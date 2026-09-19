@@ -1,0 +1,411 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "skills": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "reading",
+          "writing",
+          "oral"
+        ]
+      }
+    },
+    "bands": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "X",
+          "A",
+          "B",
+          "C",
+          "E"
+        ]
+      }
+    },
+    "variants": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "skill": {
+            "type": "string",
+            "enum": [
+              "reading",
+              "writing"
+            ]
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "supervised",
+              "unsupervised"
+            ]
+          },
+          "testNumbers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "items": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "scored": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "minutes": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "cuts": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "enum": [
+                "X",
+                "A",
+                "B",
+                "C",
+                "E"
+              ]
+            },
+            "additionalProperties": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              ],
+              "items": false,
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "required": [
+          "skill",
+          "mode",
+          "testNumbers",
+          "items",
+          "scored",
+          "minutes",
+          "cuts"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "subSkills": {
+      "type": "object",
+      "properties": {
+        "reading": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "main-idea",
+              "specific-detail",
+              "inference",
+              "vocabulary-in-context",
+              "cohesion-and-reference",
+              "tone-and-intent",
+              "text-structure",
+              "numerical-and-tabular-detail",
+              "verb-tense-and-mood",
+              "agreement",
+              "prepositions-and-government",
+              "pronouns",
+              "connectors-and-discourse-markers",
+              "register-and-formality",
+              "word-choice-precision",
+              "false-friends-and-anglicisms",
+              "punctuation-and-mechanics",
+              "sentence-structure",
+              "comprehension-of-complex-speech",
+              "fluency-and-hesitation",
+              "grammatical-accuracy-under-pressure",
+              "vocabulary-range-and-precision",
+              "discourse-organisation",
+              "task-achievement",
+              "pronunciation-and-intelligibility",
+              "interaction-and-repair-strategies"
+            ]
+          }
+        },
+        "writing": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "main-idea",
+              "specific-detail",
+              "inference",
+              "vocabulary-in-context",
+              "cohesion-and-reference",
+              "tone-and-intent",
+              "text-structure",
+              "numerical-and-tabular-detail",
+              "verb-tense-and-mood",
+              "agreement",
+              "prepositions-and-government",
+              "pronouns",
+              "connectors-and-discourse-markers",
+              "register-and-formality",
+              "word-choice-precision",
+              "false-friends-and-anglicisms",
+              "punctuation-and-mechanics",
+              "sentence-structure",
+              "comprehension-of-complex-speech",
+              "fluency-and-hesitation",
+              "grammatical-accuracy-under-pressure",
+              "vocabulary-range-and-precision",
+              "discourse-organisation",
+              "task-achievement",
+              "pronunciation-and-intelligibility",
+              "interaction-and-repair-strategies"
+            ]
+          }
+        },
+        "oral": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "main-idea",
+              "specific-detail",
+              "inference",
+              "vocabulary-in-context",
+              "cohesion-and-reference",
+              "tone-and-intent",
+              "text-structure",
+              "numerical-and-tabular-detail",
+              "verb-tense-and-mood",
+              "agreement",
+              "prepositions-and-government",
+              "pronouns",
+              "connectors-and-discourse-markers",
+              "register-and-formality",
+              "word-choice-precision",
+              "false-friends-and-anglicisms",
+              "punctuation-and-mechanics",
+              "sentence-structure",
+              "comprehension-of-complex-speech",
+              "fluency-and-hesitation",
+              "grammatical-accuracy-under-pressure",
+              "vocabulary-range-and-precision",
+              "discourse-organisation",
+              "task-achievement",
+              "pronunciation-and-intelligibility",
+              "interaction-and-repair-strategies"
+            ]
+          }
+        }
+      },
+      "required": [
+        "reading",
+        "writing",
+        "oral"
+      ],
+      "additionalProperties": false
+    },
+    "topics": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "human-resources",
+          "finance-and-budgets",
+          "it-and-digital",
+          "service-delivery",
+          "policy-and-legislation",
+          "health-and-safety",
+          "procurement",
+          "communications",
+          "project-management",
+          "official-languages",
+          "accessibility",
+          "environment"
+        ]
+      }
+    },
+    "oral": {
+      "type": "object",
+      "properties": {
+        "bands": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "X",
+              "A",
+              "B",
+              "C",
+              "E"
+            ]
+          }
+        },
+        "minutes": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "validityYears": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "minimumDaysBetweenAttempts": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "cuts": {
+          "type": "null"
+        },
+        "descriptors": {
+          "type": "object",
+          "properties": {
+            "A": {
+              "type": "object",
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fr": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "en",
+                "fr"
+              ],
+              "additionalProperties": false
+            },
+            "B": {
+              "type": "object",
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fr": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "en",
+                "fr"
+              ],
+              "additionalProperties": false
+            },
+            "C": {
+              "type": "object",
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fr": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "en",
+                "fr"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "A",
+            "B",
+            "C"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "bands",
+        "minutes",
+        "validityYears",
+        "minimumDaysBetweenAttempts",
+        "cuts",
+        "descriptors"
+      ],
+      "additionalProperties": false
+    },
+    "leitnerIntervalDays": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "exclusiveMinimum": 0,
+        "maximum": 9007199254740991
+      }
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "skills",
+    "bands",
+    "variants",
+    "subSkills",
+    "topics",
+    "oral",
+    "leitnerIntervalDays"
+  ],
+  "additionalProperties": false
+}

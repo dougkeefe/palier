@@ -225,7 +225,7 @@ module.exports = {
       severity: "error",
       comment:
         "@palier/domain performs no I/O, so it imports no Node core module (implementation-plan.md 3.2). The ExamProfile loader parses an already-read value; reading the file belongs in an adapter.",
-      from: { path: "^packages/domain/src/" },
+      from: { path: "^packages/domain/src/", pathNot: TEST_FILES },
       to: { dependencyTypes: ["core"] },
     },
     {
@@ -233,7 +233,7 @@ module.exports = {
       severity: "error",
       comment:
         "@palier/domain takes no framework dependency. `zod` is the single exception, because the content schemas are its job (implementation-plan.md 3.2).",
-      from: { path: "^packages/domain/src/" },
+      from: { path: "^packages/domain/src/", pathNot: TEST_FILES },
       to: {
         dependencyTypes: ["npm", "npm-dev", "npm-optional", "npm-peer", "npm-bundled"],
         pathNot: "node_modules/(zod|@palier)/",
@@ -244,7 +244,7 @@ module.exports = {
       severity: "error",
       comment:
         "@palier/engine is pure and takes no npm or Node core dependency at all (implementation-plan.md 3.2, architecture.md 7). Clock and Random arrive as parameters (ADR 7, ADR 8). If you need a library here, the code probably belongs in @palier/app.",
-      from: { path: "^packages/engine/src/" },
+      from: { path: "^packages/engine/src/", pathNot: TEST_FILES },
       to: {
         dependencyTypes: [
           "core",

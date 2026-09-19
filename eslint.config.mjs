@@ -38,6 +38,18 @@ const FRAMEWORK_DEFAULT_EXPORT_FILES = [
   "vitest.config.mts",
 ];
 
+/**
+ * The purity rules below govern the shipped package, not its tests. A domain
+ * test reads `content/profiles/psc-sle.json` off disk and awaits a snapshot
+ * assertion; forbidding that would forbid testing the thing.
+ */
+const TEST_FILES = [
+  "**/*.test.ts",
+  "**/*.test.tsx",
+  "**/*.test-d.ts",
+  "**/__tests__/**",
+];
+
 const NO_DEFAULT_EXPORT = {
   selector: "ExportDefaultDeclaration",
   message:
@@ -91,6 +103,17 @@ export default defineConfig([
   {
     rules: {
       "no-restricted-syntax": ["error", NO_DEFAULT_EXPORT],
+      // A leading underscore means "deliberately discarded", which is how a
+      // test destructures a field off an artefact to prove the schema needs it.
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
     },
   },
   {
@@ -107,6 +130,7 @@ export default defineConfig([
   {
     // domain: "Any I/O, any framework, any async" (implementation-plan.md 3.2).
     files: ["packages/domain/src/**/*.ts"],
+    ignores: TEST_FILES,
     rules: {
       "no-restricted-syntax": [
         "error",
@@ -140,6 +164,7 @@ export default defineConfig([
   {
     // engine: pure, with Clock and Random as parameters (ADR 7, ADR 8).
     files: ["packages/engine/src/**/*.ts"],
+    ignores: TEST_FILES,
     rules: {
       "no-restricted-properties": [
         "error",

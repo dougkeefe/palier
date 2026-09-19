@@ -1,0 +1,136 @@
+{
+  "id": "psc-sle",
+  "version": 1,
+  "skills": ["reading", "writing", "oral"],
+  "bands": ["X", "A", "B", "C", "E"],
+  "variants": {
+    "reading-supervised": {
+      "skill": "reading",
+      "mode": "supervised",
+      "testNumbers": ["633", "634"],
+      "items": 60,
+      "scored": 50,
+      "minutes": 90,
+      "cuts": {
+        "X": [0, 17],
+        "A": [18, 27],
+        "B": [28, 37],
+        "C": [38, 44],
+        "E": [45, 50]
+      }
+    },
+    "reading-unsupervised": {
+      "skill": "reading",
+      "mode": "unsupervised",
+      "testNumbers": [],
+      "items": 25,
+      "scored": 25,
+      "minutes": 45,
+      "cuts": {
+        "X": [0, 8],
+        "A": [9, 13],
+        "B": [14, 18],
+        "C": [19, 25]
+      }
+    },
+    "writing-supervised": {
+      "skill": "writing",
+      "mode": "supervised",
+      "testNumbers": ["654"],
+      "items": 65,
+      "scored": 55,
+      "minutes": 90,
+      "cuts": {
+        "X": [0, 19],
+        "A": [20, 30],
+        "B": [31, 42],
+        "C": [43, 51],
+        "E": [52, 55]
+      }
+    },
+    "writing-unsupervised": {
+      "skill": "writing",
+      "mode": "unsupervised",
+      "testNumbers": [],
+      "items": 30,
+      "scored": 30,
+      "minutes": 45,
+      "cuts": {
+        "X": [0, 10],
+        "A": [11, 16],
+        "B": [17, 23],
+        "C": [24, 30]
+      }
+    }
+  },
+  "subSkills": {
+    "reading": [
+      "main-idea",
+      "specific-detail",
+      "inference",
+      "vocabulary-in-context",
+      "cohesion-and-reference",
+      "tone-and-intent",
+      "text-structure",
+      "numerical-and-tabular-detail"
+    ],
+    "writing": [
+      "verb-tense-and-mood",
+      "agreement",
+      "prepositions-and-government",
+      "pronouns",
+      "connectors-and-discourse-markers",
+      "register-and-formality",
+      "word-choice-precision",
+      "false-friends-and-anglicisms",
+      "punctuation-and-mechanics",
+      "sentence-structure"
+    ],
+    "oral": [
+      "comprehension-of-complex-speech",
+      "fluency-and-hesitation",
+      "grammatical-accuracy-under-pressure",
+      "vocabulary-range-and-precision",
+      "discourse-organisation",
+      "task-achievement",
+      "pronunciation-and-intelligibility",
+      "interaction-and-repair-strategies"
+    ]
+  },
+  "topics": [
+    "human-resources",
+    "finance-and-budgets",
+    "it-and-digital",
+    "service-delivery",
+    "policy-and-legislation",
+    "health-and-safety",
+    "procurement",
+    "communications",
+    "project-management",
+    "official-languages",
+    "accessibility",
+    "environment"
+  ],
+  "oral": {
+    "bands": ["X", "A", "B", "C", "E"],
+    "minutes": [20, 40],
+    "validityYears": 5,
+    "minimumDaysBetweenAttempts": 30,
+    "cuts": null,
+    "descriptors": {
+      "A": {
+        "en": "Understands speech on concrete and routine topics; short exchanges, everyday activities, basic vocabulary; pronunciation needs listener attention.",
+        "fr": "Comprend un discours portant sur des sujets concrets et courants; échanges brefs, activités quotidiennes, vocabulaire de base; la prononciation exige de l'attention de la part de l'interlocuteur."
+      },
+      "B": {
+        "en": "Understands the main points of clear standard speech on work topics; simple descriptions and explanations; some spontaneity with pauses for grammar; generally clear pronunciation despite accent.",
+        "fr": "Comprend l'essentiel d'un discours standard clair portant sur des sujets liés au travail; descriptions et explications simples; une certaine spontanéité, avec des pauses pour la grammaire; prononciation généralement claire malgré l'accent."
+      },
+      "C": {
+        "en": "Understands linguistically complex speech on specialized topics; detailed descriptions, summarises discussions, responds to complex questions; broad vocabulary, natural delivery, rare mispronunciations that do not impede communication.",
+        "fr": "Comprend un discours linguistiquement complexe portant sur des sujets spécialisés; descriptions détaillées, résumés de discussions, réponses à des questions complexes; vocabulaire étendu, débit naturel, rares erreurs de prononciation qui ne nuisent pas à la communication."
+      }
+    }
+  },
+  "leitnerIntervalDays": [1, 3, 7, 21]
+}

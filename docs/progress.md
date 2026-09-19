@@ -66,7 +66,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/continue-implementation` | Phase 0 gates, test infrastructure, domain types (§12.4–12.6) | 19 September 2026 |
+| — | — | — |
 
 ---
 
@@ -78,19 +78,19 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 
 - [x] Monorepo: pnpm workspaces, Turborepo, TypeScript project references, strict everywhere
 - [x] Eight workspaces created (`apps/web`, `apps/factory`, six `packages/*`), each with an explicit `exports` map
-- [ ] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current)
+- [~] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current) — `domain` and `engine` written; the four empty packages still pending, see D4
 - [ ] Name decided and domain registered (§12.1 — "Palier" is still a working name)
 - [ ] `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0), `README` non-affiliation statement [R5, R13]
 - [ ] `adr/README.md` covering the format and the never-edit-only-supersede rule
 
 ### Domain and contracts
 
-- [ ] `@palier/domain`: full type set, branded ids
-- [ ] `@palier/domain`: Zod schemas for every content artefact, JSON Schema generated to `docs/schemas/`
-- [ ] `@palier/domain`: `ExamProfile` loader
-- [ ] `@palier/domain`: `psc-sle` profile transcribed from `product-requirements.md` §5 (ADR 9)
+- [x] `@palier/domain`: full type set, branded ids
+- [x] `@palier/domain`: Zod schemas for every content artefact, JSON Schema generated to `docs/schemas/`
+- [x] `@palier/domain`: `ExamProfile` loader
+- [x] `@palier/domain`: `psc-sle` profile transcribed from `product-requirements.md` §5 (ADR 9) — with one inferred band, see D12
 - [ ] `@palier/app`: every port interface from §3.3, no implementations behind them
-- [ ] Item type registry (§3.4), with the five members and the a11y contract
+- [!] Item type registry (§3.4), with the five members and the a11y contract — deferred, see D13; it needs an ADR, not a quiet workaround
 
 ### Test infrastructure
 
@@ -133,18 +133,27 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Exit criteria
 
-- [ ] `pnpm build && pnpm test && pnpm lint` green with every gate active
+- [~] `pnpm build && pnpm test && pnpm lint` green with every gate active — green, but three gates are not built yet: contrast validation, i18n parity and the Lighthouse/bundle budgets
 - [x] A deliberate boundary violation on a scratch branch fails CI — **verified by running it**, not assumed. Both an arrow violation and a vendor-ban violation were run on `scratch/deliberate-violation`; output in the session log. Running it caught two bugs that made the gate silently vacuous.
-- [ ] The `psc-sle` profile validates
-- [ ] Band mapping property test passes: total and monotonic over every variant
+- [x] The `psc-sle` profile validates
+- [x] Band mapping property test passes: total and monotonic over every variant — over all four, driven by `Object.entries(profile.variants)` rather than a hard-coded list
 - [x] Port contract suites exist and pass against the in-memory implementations — four ports, 23 assertions; the rest follow their ports
-- [x] Fast lane under 90 seconds on an empty codebase — **4.1 seconds cold**, caches and `dist` deleted first. That is the baseline defended for the rest of the project.
+- [x] Fast lane under 90 seconds on an empty codebase — **4.6 seconds cold**, caches and `dist` deleted first, with the domain package and 246 tests in place. That is the baseline defended for the rest of the project.
 
 ### Suggested next three
 
-1. `@palier/domain` types and the `psc-sle` profile (§12.4) — everything else depends on it.
-2. dependency-cruiser, proven against a deliberate violation (§12.5) — this is the gate that makes the architecture real, and it also closes deviation D1.
-3. Vitest workspace, fast-check, and the band-mapping property test (§12.6).
+The previous three (domain types and the profile, dependency-cruiser proven against a
+deliberate violation, Vitest and the band-mapping property) are all done — see the
+session log entries for 19 September 2026. What follows them:
+
+1. `@palier/app`: the port interfaces from §3.3. `@palier/testing/src/ports.stub.ts`
+   holds placeholders that say which file they move to; deleting that file is the
+   definition of done. Note §3.3 gives no signatures for `SessionStore` or `OralStore`,
+   so those need deciding rather than transcribing.
+2. The item type registry, which is blocked on a decision rather than on work — read D13
+   first and write ADR 16.
+3. `@palier/ui` design tokens and the six primitives, which unblocks the contrast gate,
+   the axe gate and the Lighthouse budget — the three exit criteria still outstanding.
 
 ---
 
@@ -432,11 +441,156 @@ exemption is now "framework file conventions" and the list names
 `playwright.config.ts` explicitly. `AGENTS.md` updated to match, with a note that
 adding a line to that list needs a better reason than convenience.
 
+### D12 — `writing-unsupervised` carries an inferred `X 0-10` band
+**Date:** 19 September 2026 · **Status:** open until checked against the PSC
+
+`product-requirements.md` §5.2 gave the unsupervised written expression bands as
+`A 11-16, B 17-23, C 24-30`, leaving raw scores **0 to 10 mapping to no band at
+all**. Every other variant covers its full range. The band mapping must be total
+— §6.2 makes it a property and phase 0 makes it an exit criterion — so this had
+to be resolved before the profile could be written.
+
+`content/profiles/psc-sle.json` carries `X: [0, 10]`, and §5.2 has been amended
+with a footnote saying the row is **inferred, not transcribed**. The reasoning:
+the unsupervised *reading* test does publish `X 0-8`, so X plainly exists on
+unsupervised variants, and an omission in transcription is far likelier than a
+fact about the test.
+
+**The alternative was seriously considered and rejected.** It was to encode the
+gap as a first-class `unbanded: [[0, 10]]` value and make the mapper return a
+discriminated union, so the compiler forced every consumer to handle "no band".
+That is more faithful to ADR 9's principle of holding published figures rather
+than inferred ones. It was rejected because it makes every call site pay,
+forever, for what is almost certainly a typo upstream — and because the footnote
+plus this entry keep the inference visible, which was the real thing at risk.
+
+**This is the one number in the profile nobody has checked against a source.** A
+wrong band boundary is silent: it produces a plausible result for every user with
+nothing to notice. Verify it against the PSC's published table before launch, and
+close this entry when you do.
+
+### D13 — The item type registry is deferred, and wants ADR 16
+**Date:** 19 September 2026 · **Status:** open, blocked on a decision
+
+§3.4 specifies one `registerItemType` call carrying `schema`, `render`, `score`,
+`validate`, `generatePrompt` and an `a11yContract`. It cannot be built as
+specified, because `render` is "a React component from `@palier/ui`" and
+**nothing may import `@palier/ui`** (§3.1). A single registry object therefore
+cannot exist in any package below `apps/web`, and building one now would mean
+either putting React types in `@palier/domain` — which the vendor ban forbids —
+or inventing the split under time pressure.
+
+The shape that probably works: an `ItemTypeDefinition` *without* `render` in
+domain (React-free, which is the half CI and `apps/factory` need), a parallel
+`itemRenderers` map in `@palier/ui`, and a compile-time exhaustiveness assertion
+in the composition root that both cover the same `ItemType` union.
+
+That is a change to §3.4, so it wants **ADR 16**, written in the commit that
+implements it. Not a quiet deviation now. Also unresolved there: §3.4's literal
+has six keys while §4 and §10 both say "all five members" and name the a11y
+contract separately — the architecture test cannot assert "five" until someone
+says which five.
+
+### D14 — zod's NodeNext declaration risk was checked and did not materialise
+**Date:** 19 September 2026 · **Status:** closed
+
+zod 4.6.5's export map declares a single `"types": "./index.d.cts"` for both the
+`import` and `require` conditions, which under `moduleResolution: NodeNext` in an
+ESM package has been reported to degrade inference to `any`. Because
+`@palier/domain` is `composite` with `declaration: true`, a degraded type would
+have been baked into `dist/index.d.ts` and propagated to every consumer.
+
+Checked before writing any real code, by emitting a probe and reading the `.d.ts`
+rather than trusting the editor. Inference was intact and TS2742 did not occur,
+so **no patch was needed**. Recorded so the next person does not re-run the
+investigation, and so that a future zod bump has a named thing to re-check.
+
+What *did* bite, and shapes every schema in the package: `z.infer` of
+`.optional()` produces `b?: T | undefined`, which is not assignable to a
+hand-written `b?: T` under `exactOptionalPropertyTypes` — and annotating the
+schema as `z.ZodType<T>` does not bridge it either. The resolution is that
+optional fields are written `?: T | undefined`, schemas end in `.readonly()` so
+the inferred type matches exactly, and a `Equals<>` assertion in a `.test-d.ts`
+holds the two together. Fixtures **omit** absent keys rather than setting them to
+`undefined`, which the JSON round-trip test enforces.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 19 September 2026 — `dougkeefe/continue-implementation` (3 of 3: domain types and the exam profile)
+
+`@palier/domain` filled in per `architecture.md` §5 and `prompts.md` Session 5, plus the
+band mapper in `@palier/engine`. Both packages at **100% branch, function, statement and
+line coverage**, enforced in config. Deviations D12 to D14 recorded.
+
+One dependency added: `zod@4.6.5`, in `@palier/domain` only.
+
+Branded ids (`ItemId`, `PassageId`, `FormId`, `ScenarioId`, `AttemptId`, `SessionId`,
+`DeviceId`) via a phantom property rather than a `unique symbol`, which is TS4023 under
+`declaration` + `composite`. The full type set from §5, the taxonomies from
+`product-requirements.md` §13, Zod schemas for all six content artefacts, JSON Schema
+published to `docs/schemas/`, and the `ExamProfile` loader — synchronous and I/O-free,
+taking an already-read value, because §3.2 says domain does no I/O.
+
+`content/profiles/psc-sle.json` transcribed from §5. **All four variants, all cut scores,
+checked line by line against the source table** and asserted row by row in
+`psc-sle.test.ts` rather than trusted.
+
+**Verified:**
+
+- `pnpm verify` green. 246 tests, 4 `todo`, 18 files.
+- `@palier/domain` and `@palier/engine` both at 100% on every metric. Where a branch was
+  unreachable it was **removed rather than ignored**: `orderedCuts` now does the
+  `Partial<Record<Band, …>>` narrowing once in domain, so the engine has no defensive
+  `continue` that no test could honestly cover.
+- The band mapping property passes over every variant, driven by
+  `describe.each(Object.entries(profile.variants))`. Totality is asserted **exhaustively**
+  (≤ 56 calls, cheaper and stronger than sampling); fast-check covers monotonicity.
+- The profile gate bites. `writing-supervised` C moved from `[43,51]` to `[44,51]` and the
+  suite failed with
+  `variants.writing-supervised.cuts: Raw scores 43 to 43 are covered by no band: B ends at 42 and C starts at 44.`
+  Reverted.
+- The branded-id test bites. `Brand<T, B>` reduced to `T` and `tsc` reported
+  `TS2578: Unused '@ts-expect-error' directive` three times — which is why the test uses
+  `@ts-expect-error` rather than an equality assertion that would quietly start passing.
+  Reverted.
+- The JSON Schema drift guard bites: changing `subSkills` from a record to an object
+  failed the snapshot until regenerated with `pnpm exec vitest run -u`.
+- **Layer 4 of the boundary proof**, now that there is real source to violate. On
+  `scratch/arrow-violation`, `@palier/domain` importing `@palier/engine` with the
+  dependency properly declared:
+
+```
+  error domain-depends-on-nothing: packages/domain/src/bands.ts → packages/engine/dist/index.d.ts
+    @palier/domain sits at the bottom of the graph and depends on nothing
+    (implementation-plan.md 3.1, ADR 10). If domain needs this, the thing it
+    needs is in the wrong package.
+```
+
+  Branch deleted. Together with commit 1's runs, all four layers of the gate are now
+  proved by running them.
+
+**Two things raised for you, both in the deviations log:**
+
+1. **The `writing-unsupervised` band gap (D12).** §5.2 published
+   `A 11-16, B 17-23, C 24-30` on a 30-item paper, leaving 0 to 10 mapping to nothing —
+   `prompts.md` Session 5 asks explicitly that this be reported. The profile now carries an
+   **inferred** `X: [0, 10]` and §5.2 is amended with a footnote saying so. It is the one
+   number in the profile that has not been checked against a source, and a wrong band
+   boundary is silent. Worth ten minutes against the PSC's published table.
+2. **The item type registry (D13).** It cannot be built as §3.4 specifies: `render` must be
+   a `@palier/ui` React component and nothing may import `@palier/ui`, so the registry
+   cannot live anywhere below `apps/web`. Deferred rather than worked around; it wants
+   ADR 16. §3.4 also has six keys while §4 and §10 say "five members", which needs
+   settling before the architecture test can assert a count.
+
+Also of note: `zod`'s NodeNext declaration risk was checked before any code was written
+and **did not materialise** (D14). What did bite is `exactOptionalPropertyTypes` versus
+`z.infer`, which is why optional fields are written `?: T | undefined` and every schema
+ends in `.readonly()`.
 
 ### 19 September 2026 — `dougkeefe/continue-implementation` (2 of 3: test infrastructure)
 
