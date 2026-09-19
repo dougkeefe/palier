@@ -1,34 +1,20 @@
 {
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
-  ],
-  "exclude": ["node_modules"]
+  "$schema": "https://json.schemastore.org/tsconfig",
+  // Solution file: `tsc -b` from the repo root builds the whole reference graph.
+  //
+  // `apps/web` is deliberately absent. Its typecheck depends on the route types
+  // Next.js generates into `.next/types`, so it is driven by
+  // `next typegen && tsc --noEmit` (its own `check-types` script) and by
+  // `next build`, not by this solution. It still carries `references` of its own
+  // so editors and `tsc --noEmit` resolve the packages through their exports maps.
+  "files": [],
+  "references": [
+    { "path": "./packages/domain" },
+    { "path": "./packages/engine" },
+    { "path": "./packages/app" },
+    { "path": "./packages/adapters" },
+    { "path": "./packages/ui" },
+    { "path": "./packages/testing" },
+    { "path": "./apps/factory" }
+  ]
 }
