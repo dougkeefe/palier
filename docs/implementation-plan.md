@@ -100,7 +100,7 @@ interface ItemRepository {
 // Local persistence, one port per aggregate
 interface AttemptStore   { append(a: Attempt): Promise<void>; recent(skill: Skill, n: number): Promise<Attempt[]>; since(t: ISO): Promise<Attempt[]>; forItem(id: ItemId): Promise<Attempt[]> }
 // no EstimateStore: the trend is derived from recent attempts on demand, so there is
-// nothing to persist, nothing to invalidate and nothing to reconcile during sync
+// nothing to persist, nothing to invalidate and nothing to reconcile during sync (ADR 16)
 interface ScheduleStore  { due(now: ISO, limit: number): Promise<ScheduleEntry[]>; put(e: ScheduleEntry): Promise<void> }
 interface SessionStore   { /* checkpointing, resume */ }
 interface OralStore      { /* transcripts and audio blobs, local only */ }
@@ -148,6 +148,9 @@ Two details worth defending. `KeyVault.withApiKey` hands the key to a callback r
 
 **Item type registry.** Adding a new item type touches one file plus one renderer and nothing else, and the pieces have to travel together or the type is half-implemented.
 
+Five members, plus the a11y contract, which is counted separately everywhere in this
+document because it is asserted by a different suite. Six keys in the literal below.
+
 ```ts
 registerItemType('cloze', {
   schema: ClozeSchema,                        // zod, used by CI and factory
@@ -160,6 +163,15 @@ registerItemType('cloze', {
 ```
 
 The session engine only ever calls `registry.get(item.type).score(...)`. It has no knowledge of cloze, error identification, or anything added later.
+
+**This literal cannot be built as written, and the fix needs an ADR.** `render` is a React
+component from `@palier/ui`, and §3.1 forbids every package below `apps/web` from importing
+`@palier/ui`, so a single registry object has nowhere to live. The shape that probably works
+is an `ItemTypeDefinition` without `render` in `@palier/domain` — React-free, which is the
+half that CI and `apps/factory` need — a parallel `itemRenderers` map in `@palier/ui`, and a
+compile-time exhaustiveness assertion in the composition root that both cover the same
+`ItemType` union. Deferred rather than worked around: see deviation D13 in `progress.md`,
+and write the ADR in the commit that implements it.
 
 **Exam profile, a JSON file.** Loaded and validated at build time (ADR 9).
 
@@ -230,9 +242,9 @@ Architecture that is not enforced decays in about three months. Five mechanisms,
 2. **`eslint-plugin-boundaries`** for intra-package layering.
 3. **No default exports** and explicit package `exports` maps, so a package's public surface is declared rather than accidental.
 4. **`typescript` project references** with `strict`, `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`. Composite builds mean a boundary violation is a compile error.
-5. **Architecture tests** in `packages/domain/__tests__/architecture.test.ts`: assert that engine exports are pure (no `Date.now`, no `Math.random`, no `fetch` in the built output), that every item type in the registry has all five members, and that every exam profile validates.
+5. **Architecture tests** in `packages/domain/__tests__/architecture.test.ts`: assert that engine exports are pure (no `Date.now`, no `Math.random`, no `fetch` in the built output), that every item type in the registry has all five members plus its a11y contract, and that every exam profile validates.
 
-Plus a social mechanism that is already in place rather than planned: the `adr/` directory holds fifteen decision records covering everything decided so far. Two working rules for it. An ADR is never edited after it is accepted, only superseded by a later one, so the history of the project's thinking stays readable. And a contributor who disagrees with a decision writes ADR 16 rather than arguing with a specification, which keeps disagreement productive and leaves a trail.
+Plus a social mechanism that is already in place rather than planned: the `adr/` directory holds sixteen decision records covering everything decided so far. Two working rules for it. An ADR is never edited after it is accepted, only superseded by a later one, so the history of the project's thinking stays readable. And a contributor who disagrees with a decision writes the next ADR rather than arguing with a specification, which keeps disagreement productive and leaves a trail. Numbers are assigned in order of acceptance, so take the next free one rather than a number some earlier note reserved.
 
 Each ADR carries a "revisit when" clause naming the evidence that would justify changing it. That clause is what stops a deferred decision from becoming a permanent prohibition, and it is the first thing to check when something in the architecture feels wrong.
 
@@ -297,7 +309,7 @@ Scope is every package, not just the pure core:
 - `@palier/domain`: every invariant, every value object constructor, every branded id guard, every profile accessor, and the serialisation round-trip for each type.
 - `@palier/engine`: every function, every branch, with worked examples at the boundaries. The trend calculator against a hand-worked accuracy and a Wilson interval checked against a reference implementation. The BandMapper at every cut score and one either side of it. The selector with a fixed candidate pool and a seeded Random, asserting the exact item chosen. The scheduler at each grade with a fixed clock, asserting the exact next due date. These are the tests someone reads to understand what the engine does.
 - `@palier/app`: every use case against in-memory ports, covering the happy path plus each error path and each guard clause.
-- `@palier/adapter-*`: everything the port contract suite does not already cover. Query building, pagination, retry and backoff behaviour, watermark arithmetic, error translation from a vendor error into ours, and every schema migration, forward and where applicable backward.
+- `@palier/adapters`, per adapter directory: everything the port contract suite does not already cover. Query building, pagination, retry and backoff behaviour, watermark arithmetic, error translation from a vendor error into ours, and every schema migration, forward and where applicable backward.
 - `@palier/ui`: the logic, not the pixels. Formatters, the band meter's value-to-geometry mapping, the timer's threshold transitions, the option row's keyboard handling, the item type registry lookups.
 - `@palier/domain` schemas: each accepts a valid artefact and rejects each specific way of being invalid, one test per rejection reason. These tests are what the content suite's error messages depend on being accurate.
 - `apps/factory`: each pipeline stage in isolation with fixed inputs. Register scoring, duplicate detection, key position analysis, the sharding and manifest logic, the yield calculation.
@@ -422,7 +434,7 @@ Metrics land in a committed JSON file so the trend is visible in git history. Th
 | `@palier/engine` | 100% branch | Unit with worked examples at every boundary, plus properties |
 | `@palier/app` | 95% branch | Unit against in-memory ports, plus integration |
 | `@palier/domain` schemas | 100% branch | Unit, one test per rejection reason |
-| `@palier/adapter-*` | 90% branch | Unit, plus the port contract suite, plus integration |
+| `@palier/adapters` | 90% branch | Unit, plus the port contract suite, plus integration |
 | `apps/factory` stages | 90% branch | Unit per stage with fixed inputs |
 | `apps/web` route handlers | 95% branch | Unit plus integration |
 | `@palier/ui` logic | 90% branch | Unit on formatters, state and keyboard handling |
@@ -490,7 +502,7 @@ The sequencing is risk-driven rather than value-driven. The two things that can 
 - `@palier/testing` populated properly: in-memory implementations of every port, the port contract suites as exported functions, fixture builders, seeded Random, FakeClock, and the 60 item canonical fixture bank.
 - The three CI lanes from 6.5 wired with their time budgets, and the budgets enforced so a slow test is a build failure rather than a slow creep.
 - CI gates: typecheck, lint, dependency-cruiser, unit tests, contrast validation on the token set, i18n key parity, axe on the shell, Lighthouse budget, bundle size.
-- `adr/` committed as written, ADRs 1 to 15, with a short `adr/README.md` covering the format and the never-edit-only-supersede rule.
+- `adr/` committed as written, with a short `adr/README.md` covering the format and the never-edit-only-supersede rule.
 - `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0) and a `README` that states the non-affiliation position from day one, since the repository is public from the first commit and R5 applies to it too.
 
 **Exit criteria**
@@ -758,7 +770,7 @@ Applies to every PR, not just phase ends:
 - No new dependency without a note in the pull request saying what it replaces or why nothing already present does the job. A dependency that changes the architecture needs an ADR.
 - Any change to engine behaviour explains its effect on the golden fixtures, and any new engine branch has a property or a unit test, not just coverage.
 - Any new port implementation passes the port's contract suite.
-- Any new item type registers all five members and its a11y contract is asserted.
+- Any new item type registers all five members, and its a11y contract is asserted (§3.4).
 - Any new user-visible surface works on a phone, with a keyboard, and with reduced motion.
 - The `CLAUDE.md` of any package whose invariants changed is updated in the same PR.
 
@@ -788,6 +800,6 @@ Concrete enough to start on Saturday:
 4. Write `@palier/domain` types and transcribe the `psc-sle` profile from requirements document section 5.
 5. Wire dependency-cruiser and prove it fails on a deliberate violation.
 6. Stand up the Vitest workspace and fast-check, and write the first real test: the band mapping property over the `psc-sle` profile, total and monotonic across every variant. It is a dozen lines, it will catch a cut-score typo forever, and it sets the tone for what a test looks like in this repo.
-7. Commit `adr/` as written, all fifteen records, plus a short `adr/README.md` covering the format and the rule that an ADR is superseded rather than edited.
+7. Commit `adr/` as written, plus a short `adr/README.md` covering the format, the rule that an ADR is superseded rather than edited, and that numbers are assigned in order of acceptance.
 8. Commit the licences and a README carrying the non-affiliation statement, since the repository is public from the first commit and R5 applies to it.
 9. Push, get CI green, and stop. Phase 0 is not glamorous and it is the reason the rest goes quickly.

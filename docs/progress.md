@@ -78,7 +78,7 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 
 - [x] Monorepo: pnpm workspaces, Turborepo, TypeScript project references, strict everywhere
 - [x] Eight workspaces created (`apps/web`, `apps/factory`, six `packages/*`), each with an explicit `exports` map
-- [~] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current) — `domain` and `engine` written; the four empty packages still pending, see D4
+- [x] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current) — all six written, plus the root router `CLAUDE.md`; D4 resolved, D15 recorded
 - [ ] Name decided and domain registered (§12.1 — "Palier" is still a working name)
 - [ ] `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0), `README` non-affiliation statement [R5, R13]
 - [ ] `adr/README.md` covering the format and the never-edit-only-supersede rule
@@ -296,12 +296,22 @@ first adapter. The lint rule forbidding cross-imports between adapter directorie
 thing that actually enforces §3.2, and it arrives with dependency-cruiser.
 
 ### D4 — Per-package `CLAUDE.md` files not yet written
-**Date:** 19 September 2026 · **Status:** open, phase 0
+**Date:** 19 September 2026 · **Status:** RESOLVED 19 September 2026
 
 §7 requires each package to declare its invariants in a `CLAUDE.md`, and §10 requires
 keeping them current in the same PR as any change to those invariants. The packages are
 currently empty, so there are no invariants to state. Write them alongside the first real
 code in each package, not before.
+
+**Resolution, and the order is deliberately inverted.** All six are now written, along
+with a root `CLAUDE.md` router. The reasoning above is wrong in one respect: these files
+do not merely *describe* a package, they **constrain the agent that writes it**, so
+writing them after the code gets the leverage backwards. §5 calls them "the
+highest-leverage documentation in the repo" for that reason. Where a package is still
+empty, its file states the invariants the specs already fix — `app`'s ports carry no
+vendor type (§2.4), `ui` imports domain types only (§3.1), `adapters` may not
+cross-import (§3.2) — none of which needed code to exist first. §10 still applies:
+update a package's file in the same PR as any change to its invariants.
 
 ---
 
@@ -485,8 +495,13 @@ domain (React-free, which is the half CI and `apps/factory` need), a parallel
 `itemRenderers` map in `@palier/ui`, and a compile-time exhaustiveness assertion
 in the composition root that both cover the same `ItemType` union.
 
-That is a change to §3.4, so it wants **ADR 16**, written in the commit that
-implements it. Not a quiet deviation now. Also unresolved there: §3.4's literal
+That is a change to §3.4, so it wants an ADR, written in the commit that
+implements it. Not a quiet deviation now.
+
+**Correction, 19 September 2026:** this entry said "ADR 16". That number was taken by the
+estimate-store decision before the registry was unblocked, so the registry wants **ADR 17**
+— or whatever is next free when it lands. Numbers go in order of acceptance, not
+reservation. See D16. Also unresolved there: §3.4's literal
 has six keys while §4 and §10 both say "all five members" and name the a11y
 contract separately — the architecture test cannot assert "five" until someone
 says which five.
@@ -514,11 +529,147 @@ the inferred type matches exactly, and a `Equals<>` assertion in a `.test-d.ts`
 holds the two together. Fixtures **omit** absent keys rather than setting them to
 `undefined`, which the JSON round-trip test enforces.
 
+### D15 — `CLAUDE.md` is the canonical root document; `AGENTS.md` points at it
+**Date:** 19 September 2026 · **Status:** accepted
+
+The include ran `CLAUDE.md` → `@AGENTS.md`, with `AGENTS.md` holding layout, rules and
+commands. `prompts.md` Session 2 asks for a root `CLAUDE.md` router of at most 120 lines
+carrying most of that same material, so the two would have stated the same rules twice and
+drifted. The direction is therefore reversed: `CLAUDE.md` is the router and everything in
+`AGENTS.md` that constrained behaviour moved into it; `AGENTS.md` is now a pointer plus
+`@CLAUDE.md`, so Codex-style agents that only read `AGENTS.md` land on the same content.
+No cycle — `CLAUDE.md` imports nothing.
+
+`apps/web/CLAUDE.md` still reads `@AGENTS.md` and is left alone: that `AGENTS.md` is
+written and re-added by `next dev` (see the note in it), and is the Next.js-specific file
+the root router points at.
+
+### D16 — ADR numbers are assigned on acceptance, not reserved in advance
+**Date:** 19 September 2026 · **Status:** accepted
+
+D13 and `implementation-plan.md` §4 both named "ADR 16" for a decision that had not been
+written: the item type registry split in D13's case, and "a contributor who disagrees
+writes ADR 16" in §4's. Meanwhile the estimate-store conflict (D17, contradiction 2) needed
+a record and took 16, because it was the one that was actually ready.
+
+The rule, now stated in `implementation-plan.md` §4 and in the root `CLAUDE.md`: **take the
+next free number when the ADR is accepted.** Reserving one in prose creates a number two
+things believe they own. D13 carries a correction pointing at ADR 17; §4 and §12 no longer
+name a specific next number, and §7 no longer says "ADRs 1 to 15", since that line would
+need editing every time one lands.
+
+### D17 — Ten contradictions between documents, resolved rather than carried
+**Date:** 19 September 2026 · **Status:** accepted
+
+Writing the agent documentation (D15) meant reading the whole set in one sitting, which
+surfaced ten places where two documents disagreed. They were reported rather than resolved
+at the time, then resolved in a second pass. **No new position was taken in any of them
+except one.** The rule applied throughout: `docs/README.md`'s table says what each document
+is authoritative for, so the document that is *not* authoritative for a statement is the one
+that gets corrected. That rule is now written into `docs/README.md` so the next conflict is
+cheaper.
+
+One conflict was a genuine open question rather than a stale sentence, and so became
+**ADR 16, derived state is not persisted**: `implementation-plan.md` §3.3 declared there is
+no `EstimateStore`, `architecture.md` §9.1 declared an `estimates` table, and
+`architecture.md` §9.4 agreed with the plan against its own §9.1. The table is gone. It
+mattered because a persisted estimate is a second source of truth for the number the product
+leads with, and last-write-wins on a derived value is how a stale figure overwrites a correct
+one.
+
+The rest, and what each was brought in line with:
+
+| # | Was | Now | Authority |
+| --- | --- | --- | --- |
+| 1 | `architecture.md` §4 showed three packages, `content-schema`, engine under `apps/web/lib`, factory under `tools/`; §17 said "engine and content-schema" are published | Tree matches the repo; §17 says `@palier/engine` and `@palier/domain` | ADR 10, plan §3.2 |
+| 2 | `estimates` table in §9.1 and in the §2 diagram | Removed, with a note saying why | **ADR 16** (new) |
+| 3 | `product-requirements.md` §8.11 listed band estimates as syncing | Neither column; recomputed per device | ADR 16, `architecture.md` §9.4 |
+| 4 | R12 said the key never leaves the device "except to the AI provider" | Admits the ADR 3 ephemeral-token mint, for the key and that route only | ADR 3; amendment recorded in §0.1 |
+| 5 | `architecture.md` §19 ran a second roadmap with an email and GitHub claim flow | §19 points at plan §7 and §9; the duplicate roadmap is deleted | ADR 5, plan §7 |
+| 6 | §1 and §18 said the bank is "machine-authored end to end", "no human author anywhere" | Machine-drafted by default, hand-authored items pass the same gates | ADR 6 |
+| 7 | §3.4's literal had six keys; §4.5 and §10 said "five members" | "Five members plus the a11y contract", stated once and used consistently. The `render`/`@palier/ui` impossibility is now flagged in §3.4 itself, not only in D13 | Editorial; the split still wants ADR 17 |
+| 8 | §13.0 said uncalibrated items are "weighted down in the band estimate" | The estimate discloses what it rests on; statistics retire items, they do not reweight | ADR 7 |
+| 9 | §15 said telemetry carries "the estimated ability of whoever answered" | A coarse session-accuracy bucket, which is what §9.2 actually stores | ADR 7, `architecture.md` §9.2 |
+| 10 | Minors: `/settings/sync` labelled "claim-this-account"; onboarding promised an email sign-in; diagnostic 12 minutes in §8.1 and 15 in §6.2; 400–600 items in `architecture.md` §18 against 500–700 elsewhere; `@palier/adapter-*` naming in plan §6.2 and §6.3 | All corrected to the authoritative statement | ADR 5, `content-factory.md` §2, ADR 10 |
+
+**What was deliberately not resolved.** The `writing-unsupervised` `X 0-10` band (D12) is
+still inferred and still needs checking against the PSC's published table — it is not a
+contradiction between documents but a gap in the source. And the item type registry (D13)
+is still blocked on a decision; §3.4 now says so in place rather than only in this log.
+
+Every amendment to `product-requirements.md` is dated in place, in the style §5.2 already
+used, because a requirement that changes silently is worse than one that never changed.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 19 September 2026 — `dougkeefe/agent-claude-md-docs` (2 of 2: contradictions resolved)
+
+The ten contradictions reported at the end of the previous entry, resolved. Documentation
+only; no source, config or dependency changed. Deviations D16 and D17 recorded, D13 carries
+a correction, **ADR 16 written**.
+
+Method, and it is the part worth keeping: `docs/README.md`'s table already said what each
+document is authoritative for, so nine of the ten needed no judgement — the non-authoritative
+document was simply stale and got corrected against a decision already recorded (ADR 3, 5, 6,
+7, 10, and plan §7). That rule is now written into `docs/README.md` for the next one. The
+tenth, the estimate store, was a real open question and became ADR 16 rather than an edit,
+because `architecture.md` changes by superseding ADR and not by a passing correction.
+
+Files: `docs/adr/0016-derived-state-is-not-persisted-no-estimate-store.md` (new);
+`architecture.md` §1, §2, §4, §9.1, §17, §18, §19 and a reconciliation note at the head;
+`product-requirements.md` R12, §7, §8.1, §8.11, §13.0, §15, each amendment dated in place;
+`implementation-plan.md` §3.3, §3.4, §4, §6.2, §6.3, §7, §10, §12; `docs/README.md` gained
+the conflict rule and a 0.2 revision entry; root `CLAUDE.md` ADR count 15 → 16.
+
+**Verified:** `pnpm verify` green — 246 tests, 4 todo, 18 files; depcruise clean, 84 modules
+and 185 dependencies plus 6 in `apps/web`. Every replaced string was asserted present before
+substitution, so a silent no-op edit was not possible. `architecture.md` §9.1 and the §2
+diagram were re-read after the change to confirm no other reference to an estimate store
+survives, and `grep` confirms none in `packages/`, `apps/` or `content/`.
+
+**Two things left open on purpose,** both flagged where a future session will hit them
+rather than only here: the inferred `writing-unsupervised` `X 0-10` band (D12) still needs
+ten minutes against the PSC's published table, and the item type registry (D13) still needs
+ADR 17 — `implementation-plan.md` §3.4 now says in place that its literal cannot be built as
+written, which is where someone will actually read it.
+
+### 19 September 2026 — `dougkeefe/agent-claude-md-docs` (1 of 2: agent-facing documentation)
+
+`prompts.md` Session 2. A root `CLAUDE.md` router (103 lines, budget 120) and a
+`CLAUDE.md` in all six packages. Documentation only; no source, config or dependency
+changed.
+
+The router carries, in order: what the project is; the eight §2 principles at one line
+each; the six-package table with each package's real import ceiling; the hard rules as
+imperatives; a 21-row *where to look* table mapping a task to a document **and section**;
+and `pnpm verify` with the three traps that make it non-obvious — build-before-cruise
+(D6), `apps/web` typechecking separately (D2), and `--project` silently zeroing coverage
+(D9). Deviations D4 **resolved** and D15 recorded.
+
+`packages/app`, `adapters`, `ui` and `testing` are new. `domain` and `engine` were
+tightened from ~45 lines to 34 with no fact dropped — the `BAND_RANK` ordering trap, the
+`exactOptionalPropertyTypes`/`z.infer` resolution, the `docs/schemas` drift guard and the
+engine non-goals with their ADRs are all still there. All six now sit at 26 to 34 lines,
+above the brief's 10-to-20; the four required sections cost about ten lines of structure
+before any content, and shrinking further meant deleting facts the repo paid to learn.
+
+**Verified:** `pnpm verify` green — 246 tests, 4 todo, 18 files; depcruise clean over 84
+modules and 185 dependencies, plus 6 in `apps/web`. Every *where to look* row was opened
+and read against the section it names, and every ADR citation checked against the record
+it cites.
+
+**Ten contradictions between documents were found and reported to the owner rather than
+resolved here**, per the brief. The ones that touch code: `architecture.md` §4 still
+describes the three-package layout ADR 10 superseded, and §17 with it; §9.1 persists an
+`estimates` table that `implementation-plan.md` §3.3 says must not exist; and
+`product-requirements.md` §8.11 lists band estimates as syncing, which `architecture.md`
+§9.4 rules out by construction. The remainder are in the reply for that session. None was
+written into these files — where a contradiction touched a rule, the file follows the
+document `docs/README.md` names as authoritative for it.
 
 ### 19 September 2026 — `dougkeefe/continue-implementation` (3 of 3: domain types and the exam profile)
 
