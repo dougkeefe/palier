@@ -30,10 +30,12 @@ and fails `pnpm verify` on any that points the wrong way.
 
 ## Rules
 
-- **Named exports only.** The sole exception is Next.js file conventions
-  (`page.tsx`, `layout.tsx`, `route.ts`, `next.config.ts`, …), which the framework
-  resolves by default export. The root `eslint.config.mjs` encodes the exhaustive
-  exemption list and enforces the ban in every workspace.
+- **Named exports only.** The sole exception is framework file conventions
+  (`page.tsx`, `layout.tsx`, `route.ts`, `next.config.ts`, `playwright.config.ts`,
+  …), which the framework resolves by default export and which offer no named
+  alternative. The root `eslint.config.mjs` encodes the exhaustive exemption list
+  and enforces the ban in every workspace. Adding a line to that list needs a
+  reason better than convenience.
 - **`tsconfig.base.json` is the single source of compiler settings.** `strict`,
   `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes` are on everywhere and
   are not to be relaxed per-package.

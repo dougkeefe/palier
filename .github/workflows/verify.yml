@@ -37,6 +37,8 @@ jobs:
       # Install and cache restore sit OUTSIDE the timed window. The budget
       # measures the gate a contributor actually runs, not GitHub's runner.
       - run: pnpm install --frozen-lockfile
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
       - name: Restore Turborepo cache
         uses: actions/cache@v6
@@ -72,10 +74,27 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
 
-      # Integration (PGlite, fake-indexeddb), the sync simulation, E2E on
-      # Chromium, axe and the bundle-size check land here with the test
-      # infrastructure. The job exists now so the lane is wired, not so it
-      # pretends to test something.
-      - name: Not yet populated
-        run: echo "Medium lane is wired but empty until the test infrastructure lands (implementation-plan.md 6.5)."
+      # Browser download sits OUTSIDE the timed window: it is ~150 MB of
+      # network, not test time.
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - run: pnpm --filter @palier/web exec playwright install --with-deps chromium
+
+      - name: pnpm verify:medium (budget 4m)
+        run: |
+          set -o pipefail
+          start=$SECONDS
+          if ! timeout --kill-after=30s 240s pnpm run verify:medium; then
+            code=$?
+            if [ "$code" -eq 124 ] || [ "$code" -eq 137 ]; then
+              echo "::error::Medium lane exceeded its 4 minute budget (implementation-plan.md 6.5)."
+            fi
+            exit "$code"
+          fi
+          echo "Medium lane: $((SECONDS - start))s of the 240s budget." >> "$GITHUB_STEP_SUMMARY"

@@ -7,6 +7,14 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./msw/browser": {
+      "types": "./dist/msw/browser.d.ts",
+      "default": "./dist/msw/browser.js"
+    },
+    "./setup": {
+      "types": "./dist/setup/index.d.ts",
+      "default": "./dist/setup/index.js"
     }
   },
   "files": [
@@ -18,10 +26,17 @@
     "check-types": "tsc -p tsconfig.vitest.json --noEmit"
   },
   "devDependencies": {
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "5.0.1"
   },
   "dependencies": {
+    "@electric-sql/pglite": "0.5.8",
     "@palier/app": "workspace:*",
-    "@palier/domain": "workspace:*"
+    "@palier/domain": "workspace:*",
+    "fake-indexeddb": "6.2.5",
+    "msw": "2.15.0"
+  },
+  "peerDependencies": {
+    "vitest": "^5.0.0"
   }
 }

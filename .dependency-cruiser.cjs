@@ -55,58 +55,122 @@ const VENDOR_BANS = [
   },
 ];
 
-/** The 3.1 arrows. Each entry lists what that package is allowed to reach. */
+/**
+ * The 3.1 arrows, as the set of workspaces each one may NOT reach.
+ *
+ * Two variants are generated from each entry. Production code gets the rule as
+ * written. Test files get the same rule with `testing` removed from the
+ * forbidden set, because implementation-plan.md 6.2 tier 3 requires exactly
+ * that: the Dexie adapter's test imports `attemptStoreContract` from
+ * `@palier/testing` and runs it against the real store. Forbidding that would
+ * forbid the mechanism the ports layer exists for (ADR 10).
+ */
+const TEST_FILES = ["\\.test\\.tsx?$", "\\.test-d\\.ts$", "/__tests__/"];
+
 const ARROWS = [
   {
     name: "domain-depends-on-nothing",
     from: "^packages/domain/",
-    forbidden: "^(packages/(engine|app|adapters|ui|testing)|apps)/",
+    forbidden: ["engine", "app", "adapters", "ui", "testing"],
+    forbidApps: true,
     comment:
       "@palier/domain sits at the bottom of the graph and depends on nothing (implementation-plan.md 3.1, ADR 10). If domain needs this, the thing it needs is in the wrong package.",
   },
   {
     name: "engine-depends-on-domain-only",
     from: "^packages/engine/",
-    forbidden: "^(packages/(app|adapters|ui|testing)|apps)/",
+    forbidden: ["app", "adapters", "ui", "testing"],
+    forbidApps: true,
     comment:
       "@palier/engine may only reach @palier/domain (implementation-plan.md 3.1). It is pure algorithms; storage, network and prompts belong above it.",
   },
   {
     name: "app-depends-on-domain-and-engine-only",
     from: "^packages/app/",
-    forbidden: "^(packages/(adapters|ui|testing)|apps)/",
+    forbidden: ["adapters", "ui", "testing"],
+    forbidApps: true,
     comment:
       "@palier/app holds ports and use cases and may only reach domain and engine (implementation-plan.md 3.1). A use case names a port, never a concrete adapter.",
   },
   {
     name: "adapters-depend-on-app-and-domain-only",
     from: "^packages/adapters/",
-    forbidden: "^(packages/(ui|testing)|apps)/",
+    forbidden: ["ui", "testing"],
+    forbidApps: true,
     comment:
       "@palier/adapters may only reach @palier/app and @palier/domain (implementation-plan.md 3.1).",
   },
   {
     name: "ui-depends-on-domain-only",
     from: "^packages/ui/",
-    forbidden: "^(packages/(engine|app|adapters|testing)|apps)/",
+    forbidden: ["engine", "app", "adapters", "testing"],
+    forbidApps: true,
     comment:
       "@palier/ui may reach @palier/domain for types and nothing else, never app or engine (implementation-plan.md 3.1). Business logic does not live in the design system.",
   },
   {
     name: "testing-depends-on-app-and-domain-only",
     from: "^packages/testing/",
-    forbidden: "^(packages/(adapters|ui)|apps)/",
+    forbidden: ["adapters", "ui"],
+    forbidApps: true,
     comment:
       "@palier/testing may only reach @palier/app and @palier/domain (implementation-plan.md 3.2). It holds in-memory ports; it must not depend on the concrete adapters it exists to substitute for.",
   },
   {
     name: "factory-depends-on-domain-and-adapters-only",
     from: "^apps/factory/",
-    forbidden: "^(packages/(engine|ui|testing)|apps/web)/",
+    forbidden: ["engine", "ui", "testing"],
+    forbidWeb: true,
     comment:
       "apps/factory is the content pipeline CLI and may only reach @palier/domain and the openai adapter (implementation-plan.md 3.2, ADR 14). It shares schemas with the app, not runtime.",
   },
 ];
+
+const arrowTarget = (packages, { forbidApps, forbidWeb }) => {
+  const parts = [];
+  if (packages.length > 0) {
+    parts.push(`^packages/(${packages.join("|")})/`);
+  }
+  if (forbidApps) parts.push("^apps/");
+  else if (forbidWeb) parts.push("^apps/web/");
+  return parts.join("|");
+};
+
+/**
+ * Test-file suffixes, appended to a package prefix to make "a test file inside
+ * this package". Kept as three flat patterns with a single `.*` each, because
+ * dependency-cruiser rejects nested quantifiers as ReDoS-unsafe and bails out
+ * rather than running, so an optional-directory group wrapping another
+ * quantifier is not an option here.
+ */
+const TEST_SUFFIXES = [
+  ".*\\.test\\.tsx?$",
+  ".*\\.test-d\\.ts$",
+  ".*/__tests__/",
+];
+
+const arrowRules = ARROWS.flatMap((arrow) => {
+  const { name, from, forbidden, comment, forbidApps, forbidWeb } = arrow;
+  const opts = { forbidApps, forbidWeb };
+  const forTests = forbidden.filter((pkg) => pkg !== "testing");
+
+  return [
+    {
+      name,
+      severity: "error",
+      comment,
+      from: { path: from, pathNot: TEST_FILES },
+      to: { path: arrowTarget(forbidden, opts) },
+    },
+    {
+      name: `${name}-in-tests`,
+      severity: "error",
+      comment: `${comment} A test file may additionally import @palier/testing, which is how a port contract suite is run against a real implementation (implementation-plan.md 6.2 tier 3). Nothing else is relaxed for tests.`,
+      from: { path: TEST_SUFFIXES.map((suffix) => `${from}${suffix}`) },
+      to: { path: arrowTarget(forTests, opts) },
+    },
+  ];
+});
 
 module.exports = {
   forbidden: [
@@ -204,13 +268,7 @@ module.exports = {
         pathNot: "^packages/adapters/src/$1/",
       },
     },
-    ...ARROWS.map(({ name, from, forbidden, comment }) => ({
-      name,
-      severity: "error",
-      comment,
-      from: { path: from },
-      to: { path: forbidden },
-    })),
+    ...arrowRules,
     ...VENDOR_BANS.map(({ name, module, allowed, where }) => ({
       name,
       severity: "error",

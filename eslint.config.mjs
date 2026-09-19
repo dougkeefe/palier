@@ -20,9 +20,11 @@ import tseslint from "typescript-eslint";
  */
 
 /**
- * Named exports only (AGENTS.md). Next.js file conventions are the one
- * exception: the framework resolves these modules by their default export, so
- * the list is exhaustive and should only grow when we adopt a new convention.
+ * Named exports only (AGENTS.md). Framework file conventions are the one
+ * exception: Next.js, Playwright and the config loaders resolve these modules
+ * by their default export and offer no named alternative. The list is
+ * exhaustive and should only grow when we adopt a new convention that genuinely
+ * requires it — "it was easier" is not a reason to add a line here.
  */
 const FRAMEWORK_DEFAULT_EXPORT_FILES = [
   "apps/web/src/app/**/{page,layout,route,template,default,loading,error,global-error,not-found,forbidden,unauthorized}.{ts,tsx}",
@@ -30,6 +32,7 @@ const FRAMEWORK_DEFAULT_EXPORT_FILES = [
   "apps/web/src/app/**/{sitemap,robots,manifest}.ts",
   "apps/web/src/{instrumentation,instrumentation-client,proxy}.ts",
   "apps/web/next.config.ts",
+  "apps/web/playwright.config.ts",
   "apps/web/postcss.config.mjs",
   "eslint.config.mjs",
   "vitest.config.mts",

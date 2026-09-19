@@ -96,19 +96,19 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 
 Built now rather than retrofitted — §7 is emphatic about this.
 
-- [ ] Vitest workspace across all packages
-- [ ] fast-check
-- [ ] MSW handlers shared between Node and browser
-- [ ] PGlite harness
-- [ ] Playwright with the hermetic composition-root flag
-- [ ] fake-indexeddb
-- [ ] `@axe-core/playwright`
-- [ ] Per-package coverage reporting with the §6.3 targets enforced
-- [ ] `@palier/testing`: in-memory implementation of every port
-- [ ] `@palier/testing`: port contract suites, exported as functions
-- [ ] `@palier/testing`: fixture builders, seeded Random, FakeClock
-- [ ] `@palier/testing`: the 60-item canonical fixture bank
-- [ ] The three CI lanes from §6.5, with their time budgets enforced as build failures
+- [x] Vitest across all packages — one root process, nine projects; see deviation D9
+- [x] fast-check
+- [x] MSW handlers shared between Node and browser
+- [x] PGlite harness — proven by a real integration test against embedded Postgres
+- [x] Playwright with the hermetic composition-root flag
+- [x] fake-indexeddb
+- [x] `@axe-core/playwright`
+- [x] Per-package coverage reporting with the §6.3 targets enforced — proven by a deliberate drop
+- [~] `@palier/testing`: in-memory implementation of every port — four of the specified ports; `SessionStore` and `OralStore` have no signatures in §3.3 yet, and `ItemRepository`, `AiProvider`, `SyncTransport` and `TelemetrySink` need domain types
+- [x] `@palier/testing`: port contract suites, exported as functions
+- [x] `@palier/testing`: fixture builders, seeded Random, FakeClock
+- [ ] `@palier/testing`: the 60-item canonical fixture bank — needs the domain types
+- [x] The three CI lanes from §6.5, with their time budgets enforced as build failures
 
 ### Gates
 
@@ -116,7 +116,7 @@ Built now rather than retrofitted — §7 is emphatic about this.
 - [x] Lint — one root ESLint config over every workspace; D1 resolved
 - [x] dependency-cruiser encoding the §3.1 arrows, plus the forbidden imports of `openai`, `dexie`, `next`, `react` outside their allowed packages
 - [x] eslint-plugin-boundaries for intra-package layering — but see the honesty note in D5
-- [~] Unit tests — Vitest runs in `pnpm verify` with one smoke test; the harness proper is the next task
+- [x] Unit tests
 - [ ] Contrast validation on the token set
 - [ ] i18n key parity [R8]
 - [ ] axe on the shell [R9]
@@ -137,8 +137,8 @@ Built now rather than retrofitted — §7 is emphatic about this.
 - [x] A deliberate boundary violation on a scratch branch fails CI — **verified by running it**, not assumed. Both an arrow violation and a vendor-ban violation were run on `scratch/deliberate-violation`; output in the session log. Running it caught two bugs that made the gate silently vacuous.
 - [ ] The `psc-sle` profile validates
 - [ ] Band mapping property test passes: total and monotonic over every variant
-- [ ] Port contract suites exist and pass against the in-memory implementations
-- [ ] Fast lane under 90 seconds on an empty codebase — record the number, it is the baseline defended for the rest of the project
+- [x] Port contract suites exist and pass against the in-memory implementations — four ports, 23 assertions; the rest follow their ports
+- [x] Fast lane under 90 seconds on an empty codebase — **4.1 seconds cold**, caches and `dist` deleted first. That is the baseline defended for the rest of the project.
 
 ### Suggested next three
 
@@ -372,11 +372,125 @@ list and the per-package coverage thresholds — is the next task.
 the registry rather than assumed. Revisit when `eslint-config-next` drops
 `eslint-plugin-import` or that plugin widens its range.
 
+### D9 — One root Vitest process, and why the integration lane is gated by an env var
+**Date:** 19 September 2026 · **Status:** accepted
+
+§7 says "Vitest workspace across all packages", which reads like a Turborepo
+fan-out with a `test` script per package. It is instead **one root Vitest process
+with nine projects**, and there is no `test` task in `turbo.json`. Vitest
+computes coverage for the whole process and refuses `coverage` inside a project
+config, so the §6.3 per-package targets can only be expressed as glob-keyed
+thresholds in one root block. Eight forked runners could not produce one report
+that enforces them.
+
+`test.projects`, not `test.workspace`: the latter has been deprecated since
+Vitest 3.2 and `vitest.workspace.ts` is gone.
+
+**A trap worth knowing about.** The fast lane was originally going to skip the
+integration project with `--project='!integration'`. Any `--project` filter
+silently zeroes coverage in Vitest 5.0.1 — the run passes, the summary reads
+`Unknown% (0/0)`, and every threshold in the config becomes decorative. Caught by
+running it and reading the number. The integration project is therefore gated by
+`PALIER_INTEGRATION=1` instead, so the fast lane runs `vitest run --coverage`
+with no filter at all.
+
+Two other findings, both verified rather than assumed:
+- Glob thresholds do not inherit the top-level `perFile`; set it per glob.
+- `coverage.excludeAfterRemap: true` is required, because a test in one package
+  executes another's built `dist` and v8 source-maps it back into that package's
+  `src`. Without it, `@palier/domain` could reach its 100% target on the strength
+  of somebody else's tests.
+
+Vitest is pinned at exactly `5.0.1`, released four days ago, because
+`@vitest/coverage-v8` demands an exact peer match and the repo pins everything
+else. Fallback is `4.1.11`; the `projects` API and glob thresholds are identical
+across both, so it is a one-line revert.
+
+### D10 — Test files may import `@palier/testing`; nothing else is relaxed
+**Date:** 19 September 2026 · **Status:** accepted
+
+The §3.1 arrows forbid every package from reaching `@palier/testing`. But §6.2
+tier 3 requires the opposite for tests: the Dexie adapter's test imports
+`attemptStoreContract` from `@palier/testing` and runs it against the real store,
+which is the entire return on the ports layer (ADR 10). Each arrow rule is
+therefore generated twice — once for production code, once for test files with
+`testing` removed from the forbidden set. Verified narrow: an adapters *test*
+importing `@palier/ui` still fails.
+
+`@palier/testing` declares `vitest` as a **peer** dependency, because its
+contract suites call `describe` and `it` at module scope. `vitest` and
+`fast-check` are root devDependencies that no package declares (D9), so
+`not-in-package-json` is split into a production rule and a test rule that
+exempts exactly those two and nothing else.
+
+### D11 — `playwright.config.ts` joins the default-export exemption list
+**Date:** 19 September 2026 · **Status:** accepted
+
+The rule was "named exports only, except Next.js file conventions". Playwright
+resolves its config by default export and offers no named alternative, so the
+exemption is now "framework file conventions" and the list names
+`playwright.config.ts` explicitly. `AGENTS.md` updated to match, with a note that
+adding a line to that list needs a better reason than convenience.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 19 September 2026 — `dougkeefe/continue-implementation` (2 of 3: test infrastructure)
+
+The harness built before there is anything to test, per `implementation-plan.md` §6
+and `prompts.md` Session 4. Vitest across nine projects, fast-check, MSW, PGlite,
+fake-indexeddb, Playwright with axe, the §6.3 coverage thresholds enforced in config,
+and the medium and nightly lanes wired. Deviations D9 to D11 recorded.
+
+Dependencies added, all exact: `fast-check@4.10.1` at the root;
+`msw@2.15.0`, `@electric-sql/pglite@0.5.8` and `fake-indexeddb@6.2.5` as
+**dependencies** of `@palier/testing`, because it exports those harnesses rather than
+merely testing with them; `vitest@5.0.1` as its **peer**; `@playwright/test@1.63.0` and
+`@axe-core/playwright@4.13.0` in `apps/web`, beside the app they drive.
+
+`@palier/testing` now holds a seeded `Random` (mulberry32, four lines, auditable) and a
+`FakeClock`, in-memory `AttemptStore`, `ScheduleStore`, `SettingsStore` and `KeyVault`,
+their four contract suites exported as functions, MSW handlers shared between Node and
+browser, the PGlite harness, the hermetic composition-root flag, and the generic fixture
+builder. It has three `exports` entries — the root, `./msw/browser` (importing
+`msw/browser` from the root would break every Node consumer) and `./setup` (side-effectful,
+for `setupFiles`) — which keeps D3's principle of not declaring an entry point with
+nothing behind it.
+
+The real port interfaces are deliberately **not** invented here. `src/ports.stub.ts`
+carries local placeholders with a comment naming the file they move to when
+`@palier/app` lands; only the ports §3.3 actually specifies are stubbed, so nobody
+mistakes an invention for a contract.
+
+**Verified:**
+
+- `pnpm verify` green. **Fast lane 4.1 seconds cold**, caches and `dist` deleted first,
+  against a 90-second budget. 42 tests, 4 `todo`, across 7 files.
+- Coverage thresholds bite. A three-branch function with no test was added to
+  `packages/testing/src`, and the run failed with
+  `ERROR: Coverage for branches (80%) does not meet "packages/testing/src/**/*.ts" threshold (90%)`.
+  Reverted.
+- The medium lane runs real embedded Postgres: 2 tests, 1.13s, `select 1` and a
+  create/insert/select round trip.
+- The test-file relaxation on the arrow rules is narrow. An adapters test importing
+  `@palier/ui` still fails with
+  `adapters-depend-on-app-and-domain-only-in-tests`. Reverted.
+- `depcruise` now sees a real graph rather than an empty one: 45 modules, 61
+  dependencies, clean.
+
+**Three things caught by running rather than assuming**, all written up in D9 to D11:
+any `--project` filter zeroes Vitest 5.0.1's coverage report while still passing; the
+arrow rules forbade the very import §6.2 tier 3 requires; and `playwright.config.ts`
+needs a default export, so the exemption list is now "framework file conventions" rather
+than "Next.js file conventions".
+
+**Still open in this area:** the 60-item canonical fixture bank and the remaining
+in-memory ports both need the domain types, so they follow in the next commit.
+`SessionStore` and `OralStore` have no signatures in §3.3 at all — that is a gap in the
+plan, not an omission here.
 
 ### 19 September 2026 — `dougkeefe/continue-implementation` (1 of 3: the gates)
 

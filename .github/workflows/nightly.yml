@@ -1,0 +1,55 @@
+# The nightly lane from implementation-plan.md 6.5. Unbounded in time, and it
+# opens an issue rather than blocking anyone, because nothing here gates a merge.
+name: nightly
+
+on:
+  schedule:
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+
+env:
+  # Property tests run 10,000 cases here instead of the fast lane's 50.
+  CI_LANE: nightly
+  TURBO_TELEMETRY_DISABLED: 1
+  DO_NOT_TRACK: 1
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  nightly:
+    name: Full property runs and cross-browser E2E
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+
+      - name: Full property runs
+        run: pnpm run test
+
+      - name: Integration
+        run: pnpm run test:integration
+
+      - run: pnpm --filter @palier/web exec playwright install --with-deps
+      - name: E2E, every browser
+        run: pnpm run test:e2e
+
+      - name: Open an issue on failure
+        if: failure()
+        uses: actions/github-script@v8
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Nightly lane failed on ${context.sha.slice(0, 7)}`,
+              body: `The nightly lane failed. Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              labels: ['nightly'],
+            });
