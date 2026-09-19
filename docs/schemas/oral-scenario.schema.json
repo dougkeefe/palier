@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lang": {
+      "type": "string",
+      "enum": [
+        "en",
+        "fr"
+      ]
+    },
+    "sessionType": {
+      "type": "string",
+      "enum": [
+        "warmup",
+        "work",
+        "opinion",
+        "situation",
+        "full"
+      ]
+    },
+    "targetBand": {
+      "type": "string",
+      "enum": [
+        "B",
+        "C"
+      ]
+    },
+    "phases": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minutes": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "intent": {
+            "type": "string",
+            "minLength": 1
+          },
+          "seedQuestions": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "escalation": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "deescalation": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "name",
+          "minutes",
+          "intent",
+          "seedQuestions",
+          "escalation",
+          "deescalation"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "topic": {
+      "type": "string",
+      "enum": [
+        "human-resources",
+        "finance-and-budgets",
+        "it-and-digital",
+        "service-delivery",
+        "policy-and-legislation",
+        "health-and-safety",
+        "procurement",
+        "communications",
+        "project-management",
+        "official-languages",
+        "accessibility",
+        "environment"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "lang",
+    "sessionType",
+    "targetBand",
+    "phases",
+    "topic"
+  ],
+  "additionalProperties": false
+}

@@ -14,9 +14,11 @@
   ],
   "scripts": {
     "build": "tsc -b",
-    "clean": "rm -rf dist *.tsbuildinfo"
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "check-types": "tsc -p tsconfig.vitest.json --noEmit"
   },
   "devDependencies": {
+    "@palier/testing": "workspace:*",
     "typescript": "5.9.3"
   },
   "dependencies": {

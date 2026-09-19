@@ -14,9 +14,13 @@
   ],
   "scripts": {
     "build": "tsc -b",
-    "clean": "rm -rf dist *.tsbuildinfo"
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "check-types": "tsc -p tsconfig.vitest.json --noEmit"
   },
   "devDependencies": {
     "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "zod": "4.6.5"
   }
 }

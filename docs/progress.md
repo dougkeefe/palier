@@ -78,45 +78,45 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 
 - [x] Monorepo: pnpm workspaces, Turborepo, TypeScript project references, strict everywhere
 - [x] Eight workspaces created (`apps/web`, `apps/factory`, six `packages/*`), each with an explicit `exports` map
-- [ ] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current)
+- [~] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current) — `domain` and `engine` written; the four empty packages still pending, see D4
 - [ ] Name decided and domain registered (§12.1 — "Palier" is still a working name)
 - [ ] `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0), `README` non-affiliation statement [R5, R13]
 - [ ] `adr/README.md` covering the format and the never-edit-only-supersede rule
 
 ### Domain and contracts
 
-- [ ] `@palier/domain`: full type set, branded ids
-- [ ] `@palier/domain`: Zod schemas for every content artefact, JSON Schema generated to `docs/schemas/`
-- [ ] `@palier/domain`: `ExamProfile` loader
-- [ ] `@palier/domain`: `psc-sle` profile transcribed from `product-requirements.md` §5 (ADR 9)
+- [x] `@palier/domain`: full type set, branded ids
+- [x] `@palier/domain`: Zod schemas for every content artefact, JSON Schema generated to `docs/schemas/`
+- [x] `@palier/domain`: `ExamProfile` loader
+- [x] `@palier/domain`: `psc-sle` profile transcribed from `product-requirements.md` §5 (ADR 9) — with one inferred band, see D12
 - [ ] `@palier/app`: every port interface from §3.3, no implementations behind them
-- [ ] Item type registry (§3.4), with the five members and the a11y contract
+- [!] Item type registry (§3.4), with the five members and the a11y contract — deferred, see D13; it needs an ADR, not a quiet workaround
 
 ### Test infrastructure
 
 Built now rather than retrofitted — §7 is emphatic about this.
 
-- [ ] Vitest workspace across all packages
-- [ ] fast-check
-- [ ] MSW handlers shared between Node and browser
-- [ ] PGlite harness
-- [ ] Playwright with the hermetic composition-root flag
-- [ ] fake-indexeddb
-- [ ] `@axe-core/playwright`
-- [ ] Per-package coverage reporting with the §6.3 targets enforced
-- [ ] `@palier/testing`: in-memory implementation of every port
-- [ ] `@palier/testing`: port contract suites, exported as functions
-- [ ] `@palier/testing`: fixture builders, seeded Random, FakeClock
-- [ ] `@palier/testing`: the 60-item canonical fixture bank
-- [ ] The three CI lanes from §6.5, with their time budgets enforced as build failures
+- [x] Vitest across all packages — one root process, nine projects; see deviation D9
+- [x] fast-check
+- [x] MSW handlers shared between Node and browser
+- [x] PGlite harness — proven by a real integration test against embedded Postgres
+- [x] Playwright with the hermetic composition-root flag
+- [x] fake-indexeddb
+- [x] `@axe-core/playwright`
+- [x] Per-package coverage reporting with the §6.3 targets enforced — proven by a deliberate drop
+- [~] `@palier/testing`: in-memory implementation of every port — four of the specified ports; `SessionStore` and `OralStore` have no signatures in §3.3 yet, and `ItemRepository`, `AiProvider`, `SyncTransport` and `TelemetrySink` need domain types
+- [x] `@palier/testing`: port contract suites, exported as functions
+- [x] `@palier/testing`: fixture builders, seeded Random, FakeClock
+- [ ] `@palier/testing`: the 60-item canonical fixture bank — needs the domain types
+- [x] The three CI lanes from §6.5, with their time budgets enforced as build failures
 
 ### Gates
 
 - [x] Typecheck (`turbo check-types`)
-- [~] Lint — ESLint runs in `apps/web` only; see deviation D1
-- [ ] dependency-cruiser encoding the §3.1 arrows, plus the forbidden imports of `openai`, `dexie`, `next`, `react` outside their allowed packages
-- [ ] eslint-plugin-boundaries for intra-package layering
-- [ ] Unit tests
+- [x] Lint — one root ESLint config over every workspace; D1 resolved
+- [x] dependency-cruiser encoding the §3.1 arrows, plus the forbidden imports of `openai`, `dexie`, `next`, `react` outside their allowed packages
+- [x] eslint-plugin-boundaries for intra-package layering — but see the honesty note in D5
+- [x] Unit tests
 - [ ] Contrast validation on the token set
 - [ ] i18n key parity [R8]
 - [ ] axe on the shell [R9]
@@ -133,18 +133,27 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Exit criteria
 
-- [ ] `pnpm build && pnpm test && pnpm lint` green with every gate active
-- [ ] A deliberate boundary violation on a scratch branch fails CI — **verified by running it**, not assumed
-- [ ] The `psc-sle` profile validates
-- [ ] Band mapping property test passes: total and monotonic over every variant
-- [ ] Port contract suites exist and pass against the in-memory implementations
-- [ ] Fast lane under 90 seconds on an empty codebase — record the number, it is the baseline defended for the rest of the project
+- [~] `pnpm build && pnpm test && pnpm lint` green with every gate active — green, but three gates are not built yet: contrast validation, i18n parity and the Lighthouse/bundle budgets
+- [x] A deliberate boundary violation on a scratch branch fails CI — **verified by running it**, not assumed. Both an arrow violation and a vendor-ban violation were run on `scratch/deliberate-violation`; output in the session log. Running it caught two bugs that made the gate silently vacuous.
+- [x] The `psc-sle` profile validates
+- [x] Band mapping property test passes: total and monotonic over every variant — over all four, driven by `Object.entries(profile.variants)` rather than a hard-coded list
+- [x] Port contract suites exist and pass against the in-memory implementations — four ports, 23 assertions; the rest follow their ports
+- [x] Fast lane under 90 seconds on an empty codebase — **4.6 seconds cold**, caches and `dist` deleted first, with the domain package and 246 tests in place. That is the baseline defended for the rest of the project.
 
 ### Suggested next three
 
-1. `@palier/domain` types and the `psc-sle` profile (§12.4) — everything else depends on it.
-2. dependency-cruiser, proven against a deliberate violation (§12.5) — this is the gate that makes the architecture real, and it also closes deviation D1.
-3. Vitest workspace, fast-check, and the band-mapping property test (§12.6).
+The previous three (domain types and the profile, dependency-cruiser proven against a
+deliberate violation, Vitest and the band-mapping property) are all done — see the
+session log entries for 19 September 2026. What follows them:
+
+1. `@palier/app`: the port interfaces from §3.3. `@palier/testing/src/ports.stub.ts`
+   holds placeholders that say which file they move to; deleting that file is the
+   definition of done. Note §3.3 gives no signatures for `SessionStore` or `OralStore`,
+   so those need deciding rather than transcribing.
+2. The item type registry, which is blocked on a decision rather than on work — read D13
+   first and write ADR 16.
+3. `@palier/ui` design tokens and the six primitives, which unblocks the contrast gate,
+   the axe gate and the Lighthouse budget — the three exit criteria still outstanding.
 
 ---
 
@@ -252,7 +261,7 @@ anticipate. Add to this list; do not remove entries. When a deviation is resolve
 it and say what resolved it.
 
 ### D1 — Default-export ban is enforced in `apps/web` only
-**Date:** 19 September 2026 · **Status:** open, closes in phase 0
+**Date:** 19 September 2026 · **Status:** RESOLVED 19 September 2026
 
 The rule is "named exports only, except Next.js file conventions".
 `apps/web/eslint.config.mjs` enforces it with a core-ESLint `no-restricted-syntax` rule
@@ -261,8 +270,11 @@ config, because linting TypeScript needs a parser and `typescript-eslint` is not
 tree; adding it would have broken the "no dependency beyond pnpm, Turborepo and project
 references" constraint the restructure was given.
 
-**Resolution:** when `eslint-plugin-boundaries` and `dependency-cruiser` arrive in phase 0
-they bring `typescript-eslint` with them. Extend the rule to every workspace then.
+**Resolution:** as predicted. `typescript-eslint@8.70.0` is now a direct root
+devDependency and the ban is enforced repo-wide from the single root
+`eslint.config.mjs`. Verified by running it: a default export in
+`packages/domain/src` errors, and `page.tsx` and `layout.tsx` still pass. See D5
+for why there is now one config rather than one per workspace.
 
 ### D2 — `apps/web` is excluded from the root `tsc -b` solution
 **Date:** 19 September 2026 · **Status:** accepted, permanent
@@ -293,9 +305,422 @@ code in each package, not before.
 
 ---
 
+### D5 — One root ESLint config; `apps/web/eslint.config.mjs` deleted
+**Date:** 19 September 2026 · **Status:** accepted
+
+`apps/web` had the only ESLint config, holding the exhaustive Next.js
+default-export exemption list. Closing D1 meant linting `packages/*` too, and two
+configs would have meant stating "named exports only" twice, running two ESLint
+processes inside a 90-second budget, and giving `eslint-plugin-boundaries` two
+partial views of a repo whose boundaries are the whole point. There is now one
+root `eslint.config.mjs`. `eslint` and `eslint-config-next` moved to root
+devDependencies, because that is where the config that imports them lives —
+pnpm's strict isolation blocks the root from reaching into `apps/web`'s tree.
+
+The config is deliberately **not** type-aware. Nothing it enforces needs type
+information, and `recommendedTypeChecked` would build a full TypeScript program
+on every lint run. Revisit when `@palier/engine` holds algorithms worth
+`no-floating-promises`.
+
+**Honesty note on `eslint-plugin-boundaries`.** §4.2 names it and D1's stated
+resolution named it, so it is installed and configured. With the packages still
+near-empty, the only rule of its earning anything today is `no-unknown-files`,
+which makes a file landing in an unclassified directory an error and so stops the
+element map rotting as the packages fill. The cross-adapter import ban that §3.2
+actually wants lives in `.dependency-cruiser.cjs`, which matches on paths and
+needs no classification. Split the `adapters` element when the first adapter
+lands.
+
+### D6 — dependency-cruiser cruises `src` and resolves through `dist`
+**Date:** 19 September 2026 · **Status:** accepted
+
+Entry points are the `src` directories, so a violation reports at
+`packages/engine/src/leak.ts:1` rather than at a line in generated output. But a
+workspace import resolves through the `exports` map to `<pkg>/dist/index.js`, so
+the `to` side of every arrow rule matches `^packages/<name>/` without anchoring
+to `src`. **The packages must therefore be built before the cruise**, which
+`pnpm verify` guarantees by running `check-types` (and so `^build`) first.
+
+There is deliberately no alias mapping `@palier/*` to `src`. An alias is a second
+source of truth that drifts from the `exports` map, and it would let this gate
+bless an import that does not resolve at runtime.
+
+`apps/web` gets its own two-line config that reuses the root rule set and only
+swaps the `tsConfig`, because the cruiser takes one per run and `apps/web` is the
+only workspace on `moduleResolution: bundler` (see D2).
+
+**Two bugs this config shipped with, both caught only by running the deliberate
+violation and both making the gate silently vacuous.** Recorded because the
+failure mode — a green build that checks nothing — is the one worth recognising
+on sight:
+
+1. `node_modules` was in `exclude`, which drops vendor modules from the graph
+   entirely, so every vendor ban had nothing to match. `doNotFollow` is the
+   correct mechanism: it stops the cruise at the boundary but still records the
+   dependency.
+2. `dist` was in `exclude` for the same reason, which made every *arrow* rule
+   vacuous, since a workspace import resolves into `dist`.
+
+### D7 — Vitest installed with the gates, not with the test infrastructure
+**Date:** 19 September 2026 · **Status:** accepted
+
+`docs/prompts.md` Session 3 says to add no test tooling, and also that `pnpm
+verify` must run tests. A `verify` whose fourth step is a stub that always exits
+zero is precisely the failure the phase 0 exit criteria exist to prevent, so
+`vitest` and `@vitest/coverage-v8` landed here with one real smoke test. The rest
+of §6.1 — fast-check, MSW, PGlite, fake-indexeddb, Playwright, axe, the projects
+list and the per-package coverage thresholds — is the next task.
+
+### D8 — ESLint held at 9.39.5 although 10 is current
+**Date:** 19 September 2026 · **Status:** open, revisit when the peer range widens
+
+`pnpm add eslint@9.39.5` prints a deprecation warning and it is correct: ESLint
+10.11.0 is current. `eslint-config-next@16.3.5` pulls
+`eslint-plugin-import@2.32.0`, which declares
+`peerDependencies.eslint: ^2 || … || ^9` and does not accept 10. Verified against
+the registry rather than assumed. Revisit when `eslint-config-next` drops
+`eslint-plugin-import` or that plugin widens its range.
+
+### D9 — One root Vitest process, and why the integration lane is gated by an env var
+**Date:** 19 September 2026 · **Status:** accepted
+
+§7 says "Vitest workspace across all packages", which reads like a Turborepo
+fan-out with a `test` script per package. It is instead **one root Vitest process
+with nine projects**, and there is no `test` task in `turbo.json`. Vitest
+computes coverage for the whole process and refuses `coverage` inside a project
+config, so the §6.3 per-package targets can only be expressed as glob-keyed
+thresholds in one root block. Eight forked runners could not produce one report
+that enforces them.
+
+`test.projects`, not `test.workspace`: the latter has been deprecated since
+Vitest 3.2 and `vitest.workspace.ts` is gone.
+
+**A trap worth knowing about.** The fast lane was originally going to skip the
+integration project with `--project='!integration'`. Any `--project` filter
+silently zeroes coverage in Vitest 5.0.1 — the run passes, the summary reads
+`Unknown% (0/0)`, and every threshold in the config becomes decorative. Caught by
+running it and reading the number. The integration project is therefore gated by
+`PALIER_INTEGRATION=1` instead, so the fast lane runs `vitest run --coverage`
+with no filter at all.
+
+Two other findings, both verified rather than assumed:
+- Glob thresholds do not inherit the top-level `perFile`; set it per glob.
+- `coverage.excludeAfterRemap: true` is required, because a test in one package
+  executes another's built `dist` and v8 source-maps it back into that package's
+  `src`. Without it, `@palier/domain` could reach its 100% target on the strength
+  of somebody else's tests.
+
+Vitest is pinned at exactly `5.0.1`, released four days ago, because
+`@vitest/coverage-v8` demands an exact peer match and the repo pins everything
+else. Fallback is `4.1.11`; the `projects` API and glob thresholds are identical
+across both, so it is a one-line revert.
+
+### D10 — Test files may import `@palier/testing`; nothing else is relaxed
+**Date:** 19 September 2026 · **Status:** accepted
+
+The §3.1 arrows forbid every package from reaching `@palier/testing`. But §6.2
+tier 3 requires the opposite for tests: the Dexie adapter's test imports
+`attemptStoreContract` from `@palier/testing` and runs it against the real store,
+which is the entire return on the ports layer (ADR 10). Each arrow rule is
+therefore generated twice — once for production code, once for test files with
+`testing` removed from the forbidden set. Verified narrow: an adapters *test*
+importing `@palier/ui` still fails.
+
+`@palier/testing` declares `vitest` as a **peer** dependency, because its
+contract suites call `describe` and `it` at module scope. `vitest` and
+`fast-check` are root devDependencies that no package declares (D9), so
+`not-in-package-json` is split into a production rule and a test rule that
+exempts exactly those two and nothing else.
+
+### D11 — `playwright.config.ts` joins the default-export exemption list
+**Date:** 19 September 2026 · **Status:** accepted
+
+The rule was "named exports only, except Next.js file conventions". Playwright
+resolves its config by default export and offers no named alternative, so the
+exemption is now "framework file conventions" and the list names
+`playwright.config.ts` explicitly. `AGENTS.md` updated to match, with a note that
+adding a line to that list needs a better reason than convenience.
+
+### D12 — `writing-unsupervised` carries an inferred `X 0-10` band
+**Date:** 19 September 2026 · **Status:** open until checked against the PSC
+
+`product-requirements.md` §5.2 gave the unsupervised written expression bands as
+`A 11-16, B 17-23, C 24-30`, leaving raw scores **0 to 10 mapping to no band at
+all**. Every other variant covers its full range. The band mapping must be total
+— §6.2 makes it a property and phase 0 makes it an exit criterion — so this had
+to be resolved before the profile could be written.
+
+`content/profiles/psc-sle.json` carries `X: [0, 10]`, and §5.2 has been amended
+with a footnote saying the row is **inferred, not transcribed**. The reasoning:
+the unsupervised *reading* test does publish `X 0-8`, so X plainly exists on
+unsupervised variants, and an omission in transcription is far likelier than a
+fact about the test.
+
+**The alternative was seriously considered and rejected.** It was to encode the
+gap as a first-class `unbanded: [[0, 10]]` value and make the mapper return a
+discriminated union, so the compiler forced every consumer to handle "no band".
+That is more faithful to ADR 9's principle of holding published figures rather
+than inferred ones. It was rejected because it makes every call site pay,
+forever, for what is almost certainly a typo upstream — and because the footnote
+plus this entry keep the inference visible, which was the real thing at risk.
+
+**This is the one number in the profile nobody has checked against a source.** A
+wrong band boundary is silent: it produces a plausible result for every user with
+nothing to notice. Verify it against the PSC's published table before launch, and
+close this entry when you do.
+
+### D13 — The item type registry is deferred, and wants ADR 16
+**Date:** 19 September 2026 · **Status:** open, blocked on a decision
+
+§3.4 specifies one `registerItemType` call carrying `schema`, `render`, `score`,
+`validate`, `generatePrompt` and an `a11yContract`. It cannot be built as
+specified, because `render` is "a React component from `@palier/ui`" and
+**nothing may import `@palier/ui`** (§3.1). A single registry object therefore
+cannot exist in any package below `apps/web`, and building one now would mean
+either putting React types in `@palier/domain` — which the vendor ban forbids —
+or inventing the split under time pressure.
+
+The shape that probably works: an `ItemTypeDefinition` *without* `render` in
+domain (React-free, which is the half CI and `apps/factory` need), a parallel
+`itemRenderers` map in `@palier/ui`, and a compile-time exhaustiveness assertion
+in the composition root that both cover the same `ItemType` union.
+
+That is a change to §3.4, so it wants **ADR 16**, written in the commit that
+implements it. Not a quiet deviation now. Also unresolved there: §3.4's literal
+has six keys while §4 and §10 both say "all five members" and name the a11y
+contract separately — the architecture test cannot assert "five" until someone
+says which five.
+
+### D14 — zod's NodeNext declaration risk was checked and did not materialise
+**Date:** 19 September 2026 · **Status:** closed
+
+zod 4.6.5's export map declares a single `"types": "./index.d.cts"` for both the
+`import` and `require` conditions, which under `moduleResolution: NodeNext` in an
+ESM package has been reported to degrade inference to `any`. Because
+`@palier/domain` is `composite` with `declaration: true`, a degraded type would
+have been baked into `dist/index.d.ts` and propagated to every consumer.
+
+Checked before writing any real code, by emitting a probe and reading the `.d.ts`
+rather than trusting the editor. Inference was intact and TS2742 did not occur,
+so **no patch was needed**. Recorded so the next person does not re-run the
+investigation, and so that a future zod bump has a named thing to re-check.
+
+What *did* bite, and shapes every schema in the package: `z.infer` of
+`.optional()` produces `b?: T | undefined`, which is not assignable to a
+hand-written `b?: T` under `exactOptionalPropertyTypes` — and annotating the
+schema as `z.ZodType<T>` does not bridge it either. The resolution is that
+optional fields are written `?: T | undefined`, schemas end in `.readonly()` so
+the inferred type matches exactly, and a `Equals<>` assertion in a `.test-d.ts`
+holds the two together. Fixtures **omit** absent keys rather than setting them to
+`undefined`, which the JSON round-trip test enforces.
+
+---
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 19 September 2026 — `dougkeefe/continue-implementation` (3 of 3: domain types and the exam profile)
+
+`@palier/domain` filled in per `architecture.md` §5 and `prompts.md` Session 5, plus the
+band mapper in `@palier/engine`. Both packages at **100% branch, function, statement and
+line coverage**, enforced in config. Deviations D12 to D14 recorded.
+
+One dependency added: `zod@4.6.5`, in `@palier/domain` only.
+
+Branded ids (`ItemId`, `PassageId`, `FormId`, `ScenarioId`, `AttemptId`, `SessionId`,
+`DeviceId`) via a phantom property rather than a `unique symbol`, which is TS4023 under
+`declaration` + `composite`. The full type set from §5, the taxonomies from
+`product-requirements.md` §13, Zod schemas for all six content artefacts, JSON Schema
+published to `docs/schemas/`, and the `ExamProfile` loader — synchronous and I/O-free,
+taking an already-read value, because §3.2 says domain does no I/O.
+
+`content/profiles/psc-sle.json` transcribed from §5. **All four variants, all cut scores,
+checked line by line against the source table** and asserted row by row in
+`psc-sle.test.ts` rather than trusted.
+
+**Verified:**
+
+- `pnpm verify` green. 246 tests, 4 `todo`, 18 files.
+- `@palier/domain` and `@palier/engine` both at 100% on every metric. Where a branch was
+  unreachable it was **removed rather than ignored**: `orderedCuts` now does the
+  `Partial<Record<Band, …>>` narrowing once in domain, so the engine has no defensive
+  `continue` that no test could honestly cover.
+- The band mapping property passes over every variant, driven by
+  `describe.each(Object.entries(profile.variants))`. Totality is asserted **exhaustively**
+  (≤ 56 calls, cheaper and stronger than sampling); fast-check covers monotonicity.
+- The profile gate bites. `writing-supervised` C moved from `[43,51]` to `[44,51]` and the
+  suite failed with
+  `variants.writing-supervised.cuts: Raw scores 43 to 43 are covered by no band: B ends at 42 and C starts at 44.`
+  Reverted.
+- The branded-id test bites. `Brand<T, B>` reduced to `T` and `tsc` reported
+  `TS2578: Unused '@ts-expect-error' directive` three times — which is why the test uses
+  `@ts-expect-error` rather than an equality assertion that would quietly start passing.
+  Reverted.
+- The JSON Schema drift guard bites: changing `subSkills` from a record to an object
+  failed the snapshot until regenerated with `pnpm exec vitest run -u`.
+- **Layer 4 of the boundary proof**, now that there is real source to violate. On
+  `scratch/arrow-violation`, `@palier/domain` importing `@palier/engine` with the
+  dependency properly declared:
+
+```
+  error domain-depends-on-nothing: packages/domain/src/bands.ts → packages/engine/dist/index.d.ts
+    @palier/domain sits at the bottom of the graph and depends on nothing
+    (implementation-plan.md 3.1, ADR 10). If domain needs this, the thing it
+    needs is in the wrong package.
+```
+
+  Branch deleted. Together with commit 1's runs, all four layers of the gate are now
+  proved by running them.
+
+**Two things raised for you, both in the deviations log:**
+
+1. **The `writing-unsupervised` band gap (D12).** §5.2 published
+   `A 11-16, B 17-23, C 24-30` on a 30-item paper, leaving 0 to 10 mapping to nothing —
+   `prompts.md` Session 5 asks explicitly that this be reported. The profile now carries an
+   **inferred** `X: [0, 10]` and §5.2 is amended with a footnote saying so. It is the one
+   number in the profile that has not been checked against a source, and a wrong band
+   boundary is silent. Worth ten minutes against the PSC's published table.
+2. **The item type registry (D13).** It cannot be built as §3.4 specifies: `render` must be
+   a `@palier/ui` React component and nothing may import `@palier/ui`, so the registry
+   cannot live anywhere below `apps/web`. Deferred rather than worked around; it wants
+   ADR 16. §3.4 also has six keys while §4 and §10 say "five members", which needs
+   settling before the architecture test can assert a count.
+
+Also of note: `zod`'s NodeNext declaration risk was checked before any code was written
+and **did not materialise** (D14). What did bite is `exactOptionalPropertyTypes` versus
+`z.infer`, which is why optional fields are written `?: T | undefined` and every schema
+ends in `.readonly()`.
+
+### 19 September 2026 — `dougkeefe/continue-implementation` (2 of 3: test infrastructure)
+
+The harness built before there is anything to test, per `implementation-plan.md` §6
+and `prompts.md` Session 4. Vitest across nine projects, fast-check, MSW, PGlite,
+fake-indexeddb, Playwright with axe, the §6.3 coverage thresholds enforced in config,
+and the medium and nightly lanes wired. Deviations D9 to D11 recorded.
+
+Dependencies added, all exact: `fast-check@4.10.1` at the root;
+`msw@2.15.0`, `@electric-sql/pglite@0.5.8` and `fake-indexeddb@6.2.5` as
+**dependencies** of `@palier/testing`, because it exports those harnesses rather than
+merely testing with them; `vitest@5.0.1` as its **peer**; `@playwright/test@1.63.0` and
+`@axe-core/playwright@4.13.0` in `apps/web`, beside the app they drive.
+
+`@palier/testing` now holds a seeded `Random` (mulberry32, four lines, auditable) and a
+`FakeClock`, in-memory `AttemptStore`, `ScheduleStore`, `SettingsStore` and `KeyVault`,
+their four contract suites exported as functions, MSW handlers shared between Node and
+browser, the PGlite harness, the hermetic composition-root flag, and the generic fixture
+builder. It has three `exports` entries — the root, `./msw/browser` (importing
+`msw/browser` from the root would break every Node consumer) and `./setup` (side-effectful,
+for `setupFiles`) — which keeps D3's principle of not declaring an entry point with
+nothing behind it.
+
+The real port interfaces are deliberately **not** invented here. `src/ports.stub.ts`
+carries local placeholders with a comment naming the file they move to when
+`@palier/app` lands; only the ports §3.3 actually specifies are stubbed, so nobody
+mistakes an invention for a contract.
+
+**Verified:**
+
+- `pnpm verify` green. **Fast lane 4.1 seconds cold**, caches and `dist` deleted first,
+  against a 90-second budget. 42 tests, 4 `todo`, across 7 files.
+- Coverage thresholds bite. A three-branch function with no test was added to
+  `packages/testing/src`, and the run failed with
+  `ERROR: Coverage for branches (80%) does not meet "packages/testing/src/**/*.ts" threshold (90%)`.
+  Reverted.
+- The medium lane runs real embedded Postgres: 2 tests, 1.13s, `select 1` and a
+  create/insert/select round trip.
+- The test-file relaxation on the arrow rules is narrow. An adapters test importing
+  `@palier/ui` still fails with
+  `adapters-depend-on-app-and-domain-only-in-tests`. Reverted.
+- `depcruise` now sees a real graph rather than an empty one: 45 modules, 61
+  dependencies, clean.
+
+**Three things caught by running rather than assuming**, all written up in D9 to D11:
+any `--project` filter zeroes Vitest 5.0.1's coverage report while still passing; the
+arrow rules forbade the very import §6.2 tier 3 requires; and `playwright.config.ts`
+needs a default export, so the exemption list is now "framework file conventions" rather
+than "Next.js file conventions".
+
+**Still open in this area:** the 60-item canonical fixture bank and the remaining
+in-memory ports both need the domain types, so they follow in the next commit.
+`SessionStore` and `OralStore` have no signatures in §3.3 at all — that is a gap in the
+plan, not an omission here.
+
+### 19 September 2026 — `dougkeefe/continue-implementation` (1 of 3: the gates)
+
+Architecture enforcement, per `implementation-plan.md` §4 and `prompts.md` Session 3.
+One root `eslint.config.mjs` replacing the per-app one, `dependency-cruiser` encoding
+the §3.1 arrows and the vendor bans, a `pnpm verify` chain, and the fast/medium CI
+lanes with the 90-second budget enforced as a hard kill. Deviations D5 to D8 recorded;
+**D1 resolved**.
+
+Dependencies added, all exact: `dependency-cruiser@18.3.1` and
+`eslint-plugin-boundaries@7.2.0` are the only genuinely new trees. `eslint@9.39.5`,
+`@eslint/js@9.39.5`, `typescript-eslint@8.70.0` and `eslint-config-next@16.3.5` were
+already resolved in the lockfile and moved to the root. `vitest@5.0.1` and
+`@vitest/coverage-v8@5.0.1` per D7. `@types/node` bumped to 22.18.11 to match Vitest 5's
+peer range and the local Node 22.19.0. Added `.nvmrc` so CI and local agree.
+
+**Verified:**
+
+- `pnpm verify` green, **3.4 seconds cold** (caches and `dist` deleted first). That is
+  the fast-lane baseline this project defends; the budget is 90 seconds.
+- Lint negative tests, all five bite and were reverted: a default export in
+  `packages/domain/src` → *"Named exports only…"*; `async`/`await`/`Promise` in domain
+  → three separate errors naming §3.2; `Date.now()` in `packages/engine/src` →
+  *"@palier/engine is pure. Take a Clock as a parameter"*. `page.tsx` and `layout.tsx`
+  still pass, so the Next.js exemption list survived the move.
+- `turbo check-types` now covers all eight workspaces rather than `apps/web` alone;
+  every package gained a non-composite `tsconfig.vitest.json` that includes its tests,
+  and its build `tsconfig.json` now excludes them so no test reaches `dist`.
+
+**The deliberate boundary violation, on `scratch/deliberate-violation`, since the exit
+criterion says to run it rather than assume it.** Running it was not a formality: it
+caught two bugs that made the gate silently vacuous. Both are written up in D6.
+
+*Run 1 — `@palier/engine` importing `dexie`, undeclared.* Typecheck fails first, which
+is the wrong gate for this exercise:
+
+```
+@palier/engine:check-types: src/leak.ts(1,19): error TS2307: Cannot find module 'dexie'
+  or its corresponding type declarations.
+```
+
+*Run 2 — the same import, with `dexie` genuinely declared and installed in
+`@palier/engine`, so the cruiser is what must stop it:*
+
+```
+  error no-dexie-outside-adapters: packages/engine/src/leak.ts → node_modules/.pnpm/dexie@4.4.6/node_modules/dexie/import-wrapper.mjs
+    `dexie` belongs in packages/adapters/src/dexie and nowhere else
+    (implementation-plan.md 4.1). Depend on the port instead, and let the
+    composition root wire the concrete thing.
+
+  error engine-has-no-dependencies: packages/engine/src/leak.ts → node_modules/.pnpm/dexie@4.4.6/node_modules/dexie/import-wrapper.mjs
+    @palier/engine is pure and takes no npm or Node core dependency at all
+    (implementation-plan.md 3.2, architecture.md 7). Clock and Random arrive as
+    parameters (ADR 7, ADR 8). If you need a library here, the code probably
+    belongs in @palier/app.
+
+x 2 dependency violations (2 errors, 0 warnings). 11 modules, 4 dependencies cruised.
+```
+
+*Run 3 — an arrow violation rather than a vendor one: `@palier/domain` importing
+`@palier/engine`, properly declared, so only the §3.1 rule can catch it:*
+
+```
+  error domain-depends-on-nothing: packages/domain/src/index.ts → packages/engine/dist/index.d.ts
+    @palier/domain sits at the bottom of the graph and depends on nothing
+    (implementation-plan.md 3.1, ADR 10). If domain needs this, the thing it
+    needs is in the wrong package.
+
+x 1 dependency violations (1 errors, 0 warnings). 10 modules, 3 dependencies cruised.
+```
+
+Branch deleted afterwards. The messages were legible on the first read, which is the
+acceptance check `prompts.md` sets for this session, so no `comment` needed rewriting.
+
+**Note for the next session:** the previous entry's closing note said `docs/` was
+untracked. It was committed in `3d6b524` and that note is now stale.
 
 ### 19 September 2026 — `dougkeefe/palier-monorepo-restructure`
 Restructured the `create-next-app` root into a pnpm + Turborepo monorepo matching §3.2.

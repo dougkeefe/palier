@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lang": {
+      "type": "string",
+      "enum": [
+        "en",
+        "fr"
+      ]
+    },
+    "docType": {
+      "type": "string",
+      "enum": [
+        "email",
+        "memo",
+        "letter",
+        "bulletin",
+        "report-excerpt",
+        "research",
+        "note"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "body": {
+      "type": "string",
+      "minLength": 1
+    },
+    "wordCount": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "targetBand": {
+      "type": "string",
+      "enum": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "topic": {
+      "type": "string",
+      "enum": [
+        "human-resources",
+        "finance-and-budgets",
+        "it-and-digital",
+        "service-delivery",
+        "policy-and-legislation",
+        "health-and-safety",
+        "procurement",
+        "communications",
+        "project-management",
+        "official-languages",
+        "accessibility",
+        "environment"
+      ]
+    },
+    "readability": {
+      "type": "object",
+      "properties": {
+        "sentences": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "avgSentenceLength": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "rareWordRatio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "sentences",
+        "avgSentenceLength",
+        "rareWordRatio"
+      ],
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "original",
+            "derived"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+        },
+        "licence": {
+          "type": "string",
+          "enum": [
+            "OGL-Canada-2.0",
+            "canada.ca-non-commercial",
+            "public-domain",
+            "other"
+          ]
+        },
+        "licenceNote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transformation": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "published",
+        "retired"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "lang",
+    "docType",
+    "title",
+    "body",
+    "wordCount",
+    "targetBand",
+    "topic",
+    "readability",
+    "source",
+    "status"
+  ],
+  "additionalProperties": false
+}

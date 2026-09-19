@@ -145,7 +145,11 @@ Everything in the product is anchored to the published structure of the real tes
 | Items | 65 multiple choice, 55 scored, 10 pilot, not adaptive | 30 |
 | Time | 90 minutes | 45 minutes |
 | Item types | Fill in the blank; error identification | Choose the best word or phrase to complete sentences or short paragraphs in workplace scenarios |
-| Bands | X 0-19, A 20-30, B 31-42, C 43-51, E 52-55 | A 11-16, B 17-23, C 24-30 |
+| Bands | X 0-19, A 20-30, B 31-42, C 43-51, E 52-55 | X 0-10*, A 11-16, B 17-23, C 24-30 |
+
+\* **Amendment, 19 September 2026.** The `X 0-10` row on the unsupervised test is **inferred, not transcribed.** The published figures this document was built from give the unsupervised written expression bands as `A 11-16, B 17-23, C 24-30`, which leaves raw scores 0 to 10 mapping to no band at all. Every other variant in this section covers its full range, and the unsupervised reading test does publish an X band (`X 0-8`), so the omission is far more likely to be a gap in transcription than a fact about the test. The band mapping must be total — `implementation-plan.md` §6.2 makes it a property test and a phase 0 exit criterion — so `content/profiles/psc-sle.json` carries `X: [0, 10]` and this row now matches it.
+
+**This should be checked against the PSC's published table before launch.** It is the one number in this section that nobody has verified against a source, and a wrong band boundary is silent: it produces a plausible result for every user, forever, with nothing to notice. See deviation D12 in `progress.md`.
 
 Worth noting for the product copy: the written expression test is entirely multiple choice. It measures knowledge of grammar, vocabulary and other aspects of written expression, not composition. Many candidates arrive expecting to write an essay. Palier should correct that expectation early, while still offering an optional free-writing workshop because the skill transfers to the oral test.
 
