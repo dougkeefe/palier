@@ -5,13 +5,25 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
     "check-types": "turbo run check-types",
+    "lint": "eslint --cache --max-warnings=0 .",
+    "boundaries": "depcruise --config .dependency-cruiser.cjs --output-type err-long packages/*/src apps/factory/src && depcruise --config apps/web/.dependency-cruiser.cjs --output-type err-long apps/web/src",
+    "test": "vitest run --coverage",
+    "verify": "pnpm run check-types && pnpm run lint && pnpm run boundaries && pnpm run test",
     "clean": "turbo run clean && tsc -b --clean"
   },
   "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/node": "22.18.11",
+    "@vitest/coverage-v8": "5.0.1",
+    "dependency-cruiser": "18.3.1",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.5",
+    "eslint-plugin-boundaries": "7.2.0",
     "turbo": "^2.11.2",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.70.0",
+    "vitest": "5.0.1"
   },
   "packageManager": "pnpm@10.13.1"
 }

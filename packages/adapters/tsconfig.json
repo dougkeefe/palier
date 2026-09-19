@@ -9,7 +9,12 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.test-d.ts",
+    "src/**/*.integration.test.ts",
+    "src/**/__tests__/**"
   ],
   "references": [
     {

@@ -66,7 +66,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| — | — | — |
+| `dougkeefe/continue-implementation` | Phase 0 gates, test infrastructure, domain types (§12.4–12.6) | 19 September 2026 |
 
 ---
 
@@ -113,10 +113,10 @@ Built now rather than retrofitted — §7 is emphatic about this.
 ### Gates
 
 - [x] Typecheck (`turbo check-types`)
-- [~] Lint — ESLint runs in `apps/web` only; see deviation D1
-- [ ] dependency-cruiser encoding the §3.1 arrows, plus the forbidden imports of `openai`, `dexie`, `next`, `react` outside their allowed packages
-- [ ] eslint-plugin-boundaries for intra-package layering
-- [ ] Unit tests
+- [x] Lint — one root ESLint config over every workspace; D1 resolved
+- [x] dependency-cruiser encoding the §3.1 arrows, plus the forbidden imports of `openai`, `dexie`, `next`, `react` outside their allowed packages
+- [x] eslint-plugin-boundaries for intra-package layering — but see the honesty note in D5
+- [~] Unit tests — Vitest runs in `pnpm verify` with one smoke test; the harness proper is the next task
 - [ ] Contrast validation on the token set
 - [ ] i18n key parity [R8]
 - [ ] axe on the shell [R9]
@@ -134,7 +134,7 @@ Built now rather than retrofitted — §7 is emphatic about this.
 ### Exit criteria
 
 - [ ] `pnpm build && pnpm test && pnpm lint` green with every gate active
-- [ ] A deliberate boundary violation on a scratch branch fails CI — **verified by running it**, not assumed
+- [x] A deliberate boundary violation on a scratch branch fails CI — **verified by running it**, not assumed. Both an arrow violation and a vendor-ban violation were run on `scratch/deliberate-violation`; output in the session log. Running it caught two bugs that made the gate silently vacuous.
 - [ ] The `psc-sle` profile validates
 - [ ] Band mapping property test passes: total and monotonic over every variant
 - [ ] Port contract suites exist and pass against the in-memory implementations
@@ -252,7 +252,7 @@ anticipate. Add to this list; do not remove entries. When a deviation is resolve
 it and say what resolved it.
 
 ### D1 — Default-export ban is enforced in `apps/web` only
-**Date:** 19 September 2026 · **Status:** open, closes in phase 0
+**Date:** 19 September 2026 · **Status:** RESOLVED 19 September 2026
 
 The rule is "named exports only, except Next.js file conventions".
 `apps/web/eslint.config.mjs` enforces it with a core-ESLint `no-restricted-syntax` rule
@@ -261,8 +261,11 @@ config, because linting TypeScript needs a parser and `typescript-eslint` is not
 tree; adding it would have broken the "no dependency beyond pnpm, Turborepo and project
 references" constraint the restructure was given.
 
-**Resolution:** when `eslint-plugin-boundaries` and `dependency-cruiser` arrive in phase 0
-they bring `typescript-eslint` with them. Extend the rule to every workspace then.
+**Resolution:** as predicted. `typescript-eslint@8.70.0` is now a direct root
+devDependency and the ban is enforced repo-wide from the single root
+`eslint.config.mjs`. Verified by running it: a default export in
+`packages/domain/src` errors, and `page.tsx` and `layout.tsx` still pass. See D5
+for why there is now one config rather than one per workspace.
 
 ### D2 — `apps/web` is excluded from the root `tsc -b` solution
 **Date:** 19 September 2026 · **Status:** accepted, permanent
@@ -293,9 +296,163 @@ code in each package, not before.
 
 ---
 
+### D5 — One root ESLint config; `apps/web/eslint.config.mjs` deleted
+**Date:** 19 September 2026 · **Status:** accepted
+
+`apps/web` had the only ESLint config, holding the exhaustive Next.js
+default-export exemption list. Closing D1 meant linting `packages/*` too, and two
+configs would have meant stating "named exports only" twice, running two ESLint
+processes inside a 90-second budget, and giving `eslint-plugin-boundaries` two
+partial views of a repo whose boundaries are the whole point. There is now one
+root `eslint.config.mjs`. `eslint` and `eslint-config-next` moved to root
+devDependencies, because that is where the config that imports them lives —
+pnpm's strict isolation blocks the root from reaching into `apps/web`'s tree.
+
+The config is deliberately **not** type-aware. Nothing it enforces needs type
+information, and `recommendedTypeChecked` would build a full TypeScript program
+on every lint run. Revisit when `@palier/engine` holds algorithms worth
+`no-floating-promises`.
+
+**Honesty note on `eslint-plugin-boundaries`.** §4.2 names it and D1's stated
+resolution named it, so it is installed and configured. With the packages still
+near-empty, the only rule of its earning anything today is `no-unknown-files`,
+which makes a file landing in an unclassified directory an error and so stops the
+element map rotting as the packages fill. The cross-adapter import ban that §3.2
+actually wants lives in `.dependency-cruiser.cjs`, which matches on paths and
+needs no classification. Split the `adapters` element when the first adapter
+lands.
+
+### D6 — dependency-cruiser cruises `src` and resolves through `dist`
+**Date:** 19 September 2026 · **Status:** accepted
+
+Entry points are the `src` directories, so a violation reports at
+`packages/engine/src/leak.ts:1` rather than at a line in generated output. But a
+workspace import resolves through the `exports` map to `<pkg>/dist/index.js`, so
+the `to` side of every arrow rule matches `^packages/<name>/` without anchoring
+to `src`. **The packages must therefore be built before the cruise**, which
+`pnpm verify` guarantees by running `check-types` (and so `^build`) first.
+
+There is deliberately no alias mapping `@palier/*` to `src`. An alias is a second
+source of truth that drifts from the `exports` map, and it would let this gate
+bless an import that does not resolve at runtime.
+
+`apps/web` gets its own two-line config that reuses the root rule set and only
+swaps the `tsConfig`, because the cruiser takes one per run and `apps/web` is the
+only workspace on `moduleResolution: bundler` (see D2).
+
+**Two bugs this config shipped with, both caught only by running the deliberate
+violation and both making the gate silently vacuous.** Recorded because the
+failure mode — a green build that checks nothing — is the one worth recognising
+on sight:
+
+1. `node_modules` was in `exclude`, which drops vendor modules from the graph
+   entirely, so every vendor ban had nothing to match. `doNotFollow` is the
+   correct mechanism: it stops the cruise at the boundary but still records the
+   dependency.
+2. `dist` was in `exclude` for the same reason, which made every *arrow* rule
+   vacuous, since a workspace import resolves into `dist`.
+
+### D7 — Vitest installed with the gates, not with the test infrastructure
+**Date:** 19 September 2026 · **Status:** accepted
+
+`docs/prompts.md` Session 3 says to add no test tooling, and also that `pnpm
+verify` must run tests. A `verify` whose fourth step is a stub that always exits
+zero is precisely the failure the phase 0 exit criteria exist to prevent, so
+`vitest` and `@vitest/coverage-v8` landed here with one real smoke test. The rest
+of §6.1 — fast-check, MSW, PGlite, fake-indexeddb, Playwright, axe, the projects
+list and the per-package coverage thresholds — is the next task.
+
+### D8 — ESLint held at 9.39.5 although 10 is current
+**Date:** 19 September 2026 · **Status:** open, revisit when the peer range widens
+
+`pnpm add eslint@9.39.5` prints a deprecation warning and it is correct: ESLint
+10.11.0 is current. `eslint-config-next@16.3.5` pulls
+`eslint-plugin-import@2.32.0`, which declares
+`peerDependencies.eslint: ^2 || … || ^9` and does not accept 10. Verified against
+the registry rather than assumed. Revisit when `eslint-config-next` drops
+`eslint-plugin-import` or that plugin widens its range.
+
+---
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 19 September 2026 — `dougkeefe/continue-implementation` (1 of 3: the gates)
+
+Architecture enforcement, per `implementation-plan.md` §4 and `prompts.md` Session 3.
+One root `eslint.config.mjs` replacing the per-app one, `dependency-cruiser` encoding
+the §3.1 arrows and the vendor bans, a `pnpm verify` chain, and the fast/medium CI
+lanes with the 90-second budget enforced as a hard kill. Deviations D5 to D8 recorded;
+**D1 resolved**.
+
+Dependencies added, all exact: `dependency-cruiser@18.3.1` and
+`eslint-plugin-boundaries@7.2.0` are the only genuinely new trees. `eslint@9.39.5`,
+`@eslint/js@9.39.5`, `typescript-eslint@8.70.0` and `eslint-config-next@16.3.5` were
+already resolved in the lockfile and moved to the root. `vitest@5.0.1` and
+`@vitest/coverage-v8@5.0.1` per D7. `@types/node` bumped to 22.18.11 to match Vitest 5's
+peer range and the local Node 22.19.0. Added `.nvmrc` so CI and local agree.
+
+**Verified:**
+
+- `pnpm verify` green, **3.4 seconds cold** (caches and `dist` deleted first). That is
+  the fast-lane baseline this project defends; the budget is 90 seconds.
+- Lint negative tests, all five bite and were reverted: a default export in
+  `packages/domain/src` → *"Named exports only…"*; `async`/`await`/`Promise` in domain
+  → three separate errors naming §3.2; `Date.now()` in `packages/engine/src` →
+  *"@palier/engine is pure. Take a Clock as a parameter"*. `page.tsx` and `layout.tsx`
+  still pass, so the Next.js exemption list survived the move.
+- `turbo check-types` now covers all eight workspaces rather than `apps/web` alone;
+  every package gained a non-composite `tsconfig.vitest.json` that includes its tests,
+  and its build `tsconfig.json` now excludes them so no test reaches `dist`.
+
+**The deliberate boundary violation, on `scratch/deliberate-violation`, since the exit
+criterion says to run it rather than assume it.** Running it was not a formality: it
+caught two bugs that made the gate silently vacuous. Both are written up in D6.
+
+*Run 1 — `@palier/engine` importing `dexie`, undeclared.* Typecheck fails first, which
+is the wrong gate for this exercise:
+
+```
+@palier/engine:check-types: src/leak.ts(1,19): error TS2307: Cannot find module 'dexie'
+  or its corresponding type declarations.
+```
+
+*Run 2 — the same import, with `dexie` genuinely declared and installed in
+`@palier/engine`, so the cruiser is what must stop it:*
+
+```
+  error no-dexie-outside-adapters: packages/engine/src/leak.ts → node_modules/.pnpm/dexie@4.4.6/node_modules/dexie/import-wrapper.mjs
+    `dexie` belongs in packages/adapters/src/dexie and nowhere else
+    (implementation-plan.md 4.1). Depend on the port instead, and let the
+    composition root wire the concrete thing.
+
+  error engine-has-no-dependencies: packages/engine/src/leak.ts → node_modules/.pnpm/dexie@4.4.6/node_modules/dexie/import-wrapper.mjs
+    @palier/engine is pure and takes no npm or Node core dependency at all
+    (implementation-plan.md 3.2, architecture.md 7). Clock and Random arrive as
+    parameters (ADR 7, ADR 8). If you need a library here, the code probably
+    belongs in @palier/app.
+
+x 2 dependency violations (2 errors, 0 warnings). 11 modules, 4 dependencies cruised.
+```
+
+*Run 3 — an arrow violation rather than a vendor one: `@palier/domain` importing
+`@palier/engine`, properly declared, so only the §3.1 rule can catch it:*
+
+```
+  error domain-depends-on-nothing: packages/domain/src/index.ts → packages/engine/dist/index.d.ts
+    @palier/domain sits at the bottom of the graph and depends on nothing
+    (implementation-plan.md 3.1, ADR 10). If domain needs this, the thing it
+    needs is in the wrong package.
+
+x 1 dependency violations (1 errors, 0 warnings). 10 modules, 3 dependencies cruised.
+```
+
+Branch deleted afterwards. The messages were legible on the first read, which is the
+acceptance check `prompts.md` sets for this session, so no `comment` needed rewriting.
+
+**Note for the next session:** the previous entry's closing note said `docs/` was
+untracked. It was committed in `3d6b524` and that note is now stale.
 
 ### 19 September 2026 — `dougkeefe/palier-monorepo-restructure`
 Restructured the `create-next-app` root into a pnpm + Turborepo monorepo matching §3.2.

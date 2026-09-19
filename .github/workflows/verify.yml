@@ -1,0 +1,81 @@
+# The CI lanes from implementation-plan.md 6.5.
+#
+# The budgets are enforced as build failures rather than tracked as a metric,
+# because "a slow test is a build failure rather than a slow creep" is the whole
+# point (implementation-plan.md 7). Zero retries anywhere in fast or medium:
+# everything in them is deterministic by construction, so a flake is a real bug
+# and gets quarantined with an issue the same day (6.5, flake policy).
+name: verify
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TURBO_TELEMETRY_DISABLED: 1
+  DO_NOT_TRACK: 1
+
+jobs:
+  fast:
+    name: Fast lane (budget 90s)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # Install and cache restore sit OUTSIDE the timed window. The budget
+      # measures the gate a contributor actually runs, not GitHub's runner.
+      - run: pnpm install --frozen-lockfile
+
+      - name: Restore Turborepo cache
+        uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+
+      # `turbo build` IS inside the window, because `pnpm verify` pays for it
+      # and so should the budget.
+      - name: pnpm verify
+        run: |
+          set -o pipefail
+          start=$SECONDS
+          if ! timeout --kill-after=15s 90s pnpm run verify; then
+            code=$?
+            if [ "$code" -eq 124 ] || [ "$code" -eq 137 ]; then
+              echo "::error::Fast lane exceeded its 90 second budget (implementation-plan.md 6.5). This is the baseline the project defends; make the suite faster rather than raising the number."
+            fi
+            exit "$code"
+          fi
+          echo "Fast lane: $((SECONDS - start))s of the 90s budget." >> "$GITHUB_STEP_SUMMARY"
+
+  medium:
+    name: Medium lane (budget 4m)
+    runs-on: ubuntu-latest
+    needs: fast
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      # Integration (PGlite, fake-indexeddb), the sync simulation, E2E on
+      # Chromium, axe and the bundle-size check land here with the test
+      # infrastructure. The job exists now so the lane is wired, not so it
+      # pretends to test something.
+      - name: Not yet populated
+        run: echo "Medium lane is wired but empty until the test infrastructure lands (implementation-plan.md 6.5)."
