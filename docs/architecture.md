@@ -9,6 +9,13 @@
 > **How to read this document.** It describes how the system works and the constraints it operates under. It does not argue for its choices; the reasoning and the alternatives considered live in the numbered decision records under `adr/`, cited inline as ADR n. Anything here is changeable by a future maintainer who writes a superseding ADR.
 **Status:** For review
 
+> **Reconciled 19 September 2026.** Sections 1, 2, 4, 9.1, 17, 18 and 19 had fallen behind
+> decisions recorded after they were written. Corrected against ADR 6 (hand-authored content
+> is a supported path), ADR 10 (six packages, `@palier/domain`), ADR 16 (no estimate store)
+> and `implementation-plan.md` §7 (the build order). No new position is taken here; each
+> edit brings this document in line with a decision already recorded elsewhere. See
+> deviation D17 in `progress.md`.
+
 ---
 
 ## 1. Constraints that drive the architecture
@@ -19,7 +26,7 @@
 | Users bring their own OpenAI key | The key lives in the browser. The server never stores it and, with one narrow exception, never sees it |
 | Local-first, sync on by default, no sign-in required | The browser is the system of record and the cloud is a replica. Sync runs against an anonymous device-generated identity from first run, upgradeable to an email or GitHub identity later, and disableable in settings |
 | Works with no key and no sign-in | The item bank ships as static, cacheable assets and the whole drill and exam experience is client-side |
-| The item bank is machine-authored end to end | The content factory is a first-class subsystem with adversarial review gates, not a maintainer script. Item quality is a build problem, not an editorial one |
+| The item bank is machine-drafted by default, with hand-authored items passing the same gates (ADR 6) | The content factory is a first-class subsystem with adversarial review gates, not a maintainer script. Item quality is a build problem, not an editorial one |
 | Bilingual and WCAG 2.2 AA | Server-rendered localised routes, no string literals in components, automated a11y gates in CI |
 | Realtime voice | WebRTC to OpenAI from the browser, which needs an ephemeral credential, which needs one server call |
 
@@ -38,7 +45,7 @@
 │  └────────────────────┘  └───────────────┘  └───────────────┘            │
 │                                                                          │
 │  ┌── Local store (Dexie / IndexedDB) ──────────────────────────────┐     │
-│  │ attempts · estimates · schedule · sessions · transcripts · audio │     │
+│  │ attempts · schedule · sessions · transcripts · audio             │     │
 │  └──────────────────────────────────────────────────────────────────┘     │
 │                                                                          │
 │  ┌── Key vault (Web Crypto + IndexedDB, non-extractable where possible) ─┐│
@@ -95,39 +102,37 @@ Deliberately not used: a CMS, a state management framework beyond Zustand, a com
 
 ```
 palier/
-├── apps/web/                  Next.js application
-│   ├── app/[locale]/          Localised routes
-│   ├── components/
-│   ├── lib/
-│   │   ├── engine/            session, scheduler, trend, scoring
-│   │   ├── ai/                prompt contracts, clients, cost accounting
-│   │   ├── store/             Dexie schema, migrations, sync
-│   │   └── crypto/            key vault
-│   └── messages/              en.json, fr.json
+├── apps/
+│   ├── web/                   Next.js application and the one composition root
+│   │   ├── app/[locale]/      Localised routes
+│   │   ├── components/
+│   │   ├── lib/container.ts   The only file that names concrete adapters (§3.5 of the plan)
+│   │   └── messages/          en.json, fr.json
+│   └── factory/               The content factory as a CLI (see section 8.3)
 ├── packages/
-│   ├── content-schema/        Zod schemas + generated JSON Schema + types
-│   ├── engine/                pure, dependency-free scoring and scheduling
-│   └── ui/                    design tokens and primitives
+│   ├── domain/                Types, branded ids, invariants, Zod schemas, the profile loader
+│   ├── engine/                Pure, dependency-free scoring, selection and scheduling
+│   ├── app/                   Port interfaces and use cases
+│   ├── adapters/              dexie · bank · openai · sync · vault, one subpath export each
+│   ├── ui/                    Design tokens, primitives, item renderers
+│   └── testing/               In-memory ports, contract suites, fixtures, seeded Random, FakeClock
 ├── content/
-│   ├── items/fr/              the item bank, sharded by skill and sub-skill
+│   ├── profiles/              Exam profiles. psc-sle.json holds every SLE-specific number (ADR 9)
+│   ├── items/fr/              The item bank, sharded by skill and sub-skill
 │   ├── items/en/
-│   ├── passages/              source passages with provenance metadata
-│   ├── forms/                 fixed mock exam forms
+│   ├── passages/              Source passages with provenance metadata
+│   ├── forms/                 Fixed mock exam forms
 │   └── library/               MDX reference articles
-├── tools/
-│   └── factory/               the content factory (see section 8.3)
-│       ├── harvest/           source research, licence determination, provenance
-│       ├── passages/          passage construction and register scoring
-│       ├── draft/             item generation
-│       ├── review/            adversarial cross-model review gate
-│       ├── validate/          deterministic schema, duplicate and balance checks
-│       ├── sample/            5% human spot-check UI
-│       ├── calibrate/         difficulty calibration from telemetry
-│       └── build-bank/        compiles content/ into versioned static bundles
-└── docs/                      these specs, contribution guide, ADRs
+└── docs/                      These specs, the contribution guide, ADRs
 ```
 
-The engine package being pure and dependency-free matters: it is the part that must be unit-testable and deterministic, and it is what a fork would reuse.
+The package set and the arrows between them are specified by `implementation-plan.md` §3
+and decided by ADR 10, which supersedes an earlier twelve-package split. That document is
+authoritative for module structure; this tree is here for orientation. The factory lives at
+`apps/factory` rather than under `tools/`, and the pipeline stages listed in section 8.3
+are directories within it.
+
+`@palier/engine` being pure and dependency-free matters: it is the part that must be unit-testable and deterministic, and it is what a fork would reuse. It takes `Clock` and `Random` as parameters and calls neither `Date.now` nor `Math.random`, which a lint rule enforces.
 
 ---
 
@@ -500,7 +505,6 @@ Guards: a pre-flight cost estimate on any action expected to exceed a user-set t
 db.version(1).stores({
   profile:      'id',                              // singleton
   attempts:     'id, itemId, skill, ts, sessionId',
-  estimates:    '[skill+lang], updatedAt',
   schedule:     'itemId, due, skill',
   sessions:     'id, type, startedAt',
   examRuns:     'id, formId, startedAt, submittedAt',
@@ -514,6 +518,10 @@ db.version(1).stores({
   syncMeta:     'id'
 })
 ```
+
+There is deliberately no `estimates` table. The practice trend is derived from the attempt
+log on demand, so there is nothing to persist, nothing to invalidate and nothing to
+reconcile during sync (ADR 16, `implementation-plan.md` §3.3, and section 9.4 below).
 
 Attempt record:
 
@@ -708,7 +716,7 @@ Deliberately minimal, since there is almost no server.
 - **Content licence:** CC BY 4.0 for the item bank and library, so items can be reused with attribution. Note in the licence file that derived passages carry their source's terms and are marked as such.
 - **Contribution:** `CONTRIBUTING.md` with the content style guide, the item quality bar, and a mandatory originality attestation in the PR template. A `content/` PR runs the same validators as CI and posts a rendered preview of the new items.
 - **Governance:** benevolent dictator to start, with a documented path to adding maintainers. An `docs/adr/` directory for architecture decisions, which also serves as the record of why the BYOK and licensing choices were made.
-- **Reusability:** the engine and content-schema packages are published to npm so the adaptive engine can be reused for another exam.
+- **Reusability:** `@palier/engine` and `@palier/domain` are the two packages worth publishing to npm, so the engine can be reused for another exam. An external consumer noticing a leak is what keeps their boundaries honest.
 
 ---
 
@@ -716,7 +724,7 @@ Deliberately minimal, since there is almost no server.
 
 | Risk | Likelihood | Impact | Mitigation |
 | --- | --- | --- | --- |
-| Item bank quality is mediocre and the product feels fake. This is now the top risk, because there is no human author anywhere in the pipeline | Medium to high | High | The six-stage factory in section 8.3, cross-family adversarial review with discard rather than repair, register scoring against a real GC corpus, deterministic balance checks, a 5% sample gate, post-launch auto-retirement on telemetry, an in-app report control, and a deliberate choice to launch with 400 items that survived the gates rather than 4,000 that did not |
+| Item bank quality is mediocre and the product feels fake. This is the top risk, because the default path has no human author in it (ADR 6 keeps hand-authored items available, but the volume is machine-drafted) | Medium to high | High | The six-stage factory in section 8.3, cross-family adversarial review with discard rather than repair, register scoring against a real GC corpus, deterministic balance checks, a 5% sample gate, post-launch auto-retirement on telemetry, an in-app report control, and a deliberate choice to launch with the 500 to 700 items that survived the gates (`content-factory.md` §2) rather than several thousand that did not |
 | A subtly wrong item teaches someone the wrong thing before it is caught | Medium | Medium | Items are provisional until calibrated and say so. Three reports on the same reason code auto-retire. A wrong item in a practice tool is recoverable; the harm is bounded and the honesty about it is what keeps trust |
 | The French is grammatical but reads as translated or European rather than Canadian GC register | High without mitigation | High | Stage 2 register scoring against a harvested corpus of real GC administrative French, an explicit register veto in stage 4 review, and a pre-launch read by two or three fluent GC French speakers on a sample, which is a review favour rather than an authoring commitment |
 | Item statistics never accumulate because nobody opts into telemetry | High | Medium, reduced by the engine simplification. Nothing the user sees depends on calibration, so the cost is slower retirement of bad items rather than a broken estimate | Make the telemetry case after a mock exam, where the user can see why it matters. Use the pilot to seed it. Until then, the item report control is the main signal and it needs to be prominent |
@@ -734,29 +742,23 @@ Deliberately minimal, since there is almost no server.
 
 ## 19. Roadmap
 
-Effort estimates assume evenings and weekends, one developer working with an agentic coding assistant.
+**The build order lives in `implementation-plan.md` §7, with the timeline in §9.** It is
+not repeated here. An earlier draft carried a second roadmap in this section; it drifted,
+and by 19 September 2026 it described seven phases against the plan's nine and scheduled
+an "email and GitHub claim flow" that ADR 5 had already removed from v1. Two copies of a
+build order diverge, and the plan is the one that is authoritative for sequencing.
 
-**Phase 0, foundations (2 to 3 weeks).** Repo, stack, design tokens, component primitives, i18n scaffolding, local store, content schema and validators, CI with the a11y and i18n gates from day one. Deliverable: an empty app that passes every gate.
+What this document is authoritative for does not change with the schedule: the components,
+the data model, the ports, the protocols, the security posture and the performance and
+testing gates. Read §7 of the plan for what gets built when, and `progress.md` for what
+actually has been.
 
-**Phase 1, the content factory (3 to 4 weeks).** Moved to the front, because with no hand-authoring the factory is the critical path and everything downstream depends on its output being good. Harvest, register corpus, passage construction, drafting, the adversarial review gate, deterministic validation, the sample UI, and the bank build. Deliverable: 400 to 600 French reading and written expression items at bands B and C that have survived every gate, plus a measured yield and defect rate you can look at before committing to the rest.
-
-This phase is where to spend the extra week. If the factory produces good items, the product is straightforward. If it does not, better to know in month one.
-
-**Phase 2, reading and written expression MVP (3 weeks).** Session engine, trend calculation, scheduler, home dashboard, drill flow, feedback panel, review queue, progress, item reporting. Sync on by default with anonymous identity. No key required. Deliverable: something genuinely useful, shipped publicly.
-
-**Phase 3, mock exams and calibration (2 weeks).** Exam runner with supervised and unsupervised forms for both skills, results and review walkthrough, telemetry opt-in with the post-exam prompt, the calibration job. Run the closed pilot here.
-
-**Phase 4, key, generation and writing workshop (2 weeks).** Key vault, cost ledger, runtime generation, writing workshop with AI feedback.
-
-**Phase 5, oral (4 to 5 weeks).** The biggest single chunk. Scenario content from the factory, practice mode first, then studio mode, the post-session report, and the loop back into the scheduler. Ship practice mode publicly before studio mode is finished.
-
-**Phase 6, claim, polish and hardening (2 to 3 weeks).** Email and GitHub claim flow, device management, export and import, PDF summary, the motion and illustration pass, accessibility audit with real assistive technology, security review.
-
-**Phase 7, English as a second language (ongoing).** Re-run the factory with the mirror configuration. The system already supports it, and this is the clearest demonstration that building the factory first was the right call.
-
-Total to a complete v1: roughly five to six months of part-time work, with something publicly useful at the end of month two and a defensible answer on item quality at the end of month one.
-
----
+Two consequences of the ordering are worth knowing while reading this document, because
+they explain shapes that would otherwise look odd. The content factory is built before the
+application (phase 1) because with no hand-authoring it is the critical path and its output
+being good is the project's largest risk. And realtime voice is deferred to the last
+feature phase behind turn-based practice mode, because practice mode delivers most of the
+learning value at roughly a tenth of the cost, which is why section 8.5 describes both.
 
 ## 20. Open questions for you
 

@@ -4,7 +4,7 @@ A free, open-source web app for practising the Public Service Commission's Secon
 
 **Working name:** Palier (not final)
 **Owner:** Doug Keefe
-**Last revised:** 17 September 2026
+**Last revised:** 19 September 2026
 
 ---
 
@@ -21,7 +21,9 @@ A free, open-source web app for practising the Public Service Commission's Secon
 
 Read them in that order the first time. After that, `adr/` is usually the one you want, because it holds the arguments the other documents deliberately do not.
 
-If you are resuming work rather than reading in, start at `progress.md`. It is the only document that changes weekly, and its deviations log is the part that cannot be reconstructed from the code.
+If you are resuming work rather than reading in, start at `progress.md`. It is the only document that changes weekly, and its deviations log is the part that cannot be reconstructed from the code. The repository's `CLAUDE.md` is the router into all of it and is the right first read for an agent session.
+
+**When two documents disagree, the table above decides.** Each document names what it is authoritative for, and a statement outside that column is orientation rather than law: the plan owns module structure and testing, this set's `adr/` owns reasoning, `product-requirements.md` §0.1 owns the requirements, `content-factory.md` owns the pipeline. Rather than reconcile a conflict in passing, fix the document that is not authoritative for the statement, and say in the edit which decision it was brought in line with.
 
 ---
 
@@ -55,5 +57,7 @@ The band estimate comes from mock exams scored against the published PSC cut tab
 ---
 
 ## Revision history
+
+**0.2, 19 September 2026.** Reconciliation pass, no new positions. Ten contradictions found while writing the repository's agent documentation were resolved in favour of whichever document the table above makes authoritative: `architecture.md` §4, §17 and §19 had fallen behind ADR 10 and the plan's build order, §1 and §18 behind ADR 6, and §9.1 declared an estimate store the plan had ruled out — which is now ADR 16, the one conflict that was a genuine open question rather than a stale sentence. `product-requirements.md` gained dated amendments to R12 (which had never admitted the ADR 3 exception), §8.11, §13.0 and §15. Full list and reasoning in deviation D17 of `progress.md`.
 
 **0.1, 17 September 2026.** First complete draft, revised twice in the same session. The second revision removed the item response theory, adaptive selection and FSRS scheduling specified in the first draft, on the grounds that all three required item parameters the project has no way to measure (ADR 7, ADR 8). The third revision, following an external architecture review, split this document set apart from what had been two large specifications: the reasoning moved to `adr/`, the content pipeline moved to `content-factory.md`, requirements were separated from design in `product-requirements.md`, accounts and email authentication were cut from v1 in favour of device pairing (ADR 5), and the position that content must be machine-authored was corrected to a preference (ADR 6). The implementation plan was then reconciled to all of it and gained a requirement coverage table, which is the check that the build order actually delivers the product.

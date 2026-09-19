@@ -37,9 +37,19 @@ Section 0.1 lists the requirements. Everything else in this document is design w
 | R9 | The product must meet WCAG 2.2 Level AA, verified before each release. |
 | R10 | The product must never show a proficiency estimate without the evidence and uncertainty behind it. |
 | R11 | A user must be able to export all of their data, import it back, and delete it everywhere, each in one action. |
-| R12 | The user's API key, session audio, oral transcripts and written submissions must never leave the user's device except to the AI provider they configured. |
+| R12 | The user's API key, session audio, oral transcripts and written submissions must never leave the user's device, except to the AI provider the user configured and, for the key only, the single ephemeral-token mint described in ADR 3.\* |
 | R13 | The product must be free to use and open source. |
 | R14 | Progress must be available across a user's devices, and a user must be able to turn that off. |
+
+\* **Amendment, 19 September 2026.** R12 previously read "except to the AI provider they
+configured", which ADR 3 contradicts: minting an ephemeral credential for realtime voice
+requires one server-style call, so the user's key transits a stateless edge function that
+logs nothing and holds nothing. The requirement had never been reconciled with the decision.
+The exception is now stated in the requirement itself rather than only in `architecture.md`
+§6.3, because a requirement that is quietly untrue is worse than a narrower one that is
+true. The exception is for the key and for that one route only: audio, transcripts and
+submissions still go nowhere but the configured provider, and the key-leak test (tier 11)
+asserts exactly this boundary rather than the older, broader claim.
 
 Everything below serves these. Where the document says how something looks or behaves in detail, that is design, not requirement.
 
@@ -220,7 +230,7 @@ Every item answered incorrectly, and every item answered correctly but slowly or
 /library                Grammar and vocabulary reference, register guide
 /settings
   /key                  API key management and spend meter
-  /sync                 Sync switch, devices, and claim-this-account
+  /sync                 Sync switch, paired devices, and pairing by code (ADR 5)
   /data                 Export, import, delete everything
 /about                  What this is, what it is not, who made it, licence
 ```
@@ -235,13 +245,13 @@ Five steps, skippable after step 2, under 90 seconds.
 
 1. **Which direction.** French as a second language, or English. Large bilingual cards.
 2. **What you are aiming for.** B or C, with a plain-language description of what each means at work. Optional: "I have a test booked on [date]", which turns the dashboard into a countdown and back-plans the study schedule.
-3. **Where you are now.** Offer the 12 minute diagnostic, or self-declare a current profile (for example ECB), or skip.
+3. **Where you are now.** Offer the diagnostic (30 items, about 15 minutes per skill, per section 6.2), or self-declare a current profile (for example ECB), or skip.
 4. **How you want to be pushed.** Daily goal: 10, 20 or 30 minutes. This is the only place a goal is set and it is changeable any time.
 5. **Optional key.** Explain in three lines what the key unlocks, what it costs, that it never leaves the browser, and that everything else works without it. Link to a one-page guide with screenshots of creating a key and setting a spend cap on the OpenAI dashboard.
 
 Design note: step 5 is the highest-risk drop-off in the product. It must be explicitly optional, and the app must be visibly fun before the user reaches it. Diagnostic before key, always.
 
-**Sync in onboarding.** There is no sign-in step. On first run the app creates an anonymous sync identity and starts syncing progress. Step 1 carries a single quiet line, "Your progress syncs across your devices. You can turn that off in settings," linking to a short plain-language explanation of exactly what does and does not leave the device. Sign-in appears later, on its own terms, as "add an email so you can get this on another device" rather than as a gate.
+**Sync in onboarding.** There is no sign-in step. On first run the app creates an anonymous sync identity and starts syncing progress. Step 1 carries a single quiet line, "Your progress syncs across your devices. You can turn that off in settings," linking to a short plain-language explanation of exactly what does and does not leave the device. There is no sign-in later either. A second device joins by pairing code from `/settings/sync`, which is the whole of identity in v1 (ADR 5).
 
 ### 8.2 Home (`/home`)
 
@@ -337,7 +347,13 @@ Band trend over time per skill with the confidence range as a shaded region. Ite
 ### 8.11 Settings: sync (`/settings/sync`)
 
 - **One switch at the top**, on by default. Turning it off stops all outbound sync immediately, and offers to delete what is already on the server, with a confirmation that says what will be lost (progress on other devices).
-- **What syncs**, as a plain two-column list. Left: attempts, band estimates, review schedule, vocabulary, exam results, settings. Right, under the heading "never leaves this device": your API key, session audio, oral transcripts, writing workshop submissions.
+- **What syncs**, as a plain two-column list. Left: attempts, review schedule, vocabulary,
+  exam results, settings. Right, under the heading "never leaves this device": your API key,
+  session audio, oral transcripts, writing workshop submissions. Band estimates appear in
+  neither column, because they are not stored or sent at all: each device recomputes them
+  from the synced attempts, which is what makes them impossible to disagree about
+  (ADR 16, `architecture.md` §9.4). Amended 19 September 2026; the left column previously
+  listed band estimates, contradicting the protocol that was already specified.
 - **Your devices**, with a friendly label per device, last-seen time, and a remove control.
 - **Add a device.** A button that shows a six character code, valid ten minutes. Enter it on the other device and the two are linked. No account, no email, no password (ADR 5). Directly beneath it, one plain sentence: if you lose every device on this list, the copy on our server goes with them, so keep an export.
 - **Status line** showing last sync time, or the reason it is not syncing.
@@ -475,7 +491,13 @@ The design consequences follow from most items being machine-drafted, and they h
 - **Quality has to be enforceable without an author reading every item.** The content factory specification describes the gates. What matters for the product is that they exist, that they are measured, and that the product is honest about them.
 - **Every item carries a provenance badge** visible on request: generated, reviewed by N automated checks, and calibrated or not calibrated against real responses. One tap from any item.
 - **Reporting an item is a first-class action**, not buried. A flag control sits on the feedback panel of every item, takes one tap, offers four reasons (the key looks wrong, more than one answer works, the French sounds off, the question is unclear), and files a GitHub issue with the item id. Users who report get told when the item is fixed or retired.
-- **Uncalibrated items are weighted down** in the band estimate until real response data exists, and the readiness card says how much of the estimate rests on calibrated items.
+- **The estimate discloses what it rests on**, rather than being quietly adjusted. The
+  practice trend is plain accuracy per band tag with a Wilson interval, and the readiness
+  card states the item count and the window behind it. Item statistics, once they exist,
+  retire bad items; they do not reweight the estimate (ADR 7). Amended 19 September 2026:
+  this previously said uncalibrated items are "weighted down in the band estimate", which
+  ADR 7 removed along with everything else that needed a per-item parameter nobody can
+  measure at launch.
 - **The about page says all of this plainly.** A largely machine-written practice bank is a reasonable thing to offer for free. Presenting it as examiner-written would not be.
 
 ### 13.1 Register
@@ -543,7 +565,11 @@ An item is retired automatically if calibration data shows negative discriminati
 No third-party analytics. No cookies that require a banner.
 
 - **The user's own metrics**, computed locally and synced with the rest of their progress: items answered, accuracy, time on task, session completion, streak, estimated band over time. Used by the app to drive the scheduler and shown to the user on `/progress`. This is their data, held for them.
-- **Opt-in anonymous item telemetry.** A separate thing from sync, and off by default. Sends item id, correct or incorrect, response time, and the estimated ability of whoever answered, detached from any account or device identity. This is what calibrates the item bank, and it matters more here than in most products because the bank is machine-authored and real response data is the main evidence that an item is any good. The case for it is made honestly on the results screen after the first mock exam, not buried in settings.
+- **Opt-in anonymous item telemetry.** A separate thing from sync, and off by default. Sends
+  item id, correct or incorrect, response time, and a coarse bucket for how the rest of that
+  session went, detached from any account or device identity. Amended 19 September 2026: this
+  previously said "the estimated ability of whoever answered", a value ADR 7 removed. The
+  bucket is what makes a point-biserial computable without one (`architecture.md` §9.2). This is what calibrates the item bank, and it matters more here than in most products because the bank is machine-authored and real response data is the main evidence that an item is any good. The case for it is made honestly on the results screen after the first mock exam, not buried in settings.
 - **Why they are separate.** Sync exists to serve the user. Telemetry exists to serve the bank. Conflating them, or quietly mining synced progress for calibration, would break the promise made in settings. Synced records are never read for calibration.
 - **Product health** from Vercel's own request-level data only.
 
