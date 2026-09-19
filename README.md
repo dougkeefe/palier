@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Palier
 
-## Getting Started
+A pnpm + Turborepo monorepo. The architecture — six library packages behind ports and
+adapters, with dependencies pointing strictly inward — is specified in
+[`docs/implementation-plan.md`](docs/implementation-plan.md) §3 and
+[ADR 10](docs/adr/0010-ports-and-adapters-six-packages.md).
 
-First, run the development server:
+## Repository layout
+
+| Workspace | Depends on | Contains |
+| --- | --- | --- |
+| `apps/web` | everything | Next.js app, routes, composition root |
+| `apps/factory` | `domain`, `adapters` | content pipeline CLI (placeholder) |
+| `packages/domain` | — | types, invariants, schemas, exam profiles |
+| `packages/engine` | `domain` | pure algorithms |
+| `packages/app` | `domain`, `engine` | port interfaces and use cases |
+| `packages/adapters` | `app`, `domain` | concrete adapters |
+| `packages/ui` | `domain` | design system |
+| `packages/testing` | `app`, `domain` | in-memory ports, contract suites, fixtures |
+
+Every package is currently a placeholder: an `index.ts` that exports nothing.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev          # builds the packages, then runs next dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Does |
+| --- | --- |
+| `pnpm build` | `turbo run build` — every package to its own `dist`, then `next build` |
+| `pnpm dev` | `turbo run dev` — builds packages first, then `next dev` |
+| `pnpm check-types` | `next typegen && tsc --noEmit` for `apps/web` |
+| `pnpm lint` | `turbo run lint` |
+| `pnpm exec tsc -b` | build the TypeScript project-reference graph directly |
+| `pnpm clean` | remove `dist`, `.next` and build info |
 
-## Learn More
+## Conventions
 
-To learn more about Next.js, take a look at the following resources:
+Named exports only — the one exception is Next.js file conventions, which the framework
+resolves by default export; `apps/web/eslint.config.mjs` holds the exhaustive exemption
+list and fails the lint on anything else. `strict`, `noUncheckedIndexedAccess` and
+`exactOptionalPropertyTypes` are enabled repo-wide from `tsconfig.base.json`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [`AGENTS.md`](AGENTS.md) for the full working rules.
