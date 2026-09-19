@@ -18,7 +18,9 @@ export const memoryAttemptStore = (): AttemptStore => {
       return Promise.resolve();
     },
     recent: (skill: Skill, n: number) =>
-      Promise.resolve(attempts.filter((a) => a.skill === skill).slice(-n)),
+      Promise.resolve(
+        n <= 0 ? [] : attempts.filter((a) => a.skill === skill).slice(-n),
+      ),
     since: (t: ISO) =>
       Promise.resolve(attempts.filter((a) => Date.parse(a.ts) >= Date.parse(t))),
     forItem: (id: ItemId) =>
