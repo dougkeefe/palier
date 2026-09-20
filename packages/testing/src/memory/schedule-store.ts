@@ -1,4 +1,4 @@
-import type { ISO, ScheduleEntry, ScheduleStore } from "../ports.stub.js";
+import type { ISO, ScheduleEntry, ScheduleStore } from "@palier/app";
 
 export const memoryScheduleStore = (): ScheduleStore => {
   const byItem = new Map<string, ScheduleEntry>();

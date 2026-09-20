@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { SettingsStore } from "../ports.stub.js";
+import type { SettingsStore } from "@palier/app";
 
 export const settingsStoreContract = (
   name: string,

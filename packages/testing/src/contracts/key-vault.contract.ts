@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { KeyVault } from "../ports.stub.js";
+import type { KeyVault } from "@palier/app";
 
 export const keyVaultContract = (
   name: string,

@@ -1,11 +1,13 @@
 import {
   attemptStoreContract,
+  itemRepositoryContract,
   keyVaultContract,
   scheduleStoreContract,
   settingsStoreContract,
 } from "../contracts/index.js";
 import {
   memoryAttemptStore,
+  memoryItemRepository,
   memoryKeyVault,
   memoryScheduleStore,
   memorySettingsStore,
@@ -19,6 +21,7 @@ import {
  * the in-memory implementations".
  */
 attemptStoreContract("memory", () => Promise.resolve(memoryAttemptStore()));
+itemRepositoryContract("memory", (bank) => Promise.resolve(memoryItemRepository(bank)));
 scheduleStoreContract("memory", () => Promise.resolve(memoryScheduleStore()));
 settingsStoreContract("memory", () => Promise.resolve(memorySettingsStore()));
 keyVaultContract("memory", () => Promise.resolve(memoryKeyVault()));

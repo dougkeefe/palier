@@ -89,7 +89,10 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 - [x] `@palier/domain`: Zod schemas for every content artefact, JSON Schema generated to `docs/schemas/`
 - [x] `@palier/domain`: `ExamProfile` loader
 - [x] `@palier/domain`: `psc-sle` profile transcribed from `product-requirements.md` §5 (ADR 9) — with one inferred band, see D12
-- [ ] `@palier/app`: every port interface from §3.3, no implementations behind them
+- [~] `@palier/app`: port interfaces from §3.3 — 7 of 12 under `src/ports/` (`ItemRepository`,
+  `AttemptStore`, `ScheduleStore`, `SettingsStore`, `KeyVault`, `Clock`, `Random`);
+  `SessionStore`/`OralStore` (no §3.3 signature) and `AiProvider`/`SyncTransport`/`TelemetrySink`
+  (net-new domain types) deferred; `ports.stub.ts` deleted. See D18–D20
 - [!] Item type registry (§3.4), with the five members and the a11y contract — deferred, see D13; it needs an ADR, not a quiet workaround
 
 ### Test infrastructure
@@ -104,7 +107,10 @@ Built now rather than retrofitted — §7 is emphatic about this.
 - [x] fake-indexeddb
 - [x] `@axe-core/playwright`
 - [x] Per-package coverage reporting with the §6.3 targets enforced — proven by a deliberate drop
-- [~] `@palier/testing`: in-memory implementation of every port — four of the specified ports; `SessionStore` and `OralStore` have no signatures in §3.3 yet, and `ItemRepository`, `AiProvider`, `SyncTransport` and `TelemetrySink` need domain types
+- [~] `@palier/testing`: in-memory implementation of every port — **five** now (`ItemRepository`
+  added, alongside `AttemptStore`, `ScheduleStore`, `SettingsStore`, `KeyVault`), all importing
+  the real ports from `@palier/app`; `SessionStore`/`OralStore`/`AiProvider`/`SyncTransport`/`TelemetrySink`
+  follow their ports
 - [x] `@palier/testing`: port contract suites, exported as functions
 - [x] `@palier/testing`: fixture builders, seeded Random, FakeClock
 - [ ] `@palier/testing`: the 60-item canonical fixture bank — needs the domain types
@@ -142,18 +148,18 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Suggested next three
 
-The previous three (domain types and the profile, dependency-cruiser proven against a
-deliberate violation, Vitest and the band-mapping property) are all done — see the
-session log entries for 19 September 2026. What follows them:
+`@palier/app`'s first seven ports have landed (see the session log for 19 September 2026),
+so `ports.stub.ts` is gone and the testing layer's in-memory ports are real. What follows:
 
-1. `@palier/app`: the port interfaces from §3.3. `@palier/testing/src/ports.stub.ts`
-   holds placeholders that say which file they move to; deleting that file is the
-   definition of done. Note §3.3 gives no signatures for `SessionStore` or `OralStore`,
-   so those need deciding rather than transcribing.
-2. The item type registry, which is blocked on a decision rather than on work — read D13
-   first and write ADR 16.
-3. `@palier/ui` design tokens and the six primitives, which unblocks the contrast gate,
+1. `@palier/ui` design tokens and the six primitives, which unblocks the contrast gate,
    the axe gate and the Lighthouse budget — the three exit criteria still outstanding.
+2. The item type registry, which is blocked on a decision rather than on work — read D13
+   first and write the ADR (next free number, per D16).
+3. The remaining ports and the first use cases: `SessionStore` and `OralStore` need their
+   signatures deciding and recording (D18's discipline), and
+   `AiProvider`/`SyncTransport`/`TelemetrySink` need their domain types (AI requests and
+   verdicts, sync documents, device identity, telemetry events) before they can be
+   transcribed.
 
 ---
 
@@ -600,11 +606,92 @@ is still blocked on a decision; §3.4 now says so in place rather than only in t
 Every amendment to `product-requirements.md` is dated in place, in the style §5.2 already
 used, because a requirement that changes silently is worse than one that never changed.
 
+### D18 — `ISO`, `Clock` and `Random` live in `@palier/app`, not `@palier/domain`
+**Date:** 19 September 2026 · **Status:** accepted
+
+`Clock` and `Random` are ports (§3.3), so they belong with the other ports in
+`@palier/app`, not in `@palier/engine` (which only receives them) nor in `@palier/testing`
+(where `fakeClock`/`seededRandom` merely implement them). `ISO` is the type the `Clock` and
+the stores trade in, so it lives beside them. `@palier/domain` is left untouched — its
+`Attempt.ts` keeps a plain `string` timestamp, and it *must not* import upward to reach an
+app type anyway.
+
+**The alternative was considered:** `ISO` as a domain primitive reused by `Attempt.ts` and
+every store. Cleaner conceptually, but it retypes a domain field, its schema and its tests
+for no behavioural gain, and the value crosses to `Date.parse` and JSON as a bare string
+regardless. Deferred; revisit if a domain type ever needs to name an instant.
+
+### D19 — `ScheduleEntry` is minimal until the scheduler lands
+**Date:** 19 September 2026 · **Status:** open, closes with the engine `Scheduler`
+
+§3.3 names `ScheduleEntry` in the `ScheduleStore` signature but gives it no shape. Its full
+Leitner form — the box number indexing ADR 8's four intervals — is the `Scheduler`'s output
+and belongs to the engine session that builds it. `@palier/app` therefore carries only what
+the `ScheduleStore` port itself needs: `{ itemId, due, skill }`. The box is *added*, not
+reshaped, when the scheduler arrives, so this is a safe minimum rather than a guess at the
+final type. `app/CLAUDE.md`'s "deciding an unspecified port is a decision to record" is why
+this is here rather than silent.
+
+### D20 — `ItemCriteria` and the in-memory query semantics decided ahead of the `Selector`
+**Date:** 19 September 2026 · **Status:** open until the engine `Selector` lands
+
+§3.3 gives `ItemRepository.query` the comment "skill, subSkill, band, exclude, limit" but no
+type. `ItemCriteria` is defined in `@palier/app` from existing domain unions
+(`ScoredSkill`, `SubSkill`, `TargetBand`, `ItemId[]`), every field optional and combining as
+a **conjunction**. The in-memory `ItemRepository` filters by the supplied fields, applies
+`exclude`, then `limit`; `byIds` preserves request order and drops misses. These semantics
+are the contract every implementation is held to, so if the `Selector` needs richer querying
+(ordering, weighting) it extends the criteria and the contract together, in its own session.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 19 September 2026 — `dougkeefe/guangzhou-v2` (@palier/app port interfaces)
+
+The first seven ports of `@palier/app` from §3.3, contract-first, then the testing layer
+repointed onto them. Deviations D18–D20 recorded. No dependency added.
+
+`packages/app/src/ports/` now holds `time.ts` (`ISO`, `Clock`, `Random`),
+`item-repository.ts` (`ItemCriteria`, `ItemRepository`), `attempt-store.ts`,
+`schedule-store.ts` (`ScheduleEntry`, `ScheduleStore`), `settings-store.ts`, `key-vault.ts`,
+a `ports/` barrel, and a `ports.test-d.ts` asserting branded ids are not interchangeable at
+a port boundary. All signatures transcribed from §3.3, our types only; `KeyVault.withApiKey`
+keeps its callback shape.
+
+`@palier/testing`: **`ports.stub.ts` deleted** — the definition of done for this task. The
+four in-memory stores and their contracts now import the real ports from `@palier/app` and
+the real domain types (`Attempt`, `Skill`, `ItemId`) from `@palier/domain`; `fakeClock` and
+`seededRandom` re-export `Clock`/`ISO`/`Random` from `@palier/app`. New: `memoryItemRepository`
+and `itemRepositoryContract` (13 assertions: ordered `byIds` dropping misses, conjunctive
+`query` by skill/sub-skill/band, `exclude`, `limit`, `passage`/`form`/`scenario` returning
+`null` when absent, `bankVersion`), plus a local unit test for the empty-bank defaults.
+Fixture builders `anItem`, `anAttempt`, `aScheduleEntry`, `aPassage`, `anExamForm`,
+`anOralScenario` added (§6.4) — `@palier/domain` keeps its own copy under `src/__tests__`,
+which is not exported.
+
+Type-home decisions, all recorded: `ISO`/`Clock`/`Random` in `@palier/app` not `@palier/domain`
+(D18); `ScheduleEntry` minimal until the scheduler (D19); `ItemCriteria` + query semantics
+decided ahead of the `Selector` (D20). `@palier/domain` untouched.
+
+**Verified:**
+
+- `pnpm verify` green — check-types 14/14, lint clean, depcruise clean (94 modules, 223
+  dependencies, plus 6 in `apps/web`), **260 tests passed, 4 todo, 19 files**.
+- Coverage held every glob threshold: overall 99.3% branch. The new `memoryItemRepository`
+  reached 100% branch only after adding the empty-bank unit test — the shared contract always
+  hands it a full bank, so the constructor defaults needed their own test (§10: every new
+  branch gets one).
+- `@palier/app` is type-only, so its files produce no coverage rows and the
+  `packages/app/src/**` 95% glob is satisfied vacuously today; it becomes live when a use
+  case lands there. Flagged rather than assumed (the D9 family of coverage traps).
+- `grep` confirms no `ports.stub` reference remains in any package's `src`.
+
+**Deferred, and where the next session will hit it:** `SessionStore`/`OralStore` still have
+no §3.3 signatures, and `AiProvider`/`SyncTransport`/`TelemetrySink` still need their domain
+types — see the Suggested next three and D18's discipline for deciding the unspecified ones.
 
 ### 19 September 2026 — `dougkeefe/agent-claude-md-docs` (2 of 2: contradictions resolved)
 

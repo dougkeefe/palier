@@ -1,3 +1,5 @@
+import type { Random } from "@palier/app";
+
 /**
  * A deterministic `Random`, because "no test reads the system clock or calls
  * `Math.random`" (implementation-plan.md 6.4).
@@ -10,11 +12,9 @@
  *
  * The engine takes a `Random` as a parameter (ADR 7), so production wires a
  * seeded one too; this is not a test-only escape hatch bolted onto pure code.
+ * `Random` is the port definition from `@palier/app`, re-exported here.
  */
-export type Random = {
-  /** A float in [0, 1), like `Math.random`. */
-  next: () => number;
-};
+export type { Random };
 
 export const seededRandom = (seed: number): Random => {
   let state = seed >>> 0;

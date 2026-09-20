@@ -1,16 +1,16 @@
+import type { Clock, ISO } from "@palier/app";
+
 /**
  * A `Clock` a test controls, because the engine takes one as a parameter rather
  * than calling `Date.now()` (architecture.md 7, ADR 8), and because
  * implementation-plan.md 6.4 requires that no test read the system clock.
  *
  * Time is held as epoch milliseconds and rendered as an ISO 8601 string, which
- * is the `ISO` the ports in 3.3 pass around.
+ * is the `ISO` the ports in 3.3 pass around. `Clock` and `ISO` are the port
+ * definitions from `@palier/app`; re-exported here so a test importing the fake
+ * gets the type alongside it.
  */
-export type ISO = string;
-
-export type Clock = {
-  now: () => ISO;
-};
+export type { Clock, ISO };
 
 export type FakeClock = Clock & {
   /** Move time forward. Rejects a negative duration: time does not run backwards. */

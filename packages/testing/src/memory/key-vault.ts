@@ -1,4 +1,4 @@
-import type { KeyVault } from "../ports.stub.js";
+import type { KeyVault } from "@palier/app";
 
 /**
  * Mirrors the real vault's most important property: `withApiKey` hands the key

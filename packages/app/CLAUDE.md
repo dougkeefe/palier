@@ -13,8 +13,13 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   parameters supplied by the composition root (§3.5); nothing here constructs a concrete one.
 - **`KeyVault.withApiKey` hands the key to a callback and never returns it** (§3.3). Do not
   add a `getApiKey` — the shape is the control (ADR 2, ADR 3).
-- **Ports are transcribed from §3.3, not invented.** `SessionStore` and `OralStore` have no
-  signatures there; deciding them is a decision to record, not a gap to fill quietly.
+- **Ports are transcribed from §3.3, not invented.** Seven live under `src/ports/`:
+  `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SettingsStore`, `KeyVault`, `Clock`,
+  `Random`. `SessionStore` and `OralStore` (no §3.3 signature) and the
+  `AiProvider`/`SyncTransport`/`TelemetrySink` trio (need net-new domain types) are deferred
+  to their own sessions — deciding them is a decision to record, not a gap to fill quietly.
+  `ISO`, `ScheduleEntry` and `ItemCriteria` are named-but-unspecified by §3.3 and were
+  decided here (progress.md D18–D20); `ScheduleEntry` is minimal until the scheduler lands.
 - Unit-tested against the in-memory ports from `@palier/testing`, every error path and
   guard clause included. 95% branch (§6.3).
 
