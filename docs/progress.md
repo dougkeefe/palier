@@ -66,7 +66,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/continue-dev-from-docs-v1` | `apps/web` shell: locale routing + next-intl, layout shell, composition root, and the i18n/axe/Lighthouse/bundle gates | 19 September 2026 |
+| `dougkeefe/continue-dev-from-docs-v2` | Item type registry (§3.4): React-free `ItemTypeDefinition` in `@palier/domain`, `itemRenderers` in `@palier/ui`, exhaustiveness in `apps/web`, plus ADR 0017 and the §4.5 architecture test — D13 | 19 September 2026 |
 
 ---
 
@@ -93,7 +93,9 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
   `AttemptStore`, `ScheduleStore`, `SettingsStore`, `KeyVault`, `Clock`, `Random`);
   `SessionStore`/`OralStore` (no §3.3 signature) and `AiProvider`/`SyncTransport`/`TelemetrySink`
   (net-new domain types) deferred; `ports.stub.ts` deleted. See D18–D20
-- [!] Item type registry (§3.4), with the five members and the a11y contract — deferred, see D13; it needs an ADR, not a quiet workaround
+- [x] Item type registry (§3.4): React-free `ItemTypeDefinition` in `@palier/domain`,
+  `itemRenderers` in `@palier/ui`, compile-time exhaustiveness in `apps/web`, plus the §4.5
+  architecture test — **ADR 17** written, D13 resolved
 
 ### Test infrastructure
 
@@ -157,23 +159,20 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Suggested next three
 
-The `apps/web` shell has landed (see the session log for 19 September 2026), closing the
-**axe**, **Lighthouse**, **bundle-size** and **i18n-parity** gates — every phase-0 CI gate
-is now built. What remains in phase 0:
+The item type registry has landed (see the session log for 19 September 2026), resolving
+D13 with **ADR 17** and adding the §4.5 architecture test — every phase-0 CI gate is built
+and the last deferred phase-0 mechanism is closed. What remains in phase 0, now two items:
 
-1. The item type registry, still blocked on a decision rather than on work — read D13
-   first and write the ADR (next free number, now **0017**, per D16). `@palier/ui` exists, so
-   the `itemRenderers` half of D13's proposed split has a home; `apps/web` now has a
-   composition root (`src/lib/container.ts`) where D13's compile-time exhaustiveness
-   assertion belongs.
-2. The remaining ports and the first use cases: `SessionStore` and `OralStore` need their
+1. The remaining ports and the first use cases: `SessionStore` and `OralStore` need their
    signatures deciding and recording (D18's discipline), and
    `AiProvider`/`SyncTransport`/`TelemetrySink` need their domain types (AI requests and
    verdicts, sync documents, device identity, telemetry events) before they can be
    transcribed. Once a use case lands in `@palier/app`, `container.ts` gains `buildUseCases`.
-3. The remaining phase-0 scaffolding: the `LICENSE`/`LICENSE-CONTENT`/`README` files with the
-   non-affiliation statement [R5, R13], and the 60-item canonical fixture bank (blocked only
-   on wanting real domain fixtures). Both are small and unblock nothing else.
+   The item type registry is now available for a scoring/session use case to consume via
+   `itemTypeDefinition(item.type).score(...)`.
+2. The remaining phase-0 scaffolding: the `LICENSE`/`LICENSE-CONTENT`/`README` files with the
+   non-affiliation statement [R5, R13], and the 60-item canonical fixture bank (unblocked now
+   that the domain types and the registry exist). Both are small and unblock nothing else.
 
 The French non-affiliation string in `apps/web/messages/fr.json` was owner-confirmed
 (D27, resolved); no open owner questions remain for this slice.
@@ -503,7 +502,7 @@ nothing to notice. Verify it against the PSC's published table before launch, an
 close this entry when you do.
 
 ### D13 — The item type registry is deferred, and wants ADR 16
-**Date:** 19 September 2026 · **Status:** open, blocked on a decision
+**Date:** 19 September 2026 · **Status:** RESOLVED 19 September 2026 by ADR 17
 
 §3.4 specifies one `registerItemType` call carrying `schema`, `render`, `score`,
 `validate`, `generatePrompt` and an `a11yContract`. It cannot be built as
@@ -528,6 +527,17 @@ reservation. See D16. Also unresolved there: §3.4's literal
 has six keys while §4 and §10 both say "all five members" and name the a11y
 contract separately — the architecture test cannot assert "five" until someone
 says which five.
+
+**Resolution (ADR 17).** Built as this entry and its correction proposed: a React-free
+`ItemTypeDefinition` in `@palier/domain` (`schema`, `score`, `validate`, `generatePrompt`,
+`a11yContract`), an `itemRenderers` `Record<ItemType, ItemRenderer>` in `@palier/ui`, and a
+compile-time exhaustiveness assertion in `apps/web/src/lib/item-types.ts`. The "which five"
+question is settled — `schema`, `render`, `score`, `validate`, `generatePrompt`, with
+`render` the member that lives in `@palier/ui` and `a11yContract` counted separately — and
+the §4.5 architecture test (`packages/domain/src/__tests__/architecture.test.ts`) now exists
+and asserts the domain-side members. It took **ADR 17**, not 16: the estimate store claimed
+16 first, exactly as D16 predicted. The registry is a `Record<ItemType, …>` rather than an
+imperative `registerItemType`, so a missing type is a `tsc` error, not a runtime one.
 
 ### D14 — zod's NodeNext declaration risk was checked and did not materialise
 **Date:** 19 September 2026 · **Status:** closed
@@ -785,11 +795,88 @@ Commission de la fonction publique du Canada…").
 longer an unreviewed draft. The broader full-French interface review R8 schedules for phase 7
 still applies to the app's growing string set, but this specific string is settled.
 
+### D28 — `ItemResponse` is an alias for `OptionId` until a non-MCQ type lands
+**Date:** 19 September 2026 · **Status:** open, closes when a non-multiple-choice type is added
+
+§3.4 types `score` as `(item, response) => Outcome` but gives `response` no type. Every
+current item type is single-key multiple-choice, so `ItemResponse` is defined in
+`@palier/domain` as an alias for `OptionId`, and `scoreMcq` is the one scorer registered for
+all four types. It is a **named** alias, not a bare `OptionId` at each call site, precisely so
+that widening it to a discriminated union (a cloze response, a drag-order, a free-text span)
+when a non-MCQ type arrives is a one-line change in one place that the compiler then chases
+through every scorer. This is D19/D20's discipline — decide the minimum the contract needs,
+name it, and record that it is a minimum — applied to the registry's response type. ADR 17's
+*revisit when* names the same trigger.
+
+### D29 — `PromptSpec` is minimal until the content factory lands
+**Date:** 19 September 2026 · **Status:** open, closes with `apps/factory` (Phase 1)
+
+`generatePrompt` is one of the five registry members (§3.4) and must be present for the
+registry contract to be complete, but its output `PromptSpec` is owned by the content factory
+(Phase 1), which does not exist yet. So `@palier/domain` carries a **minimal** `PromptSpec`
+(`{ itemType, targetBand, subSkill, instructions }`) and a per-type instruction string, which
+is enough to make the member real and per-type-dispatched without pre-inventing the factory's
+prompt shape. The factory fleshes it out in its own session, the same way D19 keeps
+`ScheduleEntry` minimal until the scheduler. Recorded so the next session does not mistake the
+minimal shape for the intended one.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 19 September 2026 — `dougkeefe/continue-dev-from-docs-v2` (item type registry, ADR 17)
+
+The item type registry (§3.4), the last deferred phase-0 mechanism, built across its three
+homes as ADR 17 decides. **Resolves D13** and closes the §4.5 architecture-test gap. Also
+recorded: deviations D28 (`ItemResponse` alias) and D29 (`PromptSpec` minimal). No runtime
+dependency added.
+
+`@palier/domain` gains `src/item-types/`: the React-free `ItemTypeDefinition`
+(`schema`, `score`, `validate`, `generatePrompt`, `a11yContract`) and
+`ITEM_TYPE_DEFINITIONS`, a `Record<ItemType, ItemTypeDefinition>` so a missing type is a
+`tsc` error, not a runtime one — a stronger form of principle 6 than the imperative
+`registerItemType` §3.4 illustrated (ADR 17 refines that literal). `score` is uniform MCQ
+(`response === item.key`); per-type `validate` reports deterministic quality issues the
+schema cannot express (a cloze without its `blankIndex`, an item without all four options);
+per-type `schema` is `itemSchema` narrowed to the type; `generatePrompt` carries a minimal
+per-type instruction (D29). `@palier/ui` gains `src/item-types/`: `itemRenderers`, the
+parallel `Record<ItemType, ItemRenderer>`, and `McqItem` — a `"use client"` radio-group
+renderer built on the existing `OptionRow`/`optionRowKeydown` primitives, shared by all four
+types today (per-type presentation is Phase 2, ADR 17). `apps/web/src/lib/item-types.ts` is
+the composition root's cross-map check: a compile-time `Equals` that both maps key on
+`ItemType`, plus a runtime `assertItemTypeRegistryComplete`. The §4.5 architecture test now
+exists at `packages/domain/src/__tests__/architecture.test.ts`.
+
+Docs: **ADR 17** written; `implementation-plan.md` §3.4's "cannot be built as written" note
+now points at it; `packages/domain/CLAUDE.md` and `packages/ui/CLAUDE.md` gained the registry
+invariant (§10).
+
+**Verified:**
+
+- `pnpm verify` green (exit 0) — check-types 14/14, lint clean, depcruise clean (**123
+  modules, 321 dependencies** in packages, **34 in `apps/web`** — no new arrow: domain gains
+  no import, ui imports domain types only, engine untouched), **376 tests passed, 4 todo, 30
+  files**; every glob threshold held (`@palier/domain` at 100%, `@palier/ui` `.ts` logic at
+  90%).
+- `pnpm --filter @palier/web build` green — the `"use client"` directive on `McqItem` is what
+  makes the barrel safe to pull into the server graph; without it the build failed on the
+  React-hook import (caught and fixed here).
+- **Both gates proven to bite, then reverted:** removing the `best-completion` entry from
+  `ITEM_TYPE_DEFINITIONS` failed check-types with
+  `TS2741: Property '"best-completion"' is missing … required in type 'Record<…, ItemTypeDefinition>'`
+  (compile-time exhaustiveness); coercing one entry's `score` to `undefined` past the type
+  system failed the §4.5 architecture test with `expected 'undefined' to be 'function'`. The
+  runtime cross-map drift check (`registryKeysError`) is proven by a committed test with
+  mismatched inputs.
+
+**A11y note.** The renderers carry structural a11y assertions in the ui unit tests
+(radiogroup named by the stem, four radios, roving tabindex, a text label beside every
+colour cue), following the six primitives' precedent. The full axe-on-state assertion lands
+with the Phase-2 drill route that first mounts them — there is no route to axe today, so the
+medium lane is unchanged. **Next:** the remaining ports/use cases and the licence/README +
+fixture-bank scaffolding (see Suggested next).
 
 ### 19 September 2026 — `dougkeefe/continue-dev-from-docs-v1` (apps/web shell + the four shell gates)
 

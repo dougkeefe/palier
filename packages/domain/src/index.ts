@@ -103,3 +103,18 @@ export {
 } from "./schemas/content.js";
 export type { ContentSchemaName } from "./schemas/index.js";
 export { CONTENT_SCHEMA_NAMES, CONTENT_SCHEMAS } from "./schemas/index.js";
+
+// The item type registry (implementation-plan.md §3.4, ADR 17). The React-free
+// half; the `render` member lives in `@palier/ui` as `itemRenderers`.
+export type {
+  A11yContract,
+  ItemResponse,
+  ItemTypeDefinition,
+  ItemValidationCode,
+  Outcome,
+  PromptContext,
+  PromptSpec,
+  ValidationIssue,
+} from "./item-types/definition.js";
+export { ITEM_VALIDATION_CODES } from "./item-types/definition.js";
+export { ITEM_TYPE_DEFINITIONS, itemTypeDefinition } from "./item-types/registry.js";
