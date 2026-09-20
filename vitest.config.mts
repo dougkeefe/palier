@@ -24,12 +24,15 @@ import { defineConfig } from "vitest/config";
 // absolute to be shared across all of them.
 const SETUP = fileURLToPath(new URL("./vitest.setup.mts", import.meta.url));
 
-const workspaceProject = (name: string, root: string) => ({
+// `@palier/ui` is the only package with unit-level DOM tests (its primitives are
+// React components); `apps/web` exercises the DOM through Playwright E2E, not
+// here. So ui alone runs in jsdom and everything else stays in node.
+const workspaceProject = (name: string, root: string, environment: "node" | "jsdom" = "node") => ({
   extends: true,
   test: {
     name,
     root,
-    environment: "node",
+    environment,
     include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
     exclude: ["**/node_modules/**", "**/dist/**", "src/**/*.integration.test.ts"],
     setupFiles: [SETUP],
@@ -43,7 +46,7 @@ export default defineConfig({
       workspaceProject("engine", "./packages/engine"),
       workspaceProject("app", "./packages/app"),
       workspaceProject("adapters", "./packages/adapters"),
-      workspaceProject("ui", "./packages/ui"),
+      workspaceProject("ui", "./packages/ui", "jsdom"),
       workspaceProject("testing", "./packages/testing"),
       workspaceProject("factory", "./apps/factory"),
       workspaceProject("web", "./apps/web"),

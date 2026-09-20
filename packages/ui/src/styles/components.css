@@ -1,0 +1,202 @@
+/* Static styles for the @palier/ui primitives. Depends on the custom
+   properties in tokens.css. Kept here rather than inline because pseudo-classes
+   (:focus-visible), media queries (prefers-reduced-motion) and elevation cannot
+   be expressed as inline styles. Layout values are product-requirements.md
+   §10.4; motion is §10.5; focus and target size are §11 (WCAG 2.4.11, 2.5.8). */
+
+/* ---- Shared ---------------------------------------------------------------- */
+
+.pl-focusable:focus-visible,
+.pl-btn:focus-visible,
+.pl-option:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ---- Button (§10.4: four variants; pill radius; motion §10.5) -------------- */
+
+.pl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px; /* session-flow target size, §11 2.5.8 */
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: 999px; /* pills and primary buttons, §10.4 */
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 120ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pl-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pl-btn--primary {
+  background-color: var(--primary);
+  color: var(--surface); /* clears 4.5:1 on --primary in both themes */
+}
+
+.pl-btn--secondary {
+  background-color: var(--surface);
+  border-color: var(--ink-muted);
+  color: var(--ink);
+}
+
+.pl-btn--ghost {
+  background-color: transparent;
+  color: var(--primary);
+}
+
+.pl-btn--danger {
+  background-color: var(--incorrect);
+  color: var(--surface);
+}
+
+/* ---- Card (§10.4: 12px radius; two soft shadows + 1px border) -------------- */
+
+.pl-card {
+  background-color: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--ink) 8%, transparent),
+    0 8px 24px color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+/* ---- OptionRow (drill answer; real radio; glyph + label, never colour) ----- */
+
+.pl-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 16px;
+  background-color: var(--surface);
+  border: 1px solid var(--ink-muted);
+  border-radius: 8px;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 120ms cubic-bezier(0.2, 0, 0, 1),
+    transform 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pl-option--selected {
+  border-color: var(--primary);
+  border-width: 2px;
+}
+
+.pl-option--correct {
+  border-color: var(--correct);
+  border-width: 2px;
+}
+
+.pl-option--incorrect {
+  border-color: var(--incorrect);
+  border-width: 2px;
+}
+
+.pl-option[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+.pl-option__glyph {
+  flex: none;
+}
+
+.pl-option--correct .pl-option__glyph {
+  color: var(--correct);
+}
+
+.pl-option--incorrect .pl-option__glyph {
+  color: var(--incorrect);
+}
+
+/* ---- ProgressRail ---------------------------------------------------------- */
+
+.pl-rail {
+  width: 100%;
+  height: 8px;
+  background-color: color-mix(in srgb, var(--ink) 12%, transparent);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.pl-rail__fill {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: inherit;
+  transition: width 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ---- Callout --------------------------------------------------------------- */
+
+.pl-callout {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+}
+
+.pl-callout__glyph {
+  flex: none;
+}
+
+.pl-callout--info {
+  border-color: var(--info);
+  color: var(--info);
+}
+
+.pl-callout--correct {
+  border-color: var(--correct);
+  color: var(--correct);
+}
+
+.pl-callout--incorrect {
+  border-color: var(--incorrect);
+  color: var(--incorrect);
+}
+
+.pl-callout--accent {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.pl-callout__body {
+  color: var(--ink);
+}
+
+/* ---- EmptyState ------------------------------------------------------------ */
+
+.pl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--ink-muted);
+}
+
+.pl-empty__heading {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ---- Motion (§10.5: respect prefers-reduced-motion) ------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pl-btn,
+  .pl-option,
+  .pl-rail__fill {
+    transition-duration: 0.01ms;
+  }
+}

@@ -118,6 +118,12 @@ export default defineConfig([
   },
   {
     files: ["**/*.tsx"],
+    // The no-hardcoded-string rule governs shipped components, not their tests:
+    // a test renders `<OptionRow selected={true}>Le subjonctif</OptionRow>` to
+    // exercise it, and nothing it renders is user-visible or reaches a locale
+    // file. Same carve-out the purity rules take above (see the TEST_FILES note).
+    // NO_DEFAULT_EXPORT still applies to test files, via the baseline block.
+    ignores: TEST_FILES,
     rules: {
       "no-restricted-syntax": ["error", NO_DEFAULT_EXPORT, ...NO_JSX_LITERALS],
     },

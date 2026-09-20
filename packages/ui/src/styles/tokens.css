@@ -1,0 +1,53 @@
+/* Generated from packages/ui/src/tokens/tokens.ts by renderTokensCss().
+   Do not edit by hand: the drift-guard test asserts this file equals the
+   generator output. Change tokens.ts and regenerate. */
+
+:root {
+  --bg: #FBF8F4;
+  --surface: #FFFFFF;
+  --ink: #1E1824;
+  --ink-muted: #5B5266;
+  --primary: #5B2C6F;
+  --accent: #E8913A;
+  --correct: #1F7A5C;
+  --incorrect: #B23A48;
+  --info: #2B6CB0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17131C;
+    --surface: #221C29;
+    --ink: #F4EFEA;
+    --ink-muted: #B4A9BE;
+    --primary: #B388CC;
+    --accent: #F2A85B;
+    --correct: #4FBF95;
+    --incorrect: #E8788A;
+    --info: #7FB3E8;
+  }
+}
+
+[data-theme="light"] {
+  --bg: #FBF8F4;
+  --surface: #FFFFFF;
+  --ink: #1E1824;
+  --ink-muted: #5B5266;
+  --primary: #5B2C6F;
+  --accent: #E8913A;
+  --correct: #1F7A5C;
+  --incorrect: #B23A48;
+  --info: #2B6CB0;
+}
+
+[data-theme="dark"] {
+  --bg: #17131C;
+  --surface: #221C29;
+  --ink: #F4EFEA;
+  --ink-muted: #B4A9BE;
+  --primary: #B388CC;
+  --accent: #F2A85B;
+  --correct: #4FBF95;
+  --incorrect: #E8788A;
+  --info: #7FB3E8;
+}
