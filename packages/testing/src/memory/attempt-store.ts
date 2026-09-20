@@ -1,4 +1,5 @@
-import type { Attempt, AttemptStore, ISO, ItemId, Skill } from "../ports.stub.js";
+import type { AttemptStore, ISO } from "@palier/app";
+import type { Attempt, ItemId, Skill } from "@palier/domain";
 
 /**
  * Attempts are append-only and keyed by a client-generated ULID

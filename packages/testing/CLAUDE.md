@@ -18,8 +18,10 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
   against the in-memory and the real implementation. That is the whole return on the ports
   layer (ADR 10, §6.2 tier 3).
 - **Nothing here reads the system clock or calls `Math.random`** (§6.4).
-- **Do not invent a port §3.3 has not specified.** `src/ports.stub.ts` names the file each
-  placeholder moves to; deleting it is the definition of done for `@palier/app`.
+- **Do not invent a port §3.3 has not specified.** The ports now come from `@palier/app`;
+  the in-memory impls and contract suites import them from there (`ports.stub.ts` is gone).
+  A store that needs a port §3.3 omits — `SessionStore`, `OralStore` — waits for it to land
+  in `@palier/app` rather than being stubbed here.
 
 ## The three mistakes most likely to be made here
 

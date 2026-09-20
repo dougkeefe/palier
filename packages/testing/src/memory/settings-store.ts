@@ -1,4 +1,4 @@
-import type { SettingsStore } from "../ports.stub.js";
+import type { SettingsStore } from "@palier/app";
 
 export const memorySettingsStore = (): SettingsStore => {
   const values = new Map<string, unknown>();
