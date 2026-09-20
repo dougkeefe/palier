@@ -820,11 +820,40 @@ prompt shape. The factory fleshes it out in its own session, the same way D19 ke
 `ScheduleEntry` minimal until the scheduler. Recorded so the next session does not mistake the
 minimal shape for the intended one.
 
+### D30 — Lighthouse runs the median of five, not a single run
+**Date:** 20 September 2026 · **Status:** accepted, corrects D26
+
+D26 introduced the Lighthouse gate as `numberOfRuns: 1` on the desktop preset and called it
+"flake-free... the shell scores 1.0 on both". CI has since shown that claim to be wrong: the
+same `/en` page scores across a wide band on GitHub's shared runners — 0.77 on #6's PR and
+`main` runs, 0.81 on #7's run, and ≥0.95 on one #6 push run — so the gate passed or failed
+essentially at random, and has been **red on `main` since #6 introduced it**, unrelated to
+any application change. A single Lighthouse run is not "deterministic by construction" (the
+premise §6.5's zero-retry policy rests on), chiefly because the first run against a
+just-started server is anomalously slow.
+
+`lighthouserc.json` now sets `numberOfRuns: 5` with `aggregationMethod: "median"`, which is
+Lighthouse's own recommended practice: the median discards the cold first run and the tails,
+so the asserted number reflects the page's steady-state score rather than one sample. This is
+**measurement methodology, not a retry** — it does not re-run a failed step hoping for a
+different answer; it takes a more stable statistic of a known-noisy measurement. The 0.95
+threshold and the desktop preset are unchanged. If the median still lands below 0.95, that is
+now honest signal that the page has a real performance defect to fix, not runner noise.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 20 September 2026 — `dougkeefe/lighthouse-median-runs` (Lighthouse gate made deterministic)
+
+The Lighthouse performance gate had been red on `main` since D26 introduced it: a single
+desktop run of `/en` scored anywhere from 0.77 to ≥0.95 on shared CI runners, so the ≥0.95
+assertion passed or failed at random. Changed `apps/web/lighthouserc.json` to `numberOfRuns:
+5` with `aggregationMethod: "median"`, so the asserted score is the steady-state median rather
+than one noisy sample (the cold first run is discarded). Threshold, preset and URLs unchanged.
+Config-only; recorded as deviation **D30**, which corrects D26's "flake-free" claim.
 
 ### 19 September 2026 — `dougkeefe/continue-dev-from-docs-v2` (item type registry, ADR 17)
 
