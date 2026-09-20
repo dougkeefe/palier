@@ -98,3 +98,11 @@ jobs:
             exit "$code"
           fi
           echo "Medium lane: $((SECONDS - start))s of the 240s budget." >> "$GITHUB_STEP_SUMMARY"
+
+      # Bundle-size and Lighthouse budgets (architecture.md §13). Both read the
+      # production build produced above; both fail the lane on a breach.
+      - name: Bundle-size budget (< 180 KB gzipped first-load JS)
+        run: pnpm --filter @palier/web bundle-size
+
+      - name: Lighthouse budget (performance and accessibility >= 95)
+        run: pnpm --filter @palier/web lighthouse

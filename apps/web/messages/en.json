@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "title": "Palier",
+    "description": "A free, open-source tool for practising the Public Service Commission's Second Language Evaluation."
+  },
+  "nav": {
+    "skipToContent": "Skip to main content",
+    "brand": "Palier",
+    "about": "About",
+    "primary": "Primary"
+  },
+  "languageToggle": {
+    "otherLanguage": "Français"
+  },
+  "syncStatus": {
+    "off": "Sync off"
+  },
+  "footer": {
+    "nonAffiliation": "Palier is an independent, open-source study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official."
+  },
+  "home": {
+    "title": "Practise for the Second Language Evaluation",
+    "tagline": "Reading, written expression and oral practice for the Public Service Commission's SLE — no account, no cost, and it works offline.",
+    "cta": "Learn more"
+  },
+  "about": {
+    "title": "What Palier is, and what it is not",
+    "independence": "Palier is an independent study tool, built in the open. It is not the exam, and using it is not a substitute for the Public Service Commission's own preparation material.",
+    "noRealItems": "It contains no real test questions. Every item is written or generated for practice, and no result it produces is official."
+  }
+}

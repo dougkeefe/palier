@@ -31,9 +31,11 @@ const FRAMEWORK_DEFAULT_EXPORT_FILES = [
   "apps/web/src/app/**/{icon,apple-icon,opengraph-image,twitter-image}.{ts,tsx}",
   "apps/web/src/app/**/{sitemap,robots,manifest}.ts",
   "apps/web/src/{instrumentation,instrumentation-client,proxy}.ts",
+  // next-intl's plugin imports the default export of the request config; there
+  // is no named alternative (deviation D11).
+  "apps/web/src/i18n/request.ts",
   "apps/web/next.config.ts",
   "apps/web/playwright.config.ts",
-  "apps/web/postcss.config.mjs",
   "eslint.config.mjs",
   "vitest.config.mts",
 ];
@@ -99,6 +101,14 @@ export default defineConfig([
       globals: { module: "writable", require: "readonly", __dirname: "readonly" },
     },
     rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
+  {
+    // Node-run ESM scripts (build gates, tooling) get Node globals. They are
+    // modules, so sourceType stays the default.
+    files: ["**/*.mjs"],
+    languageOptions: {
+      globals: { process: "readonly", console: "readonly", URL: "readonly" },
+    },
   },
   {
     rules: {

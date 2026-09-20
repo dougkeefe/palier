@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "title": "Palier",
+    "description": "Un outil gratuit et à code source ouvert pour s'exercer à l'Évaluation de langue seconde de la Commission de la fonction publique."
+  },
+  "nav": {
+    "skipToContent": "Passer au contenu principal",
+    "brand": "Palier",
+    "about": "À propos",
+    "primary": "Principale"
+  },
+  "languageToggle": {
+    "otherLanguage": "English"
+  },
+  "syncStatus": {
+    "off": "Synchronisation désactivée"
+  },
+  "footer": {
+    "nonAffiliation": "Palier est un outil d'étude indépendant à code source ouvert. Il n'est ni affilié à la Commission de la fonction publique du Canada, ni approuvé ou reconnu par celle-ci. Il ne contient aucune question d'examen réelle et ses résultats ne sont pas officiels."
+  },
+  "home": {
+    "title": "Préparez-vous à l'Évaluation de langue seconde",
+    "tagline": "Exercices de compréhension de l'écrit, d'expression écrite et d'expression orale pour l'ÉLS de la Commission de la fonction publique — sans compte, sans frais, et accessible hors ligne.",
+    "cta": "En savoir plus"
+  },
+  "about": {
+    "title": "Ce qu'est Palier, et ce qu'il n'est pas",
+    "independence": "Palier est un outil d'étude indépendant, conçu de façon ouverte. Il n'est pas l'examen, et son utilisation ne remplace pas le matériel de préparation de la Commission de la fonction publique.",
+    "noRealItems": "Il ne contient aucune question d'examen réelle. Chaque question est rédigée ou générée à des fins d'exercice, et aucun résultat qu'il produit n'est officiel."
+  }
+}
