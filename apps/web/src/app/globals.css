@@ -1,26 +1,189 @@
-@import "tailwindcss";
+/*
+ * App-level styling for the shell. The design system of record is @palier/ui:
+ * `tokens.css` (the colour/theme custom properties) and `components.css` (the
+ * `.pl-*` primitives, focus ring, target sizing) are imported ahead of this
+ * file in the locale layout. This file holds only what a design-system
+ * primitive does not: the base reset and the header/main/footer page frame.
+ *
+ * Tailwind was removed with the shell (deviation recorded in progress.md): the
+ * app composes @palier/ui rather than a second, utility-based styling system.
+ */
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Skip link: visible only on focus, meeting 2.4.11 focus appearance. */
+.app-skip-link {
+  position: absolute;
+  left: var(--space-2, 0.5rem);
+  top: var(--space-2, 0.5rem);
+  transform: translateY(-150%);
+  z-index: 100;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  transition: transform 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.app-skip-link:focus {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-skip-link {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------ header */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.app-header__brand {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.app-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+/*
+ * Header controls (links, toggle, status). Every interactive target clears the
+ * 24x24 CSS px floor (WCAG 2.5.8) via min-height/min-width.
+ */
+.app-header__link,
+.app-lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+  justify-content: center;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  color: var(--ink);
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.app-header__link:hover,
+.app-lang-toggle:hover {
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+.app-lang-toggle {
+  border-color: color-mix(in srgb, var(--ink) 20%, transparent);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------- sync status */
+.app-sync-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  padding: 0 0.5rem;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+.app-sync-status__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--ink-muted);
+}
+
+/* -------------------------------------------------------------------- main */
+.app-main {
+  flex: 1;
+  width: 100%;
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/*
+ * `<main>` carries tabindex="-1" so the skip link reliably moves focus to it
+ * (Safari and older browsers otherwise leave focus on the link). It is a scroll
+ * target, not an operable control, so suppress the outline the browser would
+ * draw around the whole region when focus lands there programmatically.
+ */
+.app-main:focus {
+  outline: none;
+}
+
+.app-hero__title {
+  font-size: 1.875rem;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+  color: var(--ink);
+}
+
+.app-hero__tagline {
+  font-size: 1.125rem;
+  color: var(--ink-muted);
+  margin: 0 0 1.5rem;
+  max-width: 34rem;
+}
+
+.app-prose > * + * {
+  margin-top: 1rem;
+}
+
+/* ------------------------------------------------------------------ footer */
+.app-footer {
+  background: var(--surface);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  padding: 1.25rem 1rem;
+}
+
+.app-footer__inner {
+  max-width: 48rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.app-footer__disclaimer {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  margin: 0;
 }

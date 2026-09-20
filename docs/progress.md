@@ -66,7 +66,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/osaka-v1` | `@palier/ui` design tokens, contrast gate, six primitives | 19 September 2026 |
+| `dougkeefe/continue-dev-from-docs-v1` | `apps/web` shell: locale routing + next-intl, layout shell, composition root, and the i18n/axe/Lighthouse/bundle gates | 19 September 2026 |
 
 ---
 
@@ -81,7 +81,7 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 - [x] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current) — all six written, plus the root router `CLAUDE.md`; D4 resolved, D15 recorded
 - [ ] Name decided and domain registered (§12.1 — "Palier" is still a working name)
 - [ ] `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0), `README` non-affiliation statement [R5, R13]
-- [ ] `adr/README.md` covering the format and the never-edit-only-supersede rule
+- [x] `adr/README.md` covering the format, the never-edit-only-supersede rule, and numbers-on-acceptance (D16)
 
 ### Domain and contracts
 
@@ -126,10 +126,10 @@ Built now rather than retrofitted — §7 is emphatic about this.
 - [x] Contrast validation on the token set — a unit test over `@palier/ui`'s token set; every
   text pair clears 4.5:1 and every brand/UI pair 3:1 in both themes. `accent` is documented as
   decorative and excluded. Proven to bite (a weakened token failed, naming the pair)
-- [ ] i18n key parity [R8]
-- [ ] axe on the shell [R9]
-- [ ] Lighthouse budget
-- [ ] Bundle size
+- [x] i18n key parity [R8] — `apps/web/src/i18n/messages.test.ts`, fast lane. Proven to bite (dropped a `fr.json` key → failed)
+- [x] axe on the shell [R9] — `@axe-core/playwright` on `/en`, `/fr`, `/en/about` and the toggle-focused state, medium lane. Proven to bite (an empty `<button>` → `button-name`)
+- [x] Lighthouse budget — `@lhci/cli`, desktop preset, performance and accessibility ≥ 95 on `/en` and `/fr` (both scored 1.0), medium lane. Proven to bite
+- [x] Bundle size — `scripts/check-bundle-size.mjs`, shared first-load JS 165.7 KB of the 180 KB budget, medium lane. Proven to bite
 
 ### UI and app shell
 
@@ -138,15 +138,17 @@ Built now rather than retrofitted — §7 is emphatic about this.
   shipped via the `./tokens.css` and `./components.css` export subpaths (D22)
 - [x] `@palier/ui`: six primitives (Button, Card, OptionRow, ProgressRail, Callout, EmptyState) —
   pure logic in `.ts` (tested to the 90% branch glob), thin React renderers in `.tsx` (D21)
-- [ ] `apps/web`: locale-prefixed routing, next-intl wired [R8]
-- [ ] `apps/web`: layout shell, with the non-affiliation statement present from day one [R5]
-- [ ] `apps/web`: composition root with null adapters (§3.5)
+- [x] `apps/web`: locale-prefixed routing, next-intl wired [R8] — `[locale]` segment, `proxy.ts` (Next 16 rename, D24), `en`/`fr` prerendered
+- [x] `apps/web`: layout shell, with the non-affiliation statement present from day one [R5] — header (equal-prominence language toggle, quiet sync placeholder), footer disclaimer, `@palier/ui` tokens+primitives, Tailwind removed (D25)
+- [x] `apps/web`: composition root with null adapters (§3.5) — `src/lib/container.ts` (D23), hermetic path wires `@palier/testing` in-memory ports; production path throws until Phase 2 adapters exist
 
 ### Exit criteria
 
-- [~] `pnpm build && pnpm test && pnpm lint` green with every gate active — green; contrast
-  validation is now built (over the `@palier/ui` token set), leaving i18n parity and the
-  Lighthouse/bundle budgets, both of which wait on the `apps/web` shell + next-intl
+- [x] `pnpm build && pnpm test && pnpm lint` green with every gate active — green, and **every
+  phase-0 gate is now built**: typecheck, lint, boundaries, unit tests, contrast, i18n key
+  parity, axe on the shell, Lighthouse (perf + a11y ≥ 95) and bundle size. The last four
+  landed with the `apps/web` shell + next-intl. Fast lane cold ~5 s; medium lane adds
+  axe/Lighthouse/bundle
 - [x] A deliberate boundary violation on a scratch branch fails CI — **verified by running it**, not assumed. Both an arrow violation and a vendor-ban violation were run on `scratch/deliberate-violation`; output in the session log. Running it caught two bugs that made the gate silently vacuous.
 - [x] The `psc-sle` profile validates
 - [x] Band mapping property test passes: total and monotonic over every variant — over all four, driven by `Object.entries(profile.variants)` rather than a hard-coded list
@@ -155,21 +157,26 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Suggested next three
 
-`@palier/ui`'s tokens, contrast gate and six primitives have landed (see the session log for
-19 September 2026), closing the contrast exit gate. What follows:
+The `apps/web` shell has landed (see the session log for 19 September 2026), closing the
+**axe**, **Lighthouse**, **bundle-size** and **i18n-parity** gates — every phase-0 CI gate
+is now built. What remains in phase 0:
 
-1. The `apps/web` shell: locale-prefixed routing with next-intl, the layout shell with the
-   non-affiliation statement from day one [R5], and the composition root with null adapters
-   (§3.5). It consumes `@palier/ui`'s `./tokens.css` + primitives, and it is what the still-open
-   **axe**, **Lighthouse** and **i18n parity** gates need before they can be built.
-2. The item type registry, which is blocked on a decision rather than on work — read D13
-   first and write the ADR (next free number, per D16). Now more tractable: `@palier/ui` exists,
-   so the `itemRenderers` half of D13's proposed split has a home.
-3. The remaining ports and the first use cases: `SessionStore` and `OralStore` need their
+1. The item type registry, still blocked on a decision rather than on work — read D13
+   first and write the ADR (next free number, now **0017**, per D16). `@palier/ui` exists, so
+   the `itemRenderers` half of D13's proposed split has a home; `apps/web` now has a
+   composition root (`src/lib/container.ts`) where D13's compile-time exhaustiveness
+   assertion belongs.
+2. The remaining ports and the first use cases: `SessionStore` and `OralStore` need their
    signatures deciding and recording (D18's discipline), and
    `AiProvider`/`SyncTransport`/`TelemetrySink` need their domain types (AI requests and
    verdicts, sync documents, device identity, telemetry events) before they can be
-   transcribed.
+   transcribed. Once a use case lands in `@palier/app`, `container.ts` gains `buildUseCases`.
+3. The remaining phase-0 scaffolding: the `LICENSE`/`LICENSE-CONTENT`/`README` files with the
+   non-affiliation statement [R5, R13], and the 60-item canonical fixture bank (blocked only
+   on wanting real domain fixtures). Both are small and unblock nothing else.
+
+The French non-affiliation string in `apps/web/messages/fr.json` was owner-confirmed
+(D27, resolved); no open owner questions remain for this slice.
 
 ---
 
@@ -707,11 +714,129 @@ therefore *deliberately not* asserted as a text/UI pair: §10.2 assigns it to hi
 streak and the mascot — decorative, never body text or an information-bearing boundary. The
 contrast test documents this exclusion in place.
 
+### D23 — The composition root lives at `apps/web/src/lib/container.ts`, not `apps/web/lib/`
+**Date:** 19 September 2026 · **Status:** accepted
+
+§3.5 names `apps/web/lib/container.ts`. It is instead `apps/web/src/lib/container.ts`, because
+the enforcement tooling is all rooted at `src/**`: the `boundaries` script cruises
+`apps/web/src`, the Vitest `web` project includes `src/**/*.test.ts`, and coverage includes
+`apps/*/src/**`. Under `src/`, the composition root's imports are validated by
+dependency-cruiser, its wiring test is discovered, and it appears in the coverage report;
+under a top-level `lib/` none of that holds. A one-directory move buys three enforcement
+guarantees, so it was taken. The `@/*` alias also resolves `@/lib/container` either way.
+
+### D24 — Locale negotiation uses `proxy.ts` (Next.js 16 renamed Middleware to Proxy)
+**Date:** 19 September 2026 · **Status:** accepted
+
+The plan and next-intl's own docs say "middleware.ts". Next.js 16 renamed the Middleware
+convention to **Proxy** — the file is `src/proxy.ts` and its default export runs before
+matched requests (`node_modules/next/dist/docs/01-app/01-getting-started/16-proxy.md`:
+"Starting with Next.js 16, Middleware is now called Proxy. The functionality remains the
+same"). The next-intl handler (`createMiddleware`, imported from `next-intl/middleware` — a
+module name, unrelated to the file convention) is exported from `proxy.ts`. `src/proxy.ts`
+was already on the eslint default-export exemption list, so no gate changed. `src/i18n/request.ts`
+**was** added to that list, because the next-intl plugin imports its default export and there
+is no named alternative.
+
+### D25 — Tailwind removed from `apps/web`; the design system is `@palier/ui`
+**Date:** 19 September 2026 · **Status:** accepted
+
+`apps/web` shipped from `create-next-app` with Tailwind v4 (`@tailwindcss/postcss`,
+`tailwindcss`, `postcss.config.mjs`, an `@import "tailwindcss"` in `globals.css`). The design
+system of record is `@palier/ui` — the tokens and the `.pl-*` component classes — so a second,
+utility-based styling system alongside it is drift waiting to happen. Both Tailwind packages,
+`postcss.config.mjs` and its eslint exemption line were removed; `globals.css` now imports
+`@palier/ui`'s `tokens.css` + `components.css` (via the layout) and carries only the page-frame
+layout (header/main/footer, skip link) that a primitive does not. Verified: the production
+build and all gates pass without Tailwind or PostCSS.
+
+### D26 — Lighthouse and bundle-size gate tooling
+**Date:** 19 September 2026 · **Status:** accepted
+
+Two phase-0 gates needed new tooling, both wired into the medium lane (`verify.yml`), both
+run against the production build:
+
+- **Lighthouse:** `@lhci/cli@0.15.1` (`apps/web/lighthouserc.json`), **desktop preset**,
+  asserting `categories:performance` and `categories:accessibility` ≥ 0.95 on `/en` and
+  `/fr`. Desktop rather than the mobile default deliberately, for a flake-free gate (§6.5
+  zero-tolerance); the shell scores 1.0 on both. The mobile Core-Web-Vitals field budgets in
+  architecture.md §13 (LCP/INP/CLS) are a separate, later addition.
+- **Bundle size:** a **zero-dependency** Node script (`apps/web/scripts/check-bundle-size.mjs`)
+  that gzips the App Router runtime + polyfills from `.next/build-manifest.json`
+  (`rootMainFiles` + `polyfillFiles`) and asserts < 180 KB. This measures the shared
+  first-load JS every route pays, which is the dominant term for an RSC-first shell; the
+  Turbopack build emits no `app-build-manifest.json`, so per-route chunk attribution is
+  deferred until a route ships a large client island. `PALIER_BUNDLE_BUDGET_KB` overrides the
+  budget, which is how the gate is proven to bite. Current: 165.7 KB of 180.
+
+`next-intl@4.14.5` was added as an `@palier/web` dependency — architecturally mandated
+(architecture.md §3), so a note rather than an ADR.
+
+### D27 — The French non-affiliation string was a Canadian-French draft, now confirmed
+**Date:** 19 September 2026 · **Status:** RESOLVED 19 September 2026
+
+`product-requirements.md` §2 gives the non-affiliation statement **in English only**. The
+footer carries it on every page and `fr.json` key parity is CI-gated, so a French string is
+required; PRD §12 forbids silent machine translation. `apps/web/messages/fr.json` therefore
+carries a Canadian-French rendering ("outil d'étude indépendant à code source ouvert…
+Commission de la fonction publique du Canada…").
+
+**Resolution:** the owner confirmed the wording (19 September 2026), so the string is no
+longer an unreviewed draft. The broader full-French interface review R8 schedules for phase 7
+still applies to the app's growing string set, but this specific string is settled.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 19 September 2026 — `dougkeefe/continue-dev-from-docs-v1` (apps/web shell + the four shell gates)
+
+The `apps/web` application shell, per `implementation-plan.md` §7/§3.5 and
+`product-requirements.md` §2/§7/§10–§12, and the four phase-0 gates that waited on it.
+**Closes the axe, Lighthouse, bundle-size and i18n-parity exit gates — every phase-0 CI gate
+is now built.** Deviations D23–D27 recorded. No ADR — nothing here changes a §3 decision.
+
+Built: locale-prefixed routing under `src/app/[locale]/` with next-intl
+(`src/i18n/{routing,request,navigation}.ts`, `src/proxy.ts`), `en`/`fr` prerendered and `/`
+redirecting; a root layout setting `<html lang>` and importing `@palier/ui`'s CSS; the shell
+components (`Header` with an equal-prominence language toggle labelled in the other language's
+own name + `lang`, a quiet `SyncStatus` placeholder, `Footer` carrying the R5 non-affiliation
+statement on every page); a landing page and an `/about` page; `messages/{en,fr}.json` at full
+key parity; and the composition root `src/lib/container.ts` wiring the `@palier/testing`
+in-memory ports behind `PALIER_HERMETIC`.
+
+Dependencies added (D26): `next-intl@4.14.5` (dep, architecture.md §3), `@lhci/cli@0.15.1`
+(devDep). Tailwind removed (D25): `@tailwindcss/postcss`, `tailwindcss`, `postcss.config.mjs`
+gone; the app composes `@palier/ui` plus a small `globals.css` page frame.
+
+Config: `next.config.ts` wraps the next-intl plugin; `eslint.config.mjs` exempts
+`src/i18n/request.ts` (plugin default export) and adds Node globals for `**/*.mjs`, and drops
+the `postcss.config.mjs` exemption; `verify.yml`'s medium job gained bundle-size and
+Lighthouse steps; `.gitignore` gained `.lighthouseci/`, `test-results/`, `playwright-report/`.
+`docs/adr/README.md` written (format, never-edit-only-supersede, numbers-on-acceptance).
+
+**Verified:**
+
+- `pnpm verify` green — check-types 14/14, lint clean, depcruise clean (112 modules in
+  packages, **31 in `apps/web`**), **345 tests passed, 4 todo, 26 files**; coverage held every
+  glob threshold. **Cold fast lane ~5 s** (caches and `dist` deleted first) against the 90 s
+  budget.
+- `pnpm --filter @palier/web build` green — `/en`, `/fr`, `/en/about`, `/fr/about` prerender
+  as SSG; Proxy (middleware) active.
+- Medium lane green: integration 2/2, **E2E 8/8** (axe clean on `/en`, `/fr`, `/en/about` and
+  the toggle-focused state; header keyboard focus order; locale switch preserving the route;
+  footer disclaimer present), bundle size **165.7 KB of 180**, Lighthouse **perf 1.0 / a11y
+  1.0** on both locales.
+- **All four new gates proven to bite, then reverted:** i18n parity (dropped a `fr.json` key
+  → `hold identical key paths` failed); axe (empty `<button>` → `button-name` violation);
+  bundle size (`PALIER_BUNDLE_BUDGET_KB=100` → over budget by 65.7 KB); Lighthouse (impossible
+  `minScore: 1.01` → `Assertion failed. Exiting with status code 1`).
+
+**Raised for the owner:** the French non-affiliation string is a Canadian-French *draft*
+(D27), not sourced — confirm before launch. **Next:** the item type registry (ADR 0017, D13),
+the remaining ports/use cases, and the licence/README files — see the Suggested next three.
 
 ### 19 September 2026 — `dougkeefe/osaka-v1` (@palier/ui tokens, contrast gate, six primitives)
 
