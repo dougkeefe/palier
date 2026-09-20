@@ -66,7 +66,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| — | — | — |
+| `dougkeefe/osaka-v1` | `@palier/ui` design tokens, contrast gate, six primitives | 19 September 2026 |
 
 ---
 
@@ -123,7 +123,9 @@ Built now rather than retrofitted — §7 is emphatic about this.
 - [x] dependency-cruiser encoding the §3.1 arrows, plus the forbidden imports of `openai`, `dexie`, `next`, `react` outside their allowed packages
 - [x] eslint-plugin-boundaries for intra-package layering — but see the honesty note in D5
 - [x] Unit tests
-- [ ] Contrast validation on the token set
+- [x] Contrast validation on the token set — a unit test over `@palier/ui`'s token set; every
+  text pair clears 4.5:1 and every brand/UI pair 3:1 in both themes. `accent` is documented as
+  decorative and excluded. Proven to bite (a weakened token failed, naming the pair)
 - [ ] i18n key parity [R8]
 - [ ] axe on the shell [R9]
 - [ ] Lighthouse budget
@@ -131,15 +133,20 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### UI and app shell
 
-- [ ] `@palier/ui`: design tokens as CSS custom properties, light and dark
-- [ ] `@palier/ui`: six primitives (Button, Card, OptionRow, ProgressRail, Callout, EmptyState)
+- [x] `@palier/ui`: design tokens as CSS custom properties, light and dark — TS source of truth
+  (`tokens.ts`), a generated `tokens.css` under a drift guard, and a static `components.css`;
+  shipped via the `./tokens.css` and `./components.css` export subpaths (D22)
+- [x] `@palier/ui`: six primitives (Button, Card, OptionRow, ProgressRail, Callout, EmptyState) —
+  pure logic in `.ts` (tested to the 90% branch glob), thin React renderers in `.tsx` (D21)
 - [ ] `apps/web`: locale-prefixed routing, next-intl wired [R8]
 - [ ] `apps/web`: layout shell, with the non-affiliation statement present from day one [R5]
 - [ ] `apps/web`: composition root with null adapters (§3.5)
 
 ### Exit criteria
 
-- [~] `pnpm build && pnpm test && pnpm lint` green with every gate active — green, but three gates are not built yet: contrast validation, i18n parity and the Lighthouse/bundle budgets
+- [~] `pnpm build && pnpm test && pnpm lint` green with every gate active — green; contrast
+  validation is now built (over the `@palier/ui` token set), leaving i18n parity and the
+  Lighthouse/bundle budgets, both of which wait on the `apps/web` shell + next-intl
 - [x] A deliberate boundary violation on a scratch branch fails CI — **verified by running it**, not assumed. Both an arrow violation and a vendor-ban violation were run on `scratch/deliberate-violation`; output in the session log. Running it caught two bugs that made the gate silently vacuous.
 - [x] The `psc-sle` profile validates
 - [x] Band mapping property test passes: total and monotonic over every variant — over all four, driven by `Object.entries(profile.variants)` rather than a hard-coded list
@@ -148,13 +155,16 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Suggested next three
 
-`@palier/app`'s first seven ports have landed (see the session log for 19 September 2026),
-so `ports.stub.ts` is gone and the testing layer's in-memory ports are real. What follows:
+`@palier/ui`'s tokens, contrast gate and six primitives have landed (see the session log for
+19 September 2026), closing the contrast exit gate. What follows:
 
-1. `@palier/ui` design tokens and the six primitives, which unblocks the contrast gate,
-   the axe gate and the Lighthouse budget — the three exit criteria still outstanding.
+1. The `apps/web` shell: locale-prefixed routing with next-intl, the layout shell with the
+   non-affiliation statement from day one [R5], and the composition root with null adapters
+   (§3.5). It consumes `@palier/ui`'s `./tokens.css` + primitives, and it is what the still-open
+   **axe**, **Lighthouse** and **i18n parity** gates need before they can be built.
 2. The item type registry, which is blocked on a decision rather than on work — read D13
-   first and write the ADR (next free number, per D16).
+   first and write the ADR (next free number, per D16). Now more tractable: `@palier/ui` exists,
+   so the `itemRenderers` half of D13's proposed split has a home.
 3. The remaining ports and the first use cases: `SessionStore` and `OralStore` need their
    signatures deciding and recording (D18's discipline), and
    `AiProvider`/`SyncTransport`/`TelemetrySink` need their domain types (AI requests and
@@ -643,11 +653,106 @@ a **conjunction**. The in-memory `ItemRepository` filters by the supplied fields
 are the contract every implementation is held to, so if the `Selector` needs richer querying
 (ordering, weighting) it extends the criteria and the contract together, in its own session.
 
+### D21 — `@palier/ui` gains React (peer) and a jsdom test lane
+**Date:** 19 September 2026 · **Status:** accepted
+
+`@palier/ui`'s primitives are React components, so the package needs React. `react` and
+`react-dom` are declared as **peerDependencies** (`^19`) with matching devDependencies:
+`apps/web` already pins `react@19.2.8`, and a peer avoids a second copy of React in the tree.
+`.dependency-cruiser.cjs` already allowed `react` under `^(packages/ui/|apps/web/)`, so no gate
+changed — verified by the cruise staying clean (112 modules).
+
+For unit tests, `@testing-library/react@16.3.0` and `jsdom@26.1.0` are ui **devDependencies**
+(used only by ui's own tests, not exported, so not deps the way `@palier/testing` exports its
+harnesses). The root Vitest config runs the `ui` project in **jsdom**; every other project stays
+on `node`. What it replaces: nothing present renders a component to a DOM, which the §6.2 tier-1
+"option row's keyboard handling" style tests need. `@testing-library/user-event` was considered
+and dropped — `fireEvent.click` covers what these tests assert, so it was not added.
+
+The drift-guard test reads a file off disk and so carries a `// @vitest-environment node`
+docblock, because under jsdom `import.meta.url` is not a `file://` URL.
+
+**A lint carve-out came with this.** The `no-hardcoded-string-in-JSX` rule (`NO_JSX_LITERALS`)
+matched `**/*.tsx`, and its selector also flags numeric and boolean expression-container literals
+(`selected={true}`, `current={3}`), which makes idiomatic component *tests* impossible to write.
+`eslint.config.mjs` now sets `ignores: TEST_FILES` on that block — the same carve-out the purity
+rules already take (`docs/README` principle: "these rules govern the shipped package, not its
+tests"). `NO_DEFAULT_EXPORT` still applies to test files via the baseline block. Shipped `.tsx`
+is unaffected and still routes every user-visible string through i18n.
+
+### D22 — `@palier/ui` token CSS: TS source of truth, generated CSS under a drift guard
+**Date:** 19 September 2026 · **Status:** accepted
+
+§7 asks for "design tokens as CSS custom properties". The packages build with `tsc -b` only (no
+CSS bundler), and a stylesheet needs to be a real importable file, not a string. So:
+
+- `src/tokens/tokens.ts` is the **single source of truth** — the §10.2 table as typed data.
+- `src/tokens/css.ts`'s `renderTokensCss()` generates the `:root` + `@media (prefers-color-scheme)`
+  + `[data-theme]` custom-property blocks.
+- `src/styles/tokens.css` is committed and held to the generator by a **drift-guard test** (the
+  same discipline as the `docs/schemas` JSON-Schema guard). Proven to bite (a one-hex-digit edit
+  failed the guard).
+- `src/styles/components.css` is hand-authored for what inline styles cannot express:
+  `:focus-visible` (WCAG 2.4.11), target size (2.5.8), `prefers-reduced-motion` (§10.5), radii and
+  elevation (§10.4).
+- Both ship through new `exports` subpaths (`./tokens.css`, `./components.css`), copied into
+  `dist/styles/` by an added step in the `build` script (tsc does not copy non-TS assets). This
+  keeps D3's principle — an export entry has real content behind it.
+
+**Contrast findings, recorded because a wrong contrast is silent (cf. D12).** Every text token
+(`ink`, `ink-muted`, `correct`, `incorrect`, `info`) clears 4.5:1 and `primary` clears 3:1 on both
+backgrounds in both themes; `--surface` as the primary-button label over `--primary` clears 4.5:1
+either way (light 10.32, dark 5.77). `accent` is **2.32:1** on the light background and is
+therefore *deliberately not* asserted as a text/UI pair: §10.2 assigns it to highlights, the
+streak and the mascot — decorative, never body text or an information-bearing boundary. The
+contrast test documents this exclusion in place.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 19 September 2026 — `dougkeefe/osaka-v1` (@palier/ui tokens, contrast gate, six primitives)
+
+`@palier/ui` filled in per `implementation-plan.md` §7 and `product-requirements.md` §10–§12: the
+design tokens, the contrast-validation gate, and the six primitives. **Closes the contrast exit
+criterion.** Deviations D21 and D22 recorded. No ADR — nothing here changes a §3 decision.
+
+`packages/ui/src/` now holds: `tokens/tokens.ts` (the §10.2 table as the single source of truth)
+and `tokens/css.ts` (`renderTokensCss`); `contrast.ts` (WCAG luminance + ratio, closed-form, no
+dependency); `styles/tokens.css` (generated, drift-guarded) and `styles/components.css`
+(hand-authored focus/target-size/reduced-motion/elevation); `primitives/logic.ts` (pure:
+`buttonClass`, `optionRowState`, `optionRowKeydown`, `railGeometry`, `calloutState`) and the six
+`.tsx` renderers (`Button`, `Card`, `OptionRow`, `ProgressRail`, `Callout`, `EmptyState`) plus a
+shared `Glyph`; a barrel of named exports. Correct/incorrect always carry a glyph **and** a text
+label (colour is never the only signal, §10.2); every user-visible string arrives via
+props/children (no JSX literals).
+
+Dependencies added (D21): `react`/`react-dom` as ui peerDependencies (`^19`) + devDependencies
+(`19.2.8`); `@testing-library/react@16.3.0`, `jsdom@26.1.0`, `@types/react`/`@types/react-dom` as
+ui devDependencies. `vitest.config.mts` runs the `ui` project in jsdom; `eslint.config.mjs`
+exempts test files from the no-JSX-literal rule (the carve-out the purity rules already take).
+
+**Verified:**
+
+- `pnpm verify` green — check-types 14/14, lint clean, depcruise clean (**112 modules, 269
+  dependencies** plus 6 in `apps/web`; `react` resolves only under `packages/ui/`), **337 tests
+  passed, 4 todo, 24 files**. Coverage held every glob threshold, including
+  `packages/ui/src/**/*.ts` at 90% branch; overall 99.5% branch.
+- **Cold fast lane 4.56 seconds** (caches and `dist` deleted first), against the 90-second budget.
+- **The contrast gate bites** — weakening `--ink-muted` (light) to `#CFC7D6` failed with
+  `light: --ink-muted on --bg clears 4.5:1 (is 1.55…:1)` and the `--surface` pair beside it.
+  Reverted.
+- **The drift guard bites** — one hex digit changed in `tokens.css` failed the guard. Reverted.
+- The `.tsx` rendering carries no coverage floor by design (§6.3), but every new branch has a
+  behaviour-named test regardless (DoD §10): Button variants + className merge, OptionRow
+  selection/ARIA/roving-tabindex/glyph, Card, ProgressRail ARIA, Callout, EmptyState with and
+  without an illustration, and every Glyph.
+
+**Deferred, and where the next session hits it:** the `apps/web` shell (routing, layout, null
+composition root) now consumes these tokens and primitives and is what the axe, Lighthouse and
+i18n-parity gates wait on — see the Suggested next three.
 
 ### 19 September 2026 — `dougkeefe/guangzhou-v2` (@palier/app port interfaces)
 
