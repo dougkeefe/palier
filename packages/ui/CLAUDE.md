@@ -20,6 +20,10 @@ system, not the application.
   assertion on their *states* — panel open, dialog focused — not the initial render alone.
 - Logic (formatters, band-meter geometry, timer thresholds, keyboard handling, registry
   lookups) is 90% branch; rendering has no line target on purpose (§6.3).
+- **`itemRenderers` is the `render` half of the item type registry** (ADR 17): a
+  `Record<ItemType, ItemRenderer>` parallel to `ITEM_TYPE_DEFINITIONS` in `@palier/domain`,
+  which `apps/web` asserts covers the same union. A renderer that uses hooks (`McqItem`
+  does) carries `"use client"`, or Next's server build fails when the barrel pulls it in.
 
 ## The three mistakes most likely to be made here
 

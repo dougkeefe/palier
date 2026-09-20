@@ -41,3 +41,7 @@ export { EmptyState, type EmptyStateProps } from "./primitives/EmptyState.js";
 export { Glyph, type GlyphProps } from "./primitives/Glyph.js";
 export { OptionRow, type OptionRowProps } from "./primitives/OptionRow.js";
 export { ProgressRail, type ProgressRailProps } from "./primitives/ProgressRail.js";
+
+// The render half of the item type registry (implementation-plan.md §3.4, ADR 17).
+export { McqItem, type ItemRenderer, type ItemRendererProps } from "./item-types/McqItem.js";
+export { itemRenderers } from "./item-types/renderers.js";

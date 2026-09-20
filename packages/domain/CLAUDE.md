@@ -24,6 +24,11 @@ framework. `.dependency-cruiser.cjs` enforces all three.
   keys, never as explicit `undefined`, or the JSON round-trip test will catch you.
 - 100% branch (§6.3), with one test per rejection reason — the content suite's error
   messages depend on them being accurate.
+- **The item type registry lives here, minus `render`** (ADR 17). `ITEM_TYPE_DEFINITIONS`
+  is a `Record<ItemType, ItemTypeDefinition>` (`schema`, `score`, `validate`,
+  `generatePrompt`, `a11yContract`), so adding an `ItemType` is a compile error until it has
+  an entry. `render` cannot live here — it is a React component — so it is a parallel
+  `itemRenderers` map in `@palier/ui`, tied to these definitions in `apps/web`.
 
 ## The three mistakes most likely to be made here
 

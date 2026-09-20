@@ -164,14 +164,16 @@ registerItemType('cloze', {
 
 The session engine only ever calls `registry.get(item.type).score(...)`. It has no knowledge of cloze, error identification, or anything added later.
 
-**This literal cannot be built as written, and the fix needs an ADR.** `render` is a React
+**This literal cannot be built as written; ADR 17 records the fix.** `render` is a React
 component from `@palier/ui`, and §3.1 forbids every package below `apps/web` from importing
-`@palier/ui`, so a single registry object has nowhere to live. The shape that probably works
-is an `ItemTypeDefinition` without `render` in `@palier/domain` — React-free, which is the
-half that CI and `apps/factory` need — a parallel `itemRenderers` map in `@palier/ui`, and a
-compile-time exhaustiveness assertion in the composition root that both cover the same
-`ItemType` union. Deferred rather than worked around: see deviation D13 in `progress.md`,
-and write the ADR in the commit that implements it.
+`@palier/ui`, so a single registry object has nowhere to live. Per ADR 17 the registry is
+split by the dependency graph: a React-free `ItemTypeDefinition` (`schema`, `score`,
+`validate`, `generatePrompt`, `a11yContract`) in `@palier/domain` — the half CI and
+`apps/factory` need — a parallel `itemRenderers` map in `@palier/ui`, and a compile-time
+exhaustiveness assertion in the composition root (`apps/web/src/lib/item-types.ts`) that both
+cover the same `ItemType` union. It is an exhaustive `Record<ItemType, …>` rather than the
+imperative `registerItemType(…)` shown above, because keying on the union makes adding a type
+a compile error — a stronger form of principle 6. See `progress.md` deviation D13 (resolved).
 
 **Exam profile, a JSON file.** Loaded and validated at build time (ADR 9).
 
