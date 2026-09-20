@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 19 September 2026
+**Last updated:** 20 September 2026
 **Current phase:** 0, Foundations and contracts
 **Next milestone:** gates enforced (`implementation-plan.md` §9)
 
@@ -66,7 +66,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/continue-dev-from-docs-v2` | Item type registry (§3.4): React-free `ItemTypeDefinition` in `@palier/domain`, `itemRenderers` in `@palier/ui`, exhaustiveness in `apps/web`, plus ADR 0017 and the §4.5 architecture test — D13 | 19 September 2026 |
+| `dougkeefe/continue-dev-from-docs-v3` | Phase-0 scaffolding: `LICENSE`/`LICENSE-CONTENT`/`README` non-affiliation [R5, R13] and the 60-item canonical fixture bank in `@palier/testing` (D31) | 20 September 2026 |
 
 ---
 
@@ -80,7 +80,7 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 - [x] Eight workspaces created (`apps/web`, `apps/factory`, six `packages/*`), each with an explicit `exports` map
 - [x] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current) — all six written, plus the root router `CLAUDE.md`; D4 resolved, D15 recorded
 - [ ] Name decided and domain registered (§12.1 — "Palier" is still a working name)
-- [ ] `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0), `README` non-affiliation statement [R5, R13]
+- [x] `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0), `README` non-affiliation statement [R5, R13]
 - [x] `adr/README.md` covering the format, the never-edit-only-supersede rule, and numbers-on-acceptance (D16)
 
 ### Domain and contracts
@@ -115,7 +115,10 @@ Built now rather than retrofitted — §7 is emphatic about this.
   follow their ports
 - [x] `@palier/testing`: port contract suites, exported as functions
 - [x] `@palier/testing`: fixture builders, seeded Random, FakeClock
-- [ ] `@palier/testing`: the 60-item canonical fixture bank — needs the domain types
+- [x] `@palier/testing`: the 60-item canonical fixture bank — `src/fixtures/bank.ts`, generated
+  across the scored-skill taxonomy (all 18 reading+writing sub-skills), bands A/B/C, rotating
+  keys; every item schema-valid and `validate()`-clean, proven by `bank.test.ts`. Seeds
+  passages, two forms and one scenario too (D31)
 - [x] The three CI lanes from §6.5, with their time budgets enforced as build failures
 
 ### Gates
@@ -159,20 +162,22 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Suggested next three
 
-The item type registry has landed (see the session log for 19 September 2026), resolving
-D13 with **ADR 17** and adding the §4.5 architecture test — every phase-0 CI gate is built
-and the last deferred phase-0 mechanism is closed. What remains in phase 0, now two items:
+The item type registry landed (session log, 19 September 2026), resolving D13 with **ADR 17**;
+the phase-0 scaffolding landed too (session log, 20 September 2026) — the `LICENSE` /
+`LICENSE-CONTENT` / `README` non-affiliation files [R5, R13] and the 60-item canonical fixture
+bank. Every phase-0 CI gate is built and every deferred phase-0 *mechanism* is closed. **One
+substantive phase-0 item remains:**
 
 1. The remaining ports and the first use cases: `SessionStore` and `OralStore` need their
    signatures deciding and recording (D18's discipline), and
    `AiProvider`/`SyncTransport`/`TelemetrySink` need their domain types (AI requests and
    verdicts, sync documents, device identity, telemetry events) before they can be
-   transcribed. Once a use case lands in `@palier/app`, `container.ts` gains `buildUseCases`.
-   The item type registry is now available for a scoring/session use case to consume via
-   `itemTypeDefinition(item.type).score(...)`.
-2. The remaining phase-0 scaffolding: the `LICENSE`/`LICENSE-CONTENT`/`README` files with the
-   non-affiliation statement [R5, R13], and the 60-item canonical fixture bank (unblocked now
-   that the domain types and the registry exist). Both are small and unblock nothing else.
+   transcribed. The codebase deliberately defers each until a consumer drives its shape
+   (`packages/app/CLAUDE.md`, `packages/testing/CLAUDE.md`), so this is best paired with the
+   first `@palier/app` use case — once one lands, `container.ts` gains `buildUseCases`. The
+   item type registry is available for a scoring/session use case to consume via
+   `itemTypeDefinition(item.type).score(...)`, and the fixture bank
+   (`fixtureBankRepository()`) now gives such a use case realistic data to run against.
 
 The French non-affiliation string in `apps/web/messages/fr.json` was owner-confirmed
 (D27, resolved); no open owner questions remain for this slice.
@@ -840,11 +845,61 @@ different answer; it takes a more stable statistic of a known-noisy measurement.
 threshold and the desktop preset are unchanged. If the median still lands below 0.95, that is
 now honest signal that the page has a real performance defect to fix, not runner noise.
 
+### D31 — The canonical fixture bank seeds forms and a scenario, not only items
+**Date:** 20 September 2026 · **Status:** accepted
+
+§6.4 asks for "a canonical fixture bank of about 60 items". `packages/testing/src/fixtures/bank.ts`
+carries exactly sixty items, and also the passages its comprehension items reference, two exam
+forms whose item ids resolve within the bank, and one oral scenario. The extra artefacts are
+there because `MemoryBank` (and so a seeded `ItemRepository`) exposes `passage`/`form`/`scenario`
+lookups, and a fixture bank that leaves those empty would force every future test of those paths
+to hand-assemble its own — the exact duplication §6.4 exists to prevent. The bank is **generated**
+from the existing builders over the scored-skill taxonomy (all 8 reading + 10 writing sub-skills),
+across bands A/B/C, with the correct key rotating a→b→c→d so the distribution is not degenerate
+(the healthy case the Phase-1 content suite guards). Reading items are `comprehension` (passage
+backed); writing items rotate `cloze`/`error-id`/`best-completion`, so all four item types and
+every quality-check branch are exercised. `bank.test.ts` is the contract: sixty items, each
+schema-valid and `validate()`-clean, full taxonomy coverage, every key used, every passage and
+form id resolving. The French/English are templated placeholders — these are fixtures, so
+structure and coverage are the point, not prose (real content is the factory's job, Phase 1).
+
+`fixtureBankRepository()` returns `memoryItemRepository(FIXTURE_BANK)` in one call. It is **not**
+wired into the hermetic composition root: no route reads items until Phase 2, and wiring it
+without a consumer or a test would be premature — left for the Phase-2 drill route that first
+needs seeded content.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 20 September 2026 — `dougkeefe/continue-dev-from-docs-v3` (phase-0 scaffolding: licences, README, fixture bank)
+
+The two remaining concrete phase-0 deliverables, per the Suggested-next scaffolding bundle.
+No ADR — nothing here changes a §3 decision. Deviation **D31** recorded.
+
+Licences and README: `LICENSE` (MIT, the code) and `LICENSE-CONTENT` (the verbatim CC BY 4.0
+legal code, the content) added at the repo root; root `package.json` gains `"license": "MIT"`.
+`README.md` gained the R5 non-affiliation paragraph — copied character-for-character from the
+`apps/web/messages/en.json` footer string so the two cannot drift — and a Licence section, and
+had two stale lines corrected (the "every package is a placeholder" line, and a pointer at the
+deleted `apps/web/eslint.config.mjs` → the single root config, D5). This satisfies the *phase-0*
+portion of **R5** and **R13** ("licence files present from the first commit"); the requirement
+table is left untouched because full R5/R13 (repo public, human copy pass) is Phase 7.
+
+Fixture bank: `packages/testing/src/fixtures/bank.ts` — `FIXTURE_BANK` (sixty items generated
+across all 18 scored sub-skills, bands A/B/C, rotating keys; plus their passages, two exam forms
+and one oral scenario) and `fixtureBankRepository()`, both re-exported from the package barrel.
+Generated from the existing builders, not hand-written, so its invariants hold by construction;
+`bank.test.ts` is the contract (D31). Unblocks Phase-2 engine/adapter testing (§6.4).
+
+**Verified:** `pnpm build` green (8/8), then `pnpm verify` green (**exit 0**) — check-types
+14/14, lint clean, depcruise clean (**125 modules, 330 dependencies** in packages — +2 for
+`bank.ts`/`bank.test.ts`, no new arrow: `bank.ts` imports `@palier/domain` + `@palier/app` types
+and same-package builders only; **34 modules** in `apps/web`, unchanged), **390 tests passed, 4
+todo, 31 files** (+14 from `bank.test.ts`). Every glob coverage threshold held (overall
+branches 96.51%). **Next:** the remaining ports and the first use cases (see Suggested next).
 
 ### 20 September 2026 — `dougkeefe/lighthouse-median-runs` (Lighthouse gate made deterministic)
 

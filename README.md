@@ -1,5 +1,9 @@
 # Palier
 
+Palier is an independent, open-source study tool. It is not affiliated with, endorsed by,
+or connected to the Public Service Commission of Canada. It contains no real test questions
+and its results are not official.
+
 A pnpm + Turborepo monorepo. The architecture — six library packages behind ports and
 adapters, with dependencies pointing strictly inward — is specified in
 [`docs/implementation-plan.md`](docs/implementation-plan.md) §3 and
@@ -18,7 +22,12 @@ adapters, with dependencies pointing strictly inward — is specified in
 | `packages/ui` | `domain` | design system |
 | `packages/testing` | `app`, `domain` | in-memory ports, contract suites, fixtures |
 
-Every package is currently a placeholder: an `index.ts` that exports nothing.
+Phase 0 (foundations) is largely complete: `domain` carries the full type set, content
+schemas, the exam profile and the item-type registry; `app` holds the port interfaces;
+`testing` holds the in-memory ports, contract suites, fixture builders and the canonical
+fixture bank; `ui` holds the design tokens and primitives; and `apps/web` is a locale-routed
+shell over the composition root. `engine`, `adapters` and `apps/factory` are still mostly
+empty, and fill in later phases (`docs/implementation-plan.md` §7).
 
 ## Getting started
 
@@ -42,9 +51,16 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Conventions
 
-Named exports only — the one exception is Next.js file conventions, which the framework
-resolves by default export; `apps/web/eslint.config.mjs` holds the exhaustive exemption
-list and fails the lint on anything else. `strict`, `noUncheckedIndexedAccess` and
+Named exports only — the one exception is framework file conventions, which resolve by
+default export; the single root `eslint.config.mjs` holds the exhaustive exemption list and
+fails the lint on anything else. `strict`, `noUncheckedIndexedAccess` and
 `exactOptionalPropertyTypes` are enabled repo-wide from `tsconfig.base.json`.
 
 See [`AGENTS.md`](AGENTS.md) for the full working rules.
+
+## Licence
+
+The application **code** is licensed under the MIT licence ([`LICENSE`](LICENSE)). The
+**content** — the item bank, passages, exam forms and other practice material — is licensed
+under Creative Commons Attribution 4.0 International (CC BY 4.0,
+[`LICENSE-CONTENT`](LICENSE-CONTENT)).

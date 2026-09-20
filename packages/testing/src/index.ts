@@ -13,6 +13,7 @@ export {
   buildWith,
 } from "./fixtures/builders.js";
 export type { Builder } from "./fixtures/builders.js";
+export { FIXTURE_BANK, fixtureBankRepository } from "./fixtures/bank.js";
 export * from "./memory/index.js";
 export * from "./contracts/index.js";
 export { handlers } from "./msw/handlers.js";
