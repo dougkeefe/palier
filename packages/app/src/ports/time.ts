@@ -19,7 +19,17 @@ export type Clock = {
   now: () => ISO;
 };
 
-/** Randomness, injected and seedable, so a selection is reproducible (ADR 7). */
+/**
+ * Randomness, injected and seedable, so a selection is reproducible (ADR 7).
+ *
+ * **This is the selection randomness and it is not an entropy source.** Production
+ * wires a seeded generator on purpose (implementation-plan.md 3.5), so two devices
+ * can and do produce the same stream. Never mint an identifier from it: an
+ * `AttemptStore` treats a duplicate ULID as a no-op rather than an error, so a
+ * collision would be silent attempt loss, and it would break the property that
+ * makes sync conflict-free (ADR 16, architecture.md 9.4). Identifiers come from
+ * Web Crypto, in an adapter — see progress.md D39.
+ */
 export type Random = {
   /** A float in [0, 1), like `Math.random`. */
   next: () => number;

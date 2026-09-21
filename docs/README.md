@@ -32,7 +32,7 @@ If you are resuming work rather than reading in, start at `progress.md`. It is t
 This distinction is the point of the split, and it exists because a previous draft blurred it.
 
 - **Requirements** are in `product-requirements.md` section 0.1. Fourteen of them. Changing one is a product decision and it gets recorded in that document.
-- **Decisions** are in `adr/`. Each says what was chosen, what it costs, and what evidence would justify changing it. A maintainer who disagrees writes ADR 16 rather than arguing with a specification.
+- **Decisions** are in `adr/`. Each says what was chosen, what it costs, and what evidence would justify changing it. A maintainer who disagrees writes a new ADR rather than arguing with a specification — taking the next free number when it is accepted, never reserving one in prose (`progress.md` D16; this sentence named ADR 16 until the estimate-store decision took that number first, which is exactly the failure D16 records).
 - **Assumptions** are in `product-requirements.md` section 18 and `content-factory.md` section 3. These are beliefs, not facts, and several of them will turn out to be wrong.
 - **Preferences** are everything else: the product principles, the visual language, the phase ordering. Change them freely if the requirements are still met.
 
@@ -57,6 +57,18 @@ The band estimate comes from mock exams scored against the published PSC cut tab
 ---
 
 ## Revision history
+
+**0.3, 20 September 2026.** Amendments from building the `AnswerItem` use case, which completed
+the review-schedule record. `implementation-plan.md` §3.3 gained a dated in-place amendment to
+the `ScheduleStore` signature (`ScheduleEntry` is now `{ itemId, due: ISO | null, skill, box }`
+and the port has a `get`), because §3.3 is authoritative for port signatures. `architecture.md`
+§9.1 gained the `ScheduleEntry` shape beside the `Attempt` one, with the note that IndexedDB
+will not index a null `due` — which the design relies on — and §9.4 now admits that its
+last-write-wins rule does not cover a record with no `updatedAt`. **ADR 18** records that
+content ships as a workspace package, `@palier/content`, so the app can import the profile
+through an exports map rather than a relative path the boundary gate rejects. This sentence's
+own instruction to "write ADR 16" was corrected to "write a new ADR", which is what
+`progress.md` D16 settled. Reasoning for all of it in deviations D38 to D43.
 
 **0.2, 19 September 2026.** Reconciliation pass, no new positions. Ten contradictions found while writing the repository's agent documentation were resolved in favour of whichever document the table above makes authoritative: `architecture.md` §4, §17 and §19 had fallen behind ADR 10 and the plan's build order, §1 and §18 behind ADR 6, and §9.1 declared an estimate store the plan had ruled out — which is now ADR 16, the one conflict that was a genuine open question rather than a stale sentence. `product-requirements.md` gained dated amendments to R12 (which had never admitted the ADR 3 exception), §8.11, §13.0 and §15. Full list and reasoning in deviation D17 of `progress.md`.
 

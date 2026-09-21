@@ -1202,11 +1202,84 @@ separated.
 weaker than ADR 9's "a change is a content pull request rather than a development task". Phase 2
 closes it — the bank adapter fetches content and caches it by hash (`architecture.md` §5.3).
 
+### D43 — A synced `ScheduleEntry` has no `updatedAt`, and last-write-wins can regress a box
+**Date:** 20 September 2026 · **Status:** open, closes with `adapters/sync` (Phase 2)
+
+Found while updating `architecture.md` §9.1 for D38, not while writing the code — which is why
+it is recorded rather than fixed.
+
+The schedule is replicated (`architecture.md` §12: "a replica of progress records (attempts,
+schedule, vocabulary, exam results)"), and §9.4 resolves conflicts by **last write wins on
+`updatedAt`**. `ScheduleEntry` is `{ itemId, due, skill, box }` — **no `updatedAt`**. So the
+general rule does not actually apply to it, and if it were applied naively it would be wrong in
+a way that matters: two devices drilling the same item offline would let the *later* write win
+regardless of what it says, so a device that answered correctly and advanced the box could be
+overwritten by one that had answered correctly an hour earlier from a lower box. Leitner
+progress would silently go backwards.
+
+**Deliberately not decided now.** Three options, all reasonable, and none of them can be chosen
+without the sync design in front of you:
+
+1. Add `updatedAt` to `ScheduleEntry` and take the §9.4 rule as written. Simplest, and wrong in
+   the case above roughly as often as devices disagree.
+2. Merge by taking the **lower** box. The conservative reading of Leitner — a disagreement means
+   at least one device saw a failure, and re-reviewing an item the user knows costs a few
+   seconds while skipping one they do not costs the exam. Needs no new field.
+3. Treat the schedule as device-local and never sync it, rebuilding it per device from the
+   merged attempt log. Closest to ADR 16's instinct, but it needs the `slow` judgement for every
+   historical attempt, which is exactly what D38 rejected for the single-device case.
+
+Option 2 is the current favourite because it needs no schema change and fails safe, but this
+entry deliberately does not choose. `architecture.md` §9.1 and §9.4 both point here, and
+`implementation-plan.md` §7's Phase 2 sync bullet names it as work.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 20 September 2026 — `dougkeefe/continue-docs-progress-v1` (documentation reconciliation for `answerItem`)
+
+A separate entry rather than an edit to the one below, because rule 4 of the working agreement
+says append and never rewrite — even for the same session on the same day.
+
+A sweep for documentation the `answerItem` work made stale. **D43** is the one finding that is
+not bookkeeping: `ScheduleEntry` is a synced record with no `updatedAt`, so §9.4's
+last-write-wins rule does not actually cover it, and applying it naively would let an item's
+Leitner box go backwards. Found by updating `architecture.md` for D38, not by a test — nothing
+in the build could have caught it, because the sync adapter does not exist yet.
+
+Changed:
+
+- `architecture.md` §9.1 — the `ScheduleEntry` shape beside the `Attempt` one, with three notes
+  for the Phase 2 Dexie author: why the `stores()` string is unchanged (`box` is a field, not an
+  index), why the nullable `due` is load-bearing (IndexedDB will not index a null key path, which
+  is how retired entries leave the queue for free), and the sync gap. §9.4 now admits the gap in
+  place.
+- `implementation-plan.md` §3.2 — `@palier/content` recorded as a seventh *workspace* and not a
+  seventh package, since §3.2 is authoritative for module structure. §3.5 — the composition-root
+  sketch now parses the profile, and carries the two warnings that cost this session real time:
+  **`seededRandom()` is the selection randomness and not an entropy source**, and the profile is
+  configuration handed down rather than a port. §4 — "sixteen decision records" corrected to
+  eighteen (it was already wrong by one before this session). §7 — the Phase 2 sync bullet now
+  names the D43 decision as work.
+- `packages/app/src/ports/time.ts` — the same warning on the `Random` port itself, which is where
+  someone will actually read it. This is the countermeasure that would have prevented D39.
+- `README.md` — the layout table gains `content`, and the status paragraph no longer claims
+  `engine` is "mostly empty"; the pure core has been complete since the previous session, so that
+  sentence was already stale.
+- `docs/README.md` — revision history 0.3, and the line instructing a dissenting maintainer to
+  "write ADR 16" corrected to "write a new ADR", which is the rule D16 settled after that exact
+  sentence helped cause the collision it records.
+- `CLAUDE.md` — 17 records to 18.
+
+Nothing in `product-requirements.md` needed changing: D41 brought the code to §6.5 rather than
+the other way round. `packages/domain/CLAUDE.md` and `packages/engine/CLAUDE.md` are untouched,
+because neither package changed — which is the point of having withdrawn D39 and D40.
+
+**Verified:** `pnpm verify` green (**exit 0**) after the documentation pass — 539 tests passed,
+4 todo, 45 files; depcruise clean at the same 150/446 and 37/52.
 
 ### 20 September 2026 — `dougkeefe/continue-docs-progress-v1` (the second `@palier/app` use case: `answerItem`)
 

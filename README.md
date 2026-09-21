@@ -15,19 +15,23 @@ adapters, with dependencies pointing strictly inward — is specified in
 | --- | --- | --- |
 | `apps/web` | everything | Next.js app, routes, composition root |
 | `apps/factory` | `domain`, `adapters` | content pipeline CLI (placeholder) |
-| `packages/domain` | — | types, invariants, schemas, exam profiles |
+| `packages/domain` | — | types, invariants, content schemas, the exam profile loader |
 | `packages/engine` | `domain` | pure algorithms |
 | `packages/app` | `domain`, `engine` | port interfaces and use cases |
 | `packages/adapters` | `app`, `domain` | concrete adapters |
 | `packages/ui` | `domain` | design system |
 | `packages/testing` | `app`, `domain` | in-memory ports, contract suites, fixtures |
+| `content` | — | the exam profile, and later the item bank. Data, not code (ADR 18) |
 
-Phase 0 (foundations) is largely complete: `domain` carries the full type set, content
-schemas, the exam profile and the item-type registry; `app` holds the port interfaces;
-`testing` holds the in-memory ports, contract suites, fixture builders and the canonical
-fixture bank; `ui` holds the design tokens and primitives; and `apps/web` is a locale-routed
-shell over the composition root. `engine`, `adapters` and `apps/factory` are still mostly
-empty, and fill in later phases (`docs/implementation-plan.md` §7).
+Phase 0 (foundations) is largely complete. `domain` carries the full type set, content
+schemas, the exam profile loader and the item-type registry. `engine` holds the complete pure
+core — scorer, band mapper, trend calculator, Leitner scheduler, selector and daily planner —
+built ahead of its phase because it is content-agnostic. `app` holds the port interfaces and
+the first two use cases, `planDailySession` and `answerItem`. `testing` holds the in-memory
+ports, contract suites, fixture builders and the canonical 60-item fixture bank; `ui` holds the
+design tokens and primitives; and `apps/web` is a locale-routed shell over the composition
+root. `adapters` and `apps/factory` are still empty and fill in later phases
+(`docs/implementation-plan.md` §7).
 
 ## Getting started
 
