@@ -20,8 +20,21 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   to their own sessions — deciding them is a decision to record, not a gap to fill quietly.
   `ISO`, `ScheduleEntry` and `ItemCriteria` are named-but-unspecified by §3.3 and were
   decided here (progress.md D18–D20); `ScheduleEntry` is minimal until the scheduler lands.
-- Unit-tested against the in-memory ports from `@palier/testing`, every error path and
-  guard clause included. 95% branch (§6.3).
+- **Use cases live under `src/use-cases/`**, one file per use case, each a plain async
+  function `(request, deps)` where `deps` are the collaborators the composition root supplies.
+  They are **pure orchestration**: read the ports, call one or more engine functions, return a
+  domain/engine value. The D32 bridge lives here — a use case reads `clock.now()` / `random.next`
+  and hands the engine the primitives `now: string` / `() => number`, never the ports. The
+  study parameters an engine function needs and no port vends arrive in the `request`, not from
+  `SettingsStore` or a deferred store (progress.md D36). `buildUseCases` — the binding of use
+  cases to concrete ports — lives in the composition root (`apps/web/src/lib/container.ts`, §3.5),
+  not here.
+- **Unit-tested with local port stubs, not `@palier/testing`** (progress.md D37). `@palier/testing`
+  depends on `@palier/app`, so importing it here would make Turborepo's build graph cyclic — the
+  same cycle `@palier/engine` sidesteps. A use-case test builds small inline stubs (a fixed clock,
+  a seeded random, stores returning set arrays, items built from `@palier/domain`) and asserts the
+  orchestration; the "graph from `@palier/testing`" happens at the composition root, in `apps/web`.
+  Every error path and guard clause covered. 95% branch (§6.3).
 
 ## The three mistakes most likely to be made here
 

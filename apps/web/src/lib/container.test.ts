@@ -31,6 +31,26 @@ describe("createContainer", () => {
     expect(c.vault).toBeDefined();
   });
 
+  it("assembles the use-case graph bound to the in-memory ports", () => {
+    const c = createContainer({ hermetic: true });
+    expect(typeof c.useCases.planDailySession).toBe("function");
+  });
+
+  it("plans a non-empty daily session from the fixture bank", async () => {
+    const c = createContainer({ hermetic: true });
+
+    const plan = await c.useCases.planDailySession({
+      skill: "writing",
+      lang: "fr",
+      targetBand: "B",
+      sessionSize: 8,
+    });
+
+    // The fixture bank is wired, so the plan draws real items (proves the wiring,
+    // not the planner's behaviour — that is @palier/engine's own suite).
+    expect(plan.items.length).toBeGreaterThan(0);
+  });
+
   it("refuses to build a production container until real adapters exist", () => {
     expect(() => createContainer({ hermetic: false })).toThrow(/Phase 2/);
   });
