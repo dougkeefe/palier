@@ -1,7 +1,10 @@
 # @palier/engine
 
-Pure algorithms: the band mapper today; the selector, scheduler, planner, scorer and trend
-calculator as they land (`implementation-plan.md` §3.2).
+Pure algorithms: the band mapper, the exam scorer, the trend calculator, the Leitner
+scheduler and the selector today; the planner as it lands (`implementation-plan.md` §3.2).
+Everything is
+re-exported from `src/index.ts` — the package's public surface is the barrel, not a relative
+path, so a new algorithm is not done until it is exported there.
 
 **May import** `@palier/domain`, and nothing else. **Zero npm dependencies and zero Node
 core modules, by design and by lint rule.** If you need a library here, the code probably
@@ -9,9 +12,20 @@ belongs in `@palier/app`.
 
 ## Invariants
 
-- **Pure.** No I/O, no storage, no network, no prompts. **`Clock` and `Random` arrive as
+- **Pure.** No I/O, no storage, no network, no prompts. **Time and randomness arrive as
   parameters** (ADR 7, ADR 8); `Date.now()`, `Math.random()` and `performance.now()` are
   banned by ESLint in this package. Call none of them, ever.
+- **Take primitives, not the ports (D32).** The engine may not import `@palier/app`, where
+  `Clock`, `Random` and `ISO` live, so a function that needs time takes `now: string` (an
+  ISO-8601 instant) and one that needs randomness takes `random: () => number`. The use case
+  reads `clock.now()` / `random.next` and passes the value down. If a signature tempts you to
+  name `Clock`/`Random`/`ISO`, the type belongs to the app use-case slice instead.
+- **`Attempt` carries no `subSkill` or `targetBand`** — any calculation keyed on those joins
+  attempts to items by id (`calculateTrend` takes `items` for exactly this), and ignores an
+  attempt whose item is absent from the bank.
+- **Golden fixtures are the contract** (§5). Recorded outputs live in `src/__fixtures__/*.json`;
+  a change that moves a golden value fails its test and must be explained in the PR, never
+  regenerated to make the test pass.
 - **Small enough for one person to hold in their head**, and every calculation explainable
   to a user in one sentence (`architecture.md` §7). A change that breaks either property
   needs an ADR.

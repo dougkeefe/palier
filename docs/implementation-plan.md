@@ -84,6 +84,8 @@ Six packages. See ADR 10 for the reasoning and for the twelve-package arrangemen
 
 `@palier/engine` and `@palier/domain` are the two worth publishing to npm, which keeps their boundaries honest because an external consumer would notice a leak.
 
+The engine receives time and randomness as **primitives** — an ISO-8601 `now: string` and a `random: () => number` — not the `Clock` and `Random` port *objects*, which live in `@palier/app`, a package the engine may not import (§3.1). "Given Clock and Random as parameters" (the engine row above) means given those capabilities: the use case that calls an engine function reads `clock.now()` / `random.next` and passes the values down, and no engine type names `Clock`, `Random` or `ISO`. See progress.md deviation D32.
+
 ### 3.3 The ports
 
 ```ts
@@ -485,6 +487,8 @@ Being explicit about this is part of the strategy.
 Nine phases. Each has a goal, entry criteria, a work breakdown, exit criteria, the CI gates it adds, and what it deliberately does not build. Estimates assume evenings and weekends, one person with an agentic assistant.
 
 The sequencing is risk-driven rather than value-driven. The two things that can kill this project are item quality and the cost and complexity of realtime voice, so the first is proven in month one and the second is deferred until the product already works without it.
+
+**Sequencing note, 20 September 2026.** The pure `@palier/engine` core (the Scorer, TrendCalculator, Scheduler, Selector and Planner listed under Phase 2) is being built ahead of Phase 1, in small slices. It is content-agnostic — it runs against the 60-item fixture bank whatever Phase 1 concludes about real content — so building it early does not undercut the risk-driven ordering, and Phase 1's actual go/no-go (a human register read plus the OpenAI pipeline) cannot be started autonomously anyway. Phase 2's "engine unit tests exhaustive at every boundary, golden fixtures locked" exit criterion is therefore satisfied incrementally, starting now. This is a sequencing change, which §1 says to expect; the module structure (§3) and the eight principles are untouched. See progress.md and its session log.
 
 ---
 

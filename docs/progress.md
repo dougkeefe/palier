@@ -66,7 +66,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/continue-dev-from-docs-v3` | Phase-0 scaffolding: `LICENSE`/`LICENSE-CONTENT`/`README` non-affiliation [R5, R13] and the 60-item canonical fixture bank in `@palier/testing` (D31) | 20 September 2026 |
+| `dougkeefe/continue-docs-progress` | `@palier/engine` pure core, ahead of Phase 1 (sequencing note in `implementation-plan.md` §7). Slices 1–3 landed: Scorer + TrendCalculator + barrel (D32), Leitner Scheduler (D19 update), Selector + weakest-sub-skills (D33). Planner to follow | 20 September 2026 |
 
 ---
 
@@ -205,6 +205,13 @@ Pipeline spec is `content-factory.md`. §7 is the schedule and the decision poin
 **If these fail:** work down the descoping list in `content-factory.md` §9 in order. Option 5 is a legitimate outcome, not a failure.
 
 ### Phase 2: Practice MVP — public alpha
+
+**The pure `@palier/engine` core is being built ahead of this phase** (sequencing note in
+`implementation-plan.md` §7; it is content-agnostic, so it does not wait on Phase 1). Landed so
+far: the exam **Scorer**, the **TrendCalculator**, the Leitner **Scheduler** and the **Selector**
+(with the weakest-sub-skills helper) — session log, 20 September 2026. The **Planner** follows.
+The phase's own tasks are expanded here when the phase formally starts; only the exit criteria are
+tracked in advance.
 
 - [ ] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]
 - [ ] Full offline operation after first load [R4]
@@ -654,7 +661,7 @@ for no behavioural gain, and the value crosses to `Date.parse` and JSON as a bar
 regardless. Deferred; revisit if a domain type ever needs to name an instant.
 
 ### D19 — `ScheduleEntry` is minimal until the scheduler lands
-**Date:** 19 September 2026 · **Status:** open, closes with the engine `Scheduler`
+**Date:** 19 September 2026 · **Status:** open, closes with the first `@palier/app` use case
 
 §3.3 names `ScheduleEntry` in the `ScheduleStore` signature but gives it no shape. Its full
 Leitner form — the box number indexing ADR 8's four intervals — is the `Scheduler`'s output
@@ -663,6 +670,14 @@ the `ScheduleStore` port itself needs: `{ itemId, due, skill }`. The box is *add
 reshaped, when the scheduler arrives, so this is a safe minimum rather than a guess at the
 final type. `app/CLAUDE.md`'s "deciding an unspecified port is a decision to record" is why
 this is here rather than silent.
+
+**Update, 20 September 2026.** The engine `Scheduler` has landed (`scheduler.ts`, session log),
+but the box does **not** yet live on `app`'s `ScheduleEntry` — and it cannot, cleanly, because
+the scheduler is in `@palier/engine`, which may not import `@palier/app` (D32). The scheduler
+returns its own `Review` type, `{ box, due }`, and the app-side reshape — adding `box` to
+`ScheduleEntry` and mapping a `Review` into `{ itemId, due, skill, box }` — is the job of the
+first `@palier/app` use case that persists a schedule. So this stays open, now closing with that
+use case rather than with the scheduler. `ScheduleEntry` is untouched for the moment.
 
 ### D20 — `ItemCriteria` and the in-memory query semantics decided ahead of the `Selector`
 **Date:** 19 September 2026 · **Status:** open until the engine `Selector` lands
@@ -868,11 +883,182 @@ wired into the hermetic composition root: no route reads items until Phase 2, an
 without a consumer or a test would be premature — left for the Phase-2 drill route that first
 needs seeded content.
 
+### D32 — The engine receives time and randomness as primitives, not the ports
+**Date:** 20 September 2026 · **Status:** accepted
+
+`implementation-plan.md` §3.2 says the engine's functions are "given `Clock` and `Random` as
+parameters." Taken literally that is impossible: `Clock`, `Random` and `ISO` are ports and live
+in `@palier/app` (D18), which `@palier/engine` may not import (§3.1). So the engine takes the
+**capabilities as primitives** — `now: string` (an ISO-8601 instant, the same plain string
+`Attempt.ts` already uses) and `random: () => number` (the shape of `Random.next`) — and no
+engine type names `Clock`, `Random` or `ISO`. The `@palier/app` use case bridges: it reads
+`clock.now()` / `random.next` and hands the values down. §3.2 now states this in place, and
+`packages/engine/CLAUDE.md` carries it as an invariant.
+
+**Why not move `ISO`/`Clock`/`Random` to `@palier/domain` instead?** That would reverse D18
+(ports belong with the ports) to let a lower layer name a port type, for no behavioural gain —
+the value crosses to `Date.parse` and JSON as a bare string regardless. D18's "revisit if a
+domain type needs to name an instant" is not triggered: the *engine* is not a domain type.
+
+**Exercised, not yet by this slice.** Slice 1 (Scorer, TrendCalculator) takes neither time nor
+randomness — the Scorer is pure over a form and responses, the TrendCalculator over attempts
+joined to items. D32 is recorded now because it governs the whole engine-core effort and the
+barrel comment references it; it first *bites* with the **Scheduler** (`now`) and the
+**Selector** (`random`).
+
+**The join note, since three engine functions need it.** `Attempt` carries `itemId`, `correct`,
+`skill` and timings but not `subSkill` or `targetBand`. Any calculation keyed on a band tag or a
+sub-skill therefore joins attempts to items by id — `calculateTrend` takes `items` for exactly
+this — and ignores an attempt whose item is absent from the supplied bank.
+
+### D33 — Selector: Efraimidis–Spirakis sampling, and diagnostic mode is uniform
+**Date:** 20 September 2026 · **Status:** accepted
+
+Two implementation choices in `selector.ts` that §7.2 leaves open.
+
+**The "weighted shuffle" is the Efraimidis–Spirakis method:** each candidate gets the key
+`random()^(1/weight)` and the highest keys are taken. It is a weighted sample without
+replacement whose inclusion probability is proportional to weight (so a weakest-sub-skill item
+is drawn 3× as often), done in one `map`→`sort`→`slice` with no index arithmetic. It was chosen
+over the textbook cumulative-sum scan specifically because the scan needs a "fell through to the
+last bucket" fallback that `random() < 1` makes unreachable — a dead line the engine's 100%
+statement/line target forbids, and which `!` or an `as` would only paper over. A visible
+consequence: at equal luck the heavier item wins (the unit tests assert exactly this), rather
+than the scan's "owns 3/4 of the number line" framing.
+
+**Diagnostic mode is unweighted (uniform) sampling, not strict stratification.** §7.2 says
+diagnostic "samples evenly across bands and sub-skills rather than weighting." It is implemented
+as: drop the working-set band restriction (draw from every band) and the sub-skill weighting
+(all weights 1), then the same no-consecutive-sub-skill spacing. Even coverage then comes from
+the bank's own even sub-skill representation plus the spacing, rather than from an explicit
+per-stratum round-robin. This keeps one sampling path and avoids the index-heavy stratified
+picker. **Revisit when** a real diagnostic shows uneven coverage on a skewed bank; the fix is a
+stratified sampler behind the same `selectItems(mode: "diagnostic")` signature, no caller change.
+
+**Spacing** (no two consecutive items share a sub-skill) is the standard "largest group first,
+fill even slots then odd" arrangement: it separates every sub-skill when the largest is at most
+half the items, and degrades gracefully when one unavoidably dominates (the all-one-sub-skill
+case is a unit test). `now`/`random` are primitives throughout (D32).
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 20 September 2026 — `dougkeefe/continue-docs-progress` (engine core, slice 3: Selector + weakest sub-skills)
+
+Item selection (architecture.md §7.2), slice 3. The `random` primitive first bites here (D32).
+Deviation **D33** recorded (Efraimidis–Spirakis weighted sampling; diagnostic mode is uniform).
+No ADR, no dependency.
+
+Built:
+
+- `packages/engine/src/weakest-sub-skills.ts` — `weakestSubSkills(skill, attempts, items)`:
+  accuracy over the last `WEAKEST_WINDOW` (50) attempts per sub-skill, `WEAKEST_MIN` (8) to
+  qualify, the `WEAKEST_COUNT` (3) weakest returned weakest-first with a deterministic
+  name tie-break. Joins attempts→items (D32).
+- `packages/engine/src/selector.ts` — `selectItems(criteria, pool, attempts, random, now)`:
+  filter (published, lang, skill, not attempted in the last `RECENT_DAYS` = 14) then a weighted
+  shuffle. Practice mode restricts to the `workingSet` (target band + one below, via
+  `compareBands`) and weights the three weakest sub-skills `WEAKEST_WEIGHT` (3×); diagnostic mode
+  drops both (coverage, not targeting — D33). Weighted sampling is Efraimidis–Spirakis; the
+  result is spaced so no two consecutive items share a sub-skill. Exported with `workingSet`;
+  `index.test.ts` extended.
+
+Tests: `weakest-sub-skills.test.ts` (three weakest, min-evidence boundary, window, skill filter,
+fewer-than-three, ties, orphan attempts), `selector.test.ts` (each filter, working set, weighting
+with E–S semantics, no-consecutive ordering, the all-one-sub-skill degrade, reproducibility, and
+different-seed divergence, diagnostic across all bands + coverage + filters, default mode), and
+`selector.property.test.ts` (§6.2: only eligible items in the working set, never a 14-day item,
+each at most once and never over count, no two consecutive when feasible).
+
+**Verified:** `pnpm verify` green (**exit 0**) — check-types 8 packages, lint clean, depcruise
+clean (**141 modules, 404 dependencies** in packages — engine imports `@palier/domain` only, no
+new arrow, `random`/`now` add none; **34 in `apps/web`**), **475 tests passed, 4 todo**. Every
+glob coverage threshold held: **`@palier/engine` at 100% branch** (an lcov pass caught one
+uncovered arm — the "item not in bank" join — before it could hide; a test now covers it).
+**Next:** Slice 4, the Planner (composes the scheduler, selector and weakest-sub-skills).
+
+### 20 September 2026 — `dougkeefe/continue-docs-progress` (engine core, slice 2: Leitner Scheduler)
+
+The review scheduler (architecture.md §7.3), slice 2 of the engine core. **D32 first bites
+here** — `now` arrives as a plain ISO string, not a `Clock`. The D19 note is updated: the box
+lives on the engine's own `Review` type, not yet on `app`'s `ScheduleEntry`. No ADR, no
+dependency.
+
+Built `packages/engine/src/scheduler.ts` — `scheduleReview(profile, currentBox, grade, now)`:
+correct moves up one box, incorrect resets to box 1 always, and a correct-but-`slow` or
+`changedAnswer` grade holds the box (§7.3). Returns `{ box, due }`; `due` is `null` at
+retirement and otherwise `now + leitnerIntervalDays(profile, newBox)` days, exact so midnight in
+gives midnight out. The intervals come from the profile (ADR 8) and so does the **box count** —
+`retirementBox(profile) = leitnerIntervalDays.length + 1`, so the "five boxes" is derived, not a
+constant (ADR 9). `slow` arrives as a boolean the caller computes from timings, because the
+timing-to-slow threshold is a product tuning decision, not a Leitner rule (D28's minimalism).
+Out-of-range or non-integer boxes throw. Exported from the barrel; `index.test.ts` extended.
+
+Tests: `scheduler.test.ts` (advance, retire, reset, both holds, incorrect-overrides-hold,
+midnight due strings, the three guards, the derived retirement box) and
+`scheduler.property.test.ts` (§6.2: incorrect always → box 1; correct never lowers the box nor
+shortens the interval; a due date exists **iff** the item has not retired; a scheduled due is
+strictly after `now`). `fc.date` needed `noInvalidDate: true`, caught by running it.
+
+**Verified:** `pnpm verify` green (**exit 0**) — check-types 8 packages, lint clean, depcruise
+clean (**136 modules, 381 dependencies** in packages — engine imports `@palier/domain` only, no
+new arrow; **34 in `apps/web`**), **440 tests passed, 4 todo**. Every glob coverage threshold
+held: **`@palier/engine` at 100% branch** (0 breaches). **Next:** Slice 3, the Selector
+(`random` primitive first bites here).
+
+### 20 September 2026 — `dougkeefe/continue-docs-progress` (engine core, slice 1: Scorer + TrendCalculator)
+
+The `@palier/engine` pure core, built ahead of Phase 1 as a sequencing move (recorded in
+`implementation-plan.md` §7, "sequencing is a preference" per §1). Slice 1 of four; the
+Scheduler, Selector and Planner follow in their own slices. Deviation **D32** recorded (the
+engine takes time/randomness as primitives, not the ports). No ADR — the §3 module structure
+and the eight principles are untouched. No dependency added.
+
+Built (`packages/engine/src/`):
+
+- **`trend-calculator.ts`** — `calculateTrend(skill, attempts, items)` (architecture.md §7.1):
+  accuracy per band tag over the last `TREND_WINDOW` (100) scored attempts, with the closed-form
+  **Wilson 95%** interval, gated by `MIN_EVIDENCE` (30) — below which it returns a discriminated
+  `insufficient` result naming what is still needed, so a caller cannot render a phantom figure.
+  Joins attempts→items for the band tag (D32); attempts whose item is absent are ignored.
+- **`scorer.ts`** — `scoreExam(form, items, responses)` (architecture.md §7.5): raw over scored
+  items only, pilots marked and excluded, per item via the domain registry
+  (`itemTypeDefinition(item.type).score`), band from the **form's own `bandCuts`** (not the live
+  profile), pure so rescoring is idempotent.
+- **`band-mapper.ts`** — refactored to share one `resolveBand` core between the variant path
+  (`mapRawScore`) and the form path (`scoreExam`), so the two cannot drift (§5). `resolveBand` is
+  exported for `scorer.ts` but kept off the barrel. Behaviour unchanged — the existing
+  band-mapper suite is the regression guard and stayed green.
+- **`index.ts`** — was `export {}`; now the real public surface (band mapper, trend, scorer).
+  The BandMapper had been reachable only by a relative import, so `dist` exported nothing.
+- **`__fixtures__/exam-band-boundaries.golden.json`** + `scorer.golden.test.ts` — the golden
+  pattern (§5): recorded band outcomes at every cut boundary of the real reading-unsupervised
+  table; a change that moves a value fails here and must be explained.
+
+Tests: `trend-calculator.test.ts` (min-evidence, Wilson textbook [0.404, 0.596] at 50/100, 0%
+and 100% clamping, window, joins, skill filter), `trend-calculator.property.test.ts` (Wilson vs
+an independent reference across the range; accuracy monotonic in correctness — §6.2 tier 2),
+`scorer.test.ts` (pilots, unanswered, boundaries, idempotence, missing-item throw),
+`index.test.ts` (barrel), `scorer.golden.test.ts`. Engine local fixtures under
+`__tests__/fixtures.ts` (the domain pattern — importing `@palier/testing` would cycle through
+`@palier/app`).
+
+**Verified:** `pnpm verify` green (**exit 0**) — check-types 8 packages, lint clean, depcruise
+clean (**133 modules, 369 dependencies** in packages — `@palier/engine` still imports
+`@palier/domain` only, no new arrow; **34 in `apps/web`**, unchanged), **422 tests passed, 4
+todo, 36 files**. Every glob coverage threshold held: **`@palier/engine` at 100% branch**
+(regained after replacing a three-way `ts` sort ternary — whose equal-timestamp arm no test hit
+— with a branchless `localeCompare`; overall branches 96.73%). Built `packages/engine/dist/index.js`
+confirmed non-empty and `resolveBand` confirmed absent from it.
+
+**Two things caught by running, not assuming:** (1) the barrel was `export {}`, so the package
+had shipped an empty public surface since the BandMapper landed — fixed here. (2) A redundant
+"interval contains the point accuracy" property tripped on floating-point dust (`low` =
+6.9e-18 at p=0); it added nothing over the exact reference-Wilson match, so it was dropped
+rather than fudged with an epsilon. **Next:** Slice 2, the Scheduler (D32 first bites here).
 
 ### 20 September 2026 — `dougkeefe/continue-dev-from-docs-v3` (phase-0 scaffolding: licences, README, fixture bank)
 
