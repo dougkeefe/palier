@@ -6,6 +6,7 @@ import type {
   CompleteSessionRequest,
   CompleteSessionResult,
   DiagnosticReadoutRequest,
+  IdGenerator,
   ItemRepository,
   KeyVault,
   PlanDailySessionRequest,
@@ -31,6 +32,7 @@ import type { ExamProfile } from "@palier/domain";
 import { parseExamProfileOrThrow } from "@palier/domain";
 import type { DayPlan, SkillTrend } from "@palier/engine";
 import {
+  counterIdGenerator,
   fakeClock,
   fixtureBankRepository,
   isHermetic,
@@ -97,6 +99,15 @@ export type UseCases = {
 export type Ports = {
   readonly clock: Clock;
   readonly random: Random;
+  /**
+   * Identifier minting (progress.md D39, D48). Present in the graph ahead of a
+   * use-case consumer — the Phase-2 drill route mints the ids `answerItem` and
+   * `startSession` take today — the same way `settings` and `vault` are wired but
+   * not yet consumed. The hermetic path wires the deterministic counter for
+   * reproducibility; production would wire `@palier/adapters/ids`'s Web Crypto
+   * generator, but the production path throws until the rest of Phase 2 lands.
+   */
+  readonly ids: IdGenerator;
   readonly items: ItemRepository;
   readonly attempts: AttemptStore;
   readonly schedule: ScheduleStore;
@@ -184,6 +195,7 @@ export function createContainer(env: Env): Container {
   const ports: Ports = {
     clock: fakeClock(),
     random: seededRandom(1),
+    ids: counterIdGenerator(),
     items: fixtureBankRepository(),
     attempts: memoryAttemptStore(),
     schedule: memoryScheduleStore(),

@@ -1,13 +1,17 @@
 # @palier/adapters
 
 Every concrete adapter, one directory and one subpath export each: `/dexie`, `/bank`,
-`/openai`, `/sync`, `/vault` (§3.2). The subpaths land with the first real adapter, not
-before — five entries resolving to five empty modules assert a boundary with nothing
-behind it (D3).
+`/openai`, `/sync`, `/vault` (§3.2) — plus `/ids`, the id generator, which §3.2 does not name
+(progress.md D48). A subpath lands with its adapter, not before — an entry resolving to an
+empty module asserts a boundary with nothing behind it (D3). **`/ids` is the first, and is
+live:** `./ids` → `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto,
+no npm dependency). The remaining five stay unexported until they land.
 
 **May import** `@palier/app`, `@palier/domain`. **Never another adapter directory** — that
-ban is the boundary §3.2 actually wanted, enforced by path in `.dependency-cruiser.cjs`.
-`openai` lives in `src/openai` and `dexie` in `src/dexie`, nowhere else.
+ban is the boundary §3.2 actually wanted, enforced by path in `.dependency-cruiser.cjs`
+(`no-cross-adapter-imports`). `openai` lives in `src/openai` and `dexie` in `src/dexie`,
+nowhere else. Each directory is its own `eslint-plugin-boundaries` element (D5 split began
+with `adapters-ids`), so `no-unknown-files` keeps classifying files as the package fills.
 
 ## Invariants
 

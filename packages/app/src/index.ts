@@ -1,6 +1,7 @@
 export type {
   AttemptStore,
   Clock,
+  IdGenerator,
   ISO,
   ItemCriteria,
   ItemRepository,

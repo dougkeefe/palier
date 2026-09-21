@@ -1,9 +1,10 @@
 # @palier/testing
 
 In-memory implementations of every port, the port contract suites, fixture builders, a
-seeded `Random`, a `FakeClock`, and the canonical 60-item fixture bank (§3.2). Test
-infrastructure as a package, so a use case test runs in milliseconds with no mocking
-framework.
+seeded `Random`, a `FakeClock`, a deterministic `counterIdGenerator` (the `IdGenerator`
+counterpart to `seededRandom`/`fakeClock`, so a hermetic run is reproducible — D48), and the
+canonical 60-item fixture bank (§3.2). Test infrastructure as a package, so a use case test
+runs in milliseconds with no mocking framework.
 
 **May import** `@palier/app`, `@palier/domain`. `vitest` is a **peer** dependency because
 the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglite` and
@@ -22,7 +23,9 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
   the in-memory impls and contract suites import them from there (`ports.stub.ts` is gone).
   A store that needs a port §3.3 omits — now only `OralStore` — waits for it to land
   in `@palier/app` rather than being stubbed here. (`SessionStore` has landed:
-  `memorySessionStore` and `sessionStoreContract` exist, progress.md D45.)
+  `memorySessionStore` and `sessionStoreContract` exist, progress.md D45. `IdGenerator`
+  likewise: `counterIdGenerator` and `idGeneratorContract`, D48 — the Web Crypto adapter in
+  `@palier/adapters/ids` is held to the same contract.)
 
 ## The three mistakes most likely to be made here
 

@@ -255,11 +255,15 @@ export default defineConfig([
         { type: "app-port", pattern: "packages/app/src/ports/**" },
         { type: "app-usecase", pattern: "packages/app/src/use-cases/**" },
         { type: "app", pattern: "packages/app/src/**" },
-        // One element, not one per adapter subdirectory. The subdirectories do
-        // not exist yet (progress.md deviation D3), and the rule that actually
-        // forbids cross-imports between them is `no-cross-adapter-imports` in
-        // .dependency-cruiser.cjs, which matches on paths and needs no
-        // classification. Split this when the first adapter lands.
+        // One element per adapter directory, most specific first, then a
+        // catch-all. The split began with the first adapter, `/ids` (progress.md
+        // D5); the remaining §3.2 directories (`/dexie`, `/bank`, `/openai`,
+        // `/sync`, `/vault`) get their own element as each lands. The rule that
+        // actually forbids cross-imports between them is `no-cross-adapter-imports`
+        // in .dependency-cruiser.cjs, which matches on paths and needs no
+        // classification; these elements exist so `no-unknown-files` keeps
+        // classifying every adapter file as the package fills.
+        { type: "adapters-ids", pattern: "packages/adapters/src/ids/**" },
         { type: "adapters", pattern: "packages/adapters/src/**" },
         { type: "ui", pattern: "packages/ui/src/**" },
         { type: "testing", pattern: "packages/testing/src/**" },

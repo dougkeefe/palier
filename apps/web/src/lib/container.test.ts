@@ -31,6 +31,13 @@ describe("createContainer", () => {
     expect(c.sessions).toBeDefined();
     expect(c.settings).toBeDefined();
     expect(c.vault).toBeDefined();
+
+    // The IdGenerator mints valid, strictly increasing ULIDs (behaviour proven by
+    // the contract suite in @palier/testing; here we assert wiring only).
+    const first = c.ids.ulid();
+    const second = c.ids.ulid();
+    expect(first).toMatch(/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{26}$/);
+    expect(second > first).toBe(true);
   });
 
   it("assembles the use-case graph bound to the in-memory ports", () => {

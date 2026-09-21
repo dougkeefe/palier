@@ -1,4 +1,5 @@
 export type { ISO, Clock, Random } from "./time.js";
+export type { IdGenerator } from "./id-generator.js";
 export type { ItemCriteria, ItemRepository } from "./item-repository.js";
 export type { AttemptStore } from "./attempt-store.js";
 export type { ScheduleEntry, ScheduleStore } from "./schedule-store.js";
