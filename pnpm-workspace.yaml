@@ -1,6 +1,9 @@
 packages:
   - "apps/*"
   - "packages/*"
+  # Not a code package: the exam profile and, from Phase 2, the bank shards.
+  # A workspace only so the app can import it through its exports map (ADR 18).
+  - "content"
 
 ignoredBuiltDependencies:
   - sharp

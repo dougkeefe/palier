@@ -15,6 +15,7 @@
   "dependencies": {
     "@palier/adapters": "workspace:*",
     "@palier/app": "workspace:*",
+    "@palier/content": "workspace:*",
     "@palier/domain": "workspace:*",
     "@palier/engine": "workspace:*",
     "@palier/ui": "workspace:*",

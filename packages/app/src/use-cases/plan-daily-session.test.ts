@@ -68,6 +68,7 @@ const randomOf = (values: readonly number[] = [0.1, 0.5, 0.9, 0.3, 0.7]): Random
 
 const scheduleOf = (entries: readonly ScheduleEntry[] = []): ScheduleStore => ({
   due: vi.fn(() => Promise.resolve(entries)),
+  get: vi.fn(() => Promise.resolve(null)),
   put: vi.fn(() => Promise.resolve()),
 });
 
@@ -130,8 +131,8 @@ describe("planDailySession", () => {
   it("resolves due schedule entries to items and returns them as reviews", async () => {
     const [a, b, ...rest] = aPool();
     const schedule = scheduleOf([
-      { itemId: a!.id, due: NOW, skill: "writing" },
-      { itemId: b!.id, due: NOW, skill: "writing" },
+      { itemId: a!.id, due: NOW, skill: "writing", box: 1 },
+      { itemId: b!.id, due: NOW, skill: "writing", box: 1 },
     ]);
     const items = itemsOf([a!, b!, ...rest]);
 
@@ -143,7 +144,7 @@ describe("planDailySession", () => {
 
   it("excludes the due item ids from the candidate pool query", async () => {
     const [a, b, ...rest] = aPool();
-    const schedule = scheduleOf([{ itemId: a!.id, due: NOW, skill: "writing" }]);
+    const schedule = scheduleOf([{ itemId: a!.id, due: NOW, skill: "writing", box: 1 }]);
     const items = itemsOf([a!, b!, ...rest]);
 
     await planDailySession(aRequest, depsWith({ schedule, items }));
@@ -215,7 +216,7 @@ describe("planDailySession", () => {
 
   it("tolerates a due entry whose item is absent from the bank", async () => {
     const schedule = scheduleOf([
-      { itemId: itemId("item-not-in-bank"), due: NOW, skill: "writing" },
+      { itemId: itemId("item-not-in-bank"), due: NOW, skill: "writing", box: 1 },
     ]);
     const plan = await planDailySession(aRequest, depsWith({ schedule }));
 

@@ -20,9 +20,14 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   new primitives here — they belong in `@palier/ui`.
 - **Composition root** at `src/lib/container.ts` (under `src/` so it is cruised, covered
   and tested — D23). It reads `PALIER_HERMETIC` and wires the in-memory ports from
-  `@palier/testing`, then assembles the use-case graph with `buildUseCases` (the first use
-  case, `planDailySession`, landed ahead of Phase 2 as a sequencing move — progress.md D36).
-  The real adapters still arrive in Phase 2; the production path throws until then.
+  `@palier/testing`, then assembles the use-case graph with `buildUseCases`
+  (`planDailySession` and `answerItem` landed ahead of Phase 2 as a sequencing move —
+  progress.md D36, D38). The real adapters still arrive in Phase 2; the production path
+  throws until then.
+- **The exam profile is parsed here, once**, from `@palier/content/profiles/psc-sle.json`
+  through `parseExamProfileOrThrow` (ADR 18, D42). Import it by package name, never by a
+  relative path out of `apps/web` — `no-relative-escape` in `.dependency-cruiser.cjs`
+  rejects that, and `.json` is in the cruiser's resolver extensions, so it is caught.
 - **The R5 non-affiliation statement** is in the footer of every page, from day one.
 
 ## Gates this app owns

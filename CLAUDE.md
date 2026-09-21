@@ -35,7 +35,10 @@ to claim work and how to record what you did. Follow it.
 | `@palier/testing` | In-memory ports, port contract suites, fixture builders, seeded Random, FakeClock, fixture bank | `app`, `domain` |
 
 `apps/web` may import everything and holds the one composition root; `apps/factory` takes
-`domain` and the OpenAI adapter. No package may import anything absent from its own
+`domain` and the OpenAI adapter. `@palier/content` is a **seventh workspace and not a
+seventh package** (ADR 18): `content/` holds no code, no `src`, no build and no tests — it
+is the exam profile, and from Phase 2 the bank shards, published through an `exports` map so
+the app can import them by package name. It appears in no §3.1 arrow. No package may import anything absent from its own
 `package.json` — pnpm's strict isolation and `dependency-cruiser` both enforce that.
 
 ## Hard rules

@@ -61,6 +61,9 @@ export const aScheduleEntry: Builder<ScheduleEntry> = buildWith<ScheduleEntry>({
   itemId: itemId("01HITEM00000000000000001"),
   due: "2026-01-01T00:00:00.000Z",
   skill: "reading",
+  // Box 1 is where an unseen item starts, so it is the honest default; a
+  // retired entry (`due: null`, top box) is spelled out by the test that wants it.
+  box: 1,
 });
 
 export const aPassage: Builder<Passage> = buildWith<Passage>({

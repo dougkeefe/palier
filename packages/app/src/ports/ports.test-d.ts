@@ -1,7 +1,7 @@
 import { itemId, passageId } from "@palier/domain";
 import type { ItemId } from "@palier/domain";
 
-import type { AttemptStore, ItemRepository } from "./index.js";
+import type { AttemptStore, ItemRepository, ScheduleStore } from "./index.js";
 
 /**
  * Type-level tests. They fail by producing a compile error, so `tsc` is the
@@ -12,6 +12,7 @@ import type { AttemptStore, ItemRepository } from "./index.js";
  */
 declare const items: ItemRepository;
 declare const attempts: AttemptStore;
+declare const schedule: ScheduleStore;
 
 const oneItemId: ItemId = itemId("01HZZ");
 const onePassageId = passageId("01HZY");
@@ -19,12 +20,16 @@ const onePassageId = passageId("01HZY");
 // The happy path compiles: a port method takes the id it is typed for.
 void items.byIds([oneItemId]);
 void attempts.forItem(oneItemId);
+void schedule.get(oneItemId);
 
 // @ts-expect-error a PassageId is not an ItemId, even at a port boundary
 void items.byIds([onePassageId]);
 
 // @ts-expect-error a bare string is not a branded id
 void attempts.forItem("01HZZ");
+
+// @ts-expect-error the schedule is keyed by item, so only an ItemId reaches it
+void schedule.get(onePassageId);
 
 // `passage` still takes its own id.
 void items.passage(onePassageId);

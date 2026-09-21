@@ -103,7 +103,11 @@ interface ItemRepository {
 interface AttemptStore   { append(a: Attempt): Promise<void>; recent(skill: Skill, n: number): Promise<Attempt[]>; since(t: ISO): Promise<Attempt[]>; forItem(id: ItemId): Promise<Attempt[]> }
 // no EstimateStore: the trend is derived from recent attempts on demand, so there is
 // nothing to persist, nothing to invalidate and nothing to reconcile during sync (ADR 16)
-interface ScheduleStore  { due(now: ISO, limit: number): Promise<ScheduleEntry[]>; put(e: ScheduleEntry): Promise<void> }
+interface ScheduleStore  { due(now: ISO, limit: number): Promise<ScheduleEntry[]>; get(id: ItemId): Promise<ScheduleEntry | null>; put(e: ScheduleEntry): Promise<void> }
+// ScheduleEntry = { itemId, due: ISO | null, skill, box }. `get` and the shape were added
+// 20 September 2026 with the AnswerItem use case: applying the Leitner rule needs the item's
+// CURRENT box, which due/put cannot supply, and `due` is null once an item retires from the
+// queue. See progress.md D38, which closes D19.
 interface SessionStore   { /* checkpointing, resume */ }
 interface OralStore      { /* transcripts and audio blobs, local only */ }
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }

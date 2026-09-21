@@ -19,7 +19,10 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   `AiProvider`/`SyncTransport`/`TelemetrySink` trio (need net-new domain types) are deferred
   to their own sessions — deciding them is a decision to record, not a gap to fill quietly.
   `ISO`, `ScheduleEntry` and `ItemCriteria` are named-but-unspecified by §3.3 and were
-  decided here (progress.md D18–D20); `ScheduleEntry` is minimal until the scheduler lands.
+  decided here (progress.md D18–D20). `ScheduleEntry` is now complete —
+  `{ itemId, due: ISO | null, skill, box }` — and `ScheduleStore` gained a `get`, because
+  the Leitner rule needs the item's *current* box and `due`/`put` cannot supply it; §3.3 is
+  amended in place and progress.md D38 records it, closing D19.
 - **Use cases live under `src/use-cases/`**, one file per use case, each a plain async
   function `(request, deps)` where `deps` are the collaborators the composition root supplies.
   They are **pure orchestration**: read the ports, call one or more engine functions, return a
@@ -29,6 +32,17 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   `SettingsStore` or a deferred store (progress.md D36). `buildUseCases` — the binding of use
   cases to concrete ports — lives in the composition root (`apps/web/src/lib/container.ts`, §3.5),
   not here.
+- **Configuration is a dep; study parameters are a request field** (progress.md D42). An
+  `ExamProfile` is configuration the composition root owns and every use case sees the same
+  one, so it is in `deps`. A skill, a target band or a session size differs per call, so it is
+  in the `request`. The line matters because both are "not a port", and D36 only settled half
+  of it.
+- **A use case never mints an id.** `@palier/domain`'s `ids.ts` says it plainly: "the adapters
+  mint; domain only names." An `attemptId` arrives in the request (D39). The `Random` port is
+  specifically *not* an entropy source — it is a seeded mulberry32 wired in production (§3.5),
+  so minting from it would give two devices one id stream, and an `AttemptStore` treats a
+  duplicate id as a silent no-op. That would be attempt loss, not an error, and it would break
+  the claim sync rests on (ADR 16, `architecture.md` §9.4).
 - **Unit-tested with local port stubs, not `@palier/testing`** (progress.md D37). `@palier/testing`
   depends on `@palier/app`, so importing it here would make Turborepo's build graph cyclic — the
   same cycle `@palier/engine` sidesteps. A use-case test builds small inline stubs (a fixed clock,
