@@ -25,6 +25,16 @@ export { retirementBox, scheduleReview } from "./scheduler.js";
 export type { SelectionCriteria, SelectionMode } from "./selector.js";
 export { RECENT_DAYS, WEAKEST_WEIGHT, selectItems, workingSet } from "./selector.js";
 
+export type { DayPlan, DayPlanInput } from "./planner.js";
+export {
+  MAINTENANCE_SHARE,
+  NEW_SHARE,
+  REVIEW_SHARE,
+  SHORTEN_FACTOR,
+  TAPER_DAYS,
+  planDay,
+} from "./planner.js";
+
 export {
   WEAKEST_COUNT,
   WEAKEST_MIN,
