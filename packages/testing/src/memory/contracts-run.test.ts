@@ -3,6 +3,7 @@ import {
   itemRepositoryContract,
   keyVaultContract,
   scheduleStoreContract,
+  sessionStoreContract,
   settingsStoreContract,
 } from "../contracts/index.js";
 import {
@@ -10,6 +11,7 @@ import {
   memoryItemRepository,
   memoryKeyVault,
   memoryScheduleStore,
+  memorySessionStore,
   memorySettingsStore,
 } from "./index.js";
 
@@ -23,5 +25,6 @@ import {
 attemptStoreContract("memory", () => Promise.resolve(memoryAttemptStore()));
 itemRepositoryContract("memory", (bank) => Promise.resolve(memoryItemRepository(bank)));
 scheduleStoreContract("memory", () => Promise.resolve(memoryScheduleStore()));
+sessionStoreContract("memory", () => Promise.resolve(memorySessionStore()));
 settingsStoreContract("memory", () => Promise.resolve(memorySettingsStore()));
 keyVaultContract("memory", () => Promise.resolve(memoryKeyVault()));

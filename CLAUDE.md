@@ -9,8 +9,10 @@ for a banded language exam and the SLE is its first *profile*, so every SLE-spec
 lives in `content/profiles/psc-sle.json` rather than in code (ADR 9).
 
 **Read `docs/progress.md` before anything else** — the status table, then the deviations
-log, which is the part you cannot reconstruct from the code. Its working agreement says how
-to claim work and how to record what you did. Follow it.
+log, which is the part you cannot reconstruct from the code, then *Next, decided*, which is
+the single next slice to build. Its working agreement says how to claim work, how to record
+what you did, and — rule 7 — how to leave the next step decided rather than a menu before you
+finish. Follow it.
 
 ## The eight principles (`implementation-plan.md` §2)
 

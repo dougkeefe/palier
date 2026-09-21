@@ -13,13 +13,17 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   parameters supplied by the composition root (§3.5); nothing here constructs a concrete one.
 - **`KeyVault.withApiKey` hands the key to a callback and never returns it** (§3.3). Do not
   add a `getApiKey` — the shape is the control (ADR 2, ADR 3).
-- **Ports are transcribed from §3.3, not invented.** Seven live under `src/ports/`:
-  `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SettingsStore`, `KeyVault`, `Clock`,
-  `Random`. `SessionStore` and `OralStore` (no §3.3 signature) and the
+- **Ports are transcribed from §3.3, not invented.** Eight live under `src/ports/`:
+  `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`,
+  `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the
   `AiProvider`/`SyncTransport`/`TelemetrySink` trio (need net-new domain types) are deferred
   to their own sessions — deciding them is a decision to record, not a gap to fill quietly.
   `ISO`, `ScheduleEntry` and `ItemCriteria` are named-but-unspecified by §3.3 and were
-  decided here (progress.md D18–D20). `ScheduleEntry` is now complete —
+  decided here (progress.md D18–D20). `SessionStore` was the same kind of decision
+  (progress.md D45): `Session = { id, mode, startedAt, completedAt }` and the port is
+  `{ create, complete, latest }` — the minimum `StartSession`/`CompleteSession` need. Like
+  `ScheduleEntry`, `Session` lives here, not in `@palier/domain`: the engine never consumes
+  it and it has no content-artefact/Zod role. §3.3 is amended in place. `ScheduleEntry` is now complete —
   `{ itemId, due: ISO | null, skill, box }` — and `ScheduleStore` gained a `get`, because
   the Leitner rule needs the item's *current* box and `due`/`put` cannot supply it; §3.3 is
   amended in place and progress.md D38 records it, closing D19. `AttemptStore.append` was

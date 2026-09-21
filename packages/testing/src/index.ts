@@ -6,6 +6,7 @@ export { HERMETIC_ENV_FLAG, isHermetic } from "./hermetic.js";
 export {
   aPassage,
   aScheduleEntry,
+  aSession,
   anAttempt,
   anExamForm,
   anItem,

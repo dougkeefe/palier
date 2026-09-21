@@ -561,6 +561,23 @@ The `stores()` string above is unchanged and still correct: it declares the prim
 
 The schedule is replicated (section 12, "a replica of progress records"), and section 9.4 resolves conflicts by last write wins on `updatedAt` — **which this record does not carry**. That is an open Phase 2 question, not an oversight to fix here: a bare last-write-wins on `box` can regress an item's progress when two devices drill the same item offline, so the sync work has to decide between adding `updatedAt`, merging by taking the lower box (the conservative reading of Leitner), or treating the schedule as device-local. Recorded so that decision is made deliberately rather than inherited from the default.
 
+Session record (added 21 September 2026, with the `StartSession`/`CompleteSession` use cases; `implementation-plan.md` §3.3 and `progress.md` D45):
+
+```ts
+type Session = {
+  id: string
+  mode: AttemptMode       // 9.1's `type` column: drill | diagnostic | exam | review
+  startedAt: string
+  completedAt: string | null   // null while the session is in progress
+}
+```
+
+Two notes for whoever writes the Dexie adapter.
+
+The `stores()` string `sessions: 'id, type, startedAt'` is unchanged and still correct — `completedAt` is a field, not an index, and nothing queries on it. Read `type` as `mode`: it is `AttemptMode` (the kind of session), deliberately not the oral `sessionType`, which is a field of `OralScenario` and belongs to `oralSessions` / the deferred `OralStore`.
+
+Like `ScheduleEntry`, a synced `Session` carries no `updatedAt`, so the section 9.4 rule does not cover it either. Unlike `ScheduleEntry`, this needs no Phase 2 decision: `completedAt` is write-once (keep-first at the store), so the only merge that can happen — an in-progress record on one device, its completed counterpart on another — resolves correctly whichever way it goes, because `completedAt` never moves from a set instant back to null. Recorded so the sync author does not re-open D43's question for this record.
+
 Storage budget: attempts are about 200 bytes each, so a heavy user generating 20,000 attempts over a year uses roughly 4 MB. Oral audio is the constraint at roughly 1 MB per minute of Opus. Policy: keep the last 10 oral sessions' audio, keep transcripts forever, warn at 200 MB, and offer a one-tap cleanup. Handle `QuotaExceededError` by evicting oldest audio first and telling the user.
 
 ### 9.2 Cloud (Postgres via Drizzle)
