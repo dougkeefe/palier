@@ -51,21 +51,26 @@ export class UnmappedRawScoreError extends Error {
   }
 }
 
+/** A single rung of a cut ladder. Both `OrderedCut` and a form's `BandCut` fit. */
+type Rung = { readonly band: Band; readonly min: number; readonly max: number };
+
 /**
- * Total over `[0, variant.scored]` by construction: `examProfileSchema` refuses
- * a profile whose cut ranges do not exactly partition that interval, so every
- * score in range hits exactly one band. Out of range throws rather than
- * clamping, because a score above the scored count means the caller counted
- * pilot items and silently returning "E" would hide that.
+ * The shared core, so a variant's cuts and a form's `bandCuts` are mapped by one
+ * implementation and cannot drift (implementation-plan.md §5, the divergence a
+ * second mapper would invite). Sorts by `BAND_RANK` internally, so a caller
+ * cannot mis-order the ladder. Exported for `scorer.ts` but deliberately kept
+ * off the package barrel — callers use `mapRawScore` or `scoreExam`.
+ *
+ * Out of range throws rather than clamping, because a score above the scored
+ * count means the caller counted pilot items and silently returning the top band
+ * would hide that.
  */
-export const mapRawScore = (variant: ExamVariant, raw: number): BandOutcome => {
-  if (!Number.isInteger(raw) || raw < 0 || raw > variant.scored) {
-    throw new RawScoreOutOfRangeError(raw, variant.scored);
+export const resolveBand = (cuts: readonly Rung[], scored: number, raw: number): BandOutcome => {
+  if (!Number.isInteger(raw) || raw < 0 || raw > scored) {
+    throw new RawScoreOutOfRangeError(raw, scored);
   }
 
-  // Lowest band first. `orderedCuts` does the narrowing, so nothing here has
-  // an `undefined` to guard against.
-  const ladder = orderedCuts(variant);
+  const ladder = [...cuts].sort((a, b) => bandRank(a.band) - bandRank(b.band));
 
   const index = ladder.findIndex((rung) => raw >= rung.min && raw <= rung.max);
   const rung = ladder[index];
@@ -80,7 +85,7 @@ export const mapRawScore = (variant: ExamVariant, raw: number): BandOutcome => {
     band: rung.band,
     rank: bandRank(rung.band),
     raw,
-    scored: variant.scored,
+    scored,
     bandMin: rung.min,
     bandMax: rung.max,
     next:
@@ -89,6 +94,15 @@ export const mapRawScore = (variant: ExamVariant, raw: number): BandOutcome => {
         : { band: higher.band, min: higher.min, pointsAway: higher.min - raw },
   };
 };
+
+/**
+ * Total over `[0, variant.scored]` by construction: `examProfileSchema` refuses
+ * a profile whose cut ranges do not exactly partition that interval, so every
+ * score in range hits exactly one band. `orderedCuts` does the `Partial<Record>`
+ * narrowing, so nothing downstream has an `undefined` to guard against.
+ */
+export const mapRawScore = (variant: ExamVariant, raw: number): BandOutcome =>
+  resolveBand(orderedCuts(variant), variant.scored, raw);
 
 /** Just the letter, for callers that genuinely only want it. */
 export const bandForRawScore = (variant: ExamVariant, raw: number): Band =>
