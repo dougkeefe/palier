@@ -5,21 +5,31 @@ import type {
   Clock,
   CompleteSessionRequest,
   CompleteSessionResult,
+  DiagnosticReadoutRequest,
   ItemRepository,
   KeyVault,
   PlanDailySessionRequest,
   Random,
+  RunDiagnosticRequest,
+  RunDiagnosticResult,
   ScheduleStore,
   SessionStore,
   SettingsStore,
   StartSessionRequest,
   StartSessionResult,
 } from "@palier/app";
-import { answerItem, completeSession, planDailySession, startSession } from "@palier/app";
+import {
+  answerItem,
+  completeSession,
+  diagnosticReadout,
+  planDailySession,
+  runDiagnostic,
+  startSession,
+} from "@palier/app";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
 import type { ExamProfile } from "@palier/domain";
 import { parseExamProfileOrThrow } from "@palier/domain";
-import type { DayPlan } from "@palier/engine";
+import type { DayPlan, SkillTrend } from "@palier/engine";
 import {
   fakeClock,
   fixtureBankRepository,
@@ -80,6 +90,8 @@ export type UseCases = {
   readonly startSession: (request: StartSessionRequest) => Promise<StartSessionResult>;
   readonly answerItem: (request: AnswerItemRequest) => Promise<AnswerItemResult>;
   readonly completeSession: (request: CompleteSessionRequest) => Promise<CompleteSessionResult>;
+  readonly runDiagnostic: (request: RunDiagnosticRequest) => Promise<RunDiagnosticResult>;
+  readonly diagnosticReadout: (request: DiagnosticReadoutRequest) => Promise<SkillTrend>;
 };
 
 export type Ports = {
@@ -132,6 +144,18 @@ function buildUseCases(ports: Ports): UseCases {
       completeSession(request, {
         clock: ports.clock,
         sessions: ports.sessions,
+      }),
+    runDiagnostic: (request) =>
+      runDiagnostic(request, {
+        clock: ports.clock,
+        random: ports.random,
+        items: ports.items,
+        attempts: ports.attempts,
+      }),
+    diagnosticReadout: (request) =>
+      diagnosticReadout(request, {
+        items: ports.items,
+        attempts: ports.attempts,
       }),
   };
 }

@@ -79,11 +79,10 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/continue-dev-from-docs-v4` | The `SessionStore` port plus the **`StartSession`** and **`CompleteSession`** use cases — the last named-but-unspecified persistence port, and the two use cases that open and close a day. **Closes D36** by making `SessionStore.latest()` the source of `lastDayCompleted`. Deviations **D45**, **D46** | 21 September 2026 |
+| `dougkeefe/continue-docs-progress-v2` | The decided content-agnostic runway: **`RunDiagnostic`** (`runDiagnostic` + `diagnosticReadout`, no new port/adapter — deviation **D47**), then the **`IdGenerator`** port and the first `@palier/adapters` directory (`/ids`, Web Crypto ULID + a `@palier/testing` counter, opening **D3**/**D5** — deviation **D48**). Ends at the human gate | 21 September 2026 |
 
-*(The two rows previously here — `answerItem` and `planDailySession` — merged as #13 and #12
-and were removed; the In-flight table tracks current work, not history, and the session log
-below is the permanent record.)*
+*(The prior row — the `SessionStore` slice — merged as #14 and was removed; the In-flight
+table tracks current work, not history, and the session log below is the permanent record.)*
 
 ---
 
@@ -1395,11 +1394,65 @@ loop — start, answer every planned item under the session id, complete, start 
 in-memory graph. The engine/app own the taper *magnitude*; the container proves only that records
 land and the signal is threaded.
 
+### D47 — `RunDiagnostic` is two use cases, and the diagnostic carries a `targetBand` it does not select on
+**Date:** 21 September 2026 · **Status:** accepted
+
+§3.2 names one `RunDiagnostic`, but a diagnostic spans three moments a single call cannot: select
+the set, let the user answer each item, then read the accuracy. So it is **two thin sibling use
+cases** — `runDiagnostic` (selection) and `diagnosticReadout` (the readout) — with the answers
+recorded in between through the *existing* `answerItem` with `mode: "diagnostic"`, unchanged. No new
+port, no adapter, no ADR (§3 and the eight principles untouched); both are pure orchestration, the
+D37 local-stub testing.
+
+- **`runDiagnostic`** reads `ItemRepository.query({ skill })` + a generous `AttemptStore.recent`
+  slice (for `selectItems`' 14-day exclusion) and returns `selectItems(mode: "diagnostic")` — the
+  engine's coverage sampler (all bands, no sub-skill weighting, D33). It closes out the pure
+  `@palier/app` layer's *selection* half.
+- **`diagnosticReadout`** fetches recent attempts, **filters to `mode === "diagnostic"`**, resolves
+  their items and returns `calculateTrend(skill, …)` — accuracy per band tag with a Wilson interval,
+  which *is* the R10 readout. A short diagnostic reads `"insufficient"` per band until `MIN_EVIDENCE`
+  accrues; that is R10 ("no estimate without evidence and uncertainty"), not a gap.
+- **The diagnostic carries a `targetBand` its selection ignores.** `SelectionCriteria` requires
+  `targetBand`, but the diagnostic branch (`selector.ts`) never reads it — coverage samples every
+  band. Rather than invent a placeholder in code, `runDiagnostic`'s request carries the user's
+  declared/aspirational target (onboarding collects it; the readout is read against it), documented
+  in place. The alternative — making `SelectionCriteria.targetBand` optional (an engine change to a
+  100%-branch pure file, plus a practice-mode guard) — was considered and declined for this slice;
+  D20 leaves that door open if a later selector consumer needs it.
+- **Set size is a request field, not a constant.** `count` is caller-sized (the `sessionSize`
+  precedent, D34/D36); the `recent(skill, N)` fetch is a generous internal constant, a Phase-2
+  tuning detail (D36), not an invented threshold.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 21 September 2026 — `dougkeefe/continue-docs-progress-v2` (`RunDiagnostic`: the last practice-loop use case)
+
+Step 1 of the decided runway ([Next, decided](#next-decided)): `RunDiagnostic`, the one clean slice
+left needing **no new port and no new adapter**. Deviation **D47** (it is two use cases; the
+diagnostic carries a `targetBand` its selection ignores). No ADR, no npm dependency.
+
+Built:
+
+- `packages/app/src/use-cases/run-diagnostic.ts` — `runDiagnostic(request, deps)`: `query({ skill })`
+  + a generous `recent` slice, then `selectItems(mode: "diagnostic")` (D33 coverage sampler). Returns
+  `{ items }`. `targetBand`/`count` are request fields (D47).
+- `packages/app/src/use-cases/diagnostic-readout.ts` — `diagnosticReadout(request, deps)`: fetch
+  recent attempts, filter to `mode === "diagnostic"`, resolve items, return `calculateTrend(…)` — the
+  R10 "accuracy per band tag with its interval" readout.
+- Barrels (`use-cases/index.ts`, `src/index.ts`) export both; `apps/web/src/lib/container.ts` binds
+  them into `UseCases`/`buildUseCases` over the existing ports (no new port in `Ports`).
+- Tests (D37 local stubs, 95% branch): `run-diagnostic.test.ts` (clock read once, pool query,
+  injected randomness, requested count, multi-band coverage, reproducibility, empty pool);
+  `diagnostic-readout.test.ts` (Wilson interval over diagnostic attempts, drill exclusion, resolves
+  only diagnostic items, insufficient below `MIN_EVIDENCE`, absent-item tolerance, empty when none);
+  a container end-to-end test (select → answer each in diagnostic mode → read accuracy per band).
+
+Verified: `pnpm verify` green — check-types, lint, boundaries (161 modules, no violations), and
+**578 tests + 5 todo pass** with coverage thresholds met (branches 97.6%).
 
 ### 21 September 2026 — `dougkeefe/continue-dev-from-docs-v4` (making the next direction decided, not a menu)
 
