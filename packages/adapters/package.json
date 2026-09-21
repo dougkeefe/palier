@@ -11,6 +11,10 @@
     "./ids": {
       "types": "./dist/ids/index.d.ts",
       "default": "./dist/ids/index.js"
+    },
+    "./dexie": {
+      "types": "./dist/dexie/index.d.ts",
+      "default": "./dist/dexie/index.js"
     }
   },
   "files": [
@@ -27,6 +31,7 @@
   },
   "dependencies": {
     "@palier/app": "workspace:*",
-    "@palier/domain": "workspace:*"
+    "@palier/domain": "workspace:*",
+    "dexie": "4.4.6"
   }
 }

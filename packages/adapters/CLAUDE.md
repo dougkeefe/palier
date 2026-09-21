@@ -3,9 +3,33 @@
 Every concrete adapter, one directory and one subpath export each: `/dexie`, `/bank`,
 `/openai`, `/sync`, `/vault` (§3.2) — plus `/ids`, the id generator, which §3.2 does not name
 (progress.md D48). A subpath lands with its adapter, not before — an entry resolving to an
-empty module asserts a boundary with nothing behind it (D3). **`/ids` is the first, and is
-live:** `./ids` → `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto,
-no npm dependency). The remaining five stay unexported until they land.
+empty module asserts a boundary with nothing behind it (D3). **Two are live.** `./ids` →
+`webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto, no npm dependency).
+`./dexie` → `dexieStores` (the five local store ports — `AttemptStore`, `ScheduleStore`,
+`SessionStore`, `SettingsStore`, `KeyVault` — over IndexedDB via `dexie`, at schema version 1;
+progress.md D49/D50). The remaining four (`/bank`, `/openai`, `/sync`, `/vault`) stay unexported
+until they land.
+
+**The Dexie subpath exports one Dexie-free thing.** `dexieStores(name?)` returns a `DexieStores`
+whose every field is a port type from `@palier/app`; `PalierDb` (a `Dexie` subclass with
+`Table<...>` getters) and the per-store factories are **internal**, reached only by relative
+import from the package's own tests. Exporting `PalierDb` would put a vendor type in the published
+`.d.ts` and, under pnpm's strict isolation, make the composition root's typecheck reach for
+`dexie` — which the vendor ban forbids it. The schema is architecture.md 9.1 verbatim, all
+thirteen tables at `version(1)` even though only five have adapters, so the rest land without a
+schema bump. `PalierDb` uses lazy getters over `this.table()`, never `field!: Table<...>`
+declarations, because `useDefineForClassFields` defaults on at ES2022 and would clobber Dexie's
+own property assignment.
+
+**The key vault encrypts at rest (architecture.md 6.2, [R12]).** The API key is AES-GCM
+ciphertext under a **non-extractable** `CryptoKey` held in IndexedDB, exactly as §6.2 specifies —
+a `CryptoKey` round-trips structured clone (including under `fake-indexeddb`), so nothing is
+derived from a persisted secret (an HKDF-from-stored-bytes variant was rejected in review: those
+bytes would let a storage-reader decrypt offline, D50). `withApiKey` hands the plaintext to a
+callback and never returns it; there is no `getApiKey`. The `device-secret` is a separate value
+(the sync identity seed, §9.3), so `clear` wipes the API key but not it. The key-leak test is live
+in the contract suite (not deferred to Phase 4), plus a Dexie-specific assertion that what sits at
+rest is ciphertext, not the key.
 
 **May import** `@palier/app`, `@palier/domain`. **Never another adapter directory** — that
 ban is the boundary §3.2 actually wanted, enforced by path in `.dependency-cruiser.cjs`

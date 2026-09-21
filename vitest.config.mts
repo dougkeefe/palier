@@ -45,7 +45,24 @@ export default defineConfig({
       workspaceProject("domain", "./packages/domain"),
       workspaceProject("engine", "./packages/engine"),
       workspaceProject("app", "./packages/app"),
-      workspaceProject("adapters", "./packages/adapters"),
+      /**
+       * The `adapters` unit project adds `@palier/testing/setup` (the
+       * `fake-indexeddb/auto` side-effect) so the Dexie store adapters run
+       * against a working IndexedDB in the fast lane — its own comment says
+       * that is the intent, "rather than only under Playwright". Web Crypto is
+       * native on Node, so the key vault needs no polyfill.
+       */
+      {
+        extends: true,
+        test: {
+          name: "adapters",
+          root: "./packages/adapters",
+          environment: "node",
+          include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+          exclude: ["**/node_modules/**", "**/dist/**", "src/**/*.integration.test.ts"],
+          setupFiles: [SETUP, "@palier/testing/setup"],
+        },
+      },
       workspaceProject("ui", "./packages/ui", "jsdom"),
       workspaceProject("testing", "./packages/testing"),
       workspaceProject("factory", "./apps/factory"),

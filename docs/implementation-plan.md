@@ -641,7 +641,7 @@ The mock exam is where the band letter comes from, because it is the only path w
 
 **Work breakdown**
 
-- Key vault: Web Crypto encryption, the `withApiKey` callback discipline, validation call, do-not-remember mode.
+- Key vault: Web Crypto encryption, the `withApiKey` callback discipline, validation call, do-not-remember mode. **The storage half landed early, in Phase 2** (`@palier/adapters/dexie`, `progress.md` D50): AES-GCM at rest under a non-extractable `CryptoKey` (§6.2 as written), the callback discipline, and the key-leak assertion in the contract suite. Phase 4 adds what needs a live key — the validation call, do-not-remember mode, and the E2E-level leak test below.
 - `adapters/openai`: AiProvider implementation, model configuration as data, structured outputs with client-side re-validation, retry policy, the anti-corruption translation layer.
 - Cost ledger: usage capture, pricing config, the spend meter, per-feature estimates, the pre-flight threshold warning.
 - Runtime item generation: the compressed draft plus single review path, local-only storage, the provenance badge, the one-tap contribution.
@@ -650,7 +650,7 @@ The mock exam is where the band letter comes from, because it is the only path w
 
 **Exit criteria**
 
-- **The key-leak test passes** (tier 11), running the full E2E suite with a sentinel key and asserting it never reaches any origin but OpenAI, any storage but the encrypted vault, any synced document, or any error object. Write this test before the key vault, not after.
+- **The key-leak test passes** (tier 11), running the full E2E suite with a sentinel key and asserting it never reaches any origin but OpenAI, any storage but the encrypted vault, any synced document, or any error object. Write this test before the key vault, not after. (The unit-level half — no method but the callback returns the key, and what sits at rest is ciphertext — already runs in the KeyVault contract suite from Phase 2; this criterion is the E2E-level assertion across the whole app.)
 - Every AI response is schema-validated before use, with adapter tests covering malformed output, rate limit, invalid key and timeout, each degrading gracefully.
 - The spend meter matches actual OpenAI billing within a few percent on a test account.
 

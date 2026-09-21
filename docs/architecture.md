@@ -280,6 +280,8 @@ The user's OpenAI API key. Compromise means someone else spends their money. It 
 
 - Entered once in settings, never rendered in full after entry (masked, last four characters shown).
 - Stored in IndexedDB, encrypted at rest with AES-GCM using a key derived from a device-bound secret held as a non-extractable `CryptoKey` in IndexedDB. This defends against casual inspection and against extensions reading storage in plaintext. It does not defend against a full XSS compromise of our own origin, and the documentation says so rather than implying otherwise.
+
+  **Implemented as written, 21 September 2026 (`@palier/adapters/dexie`, `progress.md` D50).** The wrapping key is a **non-extractable** AES-GCM `CryptoKey` held in the `keyVault` table, exactly as this bullet specifies; the API key is its AES-GCM ciphertext with a fresh 96-bit IV per write. A non-extractable `CryptoKey` round-trips through IndexedDB's structured clone and stays usable (verified against `fake-indexeddb`), so nothing is derived from a persisted secret — an HKDF-from-stored-bytes variant was considered and rejected in review because those bytes plus the public HKDF parameters would let a storage-reader decrypt offline, defeating this bullet's protection. The vault landed in Phase 2 rather than Phase 4, so the unit-level [R12] key-leak test was written with it, not after it.
 - Optional "do not remember" mode, where the key is held in memory for the session only.
 - Cleared on sign-out and by the one-tap data wipe.
 
@@ -518,6 +520,13 @@ db.version(1).stores({
   syncMeta:     'id'
 })
 ```
+
+**Implemented, 21 September 2026 (`@palier/adapters/dexie`, `progress.md` D49/D50).** Five of the
+thirteen tables now have adapters — `attempts`, `schedule`, `sessions`, `settings` and `keyVault`
+— each behind its `@palier/app` port and its `@palier/testing` contract suite. The whole of
+`version(1)` above is declared verbatim so the remaining tables land without a schema bump; they
+are inert until their adapter exists. The three notes below (schedule) and two (session) were
+followed as written.
 
 There is deliberately no `estimates` table. The practice trend is derived from the attempt
 log on demand, so there is nothing to persist, nothing to invalidate and nothing to
