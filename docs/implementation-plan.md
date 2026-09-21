@@ -113,7 +113,14 @@ interface ScheduleStore  { due(now: ISO, limit: number): Promise<ScheduleEntry[]
 // 20 September 2026 with the AnswerItem use case: applying the Leitner rule needs the item's
 // CURRENT box, which due/put cannot supply, and `due` is null once an item retires from the
 // queue. See progress.md D38, which closes D19.
-interface SessionStore   { /* checkpointing, resume */ }
+interface SessionStore   { create(s: Session): Promise<void>; complete(id: SessionId, at: ISO): Promise<Session | null>; latest(): Promise<Session | null> }
+// Session = { id, mode: AttemptMode, startedAt: ISO, completedAt: ISO | null }. The
+// shape and signature were decided 21 September 2026 with the StartSession/CompleteSession
+// use cases: the minimum those two consumers need. `complete` returns null on an unknown
+// id (the CompleteSession guard) and is keep-first-write; `latest` is the sole source of
+// planDailySession's lastDayCompleted. `mode` is 9.1's `type` column and reuses AttemptMode,
+// not the oral sessionType. Checkpointing/resume state is deferred to its consumer, the
+// Phase 3 exam runner. See progress.md D45, D46 (D46 closes D36).
 interface OralStore      { /* transcripts and audio blobs, local only */ }
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
 

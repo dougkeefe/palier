@@ -20,8 +20,9 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
 - **Nothing here reads the system clock or calls `Math.random`** (§6.4).
 - **Do not invent a port §3.3 has not specified.** The ports now come from `@palier/app`;
   the in-memory impls and contract suites import them from there (`ports.stub.ts` is gone).
-  A store that needs a port §3.3 omits — `SessionStore`, `OralStore` — waits for it to land
-  in `@palier/app` rather than being stubbed here.
+  A store that needs a port §3.3 omits — now only `OralStore` — waits for it to land
+  in `@palier/app` rather than being stubbed here. (`SessionStore` has landed:
+  `memorySessionStore` and `sessionStoreContract` exist, progress.md D45.)
 
 ## The three mistakes most likely to be made here
 

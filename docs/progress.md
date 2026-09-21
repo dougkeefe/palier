@@ -1,8 +1,10 @@
 # Palier: Progress
 
-**Last updated:** 20 September 2026
-**Current phase:** 0, Foundations and contracts
-**Next milestone:** gates enforced (`implementation-plan.md` §9)
+**Last updated:** 21 September 2026
+**Current phase:** 0, Foundations and contracts — every gate built; the pure `@palier/engine`
+core and the `@palier/app` practice loop are also built ahead of Phase 2 (§7 sequencing note)
+**Next step:** `RunDiagnostic`, then the `IdGenerator` port + first adapter, then the human gate
+before Phase 2 — see [Next, decided](#next-decided). Not a menu; a decided order.
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -37,6 +39,17 @@ Read this section before doing anything else in this repository.
    or, worse, silently undo it.
 6. **Do not tick an exit criterion you have not run.** Paste the command and its result
    into the session log entry. "Should pass" is not a pass.
+7. **Leave the next step decided, not a menu.** Before you finish, rewrite the *Next,
+   decided* section (below the phase-0 checklist) so the session after you opens to a
+   *single* unambiguous next slice: its scope, the ports and engine functions it uses, and
+   what "done" looks like. The test is simple — the next session should be able to start
+   building without re-deriving which direction to go. This section is **current state, so
+   you rewrite it every slice** (like the status table), which is the opposite of rule 4's
+   append-only session log — keep it terse *because* it is superseded, not accumulated. When
+   the honest next step is a fork only a human can settle — a product or UI choice, the
+   Phase 1 content go/no-go, two designs with a real trade-off — say so *in place* and name
+   the gate. **A named gate is decided; a list of options is not.** If you leave a menu, you
+   have handed the next session the same decision you were meant to close.
 
 **Honesty note on claims.** Parallel sessions work in separate worktrees branched from
 `main`, so a claim is only visible to others once it merges. This file is as accurate as
@@ -66,8 +79,11 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/continue-docs-progress-v1` | The second `@palier/app` use case, **`answerItem`** — scores through the item registry, appends the `Attempt`, and persists the Leitner move. **Closes D19** by completing `ScheduleEntry` and adding `ScheduleStore.get`. Deviations **D38**–**D42**, **D44**, **ADR 18** | 20 September 2026 |
-| `dougkeefe/naypyidaw` | The first `@palier/app` use case, **`planDailySession`** — composes the ports and the engine Planner into today's plan, first exercising the D32 bridge (Clock/Random → engine primitives) and adding `buildUseCases` to the composition root. Deviations **D36**, **D37** | 20 September 2026 |
+| `dougkeefe/continue-dev-from-docs-v4` | The `SessionStore` port plus the **`StartSession`** and **`CompleteSession`** use cases — the last named-but-unspecified persistence port, and the two use cases that open and close a day. **Closes D36** by making `SessionStore.latest()` the source of `lastDayCompleted`. Deviations **D45**, **D46** | 21 September 2026 |
+
+*(The two rows previously here — `answerItem` and `planDailySession` — merged as #13 and #12
+and were removed; the In-flight table tracks current work, not history, and the session log
+below is the permanent record.)*
 
 ---
 
@@ -161,31 +177,63 @@ Built now rather than retrofitted — §7 is emphatic about this.
 - [x] Port contract suites exist and pass against the in-memory implementations — four ports, 23 assertions; the rest follow their ports
 - [x] Fast lane under 90 seconds on an empty codebase — **4.6 seconds cold**, caches and `dist` deleted first, with the domain package and 246 tests in place. That is the baseline defended for the rest of the project.
 
-### Suggested next three
+### Next, decided
 
-`planDailySession` and now **`answerItem`** have both landed (session log, 20 September 2026),
-so the practice loop exists end to end inside `@palier/app`: a day can be planned from the bank
-and an answer can be scored, recorded and scheduled. Every phase-0 CI gate is built, and every
-deferred phase-0 *mechanism* is closed. **D19 is closed**; the still-open deviations are all
-"waiting for the consumer that drives the shape", which is the intended state.
+The `@palier/engine` pure core is complete, and the `@palier/app` practice loop now exists end
+to end: `planDailySession`, `startSession`, `answerItem`, `completeSession` (session log,
+20–21 September 2026). Every phase-0 CI gate is built and every deferred phase-0 *mechanism* is
+closed. The still-open deviations are all "waiting for the consumer that drives the shape", which
+is the intended state.
 
-What is now the natural next slice, in order:
+**This section is deliberately a decided order, not a menu.** Earlier revisions listed a
+"suggested next three" with trade-offs, because each app-layer slice was hitting a §3.3 port that
+was named but not specified, so each one forced a shape decision. That is almost used up: the pure,
+content-agnostic layers are nearly built out, so the next steps can be — and here are — named
+outright. Do them in this order and do not re-litigate the ordering; if evidence says otherwise,
+supersede this section the way the log works, do not silently reorder.
 
-1. **`SessionStore`, then `StartSession` / `CompleteSession`.** This is the one that unblocks
-   the most: `SessionStore` has been deferred since D18 for want of a §3.3 signature, and
-   `planDailySession`'s `lastDayCompleted` has been waiting on it since D36. Checkpointing and
-   resume are what it is for (§3.3's comment), and `architecture.md` E2E journey 3 — a 90-minute
-   exam surviving a reload — is the requirement that eventually judges it.
-2. **The `IdGenerator` port and the first adapter** (D39). `answerItem` takes its `attemptId`
-   from the caller because nothing may mint one; a Web Crypto implementation closes that. It is
-   the first adapter directory, so it also opens D3's subpath exports and the D5 eslint element
-   split — worth doing deliberately rather than as a side effect.
-3. **`RunDiagnostic`**, which needs neither: the selector's diagnostic mode is already built
-   (D33) and the ports it wants all exist.
+**Do this now — 1. `RunDiagnostic`.** The last practice-loop use case, and the one clean slice
+left that needs **no new port and no new adapter**. The pieces already exist: the engine's
+`selectItems(mode: "diagnostic")` (unweighted, all-band sampling — D33) and `calculateTrend`,
+which already returns accuracy per band tag with a Wilson interval — that *is* the R10 / Phase-2
+"diagnostic → accuracy per band tag with its interval" readout. So this is a thin `@palier/app`
+use case:
 
-No open owner questions for any of the three. Two older items still want a human rather than a
-session: **D12** (the inferred `X 0-10` band, which must be checked against the PSC's published
-table before launch) and the name/domain decision in §12.1.
+- **Scope.** `runDiagnostic(request, deps)` selects a diagnostic item set the caller sizes (a
+  count in the request, the `sessionSize` precedent from `planDailySession` — D34/D36), over
+  `ItemRepository.query` + `Random`, via `selectItems(mode: "diagnostic")`. Answers are recorded
+  through the **existing** `answerItem` with `mode: "diagnostic"` — nothing new there. The
+  accuracy readout is `calculateTrend(skill, diagnosticAttempts, items)` over the recorded
+  diagnostic-mode attempts; expose it as the result, or as a sibling thin use case if that reads
+  cleaner. All ports it touches exist (`ItemRepository`, `AttemptStore`, `Random`, `Clock`).
+- **No new port, so likely no deviation.** If the readout decomposition (one use case vs. two)
+  or the diagnostic-set size policy warrants a note, it takes the next free number (**D47**). No
+  ADR: §3 and the eight principles are untouched, and §3.2 already lists `RunDiagnostic`.
+- **Done looks like:** unit-tested with local stubs (D37) — the selection is uniform across bands,
+  the set is the requested size, and the readout is accuracy-per-band-with-interval over
+  diagnostic attempts; the composition-root wiring test runs it against the fixture bank. `pnpm
+  verify` green. This closes out the pure `@palier/app` layer.
+
+**Then — 2. The `IdGenerator` port and the first adapter directory (D39).** Still
+content-agnostic and autonomous, but a deliberate step: it is the **first `@palier/adapters`
+directory**, a Web Crypto ULID generator with same-millisecond monotonicity, plus a deterministic
+counter in `@palier/testing`. `answerItem` and `startSession` both take a caller-minted id today
+precisely because nothing may mint one from the seeded `Random` (D39); this is what mints them.
+Because it is the first adapter, it also opens **D3** (the `@palier/adapters` subpath exports) and
+the **D5** eslint-boundaries element split — do those with it, deliberately, not as a side effect.
+It is a port §3.3 does not name, so it takes its own deviation when it lands.
+
+**Then — the human gate. Phase 2 proper is not an autonomous slice.** After (2), the remaining
+work crosses into the real adapters (Dexie stores, the bank fetch/cache, the vault, sync + the
+sync simulator) **and the UI** — see §7 Phase 2's work breakdown. That work needs product and UI
+direction, and it leans on the **Phase 1 content go/no-go**, which cannot be run autonomously (it
+is a human register read plus the OpenAI pipeline — §7 Phase 1, `content-factory.md`). So the
+"build the content-agnostic layers ahead" runway ends after (2). Do not start Phase 2 adapters or
+UI as a self-directed slice; bring it to a human to sequence, with §7 as the breakdown.
+
+Standing human items, unchanged and still not a session's to close: **D12** (the inferred
+`X 0-10` band, which must be checked against the PSC's published table before launch) and the
+name/domain decision in §12.1.
 
 ---
 
@@ -1031,6 +1079,14 @@ The hermetic composition root's `items` became `fixtureBankRepository()` (was an
 `memoryItemRepository()`), so the use case has real seeded items to plan against and the wiring
 test asserts a non-empty plan — **this closes D31's "wire it with the first consumer"**.
 
+**Update, 21 September 2026 — the `lastDayCompleted` half is now closed by D46.** This entry
+left `lastDayCompleted` an optional request field with "its real source is the deferred
+`SessionStore`". That store has landed (D45), and `StartSession` (D46) now derives the signal
+from `SessionStore.latest()` and passes it down, so the optional is produced by `CompleteSession`
+and consumed by `StartSession` through the port — no UI involvement. The parameter stays a
+`planDailySession` request field (D42's line held): the derivation belongs to `StartSession`,
+which reads the store, not to a new `sessions` dep on the planner.
+
 ### D37 — `@palier/app` unit tests use local port stubs, not `@palier/testing`
 **Date:** 20 September 2026 · **Status:** accepted
 
@@ -1259,11 +1315,156 @@ appending — was rejected: it adds a read on every answer and infers from a que
 already knows. Considered and rejected because it re-derives a fact the store holds, the same
 instinct D38 records against replaying the Leitner fold.
 
+### D45 — `SessionStore` shape decided; §3.3 amended in place
+**Date:** 21 September 2026 · **Status:** accepted
+
+§3.3 named `SessionStore` with only the comment `/* checkpointing, resume */` — the last of the
+persistence ports left named-but-unspecified. Deciding it is the D18/D19/D20/D38 move: decide the
+minimum its consumers need, name it, record it as a minimum. Its two consumers are `StartSession`
+and `CompleteSession` (D46), and between them they need only:
+
+```ts
+Session = { id: SessionId, mode: AttemptMode, startedAt: ISO, completedAt: ISO | null }
+SessionStore = { create(s): Promise<void>; complete(id, at): Promise<Session | null>; latest(): Promise<Session | null> }
+```
+
+Choices this settles:
+
+- **`Session` lives in `@palier/app`, not `@palier/domain`** — the `ScheduleEntry` precedent
+  (D18/D38). `@palier/engine` never consumes a `Session` (its functions take study parameters);
+  it carries no content-artefact role and so no Zod schema, `.test-d.ts` or JSON round-trip
+  obligation. It references domain types by name only — `SessionId` (`ids.ts`) and `AttemptMode`
+  (`Attempt.ts`) — exactly as `ScheduleEntry` references `ItemId`/`Skill`. `@palier/domain` is
+  untouched; no new domain types.
+- **`mode` reuses `AttemptMode`, not the oral `sessionType`.** `architecture.md` §9.1 indexes
+  `sessions: 'id, type, startedAt'`; the `type` column is the session's *mode*
+  (`drill | diagnostic | exam | review`), which every `Attempt` in the session already carries.
+  The oral `sessionType` (`warmup | work | …`) is a field of `OralScenario` on a different axis,
+  and its store is the still-deferred `OralStore`. `mode`/`startedAt` are included to honour §9.1's
+  sanctioned projection even though neither use-case *branch* reads `mode` — the same reasoning by
+  which `ScheduleEntry` kept `skill`.
+- **`create` returns `void`, not the D44 boolean.** That boolean existed because `answerItem` had a
+  non-idempotent follow-on (the Leitner reschedule) to guard; `StartSession` has none, so the honest
+  minimum is `void`, like `ScheduleStore.put`. If the exam runner later needs the signal, that is a
+  D44-style amendment when its consumer arrives, not a speculative one now.
+- **`complete` returns `Session | null`** so `CompleteSession` gets its `UnknownSessionError` guard
+  (the "a use case needs a signal `void` cannot give" move as D38/D44, built in from the start). It
+  is **keep-first-write**: re-completing returns the original `completedAt`, so a double-submit is
+  idempotent and the contract holds it to that.
+- **No `get(id)`.** Neither consumer reads a session by id, so it waits for one that does — the same
+  restraint by which `ScheduleStore.get` was added only when `answerItem` needed it. The exam runner's
+  resume is its likely first consumer, and it is also what will drive the deferred
+  checkpoint/resume state the `/* checkpointing, resume */` comment gestured at.
+
+**No ADR** — §3.3 already names the port; the module structure (§3) and the eight principles are
+untouched (D38's explicit precedent). §3.3 is amended in place, `architecture.md` §9.1 gains the
+`Session` record, and `packages/app/CLAUDE.md` / `packages/testing/CLAUDE.md` are updated.
+
+### D46 — `StartSession` and `CompleteSession`, and closing D36's `lastDayCompleted`
+**Date:** 21 September 2026 · **Status:** accepted, closes D36 (the `lastDayCompleted` half)
+
+The two use cases §3.2 already lists by name, so unlike `planDailySession` (D36) no naming
+reconciliation was needed. Both are pure orchestration over the D45 `SessionStore`.
+
+- **The session id is caller-supplied** (D39). `Attempt.id` and now `Session.id` are ULIDs and
+  nothing in the app mints one — `@palier/domain`'s `ids.ts`: "the adapters mint; domain only
+  names", and the `Random` port is a seeded mulberry32, not an entropy source. `answerItem` already
+  takes a `sessionId`, so the loop is forced: `startSession` accepts the id, the caller threads it
+  through every `answerItem`, `completeSession` closes it. The Web-Crypto `IdGenerator` port (D39,
+  still open) is where it will come from.
+- **`StartSession` composes `planDailySession` and owns `lastDayCompleted`.** It reads
+  `SessionStore.latest()`, turns `completedAt !== null` into the boolean, and passes it down — so
+  the completion rule lives in the app layer, not the UI request. `planDailySession` stays usable
+  standalone with the signal omitted. **This closes D36's dangling optional**: it is now produced by
+  `completeSession` and consumed by `startSession`, through the port. The alternative — the caller
+  plans then starts — was rejected: `lastDayCompleted` must be known *before* planning, so that
+  derivation (and `SessionStore.latest()`) would have to move into the UI, leaking a domain rule out.
+- **The `latest()`-before-`create()` ordering is load-bearing, not stylistic.** If `create` ran
+  first, the just-opened in-progress session (`completedAt: null`) would be its own `latest()` and
+  pin `lastDayCompleted` to `false` forever. A named test proves the order (a call-order-recording
+  stub), and `create` runs only *after* a successful plan, so a planning failure leaves no orphan
+  session — another named test.
+- **`CompleteSession`** stamps `completedAt` from the injected `Clock` and returns the closed record,
+  throwing `UnknownSessionError` on an unknown id.
+
+Tests are local port stubs (D37), not `@palier/testing` (which would cycle the build graph): three
+`lastDayCompleted` branches (`latest()` null ⇒ omitted; prior completed ⇒ `true`; prior in-progress
+⇒ `false`, observed through the plan shortening), the ordering, the orphan guard, and
+`CompleteSession`'s guard + keep-first idempotency. The composition-root wiring test runs the whole
+loop — start, answer every planned item under the session id, complete, start again — against the
+in-memory graph. The engine/app own the taper *magnitude*; the container proves only that records
+land and the signal is threaded.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 21 September 2026 — `dougkeefe/continue-dev-from-docs-v4` (making the next direction decided, not a menu)
+
+A separate entry rather than an edit to the one below (working-agreement rule 4), for the same
+session: after the `SessionStore` slice landed, the *Suggested next three* was rewritten into
+**[Next, decided](#next-decided)** — a committed order, not a trade-off menu. The reason it *could*
+be: the pure content-agnostic layers (engine core, the `@palier/app` practice loop) are nearly
+built out, so the "which unspecified port do we decide next" fork that made every recent slice a
+judgement call is almost gone. The decided order is `RunDiagnostic` (no new port or adapter — the
+engine's `selectItems(mode: "diagnostic")` and `calculateTrend` already exist), then the
+`IdGenerator` port + the first adapter directory (D39, opening D3/D5), then **a human gate**: Phase 2
+proper (real adapters + UI) is explicitly *not* an autonomous slice, because it needs product/UI
+direction and leans on the Phase 1 content go/no-go. The top-of-file `Next step` line and the
+section now say this in place. Docs only; no code changed, so `pnpm verify` is unaffected.
+
+### 21 September 2026 — `dougkeefe/continue-dev-from-docs-v4` (the `SessionStore` port and `StartSession`/`CompleteSession`)
+
+The *Suggested next three*' #1, "the one that unblocks the most": the last named-but-unspecified
+persistence port and the two use cases that open and close a day. Ahead of Phase 2, on the same
+content-agnostic sequencing as the engine core, `planDailySession` and `answerItem`. Deviations
+**D45** (the `SessionStore` shape) and **D46** (the two use cases), and **D46 closes the
+`lastDayCompleted` half of D36**. No ADR (§3 and the eight principles untouched — D38's precedent
+for filling a port §3.3 already names). No npm dependency added.
+
+Built:
+
+- `packages/app/src/ports/session-store.ts` — `Session = { id, mode, startedAt, completedAt: ISO | null }`,
+  `SessionStore = { create, complete, latest }`. The minimum its two consumers need; §3.3 amended
+  in place. `Session` lives in `@palier/app` (the `ScheduleEntry` precedent), not `@palier/domain`.
+- `packages/app/src/use-cases/start-session.ts` — `startSession(request, deps)`: reads
+  `sessions.latest()` **before** creating this session (the ordering is load-bearing; see D46),
+  derives `lastDayCompleted`, composes `planDailySession`, then creates the in-progress session
+  *after* a successful plan. Caller-supplied id (D39).
+- `packages/app/src/use-cases/complete-session.ts` — `completeSession(request, deps)`: stamps
+  `completedAt` from the clock, returns the closed session, throws `UnknownSessionError` on an
+  unknown id. Keep-first-write, so a double-submit is idempotent.
+- `packages/testing` — `memorySessionStore` (insertion order breaks a `startedAt` tie in `latest()`;
+  keep-first `complete`), `sessionStoreContract` (seven cases + `it.todo("survives a reopen")`),
+  `aSession` builder. Barrels and `contracts-run.test.ts` updated.
+- `apps/web/src/lib/container.ts` — `sessions: memorySessionStore()` joins `Ports`; `startSession`
+  and `completeSession` join the `UseCases` graph.
+
+Tests: `start-session.test.ts` (9) and `complete-session.test.ts` (5), local stubs per D37;
+`container.test.ts` gained the full-loop wiring test (start → answer every item → complete → start
+again). One test corrected during the run — an initial `clock.now` "called once" assertion was
+wrong, because the composed `planDailySession` legitimately reads the same injected clock a second
+time; changed to assert the clock is used, not a count. That is a real property of composing the
+planner, not a defect.
+
+**Verified:** `pnpm verify` green (**exit 0**) — check-types 14/14, lint clean, depcruise clean
+(**157 modules, 476 dependencies** in packages, up 7/30 from the previous 150/446; **37 modules,
+52 dependencies** in `apps/web`, unchanged — `@palier/app` still reaches `@palier/domain` +
+`@palier/engine` only, `@palier/testing` still only `app` + `domain`, no new arrow), and the full
+root Vitest run: **563 passed, 5 todo, 47 files**, overall branches 97.6%, every glob coverage
+threshold held.
+
+**A gate proven to bite:** creating the session *before* reading `latest()` (the wrong order)
+failed both `reads the previous session before it creates this one …` and the orphan-guard test
+`does not create a session when planning fails …`; reverted, and `pnpm verify` green again at
+exit 0.
+
+**Next:** the *Suggested next three*' #2 (`IdGenerator` port + the first adapter directory, closing
+D39 and opening D3/D5) and #3 (`RunDiagnostic`, which needs no new port). `StartSession`'s
+caller-supplied id makes #2 the natural follow-on: it is what will mint the session and attempt ids
+the drill route threads.
 
 ### 20 September 2026 — `dougkeefe/continue-docs-progress-v1` (documentation reconciliation for `answerItem`)
 

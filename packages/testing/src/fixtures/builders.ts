@@ -1,4 +1,4 @@
-import type { ScheduleEntry } from "@palier/app";
+import type { ScheduleEntry, Session } from "@palier/app";
 import type { Attempt, ExamForm, Item, OralScenario, Passage } from "@palier/domain";
 import { attemptId, formId, itemId, passageId, scenarioId, sessionId } from "@palier/domain";
 
@@ -64,6 +64,15 @@ export const aScheduleEntry: Builder<ScheduleEntry> = buildWith<ScheduleEntry>({
   // Box 1 is where an unseen item starts, so it is the honest default; a
   // retired entry (`due: null`, top box) is spelled out by the test that wants it.
   box: 1,
+});
+
+export const aSession: Builder<Session> = buildWith<Session>({
+  id: sessionId("01HSESSION000000000001"),
+  mode: "drill",
+  startedAt: "2026-01-01T00:00:00.000Z",
+  // A session starts in progress; a completed one is spelled out by the test that
+  // wants it. `completedAt` is a required field, so null (not absent) is its value.
+  completedAt: null,
 });
 
 export const aPassage: Builder<Passage> = buildWith<Passage>({

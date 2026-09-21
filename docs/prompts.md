@@ -402,9 +402,13 @@ We are done with this task. Before I commit:
   contradict what we just built? If so, list it. Do not fix it yet.
 - Is there anything you worked around rather than solved, or anything you are
   uncertain about that I should know?
+- What is the single next step now? Rewrite progress.md's "Next, decided"
+  section so the next session opens to one unambiguous slice, not a menu
+  (working-agreement rule 7). If the honest next step needs me to choose,
+  name that gate in place rather than leaving options.
 ```
 
-That last question is worth asking every single time. It surfaces the compromises that would otherwise stay buried in a passing build.
+That last pair is worth asking every single time. The uncertainty question surfaces the compromises that would otherwise stay buried in a passing build; the next-step question stops the "which direction?" decision from being re-litigated every session, which is its own quiet tax.
 
 ---
 

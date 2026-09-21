@@ -3,14 +3,19 @@ import type {
   AnswerItemResult,
   AttemptStore,
   Clock,
+  CompleteSessionRequest,
+  CompleteSessionResult,
   ItemRepository,
   KeyVault,
   PlanDailySessionRequest,
   Random,
   ScheduleStore,
+  SessionStore,
   SettingsStore,
+  StartSessionRequest,
+  StartSessionResult,
 } from "@palier/app";
-import { answerItem, planDailySession } from "@palier/app";
+import { answerItem, completeSession, planDailySession, startSession } from "@palier/app";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
 import type { ExamProfile } from "@palier/domain";
 import { parseExamProfileOrThrow } from "@palier/domain";
@@ -22,6 +27,7 @@ import {
   memoryAttemptStore,
   memoryKeyVault,
   memoryScheduleStore,
+  memorySessionStore,
   memorySettingsStore,
   seededRandom,
 } from "@palier/testing";
@@ -71,7 +77,9 @@ export type Env = {
 /** The application use cases the UI drives, bound to the container's ports. */
 export type UseCases = {
   readonly planDailySession: (request: PlanDailySessionRequest) => Promise<DayPlan>;
+  readonly startSession: (request: StartSessionRequest) => Promise<StartSessionResult>;
   readonly answerItem: (request: AnswerItemRequest) => Promise<AnswerItemResult>;
+  readonly completeSession: (request: CompleteSessionRequest) => Promise<CompleteSessionResult>;
 };
 
 export type Ports = {
@@ -80,6 +88,7 @@ export type Ports = {
   readonly items: ItemRepository;
   readonly attempts: AttemptStore;
   readonly schedule: ScheduleStore;
+  readonly sessions: SessionStore;
   readonly settings: SettingsStore;
   readonly vault: KeyVault;
 };
@@ -102,6 +111,15 @@ function buildUseCases(ports: Ports): UseCases {
         schedule: ports.schedule,
         attempts: ports.attempts,
       }),
+    startSession: (request) =>
+      startSession(request, {
+        clock: ports.clock,
+        sessions: ports.sessions,
+        random: ports.random,
+        items: ports.items,
+        schedule: ports.schedule,
+        attempts: ports.attempts,
+      }),
     answerItem: (request) =>
       answerItem(request, {
         clock: ports.clock,
@@ -109,6 +127,11 @@ function buildUseCases(ports: Ports): UseCases {
         attempts: ports.attempts,
         schedule: ports.schedule,
         profile: PROFILE,
+      }),
+    completeSession: (request) =>
+      completeSession(request, {
+        clock: ports.clock,
+        sessions: ports.sessions,
       }),
   };
 }
@@ -140,6 +163,7 @@ export function createContainer(env: Env): Container {
     items: fixtureBankRepository(),
     attempts: memoryAttemptStore(),
     schedule: memoryScheduleStore(),
+    sessions: memorySessionStore(),
     settings: memorySettingsStore(),
     vault: memoryKeyVault(),
   };
