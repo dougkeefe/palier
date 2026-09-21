@@ -5,22 +5,34 @@ import type {
   Clock,
   CompleteSessionRequest,
   CompleteSessionResult,
+  DiagnosticReadoutRequest,
+  IdGenerator,
   ItemRepository,
   KeyVault,
   PlanDailySessionRequest,
   Random,
+  RunDiagnosticRequest,
+  RunDiagnosticResult,
   ScheduleStore,
   SessionStore,
   SettingsStore,
   StartSessionRequest,
   StartSessionResult,
 } from "@palier/app";
-import { answerItem, completeSession, planDailySession, startSession } from "@palier/app";
+import {
+  answerItem,
+  completeSession,
+  diagnosticReadout,
+  planDailySession,
+  runDiagnostic,
+  startSession,
+} from "@palier/app";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
 import type { ExamProfile } from "@palier/domain";
 import { parseExamProfileOrThrow } from "@palier/domain";
-import type { DayPlan } from "@palier/engine";
+import type { DayPlan, SkillTrend } from "@palier/engine";
 import {
+  counterIdGenerator,
   fakeClock,
   fixtureBankRepository,
   isHermetic,
@@ -80,11 +92,22 @@ export type UseCases = {
   readonly startSession: (request: StartSessionRequest) => Promise<StartSessionResult>;
   readonly answerItem: (request: AnswerItemRequest) => Promise<AnswerItemResult>;
   readonly completeSession: (request: CompleteSessionRequest) => Promise<CompleteSessionResult>;
+  readonly runDiagnostic: (request: RunDiagnosticRequest) => Promise<RunDiagnosticResult>;
+  readonly diagnosticReadout: (request: DiagnosticReadoutRequest) => Promise<SkillTrend>;
 };
 
 export type Ports = {
   readonly clock: Clock;
   readonly random: Random;
+  /**
+   * Identifier minting (progress.md D39, D48). Present in the graph ahead of a
+   * use-case consumer — the Phase-2 drill route mints the ids `answerItem` and
+   * `startSession` take today — the same way `settings` and `vault` are wired but
+   * not yet consumed. The hermetic path wires the deterministic counter for
+   * reproducibility; production would wire `@palier/adapters/ids`'s Web Crypto
+   * generator, but the production path throws until the rest of Phase 2 lands.
+   */
+  readonly ids: IdGenerator;
   readonly items: ItemRepository;
   readonly attempts: AttemptStore;
   readonly schedule: ScheduleStore;
@@ -133,6 +156,18 @@ function buildUseCases(ports: Ports): UseCases {
         clock: ports.clock,
         sessions: ports.sessions,
       }),
+    runDiagnostic: (request) =>
+      runDiagnostic(request, {
+        clock: ports.clock,
+        random: ports.random,
+        items: ports.items,
+        attempts: ports.attempts,
+      }),
+    diagnosticReadout: (request) =>
+      diagnosticReadout(request, {
+        items: ports.items,
+        attempts: ports.attempts,
+      }),
   };
 }
 
@@ -160,6 +195,7 @@ export function createContainer(env: Env): Container {
   const ports: Ports = {
     clock: fakeClock(),
     random: seededRandom(1),
+    ids: counterIdGenerator(),
     items: fixtureBankRepository(),
     attempts: memoryAttemptStore(),
     schedule: memoryScheduleStore(),

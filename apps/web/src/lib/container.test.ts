@@ -31,6 +31,13 @@ describe("createContainer", () => {
     expect(c.sessions).toBeDefined();
     expect(c.settings).toBeDefined();
     expect(c.vault).toBeDefined();
+
+    // The IdGenerator mints valid, strictly increasing ULIDs (behaviour proven by
+    // the contract suite in @palier/testing; here we assert wiring only).
+    const first = c.ids.ulid();
+    const second = c.ids.ulid();
+    expect(first).toMatch(/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{26}$/);
+    expect(second > first).toBe(true);
   });
 
   it("assembles the use-case graph bound to the in-memory ports", () => {
@@ -145,6 +152,47 @@ describe("createContainer", () => {
       plan: { skill: "writing", lang: "fr", targetBand: "B", sessionSize: 8 },
     });
     expect(day2.plan.items.length).toBeGreaterThan(0);
+  });
+
+  /**
+   * The diagnostic path through the assembled graph: select a diagnostic set from
+   * the fixture bank, answer every item in `mode: "diagnostic"`, then read the
+   * accuracy back. It proves the wiring — `runDiagnostic` sampled the bank,
+   * `answerItem` recorded diagnostic-mode attempts, and `diagnosticReadout` joined
+   * them to bands through the same stores — not the trend's numbers, which are
+   * @palier/engine's own suite.
+   */
+  it("runs a diagnostic: select a set, answer it, and read accuracy per band back", async () => {
+    const c = createContainer({ hermetic: true });
+
+    const { items } = await c.useCases.runDiagnostic({
+      skill: "reading",
+      lang: "fr",
+      targetBand: "C",
+      count: 8,
+    });
+    expect(items.length).toBeGreaterThan(0);
+
+    let attemptSeq = 0;
+    for (const item of items) {
+      await c.useCases.answerItem({
+        attemptId: attemptId(`01HDIAG${String(++attemptSeq).padStart(19, "0")}`),
+        itemId: item.id,
+        response: item.key,
+        sessionId: sessionId("01HSESSIONDIAGNOSTIC00001"),
+        mode: "diagnostic",
+        msToFirstSelect: 1_000,
+        msToConfirm: 2_000,
+        changedAnswer: false,
+        slow: false,
+      });
+    }
+
+    const trend = await c.useCases.diagnosticReadout({ skill: "reading" });
+    expect(trend.skill).toBe("reading");
+    expect(trend.windowSize).toBe(items.length);
+    // A readout per target band (the numbers are the engine's own suite).
+    expect(Object.keys(trend.byBand).sort()).toEqual(["A", "B", "C"]);
   });
 
   it("refuses to build a production container until real adapters exist", () => {

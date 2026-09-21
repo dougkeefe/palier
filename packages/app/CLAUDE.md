@@ -18,6 +18,11 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the
   `AiProvider`/`SyncTransport`/`TelemetrySink` trio (need net-new domain types) are deferred
   to their own sessions — deciding them is a decision to record, not a gap to fill quietly.
+  `IdGenerator` is a *ninth* port §3.3 does not name at all, decided here (progress.md D48):
+  `{ ulid(): string }`, content-agnostic — it mints the id, the caller brands it
+  (`attemptId(gen.ulid())`). It exists because nothing in the app may mint an id (`ids.ts`,
+  and the `Random` port is seeded, not entropy — see below); `@palier/adapters/ids` backs it
+  with Web Crypto, `@palier/testing` with a deterministic counter.
   `ISO`, `ScheduleEntry` and `ItemCriteria` are named-but-unspecified by §3.3 and were
   decided here (progress.md D18–D20). `SessionStore` was the same kind of decision
   (progress.md D45): `Session = { id, mode, startedAt, completedAt }` and the port is

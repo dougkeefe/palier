@@ -21,3 +21,16 @@ export type {
   CompleteSessionResult,
 } from "./complete-session.js";
 export { UnknownSessionError, completeSession } from "./complete-session.js";
+
+export type {
+  RunDiagnosticDeps,
+  RunDiagnosticRequest,
+  RunDiagnosticResult,
+} from "./run-diagnostic.js";
+export { runDiagnostic } from "./run-diagnostic.js";
+
+export type {
+  DiagnosticReadoutDeps,
+  DiagnosticReadoutRequest,
+} from "./diagnostic-readout.js";
+export { diagnosticReadout } from "./diagnostic-readout.js";

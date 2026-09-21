@@ -1,4 +1,5 @@
 export { attemptStoreContract } from "./attempt-store.contract.js";
+export { idGeneratorContract } from "./id-generator.contract.js";
 export {
   itemRepositoryContract,
   CONTRACT_BANK,

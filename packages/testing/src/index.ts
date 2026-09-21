@@ -2,6 +2,7 @@ export { fakeClock } from "./clock/fake-clock.js";
 export type { Clock, FakeClock, ISO } from "./clock/fake-clock.js";
 export { seededRandom } from "./random/seeded-random.js";
 export type { Random } from "./random/seeded-random.js";
+export { counterIdGenerator } from "./ids/counter-id-generator.js";
 export { HERMETIC_ENV_FLAG, isHermetic } from "./hermetic.js";
 export {
   aPassage,

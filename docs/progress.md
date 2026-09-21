@@ -2,9 +2,10 @@
 
 **Last updated:** 21 September 2026
 **Current phase:** 0, Foundations and contracts — every gate built; the pure `@palier/engine`
-core and the `@palier/app` practice loop are also built ahead of Phase 2 (§7 sequencing note)
-**Next step:** `RunDiagnostic`, then the `IdGenerator` port + first adapter, then the human gate
-before Phase 2 — see [Next, decided](#next-decided). Not a menu; a decided order.
+core, the full `@palier/app` practice loop (now including `RunDiagnostic`) and the first
+`@palier/adapters` directory (`/ids`) are also built ahead of Phase 2 (§7 sequencing note)
+**Next step:** **a human gate** — the content-agnostic runway is spent; Phase 2 proper (real
+adapters + UI) is not an autonomous slice — see [Next, decided](#next-decided).
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -79,11 +80,10 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/continue-dev-from-docs-v4` | The `SessionStore` port plus the **`StartSession`** and **`CompleteSession`** use cases — the last named-but-unspecified persistence port, and the two use cases that open and close a day. **Closes D36** by making `SessionStore.latest()` the source of `lastDayCompleted`. Deviations **D45**, **D46** | 21 September 2026 |
+| `dougkeefe/continue-docs-progress-v2` | The decided content-agnostic runway: **`RunDiagnostic`** (`runDiagnostic` + `diagnosticReadout`, no new port/adapter — deviation **D47**), then the **`IdGenerator`** port and the first `@palier/adapters` directory (`/ids`, Web Crypto ULID + a `@palier/testing` counter, opening **D3**/**D5** — deviation **D48**). Ends at the human gate | 21 September 2026 |
 
-*(The two rows previously here — `answerItem` and `planDailySession` — merged as #13 and #12
-and were removed; the In-flight table tracks current work, not history, and the session log
-below is the permanent record.)*
+*(The prior row — the `SessionStore` slice — merged as #14 and was removed; the In-flight
+table tracks current work, not history, and the session log below is the permanent record.)*
 
 ---
 
@@ -106,10 +106,11 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 - [x] `@palier/domain`: Zod schemas for every content artefact, JSON Schema generated to `docs/schemas/`
 - [x] `@palier/domain`: `ExamProfile` loader
 - [x] `@palier/domain`: `psc-sle` profile transcribed from `product-requirements.md` §5 (ADR 9) — with one inferred band, see D12
-- [~] `@palier/app`: port interfaces from §3.3 — 7 of 12 under `src/ports/` (`ItemRepository`,
-  `AttemptStore`, `ScheduleStore`, `SettingsStore`, `KeyVault`, `Clock`, `Random`);
-  `SessionStore`/`OralStore` (no §3.3 signature) and `AiProvider`/`SyncTransport`/`TelemetrySink`
-  (net-new domain types) deferred; `ports.stub.ts` deleted. See D18–D20
+- [~] `@palier/app`: port interfaces from §3.3 — under `src/ports/`: `ItemRepository`,
+  `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`, `KeyVault`, `Clock`, `Random`,
+  plus `IdGenerator` (a 9th port §3.3 does not name, D48); `OralStore` (no §3.3 signature) and
+  `AiProvider`/`SyncTransport`/`TelemetrySink` (net-new domain types) deferred; `ports.stub.ts`
+  deleted. See D18–D20, D45, D48
 - [x] Item type registry (§3.4): React-free `ItemTypeDefinition` in `@palier/domain`,
   `itemRenderers` in `@palier/ui`, compile-time exhaustiveness in `apps/web`, plus the §4.5
   architecture test — **ADR 17** written, D13 resolved
@@ -126,10 +127,10 @@ Built now rather than retrofitted — §7 is emphatic about this.
 - [x] fake-indexeddb
 - [x] `@axe-core/playwright`
 - [x] Per-package coverage reporting with the §6.3 targets enforced — proven by a deliberate drop
-- [~] `@palier/testing`: in-memory implementation of every port — **five** now (`ItemRepository`
-  added, alongside `AttemptStore`, `ScheduleStore`, `SettingsStore`, `KeyVault`), all importing
-  the real ports from `@palier/app`; `SessionStore`/`OralStore`/`AiProvider`/`SyncTransport`/`TelemetrySink`
-  follow their ports
+- [~] `@palier/testing`: in-memory implementation of every port — `ItemRepository`, `AttemptStore`,
+  `ScheduleStore`, `SettingsStore`, `KeyVault`, `SessionStore` (memory stores) and
+  `counterIdGenerator` (the `IdGenerator`, D48), all importing the real ports from `@palier/app`;
+  `OralStore`/`AiProvider`/`SyncTransport`/`TelemetrySink` follow their ports
 - [x] `@palier/testing`: port contract suites, exported as functions
 - [x] `@palier/testing`: fixture builders, seeded Random, FakeClock
 - [x] `@palier/testing`: the 60-item canonical fixture bank — `src/fixtures/bank.ts`, generated
@@ -179,57 +180,31 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-The `@palier/engine` pure core is complete, and the `@palier/app` practice loop now exists end
-to end: `planDailySession`, `startSession`, `answerItem`, `completeSession` (session log,
-20–21 September 2026). Every phase-0 CI gate is built and every deferred phase-0 *mechanism* is
-closed. The still-open deviations are all "waiting for the consumer that drives the shape", which
-is the intended state.
+**The content-agnostic runway is spent. The next step is a human gate — not a slice.**
 
-**This section is deliberately a decided order, not a menu.** Earlier revisions listed a
-"suggested next three" with trade-offs, because each app-layer slice was hitting a §3.3 port that
-was named but not specified, so each one forced a shape decision. That is almost used up: the pure,
-content-agnostic layers are nearly built out, so the next steps can be — and here are — named
-outright. Do them in this order and do not re-litigate the ordering; if evidence says otherwise,
-supersede this section the way the log works, do not silently reorder.
+The `@palier/engine` pure core is complete; the `@palier/app` practice loop now exists end to end
+*including the diagnostic* — `planDailySession`, `startSession`, `answerItem`, `completeSession`,
+`runDiagnostic`/`diagnosticReadout` (session log, 20–21 September 2026); and the first
+`@palier/adapters` directory, `/ids`, has landed (D48). Every phase-0 CI gate is built, every
+deferred phase-0 *mechanism* is closed, and the two autonomous steps this section previously named
+(RunDiagnostic, then IdGenerator) are both done. There is no further layer that can be built without
+crossing into work only a human can sequence.
 
-**Do this now — 1. `RunDiagnostic`.** The last practice-loop use case, and the one clean slice
-left that needs **no new port and no new adapter**. The pieces already exist: the engine's
-`selectItems(mode: "diagnostic")` (unweighted, all-band sampling — D33) and `calculateTrend`,
-which already returns accuracy per band tag with a Wilson interval — that *is* the R10 / Phase-2
-"diagnostic → accuracy per band tag with its interval" readout. So this is a thin `@palier/app`
-use case:
+**Why the next step cannot be a self-directed slice.** The remaining Phase 2 work is the real
+adapters — Dexie stores, the bank fetch/cache, the vault, sync + the sync simulator — **and the
+UI** (§7 Phase 2's work breakdown). Two things gate it, neither autonomous:
 
-- **Scope.** `runDiagnostic(request, deps)` selects a diagnostic item set the caller sizes (a
-  count in the request, the `sessionSize` precedent from `planDailySession` — D34/D36), over
-  `ItemRepository.query` + `Random`, via `selectItems(mode: "diagnostic")`. Answers are recorded
-  through the **existing** `answerItem` with `mode: "diagnostic"` — nothing new there. The
-  accuracy readout is `calculateTrend(skill, diagnosticAttempts, items)` over the recorded
-  diagnostic-mode attempts; expose it as the result, or as a sibling thin use case if that reads
-  cleaner. All ports it touches exist (`ItemRepository`, `AttemptStore`, `Random`, `Clock`).
-- **No new port, so likely no deviation.** If the readout decomposition (one use case vs. two)
-  or the diagnostic-set size policy warrants a note, it takes the next free number (**D47**). No
-  ADR: §3 and the eight principles are untouched, and §3.2 already lists `RunDiagnostic`.
-- **Done looks like:** unit-tested with local stubs (D37) — the selection is uniform across bands,
-  the set is the requested size, and the readout is accuracy-per-band-with-interval over
-  diagnostic attempts; the composition-root wiring test runs it against the fixture bank. `pnpm
-  verify` green. This closes out the pure `@palier/app` layer.
+- **The Phase 1 content go/no-go.** Phase 2 ships a product on top of the bank, and whether the bank
+  is good enough is a human register read plus the OpenAI pipeline (§7 Phase 1, `content-factory.md`).
+  That decision has not been made. Building the Phase 2 UI on an unvalidated bank is building on sand.
+- **Product and UI direction.** Onboarding, the readiness card, the drill/feedback panel, the review
+  queue, settings and the pairing flow (§7 Phase 2) are design decisions, not derivations from the
+  spec. `product-requirements.md` §8/§10/§11 constrain them but do not settle them.
 
-**Then — 2. The `IdGenerator` port and the first adapter directory (D39).** Still
-content-agnostic and autonomous, but a deliberate step: it is the **first `@palier/adapters`
-directory**, a Web Crypto ULID generator with same-millisecond monotonicity, plus a deterministic
-counter in `@palier/testing`. `answerItem` and `startSession` both take a caller-minted id today
-precisely because nothing may mint one from the seeded `Random` (D39); this is what mints them.
-Because it is the first adapter, it also opens **D3** (the `@palier/adapters` subpath exports) and
-the **D5** eslint-boundaries element split — do those with it, deliberately, not as a side effect.
-It is a port §3.3 does not name, so it takes its own deviation when it lands.
-
-**Then — the human gate. Phase 2 proper is not an autonomous slice.** After (2), the remaining
-work crosses into the real adapters (Dexie stores, the bank fetch/cache, the vault, sync + the
-sync simulator) **and the UI** — see §7 Phase 2's work breakdown. That work needs product and UI
-direction, and it leans on the **Phase 1 content go/no-go**, which cannot be run autonomously (it
-is a human register read plus the OpenAI pipeline — §7 Phase 1, `content-factory.md`). So the
-"build the content-agnostic layers ahead" runway ends after (2). Do not start Phase 2 adapters or
-UI as a self-directed slice; bring it to a human to sequence, with §7 as the breakdown.
+**So bring it to a human to sequence, with §7 Phase 2 as the breakdown.** A reasonable first
+Phase-2 slice once the gate is passed is `adapters/dexie` (the store ports behind their contract
+suites — the `IdGenerator`/`/ids` pattern now shows the way), because it is the least
+design-dependent. But do not start it as a self-directed slice; it depends on the go/no-go above.
 
 Standing human items, unchanged and still not a session's to close: **D12** (the inferred
 `X 0-10` band, which must be checked against the PSC's published table before launch) and the
@@ -379,13 +354,18 @@ its own `check-types` script (`next typegen && tsc --noEmit`), ordered by Turbor
 There is a comment in `tsconfig.json` saying so.
 
 ### D3 — `@palier/adapters` subpath exports deferred
-**Date:** 19 September 2026 · **Status:** open, closes when the first adapter lands
+**Date:** 19 September 2026 · **Status:** partially resolved 21 September 2026 (`/ids`); open for the five §3.2 directories
 
 §3.2 specifies five subpath exports (`/dexie`, `/bank`, `/openai`, `/sync`, `/vault`).
 The package currently declares one root export, because five `exports` entries resolving
 to five empty modules assert a boundary with nothing behind it. Add the subpaths with the
 first adapter. The lint rule forbidding cross-imports between adapter directories is the
 thing that actually enforces §3.2, and it arrives with dependency-cruiser.
+
+**Update, 21 September 2026 (D48).** The first adapter has landed, and it is not one of the five:
+`./ids` (the `IdGenerator`, a Web Crypto ULID generator). It is a real subpath resolving to real
+content, so D3's principle now has its first instance. The five named directories stay unexported
+until each lands.
 
 ### D4 — Per-package `CLAUDE.md` files not yet written
 **Date:** 19 September 2026 · **Status:** RESOLVED 19 September 2026
@@ -432,6 +412,12 @@ element map rotting as the packages fill. The cross-adapter import ban that §3.
 actually wants lives in `.dependency-cruiser.cjs`, which matches on paths and
 needs no classification. Split the `adapters` element when the first adapter
 lands.
+
+**Update, 21 September 2026 (D48).** Done. The first adapter (`/ids`) landed, and the `adapters`
+element is now `adapters-ids` (most specific) followed by the general `adapters` catch-all, so
+`no-unknown-files` keeps classifying every adapter file. The remaining §3.2 directories each get
+their own element as they land. `no-cross-adapter-imports` in `.dependency-cruiser.cjs` remains the
+rule that actually enforces the ban.
 
 ### D6 — dependency-cruiser cruises `src` and resolves through `dist`
 **Date:** 19 September 2026 · **Status:** accepted
@@ -1395,11 +1381,129 @@ loop — start, answer every planned item under the session id, complete, start 
 in-memory graph. The engine/app own the taper *magnitude*; the container proves only that records
 land and the signal is threaded.
 
+### D47 — `RunDiagnostic` is two use cases, and the diagnostic carries a `targetBand` it does not select on
+**Date:** 21 September 2026 · **Status:** accepted
+
+§3.2 names one `RunDiagnostic`, but a diagnostic spans three moments a single call cannot: select
+the set, let the user answer each item, then read the accuracy. So it is **two thin sibling use
+cases** — `runDiagnostic` (selection) and `diagnosticReadout` (the readout) — with the answers
+recorded in between through the *existing* `answerItem` with `mode: "diagnostic"`, unchanged. No new
+port, no adapter, no ADR (§3 and the eight principles untouched); both are pure orchestration, the
+D37 local-stub testing.
+
+- **`runDiagnostic`** reads `ItemRepository.query({ skill })` + a generous `AttemptStore.recent`
+  slice (for `selectItems`' 14-day exclusion) and returns `selectItems(mode: "diagnostic")` — the
+  engine's coverage sampler (all bands, no sub-skill weighting, D33). It closes out the pure
+  `@palier/app` layer's *selection* half.
+- **`diagnosticReadout`** fetches recent attempts, **filters to `mode === "diagnostic"`**, resolves
+  their items and returns `calculateTrend(skill, …)` — accuracy per band tag with a Wilson interval,
+  which *is* the R10 readout. A short diagnostic reads `"insufficient"` per band until `MIN_EVIDENCE`
+  accrues; that is R10 ("no estimate without evidence and uncertainty"), not a gap.
+- **The diagnostic carries a `targetBand` its selection ignores.** `SelectionCriteria` requires
+  `targetBand`, but the diagnostic branch (`selector.ts`) never reads it — coverage samples every
+  band. Rather than invent a placeholder in code, `runDiagnostic`'s request carries the user's
+  declared/aspirational target (onboarding collects it; the readout is read against it), documented
+  in place. The alternative — making `SelectionCriteria.targetBand` optional (an engine change to a
+  100%-branch pure file, plus a practice-mode guard) — was considered and declined for this slice;
+  D20 leaves that door open if a later selector consumer needs it.
+- **Set size is a request field, not a constant.** `count` is caller-sized (the `sessionSize`
+  precedent, D34/D36); the `recent(skill, N)` fetch is a generous internal constant, a Phase-2
+  tuning detail (D36), not an invented threshold.
+
+### D48 — The `IdGenerator` port and the first `@palier/adapters` directory (`/ids`)
+**Date:** 21 September 2026 · **Status:** accepted; resolves D3 and D5 for `ids`, closes the open half of D39
+
+The mechanism D39 named: nothing in the app may mint an id — `@palier/domain`'s `ids.ts` ("the
+adapters mint; domain only names") and the `Random` port is a seeded mulberry32, not entropy, so
+minting from it would give two devices one id stream and an `AttemptStore` would silently drop the
+collision as a duplicate (ADR 16, `architecture.md` §9.4). `answerItem`/`startSession` take a
+caller-minted id today for exactly that reason (D39); this is what will mint them. A port §3.3 does
+not name → its own deviation, no ADR (§3 and the eight principles untouched).
+
+- **Port shape `{ ulid(): string }`, content-agnostic.** A ULID is a ULID whatever it identifies,
+  so the port mints the string and the caller brands it (`attemptId(gen.ulid())`). This keeps the
+  port ignorant of attempts/sessions and scales to every future id kind without a new method. The
+  alternative — typed `attemptId()`/`sessionId()` methods — was declined: it hard-codes the port to
+  today's two consumers and buys nothing, since the brand constructors are unchecked casts anyway.
+- **First adapter: `@palier/adapters/ids`.** `webCryptoIdGenerator` — a hand-written Crockford
+  base32 ULID (48-bit ms timestamp + 80 bits from `crypto.getRandomValues`, 26 chars),
+  **monotonic within a millisecond**: on a same-ms or backward-clock call it keeps the high
+  timestamp and increments the random component, so a burst is strictly increasing (attempt
+  ordering depends on it). No npm dependency — `globalThis.crypto` is present in Node 20+ and
+  browsers. `now`/`randomBytes` are injectable so the monotonic branch is deterministically tested.
+- **Deterministic counterpart in `@palier/testing`.** `counterIdGenerator` encodes an incrementing
+  counter into the ULID's random field over a fixed timestamp — reproducible, so a hermetic
+  Playwright run is (§6.4) — and is held to the **same `idGeneratorContract`** as the adapter
+  (unique, valid 26-char Crockford, strictly increasing). Run against both implementations.
+- **Wired ahead of a consumer.** `ids` joins the composition root's `Ports` (hermetic path: the
+  counter; production still throws until the rest of Phase 2 lands, so the Web Crypto adapter has no
+  live wiring yet and is proven by its own suite + the contract). This is the `settings`/`vault`
+  precedent — a port present in the graph before a use case consumes it. The Phase-2 drill route is
+  the consumer that will actually call it, exactly as D39 predicted.
+- **D3 and D5 done for `ids`, deliberately, not as a side effect.** D3: `@palier/adapters`'s first
+  real subpath export, `./ids`, now resolves to real content. D5: the `eslint-plugin-boundaries`
+  `adapters` element is split — `adapters-ids` first, the general catch-all after — so
+  `no-unknown-files` keeps classifying as the package fills. Both stay open for the five §3.2
+  adapter directories still to land.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 21 September 2026 — `dougkeefe/continue-docs-progress-v2` (the `IdGenerator` port and the first adapter, `/ids`)
+
+Step 2 of the decided runway, and the end of it: the mechanism D39 named. Deviation **D48**, which
+**resolves D3 and D5 for `ids`** and closes the open half of D39. A port §3.3 does not name; no ADR;
+no npm dependency (`globalThis.crypto`).
+
+Built:
+
+- `packages/app/src/ports/id-generator.ts` — `IdGenerator = { ulid(): string }`, content-agnostic:
+  the port mints, the caller brands (`attemptId(gen.ulid())`). Exported from the ports barrel and
+  `src/index.ts`.
+- `packages/adapters/src/ids/` — `webCryptoIdGenerator`, a hand-written Crockford base32 ULID over
+  Web Crypto, monotonic within a millisecond (`now`/`randomBytes` injectable for deterministic
+  branch tests). The **first `@palier/adapters` directory**; `./ids` is the first real subpath
+  export (D3), and it is its own `eslint-plugin-boundaries` element `adapters-ids` (D5 split).
+- `packages/testing/src/ids/counter-id-generator.ts` — `counterIdGenerator`, deterministic (a
+  counter in the ULID's random field over a fixed timestamp), so a hermetic run is reproducible.
+- `packages/testing/src/contracts/id-generator.contract.ts` — `idGeneratorContract` (valid 26-char
+  Crockford, unique, strictly increasing), run against **both** implementations.
+- `apps/web/src/lib/container.ts` — `ids` joins `Ports` (hermetic: the counter); the production
+  path still throws, so the Web Crypto adapter has no live wiring yet (proven by its own suite + the
+  contract), the `settings`/`vault` precedent. Container test asserts `ids` mints increasing ULIDs.
+- CLAUDE.md updated in the same commit for `@palier/app` (the new port), `@palier/adapters` (the
+  `/ids` subpath + element split) and `@palier/testing` (the counter + contract), per §10.
+
+Verified: `pnpm verify` green — check-types, lint, boundaries (167 modules, no violations), and
+**590 tests + 5 todo pass** with coverage thresholds met (branches 97.65%).
+
+### 21 September 2026 — `dougkeefe/continue-docs-progress-v2` (`RunDiagnostic`: the last practice-loop use case)
+
+Step 1 of the decided runway ([Next, decided](#next-decided)): `RunDiagnostic`, the one clean slice
+left needing **no new port and no new adapter**. Deviation **D47** (it is two use cases; the
+diagnostic carries a `targetBand` its selection ignores). No ADR, no npm dependency.
+
+Built:
+
+- `packages/app/src/use-cases/run-diagnostic.ts` — `runDiagnostic(request, deps)`: `query({ skill })`
+  + a generous `recent` slice, then `selectItems(mode: "diagnostic")` (D33 coverage sampler). Returns
+  `{ items }`. `targetBand`/`count` are request fields (D47).
+- `packages/app/src/use-cases/diagnostic-readout.ts` — `diagnosticReadout(request, deps)`: fetch
+  recent attempts, filter to `mode === "diagnostic"`, resolve items, return `calculateTrend(…)` — the
+  R10 "accuracy per band tag with its interval" readout.
+- Barrels (`use-cases/index.ts`, `src/index.ts`) export both; `apps/web/src/lib/container.ts` binds
+  them into `UseCases`/`buildUseCases` over the existing ports (no new port in `Ports`).
+- Tests (D37 local stubs, 95% branch): `run-diagnostic.test.ts` (clock read once, pool query,
+  injected randomness, requested count, multi-band coverage, reproducibility, empty pool);
+  `diagnostic-readout.test.ts` (Wilson interval over diagnostic attempts, drill exclusion, resolves
+  only diagnostic items, insufficient below `MIN_EVIDENCE`, absent-item tolerance, empty when none);
+  a container end-to-end test (select → answer each in diagnostic mode → read accuracy per band).
+
+Verified: `pnpm verify` green — check-types, lint, boundaries (161 modules, no violations), and
+**578 tests + 5 todo pass** with coverage thresholds met (branches 97.6%).
 
 ### 21 September 2026 — `dougkeefe/continue-dev-from-docs-v4` (making the next direction decided, not a menu)
 
