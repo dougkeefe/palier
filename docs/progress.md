@@ -5,8 +5,9 @@
 full `@palier/app` practice loop (incl. `RunDiagnostic`), and now **two `@palier/adapters`
 directories** (`/ids` and `/dexie` — the five local store ports over IndexedDB, incl. the
 encrypted `KeyVault`) are built ahead of / into Phase 2
-**Next step:** `adapters/bank` (the `ItemRepository`) — see [Next, decided](#next-decided).
-Still human-gated for the product/UI slices and the Phase 1 content go/no-go.
+**Next step:** **full Phase 1 — the automated content factory** (build the 5-stage pipeline in
+`apps/factory` + `adapters/openai`, fully automated gates per **ADR 19**, run a small sample batch
+end to end). See [Next, decided](#next-decided).
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -181,39 +182,55 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next autonomous slice: `adapters/bank` — the `ItemRepository` (D49's argument extends to it).**
+**Next slice: full Phase 1 — the automated content factory (ADR 19, human-directed).**
 
-The prior read of this section — "the content-agnostic runway is spent, the next step is a human
-gate" — was too conservative: it lumped the **local store adapters** in with the UI/sync work they
-do not depend on. D49 records the correction and the human sign-off. `adapters/dexie` is now built
-(the five store ports over IndexedDB at schema v1, incl. the encrypted `KeyVault` — D49, D50), so
-the pattern for a real, contract-tested adapter directory is doubly established (`/ids`, `/dexie`).
+Phase 1 has been redirected (D51, ADR 19). It is now a **fully automated** content pipeline with no
+human in the quality loop at this stage: the bank is machine-generated from public GC sources
+(ADR 6; `content-factory.md` §4.1–§4.2) and gated by cross-family adversarial review (§4.4) plus
+deterministic validation (§4.5) alone. The week-one two-reader test and the 5% human sample are
+dropped; the human register check is deferred to the Phase 7 [R8] gate. The licence/originality
+rules (§4.1 reject unclear licences, §4.2 quote nothing) and R6 (no PSC reproduction) are
+non-negotiable and unchanged.
 
-`adapters/bank` is the same kind of slice and is decided next. It is the `ItemRepository`
-(`byIds`, `query`, `passage`, `form`, `scenario`, `bankVersion`): manifest fetch, lazy shard
-loading, and a service-worker cache keyed by content hash (§7 Phase 2, `architecture.md` §5.5).
-Its **mechanism is content-agnostic** — it fetches and caches whatever bank is published — so it is
-built and tested against a fixture manifest and the existing `itemRepositoryContract` /
-`CONTRACT_BANK` (`@palier/testing`), exactly as the stores were tested against theirs. What it must
-*not* do yet is bind to real published shards: those come from `@palier/content` (ADR 18) and are
-gated by the Phase 1 content go/no-go below. Build the adapter and its cache against fixtures;
-wire it to real content when the gate passes.
+**The slice, concretely** (`implementation-plan.md` §7 Phase 1 has the detail):
 
-**Still genuinely human-gated (do not self-direct these):**
+1. **`adapters/openai`** — the `AiProvider` adapter (resequenced here from Phase 4, because the
+   factory cannot run without it): model config as data, structured outputs with client-side
+   re-validation, retry, the anti-corruption translation layer. Held to its port contract; every AI
+   response Zod-parsed at the edge (`architecture.md` §8.2). Follows the `/ids`, `/dexie` adapter
+   pattern.
+2. **The five-stage pipeline as a CLI in `apps/factory`** — harvest (public GC sources + a licence
+   determination per source) → passage construction (original, band-tagged, nothing quoted) → item
+   drafting via the item type registry's prompt spec → cross-family review blind to the key →
+   deterministic validation → bank build into content-hashed shards.
+3. **The review-gate evaluation set** — 40–60 deliberately-defective items authored *as test
+   fixtures* (a broken item is a fixture, not expert content), the only direct measure of the gate.
+4. **Run a small sample batch (tens of items) end to end**, committed with its metrics. The
+   full-volume paid run to 500–700 items is a **deferred follow-on**, gated on the small run passing
+   and a funded key (chosen scope: build now, small run).
 
-- **The Phase 1 content go/no-go.** Whether the bank is good enough is a human register read plus
-  the OpenAI pipeline (§7 Phase 1, `content-factory.md`). Shipping product UI on an unvalidated bank
-  is building on sand.
-- **Product and UI direction.** Onboarding, the readiness card, the drill/feedback panel, the review
-  queue, settings and the pairing flow (§7 Phase 2) are design decisions, not derivations from the
-  spec. `product-requirements.md` §8/§10/§11 constrain but do not settle them.
-- **The `adapters/sync` `ScheduleEntry` merge (D43).** A design decision — add `updatedAt`, take the
-  lower Leitner box, or treat the schedule as device-local — not a derivation. It gates the sync
-  adapter, not the bank.
+**Exit criteria (automated):** pipeline runs end to end producing a committed sample batch (all
+schema-valid, `validate()`-clean, licence-cleared); review-gate detection ≥90% per defect class on
+the eval set; stage-4 yield 45–75%; deterministic validation + bank-build reproducibility green in
+CI; cost per accepted item measured.
 
-Standing human items, unchanged and still not a session's to close: **D12** (the inferred
-`X 0-10` band, checked against the PSC's published table before launch) and the name/domain
-decision in §12.1.
+**Note for the implementer:** this is a large, multi-part slice — plan it out before building
+(`apps/factory` is currently an empty stub, and `adapters/openai` does not exist). It needs a
+funded OpenAI key even for the small run (ADR 2); if none is available when you start, build against
+a mock/recorded AI adapter and leave the real run as the final step.
+
+**Still genuinely human-gated (separate from Phase 1, do not self-direct):**
+
+- **Product and UI direction** (§7 Phase 2) — onboarding, readiness card, drill/feedback, review
+  queue, settings, pairing. Design decisions, not derivations.
+- **The `adapters/sync` `ScheduleEntry` merge (D43)** — add `updatedAt`, take the lower Leitner box,
+  or treat the schedule as device-local. Gates the sync adapter.
+- **`adapters/bank`** (the `ItemRepository`: manifest fetch, lazy shards, service-worker cache) is a
+  content-agnostic Phase 2 slice buildable against fixtures whenever chosen; it is no longer *the*
+  next slice, having been superseded by the Phase 1 redirect.
+
+Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's
+table before launch) and the name/domain decision in §12.1.
 
 ---
 
@@ -223,17 +240,24 @@ Each phase's work breakdown lives in `implementation-plan.md` §7 and is expande
 tasks here **when the phase starts**, not before. Only the exit criteria are tracked
 in advance, because they are the actual gate.
 
-### Phase 1: Content factory — go/no-go on item quality
+### Phase 1: Content factory — automated go/no-go on item quality (ADR 19)
 
 Pipeline spec is `content-factory.md`. §7 is the schedule and the decision points only.
+**Fully automated — no human in the quality loop at this stage (ADR 19, D51).** Machine-generated
+from public GC sources (ADR 6); gated by cross-family review + deterministic validation alone.
 
-- [ ] Week 1 assumption test (A1): 30 hand-drafted passages read cold by two fluent GC French speakers, **before any pipeline code**
-- [ ] 500–700 published French items, reading and written expression, bands B and C
-- [ ] Stage 4 yield between 45 and 75 percent
-- [ ] Review gate detection ≥ 90 percent in **every** defect class (phase bar; 80 percent is the ongoing operational threshold)
-- [ ] Defect rate below 5 percent on a 5 percent human sample
-- [ ] Two or three fluent speakers read 30 items with no register flags
-- [ ] Cost per accepted item measured
+- [ ] `adapters/openai` — the `AiProvider` adapter (resequenced from Phase 4), Zod-parsed at the edge, contract-tested
+- [ ] The 5-stage CLI pipeline in `apps/factory`: harvest (licence-cleared public GC sources) → passages (original, nothing quoted) → draft → cross-family review → deterministic validation → bank build
+- [ ] Review-gate evaluation set (40–60 deliberately-defective items, authored as test fixtures)
+- [ ] A small sample batch (tens of items) run end to end and committed with its metrics
+- [ ] Review gate detection ≥ 90 percent in **every** defect class on the eval set (phase bar; 80 percent ongoing)
+- [ ] Stage 4 yield between 45 and 75 percent on the sample
+- [ ] Deterministic validation + bank-build reproducibility green in CI
+- [ ] Cost per accepted item measured on the sample run
+
+**Deferred follow-on (not an exit criterion):** full-volume run to 500–700 published items (reading + written expression, bands B/C), once the small run passes and a funded key is available (ADR 2).
+
+**Human register check is deferred, not deleted:** the Phase 7 [R8] "both languages reviewed by a human" gate (ADR 19's revisit trigger).
 
 **If these fail:** work down the descoping list in `content-factory.md` §9 in order. Option 5 is a legitimate outcome, not a failure.
 
@@ -1527,6 +1551,43 @@ align the docs to that. Recorded here because it moves work across a phase bound
   makes the ciphertext fail to authenticate. This is the *unit* half of [R12]; the *E2E* key-leak
   test across the whole app stays a Phase 4 exit criterion. `implementation-plan.md` §7 Phase 4 is
   annotated to say so.
+
+### D51 — Phase 1 is redirected to a fully automated content factory (ADR 19)
+**Date:** 21 September 2026 · **Status:** accepted (human-directed); recorded in **ADR 19**
+
+Human direction: Phase 1 should be an autonomous, machine-only pipeline that prepares content from
+public sources, with no human in the quality loop, and its full implementation is the next slice.
+
+The premise was half-already-true and it is worth stating so the change is understood correctly.
+Machine generation from public GC sources is *already* the design — **ADR 6** ("generated content is
+the default authoring path", revisit: never) plus `content-factory.md` §4.1 (harvest public GC
+material) and §4.2 (rewrite into original passages, "nothing is quoted"). What Phase 1 *added* on
+top was human validation: a week-one two-reader assumption test, a 5% human sample, and
+fluent-speaker register reads as the go/no-go. **That human gate is what this decision removes**,
+not the generation method.
+
+- **The register gate is now cross-family LLM review only** (§4.4), plus deterministic validation
+  (§4.5). The trade-off was put to the human with the risk named — the same class of model both
+  generates and is the sole judge of its own register, so a shared blind spot ships — and the human
+  chose it. **ADR 19** records the decision, the risk, and a *revisit when* (a later human read
+  disagrees, alpha register complaints, or the Phase 7 gate). The 5% human-sample machinery is
+  retained but off, so restoring it is a switch, not a rebuild.
+- **The one human check kept:** the Phase 7 pre-1.0 gate "both languages reviewed by a human"
+  ([R8]). Nothing reaches the *public* on a purely self-graded bank. (I flagged this as the floor;
+  the human did not remove it.)
+- **`adapters/openai` resequences from Phase 4 into Phase 1**, because the factory cannot run
+  without it. Phase 4 keeps the runtime-generation / writing / oral / BYOK-key extensions; the core
+  provider + translation layer land now. `implementation-plan.md` §7 Phase 1 and Phase 4 both say so.
+- **Scope chosen: build now, small run.** Build the whole pipeline + `adapters/openai`, run a small
+  sample batch (tens of items) end to end to prove it; the full-volume paid run to 500–700 items is
+  a deferred follow-on gated on the small run and a funded key (ADR 2). `apps/factory` is an empty
+  stub today, so this is a large multi-part slice that wants its own implementation plan.
+- **Non-negotiables reaffirmed, not touched:** §4.1 rejects unclear licences, §4.2 quotes nothing
+  (the published bank is CC BY 4.0, ADR 12), and R6 forbids reproducing real PSC items.
+
+Docs amended in place with pointers to ADR 19: `content-factory.md` §3/§4/§6/§8,
+`implementation-plan.md` §7 Phase 1 (rewritten) and Phase 4, and this file (*Next, decided*, the
+Phase 1 checklist, the header).
 
 ---
 

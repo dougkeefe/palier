@@ -49,6 +49,16 @@ Stated explicitly because most of the risk in this subsystem lives here rather t
 
 A1 and A2 are the load-bearing ones. Everything else is recoverable.
 
+**Amendment, 21 September 2026 (ADR 19).** Phase 1 no longer tests A1, A2 and A3 with a human
+reader. They are judged by the automated gate — cross-family adversarial review (§4.4) plus
+deterministic validation (§4.5) — with no human in the register loop at this stage. A3's hedge
+("needs a human in the register loop, at least as a sampling gate") is knowingly set aside for
+Phase 1: the trade-off, and the risk that a shared model blind spot on register passes unchecked,
+is recorded in ADR 19. The human read does not vanish from the project — it is the Phase 7 pre-1.0
+gate "both languages reviewed by a human" ([R8]). A4 (public GC source material under terms that
+permit derivative use) is **unchanged and still load-bearing**: §4.1 rejects unclear licences and
+§4.2 produces original passages that quote nothing.
+
 ---
 
 ## 4. Pipeline
@@ -73,7 +83,7 @@ Five stages. An earlier draft had six; corpus-based register scoring has been fo
                    ▼
             content/ (committed) ──► [build] ──► /bank/v{n}/ static shards
                    │
-                   └──► 5% sample for human spot check (confidence measure)
+                   └──► 5% sample tap (human spot check) — retained but OFF in Phase 1 (ADR 19)
 ```
 
 ### 4.1 Harvest
@@ -156,7 +166,15 @@ The factory's output cannot be verified by reading it, so it has to be measured.
 | Post-publication retirement rate | Whether items that passed every gate survive contact with users | Above 5 percent of a batch, treat as a gate failure |
 | User report rate per thousand items served | The signal that arrives before the statistics do | Any spike, investigate that batch |
 
-**The review-gate evaluation set** deserves emphasis because it is the only direct measurement of the gate. Forty to sixty hand-written items carrying deliberate defects across five classes: two defensible keys, a rationale that contradicts its option, France-specific register, a mis-tagged band, and the answer leaked in the stem. Run through stage 4 on every prompt or model change. An unmeasured gate is an unguarded bank.
+**The review-gate evaluation set** deserves emphasis because it is the only direct measurement of the gate. Forty to sixty items carrying deliberate defects across five classes: two defensible keys, a rationale that contradicts its option, France-specific register, a mis-tagged band, and the answer leaked in the stem. Run through stage 4 on every prompt or model change. An unmeasured gate is an unguarded bank.
+
+**Amendment, 21 September 2026 (ADR 19).** In Phase 1 the **Sample defect rate** metric is deferred:
+it compares the gate's verdict to a *human's*, and Phase 1 has no human in the loop. The gate is
+measured instead by review-gate detection on the evaluation set (the row above it). The eval set is
+authored *programmatically* as a set of test fixtures — deliberately-broken items are a fixture, not
+expert bank content, so authoring them is compatible with an automated Phase 1. Post-publication
+retirement rate and user report rate resume once there are users. The sample-defect metric returns
+when a human read resumes (ADR 19's revisit trigger, and the Phase 7 [R8] gate).
 
 ---
 
@@ -180,7 +198,7 @@ Not just build cost. This is the part an embedded section was hiding.
 
 | Risk | Likelihood | Impact | Response |
 | --- | --- | --- | --- |
-| Generated French is grammatical but reads as translated or European | High without mitigation | High. This is the failure that makes the product feel fake | Register veto in stage 4, exemplar anchoring in stage 3, and a human read of thirty passages in week one before anything else is built |
+| Generated French is grammatical but reads as translated or European | High without mitigation | High. This is the failure that makes the product feel fake | Register veto in stage 4 and exemplar anchoring in stage 3. The week-one human read is dropped in Phase 1 (ADR 19); the human register check is deferred to the Phase 7 [R8] gate, so this risk is carried more heavily through the alpha |
 | Review gate detects fewer defects than assumed | Medium | High | Measured directly by the evaluation set. If detection is below 80 percent, either the gate improves or hand review returns to the plan |
 | Correlated blind spots between drafter and reviewer | Medium | Medium | Cross-provider rather than cross-model, and the evaluation set would show it as a defect class with persistently low detection |
 | Licence determination is wrong on a source | Low | Medium | Nothing is quoted, so exposure is limited to structural similarity. Rejection on ambiguity, and provenance recorded so a takedown is a targeted removal |
