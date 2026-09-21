@@ -33,4 +33,11 @@ describe("@palier/engine public surface", () => {
     expect(typeof engine.workingSet).toBe("function");
     expect(typeof engine.weakestSubSkills).toBe("function");
   });
+
+  it("exports the daily planner and its budget shares", () => {
+    expect(typeof engine.planDay).toBe("function");
+    expect(engine.REVIEW_SHARE + engine.NEW_SHARE + engine.MAINTENANCE_SHARE).toBeCloseTo(1);
+    expect(engine.TAPER_DAYS).toBeGreaterThan(0);
+    expect(engine.SHORTEN_FACTOR).toBeLessThan(1);
+  });
 });

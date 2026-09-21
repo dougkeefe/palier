@@ -1,8 +1,8 @@
 # @palier/engine
 
 Pure algorithms: the band mapper, the exam scorer, the trend calculator, the Leitner
-scheduler and the selector today; the planner as it lands (`implementation-plan.md` §3.2).
-Everything is
+scheduler, the selector and the daily planner (`implementation-plan.md` §3.2) — the pure
+engine core is now complete. Everything is
 re-exported from `src/index.ts` — the package's public surface is the barrel, not a relative
 path, so a new algorithm is not done until it is exported there.
 

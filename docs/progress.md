@@ -66,7 +66,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/continue-docs-progress` | `@palier/engine` pure core, ahead of Phase 1 (sequencing note in `implementation-plan.md` §7). Slices 1–3 landed: Scorer + TrendCalculator + barrel (D32), Leitner Scheduler (D19 update), Selector + weakest-sub-skills (D33). Planner to follow | 20 September 2026 |
+| `dougkeefe/continue-dev-from-progress` | `@palier/engine` pure core, ahead of Phase 1 (sequencing note in `implementation-plan.md` §7). Slices 1–3 merged (Scorer + TrendCalculator, Scheduler, Selector — commit `70ad6b6`). Slice 4, the **Planner** (D34, D35), completes the core | 20 September 2026 |
 
 ---
 
@@ -208,10 +208,10 @@ Pipeline spec is `content-factory.md`. §7 is the schedule and the decision poin
 
 **The pure `@palier/engine` core is being built ahead of this phase** (sequencing note in
 `implementation-plan.md` §7; it is content-agnostic, so it does not wait on Phase 1). Landed so
-far: the exam **Scorer**, the **TrendCalculator**, the Leitner **Scheduler** and the **Selector**
-(with the weakest-sub-skills helper) — session log, 20 September 2026. The **Planner** follows.
-The phase's own tasks are expanded here when the phase formally starts; only the exit criteria are
-tracked in advance.
+far: the exam **Scorer**, the **TrendCalculator**, the Leitner **Scheduler**, the **Selector**
+(with the weakest-sub-skills helper) and the daily **Planner** — session log, 20 September 2026.
+The pure engine core (`implementation-plan.md` §3.2) is now complete. The phase's own tasks are
+expanded here when the phase formally starts; only the exit criteria are tracked in advance.
 
 - [ ] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]
 - [ ] Full offline operation after first load [R4]
@@ -940,11 +940,98 @@ fill even slots then odd" arrangement: it separates every sub-skill when the lar
 half the items, and degrades gracefully when one unavoidably dominates (the all-one-sub-skill
 case is a unit test). `now`/`random` are primitives throughout (D32).
 
+### D34 — The Planner budgets in item counts, not minutes
+**Date:** 20 September 2026 · **Status:** open, revisit if a per-item duration ever earns a home
+
+`architecture.md` §7.4 writes the daily plan as shares "of the daily minute goal" — due reviews
+capped at 40% of it, new items ~40%, maintenance ~20%. There is **no per-item duration** anywhere:
+not in `content/profiles/psc-sle.json`, not on `Item`, not in domain. Budgeting in minutes would
+mean either putting a duration constant in the engine — which ADR 9 forbids ("exam rules live in
+the profile, never in code", and a per-item minute estimate is exactly such a tunable number) — or
+adding per-skill/per-type minute estimates to the profile now, ahead of any consumer that needs
+them.
+
+So `planDay` takes `sessionSize`, a **total item count**, and splits it 40/40/20 via the exported
+`REVIEW_SHARE`/`NEW_SHARE`/`MAINTENANCE_SHARE` constants. Those shares and `TAPER_DAYS`/
+`SHORTEN_FACTOR` are engine tuning heuristics kept in code, consistent with the selector's own
+`RECENT_DAYS`/`WEAKEST_WEIGHT` — they are study heuristics, not published PSC exam rules, which is
+the line ADR 9 actually draws. An under-filled review bucket rolls its budget into new + maintenance
+at their 2:1 ratio, so a light-review day still fills to `sessionSize`.
+
+**The alternative — minute estimates in the profile — was considered and deferred.** It is more
+faithful to §7.4's wording, but it invents a tuning surface (and the arithmetic to convert it) with
+no consumer, for a Phase-2 display decision (how long a session should feel) that nobody has made.
+Revisit when a real "minutes per day" goal in the UI needs converting to counts; the fix is a
+minute→count model behind the same `planDay(sessionSize)` seam, no caller change.
+
+### D35 — Oral-session-findings injection is deferred to Phase 5
+**Date:** 20 September 2026 · **Status:** open, closes with the oral session types (Phase 5)
+
+§7.4 lists three plan adjustments: test-date proximity, **recent oral session findings (inject
+targeted items)**, and yesterday's completion. The first and third model cleanly from plain inputs
+and are built now — `testDate` drives the final-three-days taper (review only, no new items, one
+short confidence set, no mock advised in the last 24h) and `lastDayCompleted: false` shortens the
+day (`SHORTEN_FACTOR`, never lengthens). The **oral-findings** adjustment is deferred: the oral
+session/findings domain types do not exist yet (Phase 5, alongside `OralStore` — see D18's
+still-deferred ports), so building against them would invent a type ahead of its consumer, the
+exact thing D19/D28/D29 warn against.
+
+`planDay` therefore takes no oral input today. When Phase 5 lands the oral findings type, the
+injection is an additive input to `DayPlanInput` and a bucket that biases the new-item selection —
+no reshape of the existing signature. Recorded so the next session does not read the current
+`DayPlanInput` as the final shape.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 20 September 2026 — `dougkeefe/continue-dev-from-progress` (engine core, slice 4: the Planner)
+
+Daily plan generation (architecture.md §7.4), slice 4, which **completes the pure `@palier/engine`
+core** (`implementation-plan.md` §3.2: Selector, Scheduler, Planner, Scorer, BandMapper,
+TrendCalculator). Deviations **D34** (budget in item counts, not minutes — ADR 9) and **D35** (oral
+findings deferred to Phase 5) recorded. No ADR — the §3 module structure and the eight principles
+are untouched. No dependency added.
+
+Built `packages/engine/src/planner.ts` — `planDay(input, random, now)`:
+
+- A **composition**, not new arithmetic. New items go through `selectItems` practice mode (already
+  weights the three weakest sub-skills, §7.2); maintenance goes through `selectItems` diagnostic
+  mode over a pool pre-filtered to the working-set bands and away from the weakest sub-skills
+  ("strengths"); `weakestSubSkills` defines that split. No sampling or spacing code is added and the
+  selector's surface grows by nothing. `scheduleReview` is not called — due reviews arrive already
+  resolved to `Item`s (the app use case reads them from the `ScheduleStore`), so the planner needs
+  no `ExamProfile`.
+- **Split:** reviews capped at `REVIEW_SHARE` (40%) of the day; the remainder splits into new and
+  maintenance at their 2:1 ratio, so an under-filled review bucket rolls into learning and the day
+  still fills to `sessionSize`. Buckets are disjoint by construction (each `selectItems` call gets a
+  pool with the already-chosen ids removed).
+- **Adjustments (D35):** `testDate` within `TAPER_DAYS` (3) → taper: no new items, reviews plus one
+  short confidence set from strengths, and `mockExamAdvised` true only outside the final 24h.
+  `lastDayCompleted: false` → shorten by `SHORTEN_FACTOR` (0.5), never lengthen. Oral findings
+  deferred.
+- `now`/`random` are primitives (D32); budget is item counts, not minutes (D34). Exported from the
+  barrel; `index.test.ts` extended; `packages/engine/CLAUDE.md` updated (§10).
+
+Tests: `planner.test.ts` (the 40/40/20 split at a clean budget, review cap + roll-over, study
+order, buckets never overlap incl. a due review that is also in the pool, maintenance excludes the
+weakest sub-skill, shorten-after-a-miss and no-change-when-completed, the taper with its confidence
+set and the 24-hour mock blackout, taper on the test day, a beyond-window normal plan, a past test
+date, seed reproducibility and divergence, empty/undersupplied pool and zero budget) and
+`planner.property.test.ts` (§6.2: never over budget, buckets disjoint, tapering suppresses new items
+and the 24h mock rule, shortening never lengthens).
+
+**Verified:** `pnpm verify` green (**exit 0**) — check-types 14/14, lint clean, depcruise clean
+(**144 modules, 420 dependencies** in packages — +3 for the planner and its two test files; engine
+still imports `@palier/domain` only, no new arrow, `random`/`now` add none; **34 in `apps/web`**),
+**497 tests passed, 4 todo, 43 files**. Every glob coverage threshold held: **`@palier/engine` at
+100% branch** (no breach printed). The **disjoint-buckets property was proven to bite** — dropping
+the new-item exclusion from the maintenance pool failed `keeps the three buckets disjoint`, then
+reverted. `planDay` confirmed present in `packages/engine/dist/index.js` (D6). **Next:** the pure
+core is complete; the remaining phase-0 item is the deferred ports and the first `@palier/app` use
+case (Suggested next), which is what threads `clock.now()`/`random.next` into `planDay`.
 
 ### 20 September 2026 — `dougkeefe/continue-docs-progress` (engine core, slice 3: Selector + weakest sub-skills)
 
