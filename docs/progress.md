@@ -66,7 +66,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/continue-dev-from-progress` | `@palier/engine` pure core, ahead of Phase 1 (sequencing note in `implementation-plan.md` §7). Slices 1–3 merged (Scorer + TrendCalculator, Scheduler, Selector — commit `70ad6b6`). Slice 4, the **Planner** (D34, D35), completes the core | 20 September 2026 |
+| `dougkeefe/naypyidaw` | The first `@palier/app` use case, **`planDailySession`** — composes the ports and the engine Planner into today's plan, first exercising the D32 bridge (Clock/Random → engine primitives) and adding `buildUseCases` to the composition root. Deviations **D36**, **D37** | 20 September 2026 |
 
 ---
 
@@ -165,19 +165,25 @@ Built now rather than retrofitted — §7 is emphatic about this.
 The item type registry landed (session log, 19 September 2026), resolving D13 with **ADR 17**;
 the phase-0 scaffolding landed too (session log, 20 September 2026) — the `LICENSE` /
 `LICENSE-CONTENT` / `README` non-affiliation files [R5, R13] and the 60-item canonical fixture
-bank. Every phase-0 CI gate is built and every deferred phase-0 *mechanism* is closed. **One
-substantive phase-0 item remains:**
+bank. The pure `@palier/engine` core is complete, and the **first `@palier/app` use case**,
+`planDailySession`, has now landed (session log, 20 September 2026): the ports layer is
+load-bearing, `container.ts` has its `buildUseCases`, the fixture bank is wired into the
+hermetic container, and the D32 bridge is exercised. Every phase-0 CI gate is built and every
+deferred phase-0 *mechanism* is closed.
 
-1. The remaining ports and the first use cases: `SessionStore` and `OralStore` need their
-   signatures deciding and recording (D18's discipline), and
-   `AiProvider`/`SyncTransport`/`TelemetrySink` need their domain types (AI requests and
-   verdicts, sync documents, device identity, telemetry events) before they can be
-   transcribed. The codebase deliberately defers each until a consumer drives its shape
-   (`packages/app/CLAUDE.md`, `packages/testing/CLAUDE.md`), so this is best paired with the
-   first `@palier/app` use case — once one lands, `container.ts` gains `buildUseCases`. The
-   item type registry is available for a scoring/session use case to consume via
-   `itemTypeDefinition(item.type).score(...)`, and the fixture bank
-   (`fixtureBankRepository()`) now gives such a use case realistic data to run against.
+**What is now the natural next slice** (already Phase 2 territory — the same "build ahead"
+sequencing the engine core used):
+
+1. `AnswerItem` — appends an `Attempt`, scores it via the item registry
+   (`itemTypeDefinition(item.type).score(...)`), and *persists* the resulting review through
+   `scheduleReview` → `ScheduleStore.put`. That is the use case that **closes D19**: it adds
+   the Leitner `box` to `ScheduleEntry` and maps the engine's `Review` onto it. It reshapes a
+   port type, so it belongs in its own PR rather than bundled with `planDailySession`.
+2. The still-deferred ports: `SessionStore` and `OralStore` need their signatures deciding and
+   recording (D18's discipline), and `AiProvider`/`SyncTransport`/`TelemetrySink` need their
+   net-new domain types before they can be transcribed. Each still waits for the consumer that
+   drives its shape (`packages/app/CLAUDE.md`) — `SessionStore` first bites with session
+   checkpointing/resume, the AI trio with Phase 4/5.
 
 The French non-affiliation string in `apps/web/messages/fr.json` was owner-confirmed
 (D27, resolved); no open owner questions remain for this slice.
@@ -210,8 +216,11 @@ Pipeline spec is `content-factory.md`. §7 is the schedule and the decision poin
 `implementation-plan.md` §7; it is content-agnostic, so it does not wait on Phase 1). Landed so
 far: the exam **Scorer**, the **TrendCalculator**, the Leitner **Scheduler**, the **Selector**
 (with the weakest-sub-skills helper) and the daily **Planner** — session log, 20 September 2026.
-The pure engine core (`implementation-plan.md` §3.2) is now complete. The phase's own tasks are
-expanded here when the phase formally starts; only the exit criteria are tracked in advance.
+The pure engine core (`implementation-plan.md` §3.2) is now complete. The **first `@palier/app`
+use case, `planDailySession`, has also landed ahead of this phase** (session log, 20 September
+2026, D36/D37) — it composes the Planner over the ports, so `StartSession` (§3.2) will build on
+it. The phase's own tasks are expanded here when the phase formally starts; only the exit
+criteria are tracked in advance.
 
 - [ ] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]
 - [ ] Full offline operation after first load [R4]
@@ -981,11 +990,100 @@ injection is an additive input to `DayPlanInput` and a bucket that biases the ne
 no reshape of the existing signature. Recorded so the next session does not read the current
 `DayPlanInput` as the final shape.
 
+### D36 — The first `@palier/app` use case: `planDailySession`, and its input boundary
+**Date:** 20 September 2026 · **Status:** accepted
+
+The first use case (`packages/app/src/use-cases/plan-daily-session.ts`) composes the ports and the
+engine `planDay` (architecture.md §7.4) into today's plan. Four choices it settles:
+
+- **Convention.** Use cases live under `src/use-cases/`, one file per use case, each a plain async
+  function taking `(request, deps)` — `deps` are the collaborators the composition root supplies
+  (`packages/app/CLAUDE.md`: "use cases receive their collaborators"). This is the **first runtime
+  (non-type) export** from `@palier/app`; the barrel gained it beside the port types.
+- **Naming vs §3.2.** The §3.2 app row lists `StartSession, AnswerItem, …`, not a plan use case;
+  architecture §7.4 ("Daily plan generation") is where the daily plan is specified. `planDailySession`
+  implements §7.4 and is what `StartSession` will build on. Following the D32/D34 precedent — engine
+  reality reconciled to plan wording through a deviation, not by editing §3.2's illustrative list —
+  this is recorded rather than the list silently rewritten.
+- **Input boundary.** The study parameters `planDay` needs that no port cleanly vends — `skill`,
+  `lang`, `targetBand`, `sessionSize`, optional `testDate` — arrive as a typed **request object**
+  from the caller, *not* read from `SettingsStore` (untyped k/v) or a `SessionStore` (deferred, no
+  §3.3 signature). `lastDayCompleted` is accepted optionally but its real source is the deferred
+  `SessionStore`, so today's caller omits it (D35's "don't invent a type ahead of its consumer").
+  The optional fields are spread only when present, never passed as explicit `undefined`
+  (`exactOptionalPropertyTypes`, D14).
+- **Orchestration constants.** Due reviews are fetched with `limit = request.sessionSize` (the
+  planner caps reviews at 40% of it, so more is waste). Recent attempts are fetched with
+  `attempts.recent(skill, RECENT_ATTEMPTS_FETCHED = 500)` because the planner's two attempt
+  consumers want different windows (weakest sub-skill: last 50 per sub-skill; recent-exclusion: 14
+  days) and each applies its own internally — the use case supplies a broad slice and lets them
+  narrow it. A precise history-window policy is a Phase-2 tuning decision, deferred.
+
+The hermetic composition root's `items` became `fixtureBankRepository()` (was an empty
+`memoryItemRepository()`), so the use case has real seeded items to plan against and the wiring
+test asserts a non-empty plan — **this closes D31's "wire it with the first consumer"**.
+
+### D37 — `@palier/app` unit tests use local port stubs, not `@palier/testing`
+**Date:** 20 September 2026 · **Status:** accepted
+
+`@palier/testing` depends on `@palier/app` (a production dependency, because its in-memory ports and
+contract suites import the port types from there). So adding `@palier/testing` to `@palier/app` — even
+as a devDependency for tests — makes Turborepo's build task graph cyclic (`app build → testing build
+→ app build`), which it refuses. This is the **same cycle `@palier/engine` already sidesteps** (its
+slice-1 log: local fixtures, "importing `@palier/testing` would cycle through `@palier/app`").
+
+So `@palier/app`'s use-case unit tests construct small inline port stubs (a fixed `clock.now`, a
+seeded `random.next`, a `schedule.due` returning a set array, an `items` repo over a local item list
+built from `@palier/domain`, an `attempts.recent` returning a fixed slice). This is in fact **better**
+for a use-case unit test than a shared in-memory store: it controls each port's output precisely,
+including the miss and empty-queue guards. The "same graph from `@palier/testing`" that
+`implementation-plan.md` §3.5 describes still happens — at the **composition root** (`apps/web`, which
+*is* allowed to import `@palier/testing`), in the `buildUseCases` wiring test that plans a real
+session from the fixture bank. `packages/app/CLAUDE.md`'s testing line was corrected to say so.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 20 September 2026 — `dougkeefe/naypyidaw` (the first `@palier/app` use case: `planDailySession`)
+
+The first `@palier/app` use case, ahead of Phase 2 as a content-agnostic sequencing move (the same
+one that built the engine core early; `implementation-plan.md` §7). It makes the ports layer
+load-bearing (ADR 10) and first exercises the D32 bridge. Deviations **D36** (the use case, its
+convention, naming and input boundary) and **D37** (app tests use local stubs, not `@palier/testing`,
+because that package depends on `@palier/app`) recorded. No ADR — §3 and the eight principles are
+untouched. No dependency added.
+
+Built:
+
+- `packages/app/src/use-cases/plan-daily-session.ts` — `planDailySession(request, deps)`: reads
+  `clock.now()`, `schedule.due(now, sessionSize)` → resolves entries to items via `items.byIds`,
+  queries the pool via `items.query({ skill, exclude: dueIds })`, reads `attempts.recent(skill, 500)`,
+  and calls the engine `planDay(input, () => random.next(), now)`. Pure orchestration — no algorithm
+  (the CLAUDE.md mistake #3). First runtime export from `@palier/app`; barrel + `src/use-cases/index.ts`
+  export it.
+- `apps/web/src/lib/container.ts` — `buildUseCases(ports)` binds the use case to the ports; `Container`
+  gains `useCases`; the hermetic `items` became `fixtureBankRepository()` (closes D31). Header comment
+  updated.
+
+Tests: `plan-daily-session.test.ts` (11 tests, local stubs per D37) — reads the clock once and asks
+the schedule for what is due at that instant; resolves due entries to reviews; excludes due ids from
+the pool query; fetches recent attempts for the skill; threads the injected randomness; reproducible
+under the same seed; normal plan with no test date/flag; tapers within the test-date window; shortens
+after an incomplete day; no reviews but still fills when nothing is due; tolerates a due entry whose
+item is absent. `apps/web/src/lib/container.test.ts` extended: the use-case graph is assembled and
+plans a non-empty daily session from the fixture bank.
+
+**Verified:** `pnpm build` green (8/8), then `pnpm verify` green (**exit 0**) — check-types 14/14,
+lint clean, depcruise clean (**148 modules, 432 dependencies** in packages — `@palier/app` still
+imports `@palier/domain` + `@palier/engine` only, no new arrow; **36 in `apps/web`**, +2 for the
+engine `DayPlan` type and the `@palier/app` use-case import), **510 tests passed, 4 todo, 44 files**.
+Every glob coverage threshold held (`@palier/app` ≥95% branch; overall branches 97.39%). The
+**exclude-due-ids guard was proven to bite** — dropping `exclude: dueIds` failed `excludes the due
+item ids from the candidate pool query`, then reverted. `planDailySession` confirmed present in
+`packages/app/dist/index.js` (D6). **Next:** `AnswerItem`, which closes D19 (see Suggested next).
 
 ### 20 September 2026 — `dougkeefe/continue-dev-from-progress` (engine core, slice 4: the Planner)
 

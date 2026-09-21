@@ -3,15 +3,18 @@ import type {
   Clock,
   ItemRepository,
   KeyVault,
+  PlanDailySessionRequest,
   Random,
   ScheduleStore,
   SettingsStore,
 } from "@palier/app";
+import { planDailySession } from "@palier/app";
+import type { DayPlan } from "@palier/engine";
 import {
   fakeClock,
+  fixtureBankRepository,
   isHermetic,
   memoryAttemptStore,
-  memoryItemRepository,
   memoryKeyVault,
   memoryScheduleStore,
   memorySettingsStore,
@@ -33,13 +36,24 @@ import {
  * apps/web is explicitly allowed to import `@palier/testing` (the
  * `no-test-tooling-outside-testing` cruiser rule allows `^apps/web/`); this is
  * the sanctioned home for that import.
+ *
+ * The first use case has landed ahead of Phase 2, as a content-agnostic
+ * sequencing move (the same one that built the engine core early). So this now
+ * also assembles the use-case graph via `buildUseCases` and seeds the item
+ * repository from the canonical fixture bank (progress.md D36); the real
+ * adapters still arrive in Phase 2.
  */
 
 export type Env = {
   readonly hermetic: boolean;
 };
 
-export type Container = {
+/** The application use cases the UI drives, bound to the container's ports. */
+export type UseCases = {
+  readonly planDailySession: (request: PlanDailySessionRequest) => Promise<DayPlan>;
+};
+
+export type Ports = {
   readonly clock: Clock;
   readonly random: Random;
   readonly items: ItemRepository;
@@ -48,6 +62,27 @@ export type Container = {
   readonly settings: SettingsStore;
   readonly vault: KeyVault;
 };
+
+export type Container = Ports & {
+  readonly useCases: UseCases;
+};
+
+/**
+ * Bind the use cases to the ports. Everything a use case needs is handed to it
+ * here (implementation-plan.md §3.5); nothing else in the app constructs a port.
+ */
+function buildUseCases(ports: Ports): UseCases {
+  return {
+    planDailySession: (request) =>
+      planDailySession(request, {
+        clock: ports.clock,
+        random: ports.random,
+        items: ports.items,
+        schedule: ports.schedule,
+        attempts: ports.attempts,
+      }),
+  };
+}
 
 /** Read the environment the container branches on. */
 export function readEnv(
@@ -70,13 +105,15 @@ export function createContainer(env: Env): Container {
     );
   }
 
-  return {
+  const ports: Ports = {
     clock: fakeClock(),
     random: seededRandom(1),
-    items: memoryItemRepository(),
+    items: fixtureBankRepository(),
     attempts: memoryAttemptStore(),
     schedule: memoryScheduleStore(),
     settings: memorySettingsStore(),
     vault: memoryKeyVault(),
   };
+
+  return { ...ports, useCases: buildUseCases(ports) };
 }
