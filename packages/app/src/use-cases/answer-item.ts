@@ -6,6 +6,7 @@ import type {
   AttemptStore,
   Clock,
   ItemRepository,
+  ScheduleEntry,
   ScheduleStore,
 } from "../ports/index.js";
 
@@ -29,7 +30,9 @@ import type {
  *   id as a silent no-op, which would make that attempt loss rather than an
  *   error. An `IdGenerator` port over Web Crypto closes this, with the Phase 2
  *   drill route as the consumer that drives its shape. A caller-supplied id also
- *   makes a retried answer idempotent.
+ *   makes a retried answer idempotent: `AttemptStore.append` reports whether the
+ *   id was new, and a replay skips the Leitner reschedule below rather than
+ *   advancing the box a second time (D44).
  * - **The `slow` judgement arrives in the request** (D40), exactly as
  *   `scheduler.ts` specifies: "the timing-to-slow threshold is a product tuning
  *   decision the caller owns, so it arrives as a boolean rather than a duration".
@@ -46,7 +49,9 @@ import type {
 export type AnswerItemRequest = {
   /**
    * Minted by the caller (D39). Supplying the same id twice is a no-op at the
-   * `AttemptStore`, which is what makes a retried answer safe.
+   * `AttemptStore`, and `answerItem` reads that no-op signal to skip the Leitner
+   * reschedule too, so a retried answer neither double-records nor advances the
+   * box twice (D44) — which is what makes a retried answer safe.
    */
   readonly attemptId: AttemptId;
   readonly itemId: ItemId;
@@ -123,9 +128,17 @@ export const answerItem = async (
   // Append first: the attempt is the append-only, conflict-free record
   // (architecture.md 9.4). If the schedule write then fails, the evidence
   // survives and the box is recoverable; the other order loses the evidence.
-  await deps.attempts.append(attempt);
+  const appended = await deps.attempts.append(attempt);
 
   const existing = await deps.schedule.get(request.itemId);
+
+  // A retried answer carries the same attemptId, so the append was a no-op
+  // (`appended === false`) and the Leitner move it produced the first time is
+  // already persisted. Re-applying it would advance the box a second time, so
+  // return the schedule as it already stands: the whole use case is idempotent,
+  // not merely the attempt record (D44).
+  if (!appended) return { attempt, review: reviewOf(existing) };
+
   const shaky = !correct || request.changedAnswer || request.slow;
   if (existing === null && !shaky) return { attempt, review: null };
 
@@ -154,3 +167,11 @@ export const answerItem = async (
  */
 const currentBox = (stored: number | undefined, profile: ExamProfile): number =>
   stored === undefined ? 1 : Math.min(stored, retirementBox(profile));
+
+/**
+ * The persisted schedule state expressed as a `Review`, or null when the item is
+ * not in the queue. Used on the replay path so a retried answer returns the move
+ * that already landed rather than re-computing (and re-applying) it.
+ */
+const reviewOf = (entry: ScheduleEntry | null): Review | null =>
+  entry === null ? null : { box: entry.box, due: entry.due };

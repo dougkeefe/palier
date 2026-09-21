@@ -22,7 +22,10 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   decided here (progress.md D18–D20). `ScheduleEntry` is now complete —
   `{ itemId, due: ISO | null, skill, box }` — and `ScheduleStore` gained a `get`, because
   the Leitner rule needs the item's *current* box and `due`/`put` cannot supply it; §3.3 is
-  amended in place and progress.md D38 records it, closing D19.
+  amended in place and progress.md D38 records it, closing D19. `AttemptStore.append` was
+  likewise amended from `Promise<void>` to `Promise<boolean>` — it returns whether the attempt
+  was newly stored — so `answerItem` can keep its Leitner reschedule idempotent on a retry
+  (progress.md D44), the same "a use case needs a signal the port could not give" move as D38.
 - **Use cases live under `src/use-cases/`**, one file per use case, each a plain async
   function `(request, deps)` where `deps` are the collaborators the composition root supplies.
   They are **pure orchestration**: read the ports, call one or more engine functions, return a
@@ -42,7 +45,9 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   specifically *not* an entropy source — it is a seeded mulberry32 wired in production (§3.5),
   so minting from it would give two devices one id stream, and an `AttemptStore` treats a
   duplicate id as a silent no-op. That would be attempt loss, not an error, and it would break
-  the claim sync rests on (ADR 16, `architecture.md` §9.4).
+  the claim sync rests on (ADR 16, `architecture.md` §9.4). `append` returns whether the id was
+  new precisely so that no-op stays *silent to the store but visible to the use case*, which is
+  what lets `answerItem` guard its non-idempotent follow-on writes (D44).
 - **Unit-tested with local port stubs, not `@palier/testing`** (progress.md D37). `@palier/testing`
   depends on `@palier/app`, so importing it here would make Turborepo's build graph cyclic — the
   same cycle `@palier/engine` sidesteps. A use-case test builds small inline stubs (a fixed clock,

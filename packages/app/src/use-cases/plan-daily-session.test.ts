@@ -96,7 +96,7 @@ const itemsOf = (bank: readonly Item[]): ItemRepository => ({
 });
 
 const attemptsOf = (attempts: readonly Attempt[] = []): AttemptStore => ({
-  append: vi.fn(() => Promise.resolve()),
+  append: vi.fn(() => Promise.resolve(true)),
   recent: vi.fn(() => Promise.resolve(attempts)),
   since: vi.fn(() => Promise.resolve(attempts)),
   forItem: vi.fn(() => Promise.resolve([])),

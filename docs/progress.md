@@ -66,7 +66,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/continue-docs-progress-v1` | The second `@palier/app` use case, **`answerItem`** — scores through the item registry, appends the `Attempt`, and persists the Leitner move. **Closes D19** by completing `ScheduleEntry` and adding `ScheduleStore.get`. Deviations **D38**–**D42**, **ADR 18** | 20 September 2026 |
+| `dougkeefe/continue-docs-progress-v1` | The second `@palier/app` use case, **`answerItem`** — scores through the item registry, appends the `Attempt`, and persists the Leitner move. **Closes D19** by completing `ScheduleEntry` and adding `ScheduleStore.get`. Deviations **D38**–**D42**, **D44**, **ADR 18** | 20 September 2026 |
 | `dougkeefe/naypyidaw` | The first `@palier/app` use case, **`planDailySession`** — composes the ports and the engine Planner into today's plan, first exercising the D32 bridge (Clock/Random → engine primitives) and adding `buildUseCases` to the composition root. Deviations **D36**, **D37** | 20 September 2026 |
 
 ---
@@ -1232,6 +1232,32 @@ without the sync design in front of you:
 Option 2 is the current favourite because it needs no schema change and fails safe, but this
 entry deliberately does not choose. `architecture.md` §9.1 and §9.4 both point here, and
 `implementation-plan.md` §7's Phase 2 sync bullet names it as work.
+
+### D44 — `AttemptStore.append` returns whether the id was new, so a retried answer is fully idempotent
+**Date:** 21 September 2026 · **Status:** accepted
+
+D39 claimed "a retried answer is idempotent, because replaying the same id is a no-op at the
+store." That was true of the **attempt record** and false of everything `answerItem` does after
+it. `append` returned `Promise<void>`, so the use case could not tell a fresh answer from a
+replay; it read `schedule.get` and reran the Leitner rule unconditionally. A genuine retry — a
+network retry or a double-submit carrying the same `attemptId` — therefore advanced the box a
+second time: an already-scheduled item answered correctly, fast and unwavering went box 2 → 3 on
+the first call and 3 → 4 on the identical retry, so the item was reviewed later than earned and
+retired early. (Incorrect and correct-but-shaky answers happened to be idempotent, since they
+reset to box 1 or held the box, which is why the gap was easy to miss.)
+
+The fix is the **D38 move again**: a use case's correctness needs a signal the port cannot give,
+so the port is amended in place. `append` now resolves to `boolean` — `true` when the attempt was
+newly stored, `false` on the duplicate no-op. `answerItem` reads it and, on a replay, returns the
+schedule exactly as it already stands (`reviewOf(existing)`) rather than re-applying the move. The
+attempt append stays a silent no-op at the store; the boolean makes that no-op *visible to the use
+case* without making it an error, which is the whole point.
+
+`§3.3`, `packages/app/CLAUDE.md`, the in-memory store and its contract suite are updated together.
+The alternative — detecting the replay by scanning `AttemptStore.forItem` for the id before
+appending — was rejected: it adds a read on every answer and infers from a query what the write
+already knows. Considered and rejected because it re-derives a fact the store holds, the same
+instinct D38 records against replaying the Leitner fold.
 
 ---
 

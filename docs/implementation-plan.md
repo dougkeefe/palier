@@ -102,7 +102,10 @@ interface ItemRepository {
 }
 
 // Local persistence, one port per aggregate
-interface AttemptStore   { append(a: Attempt): Promise<void>; recent(skill: Skill, n: number): Promise<Attempt[]>; since(t: ISO): Promise<Attempt[]>; forItem(id: ItemId): Promise<Attempt[]> }
+interface AttemptStore   { append(a: Attempt): Promise<boolean>; recent(skill: Skill, n: number): Promise<Attempt[]>; since(t: ISO): Promise<Attempt[]>; forItem(id: ItemId): Promise<Attempt[]> }
+// `append` returns whether the attempt was newly stored (false = the duplicate-id no-op).
+// Amended from `Promise<void>` 21 September 2026: `answerItem` needs the signal to keep its
+// Leitner reschedule idempotent on a retry, which `void` could not supply. See progress.md D44.
 // no EstimateStore: the trend is derived from recent attempts on demand, so there is
 // nothing to persist, nothing to invalidate and nothing to reconcile during sync (ADR 16)
 interface ScheduleStore  { due(now: ISO, limit: number): Promise<ScheduleEntry[]>; get(id: ItemId): Promise<ScheduleEntry | null>; put(e: ScheduleEntry): Promise<void> }

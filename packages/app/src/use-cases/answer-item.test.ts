@@ -86,18 +86,45 @@ const itemsOf = (bank: readonly Item[], bankVersion = 7): ItemRepository => ({
   bankVersion: vi.fn(() => Promise.resolve(bankVersion)),
 });
 
-const attemptsOf = (): AttemptStore => ({
-  append: vi.fn(() => Promise.resolve()),
-  recent: vi.fn(() => Promise.resolve([])),
-  since: vi.fn(() => Promise.resolve([])),
-  forItem: vi.fn(() => Promise.resolve([])),
-});
+const attemptsOf = (): AttemptStore => {
+  const seen = new Set<string>();
+  return {
+    // Mirrors the store contract: a fresh id appends and returns true, a
+    // duplicate is a no-op and returns false.
+    append: vi.fn((a: Attempt) => {
+      if (seen.has(a.id)) return Promise.resolve(false);
+      seen.add(a.id);
+      return Promise.resolve(true);
+    }),
+    recent: vi.fn(() => Promise.resolve([])),
+    since: vi.fn(() => Promise.resolve([])),
+    forItem: vi.fn(() => Promise.resolve([])),
+  };
+};
 
 const scheduleOf = (existing: ScheduleEntry | null = null): ScheduleStore => ({
   due: vi.fn(() => Promise.resolve([])),
   get: vi.fn(() => Promise.resolve(existing)),
   put: vi.fn(() => Promise.resolve()),
 });
+
+/**
+ * A schedule stub whose `put` updates what `get` returns, so a second call in the
+ * same test sees the first call's write. The static `scheduleOf` cannot show the
+ * replay guard working: its `get` keeps returning the original box, so even an
+ * unguarded reschedule would look idempotent by accident.
+ */
+const statefulSchedule = (initial: ScheduleEntry | null = null): ScheduleStore => {
+  let entry = initial;
+  return {
+    due: vi.fn(() => Promise.resolve([])),
+    get: vi.fn(() => Promise.resolve(entry)),
+    put: vi.fn((e: ScheduleEntry) => {
+      entry = e;
+      return Promise.resolve();
+    }),
+  };
+};
 
 const anEntry = (over: Partial<ScheduleEntry> = {}): ScheduleEntry => ({
   itemId: ITEM_ID,
@@ -223,7 +250,7 @@ describe("answerItem: scoring and the attempt record", () => {
       ...attemptsOf(),
       append: vi.fn((a: Attempt) => {
         order.push(`append:${a.id}`);
-        return Promise.resolve();
+        return Promise.resolve(true);
       }),
     };
     const schedule: ScheduleStore = {
@@ -368,5 +395,37 @@ describe("answerItem: the Leitner move it persists", () => {
     const result = await answerItem(aRequest(), depsWith({ schedule }));
 
     expect(result.review?.box).toBe(RETIREMENT);
+  });
+});
+
+/**
+ * A retried answer carries the same attemptId (D39/D44). The attempt append is a
+ * no-op the second time, and the Leitner move must be too — otherwise a network
+ * retry or double-submit advances the box again and the item retires early.
+ */
+describe("answerItem: a retried answer is idempotent", () => {
+  it("does not advance the box when the same attempt id is submitted twice", async () => {
+    const schedule = statefulSchedule(anEntry({ box: 2 }));
+    const deps = depsWith({ schedule });
+    const request = aRequest(); // correct, fast, unwavering
+
+    const first = await answerItem(request, deps);
+    const second = await answerItem(request, deps);
+
+    expect(first.review?.box).toBe(3);
+    expect(second.review?.box).toBe(3);
+    expect(schedule.put).toHaveBeenCalledTimes(1);
+  });
+
+  it("writes nothing on a replay of an answer that never entered the queue", async () => {
+    const schedule = statefulSchedule(null);
+    const deps = depsWith({ schedule });
+    const request = aRequest(); // correct, fast, unwavering, unscheduled
+
+    await answerItem(request, deps);
+    const second = await answerItem(request, deps);
+
+    expect(second.review).toBeNull();
+    expect(schedule.put).not.toHaveBeenCalled();
   });
 });
