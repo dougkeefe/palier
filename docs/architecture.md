@@ -542,6 +542,25 @@ type Attempt = {
 }
 ```
 
+Schedule entry (added 20 September 2026, with the `AnswerItem` use case; `implementation-plan.md` §3.3 and `progress.md` D38):
+
+```ts
+type ScheduleEntry = {
+  itemId: string
+  due: string | null      // null once the item retires from the queue
+  skill: Skill
+  box: number             // 1 to the retirement box, indexing the profile's intervals
+}
+```
+
+Three notes for whoever writes the Dexie adapter.
+
+The `stores()` string above is unchanged and still correct: it declares the primary key and the indexes, and `box` is neither — nothing queries on it. Adding it would index a value that is only ever read by id.
+
+`due` is nullable **and that is load-bearing**. IndexedDB does not index a record whose key path is null, so a retired entry drops out of the `due` index while remaining addressable by `itemId` — which is exactly the wanted behaviour, and is why `ScheduleStore` has a `get`. It is asserted in the port contract suite ("never returns a retired entry from due, but still returns it from get") rather than left to each implementation to rediscover.
+
+The schedule is replicated (section 12, "a replica of progress records"), and section 9.4 resolves conflicts by last write wins on `updatedAt` — **which this record does not carry**. That is an open Phase 2 question, not an oversight to fix here: a bare last-write-wins on `box` can regress an item's progress when two devices drill the same item offline, so the sync work has to decide between adding `updatedAt`, merging by taking the lower box (the conservative reading of Leitner), or treating the schedule as device-local. Recorded so that decision is made deliberately rather than inherited from the default.
+
 Storage budget: attempts are about 200 bytes each, so a heavy user generating 20,000 attempts over a year uses roughly 4 MB. Oral audio is the constraint at roughly 1 MB per minute of Opus. Policy: keep the last 10 oral sessions' audio, keep transcripts forever, warn at 200 MB, and offer a one-tap cleanup. Handle `QuotaExceededError` by evicting oldest audio first and telling the user.
 
 ### 9.2 Cloud (Postgres via Drizzle)
@@ -594,7 +613,7 @@ Sync is on by default with no sign-in (ADR 4), so identity comes from the device
 
 - **Trigger:** on app focus if more than 5 minutes have elapsed, debounced 30 seconds after a session completes, on demand from settings, and on reconnect after offline.
 - **Protocol:** push local records with `updatedAt` greater than the last watermark, pull server records newer than the same watermark, resolve per record, advance the watermark. Batched, gzipped, capped at 500 records per request with continuation.
-- **Conflict resolution:** last write wins by `updatedAt`, with two cases that never conflict by construction. Attempts are append-only and keyed by client-generated ULID. Estimates are not synced as values at all; each device recomputes them from the merged attempt set, which removes the hardest conflict case entirely.
+- **Conflict resolution:** last write wins by `updatedAt`, with two cases that never conflict by construction. Attempts are append-only and keyed by client-generated ULID. Estimates are not synced as values at all; each device recomputes them from the merged attempt set, which removes the hardest conflict case entirely. **One record does not fit this rule yet:** `ScheduleEntry` carries no `updatedAt`, and last write wins on its `box` can regress an item's progress. Section 9.1 states the three options; choosing between them is Phase 2 work (`progress.md` D43).
 - **Never synced, under any setting:** the API key, session audio, oral transcripts, writing workshop submissions, and the cost ledger. Transcripts and submissions can contain anything the user chose to say or write, so they stay on the device. This list appears verbatim in the settings UI.
 - **Disabling sync:** stops outbound requests immediately, and offers server-side deletion. Turning it back on pushes the full local set.
 - **Deletions:** tombstone for 90 days, then hard delete.

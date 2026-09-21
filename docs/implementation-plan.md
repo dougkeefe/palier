@@ -84,6 +84,8 @@ Six packages. See ADR 10 for the reasoning and for the twelve-package arrangemen
 
 `@palier/engine` and `@palier/domain` are the two worth publishing to npm, which keeps their boundaries honest because an external consumer would notice a leak.
 
+**A seventh workspace, added 20 September 2026, which is not a seventh package.** `content/` is a pnpm workspace named `@palier/content`: private, no `src`, no build, no tests, no TypeScript project, and no code for anything to import. It publishes the exam profile — and, from phase 2, the bank shards — through an `exports` map, so `apps/web` can import them by package name rather than by a relative path out of its own directory, which §4's `dependency-cruiser` rules reject (`no-relative-escape`). The six packages above are unchanged and it appears in no §3.1 arrow. See ADR 18 and `progress.md` D42.
+
 The engine receives time and randomness as **primitives** — an ISO-8601 `now: string` and a `random: () => number` — not the `Clock` and `Random` port *objects*, which live in `@palier/app`, a package the engine may not import (§3.1). "Given Clock and Random as parameters" (the engine row above) means given those capabilities: the use case that calls an engine function reads `clock.now()` / `random.next` and passes the values down, and no engine type names `Clock`, `Random` or `ISO`. See progress.md deviation D32.
 
 ### 3.3 The ports
@@ -100,10 +102,17 @@ interface ItemRepository {
 }
 
 // Local persistence, one port per aggregate
-interface AttemptStore   { append(a: Attempt): Promise<void>; recent(skill: Skill, n: number): Promise<Attempt[]>; since(t: ISO): Promise<Attempt[]>; forItem(id: ItemId): Promise<Attempt[]> }
+interface AttemptStore   { append(a: Attempt): Promise<boolean>; recent(skill: Skill, n: number): Promise<Attempt[]>; since(t: ISO): Promise<Attempt[]>; forItem(id: ItemId): Promise<Attempt[]> }
+// `append` returns whether the attempt was newly stored (false = the duplicate-id no-op).
+// Amended from `Promise<void>` 21 September 2026: `answerItem` needs the signal to keep its
+// Leitner reschedule idempotent on a retry, which `void` could not supply. See progress.md D44.
 // no EstimateStore: the trend is derived from recent attempts on demand, so there is
 // nothing to persist, nothing to invalidate and nothing to reconcile during sync (ADR 16)
-interface ScheduleStore  { due(now: ISO, limit: number): Promise<ScheduleEntry[]>; put(e: ScheduleEntry): Promise<void> }
+interface ScheduleStore  { due(now: ISO, limit: number): Promise<ScheduleEntry[]>; get(id: ItemId): Promise<ScheduleEntry | null>; put(e: ScheduleEntry): Promise<void> }
+// ScheduleEntry = { itemId, due: ISO | null, skill, box }. `get` and the shape were added
+// 20 September 2026 with the AnswerItem use case: applying the Leitner rule needs the item's
+// CURRENT box, which due/put cannot supply, and `due` is null once an item retires from the
+// queue. See progress.md D38, which closes D19.
 interface SessionStore   { /* checkpointing, resume */ }
 interface OralStore      { /* transcripts and audio blobs, local only */ }
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
@@ -217,11 +226,18 @@ export function createContainer(env: Env): Container {
   const stores = createDexieStores()
   const ai = createAiProvider(env.aiProvider, vault)   // small factory, see 3.4
   const sync = env.syncEnabled ? new HttpSyncTransport(vault) : new NullSyncTransport()
-  return buildUseCases({ clock, random: seededRandom(), items, stores, ai, sync, telemetry })
+  const profile = parseExamProfileOrThrow(pscSleProfile)   // @palier/content, ADR 18
+  return buildUseCases({ clock, random: seededRandom(), items, stores, ai, sync, telemetry, profile })
 }
 ```
 
 Tests build the same graph from `@palier/testing` with in-memory everything, which means a use case test runs in milliseconds with no mocking framework.
+
+Two things about this sketch, both added 20 September 2026 after they caused real trouble.
+
+**`random: seededRandom()` is the *selection* randomness (ADR 7), and it is not an entropy source.** It is a seeded four-line generator whose whole purpose is that a selection is reproducible, and production wires a seeded one deliberately. Nothing may mint an identifier from it: two devices would share an id stream, and because an `AttemptStore` treats a duplicate ULID as a no-op rather than an error, the collision would be silent data loss rather than a crash — which would break the very property that makes sync conflict-free (ADR 16, `architecture.md` §9.4). Identifiers come from Web Crypto, in an adapter. See `progress.md` D39.
+
+**The `ExamProfile` is parsed here and handed down as configuration.** It is not a port and there is no `ProfileRepository` in §3.3: the composition root reads it once, validates it at that boundary, and every use case that needs it receives the same instance. A per-call study parameter — a skill, a target band, a session size — is a request field instead. See `progress.md` D42.
 
 ### 3.6 What this buys, concretely
 
@@ -248,7 +264,7 @@ Architecture that is not enforced decays in about three months. Five mechanisms,
 4. **`typescript` project references** with `strict`, `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`. Composite builds mean a boundary violation is a compile error.
 5. **Architecture tests** in `packages/domain/__tests__/architecture.test.ts`: assert that engine exports are pure (no `Date.now`, no `Math.random`, no `fetch` in the built output), that every item type in the registry has all five members plus its a11y contract, and that every exam profile validates.
 
-Plus a social mechanism that is already in place rather than planned: the `adr/` directory holds sixteen decision records covering everything decided so far. Two working rules for it. An ADR is never edited after it is accepted, only superseded by a later one, so the history of the project's thinking stays readable. And a contributor who disagrees with a decision writes the next ADR rather than arguing with a specification, which keeps disagreement productive and leaves a trail. Numbers are assigned in order of acceptance, so take the next free one rather than a number some earlier note reserved.
+Plus a social mechanism that is already in place rather than planned: the `adr/` directory holds eighteen decision records covering everything decided so far. Two working rules for it. An ADR is never edited after it is accepted, only superseded by a later one, so the history of the project's thinking stays readable. And a contributor who disagrees with a decision writes the next ADR rather than arguing with a specification, which keeps disagreement productive and leaves a trail. Numbers are assigned in order of acceptance, so take the next free one rather than a number some earlier note reserved.
 
 Each ADR carries a "revisit when" clause naming the evidence that would justify changing it. That clause is what stops a deferred decision from becoming a permanent prohibition, and it is the first thing to check when something in the architecture feels wrong.
 
@@ -561,7 +577,7 @@ This is a separate subsystem with its own specification. `content-factory.md` ho
 - `@palier/engine`: TrendCalculator (accuracy per band tag plus Wilson interval), Selector (filter and weighted shuffle), Scheduler (Leitner boxes), Planner, Scorer, BandMapper. Kept small enough that exhaustive unit testing with worked examples at every boundary is achievable. If it stops being that small, that is a signal to revisit, not to lower the testing bar.
 - `adapters/dexie`: the store ports, schema version 1, migration harness.
 - `adapters/bank`: manifest fetch, lazy shard loading, service worker cache keyed by content hash.
-- `adapters/vault` and `adapters/sync`: device secret, anonymous registration, pairing by code, push and pull, watermarks, retry, offline queue.
+- `adapters/vault` and `adapters/sync`: device secret, anonymous registration, pairing by code, push and pull, watermarks, retry, offline queue. **Decide how a `ScheduleEntry` merges**, which the general last-write-wins rule does not cover: it has no `updatedAt`, and a naive merge can regress an item's Leitner box (`architecture.md` §9.1, `progress.md` D43).
 - Sync backend: Postgres schema, Drizzle, the sync and device routes from architecture spec section 10, deferred account creation, pairing by code, rate limiting on device registration. No auth library, no email, no OAuth (ADR 5).
 - `@palier/app`: StartSession, AnswerItem, CompleteSession, RunDiagnostic, SyncNow, ExportData, ImportData, WipeData.
 - UI: onboarding, home with the readiness card (last exam result plus practice trend, kept visually distinct), today's plan, the drill session with the feedback panel, review queue, progress, settings for sync and data including the pairing flow and the plain sentence about no recovery.

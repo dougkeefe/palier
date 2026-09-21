@@ -1,4 +1,6 @@
 import type {
+  AnswerItemRequest,
+  AnswerItemResult,
   AttemptStore,
   Clock,
   ItemRepository,
@@ -8,7 +10,10 @@ import type {
   ScheduleStore,
   SettingsStore,
 } from "@palier/app";
-import { planDailySession } from "@palier/app";
+import { answerItem, planDailySession } from "@palier/app";
+import pscSleProfile from "@palier/content/profiles/psc-sle.json";
+import type { ExamProfile } from "@palier/domain";
+import { parseExamProfileOrThrow } from "@palier/domain";
 import type { DayPlan } from "@palier/engine";
 import {
   fakeClock,
@@ -26,23 +31,38 @@ import {
  * place that names concrete adapters. Everything else is handed what it needs.
  *
  * Phase 0 state, stated plainly: the real adapters (Dexie, bank, vault, sync)
- * and the use cases they feed do not exist yet — they land in Phase 2. So today
- * this wires only the in-memory ports from `@palier/testing`, and only for the
- * hermetic path that Playwright drives (playwright.config.ts sets
- * `PALIER_HERMETIC=1`; the flag name lives in `@palier/testing` so the two
- * cannot disagree). `@palier/app` exposes no `buildUseCases` yet, so this
- * returns the raw ports; the use-case graph is added here when it exists.
+ * do not exist yet — they land in Phase 2. So today this wires only the
+ * in-memory ports from `@palier/testing`, and only for the hermetic path that
+ * Playwright drives (playwright.config.ts sets `PALIER_HERMETIC=1`; the flag
+ * name lives in `@palier/testing` so the two cannot disagree). The production
+ * path throws rather than silently wiring test doubles into a real deployment.
  *
  * apps/web is explicitly allowed to import `@palier/testing` (the
  * `no-test-tooling-outside-testing` cruiser rule allows `^apps/web/`); this is
  * the sanctioned home for that import.
  *
- * The first use case has landed ahead of Phase 2, as a content-agnostic
- * sequencing move (the same one that built the engine core early). So this now
- * also assembles the use-case graph via `buildUseCases` and seeds the item
- * repository from the canonical fixture bank (progress.md D36); the real
- * adapters still arrive in Phase 2.
+ * Two use cases have landed ahead of Phase 2, as a content-agnostic sequencing
+ * move (the same one that built the engine core early), so this assembles the
+ * use-case graph via `buildUseCases` and seeds the item repository from the
+ * canonical fixture bank (progress.md D36, D38).
  */
+
+/**
+ * The exam profile, parsed once here. Parsing at the composition root is the same
+ * boundary discipline every other artefact gets: the file is validated before any
+ * use case can act on it, and `parseExamProfileOrThrow` is the only thing that
+ * turns the raw JSON into an `ExamProfile` (ADR 9).
+ *
+ * It arrives through `@palier/content`'s exports map rather than a relative path.
+ * A relative import out of `apps/web` is exactly what `.dependency-cruiser.cjs`'s
+ * `no-relative-escape` rule forbids — "cross-package imports go through the
+ * package name, so they resolve through the exports map" (ADR 18, progress.md D42).
+ *
+ * In Phase 2 the bank adapter fetches content over HTTP and caches it in a service
+ * worker (architecture.md §5.3); this bundled copy is what the hermetic path and
+ * the static build use until then.
+ */
+const PROFILE: ExamProfile = parseExamProfileOrThrow(pscSleProfile);
 
 export type Env = {
   readonly hermetic: boolean;
@@ -51,6 +71,7 @@ export type Env = {
 /** The application use cases the UI drives, bound to the container's ports. */
 export type UseCases = {
   readonly planDailySession: (request: PlanDailySessionRequest) => Promise<DayPlan>;
+  readonly answerItem: (request: AnswerItemRequest) => Promise<AnswerItemResult>;
 };
 
 export type Ports = {
@@ -80,6 +101,14 @@ function buildUseCases(ports: Ports): UseCases {
         items: ports.items,
         schedule: ports.schedule,
         attempts: ports.attempts,
+      }),
+    answerItem: (request) =>
+      answerItem(request, {
+        clock: ports.clock,
+        items: ports.items,
+        attempts: ports.attempts,
+        schedule: ports.schedule,
+        profile: PROFILE,
       }),
   };
 }

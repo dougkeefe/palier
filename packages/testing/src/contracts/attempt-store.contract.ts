@@ -33,6 +33,13 @@ export const attemptStoreContract = (
       expect(await store.recent("reading", 10)).toHaveLength(1);
     });
 
+    it("reports whether an append was new: true for a fresh id, false for a duplicate", async () => {
+      const store = await make();
+
+      expect(await store.append(anAttempt({ id: attemptId("a") }))).toBe(true);
+      expect(await store.append(anAttempt({ id: attemptId("a") }))).toBe(false);
+    });
+
     it("returns nothing for a timestamp in the future", async () => {
       const store = await make();
       await store.append(anAttempt({ ts: "2026-01-01T00:00:00.000Z" }));

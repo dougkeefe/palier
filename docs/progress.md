@@ -66,6 +66,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/continue-docs-progress-v1` | The second `@palier/app` use case, **`answerItem`** — scores through the item registry, appends the `Attempt`, and persists the Leitner move. **Closes D19** by completing `ScheduleEntry` and adding `ScheduleStore.get`. Deviations **D38**–**D42**, **D44**, **ADR 18** | 20 September 2026 |
 | `dougkeefe/naypyidaw` | The first `@palier/app` use case, **`planDailySession`** — composes the ports and the engine Planner into today's plan, first exercising the D32 bridge (Clock/Random → engine primitives) and adding `buildUseCases` to the composition root. Deviations **D36**, **D37** | 20 September 2026 |
 
 ---
@@ -162,31 +163,29 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Suggested next three
 
-The item type registry landed (session log, 19 September 2026), resolving D13 with **ADR 17**;
-the phase-0 scaffolding landed too (session log, 20 September 2026) — the `LICENSE` /
-`LICENSE-CONTENT` / `README` non-affiliation files [R5, R13] and the 60-item canonical fixture
-bank. The pure `@palier/engine` core is complete, and the **first `@palier/app` use case**,
-`planDailySession`, has now landed (session log, 20 September 2026): the ports layer is
-load-bearing, `container.ts` has its `buildUseCases`, the fixture bank is wired into the
-hermetic container, and the D32 bridge is exercised. Every phase-0 CI gate is built and every
-deferred phase-0 *mechanism* is closed.
+`planDailySession` and now **`answerItem`** have both landed (session log, 20 September 2026),
+so the practice loop exists end to end inside `@palier/app`: a day can be planned from the bank
+and an answer can be scored, recorded and scheduled. Every phase-0 CI gate is built, and every
+deferred phase-0 *mechanism* is closed. **D19 is closed**; the still-open deviations are all
+"waiting for the consumer that drives the shape", which is the intended state.
 
-**What is now the natural next slice** (already Phase 2 territory — the same "build ahead"
-sequencing the engine core used):
+What is now the natural next slice, in order:
 
-1. `AnswerItem` — appends an `Attempt`, scores it via the item registry
-   (`itemTypeDefinition(item.type).score(...)`), and *persists* the resulting review through
-   `scheduleReview` → `ScheduleStore.put`. That is the use case that **closes D19**: it adds
-   the Leitner `box` to `ScheduleEntry` and maps the engine's `Review` onto it. It reshapes a
-   port type, so it belongs in its own PR rather than bundled with `planDailySession`.
-2. The still-deferred ports: `SessionStore` and `OralStore` need their signatures deciding and
-   recording (D18's discipline), and `AiProvider`/`SyncTransport`/`TelemetrySink` need their
-   net-new domain types before they can be transcribed. Each still waits for the consumer that
-   drives its shape (`packages/app/CLAUDE.md`) — `SessionStore` first bites with session
-   checkpointing/resume, the AI trio with Phase 4/5.
+1. **`SessionStore`, then `StartSession` / `CompleteSession`.** This is the one that unblocks
+   the most: `SessionStore` has been deferred since D18 for want of a §3.3 signature, and
+   `planDailySession`'s `lastDayCompleted` has been waiting on it since D36. Checkpointing and
+   resume are what it is for (§3.3's comment), and `architecture.md` E2E journey 3 — a 90-minute
+   exam surviving a reload — is the requirement that eventually judges it.
+2. **The `IdGenerator` port and the first adapter** (D39). `answerItem` takes its `attemptId`
+   from the caller because nothing may mint one; a Web Crypto implementation closes that. It is
+   the first adapter directory, so it also opens D3's subpath exports and the D5 eslint element
+   split — worth doing deliberately rather than as a side effect.
+3. **`RunDiagnostic`**, which needs neither: the selector's diagnostic mode is already built
+   (D33) and the ports it wants all exist.
 
-The French non-affiliation string in `apps/web/messages/fr.json` was owner-confirmed
-(D27, resolved); no open owner questions remain for this slice.
+No open owner questions for any of the three. Two older items still want a human rather than a
+session: **D12** (the inferred `X 0-10` band, which must be checked against the PSC's published
+table before launch) and the name/domain decision in §12.1.
 
 ---
 
@@ -217,9 +216,11 @@ Pipeline spec is `content-factory.md`. §7 is the schedule and the decision poin
 far: the exam **Scorer**, the **TrendCalculator**, the Leitner **Scheduler**, the **Selector**
 (with the weakest-sub-skills helper) and the daily **Planner** — session log, 20 September 2026.
 The pure engine core (`implementation-plan.md` §3.2) is now complete. The **first `@palier/app`
-use case, `planDailySession`, has also landed ahead of this phase** (session log, 20 September
-2026, D36/D37) — it composes the Planner over the ports, so `StartSession` (§3.2) will build on
-it. The phase's own tasks are expanded here when the phase formally starts; only the exit
+use cases `planDailySession` and `answerItem` have also landed ahead of this phase** (session
+log, 20 September 2026; D36/D37 and D38–D42). Between them the practice loop exists in
+`@palier/app`: plan a day from the bank, then score, record and schedule an answer.
+`StartSession` / `CompleteSession` (§3.2) build on them and want the deferred `SessionStore`
+first. The phase's own tasks are expanded here when the phase formally starts; only the exit
 criteria are tracked in advance.
 
 - [ ] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]
@@ -670,7 +671,7 @@ for no behavioural gain, and the value crosses to `Date.parse` and JSON as a bar
 regardless. Deferred; revisit if a domain type ever needs to name an instant.
 
 ### D19 — `ScheduleEntry` is minimal until the scheduler lands
-**Date:** 19 September 2026 · **Status:** open, closes with the first `@palier/app` use case
+**Date:** 19 September 2026 · **Status:** RESOLVED 20 September 2026 by D38
 
 §3.3 names `ScheduleEntry` in the `ScheduleStore` signature but gives it no shape. Its full
 Leitner form — the box number indexing ADR 8's four intervals — is the `Scheduler`'s output
@@ -687,6 +688,13 @@ returns its own `Review` type, `{ box, due }`, and the app-side reshape — addi
 `ScheduleEntry` and mapping a `Review` into `{ itemId, due, skill, box }` — is the job of the
 first `@palier/app` use case that persists a schedule. So this stays open, now closing with that
 use case rather than with the scheduler. `ScheduleEntry` is untouched for the moment.
+
+**Resolution (D38), 20 September 2026.** `answerItem` is that use case. `ScheduleEntry` is now
+`{ itemId, due: ISO | null, skill, box }` and `ScheduleStore` gained `get`. The prediction in the
+original entry held: the box was *added*, not reshaped, so nothing that read `itemId`/`due`/`skill`
+changed meaning. One thing the entry did not anticipate — `due` had to become nullable, because
+the engine `Review` returns `due: null` at retirement and a non-null `due` would have forced an
+encoding. See D38.
 
 ### D20 — `ItemCriteria` and the in-memory query semantics decided ahead of the `Selector`
 **Date:** 19 September 2026 · **Status:** open until the engine `Selector` lands
@@ -1041,11 +1049,332 @@ including the miss and empty-queue guards. The "same graph from `@palier/testing
 *is* allowed to import `@palier/testing`), in the `buildUseCases` wiring test that plans a real
 session from the fixture bank. `packages/app/CLAUDE.md`'s testing line was corrected to say so.
 
+### D38 — `ScheduleEntry` completed and `ScheduleStore.get` added; §3.3 amended in place
+**Date:** 20 September 2026 · **Status:** accepted, closes D19
+
+`ScheduleEntry` is now `{ itemId, due: ISO | null, skill, box }`, and `ScheduleStore` is
+`{ due, get, put }`. §3.3's signature block carries a dated in-place amendment, because §3.3 is
+authoritative for port signatures — unlike §3.2's *illustrative* use-case list, which D36
+deliberately left alone. No ADR: §3 and the eight principles are untouched and D19 anticipated
+the change.
+
+**Why `get`.** `scheduleReview` needs the item's **current** box, and `due(now, limit)` /
+`put(entry)` cannot supply it. `get` is also the only way to reach a retired entry, which `due`
+deliberately hides.
+
+**Why `due` is nullable.** The engine's `Review` is `{ box, due: string | null }` — null at
+retirement. Mirroring it exactly makes the map a field copy with no encoding step. The
+alternatives were considered and rejected: a `retired: boolean` beside a non-null `due` stores
+two facts that can disagree, which is the failure mode ADR 16 exists to prevent; deleting the
+entry loses the box, so an item answered wrong long after retirement would restart with no
+history.
+
+**A consequence that is load-bearing and was nearly missed.** `architecture.md` §9.1 indexes
+this store as `schedule: 'itemId, due, skill'`, and IndexedDB will not index a record whose key
+path is null — so a retired row drops out of the `due` index while staying addressable by
+`itemId`. That happens to be exactly the wanted behaviour, so it is now an asserted line in
+`scheduleStoreContract` ("never returns a retired entry from due, but still returns it from
+get") rather than something the Dexie adapter discovers in Phase 2.
+
+**ADR 16 was checked, as the hard rule requires, and does not bite.** Its *revisit when* offers
+"persisting a derived value as a cache, keyed by a hash of its inputs and never synced", and the
+schedule **is** synced (`architecture.md` §9.4), so the question is real rather than rhetorical.
+The answer: the schedule is a persisted projection §3.3 and `architecture.md` §9.1 already
+sanction, not new derived state — ADR 16's target was the *band estimate*, and it removed a table
+that duplicated something recomputable on demand. The box is not that.
+
+**The alternative — replaying the Leitner rule over `AttemptStore.forItem(id)` — was seriously
+considered.** It needs no port change, has one source of truth, and D32's join note already makes
+"recompute from attempts" the house style. It was rejected because the fold needs the `slow`
+judgement for every past attempt, so the box would silently re-derive — and retired items
+un-retire — the day that judgement is tuned; because it is O(history) on every answer; and
+because `due` has to be written to the schedule regardless, so it reads two ports instead of one
+for no saving.
+
+**Also added: a clamp.** `retirementBox(profile)` is `leitnerIntervalDays.length + 1`, and that
+list is profile data editable in a content pull request (ADR 8). Shortening it would make
+`scheduleReview` throw a `RangeError` on every item already past the new top, so a stored box is
+clamped to the current retirement box. A named test covers it.
+
+### D39 — The `attemptId` is caller-supplied; nothing in the app mints one
+**Date:** 20 September 2026 · **Status:** open, closes with an `IdGenerator` port (Phase 2)
+
+`Attempt.id` is "a client-generated ULID" (`architecture.md` §9.4) and nothing in the repo mints
+one. The obvious move — mint it in the use case from the `Clock` and `Random` ports, both already
+injected — **is a correctness bug**, and it is recorded here because it is attractive and its
+failure is silent.
+
+`Random` is not an entropy source. `seeded-random.ts` says so itself: "chosen for being auditable
+rather than for being strong — nothing here is cryptographic, and `@palier/adapters/vault` uses
+Web Crypto for the things that are." It is mulberry32 with 32 bits of state, and §3.5 wires
+`random: seededRandom()` in **production**, so two devices would mint the same id stream. An
+`AttemptStore` treats a duplicate id as a **no-op**, not an error — `memory/attempt-store.ts` and
+its contract suite both say so, because a retried sync push must not double-count — so a
+collision is silent attempt loss. And it lands on exactly the claim sync rests on: attempts are
+conflict-free *because* they are keyed by a client-generated ULID (ADR 16, `architecture.md`
+§9.4). The hermetic container is deterministic, so every test would have stayed green.
+
+Minting in `@palier/domain` was the other candidate and is ruled out by that package's own
+`ids.ts`: "minting an id needs randomness, and `@palier/domain` is pure. **The adapters mint;
+domain only names.**" Its 100%-on-all-four-metrics coverage threshold also forbids the defensive
+branches a real encoder wants — the same trap D33 records for the cumulative-sum scan.
+
+So `AnswerItemRequest` carries `attemptId`. This is D18/D19/D28/D29's discipline — decide the
+minimum the contract needs, name it, record that it is a minimum — and it buys something real:
+a retried answer is idempotent, because replaying the same id is a no-op at the store.
+
+**What closes this:** an `IdGenerator { newAttemptId(): AttemptId }` port in `@palier/app`, a
+Web Crypto implementation in `@palier/adapters` with same-millisecond monotonicity, and a
+deterministic counter in `@palier/testing`. It is a port §3.3 does not name, so it wants its own
+deviation, and it lands the **first** adapter directory — which also opens D3's subpath exports
+and the D5 eslint element split. Its consumer is the Phase 2 drill route; building it now would
+have been inventing a port ahead of the thing that drives its shape.
+
+### D40 — The "slow" judgement stays with the caller; no threshold is invented
+**Date:** 20 September 2026 · **Status:** open, revisit when there is timing data (ADR 8)
+
+An engine constant `SLOW_ANSWER_MS` with `isSlowAnswer(msToConfirm)` was planned, on the D34
+reasoning that study heuristics live in engine code beside `RECENT_DAYS` and `TAPER_DAYS`. It was
+**withdrawn before it was written**, for two reasons.
+
+It would reverse a decision `scheduler.ts` made deliberately one session earlier: "the
+timing-to-slow threshold is a product tuning decision the caller owns, so it arrives as a boolean
+rather than a duration — the scheduler only knows the Leitner rule."
+
+More concretely, `msToConfirm` is the wrong quantity. It is time-to-confirm, which on a
+`comprehension` item includes reading the passage. One global millisecond constant across
+`comprehension` and `cloze` would mark nearly every reading item slow and pin it in its box
+forever — a silent, plausible-looking wrong answer of the kind D12 warns about.
+
+So `AnswerItemRequest` carries `slow: boolean`. ADR 8's *revisit when* is the bar a real
+threshold has to clear: "enough review data accumulates to fit intervals from this product's own
+usage". When one is written it keys off `msToFirstSelect` — deliberation, not reading — and is
+per-`ItemType`, not one number.
+
+### D41 — Not every answer enters the review queue
+**Date:** 20 September 2026 · **Status:** accepted
+
+`product-requirements.md` §6.5: "Every item answered **incorrectly**, and every item answered
+correctly but **slowly or with low confidence**, enters a spaced repetition queue." Scheduling
+every answer uniformly would contradict that sentence, so `answerItem` applies it:
+
+- An item **already in the schedule** always reschedules. That is the Leitner rule, and it is
+  what moves an item up a box; an item that could never advance could never retire.
+- An item **not yet in the schedule** enters only on a failing signal — `!correct ||
+  changedAnswer || slow`. A correct, fast, unwavering first answer writes no entry at all.
+
+`changedAnswer` is §6.5's "low confidence"; it was already modelled on `Attempt` for this reason.
+
+There is **no switch on `AttemptMode`.** A diagnostic or exam answer is evidence like any other,
+and a mode switch here is what principle 6 forbids. **Pilot items are the one real exception and
+they are deliberately not handled here**: `scoreExam` excludes pilots from the raw score
+(`architecture.md` §7.5), but pilot-ness is a property of the *form*, not the item, so
+`answerItem` cannot see it and must not guess. Excluding pilots from the queue belongs to
+`SubmitExam` (Phase 3), which holds the form.
+
+### D42 — The `ExamProfile` reaches a use case as a dep; `content/` became a workspace
+**Date:** 20 September 2026 · **Status:** accepted, recorded as **ADR 18**
+
+Two halves of one problem.
+
+**Where it goes.** `scheduleReview` needs the profile and §3.3 names no profile port. D36 put
+non-port *study parameters* in the `request`; a profile is not one — it is configuration the
+composition root owns, and every use case sees the same one. So it is a `dep`. The rule is now
+written into `packages/app/CLAUDE.md` so the next use case does not re-litigate it: configuration
+is a dep, per-call parameters are a request field.
+
+**How it gets there, which was the genuinely blocked part.** A relative import out of `apps/web`
+fails `.dependency-cruiser.cjs`'s `no-relative-escape`, and `.json` is in the cruiser's resolver
+extension list, so the gate does see it. `content/` is therefore a pnpm workspace,
+`@palier/content`, private, holding no code and publishing one `exports` entry per artefact;
+`apps/web` declares it and imports by package name. Proven by running all three gates —
+`tsc --noEmit`, `depcruise`, and the Turbopack production build — before any use-case code was
+written.
+
+**It is a seventh workspace, not a seventh package, and ADR 10 is unchanged.** ADR 18 argues
+that in full. The rejected alternatives: a build-time copy under a drift guard (the D22
+`tokens.css` idiom) duplicates the one file ADR 9 makes canonical; a Node-only
+`@palier/testing` subpath leans on test infrastructure for a production-shaped concern; a
+`@palier/domain` subpath puts content inside a code package, which is the arrangement ADR 14
+separated.
+
+**The honest cost:** bundling the profile means a profile change needs a redeploy, which is
+weaker than ADR 9's "a change is a content pull request rather than a development task". Phase 2
+closes it — the bank adapter fetches content and caches it by hash (`architecture.md` §5.3).
+
+### D43 — A synced `ScheduleEntry` has no `updatedAt`, and last-write-wins can regress a box
+**Date:** 20 September 2026 · **Status:** open, closes with `adapters/sync` (Phase 2)
+
+Found while updating `architecture.md` §9.1 for D38, not while writing the code — which is why
+it is recorded rather than fixed.
+
+The schedule is replicated (`architecture.md` §12: "a replica of progress records (attempts,
+schedule, vocabulary, exam results)"), and §9.4 resolves conflicts by **last write wins on
+`updatedAt`**. `ScheduleEntry` is `{ itemId, due, skill, box }` — **no `updatedAt`**. So the
+general rule does not actually apply to it, and if it were applied naively it would be wrong in
+a way that matters: two devices drilling the same item offline would let the *later* write win
+regardless of what it says, so a device that answered correctly and advanced the box could be
+overwritten by one that had answered correctly an hour earlier from a lower box. Leitner
+progress would silently go backwards.
+
+**Deliberately not decided now.** Three options, all reasonable, and none of them can be chosen
+without the sync design in front of you:
+
+1. Add `updatedAt` to `ScheduleEntry` and take the §9.4 rule as written. Simplest, and wrong in
+   the case above roughly as often as devices disagree.
+2. Merge by taking the **lower** box. The conservative reading of Leitner — a disagreement means
+   at least one device saw a failure, and re-reviewing an item the user knows costs a few
+   seconds while skipping one they do not costs the exam. Needs no new field.
+3. Treat the schedule as device-local and never sync it, rebuilding it per device from the
+   merged attempt log. Closest to ADR 16's instinct, but it needs the `slow` judgement for every
+   historical attempt, which is exactly what D38 rejected for the single-device case.
+
+Option 2 is the current favourite because it needs no schema change and fails safe, but this
+entry deliberately does not choose. `architecture.md` §9.1 and §9.4 both point here, and
+`implementation-plan.md` §7's Phase 2 sync bullet names it as work.
+
+### D44 — `AttemptStore.append` returns whether the id was new, so a retried answer is fully idempotent
+**Date:** 21 September 2026 · **Status:** accepted
+
+D39 claimed "a retried answer is idempotent, because replaying the same id is a no-op at the
+store." That was true of the **attempt record** and false of everything `answerItem` does after
+it. `append` returned `Promise<void>`, so the use case could not tell a fresh answer from a
+replay; it read `schedule.get` and reran the Leitner rule unconditionally. A genuine retry — a
+network retry or a double-submit carrying the same `attemptId` — therefore advanced the box a
+second time: an already-scheduled item answered correctly, fast and unwavering went box 2 → 3 on
+the first call and 3 → 4 on the identical retry, so the item was reviewed later than earned and
+retired early. (Incorrect and correct-but-shaky answers happened to be idempotent, since they
+reset to box 1 or held the box, which is why the gap was easy to miss.)
+
+The fix is the **D38 move again**: a use case's correctness needs a signal the port cannot give,
+so the port is amended in place. `append` now resolves to `boolean` — `true` when the attempt was
+newly stored, `false` on the duplicate no-op. `answerItem` reads it and, on a replay, returns the
+schedule exactly as it already stands (`reviewOf(existing)`) rather than re-applying the move. The
+attempt append stays a silent no-op at the store; the boolean makes that no-op *visible to the use
+case* without making it an error, which is the whole point.
+
+`§3.3`, `packages/app/CLAUDE.md`, the in-memory store and its contract suite are updated together.
+The alternative — detecting the replay by scanning `AttemptStore.forItem` for the id before
+appending — was rejected: it adds a read on every answer and infers from a query what the write
+already knows. Considered and rejected because it re-derives a fact the store holds, the same
+instinct D38 records against replaying the Leitner fold.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 20 September 2026 — `dougkeefe/continue-docs-progress-v1` (documentation reconciliation for `answerItem`)
+
+A separate entry rather than an edit to the one below, because rule 4 of the working agreement
+says append and never rewrite — even for the same session on the same day.
+
+A sweep for documentation the `answerItem` work made stale. **D43** is the one finding that is
+not bookkeeping: `ScheduleEntry` is a synced record with no `updatedAt`, so §9.4's
+last-write-wins rule does not actually cover it, and applying it naively would let an item's
+Leitner box go backwards. Found by updating `architecture.md` for D38, not by a test — nothing
+in the build could have caught it, because the sync adapter does not exist yet.
+
+Changed:
+
+- `architecture.md` §9.1 — the `ScheduleEntry` shape beside the `Attempt` one, with three notes
+  for the Phase 2 Dexie author: why the `stores()` string is unchanged (`box` is a field, not an
+  index), why the nullable `due` is load-bearing (IndexedDB will not index a null key path, which
+  is how retired entries leave the queue for free), and the sync gap. §9.4 now admits the gap in
+  place.
+- `implementation-plan.md` §3.2 — `@palier/content` recorded as a seventh *workspace* and not a
+  seventh package, since §3.2 is authoritative for module structure. §3.5 — the composition-root
+  sketch now parses the profile, and carries the two warnings that cost this session real time:
+  **`seededRandom()` is the selection randomness and not an entropy source**, and the profile is
+  configuration handed down rather than a port. §4 — "sixteen decision records" corrected to
+  eighteen (it was already wrong by one before this session). §7 — the Phase 2 sync bullet now
+  names the D43 decision as work.
+- `packages/app/src/ports/time.ts` — the same warning on the `Random` port itself, which is where
+  someone will actually read it. This is the countermeasure that would have prevented D39.
+- `README.md` — the layout table gains `content`, and the status paragraph no longer claims
+  `engine` is "mostly empty"; the pure core has been complete since the previous session, so that
+  sentence was already stale.
+- `docs/README.md` — revision history 0.3, and the line instructing a dissenting maintainer to
+  "write ADR 16" corrected to "write a new ADR", which is the rule D16 settled after that exact
+  sentence helped cause the collision it records.
+- `CLAUDE.md` — 17 records to 18.
+
+Nothing in `product-requirements.md` needed changing: D41 brought the code to §6.5 rather than
+the other way round. `packages/domain/CLAUDE.md` and `packages/engine/CLAUDE.md` are untouched,
+because neither package changed — which is the point of having withdrawn D39 and D40.
+
+**Verified:** `pnpm verify` green (**exit 0**) after the documentation pass — 539 tests passed,
+4 todo, 45 files; depcruise clean at the same 150/446 and 37/52.
+
+### 20 September 2026 — `dougkeefe/continue-docs-progress-v1` (the second `@palier/app` use case: `answerItem`)
+
+The use case *Suggested next three* named, built ahead of Phase 2 on the same content-agnostic
+sequencing as the engine core and `planDailySession`. It **closes D19**: `ScheduleEntry` is
+complete and something finally writes it. Deviations **D38** (the port reshape, and why ADR 16
+does not bite), **D39** (the `attemptId` is caller-supplied — the planned mint from `Random` was
+a correctness bug), **D40** (the `slow` threshold withdrawn before it was written), **D41** (not
+every answer enters the queue) and **D42** (`ExamProfile` as a dep; `content/` as a workspace).
+One ADR: **18**, content ships as a workspace package. No npm dependency added.
+
+**An adversarial review of the plan changed it, and that is the main thing worth recording.** The
+approved plan had three defects, all caught by reading the files rather than by a test: minting
+attempt ULIDs from the `Random` port (silent attempt loss on a second device, green in every
+test because the hermetic container is deterministic — D39); a `SLOW_ANSWER_MS` keyed on
+`msToConfirm`, which on a `comprehension` item includes reading the passage (D40); and
+scheduling every answer, contradicting `product-requirements.md` §6.5 (D41). Two of the three
+would have shipped looking correct.
+
+Built:
+
+- `packages/app/src/ports/schedule-store.ts` — `ScheduleEntry` is
+  `{ itemId, due: ISO | null, skill, box }`; `ScheduleStore` gained `get(id)`. §3.3 amended in
+  place with a dated note.
+- `packages/app/src/use-cases/answer-item.ts` — `answerItem(request, deps)`: reads `clock.now()`
+  once, resolves the item via `items.byIds` (absent ⇒ `UnknownItemError`), scores through
+  `itemTypeDefinition(item.type).score`, appends the `Attempt` **before** touching the schedule
+  (so the append-only record survives a failed schedule write), then reads the current box, runs
+  `scheduleReview` and persists the `Review`. Pure orchestration; the clamp on a stored box is
+  the only arithmetic.
+- `packages/testing` — `memoryScheduleStore` gained `get` and hides retired (`due: null`)
+  entries from `due()`; `scheduleStoreContract` gained four cases; `aScheduleEntry` defaults
+  `box: 1`.
+- `content/package.json` + `pnpm-workspace.yaml` — `@palier/content` (ADR 18).
+- `apps/web/src/lib/container.ts` — parses the profile once from
+  `@palier/content/profiles/psc-sle.json`; `answerItem` joins `UseCases`. Its stale "exposes no
+  `buildUseCases` yet" paragraph, which had contradicted the one below it since D36, is gone.
+
+Tests: `answer-item.test.ts` (24, local stubs per D37) across three groups — the attempt record,
+which answers enter the queue (D41), and the Leitner move persisted. It reads the **real**
+profile off disk rather than inventing four intervals, so a real interval change cannot pass
+unnoticed. `plan-daily-session.test.ts` updated for the reshape (the compiler found all five
+sites). `container.test.ts` gained the end-to-end graph test: plan a session from the fixture
+bank, answer its first item wrongly, and see the attempt and the box-1 entry land.
+
+**Verified:** `pnpm verify` green (**exit 0**) — check-types 14/14, lint clean, depcruise clean
+(**150 modules, 446 dependencies** in packages, **37 modules, 52 dependencies** in `apps/web`;
+`@palier/app` still reaches `@palier/domain` + `@palier/engine` only, no new arrow), **539 tests
+passed, 4 todo, 45 files**. Every glob coverage threshold held (overall branches 97.48%).
+`answerItem` confirmed in `packages/app/dist/index.js` (D6).
+
+**Three gates proven to bite, each by breaking it and reverting:** replacing the stored-box read
+with a constant box 1 failed six tests while `starts an unseen item in box 1` still passed;
+removing the D41 entry guard failed exactly `does not schedule a correct, fast, unwavering answer
+to an unscheduled item`; and making `due()` return retired entries failed the new contract case.
+**One honest note on that third one:** the first attempt to break it did *not* fail, because
+`Date.parse(null)` is `NaN` and `NaN <= x` is false, so the date filter excludes retired entries
+even without the explicit null check. The explicit `isQueued` filter is kept anyway — relying on
+a coercion accident is not a contract — but the contract case only bites against an
+implementation that genuinely returns them, which is what the second attempt confirmed.
+
+The `@palier/content` wiring was proven **first**, before any use-case code, against all three
+gates (`tsc --noEmit`, `depcruise`, Turbopack build), because a failure there would have meant
+redesigning late.
+
+**Next:** `StartSession` / `CompleteSession`, which need the deferred `SessionStore` (D18) — it
+is what `lastDayCompleted` has been waiting for. The `IdGenerator` port (D39) and the first
+adapter directory are the other open thread, and they are the same PR if the Phase 2 drill route
+drives both.
 
 ### 20 September 2026 — `dougkeefe/naypyidaw` (the first `@palier/app` use case: `planDailySession`)
 

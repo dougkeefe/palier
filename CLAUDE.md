@@ -35,7 +35,10 @@ to claim work and how to record what you did. Follow it.
 | `@palier/testing` | In-memory ports, port contract suites, fixture builders, seeded Random, FakeClock, fixture bank | `app`, `domain` |
 
 `apps/web` may import everything and holds the one composition root; `apps/factory` takes
-`domain` and the OpenAI adapter. No package may import anything absent from its own
+`domain` and the OpenAI adapter. `@palier/content` is a **seventh workspace and not a
+seventh package** (ADR 18): `content/` holds no code, no `src`, no build and no tests — it
+is the exam profile, and from Phase 2 the bank shards, published through an `exports` map so
+the app can import them by package name. It appears in no §3.1 arrow. No package may import anything absent from its own
 `package.json` — pnpm's strict isolation and `dependency-cruiser` both enforce that.
 
 ## Hard rules
@@ -59,7 +62,7 @@ to claim work and how to record what you did. Follow it.
 | When you need | Read |
 | --- | --- |
 | What is built, in flight, or deliberately deviated from the plan | `docs/progress.md` — status, then deviations |
-| Why a choice was made, and what evidence would reverse it | `docs/adr/`, 17 records, each with a *revisit when*. Take the next free number |
+| Why a choice was made, and what evidence would reverse it | `docs/adr/`, 18 records, each with a *revisit when*. Take the next free number |
 | Whether something is a requirement or an opinion | `product-requirements.md` §0 and §0.1 (the 14 requirements) |
 | Exam variants, item counts, time limits, band cut tables | `product-requirements.md` §5 |
 | Screens, states, copy, visual language, accessibility commitments | `product-requirements.md` §8, §10, §11, §14 |

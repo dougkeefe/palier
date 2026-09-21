@@ -66,6 +66,9 @@ importers:
       '@palier/app':
         specifier: workspace:*
         version: link:../../packages/app
+      '@palier/content':
+        specifier: workspace:*
+        version: link:../../content
       '@palier/domain':
         specifier: workspace:*
         version: link:../../packages/domain
@@ -112,6 +115,8 @@ importers:
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+
+  content: {}
 
   packages/adapters:
     dependencies:
