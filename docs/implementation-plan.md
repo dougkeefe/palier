@@ -551,26 +551,28 @@ The sequencing is risk-driven rather than value-driven. The two things that can 
 
 This is a separate subsystem with its own specification. `content-factory.md` holds the pipeline, the assumptions, the metrics and the descoping options; this section is the schedule and the decision points only. Do not duplicate its contents here, because two copies of a pipeline description will diverge.
 
-**Week 1 is an assumption test, not a build.** Before any pipeline code: harvest twenty sources by hand, draft thirty passages, and have two fluent GC French speakers read them cold. This tests assumption A1, which everything else rests on, for the cost of a few hours and two favours. If the register does not convince them, stop and pick a descoping option from `content-factory.md` section 9.
+**Phase 1 is fully automated — no human in the quality loop at this stage (ADR 19).** The bank is machine-generated from public GC sources (ADR 6; `content-factory.md` §4.1–§4.2 harvest public material and rewrite it into original passages that quote nothing), and it is gated by automation alone: cross-family adversarial review (§4.4) plus deterministic validation (§4.5). The week-one two-reader assumption test and the 5% human sample are dropped; the trade-off and its risk are recorded in ADR 19, and the one human register check that remains is the Phase 7 pre-1.0 gate "both languages reviewed by a human" ([R8]). The licence and originality rules are non-negotiable and unchanged: §4.1 rejects unclear licences, §4.2 quotes nothing, and R6 forbids reproducing real PSC items.
 
-**Weeks 2 to 3, the spine.** Harvest, passage construction, item drafting, deterministic validation, bank build, and the content test suite running on every content pull request from the first batch rather than added later.
+**Build the pipeline, then run a small batch end to end.**
 
-**Week 4, the gate.** Build the review-gate evaluation set first, then stage 4, then measure detection. The evaluation set is 40 to 60 hand-written items carrying deliberate defects across five classes, and it is the only direct measurement of whether the gate works. Building the gate before the thing that measures it is how you end up trusting an unmeasured gate.
+- **`adapters/openai`** (resequenced from Phase 4 into this phase, because the factory needs it before anything can run): the `AiProvider` implementation, model configuration as data, structured outputs with client-side re-validation, retry, and the anti-corruption translation layer.
+- **The five-stage pipeline as a CLI in `apps/factory`** (§4): harvest public GC sources with a licence determination per source; passage construction (original, band-tagged, nothing quoted); item drafting through the item type registry's prompt spec; cross-family adversarial review blind to the key; deterministic validation; bank build into content-hashed shards. The content test suite runs on every content pull request from the first batch, not bolted on later.
+- **The review-gate evaluation set, built before stage 4 is trusted** (§6): 40–60 items carrying deliberate defects across five classes, authored *programmatically as test fixtures* (a broken item is a fixture, not expert bank content, so this stays compatible with an automated phase). It is the only direct measurement of whether the gate works.
+- **Run a small sample batch (tens of items) through the whole pipeline**, committed with its metrics, to prove the system end to end. The full-volume paid run to 500–700 items is a deferred follow-on, gated on this small run passing and on a funded key (ADR 2).
 
-**Weeks 5 to 6, volume.** Run to target volume, generate the exam forms, commit the first batch reports.
+**Exit criteria (automated; ADR 19). This is still a real go/no-go.**
 
-**Exit criteria, and this is a real go/no-go**
+- The pipeline runs end to end and produces a **committed small sample batch** from public GC sources — every item schema-valid, `validate()`-clean, and licence-cleared at harvest.
+- **Review-gate detection at or above 90 percent in every defect class** on the evaluation set. This is the phase bar (the ongoing operational threshold afterwards is 80 percent). It is the direct measurement that stands in for the human read.
+- Stage 4 yield between 45 and 75 percent on the sample. Higher suggests the gate is too soft; lower suggests the drafting prompt is wrong.
+- Deterministic validation and **bank build reproducibility** green in CI (byte-identical rebuild).
+- Cost per accepted item measured on the sample run and extrapolated to volume.
 
-- 500 to 700 published French items across reading and written expression at bands B and C, matching the volume table in `content-factory.md` section 2.
-- Stage 4 yield between 45 and 75 percent. Higher suggests the gate is too soft; lower suggests the drafting prompt is wrong.
-- **Review gate detection at or above 90 percent in every defect class.** This is the phase bar. The ongoing operational threshold afterwards is 80 percent, below which a batch is held; the higher bar here exists because this is the moment to find out the approach does not work.
-- Defect rate on a 5 percent human sample below 5 percent.
-- Two or three fluent GC French speakers read thirty items and do not flag register problems.
-- Cost per accepted item measured.
+**Deferred follow-on (not a Phase 1 exit criterion):** the full-volume run to 500–700 published items across reading and written expression at bands B and C, matching the volume table in `content-factory.md` §2, once the small run passes and a funded key is available.
 
 **If the exit criteria fail**, work down the descoping list in `content-factory.md` section 9 rather than improvising. Option 5 on that list, abandoning the factory and shipping the application with a small curated bank, is a legitimate outcome rather than a failure, and the architecture keeps it available.
 
-**CI gates added:** content schema validation, duplicate detection, bank build reproducibility.
+**CI gates added:** content schema validation, duplicate detection, bank build reproducibility, and review-gate detection on the evaluation set.
 
 **Not built:** anything in the browser. The factory is a CLI, and it stays one.
 
@@ -641,8 +643,8 @@ The mock exam is where the band letter comes from, because it is the only path w
 
 **Work breakdown**
 
-- Key vault: Web Crypto encryption, the `withApiKey` callback discipline, validation call, do-not-remember mode.
-- `adapters/openai`: AiProvider implementation, model configuration as data, structured outputs with client-side re-validation, retry policy, the anti-corruption translation layer.
+- Key vault: Web Crypto encryption, the `withApiKey` callback discipline, validation call, do-not-remember mode. **The storage half landed early, in Phase 2** (`@palier/adapters/dexie`, `progress.md` D50): AES-GCM at rest under a non-extractable `CryptoKey` (§6.2 as written), the callback discipline, and the key-leak assertion in the contract suite. Phase 4 adds what needs a live key — the validation call, do-not-remember mode, and the E2E-level leak test below.
+- `adapters/openai`: AiProvider implementation, model configuration as data, structured outputs with client-side re-validation, retry policy, the anti-corruption translation layer. **Built earlier, in Phase 1** (the content factory needs it to run; §7 Phase 1, ADR 19). Phase 4 extends it with the runtime item-generation, writing-feedback and (Phase 5) oral capabilities and the BYOK key path, but the core provider + translation layer already exist.
 - Cost ledger: usage capture, pricing config, the spend meter, per-feature estimates, the pre-flight threshold warning.
 - Runtime item generation: the compressed draft plus single review path, local-only storage, the provenance badge, the one-tap contribution.
 - Writing workshop: prompt library, editor with word target and timer, `assessWriting` with inline offsets, model answer with highlighted changes.
@@ -650,7 +652,7 @@ The mock exam is where the band letter comes from, because it is the only path w
 
 **Exit criteria**
 
-- **The key-leak test passes** (tier 11), running the full E2E suite with a sentinel key and asserting it never reaches any origin but OpenAI, any storage but the encrypted vault, any synced document, or any error object. Write this test before the key vault, not after.
+- **The key-leak test passes** (tier 11), running the full E2E suite with a sentinel key and asserting it never reaches any origin but OpenAI, any storage but the encrypted vault, any synced document, or any error object. Write this test before the key vault, not after. (The unit-level half — no method but the callback returns the key, and what sits at rest is ciphertext — already runs in the KeyVault contract suite from Phase 2; this criterion is the E2E-level assertion across the whole app.)
 - Every AI response is schema-validated before use, with adapter tests covering malformed output, rate limit, invalid key and timeout, each degrading gracefully.
 - The spend meter matches actual OpenAI billing within a few percent on a test account.
 

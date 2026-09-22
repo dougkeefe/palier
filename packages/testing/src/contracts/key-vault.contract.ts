@@ -48,10 +48,30 @@ export const keyVaultContract = (
     });
 
     /**
-     * The key-leak test proper is written before the real vault, in phase 4,
-     * and is a phase 4 exit criterion [R12]. This is the placeholder that
-     * records the obligation here, where the contract lives.
+     * The key-leak test [R12]. Written with the real Dexie vault rather than
+     * deferred to phase 4 (progress.md D50): the vault's storage half lands in
+     * phase 2, so the discipline "write the key-leak test before the vault"
+     * applies now. Implementation-agnostic here — no method other than the
+     * callback may surface the plaintext; the Dexie adapter adds its own
+     * assertion that what sits at rest is ciphertext, not the key.
      */
-    it.todo("never returns the key from any method other than the callback [R12]");
+    it("never returns the key from any method other than the callback [R12]", async () => {
+      const key = "sk-secret-value-12345";
+      const vault = await make();
+      await vault.putApiKey(key);
+
+      // `hasApiKey` answers a boolean, never the key.
+      const present = await vault.hasApiKey();
+      expect(present).toBe(true);
+      expect(present as unknown).not.toBe(key);
+
+      // The device secret is unrelated to the key and must not leak it.
+      const secret = await vault.deviceSecret();
+      expect(secret).not.toBe(key);
+      expect(secret).not.toContain(key);
+
+      // The callback is the only path to the plaintext, and it still works.
+      expect(await vault.withApiKey((k) => Promise.resolve(k))).toBe(key);
+    });
   });
 };

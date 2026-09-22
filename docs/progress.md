@@ -1,11 +1,13 @@
 # Palier: Progress
 
 **Last updated:** 21 September 2026
-**Current phase:** 0, Foundations and contracts — every gate built; the pure `@palier/engine`
-core, the full `@palier/app` practice loop (now including `RunDiagnostic`) and the first
-`@palier/adapters` directory (`/ids`) are also built ahead of Phase 2 (§7 sequencing note)
-**Next step:** **a human gate** — the content-agnostic runway is spent; Phase 2 proper (real
-adapters + UI) is not an autonomous slice — see [Next, decided](#next-decided).
+**Current phase:** 0→2 boundary — every Phase-0 gate built; the pure `@palier/engine` core, the
+full `@palier/app` practice loop (incl. `RunDiagnostic`), and now **two `@palier/adapters`
+directories** (`/ids` and `/dexie` — the five local store ports over IndexedDB, incl. the
+encrypted `KeyVault`) are built ahead of / into Phase 2
+**Next step:** **full Phase 1 — the automated content factory** (build the 5-stage pipeline in
+`apps/factory` + `adapters/openai`, fully automated gates per **ADR 19**, run a small sample batch
+end to end). See [Next, decided](#next-decided).
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -80,10 +82,10 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/continue-docs-progress-v2` | The decided content-agnostic runway: **`RunDiagnostic`** (`runDiagnostic` + `diagnosticReadout`, no new port/adapter — deviation **D47**), then the **`IdGenerator`** port and the first `@palier/adapters` directory (`/ids`, Web Crypto ULID + a `@palier/testing` counter, opening **D3**/**D5** — deviation **D48**). Ends at the human gate | 21 September 2026 |
+| `dougkeefe/osaka-v1` | **`adapters/dexie`** — the five local store ports (`AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`, `KeyVault`) over IndexedDB at schema v1, each behind its contract suite; the encrypted `KeyVault` built now (not deferred to Phase 4) with the key-leak test. Deviations **D49**/**D50**; opens `./dexie` (D3), second `adapters` element (D5) | 21 September 2026 |
 
-*(The prior row — the `SessionStore` slice — merged as #14 and was removed; the In-flight
-table tracks current work, not history, and the session log below is the permanent record.)*
+*(The prior row — the `/ids` slice — merged as #15 and was removed; the In-flight table
+tracks current work, not history, and the session log below is the permanent record.)*
 
 ---
 
@@ -180,35 +182,55 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**The content-agnostic runway is spent. The next step is a human gate — not a slice.**
+**Next slice: full Phase 1 — the automated content factory (ADR 19, human-directed).**
 
-The `@palier/engine` pure core is complete; the `@palier/app` practice loop now exists end to end
-*including the diagnostic* — `planDailySession`, `startSession`, `answerItem`, `completeSession`,
-`runDiagnostic`/`diagnosticReadout` (session log, 20–21 September 2026); and the first
-`@palier/adapters` directory, `/ids`, has landed (D48). Every phase-0 CI gate is built, every
-deferred phase-0 *mechanism* is closed, and the two autonomous steps this section previously named
-(RunDiagnostic, then IdGenerator) are both done. There is no further layer that can be built without
-crossing into work only a human can sequence.
+Phase 1 has been redirected (D51, ADR 19). It is now a **fully automated** content pipeline with no
+human in the quality loop at this stage: the bank is machine-generated from public GC sources
+(ADR 6; `content-factory.md` §4.1–§4.2) and gated by cross-family adversarial review (§4.4) plus
+deterministic validation (§4.5) alone. The week-one two-reader test and the 5% human sample are
+dropped; the human register check is deferred to the Phase 7 [R8] gate. The licence/originality
+rules (§4.1 reject unclear licences, §4.2 quote nothing) and R6 (no PSC reproduction) are
+non-negotiable and unchanged.
 
-**Why the next step cannot be a self-directed slice.** The remaining Phase 2 work is the real
-adapters — Dexie stores, the bank fetch/cache, the vault, sync + the sync simulator — **and the
-UI** (§7 Phase 2's work breakdown). Two things gate it, neither autonomous:
+**The slice, concretely** (`implementation-plan.md` §7 Phase 1 has the detail):
 
-- **The Phase 1 content go/no-go.** Phase 2 ships a product on top of the bank, and whether the bank
-  is good enough is a human register read plus the OpenAI pipeline (§7 Phase 1, `content-factory.md`).
-  That decision has not been made. Building the Phase 2 UI on an unvalidated bank is building on sand.
-- **Product and UI direction.** Onboarding, the readiness card, the drill/feedback panel, the review
-  queue, settings and the pairing flow (§7 Phase 2) are design decisions, not derivations from the
-  spec. `product-requirements.md` §8/§10/§11 constrain them but do not settle them.
+1. **`adapters/openai`** — the `AiProvider` adapter (resequenced here from Phase 4, because the
+   factory cannot run without it): model config as data, structured outputs with client-side
+   re-validation, retry, the anti-corruption translation layer. Held to its port contract; every AI
+   response Zod-parsed at the edge (`architecture.md` §8.2). Follows the `/ids`, `/dexie` adapter
+   pattern.
+2. **The five-stage pipeline as a CLI in `apps/factory`** — harvest (public GC sources + a licence
+   determination per source) → passage construction (original, band-tagged, nothing quoted) → item
+   drafting via the item type registry's prompt spec → cross-family review blind to the key →
+   deterministic validation → bank build into content-hashed shards.
+3. **The review-gate evaluation set** — 40–60 deliberately-defective items authored *as test
+   fixtures* (a broken item is a fixture, not expert content), the only direct measure of the gate.
+4. **Run a small sample batch (tens of items) end to end**, committed with its metrics. The
+   full-volume paid run to 500–700 items is a **deferred follow-on**, gated on the small run passing
+   and a funded key (chosen scope: build now, small run).
 
-**So bring it to a human to sequence, with §7 Phase 2 as the breakdown.** A reasonable first
-Phase-2 slice once the gate is passed is `adapters/dexie` (the store ports behind their contract
-suites — the `IdGenerator`/`/ids` pattern now shows the way), because it is the least
-design-dependent. But do not start it as a self-directed slice; it depends on the go/no-go above.
+**Exit criteria (automated):** pipeline runs end to end producing a committed sample batch (all
+schema-valid, `validate()`-clean, licence-cleared); review-gate detection ≥90% per defect class on
+the eval set; stage-4 yield 45–75%; deterministic validation + bank-build reproducibility green in
+CI; cost per accepted item measured.
 
-Standing human items, unchanged and still not a session's to close: **D12** (the inferred
-`X 0-10` band, which must be checked against the PSC's published table before launch) and the
-name/domain decision in §12.1.
+**Note for the implementer:** this is a large, multi-part slice — plan it out before building
+(`apps/factory` is currently an empty stub, and `adapters/openai` does not exist). It needs a
+funded OpenAI key even for the small run (ADR 2); if none is available when you start, build against
+a mock/recorded AI adapter and leave the real run as the final step.
+
+**Still genuinely human-gated (separate from Phase 1, do not self-direct):**
+
+- **Product and UI direction** (§7 Phase 2) — onboarding, readiness card, drill/feedback, review
+  queue, settings, pairing. Design decisions, not derivations.
+- **The `adapters/sync` `ScheduleEntry` merge (D43)** — add `updatedAt`, take the lower Leitner box,
+  or treat the schedule as device-local. Gates the sync adapter.
+- **`adapters/bank`** (the `ItemRepository`: manifest fetch, lazy shards, service-worker cache) is a
+  content-agnostic Phase 2 slice buildable against fixtures whenever chosen; it is no longer *the*
+  next slice, having been superseded by the Phase 1 redirect.
+
+Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's
+table before launch) and the name/domain decision in §12.1.
 
 ---
 
@@ -218,17 +240,24 @@ Each phase's work breakdown lives in `implementation-plan.md` §7 and is expande
 tasks here **when the phase starts**, not before. Only the exit criteria are tracked
 in advance, because they are the actual gate.
 
-### Phase 1: Content factory — go/no-go on item quality
+### Phase 1: Content factory — automated go/no-go on item quality (ADR 19)
 
 Pipeline spec is `content-factory.md`. §7 is the schedule and the decision points only.
+**Fully automated — no human in the quality loop at this stage (ADR 19, D51).** Machine-generated
+from public GC sources (ADR 6); gated by cross-family review + deterministic validation alone.
 
-- [ ] Week 1 assumption test (A1): 30 hand-drafted passages read cold by two fluent GC French speakers, **before any pipeline code**
-- [ ] 500–700 published French items, reading and written expression, bands B and C
-- [ ] Stage 4 yield between 45 and 75 percent
-- [ ] Review gate detection ≥ 90 percent in **every** defect class (phase bar; 80 percent is the ongoing operational threshold)
-- [ ] Defect rate below 5 percent on a 5 percent human sample
-- [ ] Two or three fluent speakers read 30 items with no register flags
-- [ ] Cost per accepted item measured
+- [ ] `adapters/openai` — the `AiProvider` adapter (resequenced from Phase 4), Zod-parsed at the edge, contract-tested
+- [ ] The 5-stage CLI pipeline in `apps/factory`: harvest (licence-cleared public GC sources) → passages (original, nothing quoted) → draft → cross-family review → deterministic validation → bank build
+- [ ] Review-gate evaluation set (40–60 deliberately-defective items, authored as test fixtures)
+- [ ] A small sample batch (tens of items) run end to end and committed with its metrics
+- [ ] Review gate detection ≥ 90 percent in **every** defect class on the eval set (phase bar; 80 percent ongoing)
+- [ ] Stage 4 yield between 45 and 75 percent on the sample
+- [ ] Deterministic validation + bank-build reproducibility green in CI
+- [ ] Cost per accepted item measured on the sample run
+
+**Deferred follow-on (not an exit criterion):** full-volume run to 500–700 published items (reading + written expression, bands B/C), once the small run passes and a funded key is available (ADR 2).
+
+**Human register check is deferred, not deleted:** the Phase 7 [R8] "both languages reviewed by a human" gate (ADR 19's revisit trigger).
 
 **If these fail:** work down the descoping list in `content-factory.md` §9 in order. Option 5 is a legitimate outcome, not a failure.
 
@@ -243,7 +272,9 @@ use cases `planDailySession` and `answerItem` have also landed ahead of this pha
 log, 20 September 2026; D36/D37 and D38–D42). Between them the practice loop exists in
 `@palier/app`: plan a day from the bank, then score, record and schedule an answer.
 `StartSession` / `CompleteSession` (§3.2) build on them and want the deferred `SessionStore`
-first. The phase's own tasks are expanded here when the phase formally starts; only the exit
+first. **The first real adapters have also landed:** `adapters/ids` (D48) and `adapters/dexie` —
+the five local store ports over IndexedDB at schema v1, incl. the encrypted `KeyVault` (D49, D50).
+The phase's own tasks are expanded here when the phase formally starts; only the exit
 criteria are tracked in advance.
 
 - [ ] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]
@@ -354,7 +385,7 @@ its own `check-types` script (`next typegen && tsc --noEmit`), ordered by Turbor
 There is a comment in `tsconfig.json` saying so.
 
 ### D3 — `@palier/adapters` subpath exports deferred
-**Date:** 19 September 2026 · **Status:** partially resolved 21 September 2026 (`/ids`); open for the five §3.2 directories
+**Date:** 19 September 2026 · **Status:** partially resolved 21 September 2026 (`/ids`, `/dexie`); open for `/bank`, `/openai`, `/sync`, `/vault`
 
 §3.2 specifies five subpath exports (`/dexie`, `/bank`, `/openai`, `/sync`, `/vault`).
 The package currently declares one root export, because five `exports` entries resolving
@@ -366,6 +397,11 @@ thing that actually enforces §3.2, and it arrives with dependency-cruiser.
 `./ids` (the `IdGenerator`, a Web Crypto ULID generator). It is a real subpath resolving to real
 content, so D3's principle now has its first instance. The five named directories stay unexported
 until each lands.
+
+**Update, 21 September 2026 (D49).** `./dexie` is now live too — the first of the five named
+directories. It exports one Dexie-free thing, `dexieStores(name?)`, deliberately: `PalierDb`
+(a `Dexie` subclass) is internal, so no vendor type sits in the published `.d.ts`. `/bank`,
+`/openai`, `/sync`, `/vault` remain unexported until each lands.
 
 ### D4 — Per-package `CLAUDE.md` files not yet written
 **Date:** 19 September 2026 · **Status:** RESOLVED 19 September 2026
@@ -1446,11 +1482,158 @@ not name → its own deviation, no ADR (§3 and the eight principles untouched).
   `no-unknown-files` keeps classifying as the package fills. Both stay open for the five §3.2
   adapter directories still to land.
 
+### D49 — `adapters/dexie` built as the first Phase-2 slice, ahead of the "human gate", with human sign-off
+**Date:** 21 September 2026 · **Status:** accepted; advances D3 and D5 for `dexie`
+
+The *Next, decided* section this session inherited said the runway was spent and the next step was
+a human gate covering "the real adapters — Dexie stores, bank, vault, sync — **and the UI**". That
+framing was too coarse: it bundled the **local store adapters** with the UI/sync work they do not
+depend on. The store adapters are content-agnostic (they persist attempts/schedule/sessions/
+settings/key, never touching item quality, so the Phase 1 go/no-go does not gate them) and
+design-agnostic (no UI rides on them). They are fully specified — ports in `@palier/app`, contract
+suites in `@palier/testing`, in-memory reference impls, `fake-indexeddb` installed, schema v1 in
+`architecture.md` §9.1 *with* per-store implementation notes written for this very adapter — and
+follow the `/ids` precedent exactly. The human confirmed building them now (and the `KeyVault` with
+them — D50). So this is not a self-directed override of the gate: the gate was brought to the human
+and the human sequenced it.
+
+Built under `packages/adapters/src/dexie/`: `PalierDb` (a `Dexie` subclass declaring the whole of
+`architecture.md` §9.1's `version(1)` verbatim — all thirteen tables, though only five have
+adapters, so the rest land without a schema bump) and the five store factories
+`dexieAttemptStore` / `dexieScheduleStore` / `dexieSessionStore` / `dexieSettingsStore` /
+`dexieKeyVault`, each held to its existing contract suite plus adapter-specific tests (reopen
+survival, the duplicate-id `false`, the retired-entry-hidden-from-`due`-but-not-`get`, the
+`type`↔`mode` translation, the completion keep-first).
+
+Two implementation notes worth keeping:
+
+- **The public surface is one Dexie-free function, `dexieStores(name?)`.** Its `DexieStores` fields
+  are all `@palier/app` port types, so no vendor type crosses the boundary (§2.4). `PalierDb`
+  (whose getters return `Table<...>`) and the per-store factories are internal — exporting
+  `PalierDb` would put a vendor type in the published `.d.ts` and, under pnpm's strict isolation,
+  force the composition root's typecheck to reach for `dexie`, which the vendor ban forbids it. This
+  is a small refinement of the plan (which had said "re-export the factories + `PalierDb`").
+- **`PalierDb` uses lazy getters over `this.table()`, not `field!: Table<...>`.** `tsconfig.base`
+  targets ES2022 and leaves `useDefineForClassFields` at its default `true`, so a field declaration
+  would emit `attempts = undefined` and clobber the table object Dexie assigns in `super()`.
+
+`dexie@4.4.6` is a new dependency, but a pre-decided one: ADR 10 / §9.1 name the directory
+`adapters/dexie` and `.dependency-cruiser.cjs` already scoped the `dexie` module to
+`packages/adapters/src/dexie` (`no-dexie-outside-adapters`). No ADR needed. Advances D3 (`./dexie`
+live) and D5 (a second `adapters` element).
+
+### D50 — the encrypted `KeyVault` built in Phase 2, not deferred to Phase 4
+**Date:** 21 September 2026 · **Status:** accepted; partially satisfies [R12] (the storage half)
+
+§7 puts the key vault in Phase 4. The human chose to build it now, with the Dexie stores, and to
+align the docs to that. Recorded here because it moves work across a phase boundary.
+
+- **Encryption approach: §6.2 as written, a non-extractable `CryptoKey` at rest.** The API key is
+  AES-GCM ciphertext under a **non-extractable** `CryptoKey` held in the `keyVault` table.
+  Non-extractable is load-bearing: a storage-reader (a browser extension) gets an opaque handle
+  whose raw bytes Web Crypto refuses to export, so the key cannot be decrypted offline or in another
+  origin. It does not defend against XSS of our own origin, and §6.2 already says so.
+  - **A first draft deviated and code review caught it.** The plan proposed persisting the device
+    *secret* as raw bytes and deriving the AES key by HKDF at use time, to dodge a feared
+    structured-clone limitation on `CryptoKey`. That is strictly *weaker* than §6.2: the stored
+    bytes plus the public HKDF salt/info let a storage-reader decrypt offline — giving up the exact
+    "extensions reading storage" protection §6.2 promises. The feared limitation also does not
+    exist: a non-extractable `CryptoKey` round-trips through IndexedDB's structured clone and stays
+    usable, verified against `fake-indexeddb`. So the implementation follows §6.2 verbatim; there is
+    no crypto deviation to record, only this note that one was considered and rejected.
+- **The callback discipline holds.** `withApiKey` decrypts, hands the plaintext to the callback and
+  returns the callback's result; there is no `getApiKey`. `clear` wipes the API key but not the
+  device secret (which doubles as the sync identity seed, §9.3).
+- **The key-leak test was written *with* the vault, honouring the [R12] "before, not after"
+  discipline.** The `keyVaultContract`'s `it.todo("never returns the key…")` is now a real
+  assertion running against every implementation (no method but the callback surfaces the key), and
+  the Dexie adapter adds its own: what sits at rest is ciphertext, and replacing the device secret
+  makes the ciphertext fail to authenticate. This is the *unit* half of [R12]; the *E2E* key-leak
+  test across the whole app stays a Phase 4 exit criterion. `implementation-plan.md` §7 Phase 4 is
+  annotated to say so.
+
+### D51 — Phase 1 is redirected to a fully automated content factory (ADR 19)
+**Date:** 21 September 2026 · **Status:** accepted (human-directed); recorded in **ADR 19**
+
+Human direction: Phase 1 should be an autonomous, machine-only pipeline that prepares content from
+public sources, with no human in the quality loop, and its full implementation is the next slice.
+
+The premise was half-already-true and it is worth stating so the change is understood correctly.
+Machine generation from public GC sources is *already* the design — **ADR 6** ("generated content is
+the default authoring path", revisit: never) plus `content-factory.md` §4.1 (harvest public GC
+material) and §4.2 (rewrite into original passages, "nothing is quoted"). What Phase 1 *added* on
+top was human validation: a week-one two-reader assumption test, a 5% human sample, and
+fluent-speaker register reads as the go/no-go. **That human gate is what this decision removes**,
+not the generation method.
+
+- **The register gate is now cross-family LLM review only** (§4.4), plus deterministic validation
+  (§4.5). The trade-off was put to the human with the risk named — the same class of model both
+  generates and is the sole judge of its own register, so a shared blind spot ships — and the human
+  chose it. **ADR 19** records the decision, the risk, and a *revisit when* (a later human read
+  disagrees, alpha register complaints, or the Phase 7 gate). The 5% human-sample machinery is
+  retained but off, so restoring it is a switch, not a rebuild.
+- **The one human check kept:** the Phase 7 pre-1.0 gate "both languages reviewed by a human"
+  ([R8]). Nothing reaches the *public* on a purely self-graded bank. (I flagged this as the floor;
+  the human did not remove it.)
+- **`adapters/openai` resequences from Phase 4 into Phase 1**, because the factory cannot run
+  without it. Phase 4 keeps the runtime-generation / writing / oral / BYOK-key extensions; the core
+  provider + translation layer land now. `implementation-plan.md` §7 Phase 1 and Phase 4 both say so.
+- **Scope chosen: build now, small run.** Build the whole pipeline + `adapters/openai`, run a small
+  sample batch (tens of items) end to end to prove it; the full-volume paid run to 500–700 items is
+  a deferred follow-on gated on the small run and a funded key (ADR 2). `apps/factory` is an empty
+  stub today, so this is a large multi-part slice that wants its own implementation plan.
+- **Non-negotiables reaffirmed, not touched:** §4.1 rejects unclear licences, §4.2 quotes nothing
+  (the published bank is CC BY 4.0, ADR 12), and R6 forbids reproducing real PSC items.
+
+Docs amended in place with pointers to ADR 19: `content-factory.md` §3/§4/§6/§8,
+`implementation-plan.md` §7 Phase 1 (rewritten) and Phase 4, and this file (*Next, decided*, the
+Phase 1 checklist, the header).
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 21 September 2026 — `dougkeefe/osaka-v1` (`adapters/dexie` — the five local store ports, incl. the encrypted `KeyVault`)
+
+The first of the five §3.2 adapter directories, built with human sign-off (the store adapters were
+mis-gated by the prior *Next, decided* — see **D49**). The `KeyVault` was built now rather than
+deferred to Phase 4, at the human's request, with its key-leak test (**D50**).
+
+Built under `packages/adapters/src/dexie/`:
+
+- `db.ts` — `PalierDb`, a `Dexie` subclass declaring `architecture.md` §9.1's `version(1)` verbatim
+  (all thirteen tables). Lazy `this.table()` getters, not `field!: Table<...>` (ES2022
+  `useDefineForClassFields` would clobber Dexie's assignment). Internal, not exported.
+- `attempt-store.ts`, `schedule-store.ts`, `session-store.ts`, `settings-store.ts` — the four store
+  ports. `append` reports the duplicate-id no-op as `false` via the `ConstraintError` name;
+  `schedule.due` excludes retired (`due: null`) entries for free (IndexedDB does not index a null
+  key path) while `get` still returns them; `sessions` translates its `type` column to the port's
+  `mode`; `complete` is keep-first-write.
+- `key-vault.ts` — `dexieKeyVault`. AES-GCM at rest under a **non-extractable** `CryptoKey` held in
+  IndexedDB, §6.2 as written (an HKDF-from-stored-bytes variant was considered and rejected in
+  review — it would let a storage-reader decrypt offline; D50). `withApiKey` callback discipline, no
+  `getApiKey`; `device-secret` kept separate as the sync identity seed.
+- `index.ts` — the whole public surface: `dexieStores(name?)`, returning the five ports bound to one
+  `PalierDb`, every field a port type so **no Dexie type crosses the boundary**. `PalierDb` and the
+  factories stay internal (tests reach them by relative import).
+- Tests: each store's contract suite (`@palier/testing`) run against the Dexie impl, plus
+  adapter-specific tests (reopen survival, ciphertext-at-rest, wrong-secret-fails-to-decrypt). The
+  `keyVaultContract` `it.todo` key-leak placeholder promoted to a real assertion (D50).
+
+Config/deps: `dexie@4.4.6` added to `@palier/adapters` (pre-decided by ADR 10 / §9.1, already
+scoped by `no-dexie-outside-adapters`); `@palier/testing/setup` (fake-indexeddb) added to the
+`adapters` fast-lane Vitest project so the stores test in Node, not only under Playwright.
+
+Docs updated in the same commit (per §10): `packages/adapters/CLAUDE.md` (the `/dexie` invariants),
+`architecture.md` §6.2 (the HKDF note) and §9.1 (five stores implemented), `implementation-plan.md`
+§7 Phase 4 (the vault's storage half + unit-level key-leak test landed early), and this file
+(D49/D50, status, In-flight, *Next, decided* now `adapters/bank`, D3/D5 updates).
+
+Verified: `pnpm verify` green — check-types, lint, boundaries (**181 modules, no violations**;
+`dexie` confined to `adapters/dexie`), and **637 tests + 8 todo pass**, coverage thresholds met
+(branches 97.56% overall; `adapters/src/dexie` 96.15% branch / 100% funcs+lines, past the 90% bar).
 
 ### 21 September 2026 — `dougkeefe/continue-docs-progress-v2` (the `IdGenerator` port and the first adapter, `/ids`)
 
