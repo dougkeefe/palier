@@ -15,6 +15,10 @@
     "./dexie": {
       "types": "./dist/dexie/index.d.ts",
       "default": "./dist/dexie/index.js"
+    },
+    "./openai": {
+      "types": "./dist/openai/index.d.ts",
+      "default": "./dist/openai/index.js"
     }
   },
   "files": [

@@ -1,0 +1,6 @@
+{
+  "note": "Model ids are data, never hardcoded in TS (architecture.md §8.1). Drafter and reviewer are different models for cross-family review (content-factory.md §4.4). Set by the maintainer 23 September 2026.",
+  "passage": "gpt-6-luna",
+  "draft": "gpt-6-luna",
+  "review": "gpt-6-sol"
+}

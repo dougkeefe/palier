@@ -1,0 +1,34 @@
+{
+  "counts": {
+    "forms": 0,
+    "items": 10,
+    "passages": 8
+  },
+  "forms": [],
+  "passageShards": [
+    {
+      "count": 8,
+      "hash": "bc72ba464c77e623",
+      "lang": "*",
+      "path": "bank/v1/passages/bc72ba464c77e623.json",
+      "skill": "passage"
+    }
+  ],
+  "shards": [
+    {
+      "count": 6,
+      "hash": "b2095cad9ef67bb3",
+      "lang": "fr",
+      "path": "bank/v1/fr/reading/b2095cad9ef67bb3.json",
+      "skill": "reading"
+    },
+    {
+      "count": 4,
+      "hash": "ed60e6fa7dadbba2",
+      "lang": "fr",
+      "path": "bank/v1/fr/writing/ed60e6fa7dadbba2.json",
+      "skill": "writing"
+    }
+  ],
+  "version": 1
+}

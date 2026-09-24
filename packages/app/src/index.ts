@@ -1,4 +1,5 @@
 export type {
+  AiProvider,
   AttemptStore,
   Clock,
   IdGenerator,

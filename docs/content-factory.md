@@ -135,6 +135,8 @@ No model involved. Schema conformance, exactly four options, no duplicate option
 
 Compiles `content/` into immutable, content-hashed shards with a manifest. Reproducible: the same input produces byte-identical output, asserted in CI, because a bank build that is not reproducible cannot be audited.
 
+**Amendment, 23 September 2026 (progress.md D54).** The pipeline (§4.1–§4.6), the `AiProvider` adapter, the gate wiring and the metrics are **built** (`apps/factory`, `adapters/openai`), and a small sample batch was run end-to-end and committed under `content/factory/` and `content/bank/v1/`. Because this environment had no funded OpenAI key, the sample run used a **deterministic scripted provider**, not a real model — the plan pre-authorised exactly this. Consequences, stated plainly: the committed sample's French is synthetic, and the yield / detection / cost figures are the harness measuring itself on controlled input, not a judgement of a real model. Bank-build reproducibility is real and CI-asserted (byte-identical rebuild). The figures become meaningful only at the **deferred full-volume paid run** on a funded key, which is the run that actually tests A1/A2/A3.
+
 ---
 
 ## 5. Hand-authored content

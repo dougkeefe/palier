@@ -76,6 +76,27 @@ export type { BandCut, ExamForm } from "./exam-form.js";
 export type { Attempt, AttemptMode } from "./attempt.js";
 export { ATTEMPT_MODES } from "./attempt.js";
 
+// The AI boundary DTOs (ADR 20). Types live here so `apps/factory` can build
+// requests and read verdicts without importing `@palier/app`; the `AiProvider`
+// port interface stays in `@palier/app` (§3.3).
+export type {
+  AiCapabilities,
+  GenerateItemsRequest,
+  GeneratePassageRequest,
+  ItemDraft,
+  PassageContext,
+  PassageDraft,
+  ReviewOption,
+  ReviewRequest,
+  ReviewVerdict,
+  UsageRecord,
+} from "./ai.js";
+export {
+  itemDraftSchema,
+  passageDraftSchema,
+  reviewVerdictSchema,
+} from "./schemas/ai.js";
+
 export type {
   CutRange,
   ExamProfile,

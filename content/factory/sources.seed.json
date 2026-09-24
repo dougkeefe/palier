@@ -1,0 +1,59 @@
+[
+  {
+    "url": "https://www.canada.ca/en/treasury-board-secretariat/services/values-ethics.html",
+    "docType": "bulletin",
+    "topic": "human-resources",
+    "licence": "OGL-Canada-2.0",
+    "licenceNote": "Open Government Licence – Canada 2.0"
+  },
+  {
+    "url": "https://www.canada.ca/en/department-finance/programs/financial-sector-policy.html",
+    "docType": "report-excerpt",
+    "topic": "finance-and-budgets",
+    "licence": "OGL-Canada-2.0"
+  },
+  {
+    "url": "https://www.canada.ca/en/government/system/digital-government.html",
+    "docType": "note",
+    "topic": "it-and-digital",
+    "licence": "canada.ca-non-commercial"
+  },
+  {
+    "url": "https://www.canada.ca/en/employment-social-development/services/delivery.html",
+    "docType": "memo",
+    "topic": "service-delivery",
+    "licence": "OGL-Canada-2.0"
+  },
+  {
+    "url": "https://laws-lois.justice.gc.ca/eng/acts/O-3.01/",
+    "docType": "report-excerpt",
+    "topic": "policy-and-legislation",
+    "licence": "public-domain",
+    "licenceNote": "Federal statute, reproducible"
+  },
+  {
+    "url": "https://www.canada.ca/en/employment-social-development/services/health-safety/reports.html",
+    "docType": "bulletin",
+    "topic": "health-and-safety",
+    "licence": "OGL-Canada-2.0"
+  },
+  {
+    "url": "https://www.tpsgc-pwgsc.gc.ca/app-acq/index-eng.html",
+    "docType": "note",
+    "topic": "procurement",
+    "licence": "canada.ca-non-commercial"
+  },
+  {
+    "url": "https://www.canada.ca/en/treasury-board-secretariat/topics/project-management.html",
+    "docType": "memo",
+    "topic": "project-management",
+    "licence": "OGL-Canada-2.0"
+  },
+  {
+    "url": "https://example.org/third-party-commentary-on-official-languages",
+    "docType": "research",
+    "topic": "official-languages",
+    "licence": "other",
+    "licenceNote": "Third-party site, terms unclear — must be rejected at harvest"
+  }
+]

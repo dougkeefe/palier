@@ -24,6 +24,13 @@ framework. `.dependency-cruiser.cjs` enforces all three.
   keys, never as explicit `undefined`, or the JSON round-trip test will catch you.
 - 100% branch (§6.3), with one test per rejection reason — the content suite's error
   messages depend on them being accurate.
+- **The AI boundary DTOs live here** (ADR 20). `AiCapabilities`, the `generate*`/`review*`
+  request types, `ItemDraft`/`PassageDraft`, `ReviewVerdict` and `UsageRecord` (`ai.ts`), plus
+  the structured-output re-validation schemas (`schemas/ai.ts`, architecture.md §8.2). They sit
+  in domain, not `@palier/app`, so `apps/factory` can build requests and read verdicts without
+  importing the port layer. They are DTOs, not content artefacts, so they are **not** in
+  `CONTENT_SCHEMAS` — no JSON Schema is published for them. The `AiProvider` port *interface*
+  still lives in `@palier/app` (§3.3); only the data moved down.
 - **The item type registry lives here, minus `render`** (ADR 17). `ITEM_TYPE_DEFINITIONS`
   is a `Record<ItemType, ItemTypeDefinition>` (`schema`, `score`, `validate`,
   `generatePrompt`, `a11yContract`), so adding an `ItemType` is a compile error until it has

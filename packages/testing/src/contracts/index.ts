@@ -1,3 +1,4 @@
+export { aiProviderContract } from "./ai-provider.contract.js";
 export { attemptStoreContract } from "./attempt-store.contract.js";
 export { idGeneratorContract } from "./id-generator.contract.js";
 export {

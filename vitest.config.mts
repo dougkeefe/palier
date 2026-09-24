@@ -106,6 +106,10 @@ export default defineConfig({
         "**/__tests__/**",
         "**/*.config.*",
         "apps/web/e2e/**",
+        // The factory's bin entry is composition wiring (argv, cwd, stdout,
+        // clock, env) with no logic of its own; the CLI it calls is covered by
+        // cli.test.ts. Same rationale as apps/web's untested entry files.
+        "apps/factory/src/index.ts",
       ],
       /**
        * The packages are consumed through `dist`, so a test in one package

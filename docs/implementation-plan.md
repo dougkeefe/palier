@@ -126,13 +126,19 @@ interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string,
 
 // External services
 interface AiProvider {
+  // Amended in place 23 September 2026 (progress.md D52, ADR 20). Phase 1 built the
+  // factory-facing subset only; the writing/oral/transcribe/voice methods land with
+  // their phases (4–5). `generatePassage` was ADDED (§4.2 needs it), and generate*
+  // return DRAFTS (the factory assembles the full artefact), not Item[]/Passage[].
+  // The request/response DTOs live in @palier/domain, not here (ADR 20).
   capabilities(): AiCapabilities                                   // which of the below are supported
-  generateItems(req: GenerateItemsRequest): Promise<Item[]>
+  generatePassage(req: GeneratePassageRequest): Promise<PassageDraft[]>   // Phase 1, added
+  generateItems(req: GenerateItemsRequest): Promise<ItemDraft[]>          // draft, not Item[]
   reviewItem(req: ReviewRequest): Promise<ReviewVerdict>
-  assessWriting(req: WritingRequest): Promise<WritingAssessment>
-  assessOral(req: OralRequest): Promise<OralAssessment>
-  transcribe(audio: Blob, lang: Lang): Promise<Transcript>
-  openVoiceSession(cfg: VoiceSessionConfig): Promise<VoiceSession>  // may throw Unsupported
+  assessWriting(req: WritingRequest): Promise<WritingAssessment>   // deferred to Phase 4
+  assessOral(req: OralRequest): Promise<OralAssessment>            // deferred to Phase 5
+  transcribe(audio: Blob, lang: Lang): Promise<Transcript>         // deferred to Phase 5
+  openVoiceSession(cfg: VoiceSessionConfig): Promise<VoiceSession>  // may throw Unsupported; deferred to Phase 6
   lastUsage(): UsageRecord | null
 }
 

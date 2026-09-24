@@ -7,8 +7,17 @@ empty module asserts a boundary with nothing behind it (D3). **Two are live.** `
 `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto, no npm dependency).
 `./dexie` → `dexieStores` (the five local store ports — `AttemptStore`, `ScheduleStore`,
 `SessionStore`, `SettingsStore`, `KeyVault` — over IndexedDB via `dexie`, at schema version 1;
-progress.md D49/D50). The remaining four (`/bank`, `/openai`, `/sync`, `/vault`) stay unexported
-until they land.
+progress.md D49/D50). `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1). The
+remaining three (`/bank`, `/sync`, `/vault`) stay unexported until they land.
+
+**The OpenAI adapter is written over `fetch`, not the `openai` SDK** (progress.md D-log). It
+adds no dependency (the "no new dependency" rule), makes an SDK type impossible to leak, and
+lets tests inject a `fetch` the way `webCryptoIdGenerator` injects its clock. Model ids are
+config, never hardcoded (§8.1). It uses `response_format: { type: "json_object" }` and
+**re-validates every response with the domain Zod schema, retrying once** (§8.2) — that
+re-validation is the contract, not the model's promise. Every HTTP status / network fault /
+malformed body becomes one of our error types (`errors.ts`); no `openai` module is imported at
+all, so the `no-openai-outside-adapters-and-factory` ban is simply never exercised here.
 
 **The Dexie subpath exports one Dexie-free thing.** `dexieStores(name?)` returns a `DexieStores`
 whose every field is a port type from `@palier/app`; `PalierDb` (a `Dexie` subclass with

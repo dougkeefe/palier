@@ -1,0 +1,71 @@
+[
+  {
+    "reasons": [
+      "defensible distractor(s): d"
+    ],
+    "stemFr": "administration réglementation jour vers midi cette note porte sur un sujet clair."
+  },
+  {
+    "reasons": [
+      "register flag: reads as France-specific"
+    ],
+    "stemFr": "élaboration renseignements avant la fin du mois tard selon usage vise point."
+  },
+  {
+    "reasons": [
+      "register flag: reads as France-specific"
+    ],
+    "stemFr": "gouvernance approbation consultation coordination planification rappel le bureau ouvre avec les gens pour jour vers."
+  },
+  {
+    "reasons": [
+      "defensible distractor(s): b"
+    ],
+    "stemFr": "réglementation gouvernance porte sur un sujet clair et utile ici chaque membre."
+  },
+  {
+    "reasons": [
+      "defensible distractor(s): c"
+    ],
+    "stemFr": "consultation coordination planification élaboration renseignements membre reçoit copie avant la fin du mois tard selon."
+  },
+  {
+    "reasons": [
+      "defensible distractor(s): b"
+    ],
+    "stemFr": "gouvernance approbation consultation coordination planification midi cette note porte sur un sujet clair et utile."
+  },
+  {
+    "reasons": [
+      "defensible distractor(s): b"
+    ],
+    "stemFr": "gouvernance approbation tard selon usage vise point suivi cadre envoi delai texte."
+  },
+  {
+    "reasons": [
+      "reviewer chose \"a\", intended \"d\"",
+      "defensible distractor(s): d"
+    ],
+    "stemFr": "planification élaboration copie avant la fin du mois tard selon usage vise."
+  },
+  {
+    "reasons": [
+      "reviewer chose \"a\", intended \"b\"",
+      "defensible distractor(s): b"
+    ],
+    "stemFr": "approbation consultation coordination planification élaboration le bureau ouvre avec les gens pour jour vers midi."
+  },
+  {
+    "reasons": [
+      "reviewer chose \"a\", intended \"b\"",
+      "defensible distractor(s): b"
+    ],
+    "stemFr": "approbation consultation coordination planification élaboration le bureau ouvre avec les gens pour jour vers midi."
+  },
+  {
+    "reasons": [
+      "register flag: reads as France-specific"
+    ],
+    "stemFr": "élaboration renseignements avant la fin du mois tard selon usage vise point."
+  }
+]
