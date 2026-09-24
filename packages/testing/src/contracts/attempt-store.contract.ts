@@ -25,6 +25,30 @@ export const attemptStoreContract = (
       expect((await store.recent("reading", 10)).map((a) => a.id)).toEqual(["a", "b"]);
     });
 
+    it("orders recent by id, so an attempt synced in late sorts by when it was made", async () => {
+      const store = await make();
+      await store.append(anAttempt({ id: attemptId("b"), ts: "2026-01-02T00:00:00.000Z" }));
+      await store.append(anAttempt({ id: attemptId("a"), ts: "2026-01-01T00:00:00.000Z" }));
+
+      expect((await store.recent("reading", 10)).map((a) => a.id)).toEqual(["a", "b"]);
+    });
+
+    it("keeps the highest ids when recent is capped, whatever order they arrived in", async () => {
+      const store = await make();
+      await store.append(anAttempt({ id: attemptId("c") }));
+      await store.append(anAttempt({ id: attemptId("a") }));
+      await store.append(anAttempt({ id: attemptId("b") }));
+
+      expect((await store.recent("reading", 2)).map((a) => a.id)).toEqual(["b", "c"]);
+    });
+
+    it("returns nothing from recent when asked for no attempts", async () => {
+      const store = await make();
+      await store.append(anAttempt({ id: attemptId("a") }));
+
+      expect(await store.recent("reading", 0)).toEqual([]);
+    });
+
     it("is idempotent on duplicate ULIDs", async () => {
       const store = await make();
       await store.append(anAttempt({ id: attemptId("a") }));

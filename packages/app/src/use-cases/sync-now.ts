@@ -14,6 +14,7 @@ import {
   collectRecords,
   decodeRecord,
   keyOf,
+  readRecord,
   recordHash,
   writeRecord,
 } from "../sync/records.js";
@@ -133,7 +134,15 @@ const exchange = async (request: SyncNowRequest, deps: SyncNowDeps, from: number
     // server's older copy out-merge the device's newer one.
     if (base !== undefined && doc.revision <= base.revision) return;
     const remoteHash = recordHash(remote.value);
-    const mine = local.get(key);
+    // The snapshot is a round trip old, and study does not pause for sync: an answer
+    // may have changed this record since. Settle against what the device holds now,
+    // so that answer counts as a local edit and merges instead of being overwritten.
+    let mine = local.get(key);
+    const live = await readRecord(doc.type, doc.id, deps);
+    if (live !== null && recordHash(live.value) !== mine?.hash) {
+      mine = { record: live, hash: recordHash(live.value) };
+      local.set(key, mine);
+    }
     let next: Held = { record: remote, hash: remoteHash };
     if (mine !== undefined && mine.hash !== remoteHash) {
       const clean = base?.hash === mine.hash;

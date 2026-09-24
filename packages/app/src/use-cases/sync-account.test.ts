@@ -124,6 +124,31 @@ describe("pairDevice", () => {
     expect((await b.syncState.state()).enabled).toBe(true);
   });
 
+  it("forgets its account when a redeem's answer is lost, so the next sync learns which account it is in", async () => {
+    const server = fakeServer();
+    const a = await aRegisteredDevice(server.transport("secret-a"));
+    await a.attempts.append(anAttempt("from-a"));
+    await syncNow({ label: "Laptop" }, a);
+    const { code } = await requestPairCode({ label: "Laptop" }, a);
+    const b = await aRegisteredDevice(server.transport("secret-b"));
+    await b.attempts.append(anAttempt("from-b"));
+    await syncNow({ label: "Phone" }, b);
+    const transport = b.transport;
+    const lostAnswer: SyncTransport = {
+      ...transport,
+      redeemPairCode: async (c, label) => {
+        await transport.redeemPairCode(c, label);
+        throw new SyncUnavailableError("response lost");
+      },
+    };
+
+    await expect(pairDevice({ code, label: "Phone" }, { ...b, transport: lostAnswer })).rejects.toThrow(SyncUnavailableError);
+    await syncNow({ label: "Phone" }, b);
+
+    expect((await b.syncState.state()).identity?.accountId).toBe(server.accountOf("secret-a"));
+    expect((await b.attempts.all()).map((x) => x.id).sort()).toEqual(["from-a", "from-b"]);
+  });
+
   it("lets a rejected code through and leaves the device as it was", async () => {
     const b = aDevice(fakeServer().transport("secret-b"));
 

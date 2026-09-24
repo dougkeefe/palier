@@ -1,10 +1,12 @@
 import type {
   DeviceId,
+  DeviceIdentity,
   DeviceSummary,
   KeyVault,
   SyncStateStore,
   SyncTransport,
 } from "../ports/index.js";
+import { SyncUnavailableError } from "../ports/index.js";
 import type { ProgressStores } from "../sync/records.js";
 import { type SyncNowDeps, type SyncNowRequest, type SyncOutcome, syncNow } from "./sync-now.js";
 import { wipeData } from "./wipe-data.js";
@@ -42,12 +44,29 @@ export const requestPairCode = async (
  * device"). The ledger is forgotten first: nothing this device agreed with its old
  * account holds in the new one, so its whole local set is offered and merged with
  * what the account already has. Local progress is never discarded by pairing.
+ *
+ * **A redeem that fails in transit may still have happened** — the server moved this
+ * device to the new account and only its answer was lost. Keeping the old identity
+ * would then sync into the new account with the old account's watermark and ledger,
+ * and silently never receive what the new account held below them (found by the sync
+ * simulator; progress.md D74). So the device forgets both, and its next sync
+ * re-registers: registration is idempotent per secret (D69), so the server says which
+ * account the device is really in, and a full exchange from watermark 0 follows.
  */
 export const pairDevice = async (
   request: SyncNowRequest & { readonly code: string },
   deps: SyncNowDeps,
 ): Promise<SyncOutcome> => {
-  const identity = await deps.transport.redeemPairCode(request.code, request.label);
+  let identity: DeviceIdentity;
+  try {
+    identity = await deps.transport.redeemPairCode(request.code, request.label);
+  } catch (error) {
+    if (error instanceof SyncUnavailableError) {
+      await deps.syncState.resetLedger();
+      await deps.syncState.update({ identity: null });
+    }
+    throw error;
+  }
   await deps.syncState.resetLedger();
   await deps.syncState.update({ identity, enabled: true });
   return syncNow(request, deps);

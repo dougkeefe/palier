@@ -26,6 +26,10 @@ belongs in `@palier/app`.
 - **`Attempt` carries no `subSkill` or `targetBand`** — any calculation keyed on those joins
   attempts to items by id (`calculateTrend` takes `items` for exactly this), and ignores an
   attempt whose item is absent from the bank.
+- **A calculation over attempts is a function of the attempt set, not of its order.** Two synced
+  devices hold the same attempts in different orders, and must show the same trend (§6.2 tier 5).
+  `calculateTrend` breaks equal `ts` by id, and a property holds it to permutation invariance
+  (progress.md D73). Any new windowed or order-sensitive calculation needs the same tie-break.
 - **Golden fixtures are the contract** (§5). Recorded outputs live in `src/__fixtures__/*.json`;
   a change that moves a golden value fails its test and must be explained in the PR, never
   regenerated to make the test pass.

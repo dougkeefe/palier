@@ -63,7 +63,13 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   - attempt: immutable.
 
   **A pulled document at or below the ledger's revision is skipped**: it is the device's own echo,
-  and merging it would let an older copy win. Sync failure is an outcome (`unavailable`, `removed`),
+  and merging it would let an older copy win. **`settle` judges a pulled copy against the device's
+  live record, not the snapshot the sync read before its network call** (`readRecord`), so an
+  answer made mid-sync merges instead of vanishing (progress.md D75). **A pair redeem that fails in
+  transit forgets the identity and ledger**, because the server may have moved the device anyway; the
+  next sync re-registers and learns its real account (D74). Both were found by the sync simulator in
+  `@palier/testing` (D76). `AttemptStore.recent` returns the highest ids, oldest first, in every
+  implementation (D73). Sync failure is an outcome (`unavailable`, `removed`),
   never a throw into study (§11). Registration waits for the first completed session (§9.3).
 - **The export document carries no key-vault content** — no API key, no device secret
   (`use-cases/export-document.ts`). An export is a file users share; the key stays in the

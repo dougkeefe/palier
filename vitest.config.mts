@@ -105,6 +105,20 @@ export default defineConfig({
               },
             },
             /**
+             * The sync simulator at volume (tier 5): a few hundred seeds here, many
+             * thousands under `CI_LANE=nightly`. Its fast-lane share runs in `testing`.
+             */
+            {
+              extends: true,
+              test: {
+                name: "integration-testing",
+                root: "./packages/testing",
+                environment: "node",
+                include: ["src/**/*.integration.test.ts"],
+                setupFiles: [SETUP],
+              },
+            },
+            /**
              * The sync backend's tier-4 tests: the Drizzle repository and the route
              * handlers over PGlite with the committed migrations (progress.md D70).
              */

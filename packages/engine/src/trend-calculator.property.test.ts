@@ -2,7 +2,7 @@ import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 
 import type { Attempt, Item } from "@palier/domain";
-import { itemId } from "@palier/domain";
+import { TARGET_BANDS, attemptId, itemId } from "@palier/domain";
 
 import { MIN_EVIDENCE, TREND_WINDOW, calculateTrend } from "./trend-calculator.js";
 import { anAttempt, anItem } from "./__tests__/fixtures.js";
@@ -14,6 +14,10 @@ import { anAttempt, anItem } from "./__tests__/fixtures.js";
  *    including the degenerate cases of 0 and 100 percent."
  *   "Monotonicity. Answering an additional item correctly never decreases the
  *    ability estimate, and answering incorrectly never increases it."
+ *
+ * And one tier 5 leans on (§6.2: "every device computes the same ability estimate
+ * from that set"): the trend is a function of the attempt *set*, so two devices that
+ * received the same attempts in different orders agree (progress.md D73).
  */
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -85,6 +89,35 @@ describe("calculateTrend properties", () => {
           } else {
             expect(after.accuracy).toBeLessThanOrEqual(before.accuracy);
           }
+        },
+      ),
+    );
+  });
+
+  it("gives the same trend for the same attempts in any order, even when their times tie", () => {
+    // One item per band, and a handful of instants shared by many attempts, so the
+    // window's cut at TREND_WINDOW falls inside a run of equal `ts`.
+    const items = TARGET_BANDS.map((band) => anItem({ id: itemId(`01HITEM${band}`), targetBand: band, skill: "reading" }));
+    const attempts = fc
+      .array(fc.record({ band: fc.integer({ min: 0, max: 2 }), correct: fc.boolean(), instant: fc.integer({ min: 0, max: 3 }) }), {
+        minLength: TREND_WINDOW + 1,
+        maxLength: TREND_WINDOW + 60,
+      })
+      .map((rows) =>
+        rows.map((row, i) =>
+          anAttempt({
+            id: attemptId(`01HATTEMPT${String(i).padStart(13, "0")}`),
+            itemId: (items[row.band] as Item).id,
+            correct: row.correct,
+            ts: new Date(row.instant * DAY).toISOString(),
+          }),
+        ),
+      );
+    fc.assert(
+      fc.property(
+        attempts.chain((list) => fc.tuple(fc.constant(list), fc.shuffledSubarray(list, { minLength: list.length }))),
+        ([list, shuffled]) => {
+          expect(calculateTrend("reading", shuffled, items)).toEqual(calculateTrend("reading", list, items));
         },
       ),
     );

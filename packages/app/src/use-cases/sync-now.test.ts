@@ -162,6 +162,16 @@ describe("syncNow — pulling", () => {
     expect((await b.schedule.get(itemId("item-x")))?.box).toBe(3);
   });
 
+  it("writes a setting the device has never set", async () => {
+    const { a, b } = await aPair();
+    await a.settings.set("dailyGoal", 20);
+    await a.sync();
+
+    await b.sync();
+
+    expect(await b.settings.get("dailyGoal")).toBe(20);
+  });
+
   it("skips a malformed document rather than writing it", async () => {
     const { server, a, b } = await aPair();
     const account = server.accountOf("secret-a") ?? "";
@@ -237,6 +247,66 @@ describe("syncNow — the Gate B rule (progress.md D69)", () => {
 
     expect(await b.sync()).toMatchObject({ merged: 1 });
     expect((await b.schedule.get(itemId("item-x")))?.box).toBe(1);
+  });
+
+  /**
+   * The app's background sync can fire mid-drill. The sync reads the device's records,
+   * then waits on the network; an answer lands in that gap; then the pull brings the
+   * other device's copy of the same item. The answer did not see that copy, so the two
+   * are concurrent and must merge — not be overwritten by a snapshot taken before the
+   * answer (found by the sync simulator; progress.md D75).
+   */
+  it("merges an answer made while its own sync was in flight, rather than overwriting it", async () => {
+    const { a, b } = await aPair();
+    await a.schedule.put(anEntry("item-x", { box: 2 }));
+    await a.sync();
+    await b.sync();
+    await b.schedule.put(anEntry("item-x", { box: 3 }));
+    await b.sync();
+    const pull = a.transport.pull;
+    vi.spyOn(a.transport, "pull").mockImplementationOnce(async (watermark) => {
+      await a.schedule.put(anEntry("item-x", { box: 1 }));
+      return pull(watermark);
+    });
+
+    expect(await a.sync()).toMatchObject({ merged: 1, pushed: 1 });
+    await b.sync();
+
+    expect((await a.schedule.get(itemId("item-x")))?.box).toBe(1);
+    expect((await b.schedule.get(itemId("item-x")))?.box).toBe(1);
+  });
+
+  it("keeps a setting changed while its own sync was in flight", async () => {
+    const { a, b } = await aPair();
+    await b.settings.set("dailyGoal", 20);
+    await b.sync();
+    const pull = a.transport.pull;
+    vi.spyOn(a.transport, "pull").mockImplementationOnce(async (watermark) => {
+      await a.settings.set("dailyGoal", 30);
+      return pull(watermark);
+    });
+
+    await a.sync();
+
+    expect(await a.settings.get("dailyGoal")).toBe(30);
+  });
+
+  it("keeps a session completed while its own sync was in flight", async () => {
+    const { a, b } = await aPair();
+    const open: Session = { ...done, id: sessionId("s-open"), completedAt: null };
+    await a.sessions.create(open);
+    await a.sync();
+    await b.sync();
+    const pull = a.transport.pull;
+    vi.spyOn(a.transport, "pull").mockImplementationOnce(async (watermark) => {
+      await a.sessions.create({ ...open, completedAt: NOW });
+      // The server hands back the open copy, as it would after another device's import.
+      return { docs: [{ type: "session", id: "s-open", revision: 999, payload: open }], watermark: await pull(watermark).then((p) => p.watermark), more: false };
+    });
+
+    await a.sync();
+
+    expect((await a.sessions.all()).find((x) => x.id === open.id)?.completedAt).toBe(NOW);
   });
 
   it("gives up after a bounded number of rounds against a server that keeps conflicting", async () => {

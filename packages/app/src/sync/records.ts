@@ -1,4 +1,5 @@
 import type { Attempt } from "@palier/domain";
+import { itemId } from "@palier/domain";
 
 import type {
   AttemptStore,
@@ -124,6 +125,31 @@ export const collectRecords = async (stores: ProgressStores): Promise<Map<string
     ...settings.map(settingRecord),
   ];
   return new Map(records.map((r) => [keyOf(r.type, r.id), r]));
+};
+
+/**
+ * The record a device holds under one key *right now* — for a sync that read its
+ * snapshot a network round trip ago, while study carried on (progress.md D75). Null
+ * when the device holds none. Attempts are never re-read: they are immutable, so the
+ * snapshot's copy is still the live one.
+ */
+export const readRecord = async (type: SyncDocType, id: string, stores: ProgressStores): Promise<SyncRecord | null> => {
+  switch (type) {
+    case "attempt":
+      return null;
+    case "schedule": {
+      const entry = await stores.schedule.get(itemId(id));
+      return entry === null ? null : scheduleRecord(entry);
+    }
+    case "session": {
+      const session = (await stores.sessions.all()).find((s) => s.id === id);
+      return session === undefined ? null : sessionRecord(session);
+    }
+    case "setting": {
+      const value = await stores.settings.get<unknown>(id);
+      return value === null ? null : settingRecord({ key: id, value });
+    }
+  }
 };
 
 /**

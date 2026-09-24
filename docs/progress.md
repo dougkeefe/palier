@@ -316,7 +316,7 @@ session-log evidence; nothing is ticked without it.
 - [x] `@palier/app` use cases: `StartSession`, `AnswerItem`, `CompleteSession`, `RunDiagnostic` landed (20–21 September 2026); `ExportData`, `ImportData`, `WipeData` landed (24 September 2026, `dougkeefe/algiers`; D61, D62); `SyncNow` plus the pairing/device/switch/delete-everywhere use cases landed (24 September 2026, `dougkeefe/pangyo`; D69)
 - [x] UI: the whole single-device set **landed** (24 September 2026, `dougkeefe/algiers`; D63–D67), and the sync settings with pairing by code, the stateful header indicator and the background runner (24 September 2026, `dougkeefe/pangyo`; D72)
 - [x] Item reporting control and the GitHub issue path: on every feedback panel, four reason codes, a prefilled issue on the project repository (24 September 2026; E2E-tested)
-- [ ] The sync simulator (tier 5): two/three-device scenarios, seeded faults, convergence assertions
+- [x] The sync simulator (tier 5): two/three-device scenarios, seeded faults, convergence assertions (24 September 2026, `dougkeefe/yamoussoukro`; D76). It found two real sync defects, both fixed at the source (D74, D75), and a trend-order gap (D73)
 - [x] Every real adapter passes its port contract suite — `ids`, `dexie` (all six ports, `SyncStateStore` included), `bank`, `openai` and `sync` (24 September 2026; `pnpm verify` runs every one)
 
 **Exit criteria** (the actual gate)
@@ -324,7 +324,7 @@ session-log evidence; nothing is ticked without it.
 - [x] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]. Journey 1 covers the diagnostic to accuracy per band with its interval; **journey 8** covers daily sessions on two browser contexts paired by code, with the progress screen reading identically on both (session log, 24 September 2026, `dougkeefe/pangyo`)
 - [x] Full offline operation after first load [R4] — for everything Phase 2 builds: journey 2 (a whole drill session) passes with the network off after one online load, over real IndexedDB and the service-worker-cached bank (session log, 24 September 2026). Mock exams are Phase 3, and their offline run is Phase 3's journey 3
 - [ ] Engine unit tests exhaustive at every boundary, golden fixtures locked
-- [ ] Sync simulator passes several hundred seeds including full partition and heal, no lost or duplicated attempts
+- [x] Sync simulator passes several hundred seeds including full partition and heal, no lost or duplicated attempts, and the same trend on every device: 400 seeds on the memory server and 100 through the real route handlers on PGlite in the medium lane, and 4,000 + 200 once by hand (session log, 24 September 2026, `dougkeefe/yamoussoukro`; D76)
 - [x] Every adapter passes its port contract suite — `ids`, `dexie` ×6, `bank`, `openai`, `sync`; and `sync` passes it through the real route handlers too, on the memory repository (fast lane) and on PGlite (integration lane). Session log, 24 September 2026, `dougkeefe/pangyo`
 
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
@@ -2198,11 +2198,167 @@ treatment for high-entropy bearer tokens.
   stream (the D71 collision), journey 8 fails with "Expected 19 items answered, Received 13". Six
   attempts were silently lost to the duplicate no-op.
 
+### D73 — the trend is a function of the attempt *set*: ties break by id, and `recent` orders by id everywhere
+**Date:** 24 September 2026 · **Status:** accepted
+
+§6.2 tier 5 asks that "every device computes the same ability estimate from that set". Two things let
+two devices holding the same attempts disagree:
+
+- **`calculateTrend` sorted by `ts` alone.** Its sort is stable, so attempts with equal `ts` kept their
+  input order, and when `TREND_WINDOW` (100) cut inside such a run the result depended on the order a
+  device happened to receive its attempts. A new tier 2 property, "gives the same trend for the same
+  attempts in any order, even when their times tie", failed on its first run. **Fix:** equal instants
+  order by id (a ULID, so by creation). **No golden or unit value moved:** all 179 engine tests passed
+  unchanged, because only a tie inside the window's cut is affected.
+- **`memoryAttemptStore.recent` returned arrival order; `dexieAttemptStore.recent` returns id order.**
+  The contract's "insertion order" case could not tell the two apart, because its ids were appended in
+  order. For a synced attempt, arrival and creation differ. Two contract cases were **added** ("orders
+  recent by id, so an attempt synced in late sorts by when it was made" and "keeps the highest ids when
+  recent is capped"); Dexie already passed both, the memory store now sorts. None was weakened. The
+  port's doc comment now states the order.
+
+In production (Dexie) neither could bite on its own today, since Dexie orders by id and real `ts` values
+rarely tie to the millisecond; both are fixed because the simulator's trend property depends on them.
+
+### D74 — a pair redeem that fails in transit forgets the device's identity and ledger
+**Date:** 24 September 2026 · **Status:** accepted. **Found by the sync simulator** (seed 74, 3 devices)
+
+A redeem can succeed on the server and lose its answer. The server has then moved the device's secret
+into the new account (and dropped the old one if it is now empty), while the device still believes its
+old identity. Every later sync went into the new account **from the old account's watermark and ledger**:
+the device pushed its own history there, but never received what the new account held below that
+watermark, and every sync reported success. That is permanent, silent divergence from one lost response.
+The user saw "pairing failed" and might reasonably not retry.
+
+**Fix, in `pairDevice`:** on `SyncUnavailableError` from the redeem, reset the ledger and set `identity:
+null` before rethrowing. The next sync re-registers, and because registration is idempotent per secret
+(D69 #7) the server answers with the account the device is really in, followed by a full exchange from
+watermark 0. If the redeem never reached the server, the device simply re-registers into its old account
+and re-offers its records, which conflict and merge harmlessly. Nothing local is lost either way.
+Registration stays deferred until a completed session (§9.3), so a device with no completed session stays
+unregistered until the user retries pairing.
+
+- **The app's `fakeServer` was not idempotent on registration**, although the port promises it. It now
+  is, and every existing test passed unchanged. New test: `sync-account.test.ts`, "forgets its account
+  when a redeem's answer is lost, so the next sync learns which account it is in" (it failed first).
+- **Proven to bite:** with the fix removed, regression seed 74 fails.
+
+### D75 — sync settles against the live record, not the snapshot it read before the network call
+**Date:** 24 September 2026 · **Status:** accepted. **Found by the sync simulator** (seed 7, 2 devices)
+
+The background runner can sync mid-drill (a `focus` trigger). `syncNow` read every record, waited on the
+network, and then decided "clean, so take the server's copy" against that **snapshot**. An answer made in
+the gap was overwritten: its schedule change vanished, although its attempt survived. With Gate B that
+could hide a failure. A lower box made on the device gave way to the other device's higher one, so an
+item the user just missed would not come back for review.
+
+**Fix:** `settle` re-reads the device's current copy of each pulled record (`readRecord` in
+`sync/records.ts`: `schedule.get`, `settings.get`, `sessions.all()` for a session). A copy that changed
+since the snapshot counts as a local edit, so it merges by Gate B instead of being replaced. Attempts are
+immutable and are not re-read. Three tests were added to `sync-now.test.ts`, one each for a schedule entry,
+a setting and a session changed mid-sync. All three failed before the fix.
+
+**Residual, recorded rather than closed:** the window is now one store read wide rather than a network round
+trip: an answer landing *between* `settle`'s read and its write could still be overwritten. Closing it
+needs a transaction spanning both, which the store ports do not offer. **Revisit when** a store port gains
+transactions, or the simulator's interleaving model reaches store-operation granularity (see D76).
+**Proven to bite:** with the re-read removed, seed 7 and three others fail.
+
+### D76 — the sync simulator: where it lives, what it asserts, and what it cannot see
+**Date:** 24 September 2026 · **Status:** accepted
+
+- **Where.** `packages/testing/src/simulator/` (network, device, oracle, run, seeds), exported from the
+  root entry and never from `./in-memory`. The profile is passed in, because `@palier/testing` has no
+  dependency on `@palier/content`. The real-server variant lives in `apps/web`
+  (`src/app/api/simulator.integration.test.ts`), because testing may not import `apps/web`. It drives each
+  device through `httpSyncTransport` → the route files → the handlers → Drizzle → PGlite, with a separate
+  `x-forwarded-for` per device so the per-IP rate limits apply as they would for separate browsers.
+- **The devices are the real use cases** (`startSession`, `answerItem`, `completeSession`, `syncNow`,
+  `requestPairCode`, `pairDevice`, `setSyncEnabled`, `exportData`, `importData`, `practiceTrend`) over
+  the memory stores. Each device has its own id stream, 2^20 apart (D71), and its own clock skew of up to
+  ±3 hours. Like the app's `SyncRunner`, a device runs at most one sync at a time, and study continues
+  while a background sync is in flight.
+- **The network holds each call until a seeded scheduler delivers it**, because the memory server acts when
+  called. It reorders across devices, drops before the server (10%), drops the response after the server
+  has acted (10%), and partitions. The server runs each delivered call to completion, so a run is a total
+  order and replays exactly from its seed.
+- **Four phases, each ending in heal → pair everyone → sync to quiescence → check:**
+  1. **chaos**: all devices at once, with every action and faults;
+  2. **concurrent edits** from a converged state, every device partitioned;
+  3. **study during the device's own sync**;
+  4. **a week offline**: the others sync once a day, *not* to quiescence, so a device's own echo is still
+     in flight when it answers again.
+- **Checks:**
+  - no attempt lost;
+  - none duplicated;
+  - every store identical;
+  - `practiceTrend` identical;
+  - no schedule entry that no answer wrote;
+  - after each partition, every record equals `expectedAfterHeal(base, sides)`. That is: changed on one
+    side means that side's copy (the week-offline property); changed on several means their
+    `mergeRecord` fold (Gate B); a setting changed on several may be any of them, since the last to push
+    wins.
+
+  A lone device's side is built from **what its answers wrote**, not from its store afterwards, because a
+  sync that overwrote an answer (D75), or a device's own echo overwriting its newer box (D69 #5), would
+  otherwise be hidden in the snapshot. That change is what made the ledger-skip revert bite. The first
+  design missed it.
+- **Lanes:**
+
+  | Lane | Seeds |
+  | --- | --- |
+  | Fast (`testing` project) | 16 × two devices + 16 × three, plus the regression seeds and proofs that each check bites |
+  | Medium (`integration-testing`, new gated project; `test:integration` runs it) | 400 on the memory server, and 100 through the real handlers on PGlite |
+  | Nightly (`CI_LANE=nightly`) | 100,000 and 2,000 |
+
+  `PALIER_SIM_SEEDS` and `PALIER_SIM_SEEDS_PGLITE` override the counts. Measured: about 20 ms a seed in
+  memory and about 110 ms on PGlite.
+- **What it cannot see (honest limits):**
+  - interleavings finer than a network call: store operations resolve at once, so an answer never lands
+    between two store calls inside `settle` (D75's residual);
+  - merges between two devices both at home in the three-device week phase, which are legitimate and
+    not checked against answers;
+  - device removal, `deleteEverywhere` and tombstones, which it does not exercise;
+  - a failing seed replays the chaos script as it stood, so each fixed defect also keeps its own named
+    unit test in `@palier/app`.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, part 1: the sync simulator, and the two defects it found)
+
+The Phase 2 exit criterion "sync simulator passes several hundred seeds including full partition and heal,
+no lost or duplicated attempts" is **met**.
+
+- **Built** (D76): `packages/testing/src/simulator/` and its PGlite twin in `apps/web`. Also a new gated
+  Vitest project, `integration-testing`, which `test:integration` now runs.
+- **Found and fixed at the source.** Each fix has a named unit test that failed first:
+  - **D74**: a lost pair-redeem answer left a device syncing into its new account from its old watermark,
+    so it silently never received the account's older records (seed 74, 3 devices).
+  - **D75**: an answer made during the device's own background sync was overwritten by the pull (seed 7,
+    2 devices).
+  - **D73**: the trend was not a function of the attempt set. There was a tie-break gap in
+    `calculateTrend`, and a `recent` order that differed between the memory store and Dexie. **No golden
+    value moved.**
+- **A first oracle that could not see a class of bug, and its fix:** reverting the D69 #5 ledger skip did
+  *not* fail the first version, because quiesce rounds consumed every echo and sides were snapshots taken
+  after any loss. Sides are now built from answer writes, and the week phase syncs once a day. After that,
+  the revert failed 7 of 16 two-device seeds.
+- **Evidence:**
+  - `pnpm verify` → green: 1259 tests (8 todo); boundaries clean (292 and 127 modules); thresholds held;
+    ~21 s wall.
+  - `pnpm test:integration` → 5 files, 39 tests, **13.0 s**, which includes 400 memory seeds (~9 s) and
+    100 PGlite seeds (~11 s) in parallel projects.
+  - By hand: `PALIER_SIM_SEEDS=4000` → clean (78 s); `PALIER_SIM_SEEDS_PGLITE=200` → clean (21 s).
+  - **Proven to bite, each restored afterwards:**
+    - ledger skip removed → 7 two-device seeds fail;
+    - D74 fix removed → regression seed 74 fails;
+    - D75 re-read removed → seeds 7 and 12, in both device counts, plus both regression seeds, fail;
+    - colliding id streams (`idSpacing: 1`) → `lost-attempt`;
+    - a server that acknowledges and drops one push → `lost-attempt`.
 
 ### 24 September 2026 — `dougkeefe/pangyo` (Slice 2, part 4: the sync UI and journey 8 — Slice 2 complete)
 
