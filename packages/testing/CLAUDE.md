@@ -7,6 +7,15 @@ canonical 60-item fixture bank (§3.2), and the MSW handlers — including `bank
 serves an `ItemRepositoryBank` as the manifest + content-hashed shards the real bank ships, so the
 HTTP bank adapter is held to the same `itemRepositoryContract` the in-memory repo passes (it
 re-implements the factory's `buildBank` grouping, since this package may not import the factory).
+The sync pieces are:
+- `memorySyncServer`, the whole sync service in memory: revisions, pairing, revocation, and a
+  `transport(secret)` per device;
+- `memorySyncStateStore`;
+- `syncTransportContract` and `syncStateStoreContract`;
+- `syncHandlers`, which serves a memory server over the sync wire protocol for the HTTP adapter. It is
+  a deliberate second copy of the route handlers' protocol, checked by `apps/web` running the same
+  contract against the real handlers (progress.md D69).
+
 Test infrastructure as a package, so a use case test runs in milliseconds with no mocking framework.
 
 **May import** `@palier/app`, `@palier/domain`. `vitest` is a **peer** dependency because
@@ -28,7 +37,8 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
   in `@palier/app` rather than being stubbed here. (`SessionStore` has landed:
   `memorySessionStore` and `sessionStoreContract` exist, progress.md D45. `IdGenerator`
   likewise: `counterIdGenerator` and `idGeneratorContract`, D48 — the Web Crypto adapter in
-  `@palier/adapters/ids` is held to the same contract.)
+  `@palier/adapters/ids` is held to the same contract. `SyncTransport` and `SyncStateStore`
+  likewise, D69.)
 
 ## The four mistakes most likely to be made here
 

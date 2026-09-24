@@ -10,3 +10,5 @@ export { keyVaultContract } from "./key-vault.contract.js";
 export { scheduleStoreContract } from "./schedule-store.contract.js";
 export { sessionStoreContract } from "./session-store.contract.js";
 export { settingsStoreContract } from "./settings-store.contract.js";
+export { syncStateStoreContract } from "./sync-state-store.contract.js";
+export { contractSecret, syncTransportContract } from "./sync-transport.contract.js";

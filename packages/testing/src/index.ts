@@ -21,6 +21,8 @@ export * from "./contracts/index.js";
 export { handlers } from "./msw/handlers.js";
 export { bankHandlers } from "./msw/bank-handlers.js";
 export type { BankHandlerOptions } from "./msw/bank-handlers.js";
+export { syncHandlers } from "./msw/sync-handlers.js";
+export type { SyncHandlerOptions } from "./msw/sync-handlers.js";
 export { mswServer } from "./msw/node.js";
 export { createPgHarness } from "./pglite/harness.js";
 export type { PgHarness } from "./pglite/harness.js";

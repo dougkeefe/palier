@@ -130,6 +130,18 @@ body {
   background: var(--ink-muted);
 }
 
+.app-sync-status {
+  text-decoration: none;
+}
+
+.app-sync-status--synced .app-sync-status__dot {
+  background: var(--correct);
+}
+
+.app-sync-status--syncing .app-sync-status__dot {
+  background: var(--primary);
+}
+
 /* -------------------------------------------------------------------- main */
 .app-main {
   flex: 1;
@@ -475,4 +487,79 @@ body {
   display: flex;
   gap: 1rem;
   margin: 0;
+}
+
+/* ------------------------------------------------------------ sync settings */
+.app-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.app-switch__input {
+  width: 2.75rem;
+  height: 1.5rem;
+  accent-color: var(--primary);
+}
+
+.app-columns {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.app-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.app-device-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-device {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.app-device__label {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0;
+  font-weight: 600;
+}
+
+.app-tag {
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--ink-muted);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.app-code {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+}
+
+.app-input--code {
+  max-width: 12rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }

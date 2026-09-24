@@ -148,14 +148,29 @@ interface AiProvider {
 }
 
 interface SyncTransport {
-  push(docs: SyncDocument[], watermark: ISO): Promise<PushResult>
-  pull(watermark: ISO, cursor?: string): Promise<PullResult>
-  registerDevice(): Promise<DeviceIdentity>
+  push(items: PushItem[]): Promise<PushResult>                  // PushItem = { type, id, baseRevision: number | null, payload }
+  pull(watermark: number): Promise<PullResult>                  // PullResult = { docs, watermark, more }
+  registerDevice(label: string): Promise<DeviceIdentity>        // idempotent per secret
   requestPairCode(): Promise<{ code: string; expiresAt: ISO }>
-  redeemPairCode(code: string): Promise<DeviceIdentity>
+  redeemPairCode(code: string, label: string): Promise<DeviceIdentity>
   listDevices(): Promise<DeviceSummary[]>
   revokeDevice(id: DeviceId): Promise<void>
   deleteAccount(): Promise<void>
+}
+// Amended in place 24 September 2026 with Gate B (progress.md D69). Conflicts are detected
+// per document: every server document carries a per-account `revision`, a push names the
+// `baseRevision` it was derived from, and the server takes it only while that is current —
+// otherwise it returns its copy in `conflicts` and the DEVICE merges (lower Leitner box wins).
+// So the watermark is a revision, not an ISO instant, and needs no separate cursor. The
+// credential is the device's own secret, handed to the adapter by the composition root.
+
+interface SyncStateStore {                                      // a port §3.3 did not name (D69)
+  state(): Promise<SyncState>                                   // { identity, watermark, enabled, lastSyncedAt }
+  update(patch: Partial<SyncState>): Promise<SyncState>
+  ledger(): Promise<LedgerEntry[]>                              // per document: { type, id, revision, hash }
+  record(entries: LedgerEntry[]): Promise<void>
+  resetLedger(): Promise<void>                                  // forget ledger + watermark, keep identity + switch
+  clear(): Promise<void>
 }
 
 interface KeyVault {
@@ -647,6 +662,12 @@ mirrors this list and the two must agree.
   single-device screen subset. The detail is in `progress.md` Phase 2.
   **Slice 1 status, 24 September 2026:** built. The single-device app works end to end, offline after one
   load, and E2E journeys 1, 2, 4, 6 and 7 pass. See `progress.md` for the evidence. **Gate B** is next.
+  **Gate B resolved, 24 September 2026 (human):** the lower Leitner box wins a *concurrent* edit.
+  Concurrency is detected by a per-document server revision, and the device merges (`progress.md`
+  D69, ADR 21). **Slice 2 status, 24 September 2026: built.** Two devices pair by code and converge
+  (E2E journey 8, on the real route handlers over PGlite). The sync settings are axe-clean, and
+  Lighthouse is 1.0/1.0 on nine routes. **Slice 3** is next. Its public deploy waits on a human
+  hosting and database gate ("Gate C" in `progress.md`).
 - **Slice 2 — Multi-device sync.** After **Gate B**: the sync backend (Postgres + Drizzle, the sync and
   device routes of §10, deferred anonymous registration, pairing by code, rate limiting; no auth lib,
   email or OAuth per ADR 5); `adapters/vault` + `adapters/sync` (device secret / sync identity, pairing

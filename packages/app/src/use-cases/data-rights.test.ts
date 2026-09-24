@@ -242,10 +242,10 @@ describe("importData", () => {
 
     expect(await exportData(device)).toEqual(before);
     expect(result).toEqual({
-      attempts: { added: 2, kept: 0 },
-      schedule: { added: 2, kept: 0 },
-      sessions: { added: 2, kept: 0 },
-      settings: { added: 2, kept: 0 },
+      attempts: { added: 2, merged: 0, kept: 0 },
+      schedule: { added: 2, merged: 0, kept: 0 },
+      sessions: { added: 2, merged: 0, kept: 0 },
+      settings: { added: 2, merged: 0, kept: 0 },
     });
   });
 
@@ -258,10 +258,10 @@ describe("importData", () => {
     const second = await importData({ json: text }, device);
 
     expect(second).toEqual({
-      attempts: { added: 0, kept: 2 },
-      schedule: { added: 0, kept: 2 },
-      sessions: { added: 0, kept: 2 },
-      settings: { added: 0, kept: 2 },
+      attempts: { added: 0, merged: 0, kept: 2 },
+      schedule: { added: 0, merged: 0, kept: 2 },
+      sessions: { added: 0, merged: 0, kept: 2 },
+      settings: { added: 0, merged: 0, kept: 2 },
     });
     expect(textOf(await exportData(device))).toBe(text);
   });
@@ -277,10 +277,11 @@ describe("importData", () => {
   });
 
   /**
-   * The local copy wins for everything but attempts, because any smarter rule is a
-   * merge rule, and the schedule's is the open Gate B question (progress.md D43).
+   * Gate B's rule, applied to import (progress.md D69, replacing D62's keep-local): a
+   * file has no causal history, so a record the device already has is a concurrent
+   * edit — the lower box wins, the completed session wins, the local setting wins.
    */
-  it("never overwrites a local schedule entry, session or setting", async () => {
+  it("merges a record the device already has: lower box, completed session, local setting", async () => {
     const device = await aDevice();
     const incoming = aDocument({
       attempts: [],
@@ -296,12 +297,29 @@ describe("importData", () => {
 
     expect((await device.schedule.get(itemId("item-a")))?.box).toBe(2);
     expect(await device.schedule.get(itemId("item-new"))).not.toBeNull();
-    expect((await device.sessions.all()).find((s) => s.id === "s-2")?.completedAt).toBeNull();
+    expect((await device.sessions.all()).find((s) => s.id === "s-2")?.completedAt).toBe("2026-09-21T00:00:00.000Z");
     expect(await device.settings.get("locale")).toBe("fr");
     expect(await device.settings.get("theme")).toBe("dark");
-    expect(result.schedule).toEqual({ added: 1, kept: 1 });
-    expect(result.sessions).toEqual({ added: 1, kept: 1 });
-    expect(result.settings).toEqual({ added: 1, kept: 1 });
+    expect(result.schedule).toEqual({ added: 1, merged: 0, kept: 1 });
+    expect(result.sessions).toEqual({ added: 1, merged: 1, kept: 0 });
+    expect(result.settings).toEqual({ added: 1, merged: 0, kept: 1 });
+  });
+
+  it("sends an item back to the file's lower box, never forward to a higher one", async () => {
+    const device = await aDevice();
+    await device.schedule.put(anEntry("item-b", { box: 3, due: "2026-10-01T00:00:00.000Z" }));
+    const incoming = aDocument({
+      attempts: [],
+      schedule: [anEntry("item-a", { box: 1, due: "2026-09-21T00:00:00.000Z" }), anEntry("item-b", { box: 4 })],
+      sessions: [],
+      settings: [],
+    });
+
+    const result = await importData({ json: textOf(incoming) }, device);
+
+    expect(await device.schedule.get(itemId("item-a"))).toEqual(anEntry("item-a", { box: 1, due: "2026-09-21T00:00:00.000Z" }));
+    expect((await device.schedule.get(itemId("item-b")))?.box).toBe(3);
+    expect(result.schedule).toEqual({ added: 0, merged: 1, kept: 1 });
   });
 
   it("treats a stored null setting as a local record and keeps it", async () => {
@@ -334,8 +352,8 @@ describe("importData", () => {
       device,
     );
 
-    expect(result.sessions).toEqual({ added: 1, kept: 1 });
-    expect(result.settings).toEqual({ added: 1, kept: 1 });
+    expect(result.sessions).toEqual({ added: 1, merged: 0, kept: 1 });
+    expect(result.settings).toEqual({ added: 1, merged: 0, kept: 1 });
     expect(await device.settings.get("k")).toBe(1);
   });
 

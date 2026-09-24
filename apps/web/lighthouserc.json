@@ -12,7 +12,8 @@
         "http://localhost:3000/fr/practice/reading",
         "http://localhost:3000/en/review",
         "http://localhost:3000/fr/progress",
-        "http://localhost:3000/en/settings/data"
+        "http://localhost:3000/en/settings/data",
+        "http://localhost:3000/fr/settings/sync"
       ],
       "numberOfRuns": 5,
       "settings": {

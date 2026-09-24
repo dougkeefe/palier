@@ -12,7 +12,10 @@ the PRD's UI direction).
 The data use cases (`exportData`/`importData`/`wipeData`) have landed too (D61, D62).
 The single-device UI has landed too (D63–D67), so **Slice 1 is complete**: the whole practice app works
 on one device, offline after one load.
-**Next step:** **Gate B**, the `ScheduleEntry` merge decision (D43), a human call that gates Slice 2 (sync). See [Next, decided](#next-decided). The **full-volume published
+**Gate B is resolved** (human, 24 September 2026: the lower Leitner box wins a concurrent edit, D69),
+and **Slice 2 is complete** (`dougkeefe/pangyo`; D69–D72, ADR 21): two devices pair by code and
+converge, on the real route handlers over PGlite. **Next step:** Slice 3, starting with the sync
+simulator. See [Next, decided](#next-decided). The **full-volume published
 bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
 feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
 (D56).
@@ -90,9 +93,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/phase-2-development` (PR #19; the session log calls it by its first name, `dougkeefe/algiers`) | **Phase 2 Slice 1 — the single-device practice app, offline-complete (D57).** Composition root wires the real bank/dexie/ids (stops throwing); bank served statically + a service worker for offline [R4]; `ExportData`/`ImportData`/`WipeData`; then the single-device UI with **Gate A resolved by adopting the PRD's §8/§10/§11/§14 direction** (human decision, 24 September 2026). Shipped as ordered PRs; infra first. | 24 September 2026 |
+| `dougkeefe/pangyo` | **Phase 2 Slice 2 — multi-device sync (D57).** Gate B resolved (human, 24 September 2026): **the lower Leitner box wins a concurrent edit** (D69). Revisioned sync documents with client-side merge, SHA-256 device secrets (D70, ADR 21); `SyncTransport` + `SyncStateStore` ports, `syncNow` and the pairing use cases; the sync backend in `apps/web/src/server` + route handlers; `adapters/sync`; `/settings/sync` and E2E journey 8. Shipped as ordered parts. **All four parts landed; Slice 2 complete**, pending merge. | 24 September 2026 |
 
-*(The prior rows — `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -191,36 +194,44 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next: Gate B, the `ScheduleEntry` merge decision (D43). A human call, and the only thing between
-here and Slice 2.**
+**Next: Slice 3, part 1 — the sync simulator** (implementation-plan.md §6.2 tier 5). It is buildable
+now, and it is the largest piece of Slice 3 that needs no human.
 
-**Slice 1 is complete** (session log, 24 September 2026, `dougkeefe/algiers`; D58–D67): the
-single-device app works end to end and fully offline after one load, on real IndexedDB and the served
-bank. That covers onboarding, today, drill, diagnostic, review, progress, export/import/delete, and item
-reporting, with E2E journeys 1, 2, 4, 6 and 7 and Lighthouse 1.0/1.0. Slice 2 (multi-device sync) cannot
-start until one question is answered, and it is a product judgement, not a derivation, so it is **not
-self-directable**:
+**Slice 2 is complete** (session log, 24 September 2026, `dougkeefe/pangyo`; D69–D72, ADR 21).
 
-> When two devices have drilled the same item offline and both changed its `ScheduleEntry`, which one
-> wins?
+**Part 1's scope.**
+- **Put the harness in `@palier/testing`**, beside `memorySyncServer`, which already holds the revision
+  semantics the simulator needs:
+  - two or three virtual devices, each a full `syncNow` graph over the memory stores;
+  - one server, either `memorySyncServer` or the Drizzle repository behind the handlers on PGlite (the
+    PGlite variant sits in the integration lane);
+  - a transport wrapper, driven by `seededRandom`, that delays, drops and reorders calls, and can
+    **partition** a device fully.
+- **Scenarios:** random interleavings of answering (`answerItem` over the fixture bank), importing,
+  pairing and syncing, then a heal and a final round of syncs.
+- **Assertions at quiescence:**
+  - every device holds the same attempt set, with none lost and none duplicated;
+  - every device holds the same schedule;
+  - each schedule entry equals the `mergeRecord` fold of its concurrent versions;
+  - `practiceTrend` is identical on every device;
+  - a device offline for a "week" does not overwrite newer work.
+- **Seed counts:** a few hundred seeds in the medium lane, and a large count under `CI_LANE=nightly`.
 
-The three options D43 records, unchanged:
+**Done looks like:** the Phase 2 exit criterion "sync simulator passes several hundred seeds including
+full partition and heal, no lost or duplicated attempts" is ticked, with its command output, and
+`pnpm verify` plus `verify:medium` are green within their time budgets.
 
-1. **Add `updatedAt`** and apply §9.4's last-write-wins. Simplest; can move a box backwards when the later
-   write came from the device that saw less.
-2. **Take the lower box.** Needs no schema change and fails safe: a disagreement means one device saw a
-   failure, and a re-review costs seconds. **Recommended**, as D43 already leaned.
-3. **Keep the schedule device-local** and rebuild it from the merged attempts. Needs the `slow` judgement
-   per historical attempt, which D38 and D40 rejected.
+**Then the rest of Slice 3:**
+- wire the remaining Phase 2 CI gates: engine golden regression, contract suites, the simulator in the
+  medium lane, and E2E 1/2/6/7/8;
+- the one-off mutation check;
+- the public deploy, behind **Gate C** below.
 
-**Once it is decided, Slice 2 is concrete** (`implementation-plan.md` §7): the sync backend (Postgres +
-Drizzle; `POST /api/account/device`, the sync and pairing routes of `architecture.md` §10, rate-limited
-registration, no auth library, per ADR 5) behind route handlers that meet the pre-provisioned 95% branch
-threshold; `adapters/vault` (the device secret the Dexie vault already keeps, D50) and `adapters/sync`
-behind a new `SyncTransport` port, each with a contract suite; the chosen merge rule, applied in the sync
-adapter **and** in `importData`, whose keep-local rule (D62) is the placeholder for exactly this; the
-`SyncNow` use case; the `/settings/sync` screen with pairing by code; and E2E journey 8 (two browser
-contexts converging). Journey 7's "sync catches up" half lands then too.
+**Gate C — hosting and database (human, gates the public deploy only).** Someone with the accounts has
+to provision serverless Postgres (§3: "Neon or equivalent") and a Vercel project. The environment needs
+`DATABASE_URL` and a random `RATE_LIMIT_SALT`, and `apps/web/drizzle/` has to be applied at deploy
+(ADR 21). Until then the deployed app works fully offline-first, and its sync routes answer 503, which
+the UI shows quietly.
 
 **Standing human gates (do not self-direct):**
 
@@ -233,8 +244,9 @@ contexts converging). Journey 7's "sync catches up" half lands then too.
 - ~~**Product and UI direction**~~ — **resolved 24 September 2026** as Gate A (Phase 2 section): adopt
   the PRD's §8/§10/§11/§14 direction for the single-device screens. The *pairing* UI is Slice 2, after
   Gate B.
-- **The `adapters/sync` `ScheduleEntry` merge (D43)** — add `updatedAt`, take the lower Leitner box, or
-  treat the schedule as device-local. Gates the sync and vault adapters.
+- ~~**The `adapters/sync` `ScheduleEntry` merge (D43)**~~ — **resolved 24 September 2026** as Gate B:
+  the lower box wins a concurrent edit (D69).
+- **Gate C — hosting and database provisioning** (above). It gates only Slice 3's public deploy.
 
 Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's table
 before launch) and the name/domain decision in §12.1.
@@ -299,27 +311,26 @@ session-log evidence; nothing is ticked without it.
 - [x] `adapters/bank`: manifest fetch, lazy shard loading, content-hash cache (24 September 2026, this slice) — the service-worker registration itself is the web slice
 - [x] Composition root wires the real adapters + the service worker caches the bank by content-hashed URL (24 September 2026, `dougkeefe/algiers`; D58–D60) — production path no longer throws; offline shell/route/bank proven in the `offline` Playwright project
 - [x] `adapters/ids`: the ULID generator (D48; not one of the five §3.2 names, but a real adapter)
-- [ ] `adapters/vault` and `adapters/sync`: device secret, pairing by code, push/pull, watermarks, offline queue — **gated on the `ScheduleEntry` merge decision** (D43)
-- [ ] Sync backend: Postgres + Drizzle, sync/device routes, pairing, rate limiting (ADR 5)
-- [~] `@palier/app` use cases: `StartSession`, `AnswerItem`, `CompleteSession`, `RunDiagnostic` landed (20–21 September 2026); `ExportData`, `ImportData`, `WipeData` landed (24 September 2026, `dougkeefe/algiers`; D61, D62); `SyncNow` remains (Slice 2)
-- [~] UI: the whole single-device set **landed** (24 September 2026, `dougkeefe/algiers`; D63–D67): onboarding, home + readiness card, today's plan, drill + feedback panel, diagnostic, review queue, progress, settings/data. Only the sync + pairing settings remain (Slice 2)
+- [x] `adapters/sync` (24 September 2026, `dougkeefe/pangyo`; D69–D71): `httpSyncTransport`, pairing by code, push/pull by revision watermark, retry, held to `syncTransportContract`. **`adapters/vault` is not built, by decision (D71)**: its device secret already lives in `dexieKeyVault` (D50). The "offline queue" is the ledger diff: a record changed offline stays dirty until a push takes it (D69)
+- [x] Sync backend (24 September 2026, `dougkeefe/pangyo`; D70, ADR 21): Postgres + Drizzle on Node, the sync/device/pairing routes, rate limiting by IP HMAC, SHA-256 device secrets, committed migrations; PGlite integration lane. Deploy-time provisioning is Slice 3
+- [x] `@palier/app` use cases: `StartSession`, `AnswerItem`, `CompleteSession`, `RunDiagnostic` landed (20–21 September 2026); `ExportData`, `ImportData`, `WipeData` landed (24 September 2026, `dougkeefe/algiers`; D61, D62); `SyncNow` plus the pairing/device/switch/delete-everywhere use cases landed (24 September 2026, `dougkeefe/pangyo`; D69)
+- [x] UI: the whole single-device set **landed** (24 September 2026, `dougkeefe/algiers`; D63–D67), and the sync settings with pairing by code, the stateful header indicator and the background runner (24 September 2026, `dougkeefe/pangyo`; D72)
 - [x] Item reporting control and the GitHub issue path: on every feedback panel, four reason codes, a prefilled issue on the project repository (24 September 2026; E2E-tested)
 - [ ] The sync simulator (tier 5): two/three-device scenarios, seeded faults, convergence assertions
-- [ ] Every real adapter passes its port contract suite — `bank` now does; `dexie`/`ids` already did
+- [x] Every real adapter passes its port contract suite — `ids`, `dexie` (all six ports, `SyncStateStore` included), `bank`, `openai` and `sync` (24 September 2026; `pnpm verify` runs every one)
 
 **Exit criteria** (the actual gate)
 
-- [ ] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]
+- [x] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]. Journey 1 covers the diagnostic to accuracy per band with its interval; **journey 8** covers daily sessions on two browser contexts paired by code, with the progress screen reading identically on both (session log, 24 September 2026, `dougkeefe/pangyo`)
 - [x] Full offline operation after first load [R4] — for everything Phase 2 builds: journey 2 (a whole drill session) passes with the network off after one online load, over real IndexedDB and the service-worker-cached bank (session log, 24 September 2026). Mock exams are Phase 3, and their offline run is Phase 3's journey 3
 - [ ] Engine unit tests exhaustive at every boundary, golden fixtures locked
 - [ ] Sync simulator passes several hundred seeds including full partition and heal, no lost or duplicated attempts
-- [ ] Every adapter passes its port contract suite
+- [x] Every adapter passes its port contract suite — `ids`, `dexie` ×6, `bank`, `openai`, `sync`; and `sync` passes it through the real route handlers too, on the memory repository (fast lane) and on PGlite (integration lane). Session log, 24 September 2026, `dougkeefe/pangyo`
 
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
 carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
 `implementation-plan.md` §7 Phase 2 "Completion slices" — **keep the two in sync** (the fuller scope
-and each slice's *done* live in the plan). Current position: **Slice 1 complete**; **Gate B** is next (a human
-decision), then Slice 2.
+and each slice's *done* live in the plan). Current position: **Slices 1 and 2 complete** (Gate B resolved, D69); Slice 3 is next.
 
 - [x] **Slice 1 — Single-device practice app, offline-complete.** **Done 24 September 2026** (`dougkeefe/algiers`; D58–D67; session-log evidence). Composition-root wiring of
   bank/dexie/ids + service-worker offline cache [R4] **(landed, D58–D60)** +
@@ -334,11 +345,12 @@ decision), then Slice 2.
   `/review`, `/progress`, `/settings/data`, and item reporting. The name stays the working "Palier"
   (§12.1 is still a standing gate). Coco is a minimal static treatment. §9 streak/XP are deferred, since
   they are not in Slice 1's *done* and `@palier/engine` has none.
-- [ ] **Slice 2 — Multi-device sync.** Sync backend (Postgres/Drizzle/routes/pairing/rate-limit, ADR 5);
+- [x] **Slice 2 — Multi-device sync.** **Done 24 September 2026** (`dougkeefe/pangyo`; D69–D72, ADR 21). Sync backend (Postgres/Drizzle/routes/pairing/rate-limit, ADR 5);
   `adapters/vault` + `adapters/sync` behind `SyncTransport`, applying the D43 rule; `SyncNow` + pairing
   UI. Completes the two-device exit criterion. Behind **Gate B**.
-- [!] **Gate B — the `ScheduleEntry` merge decision (human, D43).** `updatedAt` / lower Leitner box /
-  device-local. Gates all of Slice 2.
+- [x] **Gate B — the `ScheduleEntry` merge decision (human, D43).** `updatedAt` / lower Leitner box /
+  device-local. Gates all of Slice 2. **Resolved 24 September 2026 (human decision, `dougkeefe/pangyo`): the
+  lower box wins a concurrent edit**, and concurrency is detected by a per-document server revision (D69).
 - [ ] **Slice 3 — Convergence proof + public launch.** Sync simulator (tier 5), remaining CI gates +
   mutation check, full-offline + Lighthouse ≥95 confirmation, public deploy. **Phase 2 complete.**
 
@@ -404,7 +416,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | R11 | Export, import, delete, each in one action | 2, 7 | Phase 2 half verified (24 September 2026): `/settings/data` does each in one action; journey 6 round-trips export → delete → import and finds the same progress. Phase 7's server-side delete waits for sync |
 | R12 | Key, audio, transcripts and submissions stay local | 4, 5 | not started |
 | R13 | Free and open source | 0, 7 | not started |
-| R14 | Progress across devices, with an off switch | 2 | not started |
+| R14 | Progress across devices, with an off switch | 2 | satisfied and verified on the hermetic lane (24 September 2026): journey 8 pairs two devices by code and both show the same progress; the switch is tested off, with server deletion offered, in `sync.spec.ts`. A public deployment with a real database is Slice 3 |
 
 Eleven of fourteen are covered by the end of phase 3. That is the evidence behind
 "stopping after phase 3 leaves a complete product".
@@ -1351,7 +1363,7 @@ weaker than ADR 9's "a change is a content pull request rather than a developmen
 closes it — the bank adapter fetches content and caches it by hash (`architecture.md` §5.3).
 
 ### D43 — A synced `ScheduleEntry` has no `updatedAt`, and last-write-wins can regress a box
-**Date:** 20 September 2026 · **Status:** open, closes with `adapters/sync` (Phase 2)
+**Date:** 20 September 2026 · **Status:** **resolved 24 September 2026 by D69** (Gate B, human: the lower box wins a concurrent edit)
 
 Found while updating `architecture.md` §9.1 for D38, not while writing the code — which is why
 it is recorded rather than fixed.
@@ -1863,7 +1875,7 @@ push will need the same enumeration. Cost: six hand-written stubs in `@palier/ap
 inert members each. No assertion changed.
 
 ### D62 — `importData` validates the whole file first and never overwrites a local record
-**Date:** 24 September 2026 · **Status:** accepted
+**Date:** 24 September 2026 · **Status:** accepted — its keep-local rule is **superseded by D69** (import now merges by Gate B's rule)
 
 Importing onto a device that already has progress is a **merge**, and the schedule's merge rule is the
 open Gate B question (D43). So import decides nothing it does not have to. **Attempts merge as a union**:
@@ -2001,11 +2013,301 @@ footer is one scroll down rather than in first view. It is still on every page (
 the landing and about pages, where first impressions form, keep it in view. The CI re-run is the real
 confirmation of the 0.88; it is pending as this is written.
 
+### D69 — Gate B: the lower box wins a *concurrent* edit, detected by revision; the ledger is a new port
+**Date:** 24 September 2026 · **Status:** accepted (Gate B is a human decision; the mechanism is derived). Resolves D43
+
+**The decision (human, 24 September 2026):** of D43's three options, **take the lower Leitner box**.
+
+**What implementing it forced.** Applied blindly, `min(box)` is wrong the other way from last-write-wins:
+once box 1 has synced, the device's own later box 2 loses to it every time, so **no box could ever rise
+after its first sync**. The rule can only apply to edits that are actually *concurrent*, and telling those
+apart needs causal information that `ScheduleEntry` does not carry. So:
+
+1. **Every server document carries a per-account `revision`**, strictly increasing, and it doubles as the
+   pull watermark. It is a counter, not a timestamp, so clock skew between devices cannot hide a write.
+2. **A push names the `baseRevision` it was derived from.** The server accepts it only while that revision
+   is still current; otherwise it returns its own copy as a conflict. The **device** merges and re-pushes,
+   so server payloads stay opaque (architecture.md §9.2) and every merge rule sits in one pure function,
+   `mergeRecord` in `packages/app/src/sync/merge.ts`.
+3. **A device finds its changes by diff, not an outbox.** A new **`SyncStateStore` port** holds the
+   watermark, the identity, the device-local switch and a **ledger**: per document, the revision it last
+   agreed with the server and a hash of the record at that moment (64-bit, two FNV-1a passes over stable
+   JSON). A record whose hash differs is dirty. No store's write path knows sync exists, and imports and
+   merges are covered automatically. `SyncNow` enumerates each store's `all()`, which is the use D61
+   anticipated. Dexie holds the ledger on the `syncMeta` table §9.1 already declared, so there is **no
+   schema bump**. §3.3 did not name this port, which makes it the same kind of decision as `IdGenerator`
+   (D48).
+4. **Merge rules** (symmetric, with a stable-JSON tie-break, so two devices always agree):
+   - **schedule:** the lower box wins; on an equal box the earlier `due` wins, and a retired entry counts
+     as latest.
+   - **session:** a completed copy beats an in-progress one, and the earlier `completedAt` wins. This is
+     §9.1's write-once argument.
+   - **setting:** the local value wins. Through the server's serialisation, that makes the last device to
+     push win.
+   - **attempt:** immutable.
+5. **Found while testing:** a device pulls its own last push back on the next sync. Taken as a concurrent
+   edit, that echo let the older server copy out-merge the device's newer one. **A document at or below
+   the ledger's revision is not news, and is skipped.** A test pins this.
+6. **`importData` applies the same `mergeRecord`, replacing D62's keep-local rule.** A file carries no
+   causal history, so every record already present is treated as concurrent: an old file can send an item
+   back for an early review but can never skip one. Import after a wipe is unchanged, and so is importing
+   the same file twice. `ImportCount` gains `merged`.
+   - **One `data-rights.test.ts` case changed, deliberately:** "never overwrites a local schedule entry,
+     session or setting" asserted keep-local, which Gate B supersedes. It is now "merges a record the
+     device already has: lower box, completed session, local setting". Its schedule and setting
+     assertions are unchanged; the session's now completes. A new case asserts the lower box travels in
+     from a file.
+7. **§3.3 is amended in place:**
+   - `push(items)` takes per-document base revisions;
+   - `pull(watermark: number)` returns `{ docs, watermark, more }`, so no separate cursor is needed;
+   - `registerDevice(label)` and `redeemPairCode(code, label)`;
+   - **registration is idempotent per secret**, so a retry never makes a second account.
+
+   `normalizePairCode` and the pair-code constants live beside the port.
+
+**Proven to bite:** with the ledger check removed, so that every pulled copy merges (the naive `min`),
+three `sync-now.test.ts` cases fail. They are "lets a box rise after it has synced", "fast-forwards a record
+this device has not changed" and "keeps the lower box on both devices". The file was restored and all 18
+pass.
+
+### D70 — the sync backend: `apps/web/src/server`, Drizzle on Node, SHA-256 secrets, rate limits in a table (ADR 21)
+**Date:** 24 September 2026 · **Status:** accepted (the SHA-256 call is a human decision; the rest is derived)
+
+**SHA-256, not Argon2id (human decision, 24 September 2026).** Architecture.md §9.2 said Argon2id. A slow,
+salted hash defends a low-entropy password against guessing; the device secret is 256 random bits, so
+there is nothing to guess. Argon2id would also have cost:
+- a native dependency;
+- tens of milliseconds and a large block of memory on every sync request;
+- a device id sent with every request, because a salted hash cannot be looked up.
+
+SHA-256, unsalted and uniquely indexed, lets the bearer alone find its device. It is the standard
+treatment for high-entropy bearer tokens.
+
+**The rest, derived:**
+- **Where.** `apps/web/src/server/` holds:
+  - the Drizzle schema;
+  - a `SyncRepository` whose every method is keyed by account. With no cross-account read path it can
+    be audited the way §9.2 asks, without row-level security.
+  - `drizzleSyncRepository`;
+  - pure `Request → Response` handlers;
+  - `db.ts`, the server's one composition point.
+
+  Route files are one-line `serve(...)` bindings. There is no new package. A **new dependency-cruiser
+  ban**, `no-sql-outside-web-server`, keeps `drizzle-orm|drizzle-kit|postgres` inside
+  `apps/web/src/server/`. It bit on its first run: a route-level integration test imported `sql`, and
+  the truncate moved into a server test helper.
+- **Node, not Edge.** Next 16 deprecates Edge (its own runtime docs), and postgres.js needs TCP.
+  §10 is amended.
+- **`db.ts`:**
+  - hermetic → an in-process PGlite (`@electric-sql/pglite` is now a direct `apps/web` dependency) with
+    the committed migrations applied, memoised on `globalThis` so a dev server that re-evaluates the
+    module keeps one database. **Verified under `next dev`**: registration returned 200 and a pull
+    `{docs:[],watermark:0,more:false}` with no `serverExternalPackages` entry needed;
+  - `DATABASE_URL` → postgres.js with `prepare: false`, for serverless poolers;
+  - neither → `null`, and **every route answers 503**.
+- **Protocol:**
+  - every request carries `Authorization: Bearer <secret>` (64 hex); anything else is 401;
+  - registration is idempotent for a live secret, and a revoked secret registers afresh;
+  - bodies are validated with `zod` (the version `@palier/domain` pins, now also an `apps/web`
+    dependency); a bad body is 400, over 1 MB or 500 items is 413;
+  - a device id that is not a UUID is 404 before any query. PGlite had answered it with a 500, which
+    the transport contract caught.
+  - revoking a device the account does not hold is **404, not 403** (tier 11).
+- **Rate limits in Postgres, no library.** The key is an HMAC of the route, IP and UTC day under
+  `RATE_LIMIT_SALT`, so no IP and no stable pseudonym for one is stored (§12). The limits:
+  - registering: 20 an hour;
+  - issuing codes: 20 an hour;
+  - redeeming: 10 per ten minutes.
+
+  A returning device does not count against registration.
+- **Tier 4 lane.** A second integration project, `integration-web`, is rooted at `apps/web`, and
+  `test:integration` runs both. It holds:
+  - the `SyncRepository` contract on PGlite;
+  - a concurrency case where two 20-item pushes produce revisions 1–40 exactly once;
+  - the hermetic `syncApi`;
+  - **`syncTransportContract` through the HTTP adapter and the real route files on PGlite.**
+
+  The same contract runs in the fast lane over the in-memory repository. That is what holds
+  `@palier/testing`'s `syncHandlers` copy of the protocol to the real one. The in-memory repository and
+  the repository contract live under `src/server/__tests__/`, outside the build and coverage.
+- **Coverage honesty:** every `route.ts` is at 100% branch in the fast lane, and `handlers.ts` at 97.9%.
+  `drizzle-repository.ts` reads **0% in the fast lane**. It is exercised only by the integration lane,
+  which runs without coverage (D9). That is the designed split, not a gap anything hides.
+- **Not built:** tombstones (nothing deletes a single record), the 90-day tombstone purge, the 180-day
+  inactive-account deletion, and production migrations at deploy (`drizzle-kit generate … --out=./drizzle`
+  produced the committed `0000_sync_backend.sql`). These are scheduled-job and deploy work for Slice 3.
+
+### D71 — no `adapters/vault`; the sync adapter takes its credential from the root; a hermetic page load is its own device
+**Date:** 24 September 2026 · **Status:** accepted
+
+- **`adapters/vault` is not created.** §3.2 lists `/vault`, but D50 already put its whole job, the device
+  secret, in `dexieKeyVault`, and pairing's hashing is server-side (D70). An empty subpath would be an
+  `exports` entry with nothing behind it (D3). The eslint element comment is updated to say so.
+- **`@palier/adapters/sync`** is `httpSyncTransport({ baseUrl, credentials, fetchImpl?, retryDelayMs?,
+  sleep? })` over the platform `fetch`, with no vendor at all. The composition root passes
+  `credentials: () => keyVault.deviceSecret()`, so the adapter never imports `/dexie`, as
+  `no-cross-adapter-imports` requires. Translation:
+  - a network fault, 429 or 5xx → `SyncUnavailableError`;
+  - 401 → `SyncUnauthorizedError`;
+  - a 404 on redeem → `PairCodeRejectedError`;
+  - a 404 on revoke → a no-op;
+  - any other 4xx → `SyncProtocolError`.
+
+  It retries once on a fault or 502/503/504, **but never retries a redeem**: a code works once, so a
+  retry after a lost response would spend it. Responses are structure-checked (D55's approach), so a
+  captive portal's HTML reads as "unavailable". The sync base URL is `""`: same origin (§9.3).
+- **The hermetic container is one device per page load.** The journeys' in-memory graph now gets:
+  - a random 64-hex device secret, the only kind the server accepts;
+  - an id counter seeded `random32 × 2^20`.
+
+  With the old `memoryKeyVault()` default secret and `counterIdGenerator(0)`, every browser context
+  would have been the same device minting the same ULIDs, which is the attempt-loss collision D39
+  exists to prevent, and journey 8 could not have told two devices apart. Within a device the counter
+  is still deterministic. The sync transport in hermetic mode is the **real** HTTP adapter against the
+  dev server's PGlite routes (tier 6).
+
+### D72 — the sync UI's calls: an "on" state, a delayed "Syncing…", local delete stays local, journey 7's sync half is hermetic
+**Date:** 24 September 2026 · **Status:** accepted
+
+- **The header has a fifth state, `on`.** §8.11 lists synced, syncing, offline and off. "On" means sync
+  is switched on but this device has no copy on the server yet, because registration waits for the first
+  completed session (§9.3). Showing "Synced" there would claim a copy that does not exist. An
+  unreachable server shows as "Offline" in the header (§14: a quiet indicator only). The settings
+  status line names the real reason (offline, unavailable, removed).
+- **"Syncing…" appears only after 400 ms.** The first Lighthouse run after the runner landed showed
+  max CLS 0.0003 on eight routes, up from D68's 0: on every load the label flipped "Sync on" →
+  "Syncing…" → "Sync on" for a run with nothing to do, and the neighbouring nav items moved. With the
+  delay, CLS is **0 on all nine routes**.
+- **The data pane's "Delete everything" stays this-device-only**, as its confirmation says.
+  "Delete everything everywhere" is §8.11's danger zone on `/settings/sync` (`deleteEverywhere`: the
+  server first, and nothing local is touched if that fails). A local wipe keeps the sync identity and
+  ledger, so the server copy is neither re-pulled nor deleted. The data pane's copy no longer says
+  "there is no copy anywhere else", which sync made false, and import's copy now describes the merge.
+- **Onboarding says what §8.1 says:** "Your progress syncs across your devices. You can turn that off
+  in settings." This reverses D65's interim line.
+- **Device labels are language-neutral**, `Chrome · macOS`: a label is stored once and shown in both
+  locales (R8).
+- **Journey 7's "sync catches up" half runs on the hermetic lane** (`e2e/sync.spec.ts`), not on the
+  `offline` production project, which has no database and answers 503. The flow goes offline
+  mid-drill, finishes, and comes back online; the `reconnect` trigger syncs without being asked
+  (checked well inside the 30-second session debounce), and the other device receives the attempts.
+  The offline half stays in `offline.spec.ts`.
+- **Warmup also compiles the seven API routes**, serially, so two journey-8 devices do not hit a cold
+  route at once (D67's race).
+- **Proven to bite:** with the hermetic id counter put back to `counterIdGenerator(0)`, one shared id
+  stream (the D71 collision), journey 8 fails with "Expected 19 items answered, Received 13". Six
+  attempts were silently lost to the duplicate no-op.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/pangyo` (Slice 2, part 4: the sync UI and journey 8 — Slice 2 complete)
+
+The last part of Slice 2. **Two devices pair by code and converge.** *Next, decided* is now Slice 3.
+
+- **Built:**
+  - `SyncRunner` in the layout, driving `shouldSync`/`delayFor` on load, focus, reconnect, a completed
+    session (debounced) and on demand, with its display logic in `features/sync/sync-view.ts`;
+  - the header's `SyncStatus`, now stateful and linking to `/settings/sync`;
+  - `/settings/sync`: the switch with the server-deletion offer, status, what syncs and what never
+    does, devices with remove, add a device by code, link with a code (the "restoring" count), the
+    no-recovery sentence with the export, and the danger zone;
+  - a footer link to the sync settings, a `sync` namespace in both locales, and §8.1's onboarding line;
+  - the data pane's copy corrected for sync (D72).
+- **E2E (`e2e/sync.spec.ts`, hermetic):**
+  - **journey 8**: two contexts, pairing by keyboard, then each drills and the whole progress screen
+    reads identically on both;
+  - **journey 7's sync half**: offline mid-drill, then the reconnect trigger syncs;
+  - the sync settings axe-clean in every state, with keyboard switching and focus on each
+    confirmation.
+- **A Lighthouse regression caught and fixed before it landed** (D72): a transient "Syncing…" label
+  shifted the header on every load.
+- **Evidence:**
+  - `pnpm verify` → green: 104 files, 1165 tests (8 todo); boundaries clean (281 and 126 modules).
+  - `pnpm build && pnpm verify:medium` → integration "37 passed"; Playwright "29 passed": 21 hermetic,
+    journeys 7 and 8 and the sync settings test among them, 1 warmup and 7 production.
+  - **Proven to bite:** with the hermetic id counter put back to one shared stream, journey 8 fails,
+    "Expected 19 items answered, Received 13". Restored.
+  - `pnpm --filter @palier/web bundle-size` → 165.7 KB of 180 KB, unchanged.
+  - `pnpm --filter @palier/web lighthouse` on **9 routes** (`/fr/settings/sync` added) → median
+    performance **1.0** and accessibility **1.0** everywhere, **max CLS 0 on every route**. The first
+    run, before the D72 fix, measured 0.0003.
+  - Screenshots of the pairing flow: `.context/sync-*.png`, which is gitignored.
+
+### 24 September 2026 — `dougkeefe/pangyo` (Slice 2, parts 2 and 3: the sync backend, the HTTP adapter, the wiring)
+
+Parts 2 and 3 landed as one commit. The proof that the protocol is right needs both halves: the adapter
+held to the contract **through the real route handlers**.
+
+- **Server (D70, ADR 21):**
+  - `apps/web/src/server/` holds the Drizzle schema plus committed SQL migration, a
+    per-account-keyed `SyncRepository` with its Drizzle implementation, pure handlers
+    (validation, 401/404/413/429/503), SHA-256 secrets, and rate limits in Postgres by IP HMAC.
+  - `db.ts` gives PGlite when hermetic, postgres.js on `DATABASE_URL`, and 503 otherwise.
+  - Seven Node route files hold one-line bindings.
+- **Adapter (D71):** `@palier/adapters/sync` → `httpSyncTransport`. There is no `adapters/vault`, by
+  decision.
+- **Wiring:**
+  - The composition root gains `sync` and `syncState` ports and eight sync use cases.
+  - In hermetic mode each page load is its own device, with a server-valid secret and a separate id
+    stream.
+  - `sync-triggers.ts` and `device-label.ts` are the pure halves of part 4's runner and registration.
+- **Defect found by the contract, fixed at the source:** a non-UUID device id reached Postgres and came
+  back as a 500 (the adapter then reported "network unreachable"). The handler now answers 404 first.
+- **New dependencies**, each stated in ADR 21:
+  - `drizzle-orm`, `postgres` and `zod` (already pinned by domain) in `apps/web`;
+  - `@electric-sql/pglite` as a direct `apps/web` dependency;
+  - `drizzle-kit` as a development dependency.
+
+  None replaces anything.
+- **Evidence:**
+  - `pnpm verify` → green: 103 files, 1154 tests (8 todo); boundaries clean (281 and 121 modules).
+    Every `apps/web/src/app/**/route.ts` is at 100% branch (threshold 95), `handlers.ts` at 97.9%,
+    `http-sync-transport.ts` at 100%.
+  - `pnpm test:integration` → 37 passed, including `syncTransportContract` through the route files on
+    Drizzle over PGlite, and the concurrent-push revision case.
+  - **`no-sql-outside-web-server` bit on its first run** (a test importing `drizzle-orm`), and was
+    fixed by moving the truncate into `server/__tests__/reset.ts`.
+  - `PALIER_HERMETIC=1 next dev` → `POST /api/account/device` 200 and `GET /api/sync?watermark=0` →
+    `{"docs":[],"watermark":0,"more":false}`.
+
+### 24 September 2026 — `dougkeefe/pangyo` (Slice 2, part 1: Gate B decided, and the sync core)
+
+**Gate B is decided** (human): the lower Leitner box wins a concurrent edit. A second human call
+arrived with it: the server stores **SHA-256** of the device secret, not Argon2id. That call is
+recorded with the server in part 2 (D70).
+
+- **Mechanism (D69):**
+  - A naive `min(box)` would stop a box ever rising after its first sync. Instead, every server
+    document carries a per-account revision, and a push states its base revision.
+  - A stale base returns a conflict, and the device merges with `mergeRecord`, the one rule sync and
+    import share.
+  - Change is found by diffing each record's hash against a ledger, held behind a new
+    **`SyncStateStore`** port.
+- **Built:**
+  - the `SyncTransport` port (§3.3 amended) and the `SyncStateStore` port;
+  - `syncNow`, plus `requestPairCode`, `pairDevice`, `listDevices`, `removeDevice`, `setSyncEnabled`
+    and `deleteEverywhere`;
+  - `importData` on `mergeRecord`;
+  - `memorySyncServer`, `memorySyncStateStore`, `syncTransportContract`, `syncStateStoreContract` and
+    `syncHandlers` in `@palier/testing`;
+  - `dexieSyncStateStore` on `syncMeta`, with no schema bump.
+- **A defect found by the tests, fixed before it landed:** a device's own push came back on its next
+  pull and was merged as if concurrent, so the older copy won. A document at or below the ledger
+  revision is now skipped (D69 #5).
+- **Test changed, and why:** `data-rights.test.ts` "never overwrites a local schedule entry, session or
+  setting". Gate B supersedes keep-local (D62), so it is now the merge case (D69 #6).
+- **Evidence:**
+  - `pnpm verify` → green: 96 files, 1044 tests (8 todo); boundaries clean (277 and 83 modules);
+    thresholds held.
+  - Branch coverage: `sync-now.ts`, `sync-account.ts`, `merge.ts`, `records.ts`, `import-data.ts` and
+    `dexie/sync-state-store.ts` each at 100%.
+  - **Proven to bite:** with the ledger check removed (every pull merges, the naive `min`), three
+    `sync-now.test.ts` cases fail, "lets a box rise after it has synced" among them. Restored, and 18/18
+    pass.
 
 ### 24 September 2026 — `dougkeefe/phase-2-development` (PR #19: fix the CI Lighthouse failure on `/fr/progress`)
 

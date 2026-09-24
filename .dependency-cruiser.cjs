@@ -48,6 +48,14 @@ const VENDOR_BANS = [
     where: "apps/web",
   },
   {
+    // The sync backend's database stack (ADR 21). It lives in apps/web/src/server and
+    // nowhere else: the client reaches sync only through the SyncTransport port.
+    name: "no-sql-outside-web-server",
+    module: "drizzle-orm|drizzle-kit|postgres",
+    allowed: "^apps/web/src/server/",
+    where: "apps/web/src/server",
+  },
+  {
     name: "no-test-tooling-outside-testing",
     module: "msw|@electric-sql/pglite|fake-indexeddb|@playwright/test",
     allowed: "^(packages/testing/|apps/web/)",

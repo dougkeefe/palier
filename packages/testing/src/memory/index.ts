@@ -6,3 +6,6 @@ export { memoryKeyVault } from "./key-vault.js";
 export { memoryScheduleStore } from "./schedule-store.js";
 export { memorySessionStore } from "./session-store.js";
 export { memorySettingsStore } from "./settings-store.js";
+export { memorySyncServer } from "./sync-server.js";
+export type { MemorySyncServer, MemorySyncServerOptions, SyncService } from "./sync-server.js";
+export { memorySyncStateStore } from "./sync-state-store.js";

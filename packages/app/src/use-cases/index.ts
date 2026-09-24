@@ -65,3 +65,16 @@ export { reviewQueue } from "./review-queue.js";
 
 export type { ProgressReport, ProgressReportDeps, ProgressReportRequest } from "./progress-report.js";
 export { progressReport } from "./progress-report.js";
+
+export type { SyncNowDeps, SyncNowRequest, SyncOutcome } from "./sync-now.js";
+export { MAX_PUSH_ROUNDS, PUSH_BATCH, syncNow } from "./sync-now.js";
+
+export type { DeleteEverywhereDeps, SyncAccountDeps } from "./sync-account.js";
+export {
+  deleteEverywhere,
+  listDevices,
+  pairDevice,
+  removeDevice,
+  requestPairCode,
+  setSyncEnabled,
+} from "./sync-account.js";

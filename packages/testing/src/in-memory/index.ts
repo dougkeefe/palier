@@ -26,5 +26,7 @@ export {
   memoryScheduleStore,
   memorySessionStore,
   memorySettingsStore,
+  memorySyncServer,
+  memorySyncStateStore,
 } from "../memory/index.js";
-export type { MemoryBank } from "../memory/index.js";
+export type { MemoryBank, MemorySyncServer } from "../memory/index.js";

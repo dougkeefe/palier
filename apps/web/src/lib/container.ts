@@ -26,24 +26,39 @@ import type {
   SettingsStore,
   StartSessionRequest,
   StartSessionResult,
+  DeviceId,
+  DeviceSummary,
+  SyncNowRequest,
+  SyncOutcome,
+  SyncState,
+  SyncStateStore,
+  SyncTransport,
 } from "@palier/app";
 import {
   answerItem,
   completeSession,
+  deleteEverywhere,
   diagnosticReadout,
   exportData,
   importData,
+  listDevices,
+  pairDevice,
   planDailySession,
   practiceTrend,
   progressReport,
+  removeDevice,
+  requestPairCode,
   reviewQueue,
   runDiagnostic,
+  setSyncEnabled,
   startSession,
+  syncNow,
   wipeData,
 } from "@palier/app";
 import { httpBankRepository } from "@palier/adapters/bank";
 import { dexieStores } from "@palier/adapters/dexie";
 import { webCryptoIdGenerator } from "@palier/adapters/ids";
+import { httpSyncTransport } from "@palier/adapters/sync";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
 import type { ExamProfile } from "@palier/domain";
 import { parseExamProfileOrThrow } from "@palier/domain";
@@ -58,6 +73,7 @@ import {
   memoryScheduleStore,
   memorySessionStore,
   memorySettingsStore,
+  memorySyncStateStore,
   seededRandom,
 } from "@palier/testing/in-memory";
 
@@ -137,6 +153,16 @@ export type UseCases = {
   readonly exportData: () => Promise<ExportDocument>;
   readonly importData: (request: ImportDataRequest) => Promise<ImportDataResult>;
   readonly wipeData: () => Promise<void>;
+  /** Sync (architecture.md §9.3–§9.4, progress.md D69): one exchange, and the account around it. */
+  readonly syncNow: (request: SyncNowRequest) => Promise<SyncOutcome>;
+  readonly syncState: () => Promise<SyncState>;
+  readonly requestPairCode: (request: { readonly label: string }) => Promise<{ readonly code: string; readonly expiresAt: string }>;
+  readonly pairDevice: (request: SyncNowRequest & { readonly code: string }) => Promise<SyncOutcome>;
+  readonly listDevices: () => Promise<readonly DeviceSummary[]>;
+  readonly removeDevice: (request: { readonly id: DeviceId }) => Promise<void>;
+  readonly setSyncEnabled: (request: { readonly enabled: boolean; readonly deleteFromServer?: boolean }) => Promise<void>;
+  /** Delete everything, on the server and here [R11]; the server first. */
+  readonly deleteEverywhere: () => Promise<void>;
 };
 
 export type Ports = {
@@ -155,6 +181,9 @@ export type Ports = {
   readonly sessions: SessionStore;
   readonly settings: SettingsStore;
   readonly vault: KeyVault;
+  /** The HTTP sync transport, same-origin, presenting the vault's device secret. */
+  readonly sync: SyncTransport;
+  readonly syncState: SyncStateStore;
 };
 
 export type Container = Ports & {
@@ -248,8 +277,32 @@ function buildUseCases(ports: Ports): UseCases {
         settings: ports.settings,
         vault: ports.vault,
       }),
+    syncNow: (request) => syncNow(request, syncDeps(ports)),
+    syncState: () => ports.syncState.state(),
+    requestPairCode: (request) => requestPairCode(request, { transport: ports.sync, syncState: ports.syncState }),
+    pairDevice: (request) => pairDevice(request, syncDeps(ports)),
+    listDevices: () => listDevices({ transport: ports.sync, syncState: ports.syncState }),
+    removeDevice: (request) => removeDevice(request, { transport: ports.sync, syncState: ports.syncState }),
+    setSyncEnabled: (request) => setSyncEnabled(request, { transport: ports.sync, syncState: ports.syncState }),
+    deleteEverywhere: () => deleteEverywhere({ ...syncDeps(ports), vault: ports.vault }),
   };
 }
+
+const syncDeps = (ports: Ports) => ({
+  clock: ports.clock,
+  transport: ports.sync,
+  syncState: ports.syncState,
+  attempts: ports.attempts,
+  schedule: ports.schedule,
+  sessions: ports.sessions,
+  settings: ports.settings,
+});
+
+/**
+ * The sync API is same-origin (architecture.md §9.3: "sent only over TLS to our own
+ * origin"), so the transport's base URL is empty and every request is relative.
+ */
+export const SYNC_BASE_URL = "";
 
 /** Read the environment the container branches on. */
 export function readEnv(
@@ -284,20 +337,45 @@ function productionPorts(): Ports {
     settings: stores.settings,
     // The Dexie adapter names this port `keyVault`; the graph calls it `vault`.
     vault: stores.keyVault,
+    sync: httpSyncTransport({ baseUrl: SYNC_BASE_URL, credentials: () => stores.keyVault.deviceSecret() }),
+    syncState: stores.syncState,
   };
 }
 
-/** The in-memory ports and the fixture bank, for the hermetic Playwright lane. */
+/**
+ * The in-memory ports and the fixture bank, for the hermetic Playwright lane.
+ *
+ * Sync is the one exception to "in memory": the transport is the **real** HTTP adapter
+ * against the dev server's routes, which run on an in-process PGlite (`src/server/db.ts`),
+ * so E2E journey 8 drives the real route handlers (implementation-plan.md §6.2 tier 6).
+ * For that, each hermetic page load is its own device. It gets a device secret the
+ * server will accept (64 hex characters) and an id counter started far from any other
+ * device's. Two devices sharing one id stream would lose attempts to the store's
+ * duplicate no-op, the very collision D39 exists to rule out. Within one device the
+ * counter is still deterministic (progress.md D71).
+ */
 function hermeticPorts(): Ports {
+  const device = hermeticDevice();
+  const vault = memoryKeyVault(device.secret);
   return {
     clock: fakeClock(),
     random: seededRandom(1),
-    ids: counterIdGenerator(),
+    ids: counterIdGenerator(device.idSeed),
     items: fixtureBankRepository(),
     attempts: memoryAttemptStore(),
     schedule: memoryScheduleStore(),
     sessions: memorySessionStore(),
     settings: memorySettingsStore(),
-    vault: memoryKeyVault(),
+    vault,
+    sync: httpSyncTransport({ baseUrl: SYNC_BASE_URL, credentials: () => vault.deviceSecret() }),
+    syncState: memorySyncStateStore(),
   };
+}
+
+/** A fresh hermetic device: a 256-bit hex secret, and an id seed 2^20 ids from its neighbours. */
+export function hermeticDevice(random: (bytes: Uint8Array) => Uint8Array = (b) => crypto.getRandomValues(b)) {
+  const bytes = random(new Uint8Array(36));
+  const secret = [...bytes.subarray(0, 32)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  const idSeed = new DataView(bytes.buffer, 32, 4).getUint32(0) * 2 ** 20;
+  return { secret, idSeed };
 }

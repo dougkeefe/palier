@@ -65,7 +65,7 @@ const arrayField = (doc: Record<string, unknown>, field: string): readonly unkno
   return value;
 };
 
-const parseAttempt = (raw: unknown, at: string): Attempt => {
+export const parseAttempt = (raw: unknown, at: string): Attempt => {
   const parsed = attemptSchema.safeParse(raw);
   if (!parsed.success) throw new InvalidExportError(`${at} is not a valid attempt`);
   const a = parsed.data;
@@ -73,7 +73,7 @@ const parseAttempt = (raw: unknown, at: string): Attempt => {
   return { ...a, id: attemptId(a.id), itemId: itemId(a.itemId), sessionId: sessionId(a.sessionId) };
 };
 
-const parseScheduleEntry = (raw: unknown, at: string): ScheduleEntry => {
+export const parseScheduleEntry = (raw: unknown, at: string): ScheduleEntry => {
   if (
     !isRecord(raw) ||
     !nonEmptyString(raw.itemId) ||
@@ -87,7 +87,7 @@ const parseScheduleEntry = (raw: unknown, at: string): ScheduleEntry => {
   return { itemId: itemId(raw.itemId), due: raw.due, skill: raw.skill as Skill, box: raw.box as number };
 };
 
-const parseSession = (raw: unknown, at: string): Session => {
+export const parseSession = (raw: unknown, at: string): Session => {
   if (
     !isRecord(raw) ||
     !nonEmptyString(raw.id) ||
@@ -105,7 +105,7 @@ const parseSession = (raw: unknown, at: string): Session => {
   };
 };
 
-const parseSetting = (raw: unknown, at: string): SettingEntry => {
+export const parseSetting = (raw: unknown, at: string): SettingEntry => {
   if (!isRecord(raw) || !nonEmptyString(raw.key) || !("value" in raw)) {
     throw new InvalidExportError(`${at} is not a valid setting`);
   }

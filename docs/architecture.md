@@ -570,6 +570,8 @@ The `stores()` string above is unchanged and still correct: it declares the prim
 
 The schedule is replicated (section 12, "a replica of progress records"), and section 9.4 resolves conflicts by last write wins on `updatedAt` — **which this record does not carry**. That is an open Phase 2 question, not an oversight to fix here: a bare last-write-wins on `box` can regress an item's progress when two devices drill the same item offline, so the sync work has to decide between adding `updatedAt`, merging by taking the lower box (the conservative reading of Leitner), or treating the schedule as device-local. Recorded so that decision is made deliberately rather than inherited from the default.
 
+**Decided 24 September 2026 (Gate B, human; `progress.md` D69): the lower box wins a concurrent edit.** The schedule syncs, and needs no `updatedAt`. Every server document carries a per-account `revision`; a device pushes each record with the revision it was derived from, and the server takes it only while that revision is still current. So a causally later write — the device saw the server's copy, then answered again — replaces it outright, and a box rises after it has synced. Only a concurrent edit, where both sides changed the record since their shared revision, is merged, on the device, by taking the lower box (an equal box takes the earlier `due`; a retired entry counts as latest). A plain `min(box)` would have been wrong in the other direction: a box could never rise once synced. `importData` applies the same merge, treating every record already present as concurrent, because a file carries no causal history.
+
 Session record (added 21 September 2026, with the `StartSession`/`CompleteSession` use cases; `implementation-plan.md` §3.3 and `progress.md` D45):
 
 ```ts
@@ -615,17 +617,23 @@ telemetry_events(               -- opt-in, deliberately has no account_id
 
 `sync_documents` is a generic per-record envelope rather than a normalised mirror, so client schema changes do not require a server migration. Payloads are the client's own record shapes, opaque to the server.
 
+*Amended 24 September 2026 (ADR 21, `progress.md` D69–D70); the schema itself is `apps/web/src/server/schema.ts`:*
+- `accounts` gains `revision`, the per-account counter every accepted write increments. It stamps `sync_documents.revision` and serves as the pull watermark.
+- `accounts` drops `locale`, `target_lang` and `target_band`, because nothing sends them.
+- `devices.secret_hash` is **SHA-256** of the 256-bit secret, uniquely indexed, not Argon2id. The secret is random, not a password, so there is nothing for a slow hash to protect.
+- `pair_codes` (hashed, expiring, single use) and `rate_limits` (HMAC of route, IP and day) are added.
+
 Every query filters by the request's account id through a repository layer, never by ad hoc query construction. There is no cross-account read path in the codebase at all, which is easier to audit than row-level security policies.
 
 ### 9.3 Identity
 
 Sync is on by default with no sign-in (ADR 4), so identity comes from the device. v1 has no accounts, no email, no OAuth and no session handling (ADR 5).
 
-**First run.** The client generates a 256-bit device secret with `crypto.getRandomValues`, stores it in the key vault, and calls `POST /api/account/device`. The server creates an `accounts` row and a `devices` row holding an Argon2id hash of the secret, and returns the account id. The secret is the bearer credential for every subsequent sync request. The server never holds it in reversible form.
+**First run.** The client generates a 256-bit device secret with `crypto.getRandomValues`, stores it in the key vault, and calls `POST /api/account/device`. The server creates an `accounts` row and a `devices` row holding an Argon2id hash of the secret, and returns the account id. *(Amended 24 September 2026, ADR 21: the hash is SHA-256. Registration presents the secret as the bearer, and is idempotent per secret.)* The secret is the bearer credential for every subsequent sync request. The server never holds it in reversible form.
 
 **Deferred creation.** The account row is created on completion of the first practice session, not on first page load. A visitor who lands and leaves creates nothing.
 
-**Adding a second device.** Device one requests a pairing code: six characters, valid ten minutes, single use, rate limited. The user types it into device two, which calls `POST /api/account/pair` and receives its own device record and secret, then pulls the document set. No email, no third-party identity, no account to remember.
+**Adding a second device.** Device one requests a pairing code: six characters, valid ten minutes, single use, rate limited. The user types it into device two, which calls `POST /api/account/pair` and receives its own device record and secret, then pulls the document set. *(Amended 24 September 2026, ADR 21: device two presents the secret already in its vault, and the server never generates one. If device two already had an account, it moves, and its local progress merges into the one it joins.)* No email, no third-party identity, no account to remember.
 
 **Recovery.** There is none in v1, and the settings page says so in one plain sentence: if you lose every paired device, server-side progress is gone. The JSON export sits directly beneath that sentence. Adding a recoverable identity is deferred until there is evidence it is needed (ADR 5).
 
@@ -638,8 +646,8 @@ Sync is on by default with no sign-in (ADR 4), so identity comes from the device
 ### 9.4 Sync protocol
 
 - **Trigger:** on app focus if more than 5 minutes have elapsed, debounced 30 seconds after a session completes, on demand from settings, and on reconnect after offline.
-- **Protocol:** push local records with `updatedAt` greater than the last watermark, pull server records newer than the same watermark, resolve per record, advance the watermark. Batched, gzipped, capped at 500 records per request with continuation.
-- **Conflict resolution:** last write wins by `updatedAt`, with two cases that never conflict by construction. Attempts are append-only and keyed by client-generated ULID. Estimates are not synced as values at all; each device recomputes them from the merged attempt set, which removes the hardest conflict case entirely. **One record does not fit this rule yet:** `ScheduleEntry` carries no `updatedAt`, and last write wins on its `box` can regress an item's progress. Section 9.1 states the three options; choosing between them is Phase 2 work (`progress.md` D43).
+- **Protocol:** push local records with `updatedAt` greater than the last watermark, pull server records newer than the same watermark, resolve per record, advance the watermark. Batched, gzipped, capped at 500 records per request with continuation. *Amended 24 September 2026 (`progress.md` D69):* the watermark is the account's **revision counter**, not a timestamp, so clock skew cannot hide a write. A device finds what to push by diffing each record against a local ledger of the revision and hash it last agreed with the server (the `SyncStateStore` port), since no progress record carries `updatedAt`. It pulls first, then pushes each dirty record with its base revision. A stale base comes back as a conflict carrying the server's copy, which the device merges and re-pushes.
+- **Conflict resolution:** last write wins by `updatedAt`, with two cases that never conflict by construction. Attempts are append-only and keyed by client-generated ULID. Estimates are not synced as values at all; each device recomputes them from the merged attempt set, which removes the hardest conflict case entirely. **One record does not fit this rule yet:** `ScheduleEntry` carries no `updatedAt`, and last write wins on its `box` can regress an item's progress. Section 9.1 states the three options; choosing between them is Phase 2 work (`progress.md` D43). *Resolved 24 September 2026 (`progress.md` D69):* conflicts are detected by revision, and only genuinely concurrent edits merge, on the device. A schedule entry keeps the lower box, a session the completed copy, and a setting the local value. So the last-write-wins rule above is what happens for every causally ordered write, and the merge is what happens for the rest.
 - **Never synced, under any setting:** the API key, session audio, oral transcripts, writing workshop submissions, and the cost ledger. Transcripts and submissions can contain anything the user chose to say or write, so they stay on the device. This list appears verbatim in the settings UI.
 - **Disabling sync:** stops outbound requests immediately, and offers server-side deletion. Turning it back on pushes the full local set.
 - **Deletions:** tombstone for 90 days, then hard delete.
@@ -664,6 +672,9 @@ Small by design.
 | `GET/POST /api/sync` | Node | device secret bearer | Push and pull sync documents |
 | `DELETE /api/account/device/:id` | Node | device secret | Revoke a device |
 | `DELETE /api/account` | Node | device secret | Hard delete everything server-side, returns a confirmation |
+| `GET /api/account/devices` | Node | device secret | The account's devices, for the settings list (added 24 September 2026) |
+
+*Amended 24 September 2026 (ADR 21):* every account and sync route runs on **Node**. Next.js 16 deprecates the Edge runtime, and the Postgres driver needs Node. The wire protocol, including every status code, is the table in `packages/testing/src/msw/sync-handlers.ts`. With no database configured, every sync route answers 503.
 
 Everything else is static: the app shell, the bank bundles, and the library content.
 
