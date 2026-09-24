@@ -123,6 +123,11 @@ interface SessionStore   { create(s: Session): Promise<void>; complete(id: Sessi
 // Phase 3 exam runner. See progress.md D45, D46 (D46 closes D36).
 interface OralStore      { /* transcripts and audio blobs, local only */ }
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
+// Amended 24 September 2026: AttemptStore, ScheduleStore, SessionStore and SettingsStore each
+// gained `all()` and `clear()` (SettingsStore's `all()` returns `{ key, value }` entries). The
+// data-rights use cases need them — ExportData must read every record and WipeData must delete
+// them — and no existing method could do either. `ScheduleStore.all()` includes retired
+// entries. See progress.md D61; ImportData's never-overwrite merge rule is D62.
 
 // External services
 interface AiProvider {
@@ -637,7 +642,11 @@ mirrors this list and the two must agree.
   type crosses into `apps/web` beyond `next`/`react`.
 - **Gate A — product and UI direction (human).** Screens, copy, states, visual language for the
   onboarding/drill/review/settings surfaces. Gates Slice 1's UI portion (its composition-root, service
-  worker and data use cases are buildable before it).
+  worker and data use cases are buildable before it). **Resolved 24 September 2026:** adopt the
+  direction this set already specifies (`product-requirements.md` §8, §10, §11, §14) for the
+  single-device screen subset. The detail is in `progress.md` Phase 2.
+  **Slice 1 status, 24 September 2026:** built. The single-device app works end to end, offline after one
+  load, and E2E journeys 1, 2, 4, 6 and 7 pass. See `progress.md` for the evidence. **Gate B** is next.
 - **Slice 2 — Multi-device sync.** After **Gate B**: the sync backend (Postgres + Drizzle, the sync and
   device routes of §10, deferred anonymous registration, pairing by code, rate limiting; no auth lib,
   email or OAuth per ADR 5); `adapters/vault` + `adapters/sync` (device secret / sync identity, pairing

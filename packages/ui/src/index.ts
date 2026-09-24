@@ -17,11 +17,14 @@ export {
 
 // Primitive logic (pure, testable).
 export {
+  bandMeterGeometry,
   buttonClass,
   calloutState,
   optionRowKeydown,
   optionRowState,
   railGeometry,
+  type BandMeterGeometry,
+  type BandMeterInput,
   type ButtonVariant,
   type CalloutState,
   type CalloutTone,
@@ -31,6 +34,9 @@ export {
   type OptionRowIntent,
   type OptionRowState,
   type RailGeometry,
+  type SheetState,
+  type SheetTone,
+  sheetState,
 } from "./primitives/logic.js";
 
 // Primitives.
@@ -41,6 +47,11 @@ export { EmptyState, type EmptyStateProps } from "./primitives/EmptyState.js";
 export { Glyph, type GlyphProps } from "./primitives/Glyph.js";
 export { OptionRow, type OptionRowProps } from "./primitives/OptionRow.js";
 export { ProgressRail, type ProgressRailProps } from "./primitives/ProgressRail.js";
+export { BandMeter, type BandMeterProps } from "./primitives/BandMeter.js";
+export { Sheet, type SheetProps } from "./primitives/Sheet.js";
+export { Passage, type PassageProps } from "./primitives/Passage.js";
+export { Toast, type ToastProps } from "./primitives/Toast.js";
+export { Mascot } from "./primitives/Mascot.js";
 
 // The render half of the item type registry (implementation-plan.md §3.4, ADR 17).
 export { McqItem, type ItemRenderer, type ItemRendererProps } from "./item-types/McqItem.js";

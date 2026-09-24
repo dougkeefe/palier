@@ -1,7 +1,11 @@
-import { attemptId, sessionId } from "@palier/domain";
-import { describe, expect, it } from "vitest";
+import { readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 
-import { createContainer, readEnv } from "./container";
+import { attemptId, sessionId } from "@palier/domain";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { BANK_BASE_PATH, BANK_VERSION, createContainer, readEnv } from "./container";
 
 describe("readEnv", () => {
   it("is hermetic when PALIER_HERMETIC is exactly '1'", () => {
@@ -195,7 +199,174 @@ describe("createContainer", () => {
     expect(Object.keys(trend.byBand).sort()).toEqual(["A", "B", "C"]);
   });
 
-  it("refuses to build a production container until real adapters exist", () => {
-    expect(() => createContainer({ hermetic: false })).toThrow(/Phase 2/);
+  it("round-trips a device's progress through export, wipe and import [R11]", async () => {
+    await roundTripsProgress(createContainer({ hermetic: true }));
+  });
+});
+
+/**
+ * E2E journey 6's claim (implementation-plan.md §6.2), through the assembled graph:
+ * make some progress, export it, wipe everything, import the file, and find the same
+ * state. "The same" is checked twice over: the re-export is identical, and the
+ * review queue the planner reads is the queue it read before.
+ *
+ * Not "the next plan equals the previous plan": the container holds one seeded
+ * `Random` for its lifetime (§3.5), so each plan advances it, and two plans over
+ * identical state legitimately differ in order.
+ */
+const roundTripsProgress = async (c: ReturnType<typeof createContainer>) => {
+  const planRequest = { skill: "reading", lang: "fr", targetBand: "C", sessionSize: 8 } as const;
+  const started = await c.useCases.startSession({
+    sessionId: sessionId("01HSESSIONROUNDTRIP000001"),
+    mode: "drill",
+    plan: planRequest,
+  });
+  let seq = 0;
+  for (const item of started.plan.items) {
+    seq++;
+    await c.useCases.answerItem({
+      attemptId: attemptId(`01HROUNDTRIP${String(seq).padStart(14, "0")}`),
+      itemId: item.id,
+      // Alternate right and wrong, so the schedule holds more than one box.
+      response: seq % 2 === 0 ? item.key : item.key === "a" ? "b" : "a",
+      sessionId: started.session.id,
+      mode: "drill",
+      msToFirstSelect: 1_000,
+      msToConfirm: 2_000,
+      changedAnswer: false,
+      slow: false,
+    });
+  }
+  await c.useCases.completeSession({ sessionId: started.session.id });
+  await c.settings.set("dailyGoalMinutes", 20);
+
+  const before = await c.useCases.exportData();
+  const dueLater = "2099-01-01T00:00:00.000Z";
+  const queueBefore = await c.schedule.due(dueLater, 100);
+  expect(before.attempts).toHaveLength(started.plan.items.length);
+  expect(before.schedule.length).toBeGreaterThan(0);
+
+  await c.useCases.wipeData();
+  const emptied = await c.useCases.exportData();
+  expect([emptied.attempts, emptied.schedule, emptied.sessions, emptied.settings]).toEqual([[], [], [], []]);
+
+  await c.useCases.importData({ json: JSON.stringify(before) });
+
+  const after = await c.useCases.exportData();
+  expect({ ...after, exportedAt: before.exportedAt }).toEqual(before);
+  // `due` orders by due instant and promises nothing within a tie, so compare by item.
+  const byItem = (entries: readonly { itemId: string }[]) =>
+    [...entries].sort((a, b) => a.itemId.localeCompare(b.itemId));
+  expect(queueBefore.length).toBeGreaterThan(0);
+  expect(byItem(await c.schedule.due(dueLater, 100))).toEqual(byItem(queueBefore));
+};
+
+/**
+ * The production graph, run in Node: Dexie over `fake-indexeddb` (the `web` project's
+ * setup file), Web Crypto ids (native on Node), the wall clock, and the HTTP bank. The
+ * bank's base URL is origin-relative, which Node's `fetch` cannot resolve, so `fetch`
+ * is stubbed with a reader that serves the **committed** `content/bank/` tree from disk
+ * at the paths the browser would request. That makes this the fast-lane proof that
+ * the app plans a day from the real committed bank rather than the fixture bank; the
+ * browser-and-service-worker half is the medium lane's offline E2E.
+ */
+describe("createContainer in production", () => {
+  const require = createRequire(import.meta.url);
+  // content/profiles/psc-sle.json → content/
+  const CONTENT_DIR = dirname(dirname(require.resolve("@palier/content/profiles/psc-sle.json")));
+  const requested: string[] = [];
+
+  const serveCommittedBank = async (url: string) => {
+    requested.push(url);
+    const prefix = `${BANK_BASE_PATH}/`;
+    if (!url.startsWith(prefix)) return { ok: false, status: 404, json: async () => null };
+    try {
+      const body = await readFile(join(CONTENT_DIR, url.slice(prefix.length)), "utf8");
+      return { ok: true, status: 200, json: async () => JSON.parse(body) as unknown };
+    } catch {
+      return { ok: false, status: 404, json: async () => null };
+    }
+  };
+
+  /** The ids of every item in the committed bank, read straight off disk. */
+  const committedItemIds = async (): Promise<Set<string>> => {
+    const bankDir = join(CONTENT_DIR, "bank", `v${String(BANK_VERSION)}`);
+    const manifest = JSON.parse(await readFile(join(bankDir, "manifest.json"), "utf8")) as {
+      shards: { path: string }[];
+    };
+    const ids = new Set<string>();
+    for (const shard of manifest.shards) {
+      const items = JSON.parse(await readFile(join(CONTENT_DIR, shard.path), "utf8")) as {
+        id: string;
+      }[];
+      for (const item of items) ids.add(item.id);
+    }
+    return ids;
+  };
+
+  beforeEach(() => {
+    requested.length = 0;
+    vi.stubGlobal("fetch", serveCommittedBank);
+  });
+  afterEach(async () => {
+    // Every production container shares the one IndexedDB database, so leave it empty.
+    await createContainer({ hermetic: false }).useCases.wipeData();
+    vi.unstubAllGlobals();
+  });
+
+  it("wires every port to a real adapter without touching storage or the network", () => {
+    const c = createContainer({ hermetic: false });
+
+    expect(c.items).toBeDefined();
+    expect(c.attempts).toBeDefined();
+    expect(c.schedule).toBeDefined();
+    expect(c.sessions).toBeDefined();
+    expect(c.settings).toBeDefined();
+    expect(c.vault).toBeDefined();
+    expect(Number.isNaN(Date.parse(c.clock.now()))).toBe(false);
+    expect(c.ids.ulid()).toMatch(/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{26}$/);
+    // Construction is lazy: the bank has not fetched its manifest yet.
+    expect(requested).toEqual([]);
+  });
+
+  it("plans a day from the committed bank, fetched from the served base path", async () => {
+    const c = createContainer({ hermetic: false });
+
+    const plan = await c.useCases.planDailySession({
+      skill: "reading",
+      lang: "fr",
+      targetBand: "C",
+      sessionSize: 8,
+    });
+
+    expect(plan.items.length).toBeGreaterThan(0);
+    // Every planned item is one the committed bank ships, not a fixture-bank item.
+    const committedIds = await committedItemIds();
+    expect(plan.items.every((item) => committedIds.has(item.id))).toBe(true);
+    expect(requested).toContain(`${BANK_BASE_PATH}/bank/v${String(BANK_VERSION)}/manifest.json`);
+    expect(await c.items.bankVersion()).toBe(BANK_VERSION);
+  });
+
+  it("seeds today's selection by the day, so rebuilding the container replays the same plan", async () => {
+    const request = { skill: "reading", lang: "fr", targetBand: "C", sessionSize: 8 } as const;
+    const first = await createContainer({ hermetic: false }).useCases.planDailySession(request);
+    const again = await createContainer({ hermetic: false }).useCases.planDailySession(request);
+
+    expect(again.items.map((item) => item.id)).toEqual(first.items.map((item) => item.id));
+  });
+
+  it("round-trips a device's progress through export, wipe and import, over real IndexedDB [R11]", async () => {
+    await roundTripsProgress(createContainer({ hermetic: false }));
+  });
+
+  it("keeps the device secret through a wipe, so the device keeps its sync identity (D50)", async () => {
+    const c = createContainer({ hermetic: false });
+    const secret = await c.vault.deviceSecret();
+    await c.vault.putApiKey("sk-test-not-a-real-key");
+
+    await c.useCases.wipeData();
+
+    expect(await c.vault.hasApiKey()).toBe(false);
+    expect(await c.vault.deviceSecret()).toBe(secret);
   });
 });

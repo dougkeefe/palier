@@ -101,6 +101,27 @@ export const scheduleStoreContract = (
       expect(await store.get(itemId("retired"))).toMatchObject({ due: null, box: 5 });
     });
 
+    it("returns every entry from all, retired ones included, in any order", async () => {
+      const store = await make();
+      await store.put(aScheduleEntry({ itemId: itemId("queued"), box: 2 }));
+      await store.put(aScheduleEntry({ itemId: itemId("retired"), due: null, box: 5 }));
+
+      const all = await store.all();
+      expect(all.map((e) => e.itemId).sort()).toEqual(["queued", "retired"]);
+      expect(all.find((e) => e.itemId === "retired")).toMatchObject({ due: null, box: 5 });
+    });
+
+    it("holds nothing after clear, and still takes new entries", async () => {
+      const store = await make();
+      await store.put(aScheduleEntry({ itemId: itemId("a") }));
+      await store.clear();
+
+      expect(await store.all()).toEqual([]);
+      expect(await store.get(itemId("a"))).toBeNull();
+      await store.put(aScheduleEntry({ itemId: itemId("b") }));
+      expect((await store.all()).map((e) => e.itemId)).toEqual(["b"]);
+    });
+
     it.todo("survives a reopen");
   });
 };

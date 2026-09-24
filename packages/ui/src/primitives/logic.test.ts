@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  bandMeterGeometry,
   buttonClass,
   calloutState,
   optionRowKeydown,
   optionRowState,
   railGeometry,
+  sheetState,
 } from "./logic.js";
 
 describe("buttonClass", () => {
@@ -109,5 +111,50 @@ describe("calloutState", () => {
     expect(calloutState("correct").glyph).toBe("check");
     expect(calloutState("incorrect").glyph).toBe("cross");
     expect(calloutState("accent").glyph).toBe("star");
+  });
+});
+
+describe("bandMeterGeometry", () => {
+  it("draws the estimate as the fill and the interval as the lighter range", () => {
+    const geo = bandMeterGeometry({ accuracy: 0.52, low: 0.4, high: 0.64 });
+    expect(geo.fillPercent).toBeCloseTo(52);
+    expect(geo.rangeStartPercent).toBeCloseTo(40);
+    expect(geo.rangeWidthPercent).toBeCloseTo(24);
+    expect(geo.valueNow).toBe(52);
+  });
+
+  it("rounds the accessible value to a whole percentage", () => {
+    expect(bandMeterGeometry({ accuracy: 0.846, low: 0.8, high: 0.9 }).valueNow).toBe(85);
+  });
+
+  it("clamps everything to the track, so nothing runs off either end", () => {
+    const geo = bandMeterGeometry({ accuracy: 1.3, low: -0.2, high: 1.5 });
+    expect(geo).toMatchObject({ fillPercent: 100, rangeStartPercent: 0, rangeWidthPercent: 100, valueNow: 100 });
+  });
+
+  it("puts an inverted interval right rather than drawing a negative width", () => {
+    const geo = bandMeterGeometry({ accuracy: 0.5, low: 0.7, high: 0.3 });
+    expect(geo.rangeStartPercent).toBeCloseTo(30);
+    expect(geo.rangeWidthPercent).toBeCloseTo(40);
+  });
+
+  it("draws an empty meter from a value that is not a number", () => {
+    expect(bandMeterGeometry({ accuracy: Number.NaN, low: Number.NaN, high: Number.POSITIVE_INFINITY })).toEqual({
+      fillPercent: 0,
+      rangeStartPercent: 0,
+      rangeWidthPercent: 0,
+      valueNow: 0,
+    });
+  });
+});
+
+describe("sheetState", () => {
+  it("gives a correct answer the check glyph and an incorrect one the cross", () => {
+    expect(sheetState("correct")).toEqual({ className: "pl-sheet pl-sheet--correct", glyph: "check" });
+    expect(sheetState("incorrect")).toEqual({ className: "pl-sheet pl-sheet--incorrect", glyph: "cross" });
+  });
+
+  it("carries no glyph when neutral", () => {
+    expect(sheetState("neutral")).toEqual({ className: "pl-sheet pl-sheet--neutral", glyph: null });
   });
 });

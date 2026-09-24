@@ -6,11 +6,19 @@ import type {
   CompleteSessionRequest,
   CompleteSessionResult,
   DiagnosticReadoutRequest,
+  ExportDocument,
   IdGenerator,
+  ImportDataRequest,
+  ImportDataResult,
   ItemRepository,
   KeyVault,
   PlanDailySessionRequest,
+  PracticeTrendRequest,
+  ProgressReport,
+  ProgressReportRequest,
   Random,
+  ReviewQueueRequest,
+  ReviewQueueResult,
   RunDiagnosticRequest,
   RunDiagnosticResult,
   ScheduleStore,
@@ -23,10 +31,19 @@ import {
   answerItem,
   completeSession,
   diagnosticReadout,
+  exportData,
+  importData,
   planDailySession,
+  practiceTrend,
+  progressReport,
+  reviewQueue,
   runDiagnostic,
   startSession,
+  wipeData,
 } from "@palier/app";
+import { httpBankRepository } from "@palier/adapters/bank";
+import { dexieStores } from "@palier/adapters/dexie";
+import { webCryptoIdGenerator } from "@palier/adapters/ids";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
 import type { ExamProfile } from "@palier/domain";
 import { parseExamProfileOrThrow } from "@palier/domain";
@@ -42,28 +59,45 @@ import {
   memorySessionStore,
   memorySettingsStore,
   seededRandom,
-} from "@palier/testing";
+} from "@palier/testing/in-memory";
+
+import { selectionSeedFor, systemClock } from "./system-clock";
 
 /**
  * The one composition root (implementation-plan.md §3.5, principle 7): the only
  * place that names concrete adapters. Everything else is handed what it needs.
  *
- * Phase 0 state, stated plainly: the real adapters (Dexie, bank, vault, sync)
- * do not exist yet — they land in Phase 2. So today this wires only the
- * in-memory ports from `@palier/testing`, and only for the hermetic path that
- * Playwright drives (playwright.config.ts sets `PALIER_HERMETIC=1`; the flag
- * name lives in `@palier/testing` so the two cannot disagree). The production
- * path throws rather than silently wiring test doubles into a real deployment.
+ * Two graphs, chosen by `Env`:
+ *
+ * - **Production** wires the real adapters: the HTTP bank over the statically served
+ *   shards (`@palier/adapters/bank`), the five local stores over IndexedDB
+ *   (`@palier/adapters/dexie`), Web Crypto ULIDs (`@palier/adapters/ids`), the wall
+ *   clock, and a per-day-seeded selection `Random` (D58). **It is browser-only**:
+ *   Dexie needs IndexedDB and the bank's base URL is origin-relative, so it is built
+ *   in the browser by `ContainerProvider`, never during server rendering (D59).
+ * - **Hermetic** wires the in-memory ports and the fixture bank, for the Playwright
+ *   lane (playwright.config.ts sets `PALIER_HERMETIC=1`; the flag name lives in
+ *   `@palier/testing` so the two cannot disagree).
  *
  * apps/web is explicitly allowed to import `@palier/testing` (the
- * `no-test-tooling-outside-testing` cruiser rule allows `^apps/web/`); this is
- * the sanctioned home for that import.
- *
- * Two use cases have landed ahead of Phase 2, as a content-agnostic sequencing
- * move (the same one that built the engine core early), so this assembles the
- * use-case graph via `buildUseCases` and seeds the item repository from the
- * canonical fixture bank (progress.md D36, D38).
+ * `no-test-tooling-outside-testing` cruiser rule allows `^apps/web/`); this is the
+ * sanctioned home for that import. It comes through the browser-safe
+ * `@palier/testing/in-memory` subpath, because the root entry point re-exports the
+ * contract suites (vitest), `msw/node` and PGlite, none of which a browser bundle can
+ * take (D59). Production reuses exactly one thing from it: `seededRandom`, which
+ * §3.5 wires in production on purpose.
  */
+
+/**
+ * Where the committed bank is served and which version this build reads. The
+ * `content/bank/` tree is copied under `public/content/` at build (scripts/
+ * prepare-public.mjs), and every manifest `path` already starts `bank/v{n}/`, so
+ * the adapter's base is the directory that *contains* `bank/`. Bank versions are
+ * additive (architecture.md §5.5): a new one is a new path, so moving this number
+ * is the whole of a bank migration on the client.
+ */
+export const BANK_BASE_PATH = "/content";
+export const BANK_VERSION = 1;
 
 /**
  * The exam profile, parsed once here. Parsing at the composition root is the same
@@ -76,9 +110,10 @@ import {
  * `no-relative-escape` rule forbids — "cross-package imports go through the
  * package name, so they resolve through the exports map" (ADR 18, progress.md D42).
  *
- * In Phase 2 the bank adapter fetches content over HTTP and caches it in a service
- * worker (architecture.md §5.3); this bundled copy is what the hermetic path and
- * the static build use until then.
+ * The *bank* is no longer bundled — the production path fetches it over HTTP and the
+ * service worker keeps it (architecture.md §5.5). The profile still is: it is small,
+ * every use case that needs it needs it synchronously, and ADR 18's revisit clause
+ * (move it onto the bank's path) has not yet been exercised.
  */
 const PROFILE: ExamProfile = parseExamProfileOrThrow(pscSleProfile);
 
@@ -94,18 +129,24 @@ export type UseCases = {
   readonly completeSession: (request: CompleteSessionRequest) => Promise<CompleteSessionResult>;
   readonly runDiagnostic: (request: RunDiagnosticRequest) => Promise<RunDiagnosticResult>;
   readonly diagnosticReadout: (request: DiagnosticReadoutRequest) => Promise<SkillTrend>;
+  /** The readiness card's practice trend (D64). */
+  readonly practiceTrend: (request: PracticeTrendRequest) => Promise<SkillTrend>;
+  readonly reviewQueue: (request: ReviewQueueRequest) => Promise<ReviewQueueResult>;
+  readonly progressReport: (request: ProgressReportRequest) => Promise<ProgressReport>;
+  /** The data-rights trio [R11]: one action each (progress.md D61, D62). */
+  readonly exportData: () => Promise<ExportDocument>;
+  readonly importData: (request: ImportDataRequest) => Promise<ImportDataResult>;
+  readonly wipeData: () => Promise<void>;
 };
 
 export type Ports = {
   readonly clock: Clock;
   readonly random: Random;
   /**
-   * Identifier minting (progress.md D39, D48). Present in the graph ahead of a
-   * use-case consumer — the Phase-2 drill route mints the ids `answerItem` and
-   * `startSession` take today — the same way `settings` and `vault` are wired but
-   * not yet consumed. The hermetic path wires the deterministic counter for
-   * reproducibility; production would wire `@palier/adapters/ids`'s Web Crypto
-   * generator, but the production path throws until the rest of Phase 2 lands.
+   * Identifier minting (progress.md D39, D48). The UI mints the attempt and session
+   * ids `answerItem` and `startSession` take — a use case never mints one. The
+   * hermetic path wires the deterministic counter for reproducibility; production
+   * wires `@palier/adapters/ids`'s Web Crypto generator.
    */
   readonly ids: IdGenerator;
   readonly items: ItemRepository;
@@ -168,6 +209,45 @@ function buildUseCases(ports: Ports): UseCases {
         items: ports.items,
         attempts: ports.attempts,
       }),
+    practiceTrend: (request) =>
+      practiceTrend(request, {
+        items: ports.items,
+        attempts: ports.attempts,
+      }),
+    reviewQueue: (request) =>
+      reviewQueue(request, {
+        clock: ports.clock,
+        schedule: ports.schedule,
+        items: ports.items,
+      }),
+    progressReport: (request) =>
+      progressReport(request, {
+        items: ports.items,
+        attempts: ports.attempts,
+      }),
+    exportData: () =>
+      exportData({
+        clock: ports.clock,
+        attempts: ports.attempts,
+        schedule: ports.schedule,
+        sessions: ports.sessions,
+        settings: ports.settings,
+      }),
+    importData: (request) =>
+      importData(request, {
+        attempts: ports.attempts,
+        schedule: ports.schedule,
+        sessions: ports.sessions,
+        settings: ports.settings,
+      }),
+    wipeData: () =>
+      wipeData({
+        attempts: ports.attempts,
+        schedule: ports.schedule,
+        sessions: ports.sessions,
+        settings: ports.settings,
+        vault: ports.vault,
+      }),
   };
 }
 
@@ -179,20 +259,37 @@ export function readEnv(
 }
 
 /**
- * Build the port graph for the given environment. Until the real adapters land,
- * only the hermetic in-memory container exists; the production path fails loudly
- * rather than silently wiring test doubles into a real deployment.
+ * Build the port graph for the given environment: the real adapters in production,
+ * the in-memory ports under `PALIER_HERMETIC`. Construction does no I/O — Dexie
+ * opens its database and the bank fetches its manifest on first use — so building
+ * the container is cheap and cannot fail on a network or storage fault.
  */
 export function createContainer(env: Env): Container {
-  if (!env.hermetic) {
-    throw new Error(
-      "No real adapters yet: the Dexie, bank, vault and sync adapters land in " +
-        "Phase 2 (implementation-plan.md §7). Only the hermetic in-memory " +
-        "container exists today — set PALIER_HERMETIC=1 to use it.",
-    );
-  }
+  const ports = env.hermetic ? hermeticPorts() : productionPorts();
+  return { ...ports, useCases: buildUseCases(ports) };
+}
 
-  const ports: Ports = {
+/** The real adapters. Browser-only — see the file comment (D59). */
+function productionPorts(): Ports {
+  const clock = systemClock();
+  const stores = dexieStores();
+  return {
+    clock,
+    random: seededRandom(selectionSeedFor(clock.now())),
+    ids: webCryptoIdGenerator(),
+    items: httpBankRepository({ baseUrl: BANK_BASE_PATH, version: BANK_VERSION }),
+    attempts: stores.attempts,
+    schedule: stores.schedule,
+    sessions: stores.sessions,
+    settings: stores.settings,
+    // The Dexie adapter names this port `keyVault`; the graph calls it `vault`.
+    vault: stores.keyVault,
+  };
+}
+
+/** The in-memory ports and the fixture bank, for the hermetic Playwright lane. */
+function hermeticPorts(): Ports {
+  return {
     clock: fakeClock(),
     random: seededRandom(1),
     ids: counterIdGenerator(),
@@ -203,6 +300,4 @@ export function createContainer(env: Env): Container {
     settings: memorySettingsStore(),
     vault: memoryKeyVault(),
   };
-
-  return { ...ports, useCases: buildUseCases(ports) };
 }

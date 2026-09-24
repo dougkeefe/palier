@@ -19,6 +19,15 @@ export function Header() {
         {t("brand")}
       </Link>
       <nav className="app-header__nav" aria-label={t("primary")}>
+        <Link href="/home" className="app-header__link pl-focusable">
+          {t("home")}
+        </Link>
+        <Link href="/review" className="app-header__link pl-focusable">
+          {t("review")}
+        </Link>
+        <Link href="/progress" className="app-header__link pl-focusable">
+          {t("progress")}
+        </Link>
         <Link href="/about" className="app-header__link pl-focusable">
           {t("about")}
         </Link>

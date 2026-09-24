@@ -77,6 +77,8 @@ const attemptsOf = (attempts: readonly Attempt[]): AttemptStore => ({
   recent: vi.fn(() => Promise.resolve(attempts)),
   since: vi.fn(() => Promise.resolve(attempts)),
   forItem: vi.fn(() => Promise.resolve([])),
+  all: vi.fn(() => Promise.resolve([])),
+  clear: vi.fn(() => Promise.resolve()),
 });
 
 /** Items at band B for every attempt in the given set. */

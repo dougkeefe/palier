@@ -56,9 +56,15 @@ export type Session = {
  * waits for one that does — the same restraint by which `ScheduleStore.get` was
  * added only when `answerItem` needed it. The exam runner's resume is its likely
  * first consumer.
+ *
+ * `all` and `clear` serve export and wipe [R11], the pair every store port gains
+ * (progress.md D61). `all` promises no order. `importData` uses it for the ids it
+ * must not overwrite, which is why `get(id)` is still not needed.
  */
 export type SessionStore = {
   create: (session: Session) => Promise<void>;
   complete: (id: SessionId, at: ISO) => Promise<Session | null>;
   latest: () => Promise<Session | null>;
+  all: () => Promise<readonly Session[]>;
+  clear: () => Promise<void>;
 };

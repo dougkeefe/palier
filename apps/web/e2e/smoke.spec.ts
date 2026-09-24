@@ -48,8 +48,10 @@ test("header focus order is skip link, brand, then nav", async ({ page }) => {
   await expect(page.locator(".app-skip-link")).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(page.locator(".app-header__brand")).toBeFocused();
+  // Then the nav's first link, whichever it is: the order under test is skip link,
+  // brand, nav, and the nav's contents grow as screens land (progress.md, Slice 1).
   await page.keyboard.press("Tab");
-  await expect(page.getByRole("link", { name: "About" })).toBeFocused();
+  await expect(page.getByRole("navigation", { name: "Primary" }).getByRole("link").first()).toBeFocused();
 });
 
 test("activating the skip link moves focus into main", async ({ page }) => {

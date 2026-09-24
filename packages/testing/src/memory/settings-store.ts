@@ -9,5 +9,10 @@ export const memorySettingsStore = (): SettingsStore => {
       values.set(key, value);
       return Promise.resolve();
     },
+    all: () => Promise.resolve([...values].map(([key, value]) => ({ key, value }))),
+    clear: () => {
+      values.clear();
+      return Promise.resolve();
+    },
   };
 };

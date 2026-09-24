@@ -3,8 +3,12 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { isHermetic } from "@palier/testing/in-memory";
+
+import { ContainerProvider } from "../../components/ContainerProvider";
 import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
+import { ServiceWorkerRegistrar } from "../../components/ServiceWorkerRegistrar";
 import { routing } from "../../i18n/routing";
 
 // The design system of record. Imported once here, ahead of the app's own
@@ -26,7 +30,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
-  return { title: t("title"), description: t("description") };
+  // Each page names itself ahead of the product (WCAG 2.4.2: a title that says what the
+  // page is for); a page that sets no title of its own gets the product's.
+  return { title: { template: `%s · ${t("title")}`, default: t("title") }, description: t("description") };
 }
 
 export default async function LocaleLayout({
@@ -48,12 +54,15 @@ export default async function LocaleLayout({
           {t("skipToContent")}
         </a>
         <NextIntlClientProvider>
-          <Header />
-          <main id="main" tabIndex={-1} className="app-main">
-            {children}
-          </main>
-          <Footer />
+          <ContainerProvider hermetic={isHermetic(process.env)}>
+            <Header />
+            <main id="main" tabIndex={-1} className="app-main">
+              {children}
+            </main>
+            <Footer />
+          </ContainerProvider>
         </NextIntlClientProvider>
+        <ServiceWorkerRegistrar />
       </body>
     </html>
   );

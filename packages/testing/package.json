@@ -8,6 +8,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./in-memory": {
+      "types": "./dist/in-memory/index.d.ts",
+      "default": "./dist/in-memory/index.js"
+    },
     "./msw/browser": {
       "types": "./dist/msw/browser.d.ts",
       "default": "./dist/msw/browser.js"

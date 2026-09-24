@@ -30,11 +30,14 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
   likewise: `counterIdGenerator` and `idGeneratorContract`, D48 — the Web Crypto adapter in
   `@palier/adapters/ids` is held to the same contract.)
 
-## The three mistakes most likely to be made here
+## The four mistakes most likely to be made here
 
 1. **A fixture builder setting an optional key to explicit `undefined`.** Omit it —
    `exactOptionalPropertyTypes` and the JSON round-trip test both object (D14).
 2. **A contract suite asserting an implementation detail.** If only the in-memory version
    can pass it, it is the wrong assertion.
-3. **An `exports` entry with nothing behind it** (D3). Three exist: the root,
-   `./msw/browser`, `./setup`.
+3. **An `exports` entry with nothing behind it** (D3). Four exist: the root,
+   `./in-memory`, `./msw/browser`, `./setup`.
+4. **Importing vitest, msw, PGlite or Node core from anything `./in-memory` reaches.** That
+   subpath is what `apps/web`'s composition root bundles into the browser (D59). A test walks
+   its module graph and fails on any package but `@palier/app`/`@palier/domain`.

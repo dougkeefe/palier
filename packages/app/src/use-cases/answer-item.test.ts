@@ -99,6 +99,8 @@ const attemptsOf = (): AttemptStore => {
     recent: vi.fn(() => Promise.resolve([])),
     since: vi.fn(() => Promise.resolve([])),
     forItem: vi.fn(() => Promise.resolve([])),
+    all: vi.fn(() => Promise.resolve([])),
+    clear: vi.fn(() => Promise.resolve()),
   };
 };
 
@@ -106,6 +108,8 @@ const scheduleOf = (existing: ScheduleEntry | null = null): ScheduleStore => ({
   due: vi.fn(() => Promise.resolve([])),
   get: vi.fn(() => Promise.resolve(existing)),
   put: vi.fn(() => Promise.resolve()),
+  all: vi.fn(() => Promise.resolve([])),
+  clear: vi.fn(() => Promise.resolve()),
 });
 
 /**
@@ -123,6 +127,8 @@ const statefulSchedule = (initial: ScheduleEntry | null = null): ScheduleStore =
       entry = e;
       return Promise.resolve();
     }),
+    all: vi.fn(() => Promise.resolve([])),
+    clear: vi.fn(() => Promise.resolve()),
   };
 };
 

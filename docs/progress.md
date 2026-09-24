@@ -6,8 +6,13 @@ ADR 19; the D54 real-model go-signal exists — session log, 24 September 2026).
 landed ahead of the formal start: the pure `@palier/engine` core, the `@palier/app` practice loop,
 and the `/ids`, `/dexie`, `/openai` adapters. The bank `ItemRepository` (`adapters/bank`) now
 lands too, so the app can plan a day from the real committed bank, not only the fixture bank.
-**Next step:** the Phase-2 **web slice** — wire the bank into the composition root with
-service-worker offline caching. See [Next, decided](#next-decided). The **full-volume published
+The web slice has landed too: the production composition root wires the real adapters, and a service
+worker makes the app and the bank work offline after one load (D58–D60). **Gate A is resolved** (adopt
+the PRD's UI direction).
+The data use cases (`exportData`/`importData`/`wipeData`) have landed too (D61, D62).
+The single-device UI has landed too (D63–D67), so **Slice 1 is complete**: the whole practice app works
+on one device, offline after one load.
+**Next step:** **Gate B**, the `ScheduleEntry` merge decision (D43), a human call that gates Slice 2 (sync). See [Next, decided](#next-decided). The **full-volume published
 bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
 feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
 (D56).
@@ -85,11 +90,11 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/moroni` | **Open Phase 2 + `adapters/bank` — the HTTP `ItemRepository` (§7).** `httpBankRepository` over the committed bank shards: manifest fetch, lazy per-skill shard loading, content-hash cache. Held to `itemRepositoryContract` via a new `bankHandlers` MSW helper in `@palier/testing`. Opens `./bank` (D3), `adapters-bank` element (D5); deviation **D55** (structure-check at the edge, not full Zod). Formally opens Phase 2: status row flipped, §7 breakdown expanded. | 24 September 2026 |
+| `dougkeefe/phase-2-development` (PR #19; the session log calls it by its first name, `dougkeefe/algiers`) | **Phase 2 Slice 1 — the single-device practice app, offline-complete (D57).** Composition root wires the real bank/dexie/ids (stops throwing); bank served statically + a service worker for offline [R4]; `ExportData`/`ImportData`/`WipeData`; then the single-device UI with **Gate A resolved by adopting the PRD's §8/§10/§11/§14 direction** (human decision, 24 September 2026). Shipped as ordered PRs; infra first. | 24 September 2026 |
 
-*(The prior rows — the `adapters/dexie` slice (#16) and the Phase-1 content factory — merged and
-were removed; the In-flight table tracks current work, not history, and the session log below is the
-permanent record.)*
+*(The prior rows — `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+factory — merged and were removed; the In-flight table tracks current work, not history, and the
+session log below is the permanent record.)*
 
 ---
 
@@ -186,36 +191,36 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next slice: the Phase-2 web slice — wire the bank into the composition root, with a service worker
-that caches shards by content hash for offline use [R4].**
+**Next: Gate B, the `ScheduleEntry` merge decision (D43). A human call, and the only thing between
+here and Slice 2.**
 
-`adapters/bank` landed (session log, 24 September 2026), so the `ItemRepository` the app plans a day
-against now has a real, content-hashed HTTP implementation. The next *buildable*, self-directable
-slice is the `apps/web` wiring that turns it on: the production composition root
-(`apps/web/src/lib/container.ts`) currently throws until Phase 2 adapters exist (D23), and the bank
-was the one it most needs.
+**Slice 1 is complete** (session log, 24 September 2026, `dougkeefe/algiers`; D58–D67): the
+single-device app works end to end and fully offline after one load, on real IndexedDB and the served
+bank. That covers onboarding, today, drill, diagnostic, review, progress, export/import/delete, and item
+reporting, with E2E journeys 1, 2, 4, 6 and 7 and Lighthouse 1.0/1.0. Slice 2 (multi-device sync) cannot
+start until one question is answered, and it is a product judgement, not a derivation, so it is **not
+self-directable**:
 
-**The slice, concretely:**
+> When two devices have drilled the same item offline and both changed its `ScheduleEntry`, which one
+> wins?
 
-- In `apps/web/src/lib/container.ts`, construct `httpBankRepository` from `@palier/adapters/bank`
-  (base URL = wherever `content/bank/` is served; `version` from the shipped bank) and hand it to the
-  use cases, alongside the `dexieStores` and `webCryptoIdGenerator` already available. The production
-  path stops throwing for the bank port.
-- Serve the committed `content/bank/v{n}/` as a static asset under a stable public path, and register
-  a **service worker** that caches shard responses by URL — which *is* the content hash, so the cache
-  is immutable and keyed exactly as the adapter's in-memory cache is. This is the [R4] "full offline
-  operation after first load" exit criterion beginning to land.
-- A route/loader (or server component) that runs `planDailySession` end to end against the real bank,
-  proving the app plans a day from committed content rather than the fixture bank.
-- **Done when:** `pnpm verify` green; the composition root wires the real bank without a vendor type
-  crossing into `apps/web` beyond `next`/`react` (boundaries clean); an E2E or route test plans a day
-  from the served bank; the service worker serves a shard from cache on a second load (offline).
+The three options D43 records, unchanged:
 
-The adapter's public surface is `httpBankRepository({ baseUrl, version?, fetchImpl? })` returning the
-`ItemRepository` port, plus `BankUnavailableError`/`BankContentError` — nothing else escapes
-`@palier/adapters/bank`. The shard **layout is fixed** by the bank build
-(`bank/v{n}/manifest.json`, `bank/v{n}/{lang}/{skill}/{hash}.json`, `bank/v{n}/passages/{hash}.json`,
-`bank/v{n}/forms/{id}.json`), so no new content decision is required.
+1. **Add `updatedAt`** and apply §9.4's last-write-wins. Simplest; can move a box backwards when the later
+   write came from the device that saw less.
+2. **Take the lower box.** Needs no schema change and fails safe: a disagreement means one device saw a
+   failure, and a re-review costs seconds. **Recommended**, as D43 already leaned.
+3. **Keep the schedule device-local** and rebuild it from the merged attempts. Needs the `slow` judgement
+   per historical attempt, which D38 and D40 rejected.
+
+**Once it is decided, Slice 2 is concrete** (`implementation-plan.md` §7): the sync backend (Postgres +
+Drizzle; `POST /api/account/device`, the sync and pairing routes of `architecture.md` §10, rate-limited
+registration, no auth library, per ADR 5) behind route handlers that meet the pre-provisioned 95% branch
+threshold; `adapters/vault` (the device secret the Dexie vault already keeps, D50) and `adapters/sync`
+behind a new `SyncTransport` port, each with a contract suite; the chosen merge rule, applied in the sync
+adapter **and** in `importData`, whose keep-local rule (D62) is the placeholder for exactly this; the
+`SyncNow` use case; the `/settings/sync` screen with pairing by code; and E2E journey 8 (two browser
+contexts converging). Journey 7's "sync catches up" half lands then too.
 
 **Standing human gates (do not self-direct):**
 
@@ -225,8 +230,9 @@ The adapter's public surface is `httpBankRepository({ baseUrl, version?, fetchIm
   phase (2–6) is built and used against the baseline committed bank; the content run is a 1.0 gate, not
   a per-phase blocker. The baseline bank's French is synthetic (D54), so the app is feature-usable
   before this gate, not study-ready.
-- **Product and UI direction** (§7 Phase 2) — onboarding, readiness card, drill/feedback, review queue,
-  settings, pairing. Design decisions, not derivations.
+- ~~**Product and UI direction**~~ — **resolved 24 September 2026** as Gate A (Phase 2 section): adopt
+  the PRD's §8/§10/§11/§14 direction for the single-device screens. The *pairing* UI is Slice 2, after
+  Gate B.
 - **The `adapters/sync` `ScheduleEntry` merge (D43)** — add `updatedAt`, take the lower Leitner box, or
   treat the schedule as device-local. Gates the sync and vault adapters.
 
@@ -291,19 +297,20 @@ session-log evidence; nothing is ticked without it.
 - [x] `@palier/engine`: Scorer, TrendCalculator, Scheduler, Planner, Selector, BandMapper — the pure core (20 September 2026)
 - [x] `adapters/dexie`: the store ports at schema v1, with the migration harness (D49/D50)
 - [x] `adapters/bank`: manifest fetch, lazy shard loading, content-hash cache (24 September 2026, this slice) — the service-worker registration itself is the web slice
+- [x] Composition root wires the real adapters + the service worker caches the bank by content-hashed URL (24 September 2026, `dougkeefe/algiers`; D58–D60) — production path no longer throws; offline shell/route/bank proven in the `offline` Playwright project
 - [x] `adapters/ids`: the ULID generator (D48; not one of the five §3.2 names, but a real adapter)
 - [ ] `adapters/vault` and `adapters/sync`: device secret, pairing by code, push/pull, watermarks, offline queue — **gated on the `ScheduleEntry` merge decision** (D43)
 - [ ] Sync backend: Postgres + Drizzle, sync/device routes, pairing, rate limiting (ADR 5)
-- [~] `@palier/app` use cases: `StartSession`, `AnswerItem`, `CompleteSession`, `RunDiagnostic` landed (20–21 September 2026); `SyncNow`, `ExportData`, `ImportData`, `WipeData` remain
-- [ ] UI: onboarding, home + readiness card, today's plan, the drill/feedback panel, review queue, progress, settings (sync + data, pairing flow)
-- [ ] Item reporting control and the GitHub issue path
+- [~] `@palier/app` use cases: `StartSession`, `AnswerItem`, `CompleteSession`, `RunDiagnostic` landed (20–21 September 2026); `ExportData`, `ImportData`, `WipeData` landed (24 September 2026, `dougkeefe/algiers`; D61, D62); `SyncNow` remains (Slice 2)
+- [~] UI: the whole single-device set **landed** (24 September 2026, `dougkeefe/algiers`; D63–D67): onboarding, home + readiness card, today's plan, drill + feedback panel, diagnostic, review queue, progress, settings/data. Only the sync + pairing settings remain (Slice 2)
+- [x] Item reporting control and the GitHub issue path: on every feedback panel, four reason codes, a prefilled issue on the project repository (24 September 2026; E2E-tested)
 - [ ] The sync simulator (tier 5): two/three-device scenarios, seeded faults, convergence assertions
 - [ ] Every real adapter passes its port contract suite — `bank` now does; `dexie`/`ids` already did
 
 **Exit criteria** (the actual gate)
 
 - [ ] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]
-- [ ] Full offline operation after first load [R4]
+- [x] Full offline operation after first load [R4] — for everything Phase 2 builds: journey 2 (a whole drill session) passes with the network off after one online load, over real IndexedDB and the service-worker-cached bank (session log, 24 September 2026). Mock exams are Phase 3, and their offline run is Phase 3's journey 3
 - [ ] Engine unit tests exhaustive at every boundary, golden fixtures locked
 - [ ] Sync simulator passes several hundred seeds including full partition and heal, no lost or duplicated attempts
 - [ ] Every adapter passes its port contract suite
@@ -311,15 +318,22 @@ session-log evidence; nothing is ticked without it.
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
 carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
 `implementation-plan.md` §7 Phase 2 "Completion slices" — **keep the two in sync** (the fuller scope
-and each slice's *done* live in the plan). Current position: **Slice 1**, at its buildable head — the
-web slice in *Next, decided*.
+and each slice's *done* live in the plan). Current position: **Slice 1 complete**; **Gate B** is next (a human
+decision), then Slice 2.
 
-- [~] **Slice 1 — Single-device practice app, offline-complete.** Composition-root wiring of
-  bank/dexie/ids + service-worker offline cache [R4] + `ExportData`/`ImportData`/`WipeData`, then (after
-  **Gate A**) the full single-device UI: onboarding, home/readiness, today's plan, diagnostic,
-  drill/feedback, review queue, progress, settings + data pane, item reporting. The composition-root /
-  service-worker / data-use-case part is buildable now; the UI waits on Gate A.
-- [!] **Gate A — product & UI direction (human).** Screens, copy, states. Gates Slice 1's UI.
+- [x] **Slice 1 — Single-device practice app, offline-complete.** **Done 24 September 2026** (`dougkeefe/algiers`; D58–D67; session-log evidence). Composition-root wiring of
+  bank/dexie/ids + service-worker offline cache [R4] **(landed, D58–D60)** +
+  `ExportData`/`ImportData`/`WipeData`, then (after **Gate A**, now resolved) the full single-device UI:
+  onboarding, home/readiness, today's plan, diagnostic, drill/feedback, review queue, progress,
+  settings + data pane, item reporting.
+- [x] **Gate A — product & UI direction (human).** Screens, copy, states. Gates Slice 1's UI.
+  **Resolved 24 September 2026 (human decision, `dougkeefe/algiers`):** adopt the direction the PRD
+  already specifies rather than invent one — §8 screens, §10 visual language, §11 accessibility, §14
+  states — for the single-device subset: `/start` (steps 1–4; step 5, the key, is Phase 4), `/home`
+  (practice-trend readiness only), the reading/writing drill + feedback panel, the diagnostic,
+  `/review`, `/progress`, `/settings/data`, and item reporting. The name stays the working "Palier"
+  (§12.1 is still a standing gate). Coco is a minimal static treatment. §9 streak/XP are deferred, since
+  they are not in Slice 1's *done* and `@palier/engine` has none.
 - [ ] **Slice 2 — Multi-device sync.** Sync backend (Postgres/Drizzle/routes/pairing/rate-limit, ADR 5);
   `adapters/vault` + `adapters/sync` behind `SyncTransport`, applying the D43 rule; `SyncNow` + pairing
   UI. Completes the two-device exit criterion. Behind **Gate B**.
@@ -377,17 +391,17 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 
 | # | Requirement | Phase | Status |
 | --- | --- | --- | --- |
-| R1 | Practises all three tested skills | 2, 5, 6 | not started |
+| R1 | Practises all three tested skills | 2, 5, 6 | reading and written expression practised end to end (24 September 2026); oral is Phases 5–6 |
 | R2 | Format and register match the real tests | 1 | not started |
 | R3 | Mock exams mirror published structure and cuts | 3 | not started |
-| R4 | Works with no key and offline after first load | 2 | not started |
+| R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams are Phase 3 |
 | R5 | Never presents as official | 0, 7 | not started |
 | R6 | No real test items, no PSC reproduction | 1 | not started |
 | R7 | Rationale per option, explanation per item | 1 | not started |
 | R8 | Fully bilingual, equal prominence | 0, 1, 7 | not started |
 | R9 | WCAG 2.2 AA | 0, all | not started |
-| R10 | No estimate without evidence and uncertainty | 2 | not started |
-| R11 | Export, import, delete, each in one action | 2, 7 | not started |
+| R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
+| R11 | Export, import, delete, each in one action | 2, 7 | Phase 2 half verified (24 September 2026): `/settings/data` does each in one action; journey 6 round-trips export → delete → import and finds the same progress. Phase 7's server-side delete waits for sync |
 | R12 | Key, audio, transcripts and submissions stay local | 4, 5 | not started |
 | R13 | Free and open source | 0, 7 | not started |
 | R14 | Progress across devices, with an off switch | 2 | not started |
@@ -1084,7 +1098,7 @@ half the items, and degrades gracefully when one unavoidably dominates (the all-
 case is a unit test). `now`/`random` are primitives throughout (D32).
 
 ### D34 — The Planner budgets in item counts, not minutes
-**Date:** 20 September 2026 · **Status:** open, revisit if a per-item duration ever earns a home
+**Date:** 20 September 2026 · **Status:** RESOLVED 24 September 2026 by D63 (the minute→count model landed at the caller, `planDay` unchanged)
 
 `architecture.md` §7.4 writes the daily plan as shares "of the daily minute goal" — due reviews
 capped at 40% of it, new items ~40%, maintenance ~20%. There is **no per-item duration** anywhere:
@@ -1765,11 +1779,388 @@ so an editor touching one must update the other. Two human gates sit between the
 2 — and are named, not left as menus (working-agreement rule 7). *Next, decided* is unchanged: the single
 next buildable step is the web slice at the head of Slice 1.
 
+### D58 — the production clock lives beside the composition root; the selection seed is per day
+**Date:** 24 September 2026 · **Status:** accepted
+
+Two things §3.5's sketch names and nothing had built. **`systemClock()`** had no home: no production
+`Clock` existed anywhere. It is `apps/web/src/lib/system-clock.ts`, not a new `@palier/adapters/clock`
+subpath, because it is one vendor-free line with one consumer and D3 says a subpath lands with a real
+adapter behind it. Precedent for a non-adapters port impl in the root already exists (`seededRandom` from
+`@palier/testing`, per §3.5). **Promote it** the day a second entry point outside `apps/web` needs a clock.
+
+**The production seed.** §3.5 writes `seededRandom()` but the function takes a seed, and nothing said
+which. It is `selectionSeedFor(clock.now())`: FNV-1a over the UTC `YYYY-MM-DD`. A reload replays today's
+plan exactly instead of reshuffling it under the user, and each new day draws a fresh order. Not an
+entropy source — identifiers still come only from `@palier/adapters/ids` (D39). Rejected: a constant seed
+(every day's order identical given the same pool) and a time-of-construction seed (the plan changes on
+every reload, which reads as a bug).
+
+### D59 — the production container is browser-only; `@palier/testing/in-memory` is its bundleable half
+**Date:** 24 September 2026 · **Status:** accepted
+
+Wiring the production path surfaced a constraint the plan did not state: **the production graph can only
+be built in a browser.** `dexieStores()` needs IndexedDB, and the bank's base URL is origin-relative
+(`/content`), which Node's `fetch` cannot resolve. So `createContainer({ hermetic: false })` is for client
+components, never server rendering; the UI's container provider (Slice 1's UI PRs) builds it after
+hydration. This fits architecture.md §13's "session engine as a single client island".
+
+Two consequences. (1) **`@palier/testing`'s root entry point cannot be bundled for a browser** — it
+re-exports the contract suites (vitest's `describe` at module scope), `mswServer` (`msw/node`) and the
+PGlite harness. The composition root now imports the in-memory ports through a new **`./in-memory`**
+subpath that reaches only `@palier/app` and `@palier/domain`; a test walks its module graph and fails if
+anything else appears. The root entry point still re-exports everything, so no other import moved. (2)
+**The `web` Vitest project gains `@palier/testing/setup`** (`fake-indexeddb/auto`), exactly as `adapters`
+has, so `container.test.ts` runs the *real* production graph in the fast lane, with `fetch` stubbed to serve
+the committed `content/bank/` from disk. That test is the fast-lane proof that the app plans a day from
+the committed bank. The old "refuses to build a production container" case asserted behaviour that no
+longer exists and was replaced, not weakened: the new cases assert more.
+
+### D60 — the bank ships as a generated `public/` copy; the service worker is compiled from TypeScript
+**Date:** 24 September 2026 · **Status:** accepted
+
+**Serving.** `scripts/prepare-public.mjs` runs before `next dev` and `next build` (before, because Next
+serves only `public/` files that exist at build time). It copies `content/bank/` → `public/content/bank/`,
+located through `@palier/content`'s exports map (ADR 18). The copy is **gitignored**: `content/bank/` stays
+the one source of truth. Rejected: a route handler streaming the files (server code, not the static CDN
+asset architecture.md §2/§5.5 requires) and a rewrite (cannot reach outside `public/` alone). Because
+`@palier/content` has no build task, a bank change would not have busted `apps/web`'s Turborepo cache, so
+`apps/web/turbo.json` adds `$TURBO_ROOT$/content/bank/**` to the build's inputs and the generated files to
+its outputs.
+
+**The service worker** is `src/sw/worker.ts`: typechecked, linted, and unit-tested (19 cases over an
+in-memory `CacheStorage`). The same script compiles it to `public/sw.js` with `ts.transpileModule`, using
+the `typescript` already in `apps/web`'s devDependencies, so there is **no new dependency**
+(serwist/next-pwa would have been one, for a need this small). It precaches every route in every locale
+plus the whole served bank on install, serves `/content/bank/**` and `/_next/static/**` cache-first, and
+everything else network-first with a cache fallback. Its cache name carries a stamp hashed from its
+inputs, so a deploy gets a fresh cache and `activate` deletes the old one. The file may have **no runtime
+imports** — the output is a classic script — and a test compiles and runs it to hold that line.
+Registration happens **only in production builds**: under `next dev` a cache-first `/_next/static/` would
+pin stale hot-reload chunks and break the hermetic lane.
+
+**Testing it** needs a production server, which Next's own offline guide also says ("dev mode is not a
+reliable reference"). So Playwright gains an **`offline` project** on `next start` (port 3100) beside the
+hermetic `chromium` project on `next dev`. The medium lane already builds before `verify:medium`. Proven to
+bite: with the worker forced to pass everything through, all three offline cases failed with
+`net::ERR_INTERNET_DISCONNECTED`.
+
+### D61 — every store port gains `all()` and `clear()`; §3.3 amended in place
+**Date:** 24 September 2026 · **Status:** accepted
+
+`ExportData` must read every record and `WipeData` must delete them, and no §3.3 method can do either.
+`AttemptStore` reads by skill, time and item; `ScheduleStore` by due date and id; `SessionStore` and
+`SettingsStore` not at all. So `AttemptStore`, `ScheduleStore`, `SessionStore` and `SettingsStore` each
+gain the same pair, in the port, the in-memory impl, the Dexie impl, and the contract suite, which holds
+both to it. `SettingsStore.all()` returns `{ key, value }` entries (a new `SettingEntry` type).
+`ScheduleStore.all()` **includes retired entries**: they carry an item's history, and the Dexie impl
+scans the primary key, not the `due` index that hides them. No Dexie schema change, so no migration.
+This is the "a use case needs a signal the port could not give" move of D38/D44, and §3.3 carries a dated
+note.
+
+One port per aggregate rather than a new cross-cutting `BackupStore`, because §3.3 says "one port per
+aggregate", and a second port over the same tables is two sources of truth for one table. Slice 2's sync
+push will need the same enumeration. Cost: six hand-written stubs in `@palier/app`'s tests gained two
+inert members each. No assertion changed.
+
+### D62 — `importData` validates the whole file first and never overwrites a local record
+**Date:** 24 September 2026 · **Status:** accepted
+
+Importing onto a device that already has progress is a **merge**, and the schedule's merge rule is the
+open Gate B question (D43). So import decides nothing it does not have to. **Attempts merge as a union**:
+append-only and keyed by ULID, so an already-present attempt is the store's duplicate no-op (ADR 16,
+D44). That aggregate's rule is already settled. **Schedule entries, sessions and settings are added only
+where the device has no record of that key; the local copy wins.** So: import after a wipe restores
+everything (the round trip `container.test.ts` runs over real IndexedDB), importing the same file twice
+changes nothing, and importing onto a device with history keeps that history. When Gate B lands a merge
+rule, import is the second place to apply it.
+
+The file is **parsed and validated whole before anything is written** (`parseExportDocument`,
+`InvalidExportError` naming the first bad record), so a file with one bad record changes nothing. The
+document is versioned (`format: "palier-export"`, `version: 1`) and carries **no key-vault content**: no
+API key [R12], and no device secret (a sync credential). Band estimates are absent because nothing stores
+them (ADR 16).
+
+**Finding worth carrying into the UI:** with the baseline committed bank (6 reading and 4 writing
+items), one full session answers every reading item. The planner then excludes them for 14 days, and the
+wrong answers are not due until tomorrow, so **a same-day re-plan is empty.** That is correct
+behaviour, not a bug. The home screen must present it as "done for today", not as an error.
+
+### D63 — the daily goal becomes a session size at the caller: about 1.5 minutes an item
+**Date:** 24 September 2026 · **Status:** accepted; resolves D34's revisit
+
+D34 left the planner budgeting in items and named its own trigger: "revisit when a real minutes-per-day
+goal in the UI needs converting to counts". Onboarding's daily goal (§8.1: 10, 20 or 30 minutes) is that
+goal. The conversion is `sessionSizeFor(goalMinutes)` in `apps/web/src/lib/study.ts`: one heuristic,
+**1.5 minutes per item** (answer plus feedback), a floor of five items, so 10/20/30 → 7/13/20. It sits
+behind the unchanged `planDay(sessionSize)` seam, exactly as D34 said the fix would, and `planDay` does not
+change. It is a study heuristic in D34's own sense, not a published exam rule, so it is code, not profile
+(ADR 9). **Principle 8's measurable replacement** is the user's own `msToConfirm` timings once there are
+enough of them to fit — the same bar ADR 8 and D40 set for `slow`. The diagnostic's size is §6.2's 30 per
+skill, caller-sized as D47 says; a smaller bank yields every item it has.
+
+### D64 — `practiceTrend`, a sibling of `diagnosticReadout` for the readiness card
+**Date:** 24 September 2026 · **Status:** accepted
+
+§8.2's readiness card is "your practice trend, *always*", so drills must move it. But the only trend use
+case, `diagnosticReadout`, reads diagnostic attempts alone (D47). `practiceTrend` is its sibling: the
+same thin wrapper over `calculateTrend`, over **drill, review and diagnostic** attempts, and **excluding
+exam attempts**, because §8.2 keeps the exam result and the practice trend "visually distinct" and folding
+one into the other would erase that line. A sibling rather than a mode flag on `diagnosticReadout`, because
+each name then says exactly which evidence it reads. `MIN_EVIDENCE` is 30 per band tag, so with the
+10-item baseline bank every band honestly reads "insufficient" (R10), and the card says how many more
+answers each band needs.
+
+### D65 — the Slice 1 UI's calls where the PRD and the requirements pull apart
+**Date:** 24 September 2026 · **Status:** accepted
+
+Gate A adopted the PRD's direction. Building it forced these calls, each recorded so it is not re-litigated:
+
+- **The drill keeps the header and footer.** §8.3 says "no navigation chrome", but R5 puts the
+  non-affiliation statement on every page and WCAG 3.2.6 wants help and controls in the same place on every
+  page. The requirement wins over the design note. The drill is still single-column and focused, with its
+  Confirm action bottom-anchored.
+- **The feedback sheet slides but does not fade.** Its first draft faded in from `opacity: 0`, and axe caught
+  every word in it at contrast 1.23 during the fade. That is a real 1.4.3 failure for 200 ms, not a test
+  artefact. `transform` only.
+- **The drill's keys (1–4, Enter) listen on the window**, not the session element, because focus is on the
+  page body when an item first appears. Enter on a real button or link is left to that control; Enter on an
+  option radio confirms.
+- **A diagnostic gives no feedback per item.** It is placement, so it measures rather than teaches (§6.2),
+  and the readout comes at the end.
+- **One static route per skill** (`/practice/reading`, `/practice/writing`), not a dynamic `[skill]`
+  segment, so the service worker can precache each by name (D60).
+- **Deferred, not dropped:** self-hosted fonts (Source Serif 4 is named first in the passage stack, so a
+  font added in Phase 7 needs no CSS change); Coco; streak/XP (§9); onboarding step 5, the key (Phase 4);
+  English as a target language (offered as "coming later", Phase 8). The §8.1 line "your progress syncs"
+  is replaced by "your progress stays on this device" until sync exists (Slice 2): the PRD's copy would be
+  false today.
+- **`slow` is always `false`** (D40: no threshold until there is timing data). The shaky-answer signal
+  travels as `changedAnswer`.
+
+### D66 — `reviewQueue`, `progressReport`, and an engine `subSkillBreakdown` for the last three screens
+**Date:** 24 September 2026 · **Status:** accepted
+
+Three pieces of logic the review and progress screens need, each placed where the layering rules put it,
+not in a component:
+
+- **`reviewQueue({ limit })`** (`@palier/app`): what is due now across both skills (§8.8: "a single
+  stack"), resolved through the bank. An entry whose item has left the bank is dropped from the set but
+  stays scheduled. The set is capped at `REVIEW_SET_LIMIT` (40) in the UI.
+- **`progressReport({ skill })`** (`@palier/app`): the practice trend, per-sub-skill tallies, the count
+  answered, and time spent answering (summed `msToConfirm`, labelled as such, since reading the feedback
+  is not measured). Over the **whole** record via `AttemptStore.all()` (`calculateTrend` sorts by `ts`
+  itself, so `all()`'s lack of order is safe), and without exam attempts (D64's line).
+- **`subSkillBreakdown`** (`@palier/engine`, 100%): tallies per sub-skill, weakest first, no window, no
+  minimum. It is **not** a refactor of `weakestSubSkills`: that one windows to 50 and thresholds at 8
+  because it *targets* practice, and reshaping a function the planner depends on to share a loop was not
+  worth the risk. It returns counts, never a percentage (R10). **No golden value moved**: it is a new
+  function, and every existing engine test is unchanged.
+
+### D67 — what the E2E journeys found, and the fixes (none of them test-only)
+**Date:** 24 September 2026 · **Status:** accepted
+
+Writing journeys 4, 6 and 7 exposed four real defects. Each was fixed at the source:
+
+1. **A cold dev server fails under parallel first requests.** Turbopack answered "Unexpected end of JSON
+   input" (server and browser) when four workers hit uncompiled routes at once. The medium lane always
+   starts cold, so this would have flaked in CI. (An earlier session-log line guessed a half-stopped
+   server; that guess was wrong.) **Fix:** a `warmup` Playwright setup project that visits every route
+   once, serially, before the parallel `chromium` project, with the route list from the same `routesFrom`
+   as the service worker. Verified: three cold full runs and six warm hermetic runs, all green.
+2. **A fast "1" then Enter could be dropped.** The window key listener read state through a ref refreshed
+   in an effect after each render, so an Enter arriving first saw "nothing selected". **Fix:** raw keys
+   go into the reducer as a `key` event, resolved against its current state. A named test replays the race.
+3. **Enter after arriving by the header nav re-activated the nav link.** The header survives a
+   client-side navigation, so focus stayed on "Review", and the listener rightly leaves Enter on links
+   alone. **Fix:** when a set opens, focus moves to its first option, not only on advance (§11).
+4. **Pages had no title for a moment after navigation, and one shared title always.** axe caught an
+   empty `<title>` while Next streamed the new metadata in. Behind it, every page was titled just "Palier",
+   a weak WCAG 2.4.2. **Fix:** every page sets its own title (`Review · Palier`), tested. `axeClean` also
+   waits for a title before auditing, because a mid-navigation frame is not a state a user rests on.
+
+And one tooling note: **journey 4 moves the browser's date with `page.clock.setFixedTime`**, because
+`page.clock.install()`'s fake timers (even resumed) stall Dexie and React. `setFixedTime` pins `Date` and
+leaves the timers alone.
+
+### D68 — app screens keep the footer below the fold, so content arriving after hydration never moves it
+**Date:** 24 September 2026 · **Status:** accepted
+
+CI's Lighthouse run on PR #19 failed `/fr/progress` at **performance 0.88** (all 5 runs), below the 0.95
+budget. Locally it scored 1.0, with a layout shift of 0.06 that I had wrongly logged as "within budget".
+The layout-shift audit names the culprit: **the footer.** An island screen renders a one-line loading
+state, so the footer, non-affiliation statement included, sits in the first viewport. It is then pushed
+off-screen when the content arrives. CI's slower runner makes that shift far larger, and home and review
+share the pattern.
+
+**Fix, for the whole class, not one page:** every island page's section carries `.app-island`, and
+`.app-main:has(.app-island) { min-height: 100vh }`. The footer starts below the fold on those screens,
+content only grows from there, and nothing visible moves. Measured locally: max CLS **0 on all 8 routes**,
+both at the budget's settings and with the CPU slowed 4× to stand in for CI; with the rule removed,
+`/fr/progress` shifts 0.0595 again. **Trade-off, deliberately taken:** on app screens the non-affiliation
+footer is one scroll down rather than in first view. It is still on every page (R5's requirement), and
+the landing and about pages, where first impressions form, keep it in view. The CI re-run is the real
+confirmation of the 0.88; it is pending as this is written.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/phase-2-development` (PR #19: fix the CI Lighthouse failure on `/fr/progress`)
+
+The branch was renamed from `dougkeefe/algiers` (the entries below keep that name) and opened as PR #19.
+CI's Lighthouse budget then failed `/fr/progress` at performance **0.88**, 5 of 5 runs.
+
+- **Correcting the part 4 entry below:** it logged `/fr/progress`'s remaining 0.06 layout shift as
+  "within budget, noted rather than hidden". That was the defect, only smaller on my machine. On CI it
+  costs the route its performance budget.
+- **Cause and fix:** **D68.** On island screens the footer was in view beside the loading state and was
+  pushed off when content arrived. App screens now keep the footer below the fold.
+- **Evidence:**
+  - `pnpm --filter @palier/web lighthouse` → exit 0, performance 1.0 and accessibility 1.0 on all 8
+    routes, **max CLS 0 on every route** (was 0.0595 on `/fr/progress`).
+  - `lhci collect` with `cpuSlowdownMultiplier=4`, 2 runs × 8 routes → max CLS 0, performance 1.0 on all.
+  - With the rule removed, `/fr/progress` shifts 0.0595 again; restored byte-identical (`cmp`) and rebuilt.
+  - `pnpm verify` → 944 passed; `pnpm test:e2e` cold → "26 passed".
+  - CI's re-run on the push is the confirmation that matters; it is not in yet.
+
+### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 4: review, progress, your data, item reporting — Slice 1 complete)
+
+The last PR of Slice 1. **The single-device practice app is complete**, and *Next, decided* is now
+Gate B.
+
+- **Screens:** `/review` (the due stack across both skills, drilled in `mode: "review"`, and the "Nothing
+  due" reward state with a minimal Coco), `/progress` (the trend per skill, sub-skill **counts** weakest
+  first, items answered, time spent answering, the honest "what this does and does not tell you" panel,
+  export), `/settings/data` (export, import with its counts reported, delete everything behind an in-place
+  confirmation, and the no-recovery sentence), and **item reporting** on every feedback panel (four
+  reasons, provenance, a prefilled GitHub issue). Review and Progress join the nav; "Your data" is in the
+  footer on every page.
+- **Logic below the UI** (**D66**): `reviewQueue` and `progressReport` in `@palier/app`,
+  `subSkillBreakdown` in `@palier/engine` (100%, a new function, **no golden value moved**).
+  `@palier/ui` gains `Toast` and `Mascot`.
+- **Four real defects the journeys exposed, fixed at the source** (**D67**): the cold-dev-server race
+  (a serial `warmup` project); a fast "1"+Enter being dropped (keys now resolved in the reducer); Enter
+  re-activating the nav link after arriving by it (a set now focuses its first option); and pages with
+  no descriptive title (per-route titles, WCAG 2.4.2).
+- **Correcting my part 3 entry, as rule 4 says (it stays as written):** its honesty note blamed the 13
+  cold failures on a half-stopped server. That was wrong. It was the cold-compile race D67 describes, now
+  fixed.
+- **Test changes and why:** the smoke test "header focus order is skip link, brand, then nav" now asserts
+  the nav's *first link*, whatever it is, rather than a name, since the nav grows with the screens and the
+  order it guards is unchanged. `axeClean` (a helper new in part 3) waits for the page's title before
+  auditing (D67 #4).
+- **Evidence:**
+  - `pnpm verify` → green: 88 files, 944 tests; boundaries clean (256 and 83 modules); thresholds held.
+  - `pnpm test:e2e`, **three cold runs** → "26 passed" each: 19 hermetic (smoke, journeys 1, 2, 6, the
+    invalid import, the review empty state, the report control, titles) + 1 warm-up + 6 production (shell,
+    unvisited route, every shard, journey 2 offline, journey 7, journey 4). Then the warm hermetic project
+    **six times** → "20 passed" each, the load under which journey 6 had once flaked.
+  - `pnpm --filter @palier/web lighthouse` on **8 routes** (`/review`, `/progress`, `/settings/data` added)
+    → the first run **failed**: `/fr/progress` scored performance 0.94 on a layout shift of 0.148, because
+    its static cards were drawn before the report and then pushed down. The report now renders in one
+    pass. Re-run → exit 0, median performance **1.0** and accessibility **1.0** on all 8 routes.
+    `/fr/progress` keeps a small shift (max 0.06, within budget), noted rather than hidden.
+  - After the last two fixes (the progress layout, and the home card counting both skills' due items to
+    match `/review`): `pnpm verify` → 944 passed; `pnpm test:e2e` cold → "26 passed".
+
+### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 3: the UI's first half — onboarding, today, drill, diagnostic)
+
+The third PR of Slice 1, and the first UI, built to the PRD direction Gate A adopted.
+
+- **Screens** (static RSC shells, one client island each): `/start` (onboarding steps 1–4, §8.1),
+  `/home` (readiness card from the new `practiceTrend`, **D64**; today's plan as §8.2's rows; "done for
+  today" for D62's empty re-plan; the review count; the test-date countdown), `/practice/reading` and
+  `/practice/writing` (the drill: select-then-confirm, the feedback sheet with the answer, both rationales,
+  the rule and the sub-skill, keyboard 1–4/Enter, focus to the sheet heading and back to the options),
+  and `/diagnostic` (coverage sample, no per-item feedback, a readout per band with its interval).
+- **`ContainerProvider`** builds the browser-only container once after hydration, importing it lazily
+  (shared first-load JS unchanged). The daily goal becomes a session size behind `planDay`'s seam
+  (**D63**, which resolves D34). The UI calls where the PRD and the requirements disagreed are **D65**.
+- **`@palier/ui`:** `BandMeter`, `Sheet`, `Passage` (+ `bandMeterGeometry`, `sheetState`, tested).
+  `McqItem`'s layout CSS moved into the package, where its component lives.
+- **Logic in tested `.ts`:** the drill state machine (timings, changed-answer, the key map), the study
+  profile and session sizing, onboarding's steps, the trend lines. All strings are in
+  `messages/{en,fr}.json` at parity, including the 18 sub-skill names.
+- **Found by the gates, and fixed at the source:** axe failed the feedback sheet at contrast 1.23, because
+  its slide-in faded in from `opacity: 0`; it now moves without fading (D65). Lint's
+  `react-hooks/set-state-in-effect` flagged two state resets inside effects; the loaded data is now keyed
+  by what it was loaded for. The drill's keys only worked while focus was inside the session; they now
+  listen on the window.
+- **One existing test's expectation moved, and why:** `smoke.spec.ts` "header focus order is skip link,
+  brand, then nav" expected the third Tab stop to be "About". The new "Today" link is now the nav's first
+  item, so the test expects "Today" then "About". The order it guards (skip link, brand, nav) is unchanged.
+- **Evidence:**
+  - `pnpm verify` → green: 85 files, 919 tests; boundaries clean (249 and 73 modules); thresholds held.
+  - `pnpm build` → all 9 routes prerendered; `bundle-size` → "165.7 KB of 180.0 KB … within budget"
+    (unchanged, so the lazy container import works).
+  - `pnpm test:e2e` from a **cold** dev cache → "18 passed": 9 smoke; 5 journeys (journey 1, journey 2
+    with axe on the feedback-open state, focus-on-advance, first-run set-up, French parity); 4 offline,
+    including **journey 2 with the network off, start to finish**, which ticks the [R4] exit criterion.
+  - **Honesty note:** one earlier cold run failed 13 tests on dev-server 500s and did not reproduce in
+    three cold re-runs. It came straight after I had `pkill`ed a hand-started dev server on port 3000,
+    which Playwright reuses outside CI, so a half-stopped server is the likely cause. If it recurs in CI,
+    it is real and wants chasing, not retrying.
+  - `pnpm --filter @palier/web lighthouse`, with `/en/start`, `/en/home` and `/fr/practice/reading` added to
+    `lighthouserc.json` → exit 0; median performance **1.0** and accessibility **1.0** on all 5 routes (25 runs).
+
+### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 2: `exportData` / `importData` / `wipeData`)
+
+The data-rights use cases [R11], the second PR of Slice 1.
+
+- `packages/app/src/use-cases/`: `exportData` (a versioned `palier-export` v1 document, lists sorted so
+  equal state exports byte-identically, **no key-vault content**); `importData` (validates the whole file
+  first, then merges without ever overwriting a local record, **D62**); `wipeData` (clears the four stores
+  and the API key, **keeps the device secret**, D50). All three are bound in `buildUseCases`.
+- The four store ports gain `all()`/`clear()` (**D61**, §3.3 amended in place) in the port, the memory
+  impl, the Dexie impl and the contract suites. No Dexie schema change.
+- **Tests:** 30 cases in `data-rights.test.ts` over stateful local stubs (D37), including every
+  `parseExportDocument` rejection path. New contract cases run against memory and Dexie.
+  `container.test.ts` round-trips export → wipe → import through the assembled graph, hermetic and over
+  real IndexedDB, and checks the device secret survives a wipe.
+- **Two test mistakes of mine, caught by running them, not implementation bugs:** (1) "the next plan
+  equals the previous plan" is false by design, because the container's one seeded `Random` advances
+  with every plan, so the check is now the review queue the planner reads; (2) "the restored state still
+  plans a day" is false on the 10-item baseline bank. That is recorded as D62's finding for the home
+  screen.
+- **Evidence:** `pnpm verify` → green: 80 files, 862 tests (was 818); boundaries clean (244 and 54
+  modules); coverage thresholds held.
+
+### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 1: production composition root + offline service worker)
+
+Human decisions first. This session is the **whole of Slice 1**, shipped as ordered PRs. **Gate A is
+resolved** by adopting the PRD's already-specified UI direction (Phase 2 section). This entry covers the
+first PR: the web slice.
+
+- **Composition root** (`apps/web/src/lib/container.ts`): the production path no longer throws. It wires
+  `httpBankRepository({ baseUrl: "/content", version: 1 })`, `dexieStores()`, `webCryptoIdGenerator()`,
+  a new `systemClock()` and `seededRandom(selectionSeedFor(now))` (**D58**). It is **browser-only**, and
+  its in-memory half now comes through a new bundleable `@palier/testing/in-memory` subpath (**D59**).
+- **Offline [R4]** (**D60**): `scripts/prepare-public.mjs` copies `content/bank/` into a gitignored
+  `public/content/` and compiles `src/sw/worker.ts` to `public/sw.js` (no new dependency). The worker
+  precaches every route × locale and the whole bank, and serves the bank and `/_next/static/`
+  cache-first. It registers in production builds only. `apps/web/turbo.json` makes a bank change bust the
+  web build cache. `next.config.ts` sets the `/sw.js` and bank cache headers.
+- **Tests:** `container.test.ts` runs the real production graph over `fake-indexeddb`, planning a day from
+  the **committed** bank (every planned id checked against the shards on disk). 19 worker cases run over
+  an in-memory `CacheStorage`; a compile-and-run check holds the worker to no runtime imports. Also
+  `register.test.ts`, `system-clock.test.ts`, and the `in-memory` module-graph guard. A new Playwright
+  `offline` project runs on `next start`.
+- **Evidence:**
+  - `pnpm verify` → green: 79 files, 818 tests; boundaries "no dependency violations found" (239 and 54
+    modules); coverage thresholds held.
+  - `pnpm build` → green; `pnpm --filter @palier/web bundle-size` → "shared first-load JS (gzipped):
+    165.7 KB of 180.0 KB … within budget".
+  - `pnpm test:e2e` → "12 passed": 9 hermetic smoke + 3 offline — shell reload, an unvisited `/fr/about`,
+    every bank shard.
+  - **Proven to bite:** with the worker's `strategyFor` forced to passthrough, all 3 offline cases failed
+    with `net::ERR_INTERNET_DISCONNECTED`; restored byte-identical (`cmp`) and green again.
+  - `pnpm --filter @palier/web lighthouse` → exit 0, perf & a11y ≥ 0.95 on `/en` and `/fr`, 5 runs each.
+- **Not ticked:** the [R4] exit criterion. The shell and bank work offline, but "full offline operation"
+  means *doing a session* offline, which needs the Slice 1 UI. It is ticked when journey 2 passes on the
+  `offline` project.
+- *Next, decided* → the data use cases (`exportData`/`importData`/`wipeData`).
 
 ### 24 September 2026 — `dougkeefe/continue-dev-from-progress-v3` (bank hardening + content-sequencing decision)
 

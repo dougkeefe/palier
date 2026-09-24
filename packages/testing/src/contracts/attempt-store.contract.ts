@@ -69,6 +69,26 @@ export const attemptStoreContract = (
       expect(await store.recent("reading", 10)).toEqual([]);
     });
 
+    it("returns every attempt from all, across skills and items, in any order", async () => {
+      const store = await make();
+      await store.append(anAttempt({ id: attemptId("r"), skill: "reading" }));
+      await store.append(anAttempt({ id: attemptId("w"), skill: "writing" }));
+      await store.append(anAttempt({ id: attemptId("w") }));
+
+      expect((await store.all()).map((a) => a.id).sort()).toEqual(["r", "w"]);
+    });
+
+    it("holds nothing after clear, and accepts a previously seen id again", async () => {
+      const store = await make();
+      await store.append(anAttempt({ id: attemptId("a") }));
+      await store.clear();
+
+      expect(await store.all()).toEqual([]);
+      expect(await store.recent("reading", 10)).toEqual([]);
+      // Clear forgets ids too, so an import after a wipe restores every attempt.
+      expect(await store.append(anAttempt({ id: attemptId("a") }))).toBe(true);
+    });
+
     // Meaningless against an in-memory store; the Dexie adapter must satisfy it.
     it.todo("survives a reopen");
   });

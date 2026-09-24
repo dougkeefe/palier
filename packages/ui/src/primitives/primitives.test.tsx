@@ -1,13 +1,18 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { BandMeter } from "./BandMeter.js";
 import { Button } from "./Button.js";
 import { Card } from "./Card.js";
 import { Callout } from "./Callout.js";
 import { EmptyState } from "./EmptyState.js";
 import { Glyph } from "./Glyph.js";
 import { OptionRow } from "./OptionRow.js";
+import { Passage } from "./Passage.js";
 import { ProgressRail } from "./ProgressRail.js";
+import { Sheet } from "./Sheet.js";
+import { Mascot } from "./Mascot.js";
+import { Toast } from "./Toast.js";
 
 afterEach(cleanup);
 
@@ -131,5 +136,77 @@ describe("Glyph", () => {
     );
     const svgs = container.querySelectorAll("svg[aria-hidden]");
     expect(svgs).toHaveLength(4);
+  });
+});
+
+describe("BandMeter", () => {
+  it("exposes the estimate as a meter whose value text states the interval", () => {
+    render(
+      <BandMeter
+        label="C-level items"
+        valueText="52% correct, likely 40–64%"
+        estimate={{ accuracy: 0.52, low: 0.4, high: 0.64 }}
+      />,
+    );
+    const meter = screen.getByRole("meter", { name: "C-level items" });
+    expect(meter.getAttribute("aria-valuenow")).toBe("52");
+    expect(meter.getAttribute("aria-valuetext")).toBe("52% correct, likely 40–64%");
+  });
+
+  it("draws no bar at all while the evidence is insufficient, only the text (R10)", () => {
+    render(<BandMeter label="B-level items" valueText="8 more answers needed" estimate={null} />);
+    expect(screen.queryByRole("meter")).toBeNull();
+    expect(screen.getByText("8 more answers needed")).toBeTruthy();
+  });
+});
+
+describe("Sheet", () => {
+  it("is a region named by its heading, which can take focus", () => {
+    render(
+      <Sheet tone="incorrect" heading="Not quite">
+        Why
+      </Sheet>,
+    );
+    const region = screen.getByRole("region", { name: "Not quite" });
+    expect(region.className).toContain("pl-sheet--incorrect");
+    expect(screen.getByRole("heading", { name: "Not quite" }).getAttribute("tabindex")).toBe("-1");
+  });
+
+  it("renders its action when given one, and a glyph only for a toned sheet", () => {
+    const { container } = render(
+      <Sheet tone="neutral" heading="Done" action={<button type="button">Next</button>}>
+        Body
+      </Sheet>,
+    );
+    expect(screen.getByRole("button", { name: "Next" })).toBeTruthy();
+    expect(container.querySelector(".pl-sheet__glyph")).toBeNull();
+  });
+});
+
+describe("Passage", () => {
+  it("is a labelled region in the passage's language, one paragraph per blank-line block", () => {
+    render(<Passage title="Note" body={"Premier.\n\nDeuxième.\n\n\n"} lang="fr" label="Reading passage" />);
+    const region = screen.getByRole("region", { name: "Reading passage" });
+    expect(region.getAttribute("lang")).toBe("fr");
+    expect(region.querySelectorAll("p")).toHaveLength(2);
+  });
+});
+
+describe("Toast", () => {
+  it("is a polite status message carrying its tone", () => {
+    render(<Toast tone="correct">Imported</Toast>);
+    const status = screen.getByRole("status");
+    expect(status.getAttribute("aria-live")).toBe("polite");
+    expect(status.className).toContain("pl-callout--correct");
+    expect(status.textContent).toContain("Imported");
+  });
+});
+
+describe("Mascot", () => {
+  it("is decorative, hidden from assistive technology", () => {
+    const { container } = render(<Mascot />);
+    const svg = container.querySelector("svg");
+    expect(svg?.getAttribute("aria-hidden")).toBe("true");
+    expect(svg?.getAttribute("focusable")).toBe("false");
   });
 });

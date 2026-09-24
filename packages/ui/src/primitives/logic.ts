@@ -116,3 +116,55 @@ export const calloutState = (tone: CalloutTone): CalloutState => {
           : "info";
   return { className: `pl-callout pl-callout--${tone}`, glyph };
 };
+
+// ---- BandMeter (§8.2 Zone A: accuracy per band tag, its interval a lighter extension) ----
+
+export type BandMeterInput = {
+  /** Proportion correct, in [0, 1]. */
+  readonly accuracy: number;
+  /** The interval's bounds, in [0, 1]. */
+  readonly low: number;
+  readonly high: number;
+};
+
+export type BandMeterGeometry = {
+  /** Width of the solid bar, the point estimate, as a percentage. */
+  readonly fillPercent: number;
+  /** Where the lighter interval band starts, and how wide it is, as percentages. */
+  readonly rangeStartPercent: number;
+  readonly rangeWidthPercent: number;
+  /** The rounded percentage for `aria-valuenow`. */
+  readonly valueNow: number;
+};
+
+const clampUnit = (value: number): number => (Number.isFinite(value) ? Math.min(Math.max(value, 0), 1) : 0);
+
+/**
+ * The meter's shapes from an accuracy and its interval. Everything is clamped to
+ * [0, 1], and an inverted interval is put right, so a malformed input draws a
+ * plausible meter rather than a bar running off its track.
+ */
+export const bandMeterGeometry = (input: BandMeterInput): BandMeterGeometry => {
+  const accuracy = clampUnit(input.accuracy);
+  const [low, high] = [clampUnit(input.low), clampUnit(input.high)].sort((a, b) => a - b) as [number, number];
+  return {
+    fillPercent: accuracy * 100,
+    rangeStartPercent: low * 100,
+    rangeWidthPercent: (high - low) * 100,
+    valueNow: Math.round(accuracy * 100),
+  };
+};
+
+// ---- Sheet (§8.3: the feedback panel that slides up after confirm) ----
+
+export type SheetTone = "correct" | "incorrect" | "neutral";
+
+export type SheetState = {
+  readonly className: string;
+  readonly glyph: GlyphName | null;
+};
+
+export const sheetState = (tone: SheetTone): SheetState => ({
+  className: `pl-sheet pl-sheet--${tone}`,
+  glyph: tone === "correct" ? "check" : tone === "incorrect" ? "cross" : null,
+});

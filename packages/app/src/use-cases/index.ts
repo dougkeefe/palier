@@ -34,3 +34,34 @@ export type {
   DiagnosticReadoutRequest,
 } from "./diagnostic-readout.js";
 export { diagnosticReadout } from "./diagnostic-readout.js";
+
+export type { ExportDocument } from "./export-document.js";
+export {
+  EXPORT_FORMAT,
+  EXPORT_VERSION,
+  InvalidExportError,
+  parseExportDocument,
+} from "./export-document.js";
+
+export type { ExportDataDeps } from "./export-data.js";
+export { exportData } from "./export-data.js";
+
+export type {
+  ImportCount,
+  ImportDataDeps,
+  ImportDataRequest,
+  ImportDataResult,
+} from "./import-data.js";
+export { importData } from "./import-data.js";
+
+export type { WipeDataDeps } from "./wipe-data.js";
+export { wipeData } from "./wipe-data.js";
+
+export type { PracticeTrendDeps, PracticeTrendRequest } from "./practice-trend.js";
+export { PRACTICE_MODES, practiceTrend } from "./practice-trend.js";
+
+export type { ReviewQueueDeps, ReviewQueueRequest, ReviewQueueResult } from "./review-queue.js";
+export { reviewQueue } from "./review-queue.js";
+
+export type { ProgressReport, ProgressReportDeps, ProgressReportRequest } from "./progress-report.js";
+export { progressReport } from "./progress-report.js";

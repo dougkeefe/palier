@@ -19,4 +19,7 @@ export const dexieScheduleStore = (db: PalierDb): ScheduleStore => ({
   put: async (entry: ScheduleEntry) => {
     await db.schedule.put(entry);
   },
+  // The primary-key scan, not the `due` index, so retired (null-due) entries come too.
+  all: () => db.schedule.toArray(),
+  clear: () => db.schedule.clear(),
 });

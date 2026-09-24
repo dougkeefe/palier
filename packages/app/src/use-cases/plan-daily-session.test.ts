@@ -70,6 +70,8 @@ const scheduleOf = (entries: readonly ScheduleEntry[] = []): ScheduleStore => ({
   due: vi.fn(() => Promise.resolve(entries)),
   get: vi.fn(() => Promise.resolve(null)),
   put: vi.fn(() => Promise.resolve()),
+  all: vi.fn(() => Promise.resolve([])),
+  clear: vi.fn(() => Promise.resolve()),
 });
 
 const itemsOf = (bank: readonly Item[]): ItemRepository => ({
@@ -100,6 +102,8 @@ const attemptsOf = (attempts: readonly Attempt[] = []): AttemptStore => ({
   recent: vi.fn(() => Promise.resolve(attempts)),
   since: vi.fn(() => Promise.resolve(attempts)),
   forItem: vi.fn(() => Promise.resolve([])),
+  all: vi.fn(() => Promise.resolve([])),
+  clear: vi.fn(() => Promise.resolve()),
 });
 
 const depsWith = (over: Partial<PlanDailySessionDeps> = {}): PlanDailySessionDeps => ({

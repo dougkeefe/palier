@@ -35,6 +35,28 @@ export const settingsStoreContract = (
       expect(await store.get("sync")).toEqual({ enabled: true, devices: 2 });
     });
 
+    it("returns every key with its latest value from all, in any order", async () => {
+      const store = await make();
+      await store.set("locale", "fr");
+      await store.set("goal", { minutes: 20 });
+      await store.set("locale", "en");
+
+      const all = [...(await store.all())].sort((a, b) => a.key.localeCompare(b.key));
+      expect(all).toEqual([
+        { key: "goal", value: { minutes: 20 } },
+        { key: "locale", value: "en" },
+      ]);
+    });
+
+    it("holds nothing after clear", async () => {
+      const store = await make();
+      await store.set("locale", "fr");
+      await store.clear();
+
+      expect(await store.all()).toEqual([]);
+      expect(await store.get("locale")).toBeNull();
+    });
+
     it.todo("survives a reopen");
   });
 };

@@ -140,6 +140,19 @@ body {
 }
 
 /*
+ * An island page (`.app-island`: a screen whose content loads in the browser after
+ * hydration) keeps the footer below the fold. Otherwise the footer sits in view beside a
+ * one-line loading state and is then pushed off-screen when the content arrives: a
+ * layout shift CI measured at performance 0.88 on /fr/progress. Content only grows from
+ * here, so the footer never moves while visible. It is still on every page (R5), one
+ * scroll down on these app screens; the landing and about pages keep it in view
+ * (progress.md D68).
+ */
+.app-main:has(.app-island) {
+  min-height: 100vh;
+}
+
+/*
  * `<main>` carries tabindex="-1" so the skip link reliably moves focus to it
  * (Safari and older browsers otherwise leave focus on the link). It is a scroll
  * target, not an operable control, so suppress the outline the browser would
@@ -185,5 +198,281 @@ body {
 .app-footer__disclaimer {
   color: var(--ink-muted);
   font-size: 0.875rem;
+  margin: 0;
+}
+
+/* ------------------------------------------------------------ study screens */
+/* Layout only; every control is a @palier/ui primitive or a native form control. */
+
+.app-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.app-muted {
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.app-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.app-link {
+  color: var(--primary);
+  font-weight: 600;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.app-fieldset {
+  display: grid;
+  gap: 0.75rem;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.app-fieldset > legend {
+  padding: 0;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.app-step-heading {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.app-step-heading:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* A choice is a whole-card label around a native radio: the target is the card. */
+.app-choice {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.75rem;
+  align-items: start;
+  min-height: 2.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--ink-muted);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.app-choice:has(input:checked) {
+  border-color: var(--primary);
+  border-width: 2px;
+}
+
+.app-choice:has(input:focus-visible) {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.app-choice input {
+  grid-row: span 2;
+  margin-top: 0.25rem;
+  accent-color: var(--primary);
+}
+
+.app-choice__label {
+  font-weight: 600;
+}
+
+.app-choice__hint {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+.app-choice--disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.app-field {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.app-input {
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--ink-muted);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+
+.app-segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.app-segmented__legend {
+  width: 100%;
+  margin-bottom: 0.25rem;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+.app-segmented__option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--ink-muted);
+  border-radius: 999px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.app-segmented__option:has(input:checked) {
+  border-color: var(--primary);
+  border-width: 2px;
+  font-weight: 600;
+}
+
+.app-segmented__option:has(input:focus-visible) {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.app-segmented__option input {
+  accent-color: var(--primary);
+}
+
+/* Home: stacked on mobile, two columns from 900px (§8.2). */
+.app-home {
+  display: grid;
+  gap: 1rem;
+}
+
+.app-home h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+@media (min-width: 900px) {
+  .app-home {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .app-home__readiness {
+    grid-row: span 2;
+  }
+}
+
+.app-countdown {
+  font-weight: 600;
+  color: var(--primary);
+  margin: 0 0 0.75rem;
+}
+
+.app-plan {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.app-plan__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+}
+
+.app-plan__kind {
+  font-weight: 600;
+}
+
+.app-plan__start {
+  width: 100%;
+}
+
+/* The drill (§8.3): one column; the confirm action sits at the bottom, in thumb reach. */
+.app-session {
+  display: grid;
+  gap: 1rem;
+}
+
+.app-session__count {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+.app-session__actions {
+  display: grid;
+  gap: 0.5rem;
+  position: sticky;
+  bottom: 0;
+  padding: 0.75rem 0;
+  background: var(--bg);
+}
+
+.app-session__hint {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+.app-feedback__answer {
+  font-weight: 600;
+  margin: 0;
+}
+
+.app-feedback__subheading {
+  font-size: 1rem;
+  margin: 0.5rem 0 0;
+}
+
+.app-feedback__matters {
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+
+.app-report {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+}
+
+.app-report > .pl-btn {
+  justify-self: start;
+}
+
+.app-confirm {
+  padding: 0.75rem;
+  border: 2px solid var(--incorrect);
+  border-radius: 12px;
+}
+
+.app-home__actions {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.app-footer__links {
+  display: flex;
+  gap: 1rem;
   margin: 0;
 }

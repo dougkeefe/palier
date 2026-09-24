@@ -7,7 +7,10 @@
     "skipToContent": "Skip to main content",
     "brand": "Palier",
     "about": "About",
-    "primary": "Primary"
+    "primary": "Primary",
+    "home": "Today",
+    "review": "Review",
+    "progress": "Progress"
   },
   "languageToggle": {
     "otherLanguage": "Français"
@@ -16,16 +19,194 @@
     "off": "Sync off"
   },
   "footer": {
-    "nonAffiliation": "Palier is an independent, open-source study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official."
+    "nonAffiliation": "Palier is an independent, open-source study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official.",
+    "yourData": "Your data"
   },
   "home": {
     "title": "Practise for the Second Language Evaluation",
     "tagline": "Reading, written expression and oral practice for the Public Service Commission's SLE — no account, no cost, and it works offline.",
-    "cta": "Learn more"
+    "cta": "Learn more",
+    "ctaStart": "Get started",
+    "ctaHome": "Go to today’s plan"
   },
   "about": {
     "title": "What Palier is, and what it is not",
     "independence": "Palier is an independent study tool, built in the open. It is not the exam, and using it is not a substitute for the Public Service Commission's own preparation material.",
     "noRealItems": "It contains no real test questions. Every item is written or generated for practice, and no result it produces is official."
+  },
+  "common": {
+    "loading": "Loading…",
+    "loadFailed": "Something went wrong loading your study data. Reload the page to try again.",
+    "backHome": "Back to today",
+    "minutes": "{count} min"
+  },
+  "skills": {
+    "reading": "Reading",
+    "writing": "Written expression"
+  },
+  "bands": {
+    "items": "{band}-level items"
+  },
+  "subSkills": {
+    "main-idea": "main idea",
+    "specific-detail": "specific detail",
+    "inference": "inference",
+    "vocabulary-in-context": "vocabulary in context",
+    "cohesion-and-reference": "cohesion and reference",
+    "tone-and-intent": "tone and intent",
+    "text-structure": "text structure",
+    "numerical-and-tabular-detail": "numerical and tabular detail",
+    "verb-tense-and-mood": "verb tense and mood",
+    "agreement": "agreement",
+    "prepositions-and-government": "prepositions and government",
+    "pronouns": "pronouns",
+    "connectors-and-discourse-markers": "connectors and discourse markers",
+    "register-and-formality": "register and formality",
+    "word-choice-precision": "precise word choice",
+    "false-friends-and-anglicisms": "false friends and anglicisms",
+    "punctuation-and-mechanics": "punctuation and mechanics",
+    "sentence-structure": "sentence structure"
+  },
+  "start": {
+    "title": "Let’s set up your practice",
+    "stepOf": "Step {current} of {total}",
+    "back": "Back",
+    "next": "Continue",
+    "finish": "Start practising",
+    "directionHeading": "Which language are you practising?",
+    "directionFrench": "French as a second language",
+    "directionFrenchHint": "Reading and written expression, level C focus",
+    "directionEnglish": "English as a second language",
+    "directionEnglishHint": "Coming later",
+    "localNote": "Your progress stays on this device. You can export it or delete it any time.",
+    "targetHeading": "What are you aiming for?",
+    "targetB": "Level B",
+    "targetBHint": "You handle routine work situations: most emails, memos and meetings on familiar topics.",
+    "targetC": "Level C",
+    "targetCHint": "You handle complex, abstract and sensitive matters: nuance, register and implication included.",
+    "testDateLabel": "I have a test booked on (optional)",
+    "placementHeading": "Where are you now?",
+    "placementDiagnostic": "Take the diagnostic",
+    "placementDiagnosticHint": "About 15 minutes per skill. It shows which kinds of items you already get right.",
+    "placementSkip": "Skip for now",
+    "placementSkipHint": "You can take it later from today’s plan.",
+    "goalHeading": "How much time a day?",
+    "goalOption": "{minutes} minutes a day",
+    "goalHint": "You can change this whenever you like."
+  },
+  "today": {
+    "title": "Today",
+    "setUpTitle": "Set up your practice first",
+    "setUpBody": "Two quick questions and you’re ready.",
+    "setUpAction": "Set up",
+    "readinessTitle": "Your practice trend",
+    "readinessNote": "Accuracy on practice items, not an exam result. Mock exams arrive later.",
+    "provenance": "{count, plural, one {Based on your last answer} other {Based on your last # answers}} in {skill}.",
+    "firstRunTitle": "See where you stand",
+    "firstRunBody": "Take the diagnostic and this card shows your accuracy on each level of item.",
+    "firstRunAction": "Take the diagnostic",
+    "planTitle": "Today’s plan",
+    "row_review": "Review",
+    "row_targeted": "Targeted practice",
+    "row_keepSharp": "Keep sharp",
+    "rowDetail": "{count, plural, one {# item} other {# items}} · {minutes} min",
+    "start": "Start, {minutes} min",
+    "doneTitle": "Done for today",
+    "doneBody": "You’ve answered everything available right now. New reviews come due tomorrow.",
+    "skillLabel": "Practising",
+    "reviewTitle": "Review queue",
+    "reviewDue": "{count, plural, =0 {Nothing due} one {# item due} other {# items due}}",
+    "diagnosticAgain": "Retake the diagnostic",
+    "testCountdown": "{days, plural, =0 {Your test is today} one {Your test is tomorrow} other {# days to your test}}",
+    "reviewAction": "Open the review queue"
+  },
+  "drill": {
+    "progress": "Item {current} of {total}",
+    "confirm": "Confirm",
+    "next": "Next",
+    "finish": "See results",
+    "keyboardHint": "Keys: 1 to 4 to choose, Enter to confirm.",
+    "statusCorrect": "Correct",
+    "statusIncorrect": "Incorrect",
+    "headingCorrect": "Correct",
+    "headingIncorrect": "Not quite",
+    "theAnswer": "The answer: <target>{answer}</target>",
+    "whyChosenWrong": "Why “<target>{answer}</target>” is tempting but wrong",
+    "theRule": "The rule",
+    "whyMatters": "Why this matters at level {band}: {subSkill}.",
+    "passageLabel": "Reading passage",
+    "recordFailed": "Your answer could not be saved. Try confirming again.",
+    "completeTitle": "Set complete",
+    "summary": "{correct} of {answered} correct.",
+    "nothingTitle": "Nothing to practise right now",
+    "nothingBody": "You’ve seen every available item recently. Come back tomorrow for your reviews."
+  },
+  "diagnostic": {
+    "title": "Diagnostic",
+    "intro": "About {count, plural, one {# item} other {# items}}, sampled across every level. There is no feedback until the end, so you see where you stand rather than learn as you go.",
+    "chooseSkill": "Choose a skill",
+    "start": "Start the {skill} diagnostic",
+    "resultTitle": "Your {skill} diagnostic",
+    "estimate": "{accuracy}% correct, likely between {low}% and {high}%",
+    "insufficient": "{attempted} answered. {needed, plural, one {# more is needed} other {# more are needed}} before a figure is shown.",
+    "resultNote": "This is accuracy on practice items with its likely range, not a band. Only a full mock exam can give a band.",
+    "toToday": "Go to today’s plan"
+  },
+  "review": {
+    "title": "Review",
+    "summary": "{count, plural, one {# item due} other {# items due}} · about {minutes} min",
+    "emptyTitle": "Nothing due",
+    "emptyBody": "Come back tomorrow, or do a set anyway.",
+    "emptyAction": "Do a set anyway"
+  },
+  "progress": {
+    "title": "Progress",
+    "trendTitle": "Practice trend",
+    "subSkillTitle": "By sub-skill",
+    "subSkillEmpty": "Answer a few items and each sub-skill you practise appears here.",
+    "subSkillRow": "{correct} of {attempted} correct",
+    "answered": "{count, plural, one {# item answered} other {# items answered}}",
+    "timeAnswering": "{minutes, plural, one {# minute} other {# minutes}} spent answering",
+    "honestTitle": "What this does and does not tell you",
+    "honestDoes": "It shows how often you get items right at each level, and the range the true rate most likely sits in.",
+    "honestDoesNot": "It is not a band. Practice items are not a calibrated test, and this bank is still small and partly synthetic. Only a full mock exam can give a band.",
+    "exportTitle": "Keep a copy",
+    "exportBody": "Download everything as a JSON file you can import later, on this device or another."
+  },
+  "data": {
+    "title": "Your data",
+    "intro": "Everything Palier knows about your practice is stored in this browser, on this device, and nowhere else.",
+    "noRecovery": "There is no copy anywhere else. If you delete it here, or clear this browser’s data, it is gone. Keep an export.",
+    "exportTitle": "Export",
+    "exportAction": "Download everything (JSON)",
+    "exported": "Your export has been downloaded.",
+    "importTitle": "Import",
+    "importBody": "Restore from an export. Nothing already on this device is overwritten.",
+    "importLabel": "Choose an export file",
+    "importAction": "Import",
+    "imported": "Imported {attempts, plural, one {# answer} other {# answers}}, {reviews, plural, one {# review} other {# reviews}} and {sessions, plural, one {# session} other {# sessions}}. {kept, plural, =0 {} one {# record was already here.} other {# records were already here.}}",
+    "importInvalid": "That file could not be imported: it is not a Palier export this version can read. Nothing was changed.",
+    "importFailed": "The file could not be read.",
+    "deleteTitle": "Delete everything",
+    "deleteBody": "Remove every answer, review, session and setting from this device.",
+    "deleteAction": "Delete everything",
+    "confirmTitle": "Delete everything on this device?",
+    "confirmBody": "This cannot be undone. Download an export first if you might want your progress back.",
+    "confirmAction": "Yes, delete everything",
+    "cancel": "Cancel",
+    "deleted": "Everything on this device has been deleted.",
+    "startAgain": "Set up again"
+  },
+  "report": {
+    "open": "Report a problem with this item",
+    "legend": "What looks wrong?",
+    "reason_key-wrong": "The key looks wrong",
+    "reason_multiple-answers": "More than one answer works",
+    "reason_french-off": "The French sounds off",
+    "reason_unclear": "The question is unclear",
+    "fileIssue": "Open a GitHub issue (new tab)",
+    "provenance_generated": "Machine-generated and checked automatically. Not yet calibrated against real answers.",
+    "provenance_authored": "Written by hand and checked automatically. Not yet calibrated against real answers.",
+    "provenance_adapted": "Adapted from a public source and checked automatically. Not yet calibrated against real answers."
   }
 }
