@@ -23,12 +23,13 @@ import type { MemorySyncServer } from "../memory/sync-server.js";
  * | `POST /api/account/pair-code` | — | 200 `{ code, expiresAt }` |
  * | `POST /api/account/pair` | `{ code, label }` | 200 `DeviceIdentity`, 404 on a bad code |
  * | `GET /api/account/devices` | — | 200 `{ devices }` |
- * | `DELETE /api/account/device/:id` | — | 204 |
+ * | `DELETE /api/account/device/:id` | — | 204, 404 for a device the account does not hold |
  * | `DELETE /api/account` | — | 200 `{ deleted: true }` |
  * | `GET /api/sync?watermark=n` | — | 200 `PullResult` |
  * | `POST /api/sync` | `{ items }` | 200 `PushResult` |
  *
- * An unknown or removed secret is 401 on every route.
+ * An unknown or removed secret is 401 on every route. A body that fails validation is 400
+ * on the real server; this copy trusts its callers, who are the contract suite.
  */
 export type SyncHandlerOptions = {
   readonly baseUrl: string;
@@ -44,6 +45,7 @@ const answer = async (request: Request, run: (secret: string) => unknown | Promi
   if (secret === null) return HttpResponse.json({ error: "unauthorized" }, { status: 401 });
   try {
     const body = await run(secret);
+    if (body instanceof Response) return body;
     return body === undefined ? new HttpResponse(null, { status: 204 }) : HttpResponse.json(body);
   } catch (error) {
     if (error instanceof SyncUnauthorizedError) return HttpResponse.json({ error: "unauthorized" }, { status: 401 });
@@ -73,9 +75,9 @@ export const syncHandlers = (server: MemorySyncServer, options: SyncHandlerOptio
       answer(request, (secret) => ({ devices: service.devices(secret) })),
     ),
     http.delete(at("/api/account/device/:id"), ({ request, params }) =>
-      answer(request, (secret) => {
-        service.revoke(secret, String(params.id));
-      }),
+      answer(request, (secret) =>
+        service.revoke(secret, String(params.id)) ? undefined : HttpResponse.json({ error: "not-found" }, { status: 404 }),
+      ),
     ),
     http.delete(at("/api/account"), ({ request }) =>
       answer(request, (secret) => {

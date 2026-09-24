@@ -617,17 +617,23 @@ telemetry_events(               -- opt-in, deliberately has no account_id
 
 `sync_documents` is a generic per-record envelope rather than a normalised mirror, so client schema changes do not require a server migration. Payloads are the client's own record shapes, opaque to the server.
 
+*Amended 24 September 2026 (ADR 21, `progress.md` D69–D70); the schema itself is `apps/web/src/server/schema.ts`:*
+- `accounts` gains `revision`, the per-account counter every accepted write increments. It stamps `sync_documents.revision` and serves as the pull watermark.
+- `accounts` drops `locale`, `target_lang` and `target_band`, because nothing sends them.
+- `devices.secret_hash` is **SHA-256** of the 256-bit secret, uniquely indexed, not Argon2id. The secret is random, not a password, so there is nothing for a slow hash to protect.
+- `pair_codes` (hashed, expiring, single use) and `rate_limits` (HMAC of route, IP and day) are added.
+
 Every query filters by the request's account id through a repository layer, never by ad hoc query construction. There is no cross-account read path in the codebase at all, which is easier to audit than row-level security policies.
 
 ### 9.3 Identity
 
 Sync is on by default with no sign-in (ADR 4), so identity comes from the device. v1 has no accounts, no email, no OAuth and no session handling (ADR 5).
 
-**First run.** The client generates a 256-bit device secret with `crypto.getRandomValues`, stores it in the key vault, and calls `POST /api/account/device`. The server creates an `accounts` row and a `devices` row holding an Argon2id hash of the secret, and returns the account id. The secret is the bearer credential for every subsequent sync request. The server never holds it in reversible form.
+**First run.** The client generates a 256-bit device secret with `crypto.getRandomValues`, stores it in the key vault, and calls `POST /api/account/device`. The server creates an `accounts` row and a `devices` row holding an Argon2id hash of the secret, and returns the account id. *(Amended 24 September 2026, ADR 21: the hash is SHA-256. Registration presents the secret as the bearer, and is idempotent per secret.)* The secret is the bearer credential for every subsequent sync request. The server never holds it in reversible form.
 
 **Deferred creation.** The account row is created on completion of the first practice session, not on first page load. A visitor who lands and leaves creates nothing.
 
-**Adding a second device.** Device one requests a pairing code: six characters, valid ten minutes, single use, rate limited. The user types it into device two, which calls `POST /api/account/pair` and receives its own device record and secret, then pulls the document set. No email, no third-party identity, no account to remember.
+**Adding a second device.** Device one requests a pairing code: six characters, valid ten minutes, single use, rate limited. The user types it into device two, which calls `POST /api/account/pair` and receives its own device record and secret, then pulls the document set. *(Amended 24 September 2026, ADR 21: device two presents the secret already in its vault, and the server never generates one. If device two already had an account, it moves, and its local progress merges into the one it joins.)* No email, no third-party identity, no account to remember.
 
 **Recovery.** There is none in v1, and the settings page says so in one plain sentence: if you lose every paired device, server-side progress is gone. The JSON export sits directly beneath that sentence. Adding a recoverable identity is deferred until there is evidence it is needed (ADR 5).
 
@@ -666,6 +672,9 @@ Small by design.
 | `GET/POST /api/sync` | Node | device secret bearer | Push and pull sync documents |
 | `DELETE /api/account/device/:id` | Node | device secret | Revoke a device |
 | `DELETE /api/account` | Node | device secret | Hard delete everything server-side, returns a confirmation |
+| `GET /api/account/devices` | Node | device secret | The account's devices, for the settings list (added 24 September 2026) |
+
+*Amended 24 September 2026 (ADR 21):* every account and sync route runs on **Node**. Next.js 16 deprecates the Edge runtime, and the Postgres driver needs Node. The wire protocol, including every status code, is the table in `packages/testing/src/msw/sync-handlers.ts`. With no database configured, every sync route answers 503.
 
 Everything else is static: the app shell, the bank bundles, and the library content.
 

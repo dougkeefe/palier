@@ -43,12 +43,33 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   relative path out of `apps/web` — `no-relative-escape` in `.dependency-cruiser.cjs`
   rejects that, and `.json` is in the cruiser's resolver extensions, so it is caught.
 - **The R5 non-affiliation statement** is in the footer of every page, from day one.
+- **The sync backend lives in `src/server/` and nowhere else** (ADR 21, progress.md D70).
+  - It holds the Drizzle schema, a `SyncRepository` whose every method takes an account id (there
+    is no cross-account read path), pure `Request → Response` handlers, and `db.ts`, the server's one
+    composition point: PGlite when hermetic, postgres.js on `DATABASE_URL`, and `null` (→ 503) with
+    neither.
+  - `drizzle-orm`, `drizzle-kit` and `postgres` are banned outside `src/server/`
+    (`no-sql-outside-web-server`).
+  - Route files under `src/app/api/` are one-line `serve(...)` bindings on the Node runtime (Edge is
+    deprecated in Next 16), with no `runtime` export.
+  - Device secrets are stored as SHA-256 (D70).
+  - A schema change means `pnpm --filter @palier/web exec drizzle-kit generate --dialect=postgresql
+    --schema=./src/server/schema.ts --out=./drizzle`, with the generated SQL committed.
+- **Sync in the browser graph** (D71): the container's `sync` port is the real `@palier/adapters/sync`
+  transport, same-origin, presenting `vault.deviceSecret()`, in **both** graphs. In hermetic mode each
+  page load is its own device, with a random 64-hex secret and a separate id counter, and syncs
+  against the dev server's PGlite routes.
 
 ## Gates this app owns
 
 - Fast lane: i18n key parity (`messages.test.ts`), container wiring test — including the
-  production graph over `fake-indexeddb` planning a day from the committed bank — and the
-  service worker's behaviour over an in-memory `CacheStorage` (`src/sw/`).
+  production graph over `fake-indexeddb` planning a day from the committed bank, and one sync
+  round trip through the real routes — and the service worker's behaviour over an in-memory
+  `CacheStorage` (`src/sw/`). The sync handlers run over an in-memory `SyncRepository`
+  (`src/server/__tests__/`). `syncTransportContract` runs through the HTTP adapter and the real
+  route files (`src/app/api/transport.test.ts`), and every `route.ts` holds 95% branch.
+- Integration lane (`integration-web`, `PALIER_INTEGRATION=1`): the same repository and transport
+  contracts on Drizzle over PGlite, with the committed migrations.
 - Medium lane (`.github/workflows/verify.yml`): Playwright in three projects.
   **`warmup`** compiles every route once, serially, before the parallel hermetic tests. A cold
   Turbopack dev server under parallel first requests can read a build file mid-write (D67);

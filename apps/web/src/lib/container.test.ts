@@ -5,7 +5,14 @@ import { dirname, join } from "node:path";
 import { attemptId, sessionId } from "@palier/domain";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { BANK_BASE_PATH, BANK_VERSION, createContainer, readEnv } from "./container";
+import { routeFetch } from "../app/api/__tests__/route-fetch";
+import { memorySyncRepository } from "../server/__tests__/memory-repository";
+import { type SyncApi, createSyncApi } from "../server/handlers";
+import { BANK_BASE_PATH, BANK_VERSION, createContainer, hermeticDevice, readEnv } from "./container";
+
+// The sync routes, served from memory, for the production graph's one sync round trip.
+const server = vi.hoisted(() => ({ api: null as SyncApi | null }));
+vi.mock("../server/db", () => ({ syncApi: () => Promise.resolve(server.api) }));
 
 describe("readEnv", () => {
   it("is hermetic when PALIER_HERMETIC is exactly '1'", () => {
@@ -42,6 +49,26 @@ describe("createContainer", () => {
     const second = c.ids.ulid();
     expect(first).toMatch(/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{26}$/);
     expect(second > first).toBe(true);
+  });
+
+  it("makes each hermetic page load its own sync device: a server-valid secret and a separate id stream", async () => {
+    const one = createContainer({ hermetic: true });
+    const two = createContainer({ hermetic: true });
+
+    const [a, b] = await Promise.all([one.vault.deviceSecret(), two.vault.deviceSecret()]);
+
+    expect(a).toMatch(/^[0-9a-f]{64}$/);
+    expect(b).not.toBe(a);
+    expect(one.ids.ulid()).not.toBe(two.ids.ulid());
+    expect(one.sync).toBeDefined();
+    expect(await one.useCases.syncState()).toMatchObject({ enabled: true, identity: null });
+  });
+
+  it("derives a hermetic device from its random bytes: 32 for the secret, 4 for the id seed", () => {
+    const device = hermeticDevice((bytes) => bytes.fill(1));
+
+    expect(device.secret).toBe("01".repeat(32));
+    expect(device.idSeed).toBe(0x01010101 * 2 ** 20);
   });
 
   it("assembles the use-case graph bound to the in-memory ports", () => {
@@ -323,10 +350,47 @@ describe("createContainer in production", () => {
     expect(c.sessions).toBeDefined();
     expect(c.settings).toBeDefined();
     expect(c.vault).toBeDefined();
+    expect(c.sync).toBeDefined();
+    expect(c.syncState).toBeDefined();
     expect(Number.isNaN(Date.parse(c.clock.now()))).toBe(false);
     expect(c.ids.ulid()).toMatch(/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{26}$/);
     // Construction is lazy: the bank has not fetched its manifest yet.
     expect(requested).toEqual([]);
+  });
+
+  it("does not register with the sync service before the first completed session (§9.3)", async () => {
+    const c = createContainer({ hermetic: false });
+
+    expect(await c.useCases.syncNow({ label: "Test" })).toEqual({ status: "waiting" });
+    expect(requested.filter((url) => url.startsWith("/api/"))).toEqual([]);
+  });
+
+  it("syncs over the same-origin routes with the vault's secret once a session is complete", async () => {
+    server.api = createSyncApi({
+      repo: memorySyncRepository(),
+      now: () => new Date(),
+      randomBytes: (n) => crypto.getRandomValues(new Uint8Array(n)),
+      rateLimitSalt: "salt",
+    });
+    const routes = await routeFetch();
+    vi.stubGlobal("fetch", (url: string, init?: { method: string; headers: Record<string, string>; body?: string }) =>
+      url.startsWith("/api/") ? routes(`http://palier.test${url}`, init ?? { method: "GET", headers: {} }) : serveCommittedBank(url),
+    );
+    const c = createContainer({ hermetic: false });
+    const id = sessionId(c.ids.ulid());
+    await c.useCases.startSession({
+      sessionId: id,
+      mode: "drill",
+      plan: { skill: "reading", lang: "fr", targetBand: "C", sessionSize: 1 },
+    });
+    await c.useCases.completeSession({ sessionId: id });
+
+    const outcome = await c.useCases.syncNow({ label: "Test" });
+
+    expect(outcome).toMatchObject({ status: "synced", pushed: 1 });
+    expect((await c.useCases.listDevices()).map((d) => d.label)).toEqual(["Test"]);
+    await c.useCases.deleteEverywhere();
+    expect((await c.useCases.syncState()).identity).toBeNull();
   });
 
   it("plans a day from the committed bank, fetched from the served base path", async () => {

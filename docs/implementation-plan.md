@@ -662,6 +662,10 @@ mirrors this list and the two must agree.
   single-device screen subset. The detail is in `progress.md` Phase 2.
   **Slice 1 status, 24 September 2026:** built. The single-device app works end to end, offline after one
   load, and E2E journeys 1, 2, 4, 6 and 7 pass. See `progress.md` for the evidence. **Gate B** is next.
+  **Gate B resolved, 24 September 2026 (human):** the lower Leitner box wins a *concurrent* edit.
+  Concurrency is detected by a per-document server revision, and the device merges (`progress.md`
+  D69, ADR 21). **Slice 2 status:** parts 1–3 (ports and `syncNow`, the backend, the HTTP adapter)
+  have landed. Part 4, the sync UI and journey 8, is next.
 - **Slice 2 — Multi-device sync.** After **Gate B**: the sync backend (Postgres + Drizzle, the sync and
   device routes of §10, deferred anonymous registration, pairing by code, rate limiting; no auth lib,
   email or OAuth per ADR 5); `adapters/vault` + `adapters/sync` (device secret / sync identity, pairing

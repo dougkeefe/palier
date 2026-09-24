@@ -104,6 +104,20 @@ export default defineConfig({
                 setupFiles: [SETUP, "@palier/testing/setup"],
               },
             },
+            /**
+             * The sync backend's tier-4 tests: the Drizzle repository and the route
+             * handlers over PGlite with the committed migrations (progress.md D70).
+             */
+            {
+              extends: true,
+              test: {
+                name: "integration-web",
+                root: "./apps/web",
+                environment: "node",
+                include: ["src/**/*.integration.test.ts"],
+                setupFiles: [SETUP, "@palier/testing/setup"],
+              },
+            },
           ]
         : []),
     ],

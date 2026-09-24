@@ -12,7 +12,7 @@
     "test": "vitest run --coverage",
     "verify": "pnpm run check-types && pnpm run lint && pnpm run boundaries && pnpm run test",
     "clean": "turbo run clean && tsc -b --clean",
-    "test:integration": "PALIER_INTEGRATION=1 vitest run --project=integration",
+    "test:integration": "PALIER_INTEGRATION=1 vitest run --project=integration --project=integration-web",
     "test:e2e": "pnpm --filter @palier/web exec playwright test",
     "verify:medium": "pnpm run test:integration && pnpm run test:e2e"
   },

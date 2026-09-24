@@ -23,6 +23,10 @@
     "./bank": {
       "types": "./dist/bank/index.d.ts",
       "default": "./dist/bank/index.js"
+    },
+    "./sync": {
+      "types": "./dist/sync/index.d.ts",
+      "default": "./dist/sync/index.js"
     }
   },
   "files": [

@@ -54,7 +54,8 @@ export type SyncService = {
   readonly pairCode: (secret: string) => { code: string; expiresAt: string };
   readonly pair: (secret: string, code: string, label: string) => DeviceIdentity;
   readonly devices: (secret: string) => readonly DeviceSummary[];
-  readonly revoke: (secret: string, id: string) => void;
+  /** Revoke a device of the caller's account; false when the account holds no such live device. */
+  readonly revoke: (secret: string, id: string) => boolean;
   readonly deleteAccount: (secret: string) => void;
   readonly pull: (secret: string, watermark: number) => PullResult;
   readonly push: (secret: string, items: readonly PushItem[]) => PushResult;
@@ -147,9 +148,10 @@ export const memorySyncServer = (options: MemorySyncServerOptions = {}): MemoryS
     },
     revoke: (secret, id) => {
       const { device } = authorised(secret);
-      for (const d of bySecret.values()) {
-        if (d.id === id && d.accountId === device.accountId) d.revoked = true;
-      }
+      const target = [...bySecret.values()].find((d) => d.id === id && d.accountId === device.accountId && !d.revoked);
+      if (target === undefined) return false;
+      target.revoked = true;
+      return true;
     },
     deleteAccount: (secret) => {
       const { device } = authorised(secret);
@@ -192,7 +194,10 @@ export const memorySyncServer = (options: MemorySyncServerOptions = {}): MemoryS
       requestPairCode: () => call(() => service.pairCode(secret)),
       redeemPairCode: (code, label) => call(() => service.pair(secret, code, label)),
       listDevices: () => call(() => service.devices(secret)),
-      revokeDevice: (id) => call(() => service.revoke(secret, id)),
+      revokeDevice: (id) =>
+        call(() => {
+          service.revoke(secret, id);
+        }),
       deleteAccount: () => call(() => service.deleteAccount(secret)),
       pull: (watermark) => call(() => service.pull(secret, watermark)),
       push: (items) => call(() => service.push(secret, items)),

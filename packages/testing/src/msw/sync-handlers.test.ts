@@ -73,10 +73,12 @@ describe("syncHandlers — the wire protocol over a memory server", () => {
     const { devices } = (await (await fetch(`${BASE}/api/account/devices`, as("a"))).json()) as { devices: unknown[] };
 
     const revoke = await fetch(`${BASE}/api/account/device/${joined.deviceId}`, as("a", { method: "DELETE" }));
-    const del = await fetch(`${BASE}/api/account`, as("a", { method: "DELETE" }));
+    const again = await fetch(`${BASE}/api/account/device/${joined.deviceId}`, as("a", { method: "DELETE" }));
 
     expect(devices).toHaveLength(2);
     expect(revoke.status).toBe(204);
+    expect(again.status).toBe(404);
+    const del = await fetch(`${BASE}/api/account`, as("a", { method: "DELETE" }));
     expect(await del.json()).toEqual({ deleted: true });
   });
 
