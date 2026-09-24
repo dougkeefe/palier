@@ -637,7 +637,9 @@ mirrors this list and the two must agree.
   type crosses into `apps/web` beyond `next`/`react`.
 - **Gate A — product and UI direction (human).** Screens, copy, states, visual language for the
   onboarding/drill/review/settings surfaces. Gates Slice 1's UI portion (its composition-root, service
-  worker and data use cases are buildable before it).
+  worker and data use cases are buildable before it). **Resolved 24 September 2026:** adopt the
+  direction this set already specifies (`product-requirements.md` §8, §10, §11, §14) for the
+  single-device screen subset. The detail is in `progress.md` Phase 2.
 - **Slice 2 — Multi-device sync.** After **Gate B**: the sync backend (Postgres + Drizzle, the sync and
   device routes of §10, deferred anonymous registration, pairing by code, rate limiting; no auth lib,
   email or OAuth per ADR 5); `adapters/vault` + `adapters/sync` (device secret / sync identity, pairing

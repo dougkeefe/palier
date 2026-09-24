@@ -6,8 +6,11 @@ ADR 19; the D54 real-model go-signal exists — session log, 24 September 2026).
 landed ahead of the formal start: the pure `@palier/engine` core, the `@palier/app` practice loop,
 and the `/ids`, `/dexie`, `/openai` adapters. The bank `ItemRepository` (`adapters/bank`) now
 lands too, so the app can plan a day from the real committed bank, not only the fixture bank.
-**Next step:** the Phase-2 **web slice** — wire the bank into the composition root with
-service-worker offline caching. See [Next, decided](#next-decided). The **full-volume published
+The web slice has landed too: the production composition root wires the real adapters, and a service
+worker makes the app and the bank work offline after one load (D58–D60). **Gate A is resolved** (adopt
+the PRD's UI direction).
+**Next step:** Slice 1's **data use cases** (`exportData`/`importData`/`wipeData`), then the
+single-device UI. See [Next, decided](#next-decided). The **full-volume published
 bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
 feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
 (D56).
@@ -85,11 +88,11 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/moroni` | **Open Phase 2 + `adapters/bank` — the HTTP `ItemRepository` (§7).** `httpBankRepository` over the committed bank shards: manifest fetch, lazy per-skill shard loading, content-hash cache. Held to `itemRepositoryContract` via a new `bankHandlers` MSW helper in `@palier/testing`. Opens `./bank` (D3), `adapters-bank` element (D5); deviation **D55** (structure-check at the edge, not full Zod). Formally opens Phase 2: status row flipped, §7 breakdown expanded. | 24 September 2026 |
+| `dougkeefe/algiers` | **Phase 2 Slice 1 — the single-device practice app, offline-complete (D57).** Composition root wires the real bank/dexie/ids (stops throwing); bank served statically + a service worker for offline [R4]; `ExportData`/`ImportData`/`WipeData`; then the single-device UI with **Gate A resolved by adopting the PRD's §8/§10/§11/§14 direction** (human decision, 24 September 2026). Shipped as ordered PRs; infra first. | 24 September 2026 |
 
-*(The prior rows — the `adapters/dexie` slice (#16) and the Phase-1 content factory — merged and
-were removed; the In-flight table tracks current work, not history, and the session log below is the
-permanent record.)*
+*(The prior rows — `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+factory — merged and were removed; the In-flight table tracks current work, not history, and the
+session log below is the permanent record.)*
 
 ---
 
@@ -186,36 +189,37 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next slice: the Phase-2 web slice — wire the bank into the composition root, with a service worker
-that caches shards by content hash for offline use [R4].**
+**Next slice: Slice 1's data use cases — `exportData`, `importData`, `wipeData` [R11].**
 
-`adapters/bank` landed (session log, 24 September 2026), so the `ItemRepository` the app plans a day
-against now has a real, content-hashed HTTP implementation. The next *buildable*, self-directable
-slice is the `apps/web` wiring that turns it on: the production composition root
-(`apps/web/src/lib/container.ts`) currently throws until Phase 2 adapters exist (D23), and the bank
-was the one it most needs.
+The web slice landed (session log, 24 September 2026, `dougkeefe/algiers`): the production composition
+root wires the real bank/dexie/ids, the bank is served statically, and the service worker makes the
+shell, every route and the whole bank available offline (D58–D60). Gate A is resolved (Phase 2 section),
+so all of Slice 1 is now self-directable. Its next piece is the data use cases the settings/data pane and
+`/progress` export need. They come before the UI because the UI consumes them.
 
 **The slice, concretely:**
 
-- In `apps/web/src/lib/container.ts`, construct `httpBankRepository` from `@palier/adapters/bank`
-  (base URL = wherever `content/bank/` is served; `version` from the shipped bank) and hand it to the
-  use cases, alongside the `dexieStores` and `webCryptoIdGenerator` already available. The production
-  path stops throwing for the bank port.
-- Serve the committed `content/bank/v{n}/` as a static asset under a stable public path, and register
-  a **service worker** that caches shard responses by URL — which *is* the content hash, so the cache
-  is immutable and keyed exactly as the adapter's in-memory cache is. This is the [R4] "full offline
-  operation after first load" exit criterion beginning to land.
-- A route/loader (or server component) that runs `planDailySession` end to end against the real bank,
-  proving the app plans a day from committed content rather than the fixture bank.
-- **Done when:** `pnpm verify` green; the composition root wires the real bank without a vendor type
-  crossing into `apps/web` beyond `next`/`react` (boundaries clean); an E2E or route test plans a day
-  from the served bank; the service worker serves a shard from cache on a second load (offline).
+- Three use cases in `packages/app/src/use-cases/`, each `(request, deps)` pure orchestration with
+  local-stub unit tests (app CLAUDE.md, D37):
+  - `exportData` → a versioned JSON document of every attempt, schedule entry, session and setting.
+  - `importData(doc)` → validates the document, then merges: attempts are append-only (a duplicate id is
+    a no-op, D44), schedule entries and settings upsert. Idempotent, so importing twice changes nothing.
+  - `wipeData` → clears every store and the API key (`KeyVault.clear`) but **keeps the device secret**
+    (D50).
+- The store ports cannot enumerate today (`AttemptStore` has `recent`/`since`/`forItem`,
+  `ScheduleStore` has `due`/`get`/`put`, `SessionStore`/`SettingsStore` have no listing, and nothing can
+  clear). Add the minimum that export and wipe need, in the port **and** the in-memory impl **and** the
+  Dexie impl **and** the contract suite, amend §3.3 in place, and record each change as a deviation, the
+  way D38/D44 did.
+- Bind all three in `buildUseCases` (`apps/web/src/lib/container.ts`), with the export document's schema
+  version in one place.
+- **Done when:** `pnpm verify` green; every new port method passes its contract suite against the memory
+  **and** Dexie implementations; an export → wipe → import round trip in `container.test.ts` restores
+  the same plan; the device secret survives a wipe.
 
-The adapter's public surface is `httpBankRepository({ baseUrl, version?, fetchImpl? })` returning the
-`ItemRepository` port, plus `BankUnavailableError`/`BankContentError` — nothing else escapes
-`@palier/adapters/bank`. The shard **layout is fixed** by the bank build
-(`bank/v{n}/manifest.json`, `bank/v{n}/{lang}/{skill}/{hash}.json`, `bank/v{n}/passages/{hash}.json`,
-`bank/v{n}/forms/{id}.json`), so no new content decision is required.
+After it, the Slice 1 UI in the order the plan fixes: drill + diagnostic + home (with the container
+provider and the `@palier/ui` additions), then review, progress, settings/data and item reporting, then
+the E2E journeys 1/2/6/7, axe on states, and Lighthouse on the new routes.
 
 **Standing human gates (do not self-direct):**
 
@@ -225,8 +229,9 @@ The adapter's public surface is `httpBankRepository({ baseUrl, version?, fetchIm
   phase (2–6) is built and used against the baseline committed bank; the content run is a 1.0 gate, not
   a per-phase blocker. The baseline bank's French is synthetic (D54), so the app is feature-usable
   before this gate, not study-ready.
-- **Product and UI direction** (§7 Phase 2) — onboarding, readiness card, drill/feedback, review queue,
-  settings, pairing. Design decisions, not derivations.
+- ~~**Product and UI direction**~~ — **resolved 24 September 2026** as Gate A (Phase 2 section): adopt
+  the PRD's §8/§10/§11/§14 direction for the single-device screens. The *pairing* UI is Slice 2, after
+  Gate B.
 - **The `adapters/sync` `ScheduleEntry` merge (D43)** — add `updatedAt`, take the lower Leitner box, or
   treat the schedule as device-local. Gates the sync and vault adapters.
 
@@ -291,6 +296,7 @@ session-log evidence; nothing is ticked without it.
 - [x] `@palier/engine`: Scorer, TrendCalculator, Scheduler, Planner, Selector, BandMapper — the pure core (20 September 2026)
 - [x] `adapters/dexie`: the store ports at schema v1, with the migration harness (D49/D50)
 - [x] `adapters/bank`: manifest fetch, lazy shard loading, content-hash cache (24 September 2026, this slice) — the service-worker registration itself is the web slice
+- [x] Composition root wires the real adapters + the service worker caches the bank by content-hashed URL (24 September 2026, `dougkeefe/algiers`; D58–D60) — production path no longer throws; offline shell/route/bank proven in the `offline` Playwright project
 - [x] `adapters/ids`: the ULID generator (D48; not one of the five §3.2 names, but a real adapter)
 - [ ] `adapters/vault` and `adapters/sync`: device secret, pairing by code, push/pull, watermarks, offline queue — **gated on the `ScheduleEntry` merge decision** (D43)
 - [ ] Sync backend: Postgres + Drizzle, sync/device routes, pairing, rate limiting (ADR 5)
@@ -311,15 +317,22 @@ session-log evidence; nothing is ticked without it.
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
 carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
 `implementation-plan.md` §7 Phase 2 "Completion slices" — **keep the two in sync** (the fuller scope
-and each slice's *done* live in the plan). Current position: **Slice 1**, at its buildable head — the
-web slice in *Next, decided*.
+and each slice's *done* live in the plan). Current position: **Slice 1** — composition root and service
+worker landed; the data use cases are *Next, decided*; Gate A is resolved, so the UI is unblocked.
 
 - [~] **Slice 1 — Single-device practice app, offline-complete.** Composition-root wiring of
-  bank/dexie/ids + service-worker offline cache [R4] + `ExportData`/`ImportData`/`WipeData`, then (after
-  **Gate A**) the full single-device UI: onboarding, home/readiness, today's plan, diagnostic,
-  drill/feedback, review queue, progress, settings + data pane, item reporting. The composition-root /
-  service-worker / data-use-case part is buildable now; the UI waits on Gate A.
-- [!] **Gate A — product & UI direction (human).** Screens, copy, states. Gates Slice 1's UI.
+  bank/dexie/ids + service-worker offline cache [R4] **(landed, D58–D60)** +
+  `ExportData`/`ImportData`/`WipeData`, then (after **Gate A**, now resolved) the full single-device UI:
+  onboarding, home/readiness, today's plan, diagnostic, drill/feedback, review queue, progress,
+  settings + data pane, item reporting.
+- [x] **Gate A — product & UI direction (human).** Screens, copy, states. Gates Slice 1's UI.
+  **Resolved 24 September 2026 (human decision, `dougkeefe/algiers`):** adopt the direction the PRD
+  already specifies rather than invent one — §8 screens, §10 visual language, §11 accessibility, §14
+  states — for the single-device subset: `/start` (steps 1–4; step 5, the key, is Phase 4), `/home`
+  (practice-trend readiness only), the reading/writing drill + feedback panel, the diagnostic,
+  `/review`, `/progress`, `/settings/data`, and item reporting. The name stays the working "Palier"
+  (§12.1 is still a standing gate). Coco is a minimal static treatment. §9 streak/XP are deferred, since
+  they are not in Slice 1's *done* and `@palier/engine` has none.
 - [ ] **Slice 2 — Multi-device sync.** Sync backend (Postgres/Drizzle/routes/pairing/rate-limit, ADR 5);
   `adapters/vault` + `adapters/sync` behind `SyncTransport`, applying the D43 rule; `SyncNow` + pairing
   UI. Completes the two-device exit criterion. Behind **Gate B**.
@@ -1765,11 +1778,111 @@ so an editor touching one must update the other. Two human gates sit between the
 2 — and are named, not left as menus (working-agreement rule 7). *Next, decided* is unchanged: the single
 next buildable step is the web slice at the head of Slice 1.
 
+### D58 — the production clock lives beside the composition root; the selection seed is per day
+**Date:** 24 September 2026 · **Status:** accepted
+
+Two things §3.5's sketch names and nothing had built. **`systemClock()`** had no home: no production
+`Clock` existed anywhere. It is `apps/web/src/lib/system-clock.ts`, not a new `@palier/adapters/clock`
+subpath, because it is one vendor-free line with one consumer and D3 says a subpath lands with a real
+adapter behind it. Precedent for a non-adapters port impl in the root already exists (`seededRandom` from
+`@palier/testing`, per §3.5). **Promote it** the day a second entry point outside `apps/web` needs a clock.
+
+**The production seed.** §3.5 writes `seededRandom()` but the function takes a seed, and nothing said
+which. It is `selectionSeedFor(clock.now())`: FNV-1a over the UTC `YYYY-MM-DD`. A reload replays today's
+plan exactly instead of reshuffling it under the user, and each new day draws a fresh order. Not an
+entropy source — identifiers still come only from `@palier/adapters/ids` (D39). Rejected: a constant seed
+(every day's order identical given the same pool) and a time-of-construction seed (the plan changes on
+every reload, which reads as a bug).
+
+### D59 — the production container is browser-only; `@palier/testing/in-memory` is its bundleable half
+**Date:** 24 September 2026 · **Status:** accepted
+
+Wiring the production path surfaced a constraint the plan did not state: **the production graph can only
+be built in a browser.** `dexieStores()` needs IndexedDB, and the bank's base URL is origin-relative
+(`/content`), which Node's `fetch` cannot resolve. So `createContainer({ hermetic: false })` is for client
+components, never server rendering; the UI's container provider (Slice 1's UI PRs) builds it after
+hydration. This fits architecture.md §13's "session engine as a single client island".
+
+Two consequences. (1) **`@palier/testing`'s root entry point cannot be bundled for a browser** — it
+re-exports the contract suites (vitest's `describe` at module scope), `mswServer` (`msw/node`) and the
+PGlite harness. The composition root now imports the in-memory ports through a new **`./in-memory`**
+subpath that reaches only `@palier/app` and `@palier/domain`; a test walks its module graph and fails if
+anything else appears. The root entry point still re-exports everything, so no other import moved. (2)
+**The `web` Vitest project gains `@palier/testing/setup`** (`fake-indexeddb/auto`), exactly as `adapters`
+has, so `container.test.ts` runs the *real* production graph in the fast lane, with `fetch` stubbed to serve
+the committed `content/bank/` from disk. That test is the fast-lane proof that the app plans a day from
+the committed bank. The old "refuses to build a production container" case asserted behaviour that no
+longer exists and was replaced, not weakened: the new cases assert more.
+
+### D60 — the bank ships as a generated `public/` copy; the service worker is compiled from TypeScript
+**Date:** 24 September 2026 · **Status:** accepted
+
+**Serving.** `scripts/prepare-public.mjs` runs before `next dev` and `next build` (before, because Next
+serves only `public/` files that exist at build time). It copies `content/bank/` → `public/content/bank/`,
+located through `@palier/content`'s exports map (ADR 18). The copy is **gitignored**: `content/bank/` stays
+the one source of truth. Rejected: a route handler streaming the files (server code, not the static CDN
+asset architecture.md §2/§5.5 requires) and a rewrite (cannot reach outside `public/` alone). Because
+`@palier/content` has no build task, a bank change would not have busted `apps/web`'s Turborepo cache, so
+`apps/web/turbo.json` adds `$TURBO_ROOT$/content/bank/**` to the build's inputs and the generated files to
+its outputs.
+
+**The service worker** is `src/sw/worker.ts`: typechecked, linted, and unit-tested (19 cases over an
+in-memory `CacheStorage`). The same script compiles it to `public/sw.js` with `ts.transpileModule`, using
+the `typescript` already in `apps/web`'s devDependencies, so there is **no new dependency**
+(serwist/next-pwa would have been one, for a need this small). It precaches every route in every locale
+plus the whole served bank on install, serves `/content/bank/**` and `/_next/static/**` cache-first, and
+everything else network-first with a cache fallback. Its cache name carries a stamp hashed from its
+inputs, so a deploy gets a fresh cache and `activate` deletes the old one. The file may have **no runtime
+imports** — the output is a classic script — and a test compiles and runs it to hold that line.
+Registration happens **only in production builds**: under `next dev` a cache-first `/_next/static/` would
+pin stale hot-reload chunks and break the hermetic lane.
+
+**Testing it** needs a production server, which Next's own offline guide also says ("dev mode is not a
+reliable reference"). So Playwright gains an **`offline` project** on `next start` (port 3100) beside the
+hermetic `chromium` project on `next dev`. The medium lane already builds before `verify:medium`. Proven to
+bite: with the worker forced to pass everything through, all three offline cases failed with
+`net::ERR_INTERNET_DISCONNECTED`.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 1: production composition root + offline service worker)
+
+Human decisions first. This session is the **whole of Slice 1**, shipped as ordered PRs. **Gate A is
+resolved** by adopting the PRD's already-specified UI direction (Phase 2 section). This entry covers the
+first PR: the web slice.
+
+- **Composition root** (`apps/web/src/lib/container.ts`): the production path no longer throws. It wires
+  `httpBankRepository({ baseUrl: "/content", version: 1 })`, `dexieStores()`, `webCryptoIdGenerator()`,
+  a new `systemClock()` and `seededRandom(selectionSeedFor(now))` (**D58**). It is **browser-only**, and
+  its in-memory half now comes through a new bundleable `@palier/testing/in-memory` subpath (**D59**).
+- **Offline [R4]** (**D60**): `scripts/prepare-public.mjs` copies `content/bank/` into a gitignored
+  `public/content/` and compiles `src/sw/worker.ts` to `public/sw.js` (no new dependency). The worker
+  precaches every route × locale and the whole bank, and serves the bank and `/_next/static/`
+  cache-first. It registers in production builds only. `apps/web/turbo.json` makes a bank change bust the
+  web build cache. `next.config.ts` sets the `/sw.js` and bank cache headers.
+- **Tests:** `container.test.ts` runs the real production graph over `fake-indexeddb`, planning a day from
+  the **committed** bank (every planned id checked against the shards on disk). 19 worker cases run over
+  an in-memory `CacheStorage`; a compile-and-run check holds the worker to no runtime imports. Also
+  `register.test.ts`, `system-clock.test.ts`, and the `in-memory` module-graph guard. A new Playwright
+  `offline` project runs on `next start`.
+- **Evidence:**
+  - `pnpm verify` → green: 79 files, 818 tests; boundaries "no dependency violations found" (239 and 54
+    modules); coverage thresholds held.
+  - `pnpm build` → green; `pnpm --filter @palier/web bundle-size` → "shared first-load JS (gzipped):
+    165.7 KB of 180.0 KB … within budget".
+  - `pnpm test:e2e` → "12 passed": 9 hermetic smoke + 3 offline — shell reload, an unvisited `/fr/about`,
+    every bank shard.
+  - **Proven to bite:** with the worker's `strategyFor` forced to passthrough, all 3 offline cases failed
+    with `net::ERR_INTERNET_DISCONNECTED`; restored byte-identical (`cmp`) and green again.
+  - `pnpm --filter @palier/web lighthouse` → exit 0, perf & a11y ≥ 0.95 on `/en` and `/fr`, 5 runs each.
+- **Not ticked:** the [R4] exit criterion. The shell and bank work offline, but "full offline operation"
+  means *doing a session* offline, which needs the Slice 1 UI. It is ticked when journey 2 passes on the
+  `offline` project.
+- *Next, decided* → the data use cases (`exportData`/`importData`/`wipeData`).
 
 ### 24 September 2026 — `dougkeefe/continue-dev-from-progress-v3` (bank hardening + content-sequencing decision)
 

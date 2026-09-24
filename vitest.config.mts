@@ -66,7 +66,22 @@ export default defineConfig({
       workspaceProject("ui", "./packages/ui", "jsdom"),
       workspaceProject("testing", "./packages/testing"),
       workspaceProject("factory", "./apps/factory"),
-      workspaceProject("web", "./apps/web"),
+      /**
+       * `web` adds the same `fake-indexeddb` setup as `adapters`, because the
+       * composition root's production path now builds the Dexie stores, and
+       * `container.test.ts` runs that real graph in the fast lane (progress.md D59).
+       */
+      {
+        extends: true,
+        test: {
+          name: "web",
+          root: "./apps/web",
+          environment: "node",
+          include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+          exclude: ["**/node_modules/**", "**/dist/**", "src/**/*.integration.test.ts"],
+          setupFiles: [SETUP, "@palier/testing/setup"],
+        },
+      },
       /**
        * The integration project is gated by an env var rather than skipped
        * with `--project='!integration'`, because **any** `--project` filter

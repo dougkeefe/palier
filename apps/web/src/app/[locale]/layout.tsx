@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 
 import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
+import { ServiceWorkerRegistrar } from "../../components/ServiceWorkerRegistrar";
 import { routing } from "../../i18n/routing";
 
 // The design system of record. Imported once here, ahead of the app's own
@@ -54,6 +55,7 @@ export default async function LocaleLayout({
           </main>
           <Footer />
         </NextIntlClientProvider>
+        <ServiceWorkerRegistrar />
       </body>
     </html>
   );
