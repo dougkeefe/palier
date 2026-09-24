@@ -56,3 +56,6 @@ export { importData } from "./import-data.js";
 
 export type { WipeDataDeps } from "./wipe-data.js";
 export { wipeData } from "./wipe-data.js";
+
+export type { PracticeTrendDeps, PracticeTrendRequest } from "./practice-trend.js";
+export { PRACTICE_MODES, practiceTrend } from "./practice-trend.js";

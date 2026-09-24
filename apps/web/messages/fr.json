@@ -7,7 +7,9 @@
     "skipToContent": "Passer au contenu principal",
     "brand": "Palier",
     "about": "À propos",
-    "primary": "Principale"
+    "primary": "Principale",
+    "home": "Aujourd’hui",
+    "review": "Révision"
   },
   "languageToggle": {
     "otherLanguage": "English"
@@ -21,11 +23,130 @@
   "home": {
     "title": "Préparez-vous à l'Évaluation de langue seconde",
     "tagline": "Exercices de compréhension de l'écrit, d'expression écrite et d'expression orale pour l'ÉLS de la Commission de la fonction publique — sans compte, sans frais, et accessible hors ligne.",
-    "cta": "En savoir plus"
+    "cta": "En savoir plus",
+    "ctaStart": "Commencer",
+    "ctaHome": "Voir le plan du jour"
   },
   "about": {
     "title": "Ce qu'est Palier, et ce qu'il n'est pas",
     "independence": "Palier est un outil d'étude indépendant, conçu de façon ouverte. Il n'est pas l'examen, et son utilisation ne remplace pas le matériel de préparation de la Commission de la fonction publique.",
     "noRealItems": "Il ne contient aucune question d'examen réelle. Chaque question est rédigée ou générée à des fins d'exercice, et aucun résultat qu'il produit n'est officiel."
+  },
+  "common": {
+    "loading": "Chargement…",
+    "loadFailed": "Un problème est survenu au chargement de vos données d’étude. Rechargez la page pour réessayer.",
+    "backHome": "Retour au plan du jour",
+    "minutes": "{count} min"
+  },
+  "skills": {
+    "reading": "Compréhension de l’écrit",
+    "writing": "Expression écrite"
+  },
+  "bands": {
+    "items": "Items de niveau {band}"
+  },
+  "subSkills": {
+    "main-idea": "idée principale",
+    "specific-detail": "détail précis",
+    "inference": "inférence",
+    "vocabulary-in-context": "vocabulaire en contexte",
+    "cohesion-and-reference": "cohésion et référence",
+    "tone-and-intent": "ton et intention",
+    "text-structure": "structure du texte",
+    "numerical-and-tabular-detail": "données chiffrées et tableaux",
+    "verb-tense-and-mood": "temps et modes verbaux",
+    "agreement": "accords",
+    "prepositions-and-government": "prépositions et régime",
+    "pronouns": "pronoms",
+    "connectors-and-discourse-markers": "connecteurs et marqueurs de discours",
+    "register-and-formality": "registre et niveau de langue",
+    "word-choice-precision": "précision du vocabulaire",
+    "false-friends-and-anglicisms": "faux amis et anglicismes",
+    "punctuation-and-mechanics": "ponctuation et typographie",
+    "sentence-structure": "structure de la phrase"
+  },
+  "start": {
+    "title": "Préparons votre pratique",
+    "stepOf": "Étape {current} sur {total}",
+    "back": "Retour",
+    "next": "Continuer",
+    "finish": "Commencer à pratiquer",
+    "directionHeading": "Quelle langue pratiquez-vous?",
+    "directionFrench": "Le français langue seconde",
+    "directionFrenchHint": "Compréhension de l’écrit et expression écrite, visée niveau C",
+    "directionEnglish": "L’anglais langue seconde",
+    "directionEnglishHint": "Offert plus tard",
+    "localNote": "Vos progrès restent sur cet appareil. Vous pouvez les exporter ou les supprimer en tout temps.",
+    "targetHeading": "Quel niveau visez-vous?",
+    "targetB": "Niveau B",
+    "targetBHint": "Vous gérez les situations de travail courantes : la plupart des courriels, notes de service et réunions sur des sujets familiers.",
+    "targetC": "Niveau C",
+    "targetCHint": "Vous gérez des sujets complexes, abstraits et délicats, y compris les nuances, le registre et les sous-entendus.",
+    "testDateLabel": "J’ai un test prévu le (facultatif)",
+    "placementHeading": "Où en êtes-vous?",
+    "placementDiagnostic": "Faire le diagnostic",
+    "placementDiagnosticHint": "Environ 15 minutes par compétence. Il montre quels types d’items vous réussissez déjà.",
+    "placementSkip": "Plus tard",
+    "placementSkipHint": "Vous pourrez le faire plus tard à partir du plan du jour.",
+    "goalHeading": "Combien de temps par jour?",
+    "goalOption": "{minutes} minutes par jour",
+    "goalHint": "Vous pourrez changer ce choix quand vous voudrez."
+  },
+  "today": {
+    "title": "Aujourd’hui",
+    "setUpTitle": "Configurez d’abord votre pratique",
+    "setUpBody": "Deux petites questions et vous êtes prêt.",
+    "setUpAction": "Configurer",
+    "readinessTitle": "Votre tendance en pratique",
+    "readinessNote": "Taux de réussite aux items de pratique, et non un résultat d’examen. Les examens simulés viendront plus tard.",
+    "provenance": "{count, plural, one {D’après votre dernière réponse} other {D’après vos # dernières réponses}} en {skill}.",
+    "firstRunTitle": "Voyez où vous en êtes",
+    "firstRunBody": "Faites le diagnostic : cette carte montrera votre taux de réussite pour chaque niveau d’item.",
+    "firstRunAction": "Faire le diagnostic",
+    "planTitle": "Plan du jour",
+    "row_review": "Révision",
+    "row_targeted": "Pratique ciblée",
+    "row_keepSharp": "Maintien des acquis",
+    "rowDetail": "{count, plural, one {# item} other {# items}} · {minutes} min",
+    "start": "Commencer, {minutes} min",
+    "doneTitle": "Terminé pour aujourd’hui",
+    "doneBody": "Vous avez répondu à tout ce qui est offert pour le moment. De nouvelles révisions seront dues demain.",
+    "skillLabel": "Compétence",
+    "reviewTitle": "File de révision",
+    "reviewDue": "{count, plural, =0 {Rien à réviser} one {# item à réviser} other {# items à réviser}}",
+    "diagnosticAgain": "Refaire le diagnostic",
+    "testCountdown": "{days, plural, =0 {Votre test a lieu aujourd’hui} one {Votre test a lieu demain} other {# jours avant votre test}}"
+  },
+  "drill": {
+    "progress": "Item {current} sur {total}",
+    "confirm": "Confirmer",
+    "next": "Suivant",
+    "finish": "Voir les résultats",
+    "keyboardHint": "Touches : 1 à 4 pour choisir, Entrée pour confirmer.",
+    "statusCorrect": "Bonne réponse",
+    "statusIncorrect": "Mauvaise réponse",
+    "headingCorrect": "Bonne réponse",
+    "headingIncorrect": "Pas tout à fait",
+    "theAnswer": "La réponse : <target>{answer}</target>",
+    "whyChosenWrong": "Pourquoi « <target>{answer}</target> » est tentant, mais faux",
+    "theRule": "La règle",
+    "whyMatters": "Pourquoi c’est important au niveau {band} : {subSkill}.",
+    "passageLabel": "Texte à lire",
+    "recordFailed": "Votre réponse n’a pas pu être enregistrée. Essayez de confirmer de nouveau.",
+    "completeTitle": "Série terminée",
+    "summary": "{correct} sur {answered} bonnes réponses.",
+    "nothingTitle": "Rien à pratiquer pour le moment",
+    "nothingBody": "Vous avez vu récemment tous les items offerts. Revenez demain pour vos révisions."
+  },
+  "diagnostic": {
+    "title": "Diagnostic",
+    "intro": "Environ {count, plural, one {# item} other {# items}}, tirés de tous les niveaux. Aucune rétroaction avant la fin : vous voyez où vous en êtes plutôt que d’apprendre en chemin.",
+    "chooseSkill": "Choisissez une compétence",
+    "start": "Commencer le diagnostic : {skill}",
+    "resultTitle": "Votre diagnostic : {skill}",
+    "estimate": "{accuracy} % de bonnes réponses, vraisemblablement entre {low} % et {high} %",
+    "insufficient": "{attempted} réponses. {needed, plural, one {Il en faut # de plus} other {Il en faut # de plus}} avant d’afficher un taux.",
+    "resultNote": "Il s’agit du taux de réussite aux items de pratique, avec sa marge probable, et non d’un niveau. Seul un examen simulé complet peut donner un niveau.",
+    "toToday": "Voir le plan du jour"
   }
 }

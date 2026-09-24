@@ -48,6 +48,10 @@ test("header focus order is skip link, brand, then nav", async ({ page }) => {
   await expect(page.locator(".app-skip-link")).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(page.locator(".app-header__brand")).toBeFocused();
+  // The nav's first link. "Today" joined the nav ahead of "About" with the Slice 1
+  // screens; the order under test — skip link, brand, then nav — is unchanged.
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("link", { name: "Today", exact: true })).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: "About" })).toBeFocused();
 });

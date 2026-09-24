@@ -119,6 +119,24 @@
   color: var(--incorrect);
 }
 
+/* ---- McqItem (the item renderer: the stem, then the options as one column) ---- */
+
+.pl-item {
+  display: grid;
+  gap: 12px;
+}
+
+.pl-item__stem {
+  font-size: 1.1875rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.pl-item [role="radiogroup"] {
+  display: grid;
+  gap: 8px;
+}
+
 /* ---- ProgressRail ---------------------------------------------------------- */
 
 .pl-rail {
@@ -191,12 +209,140 @@
   font-weight: 600;
 }
 
+/* ---- BandMeter (§8.2: the point estimate solid, its interval a lighter band) --- */
+
+.pl-band-meter {
+  display: grid;
+  gap: 4px;
+}
+
+.pl-band-meter__label {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.pl-band-meter__track {
+  position: relative;
+  height: 12px;
+  background-color: color-mix(in srgb, var(--ink) 10%, transparent);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.pl-band-meter__range {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background-color: color-mix(in srgb, var(--primary) 30%, transparent);
+}
+
+.pl-band-meter__fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-color: var(--primary);
+  border-radius: 999px;
+  transition: width 400ms cubic-bezier(0.2, 0, 0, 1); /* the meter filling, §10.5 */
+}
+
+/* The text carries the value; the bar is its picture, never the only signal. */
+.pl-band-meter__text {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+/* ---- Sheet (§8.3: the feedback panel slides up; tone is glyph + colour) ------- */
+
+.pl-sheet {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background-color: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  border-top-width: 4px;
+  border-radius: 12px;
+  box-shadow: 0 -8px 24px color-mix(in srgb, var(--ink) 8%, transparent);
+  animation: pl-sheet-in 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pl-sheet--correct {
+  border-top-color: var(--correct);
+}
+
+.pl-sheet--incorrect {
+  border-top-color: var(--incorrect);
+}
+
+.pl-sheet__heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--ink);
+}
+
+.pl-sheet__heading:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.pl-sheet--correct .pl-sheet__glyph {
+  color: var(--correct);
+}
+
+.pl-sheet--incorrect .pl-sheet__glyph {
+  color: var(--incorrect);
+}
+
+.pl-sheet__action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Movement only, no fade: a fading panel is low-contrast text for its first frames,
+   which fails 1.4.3 while it lasts (and axe, rightly, catches it). */
+@keyframes pl-sheet-in {
+  from {
+    transform: translateY(16px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* ---- Passage (§8.3, §10.3: a document, not chrome — serif, 19px, 1.65, 66ch) --- */
+
+.pl-passage {
+  max-width: 66ch;
+  font-family: "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  font-size: 1.1875rem;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.pl-passage__title {
+  font-size: 1.1875rem;
+  margin: 0 0 8px;
+}
+
+.pl-passage__paragraph {
+  margin: 0 0 12px;
+}
+
 /* ---- Motion (§10.5: respect prefers-reduced-motion) ------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
   .pl-btn,
   .pl-option,
-  .pl-rail__fill {
+  .pl-rail__fill,
+  .pl-band-meter__fill {
     transition-duration: 0.01ms;
+  }
+
+  /* Instant, with no loss of information (§10.5). */
+  .pl-sheet {
+    animation: none;
   }
 }

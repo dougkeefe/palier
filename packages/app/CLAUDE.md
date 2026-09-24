@@ -53,6 +53,10 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   record**: attempts merge as a union, and everything else is added only where the device has
   no record of that key. A smarter merge is Gate B's question (D43), so import must not answer
   it (progress.md D62). **`wipeData` keeps the device secret** (D50).
+- **Two trend readouts, each named for its evidence.** `diagnosticReadout` reads diagnostic
+  attempts only (D47); `practiceTrend` reads drill, review and diagnostic attempts and **never exam
+  attempts**, because the readiness card keeps the exam result and the practice trend visually
+  distinct (§8.2, progress.md D64). Do not merge them behind a flag.
 - **Use cases live under `src/use-cases/`**, one file per use case, each a plain async
   function `(request, deps)` where `deps` are the collaborators the composition root supplies.
   They are **pure orchestration**: read the ports, call one or more engine functions, return a

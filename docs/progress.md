@@ -10,7 +10,8 @@ The web slice has landed too: the production composition root wires the real ada
 worker makes the app and the bank work offline after one load (D58–D60). **Gate A is resolved** (adopt
 the PRD's UI direction).
 The data use cases (`exportData`/`importData`/`wipeData`) have landed too (D61, D62).
-**Next step:** the single-device **UI**, part 1 (drill, diagnostic, home). See [Next, decided](#next-decided). The **full-volume published
+The single-device UI's first half has landed too: onboarding, today, the drill, the diagnostic (D63–D65).
+**Next step:** the UI's second half: review, progress, settings/data, item reporting. See [Next, decided](#next-decided). The **full-volume published
 bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
 feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
 (D56).
@@ -189,39 +190,36 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next slice: Slice 1's UI, part 1 — the container provider, the drill session and the diagnostic, with
-`/home`.**
+**Next slice: Slice 1's UI, part 2 — `/review`, `/progress`, `/settings/data` and item reporting. With
+it, Slice 1 is complete.**
 
-The web slice and the data use cases have landed (session log, 24 September 2026, `dougkeefe/algiers`;
-D58–D62). Gate A is resolved: the UI follows the PRD's §8/§10/§11/§14 direction (Phase 2 section). Every
-use case the single-device app needs now exists and is bound in `buildUseCases`, so what is left is the
-UI.
+Part 1 landed (session log, 24 September 2026, `dougkeefe/algiers`; D63–D65): the container provider,
+onboarding, `/home`, the drill with its feedback panel, and the diagnostic, plus E2E journeys 1 and 2 on
+the hermetic project and journey 2 **offline** on the production project ([R4] exit criterion ticked).
+What is left of Slice 1 is the four surfaces below. Every use case they need already exists and is bound
+in `buildUseCases`.
 
 **The slice, concretely:**
 
-- `apps/web/src/components/ContainerProvider.tsx` (`"use client"`): builds `createContainer` **once in
-  the browser** after hydration, because the production graph is browser-only (D59). The server layout
-  passes `hermetic` from `readEnv()`. Import the container module lazily, so the adapters stay out of the
-  shared first-load JS the bundle budget measures.
-- The `@palier/ui` pieces those screens need, as pure logic in `.ts` plus a thin `.tsx`: **BandMeter**
-  (accuracy with the Wilson interval as a lighter extension, §8.2), **Sheet** (the feedback panel,
-  §8.3), **Toast**.
-- **The drill** (`/[locale]/practice/[skill]`, §8.3): progress rail, `itemRenderers[item.type]`,
-  select-then-confirm, the feedback sheet with the rationale for the chosen option, keyboard 1–4/Enter/
-  arrows, and focus to the feedback heading then to the next item (§11). It drives `startSession` →
-  `answerItem` → `completeSession`, with ids minted by `ids.ulid()`.
-- **The diagnostic** (§6.2): a `runDiagnostic` set answered in `mode: "diagnostic"`, then
-  `diagnosticReadout` shown as accuracy per band tag with its interval.
-- **`/home`** (§8.2): Zone A readiness (practice trend, a first-run invitation to the diagnostic, §14),
-  Zone B today's plan with one "Start" action, and Zone C a review-queue link with its count. When a
-  same-day re-plan is empty (D62's finding), show **"done for today"**, not an error.
-- Every string in `messages/{en,fr}.json` at parity, and target-language content marked `lang="fr"`.
-- **Done when:** `pnpm verify` green; E2E journeys 1 and 2 pass on the hermetic project; journey 2
-  passes **offline** on the `offline` project (which ticks the [R4] exit criterion); axe is clean on the
-  drill's feedback-open state; the bundle stays under budget.
-
-Then part 2: `/review`, `/progress` (with export), `/settings/data` (export/import/wipe) and item
-reporting, plus E2E journeys 6 and 7 and Lighthouse on the new routes. That completes Slice 1.
+- **`/review`** (§8.8): the due stack from `ScheduleStore.due(now)`, with a count and an estimated time,
+  drilled through the same `PracticeSession` loop in `mode: "review"`. Its items come from `items.byIds`
+  over the due entries, not from a plan. A satisfying **empty state** when nothing is due (§14: "Nothing
+  due. Come back tomorrow, or do a set anyway."), with a minimal static Coco. The home card's "Review
+  queue" becomes a link to it, and it joins the header nav.
+- **`/progress`** (§8.9): `practiceTrend` per skill as `TrendMeters`, accuracy by sub-skill, items
+  answered, the honest "what this does and does not tell you" panel, and **Export to JSON** (`exportData`
+  → a downloaded file).
+- **`/settings/data`** (§8.11's danger zone, [R11]): export, import (a file input → `importData`, with
+  the counts reported through a new `@palier/ui` **Toast**; an `InvalidExportError` shown plainly), and
+  **delete everything** behind a confirmation (`wipeData`), with the plain no-recovery sentence.
+- **Item reporting** (§13.0): a one-tap flag on the feedback sheet with the four reason codes, opening a
+  prefilled GitHub new-issue URL with the item id and reason (the zero-backend path). The repository URL
+  goes in one constant.
+- **Done when:** `pnpm verify` green; E2E journeys **6** (export → wipe → import, state matches) and **7**
+  (offline mid-session: go offline during a drill, finish it; the sync half is Slice 2) pass; axe clean on
+  the review empty state, the delete confirmation and the import result; Lighthouse ≥ 95 on the new routes.
+  Then tick Slice 1 and rewrite this section to **Gate B** (the D43 merge decision, a human call) as the
+  next step.
 
 **Standing human gates (do not self-direct):**
 
@@ -303,7 +301,7 @@ session-log evidence; nothing is ticked without it.
 - [ ] `adapters/vault` and `adapters/sync`: device secret, pairing by code, push/pull, watermarks, offline queue — **gated on the `ScheduleEntry` merge decision** (D43)
 - [ ] Sync backend: Postgres + Drizzle, sync/device routes, pairing, rate limiting (ADR 5)
 - [~] `@palier/app` use cases: `StartSession`, `AnswerItem`, `CompleteSession`, `RunDiagnostic` landed (20–21 September 2026); `ExportData`, `ImportData`, `WipeData` landed (24 September 2026, `dougkeefe/algiers`; D61, D62); `SyncNow` remains (Slice 2)
-- [ ] UI: onboarding, home + readiness card, today's plan, the drill/feedback panel, review queue, progress, settings (sync + data, pairing flow)
+- [~] UI: onboarding, home + readiness card, today's plan, the drill/feedback panel and the diagnostic **landed** (24 September 2026, `dougkeefe/algiers`; D63–D65); review queue, progress, settings/data remain (Slice 1 part 2); the sync + pairing settings are Slice 2
 - [ ] Item reporting control and the GitHub issue path
 - [ ] The sync simulator (tier 5): two/three-device scenarios, seeded faults, convergence assertions
 - [ ] Every real adapter passes its port contract suite — `bank` now does; `dexie`/`ids` already did
@@ -311,7 +309,7 @@ session-log evidence; nothing is ticked without it.
 **Exit criteria** (the actual gate)
 
 - [ ] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]
-- [ ] Full offline operation after first load [R4]
+- [x] Full offline operation after first load [R4] — for everything Phase 2 builds: journey 2 (a whole drill session) passes with the network off after one online load, over real IndexedDB and the service-worker-cached bank (session log, 24 September 2026). Mock exams are Phase 3, and their offline run is Phase 3's journey 3
 - [ ] Engine unit tests exhaustive at every boundary, golden fixtures locked
 - [ ] Sync simulator passes several hundred seeds including full partition and heal, no lost or duplicated attempts
 - [ ] Every adapter passes its port contract suite
@@ -319,8 +317,8 @@ session-log evidence; nothing is ticked without it.
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
 carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
 `implementation-plan.md` §7 Phase 2 "Completion slices" — **keep the two in sync** (the fuller scope
-and each slice's *done* live in the plan). Current position: **Slice 1** — composition root, service worker
-and data use cases landed; the UI is *Next, decided* (Gate A resolved).
+and each slice's *done* live in the plan). Current position: **Slice 1** — composition root, service worker,
+data use cases and the UI's first half landed; the second half is *Next, decided*.
 
 - [~] **Slice 1 — Single-device practice app, offline-complete.** Composition-root wiring of
   bank/dexie/ids + service-worker offline cache [R4] **(landed, D58–D60)** +
@@ -395,13 +393,13 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | R1 | Practises all three tested skills | 2, 5, 6 | not started |
 | R2 | Format and register match the real tests | 1 | not started |
 | R3 | Mock exams mirror published structure and cuts | 3 | not started |
-| R4 | Works with no key and offline after first load | 2 | not started |
+| R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams are Phase 3 |
 | R5 | Never presents as official | 0, 7 | not started |
 | R6 | No real test items, no PSC reproduction | 1 | not started |
 | R7 | Rationale per option, explanation per item | 1 | not started |
 | R8 | Fully bilingual, equal prominence | 0, 1, 7 | not started |
 | R9 | WCAG 2.2 AA | 0, all | not started |
-| R10 | No estimate without evidence and uncertainty | 2 | not started |
+| R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
 | R11 | Export, import, delete, each in one action | 2, 7 | not started |
 | R12 | Key, audio, transcripts and submissions stay local | 4, 5 | not started |
 | R13 | Free and open source | 0, 7 | not started |
@@ -1099,7 +1097,7 @@ half the items, and degrades gracefully when one unavoidably dominates (the all-
 case is a unit test). `now`/`random` are primitives throughout (D32).
 
 ### D34 — The Planner budgets in item counts, not minutes
-**Date:** 20 September 2026 · **Status:** open, revisit if a per-item duration ever earns a home
+**Date:** 20 September 2026 · **Status:** RESOLVED 24 September 2026 by D63 (the minute→count model landed at the caller, `planDay` unchanged)
 
 `architecture.md` §7.4 writes the daily plan as shares "of the daily minute goal" — due reviews
 capped at 40% of it, new items ~40%, maintenance ~20%. There is **no per-item duration** anywhere:
@@ -1886,11 +1884,103 @@ items), one full session answers every reading item. The planner then excludes t
 wrong answers are not due until tomorrow, so **a same-day re-plan is empty.** That is correct
 behaviour, not a bug. The home screen must present it as "done for today", not as an error.
 
+### D63 — the daily goal becomes a session size at the caller: about 1.5 minutes an item
+**Date:** 24 September 2026 · **Status:** accepted; resolves D34's revisit
+
+D34 left the planner budgeting in items and named its own trigger: "revisit when a real minutes-per-day
+goal in the UI needs converting to counts". Onboarding's daily goal (§8.1: 10, 20 or 30 minutes) is that
+goal. The conversion is `sessionSizeFor(goalMinutes)` in `apps/web/src/lib/study.ts`: one heuristic,
+**1.5 minutes per item** (answer plus feedback), a floor of five items, so 10/20/30 → 7/13/20. It sits
+behind the unchanged `planDay(sessionSize)` seam, exactly as D34 said the fix would, and `planDay` does not
+change. It is a study heuristic in D34's own sense, not a published exam rule, so it is code, not profile
+(ADR 9). **Principle 8's measurable replacement** is the user's own `msToConfirm` timings once there are
+enough of them to fit — the same bar ADR 8 and D40 set for `slow`. The diagnostic's size is §6.2's 30 per
+skill, caller-sized as D47 says; a smaller bank yields every item it has.
+
+### D64 — `practiceTrend`, a sibling of `diagnosticReadout` for the readiness card
+**Date:** 24 September 2026 · **Status:** accepted
+
+§8.2's readiness card is "your practice trend, *always*", so drills must move it. But the only trend use
+case, `diagnosticReadout`, reads diagnostic attempts alone (D47). `practiceTrend` is its sibling: the
+same thin wrapper over `calculateTrend`, over **drill, review and diagnostic** attempts, and **excluding
+exam attempts**, because §8.2 keeps the exam result and the practice trend "visually distinct" and folding
+one into the other would erase that line. A sibling rather than a mode flag on `diagnosticReadout`, because
+each name then says exactly which evidence it reads. `MIN_EVIDENCE` is 30 per band tag, so with the
+10-item baseline bank every band honestly reads "insufficient" (R10), and the card says how many more
+answers each band needs.
+
+### D65 — the Slice 1 UI's calls where the PRD and the requirements pull apart
+**Date:** 24 September 2026 · **Status:** accepted
+
+Gate A adopted the PRD's direction. Building it forced these calls, each recorded so it is not re-litigated:
+
+- **The drill keeps the header and footer.** §8.3 says "no navigation chrome", but R5 puts the
+  non-affiliation statement on every page and WCAG 3.2.6 wants help and controls in the same place on every
+  page. The requirement wins over the design note. The drill is still single-column and focused, with its
+  Confirm action bottom-anchored.
+- **The feedback sheet slides but does not fade.** Its first draft faded in from `opacity: 0`, and axe caught
+  every word in it at contrast 1.23 during the fade. That is a real 1.4.3 failure for 200 ms, not a test
+  artefact. `transform` only.
+- **The drill's keys (1–4, Enter) listen on the window**, not the session element, because focus is on the
+  page body when an item first appears. Enter on a real button or link is left to that control; Enter on an
+  option radio confirms.
+- **A diagnostic gives no feedback per item.** It is placement, so it measures rather than teaches (§6.2),
+  and the readout comes at the end.
+- **One static route per skill** (`/practice/reading`, `/practice/writing`), not a dynamic `[skill]`
+  segment, so the service worker can precache each by name (D60).
+- **Deferred, not dropped:** self-hosted fonts (Source Serif 4 is named first in the passage stack, so a
+  font added in Phase 7 needs no CSS change); Coco; streak/XP (§9); onboarding step 5, the key (Phase 4);
+  English as a target language (offered as "coming later", Phase 8). The §8.1 line "your progress syncs"
+  is replaced by "your progress stays on this device" until sync exists (Slice 2): the PRD's copy would be
+  false today.
+- **`slow` is always `false`** (D40: no threshold until there is timing data). The shaky-answer signal
+  travels as `changedAnswer`.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 3: the UI's first half — onboarding, today, drill, diagnostic)
+
+The third PR of Slice 1, and the first UI, built to the PRD direction Gate A adopted.
+
+- **Screens** (static RSC shells, one client island each): `/start` (onboarding steps 1–4, §8.1),
+  `/home` (readiness card from the new `practiceTrend`, **D64**; today's plan as §8.2's rows; "done for
+  today" for D62's empty re-plan; the review count; the test-date countdown), `/practice/reading` and
+  `/practice/writing` (the drill: select-then-confirm, the feedback sheet with the answer, both rationales,
+  the rule and the sub-skill, keyboard 1–4/Enter, focus to the sheet heading and back to the options),
+  and `/diagnostic` (coverage sample, no per-item feedback, a readout per band with its interval).
+- **`ContainerProvider`** builds the browser-only container once after hydration, importing it lazily
+  (shared first-load JS unchanged). The daily goal becomes a session size behind `planDay`'s seam
+  (**D63**, which resolves D34). The UI calls where the PRD and the requirements disagreed are **D65**.
+- **`@palier/ui`:** `BandMeter`, `Sheet`, `Passage` (+ `bandMeterGeometry`, `sheetState`, tested).
+  `McqItem`'s layout CSS moved into the package, where its component lives.
+- **Logic in tested `.ts`:** the drill state machine (timings, changed-answer, the key map), the study
+  profile and session sizing, onboarding's steps, the trend lines. All strings are in
+  `messages/{en,fr}.json` at parity, including the 18 sub-skill names.
+- **Found by the gates, and fixed at the source:** axe failed the feedback sheet at contrast 1.23, because
+  its slide-in faded in from `opacity: 0`; it now moves without fading (D65). Lint's
+  `react-hooks/set-state-in-effect` flagged two state resets inside effects; the loaded data is now keyed
+  by what it was loaded for. The drill's keys only worked while focus was inside the session; they now
+  listen on the window.
+- **One existing test's expectation moved, and why:** `smoke.spec.ts` "header focus order is skip link,
+  brand, then nav" expected the third Tab stop to be "About". The new "Today" link is now the nav's first
+  item, so the test expects "Today" then "About". The order it guards (skip link, brand, nav) is unchanged.
+- **Evidence:**
+  - `pnpm verify` → green: 85 files, 919 tests; boundaries clean (249 and 73 modules); thresholds held.
+  - `pnpm build` → all 9 routes prerendered; `bundle-size` → "165.7 KB of 180.0 KB … within budget"
+    (unchanged, so the lazy container import works).
+  - `pnpm test:e2e` from a **cold** dev cache → "18 passed": 9 smoke; 5 journeys (journey 1, journey 2
+    with axe on the feedback-open state, focus-on-advance, first-run set-up, French parity); 4 offline,
+    including **journey 2 with the network off, start to finish**, which ticks the [R4] exit criterion.
+  - **Honesty note:** one earlier cold run failed 13 tests on dev-server 500s and did not reproduce in
+    three cold re-runs. It came straight after I had `pkill`ed a hand-started dev server on port 3000,
+    which Playwright reuses outside CI, so a half-stopped server is the likely cause. If it recurs in CI,
+    it is real and wants chasing, not retrying.
+  - `pnpm --filter @palier/web lighthouse`, with `/en/start`, `/en/home` and `/fr/practice/reading` added to
+    `lighthouserc.json` → exit 0; median performance **1.0** and accessibility **1.0** on all 5 routes (25 runs).
 
 ### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 2: `exportData` / `importData` / `wipeData`)
 

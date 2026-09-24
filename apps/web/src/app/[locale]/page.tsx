@@ -20,9 +20,17 @@ export default function HomePage({ params }: PageProps<"/[locale]">) {
     <section className="app-hero">
       <h1 className="app-hero__title">{t("title")}</h1>
       <p className="app-hero__tagline">{t("tagline")}</p>
-      <Link href="/about" className={`${buttonClass("primary")} pl-focusable`}>
-        {t("cta")}
-      </Link>
+      <div className="app-actions">
+        <Link href="/start" className={`${buttonClass("primary")} pl-focusable`}>
+          {t("ctaStart")}
+        </Link>
+        <Link href="/home" className={`${buttonClass("secondary")} pl-focusable`}>
+          {t("ctaHome")}
+        </Link>
+        <Link href="/about" className={`${buttonClass("ghost")} pl-focusable`}>
+          {t("cta")}
+        </Link>
+      </div>
     </section>
   );
 }

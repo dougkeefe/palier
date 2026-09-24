@@ -27,6 +27,12 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   (`PALIER_HERMETIC=1`) wires the in-memory ports and the fixture bank. Both come through
   `@palier/testing/in-memory`, never the root entry point, which a browser cannot bundle
   (it re-exports vitest-based contract suites, `msw/node` and PGlite — D59).
+- **Islands get the container from `ContainerProvider`** (`src/components/`), which builds it once
+  in the browser after hydration and imports the container module lazily, so the adapters stay out of
+  the shared first-load JS. The layout passes `hermetic` from the environment. Screens are static RSC
+  shells around one client island each (`/start`, `/home`, `/diagnostic`, `/practice/{reading,writing}`).
+  The islands' decisions live in tested `.ts` beside them (`src/features/**`, `src/lib/study.ts`); a
+  `.tsx` holds rendering and effects only.
 - **`public/content/` and `public/sw.js` are generated, gitignored and never edited.**
   `scripts/prepare-public.mjs` runs before `dev` and `build`: it copies `content/bank/` and
   compiles the service worker from `src/sw/worker.ts` (D60). That file may have **no runtime

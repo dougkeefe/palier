@@ -1,5 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
+import { drillThroughByKeyboard, onboard } from "./helpers";
+
 /**
  * [R4]: "must work with no API key and no network after first load." Runs against a
  * production server (the `offline` project), because the service worker registers
@@ -62,4 +64,30 @@ test("every shard of the served bank is readable offline, not only the ones fetc
   expect(result.files).toBeGreaterThan(0);
   expect(result.allOk).toBe(true);
   expect(result.firstShardItems).toBeGreaterThan(0);
+});
+
+/**
+ * Journey 2 with the network off — the case that makes [R4] true rather than only the
+ * shell. Onboarding happens online, so the profile is in IndexedDB. Then, offline, a
+ * full page load of a drill comes from the worker's cache, the bank from its cached
+ * shards and the progress from IndexedDB, and a whole session runs to its end.
+ */
+test("journey 2 offline: after one online load, a whole daily session runs with the network off", async ({
+  page,
+  context,
+}) => {
+  await onboard(page, "skip");
+  await expect(page).toHaveURL(/\/en\/home$/);
+  await waitForOfflineReady(page);
+
+  await context.setOffline(true);
+  await page.goto("/en/practice/reading");
+  const total = await drillThroughByKeyboard(page);
+  expect(total).toBeGreaterThan(0);
+  await expect(page.getByRole("heading", { name: "Set complete" })).toBeVisible();
+
+  // Today still opens offline, reading the session just finished back from IndexedDB.
+  await page.goto("/en/home");
+  await expect(page.getByRole("heading", { name: "Today’s plan" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Review queue" })).toBeVisible();
 });
