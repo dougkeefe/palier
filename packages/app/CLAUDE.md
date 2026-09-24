@@ -18,6 +18,14 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the
   `AiProvider`/`SyncTransport`/`TelemetrySink` trio (need net-new domain types) are deferred
   to their own sessions — deciding them is a decision to record, not a gap to fill quietly.
+  **`AiProvider` has now partly landed** (`ports/ai-provider.ts`, Phase 1): the factory-facing
+  subset `capabilities`/`generatePassage`/`generateItems`/`reviewItem`/`lastUsage`. §3.3 is
+  amended in place with two D-log decisions — `generatePassage` is added (content-factory.md
+  §4.2 needs it) and `generateItems`/`generatePassage` return **drafts**, not assembled
+  `Item[]`/`Passage[]`, so id-minting and provenance stay the factory's job, not the adapter's.
+  Its DTOs live in `@palier/domain`, not here (ADR 20). `assessWriting`/`assessOral`/
+  `transcribe`/`openVoiceSession` and `SyncTransport`/`TelemetrySink`/`OralStore` are still
+  deferred to their phases.
   `IdGenerator` is a *ninth* port §3.3 does not name at all, decided here (progress.md D48):
   `{ ulid(): string }`, content-agnostic — it mints the id, the caller brands it
   (`attemptId(gen.ulid())`). It exists because nothing in the app may mint an id (`ids.ts`,

@@ -1,13 +1,13 @@
 # Palier: Progress
 
-**Last updated:** 21 September 2026
-**Current phase:** 0→2 boundary — every Phase-0 gate built; the pure `@palier/engine` core, the
-full `@palier/app` practice loop (incl. `RunDiagnostic`), and now **two `@palier/adapters`
-directories** (`/ids` and `/dexie` — the five local store ports over IndexedDB, incl. the
-encrypted `KeyVault`) are built ahead of / into Phase 2
-**Next step:** **full Phase 1 — the automated content factory** (build the 5-stage pipeline in
-`apps/factory` + `adapters/openai`, fully automated gates per **ADR 19**, run a small sample batch
-end to end). See [Next, decided](#next-decided).
+**Last updated:** 23 September 2026
+**Current phase:** **Phase 1 built (automated content factory, ADR 19).** The `adapters/openai`
+`AiProvider`, the five-stage `apps/factory` CLI pipeline, the review-gate defect eval set, and a
+committed reproducible sample batch are all in place, gated automatically. Phase 0 gates, the pure
+`@palier/engine` core, the full `@palier/app` practice loop and the `/ids`+`/dexie` adapters remain
+built ahead of Phase 2.
+**Next step:** the **deferred full-volume paid content run** (500–700 items on a funded OpenAI key),
+then Phase 2. See [Next, decided](#next-decided).
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -82,9 +82,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/osaka-v1` | **`adapters/dexie`** — the five local store ports (`AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`, `KeyVault`) over IndexedDB at schema v1, each behind its contract suite; the encrypted `KeyVault` built now (not deferred to Phase 4) with the key-leak test. Deviations **D49**/**D50**; opens `./dexie` (D3), second `adapters` element (D5) | 21 September 2026 |
+| `dougkeefe/lilongwe` | **Full Phase 1 — the automated content factory (ADR 19).** `adapters/openai` (the `AiProvider` port, over `fetch`), the five-stage `apps/factory` CLI, the 50-item review-gate defect eval set, and a committed reproducible sample batch. Deviations **D52**–**D54**; **ADR 20** (AI DTOs in `@palier/domain`); opens `./openai` (D3), `adapters-openai` element (D5) | 23 September 2026 |
 
-*(The prior row — the `/ids` slice — merged as #15 and was removed; the In-flight table
+*(The prior row — the `adapters/dexie` slice — merged as #16 and was removed; the In-flight table
 tracks current work, not history, and the session log below is the permanent record.)*
 
 ---
@@ -182,55 +182,44 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next slice: full Phase 1 — the automated content factory (ADR 19, human-directed).**
+**Next slice: `adapters/bank` — the `ItemRepository` over the committed bank shards (Phase 2).**
 
-Phase 1 has been redirected (D51, ADR 19). It is now a **fully automated** content pipeline with no
-human in the quality loop at this stage: the bank is machine-generated from public GC sources
-(ADR 6; `content-factory.md` §4.1–§4.2) and gated by cross-family adversarial review (§4.4) plus
-deterministic validation (§4.5) alone. The week-one two-reader test and the 5% human sample are
-dropped; the human register check is deferred to the Phase 7 [R8] gate. The licence/originality
-rules (§4.1 reject unclear licences, §4.2 quote nothing) and R6 (no PSC reproduction) are
-non-negotiable and unchanged.
+Phase 1 is built (session log, 23 September 2026). The next *buildable* slice — content-agnostic,
+self-directable, and now unblocked because the bank build produces a real manifest+shard layout — is
+the fourth of the five §3.2 adapter directories: `adapters/bank`.
 
-**The slice, concretely** (`implementation-plan.md` §7 Phase 1 has the detail):
+**The slice, concretely:**
 
-1. **`adapters/openai`** — the `AiProvider` adapter (resequenced here from Phase 4, because the
-   factory cannot run without it): model config as data, structured outputs with client-side
-   re-validation, retry, the anti-corruption translation layer. Held to its port contract; every AI
-   response Zod-parsed at the edge (`architecture.md` §8.2). Follows the `/ids`, `/dexie` adapter
-   pattern.
-2. **The five-stage pipeline as a CLI in `apps/factory`** — harvest (public GC sources + a licence
-   determination per source) → passage construction (original, band-tagged, nothing quoted) → item
-   drafting via the item type registry's prompt spec → cross-family review blind to the key →
-   deterministic validation → bank build into content-hashed shards.
-3. **The review-gate evaluation set** — 40–60 deliberately-defective items authored *as test
-   fixtures* (a broken item is a fixture, not expert content), the only direct measure of the gate.
-4. **Run a small sample batch (tens of items) end to end**, committed with its metrics. The
-   full-volume paid run to 500–700 items is a **deferred follow-on**, gated on the small run passing
-   and a funded key (chosen scope: build now, small run).
+- Implement the `ItemRepository` port (`@palier/app` §3.3) in `packages/adapters/src/bank/`, opening
+  the `./bank` subpath (D3) and a new `adapters-bank` eslint-boundaries element (D5): `byIds`, `query`
+  (`ItemCriteria`: skill/subSkill/band/exclude/limit, conjunction, per D20), `passage`, `form`,
+  `scenario`, `bankVersion`. Fetch the manifest, lazily fetch only the shards a query needs, cache by
+  content hash. Vendor-free public surface, no type escaping the boundary (adapters/CLAUDE.md).
+- Held to `itemRepositoryContract` from `@palier/testing` (the same suite the in-memory repo passes),
+  plus adapter-specific tests for manifest fetch, lazy shard loading and the content-hash cache. Use
+  MSW to serve the shard files. The committed `content/bank/v1/` from Phase 1 is a ready fixture, as is
+  the canonical fixture bank.
+- **Done when:** `pnpm verify` green; `itemRepositoryContract` passes against the real bank repo; a
+  query fetches only the shards it needs (asserted); the service-worker/content-hash cache keying is
+  unit-tested. The service-worker registration itself is `apps/web` wiring and can follow in the web slice.
 
-**Exit criteria (automated):** pipeline runs end to end producing a committed sample batch (all
-schema-valid, `validate()`-clean, licence-cleared); review-gate detection ≥90% per defect class on
-the eval set; stage-4 yield 45–75%; deterministic validation + bank-build reproducibility green in
-CI; cost per accepted item measured.
+The shard **layout is fixed** by the Phase-1 bank build (`bank/v{n}/manifest.json`,
+`bank/v{n}/{lang}/{skill}/{hash}.json`, `bank/v{n}/passages/{hash}.json`, `bank/v{n}/forms/{id}.json`),
+so the repo reads that manifest — no new content decision required.
 
-**Note for the implementer:** this is a large, multi-part slice — plan it out before building
-(`apps/factory` is currently an empty stub, and `adapters/openai` does not exist). It needs a
-funded OpenAI key even for the small run (ADR 2); if none is available when you start, build against
-a mock/recorded AI adapter and leave the real run as the final step.
+**Standing human gates (do not self-direct):**
 
-**Still genuinely human-gated (separate from Phase 1, do not self-direct):**
+- **The deferred full-volume paid content run (D54, the real Phase-1 payoff).** Needs a funded OpenAI
+  key (ADR 2) and verified model ids in `apps/factory/config/models.json`. This is the run that
+  actually tests A1/A2/A3 and produces a publishable bank; until it happens, the committed sample is
+  synthetic and D54 stays open.
+- **Product and UI direction** (§7 Phase 2) — onboarding, readiness card, drill/feedback, review queue,
+  settings, pairing. Design decisions, not derivations.
+- **The `adapters/sync` `ScheduleEntry` merge (D43)** — add `updatedAt`, take the lower Leitner box, or
+  treat the schedule as device-local. Gates the sync adapter.
 
-- **Product and UI direction** (§7 Phase 2) — onboarding, readiness card, drill/feedback, review
-  queue, settings, pairing. Design decisions, not derivations.
-- **The `adapters/sync` `ScheduleEntry` merge (D43)** — add `updatedAt`, take the lower Leitner box,
-  or treat the schedule as device-local. Gates the sync adapter.
-- **`adapters/bank`** (the `ItemRepository`: manifest fetch, lazy shards, service-worker cache) is a
-  content-agnostic Phase 2 slice buildable against fixtures whenever chosen; it is no longer *the*
-  next slice, having been superseded by the Phase 1 redirect.
-
-Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's
-table before launch) and the name/domain decision in §12.1.
+Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's table
+before launch) and the name/domain decision in §12.1.
 
 ---
 
@@ -246,16 +235,23 @@ Pipeline spec is `content-factory.md`. §7 is the schedule and the decision poin
 **Fully automated — no human in the quality loop at this stage (ADR 19, D51).** Machine-generated
 from public GC sources (ADR 6); gated by cross-family review + deterministic validation alone.
 
-- [ ] `adapters/openai` — the `AiProvider` adapter (resequenced from Phase 4), Zod-parsed at the edge, contract-tested
-- [ ] The 5-stage CLI pipeline in `apps/factory`: harvest (licence-cleared public GC sources) → passages (original, nothing quoted) → draft → cross-family review → deterministic validation → bank build
-- [ ] Review-gate evaluation set (40–60 deliberately-defective items, authored as test fixtures)
-- [ ] A small sample batch (tens of items) run end to end and committed with its metrics
-- [ ] Review gate detection ≥ 90 percent in **every** defect class on the eval set (phase bar; 80 percent ongoing)
-- [ ] Stage 4 yield between 45 and 75 percent on the sample
-- [ ] Deterministic validation + bank-build reproducibility green in CI
-- [ ] Cost per accepted item measured on the sample run
+- [x] `adapters/openai` — the `AiProvider` adapter (resequenced from Phase 4), Zod-parsed at the edge, contract-tested. Over `fetch`, not the SDK (D53); held to `aiProviderContract` + retry/error-translation/usage tests. `./openai` subpath live (D3)
+- [x] The 5-stage CLI pipeline in `apps/factory`: harvest (licence-cleared public GC sources) → passages (original, nothing quoted) → draft → cross-family review → deterministic validation → bank build. Each stage a pure function with a naming test
+- [x] Review-gate evaluation set (50 deliberately-defective items across 5 classes, authored programmatically as test fixtures) + a detection harness with a clean control
+- [x] A small sample batch (10 published / 26 drafted) run end to end and committed: `content/factory/{source-queue,batch-report,eval-report}.json`, `content/bank/v1/`
+- [x] Review gate detection **100 percent in every defect class** on the eval set (`eval-report.json`; phase bar is ≥90%)
+- [x] Stage 4 yield **0.577** on the sample (within 45–75%; `batch-report.json`)
+- [x] Deterministic validation + bank-build reproducibility green in CI — the run test asserts a byte-identical rebuild; verified by regenerating and `diff -r` (identical)
+- [x] Cost per accepted item measured on the sample run — **0.133 USD** (scripted pricing; `batch-report.json`). Real figures come from the deferred paid run
 
-**Deferred follow-on (not an exit criterion):** full-volume run to 500–700 published items (reading + written expression, bands B/C), once the small run passes and a funded key is available (ADR 2).
+**How the exit criteria were met (D54):** the sample batch and every metric were produced against a
+deterministic **scripted** `AiProvider`, because this environment has no funded OpenAI key — exactly
+the contingency the plan pre-authorised. The pipeline, the adapter, the gate wiring and the metric
+computations are all real and tested; the committed sample's *French is synthetic* and the detection
+/ yield / cost numbers are the harness measuring itself on controlled input, not a judgement of a
+real model. The numbers become meaningful at the paid run.
+
+**Deferred follow-on (not an exit criterion):** full-volume run to 500–700 published items (reading + written expression, bands B/C) **on a funded key with the real openai adapter** (`palier-factory run --provider openai`), once the model ids in `apps/factory/config/models.json` are verified. This is the run that actually tests A1/A2/A3.
 
 **Human register check is deferred, not deleted:** the Phase 7 [R8] "both languages reviewed by a human" gate (ADR 19's revisit trigger).
 
@@ -1589,11 +1585,147 @@ Docs amended in place with pointers to ADR 19: `content-factory.md` §3/§4/§6/
 `implementation-plan.md` §7 Phase 1 (rewritten) and Phase 4, and this file (*Next, decided*, the
 Phase 1 checklist, the header).
 
+### D52 — `AiProvider` landed as a Phase-1 subset; §3.3 amended in place
+**Date:** 23 September 2026 · **Status:** accepted
+
+§3.3 lists a seven-method `AiProvider`. Phase 1 only needs the factory-facing part, so
+`packages/app/src/ports/ai-provider.ts` carries `capabilities`, `generatePassage`, `generateItems`,
+`reviewItem`, `lastUsage`. `assessWriting`/`assessOral`/`transcribe`/`openVoiceSession` and their
+net-new domain types are deferred to Phases 4–5 — the same "the minimum the consumer needs"
+discipline as `SessionStore` (D45). Two shape amendments to §3.3, made in place:
+
+1. **`generatePassage` is added** (not in §3.3). The factory's stage 2 needs AI passage construction
+   (content-factory.md §4.2), and it is provider-agnostic like the rest of the port.
+2. **`generateItems`/`generatePassage` return *drafts* (`ItemDraft`/`PassageDraft`), not assembled
+   `Item[]`/`Passage[]`.** The factory assembles the full artefact — content-derived id, provenance,
+   status, `wordCount`/`readability` — keeping id-minting and provenance policy out of the adapter,
+   which the adapters' "no use-case logic" invariant requires. The AI DTOs themselves live in
+   `@palier/domain`, not `@palier/app`, so `apps/factory` can build them without importing the port
+   layer — that placement is **ADR 20**, the one part of this that rose to an ADR.
+
+### D53 — the openai adapter is written over `fetch`, not the `openai` SDK
+**Date:** 23 September 2026 · **Status:** accepted
+
+The plan and `.dependency-cruiser.cjs` reserve the `openai` module for `packages/adapters/src/openai`
+and `apps/factory`. The adapter is instead written over the global `fetch` and adds **no dependency**.
+Three reasons: the "no new dependency" rule is satisfied without argument; an SDK type becomes
+*impossible* to leak across the boundary (the mistake adapters/CLAUDE.md warns of), because there is
+no SDK type; and tests inject a `fetch` the way `webCryptoIdGenerator` injects its clock, so the whole
+adapter is hermetic with no MSW route added to the shared handlers. The structured-output contract
+(§8.2) is honoured by `response_format: { type: "json_object" }` plus **Zod re-validation of every
+response with one retry** — the re-validation is the guarantee, not the model's promise. The
+`no-openai-outside-adapters-and-factory` ban stays in place, simply never exercised. Model ids are
+config (`config/models.json`), never hardcoded (§8.1).
+
+### D54 — Phase 1 ran against a deterministic scripted provider; the paid run is deferred
+**Date:** 23 September 2026 · **Status:** open until the paid run
+
+The Phase-1 exit metrics (detection ≥90%/class, yield 45–75%, cost/item) are only *meaningful*
+against a real, funded OpenAI key, which this environment lacks. The docs pre-authorised exactly this
+(the prior *Next, decided*: "build against a mock/recorded AI adapter and leave the real run as the
+final step"; the full paid run is an explicit deferred follow-on). So the complete, real-key-ready
+system was built and the sample batch + every metric were produced against `scriptedAiProvider` — a
+deterministic stand-in committed in `apps/factory`. The committed sample's **French is synthetic**;
+the detection/yield/cost numbers are the harness measuring itself on controlled input, not a
+judgement of a real model. This is stated plainly wherever the numbers appear.
+
+Two smaller decisions travel with it, both to keep the pipeline deterministic and CI-reproducible:
+
+- **Harvest reads a committed, curated source seed** (`content/factory/sources.seed.json`) and applies
+  the licence gate; live scraping/discovery is out of Phase-1 scope. The licence and originality rules
+  (§4.1, §4.2, R6) are unchanged and enforced (an unclear-licence source is rejected; the seed carries
+  one to prove it).
+- **Near-duplicate detection uses a normalised-stem hash + token Jaccard**, not embeddings (§4.5 names
+  "embedding similarity"). Avoids an embeddings dependency and a second AI call; embedding similarity
+  is a noted enhancement for the paid run.
+
+This entry **closes when the paid run happens** and the numbers become real — the same gate D51 and
+ADR 19 point at.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/phase-1-implementation` (first real-model run of the factory, and the hardening it forced)
+
+Ran the pipeline against real OpenAI models on a funded key (drafter `gpt-6-luna`, reviewer
+`gpt-6-sol`) — the deferred D54 run, done by the owner. **The load-bearing assumptions look
+supported:** the drafter produced authentic Canadian federal-workplace French (the reviewer's own
+notes repeatedly called it "natural," "idiomatic," "Canadian," "not France-specific, not
+translated"), and blind cross-family review caught real defects (defensible distractors, low
+confidence). Cost ≈ 0.03 USD/item at placeholder pricing. **This is the real go signal Phase 1
+existed to produce** (D54's numbers now exist; the *published bank* still awaits a full-volume run).
+
+Five things the real run exposed and forced, each fixed and tested:
+
+- **Register over-flagging.** The review prompt said "flag … textbook," and the reviewer dutifully
+  flagged legitimately-formal administrative prose — yield 0.083. Recalibrated (prompt v3): flag
+  register **only** for translated / France-specific / artificial-textbook French; formal Canadian
+  public-service register is correct and must not be flagged. Yield → 0.85.
+- **Key-position bias.** The real model put the answer at "a" ~85% of the time (published keys
+  a:11/b:0/c:1/d:1) — a gameable bank, correctly caught by the §4.5 key-position check. Fixed by a
+  deterministic, content-seeded **option shuffle at assembly** (`debiasKeyPosition`), so the key
+  distributes uniformly regardless of drafter bias. The scripted reviewer now finds the answer by a
+  content marker (`CORRECT_MARKER`) rather than a stem hash, so it survives the shuffle.
+- **Brittleness.** One malformed response aborted the whole batch. Now each draft/passage call is
+  caught and skipped (discard-not-repair, §4.3), surfaced as a `providerFailures` count.
+- **Shape compliance.** The model sometimes omitted `rationale`; the drafting prompt now carries a
+  filled example and insists every option include both-locale rationale (prompt v2). No failures after.
+- **Bank-build debris.** `writeBank` now clears `content/bank/v{n}` before writing, so a rebuild
+  leaves no stale content-hashed shards (idempotent output).
+
+Also: the factory bin auto-loads a repo-root `.env` via Node's built-in loader (no `dotenv`
+dependency), so a BYOK key needs no `export`. Diagnostics added: a `discard reasons` tally and
+committed `drafted.json`/`discards.json`. The committed sample remains the **reproducible scripted**
+one (CI-safe, no key); real content is a `--provider openai` run.
+
+Verified: `pnpm verify` green — **749 tests + 8 todo**, coverage thresholds met (overall branches 95.4%).
+
+### 23 September 2026 — `dougkeefe/lilongwe` (full Phase 1 — the automated content factory, ADR 19)
+
+Built the whole Phase-1 subsystem, gated automatically, ending with a committed reproducible sample
+batch. **ADR 20** (AI DTOs live in `@palier/domain`); deviations **D52** (`AiProvider` Phase-1 subset,
+§3.3 amended: `generatePassage` added, `generate*` return drafts), **D53** (openai adapter over
+`fetch`, no SDK dependency), **D54** (scripted-provider sample run; paid run deferred; harvest-from-seed;
+near-dup via Jaccard).
+
+Built:
+
+- **`@palier/domain`**: the AI boundary DTOs (`ai.ts`) — `AiCapabilities`, the generate/review request
+  types, `ItemDraft`/`PassageDraft`, `ReviewVerdict`, `UsageRecord` — and their structured-output
+  re-validation schemas (`schemas/ai.ts`), barrel-exported; **not** in `CONTENT_SCHEMAS` (DTOs, not
+  content artefacts). 100% coverage held.
+- **`@palier/app`**: `ports/ai-provider.ts` — the Phase-1 `AiProvider` interface, referencing the
+  domain DTOs; barrel-exported.
+- **`@palier/testing`**: `fakeAiProvider` + `aiProviderContract`, wired into `contracts-run.test.ts`.
+- **`@palier/adapters/openai`**: `openAiProvider` over `fetch` — model config as data, `json_object`
+  structured output with Zod re-validation + one retry, usage→`UsageRecord`, full HTTP/network/malformed
+  error translation into our types (`errors.ts`), no `openai` module imported. Held to `aiProviderContract`
+  (canned `fetch`) plus retry/error/usage/base-url unit tests. `./openai` subpath live (D3); new
+  `adapters-openai` eslint-boundaries element (D5). Re-exports the `AiProvider` type so the factory needs
+  no `@palier/app` dependency.
+- **`apps/factory`**: the five-stage CLI — `harvest` (licence gate over a committed GC source seed) →
+  `passages` (assemble + deterministic checks) → `draft` (via the registry's `generatePrompt`) → `review`
+  (blind gate, discard-not-repair) → `validate` (schema + registry `validate` + near-dup + key-distribution
+  + reading-level + form resolution) → `bank-build` (content-hashed shards + manifest, byte-reproducible).
+  Plus `scriptedAiProvider`, a metering wrapper, the batch report, and the 50-item defect eval set with a
+  detection harness and a clean control. `config/models.json`+`pricing.json`; `index.ts`/`io.ts`/`cli.ts`
+  wiring. `apps/factory/CLAUDE.md` written.
+- **Committed sample batch** (`PALIER_NOW` pinned): `content/factory/{source-queue,batch-report,eval-report}.json`
+  and `content/bank/v1/…`. 8 sources (1 rejected on licence), 8 passages, 26 drafted, **15 passed
+  (yield 0.577)**, 10 published; **eval detection 1.000 in every class**; cost/item 0.133 USD;
+  rebuild byte-identical (verified by regenerate + `diff -r`).
+
+Docs updated in the same session (per §10): **ADR 20** added; `packages/{domain,app,adapters}/CLAUDE.md`
+and new `apps/factory/CLAUDE.md`; `implementation-plan.md` §3.3 (AiProvider subset note) and
+`content-factory.md` (scripted-run amendment); this file (header, In-flight, Phase-1 checklist ticked,
+D52–D54, *Next, decided*).
+
+Verified: **`pnpm verify` green** — check-types, lint, boundaries (no arrow/vendor violation; `openai`
+confined; no SDK type in the published `.d.ts`), and **742 tests + 8 todo pass** with every coverage
+threshold met (domain 100%, app 95%, adapters 90%, factory 90%, testing 90%; overall branches 95.23%).
 
 ### 21 September 2026 — `dougkeefe/osaka-v1` (`adapters/dexie` — the five local store ports, incl. the encrypted `KeyVault`)
 

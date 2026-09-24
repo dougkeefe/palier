@@ -1,0 +1,264 @@
+[
+  {
+    "createdAt": "2026-09-23T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "3CU8V2PHMKVB4AOCLGPO",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-23T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN élaboration renseignements suivi cadre envoi delai texte rappel le bureau ouvre avec.",
+      "fr": "élaboration renseignements suivi cadre envoi delai texte rappel le bureau ouvre avec."
+    },
+    "subSkill": "connectors-and-discourse-markers",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "policy-and-legislation",
+    "type": "error-id",
+    "updatedAt": "2026-09-23T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-23T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "4IE9JNL6RK1QOVRKKFED",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-23T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN réglementation gouvernance texte rappel le bureau ouvre avec les gens pour jour.",
+      "fr": "réglementation gouvernance texte rappel le bureau ouvre avec les gens pour jour."
+    },
+    "subSkill": "prepositions-and-government",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "it-and-digital",
+    "type": "best-completion",
+    "updatedAt": "2026-09-23T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-23T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "6F3B38QCOFROU42IO29R",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-23T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN établissement administration pour jour vers midi cette note porte sur un sujet.",
+      "fr": "établissement administration pour jour vers midi cette note porte sur un sujet."
+    },
+    "subSkill": "word-choice-precision",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "procurement",
+    "type": "cloze",
+    "updatedAt": "2026-09-23T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-23T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "J2BU3OMGI37N743HJ0UU",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-23T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN planification élaboration renseignements établissement administration point suivi cadre envoi delai texte rappel le bureau ouvre.",
+      "fr": "planification élaboration renseignements établissement administration point suivi cadre envoi delai texte rappel le bureau ouvre."
+    },
+    "subSkill": "pronouns",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "service-delivery",
+    "type": "cloze",
+    "updatedAt": "2026-09-23T00:00:00.000Z",
+    "version": 1
+  }
+]

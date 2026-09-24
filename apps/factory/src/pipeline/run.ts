@@ -1,0 +1,140 @@
+import type { AiProvider } from "@palier/adapters/openai";
+import type {
+  ExamForm,
+  ExamProfile,
+  Item,
+  ItemType,
+  Lang,
+  OralScenario,
+  Passage,
+  PassageId,
+  SubSkill,
+  TargetBand,
+} from "@palier/domain";
+
+import type { BatchReport, HarvestResult, ReviewResult, SourceCandidate } from "../lib/types.js";
+import { meterProvider } from "../providers/metered.js";
+import { harvest } from "./harvest.js";
+import { constructPassages } from "./passages.js";
+import { draftItems } from "./draft.js";
+import type { WritingPlanRow } from "./draft.js";
+import { reviewItems } from "./review.js";
+import { validateBank } from "./validate.js";
+import type { ValidationReport } from "./validate.js";
+import { buildBank } from "./bank-build.js";
+import type { BankBuild } from "./bank-build.js";
+import { batchReport } from "./metrics.js";
+
+/**
+ * The five-stage pipeline end to end (content-factory.md §4), plus the bank build
+ * and the batch report. Everything is deterministic given `now`/`batchId`/the
+ * provider, so a committed sample batch is reproducible. The CLI wires reading
+ * and writing; this function does no I/O.
+ */
+
+const ITEM_TYPE_CYCLE: readonly ItemType[] = ["cloze", "error-id", "best-completion"];
+
+const defaultWritingPlan = (profile: ExamProfile, bands: readonly TargetBand[]): WritingPlanRow[] =>
+  profile.subSkills.writing.map((subSkill, i) => ({
+    subSkill,
+    type: ITEM_TYPE_CYCLE[i % ITEM_TYPE_CYCLE.length]!,
+    targetBand: bands[i % bands.length]!,
+    topic: profile.topics[i % profile.topics.length]!,
+  }));
+
+export type RunInput = {
+  readonly sources: readonly SourceCandidate[];
+  readonly profile: ExamProfile;
+  readonly provider: AiProvider;
+  readonly now: string;
+  readonly batchId: string;
+  readonly bankVersion: number;
+  readonly promptVersion: string;
+  readonly lang?: Lang;
+  readonly bands?: readonly TargetBand[];
+  readonly perSource?: number;
+  readonly readingSubSkills?: readonly SubSkill[];
+  readonly writingPlan?: readonly WritingPlanRow[];
+};
+
+export type RunOutput = {
+  readonly harvest: HarvestResult;
+  readonly passages: readonly Passage[];
+  /** Every candidate the drafter produced, kept so a run can be inspected. */
+  readonly drafted: readonly Item[];
+  readonly itemsDrafted: number;
+  /** Provider calls that failed re-validation and were skipped (§4.3). */
+  readonly providerFailures: number;
+  readonly review: ReviewResult<Item>;
+  readonly validation: ValidationReport;
+  readonly bank: BankBuild;
+  readonly report: BatchReport;
+};
+
+export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
+  const lang: Lang = input.lang ?? "fr";
+  const bands: readonly TargetBand[] = input.bands ?? ["B", "C"];
+  const readingSubSkills = input.readingSubSkills ?? input.profile.subSkills.reading.slice(0, 2);
+  const writingPlan = input.writingPlan ?? defaultWritingPlan(input.profile, bands);
+
+  const metered = meterProvider(input.provider);
+
+  const harvested = harvest(input.sources, input.now);
+
+  const passageStage = await constructPassages(harvested.queue, metered.provider, {
+    lang,
+    bands,
+    perSource: input.perSource ?? 1,
+  });
+  const passages = passageStage.passages;
+
+  const draftStage = await draftItems(passages, metered.provider, {
+    now: input.now,
+    lang,
+    model: metered.provider.lastUsage()?.model ?? "scripted",
+    promptVersion: input.promptVersion,
+    readingSubSkills,
+    writingPlan,
+  });
+  const drafted = draftStage.items;
+
+  const passageIndex: ReadonlyMap<PassageId, Passage> = new Map(passages.map((p) => [p.id, p]));
+  const review = await reviewItems(drafted, metered.provider, passageIndex);
+
+  const forms: readonly ExamForm[] = [];
+  const scenarios: readonly OralScenario[] = [];
+  const validation = validateBank(review.passed, forms, input.profile);
+
+  const bank = buildBank({
+    items: validation.valid,
+    passages,
+    forms: [...forms],
+    scenarios: [...scenarios],
+    version: input.bankVersion,
+  });
+
+  const totals = metered.totals();
+  const report = batchReport({
+    batchId: input.batchId,
+    generatedAt: input.now,
+    provider: metered.provider.lastUsage()?.model ?? "scripted",
+    sources: harvested.queue.length,
+    passages: passages.length,
+    itemsDrafted: drafted.length,
+    review,
+    validation,
+    totalCostUsd: totals.costUsd,
+  });
+
+  return {
+    harvest: harvested,
+    passages,
+    drafted,
+    itemsDrafted: drafted.length,
+    providerFailures: passageStage.failedCalls + draftStage.failedCalls,
+    review,
+    validation,
+    bank,
+    report,
+  };
+};

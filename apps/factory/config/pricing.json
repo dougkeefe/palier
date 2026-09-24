@@ -1,0 +1,5 @@
+{
+  "note": "USD per million tokens (architecture.md §8.6). Keyed by model id, matching models.json. PLACEHOLDER rates — the token counts are real (from the API), but the dollar figure is an estimate until these per-MTok prices are confirmed against OpenAI's pricing.",
+  "gpt-6-luna": { "inputPerMTok": 2.0, "outputPerMTok": 8.0 },
+  "gpt-6-sol": { "inputPerMTok": 2.0, "outputPerMTok": 8.0 }
+}

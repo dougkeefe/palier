@@ -1,0 +1,31 @@
+{
+  "byClass": {
+    "contradictory-rationale": {
+      "detected": 10,
+      "rate": 1,
+      "total": 10
+    },
+    "france-register": {
+      "detected": 10,
+      "rate": 1,
+      "total": 10
+    },
+    "leaked-answer": {
+      "detected": 10,
+      "rate": 1,
+      "total": 10
+    },
+    "mis-tagged-band": {
+      "detected": 10,
+      "rate": 1,
+      "total": 10
+    },
+    "two-defensible-keys": {
+      "detected": 10,
+      "rate": 1,
+      "total": 10
+    }
+  },
+  "minClassRate": 1,
+  "overallRate": 1
+}

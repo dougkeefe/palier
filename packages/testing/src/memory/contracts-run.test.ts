@@ -1,4 +1,5 @@
 import {
+  aiProviderContract,
   attemptStoreContract,
   itemRepositoryContract,
   keyVaultContract,
@@ -7,6 +8,7 @@ import {
   settingsStoreContract,
 } from "../contracts/index.js";
 import {
+  fakeAiProvider,
   memoryAttemptStore,
   memoryItemRepository,
   memoryKeyVault,
@@ -28,3 +30,4 @@ scheduleStoreContract("memory", () => Promise.resolve(memoryScheduleStore()));
 sessionStoreContract("memory", () => Promise.resolve(memorySessionStore()));
 settingsStoreContract("memory", () => Promise.resolve(memorySettingsStore()));
 keyVaultContract("memory", () => Promise.resolve(memoryKeyVault()));
+aiProviderContract("fake", () => Promise.resolve(fakeAiProvider()));

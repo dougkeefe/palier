@@ -6,3 +6,4 @@ export type { ScheduleEntry, ScheduleStore } from "./schedule-store.js";
 export type { Session, SessionStore } from "./session-store.js";
 export type { SettingsStore } from "./settings-store.js";
 export type { KeyVault } from "./key-vault.js";
+export type { AiProvider } from "./ai-provider.js";
