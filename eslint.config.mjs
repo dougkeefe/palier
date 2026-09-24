@@ -265,6 +265,7 @@ export default defineConfig([
         // classifying every adapter file as the package fills.
         { type: "adapters-ids", pattern: "packages/adapters/src/ids/**" },
         { type: "adapters-openai", pattern: "packages/adapters/src/openai/**" },
+        { type: "adapters-bank", pattern: "packages/adapters/src/bank/**" },
         { type: "adapters", pattern: "packages/adapters/src/**" },
         { type: "ui", pattern: "packages/ui/src/**" },
         { type: "testing", pattern: "packages/testing/src/**" },

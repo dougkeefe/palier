@@ -1,13 +1,16 @@
 # Palier: Progress
 
-**Last updated:** 23 September 2026
-**Current phase:** **Phase 1 built (automated content factory, ADR 19).** The `adapters/openai`
-`AiProvider`, the five-stage `apps/factory` CLI pipeline, the review-gate defect eval set, and a
-committed reproducible sample batch are all in place, gated automatically. Phase 0 gates, the pure
-`@palier/engine` core, the full `@palier/app` practice loop and the `/ids`+`/dexie` adapters remain
-built ahead of Phase 2.
-**Next step:** the **deferred full-volume paid content run** (500–700 items on a funded OpenAI key),
-then Phase 2. See [Next, decided](#next-decided).
+**Last updated:** 24 September 2026
+**Current phase:** **Phase 2 (Practice MVP) is open.** Phase 1 is built (automated content factory,
+ADR 19; the D54 real-model go-signal exists — session log, 24 September 2026). Much of Phase 2 has
+landed ahead of the formal start: the pure `@palier/engine` core, the `@palier/app` practice loop,
+and the `/ids`, `/dexie`, `/openai` adapters. The bank `ItemRepository` (`adapters/bank`) now
+lands too, so the app can plan a day from the real committed bank, not only the fixture bank.
+**Next step:** the Phase-2 **web slice** — wire the bank into the composition root with
+service-worker offline caching. See [Next, decided](#next-decided). The **full-volume published
+bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
+feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
+(D56).
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -67,8 +70,8 @@ human for anything expensive.
 | Phase | Goal | Size | State |
 | --- | --- | --- | --- |
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
-| 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | not started |
-| 2 Practice MVP | Ship something publicly useful | 3–4 wk | not started |
+| 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
+| 2 Practice MVP | Ship something publicly useful | 3–4 wk | **in progress** |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | not started |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | not started |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
@@ -82,10 +85,11 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/lilongwe` | **Full Phase 1 — the automated content factory (ADR 19).** `adapters/openai` (the `AiProvider` port, over `fetch`), the five-stage `apps/factory` CLI, the 50-item review-gate defect eval set, and a committed reproducible sample batch. Deviations **D52**–**D54**; **ADR 20** (AI DTOs in `@palier/domain`); opens `./openai` (D3), `adapters-openai` element (D5) | 23 September 2026 |
+| `dougkeefe/moroni` | **Open Phase 2 + `adapters/bank` — the HTTP `ItemRepository` (§7).** `httpBankRepository` over the committed bank shards: manifest fetch, lazy per-skill shard loading, content-hash cache. Held to `itemRepositoryContract` via a new `bankHandlers` MSW helper in `@palier/testing`. Opens `./bank` (D3), `adapters-bank` element (D5); deviation **D55** (structure-check at the edge, not full Zod). Formally opens Phase 2: status row flipped, §7 breakdown expanded. | 24 September 2026 |
 
-*(The prior row — the `adapters/dexie` slice — merged as #16 and was removed; the In-flight table
-tracks current work, not history, and the session log below is the permanent record.)*
+*(The prior rows — the `adapters/dexie` slice (#16) and the Phase-1 content factory — merged and
+were removed; the In-flight table tracks current work, not history, and the session log below is the
+permanent record.)*
 
 ---
 
@@ -182,41 +186,49 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next slice: `adapters/bank` — the `ItemRepository` over the committed bank shards (Phase 2).**
+**Next slice: the Phase-2 web slice — wire the bank into the composition root, with a service worker
+that caches shards by content hash for offline use [R4].**
 
-Phase 1 is built (session log, 23 September 2026). The next *buildable* slice — content-agnostic,
-self-directable, and now unblocked because the bank build produces a real manifest+shard layout — is
-the fourth of the five §3.2 adapter directories: `adapters/bank`.
+`adapters/bank` landed (session log, 24 September 2026), so the `ItemRepository` the app plans a day
+against now has a real, content-hashed HTTP implementation. The next *buildable*, self-directable
+slice is the `apps/web` wiring that turns it on: the production composition root
+(`apps/web/src/lib/container.ts`) currently throws until Phase 2 adapters exist (D23), and the bank
+was the one it most needs.
 
 **The slice, concretely:**
 
-- Implement the `ItemRepository` port (`@palier/app` §3.3) in `packages/adapters/src/bank/`, opening
-  the `./bank` subpath (D3) and a new `adapters-bank` eslint-boundaries element (D5): `byIds`, `query`
-  (`ItemCriteria`: skill/subSkill/band/exclude/limit, conjunction, per D20), `passage`, `form`,
-  `scenario`, `bankVersion`. Fetch the manifest, lazily fetch only the shards a query needs, cache by
-  content hash. Vendor-free public surface, no type escaping the boundary (adapters/CLAUDE.md).
-- Held to `itemRepositoryContract` from `@palier/testing` (the same suite the in-memory repo passes),
-  plus adapter-specific tests for manifest fetch, lazy shard loading and the content-hash cache. Use
-  MSW to serve the shard files. The committed `content/bank/v1/` from Phase 1 is a ready fixture, as is
-  the canonical fixture bank.
-- **Done when:** `pnpm verify` green; `itemRepositoryContract` passes against the real bank repo; a
-  query fetches only the shards it needs (asserted); the service-worker/content-hash cache keying is
-  unit-tested. The service-worker registration itself is `apps/web` wiring and can follow in the web slice.
+- In `apps/web/src/lib/container.ts`, construct `httpBankRepository` from `@palier/adapters/bank`
+  (base URL = wherever `content/bank/` is served; `version` from the shipped bank) and hand it to the
+  use cases, alongside the `dexieStores` and `webCryptoIdGenerator` already available. The production
+  path stops throwing for the bank port.
+- Serve the committed `content/bank/v{n}/` as a static asset under a stable public path, and register
+  a **service worker** that caches shard responses by URL — which *is* the content hash, so the cache
+  is immutable and keyed exactly as the adapter's in-memory cache is. This is the [R4] "full offline
+  operation after first load" exit criterion beginning to land.
+- A route/loader (or server component) that runs `planDailySession` end to end against the real bank,
+  proving the app plans a day from committed content rather than the fixture bank.
+- **Done when:** `pnpm verify` green; the composition root wires the real bank without a vendor type
+  crossing into `apps/web` beyond `next`/`react` (boundaries clean); an E2E or route test plans a day
+  from the served bank; the service worker serves a shard from cache on a second load (offline).
 
-The shard **layout is fixed** by the Phase-1 bank build (`bank/v{n}/manifest.json`,
-`bank/v{n}/{lang}/{skill}/{hash}.json`, `bank/v{n}/passages/{hash}.json`, `bank/v{n}/forms/{id}.json`),
-so the repo reads that manifest — no new content decision required.
+The adapter's public surface is `httpBankRepository({ baseUrl, version?, fetchImpl? })` returning the
+`ItemRepository` port, plus `BankUnavailableError`/`BankContentError` — nothing else escapes
+`@palier/adapters/bank`. The shard **layout is fixed** by the bank build
+(`bank/v{n}/manifest.json`, `bank/v{n}/{lang}/{skill}/{hash}.json`, `bank/v{n}/passages/{hash}.json`,
+`bank/v{n}/forms/{id}.json`), so no new content decision is required.
 
 **Standing human gates (do not self-direct):**
 
-- **The deferred full-volume paid content run (D54, the real Phase-1 payoff).** Needs a funded OpenAI
-  key (ADR 2) and verified model ids in `apps/factory/config/models.json`. This is the run that
-  actually tests A1/A2/A3 and produces a publishable bank; until it happens, the committed sample is
-  synthetic and D54 stays open.
+- **The full-volume published bank (D54).** The real-model go-signal exists (session log, 24 September
+  2026); the remaining step is the full run to 500–700 published items on a funded key, then shipping
+  that bank as `content/bank/v{n}/`. **Timing now settled (D56): sequenced to the end.** Every feature
+  phase (2–6) is built and used against the baseline committed bank; the content run is a 1.0 gate, not
+  a per-phase blocker. The baseline bank's French is synthetic (D54), so the app is feature-usable
+  before this gate, not study-ready.
 - **Product and UI direction** (§7 Phase 2) — onboarding, readiness card, drill/feedback, review queue,
   settings, pairing. Design decisions, not derivations.
 - **The `adapters/sync` `ScheduleEntry` merge (D43)** — add `updatedAt`, take the lower Leitner box, or
-  treat the schedule as device-local. Gates the sync adapter.
+  treat the schedule as device-local. Gates the sync and vault adapters.
 
 Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's table
 before launch) and the name/domain decision in §12.1.
@@ -270,14 +282,51 @@ log, 20 September 2026; D36/D37 and D38–D42). Between them the practice loop e
 `StartSession` / `CompleteSession` (§3.2) build on them and want the deferred `SessionStore`
 first. **The first real adapters have also landed:** `adapters/ids` (D48) and `adapters/dexie` —
 the five local store ports over IndexedDB at schema v1, incl. the encrypted `KeyVault` (D49, D50).
-The phase's own tasks are expanded here when the phase formally starts; only the exit
-criteria are tracked in advance.
+**Phase 2 formally opened 24 September 2026** (session log). The `implementation-plan.md` §7 work
+breakdown, expanded on start with what has already landed ticked — each tick points at its
+session-log evidence; nothing is ticked without it.
+
+**Work breakdown (§7)**
+
+- [x] `@palier/engine`: Scorer, TrendCalculator, Scheduler, Planner, Selector, BandMapper — the pure core (20 September 2026)
+- [x] `adapters/dexie`: the store ports at schema v1, with the migration harness (D49/D50)
+- [x] `adapters/bank`: manifest fetch, lazy shard loading, content-hash cache (24 September 2026, this slice) — the service-worker registration itself is the web slice
+- [x] `adapters/ids`: the ULID generator (D48; not one of the five §3.2 names, but a real adapter)
+- [ ] `adapters/vault` and `adapters/sync`: device secret, pairing by code, push/pull, watermarks, offline queue — **gated on the `ScheduleEntry` merge decision** (D43)
+- [ ] Sync backend: Postgres + Drizzle, sync/device routes, pairing, rate limiting (ADR 5)
+- [~] `@palier/app` use cases: `StartSession`, `AnswerItem`, `CompleteSession`, `RunDiagnostic` landed (20–21 September 2026); `SyncNow`, `ExportData`, `ImportData`, `WipeData` remain
+- [ ] UI: onboarding, home + readiness card, today's plan, the drill/feedback panel, review queue, progress, settings (sync + data, pairing flow)
+- [ ] Item reporting control and the GitHub issue path
+- [ ] The sync simulator (tier 5): two/three-device scenarios, seeded faults, convergence assertions
+- [ ] Every real adapter passes its port contract suite — `bank` now does; `dexie`/`ids` already did
+
+**Exit criteria** (the actual gate)
 
 - [ ] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]
 - [ ] Full offline operation after first load [R4]
 - [ ] Engine unit tests exhaustive at every boundary, golden fixtures locked
 - [ ] Sync simulator passes several hundred seeds including full partition and heal, no lost or duplicated attempts
 - [ ] Every adapter passes its port contract suite
+
+**Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
+carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
+`implementation-plan.md` §7 Phase 2 "Completion slices" — **keep the two in sync** (the fuller scope
+and each slice's *done* live in the plan). Current position: **Slice 1**, at its buildable head — the
+web slice in *Next, decided*.
+
+- [~] **Slice 1 — Single-device practice app, offline-complete.** Composition-root wiring of
+  bank/dexie/ids + service-worker offline cache [R4] + `ExportData`/`ImportData`/`WipeData`, then (after
+  **Gate A**) the full single-device UI: onboarding, home/readiness, today's plan, diagnostic,
+  drill/feedback, review queue, progress, settings + data pane, item reporting. The composition-root /
+  service-worker / data-use-case part is buildable now; the UI waits on Gate A.
+- [!] **Gate A — product & UI direction (human).** Screens, copy, states. Gates Slice 1's UI.
+- [ ] **Slice 2 — Multi-device sync.** Sync backend (Postgres/Drizzle/routes/pairing/rate-limit, ADR 5);
+  `adapters/vault` + `adapters/sync` behind `SyncTransport`, applying the D43 rule; `SyncNow` + pairing
+  UI. Completes the two-device exit criterion. Behind **Gate B**.
+- [!] **Gate B — the `ScheduleEntry` merge decision (human, D43).** `updatedAt` / lower Leitner box /
+  device-local. Gates all of Slice 2.
+- [ ] **Slice 3 — Convergence proof + public launch.** Sync simulator (tier 5), remaining CI gates +
+  mutation check, full-offline + Lighthouse ≥95 confirmation, public deploy. **Phase 2 complete.**
 
 ### Phase 3: Exams and item statistics — closed pilot
 
@@ -381,7 +430,7 @@ its own `check-types` script (`next typegen && tsc --noEmit`), ordered by Turbor
 There is a comment in `tsconfig.json` saying so.
 
 ### D3 — `@palier/adapters` subpath exports deferred
-**Date:** 19 September 2026 · **Status:** partially resolved 21 September 2026 (`/ids`, `/dexie`); open for `/bank`, `/openai`, `/sync`, `/vault`
+**Date:** 19 September 2026 · **Status:** partially resolved (`/ids`, `/dexie`, `/openai`, `/bank`); open for `/sync`, `/vault`
 
 §3.2 specifies five subpath exports (`/dexie`, `/bank`, `/openai`, `/sync`, `/vault`).
 The package currently declares one root export, because five `exports` entries resolving
@@ -398,6 +447,12 @@ until each lands.
 directories. It exports one Dexie-free thing, `dexieStores(name?)`, deliberately: `PalierDb`
 (a `Dexie` subclass) is internal, so no vendor type sits in the published `.d.ts`. `/bank`,
 `/openai`, `/sync`, `/vault` remain unexported until each lands.
+
+**Update, 24 September 2026 (bank slice).** `./bank` is now live — `httpBankRepository`, the
+`ItemRepository` over the committed shards. Its public surface is the port plus
+`BankUnavailableError`/`BankContentError`; the manifest type and the GET-only `FetchLike` stay
+internal, so no HTTP/fetch type sits in the published `.d.ts`. `/openai` also landed (Phase 1). Only
+`/sync` and `/vault` remain unexported, both behind the D43 `ScheduleEntry`-merge gate.
 
 ### D4 — Per-package `CLAUDE.md` files not yet written
 **Date:** 19 September 2026 · **Status:** RESOLVED 19 September 2026
@@ -450,6 +505,11 @@ element is now `adapters-ids` (most specific) followed by the general `adapters`
 `no-unknown-files` keeps classifying every adapter file. The remaining §3.2 directories each get
 their own element as they land. `no-cross-adapter-imports` in `.dependency-cruiser.cjs` remains the
 rule that actually enforces the ban.
+
+**Update, 24 September 2026 (bank slice).** `adapters-bank` joins `adapters-ids` and
+`adapters-openai` ahead of the `adapters` catch-all. (`/dexie` never took its own element — it uses
+the catch-all — so the element list is not exhaustive of the directories; it only needs to keep
+`no-unknown-files` classifying, which the catch-all already does.)
 
 ### D6 — dependency-cruiser cruises `src` and resolves through `dist`
 **Date:** 19 September 2026 · **Status:** accepted
@@ -1644,9 +1704,127 @@ ADR 19 point at.
 
 ---
 
+### D55 — the bank adapter structure-checks the edge; it does not re-run the domain Zod schemas
+**Date:** 24 September 2026 · **Status:** accepted
+
+`adapters/CLAUDE.md` says every response is Zod-parsed at the edge, and the plan for `adapters/bank`
+said the same. Building it surfaced that the rule is about *vendor* payloads: the OpenAI adapter
+re-validates because the model's output is untrusted. The **bank is our own content**, validated
+field-by-field at build time by the factory's deterministic validation stage (`content-factory.md`
+§4.5), and — decisively — the shared `itemRepositoryContract` seeds `CONTRACT_BANK` from the fixture
+builders, whose default `anItem()` is deliberately schema-*incomplete* (a `comprehension` item with
+no `passageId`). A full `itemSchema.safeParse` on the read path rejects those fixtures, so the very
+suite that proves the adapter substitutable for the in-memory repo (which never validates) cannot pass
+against a fully-validating adapter.
+
+So `httpBankRepository` **structure-checks** the delivery — the manifest's control fields (they drive
+which shard is fetched), that a shard body is a JSON array and a form a JSON record, and that a body is
+valid JSON — turning a corrupt or truncated delivery into a `BankContentError`, without re-asserting
+every content field. Full per-field re-validation stays reserved for genuine vendor payloads (the
+OpenAI adapter, `architecture.md` §8.2). Consequence: the package stays **zod-free** (it imports no
+domain schema, only types — matching how the OpenAI adapter avoids importing `zod` directly), so the
+manifest is validated by a small hand-rolled guard rather than a Zod schema (the "no new dependency"
+rule). Revisit if the bank ever carries third-party or user-submitted content that has *not* passed
+the factory gate — that content is vendor-equivalent and would want full re-validation.
+
+### D56 — feature phases build against the baseline bank; the content run is a 1.0 gate
+**Date:** 24 September 2026 · **Status:** accepted (human decision)
+
+`implementation-plan.md` sequences the content factory as Phase 1 precisely so the "is a
+machine-generated bank good enough?" question (ADR 19, A1/A2/A3) is answered early. Product decision
+(24 September 2026): **defer that answer to the end.** Build every feature phase — 2 (practice MVP),
+3 (exams + item statistics), 4 (BYOK, generation, writing workshop), 5–6 (oral) — against the
+**baseline committed bank** (`content/bank/v1/`, the D54 sample), so the whole product is
+feature-complete and exercisable before any funded content run. The full-volume run to 500–700
+published items on a funded key (D54) then happens as a **1.0 gate**, alongside Phase 7 polish, not as
+a per-phase blocker.
+
+The accepted trade-off: (1) the baseline bank's French is **synthetic** (D54), so the app is
+feature-usable but **not study-ready** until the content gate — every screen and flow works, but real
+SLE practice waits for real content; (2) content-quality risk (the thing Phase 1 was built to
+de-risk) is carried unvalidated until late, in exchange for de-risking the *product* first. Nothing in
+the architecture blocks this: the bank is data behind a port (`ItemRepository`), the shard layout is
+fixed by the bank build, and swapping the baseline bank for the full-volume one is a content-only
+change, no code. Revisit if a feature turns out to *depend* on real content characteristics the
+synthetic sample cannot stand in for (e.g. item-statistics calibration in Phase 3 needing realistic
+difficulty spread) — that feature's validation, not its build, moves to after the content run.
+
+### D57 — Phase 2's remainder is planned as three bigger slices, mirrored in two documents
+**Date:** 24 September 2026 · **Status:** accepted (human decision)
+
+`progress.md` normally does not restate the `implementation-plan.md` §7 work breakdown, "because two
+copies of a plan diverge." Human decision (24 September 2026), two parts: (1) group Phase 2's remaining
+work into **three** deliberately-large slices — *single-device practice app (offline)* → *multi-device
+sync* → *convergence proof + launch* — rather than many small ones, because the requester wants coherent
+shippable steps, not a task list; (2) document the slice list in **both** `implementation-plan.md` §7
+Phase 2 and here, and require the two to **agree**. This is a deliberate, scoped exception to the
+"one copy" rule: the plan holds the authoritative fuller scope and each slice's *done*; progress.md holds
+a terse mirror plus live `[~]`/`[!]`/`[ ]` state. Both cross-reference each other and say "keep in sync,"
+so an editor touching one must update the other. Two human gates sit between the slices — **Gate A**
+(product/UI direction) gates Slice 1's UI, **Gate B** (the D43 `ScheduleEntry` merge) gates all of Slice
+2 — and are named, not left as menus (working-agreement rule 7). *Next, decided* is unchanged: the single
+next buildable step is the web slice at the head of Slice 1.
+
+---
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/continue-dev-from-progress-v3` (bank hardening + content-sequencing decision)
+
+Reviewed the `adapters/bank` change and hardened one finding, then recorded a product decision.
+
+- **Fix:** `httpBankRepository` cached rejected promises, so a transient manifest/shard fetch failure
+  (a 5xx, or an offline first read on the one long-lived instance the composition root builds) poisoned
+  the instance permanently — every later bank read failed until a page reload. Each of the five caches
+  now clears its own slot on rejection (a `.catch` that resets the `??=` promise or `delete`s the map
+  entry), so only *fulfilled* results are cached; a later call retries. Named test added
+  (`retries the manifest after a transient failure…`). `pnpm verify` green.
+- **Decision (D56):** feature phases 2–6 are built against the **baseline committed bank**; the
+  full-volume content run (D54) is sequenced to a **1.0 gate**, not a per-phase blocker. Human choice:
+  get the product feature-complete first, gate on content last. Recorded the synthetic-baseline caveat
+  (feature-usable ≠ study-ready) in D56 and the standing gates. *Next, decided* is unchanged — the
+  Phase-2 web slice remains the next buildable step.
+- **Plan (D57):** grouped Phase 2's remaining work into **three** bigger slices (single-device app →
+  multi-device sync → convergence + launch) with two named human gates (A: product/UI direction; B: the
+  D43 merge). Documented in **both** `implementation-plan.md` §7 Phase 2 and the Phase 2 section here,
+  required to agree. Human decision on grain (three, larger) and on the two-document mirror.
+
+### 24 September 2026 — `dougkeefe/moroni` (open Phase 2; `adapters/bank`, the HTTP `ItemRepository`)
+
+Formally opened **Phase 2** (status row → in progress; §7 work breakdown expanded into the Phase 2
+section with the already-landed pieces ticked) and built the slice *Next, decided* had queued:
+**`adapters/bank`**, the fourth of the five §3.2 adapter directories.
+
+- `packages/adapters/src/bank/`: `httpBankRepository({ baseUrl, version?, fetchImpl? })` implements
+  the `ItemRepository` port over `fetch`. The manifest is fetched once and memoized; a `query`
+  fetches **only** the shards whose `skill` it needs (a reading query never pulls the writing shard);
+  each shard is cached by its content-hashed path, so a hit is a hit forever. `byIds` loads all item
+  shards (the manifest carries no id→shard index — noted in the code). `form(id)` fetches only the
+  mapped file; `scenario(id)` reads the un-manifested `oral/scenarios.json` and treats its 404 as
+  "no scenarios", not an error. Public surface is the port plus `BankUnavailableError`/
+  `BankContentError`; the manifest type and `FetchLike` stay internal (adapters/CLAUDE.md).
+- Structure-checks the edge rather than re-running the domain Zod schemas — **D55**, because the
+  shared contract's fixtures are deliberately schema-incomplete and the bank is our own
+  build-validated content. The package stays zod-free.
+- Held to `itemRepositoryContract` from `@palier/testing` (the same suite the in-memory repo passes),
+  served through a new **`bankHandlers`** MSW helper added to `@palier/testing` (a small re-impl of
+  the factory's `buildBank` grouping; testing may not import the factory). Adapter-specific tests
+  cover manifest memoization, lazy per-skill loading, the content-hash cache, form/scenario laziness,
+  error translation, malformed-manifest rejection, and **reading the real committed
+  `content/bank/v1/` off disk** (10 items / 8 passages / `bankVersion 1`). `bankHandlers` has its own
+  unit test in the testing project (its cross-project execution from `adapters` does not attribute
+  coverage — same reason the pre-existing `handlers.ts` reads 0%).
+- Wiring: `./bank` export opened (D3); `adapters-bank` eslint element added (D5).
+
+**Verification.** `pnpm verify` → **EXIT=0**. `check-types` clean; `lint` clean; `boundaries` clean
+(237 modules, no violations); **780 tests pass** (+ 8 todo), 74 files; coverage thresholds all met
+(branches 95.42% overall; `packages/adapters/src/**` and `packages/testing/src/**` both back above
+their 90% bars after the `bankHandlers` unit test).
+
+**Next, decided** rewritten to the Phase-2 **web slice**: wire the bank into the composition root
+with a content-hash service-worker cache for offline use [R4].
 
 ### 24 September 2026 — `dougkeefe/phase-1-implementation` (first real-model run of the factory, and the hardening it forced)
 

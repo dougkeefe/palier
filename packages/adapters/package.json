@@ -19,6 +19,10 @@
     "./openai": {
       "types": "./dist/openai/index.d.ts",
       "default": "./dist/openai/index.js"
+    },
+    "./bank": {
+      "types": "./dist/bank/index.d.ts",
+      "default": "./dist/bank/index.js"
     }
   },
   "files": [

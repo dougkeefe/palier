@@ -3,12 +3,24 @@
 Every concrete adapter, one directory and one subpath export each: `/dexie`, `/bank`,
 `/openai`, `/sync`, `/vault` (§3.2) — plus `/ids`, the id generator, which §3.2 does not name
 (progress.md D48). A subpath lands with its adapter, not before — an entry resolving to an
-empty module asserts a boundary with nothing behind it (D3). **Two are live.** `./ids` →
+empty module asserts a boundary with nothing behind it (D3). **Four are live.** `./ids` →
 `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto, no npm dependency).
 `./dexie` → `dexieStores` (the five local store ports — `AttemptStore`, `ScheduleStore`,
 `SessionStore`, `SettingsStore`, `KeyVault` — over IndexedDB via `dexie`, at schema version 1;
-progress.md D49/D50). `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1). The
-remaining three (`/bank`, `/sync`, `/vault`) stay unexported until they land.
+progress.md D49/D50). `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1). `./bank` →
+`httpBankRepository` (the `ItemRepository` over the committed bank shards; progress.md D55). The
+remaining two (`/sync`, `/vault`) stay unexported until they land.
+
+**The bank adapter is written over `fetch`, and has no vendor at all** — `fetch` is the platform.
+It fetches the manifest once, then lazily fetches only the shards a query's `skill` needs and caches
+each by its content-hashed path (immutable forever — the "service worker cache keyed by content hash"
+of §7 at the data layer; the service-worker registration itself is `apps/web`). Its public surface
+is the port plus `BankUnavailableError`/`BankContentError`; the manifest type and the GET-only
+`FetchLike` stay internal, so no HTTP/fetch type crosses the boundary. Unlike the OpenAI adapter it
+**structure-checks** the delivery rather than re-running the domain Zod schemas (array/record shape,
+valid JSON, the manifest's control fields → `BankContentError`): the bank is our own
+build-validated content, and full re-validation would reject the deliberately schema-incomplete
+`itemRepositoryContract` fixtures (progress.md D55). The package therefore stays zod-free.
 
 **The OpenAI adapter is written over `fetch`, not the `openai` SDK** (progress.md D-log). It
 adds no dependency (the "no new dependency" rule), makes an SDK type impossible to leak, and
