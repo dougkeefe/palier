@@ -18,7 +18,7 @@ export default function StartPage({ params }: PageProps<"/[locale]/start">) {
   const t = useTranslations("start");
 
   return (
-    <section className="app-stack">
+    <section className="app-stack app-island">
       <h1 className="app-hero__title">{t("title")}</h1>
       <OnboardingWizard />
     </section>

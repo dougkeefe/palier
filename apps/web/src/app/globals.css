@@ -140,6 +140,19 @@ body {
 }
 
 /*
+ * An island page (`.app-island`: a screen whose content loads in the browser after
+ * hydration) keeps the footer below the fold. Otherwise the footer sits in view beside a
+ * one-line loading state and is then pushed off-screen when the content arrives: a
+ * layout shift CI measured at performance 0.88 on /fr/progress. Content only grows from
+ * here, so the footer never moves while visible. It is still on every page (R5), one
+ * scroll down on these app screens; the landing and about pages keep it in view
+ * (progress.md D68).
+ */
+.app-main:has(.app-island) {
+  min-height: 100vh;
+}
+
+/*
  * `<main>` carries tabindex="-1" so the skip link reliably moves focus to it
  * (Safari and older browsers otherwise leave focus on the link). It is a scroll
  * target, not an operable control, so suppress the outline the browser would

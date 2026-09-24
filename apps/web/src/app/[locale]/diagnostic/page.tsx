@@ -18,7 +18,7 @@ export default function DiagnosticPage({ params }: PageProps<"/[locale]/diagnost
   const t = useTranslations("diagnostic");
 
   return (
-    <section className="app-stack">
+    <section className="app-stack app-island">
       <h1 className="app-hero__title">{t("title")}</h1>
       <DiagnosticLauncher />
     </section>

@@ -17,7 +17,7 @@ export default function ProgressPage({ params }: PageProps<"/[locale]/progress">
   const t = useTranslations("progress");
 
   return (
-    <section className="app-stack">
+    <section className="app-stack app-island">
       <h1 className="app-hero__title">{t("title")}</h1>
       <ProgressScreen />
     </section>

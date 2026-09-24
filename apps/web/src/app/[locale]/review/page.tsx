@@ -17,7 +17,7 @@ export default function ReviewPage({ params }: PageProps<"/[locale]/review">) {
   const t = useTranslations("review");
 
   return (
-    <section className="app-stack">
+    <section className="app-stack app-island">
       <h1 className="app-hero__title">{t("title")}</h1>
       <ReviewScreen />
     </section>

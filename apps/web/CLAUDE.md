@@ -74,3 +74,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   in-memory container lives for one page load.
 - **Every page sets its own title** through `generateMetadata` (the layout's template makes it
   `Page · Palier`, WCAG 2.4.2).
+- **An island page's section carries `.app-island`.** It gives `<main>` a full viewport of height, so the
+  footer starts below the fold and content arriving after hydration never moves it. Without it CI
+  measured a layout shift that cost `/fr/progress` its performance budget (D68). A new island screen
+  needs the class too.

@@ -90,7 +90,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/algiers` | **Phase 2 Slice 1 — the single-device practice app, offline-complete (D57).** Composition root wires the real bank/dexie/ids (stops throwing); bank served statically + a service worker for offline [R4]; `ExportData`/`ImportData`/`WipeData`; then the single-device UI with **Gate A resolved by adopting the PRD's §8/§10/§11/§14 direction** (human decision, 24 September 2026). Shipped as ordered PRs; infra first. | 24 September 2026 |
+| `dougkeefe/phase-2-development` (PR #19; the session log calls it by its first name, `dougkeefe/algiers`) | **Phase 2 Slice 1 — the single-device practice app, offline-complete (D57).** Composition root wires the real bank/dexie/ids (stops throwing); bank served statically + a service worker for offline [R4]; `ExportData`/`ImportData`/`WipeData`; then the single-device UI with **Gate A resolved by adopting the PRD's §8/§10/§11/§14 direction** (human decision, 24 September 2026). Shipped as ordered PRs; infra first. | 24 September 2026 |
 
 *(The prior rows — `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -1982,11 +1982,48 @@ And one tooling note: **journey 4 moves the browser's date with `page.clock.setF
 `page.clock.install()`'s fake timers (even resumed) stall Dexie and React. `setFixedTime` pins `Date` and
 leaves the timers alone.
 
+### D68 — app screens keep the footer below the fold, so content arriving after hydration never moves it
+**Date:** 24 September 2026 · **Status:** accepted
+
+CI's Lighthouse run on PR #19 failed `/fr/progress` at **performance 0.88** (all 5 runs), below the 0.95
+budget. Locally it scored 1.0, with a layout shift of 0.06 that I had wrongly logged as "within budget".
+The layout-shift audit names the culprit: **the footer.** An island screen renders a one-line loading
+state, so the footer, non-affiliation statement included, sits in the first viewport. It is then pushed
+off-screen when the content arrives. CI's slower runner makes that shift far larger, and home and review
+share the pattern.
+
+**Fix, for the whole class, not one page:** every island page's section carries `.app-island`, and
+`.app-main:has(.app-island) { min-height: 100vh }`. The footer starts below the fold on those screens,
+content only grows from there, and nothing visible moves. Measured locally: max CLS **0 on all 8 routes**,
+both at the budget's settings and with the CPU slowed 4× to stand in for CI; with the rule removed,
+`/fr/progress` shifts 0.0595 again. **Trade-off, deliberately taken:** on app screens the non-affiliation
+footer is one scroll down rather than in first view. It is still on every page (R5's requirement), and
+the landing and about pages, where first impressions form, keep it in view. The CI re-run is the real
+confirmation of the 0.88; it is pending as this is written.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/phase-2-development` (PR #19: fix the CI Lighthouse failure on `/fr/progress`)
+
+The branch was renamed from `dougkeefe/algiers` (the entries below keep that name) and opened as PR #19.
+CI's Lighthouse budget then failed `/fr/progress` at performance **0.88**, 5 of 5 runs.
+
+- **Correcting the part 4 entry below:** it logged `/fr/progress`'s remaining 0.06 layout shift as
+  "within budget, noted rather than hidden". That was the defect, only smaller on my machine. On CI it
+  costs the route its performance budget.
+- **Cause and fix:** **D68.** On island screens the footer was in view beside the loading state and was
+  pushed off when content arrived. App screens now keep the footer below the fold.
+- **Evidence:**
+  - `pnpm --filter @palier/web lighthouse` → exit 0, performance 1.0 and accessibility 1.0 on all 8
+    routes, **max CLS 0 on every route** (was 0.0595 on `/fr/progress`).
+  - `lhci collect` with `cpuSlowdownMultiplier=4`, 2 runs × 8 routes → max CLS 0, performance 1.0 on all.
+  - With the rule removed, `/fr/progress` shifts 0.0595 again; restored byte-identical (`cmp`) and rebuilt.
+  - `pnpm verify` → 944 passed; `pnpm test:e2e` cold → "26 passed".
+  - CI's re-run on the push is the confirmation that matters; it is not in yet.
 
 ### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 4: review, progress, your data, item reporting — Slice 1 complete)
 

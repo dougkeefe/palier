@@ -19,7 +19,7 @@ export default function ReadingDrillPage({ params }: PageProps<"/[locale]/practi
   const t = useTranslations("skills");
 
   return (
-    <section className="app-stack">
+    <section className="app-stack app-island">
       <h1 className="app-hero__title">{t("reading")}</h1>
       <PracticeSession skill="reading" mode="drill" />
     </section>

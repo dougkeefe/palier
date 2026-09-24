@@ -17,7 +17,7 @@ export default function DataSettingsPage({ params }: PageProps<"/[locale]/settin
   const t = useTranslations("data");
 
   return (
-    <section className="app-stack">
+    <section className="app-stack app-island">
       <h1 className="app-hero__title">{t("title")}</h1>
       <DataSettings />
     </section>

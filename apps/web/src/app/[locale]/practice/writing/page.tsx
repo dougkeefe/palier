@@ -19,7 +19,7 @@ export default function WritingDrillPage({ params }: PageProps<"/[locale]/practi
   const t = useTranslations("skills");
 
   return (
-    <section className="app-stack">
+    <section className="app-stack app-island">
       <h1 className="app-hero__title">{t("writing")}</h1>
       <PracticeSession skill="writing" mode="drill" />
     </section>
