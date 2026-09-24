@@ -6,6 +6,7 @@ import {
   bandForRawScore,
   mapRawScore,
   pointsToBand,
+  resolveBand,
 } from "./band-mapper.js";
 import { pscSle } from "./__tests__/read-profile.js";
 
@@ -143,5 +144,31 @@ describe("a variant whose cut table has a hole", () => {
 
   it("still maps the scores the table does cover", () => {
     expect(bandForRawScore(holed, 8)).toBe("C");
+  });
+});
+
+/** Found by the one-off mutation check (progress.md D77): behaviours no test named. */
+describe("band mapper edges the mutation check found unasserted", () => {
+  it("names a raw-score-out-of-range error, so a caller can tell it from any other", () => {
+    expect(new RawScoreOutOfRangeError(60, 50).name).toBe("RawScoreOutOfRangeError");
+  });
+
+  it("names an unmapped-score error, so a caller can tell it from any other", () => {
+    expect(new UnmappedRawScoreError(5).name).toBe("UnmappedRawScoreError");
+  });
+
+  it("orders a cut table given highest band first before naming the next band up", () => {
+    const cuts = [
+      { band: "C" as const, min: 19, max: 25 },
+      { band: "B" as const, min: 14, max: 18 },
+      { band: "A" as const, min: 9, max: 13 },
+      { band: "X" as const, min: 0, max: 8 },
+    ];
+
+    expect(resolveBand(cuts, 25, 13).next).toEqual({ band: "B", min: 14, pointsAway: 1 });
+  });
+
+  it("is null, not zero points away, when the raw score sits exactly on the target's cut", () => {
+    expect(pointsToBand(readingSupervised, 38, "C")).toBeNull();
   });
 });

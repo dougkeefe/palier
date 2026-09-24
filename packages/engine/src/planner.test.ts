@@ -245,3 +245,28 @@ describe("planDay, reproducibility and degenerate inputs", () => {
     expect(plan.items).toEqual([]);
   });
 });
+
+/** Found by the one-off mutation check (progress.md D77): the two taper boundaries, exactly. */
+describe("planDay, test-date boundaries", () => {
+  const dueReviews = Array.from({ length: 8 }, (_, i) => review(`r${i}`));
+
+  it("tapers when the test is exactly three days away", () => {
+    const plan = planDay({ ...base, sessionSize: 10, dueReviews, testDate: ahead(3 * DAY) }, seq([0.3]), NOW);
+
+    expect(plan.tapering).toBe(true);
+  });
+
+  it("caps the reviews while tapering at the day less its confidence set, however many are due", () => {
+    const manyDue = Array.from({ length: 12 }, (_, i) => review(`many${i}`));
+
+    const plan = planDay({ ...base, sessionSize: 10, dueReviews: manyDue, testDate: ahead(2 * DAY) }, seq([0.3]), NOW);
+
+    expect(plan.reviews).toHaveLength(8);
+  });
+
+  it("still advises a mock exam when the test is exactly 24 hours away", () => {
+    const plan = planDay({ ...base, sessionSize: 10, dueReviews, testDate: ahead(24 * HOUR) }, seq([0.3]), NOW);
+
+    expect(plan.mockExamAdvised).toBe(true);
+  });
+});

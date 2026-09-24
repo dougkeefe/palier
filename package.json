@@ -14,10 +14,13 @@
     "clean": "turbo run clean && tsc -b --clean",
     "test:integration": "PALIER_INTEGRATION=1 vitest run --project=integration --project=integration-testing --project=integration-web",
     "test:e2e": "pnpm --filter @palier/web exec playwright test",
-    "verify:medium": "pnpm run test:integration && pnpm run test:e2e"
+    "verify:medium": "pnpm run test:integration && pnpm run test:e2e",
+    "mutation": "stryker run"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",
+    "@stryker-mutator/core": "10.0.0",
+    "@stryker-mutator/vitest-runner": "10.0.0",
     "@types/node": "22.18.11",
     "@vitest/coverage-v8": "5.0.1",
     "dependency-cruiser": "18.3.1",

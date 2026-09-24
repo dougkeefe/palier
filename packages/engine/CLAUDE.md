@@ -28,8 +28,12 @@ belongs in `@palier/app`.
   attempt whose item is absent from the bank.
 - **A calculation over attempts is a function of the attempt set, not of its order.** Two synced
   devices hold the same attempts in different orders, and must show the same trend (§6.2 tier 5).
-  `calculateTrend` breaks equal `ts` by id, and a property holds it to permutation invariance
-  (progress.md D73). Any new windowed or order-sensitive calculation needs the same tie-break.
+  `calculateTrend` and `weakestSubSkills` break equal `ts` by id, and a property holds each to
+  permutation invariance (progress.md D73, D77). Any new windowed or order-sensitive calculation
+  needs the same tie-break.
+- **Mutation-checked, on demand.** `pnpm mutation` runs Stryker over `src/` (D77). Run it after
+  any engine rewrite, and give every survivor a test or a written reason it is equivalent. It
+  is in no CI lane.
 - **Golden fixtures are the contract** (§5). Recorded outputs live in `src/__fixtures__/*.json`;
   a change that moves a golden value fails its test and must be explained in the PR, never
   regenerated to make the test pass. Two records: `exam-band-boundaries.golden.json` (the scorer

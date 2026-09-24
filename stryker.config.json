@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "_comment": "The one-off mutation check on @palier/engine (implementation-plan.md §6.2, §6.5): run once at the end of Phase 2 and after any engine rewrite, never in a CI lane. The command runner, because the vitest runner never activates a mutant under the root multi-project config; in place, because the sandbox copy breaks pnpm's nested workspace links. See progress.md D77.",
+  "testRunner": "command",
+  "commandRunner": { "command": "pnpm exec vitest run --project=engine" },
+  "coverageAnalysis": "off",
+  "mutate": [
+    "packages/engine/src/**/*.ts",
+    "!packages/engine/src/**/*.test.ts",
+    "!packages/engine/src/__tests__/**",
+    "!packages/engine/src/index.ts"
+  ],
+  "inPlace": true,
+  "concurrency": 4,
+  "reporters": ["clear-text", "progress", "json"],
+  "jsonReporter": { "fileName": "reports/mutation/engine.json" },
+  "thresholds": { "high": 90, "low": 80, "break": null }
+}

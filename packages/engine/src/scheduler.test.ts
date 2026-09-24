@@ -95,3 +95,10 @@ describe("scheduleReview, guards and helpers", () => {
     expect(retirementBox(profile)).toBe(profile.leitnerIntervalDays.length + 1);
   });
 });
+
+/** Found by the one-off mutation check (progress.md D77). */
+describe("scheduleReview, refusing a box", () => {
+  it("says which boxes are valid and which one it was given", () => {
+    expect(() => scheduleReview(profile, 0, clean, MIDNIGHT)).toThrow(`integer from 1 to ${String(RETIRED)} (the retirement box); got 0`);
+  });
+});

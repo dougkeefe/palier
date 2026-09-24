@@ -151,3 +151,18 @@ describe("weakestSubSkills", () => {
     expect(weakestSubSkills("reading", attempts, items)).toHaveLength(WEAKEST_COUNT);
   });
 });
+
+/** Found by the one-off mutation check (progress.md D77): the per-sub-skill window's edge, exactly. */
+describe("weakestSubSkills, the window's edge", () => {
+  it("drops the one answer just outside the window", () => {
+    // inference: one old miss, then exactly a window of hits, so it reads 1.0 only if the
+    // miss is outside; cohesion-and-reference reads 1.0 too, and wins the name tie.
+    const all = merge(
+      on("inference", 1, 0, { startDay: 0 }),
+      on("inference", WEAKEST_WINDOW, WEAKEST_WINDOW, { startDay: 10 }),
+      on("cohesion-and-reference", WEAKEST_WINDOW, WEAKEST_WINDOW, { startDay: 100 }),
+    );
+
+    expect(weakestSubSkills("reading", all.attempts, all.items)).toEqual(["cohesion-and-reference", "inference"]);
+  });
+});

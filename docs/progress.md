@@ -323,7 +323,7 @@ session-log evidence; nothing is ticked without it.
 
 - [x] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]. Journey 1 covers the diagnostic to accuracy per band with its interval; **journey 8** covers daily sessions on two browser contexts paired by code, with the progress screen reading identically on both (session log, 24 September 2026, `dougkeefe/pangyo`)
 - [x] Full offline operation after first load [R4] — for everything Phase 2 builds: journey 2 (a whole drill session) passes with the network off after one online load, over real IndexedDB and the service-worker-cached bank (session log, 24 September 2026). Mock exams are Phase 3, and their offline run is Phase 3's journey 3
-- [ ] Engine unit tests exhaustive at every boundary, golden fixtures locked
+- [x] Engine unit tests exhaustive at every boundary, golden fixtures locked: 100% branch; the practice-record golden beside the exam-band one (both proven to bite); and the one-off mutation check at 404/410 detected, with all 5 survivors equivalent (session log, 24 September 2026, `dougkeefe/yamoussoukro`; D77)
 - [x] Sync simulator passes several hundred seeds including full partition and heal, no lost or duplicated attempts, and the same trend on every device: 400 seeds on the memory server and 100 through the real route handlers on PGlite in the medium lane, and 4,000 + 200 once by hand (session log, 24 September 2026, `dougkeefe/yamoussoukro`; D76)
 - [x] Every adapter passes its port contract suite — `ids`, `dexie` ×6, `bank`, `openai`, `sync`; and `sync` passes it through the real route handlers too, on the memory repository (fast lane) and on PGlite (integration lane). Session log, 24 September 2026, `dougkeefe/pangyo`
 
@@ -2322,11 +2322,67 @@ transactions, or the simulator's interleaving model reaches store-operation gran
   - a failing seed replays the chaos script as it stood, so each fixed defect also keeps its own named
     unit test in `@palier/app`.
 
+### D77 — the one-off mutation check: Stryker on the command runner, run in place; 14 gaps closed, 5 equivalents
+**Date:** 24 September 2026 · **Status:** accepted
+
+§6.2 says: "run it once at the end of phase 2, act on what it finds, and drop it from the schedule if it
+finds nothing."
+- **Tooling:** `@stryker-mutator/core` and `@stryker-mutator/vitest-runner` 10.0.0 are root
+  devDependencies. §6.1 names Stryker, and nothing present mutates code, so they replace nothing. There
+  is a root `mutation` script and `stryker.config.json`, in JSON so the default-export exemption list is
+  untouched. `reports/` and `.stryker-tmp/` are gitignored. It is **in no CI lane.**
+- **Two deviations from the obvious setup, both forced:**
+  - **The command runner** (`pnpm exec vitest run --project=engine`), not the vitest runner. Under the
+    root multi-project config, the vitest runner never activated a mutant: 8.35% and "0 tests ran" on
+    seven of eight files, identically with coverage analysis on or off.
+  - **`inPlace: true`**, because Stryker's sandbox copy breaks pnpm's nested workspace links. Stryker
+    restores the files afterwards, and `git status` confirmed that after every run.
+- **First real run: 95.09%** (387 killed of 407, 20 survived, 5 min 24 s). Each survivor was either
+  given a test naming the behaviour, or recorded here as equivalent:
+  - **Closed, 14:**
+    - both error `name`s;
+    - `resolveBand` ordering a cut table given highest-first;
+    - `pointsToBand` at exactly the cut (null, not 0);
+    - the taper at exactly three days, and the mock-exam advice at exactly 24 hours;
+    - the scheduler's refusal message;
+    - the 14-day exclusion at exactly 14 days;
+    - both `subSkillBreakdown` sort keys deciding alone;
+    - an orphaned attempt not taking a trend window slot;
+    - `weakestSubSkills` at exactly its 50-answer window.
+  - **Equivalent, 5, each kept as written:**
+    - `testDate !== undefined`: with no date, the NaN arithmetic already disables the taper;
+    - `mode: "practice"` in the planner and `?? "practice"` in the selector: both are only ever
+      compared with `"diagnostic"`;
+    - `chosen !== null &&` in the scorer: scoring a null response is false anyway;
+    - `new Array(n)` against `new Array()`: filled by index either way.
+- **Second run: 98.54%** (403 killed, 1 timeout, 6 survived, 4 min 57 s). The sixth survivor was a
+  new-visible gap: the taper's review cap was never exceeded by the due reviews in any test. It now has a
+  test ("caps the reviews while tapering…"), proven by applying that mutant by hand. So **404 of 410
+  mutants are detected, and all 5 survivors are equivalent.**
+- **Found alongside:** `weakestSubSkills` windowed on `ts` alone, the same gap D73 closed in the trend. A
+  permutation property failed once its generator actually passed the 50-per-sub-skill window. The fix
+  is the same id tie-break. **No golden value moved.**
+- **Keep it, on demand:** it found real gaps, so per §6.5 it runs again after any engine rewrite
+  (`pnpm mutation`, about 5 minutes). It stays out of every lane.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, part 3: the one-off mutation check)
+
+- **Ran** Stryker on `@palier/engine` (D77): first 95.09%, then 98.54% after closing 14 gaps, then one
+  more closed by hand. **404 of 410 mutants are detected; the 5 survivors are equivalent**, and each is
+  named in D77. The exit criterion "engine unit tests exhaustive at every boundary, golden fixtures
+  locked" is ticked.
+- **Also fixed:** `weakestSubSkills`' tie-break (D73's gap, in the planner's targeting). Its permutation
+  property failed first.
+- **Evidence:**
+  - `pnpm mutation` → "All files 95.09" (5 min 24 s); after the tests → "All files 98.54" (4 min 57 s);
+    `git status` clean on `packages/engine/src` after each in-place run.
+  - `pnpm verify` → green, 1396 tests (8 todo), boundaries clean (297 and 127 modules).
 
 ### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, part 2: the engine golden record)
 

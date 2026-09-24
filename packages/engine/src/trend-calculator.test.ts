@@ -184,3 +184,15 @@ describe("calculateTrend, the window and the joins", () => {
     expect(calculateTrend("writing", [], []).skill).toBe("writing");
   });
 });
+
+/** Found by the one-off mutation check (progress.md D77). */
+describe("calculateTrend, an attempt whose item left the bank", () => {
+  it("does not let it take a window slot from an attempt the bank can still tag", () => {
+    const { items, attempts } = history("B", TREND_WINDOW, TREND_WINDOW);
+    const orphan = anAttempt({ itemId: itemId("01HGONEFROMTHEBANK000000"), ts: new Date(1000 * DAY).toISOString() });
+
+    const trend = calculateTrend("reading", [...attempts, orphan], items);
+
+    expect(trend.byBand.B).toMatchObject({ attempted: TREND_WINDOW });
+  });
+});
