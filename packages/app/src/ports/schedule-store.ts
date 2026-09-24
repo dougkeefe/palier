@@ -46,9 +46,16 @@ export type ScheduleEntry = {
  * architecture.md 9.1 indexes this store on `due`, IndexedDB will not index a
  * null key path, so the Dexie adapter gets that exclusion for free rather than
  * by filtering. The contract suite asserts both halves.
+ *
+ * `all` and `clear` serve export and wipe [R11], the pair every store port gains
+ * (progress.md D61). `all` returns every entry **including retired ones** — they
+ * carry an item's history, so an export that dropped them would lose it — in no
+ * promised order.
  */
 export type ScheduleStore = {
   due: (now: ISO, limit: number) => Promise<readonly ScheduleEntry[]>;
   get: (id: ItemId) => Promise<ScheduleEntry | null>;
   put: (entry: ScheduleEntry) => Promise<void>;
+  all: () => Promise<readonly ScheduleEntry[]>;
+  clear: () => Promise<void>;
 };

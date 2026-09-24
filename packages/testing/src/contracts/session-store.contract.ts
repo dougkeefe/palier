@@ -71,6 +71,27 @@ export const sessionStoreContract = (
       expect(again?.completedAt).toBe("2026-02-01T00:00:00.000Z");
     });
 
+    it("returns every session from all, completed or not, in any order", async () => {
+      const store = await make();
+      await store.create(aSession({ id: sessionId("open") }));
+      await store.create(aSession({ id: sessionId("done"), completedAt: "2026-01-02T00:00:00.000Z" }));
+
+      const all = await store.all();
+      expect(all.map((s) => s.id).sort()).toEqual(["done", "open"]);
+      expect(all.find((s) => s.id === "done")).toEqual(
+        aSession({ id: sessionId("done"), completedAt: "2026-01-02T00:00:00.000Z" }),
+      );
+    });
+
+    it("holds nothing after clear, so latest is null again", async () => {
+      const store = await make();
+      await store.create(aSession({ id: sessionId("s-1") }));
+      await store.clear();
+
+      expect(await store.all()).toEqual([]);
+      expect(await store.latest()).toBeNull();
+    });
+
     it.todo("survives a reopen");
   });
 };

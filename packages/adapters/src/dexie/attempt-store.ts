@@ -36,4 +36,6 @@ export const dexieAttemptStore = (db: PalierDb): AttemptStore => ({
   },
   since: (t: ISO) => db.attempts.where("ts").aboveOrEqual(t).toArray(),
   forItem: (id: ItemId) => db.attempts.where("itemId").equals(id).toArray(),
+  all: () => db.attempts.toArray(),
+  clear: () => db.attempts.clear(),
 });

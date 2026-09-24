@@ -20,4 +20,6 @@ export const dexieSettingsStore = (db: PalierDb): SettingsStore => ({
   set: async <T>(key: string, value: T) => {
     await db.settings.put({ key, value });
   },
+  all: async () => (await db.settings.toArray()).map(({ key, value }) => ({ key, value })),
+  clear: () => db.settings.clear(),
 });

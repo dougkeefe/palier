@@ -45,4 +45,6 @@ export const dexieSessionStore = (db: PalierDb): SessionStore => ({
     const row = await db.sessions.orderBy("startedAt").last();
     return row === undefined ? null : toSession(row);
   },
+  all: async () => (await db.sessions.toArray()).map(toSession),
+  clear: () => db.sessions.clear(),
 });

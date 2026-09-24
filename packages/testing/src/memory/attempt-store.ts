@@ -27,5 +27,11 @@ export const memoryAttemptStore = (): AttemptStore => {
       Promise.resolve(attempts.filter((a) => Date.parse(a.ts) >= Date.parse(t))),
     forItem: (id: ItemId) =>
       Promise.resolve(attempts.filter((a) => a.itemId === id)),
+    all: () => Promise.resolve([...attempts]),
+    clear: () => {
+      attempts.length = 0;
+      seen.clear();
+      return Promise.resolve();
+    },
   };
 };

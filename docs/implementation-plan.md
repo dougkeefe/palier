@@ -123,6 +123,11 @@ interface SessionStore   { create(s: Session): Promise<void>; complete(id: Sessi
 // Phase 3 exam runner. See progress.md D45, D46 (D46 closes D36).
 interface OralStore      { /* transcripts and audio blobs, local only */ }
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
+// Amended 24 September 2026: AttemptStore, ScheduleStore, SessionStore and SettingsStore each
+// gained `all()` and `clear()` (SettingsStore's `all()` returns `{ key, value }` entries). The
+// data-rights use cases need them — ExportData must read every record and WipeData must delete
+// them — and no existing method could do either. `ScheduleStore.all()` includes retired
+// entries. See progress.md D61; ImportData's never-overwrite merge rule is D62.
 
 // External services
 interface AiProvider {

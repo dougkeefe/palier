@@ -16,10 +16,17 @@ import type { ISO } from "./time.js";
  * uses it to avoid advancing an item's Leitner box a second time on a retry
  * (progress.md D44). Like `ScheduleStore.get` (D38), it is a signal a use case's
  * correctness needs and `Promise<void>` could not supply.
+ *
+ * `all` and `clear` exist for the data-rights use cases [R11]: `exportData` must
+ * read every record and `wipeData` must delete them, and no other method can do
+ * either. Every store port gains the same pair (progress.md D61). `all` promises
+ * no order; `clear` deletes every attempt.
  */
 export type AttemptStore = {
   append: (attempt: Attempt) => Promise<boolean>;
   recent: (skill: Skill, n: number) => Promise<readonly Attempt[]>;
   since: (t: ISO) => Promise<readonly Attempt[]>;
   forItem: (id: ItemId) => Promise<readonly Attempt[]>;
+  all: () => Promise<readonly Attempt[]>;
+  clear: () => Promise<void>;
 };

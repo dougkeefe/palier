@@ -6,7 +6,10 @@ import type {
   CompleteSessionRequest,
   CompleteSessionResult,
   DiagnosticReadoutRequest,
+  ExportDocument,
   IdGenerator,
+  ImportDataRequest,
+  ImportDataResult,
   ItemRepository,
   KeyVault,
   PlanDailySessionRequest,
@@ -23,9 +26,12 @@ import {
   answerItem,
   completeSession,
   diagnosticReadout,
+  exportData,
+  importData,
   planDailySession,
   runDiagnostic,
   startSession,
+  wipeData,
 } from "@palier/app";
 import { httpBankRepository } from "@palier/adapters/bank";
 import { dexieStores } from "@palier/adapters/dexie";
@@ -115,6 +121,10 @@ export type UseCases = {
   readonly completeSession: (request: CompleteSessionRequest) => Promise<CompleteSessionResult>;
   readonly runDiagnostic: (request: RunDiagnosticRequest) => Promise<RunDiagnosticResult>;
   readonly diagnosticReadout: (request: DiagnosticReadoutRequest) => Promise<SkillTrend>;
+  /** The data-rights trio [R11]: one action each (progress.md D61, D62). */
+  readonly exportData: () => Promise<ExportDocument>;
+  readonly importData: (request: ImportDataRequest) => Promise<ImportDataResult>;
+  readonly wipeData: () => Promise<void>;
 };
 
 export type Ports = {
@@ -186,6 +196,29 @@ function buildUseCases(ports: Ports): UseCases {
       diagnosticReadout(request, {
         items: ports.items,
         attempts: ports.attempts,
+      }),
+    exportData: () =>
+      exportData({
+        clock: ports.clock,
+        attempts: ports.attempts,
+        schedule: ports.schedule,
+        sessions: ports.sessions,
+        settings: ports.settings,
+      }),
+    importData: (request) =>
+      importData(request, {
+        attempts: ports.attempts,
+        schedule: ports.schedule,
+        sessions: ports.sessions,
+        settings: ports.settings,
+      }),
+    wipeData: () =>
+      wipeData({
+        attempts: ports.attempts,
+        schedule: ports.schedule,
+        sessions: ports.sessions,
+        settings: ports.settings,
+        vault: ports.vault,
       }),
   };
 }

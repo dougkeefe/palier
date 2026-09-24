@@ -67,6 +67,8 @@ const scheduleOf = (): ScheduleStore => ({
   due: vi.fn(() => Promise.resolve([])),
   get: vi.fn(() => Promise.resolve(null)),
   put: vi.fn(() => Promise.resolve()),
+  all: vi.fn(() => Promise.resolve([])),
+  clear: vi.fn(() => Promise.resolve()),
 });
 
 const itemsOf = (bank: readonly Item[]): ItemRepository => ({
@@ -97,6 +99,8 @@ const attemptsOf = (): AttemptStore => ({
   recent: vi.fn(() => Promise.resolve([])),
   since: vi.fn(() => Promise.resolve([])),
   forItem: vi.fn(() => Promise.resolve([])),
+  all: vi.fn(() => Promise.resolve([])),
+  clear: vi.fn(() => Promise.resolve()),
 });
 
 /** A sessions stub whose `latest()` returns a fixed prior session (or none). */
@@ -104,6 +108,8 @@ const sessionsOf = (latest: Session | null = null): SessionStore => ({
   create: vi.fn(() => Promise.resolve()),
   complete: vi.fn(() => Promise.resolve(null)),
   latest: vi.fn(() => Promise.resolve(latest)),
+  all: vi.fn(() => Promise.resolve([])),
+  clear: vi.fn(() => Promise.resolve()),
 });
 
 const aPriorSession = (over: Partial<Session> = {}): Session => ({
@@ -210,6 +216,8 @@ describe("startSession: ordering", () => {
         return Promise.resolve();
       }),
       complete: vi.fn(() => Promise.resolve(null)),
+      all: vi.fn(() => Promise.resolve([])),
+      clear: vi.fn(() => Promise.resolve()),
     };
 
     await startSession(aRequest(), depsWith({ sessions }));

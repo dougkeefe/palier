@@ -43,6 +43,16 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   likewise amended from `Promise<void>` to `Promise<boolean>` — it returns whether the attempt
   was newly stored — so `answerItem` can keep its Leitner reschedule idempotent on a retry
   (progress.md D44), the same "a use case needs a signal the port could not give" move as D38.
+  The four store ports (`AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`) each
+  gained **`all()` and `clear()`** for the data-rights use cases (progress.md D61) — the same
+  move again: export must read every record and wipe must delete them. `all()` promises no
+  order; `ScheduleStore.all()` includes retired entries.
+- **The export document carries no key-vault content** — no API key, no device secret
+  (`use-cases/export-document.ts`). An export is a file users share; the key stays in the
+  browser [R12] and the secret is a sync credential. **`importData` never overwrites a local
+  record**: attempts merge as a union, and everything else is added only where the device has
+  no record of that key. A smarter merge is Gate B's question (D43), so import must not answer
+  it (progress.md D62). **`wipeData` keeps the device secret** (D50).
 - **Use cases live under `src/use-cases/`**, one file per use case, each a plain async
   function `(request, deps)` where `deps` are the collaborators the composition root supplies.
   They are **pure orchestration**: read the ports, call one or more engine functions, return a

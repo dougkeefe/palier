@@ -199,7 +199,67 @@ describe("createContainer", () => {
     expect(Object.keys(trend.byBand).sort()).toEqual(["A", "B", "C"]);
   });
 
+  it("round-trips a device's progress through export, wipe and import [R11]", async () => {
+    await roundTripsProgress(createContainer({ hermetic: true }));
+  });
 });
+
+/**
+ * E2E journey 6's claim (implementation-plan.md §6.2), through the assembled graph:
+ * make some progress, export it, wipe everything, import the file, and find the same
+ * state. "The same" is checked twice over: the re-export is identical, and the
+ * review queue the planner reads is the queue it read before.
+ *
+ * Not "the next plan equals the previous plan": the container holds one seeded
+ * `Random` for its lifetime (§3.5), so each plan advances it, and two plans over
+ * identical state legitimately differ in order.
+ */
+const roundTripsProgress = async (c: ReturnType<typeof createContainer>) => {
+  const planRequest = { skill: "reading", lang: "fr", targetBand: "C", sessionSize: 8 } as const;
+  const started = await c.useCases.startSession({
+    sessionId: sessionId("01HSESSIONROUNDTRIP000001"),
+    mode: "drill",
+    plan: planRequest,
+  });
+  let seq = 0;
+  for (const item of started.plan.items) {
+    seq++;
+    await c.useCases.answerItem({
+      attemptId: attemptId(`01HROUNDTRIP${String(seq).padStart(14, "0")}`),
+      itemId: item.id,
+      // Alternate right and wrong, so the schedule holds more than one box.
+      response: seq % 2 === 0 ? item.key : item.key === "a" ? "b" : "a",
+      sessionId: started.session.id,
+      mode: "drill",
+      msToFirstSelect: 1_000,
+      msToConfirm: 2_000,
+      changedAnswer: false,
+      slow: false,
+    });
+  }
+  await c.useCases.completeSession({ sessionId: started.session.id });
+  await c.settings.set("dailyGoalMinutes", 20);
+
+  const before = await c.useCases.exportData();
+  const dueLater = "2099-01-01T00:00:00.000Z";
+  const queueBefore = await c.schedule.due(dueLater, 100);
+  expect(before.attempts).toHaveLength(started.plan.items.length);
+  expect(before.schedule.length).toBeGreaterThan(0);
+
+  await c.useCases.wipeData();
+  const emptied = await c.useCases.exportData();
+  expect([emptied.attempts, emptied.schedule, emptied.sessions, emptied.settings]).toEqual([[], [], [], []]);
+
+  await c.useCases.importData({ json: JSON.stringify(before) });
+
+  const after = await c.useCases.exportData();
+  expect({ ...after, exportedAt: before.exportedAt }).toEqual(before);
+  // `due` orders by due instant and promises nothing within a tie, so compare by item.
+  const byItem = (entries: readonly { itemId: string }[]) =>
+    [...entries].sort((a, b) => a.itemId.localeCompare(b.itemId));
+  expect(queueBefore.length).toBeGreaterThan(0);
+  expect(byItem(await c.schedule.due(dueLater, 100))).toEqual(byItem(queueBefore));
+};
 
 /**
  * The production graph, run in Node: Dexie over `fake-indexeddb` (the `web` project's
@@ -248,7 +308,9 @@ describe("createContainer in production", () => {
     requested.length = 0;
     vi.stubGlobal("fetch", serveCommittedBank);
   });
-  afterEach(() => {
+  afterEach(async () => {
+    // Every production container shares the one IndexedDB database, so leave it empty.
+    await createContainer({ hermetic: false }).useCases.wipeData();
     vi.unstubAllGlobals();
   });
 
@@ -291,5 +353,20 @@ describe("createContainer in production", () => {
     const again = await createContainer({ hermetic: false }).useCases.planDailySession(request);
 
     expect(again.items.map((item) => item.id)).toEqual(first.items.map((item) => item.id));
+  });
+
+  it("round-trips a device's progress through export, wipe and import, over real IndexedDB [R11]", async () => {
+    await roundTripsProgress(createContainer({ hermetic: false }));
+  });
+
+  it("keeps the device secret through a wipe, so the device keeps its sync identity (D50)", async () => {
+    const c = createContainer({ hermetic: false });
+    const secret = await c.vault.deviceSecret();
+    await c.vault.putApiKey("sk-test-not-a-real-key");
+
+    await c.useCases.wipeData();
+
+    expect(await c.vault.hasApiKey()).toBe(false);
+    expect(await c.vault.deviceSecret()).toBe(secret);
   });
 });

@@ -9,8 +9,8 @@ lands too, so the app can plan a day from the real committed bank, not only the 
 The web slice has landed too: the production composition root wires the real adapters, and a service
 worker makes the app and the bank work offline after one load (D58–D60). **Gate A is resolved** (adopt
 the PRD's UI direction).
-**Next step:** Slice 1's **data use cases** (`exportData`/`importData`/`wipeData`), then the
-single-device UI. See [Next, decided](#next-decided). The **full-volume published
+The data use cases (`exportData`/`importData`/`wipeData`) have landed too (D61, D62).
+**Next step:** the single-device **UI**, part 1 (drill, diagnostic, home). See [Next, decided](#next-decided). The **full-volume published
 bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
 feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
 (D56).
@@ -189,37 +189,39 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next slice: Slice 1's data use cases — `exportData`, `importData`, `wipeData` [R11].**
+**Next slice: Slice 1's UI, part 1 — the container provider, the drill session and the diagnostic, with
+`/home`.**
 
-The web slice landed (session log, 24 September 2026, `dougkeefe/algiers`): the production composition
-root wires the real bank/dexie/ids, the bank is served statically, and the service worker makes the
-shell, every route and the whole bank available offline (D58–D60). Gate A is resolved (Phase 2 section),
-so all of Slice 1 is now self-directable. Its next piece is the data use cases the settings/data pane and
-`/progress` export need. They come before the UI because the UI consumes them.
+The web slice and the data use cases have landed (session log, 24 September 2026, `dougkeefe/algiers`;
+D58–D62). Gate A is resolved: the UI follows the PRD's §8/§10/§11/§14 direction (Phase 2 section). Every
+use case the single-device app needs now exists and is bound in `buildUseCases`, so what is left is the
+UI.
 
 **The slice, concretely:**
 
-- Three use cases in `packages/app/src/use-cases/`, each `(request, deps)` pure orchestration with
-  local-stub unit tests (app CLAUDE.md, D37):
-  - `exportData` → a versioned JSON document of every attempt, schedule entry, session and setting.
-  - `importData(doc)` → validates the document, then merges: attempts are append-only (a duplicate id is
-    a no-op, D44), schedule entries and settings upsert. Idempotent, so importing twice changes nothing.
-  - `wipeData` → clears every store and the API key (`KeyVault.clear`) but **keeps the device secret**
-    (D50).
-- The store ports cannot enumerate today (`AttemptStore` has `recent`/`since`/`forItem`,
-  `ScheduleStore` has `due`/`get`/`put`, `SessionStore`/`SettingsStore` have no listing, and nothing can
-  clear). Add the minimum that export and wipe need, in the port **and** the in-memory impl **and** the
-  Dexie impl **and** the contract suite, amend §3.3 in place, and record each change as a deviation, the
-  way D38/D44 did.
-- Bind all three in `buildUseCases` (`apps/web/src/lib/container.ts`), with the export document's schema
-  version in one place.
-- **Done when:** `pnpm verify` green; every new port method passes its contract suite against the memory
-  **and** Dexie implementations; an export → wipe → import round trip in `container.test.ts` restores
-  the same plan; the device secret survives a wipe.
+- `apps/web/src/components/ContainerProvider.tsx` (`"use client"`): builds `createContainer` **once in
+  the browser** after hydration, because the production graph is browser-only (D59). The server layout
+  passes `hermetic` from `readEnv()`. Import the container module lazily, so the adapters stay out of the
+  shared first-load JS the bundle budget measures.
+- The `@palier/ui` pieces those screens need, as pure logic in `.ts` plus a thin `.tsx`: **BandMeter**
+  (accuracy with the Wilson interval as a lighter extension, §8.2), **Sheet** (the feedback panel,
+  §8.3), **Toast**.
+- **The drill** (`/[locale]/practice/[skill]`, §8.3): progress rail, `itemRenderers[item.type]`,
+  select-then-confirm, the feedback sheet with the rationale for the chosen option, keyboard 1–4/Enter/
+  arrows, and focus to the feedback heading then to the next item (§11). It drives `startSession` →
+  `answerItem` → `completeSession`, with ids minted by `ids.ulid()`.
+- **The diagnostic** (§6.2): a `runDiagnostic` set answered in `mode: "diagnostic"`, then
+  `diagnosticReadout` shown as accuracy per band tag with its interval.
+- **`/home`** (§8.2): Zone A readiness (practice trend, a first-run invitation to the diagnostic, §14),
+  Zone B today's plan with one "Start" action, and Zone C a review-queue link with its count. When a
+  same-day re-plan is empty (D62's finding), show **"done for today"**, not an error.
+- Every string in `messages/{en,fr}.json` at parity, and target-language content marked `lang="fr"`.
+- **Done when:** `pnpm verify` green; E2E journeys 1 and 2 pass on the hermetic project; journey 2
+  passes **offline** on the `offline` project (which ticks the [R4] exit criterion); axe is clean on the
+  drill's feedback-open state; the bundle stays under budget.
 
-After it, the Slice 1 UI in the order the plan fixes: drill + diagnostic + home (with the container
-provider and the `@palier/ui` additions), then review, progress, settings/data and item reporting, then
-the E2E journeys 1/2/6/7, axe on states, and Lighthouse on the new routes.
+Then part 2: `/review`, `/progress` (with export), `/settings/data` (export/import/wipe) and item
+reporting, plus E2E journeys 6 and 7 and Lighthouse on the new routes. That completes Slice 1.
 
 **Standing human gates (do not self-direct):**
 
@@ -300,7 +302,7 @@ session-log evidence; nothing is ticked without it.
 - [x] `adapters/ids`: the ULID generator (D48; not one of the five §3.2 names, but a real adapter)
 - [ ] `adapters/vault` and `adapters/sync`: device secret, pairing by code, push/pull, watermarks, offline queue — **gated on the `ScheduleEntry` merge decision** (D43)
 - [ ] Sync backend: Postgres + Drizzle, sync/device routes, pairing, rate limiting (ADR 5)
-- [~] `@palier/app` use cases: `StartSession`, `AnswerItem`, `CompleteSession`, `RunDiagnostic` landed (20–21 September 2026); `SyncNow`, `ExportData`, `ImportData`, `WipeData` remain
+- [~] `@palier/app` use cases: `StartSession`, `AnswerItem`, `CompleteSession`, `RunDiagnostic` landed (20–21 September 2026); `ExportData`, `ImportData`, `WipeData` landed (24 September 2026, `dougkeefe/algiers`; D61, D62); `SyncNow` remains (Slice 2)
 - [ ] UI: onboarding, home + readiness card, today's plan, the drill/feedback panel, review queue, progress, settings (sync + data, pairing flow)
 - [ ] Item reporting control and the GitHub issue path
 - [ ] The sync simulator (tier 5): two/three-device scenarios, seeded faults, convergence assertions
@@ -317,8 +319,8 @@ session-log evidence; nothing is ticked without it.
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
 carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
 `implementation-plan.md` §7 Phase 2 "Completion slices" — **keep the two in sync** (the fuller scope
-and each slice's *done* live in the plan). Current position: **Slice 1** — composition root and service
-worker landed; the data use cases are *Next, decided*; Gate A is resolved, so the UI is unblocked.
+and each slice's *done* live in the plan). Current position: **Slice 1** — composition root, service worker
+and data use cases landed; the UI is *Next, decided* (Gate A resolved).
 
 - [~] **Slice 1 — Single-device practice app, offline-complete.** Composition-root wiring of
   bank/dexie/ids + service-worker offline cache [R4] **(landed, D58–D60)** +
@@ -1843,11 +1845,74 @@ hermetic `chromium` project on `next dev`. The medium lane already builds before
 bite: with the worker forced to pass everything through, all three offline cases failed with
 `net::ERR_INTERNET_DISCONNECTED`.
 
+### D61 — every store port gains `all()` and `clear()`; §3.3 amended in place
+**Date:** 24 September 2026 · **Status:** accepted
+
+`ExportData` must read every record and `WipeData` must delete them, and no §3.3 method can do either.
+`AttemptStore` reads by skill, time and item; `ScheduleStore` by due date and id; `SessionStore` and
+`SettingsStore` not at all. So `AttemptStore`, `ScheduleStore`, `SessionStore` and `SettingsStore` each
+gain the same pair, in the port, the in-memory impl, the Dexie impl, and the contract suite, which holds
+both to it. `SettingsStore.all()` returns `{ key, value }` entries (a new `SettingEntry` type).
+`ScheduleStore.all()` **includes retired entries**: they carry an item's history, and the Dexie impl
+scans the primary key, not the `due` index that hides them. No Dexie schema change, so no migration.
+This is the "a use case needs a signal the port could not give" move of D38/D44, and §3.3 carries a dated
+note.
+
+One port per aggregate rather than a new cross-cutting `BackupStore`, because §3.3 says "one port per
+aggregate", and a second port over the same tables is two sources of truth for one table. Slice 2's sync
+push will need the same enumeration. Cost: six hand-written stubs in `@palier/app`'s tests gained two
+inert members each. No assertion changed.
+
+### D62 — `importData` validates the whole file first and never overwrites a local record
+**Date:** 24 September 2026 · **Status:** accepted
+
+Importing onto a device that already has progress is a **merge**, and the schedule's merge rule is the
+open Gate B question (D43). So import decides nothing it does not have to. **Attempts merge as a union**:
+append-only and keyed by ULID, so an already-present attempt is the store's duplicate no-op (ADR 16,
+D44). That aggregate's rule is already settled. **Schedule entries, sessions and settings are added only
+where the device has no record of that key; the local copy wins.** So: import after a wipe restores
+everything (the round trip `container.test.ts` runs over real IndexedDB), importing the same file twice
+changes nothing, and importing onto a device with history keeps that history. When Gate B lands a merge
+rule, import is the second place to apply it.
+
+The file is **parsed and validated whole before anything is written** (`parseExportDocument`,
+`InvalidExportError` naming the first bad record), so a file with one bad record changes nothing. The
+document is versioned (`format: "palier-export"`, `version: 1`) and carries **no key-vault content**: no
+API key [R12], and no device secret (a sync credential). Band estimates are absent because nothing stores
+them (ADR 16).
+
+**Finding worth carrying into the UI:** with the baseline committed bank (6 reading and 4 writing
+items), one full session answers every reading item. The planner then excludes them for 14 days, and the
+wrong answers are not due until tomorrow, so **a same-day re-plan is empty.** That is correct
+behaviour, not a bug. The home screen must present it as "done for today", not as an error.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 2: `exportData` / `importData` / `wipeData`)
+
+The data-rights use cases [R11], the second PR of Slice 1.
+
+- `packages/app/src/use-cases/`: `exportData` (a versioned `palier-export` v1 document, lists sorted so
+  equal state exports byte-identically, **no key-vault content**); `importData` (validates the whole file
+  first, then merges without ever overwriting a local record, **D62**); `wipeData` (clears the four stores
+  and the API key, **keeps the device secret**, D50). All three are bound in `buildUseCases`.
+- The four store ports gain `all()`/`clear()` (**D61**, §3.3 amended in place) in the port, the memory
+  impl, the Dexie impl and the contract suites. No Dexie schema change.
+- **Tests:** 30 cases in `data-rights.test.ts` over stateful local stubs (D37), including every
+  `parseExportDocument` rejection path. New contract cases run against memory and Dexie.
+  `container.test.ts` round-trips export → wipe → import through the assembled graph, hermetic and over
+  real IndexedDB, and checks the device secret survives a wipe.
+- **Two test mistakes of mine, caught by running them, not implementation bugs:** (1) "the next plan
+  equals the previous plan" is false by design, because the container's one seeded `Random` advances
+  with every plan, so the check is now the review queue the planner reads; (2) "the restored state still
+  plans a day" is false on the 10-item baseline bank. That is recorded as D62's finding for the home
+  screen.
+- **Evidence:** `pnpm verify` → green: 80 files, 862 tests (was 818); boundaries clean (244 and 54
+  modules); coverage thresholds held.
 
 ### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 1: production composition root + offline service worker)
 

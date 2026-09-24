@@ -12,6 +12,7 @@ export type {
   ScheduleStore,
   Session,
   SessionStore,
+  SettingEntry,
   SettingsStore,
 } from "./ports/index.js";
 
@@ -24,6 +25,12 @@ export type {
   CompleteSessionResult,
   DiagnosticReadoutDeps,
   DiagnosticReadoutRequest,
+  ExportDataDeps,
+  ExportDocument,
+  ImportCount,
+  ImportDataDeps,
+  ImportDataRequest,
+  ImportDataResult,
   PlanDailySessionDeps,
   PlanDailySessionRequest,
   RunDiagnosticDeps,
@@ -32,14 +39,22 @@ export type {
   StartSessionDeps,
   StartSessionRequest,
   StartSessionResult,
+  WipeDataDeps,
 } from "./use-cases/index.js";
 export {
+  EXPORT_FORMAT,
+  EXPORT_VERSION,
+  InvalidExportError,
   UnknownItemError,
   UnknownSessionError,
   answerItem,
   completeSession,
   diagnosticReadout,
+  exportData,
+  importData,
+  parseExportDocument,
   planDailySession,
   runDiagnostic,
   startSession,
+  wipeData,
 } from "./use-cases/index.js";

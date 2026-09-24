@@ -30,5 +30,10 @@ export const memoryScheduleStore = (): ScheduleStore => {
       byItem.set(entry.itemId, entry);
       return Promise.resolve();
     },
+    all: () => Promise.resolve([...byItem.values()]),
+    clear: () => {
+      byItem.clear();
+      return Promise.resolve();
+    },
   };
 };

@@ -34,3 +34,25 @@ export type {
   DiagnosticReadoutRequest,
 } from "./diagnostic-readout.js";
 export { diagnosticReadout } from "./diagnostic-readout.js";
+
+export type { ExportDocument } from "./export-document.js";
+export {
+  EXPORT_FORMAT,
+  EXPORT_VERSION,
+  InvalidExportError,
+  parseExportDocument,
+} from "./export-document.js";
+
+export type { ExportDataDeps } from "./export-data.js";
+export { exportData } from "./export-data.js";
+
+export type {
+  ImportCount,
+  ImportDataDeps,
+  ImportDataRequest,
+  ImportDataResult,
+} from "./import-data.js";
+export { importData } from "./import-data.js";
+
+export type { WipeDataDeps } from "./wipe-data.js";
+export { wipeData } from "./wipe-data.js";

@@ -36,5 +36,10 @@ export const memorySessionStore = (): SessionStore => {
           null,
         ),
       ),
+    all: () => Promise.resolve([...byId.values()]),
+    clear: () => {
+      byId.clear();
+      return Promise.resolve();
+    },
   };
 };

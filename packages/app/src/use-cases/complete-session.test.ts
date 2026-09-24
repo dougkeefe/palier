@@ -37,6 +37,8 @@ const sessionsOf = (initial: Session | null = aSession()): SessionStore => {
       stored = stored.completedAt === null ? { ...stored, completedAt: at } : stored;
       return Promise.resolve(stored);
     }),
+    all: vi.fn(() => Promise.resolve([])),
+    clear: vi.fn(() => Promise.resolve()),
   };
 };
 
