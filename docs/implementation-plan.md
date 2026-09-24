@@ -664,8 +664,10 @@ mirrors this list and the two must agree.
   load, and E2E journeys 1, 2, 4, 6 and 7 pass. See `progress.md` for the evidence. **Gate B** is next.
   **Gate B resolved, 24 September 2026 (human):** the lower Leitner box wins a *concurrent* edit.
   Concurrency is detected by a per-document server revision, and the device merges (`progress.md`
-  D69, ADR 21). **Slice 2 status:** parts 1–3 (ports and `syncNow`, the backend, the HTTP adapter)
-  have landed. Part 4, the sync UI and journey 8, is next.
+  D69, ADR 21). **Slice 2 status, 24 September 2026: built.** Two devices pair by code and converge
+  (E2E journey 8, on the real route handlers over PGlite). The sync settings are axe-clean, and
+  Lighthouse is 1.0/1.0 on nine routes. **Slice 3** is next. Its public deploy waits on a human
+  hosting and database gate ("Gate C" in `progress.md`).
 - **Slice 2 — Multi-device sync.** After **Gate B**: the sync backend (Postgres + Drizzle, the sync and
   device routes of §10, deferred anonymous registration, pairing by code, rate limiting; no auth lib,
   email or OAuth per ADR 5); `adapters/vault` + `adapters/sync` (device secret / sync identity, pairing

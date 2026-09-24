@@ -34,4 +34,17 @@ setup("compile every route once, one at a time", async ({ page }) => {
       await page.waitForLoadState("networkidle");
     }
   }
+  // The sync routes compile on first request too; each answers 401 or 400 unauthenticated,
+  // which is enough to build it before two journey-8 devices call it at once.
+  for (const [method, path] of SYNC_ROUTES) await page.request.fetch(path, { method });
 });
+
+const SYNC_ROUTES = [
+  ["POST", "/api/account/device"],
+  ["POST", "/api/account/pair-code"],
+  ["POST", "/api/account/pair"],
+  ["GET", "/api/account/devices"],
+  ["DELETE", "/api/account/device/warmup"],
+  ["DELETE", "/api/account"],
+  ["GET", "/api/sync"],
+] as const;

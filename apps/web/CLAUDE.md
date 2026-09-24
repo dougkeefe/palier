@@ -59,6 +59,11 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   transport, same-origin, presenting `vault.deviceSecret()`, in **both** graphs. In hermetic mode each
   page load is its own device, with a random 64-hex secret and a separate id counter, and syncs
   against the dev server's PGlite routes.
+- **`SyncRunner`** (`src/components/sync/`) sits in the layout inside `ContainerProvider` and is the
+  only thing that calls `syncNow` in the background. The trigger rules are `src/lib/sync-triggers.ts`
+  and the display rules are `src/features/sync/sync-view.ts`. Islands report events with
+  `useSync().notify(...)`, for example `"session-complete"` after `completeSession`. "Syncing…"
+  appears only after 400 ms, so a run with nothing to do never shifts the header (D72).
 
 ## Gates this app owns
 
@@ -75,7 +80,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   Turbopack dev server under parallel first requests can read a build file mid-write (D67);
   keep it the `chromium` project's dependency. **`chromium`** (hermetic, `next dev`) runs the
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
-  titles. **`offline`** (production `next start`, port 3100) runs `offline.spec.ts` (shell,
+  titles, and `sync.spec.ts`: journey 8 (two contexts, two devices), journey 7's sync half,
+  and the sync settings' states. **`offline`** (production `next start`, port 3100) runs `offline.spec.ts` (shell,
   unvisited route, every shard, journeys 2 and 7 with the network off [R4]) and
   `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
   whose fake timers stall Dexie and React). Axe on the states, (`e2e/`),

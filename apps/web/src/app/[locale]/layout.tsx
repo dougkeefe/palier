@@ -9,6 +9,7 @@ import { ContainerProvider } from "../../components/ContainerProvider";
 import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
 import { ServiceWorkerRegistrar } from "../../components/ServiceWorkerRegistrar";
+import { SyncRunner } from "../../components/sync/SyncRunner";
 import { routing } from "../../i18n/routing";
 
 // The design system of record. Imported once here, ahead of the app's own
@@ -55,11 +56,13 @@ export default async function LocaleLayout({
         </a>
         <NextIntlClientProvider>
           <ContainerProvider hermetic={isHermetic(process.env)}>
-            <Header />
-            <main id="main" tabIndex={-1} className="app-main">
-              {children}
-            </main>
-            <Footer />
+            <SyncRunner>
+              <Header />
+              <main id="main" tabIndex={-1} className="app-main">
+                {children}
+              </main>
+              <Footer />
+            </SyncRunner>
           </ContainerProvider>
         </NextIntlClientProvider>
         <ServiceWorkerRegistrar />

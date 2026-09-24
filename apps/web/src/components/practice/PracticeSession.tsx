@@ -12,6 +12,7 @@ import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { DIAGNOSTIC_SIZE, REVIEW_SET_LIMIT, readStudyProfile, sessionSizeFor } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
+import { useSync } from "../sync/SyncRunner";
 import { ReportItem } from "./ReportItem";
 import { TrendMeters } from "./TrendMeters";
 
@@ -151,6 +152,7 @@ function Runner({
   const [loadedPassage, setLoadedPassage] = useState<{ itemId: string; passage: PassageData | null } | null>(null);
   const [recordFailed, setRecordFailed] = useState(false);
   const [trend, setTrend] = useState<SkillTrend | null>(null);
+  const sync = useSync();
   const itemRef = useRef<HTMLDivElement>(null);
   const feedbackRef = useRef<HTMLHeadingElement>(null);
   // One attempt id per item, minted once, so a retried confirm is the store's no-op
@@ -249,14 +251,15 @@ function Runner({
     if (state.phase !== "complete" || items.length === 0) return;
     let live = true;
     if (mode === "drill") {
-      void container.useCases.completeSession({ sessionId: session });
+      // A completed session is a sync trigger, debounced (architecture.md §9.4).
+      void container.useCases.completeSession({ sessionId: session }).then(() => sync.notify("session-complete"));
     } else if (mode === "diagnostic" && skill !== null) {
       void container.useCases.diagnosticReadout({ skill }).then((readout) => live && setTrend(readout));
     }
     return () => {
       live = false;
     };
-  }, [state.phase, mode, container, session, skill, items.length]);
+  }, [state.phase, mode, container, session, skill, items.length, sync]);
 
   if (items.length === 0) {
     return (
