@@ -2,9 +2,12 @@
 
 In-memory implementations of every port, the port contract suites, fixture builders, a
 seeded `Random`, a `FakeClock`, a deterministic `counterIdGenerator` (the `IdGenerator`
-counterpart to `seededRandom`/`fakeClock`, so a hermetic run is reproducible — D48), and the
-canonical 60-item fixture bank (§3.2). Test infrastructure as a package, so a use case test
-runs in milliseconds with no mocking framework.
+counterpart to `seededRandom`/`fakeClock`, so a hermetic run is reproducible — D48), the
+canonical 60-item fixture bank (§3.2), and the MSW handlers — including `bankHandlers`, which
+serves an `ItemRepositoryBank` as the manifest + content-hashed shards the real bank ships, so the
+HTTP bank adapter is held to the same `itemRepositoryContract` the in-memory repo passes (it
+re-implements the factory's `buildBank` grouping, since this package may not import the factory).
+Test infrastructure as a package, so a use case test runs in milliseconds with no mocking framework.
 
 **May import** `@palier/app`, `@palier/domain`. `vitest` is a **peer** dependency because
 the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglite` and

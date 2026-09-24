@@ -615,6 +615,50 @@ This is a separate subsystem with its own specification. `content-factory.md` ho
 
 **Not built:** exams, API keys, oral, any AI at runtime.
 
+**Completion slices (24 September 2026 refinement).** The work breakdown above is grouped into
+**three** buildable slices that take Phase 2 from its current state — the `@palier/engine` core,
+`adapters/{dexie,bank,ids}` and the practice-loop use cases already landed — to every exit criterion
+met. Bigger slices by choice (human decision, progress.md D57): each is a coherent, shippable step,
+not a task list. Two **human gates** sit between them and are not self-directable. `progress.md`
+mirrors this list and the two must agree.
+
+- **Slice 1 — Single-device practice app, offline-complete.** Wire `httpBankRepository` +
+  `dexieStores` + `webCryptoIdGenerator` into the `apps/web` composition root (it stops throwing for
+  these ports); serve `content/bank/v{n}/` statically and register a service worker caching shards by
+  content-hashed URL (full offline after first load, [R4]); add the `ExportData`/`ImportData`/`WipeData`
+  use cases (over the dexie stores + `KeyVault.clear`, device-secret preserved, D50); and — after
+  **Gate A** — the full single-device UI: onboarding, home + readiness card (practice-trend only until
+  Phase 3 adds the exam half), today's plan, diagnostic, drill + feedback panel, review queue, progress,
+  settings incl. the data pane and the no-recovery sentence, and the item-reporting control + GitHub
+  issue path. *Done:* a user can arrive, run a diagnostic, see accuracy per band tag with its Wilson
+  interval, do a daily session and clear the review queue on one device fully offline after first load;
+  export/import/wipe work; axe clean + keyboard-complete on onboarding, drill and review (asserted on
+  states, [R9]); Lighthouse perf & a11y ≥95; E2E journeys 1, 2, 6, 7; `pnpm verify` green; no vendor
+  type crosses into `apps/web` beyond `next`/`react`.
+- **Gate A — product and UI direction (human).** Screens, copy, states, visual language for the
+  onboarding/drill/review/settings surfaces. Gates Slice 1's UI portion (its composition-root, service
+  worker and data use cases are buildable before it).
+- **Slice 2 — Multi-device sync.** After **Gate B**: the sync backend (Postgres + Drizzle, the sync and
+  device routes of §10, deferred anonymous registration, pairing by code, rate limiting; no auth lib,
+  email or OAuth per ADR 5); `adapters/vault` + `adapters/sync` (device secret / sync identity, pairing
+  crypto, push/pull, watermarks, retry, offline queue) behind the `SyncTransport` port, applying the
+  D43 merge rule; the `SyncNow` use case and the settings pairing-flow UI. *Done:* two devices paired by
+  code with progress following both and identical trend figures on each; both adapters pass their port
+  contract suites; PGlite integration + route-handler tests; E2E journey 8; axe clean on pairing;
+  `pnpm verify` green. Completes the two-device exit criterion [R1, R4, R10, R14].
+- **Gate B — the `ScheduleEntry` merge decision (human, D43).** Add `updatedAt`, take the lower Leitner
+  box, or treat the schedule as device-local. Gates all of Slice 2.
+- **Slice 3 — Convergence proof + public launch.** The sync simulator (tier 5): two/three-device
+  scenarios, seeded faults, several hundred seeds incl. full partition and heal, asserting no lost or
+  duplicated attempts and identical trend on every device; wire the remaining Phase 2 CI gates (engine
+  golden regression, port contract suites, sync simulation in the medium lane, PGlite integration, E2E
+  1/2/6/7/8) and run the one-off mutation check; confirm full-offline operation and Lighthouse ≥95; deploy
+  publicly and share with a handful of people. *Done:* every Phase 2 exit criterion green; **Phase 2
+  complete.**
+
+Critical path: Slice 1 (Gate A gates its UI) → Slice 2 (behind Gate B) → Slice 3. Slice 1's
+composition-root/service-worker/data-use-case work is the only part buildable before either gate.
+
 ---
 
 ### Phase 3: Exams and item statistics
