@@ -1,0 +1,1586 @@
+{
+  "description": "A recorded practice history on 12 reading items (3 at band A, 5 at B, 4 at C) and 120 answers — enough that the trend's 100-attempt window cuts it — with the engine's outputs: the Leitner state after every answer (psc-sle intervals), the final trend with Wilson intervals, one seeded selection and one day plan. Golden fixtures are the contract (implementation-plan.md §5): a change that moves any value here fails its test and is explained in the PR, never regenerated to pass.",
+  "now": "2026-05-01T09:00:00.000Z",
+  "items": [
+    {
+      "id": "01HGOLDITEM0000000000001",
+      "band": "A",
+      "subSkill": "main-idea"
+    },
+    {
+      "id": "01HGOLDITEM0000000000002",
+      "band": "A",
+      "subSkill": "specific-detail"
+    },
+    {
+      "id": "01HGOLDITEM0000000000003",
+      "band": "A",
+      "subSkill": "inference"
+    },
+    {
+      "id": "01HGOLDITEM0000000000004",
+      "band": "B",
+      "subSkill": "vocabulary-in-context"
+    },
+    {
+      "id": "01HGOLDITEM0000000000005",
+      "band": "B",
+      "subSkill": "cohesion-and-reference"
+    },
+    {
+      "id": "01HGOLDITEM0000000000006",
+      "band": "B",
+      "subSkill": "tone-and-intent"
+    },
+    {
+      "id": "01HGOLDITEM0000000000007",
+      "band": "B",
+      "subSkill": "text-structure"
+    },
+    {
+      "id": "01HGOLDITEM0000000000008",
+      "band": "B",
+      "subSkill": "numerical-and-tabular-detail"
+    },
+    {
+      "id": "01HGOLDITEM0000000000009",
+      "band": "C",
+      "subSkill": "main-idea"
+    },
+    {
+      "id": "01HGOLDITEM0000000000010",
+      "band": "C",
+      "subSkill": "specific-detail"
+    },
+    {
+      "id": "01HGOLDITEM0000000000011",
+      "band": "C",
+      "subSkill": "inference"
+    },
+    {
+      "id": "01HGOLDITEM0000000000012",
+      "band": "C",
+      "subSkill": "vocabulary-in-context"
+    }
+  ],
+  "responses": [
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T08:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000008",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T09:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000003",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T10:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000010",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": true,
+      "ts": "2026-04-01T11:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000005",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T12:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000012",
+      "correct": false,
+      "changedAnswer": true,
+      "slow": false,
+      "ts": "2026-04-01T13:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000007",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T14:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000002",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T15:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T16:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T17:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000011",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T18:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000006",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T19:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T20:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000008",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T21:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000003",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T22:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000010",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-01T23:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000005",
+      "correct": false,
+      "changedAnswer": true,
+      "slow": false,
+      "ts": "2026-04-02T00:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000012",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T01:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000007",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T02:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000002",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T03:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": true,
+      "ts": "2026-04-02T04:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T05:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000011",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T06:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000006",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T07:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T08:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000008",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T09:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000003",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T10:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000010",
+      "correct": true,
+      "changedAnswer": true,
+      "slow": false,
+      "ts": "2026-04-02T11:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000005",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T12:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000012",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T13:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000007",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T14:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000002",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T15:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T16:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T17:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000011",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T18:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000006",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T19:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T20:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000008",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": true,
+      "ts": "2026-04-02T21:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000003",
+      "correct": true,
+      "changedAnswer": true,
+      "slow": false,
+      "ts": "2026-04-02T22:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000010",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-02T23:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000005",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T00:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000012",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T01:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000007",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T02:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000002",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T03:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T04:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T05:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000011",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T06:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000006",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T07:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T08:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000008",
+      "correct": false,
+      "changedAnswer": true,
+      "slow": false,
+      "ts": "2026-04-03T09:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000003",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T10:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000010",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T11:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000005",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T12:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000012",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T13:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000007",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": true,
+      "ts": "2026-04-03T14:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000002",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T15:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T16:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T17:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000011",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T18:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000006",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T19:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": true,
+      "changedAnswer": true,
+      "slow": false,
+      "ts": "2026-04-03T20:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000008",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T21:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000003",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T22:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000010",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-03T23:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000005",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T00:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000012",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T01:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000007",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T02:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000002",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T03:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T04:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T05:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000011",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T06:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000006",
+      "correct": true,
+      "changedAnswer": true,
+      "slow": true,
+      "ts": "2026-04-04T07:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T08:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000008",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T09:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000003",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T10:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000010",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T11:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000005",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T12:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000012",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T13:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000007",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T14:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000002",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T15:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T16:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T17:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000011",
+      "correct": false,
+      "changedAnswer": true,
+      "slow": false,
+      "ts": "2026-04-04T18:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000006",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T19:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T20:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000008",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T21:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000003",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T22:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000010",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-04T23:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000005",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": true,
+      "ts": "2026-04-05T00:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000012",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T01:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000007",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T02:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000002",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T03:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T04:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": false,
+      "changedAnswer": true,
+      "slow": false,
+      "ts": "2026-04-05T05:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000011",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T06:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000006",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T07:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T08:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000008",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T09:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000003",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T10:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000010",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T11:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000005",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T12:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000012",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T13:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000007",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T14:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000002",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T15:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": true,
+      "changedAnswer": true,
+      "slow": false,
+      "ts": "2026-04-05T16:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": true,
+      "ts": "2026-04-05T17:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000011",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T18:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000006",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T19:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T20:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000008",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-05T21:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-25T08:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-25T09:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-25T10:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-25T11:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-25T12:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": false,
+      "changedAnswer": true,
+      "slow": false,
+      "ts": "2026-04-25T13:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-25T14:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000004",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-25T15:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000009",
+      "correct": false,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-25T16:00:00.000Z"
+    },
+    {
+      "item": "01HGOLDITEM0000000000001",
+      "correct": true,
+      "changedAnswer": false,
+      "slow": false,
+      "ts": "2026-04-25T17:00:00.000Z"
+    }
+  ],
+  "expected": {
+    "schedule": [
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 2,
+        "due": "2026-04-04T08:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000008",
+        "box": 2,
+        "due": "2026-04-04T09:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000003",
+        "box": 2,
+        "due": "2026-04-04T10:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000010",
+        "box": 1,
+        "due": "2026-04-02T11:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000005",
+        "box": 2,
+        "due": "2026-04-04T12:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000012",
+        "box": 1,
+        "due": "2026-04-02T13:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000007",
+        "box": 1,
+        "due": "2026-04-02T14:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000002",
+        "box": 2,
+        "due": "2026-04-04T15:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 1,
+        "due": "2026-04-02T16:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 1,
+        "due": "2026-04-02T17:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000011",
+        "box": 2,
+        "due": "2026-04-04T18:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000006",
+        "box": 2,
+        "due": "2026-04-04T19:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 3,
+        "due": "2026-04-08T20:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000008",
+        "box": 1,
+        "due": "2026-04-02T21:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000003",
+        "box": 3,
+        "due": "2026-04-08T22:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000010",
+        "box": 1,
+        "due": "2026-04-02T23:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000005",
+        "box": 1,
+        "due": "2026-04-03T00:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000012",
+        "box": 2,
+        "due": "2026-04-05T01:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000007",
+        "box": 2,
+        "due": "2026-04-05T02:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000002",
+        "box": 3,
+        "due": "2026-04-09T03:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 1,
+        "due": "2026-04-03T04:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 2,
+        "due": "2026-04-05T05:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000011",
+        "box": 1,
+        "due": "2026-04-03T06:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000006",
+        "box": 1,
+        "due": "2026-04-03T07:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 4,
+        "due": "2026-04-23T08:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000008",
+        "box": 2,
+        "due": "2026-04-05T09:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000003",
+        "box": 1,
+        "due": "2026-04-03T10:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000010",
+        "box": 1,
+        "due": "2026-04-03T11:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000005",
+        "box": 2,
+        "due": "2026-04-05T12:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000012",
+        "box": 1,
+        "due": "2026-04-03T13:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000007",
+        "box": 3,
+        "due": "2026-04-09T14:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000002",
+        "box": 4,
+        "due": "2026-04-23T15:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 1,
+        "due": "2026-04-03T16:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 1,
+        "due": "2026-04-03T17:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000011",
+        "box": 2,
+        "due": "2026-04-05T18:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000006",
+        "box": 2,
+        "due": "2026-04-05T19:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 1,
+        "due": "2026-04-03T20:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000008",
+        "box": 2,
+        "due": "2026-04-05T21:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000003",
+        "box": 1,
+        "due": "2026-04-03T22:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000010",
+        "box": 1,
+        "due": "2026-04-03T23:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000005",
+        "box": 3,
+        "due": "2026-04-10T00:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000012",
+        "box": 2,
+        "due": "2026-04-06T01:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000007",
+        "box": 1,
+        "due": "2026-04-04T02:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000002",
+        "box": 1,
+        "due": "2026-04-04T03:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 2,
+        "due": "2026-04-06T04:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 2,
+        "due": "2026-04-06T05:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000011",
+        "box": 1,
+        "due": "2026-04-04T06:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000006",
+        "box": 3,
+        "due": "2026-04-10T07:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 2,
+        "due": "2026-04-06T08:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000008",
+        "box": 1,
+        "due": "2026-04-04T09:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000003",
+        "box": 2,
+        "due": "2026-04-06T10:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000010",
+        "box": 2,
+        "due": "2026-04-06T11:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000005",
+        "box": 1,
+        "due": "2026-04-04T12:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000012",
+        "box": 1,
+        "due": "2026-04-04T13:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000007",
+        "box": 1,
+        "due": "2026-04-04T14:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000002",
+        "box": 2,
+        "due": "2026-04-06T15:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 1,
+        "due": "2026-04-04T16:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 3,
+        "due": "2026-04-10T17:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000011",
+        "box": 1,
+        "due": "2026-04-04T18:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000006",
+        "box": 1,
+        "due": "2026-04-04T19:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 2,
+        "due": "2026-04-06T20:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000008",
+        "box": 2,
+        "due": "2026-04-06T21:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000003",
+        "box": 3,
+        "due": "2026-04-10T22:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000010",
+        "box": 1,
+        "due": "2026-04-04T23:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000005",
+        "box": 2,
+        "due": "2026-04-07T00:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000012",
+        "box": 1,
+        "due": "2026-04-05T01:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000007",
+        "box": 1,
+        "due": "2026-04-05T02:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000002",
+        "box": 3,
+        "due": "2026-04-11T03:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 1,
+        "due": "2026-04-05T04:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 1,
+        "due": "2026-04-05T05:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000011",
+        "box": 2,
+        "due": "2026-04-07T06:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000006",
+        "box": 1,
+        "due": "2026-04-05T07:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 3,
+        "due": "2026-04-11T08:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000008",
+        "box": 1,
+        "due": "2026-04-05T09:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000003",
+        "box": 4,
+        "due": "2026-04-25T10:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000010",
+        "box": 1,
+        "due": "2026-04-05T11:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000005",
+        "box": 1,
+        "due": "2026-04-05T12:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000012",
+        "box": 2,
+        "due": "2026-04-07T13:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000007",
+        "box": 2,
+        "due": "2026-04-07T14:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000002",
+        "box": 4,
+        "due": "2026-04-25T15:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 2,
+        "due": "2026-04-07T16:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 2,
+        "due": "2026-04-07T17:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000011",
+        "box": 1,
+        "due": "2026-04-05T18:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000006",
+        "box": 1,
+        "due": "2026-04-05T19:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 4,
+        "due": "2026-04-25T20:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000008",
+        "box": 2,
+        "due": "2026-04-07T21:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000003",
+        "box": 1,
+        "due": "2026-04-05T22:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000010",
+        "box": 2,
+        "due": "2026-04-07T23:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000005",
+        "box": 1,
+        "due": "2026-04-06T00:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000012",
+        "box": 1,
+        "due": "2026-04-06T01:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000007",
+        "box": 3,
+        "due": "2026-04-12T02:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000002",
+        "box": 5,
+        "due": null
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 1,
+        "due": "2026-04-06T04:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 1,
+        "due": "2026-04-06T05:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000011",
+        "box": 2,
+        "due": "2026-04-08T06:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000006",
+        "box": 2,
+        "due": "2026-04-08T07:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 1,
+        "due": "2026-04-06T08:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000008",
+        "box": 3,
+        "due": "2026-04-12T09:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000003",
+        "box": 2,
+        "due": "2026-04-08T10:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000010",
+        "box": 1,
+        "due": "2026-04-06T11:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000005",
+        "box": 2,
+        "due": "2026-04-08T12:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000012",
+        "box": 2,
+        "due": "2026-04-08T13:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000007",
+        "box": 1,
+        "due": "2026-04-06T14:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000002",
+        "box": 1,
+        "due": "2026-04-06T15:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 1,
+        "due": "2026-04-06T16:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 1,
+        "due": "2026-04-06T17:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000011",
+        "box": 1,
+        "due": "2026-04-06T18:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000006",
+        "box": 3,
+        "due": "2026-04-12T19:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 2,
+        "due": "2026-04-08T20:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000008",
+        "box": 1,
+        "due": "2026-04-06T21:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 3,
+        "due": "2026-05-02T08:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 2,
+        "due": "2026-04-28T09:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 1,
+        "due": "2026-04-26T10:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 1,
+        "due": "2026-04-26T11:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 3,
+        "due": "2026-05-02T12:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 1,
+        "due": "2026-04-26T13:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 1,
+        "due": "2026-04-26T14:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000004",
+        "box": 4,
+        "due": "2026-05-16T15:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000009",
+        "box": 1,
+        "due": "2026-04-26T16:00:00.000Z"
+      },
+      {
+        "item": "01HGOLDITEM0000000000001",
+        "box": 2,
+        "due": "2026-04-28T17:00:00.000Z"
+      }
+    ],
+    "trend": {
+      "skill": "reading",
+      "windowSize": 100,
+      "byBand": {
+        "A": {
+          "status": "insufficient",
+          "attempted": 26,
+          "needed": 30
+        },
+        "B": {
+          "status": "estimated",
+          "attempted": 41,
+          "correct": 27,
+          "accuracy": 0.6585365853658537,
+          "interval": {
+            "low": 0.5054983651982969,
+            "high": 0.7844119174261515
+          }
+        },
+        "C": {
+          "status": "estimated",
+          "attempted": 33,
+          "correct": 13,
+          "accuracy": 0.3939393939393939,
+          "interval": {
+            "low": 0.2468310743447709,
+            "high": 0.5631655918005977
+          }
+        }
+      }
+    },
+    "selection": {
+      "seed": 42,
+      "targetBand": "C",
+      "count": 4,
+      "ids": [
+        "01HGOLDITEM0000000000005",
+        "01HGOLDITEM0000000000010",
+        "01HGOLDITEM0000000000008",
+        "01HGOLDITEM0000000000007"
+      ]
+    },
+    "plan": {
+      "seed": 7,
+      "targetBand": "C",
+      "sessionSize": 8,
+      "dueItems": [
+        "01HGOLDITEM0000000000001",
+        "01HGOLDITEM0000000000008",
+        "01HGOLDITEM0000000000003",
+        "01HGOLDITEM0000000000010",
+        "01HGOLDITEM0000000000005",
+        "01HGOLDITEM0000000000012",
+        "01HGOLDITEM0000000000007",
+        "01HGOLDITEM0000000000002",
+        "01HGOLDITEM0000000000009",
+        "01HGOLDITEM0000000000011",
+        "01HGOLDITEM0000000000006"
+      ],
+      "reviews": [
+        "01HGOLDITEM0000000000001",
+        "01HGOLDITEM0000000000002",
+        "01HGOLDITEM0000000000003"
+      ],
+      "newItems": [
+        "01HGOLDITEM0000000000011",
+        "01HGOLDITEM0000000000007",
+        "01HGOLDITEM0000000000010"
+      ],
+      "maintenance": [
+        "01HGOLDITEM0000000000008",
+        "01HGOLDITEM0000000000006"
+      ]
+    }
+  }
+}

@@ -2328,6 +2328,28 @@ transactions, or the simulator's interleaving model reaches store-operation gran
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
+### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, part 2: the engine golden record)
+
+- **Built:** `packages/engine/src/__fixtures__/practice-record.golden.json`, the §5 "recorded set of
+  item responses with expected accuracy figures, intervals, schedule states". It holds 12 reading items
+  (A×3, B×5, C×4) and 120 answers, so the 100-attempt window cuts the history, plus the outputs:
+  - the Leitner state after every answer;
+  - the trend (A insufficient; B and C estimated, with Wilson intervals);
+  - one seeded `selectItems`;
+  - one seeded `planDay`.
+
+  Three golden tests replay it, beside the existing exam-band golden. They were recorded after D73's
+  tie-break, so no existing value moved.
+- **Checked independently, not only recorded:** all 120 Leitner rows were recomputed in Python from the
+  profile's `[1, 3, 7, 21]` (0 mismatches). The window was recounted by hand (A 26, B 41/27 correct, C
+  33/13), and both estimated intervals match an independent Wilson formula to 12 decimal places.
+- **Proven to bite, each restored afterwards:**
+  - `TREND_WINDOW` 100 → 99 fails the trend golden;
+  - `WEAKEST_WEIGHT` 3 → 1 fails both selection goldens;
+  - dropping `slow` from the Leitner hold rule fails 9 of 120 schedule rows;
+  - `RECENT_DAYS` 14 → 13 moves nothing, correctly, since the recent answers are 6 days old.
+- **Evidence:** `pnpm verify` → green, 1382 tests (8 todo), boundaries clean (296 and 127 modules).
+
 ### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, part 1: the sync simulator, and the two defects it found)
 
 The Phase 2 exit criterion "sync simulator passes several hundred seeds including full partition and heal,
