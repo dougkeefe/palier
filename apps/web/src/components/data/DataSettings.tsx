@@ -84,9 +84,10 @@ export function DataSettings() {
           {imported.status === "done" ? (
             <Toast tone="correct">
               {t("imported", {
-                attempts: imported.result.attempts.added,
-                reviews: imported.result.schedule.added,
-                sessions: imported.result.sessions.added,
+                // A merged record changed this device's copy, so it counts as imported (D69).
+                attempts: imported.result.attempts.added + imported.result.attempts.merged,
+                reviews: imported.result.schedule.added + imported.result.schedule.merged,
+                sessions: imported.result.sessions.added + imported.result.sessions.merged,
                 kept:
                   imported.result.attempts.kept +
                   imported.result.schedule.kept +

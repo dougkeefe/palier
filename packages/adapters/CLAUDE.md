@@ -5,9 +5,9 @@ Every concrete adapter, one directory and one subpath export each: `/dexie`, `/b
 (progress.md D48). A subpath lands with its adapter, not before — an entry resolving to an
 empty module asserts a boundary with nothing behind it (D3). **Four are live.** `./ids` →
 `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto, no npm dependency).
-`./dexie` → `dexieStores` (the five local store ports — `AttemptStore`, `ScheduleStore`,
-`SessionStore`, `SettingsStore`, `KeyVault` — over IndexedDB via `dexie`, at schema version 1;
-progress.md D49/D50). `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1). `./bank` →
+`./dexie` → `dexieStores` (the six local store ports — `AttemptStore`, `ScheduleStore`,
+`SessionStore`, `SettingsStore`, `KeyVault`, `SyncStateStore` — over IndexedDB via `dexie`, at
+schema version 1; progress.md D49/D50, D69, the last on the `syncMeta` table v1 already declared). `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1). `./bank` →
 `httpBankRepository` (the `ItemRepository` over the committed bank shards; progress.md D55). The
 remaining two (`/sync`, `/vault`) stay unexported until they land.
 

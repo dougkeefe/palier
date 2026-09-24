@@ -7,3 +7,27 @@ export type { Session, SessionStore } from "./session-store.js";
 export type { SettingEntry, SettingsStore } from "./settings-store.js";
 export type { KeyVault } from "./key-vault.js";
 export type { AiProvider } from "./ai-provider.js";
+export type {
+  DeviceId,
+  DeviceIdentity,
+  DeviceSummary,
+  PullResult,
+  PushItem,
+  PushResult,
+  SyncDocType,
+  SyncDocument,
+  SyncTransport,
+} from "./sync-transport.js";
+export {
+  PAIR_CODE_ALPHABET,
+  PAIR_CODE_LENGTH,
+  PAIR_CODE_TTL_MS,
+  PairCodeRejectedError,
+  SYNC_DOC_TYPES,
+  normalizePairCode,
+  SyncUnauthorizedError,
+  SyncUnavailableError,
+  deviceId,
+} from "./sync-transport.js";
+export type { LedgerEntry, SyncState, SyncStateStore } from "./sync-state-store.js";
+export { INITIAL_SYNC_STATE } from "./sync-state-store.js";

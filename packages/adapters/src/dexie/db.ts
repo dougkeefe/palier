@@ -1,4 +1,4 @@
-import type { ISO, ScheduleEntry } from "@palier/app";
+import type { ISO, LedgerEntry, ScheduleEntry, SyncState } from "@palier/app";
 import type { Attempt, AttemptId, AttemptMode, ItemId, SessionId } from "@palier/domain";
 import { Dexie, type Table } from "dexie";
 
@@ -6,8 +6,8 @@ import { Dexie, type Table } from "dexie";
  * The local IndexedDB database, one Dexie instance per app (architecture.md 9.1).
  *
  * The `stores()` block below is the documented schema version 1 **verbatim**, all
- * thirteen tables, even though only five have adapters today (attempts, schedule,
- * sessions, settings, keyVault). Declaring the whole of v1 now means the remaining
+ * thirteen tables, even though only six have adapters today (attempts, schedule,
+ * sessions, settings, keyVault, syncMeta). Declaring the whole of v1 now means the remaining
  * adapters land without a schema bump — a `version(2)` is reserved for a real shape
  * change, not for turning on a table the schema already anticipated. The unused
  * tables are inert: nothing reads or writes them until their adapter exists.
@@ -60,6 +60,15 @@ export type ApiKeyRow = {
 /** Every row the `keyVault` table holds, discriminated by `id`. */
 export type KeyVaultRow = DeviceKeyRow | DeviceSecretRow | ApiKeyRow;
 
+/** The one sync-state row: identity, watermark, switch, last sync (progress.md D69). */
+export type SyncStateRow = SyncState & { readonly id: "state" };
+
+/** One ledger entry, keyed `ledger:<type>:<id>` so a prefix query finds them all. */
+export type LedgerRow = LedgerEntry & { readonly id: `ledger:${string}` };
+
+/** Every row the `syncMeta` table holds, discriminated by `id`. */
+export type SyncMetaRow = SyncStateRow | LedgerRow;
+
 export class PalierDb extends Dexie {
   constructor(name = "palier") {
     super(name);
@@ -102,5 +111,9 @@ export class PalierDb extends Dexie {
 
   get keyVault(): Table<KeyVaultRow, string> {
     return this.table("keyVault");
+  }
+
+  get syncMeta(): Table<SyncMetaRow, string> {
+    return this.table("syncMeta");
   }
 }

@@ -148,14 +148,29 @@ interface AiProvider {
 }
 
 interface SyncTransport {
-  push(docs: SyncDocument[], watermark: ISO): Promise<PushResult>
-  pull(watermark: ISO, cursor?: string): Promise<PullResult>
-  registerDevice(): Promise<DeviceIdentity>
+  push(items: PushItem[]): Promise<PushResult>                  // PushItem = { type, id, baseRevision: number | null, payload }
+  pull(watermark: number): Promise<PullResult>                  // PullResult = { docs, watermark, more }
+  registerDevice(label: string): Promise<DeviceIdentity>        // idempotent per secret
   requestPairCode(): Promise<{ code: string; expiresAt: ISO }>
-  redeemPairCode(code: string): Promise<DeviceIdentity>
+  redeemPairCode(code: string, label: string): Promise<DeviceIdentity>
   listDevices(): Promise<DeviceSummary[]>
   revokeDevice(id: DeviceId): Promise<void>
   deleteAccount(): Promise<void>
+}
+// Amended in place 24 September 2026 with Gate B (progress.md D69). Conflicts are detected
+// per document: every server document carries a per-account `revision`, a push names the
+// `baseRevision` it was derived from, and the server takes it only while that is current —
+// otherwise it returns its copy in `conflicts` and the DEVICE merges (lower Leitner box wins).
+// So the watermark is a revision, not an ISO instant, and needs no separate cursor. The
+// credential is the device's own secret, handed to the adapter by the composition root.
+
+interface SyncStateStore {                                      // a port §3.3 did not name (D69)
+  state(): Promise<SyncState>                                   // { identity, watermark, enabled, lastSyncedAt }
+  update(patch: Partial<SyncState>): Promise<SyncState>
+  ledger(): Promise<LedgerEntry[]>                              // per document: { type, id, revision, hash }
+  record(entries: LedgerEntry[]): Promise<void>
+  resetLedger(): Promise<void>                                  // forget ledger + watermark, keep identity + switch
+  clear(): Promise<void>
 }
 
 interface KeyVault {

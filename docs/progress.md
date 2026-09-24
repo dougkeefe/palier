@@ -12,7 +12,9 @@ the PRD's UI direction).
 The data use cases (`exportData`/`importData`/`wipeData`) have landed too (D61, D62).
 The single-device UI has landed too (D63–D67), so **Slice 1 is complete**: the whole practice app works
 on one device, offline after one load.
-**Next step:** **Gate B**, the `ScheduleEntry` merge decision (D43), a human call that gates Slice 2 (sync). See [Next, decided](#next-decided). The **full-volume published
+**Gate B is resolved** (human, 24 September 2026: the lower Leitner box wins a concurrent edit, D69),
+so **Slice 2 (multi-device sync) is in flight** on `dougkeefe/pangyo`. Part 1, the sync core, has
+landed. **Next step:** Slice 2 part 2, the sync backend. See [Next, decided](#next-decided). The **full-volume published
 bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
 feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
 (D56).
@@ -90,9 +92,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/phase-2-development` (PR #19; the session log calls it by its first name, `dougkeefe/algiers`) | **Phase 2 Slice 1 — the single-device practice app, offline-complete (D57).** Composition root wires the real bank/dexie/ids (stops throwing); bank served statically + a service worker for offline [R4]; `ExportData`/`ImportData`/`WipeData`; then the single-device UI with **Gate A resolved by adopting the PRD's §8/§10/§11/§14 direction** (human decision, 24 September 2026). Shipped as ordered PRs; infra first. | 24 September 2026 |
+| `dougkeefe/pangyo` | **Phase 2 Slice 2 — multi-device sync (D57).** Gate B resolved (human, 24 September 2026): **the lower Leitner box wins a concurrent edit** (D69). Revisioned sync documents with client-side merge, SHA-256 device secrets (D70, ADR 21); `SyncTransport` + `SyncStateStore` ports, `syncNow` and the pairing use cases; the sync backend in `apps/web/src/server` + route handlers; `adapters/sync`; `/settings/sync` and E2E journey 8. Shipped as ordered parts. | 24 September 2026 |
 
-*(The prior rows — `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -191,36 +193,46 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next: Gate B, the `ScheduleEntry` merge decision (D43). A human call, and the only thing between
-here and Slice 2.**
+**Next: Slice 2, part 2 — the sync backend** (`apps/web/src/server` plus the route handlers). It is
+buildable now. Parts 3 and 4 follow on the same branch, in order.
 
-**Slice 1 is complete** (session log, 24 September 2026, `dougkeefe/algiers`; D58–D67): the
-single-device app works end to end and fully offline after one load, on real IndexedDB and the served
-bank. That covers onboarding, today, drill, diagnostic, review, progress, export/import/delete, and item
-reporting, with E2E journeys 1, 2, 4, 6 and 7 and Lighthouse 1.0/1.0. Slice 2 (multi-device sync) cannot
-start until one question is answered, and it is a product judgement, not a derivation, so it is **not
-self-directable**:
+**Where Slice 2 stands.**
+- **Gate B is resolved** (D69): the lower box wins a concurrent edit, and concurrency is detected by a
+  per-document server revision.
+- **Part 1 has landed** (session log, 24 September 2026, `dougkeefe/pangyo`):
+  - the `SyncTransport` port (§3.3 amended) and a new `SyncStateStore` port;
+  - `mergeRecord`, `syncNow`, and the pairing, device, switch and delete-everywhere use cases;
+  - `importData` moved onto the same merge;
+  - `memorySyncServer`, `syncTransportContract`, `syncStateStoreContract` and `syncHandlers` in
+    `@palier/testing`;
+  - `dexieSyncStateStore` on the `syncMeta` table.
 
-> When two devices have drilled the same item offline and both changed its `ScheduleEntry`, which one
-> wins?
+**Part 2's scope** (the protocol is fixed by `packages/testing/src/msw/sync-handlers.ts`, whose doc
+comment is the wire table):
+- **Schema and migrations:** a Drizzle schema in `apps/web/src/server/schema.ts` with `accounts`
+  (+`revision`), `devices` (`secret_hash` unique, **SHA-256**, human decision, recorded as D70),
+  `sync_documents` (+`revision`, indexed `(account_id, revision)`), `pair_codes` and `rate_limits`.
+  Migrations come from drizzle-kit into `apps/web/drizzle/`.
+- **Repository:** a `SyncRepository` over it, with every method keyed by account.
+- **Handlers:** pure request→response functions that validate every body. Registration, pair-code and
+  pair are rate-limited by an HMAC of the IP. A foreign device or document is **404**.
+- **Routes:** Node-runtime routes under `src/app/api/{account,sync}/`.
+- **Database wiring:** `server/db.ts`, with PGlite (a `globalThis` singleton) when hermetic,
+  `postgres(DATABASE_URL)` otherwise, and 503 when it is unset.
 
-The three options D43 records, unchanged:
+**Done looks like:**
+- `syncTransportContract` passes through an HTTP transport whose `fetch` calls the real handlers, over a
+  memory repository in the fast lane and over PGlite in the integration lane (widen the `integration`
+  project to `apps/web/src/**/*.integration.test.ts`);
+- `apps/web/src/app/**/route.ts` holds 95% branch;
+- a `VENDOR_BANS` entry keeps `drizzle-orm|postgres` in `apps/web`;
+- ADR 21 is written, and D70 is recorded;
+- `pnpm verify` is green.
 
-1. **Add `updatedAt`** and apply §9.4's last-write-wins. Simplest; can move a box backwards when the later
-   write came from the device that saw less.
-2. **Take the lower box.** Needs no schema change and fails safe: a disagreement means one device saw a
-   failure, and a re-review costs seconds. **Recommended**, as D43 already leaned.
-3. **Keep the schedule device-local** and rebuild it from the merged attempts. Needs the `slow` judgement
-   per historical attempt, which D38 and D40 rejected.
-
-**Once it is decided, Slice 2 is concrete** (`implementation-plan.md` §7): the sync backend (Postgres +
-Drizzle; `POST /api/account/device`, the sync and pairing routes of `architecture.md` §10, rate-limited
-registration, no auth library, per ADR 5) behind route handlers that meet the pre-provisioned 95% branch
-threshold; `adapters/vault` (the device secret the Dexie vault already keeps, D50) and `adapters/sync`
-behind a new `SyncTransport` port, each with a contract suite; the chosen merge rule, applied in the sync
-adapter **and** in `importData`, whose keep-local rule (D62) is the placeholder for exactly this; the
-`SyncNow` use case; the `/settings/sync` screen with pairing by code; and E2E journey 8 (two browser
-contexts converging). Journey 7's "sync catches up" half lands then too.
+**Then part 3** (`adapters/sync`: `httpSyncTransport` over `fetch`, contract via `syncHandlers`, and the
+composition root plus sync triggers). **Then part 4** (`/settings/sync`, the stateful header indicator,
+the onboarding copy, and E2E journey 8). Plan: `/Users/keefe/.claude/plans/…vivid-catmull.md` is the
+session's working copy, and this section is authoritative.
 
 **Standing human gates (do not self-direct):**
 
@@ -233,8 +245,8 @@ contexts converging). Journey 7's "sync catches up" half lands then too.
 - ~~**Product and UI direction**~~ — **resolved 24 September 2026** as Gate A (Phase 2 section): adopt
   the PRD's §8/§10/§11/§14 direction for the single-device screens. The *pairing* UI is Slice 2, after
   Gate B.
-- **The `adapters/sync` `ScheduleEntry` merge (D43)** — add `updatedAt`, take the lower Leitner box, or
-  treat the schedule as device-local. Gates the sync and vault adapters.
+- ~~**The `adapters/sync` `ScheduleEntry` merge (D43)**~~ — **resolved 24 September 2026** as Gate B:
+  the lower box wins a concurrent edit (D69).
 
 Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's table
 before launch) and the name/domain decision in §12.1.
@@ -334,11 +346,12 @@ decision), then Slice 2.
   `/review`, `/progress`, `/settings/data`, and item reporting. The name stays the working "Palier"
   (§12.1 is still a standing gate). Coco is a minimal static treatment. §9 streak/XP are deferred, since
   they are not in Slice 1's *done* and `@palier/engine` has none.
-- [ ] **Slice 2 — Multi-device sync.** Sync backend (Postgres/Drizzle/routes/pairing/rate-limit, ADR 5);
+- [~] **Slice 2 — Multi-device sync.** Sync backend (Postgres/Drizzle/routes/pairing/rate-limit, ADR 5);
   `adapters/vault` + `adapters/sync` behind `SyncTransport`, applying the D43 rule; `SyncNow` + pairing
   UI. Completes the two-device exit criterion. Behind **Gate B**.
-- [!] **Gate B — the `ScheduleEntry` merge decision (human, D43).** `updatedAt` / lower Leitner box /
-  device-local. Gates all of Slice 2.
+- [x] **Gate B — the `ScheduleEntry` merge decision (human, D43).** `updatedAt` / lower Leitner box /
+  device-local. Gates all of Slice 2. **Resolved 24 September 2026 (human decision, `dougkeefe/pangyo`): the
+  lower box wins a concurrent edit**, and concurrency is detected by a per-document server revision (D69).
 - [ ] **Slice 3 — Convergence proof + public launch.** Sync simulator (tier 5), remaining CI gates +
   mutation check, full-offline + Lighthouse ≥95 confirmation, public deploy. **Phase 2 complete.**
 
@@ -1351,7 +1364,7 @@ weaker than ADR 9's "a change is a content pull request rather than a developmen
 closes it — the bank adapter fetches content and caches it by hash (`architecture.md` §5.3).
 
 ### D43 — A synced `ScheduleEntry` has no `updatedAt`, and last-write-wins can regress a box
-**Date:** 20 September 2026 · **Status:** open, closes with `adapters/sync` (Phase 2)
+**Date:** 20 September 2026 · **Status:** **resolved 24 September 2026 by D69** (Gate B, human: the lower box wins a concurrent edit)
 
 Found while updating `architecture.md` §9.1 for D38, not while writing the code — which is why
 it is recorded rather than fixed.
@@ -1863,7 +1876,7 @@ push will need the same enumeration. Cost: six hand-written stubs in `@palier/ap
 inert members each. No assertion changed.
 
 ### D62 — `importData` validates the whole file first and never overwrites a local record
-**Date:** 24 September 2026 · **Status:** accepted
+**Date:** 24 September 2026 · **Status:** accepted — its keep-local rule is **superseded by D69** (import now merges by Gate B's rule)
 
 Importing onto a device that already has progress is a **merge**, and the schedule's merge rule is the
 open Gate B question (D43). So import decides nothing it does not have to. **Attempts merge as a union**:
@@ -2001,11 +2014,103 @@ footer is one scroll down rather than in first view. It is still on every page (
 the landing and about pages, where first impressions form, keep it in view. The CI re-run is the real
 confirmation of the 0.88; it is pending as this is written.
 
+### D69 — Gate B: the lower box wins a *concurrent* edit, detected by revision; the ledger is a new port
+**Date:** 24 September 2026 · **Status:** accepted (Gate B is a human decision; the mechanism is derived). Resolves D43
+
+**The decision (human, 24 September 2026):** of D43's three options, **take the lower Leitner box**.
+
+**What implementing it forced.** Applied blindly, `min(box)` is wrong the other way from last-write-wins:
+once box 1 has synced, the device's own later box 2 loses to it every time, so **no box could ever rise
+after its first sync**. The rule can only apply to edits that are actually *concurrent*, and telling those
+apart needs causal information that `ScheduleEntry` does not carry. So:
+
+1. **Every server document carries a per-account `revision`**, strictly increasing, and it doubles as the
+   pull watermark. It is a counter, not a timestamp, so clock skew between devices cannot hide a write.
+2. **A push names the `baseRevision` it was derived from.** The server accepts it only while that revision
+   is still current; otherwise it returns its own copy as a conflict. The **device** merges and re-pushes,
+   so server payloads stay opaque (architecture.md §9.2) and every merge rule sits in one pure function,
+   `mergeRecord` in `packages/app/src/sync/merge.ts`.
+3. **A device finds its changes by diff, not an outbox.** A new **`SyncStateStore` port** holds the
+   watermark, the identity, the device-local switch and a **ledger**: per document, the revision it last
+   agreed with the server and a hash of the record at that moment (64-bit, two FNV-1a passes over stable
+   JSON). A record whose hash differs is dirty. No store's write path knows sync exists, and imports and
+   merges are covered automatically. `SyncNow` enumerates each store's `all()`, which is the use D61
+   anticipated. Dexie holds the ledger on the `syncMeta` table §9.1 already declared, so there is **no
+   schema bump**. §3.3 did not name this port, which makes it the same kind of decision as `IdGenerator`
+   (D48).
+4. **Merge rules** (symmetric, with a stable-JSON tie-break, so two devices always agree):
+   - **schedule:** the lower box wins; on an equal box the earlier `due` wins, and a retired entry counts
+     as latest.
+   - **session:** a completed copy beats an in-progress one, and the earlier `completedAt` wins. This is
+     §9.1's write-once argument.
+   - **setting:** the local value wins. Through the server's serialisation, that makes the last device to
+     push win.
+   - **attempt:** immutable.
+5. **Found while testing:** a device pulls its own last push back on the next sync. Taken as a concurrent
+   edit, that echo let the older server copy out-merge the device's newer one. **A document at or below
+   the ledger's revision is not news, and is skipped.** A test pins this.
+6. **`importData` applies the same `mergeRecord`, replacing D62's keep-local rule.** A file carries no
+   causal history, so every record already present is treated as concurrent: an old file can send an item
+   back for an early review but can never skip one. Import after a wipe is unchanged, and so is importing
+   the same file twice. `ImportCount` gains `merged`.
+   - **One `data-rights.test.ts` case changed, deliberately:** "never overwrites a local schedule entry,
+     session or setting" asserted keep-local, which Gate B supersedes. It is now "merges a record the
+     device already has: lower box, completed session, local setting". Its schedule and setting
+     assertions are unchanged; the session's now completes. A new case asserts the lower box travels in
+     from a file.
+7. **§3.3 is amended in place:**
+   - `push(items)` takes per-document base revisions;
+   - `pull(watermark: number)` returns `{ docs, watermark, more }`, so no separate cursor is needed;
+   - `registerDevice(label)` and `redeemPairCode(code, label)`;
+   - **registration is idempotent per secret**, so a retry never makes a second account.
+
+   `normalizePairCode` and the pair-code constants live beside the port.
+
+**Proven to bite:** with the ledger check removed, so that every pulled copy merges (the naive `min`),
+three `sync-now.test.ts` cases fail. They are "lets a box rise after it has synced", "fast-forwards a record
+this device has not changed" and "keeps the lower box on both devices". The file was restored and all 18
+pass.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/pangyo` (Slice 2, part 1: Gate B decided, and the sync core)
+
+**Gate B is decided** (human): the lower Leitner box wins a concurrent edit. A second human call
+arrived with it: the server stores **SHA-256** of the device secret, not Argon2id. That call is
+recorded with the server in part 2 (D70).
+
+- **Mechanism (D69):**
+  - A naive `min(box)` would stop a box ever rising after its first sync. Instead, every server
+    document carries a per-account revision, and a push states its base revision.
+  - A stale base returns a conflict, and the device merges with `mergeRecord`, the one rule sync and
+    import share.
+  - Change is found by diffing each record's hash against a ledger, held behind a new
+    **`SyncStateStore`** port.
+- **Built:**
+  - the `SyncTransport` port (§3.3 amended) and the `SyncStateStore` port;
+  - `syncNow`, plus `requestPairCode`, `pairDevice`, `listDevices`, `removeDevice`, `setSyncEnabled`
+    and `deleteEverywhere`;
+  - `importData` on `mergeRecord`;
+  - `memorySyncServer`, `memorySyncStateStore`, `syncTransportContract`, `syncStateStoreContract` and
+    `syncHandlers` in `@palier/testing`;
+  - `dexieSyncStateStore` on `syncMeta`, with no schema bump.
+- **A defect found by the tests, fixed before it landed:** a device's own push came back on its next
+  pull and was merged as if concurrent, so the older copy won. A document at or below the ledger
+  revision is now skipped (D69 #5).
+- **Test changed, and why:** `data-rights.test.ts` "never overwrites a local schedule entry, session or
+  setting". Gate B supersedes keep-local (D62), so it is now the merge case (D69 #6).
+- **Evidence:**
+  - `pnpm verify` → green: 96 files, 1044 tests (8 todo); boundaries clean (277 and 83 modules);
+    thresholds held.
+  - Branch coverage: `sync-now.ts`, `sync-account.ts`, `merge.ts`, `records.ts`, `import-data.ts` and
+    `dexie/sync-state-store.ts` each at 100%.
+  - **Proven to bite:** with the ledger check removed (every pull merges, the naive `min`), three
+    `sync-now.test.ts` cases fail, "lets a box rise after it has synced" among them. Restored, and 18/18
+    pass.
 
 ### 24 September 2026 — `dougkeefe/phase-2-development` (PR #19: fix the CI Lighthouse failure on `/fr/progress`)
 
