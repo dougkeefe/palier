@@ -34,6 +34,10 @@ describe("@palier/engine public surface", () => {
     expect(typeof engine.weakestSubSkills).toBe("function");
   });
 
+  it("exports the sub-skill breakdown", () => {
+    expect(typeof engine.subSkillBreakdown).toBe("function");
+  });
+
   it("exports the daily planner and its budget shares", () => {
     expect(typeof engine.planDay).toBe("function");
     expect(engine.REVIEW_SHARE + engine.NEW_SHARE + engine.MAINTENANCE_SHARE).toBeCloseTo(1);

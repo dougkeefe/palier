@@ -5,7 +5,14 @@ import { expect, type Page } from "@playwright/test";
 
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
+/**
+ * Audit a settled page. After a client-side navigation Next streams the new metadata
+ * in, and for a moment the document has no `<title>`: axe once caught exactly that
+ * frame. That is a transient no user rests on, so wait for the title first; the pages
+ * do each carry one (see the "titled for its purpose" test).
+ */
 export const axeClean = async (page: Page) => {
+  await expect(page).toHaveTitle(/\S/);
   const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
   expect(results.violations).toEqual([]);
 };

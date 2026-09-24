@@ -167,3 +167,25 @@ describe("keyIntent", () => {
     expect(keyIntent("Enter", startDrill([], at(0)))).toBeNull();
   });
 });
+
+describe("key events, resolved inside the reducer", () => {
+  const key = (k: string, t = 10) => ({ type: "key" as const, key: k, at: at(t) });
+
+  /** The race the window listener lost: "1" then Enter, before any re-render. */
+  it("confirms on 1 then Enter applied back to back, with no render between them", () => {
+    const s = run(startDrill(ITEMS, at(0)), key("1"), key("Enter"));
+    expect(s.phase).toBe("recording");
+    expect(s.selected).toBe(ITEMS[0]!.options[0]!.id);
+  });
+
+  it("advances on Enter from feedback", () => {
+    const s = run(startDrill(ITEMS, at(0)), key("1"), key("Enter"), { type: "answered", correct: true }, key("Enter", 50));
+    expect(s).toMatchObject({ index: 1, phase: "answering", shownAt: at(50) });
+  });
+
+  it("ignores a key that means nothing in the current phase", () => {
+    const s = startDrill(ITEMS, at(0));
+    expect(drillReducer(s, key("x"))).toBe(s);
+    expect(drillReducer(s, key("Enter"))).toBe(s);
+  });
+});

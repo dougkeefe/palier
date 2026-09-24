@@ -91,3 +91,36 @@ test("journey 2 offline: after one online load, a whole daily session runs with 
   await expect(page.getByRole("heading", { name: "Today’s plan" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Review queue" })).toBeVisible();
 });
+
+/**
+ * Journey 7's single-device half (§6.2): the network drops in the middle of a session,
+ * and the session still finishes. The "sync catches up" half needs sync, which is
+ * Slice 2.
+ */
+test("journey 7: the network drops mid-session, and the session still finishes", async ({ page, context }) => {
+  await onboard(page, "skip");
+  await expect(page).toHaveURL(/\/en\/home$/);
+  await waitForOfflineReady(page);
+
+  await page.getByRole("link", { name: /^Start, \d+ min$/ }).click();
+  await expect(page.locator(".app-session__count")).toHaveText(/Item 1 of \d+/);
+  await page.keyboard.press("1");
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("region", { name: /Correct|Not quite/ })).toBeVisible();
+
+  await context.setOffline(true);
+  await page.keyboard.press("Enter");
+  const total = Number(/of (\d+)/.exec((await page.locator(".app-session__count").textContent()) ?? "")?.[1]);
+  for (let i = 2; i <= total; i++) {
+    await expect(page.locator(".app-session__count")).toHaveText(`Item ${i} of ${total}`);
+    await page.keyboard.press("1");
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("region", { name: /Correct|Not quite/ })).toBeVisible();
+    await page.keyboard.press("Enter");
+  }
+  await expect(page.getByRole("heading", { name: "Set complete" })).toBeVisible();
+
+  await context.setOffline(false);
+  await page.getByRole("link", { name: "Back to today" }).click();
+  await expect(page.getByRole("heading", { name: "Today’s plan" })).toBeVisible();
+});

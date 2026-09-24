@@ -68,6 +68,12 @@ export const minutesFor = (items: number): number => Math.max(1, Math.round(item
  */
 export const DIAGNOSTIC_SIZE = 30;
 
+/**
+ * The most items one review set holds. §8.8 shows the queue as "a single stack"; this
+ * caps a long backlog at a sitting's worth, and the rest waits for the next set.
+ */
+export const REVIEW_SET_LIMIT = 40;
+
 /** Today's plan as §8.2's rows: each bucket with its count and estimated minutes. */
 export type PlanRow = {
   readonly kind: "review" | "targeted" | "keepSharp";

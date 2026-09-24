@@ -50,6 +50,8 @@ export { ProgressRail, type ProgressRailProps } from "./primitives/ProgressRail.
 export { BandMeter, type BandMeterProps } from "./primitives/BandMeter.js";
 export { Sheet, type SheetProps } from "./primitives/Sheet.js";
 export { Passage, type PassageProps } from "./primitives/Passage.js";
+export { Toast, type ToastProps } from "./primitives/Toast.js";
+export { Mascot } from "./primitives/Mascot.js";
 
 // The render half of the item type registry (implementation-plan.md §3.4, ADR 17).
 export { McqItem, type ItemRenderer, type ItemRendererProps } from "./item-types/McqItem.js";

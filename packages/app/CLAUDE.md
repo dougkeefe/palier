@@ -56,7 +56,9 @@ Knows what the product does, nothing about how anything is stored, fetched or re
 - **Two trend readouts, each named for its evidence.** `diagnosticReadout` reads diagnostic
   attempts only (D47); `practiceTrend` reads drill, review and diagnostic attempts and **never exam
   attempts**, because the readiness card keeps the exam result and the practice trend visually
-  distinct (§8.2, progress.md D64). Do not merge them behind a flag.
+  distinct (§8.2, progress.md D64). Do not merge them behind a flag. `progressReport` holds the
+  same line over the **whole** practice record (`AttemptStore.all()`), and `reviewQueue` resolves
+  what is due now across both skills (D66).
 - **Use cases live under `src/use-cases/`**, one file per use case, each a plain async
   function `(request, deps)` where `deps` are the collaborators the composition root supplies.
   They are **pure orchestration**: read the ports, call one or more engine functions, return a

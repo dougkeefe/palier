@@ -37,13 +37,21 @@ export default defineConfig({
   },
   projects: [
     {
+      // Compiles every route once, serially, before the parallel hermetic tests
+      // (e2e/warmup.setup.ts explains the cold-start race it prevents).
+      name: "warmup",
+      testMatch: /warmup\.setup\.ts/,
+      use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${HERMETIC_PORT}` },
+    },
+    {
       name: "chromium",
-      testIgnore: /offline\.spec\.ts/,
+      dependencies: ["warmup"],
+      testIgnore: /(offline|production)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${HERMETIC_PORT}` },
     },
     {
       name: "offline",
-      testMatch: /offline\.spec\.ts/,
+      testMatch: /(offline|production)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${PRODUCTION_PORT}` },
     },
   ],

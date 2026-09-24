@@ -9,7 +9,8 @@
     "about": "About",
     "primary": "Primary",
     "home": "Today",
-    "review": "Review"
+    "review": "Review",
+    "progress": "Progress"
   },
   "languageToggle": {
     "otherLanguage": "Français"
@@ -18,7 +19,8 @@
     "off": "Sync off"
   },
   "footer": {
-    "nonAffiliation": "Palier is an independent, open-source study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official."
+    "nonAffiliation": "Palier is an independent, open-source study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official.",
+    "yourData": "Your data"
   },
   "home": {
     "title": "Practise for the Second Language Evaluation",
@@ -115,7 +117,8 @@
     "reviewTitle": "Review queue",
     "reviewDue": "{count, plural, =0 {Nothing due} one {# item due} other {# items due}}",
     "diagnosticAgain": "Retake the diagnostic",
-    "testCountdown": "{days, plural, =0 {Your test is today} one {Your test is tomorrow} other {# days to your test}}"
+    "testCountdown": "{days, plural, =0 {Your test is today} one {Your test is tomorrow} other {# days to your test}}",
+    "reviewAction": "Open the review queue"
   },
   "drill": {
     "progress": "Item {current} of {total}",
@@ -148,5 +151,62 @@
     "insufficient": "{attempted} answered. {needed, plural, one {# more is needed} other {# more are needed}} before a figure is shown.",
     "resultNote": "This is accuracy on practice items with its likely range, not a band. Only a full mock exam can give a band.",
     "toToday": "Go to today’s plan"
+  },
+  "review": {
+    "title": "Review",
+    "summary": "{count, plural, one {# item due} other {# items due}} · about {minutes} min",
+    "emptyTitle": "Nothing due",
+    "emptyBody": "Come back tomorrow, or do a set anyway.",
+    "emptyAction": "Do a set anyway"
+  },
+  "progress": {
+    "title": "Progress",
+    "trendTitle": "Practice trend",
+    "subSkillTitle": "By sub-skill",
+    "subSkillEmpty": "Answer a few items and each sub-skill you practise appears here.",
+    "subSkillRow": "{correct} of {attempted} correct",
+    "answered": "{count, plural, one {# item answered} other {# items answered}}",
+    "timeAnswering": "{minutes, plural, one {# minute} other {# minutes}} spent answering",
+    "honestTitle": "What this does and does not tell you",
+    "honestDoes": "It shows how often you get items right at each level, and the range the true rate most likely sits in.",
+    "honestDoesNot": "It is not a band. Practice items are not a calibrated test, and this bank is still small and partly synthetic. Only a full mock exam can give a band.",
+    "exportTitle": "Keep a copy",
+    "exportBody": "Download everything as a JSON file you can import later, on this device or another."
+  },
+  "data": {
+    "title": "Your data",
+    "intro": "Everything Palier knows about your practice is stored in this browser, on this device, and nowhere else.",
+    "noRecovery": "There is no copy anywhere else. If you delete it here, or clear this browser’s data, it is gone. Keep an export.",
+    "exportTitle": "Export",
+    "exportAction": "Download everything (JSON)",
+    "exported": "Your export has been downloaded.",
+    "importTitle": "Import",
+    "importBody": "Restore from an export. Nothing already on this device is overwritten.",
+    "importLabel": "Choose an export file",
+    "importAction": "Import",
+    "imported": "Imported {attempts, plural, one {# answer} other {# answers}}, {reviews, plural, one {# review} other {# reviews}} and {sessions, plural, one {# session} other {# sessions}}. {kept, plural, =0 {} one {# record was already here.} other {# records were already here.}}",
+    "importInvalid": "That file could not be imported: it is not a Palier export this version can read. Nothing was changed.",
+    "importFailed": "The file could not be read.",
+    "deleteTitle": "Delete everything",
+    "deleteBody": "Remove every answer, review, session and setting from this device.",
+    "deleteAction": "Delete everything",
+    "confirmTitle": "Delete everything on this device?",
+    "confirmBody": "This cannot be undone. Download an export first if you might want your progress back.",
+    "confirmAction": "Yes, delete everything",
+    "cancel": "Cancel",
+    "deleted": "Everything on this device has been deleted.",
+    "startAgain": "Set up again"
+  },
+  "report": {
+    "open": "Report a problem with this item",
+    "legend": "What looks wrong?",
+    "reason_key-wrong": "The key looks wrong",
+    "reason_multiple-answers": "More than one answer works",
+    "reason_french-off": "The French sounds off",
+    "reason_unclear": "The question is unclear",
+    "fileIssue": "Open a GitHub issue (new tab)",
+    "provenance_generated": "Machine-generated and checked automatically. Not yet calibrated against real answers.",
+    "provenance_authored": "Written by hand and checked automatically. Not yet calibrated against real answers.",
+    "provenance_adapted": "Adapted from a public source and checked automatically. Not yet calibrated against real answers."
   }
 }

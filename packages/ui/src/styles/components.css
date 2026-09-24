@@ -346,3 +346,15 @@
     animation: none;
   }
 }
+
+/* ---- Toast (a status message; it stays until the next action replaces it) --- */
+
+.pl-toast {
+  background-color: var(--surface);
+}
+
+/* ---- Mascot (decorative; the empty state's words carry the meaning) --------- */
+
+.pl-mascot {
+  display: block;
+}

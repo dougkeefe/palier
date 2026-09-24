@@ -49,9 +49,15 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 - Fast lane: i18n key parity (`messages.test.ts`), container wiring test — including the
   production graph over `fake-indexeddb` planning a day from the committed bank — and the
   service worker's behaviour over an in-memory `CacheStorage` (`src/sw/`).
-- Medium lane (`.github/workflows/verify.yml`): the `offline` Playwright project on a
-  production `next start` (port 3100) — one online load, then the shell, an unvisited
-  route and every bank shard with the network off [R4]; axe on the shell states (`e2e/`),
+- Medium lane (`.github/workflows/verify.yml`): Playwright in three projects.
+  **`warmup`** compiles every route once, serially, before the parallel hermetic tests. A cold
+  Turbopack dev server under parallel first requests can read a build file mid-write (D67);
+  keep it the `chromium` project's dependency. **`chromium`** (hermetic, `next dev`) runs the
+  smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
+  titles. **`offline`** (production `next start`, port 3100) runs `offline.spec.ts` (shell,
+  unvisited route, every shard, journeys 2 and 7 with the network off [R4]) and
+  `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
+  whose fake timers stall Dexie and React). Axe on the states, (`e2e/`),
   Lighthouse perf + a11y ≥ 95 (`lighthouserc.json`), bundle-size < 180 KB gzipped
   (`scripts/check-bundle-size.mjs`, override with `PALIER_BUNDLE_BUDGET_KB` to test it).
 
@@ -64,3 +70,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   `pnpm --filter @palier/web build` first, or it tests a stale one.
 - Under `next dev` there is no service worker by design. Offline behaviour is only real
   under `next build && next start`.
+- **Hermetic journeys move by in-app links, never `page.goto`, once they have state:** the
+  in-memory container lives for one page load.
+- **Every page sets its own title** through `generateMetadata` (the layout's template makes it
+  `Page · Palier`, WCAG 2.4.2).

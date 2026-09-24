@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
+
+export async function generateMetadata({ params }: PageProps<"/[locale]/about">): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "about" });
+  return { title: t("title") };
+}
 
 // "What this is, what it is not" (product-requirements.md §7). Reinforces R5
 // beyond the footer disclaimer, and gives the shell a second real route to

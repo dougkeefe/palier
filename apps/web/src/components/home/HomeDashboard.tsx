@@ -45,7 +45,8 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
     container.useCases.practiceTrend({ skill }),
     container.schedule.due(container.clock.now(), DUE_LIMIT),
   ]);
-  return { status: "ready", profile, plan, trend, dueCount: due.filter((e) => e.skill === skill).length };
+  // The whole queue, both skills: the card counts what `/review` will show.
+  return { status: "ready", profile, plan, trend, dueCount: due.length };
 };
 
 /**
@@ -170,6 +171,9 @@ export function HomeDashboard() {
           <Card className="app-home__actions">
             <h2>{t("reviewTitle")}</h2>
             <p>{t("reviewDue", { count: dashboard.dueCount })}</p>
+            <Link href="/review" className="app-link pl-focusable">
+              {t("reviewAction")}
+            </Link>
             <Link href="/diagnostic" className="app-link pl-focusable">
               {t("diagnosticAgain")}
             </Link>

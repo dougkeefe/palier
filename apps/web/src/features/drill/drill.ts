@@ -34,7 +34,13 @@ export type DrillEvent =
   | { readonly type: "confirm" }
   | { readonly type: "answered"; readonly correct: boolean }
   | { readonly type: "failed" }
-  | { readonly type: "next"; readonly at: number };
+  | { readonly type: "next"; readonly at: number }
+  /**
+   * A raw key press, resolved against the state the reducer holds *now*. Deciding in the
+   * reducer, not in the listener, is what lets "1" then Enter in quick succession
+   * confirm: the listener's view of state can be a render behind (progress.md D65).
+   */
+  | { readonly type: "key"; readonly key: string; readonly at: number };
 
 export const startDrill = (items: readonly Item[], at: number): DrillState => ({
   items,
@@ -74,6 +80,13 @@ export const drillReducer = (state: DrillState, event: DrillEvent): DrillState =
       // Recording failed (storage full, say): back to answering with the choice
       // kept, so nothing the user did is lost and they can confirm again.
       return state.phase === "recording" ? { ...state, phase: "answering" } : state;
+    case "key": {
+      const intent = keyIntent(event.key, state);
+      if (intent === null) return state;
+      if (intent.type === "select") return drillReducer(state, { type: "select", option: intent.option, at: event.at });
+      if (intent.type === "confirm") return drillReducer(state, { type: "confirm" });
+      return drillReducer(state, { type: "next", at: event.at });
+    }
     case "next": {
       if (state.phase !== "feedback") return state;
       const index = state.index + 1;

@@ -9,7 +9,8 @@
     "about": "À propos",
     "primary": "Principale",
     "home": "Aujourd’hui",
-    "review": "Révision"
+    "review": "Révision",
+    "progress": "Progrès"
   },
   "languageToggle": {
     "otherLanguage": "English"
@@ -18,7 +19,8 @@
     "off": "Synchronisation désactivée"
   },
   "footer": {
-    "nonAffiliation": "Palier est un outil d'étude indépendant à code source ouvert. Il n'est ni affilié à la Commission de la fonction publique du Canada, ni approuvé ou reconnu par celle-ci. Il ne contient aucune question d'examen réelle et ses résultats ne sont pas officiels."
+    "nonAffiliation": "Palier est un outil d'étude indépendant à code source ouvert. Il n'est ni affilié à la Commission de la fonction publique du Canada, ni approuvé ou reconnu par celle-ci. Il ne contient aucune question d'examen réelle et ses résultats ne sont pas officiels.",
+    "yourData": "Vos données"
   },
   "home": {
     "title": "Préparez-vous à l'Évaluation de langue seconde",
@@ -115,7 +117,8 @@
     "reviewTitle": "File de révision",
     "reviewDue": "{count, plural, =0 {Rien à réviser} one {# item à réviser} other {# items à réviser}}",
     "diagnosticAgain": "Refaire le diagnostic",
-    "testCountdown": "{days, plural, =0 {Votre test a lieu aujourd’hui} one {Votre test a lieu demain} other {# jours avant votre test}}"
+    "testCountdown": "{days, plural, =0 {Votre test a lieu aujourd’hui} one {Votre test a lieu demain} other {# jours avant votre test}}",
+    "reviewAction": "Ouvrir la file de révision"
   },
   "drill": {
     "progress": "Item {current} sur {total}",
@@ -148,5 +151,62 @@
     "insufficient": "{attempted} réponses. {needed, plural, one {Il en faut # de plus} other {Il en faut # de plus}} avant d’afficher un taux.",
     "resultNote": "Il s’agit du taux de réussite aux items de pratique, avec sa marge probable, et non d’un niveau. Seul un examen simulé complet peut donner un niveau.",
     "toToday": "Voir le plan du jour"
+  },
+  "review": {
+    "title": "Révision",
+    "summary": "{count, plural, one {# item à réviser} other {# items à réviser}} · environ {minutes} min",
+    "emptyTitle": "Rien à réviser",
+    "emptyBody": "Revenez demain, ou faites une série quand même.",
+    "emptyAction": "Faire une série quand même"
+  },
+  "progress": {
+    "title": "Progrès",
+    "trendTitle": "Tendance en pratique",
+    "subSkillTitle": "Par sous-compétence",
+    "subSkillEmpty": "Répondez à quelques items : chaque sous-compétence pratiquée apparaîtra ici.",
+    "subSkillRow": "{correct} sur {attempted} bonnes réponses",
+    "answered": "{count, plural, one {# item répondu} other {# items répondus}}",
+    "timeAnswering": "{minutes, plural, one {# minute} other {# minutes}} passées à répondre",
+    "honestTitle": "Ce que ces chiffres disent, et ne disent pas",
+    "honestDoes": "Ils montrent à quelle fréquence vous réussissez les items de chaque niveau, et la marge où se situe vraisemblablement votre vrai taux.",
+    "honestDoesNot": "Ce n’est pas un niveau. Les items de pratique ne sont pas un test étalonné, et cette banque est encore petite et en partie synthétique. Seul un examen simulé complet peut donner un niveau.",
+    "exportTitle": "Gardez une copie",
+    "exportBody": "Téléchargez tout dans un fichier JSON que vous pourrez importer plus tard, sur cet appareil ou un autre."
+  },
+  "data": {
+    "title": "Vos données",
+    "intro": "Tout ce que Palier sait de votre pratique est conservé dans ce navigateur, sur cet appareil, et nulle part ailleurs.",
+    "noRecovery": "Il n’en existe aucune autre copie. Si vous les supprimez ici, ou effacez les données de ce navigateur, elles sont perdues. Gardez une exportation.",
+    "exportTitle": "Exporter",
+    "exportAction": "Tout télécharger (JSON)",
+    "exported": "Votre exportation a été téléchargée.",
+    "importTitle": "Importer",
+    "importBody": "Restaurer à partir d’une exportation. Rien de ce qui se trouve déjà sur cet appareil n’est remplacé.",
+    "importLabel": "Choisir un fichier d’exportation",
+    "importAction": "Importer",
+    "imported": "{attempts, plural, one {# réponse importée} other {# réponses importées}}, {reviews, plural, one {# révision} other {# révisions}} et {sessions, plural, one {# séance} other {# séances}}. {kept, plural, =0 {} one {# élément se trouvait déjà ici.} other {# éléments se trouvaient déjà ici.}}",
+    "importInvalid": "Ce fichier n’a pas pu être importé : ce n’est pas une exportation de Palier que cette version peut lire. Rien n’a été modifié.",
+    "importFailed": "Le fichier n’a pas pu être lu.",
+    "deleteTitle": "Tout supprimer",
+    "deleteBody": "Retirer de cet appareil toutes les réponses, révisions, séances et préférences.",
+    "deleteAction": "Tout supprimer",
+    "confirmTitle": "Tout supprimer sur cet appareil?",
+    "confirmBody": "C’est irréversible. Téléchargez d’abord une exportation si vous pourriez vouloir récupérer vos progrès.",
+    "confirmAction": "Oui, tout supprimer",
+    "cancel": "Annuler",
+    "deleted": "Tout ce qui se trouvait sur cet appareil a été supprimé.",
+    "startAgain": "Recommencer la configuration"
+  },
+  "report": {
+    "open": "Signaler un problème avec cet item",
+    "legend": "Qu’est-ce qui cloche?",
+    "reason_key-wrong": "La bonne réponse semble fausse",
+    "reason_multiple-answers": "Plus d’une réponse convient",
+    "reason_french-off": "Le français sonne faux",
+    "reason_unclear": "La question n’est pas claire",
+    "fileIssue": "Ouvrir un billet GitHub (nouvel onglet)",
+    "provenance_generated": "Généré automatiquement et vérifié automatiquement. Pas encore étalonné sur de vraies réponses.",
+    "provenance_authored": "Rédigé à la main et vérifié automatiquement. Pas encore étalonné sur de vraies réponses.",
+    "provenance_adapted": "Adapté d’une source publique et vérifié automatiquement. Pas encore étalonné sur de vraies réponses."
   }
 }

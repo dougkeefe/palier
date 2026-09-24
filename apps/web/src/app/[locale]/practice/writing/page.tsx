@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
 
 import { PracticeSession } from "../../../../components/practice/PracticeSession";
+
+export async function generateMetadata({ params }: PageProps<"/[locale]/practice/writing">): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "skills" });
+  return { title: t("writing") };
+}
 
 // A writing drill (product-requirements.md §8.3). One static route per skill rather
 // than a dynamic segment, so the service worker can precache it by name (D60).

@@ -30,7 +30,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
-  return { title: t("title"), description: t("description") };
+  // Each page names itself ahead of the product (WCAG 2.4.2: a title that says what the
+  // page is for); a page that sets no title of its own gets the product's.
+  return { title: { template: `%s · ${t("title")}`, default: t("title") }, description: t("description") };
 }
 
 export default async function LocaleLayout({

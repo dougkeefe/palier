@@ -10,8 +10,9 @@ The web slice has landed too: the production composition root wires the real ada
 worker makes the app and the bank work offline after one load (D58–D60). **Gate A is resolved** (adopt
 the PRD's UI direction).
 The data use cases (`exportData`/`importData`/`wipeData`) have landed too (D61, D62).
-The single-device UI's first half has landed too: onboarding, today, the drill, the diagnostic (D63–D65).
-**Next step:** the UI's second half: review, progress, settings/data, item reporting. See [Next, decided](#next-decided). The **full-volume published
+The single-device UI has landed too (D63–D67), so **Slice 1 is complete**: the whole practice app works
+on one device, offline after one load.
+**Next step:** **Gate B**, the `ScheduleEntry` merge decision (D43), a human call that gates Slice 2 (sync). See [Next, decided](#next-decided). The **full-volume published
 bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
 feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
 (D56).
@@ -190,36 +191,36 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next slice: Slice 1's UI, part 2 — `/review`, `/progress`, `/settings/data` and item reporting. With
-it, Slice 1 is complete.**
+**Next: Gate B, the `ScheduleEntry` merge decision (D43). A human call, and the only thing between
+here and Slice 2.**
 
-Part 1 landed (session log, 24 September 2026, `dougkeefe/algiers`; D63–D65): the container provider,
-onboarding, `/home`, the drill with its feedback panel, and the diagnostic, plus E2E journeys 1 and 2 on
-the hermetic project and journey 2 **offline** on the production project ([R4] exit criterion ticked).
-What is left of Slice 1 is the four surfaces below. Every use case they need already exists and is bound
-in `buildUseCases`.
+**Slice 1 is complete** (session log, 24 September 2026, `dougkeefe/algiers`; D58–D67): the
+single-device app works end to end and fully offline after one load, on real IndexedDB and the served
+bank. That covers onboarding, today, drill, diagnostic, review, progress, export/import/delete, and item
+reporting, with E2E journeys 1, 2, 4, 6 and 7 and Lighthouse 1.0/1.0. Slice 2 (multi-device sync) cannot
+start until one question is answered, and it is a product judgement, not a derivation, so it is **not
+self-directable**:
 
-**The slice, concretely:**
+> When two devices have drilled the same item offline and both changed its `ScheduleEntry`, which one
+> wins?
 
-- **`/review`** (§8.8): the due stack from `ScheduleStore.due(now)`, with a count and an estimated time,
-  drilled through the same `PracticeSession` loop in `mode: "review"`. Its items come from `items.byIds`
-  over the due entries, not from a plan. A satisfying **empty state** when nothing is due (§14: "Nothing
-  due. Come back tomorrow, or do a set anyway."), with a minimal static Coco. The home card's "Review
-  queue" becomes a link to it, and it joins the header nav.
-- **`/progress`** (§8.9): `practiceTrend` per skill as `TrendMeters`, accuracy by sub-skill, items
-  answered, the honest "what this does and does not tell you" panel, and **Export to JSON** (`exportData`
-  → a downloaded file).
-- **`/settings/data`** (§8.11's danger zone, [R11]): export, import (a file input → `importData`, with
-  the counts reported through a new `@palier/ui` **Toast**; an `InvalidExportError` shown plainly), and
-  **delete everything** behind a confirmation (`wipeData`), with the plain no-recovery sentence.
-- **Item reporting** (§13.0): a one-tap flag on the feedback sheet with the four reason codes, opening a
-  prefilled GitHub new-issue URL with the item id and reason (the zero-backend path). The repository URL
-  goes in one constant.
-- **Done when:** `pnpm verify` green; E2E journeys **6** (export → wipe → import, state matches) and **7**
-  (offline mid-session: go offline during a drill, finish it; the sync half is Slice 2) pass; axe clean on
-  the review empty state, the delete confirmation and the import result; Lighthouse ≥ 95 on the new routes.
-  Then tick Slice 1 and rewrite this section to **Gate B** (the D43 merge decision, a human call) as the
-  next step.
+The three options D43 records, unchanged:
+
+1. **Add `updatedAt`** and apply §9.4's last-write-wins. Simplest; can move a box backwards when the later
+   write came from the device that saw less.
+2. **Take the lower box.** Needs no schema change and fails safe: a disagreement means one device saw a
+   failure, and a re-review costs seconds. **Recommended**, as D43 already leaned.
+3. **Keep the schedule device-local** and rebuild it from the merged attempts. Needs the `slow` judgement
+   per historical attempt, which D38 and D40 rejected.
+
+**Once it is decided, Slice 2 is concrete** (`implementation-plan.md` §7): the sync backend (Postgres +
+Drizzle; `POST /api/account/device`, the sync and pairing routes of `architecture.md` §10, rate-limited
+registration, no auth library, per ADR 5) behind route handlers that meet the pre-provisioned 95% branch
+threshold; `adapters/vault` (the device secret the Dexie vault already keeps, D50) and `adapters/sync`
+behind a new `SyncTransport` port, each with a contract suite; the chosen merge rule, applied in the sync
+adapter **and** in `importData`, whose keep-local rule (D62) is the placeholder for exactly this; the
+`SyncNow` use case; the `/settings/sync` screen with pairing by code; and E2E journey 8 (two browser
+contexts converging). Journey 7's "sync catches up" half lands then too.
 
 **Standing human gates (do not self-direct):**
 
@@ -301,8 +302,8 @@ session-log evidence; nothing is ticked without it.
 - [ ] `adapters/vault` and `adapters/sync`: device secret, pairing by code, push/pull, watermarks, offline queue — **gated on the `ScheduleEntry` merge decision** (D43)
 - [ ] Sync backend: Postgres + Drizzle, sync/device routes, pairing, rate limiting (ADR 5)
 - [~] `@palier/app` use cases: `StartSession`, `AnswerItem`, `CompleteSession`, `RunDiagnostic` landed (20–21 September 2026); `ExportData`, `ImportData`, `WipeData` landed (24 September 2026, `dougkeefe/algiers`; D61, D62); `SyncNow` remains (Slice 2)
-- [~] UI: onboarding, home + readiness card, today's plan, the drill/feedback panel and the diagnostic **landed** (24 September 2026, `dougkeefe/algiers`; D63–D65); review queue, progress, settings/data remain (Slice 1 part 2); the sync + pairing settings are Slice 2
-- [ ] Item reporting control and the GitHub issue path
+- [~] UI: the whole single-device set **landed** (24 September 2026, `dougkeefe/algiers`; D63–D67): onboarding, home + readiness card, today's plan, drill + feedback panel, diagnostic, review queue, progress, settings/data. Only the sync + pairing settings remain (Slice 2)
+- [x] Item reporting control and the GitHub issue path: on every feedback panel, four reason codes, a prefilled issue on the project repository (24 September 2026; E2E-tested)
 - [ ] The sync simulator (tier 5): two/three-device scenarios, seeded faults, convergence assertions
 - [ ] Every real adapter passes its port contract suite — `bank` now does; `dexie`/`ids` already did
 
@@ -317,10 +318,10 @@ session-log evidence; nothing is ticked without it.
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
 carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
 `implementation-plan.md` §7 Phase 2 "Completion slices" — **keep the two in sync** (the fuller scope
-and each slice's *done* live in the plan). Current position: **Slice 1** — composition root, service worker,
-data use cases and the UI's first half landed; the second half is *Next, decided*.
+and each slice's *done* live in the plan). Current position: **Slice 1 complete**; **Gate B** is next (a human
+decision), then Slice 2.
 
-- [~] **Slice 1 — Single-device practice app, offline-complete.** Composition-root wiring of
+- [x] **Slice 1 — Single-device practice app, offline-complete.** **Done 24 September 2026** (`dougkeefe/algiers`; D58–D67; session-log evidence). Composition-root wiring of
   bank/dexie/ids + service-worker offline cache [R4] **(landed, D58–D60)** +
   `ExportData`/`ImportData`/`WipeData`, then (after **Gate A**, now resolved) the full single-device UI:
   onboarding, home/readiness, today's plan, diagnostic, drill/feedback, review queue, progress,
@@ -390,7 +391,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 
 | # | Requirement | Phase | Status |
 | --- | --- | --- | --- |
-| R1 | Practises all three tested skills | 2, 5, 6 | not started |
+| R1 | Practises all three tested skills | 2, 5, 6 | reading and written expression practised end to end (24 September 2026); oral is Phases 5–6 |
 | R2 | Format and register match the real tests | 1 | not started |
 | R3 | Mock exams mirror published structure and cuts | 3 | not started |
 | R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams are Phase 3 |
@@ -400,7 +401,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | R8 | Fully bilingual, equal prominence | 0, 1, 7 | not started |
 | R9 | WCAG 2.2 AA | 0, all | not started |
 | R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
-| R11 | Export, import, delete, each in one action | 2, 7 | not started |
+| R11 | Export, import, delete, each in one action | 2, 7 | Phase 2 half verified (24 September 2026): `/settings/data` does each in one action; journey 6 round-trips export → delete → import and finds the same progress. Phase 7's server-side delete waits for sync |
 | R12 | Key, audio, transcripts and submissions stay local | 4, 5 | not started |
 | R13 | Free and open source | 0, 7 | not started |
 | R14 | Progress across devices, with an off switch | 2 | not started |
@@ -1936,11 +1937,96 @@ Gate A adopted the PRD's direction. Building it forced these calls, each recorde
 - **`slow` is always `false`** (D40: no threshold until there is timing data). The shaky-answer signal
   travels as `changedAnswer`.
 
+### D66 — `reviewQueue`, `progressReport`, and an engine `subSkillBreakdown` for the last three screens
+**Date:** 24 September 2026 · **Status:** accepted
+
+Three pieces of logic the review and progress screens need, each placed where the layering rules put it,
+not in a component:
+
+- **`reviewQueue({ limit })`** (`@palier/app`): what is due now across both skills (§8.8: "a single
+  stack"), resolved through the bank. An entry whose item has left the bank is dropped from the set but
+  stays scheduled. The set is capped at `REVIEW_SET_LIMIT` (40) in the UI.
+- **`progressReport({ skill })`** (`@palier/app`): the practice trend, per-sub-skill tallies, the count
+  answered, and time spent answering (summed `msToConfirm`, labelled as such, since reading the feedback
+  is not measured). Over the **whole** record via `AttemptStore.all()` (`calculateTrend` sorts by `ts`
+  itself, so `all()`'s lack of order is safe), and without exam attempts (D64's line).
+- **`subSkillBreakdown`** (`@palier/engine`, 100%): tallies per sub-skill, weakest first, no window, no
+  minimum. It is **not** a refactor of `weakestSubSkills`: that one windows to 50 and thresholds at 8
+  because it *targets* practice, and reshaping a function the planner depends on to share a loop was not
+  worth the risk. It returns counts, never a percentage (R10). **No golden value moved**: it is a new
+  function, and every existing engine test is unchanged.
+
+### D67 — what the E2E journeys found, and the fixes (none of them test-only)
+**Date:** 24 September 2026 · **Status:** accepted
+
+Writing journeys 4, 6 and 7 exposed four real defects. Each was fixed at the source:
+
+1. **A cold dev server fails under parallel first requests.** Turbopack answered "Unexpected end of JSON
+   input" (server and browser) when four workers hit uncompiled routes at once. The medium lane always
+   starts cold, so this would have flaked in CI. (An earlier session-log line guessed a half-stopped
+   server; that guess was wrong.) **Fix:** a `warmup` Playwright setup project that visits every route
+   once, serially, before the parallel `chromium` project, with the route list from the same `routesFrom`
+   as the service worker. Verified: three cold full runs and six warm hermetic runs, all green.
+2. **A fast "1" then Enter could be dropped.** The window key listener read state through a ref refreshed
+   in an effect after each render, so an Enter arriving first saw "nothing selected". **Fix:** raw keys
+   go into the reducer as a `key` event, resolved against its current state. A named test replays the race.
+3. **Enter after arriving by the header nav re-activated the nav link.** The header survives a
+   client-side navigation, so focus stayed on "Review", and the listener rightly leaves Enter on links
+   alone. **Fix:** when a set opens, focus moves to its first option, not only on advance (§11).
+4. **Pages had no title for a moment after navigation, and one shared title always.** axe caught an
+   empty `<title>` while Next streamed the new metadata in. Behind it, every page was titled just "Palier",
+   a weak WCAG 2.4.2. **Fix:** every page sets its own title (`Review · Palier`), tested. `axeClean` also
+   waits for a title before auditing, because a mid-navigation frame is not a state a user rests on.
+
+And one tooling note: **journey 4 moves the browser's date with `page.clock.setFixedTime`**, because
+`page.clock.install()`'s fake timers (even resumed) stall Dexie and React. `setFixedTime` pins `Date` and
+leaves the timers alone.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 4: review, progress, your data, item reporting — Slice 1 complete)
+
+The last PR of Slice 1. **The single-device practice app is complete**, and *Next, decided* is now
+Gate B.
+
+- **Screens:** `/review` (the due stack across both skills, drilled in `mode: "review"`, and the "Nothing
+  due" reward state with a minimal Coco), `/progress` (the trend per skill, sub-skill **counts** weakest
+  first, items answered, time spent answering, the honest "what this does and does not tell you" panel,
+  export), `/settings/data` (export, import with its counts reported, delete everything behind an in-place
+  confirmation, and the no-recovery sentence), and **item reporting** on every feedback panel (four
+  reasons, provenance, a prefilled GitHub issue). Review and Progress join the nav; "Your data" is in the
+  footer on every page.
+- **Logic below the UI** (**D66**): `reviewQueue` and `progressReport` in `@palier/app`,
+  `subSkillBreakdown` in `@palier/engine` (100%, a new function, **no golden value moved**).
+  `@palier/ui` gains `Toast` and `Mascot`.
+- **Four real defects the journeys exposed, fixed at the source** (**D67**): the cold-dev-server race
+  (a serial `warmup` project); a fast "1"+Enter being dropped (keys now resolved in the reducer); Enter
+  re-activating the nav link after arriving by it (a set now focuses its first option); and pages with
+  no descriptive title (per-route titles, WCAG 2.4.2).
+- **Correcting my part 3 entry, as rule 4 says (it stays as written):** its honesty note blamed the 13
+  cold failures on a half-stopped server. That was wrong. It was the cold-compile race D67 describes, now
+  fixed.
+- **Test changes and why:** the smoke test "header focus order is skip link, brand, then nav" now asserts
+  the nav's *first link*, whatever it is, rather than a name, since the nav grows with the screens and the
+  order it guards is unchanged. `axeClean` (a helper new in part 3) waits for the page's title before
+  auditing (D67 #4).
+- **Evidence:**
+  - `pnpm verify` → green: 88 files, 944 tests; boundaries clean (256 and 83 modules); thresholds held.
+  - `pnpm test:e2e`, **three cold runs** → "26 passed" each: 19 hermetic (smoke, journeys 1, 2, 6, the
+    invalid import, the review empty state, the report control, titles) + 1 warm-up + 6 production (shell,
+    unvisited route, every shard, journey 2 offline, journey 7, journey 4). Then the warm hermetic project
+    **six times** → "20 passed" each, the load under which journey 6 had once flaked.
+  - `pnpm --filter @palier/web lighthouse` on **8 routes** (`/review`, `/progress`, `/settings/data` added)
+    → the first run **failed**: `/fr/progress` scored performance 0.94 on a layout shift of 0.148, because
+    its static cards were drawn before the report and then pushed down. The report now renders in one
+    pass. Re-run → exit 0, median performance **1.0** and accessibility **1.0** on all 8 routes.
+    `/fr/progress` keeps a small shift (max 0.06, within budget), noted rather than hidden.
+  - After the last two fixes (the progress layout, and the home card counting both skills' due items to
+    match `/review`): `pnpm verify` → 944 passed; `pnpm test:e2e` cold → "26 passed".
 
 ### 24 September 2026 — `dougkeefe/algiers` (Slice 1, part 3: the UI's first half — onboarding, today, drill, diagnostic)
 

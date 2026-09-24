@@ -14,7 +14,11 @@ import type {
   KeyVault,
   PlanDailySessionRequest,
   PracticeTrendRequest,
+  ProgressReport,
+  ProgressReportRequest,
   Random,
+  ReviewQueueRequest,
+  ReviewQueueResult,
   RunDiagnosticRequest,
   RunDiagnosticResult,
   ScheduleStore,
@@ -31,6 +35,8 @@ import {
   importData,
   planDailySession,
   practiceTrend,
+  progressReport,
+  reviewQueue,
   runDiagnostic,
   startSession,
   wipeData,
@@ -125,6 +131,8 @@ export type UseCases = {
   readonly diagnosticReadout: (request: DiagnosticReadoutRequest) => Promise<SkillTrend>;
   /** The readiness card's practice trend (D64). */
   readonly practiceTrend: (request: PracticeTrendRequest) => Promise<SkillTrend>;
+  readonly reviewQueue: (request: ReviewQueueRequest) => Promise<ReviewQueueResult>;
+  readonly progressReport: (request: ProgressReportRequest) => Promise<ProgressReport>;
   /** The data-rights trio [R11]: one action each (progress.md D61, D62). */
   readonly exportData: () => Promise<ExportDocument>;
   readonly importData: (request: ImportDataRequest) => Promise<ImportDataResult>;
@@ -203,6 +211,17 @@ function buildUseCases(ports: Ports): UseCases {
       }),
     practiceTrend: (request) =>
       practiceTrend(request, {
+        items: ports.items,
+        attempts: ports.attempts,
+      }),
+    reviewQueue: (request) =>
+      reviewQueue(request, {
+        clock: ports.clock,
+        schedule: ports.schedule,
+        items: ports.items,
+      }),
+    progressReport: (request) =>
+      progressReport(request, {
         items: ports.items,
         attempts: ports.attempts,
       }),

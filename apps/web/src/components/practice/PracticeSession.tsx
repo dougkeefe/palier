@@ -7,14 +7,19 @@ import { Button, Callout, EmptyState, Passage, ProgressRail, Sheet, itemRenderer
 import { useLocale, useTranslations } from "next-intl";
 import { type ReactNode, type Ref, useEffect, useReducer, useRef, useState } from "react";
 
-import { currentItem, drillReducer, keyIntent, pendingAnswer, startDrill, summaryOf } from "../../features/drill/drill";
+import { currentItem, drillReducer, pendingAnswer, startDrill, summaryOf } from "../../features/drill/drill";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
-import { DIAGNOSTIC_SIZE, readStudyProfile, sessionSizeFor } from "../../lib/study";
+import { DIAGNOSTIC_SIZE, REVIEW_SET_LIMIT, readStudyProfile, sessionSizeFor } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
+import { ReportItem } from "./ReportItem";
 import { TrendMeters } from "./TrendMeters";
 
-export type PracticeMode = "drill" | "diagnostic";
+export type PracticeMode = "drill" | "diagnostic" | "review";
+
+export type PracticeSessionProps =
+  | { readonly mode: "drill" | "diagnostic"; readonly skill: ScoredSkill }
+  | { readonly mode: "review" };
 
 type Loaded =
   | { readonly status: "loading" }
@@ -30,15 +35,18 @@ type Loaded =
 const TARGET_LANG = "fr" as const;
 
 /**
- * A drill (product-requirements.md §8.3) or a diagnostic (§6.2) for one skill.
+ * A drill (product-requirements.md §8.3) or a diagnostic (§6.2) for one skill, or a
+ * review set (§8.8) across both.
  *
- * Both run the same answer loop over `answerItem`. They differ in where the items
- * come from (`startSession`'s plan, or `runDiagnostic`'s coverage sample), in whether
- * each answer is followed by feedback (a diagnostic gives none until the end, so it
- * measures rather than teaches), and in the ending (a summary, or accuracy per band
- * with its interval, R10).
+ * All three run the same answer loop over `answerItem`. They differ in where the items
+ * come from (`startSession`'s plan, `runDiagnostic`'s coverage sample, or
+ * `reviewQueue`'s due stack), in whether each answer is followed by feedback (a
+ * diagnostic gives none until the end, so it measures rather than teaches), and in the
+ * ending (a summary, or accuracy per band with its interval, R10).
  */
-export function PracticeSession({ skill, mode }: { skill: ScoredSkill; mode: PracticeMode }) {
+export function PracticeSession(props: PracticeSessionProps) {
+  const { mode } = props;
+  const skill = props.mode === "review" ? null : props.skill;
   const t = useTranslations("common");
   const state = useContainer();
   const [loaded, setLoaded] = useState<Loaded>({ status: "loading" });
@@ -73,7 +81,11 @@ export function PracticeSession({ skill, mode }: { skill: ScoredSkill; mode: Pra
   );
 }
 
-const load = async (container: Container, skill: ScoredSkill, mode: PracticeMode): Promise<Loaded> => {
+const load = async (container: Container, skill: ScoredSkill | null, mode: PracticeMode): Promise<Loaded> => {
+  if (mode === "review" || skill === null) {
+    const { items } = await container.useCases.reviewQueue({ limit: REVIEW_SET_LIMIT });
+    return { status: "ready", items, sessionId: sessionId(container.ids.ulid()) };
+  }
   const profile = await readStudyProfile(container.settings);
   if (mode === "drill") {
     if (profile === null) return { status: "needs-setup" };
@@ -127,7 +139,7 @@ function Runner({
 }: {
   container: Container;
   mode: PracticeMode;
-  skill: ScoredSkill;
+  skill: ScoredSkill | null;
   items: readonly Item[];
   sessionId: SessionId;
 }) {
@@ -145,12 +157,6 @@ function Runner({
   // rather than a second attempt (D44).
   const attemptIds = useRef(new Map<number, string>());
   const item = currentItem(state);
-  // The keyboard listener reads the latest state through this ref, so it can be
-  // attached once rather than re-bound on every render.
-  const stateRef = useRef(state);
-  useEffect(() => {
-    stateRef.current = state;
-  }, [state]);
   const passage = item !== null && loadedPassage?.itemId === item.id ? loadedPassage.passage : null;
 
   // The item's passage, if it has one.
@@ -217,12 +223,10 @@ function Runner({
       if (event.key === "Enter" && target !== null && (target.tagName === "BUTTON" || target.tagName === "A") && target.getAttribute("role") !== "radio") {
         return;
       }
-      const intent = keyIntent(event.key, stateRef.current);
-      if (intent === null) return;
-      event.preventDefault();
-      if (intent.type === "select") dispatch({ type: "select", option: intent.option, at: performance.now() });
-      else if (intent.type === "confirm") dispatch({ type: "confirm" });
-      else dispatch({ type: "next", at: performance.now() });
+      // The reducer resolves the key against its current state (see the "key" event).
+      if (event.key === "Enter" || /^[1-9]$/.test(event.key)) {
+        dispatch({ type: "key", key: event.key, at: performance.now() });
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -232,8 +236,10 @@ function Runner({
   useEffect(() => {
     if (state.phase === "feedback") feedbackRef.current?.focus();
   }, [state.phase]);
+  // Including the first item: a set is usually reached by a link, and a link that
+  // keeps focus would take the user's Enter for itself instead of confirming.
   useEffect(() => {
-    if (state.index > 0 && state.phase === "answering") {
+    if (state.phase === "answering") {
       itemRef.current?.querySelector<HTMLElement>("[role='radio'][tabindex='0']")?.focus();
     }
   }, [state.index, state.phase]);
@@ -244,7 +250,7 @@ function Runner({
     let live = true;
     if (mode === "drill") {
       void container.useCases.completeSession({ sessionId: session });
-    } else {
+    } else if (mode === "diagnostic" && skill !== null) {
       void container.useCases.diagnosticReadout({ skill }).then((readout) => live && setTrend(readout));
     }
     return () => {
@@ -268,10 +274,10 @@ function Runner({
   }
 
   if (state.phase === "complete") {
-    return mode === "drill" ? (
-      <DrillComplete {...summaryOf(state)} />
-    ) : (
+    return mode === "diagnostic" && skill !== null ? (
       <DiagnosticComplete skillName={tSkills(skill)} trend={trend} />
+    ) : (
+      <DrillComplete {...summaryOf(state)} />
     );
   }
 
@@ -303,12 +309,13 @@ function Runner({
         />
       </div>
       {recordFailed ? <Callout tone="incorrect">{t("recordFailed")}</Callout> : null}
-      {inFeedback && mode === "drill" ? (
+      {inFeedback && mode !== "diagnostic" ? (
         <Feedback
           item={item}
           chosen={state.selected}
           correct={state.outcomes.at(-1) === "correct"}
           headingRef={feedbackRef}
+          container={container}
           last={state.index === items.length - 1}
           onNext={() => dispatch({ type: "next", at: performance.now() })}
         />
@@ -334,6 +341,7 @@ function Feedback({
   chosen,
   correct,
   headingRef,
+  container,
   last,
   onNext,
 }: {
@@ -341,6 +349,7 @@ function Feedback({
   chosen: string | null;
   correct: boolean;
   headingRef: Ref<HTMLHeadingElement>;
+  container: Container;
   last: boolean;
   onNext: () => void;
 }) {
@@ -377,6 +386,7 @@ function Feedback({
       <p className="app-feedback__matters">
         {t("whyMatters", { band: item.targetBand, subSkill: tSub(item.subSkill) })}
       </p>
+      <ReportItem item={item} container={container} />
     </Sheet>
   );
 }

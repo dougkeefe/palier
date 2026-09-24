@@ -41,3 +41,6 @@ export {
   WEAKEST_WINDOW,
   weakestSubSkills,
 } from "./weakest-sub-skills.js";
+
+export type { SubSkillTally } from "./sub-skill-breakdown.js";
+export { subSkillBreakdown } from "./sub-skill-breakdown.js";

@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
 
 import { DiagnosticLauncher } from "../../../components/diagnostic/DiagnosticLauncher";
+
+export async function generateMetadata({ params }: PageProps<"/[locale]/diagnostic">): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "diagnostic" });
+  return { title: t("title") };
+}
 
 // The diagnostic (product-requirements.md §6.2).
 export default function DiagnosticPage({ params }: PageProps<"/[locale]/diagnostic">) {

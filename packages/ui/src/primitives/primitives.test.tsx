@@ -11,6 +11,8 @@ import { OptionRow } from "./OptionRow.js";
 import { Passage } from "./Passage.js";
 import { ProgressRail } from "./ProgressRail.js";
 import { Sheet } from "./Sheet.js";
+import { Mascot } from "./Mascot.js";
+import { Toast } from "./Toast.js";
 
 afterEach(cleanup);
 
@@ -187,5 +189,24 @@ describe("Passage", () => {
     const region = screen.getByRole("region", { name: "Reading passage" });
     expect(region.getAttribute("lang")).toBe("fr");
     expect(region.querySelectorAll("p")).toHaveLength(2);
+  });
+});
+
+describe("Toast", () => {
+  it("is a polite status message carrying its tone", () => {
+    render(<Toast tone="correct">Imported</Toast>);
+    const status = screen.getByRole("status");
+    expect(status.getAttribute("aria-live")).toBe("polite");
+    expect(status.className).toContain("pl-callout--correct");
+    expect(status.textContent).toContain("Imported");
+  });
+});
+
+describe("Mascot", () => {
+  it("is decorative, hidden from assistive technology", () => {
+    const { container } = render(<Mascot />);
+    const svg = container.querySelector("svg");
+    expect(svg?.getAttribute("aria-hidden")).toBe("true");
+    expect(svg?.getAttribute("focusable")).toBe("false");
   });
 });

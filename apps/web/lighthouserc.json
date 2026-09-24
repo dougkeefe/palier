@@ -9,7 +9,10 @@
         "http://localhost:3000/fr",
         "http://localhost:3000/en/start",
         "http://localhost:3000/en/home",
-        "http://localhost:3000/fr/practice/reading"
+        "http://localhost:3000/fr/practice/reading",
+        "http://localhost:3000/en/review",
+        "http://localhost:3000/fr/progress",
+        "http://localhost:3000/en/settings/data"
       ],
       "numberOfRuns": 5,
       "settings": {

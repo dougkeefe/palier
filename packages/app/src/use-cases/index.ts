@@ -59,3 +59,9 @@ export { wipeData } from "./wipe-data.js";
 
 export type { PracticeTrendDeps, PracticeTrendRequest } from "./practice-trend.js";
 export { PRACTICE_MODES, practiceTrend } from "./practice-trend.js";
+
+export type { ReviewQueueDeps, ReviewQueueRequest, ReviewQueueResult } from "./review-queue.js";
+export { reviewQueue } from "./review-queue.js";
+
+export type { ProgressReport, ProgressReportDeps, ProgressReportRequest } from "./progress-report.js";
+export { progressReport } from "./progress-report.js";

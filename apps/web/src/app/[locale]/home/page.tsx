@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
 
 import { HomeDashboard } from "../../../components/home/HomeDashboard";
+
+export async function generateMetadata({ params }: PageProps<"/[locale]/home">): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "today" });
+  return { title: t("title") };
+}
 
 // Today's plan and the readiness card (product-requirements.md §8.2).
 export default function TodayPage({ params }: PageProps<"/[locale]/home">) {
