@@ -93,9 +93,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/pangyo` | **Phase 2 Slice 2 — multi-device sync (D57).** Gate B resolved (human, 24 September 2026): **the lower Leitner box wins a concurrent edit** (D69). Revisioned sync documents with client-side merge, SHA-256 device secrets (D70, ADR 21); `SyncTransport` + `SyncStateStore` ports, `syncNow` and the pairing use cases; the sync backend in `apps/web/src/server` + route handlers; `adapters/sync`; `/settings/sync` and E2E journey 8. Shipped as ordered parts. **All four parts landed; Slice 2 complete**, pending merge. | 24 September 2026 |
+| `dougkeefe/yamoussoukro` | **Phase 2 Slice 3 — convergence proof + public launch (D57), the last Phase 2 slice.** The sync simulator (tier 5) in `@palier/testing` over the memory server and, in the integration lane, the real route handlers on PGlite; the engine golden record; the one-off mutation check; the remaining gates confirmed; deploy tooling, then the public deploy with the human (Gate C, provisioned together). | 24 September 2026 |
 
-*(The prior rows — Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
