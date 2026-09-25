@@ -36,12 +36,16 @@ belongs in `@palier/app`.
   is in no CI lane.
 - **Golden fixtures are the contract** (§5). Recorded outputs live in `src/__fixtures__/*.json`;
   a change that moves a golden value fails its test and must be explained in the PR, never
-  regenerated to make the test pass. Two records: `exam-band-boundaries.golden.json` (the scorer
-  at every cut, `scorer.golden.test.ts`) and `practice-record.golden.json`, 120 recorded answers
+  regenerated to make the test pass. The records: `exam-band-boundaries.golden.json` (the scorer
+  at every cut of reading-unsupervised, `scorer.golden.test.ts`); **one
+  `exam-band-boundaries.<variant>.golden.json` per profile variant** (Phase 3, [R3]), hand-checked
+  against `product-requirements.md` §5 and driven by `Object.entries(profile.variants)` in
+  `scorer.variants.golden.test.ts`, so a variant with no golden, or a golden whose cuts drift from
+  the profile, fails; each form carries the variant's pilots, all answered correctly; and `practice-record.golden.json`, 120 recorded answers
   with the Leitner state after each (`scheduler.golden.test.ts`), the trend with its Wilson
   intervals (`trend-calculator.golden.test.ts`), and one seeded selection and day plan
   (`selector.golden.test.ts`). They run in the fast lane's `engine` project. That is the
-  "engine golden regression" gate (§7 Phase 2). Per-variant exam goldens are Phase 3's.
+  "engine golden regression" gate (§7 Phase 2).
 - **Small enough for one person to hold in their head**, and every calculation explainable
   to a user in one sentence (`architecture.md` §7). A change that breaks either property
   needs an ADR.

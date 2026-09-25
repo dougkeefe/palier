@@ -762,6 +762,10 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
   - `pnpm verify` and `verify:medium` green.
 
   This slice carries exit criteria 1 (the goldens) and 4.
+  **Slice 1 status, 24 September 2026: built** (`progress.md` D80, D81). The simulator's exam phase found
+  that the attempt id first planned here, `${runId}:${itemId}` stamped at submission, cannot converge
+  when two devices submit one run offline. An exam attempt is now a pure function of its run and its
+  answer. Slice 2 is next.
 - **Slice 2 — Forms and a bank that can fill them.**
   - Form generation in the factory: fixed, immutable and versioned, one set per variant, with
     `bandCuts` copied from the profile.

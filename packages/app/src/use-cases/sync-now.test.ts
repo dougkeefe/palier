@@ -1,7 +1,7 @@
-import { type Attempt, attemptId, itemId, sessionId } from "@palier/domain";
+import { type Attempt, attemptId, formId, itemId, sessionId } from "@palier/domain";
 import { describe, expect, it, vi } from "vitest";
 
-import type { ScheduleEntry, Session, SyncTransport } from "../ports/index.js";
+import type { ExamRun, ScheduleEntry, Session, SyncTransport } from "../ports/index.js";
 import { SyncUnauthorizedError, SyncUnavailableError, deviceId } from "../ports/index.js";
 import { recordHash } from "../sync/records.js";
 import {
@@ -12,6 +12,7 @@ import {
   sessionStore,
   settingsStore,
   syncStateStore,
+  examRunStore,
 } from "./__tests__/sync-fakes.js";
 import { MAX_PUSH_ROUNDS, PUSH_BATCH, type SyncNowDeps, syncNow } from "./sync-now.js";
 
@@ -58,6 +59,7 @@ const aDevice = (transport: SyncTransport, over: Partial<SyncNowDeps> = {}): Dev
     attempts: attemptStore(),
     schedule: scheduleStore(),
     sessions: sessionStore(),
+    examRuns: examRunStore(),
     settings: settingsStore(),
     ...over,
   };
@@ -103,6 +105,32 @@ describe("syncNow — when it does nothing", () => {
     expect(await device.sync()).toEqual({ status: "waiting" });
     expect(register).not.toHaveBeenCalled();
     expect((await device.syncState.state()).identity).toBeNull();
+  });
+
+  const aRun = (submittedAt: string | null) => ({
+    id: sessionId("run-1"),
+    formId: formId("f-1"),
+    startedAt: "2026-09-24T09:00:00.000Z",
+    answers: [],
+    flagged: [],
+    elapsedMs: 0,
+    checkpointedAt: "2026-09-24T09:00:00.000Z",
+    submittedAt,
+  });
+
+  it("registers once a mock exam is submitted, even with no session completed", async () => {
+    const device = aDevice(fakeServer().transport("s"));
+    await device.examRuns.put(aRun("2026-09-24T09:45:00.000Z"));
+
+    expect((await device.sync()).status).toBe("synced");
+    expect((await device.syncState.state()).identity).not.toBeNull();
+  });
+
+  it("keeps waiting while the only exam run is still in progress", async () => {
+    const device = aDevice(fakeServer().transport("s"));
+    await device.examRuns.put(aRun(null));
+
+    expect(await device.sync()).toEqual({ status: "waiting" });
   });
 });
 
@@ -376,6 +404,37 @@ describe("syncNow — the Gate B rule (progress.md D69)", () => {
 
     expect(await a.sync()).toMatchObject({ pushed: 0 });
     expect((await a.syncState.ledger()).some((e) => e.id === "ghost")).toBe(false);
+  });
+});
+
+describe("syncNow — exam runs", () => {
+  const aRun = (over: Partial<ExamRun> = {}): ExamRun => ({
+    id: sessionId("run-1"),
+    formId: formId("f-1"),
+    startedAt: "2026-09-24T09:00:00.000Z",
+    answers: [],
+    flagged: [],
+    elapsedMs: 600_000,
+    checkpointedAt: "2026-09-24T09:10:00.000Z",
+    submittedAt: null,
+    ...over,
+  });
+
+  it("keeps the submitted run on both devices when one submitted and the other kept going offline", async () => {
+    const { a, b } = await aPair();
+    await a.examRuns.put(aRun());
+    await a.sync();
+    await b.sync();
+    const submitted = aRun({ submittedAt: "2026-09-24T09:40:00.000Z" });
+    await a.examRuns.put(submitted);
+    await b.examRuns.put(aRun({ elapsedMs: 1_500_000 }));
+
+    await a.sync();
+    expect(await b.sync()).toMatchObject({ merged: 1 });
+    await a.sync();
+
+    expect(await a.examRuns.get(sessionId("run-1"))).toEqual(submitted);
+    expect(await b.examRuns.get(sessionId("run-1"))).toEqual(submitted);
   });
 });
 

@@ -1,7 +1,7 @@
 import type { Clock, Random, ScheduleEntry, SyncRecord, SyncTransport } from "@palier/app";
 import { PairCodeRejectedError, SyncUnavailableError, stableJson } from "@palier/app";
 import type { ExamProfile, ItemId } from "@palier/domain";
-import { itemId } from "@palier/domain";
+import { formId, itemId } from "@palier/domain";
 
 import { fakeClock } from "../clock/fake-clock.js";
 import { contractSecret } from "../contracts/index.js";
@@ -14,6 +14,7 @@ import {
   type DeviceView,
   type Records,
   type Violation,
+  differingExamResults,
   differingTrends,
   diverged,
   duplicatedAttempts,
@@ -21,6 +22,8 @@ import {
   inventedSchedule,
   lostAttempts,
   unexpected,
+  unrecordedExamAnswers,
+  unsubmittedRuns,
 } from "./oracle.js";
 
 /**
@@ -29,7 +32,7 @@ import {
  * delays, reorders, drops and partitions — then, after every phase, the convergence
  * properties in `oracle.ts`. One run is one seed; a failing seed replays exactly.
  *
- * Three phases, each ending in a heal and syncs to quiescence:
+ * The phases, each ending in a heal and syncs to quiescence, include:
  *
  * 1. **Chaos.** Every device runs a random script at once — study, sync (foreground and
  *    in the background, mid-study), change a setting, switch sync off and on, import
@@ -40,6 +43,14 @@ import {
  *    each record must be the `mergeRecord` fold of the concurrent copies (Gate B).
  * 3. **A week offline.** One device is cut off while the others study for a week of
  *    clock time. Nothing it did not touch may overwrite their newer work.
+ * 4. **An exam across a partition.** One device starts a mock exam and it syncs
+ *    everywhere; then every device is cut off and may answer, checkpoint and submit
+ *    the same run. After the heal the run is the `mergeRecord` fold: a submission
+ *    beats an in-progress copy, and the earliest submission wins. Every submitted
+ *    answer has its attempt, and every device rescores the same result (D80).
+ *
+ * Each phase after chaos draws from its own seeded stream, so adding a phase at the end
+ * leaves every earlier phase's script, and so every regression seed, as it was.
  */
 
 export type SimulatedServer = {
@@ -101,6 +112,8 @@ type World = {
   readonly devices: readonly SimulatedDevice[];
   readonly produced: SyncRecord[];
   readonly written: Set<string>;
+  /** Every exam run a device submitted, with the earliest `submittedAt` any device gave it. */
+  readonly submitted: Map<string, string>;
   readonly answered: ReadonlyMap<string, Map<string, ScheduleEntry>>;
   readonly trace: string[];
   readonly violations: Violation[];
@@ -137,7 +150,17 @@ export const runSyncSimulation = async (options: SimulationOptions): Promise<Sim
     });
   });
 
-  const world: World = { clock, network, devices, produced: [], written, answered, trace: [], violations: [] };
+  const world: World = {
+    clock,
+    network,
+    devices,
+    produced: [],
+    written,
+    submitted: new Map(),
+    answered,
+    trace: [],
+    violations: [],
+  };
 
   await chaos(world, options.steps ?? DEFAULT_STEPS, seed);
   await healAndCheck(world, "chaos", null);
@@ -145,6 +168,7 @@ export const runSyncSimulation = async (options: SimulationOptions): Promise<Sim
   await concurrentEdits(world, seededRandom(seed + 1));
   await studyDuringSync(world, seededRandom(seed + 3));
   await weekOffline(world, seededRandom(seed + 2));
+  await examAcrossPartition(world, seededRandom(seed + 4));
 
   return { seed, violations: world.violations, trace: world.trace };
 };
@@ -262,6 +286,9 @@ const healAndCheck = async (
     ...diverged(views),
     ...differingTrends(views),
     ...inventedSchedule(world.written, views),
+    ...unrecordedExamAnswers(views),
+    ...unsubmittedRuns(world.submitted, views),
+    ...differingExamResults(views),
     ...(expectations === null ? [] : unexpected(expectedAfterHeal(expectations.base, expectations.sides), views)),
   ];
   world.violations.push(...found.map((v) => ({ ...v, detail: `${phase}: ${v.detail}` })));
@@ -289,6 +316,7 @@ const view = async (device: SimulatedDevice): Promise<DeviceView> => ({
   records: await device.records(),
   attemptCount: (await device.deps.attempts.all()).length,
   trends: stableJson([await device.trend("reading"), await device.trend("writing")]),
+  examResults: await device.examResults(),
 });
 
 /** Record, from now, the schedule entries `devices`' answers write (`sideOf` reads them). */
@@ -374,4 +402,59 @@ const weekOffline = async (world: World, random: Random): Promise<void> => {
   // Devices at home merge with each other legitimately, so only a lone one's answers are its side.
   const homeSide = home.length === 1 && alone !== undefined ? await sideOf(world, alone) : await (home[0] as SimulatedDevice).records();
   await healAndCheck(world, "week", { base, sides: [homeSide, await sideOf(world, away)] });
+};
+
+const EXAM_FORM = formId("fixture-form-reading");
+const MINUTE = 60_000;
+
+/**
+ * One mock exam, sat on several devices at once. A device starts it and answers a
+ * little, and the run syncs everywhere. Then every device is cut off. Each may go on
+ * answering, at a later elapsed time than the last, and may submit, which records
+ * attempts and schedules the wrong answers. Some devices leave the run alone.
+ *
+ * The expectation is the same partition oracle the other phases use. The run is the
+ * `mergeRecord` fold of the copies each side changed, the attempts are the union
+ * (identical answers derive identical attempts, D80), and the schedule folds to the
+ * lower box.
+ */
+const examAcrossPartition = async (world: World, random: Random): Promise<void> => {
+  const { devices, network, clock } = world;
+  const [host] = devices as [SimulatedDevice, ...SimulatedDevice[]];
+  const onForm = (await fixtureBankRepository().form(EXAM_FORM))?.itemIds ?? [];
+  const examAnswers = (): Answer[] =>
+    Array.from({ length: 1 + Math.floor(random.next() * 4) }, () => ({
+      itemId: pick(random, onForm),
+      correct: random.next() < 0.6,
+      changedAnswer: random.next() < 0.15,
+    }));
+
+  const run = await host.startExam(EXAM_FORM);
+  let elapsed = MINUTE;
+  await host.answerExam(run, examAnswers(), elapsed);
+  world.trace.push(`${host.name} started exam ${run}`);
+  if (!(await quiesce(world, devices))) {
+    world.violations.push({ check: "no-quiescence", device: "all", detail: "exam: the started run never settled" });
+  }
+
+  const base = await host.records();
+  startRecording(world, devices);
+  for (const device of devices) network.partition(device.name);
+  for (const device of devices) {
+    if (random.next() < 0.25) continue;
+    clock.advance(Math.floor(random.next() * 20 * MINUTE));
+    elapsed += Math.floor(random.next() * 30 * MINUTE);
+    await device.answerExam(run, examAnswers(), elapsed);
+    if (random.next() < 0.6) {
+      world.produced.push(...(await device.submitExam(run, elapsed)));
+      const at = (await device.deps.examRuns.get(run))?.submittedAt ?? null;
+      const earliest = world.submitted.get(run);
+      if (at !== null && (earliest === undefined || Date.parse(at) < Date.parse(earliest))) world.submitted.set(run, at);
+      world.trace.push(`${device.name} submitted exam ${run} at ${String(elapsed)} ms`);
+    } else {
+      world.trace.push(`${device.name} answered exam ${run} at ${String(elapsed)} ms`);
+    }
+  }
+  const sides = await Promise.all(devices.map((d) => sideOf(world, d)));
+  await healAndCheck(world, "exam", { base, sides });
 };

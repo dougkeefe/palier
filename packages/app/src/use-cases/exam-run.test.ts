@@ -66,7 +66,10 @@ describe("startExam", () => {
   });
 
   it("returns the stored run on a retried start instead of resetting its answers", async () => {
-    const answered = aRun({ elapsedMs: 90_000, answers: [{ ...answer(), itemId: Q1, changedAnswer: false }] });
+    const answered = aRun({
+      elapsedMs: 90_000,
+      answers: [{ itemId: Q1, response: "a", msToFirstSelect: 1, msToConfirm: 2, changedAnswer: false, answeredAt: NOW }],
+    });
     const deps = depsHolding(answered);
 
     const { run } = await startExam({ runId: RUN_ID, formId: FORM_ID }, deps);
@@ -83,7 +86,7 @@ describe("answerExamItem", () => {
     const run = await answerExamItem(answer({ elapsedMs: 75_000 }), deps);
 
     expect(run.answers).toEqual([
-      { itemId: Q1, response: "a", msToFirstSelect: 800, msToConfirm: 1_200, changedAnswer: false },
+      { itemId: Q1, response: "a", msToFirstSelect: 800, msToConfirm: 1_200, changedAnswer: false, answeredAt: LATER },
     ]);
     expect(run.elapsedMs).toBe(75_000);
     expect(run.checkpointedAt).toBe(LATER);

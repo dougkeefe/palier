@@ -1,10 +1,10 @@
 /**
- * The four progress aggregates a sync document can carry (architecture.md §9.4,
+ * The five progress aggregates a sync document can carry (architecture.md §9.4,
  * product-requirements.md §8.11 "what syncs"). Everything else — the API key, audio,
  * transcripts, submissions, the cost ledger — never leaves the device, and has no
  * document type to leave in.
  */
-export const SYNC_DOC_TYPES = ["attempt", "schedule", "session", "setting"] as const;
+export const SYNC_DOC_TYPES = ["attempt", "schedule", "session", "examRun", "setting"] as const;
 export type SyncDocType = (typeof SYNC_DOC_TYPES)[number];
 
 /** A server-assigned device identifier (architecture.md §9.2 `devices.id`). */

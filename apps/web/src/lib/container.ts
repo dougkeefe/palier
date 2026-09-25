@@ -6,6 +6,7 @@ import type {
   CompleteSessionRequest,
   CompleteSessionResult,
   DiagnosticReadoutRequest,
+  ExamRunStore,
   ExportDocument,
   IdGenerator,
   ImportDataRequest,
@@ -69,6 +70,7 @@ import {
   fixtureBankRepository,
   isHermetic,
   memoryAttemptStore,
+  memoryExamRunStore,
   memoryKeyVault,
   memoryScheduleStore,
   memorySessionStore,
@@ -179,6 +181,8 @@ export type Ports = {
   readonly attempts: AttemptStore;
   readonly schedule: ScheduleStore;
   readonly sessions: SessionStore;
+  /** The mock-exam runs. Their use cases are wired with the runner UI (Phase 3 Slice 3). */
+  readonly examRuns: ExamRunStore;
   readonly settings: SettingsStore;
   readonly vault: KeyVault;
   /** The HTTP sync transport, same-origin, presenting the vault's device secret. */
@@ -260,6 +264,7 @@ function buildUseCases(ports: Ports): UseCases {
         attempts: ports.attempts,
         schedule: ports.schedule,
         sessions: ports.sessions,
+        examRuns: ports.examRuns,
         settings: ports.settings,
       }),
     importData: (request) =>
@@ -267,6 +272,7 @@ function buildUseCases(ports: Ports): UseCases {
         attempts: ports.attempts,
         schedule: ports.schedule,
         sessions: ports.sessions,
+        examRuns: ports.examRuns,
         settings: ports.settings,
       }),
     wipeData: () =>
@@ -274,6 +280,7 @@ function buildUseCases(ports: Ports): UseCases {
         attempts: ports.attempts,
         schedule: ports.schedule,
         sessions: ports.sessions,
+        examRuns: ports.examRuns,
         settings: ports.settings,
         vault: ports.vault,
       }),
@@ -295,6 +302,7 @@ const syncDeps = (ports: Ports) => ({
   attempts: ports.attempts,
   schedule: ports.schedule,
   sessions: ports.sessions,
+  examRuns: ports.examRuns,
   settings: ports.settings,
 });
 
@@ -334,6 +342,7 @@ function productionPorts(): Ports {
     attempts: stores.attempts,
     schedule: stores.schedule,
     sessions: stores.sessions,
+    examRuns: stores.examRuns,
     settings: stores.settings,
     // The Dexie adapter names this port `keyVault`; the graph calls it `vault`.
     vault: stores.keyVault,
@@ -365,6 +374,7 @@ function hermeticPorts(): Ports {
     attempts: memoryAttemptStore(),
     schedule: memoryScheduleStore(),
     sessions: memorySessionStore(),
+    examRuns: memoryExamRunStore(),
     settings: memorySettingsStore(),
     vault,
     sync: httpSyncTransport({ baseUrl: SYNC_BASE_URL, credentials: () => vault.deviceSecret() }),

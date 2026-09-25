@@ -21,7 +21,14 @@ export const examRunStoreContract = (
       const run = anExamRun({
         id: sessionId("r-1"),
         answers: [
-          { itemId: itemId("i-1"), response: "b", msToFirstSelect: 900, msToConfirm: 1400, changedAnswer: true },
+          {
+            itemId: itemId("i-1"),
+            response: "b",
+            msToFirstSelect: 900,
+            msToConfirm: 1400,
+            changedAnswer: true,
+            answeredAt: "2026-01-01T00:01:00.000Z",
+          },
         ],
         flagged: [itemId("i-2")],
         elapsedMs: 61_000,

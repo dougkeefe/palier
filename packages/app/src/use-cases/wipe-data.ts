@@ -1,5 +1,6 @@
 import type {
   AttemptStore,
+  ExamRunStore,
   KeyVault,
   ScheduleStore,
   SessionStore,
@@ -8,7 +9,7 @@ import type {
 
 /**
  * Delete everything on this device in one action [R11] (implementation-plan.md 3.2,
- * `WipeData`): every attempt, schedule entry, session and setting, and the stored
+ * `WipeData`): every attempt, schedule entry, session, exam run and setting, and the stored
  * API key.
  *
  * The **device secret survives**. `KeyVault.clear` removes the API key and leaves the
@@ -23,6 +24,7 @@ export type WipeDataDeps = {
   readonly attempts: AttemptStore;
   readonly schedule: ScheduleStore;
   readonly sessions: SessionStore;
+  readonly examRuns: ExamRunStore;
   readonly settings: SettingsStore;
   readonly vault: KeyVault;
 };
@@ -32,6 +34,7 @@ export const wipeData = async (deps: WipeDataDeps): Promise<void> => {
     deps.attempts.clear(),
     deps.schedule.clear(),
     deps.sessions.clear(),
+    deps.examRuns.clear(),
     deps.settings.clear(),
     deps.vault.clear(),
   ]);

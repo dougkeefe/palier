@@ -21,6 +21,11 @@ The sync pieces are:
   properties after every heal. The server is a parameter (`memorySimulatedServer`, or the real handlers
   on PGlite from `apps/web`), and so is the exam profile. `SEEDS_PER_LANE` and `REGRESSION_SEEDS` live in
   `seeds.ts`; the volume run is `simulator.integration.test.ts` in the gated `integration-testing` project.
+  **Every phase after chaos draws from its own seeded stream** (`seed + n`), so a new phase goes at the
+  end and leaves every earlier script, and so every regression seed, as it was. The last phase sits one
+  mock exam on every device across a partition (progress.md D80). Its `unsubmittedRuns` check is judged
+  from what the devices did, not from `mergeRecord`. The partition oracle folds by `mergeRecord` itself,
+  so it cannot see a wrong merge rule; a rule-independent check can.
 
 Test infrastructure as a package, so a use case test runs in milliseconds with no mocking framework.
 
@@ -40,7 +45,8 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
 - **Do not invent a port §3.3 has not specified.** The ports now come from `@palier/app`;
   the in-memory impls and contract suites import them from there (`ports.stub.ts` is gone).
   A store that needs a port §3.3 omits — now only `OralStore` — waits for it to land
-  in `@palier/app` rather than being stubbed here. (`SessionStore` has landed:
+  in `@palier/app` rather than being stubbed here. (`ExamRunStore` has landed: `memoryExamRunStore`,
+  `examRunStoreContract` and `anExamRun`, progress.md D80. `SessionStore` has landed:
   `memorySessionStore` and `sessionStoreContract` exist, progress.md D45. `IdGenerator`
   likewise: `counterIdGenerator` and `idGeneratorContract`, D48 — the Web Crypto adapter in
   `@palier/adapters/ids` is held to the same contract. `SyncTransport` and `SyncStateStore`

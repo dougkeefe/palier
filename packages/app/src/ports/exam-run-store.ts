@@ -3,10 +3,15 @@ import type { FormId, ItemId, ItemResponse, SessionId } from "@palier/domain";
 import type { ISO } from "./time.js";
 
 /**
- * One answer given during a mock exam. It carries the same timing evidence an
- * `Attempt` does, because `submitExam` turns each answer into one. An answer is
- * not an attempt yet: until the run is submitted the candidate may change it,
- * and re-answering an item replaces its `ExamAnswer`.
+ * One answer given during a mock exam. It carries the same evidence an `Attempt`
+ * does, because `submitExam` turns each answer into one. An answer is not an
+ * attempt yet: until the run is submitted the candidate may change it, and
+ * re-answering an item replaces its `ExamAnswer`.
+ *
+ * The attempt is a pure function of the run id and this answer: its id hashes
+ * the answer, and its `ts` is `answeredAt`. So two devices that submit the same
+ * synced run record byte-identical attempts, not two copies of one id that
+ * disagree (progress.md D80).
  */
 export type ExamAnswer = {
   readonly itemId: ItemId;
@@ -15,6 +20,8 @@ export type ExamAnswer = {
   readonly msToConfirm: number;
   /** The candidate changed their mind, within this item or on returning to it. */
   readonly changedAnswer: boolean;
+  /** When this answer was given. It becomes the attempt's `ts`. */
+  readonly answeredAt: ISO;
 };
 
 /**

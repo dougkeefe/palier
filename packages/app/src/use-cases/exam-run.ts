@@ -163,6 +163,7 @@ export const answerExamItem = async (
   const run = await openRun(request.runId, deps.examRuns);
   await requireOnForm(run, request.itemId, deps.items);
 
+  const now = deps.clock.now();
   const previous = run.answers.find((a) => a.itemId === request.itemId);
   const answer: ExamAnswer = {
     itemId: request.itemId,
@@ -172,13 +173,14 @@ export const answerExamItem = async (
     changedAnswer:
       request.changedAnswer ||
       (previous !== undefined && (previous.changedAnswer || previous.response !== request.response)),
+    answeredAt: now,
   };
   const answers =
     previous === undefined
       ? [...run.answers, answer]
       : run.answers.map((a) => (a.itemId === request.itemId ? answer : a));
 
-  const next = checkpoint({ ...run, answers }, request.elapsedMs, deps.clock.now());
+  const next = checkpoint({ ...run, answers }, request.elapsedMs, now);
   await deps.examRuns.put(next);
   return next;
 };

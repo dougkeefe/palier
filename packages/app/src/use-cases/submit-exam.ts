@@ -5,11 +5,13 @@ import { type ExamResult, scoreExam } from "@palier/engine";
 import type {
   AttemptStore,
   Clock,
+  ExamAnswer,
   ExamRun,
   ExamRunStore,
   ItemRepository,
   ScheduleStore,
 } from "../ports/index.js";
+import { recordHash } from "../sync/records.js";
 import { answerItem, recordAttempt } from "./answer-item.js";
 import { UnknownExamRunError, formOf, laterElapsed } from "./exam-run.js";
 
@@ -76,17 +78,27 @@ export type SubmitExamResult = {
 };
 
 /**
- * The attempt an exam answer becomes. Its id is derived from the run and the
- * item, not minted (progress.md D80). A retried submit therefore appends
- * nothing twice (D44), and neither does the same run submitted on two devices.
+ * The attempt an exam answer becomes. Its id is derived, not minted
+ * (progress.md D80): the run, the item, and a hash of the answer itself.
+ *
+ * - A retried submit derives the same ids, so it appends nothing twice (D44).
+ * - Two devices that submit the same synced answers derive the same ids for
+ *   byte-identical attempts, because the attempt's `ts` is the answer's
+ *   `answeredAt` and not the moment of submission.
+ * - Two devices that submitted *different* answers to one item derive different
+ *   ids. Both attempts are kept, as a union, and neither overwrites the other.
+ *   Attempts are append-only, so one id carrying two contents could never
+ *   converge.
  */
-export const examAttemptId = (runId: SessionId, itemId: ItemId) => attemptId(`${runId}:${itemId}`);
+export const examAttemptId = (runId: SessionId, answer: ExamAnswer) =>
+  attemptId(`${runId}:${answer.itemId}:${recordHash(answer)}`);
 
 /**
  * Close a run: record its answers as attempts, then stamp `submittedAt` once.
  *
- * - **One attempt per answered item**, with `mode: "exam"`. An unanswered item
- *   has no response to record, and `scoreExam` counts it wrong.
+ * - **One attempt per answered item**, with `mode: "exam"`, stamped with the
+ *   answer's `answeredAt`. An unanswered item has no response to record, and
+ *   `scoreExam` counts it wrong.
  * - **Scored items go through `answerItem`**, so a wrong or wavering answer
  *   enters the review queue by the D41 rule. `slow` is false: an exam has no
  *   per-item speed judgement, and the caller owns that threshold (D40).
@@ -107,8 +119,11 @@ export const submitExam = async (
   const pilots = new Set<ItemId>(form.pilotItemIds);
 
   for (const answer of run.answers) {
+    // The attempt is stamped with when the answer was given, so it is the same record
+    // on every device that submits it (D80).
+    const at = { ...deps, clock: { now: () => answer.answeredAt } };
     const attempt = {
-      attemptId: examAttemptId(run.id, answer.itemId),
+      attemptId: examAttemptId(run.id, answer),
       itemId: answer.itemId,
       response: answer.response,
       sessionId: run.id,
@@ -119,9 +134,9 @@ export const submitExam = async (
     };
     // Sequential on purpose, so a replay writes in the same order as the first pass.
     if (pilots.has(answer.itemId)) {
-      await recordAttempt(attempt, deps);
+      await recordAttempt(attempt, at);
     } else {
-      await answerItem({ ...attempt, slow: false }, deps);
+      await answerItem({ ...attempt, slow: false }, at);
     }
   }
 

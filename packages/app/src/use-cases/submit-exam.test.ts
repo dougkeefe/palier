@@ -1,5 +1,5 @@
 import type { ItemId, OptionId } from "@palier/domain";
-import { formId, itemId } from "@palier/domain";
+import { formId, itemId, sessionId } from "@palier/domain";
 import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 
@@ -19,12 +19,15 @@ import { attemptStore, examRunStore, scheduleStore } from "./__tests__/sync-fake
 
 const SUBMIT_AT = "2026-03-01T09:40:00.000Z";
 
+const ANSWERED_AT = "2026-03-01T09:20:00.000Z";
+
 const anAnswer = (id: string, response: OptionId, changedAnswer = false): ExamAnswer => ({
   itemId: itemId(id),
   response,
   msToFirstSelect: 700,
   msToConfirm: 1_100,
   changedAnswer,
+  answeredAt: ANSWERED_AT,
 });
 
 const depsHolding = (run: ExamRun, over: Partial<SubmitExamDeps> = {}): SubmitExamDeps => ({
@@ -44,17 +47,15 @@ const ANSWERED = aRun({
 });
 
 describe("submitExam", () => {
-  it("records one exam attempt per answered item, keyed by run and item, stamped at submission", async () => {
+  it("records one exam attempt per answered item, keyed by run and answer, stamped when it was answered", async () => {
     const deps = depsHolding(ANSWERED);
 
     await submitExam({ runId: RUN_ID, elapsedMs: 31 * 60_000 }, deps);
 
     const attempts = await deps.attempts.all();
-    expect(attempts.map((a) => a.id).sort()).toEqual(
-      ["q1", "q2", "q3", "p1"].map((id) => examAttemptId(RUN_ID, itemId(id))).sort(),
-    );
+    expect(attempts.map((a) => a.id).sort()).toEqual(ANSWERED.answers.map((a) => examAttemptId(RUN_ID, a)).sort());
     for (const attempt of attempts) {
-      expect(attempt).toMatchObject({ mode: "exam", sessionId: RUN_ID, ts: SUBMIT_AT, bankVersion: 3 });
+      expect(attempt).toMatchObject({ mode: "exam", sessionId: RUN_ID, ts: ANSWERED_AT, bankVersion: 3 });
     }
     expect(attempts.find((a) => a.itemId === "q3")).toMatchObject({ chosen: "a", correct: true, changedAnswer: true });
   });
@@ -168,6 +169,40 @@ describe("submitExam", () => {
   });
 });
 
+describe("examAttemptId", () => {
+  it("is the same for the same run and answer, so a retry or a second device derives it again", () => {
+    expect(examAttemptId(RUN_ID, anAnswer("q1", "a"))).toBe(examAttemptId(RUN_ID, anAnswer("q1", "a")));
+  });
+
+  it("differs when the answers differ, so two devices' different answers never share an id", () => {
+    const ids = new Set([
+      examAttemptId(RUN_ID, anAnswer("q1", "a")),
+      examAttemptId(RUN_ID, anAnswer("q1", "b")),
+      examAttemptId(RUN_ID, anAnswer("q1", "a", true)),
+      examAttemptId(RUN_ID, { ...anAnswer("q1", "a"), answeredAt: "2026-03-01T09:21:00.000Z" }),
+      examAttemptId(RUN_ID, anAnswer("q2", "a")),
+    ]);
+    expect(ids.size).toBe(5);
+  });
+
+  it("differs between runs", () => {
+    expect(examAttemptId(RUN_ID, anAnswer("q1", "a"))).not.toBe(examAttemptId(sessionId("other"), anAnswer("q1", "a")));
+  });
+});
+
+describe("two devices submitting one run", () => {
+  it("record byte-identical attempts when they submit the same answers at different times", async () => {
+    const first = depsHolding(ANSWERED, { clock: clockOf("2026-03-01T09:40:00.000Z") });
+    const second = depsHolding(ANSWERED, { clock: clockOf("2026-03-01T11:05:00.000Z") });
+
+    await submitExam({ runId: RUN_ID, elapsedMs: 0 }, first);
+    await submitExam({ runId: RUN_ID, elapsedMs: 0 }, second);
+
+    const byId = (list: readonly { id: string }[]) => [...list].sort((a, b) => (a.id < b.id ? -1 : 1));
+    expect(byId(await second.attempts.all())).toEqual(byId(await first.attempts.all()));
+  });
+});
+
 describe("rescoreExam", () => {
   it("returns the same result submitExam did", async () => {
     const deps = depsHolding(ANSWERED);
@@ -207,6 +242,7 @@ describe("scoring is idempotent (property)", () => {
             msToFirstSelect: fc.nat(60_000),
             msToConfirm: fc.nat(60_000),
             changedAnswer: fc.boolean(),
+            answeredAt: fc.constant("2026-03-01T09:15:00.000Z"),
           }),
         ),
       ),

@@ -1,5 +1,6 @@
 import type {
   AttemptStore,
+  ExamRunStore,
   ScheduleStore,
   SessionStore,
   SettingsStore,
@@ -9,6 +10,7 @@ import {
   type SyncRecord,
   attemptRecord,
   collectRecords,
+  examRunRecord,
   keyOf,
   scheduleRecord,
   sessionRecord,
@@ -29,7 +31,8 @@ import { parseExportDocument } from "./export-document.js";
  * - Attempts merge as a union. They are append-only and keyed by ULID, so an attempt
  *   already present is the store's duplicate no-op (ADR 16, D44).
  * - A schedule entry keeps the **lower Leitner box** (Gate B, D43); a session keeps the
- *   completed copy; a setting keeps the local value.
+ *   completed copy; an exam run keeps the submitted copy; a setting keeps the local
+ *   value.
  *
  * A file carries no causal history — it cannot say whether it was exported before or
  * after the device's own edits — so every record already present is treated as a
@@ -50,6 +53,7 @@ export type ImportDataDeps = {
   readonly attempts: AttemptStore;
   readonly schedule: ScheduleStore;
   readonly sessions: SessionStore;
+  readonly examRuns: ExamRunStore;
   readonly settings: SettingsStore;
 };
 
@@ -63,6 +67,7 @@ export type ImportDataResult = {
   readonly attempts: ImportCount;
   readonly schedule: ImportCount;
   readonly sessions: ImportCount;
+  readonly examRuns: ImportCount;
   readonly settings: ImportCount;
 };
 
@@ -93,6 +98,7 @@ export const importData = async (
     attempts: await importAll(doc.attempts.map(attemptRecord)),
     schedule: await importAll(doc.schedule.map(scheduleRecord)),
     sessions: await importAll(doc.sessions.map(sessionRecord)),
+    examRuns: await importAll(doc.examRuns.map(examRunRecord)),
     settings: await importAll(doc.settings.map(settingRecord)),
   };
 };

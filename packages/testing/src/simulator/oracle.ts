@@ -1,5 +1,5 @@
-import type { SyncRecord } from "@palier/app";
-import { mergeRecord, stableJson } from "@palier/app";
+import type { ExamRun, SyncRecord } from "@palier/app";
+import { examAttemptId, mergeRecord, stableJson } from "@palier/app";
 
 /**
  * What the sync simulator asserts once the network has healed and every device has
@@ -25,6 +25,8 @@ export type DeviceView = {
   readonly attemptCount: number;
   /** The practice trend for every scored skill, as stable JSON. */
   readonly trends: string;
+  /** The rescored result of every submitted exam run, as stable JSON. */
+  readonly examResults: string;
 };
 
 const same = (a: SyncRecord | undefined, b: SyncRecord | undefined): boolean =>
@@ -48,7 +50,7 @@ export const duplicatedAttempts = (views: readonly DeviceView[]): Violation[] =>
       : [{ check: "duplicated-attempt", device: view.name, detail: `${String(view.attemptCount)} stored, ${String(unique)} unique` }];
   });
 
-/** Every device holds exactly what the first one holds: attempts, schedule, sessions, settings. */
+/** Every device holds exactly what the first one holds: attempts, schedule, sessions, exam runs, settings. */
 export const diverged = (views: readonly DeviceView[]): Violation[] => {
   const [first, ...rest] = views;
   if (first === undefined) return [];
@@ -81,6 +83,51 @@ export const inventedSchedule = (written: ReadonlySet<string>, views: readonly D
       .map((r) => ({ check: "invented-schedule", device: view.name, detail: `schedule ${r.id} was never written` })),
   );
 
+/**
+ * Every submitted exam run has an attempt for each of its answers, on every device.
+ * `submitExam` records the attempts before it stamps the run, so a submitted copy that
+ * won the merge always had its attempts written somewhere. If they are missing here,
+ * sync lost them (progress.md D80).
+ */
+export const unrecordedExamAnswers = (views: readonly DeviceView[]): Violation[] =>
+  views.flatMap((view) =>
+    [...view.records.values()].flatMap((record) => {
+      if (record.type !== "examRun" || record.value.submittedAt === null) return [];
+      const run: ExamRun = record.value;
+      const missing = run.answers.filter((a) => !view.records.has(`attempt:${examAttemptId(run.id, a)}`));
+      return missing.length === 0
+        ? []
+        : [{ check: "unrecorded-exam-answer", device: view.name, detail: `run ${run.id}: ${String(missing.length)} answers have no attempt` }];
+    }),
+  );
+
+/**
+ * A run submitted anywhere is submitted everywhere, with the earliest submission any
+ * device made. This is judged from what the devices did (`submitted`, run id to the
+ * earliest `submittedAt`), not from `mergeRecord`, so a merge rule that let an
+ * in-progress copy win would be caught here even though the partition oracle, which
+ * folds by that same rule, would agree with it.
+ */
+export const unsubmittedRuns = (submitted: ReadonlyMap<string, string>, views: readonly DeviceView[]): Violation[] =>
+  views.flatMap((view) =>
+    [...submitted].flatMap(([id, at]) => {
+      const record = view.records.get(`examRun:${id}`);
+      const got = record?.type === "examRun" ? record.value.submittedAt : undefined;
+      return got === at
+        ? []
+        : [{ check: "unsubmitted-run", device: view.name, detail: `run ${id} submitted at ${at}, here ${String(got)}` }];
+    }),
+  );
+
+/** Every device rescoring its submitted exam runs gets the same results (Phase 3 exit criterion 4). */
+export const differingExamResults = (views: readonly DeviceView[]): Violation[] => {
+  const [first, ...rest] = views;
+  if (first === undefined) return [];
+  return rest
+    .filter((view) => view.examResults !== first.examResults)
+    .map((view) => ({ check: "exam-result-differs", device: view.name, detail: `exam results differ from ${first.name}` }));
+};
+
 export type Expectation =
   | { readonly exact: SyncRecord }
   /** A setting changed on more than one side: the last device to push wins, so any of them. */
@@ -95,7 +142,7 @@ export type Expectation =
  * - changed on **one** side — that side's copy wins outright. This is the week-offline
  *   property: a device that did not touch a record never overwrites the newer copy;
  * - changed on **several** — their `mergeRecord` fold (the lower box, the completed
- *   session: Gate B, D69), or for a setting, any one of them.
+ *   session, the submitted exam run: Gate B, D69, D80), or for a setting, any one of them.
  */
 export const expectedAfterHeal = (base: Records, sides: readonly Records[]): Map<string, Expectation> => {
   const expected = new Map<string, Expectation>();

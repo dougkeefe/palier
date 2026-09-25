@@ -1,9 +1,10 @@
-import { type Attempt, attemptId, itemId, sessionId } from "@palier/domain";
+import { type Attempt, attemptId, formId, itemId, sessionId } from "@palier/domain";
 import { describe, expect, it, vi } from "vitest";
 
 import type {
   AttemptStore,
   Clock,
+  ExamRun,
   KeyVault,
   ScheduleEntry,
   ScheduleStore,
@@ -21,6 +22,7 @@ import {
 } from "./export-document.js";
 import { importData } from "./import-data.js";
 import { wipeData } from "./wipe-data.js";
+import { examRunStore } from "./__tests__/sync-fakes.js";
 
 // Local stubs rather than @palier/testing (progress.md D37). These are small
 // *stateful* stores, because export → wipe → import is only meaningful over state.
@@ -57,6 +59,27 @@ const aSession = (id: string, over: Partial<Session> = {}): Session => ({
   mode: "drill",
   startedAt: "2026-09-20T09:00:00.000Z",
   completedAt: "2026-09-20T09:15:00.000Z",
+  ...over,
+});
+
+const anExamRun = (id: string, over: Partial<ExamRun> = {}): ExamRun => ({
+  id: sessionId(id),
+  formId: formId("form-1"),
+  startedAt: "2026-09-21T09:00:00.000Z",
+  answers: [
+    {
+      itemId: itemId("item-a"),
+      response: "b",
+      msToFirstSelect: 900,
+      msToConfirm: 1500,
+      changedAnswer: true,
+      answeredAt: "2026-09-21T09:05:00.000Z",
+    },
+  ],
+  flagged: [itemId("item-b")],
+  elapsedMs: 600_000,
+  checkpointedAt: "2026-09-21T09:10:00.000Z",
+  submittedAt: "2026-09-21T09:40:00.000Z",
   ...over,
 });
 
@@ -151,6 +174,7 @@ const aDevice = async () => {
     attempts: attemptStore(),
     schedule: scheduleStore(),
     sessions: sessionStore(),
+    examRuns: examRunStore(),
     settings: settingsStore(),
     vault: vaultOf(),
   };
@@ -160,6 +184,8 @@ const aDevice = async () => {
   await device.schedule.put(anEntry("retired", { due: null, box: 5 }));
   await device.sessions.create(aSession("s-1"));
   await device.sessions.create(aSession("s-2", { completedAt: null }));
+  await device.examRuns.put(anExamRun("run-2", { submittedAt: null }));
+  await device.examRuns.put(anExamRun("run-1"));
   await device.settings.set("locale", "fr");
   await device.settings.set("goal", { minutes: 20 });
   return device;
@@ -172,6 +198,7 @@ const aDocument = (over: Partial<ExportDocument> = {}): ExportDocument => ({
   attempts: [anAttempt("a")],
   schedule: [anEntry("item-a")],
   sessions: [aSession("s-1")],
+  examRuns: [],
   settings: [{ key: "locale", value: "fr" }],
   ...over,
 });
@@ -179,7 +206,7 @@ const aDocument = (over: Partial<ExportDocument> = {}): ExportDocument => ({
 const textOf = (doc: unknown) => JSON.stringify(doc);
 
 describe("exportData", () => {
-  it("writes every record of the four stores into one versioned, dated document", async () => {
+  it("writes every record of the five stores into one versioned, dated document", async () => {
     const doc = await exportData(await aDevice());
 
     expect(doc.format).toBe(EXPORT_FORMAT);
@@ -189,6 +216,7 @@ describe("exportData", () => {
     // Retired entries carry an item's history, so they are exported too.
     expect(doc.schedule.map((e) => e.itemId)).toEqual(["item-a", "retired"]);
     expect(doc.sessions).toHaveLength(2);
+    expect(doc.examRuns).toHaveLength(2);
     expect(doc.settings).toHaveLength(2);
   });
 
@@ -197,6 +225,7 @@ describe("exportData", () => {
 
     expect(doc.attempts.map((a) => a.id)).toEqual(["a", "b"]);
     expect(doc.sessions.map((s) => s.id)).toEqual(["s-1", "s-2"]);
+    expect(doc.examRuns.map((r) => r.id)).toEqual(["run-1", "run-2"]);
     expect(doc.settings.map((s) => s.key)).toEqual(["goal", "locale"]);
     expect(textOf(await exportData(await aDevice()))).toBe(textOf(doc));
   });
@@ -207,7 +236,7 @@ describe("exportData", () => {
 
     expect(text).not.toContain("device-secret");
     expect(Object.keys(await exportData(device)).sort()).toEqual(
-      ["attempts", "exportedAt", "format", "schedule", "sessions", "settings", "version"].sort(),
+      ["attempts", "examRuns", "exportedAt", "format", "schedule", "sessions", "settings", "version"].sort(),
     );
   });
 });
@@ -220,6 +249,7 @@ describe("wipeData", () => {
     expect(await device.attempts.all()).toEqual([]);
     expect(await device.schedule.all()).toEqual([]);
     expect(await device.sessions.all()).toEqual([]);
+    expect(await device.examRuns.all()).toEqual([]);
     expect(await device.settings.all()).toEqual([]);
     expect(device.vault.apiKeyCleared()).toBe(true);
   });
@@ -245,6 +275,7 @@ describe("importData", () => {
       attempts: { added: 2, merged: 0, kept: 0 },
       schedule: { added: 2, merged: 0, kept: 0 },
       sessions: { added: 2, merged: 0, kept: 0 },
+      examRuns: { added: 2, merged: 0, kept: 0 },
       settings: { added: 2, merged: 0, kept: 0 },
     });
   });
@@ -261,6 +292,7 @@ describe("importData", () => {
       attempts: { added: 0, merged: 0, kept: 2 },
       schedule: { added: 0, merged: 0, kept: 2 },
       sessions: { added: 0, merged: 0, kept: 2 },
+      examRuns: { added: 0, merged: 0, kept: 2 },
       settings: { added: 0, merged: 0, kept: 2 },
     });
     expect(textOf(await exportData(device))).toBe(text);
@@ -357,6 +389,22 @@ describe("importData", () => {
     expect(await device.settings.get("k")).toBe(1);
   });
 
+  it("keeps the submitted copy of an exam run over an in-progress one, from either side", async () => {
+    const device = { ...(await aDevice()), examRuns: examRunStore() };
+    await device.examRuns.put(anExamRun("run-1", { submittedAt: null, elapsedMs: 900_000 }));
+
+    const result = await importData({ json: textOf(aDocument({ examRuns: [anExamRun("run-1")] })) }, device);
+
+    expect(result.examRuns).toEqual({ added: 0, merged: 1, kept: 0 });
+    expect(await device.examRuns.get(sessionId("run-1"))).toEqual(anExamRun("run-1"));
+
+    const again = await importData(
+      { json: textOf(aDocument({ examRuns: [anExamRun("run-1", { submittedAt: null, elapsedMs: 999_000 })] })) },
+      device,
+    );
+    expect(again.examRuns).toEqual({ added: 0, merged: 0, kept: 1 });
+  });
+
   it("writes nothing when any record in the file is invalid", async () => {
     const device = { ...(await aDevice()), attempts: attemptStore() };
     const bad = { ...aDocument({ attempts: [anAttempt("ok")] }), schedule: [{ itemId: "x", due: "soon", skill: "reading", box: 1 }] };
@@ -397,6 +445,58 @@ describe("parseExportDocument", () => {
     rejects("[]", /not a Palier export/);
     rejects("null", /not a Palier export/);
     rejects(textOf({ ...aDocument(), format: "other-app" }), /not a Palier export/);
+  });
+
+  it("reads a version 1 file, which predates exam runs, as a document with none", () => {
+    const { examRuns: _examRuns, ...v1 } = { ...aDocument(), version: 1 };
+
+    expect(parseExportDocument(textOf(v1))).toEqual(aDocument({ examRuns: [] }));
+  });
+
+  it("imports a version 1 file onto a device and leaves its exam runs alone", async () => {
+    const device = await aDevice();
+    const { examRuns: _examRuns, ...v1 } = { ...aDocument(), version: 1 };
+
+    const result = await importData({ json: textOf(v1) }, device);
+
+    expect(result.examRuns).toEqual({ added: 0, merged: 0, kept: 0 });
+    expect(await device.examRuns.all()).toHaveLength(2);
+  });
+
+  it("rejects a version 2 document with no exam-run list", () => {
+    const { examRuns: _examRuns, ...withoutRuns } = aDocument();
+    rejects(textOf(withoutRuns), /"examRuns" is missing/);
+  });
+
+  it("reads exam runs back to the same value, in progress or submitted", () => {
+    const doc = aDocument({ examRuns: [anExamRun("r-1"), anExamRun("r-2", { submittedAt: null, answers: [], flagged: [] })] });
+    expect(parseExportDocument(textOf(doc))).toEqual(doc);
+  });
+
+  it("names an invalid exam run, for each way one can be wrong", () => {
+    const answer = anExamRun("r").answers[0];
+    for (const bad of [
+      "not-a-record",
+      { ...anExamRun("r"), id: "" },
+      { ...anExamRun("r"), formId: 7 },
+      { ...anExamRun("r"), startedAt: "dawn" },
+      { ...anExamRun("r"), answers: "all of them" },
+      { ...anExamRun("r"), flagged: [""] },
+      { ...anExamRun("r"), flagged: "q1" },
+      { ...anExamRun("r"), elapsedMs: -1 },
+      { ...anExamRun("r"), elapsedMs: "long" },
+      { ...anExamRun("r"), checkpointedAt: null },
+      { ...anExamRun("r"), submittedAt: "later" },
+      { ...anExamRun("r"), answers: [null] },
+      { ...anExamRun("r"), answers: [{ ...answer, itemId: "" }] },
+      { ...anExamRun("r"), answers: [{ ...answer, response: "z" }] },
+      { ...anExamRun("r"), answers: [{ ...answer, msToFirstSelect: Number.NaN }] },
+      { ...anExamRun("r"), answers: [{ ...answer, msToConfirm: -5 }] },
+      { ...anExamRun("r"), answers: [{ ...answer, changedAnswer: "yes" }] },
+      { ...anExamRun("r"), answers: [{ ...answer, answeredAt: "whenever" }] },
+    ]) {
+      rejects(textOf({ ...aDocument(), examRuns: [bad] }), /examRuns\[0\] is not a valid exam run/);
+    }
   });
 
   it("rejects a format version it does not know, naming it", () =>

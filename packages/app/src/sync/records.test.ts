@@ -1,12 +1,14 @@
-import { type Attempt, attemptId, itemId, sessionId } from "@palier/domain";
+import { type Attempt, attemptId, formId, itemId, sessionId } from "@palier/domain";
 import { describe, expect, it } from "vitest";
 
-import { attemptStore, scheduleStore, sessionStore, settingsStore } from "../use-cases/__tests__/sync-fakes.js";
+import { attemptStore, examRunStore, scheduleStore, sessionStore, settingsStore } from "../use-cases/__tests__/sync-fakes.js";
 import {
   attemptRecord,
   collectRecords,
   decodeRecord,
+  examRunRecord,
   keyOf,
+  liveRecords,
   recordHash,
   scheduleRecord,
   sessionRecord,
@@ -32,10 +34,31 @@ const anAttempt: Attempt = {
 const anEntry = { itemId: itemId("i-1"), due: null, skill: "reading" as const, box: 5 };
 const aSession = { id: sessionId("s-1"), mode: "drill" as const, startedAt: "2026-09-24T09:00:00.000Z", completedAt: null };
 
+const aRun = {
+  id: sessionId("r-1"),
+  formId: formId("f-1"),
+  startedAt: "2026-09-24T09:00:00.000Z",
+  answers: [
+    {
+      itemId: itemId("i-1"),
+      response: "a" as const,
+      msToFirstSelect: 10,
+      msToConfirm: 20,
+      changedAnswer: false,
+      answeredAt: "2026-09-24T09:04:00.000Z",
+    },
+  ],
+  flagged: [],
+  elapsedMs: 5_000,
+  checkpointedAt: "2026-09-24T09:05:00.000Z",
+  submittedAt: null,
+};
+
 const stores = () => ({
   attempts: attemptStore(),
   schedule: scheduleStore(),
   sessions: sessionStore(),
+  examRuns: examRunStore(),
   settings: settingsStore(),
 });
 
@@ -63,6 +86,7 @@ describe("decodeRecord", () => {
     expect(decodeRecord("attempt", "a-1", anAttempt)).toEqual(attemptRecord(anAttempt));
     expect(decodeRecord("schedule", "i-1", anEntry)).toEqual(scheduleRecord(anEntry));
     expect(decodeRecord("session", "s-1", aSession)).toEqual(sessionRecord(aSession));
+    expect(decodeRecord("examRun", "r-1", aRun)).toEqual(examRunRecord(aRun));
     expect(decodeRecord("setting", "goal", { key: "goal", value: 20 })).toEqual(settingRecord({ key: "goal", value: 20 }));
   });
 
@@ -83,6 +107,7 @@ describe("collectRecords and writeRecord", () => {
       attemptRecord(anAttempt),
       scheduleRecord(anEntry),
       sessionRecord(aSession),
+      examRunRecord(aRun),
       settingRecord({ key: "goal", value: 20 }),
     ]) {
       await writeRecord(record, device);
@@ -91,9 +116,16 @@ describe("collectRecords and writeRecord", () => {
     const records = await collectRecords(device);
 
     expect([...records.keys()].sort()).toEqual(
-      [keyOf("attempt", "a-1"), keyOf("schedule", "i-1"), keyOf("session", "s-1"), keyOf("setting", "goal")].sort(),
+      [
+        keyOf("attempt", "a-1"),
+        keyOf("schedule", "i-1"),
+        keyOf("session", "s-1"),
+        keyOf("examRun", "r-1"),
+        keyOf("setting", "goal"),
+      ].sort(),
     );
     expect(await device.settings.get("goal")).toBe(20);
+    expect(await device.examRuns.get(sessionId("r-1"))).toEqual(aRun);
   });
 
   it("replaces a schedule entry, session or setting, and leaves an existing attempt as it was", async () => {
@@ -105,5 +137,16 @@ describe("collectRecords and writeRecord", () => {
 
     expect((await device.schedule.get(itemId("i-1")))?.box).toBe(1);
     expect((await device.attempts.all())[0]?.correct).toBe(true);
+  });
+});
+
+describe("liveRecords", () => {
+  it("reads an exam run as the device holds it now, by id, and null for one it does not hold", async () => {
+    const device = stores();
+    const live = liveRecords(device);
+    await device.examRuns.put({ ...aRun, elapsedMs: 9_000 });
+
+    expect(await live("examRun", "r-1")).toEqual(examRunRecord({ ...aRun, elapsedMs: 9_000 }));
+    expect(await live("examRun", "r-404")).toBeNull();
   });
 });

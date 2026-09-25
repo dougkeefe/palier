@@ -1,5 +1,5 @@
 import type { SyncTransport } from "@palier/app";
-import { itemId } from "@palier/domain";
+import { formId, itemId } from "@palier/domain";
 import { describe, expect, it } from "vitest";
 
 import { fakeClock } from "../clock/fake-clock.js";
@@ -53,13 +53,45 @@ describe("simulatedDevice", () => {
     await expect(device.idle()).rejects.toThrow("defect");
   });
 
+  it("sits a mock exam through the real exam use cases, and submitting records its attempts", async () => {
+    const device = aDevice();
+    const [first, second] = (await fixtureBankRepository().form(formId("fixture-form-reading")))?.itemIds ?? [];
+    if (first === undefined || second === undefined) throw new Error("the fixture reading form holds items");
+    const run = await device.startExam(formId("fixture-form-reading"));
+    await device.answerExam(
+      run,
+      [
+        { itemId: first, correct: true, changedAnswer: false },
+        { itemId: second, correct: false, changedAnswer: true },
+        { itemId: itemId("no-such-item"), correct: true, changedAnswer: false },
+      ],
+      60_000,
+    );
+
+    const recorded = await device.submitExam(run, 90_000);
+
+    expect(recorded.map((r) => r.id).sort()).toEqual((await device.deps.attempts.all()).map((a) => a.id).sort());
+    expect(recorded).toHaveLength(2);
+    expect(await device.deps.examRuns.get(run)).toMatchObject({ elapsedMs: 90_000, submittedAt: expect.any(String) });
+    expect(JSON.parse(await device.examResults())).toHaveLength(1);
+  });
+
+  it("reports no exam results while no run is submitted", async () => {
+    const device = aDevice();
+    await device.startExam(formId("fixture-form-reading"));
+
+    expect(await device.examResults()).toBe("[]");
+  });
+
   it("lists every record it holds under its sync key", async () => {
     const device = aDevice();
     await device.setSetting("dailyGoal", 20);
     await device.study([{ itemId: itemId("fixture-item-01"), correct: false, changedAnswer: false }], true);
+    await device.startExam(formId("fixture-form-reading"));
 
     expect([...(await device.records()).keys()].map((k) => k.split(":")[0]).sort()).toEqual([
       "attempt",
+      "examRun",
       "schedule",
       "session",
       "setting",

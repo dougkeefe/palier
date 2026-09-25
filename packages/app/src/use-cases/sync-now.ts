@@ -83,6 +83,16 @@ export type SyncOutcome =
 
 type Held = { record: SyncRecord; hash: string };
 
+/**
+ * Registration waits for progress worth syncing (architecture.md §9.3): a completed
+ * session, or a submitted mock exam. Someone whose first act is a mock exam has a
+ * result they would not want to lose.
+ */
+const hasFinishedWork = async (deps: SyncNowDeps): Promise<boolean> => {
+  const [sessions, runs] = await Promise.all([deps.sessions.all(), deps.examRuns.all()]);
+  return sessions.some((s) => s.completedAt !== null) || runs.some((r) => r.submittedAt !== null);
+};
+
 export const syncNow = async (request: SyncNowRequest, deps: SyncNowDeps): Promise<SyncOutcome> => {
   const state = await deps.syncState.state();
   if (!state.enabled) return { status: "off" };
@@ -91,8 +101,7 @@ export const syncNow = async (request: SyncNowRequest, deps: SyncNowDeps): Promi
     let from = state.watermark;
     if (state.identity === null) {
       // A pairing whose answer never came was a request to sync, so it does not wait.
-      const sessions = await deps.sessions.all();
-      if (!state.accountUnconfirmed && !sessions.some((s) => s.completedAt !== null)) return { status: "waiting" };
+      if (!state.accountUnconfirmed && !(await hasFinishedWork(deps))) return { status: "waiting" };
       const identity = await deps.transport.registerDevice(request.label);
       await deps.syncState.update({ identity, accountUnconfirmed: false });
     } else if (state.accountUnconfirmed) {

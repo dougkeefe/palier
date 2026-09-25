@@ -1,8 +1,10 @@
 import type { Attempt } from "@palier/domain";
-import { itemId } from "@palier/domain";
+import { itemId, sessionId } from "@palier/domain";
 
 import type {
   AttemptStore,
+  ExamRun,
+  ExamRunStore,
   ScheduleEntry,
   ScheduleStore,
   Session,
@@ -13,6 +15,7 @@ import type {
 } from "../ports/index.js";
 import {
   parseAttempt,
+  parseExamRun,
   parseScheduleEntry,
   parseSession,
   parseSetting,
@@ -28,12 +31,14 @@ export type SyncRecord =
   | { readonly type: "attempt"; readonly id: string; readonly value: Attempt }
   | { readonly type: "schedule"; readonly id: string; readonly value: ScheduleEntry }
   | { readonly type: "session"; readonly id: string; readonly value: Session }
+  | { readonly type: "examRun"; readonly id: string; readonly value: ExamRun }
   | { readonly type: "setting"; readonly id: string; readonly value: SettingEntry };
 
 export type ProgressStores = {
   readonly attempts: AttemptStore;
   readonly schedule: ScheduleStore;
   readonly sessions: SessionStore;
+  readonly examRuns: ExamRunStore;
   readonly settings: SettingsStore;
 };
 
@@ -42,6 +47,7 @@ export const keyOf = (type: SyncDocType, id: string): string => `${type}:${id}`;
 export const attemptRecord = (value: Attempt): SyncRecord => ({ type: "attempt", id: value.id, value });
 export const scheduleRecord = (value: ScheduleEntry): SyncRecord => ({ type: "schedule", id: value.itemId, value });
 export const sessionRecord = (value: Session): SyncRecord => ({ type: "session", id: value.id, value });
+export const examRunRecord = (value: ExamRun): SyncRecord => ({ type: "examRun", id: value.id, value });
 export const settingRecord = (value: SettingEntry): SyncRecord => ({ type: "setting", id: value.key, value });
 
 /**
@@ -105,6 +111,8 @@ const parseByType = (type: SyncDocType, payload: unknown): SyncRecord => {
       return scheduleRecord(parseScheduleEntry(payload, at));
     case "session":
       return sessionRecord(parseSession(payload, at));
+    case "examRun":
+      return examRunRecord(parseExamRun(payload, at));
     case "setting":
       return settingRecord(parseSetting(payload, at));
   }
@@ -112,16 +120,18 @@ const parseByType = (type: SyncDocType, payload: unknown): SyncRecord => {
 
 /** Every progress record on the device, keyed by `keyOf(type, id)`. */
 export const collectRecords = async (stores: ProgressStores): Promise<Map<string, SyncRecord>> => {
-  const [attempts, schedule, sessions, settings] = await Promise.all([
+  const [attempts, schedule, sessions, examRuns, settings] = await Promise.all([
     stores.attempts.all(),
     stores.schedule.all(),
     stores.sessions.all(),
+    stores.examRuns.all(),
     stores.settings.all(),
   ]);
   const records = [
     ...attempts.map(attemptRecord),
     ...schedule.map(scheduleRecord),
     ...sessions.map(sessionRecord),
+    ...examRuns.map(examRunRecord),
     ...settings.map(settingRecord),
   ];
   return new Map(records.map((r) => [keyOf(r.type, r.id), r]));
@@ -131,7 +141,7 @@ export const collectRecords = async (stores: ProgressStores): Promise<Map<string
  * A reader of the records a device holds *right now*, for a sync that read its snapshot a
  * network round trip ago while study carried on (progress.md D75). Null when the device
  * holds none. Attempts are never re-read: they are immutable, so the snapshot's copy is
- * still the live one. Sessions have no by-id read, so a reader loads them once and serves
+ * still the live one. Exam runs are read by id. Sessions have no by-id read, so a reader loads them once and serves
  * every session document from that; the sync makes one reader per pulled page, so a
  * large first pull is not one full read per session.
  */
@@ -149,6 +159,10 @@ export const liveRecords = (stores: ProgressStores) => {
         sessions ??= stores.sessions.all().then((all) => new Map(all.map((s) => [s.id, s])));
         const session = (await sessions).get(id);
         return session === undefined ? null : sessionRecord(session);
+      }
+      case "examRun": {
+        const run = await stores.examRuns.get(sessionId(id));
+        return run === null ? null : examRunRecord(run);
       }
       case "setting": {
         const value = await stores.settings.get<unknown>(id);
@@ -173,6 +187,9 @@ export const writeRecord = async (record: SyncRecord, stores: ProgressStores): P
       return;
     case "session":
       await stores.sessions.create(record.value);
+      return;
+    case "examRun":
+      await stores.examRuns.put(record.value);
       return;
     case "setting":
       await stores.settings.set(record.value.key, record.value.value);

@@ -5,6 +5,7 @@ export {
   type Expectation,
   type Records,
   type Violation,
+  differingExamResults,
   differingTrends,
   diverged,
   duplicatedAttempts,
@@ -12,6 +13,8 @@ export {
   inventedSchedule,
   lostAttempts,
   unexpected,
+  unrecordedExamAnswers,
+  unsubmittedRuns,
 } from "./oracle.js";
 export {
   type SimulatedServer,

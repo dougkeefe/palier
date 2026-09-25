@@ -1,15 +1,35 @@
-import { type Attempt, attemptId, itemId, sessionId } from "@palier/domain";
+import { type Attempt, attemptId, formId, itemId, sessionId } from "@palier/domain";
 import { describe, expect, it } from "vitest";
 
-import type { ScheduleEntry, Session } from "../ports/index.js";
+import type { ExamRun, ScheduleEntry, Session } from "../ports/index.js";
 import { mergeRecord } from "./merge.js";
-import { type SyncRecord, attemptRecord, scheduleRecord, sessionRecord, settingRecord } from "./records.js";
+import {
+  type SyncRecord,
+  attemptRecord,
+  examRunRecord,
+  scheduleRecord,
+  sessionRecord,
+  settingRecord,
+} from "./records.js";
 
 const entry = (over: Partial<ScheduleEntry> = {}): SyncRecord =>
   scheduleRecord({ itemId: itemId("i-1"), due: "2026-09-25T00:00:00.000Z", skill: "reading", box: 2, ...over });
 
 const session = (over: Partial<Session> = {}): SyncRecord =>
   sessionRecord({ id: sessionId("s-1"), mode: "drill", startedAt: "2026-09-24T09:00:00.000Z", completedAt: null, ...over });
+
+const run = (over: Partial<ExamRun> = {}): SyncRecord =>
+  examRunRecord({
+    id: sessionId("r-1"),
+    formId: formId("f-1"),
+    startedAt: "2026-09-24T09:00:00.000Z",
+    answers: [],
+    flagged: [],
+    elapsedMs: 60_000,
+    checkpointedAt: "2026-09-24T09:01:00.000Z",
+    submittedAt: null,
+    ...over,
+  });
 
 const attempt = (over: Partial<Attempt> = {}): SyncRecord =>
   attemptRecord({
@@ -72,6 +92,27 @@ describe("mergeRecord — sessions (a completion never un-happens)", () => {
 
   it("returns the session unchanged when both copies are still in progress", () => {
     expect(bothWays(session(), session())).toEqual(session());
+  });
+});
+
+describe("mergeRecord — exam runs (a submission never un-happens)", () => {
+  it("keeps the submitted copy over an in-progress one, however much further the other went", () => {
+    const submitted = run({ submittedAt: "2026-09-24T09:40:00.000Z", elapsedMs: 60_000 });
+    expect(bothWays(submitted, run({ elapsedMs: 2_000_000 }))).toEqual(submitted);
+  });
+
+  it("keeps the earlier submission of two", () => {
+    const first = run({ submittedAt: "2026-09-24T09:40:00.000Z" });
+    expect(bothWays(first, run({ submittedAt: "2026-09-24T10:00:00.000Z" }))).toEqual(first);
+  });
+
+  it("keeps the in-progress copy with more exam time used", () => {
+    const further = run({ elapsedMs: 900_000 });
+    expect(bothWays(further, run({ elapsedMs: 300_000 }))).toEqual(further);
+  });
+
+  it("breaks a tie the rule cannot decide by the records' content, the same on both devices", () => {
+    bothWays(run({ flagged: [itemId("q1")] }), run({ flagged: [itemId("q2")] }));
   });
 });
 

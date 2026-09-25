@@ -2,21 +2,24 @@ import {
   ATTEMPT_MODES,
   type Attempt,
   type AttemptMode,
+  OPTION_IDS,
+  type OptionId,
   SKILLS,
   type Skill,
   attemptId,
   attemptSchema,
+  formId,
   itemId,
   sessionId,
 } from "@palier/domain";
 
-import type { ISO, ScheduleEntry, Session, SettingEntry } from "../ports/index.js";
+import type { ExamAnswer, ExamRun, ISO, ScheduleEntry, Session, SettingEntry } from "../ports/index.js";
 
 /**
  * The export file [R11]: everything this device knows about its user's progress, in
  * one versioned JSON document, which `exportData` writes and `importData` reads.
  *
- * It carries the four progress aggregates and **nothing from the key vault** — no
+ * It carries the five progress aggregates and **nothing from the key vault** — no
  * API key, no device secret. An export is a file a user can email, keep in a cloud
  * drive or hand to a colleague. The key never leaves the browser [R12], and the
  * device secret is a sync credential that would let whoever holds the file act as
@@ -24,10 +27,12 @@ import type { ISO, ScheduleEntry, Session, SettingEntry } from "../ports/index.j
  * stores them: each device recomputes them from the attempts (ADR 16).
  *
  * `version` names this shape. A future shape bumps it, and `parseExportDocument`
- * then has to accept both — an old export must stay importable.
+ * then has to accept both — an old export must stay importable. Version 2 added
+ * `examRuns` (progress.md D81). A version 1 file is read as a version 2 document
+ * with no exam runs, which is exactly what it describes.
  */
 export const EXPORT_FORMAT = "palier-export";
-export const EXPORT_VERSION = 1;
+export const EXPORT_VERSION = 2;
 
 export type ExportDocument = {
   readonly format: typeof EXPORT_FORMAT;
@@ -36,6 +41,7 @@ export type ExportDocument = {
   readonly attempts: readonly Attempt[];
   readonly schedule: readonly ScheduleEntry[];
   readonly sessions: readonly Session[];
+  readonly examRuns: readonly ExamRun[];
   readonly settings: readonly SettingEntry[];
 };
 
@@ -105,6 +111,61 @@ export const parseSession = (raw: unknown, at: string): Session => {
   };
 };
 
+const isDuration = (value: unknown): value is number =>
+  typeof value === "number" && Number.isFinite(value) && value >= 0;
+
+const parseExamAnswer = (raw: unknown): ExamAnswer | null => {
+  if (
+    !isRecord(raw) ||
+    !nonEmptyString(raw.itemId) ||
+    !OPTION_IDS.includes(raw.response as OptionId) ||
+    !isDuration(raw.msToFirstSelect) ||
+    !isDuration(raw.msToConfirm) ||
+    typeof raw.changedAnswer !== "boolean" ||
+    !isIso(raw.answeredAt)
+  ) {
+    return null;
+  }
+  return {
+    itemId: itemId(raw.itemId),
+    response: raw.response as OptionId,
+    msToFirstSelect: raw.msToFirstSelect,
+    msToConfirm: raw.msToConfirm,
+    changedAnswer: raw.changedAnswer,
+    answeredAt: raw.answeredAt,
+  };
+};
+
+export const parseExamRun = (raw: unknown, at: string): ExamRun => {
+  const invalid = new InvalidExportError(`${at} is not a valid exam run`);
+  if (
+    !isRecord(raw) ||
+    !nonEmptyString(raw.id) ||
+    !nonEmptyString(raw.formId) ||
+    !isIso(raw.startedAt) ||
+    !Array.isArray(raw.answers) ||
+    !Array.isArray(raw.flagged) ||
+    !raw.flagged.every(nonEmptyString) ||
+    !isDuration(raw.elapsedMs) ||
+    !isIso(raw.checkpointedAt) ||
+    !(raw.submittedAt === null || isIso(raw.submittedAt))
+  ) {
+    throw invalid;
+  }
+  const answers = raw.answers.map(parseExamAnswer);
+  if (answers.some((a) => a === null)) throw invalid;
+  return {
+    id: sessionId(raw.id),
+    formId: formId(raw.formId),
+    startedAt: raw.startedAt,
+    answers: answers as ExamAnswer[],
+    flagged: raw.flagged.map((id) => itemId(id)),
+    elapsedMs: raw.elapsedMs,
+    checkpointedAt: raw.checkpointedAt,
+    submittedAt: raw.submittedAt,
+  };
+};
+
 export const parseSetting = (raw: unknown, at: string): SettingEntry => {
   if (!isRecord(raw) || !nonEmptyString(raw.key) || !("value" in raw)) {
     throw new InvalidExportError(`${at} is not a valid setting`);
@@ -127,7 +188,7 @@ export const parseExportDocument = (text: string): ExportDocument => {
   if (!isRecord(raw) || raw.format !== EXPORT_FORMAT) {
     throw new InvalidExportError("it is not a Palier export");
   }
-  if (raw.version !== EXPORT_VERSION) {
+  if (raw.version !== 1 && raw.version !== EXPORT_VERSION) {
     throw new InvalidExportError(`its format version ${String(raw.version)} is not supported`);
   }
   if (!isIso(raw.exportedAt)) throw new InvalidExportError('"exportedAt" is not a date');
@@ -139,6 +200,11 @@ export const parseExportDocument = (text: string): ExportDocument => {
     attempts: arrayField(raw, "attempts").map((a, i) => parseAttempt(a, `attempts[${String(i)}]`)),
     schedule: arrayField(raw, "schedule").map((e, i) => parseScheduleEntry(e, `schedule[${String(i)}]`)),
     sessions: arrayField(raw, "sessions").map((s, i) => parseSession(s, `sessions[${String(i)}]`)),
+    // Version 1 predates exam runs, so it has none to carry (D81).
+    examRuns:
+      raw.version === 1
+        ? []
+        : arrayField(raw, "examRuns").map((r, i) => parseExamRun(r, `examRuns[${String(i)}]`)),
     settings: arrayField(raw, "settings").map((s, i) => parseSetting(s, `settings[${String(i)}]`)),
   };
 };
