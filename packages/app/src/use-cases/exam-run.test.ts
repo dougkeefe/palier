@@ -375,6 +375,15 @@ describe("resumeExam", () => {
     expect((await resumeExam({}, deps))?.run.id).toBe("older");
   });
 
+  it("passes over every stranded run, and a submitted one, returning null when none can resume (D89)", async () => {
+    const newest = aRun({ id: sessionId("new"), formId: formId("gone"), startedAt: "2026-03-03T00:00:00.000Z" });
+    const older = aRun({ id: sessionId("old"), formId: formId("gone-too"), startedAt: "2026-03-01T00:00:00.000Z" });
+    const done = aRun({ id: sessionId("done"), submittedAt: NOW });
+    const deps = depsWith({ examRuns: examRunStore([done, older, newest]) });
+
+    expect(await resumeExam({}, deps)).toBeNull();
+  });
+
   it("returns null, not a throw, when the only run in progress has a form the bank dropped (D89)", async () => {
     expect(await resumeExam({}, depsHolding(aRun({ formId: formId("gone") })))).toBeNull();
   });
@@ -385,8 +394,11 @@ describe("resumeExam", () => {
     );
   });
 
-  it("takes the higher id of two runs started at the same instant", async () => {
-    const deps = depsWith({ examRuns: examRunStore([aRun({ id: sessionId("a") }), aRun({ id: sessionId("b") })]) });
+  it("looking past a stranded run, takes the higher id of two older runs started at the same instant", async () => {
+    const stranded = aRun({ id: sessionId("stranded"), formId: formId("gone"), startedAt: "2026-03-02T00:00:00.000Z" });
+    const a = aRun({ id: sessionId("a"), startedAt: "2026-02-01T00:00:00.000Z" });
+    const b = aRun({ id: sessionId("b"), startedAt: "2026-02-01T00:00:00.000Z" });
+    const deps = depsWith({ examRuns: examRunStore([b, a, stranded]) });
 
     expect((await examInProgress(deps))?.run.id).toBe("b");
   });

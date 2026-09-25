@@ -282,10 +282,17 @@ export const descending = (a: string, b: string): number => (a < b ? 1 : a > b ?
  * picker and the runner for good (D89).
  */
 const newestOpen = async (deps: Pick<ExamRunDeps, "items" | "examRuns">): Promise<ResumeExamResult | null> => {
-  const open = (await deps.examRuns.all())
-    .filter((run) => run.submittedAt === null)
+  // The store's own read first, which is indexed, and the ordinary case.
+  const newest = await deps.examRuns.unsubmitted();
+  if (newest === null) return null;
+  const form = await deps.items.form(newest.formId);
+  if (form !== null) return resumable(newest, form);
+
+  // Only when the newest is stranded, look further back through every run.
+  const older = (await deps.examRuns.all())
+    .filter((run) => run.submittedAt === null && run.id !== newest.id)
     .sort((a, b) => descending(a.startedAt, b.startedAt) || descending(a.id, b.id));
-  for (const run of open) {
+  for (const run of older) {
     const form = await deps.items.form(run.formId);
     if (form !== null) return resumable(run, form);
   }

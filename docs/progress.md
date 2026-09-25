@@ -2918,6 +2918,9 @@ test or an E2E assertion.
     has left.
   - **The submission status line takes focus** when the runner stops running, since that unmounts any open
     dialog with focus inside it (§11).
+- **The review's second pass** caught one smell in the first pass's own fix. The pass-over scan had left
+  `ExamRunStore.unsubmitted()` unused. The scan now uses that indexed read first, and walks every run only
+  when the newest is stranded.
 
 ---
 
