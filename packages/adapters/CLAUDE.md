@@ -5,9 +5,10 @@ Every concrete adapter, one directory and one subpath export each: `/dexie`, `/b
 (progress.md D48). A subpath lands with its adapter, not before — an entry resolving to an
 empty module asserts a boundary with nothing behind it (D3). **Five are live.** `./ids` →
 `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto, no npm dependency).
-`./dexie` → `dexieStores` (the six local store ports — `AttemptStore`, `ScheduleStore`,
-`SessionStore`, `SettingsStore`, `KeyVault`, `SyncStateStore` — over IndexedDB via `dexie`, at
-schema version 1; progress.md D49/D50, D69, the last on the `syncMeta` table v1 already declared). `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1). `./bank` →
+`./dexie` → `dexieStores` (the seven local store ports — `AttemptStore`, `ScheduleStore`,
+`SessionStore`, `ExamRunStore`, `SettingsStore`, `KeyVault`, `SyncStateStore` — over IndexedDB via
+`dexie`, at schema version 1; progress.md D49/D50, D69 and D80, the last two on the `syncMeta` and
+`examRuns` tables v1 already declared). `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1). `./bank` →
 `httpBankRepository` (the `ItemRepository` over the committed bank shards; progress.md D55).
 `./sync` → `httpSyncTransport` (the `SyncTransport` port over the sync routes; progress.md D69–D71).
 **`/vault` will not land** (D71): the device secret it was to hold already lives in `dexieKeyVault`
@@ -55,8 +56,10 @@ whose every field is a port type from `@palier/app`; `PalierDb` (a `Dexie` subcl
 import from the package's own tests. Exporting `PalierDb` would put a vendor type in the published
 `.d.ts` and, under pnpm's strict isolation, make the composition root's typecheck reach for
 `dexie` — which the vendor ban forbids it. The schema is architecture.md 9.1 verbatim, all
-thirteen tables at `version(1)` even though only six have adapters, so the rest land without a
-schema bump. `PalierDb` uses lazy getters over `this.table()`, never `field!: Table<...>`
+thirteen tables at `version(1)` even though only seven have adapters, so the rest land without a
+schema bump. **IndexedDB leaves a null key out of an index**, so a nullable indexed column cannot
+find its null rows: `schedule.due` relies on that to drop retired entries, and `examRuns.submittedAt`
+is why `unsubmitted()` walks `startedAt` instead. `PalierDb` uses lazy getters over `this.table()`, never `field!: Table<...>`
 declarations, because `useDefineForClassFields` defaults on at ES2022 and would clobber Dexie's
 own property assignment.
 

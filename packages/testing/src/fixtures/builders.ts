@@ -1,4 +1,4 @@
-import type { ScheduleEntry, Session } from "@palier/app";
+import type { ExamRun, ScheduleEntry, Session } from "@palier/app";
 import type { Attempt, ExamForm, Item, OralScenario, Passage } from "@palier/domain";
 import { attemptId, formId, itemId, passageId, scenarioId, sessionId } from "@palier/domain";
 
@@ -73,6 +73,19 @@ export const aSession: Builder<Session> = buildWith<Session>({
   // A session starts in progress; a completed one is spelled out by the test that
   // wants it. `completedAt` is a required field, so null (not absent) is its value.
   completedAt: null,
+});
+
+export const anExamRun: Builder<ExamRun> = buildWith<ExamRun>({
+  id: sessionId("01HEXAMRUN000000000001"),
+  formId: formId("01HFORM000000000000001"),
+  startedAt: "2026-01-01T00:00:00.000Z",
+  // A run starts empty and in progress. Answers, flags and a submission are
+  // spelled out by the test that wants them.
+  answers: [],
+  flagged: [],
+  elapsedMs: 0,
+  checkpointedAt: "2026-01-01T00:00:00.000Z",
+  submittedAt: null,
 });
 
 export const aPassage: Builder<Passage> = buildWith<Passage>({

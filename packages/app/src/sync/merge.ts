@@ -1,4 +1,4 @@
-import type { ScheduleEntry, Session } from "../ports/index.js";
+import type { ExamRun, ScheduleEntry, Session } from "../ports/index.js";
 import { type SyncRecord, stableJson } from "./records.js";
 
 /**
@@ -17,6 +17,10 @@ import { type SyncRecord, stableJson } from "./records.js";
  * - **session** — a completed copy beats an in-progress one, and of two completed
  *   copies the earlier `completedAt` wins: `completedAt` is write-once and never moves
  *   back to null (architecture.md §9.1).
+ * - **exam run** — a submitted copy beats an in-progress one, and of two submitted
+ *   copies the earlier `submittedAt` wins: submission is write-once, like a session's
+ *   completion. Of two in-progress copies, the one with more elapsed exam time wins,
+ *   since it is the one the candidate went further in (progress.md D80).
  * - **setting — the local copy wins.** A setting is a preference the user just set on
  *   the device in front of them. Through sync this makes the last device to push win,
  *   because the server serialises pushes.
@@ -32,6 +36,9 @@ export const mergeRecord = (local: SyncRecord, remote: SyncRecord): SyncRecord =
   }
   if (local.type === "session" && remote.type === "session") {
     return pick(local, remote, compareSession(local.value, remote.value));
+  }
+  if (local.type === "examRun" && remote.type === "examRun") {
+    return pick(local, remote, compareExamRun(local.value, remote.value));
   }
   return pick(local, remote, 0);
 };
@@ -55,3 +62,7 @@ const compareSchedule = (a: ScheduleEntry, b: ScheduleEntry): number =>
   a.box !== b.box ? a.box - b.box : compareInstants(a.due, b.due);
 
 const compareSession = (a: Session, b: Session): number => compareInstants(a.completedAt, b.completedAt);
+
+/** Submission first, as `compareSession` does for completion; then the most exam time used. */
+const compareExamRun = (a: ExamRun, b: ExamRun): number =>
+  compareInstants(a.submittedAt, b.submittedAt) || b.elapsedMs - a.elapsedMs;

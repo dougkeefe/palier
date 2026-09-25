@@ -1,0 +1,22 @@
+{
+  "description": "Golden exam band outcomes at every cut boundary of the psc-sle writing-unsupervised variant (30 items, all scored; cuts X 0-10, A 11-16, B 17-23, C 24-30, product-requirements.md §5.2). The X 0-10 band is inferred, not published (progress.md D12), and is checked against the PSC's table before launch. Each band's min and max are both sides of every exact cut. A recorded contract (implementation-plan.md §5): any engine change that moves one of these values must be explained in its PR. Regenerate deliberately, never to make a test pass.",
+  "variant": "writing-unsupervised",
+  "items": 30,
+  "scored": 30,
+  "bandCuts": [
+    { "band": "X", "min": 0, "max": 10 },
+    { "band": "A", "min": 11, "max": 16 },
+    { "band": "B", "min": 17, "max": 23 },
+    { "band": "C", "min": 24, "max": 30 }
+  ],
+  "outcomes": [
+    { "raw": 0, "band": "X", "bandMin": 0, "bandMax": 10, "next": { "band": "A", "min": 11, "pointsAway": 11 } },
+    { "raw": 10, "band": "X", "bandMin": 0, "bandMax": 10, "next": { "band": "A", "min": 11, "pointsAway": 1 } },
+    { "raw": 11, "band": "A", "bandMin": 11, "bandMax": 16, "next": { "band": "B", "min": 17, "pointsAway": 6 } },
+    { "raw": 16, "band": "A", "bandMin": 11, "bandMax": 16, "next": { "band": "B", "min": 17, "pointsAway": 1 } },
+    { "raw": 17, "band": "B", "bandMin": 17, "bandMax": 23, "next": { "band": "C", "min": 24, "pointsAway": 7 } },
+    { "raw": 23, "band": "B", "bandMin": 17, "bandMax": 23, "next": { "band": "C", "min": 24, "pointsAway": 1 } },
+    { "raw": 24, "band": "C", "bandMin": 24, "bandMax": 30, "next": null },
+    { "raw": 30, "band": "C", "bandMin": 24, "bandMax": 30, "next": null }
+  ]
+}

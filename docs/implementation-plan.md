@@ -121,6 +121,15 @@ interface SessionStore   { create(s: Session): Promise<void>; complete(id: Sessi
 // planDailySession's lastDayCompleted. `mode` is 9.1's `type` column and reuses AttemptMode,
 // not the oral sessionType. Checkpointing/resume state is deferred to its consumer, the
 // Phase 3 exam runner. See progress.md D45, D46 (D46 closes D36).
+interface ExamRunStore   { put(r: ExamRun): Promise<void>; get(id: SessionId): Promise<ExamRun | null>; unsubmitted(): Promise<ExamRun | null>; all(): Promise<ExamRun[]>; clear(): Promise<void> }
+// Added 24 September 2026 with Phase 3 Slice 1: the exam runner's checkpoint/resume state,
+// which SessionStore deferred to it. ExamRun = { id: SessionId, formId, startedAt,
+// answers: ExamAnswer[], flagged: ItemId[], elapsedMs, checkpointedAt, submittedAt: ISO | null }.
+// ExamAnswer = { itemId, response, msToFirstSelect, msToConfirm, changedAnswer }. The run holds
+// ELAPSED exam time, so a resume restores the clock without counting the time the tab was
+// closed. `put` is a plain upsert: the write-once `submittedAt` rule lives in the use cases and
+// in sync's mergeRecord. No result is stored, because rescoring derives it (ADR 16). See
+// progress.md D80.
 interface OralStore      { /* transcripts and audio blobs, local only */ }
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
 // Amended 24 September 2026: AttemptStore, ScheduleStore, SessionStore and SettingsStore each
@@ -727,6 +736,65 @@ The mock exam is where the band letter comes from, because it is the only path w
 **Decision gate:** run the closed pilot here, 20 to 30 people, to seed item statistics and to find out whether the bank holds up in front of real users. Nothing a user sees depends on those statistics, so a thin pilot slows down bad-item retirement rather than breaking the product. That is the practical consequence of ADR 7 and it is why this gate is a checkpoint rather than a blocker.
 
 **Not built:** anything requiring a key.
+
+**Completion slices (24 September 2026).** The work breakdown above is grouped into **four** slices,
+as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, and the two must agree.
+
+- **Slice 1 — The exam core, no UI.**
+  - A golden fixture per profile variant, covering every band boundary and both sides of each exact
+    cut, driven by `Object.entries(profile.variants)`.
+  - The `ExamRunStore` port (§3.3), with memory and Dexie implementations and a contract suite. A run
+    holds its answers, its flags and the **elapsed** exam time, so a resume restores the clock from
+    elapsed time rather than the wall clock.
+  - The use cases `startExam`, `answerExamItem`, `flagExamItem`, `checkpointExam`, `resumeExam`,
+    `submitExam` and `rescoreExam`. `submitExam` records `mode: "exam"` attempts and schedules scored
+    items, but never pilot items.
+  - Exam runs as a fifth sync document type. A submitted run beats an in-progress one, and submission
+    is write-once. Exam runs also go into export, import and wipe.
+  - The sync simulator gains exam runs across a partition, and its oracle gains an exam-run check.
+
+  *Done:*
+  - the four variant goldens, proven to bite;
+  - the contract passing on memory and Dexie;
+  - rescoring idempotent, held by a property;
+  - every new branch tested;
+  - the simulator green at the medium-lane seed counts with exam runs in play;
+  - `pnpm verify` and `verify:medium` green.
+
+  This slice carries exit criteria 1 (the goldens) and 4.
+  **Slice 1 status, 24 September 2026: built** (`progress.md` D80, D81). The simulator's exam phase found
+  that the attempt id first planned here, `${runId}:${itemId}` stamped at submission, cannot converge
+  when two devices submit one run offline. An exam attempt is now a pure function of its run and its
+  answer. Slice 2 is next.
+- **Slice 2 — Forms and a bank that can fill them.**
+  - Form generation in the factory: fixed, immutable and versioned, one set per variant, with
+    `bandCuts` copied from the profile.
+  - A baseline bank regenerated with the scripted provider, large enough for every variant's full item
+    count, pilots included. It stays synthetic (`progress.md` D54, D56).
+
+  *Done:* the committed bank ships a form per variant, each schema-valid and byte-reproducible, and
+  every item on a form is in the bank.
+- **Gate D — exam UI direction (human).** Adopt `product-requirements.md` §8.4–§8.5 as-is, as Gate A
+  adopted §8 for Phase 2, or revise it first. Gates Slice 3.
+- **Slice 3 — The runner and results UI, and E2E journey 3.**
+  - The runner covers the navigator, flagging, the timer with its amber and red thresholds, checkpoint
+    and resume, and pilot handling.
+  - The results screen covers the band, the raw score against the cuts, the sub-skill breakdown, the
+    near-miss, confidence calibration and the review walkthrough.
+  - The readiness card gains its exam half.
+
+  *Done:*
+  - all four variants runnable, which completes exit criterion 1;
+  - journey 3, a full 90-minute exam through a reload and a network drop, which is exit criterion 2;
+  - axe clean on the runner and results states;
+  - Lighthouse ≥ 95.
+- **Slice 4 — Telemetry and the item-statistics job.**
+  - Telemetry opt-in, the post-exam prompt, `/api/telemetry` and client batching.
+  - The statistics job: proportion correct and point-biserial, minimum counts, and a retirement PR.
+  - The readiness-card disclosure.
+
+  *Done:* exit criterion 3 on synthetic data. **The closed pilot**, 20–30 people, is the human decision
+  gate that follows.
 
 ---
 

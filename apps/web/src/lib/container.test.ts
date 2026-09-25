@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 
-import { attemptId, sessionId } from "@palier/domain";
+import { attemptId, formId, sessionId } from "@palier/domain";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { routeFetch } from "../app/api/__tests__/route-fetch";
@@ -40,6 +40,7 @@ describe("createContainer", () => {
     expect(c.attempts).toBeDefined();
     expect(c.schedule).toBeDefined();
     expect(c.sessions).toBeDefined();
+    expect(c.examRuns).toBeDefined();
     expect(c.settings).toBeDefined();
     expect(c.vault).toBeDefined();
 
@@ -266,16 +267,34 @@ const roundTripsProgress = async (c: ReturnType<typeof createContainer>) => {
   }
   await c.useCases.completeSession({ sessionId: started.session.id });
   await c.settings.set("dailyGoalMinutes", 20);
+  // The exam use cases are wired with the runner UI (Phase 3 Slice 3); the store is here now.
+  await c.examRuns.put({
+    id: sessionId("01HEXAMROUNDTRIP00000001"),
+    formId: formId("fixture-form-reading"),
+    startedAt: "2026-09-24T09:00:00.000Z",
+    answers: [],
+    flagged: [],
+    elapsedMs: 120_000,
+    checkpointedAt: "2026-09-24T09:02:00.000Z",
+    submittedAt: null,
+  });
 
   const before = await c.useCases.exportData();
   const dueLater = "2099-01-01T00:00:00.000Z";
   const queueBefore = await c.schedule.due(dueLater, 100);
   expect(before.attempts).toHaveLength(started.plan.items.length);
   expect(before.schedule.length).toBeGreaterThan(0);
+  expect(before.examRuns).toHaveLength(1);
 
   await c.useCases.wipeData();
   const emptied = await c.useCases.exportData();
-  expect([emptied.attempts, emptied.schedule, emptied.sessions, emptied.settings]).toEqual([[], [], [], []]);
+  expect([emptied.attempts, emptied.schedule, emptied.sessions, emptied.examRuns, emptied.settings]).toEqual([
+    [],
+    [],
+    [],
+    [],
+    [],
+  ]);
 
   await c.useCases.importData({ json: JSON.stringify(before) });
 
@@ -348,6 +367,7 @@ describe("createContainer in production", () => {
     expect(c.attempts).toBeDefined();
     expect(c.schedule).toBeDefined();
     expect(c.sessions).toBeDefined();
+    expect(c.examRuns).toBeDefined();
     expect(c.settings).toBeDefined();
     expect(c.vault).toBeDefined();
     expect(c.sync).toBeDefined();

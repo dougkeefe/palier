@@ -1,0 +1,25 @@
+{
+  "description": "Golden exam band outcomes at every cut boundary of the psc-sle reading-supervised variant (tests 633/634: 60 items, 50 scored, 10 pilot; cuts X 0-17, A 18-27, B 28-37, C 38-44, E 45-50, product-requirements.md §5.1). Each band's min and max are both sides of every exact cut. A recorded contract (implementation-plan.md §5): any engine change that moves one of these values must be explained in its PR. Regenerate deliberately, never to make a test pass.",
+  "variant": "reading-supervised",
+  "items": 60,
+  "scored": 50,
+  "bandCuts": [
+    { "band": "X", "min": 0, "max": 17 },
+    { "band": "A", "min": 18, "max": 27 },
+    { "band": "B", "min": 28, "max": 37 },
+    { "band": "C", "min": 38, "max": 44 },
+    { "band": "E", "min": 45, "max": 50 }
+  ],
+  "outcomes": [
+    { "raw": 0, "band": "X", "bandMin": 0, "bandMax": 17, "next": { "band": "A", "min": 18, "pointsAway": 18 } },
+    { "raw": 17, "band": "X", "bandMin": 0, "bandMax": 17, "next": { "band": "A", "min": 18, "pointsAway": 1 } },
+    { "raw": 18, "band": "A", "bandMin": 18, "bandMax": 27, "next": { "band": "B", "min": 28, "pointsAway": 10 } },
+    { "raw": 27, "band": "A", "bandMin": 18, "bandMax": 27, "next": { "band": "B", "min": 28, "pointsAway": 1 } },
+    { "raw": 28, "band": "B", "bandMin": 28, "bandMax": 37, "next": { "band": "C", "min": 38, "pointsAway": 10 } },
+    { "raw": 37, "band": "B", "bandMin": 28, "bandMax": 37, "next": { "band": "C", "min": 38, "pointsAway": 1 } },
+    { "raw": 38, "band": "C", "bandMin": 38, "bandMax": 44, "next": { "band": "E", "min": 45, "pointsAway": 7 } },
+    { "raw": 44, "band": "C", "bandMin": 38, "bandMax": 44, "next": { "band": "E", "min": 45, "pointsAway": 1 } },
+    { "raw": 45, "band": "E", "bandMin": 45, "bandMax": 50, "next": null },
+    { "raw": 50, "band": "E", "bandMin": 45, "bandMax": 50, "next": null }
+  ]
+}

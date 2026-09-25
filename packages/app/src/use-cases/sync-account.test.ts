@@ -10,6 +10,7 @@ import {
   sessionStore,
   settingsStore,
   syncStateStore,
+  examRunStore,
 } from "./__tests__/sync-fakes.js";
 import {
   deleteEverywhere,
@@ -60,6 +61,7 @@ const aDevice = (transport: SyncTransport) => ({
   attempts: attemptStore(),
   schedule: scheduleStore(),
   sessions: sessionStore(),
+  examRuns: examRunStore(),
   settings: settingsStore(),
   vault: vault(),
 });

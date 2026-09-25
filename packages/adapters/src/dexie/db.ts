@@ -1,4 +1,4 @@
-import type { ISO, LedgerEntry, ScheduleEntry, SyncState } from "@palier/app";
+import type { ExamRun, ISO, LedgerEntry, ScheduleEntry, SyncState } from "@palier/app";
 import type { Attempt, AttemptId, AttemptMode, ItemId, SessionId } from "@palier/domain";
 import { Dexie, type Table } from "dexie";
 
@@ -6,8 +6,8 @@ import { Dexie, type Table } from "dexie";
  * The local IndexedDB database, one Dexie instance per app (architecture.md 9.1).
  *
  * The `stores()` block below is the documented schema version 1 **verbatim**, all
- * thirteen tables, even though only six have adapters today (attempts, schedule,
- * sessions, settings, keyVault, syncMeta). Declaring the whole of v1 now means the remaining
+ * thirteen tables, even though only seven have adapters today (attempts, schedule,
+ * sessions, examRuns, settings, keyVault, syncMeta). Declaring the whole of v1 now means the remaining
  * adapters land without a schema bump — a `version(2)` is reserved for a real shape
  * change, not for turning on a table the schema already anticipated. The unused
  * tables are inert: nothing reads or writes them until their adapter exists.
@@ -103,6 +103,15 @@ export class PalierDb extends Dexie {
 
   get sessions(): Table<SessionRow, SessionId> {
     return this.table("sessions");
+  }
+
+  /**
+   * Stored as the port's `ExamRun`, unchanged. `submittedAt` is null while a run is in
+   * progress, and IndexedDB does not index a null key path, so an in-progress run is
+   * absent from the `submittedAt` index. `unsubmitted()` therefore walks `startedAt`.
+   */
+  get examRuns(): Table<ExamRun, SessionId> {
+    return this.table("examRuns");
   }
 
   get settings(): Table<SettingRow, string> {

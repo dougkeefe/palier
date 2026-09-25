@@ -1,11 +1,12 @@
-import type { ScheduleEntry, Session, SyncRecord } from "@palier/app";
-import { stableJson } from "@palier/app";
+import type { ExamRun, ScheduleEntry, Session, SyncRecord } from "@palier/app";
+import { examAttemptId, stableJson } from "@palier/app";
 import { attemptId, itemId, sessionId } from "@palier/domain";
 import { describe, expect, it } from "vitest";
 
-import { aScheduleEntry, aSession, anAttempt } from "../fixtures/builders.js";
+import { aScheduleEntry, aSession, anAttempt, anExamRun } from "../fixtures/builders.js";
 import {
   type DeviceView,
+  differingExamResults,
   differingTrends,
   diverged,
   duplicatedAttempts,
@@ -13,6 +14,8 @@ import {
   inventedSchedule,
   lostAttempts,
   unexpected,
+  unrecordedExamAnswers,
+  unsubmittedRuns,
 } from "./oracle.js";
 
 const attempt = (id: string): SyncRecord => ({ type: "attempt", id, value: anAttempt({ id: attemptId(id) }) });
@@ -35,6 +38,7 @@ const aView = (name: string, rs: SyncRecord[], over: Partial<DeviceView> = {}): 
   records: records(...rs),
   attemptCount: rs.filter((r) => r.type === "attempt").length,
   trends: "same",
+  examResults: "[]",
   ...over,
 });
 
@@ -111,6 +115,76 @@ describe("inventedSchedule", () => {
     expect(inventedSchedule(new Set(), [aView("d0", [entry("x")])])).toEqual([
       expect.objectContaining({ check: "invented-schedule", device: "d0" }),
     ]);
+  });
+});
+
+describe("unrecordedExamAnswers", () => {
+  const answer = {
+    itemId: itemId("q1"),
+    response: "a" as const,
+    msToFirstSelect: 1,
+    msToConfirm: 2,
+    changedAnswer: false,
+    answeredAt: "2026-01-01T00:10:00.000Z",
+  };
+  const run = (over: Partial<ExamRun> = {}): SyncRecord => {
+    const value = anExamRun({ answers: [answer], submittedAt: "2026-01-01T01:00:00.000Z", ...over });
+    return { type: "examRun", id: value.id, value };
+  };
+  const itsAttempt = attempt(examAttemptId(anExamRun().id, answer));
+
+  it("accepts a submitted run whose every answer has its attempt", () => {
+    expect(unrecordedExamAnswers([aView("d0", [run(), itsAttempt])])).toEqual([]);
+  });
+
+  it("does not ask an in-progress run for attempts it has not recorded yet", () => {
+    expect(unrecordedExamAnswers([aView("d0", [run({ submittedAt: null })])])).toEqual([]);
+  });
+
+  it("names a device holding a submitted run with an answer that has no attempt", () => {
+    expect(unrecordedExamAnswers([aView("d0", [run(), itsAttempt]), aView("d1", [run()])])).toEqual([
+      expect.objectContaining({ check: "unrecorded-exam-answer", device: "d1" }),
+    ]);
+  });
+});
+
+describe("unsubmittedRuns", () => {
+  const run = (submittedAt: string | null): SyncRecord => {
+    const value = anExamRun({ submittedAt });
+    return { type: "examRun", id: value.id, value };
+  };
+  const submitted = new Map([[anExamRun().id as string, "2026-01-01T01:00:00.000Z"]]);
+
+  it("accepts every device holding the run submitted at the earliest submission", () => {
+    expect(unsubmittedRuns(submitted, [aView("d0", [run("2026-01-01T01:00:00.000Z")])])).toEqual([]);
+  });
+
+  it("names a device where a submitted run came back in progress", () => {
+    expect(unsubmittedRuns(submitted, [aView("d0", [run(null)])])).toEqual([
+      expect.objectContaining({ check: "unsubmitted-run", device: "d0" }),
+    ]);
+  });
+
+  it("names a device holding a later submission than the earliest", () => {
+    expect(unsubmittedRuns(submitted, [aView("d0", [run("2026-01-01T02:00:00.000Z")])])).toEqual([
+      expect.objectContaining({ check: "unsubmitted-run" }),
+    ]);
+  });
+
+  it("names a device that lost the run altogether", () => {
+    expect(unsubmittedRuns(submitted, [aView("d0", [])])).toEqual([expect.objectContaining({ check: "unsubmitted-run" })]);
+  });
+});
+
+describe("differingExamResults", () => {
+  it("finds nothing for no devices", () => {
+    expect(differingExamResults([])).toEqual([]);
+  });
+
+  it("names a device that rescores a run differently from the first", () => {
+    expect(
+      differingExamResults([aView("d0", [], { examResults: "[1]" }), aView("d1", [], { examResults: "[2]" })]),
+    ).toEqual([expect.objectContaining({ check: "exam-result-differs", device: "d1" })]);
   });
 });
 

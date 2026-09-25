@@ -3,6 +3,8 @@ import type { Attempt } from "@palier/domain";
 import type {
   AttemptStore,
   DeviceIdentity,
+  ExamRun,
+  ExamRunStore,
   LedgerEntry,
   ScheduleEntry,
   ScheduleStore,
@@ -69,6 +71,29 @@ export const sessionStore = (): SessionStore => {
     },
     complete: () => Promise.resolve(null),
     latest: () => Promise.resolve(null),
+    all: () => Promise.resolve([...rows.values()]),
+    clear: () => {
+      rows.clear();
+      return Promise.resolve();
+    },
+  };
+};
+
+/** A stateful `ExamRunStore`: a plain upsert, as the port asks. */
+export const examRunStore = (initial: readonly ExamRun[] = []): ExamRunStore => {
+  const rows = new Map<string, ExamRun>(initial.map((r) => [r.id, r]));
+  return {
+    put: (r) => {
+      rows.set(r.id, r);
+      return Promise.resolve();
+    },
+    get: (id) => Promise.resolve(rows.get(id) ?? null),
+    unsubmitted: () =>
+      Promise.resolve(
+        [...rows.values()]
+          .filter((r) => r.submittedAt === null)
+          .reduce<ExamRun | null>((best, r) => (best === null || r.startedAt >= best.startedAt ? r : best), null),
+      ),
     all: () => Promise.resolve([...rows.values()]),
     clear: () => {
       rows.clear();

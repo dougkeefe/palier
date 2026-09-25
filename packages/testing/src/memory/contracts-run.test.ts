@@ -1,6 +1,7 @@
 import {
   aiProviderContract,
   attemptStoreContract,
+  examRunStoreContract,
   itemRepositoryContract,
   keyVaultContract,
   scheduleStoreContract,
@@ -12,6 +13,7 @@ import {
 import {
   fakeAiProvider,
   memoryAttemptStore,
+  memoryExamRunStore,
   memoryItemRepository,
   memoryKeyVault,
   memoryScheduleStore,
@@ -32,6 +34,7 @@ attemptStoreContract("memory", () => Promise.resolve(memoryAttemptStore()));
 itemRepositoryContract("memory", (bank) => Promise.resolve(memoryItemRepository(bank)));
 scheduleStoreContract("memory", () => Promise.resolve(memoryScheduleStore()));
 sessionStoreContract("memory", () => Promise.resolve(memorySessionStore()));
+examRunStoreContract("memory", () => Promise.resolve(memoryExamRunStore()));
 settingsStoreContract("memory", () => Promise.resolve(memorySettingsStore()));
 keyVaultContract("memory", () => Promise.resolve(memoryKeyVault()));
 aiProviderContract("fake", () => Promise.resolve(fakeAiProvider()));

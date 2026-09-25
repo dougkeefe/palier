@@ -1,27 +1,13 @@
 # Palier: Progress
 
 **Last updated:** 24 September 2026
-**Current phase:** **Phase 2 (Practice MVP) is open.** Phase 1 is built (automated content factory,
-ADR 19; the D54 real-model go-signal exists — session log, 24 September 2026). Much of Phase 2 has
-landed ahead of the formal start: the pure `@palier/engine` core, the `@palier/app` practice loop,
-and the `/ids`, `/dexie`, `/openai` adapters. The bank `ItemRepository` (`adapters/bank`) now
-lands too, so the app can plan a day from the real committed bank, not only the fixture bank.
-The web slice has landed too: the production composition root wires the real adapters, and a service
-worker makes the app and the bank work offline after one load (D58–D60). **Gate A is resolved** (adopt
-the PRD's UI direction).
-The data use cases (`exportData`/`importData`/`wipeData`) have landed too (D61, D62).
-The single-device UI has landed too (D63–D67), so **Slice 1 is complete**: the whole practice app works
-on one device, offline after one load.
-**Gate B is resolved** (human, 24 September 2026: the lower Leitner box wins a concurrent edit, D69),
-and **Slice 2 is complete** (`dougkeefe/pangyo`; D69–D72, ADR 21): two devices pair by code and
-converge, on the real route handlers over PGlite. **Slice 3 is built** (`dougkeefe/yamoussoukro`;
-D73–D78): the sync simulator, which found and fixed two real sync defects; the engine golden record; the
-mutation check; every Phase 2 CI gate; and the deploy tooling. **Gate C is resolved: the app is live at
-https://palier-virid.vercel.app**, with sync on a Neon database (D78). Phase 2 is complete except for one
-human act: sharing the app with a handful of people. See [Next, decided](#next-decided). The **full-volume published
-bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
-feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
-(D56).
+**Current phase:** **Phase 3 (Exams and item statistics) is open.** **Phase 2 is complete**: the last
+exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
+paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
+four, mirrored in `implementation-plan.md` §7 (D79). **Slice 1, the exam core with no UI, is in flight**
+(`dougkeefe/minnetonka-v3`). See [Next, decided](#next-decided). The **full-volume published bank** (D54)
+is still a standing human gate, **sequenced to the end** (D56): every feature phase (2–6) is built
+against the baseline committed bank, and the content gate runs at 1.0.
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -82,8 +68,8 @@ human for anything expensive.
 | --- | --- | --- | --- |
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
-| 2 Practice MVP | Ship something publicly useful | 3–4 wk | **built and deployed** (live 24 September 2026; "shared with a handful" pending the human) |
-| 3 Exams and item statistics | The number users actually came for | 2 wk | not started |
+| 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
+| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (Slice 1 in flight, D79) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | not started |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
@@ -96,9 +82,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/yamoussoukro` → `dougkeefe/phase-2-final-slice` (PR #21) | **Phase 2 Slice 3 — convergence proof + public launch (D57), the last Phase 2 slice.** The sync simulator (tier 5) in `@palier/testing` over the memory server and, in the integration lane, the real route handlers on PGlite; the engine golden record; the one-off mutation check; the remaining gates confirmed; deploy tooling, then the public deploy with the human (Gate C, provisioned together). **All built; deployed at https://palier-virid.vercel.app**, pending merge. | 24 September 2026 |
+| `dougkeefe/minnetonka-v3` | **Phase 3 Slice 1 — the exam core, no UI (D79).** Per-variant golden fixtures at every cut; the `ExamRunStore` port (memory, Dexie, contract); `startExam`/`answerExamItem`/`flagExamItem`/`checkpointExam`/`resumeExam`/`submitExam`/`rescoreExam`; exam runs as a fifth sync doc type and in export/import/wipe; the simulator gains an exam phase and oracle. **Built; pending merge** (D80, D81). | 24 September 2026 |
 
-*(The prior rows — Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -197,52 +183,56 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Slice 3 is built and deployed** (`dougkeefe/yamoussoukro`, PR #21, D73–D78): the sync simulator, the engine
-golden record, the mutation check, every Phase 2 CI gate, and **the public deploy at
-https://palier-virid.vercel.app** (Gate C resolved). **One Phase 2 exit criterion remains, and it is the
-human's act:** sharing the app with a handful of people. When they confirm it, tick it and mark Phase 2
-complete in the status table.
+**Phase 2 is complete** (24 September 2026). **Phase 3 Slice 1, the exam core, is built** (`dougkeefe/minnetonka-v3`;
+D79–D81): the per-variant goldens, the `ExamRunStore` port, the seven exam use cases, exam runs as a
+synced, exported and wiped aggregate, and the simulator's exam phase. Exit criterion 4 is met.
 
-**Next: open Phase 3 with Slice 1, the exam core, no UI.** It needs no human, and it carries two of Phase
-3's four exit criteria.
+**Next: Phase 3 Slice 2, forms and a bank that can fill them.** It needs no human.
 
-**Opening Phase 3 means**, as D57 did for Phase 2: expand the plan's §7 Phase 3 breakdown into this file,
-and group it into slices mirrored in both documents:
-1. the exam core (below);
-2. forms and a bank that can fill them: the factory's form generation, and a baseline bank regenerated
-   with the scripted provider large enough to fill every variant's scored-plus-pilot count. The
-   committed bank has **10 items and 0 forms**, against the smallest variant's 25 scored items; it stays
-   synthetic (D54, D56);
-3. the runner and results UI and E2E journey 3, behind **Gate D** (exam UI direction: whether to adopt
-   PRD §8.4–§8.5 as Gate A adopted §8 for Slice 1);
-4. telemetry and the item-statistics job. The closed pilot is the plan's human decision gate.
+**The gap:**
+- The committed bank (`content/bank/v1/`) has **10 items and 0 forms**.
+- `apps/factory/src/pipeline/run.ts` passes `forms = []` to `validateBank` and `buildBank`.
+- Everything downstream of form generation already exists: `bank-build.ts` writes `forms/<id>.json`
+  with a hash into the manifest; `validate.ts`'s `checkForms` resolves every form's item ids at its
+  variant's exact counts; `httpBankRepository.form()` serves forms.
 
-**Slice 1's scope:**
-- **Per-variant golden fixtures** at every band boundary, both sides of each exact cut, for all four
-  profile variants (exit criterion 1, [R3]). Follow the pattern of `scorer.golden.test.ts`, driven by
-  `Object.entries(profile.variants)`.
-- **An `ExamRunStore` port.** Dexie's v1 schema already declares
-  `examRuns: 'id, formId, startedAt, submittedAt'` (architecture.md §9.1), so there is no schema bump.
-  It needs the memory and Dexie implementations and a contract suite. A run holds its answers, flags
-  and the **elapsed** exam time at each checkpoint, so a resume restores the clock from elapsed time, not
-  from the wall clock.
-- **Use cases in `@palier/app`:**
-  - `startExam(formId)`, `answerExamItem`, `flagExamItem`, `checkpointExam`, `resumeExam`;
-  - `submitExam`, which calls `scoreExam` and records attempts with `mode: "exam"` (kept out of the
-    practice trend, D64);
-  - `rescoreExam`, idempotent (exit criterion 4) and held to it by a property.
+**Scope:**
+- **A pure form-assembly stage** in `apps/factory/src/pipeline/`, for example `forms.ts`, taking
+  `(published items, profile, seed)` and returning one `ExamForm` per profile variant, each built from
+  `Object.entries(profile.variants)`:
+  - `items` item ids, of which `items − scored` are pilots;
+  - `bandCuts` copied from `orderedCuts(variant)`;
+  - `timeLimitMinutes` from `variant.minutes`;
+  - `version: 1`.
 
-  They run over the fixture bank's two forms.
-- **Sync for exam runs:** a fifth `SyncDocType`, with a `mergeRecord` rule (a submitted run beats an
-  in-progress one, write-once, like sessions). **The simulator gains exam actions**, and its oracle an
-  exam-run check.
+  Selection is deterministic for a seed, and spreads over sub-skills and bands. If the bank cannot
+  fill a variant, the stage fails loudly and names the shortfall; it never ships a short form. A
+  number in code is the ADR 9 mistake.
+- **Wire it into `run.ts`**, so `validateBank` and `buildBank` receive real forms.
+- **Regenerate the baseline bank with the scripted provider**, large enough for the largest form of
+  each skill: at least 60 reading and 65 writing published items, plus headroom so pilots are not
+  simply the leftovers.
+  - It stays synthetic (D54, D56).
+  - Ship it as `content/bank/v2/`, leaving `v1` as it was, since a published bank version is
+    immutable.
+  - Bump `BANK_VERSION` (`apps/web/src/lib/container.ts`), and follow it wherever the bank version is
+    keyed, including the service worker's bank cache and the E2E bank fixtures.
 
 **Done looks like:**
-- the four variant goldens, proven to bite;
-- `examRunStoreContract` passing on memory and Dexie;
-- every new use-case branch tested;
-- the simulator green at the medium-lane seed count with exam runs in play;
-- `pnpm verify` and `verify:medium` green.
+- the form stage unit-tested, with every branch named (§10): a form per variant, pilot counts, cuts
+  equal to the profile's, determinism per seed, and a loud shortfall;
+- `checkForms` clean on the new bank;
+- the bank byte-reproducible, since the run test's rebuild is identical;
+- `httpBankRepository` serving all four forms, with `bankHandlers` and the contract;
+- `pnpm verify` and `verify:medium` green, and journey 2 still passing offline on the new bank.
+
+**Then Gate D (human): the exam UI direction.** Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise it
+first. It gates Slice 3, the runner and results UI and E2E journey 3. Slice 2 does not wait on it.
+
+**One known E2E flake to fix in passing** (session log, `dougkeefe/minnetonka-v3`). Journey 8's `syncNow`
+helper waits for a "Last synced" status that can already be showing from the page's earlier sync, so
+it can return before the new sync lands. It failed once in three full runs, and 3 of 3 in isolation
+passed. The fix is to wait for the status to change, not merely to be present.
 
 **Standing human gates (do not self-direct):**
 
@@ -261,7 +251,7 @@ and group it into slices mirrored in both documents:
   human: the Vercel project `palier` (dougkeefes-projects) and Neon `palier-db` (Production only). The live
   URL is https://palier-virid.vercel.app. `docs/deploy.md` is the runbook.
 - **Gate D — exam UI direction** (Phase 3 Slice 3). Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise
-  it first.
+  it first. Slice 2 is buildable before it.
 
 Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's table
 before launch) and the name/domain decision in §12.1.
@@ -343,12 +333,12 @@ session-log evidence; nothing is ticked without it.
 - [x] Every adapter passes its port contract suite — `ids`, `dexie` ×6, `bank`, `openai`, `sync`; and `sync` passes it through the real route handlers too, on the memory repository (fast lane) and on PGlite (integration lane). Session log, 24 September 2026, `dougkeefe/pangyo`
 - [x] axe clean and keyboard-complete on onboarding, drill and review, asserted on states [R9]: axe runs on each state in journeys 1, 2 and 4 and on the sync settings, and the drill and review are driven by keyboard. The rerun is in this session's `verify:medium` → Playwright "31 passed" (session log, 24 September 2026, `dougkeefe/yamoussoukro`). Slice 1 first built it (`dougkeefe/algiers`)
 - [x] Lighthouse performance and accessibility both ≥95: median **1.0 / 1.0 on all 9 routes**, max CLS 0, rerun after the security headers (session log, 24 September 2026, `dougkeefe/yamoussoukro`)
-- [~] Deployed publicly and shared with a handful of people — **deployed**, 24 September 2026, at **https://palier-virid.vercel.app** (Vercel project `palier`, Neon Postgres `palier-db`, both provisioned with the human, Gate C). Every production smoke check passed, including a two-device sync round trip over the live database (session log). **"Shared with a handful of people" is the human's act, and is ticked when they confirm it.**
+- [x] Deployed publicly and shared with a handful of people — **deployed** 24 September 2026 at **https://palier-virid.vercel.app** (Vercel project `palier`, Neon Postgres `palier-db`, provisioned with the human, Gate C), with every production smoke check passing, including a two-device sync round trip over the live database. **Shared**: the human confirmed on 24 September 2026 that they paired two real browsers on the live URL and shared the link with a handful of people (session log, `dougkeefe/minnetonka-v3`). **Phase 2 complete.**
 
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
 carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
 `implementation-plan.md` §7 Phase 2 "Completion slices" — **keep the two in sync** (the fuller scope
-and each slice's *done* live in the plan). Current position: **Slices 1 and 2 complete** (Gate B resolved, D69); Slice 3 is next.
+and each slice's *done* live in the plan). Current position: **all three slices complete; Phase 2 complete** (24 September 2026).
 
 - [x] **Slice 1 — Single-device practice app, offline-complete.** **Done 24 September 2026** (`dougkeefe/algiers`; D58–D67; session-log evidence). Composition-root wiring of
   bank/dexie/ids + service-worker offline cache [R4] **(landed, D58–D60)** +
@@ -372,15 +362,47 @@ and each slice's *done* live in the plan). Current position: **Slices 1 and 2 co
 - [x] **Slice 3 — Convergence proof + public launch.** Sync simulator (tier 5), remaining CI gates +
   mutation check, full-offline + Lighthouse ≥95 confirmation, public deploy. **Phase 2 complete.**
   **Done 24 September 2026** (`dougkeefe/yamoussoukro`, PR #21; D73–D78), and deployed at
-  https://palier-virid.vercel.app. Only "shared with a handful of people", the human's act, remains.
+  https://palier-virid.vercel.app. "Shared with a handful of people" was confirmed by the human the same day.
 
 ### Phase 3: Exams and item statistics — closed pilot
 
-- [ ] All four exam variants runnable and correctly scored, golden fixture per variant at every cut boundary [R3]
-- [ ] A full 90-minute exam survives reload and network drop (E2E journey 3)
-- [ ] Statistics job flags and retires a seeded reversed-key item on synthetic data
-- [ ] Scoring is idempotent
-- [ ] Closed pilot run, 20–30 people
+**Opened 24 September 2026** (`dougkeefe/minnetonka-v3`). The `implementation-plan.md` §7 work
+breakdown, expanded on start. Nothing is ticked without session-log evidence.
+
+**Work breakdown (§7)**
+
+- [~] Exam runner driven by the profile variants: navigator, flagging, timer with amber/red thresholds, checkpoint and resume with the clock preserved, pilot items — **the core is built** (Slice 1, `dougkeefe/minnetonka-v3`, D80): the `ExamRunStore` port on memory and Dexie, the start/answer/flag/checkpoint/resume/submit/rescore use cases, and exam runs synced, exported and wiped. **The UI is Slice 3**
+- [ ] Results screen: band, raw score against the cuts, per-sub-skill breakdown, near-miss from the actual cuts, confidence calibration, review walkthrough — Slice 3
+- [ ] Form generation in the factory: fixed, immutable, versioned forms per variant — Slice 2
+- [ ] Telemetry opt-in, the post-exam prompt, `/api/telemetry`, client batching — Slice 4
+- [ ] The item statistics job: proportion correct and point-biserial per item, minimum counts, a PR retiring items that trip the rules — Slice 4
+- [ ] Minimum response counts before an item's statistics are trusted, and the readiness-card disclosure — Slice 4
+
+**Exit criteria** (the actual gate)
+
+- [~] All four exam variants runnable and correctly scored, golden fixture per variant at every cut boundary [R3] — **the goldens are done** (Slice 1): one per variant, both sides of every exact cut, pilots answered right and not counted, and proven to bite (session log). "Runnable" needs Slice 2's forms and Slice 3's runner
+- [ ] A full 90-minute exam survives reload and network drop (E2E journey 3) — Slice 3
+- [ ] Statistics job flags and retires a seeded reversed-key item on synthetic data — Slice 4
+- [x] Scoring is idempotent — `rescoreExam` derives the result from the stored run, and no result is stored (ADR 16). A fast-check property holds submit, rescore and a second rescore deep-equal, with each attempt agreeing with the result. The simulator also rescores on every device after every heal and requires the same result (session log, `dougkeefe/minnetonka-v3`)
+- [ ] Closed pilot run, 20–30 people — the plan's human decision gate, after Slice 4
+
+**Completion slices (D79).** Four slices, mirroring `implementation-plan.md` §7 Phase 3 "Completion
+slices". **Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
+
+- [x] **Slice 1 — The exam core, no UI.** **Built 24 September 2026** (`dougkeefe/minnetonka-v3`; D80, D81;
+  session-log evidence). It includes:
+  - per-variant golden fixtures;
+  - the `ExamRunStore` port;
+  - start/answer/flag/checkpoint/resume/submit/rescore;
+  - exam runs synced, exported and wiped;
+  - an exam phase in the simulator, which found that the plan's attempt-id rule could not converge
+    (D80).
+- [ ] **Slice 2 — Forms and a bank that can fill them.** Factory form generation, and a baseline bank
+  regenerated with the scripted provider, large enough for every variant's full item count (D54, D56).
+- [ ] **Gate D — exam UI direction (human).** Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise it
+  first. Gates Slice 3.
+- [ ] **Slice 3 — The runner and results UI, and E2E journey 3.** Behind Gate D.
+- [ ] **Slice 4 — Telemetry and the item-statistics job.** Then the closed pilot (the human gate).
 
 ### Phase 4: BYOK, generation, writing workshop
 
@@ -425,7 +447,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | --- | --- | --- | --- |
 | R1 | Practises all three tested skills | 2, 5, 6 | reading and written expression practised end to end (24 September 2026); oral is Phases 5–6 |
 | R2 | Format and register match the real tests | 1 | not started |
-| R3 | Mock exams mirror published structure and cuts | 3 | not started |
+| R3 | Mock exams mirror published structure and cuts | 3 | in progress: every variant's cuts are locked by a golden at each boundary, with pilots excluded (Phase 3 Slice 1). Runnable forms are Slices 2–3 |
 | R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams are Phase 3 |
 | R5 | Never presents as official | 0, 7 | not started |
 | R6 | No real test items, no PSC reproduction | 1 | not started |
@@ -2442,11 +2464,169 @@ was built first:
   fail loudly is left to Phase 7's hardening, because failing the whole sync service over it would trade
   a weaker limit for an outage.
 
+### D79 — Phase 3 is planned as four slices, mirrored in two documents
+**Date:** 24 September 2026 · **Status:** accepted
+
+D57 made a scoped exception to the "one copy of the plan" rule for Phase 2: the slices appear in both
+`implementation-plan.md` §7 and here, and the two must agree. Phase 3 takes the same exception, as the
+Phase 2 *Next, decided* already proposed. D57 is not edited. The four slices:
+
+1. **The exam core, no UI.** It carries two of the four exit criteria: the per-variant goldens [R3] and
+   idempotent scoring.
+2. **Forms and a bank that can fill them.** The committed bank has 10 items and no forms. The smallest
+   variant needs 25 scored items.
+3. **The runner and results UI, and E2E journey 3.** Behind **Gate D**, the exam UI direction.
+4. **Telemetry and the item-statistics job**, then the closed pilot, which is the plan's human gate.
+
+The order follows the dependencies. The UI needs forms to run, the forms need a bank, and the
+statistics job needs submitted runs. Slice 1 needs none of these: it runs over the fixture bank's two
+forms.
+
+### D80 — an exam run lives in the session id space, and an exam attempt is a pure function of its answer
+**Date:** 24 September 2026 · **Status:** accepted
+
+Four decisions of Phase 3 Slice 1. The plan left them open, and the sync simulator settled the last.
+
+- **`ExamRun` is an `@palier/app` aggregate, and its id is a `SessionId`.**
+  - Like `Session` (D45), nothing in the engine consumes a run: `scoreExam` takes the form, the items
+    and a response map. So the type stays out of `@palier/domain`.
+  - Every `Attempt` groups by `sessionId`, so the attempts a submission records point back at their
+    run without a cast. A run is never written to the `SessionStore`, so the practice plan's
+    `latest()` (D46) cannot mistake an exam for a finished practice day.
+- **The run holds elapsed exam time and no result.**
+  - A resume restores the timer from `elapsedMs`, which never goes backwards, and not from the wall
+    clock. So the time a tab was closed never counts (PRD §14: "mock exams resume with the clock as it
+    was").
+  - The result is rescored on demand (ADR 16). That is safe because a form and its `bandCuts` are
+    immutable, and it makes scoring idempotent by construction. A fast-check property holds it: exit
+    criterion 4.
+  - `put` is a plain upsert. The write-once `submittedAt` lives in the use cases, which refuse any
+    write to a submitted run, and in `mergeRecord`.
+- **The merge rule.** A submitted copy beats an in-progress one, and of two submitted copies the
+  earlier `submittedAt` wins, as sessions do. Of two in-progress copies, the one with more elapsed
+  exam time wins, and the other copy's answers are discarded. That is accepted: one run in progress on
+  two devices at once needs the candidate to sit the same exam in two browsers offline. The
+  alternative, a union of answers, would invent a run neither device held.
+- **An exam attempt's id is `${runId}:${itemId}:${recordHash(answer)}`, and its `ts` is the answer's
+  `answeredAt`, not the moment of submission.**
+  - The plan said `${runId}:${itemId}`, stamped at submit. **The simulator's new exam phase showed
+    that to be wrong.** Two devices submitting the same synced run offline recorded one id with two
+    contents, because each stamped its own submission time. Attempts are append-only (`writeRecord`
+    appends, and a known id is a no-op), so the copies never converge.
+  - With the plan's rule, 40 three-device seeds produced **79 violations** (lost-attempt 36,
+    diverged 16, merge-oracle 15, no-quiescence 12). With this rule they produce **0**.
+  - Now a retry, or a second device with the same answers, derives byte-identical attempts. Two
+    devices with *different* answers derive different ids and both attempts are kept, as a union.
+    Nothing is overwritten. The practice trend excludes exam attempts (D64), so nothing a user sees
+    double-counts.
+  - **Slice 4's statistics job should read a run's responses from the winning run**, not from its
+    attempts, since a concurrent double submission can leave attempts for answers the winning run
+    does not hold.
+  - This extends D39: the caller mints the run id, and the attempt ids are a function of it and of
+    data. Nothing is minted from `Random`.
+  - Residual: two devices on different bank versions submitting the same answer would record
+    different `bankVersion`s under one id. That needs a deploy to land mid-exam, and the same run
+    submitted offline on two devices across it.
+- **Pilots:** `submitExam` records a pilot's attempt through `recordAttempt`, the score-and-append half
+  split out of `answerItem`, and never schedules it (the D41 hand-off). The existing `answerItem`
+  tests pass unchanged.
+- **A rule-independent oracle check** (`unsubmittedRuns`): a run submitted anywhere ends submitted
+  everywhere, with the earliest submission. The partition oracle folds by `mergeRecord` itself, so it
+  cannot catch a wrong merge rule. With the rule weakened so an in-progress run wins, the partition
+  oracle reported nothing, and this check reported 45 violations in 40 seeds.
+
+### D81 — the export format is version 2, and version 1 files still import
+**Date:** 24 September 2026 · **Status:** accepted
+
+Exam runs are progress [R11], so the export carries them as a fifth list, `examRuns`, and
+`EXPORT_VERSION` becomes 2. `export-document.ts` already required an old export to stay importable.
+A version 1 file is therefore read as a version 2 document with no exam runs, which is exactly what it
+describes, and a version 2 file must carry the list.
+
+Three existing data-rights tests pinned the export's field list and the per-store import counts. They
+were widened by the new field, because the shape changed on purpose. Their point, that no key-vault
+content is exported and that round trips are exact, is unchanged. `aDevice` now also holds two exam
+runs, so those round trips cover exam runs too. The browser-safe `@palier/testing/in-memory`
+export-list test likewise gained `memoryExamRunStore`.
+
+The data-settings import toast still counts attempts, reviews and sessions only. Adding mock exams to
+its bilingual copy belongs with the exam UI in Slice 3.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/minnetonka-v3` (Phase 3 Slice 1: the exam core)
+
+**Built.** The work, with the decisions recorded in D80 and D81:
+- **Per-variant golden fixtures.** Four `exam-band-boundaries.<variant>.golden.json` files, written by
+  hand from PRD §5. `scorer.variants.golden.test.ts` drives them over
+  `Object.entries(profile.variants)`, with 44 tests. The older reading-unsupervised golden is kept as
+  it was.
+- **The `ExamRunStore` port**, with its memory and Dexie implementations, the contract and the
+  `anExamRun` builder.
+- **The use cases:** `startExam`, `answerExamItem`, `flagExamItem`, `checkpointExam`, `resumeExam`,
+  `submitExam` and `rescoreExam`. `answerItem`'s score-and-append half is split out as
+  `recordAttempt`.
+- **Exam runs as a fifth sync document type** (`"examRun"`), plus the export at version 2, import and
+  wipe. A submitted exam also ends deferred registration.
+- **The composition root** wires the store in, but not the exam use cases: the Slice 3 UI does that.
+- **The simulator's `examAcrossPartition` phase** and the oracle checks `unrecordedExamAnswers`,
+  `unsubmittedRuns` and `differingExamResults`.
+
+**Found by the simulator: the planned exam attempt id could not converge** (D80). Over 40
+three-device seeds, 53 submissions, in 17 seeds concurrent across a partition:
+```
+plan's rule  ${runId}:${itemId}, ts = submission   → { lost-attempt: 36, diverged: 16, merge-oracle: 15, no-quiescence: 12 }
+built rule   ${runId}:${itemId}:${hash}, ts = answeredAt → { submits: 53, seedsWithConcurrentSubmits: 17, violations: 0 }
+```
+
+**Proven to bite, each reverted afterwards:**
+- A cut moved in `psc-sle.json` (C 38→39, B max 37→38) → `scorer.variants.golden.test.ts`: 6 failed.
+- The scorer made to count pilots → 20 failed.
+- `compareExamRun` weakened so the larger `elapsedMs` beats a submission:
+  - `merge.test.ts`: "keeps the submitted copy over an in-progress one…" failed;
+  - the simulator, over 40 seeds: `{ unsubmitted-run: 45 }`.
+
+  The partition oracle alone reported nothing, because it folds by `mergeRecord` itself. That is why
+  `unsubmittedRuns` exists.
+
+**Existing tests changed, and why:**
+- Three data-rights tests pinned the export's field list and the per-store import counts. Each gained
+  the `examRuns` field or count, because the shape changed deliberately (D81).
+- `@palier/testing/in-memory`'s export-list test gained `memoryExamRunStore`.
+- The `answerItem` tests are unchanged.
+
+**Gates:**
+```
+pnpm verify                     → exit 0: check-types, lint, boundaries ("no dependency violations" ×2),
+                                  Test Files 117 passed, Tests 1554 passed | 8 todo
+pnpm test:integration           → exit 0: Tests 39 passed, incl. "holds every convergence property on 400 seeds"
+                                  (memory server) and "… on 100 seeds" (route handlers on Drizzle/PGlite)
+pnpm test:e2e                   → run 1: 30 passed, 1 failed (journey 8, laptop showed 13 of 19 answered);
+                                  runs 2 and 3: 31 passed; journey 8 alone ×3: passed
+```
+- **Coverage of the new code:** `exam-run.ts`, `submit-exam.ts`, `merge.ts`, `records.ts`,
+  `export-document.ts`, `sync-now.ts`, the dexie and memory `exam-run-store.ts` and `oracle.ts` are
+  all at 100% branch.
+- **The journey 8 failure is a race in the test's `syncNow` helper**, not in this slice. The laptop's
+  settings page still shows "Last synced …" from its earlier sync, so waiting for that text can return
+  before the new sync's pull lands. It is recorded in *Next, decided*, and the test is not changed here.
+
+**Not done here, by design:**
+- the exam UI, and wiring the exam use cases into `buildUseCases` (Slice 3, behind Gate D);
+- the import toast's mock-exam count (Slice 3);
+- the forms and the bigger bank (Slice 2, now *Next, decided*).
+
+### 24 September 2026 — `dougkeefe/minnetonka-v3` (Phase 2 closed; Phase 3 opened)
+
+- **Phase 2 complete.** The human confirmed three things: the live URL works, two real browsers were
+  paired on it, and the link was shared with a handful of people. That was the last exit criterion,
+  and it is now ticked. PR #21 had merged (`a346d19`), so its In-flight row is gone.
+- **Phase 3 opened.** The §7 breakdown is expanded, and the four slices are mirrored in
+  `implementation-plan.md` §7 (D79). Slice 1, the exam core, is claimed on this branch.
 
 ### 24 September 2026 — `dougkeefe/yamoussoukro` → `dougkeefe/phase-2-final-slice` (Gate C: the public deploy)
 

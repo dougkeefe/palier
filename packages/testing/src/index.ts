@@ -10,6 +10,7 @@ export {
   aSession,
   anAttempt,
   anExamForm,
+  anExamRun,
   anItem,
   anOralScenario,
   buildWith,

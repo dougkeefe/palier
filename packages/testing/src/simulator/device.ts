@@ -9,6 +9,7 @@ import type {
   SyncTransport,
 } from "@palier/app";
 import {
+  answerExamItem,
   answerItem,
   completeSession,
   exportData,
@@ -16,16 +17,20 @@ import {
   pairDevice,
   practiceTrend,
   requestPairCode,
+  rescoreExam,
   setSyncEnabled,
+  startExam,
   startSession,
+  submitExam,
   syncNow,
 } from "@palier/app";
-import type { ExamProfile, ItemId, OptionId, ScoredSkill } from "@palier/domain";
+import type { ExamProfile, FormId, ItemId, OptionId, ScoredSkill, SessionId } from "@palier/domain";
 import { OPTION_IDS, attemptId, sessionId } from "@palier/domain";
 
 import { counterIdGenerator } from "../ids/counter-id-generator.js";
 import {
   memoryAttemptStore,
+  memoryExamRunStore,
   memoryScheduleStore,
   memorySessionStore,
   memorySettingsStore,
@@ -69,6 +74,14 @@ export type SimulatedDevice = {
   /** Open a session, answer, and optionally complete it. Returns the attempts recorded. */
   readonly study: (answers: readonly Answer[], complete: boolean) => Promise<readonly SyncRecord[]>;
   readonly setSetting: (key: string, value: unknown) => Promise<void>;
+  /** Start a mock exam on a form. Returns the run's id. */
+  readonly startExam: (form: FormId) => Promise<SessionId>;
+  /** Answer items of a run, each answer a checkpoint at the given elapsed time. */
+  readonly answerExam: (run: SessionId, answers: readonly Answer[], elapsedMs: number) => Promise<void>;
+  /** Submit a run. Returns the attempts the submission recorded. */
+  readonly submitExam: (run: SessionId, elapsedMs: number) => Promise<readonly SyncRecord[]>;
+  /** The result of every submitted run the device holds, as stable JSON. */
+  readonly examResults: () => Promise<string>;
   /** Sync now and wait for it; a sync already running is waited for instead. */
   readonly sync: () => Promise<SyncOutcome>;
   /** Start a sync without waiting for it, unless one is already running. */
@@ -95,6 +108,7 @@ export const simulatedDevice = (options: SimulatedDeviceOptions): SimulatedDevic
     attempts: memoryAttemptStore(),
     schedule: memoryScheduleStore(),
     sessions: memorySessionStore(),
+    examRuns: memoryExamRunStore(),
     settings: memorySettingsStore(),
   };
   const ids = counterIdGenerator(options.idSeed);
@@ -148,17 +162,57 @@ export const simulatedDevice = (options: SimulatedDeviceOptions): SimulatedDevic
     return recorded;
   };
 
+  const answerExam = async (run: SessionId, answers: readonly Answer[], elapsedMs: number): Promise<void> => {
+    for (const answer of answers) {
+      const [item] = await items.byIds([answer.itemId]);
+      if (item === undefined) continue;
+      await answerExamItem(
+        {
+          runId: run,
+          itemId: answer.itemId,
+          response: answer.correct ? item.key : wrongOption(item.key),
+          msToFirstSelect: 1000,
+          msToConfirm: 2000,
+          changedAnswer: answer.changedAnswer,
+          elapsedMs,
+        },
+        { ...deps, items },
+      );
+    }
+  };
+
+  const submit = async (run: SessionId, elapsedMs: number): Promise<readonly SyncRecord[]> => {
+    await submitExam({ runId: run, elapsedMs }, { ...deps, schedule: answered, items, profile });
+    return (await deps.attempts.all())
+      .filter((a) => a.sessionId === run)
+      .map((value): SyncRecord => ({ type: "attempt", id: value.id, value }));
+  };
+
+  const examResults = async (): Promise<string> => {
+    // Sorted by id, code unit by code unit, so two devices holding the same runs agree (D73).
+    const submitted = (await deps.examRuns.all())
+      .filter((r) => r.submittedAt !== null)
+      .map((r) => r.id)
+      .sort();
+    const results = await Promise.all(
+      submitted.map(async (id) => [id, await rescoreExam({ runId: id }, { items, examRuns: deps.examRuns })]),
+    );
+    return JSON.stringify(results);
+  };
+
   const records = async (): Promise<Map<string, SyncRecord>> => {
-    const [attempts, schedule, sessions, settings] = await Promise.all([
+    const [attempts, schedule, sessions, examRuns, settings] = await Promise.all([
       deps.attempts.all(),
       deps.schedule.all(),
       deps.sessions.all(),
+      deps.examRuns.all(),
       deps.settings.all(),
     ]);
     const all: SyncRecord[] = [
       ...attempts.map((value): SyncRecord => ({ type: "attempt", id: value.id, value })),
       ...schedule.map((value): SyncRecord => ({ type: "schedule", id: value.itemId, value })),
       ...sessions.map((value): SyncRecord => ({ type: "session", id: value.id, value })),
+      ...examRuns.map((value): SyncRecord => ({ type: "examRun", id: value.id, value })),
       ...settings.map((value): SyncRecord => ({ type: "setting", id: value.key, value })),
     ];
     return new Map(all.map((r) => [`${r.type}:${r.id}`, r]));
@@ -169,6 +223,14 @@ export const simulatedDevice = (options: SimulatedDeviceOptions): SimulatedDevic
     deps,
     study,
     setSetting: (key, value) => deps.settings.set(key, value),
+    startExam: async (form) => {
+      const id = sessionId(ids.ulid());
+      await startExam({ runId: id, formId: form }, { ...deps, items });
+      return id;
+    },
+    answerExam,
+    submitExam: submit,
+    examResults,
     sync,
     syncInBackground: () => {
       sync().catch((error: unknown) => {

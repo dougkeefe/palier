@@ -1,5 +1,6 @@
 export { fakeAiProvider } from "./ai-provider.js";
 export { memoryAttemptStore } from "./attempt-store.js";
+export { memoryExamRunStore } from "./exam-run-store.js";
 export { memoryItemRepository } from "./item-repository.js";
 export type { MemoryBank } from "./item-repository.js";
 export { memoryKeyVault } from "./key-vault.js";

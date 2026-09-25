@@ -528,6 +528,15 @@ thirteen tables now have adapters — `attempts`, `schedule`, `sessions`, `setti
 are inert until their adapter exists. The three notes below (schedule) and two (session) were
 followed as written.
 
+**`examRuns` implemented, 24 September 2026** (Phase 3 Slice 1, `progress.md` D80). The seventh
+table with an adapter, behind `ExamRunStore`, and no schema bump. A run holds its answers, flags and
+**elapsed** exam time, so a resume restores the clock from elapsed time. It holds no result, which
+is rescored from the immutable form on demand (ADR 16). `submittedAt` is null while a run is in
+progress, and IndexedDB does not index a null key path. So, as with `schedule.due`, an in-progress
+run is absent from the `submittedAt` index, and "the run to resume" walks `startedAt` instead. Exam
+runs sync as the fifth document type: a submitted copy beats an in-progress one, and submission is
+write-once.
+
 There is deliberately no `estimates` table. The practice trend is derived from the attempt
 log on demand, so there is nothing to persist, nothing to invalidate and nothing to
 reconcile during sync (ADR 16, `implementation-plan.md` §3.3, and section 9.4 below).

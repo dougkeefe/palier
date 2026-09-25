@@ -53,12 +53,18 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   **tenth** port §3.3 does not name, **`SyncStateStore`** (`ports/sync-state-store.ts`), holds the
   device-local sync bookkeeping: identity, watermark, the on/off switch and the per-document ledger.
   It is decided here like `IdGenerator` was.
+  **`ExamRunStore` has landed** (`ports/exam-run-store.ts`, Phase 3 Slice 1, progress.md D80), added
+  to §3.3 in place: `{ put, get, unsubmitted, all, clear }` over `ExamRun`. It is the
+  checkpoint/resume state `SessionStore` deferred to the exam runner. Like `Session`, `ExamRun` lives
+  here, not in `@palier/domain`. Its id is a `SessionId`, because attempts group by `sessionId`. `put`
+  is a plain upsert: the write-once `submittedAt` rule lives in the use cases and in `mergeRecord`.
 - **Sync merges on the device, and only concurrent edits merge** (progress.md D69, Gate B). `syncNow`
   finds dirty records by hashing each one against the ledger, pulls first, then pushes with base
   revisions. A stale base comes back as a conflict. `mergeRecord` (`src/sync/merge.ts`) is the one
   merge rule, used by sync and import alike:
   - schedule: **the lower Leitner box wins**;
   - session: the completed copy wins;
+  - exam run: a submitted copy wins, then the earlier submission, then more elapsed exam time;
   - setting: the local value wins;
   - attempt: immutable.
 
@@ -72,7 +78,8 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   record would merge as concurrent, and other devices' newer work would roll back. Both were found by the sync simulator in
   `@palier/testing` (D76). `AttemptStore.recent` returns the highest ids, oldest first, compared by
   code unit, in every implementation (D73). Sync failure is an outcome (`unavailable`, `removed`),
-  never a throw into study (§11). Registration waits for the first completed session (§9.3).
+  never a throw into study (§11). Registration waits for the first completed session or submitted mock
+  exam (§9.3).
 - **The export document carries no key-vault content** — no API key, no device secret
   (`use-cases/export-document.ts`). An export is a file users share; the key stays in the
   browser [R12] and the secret is a sync credential. **`importData` merges by `mergeRecord`**,
@@ -85,8 +92,19 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   distinct (§8.2, progress.md D64). Do not merge them behind a flag. `progressReport` holds the
   same line over the **whole** practice record (`AttemptStore.all()`), and `reviewQueue` resolves
   what is due now across both skills (D66).
+- **A mock exam's result is never stored** (ADR 16). `rescoreExam` derives it from the stored run, whose
+  form and `bandCuts` never change, and `submitExam` returns exactly that, so scoring is idempotent by
+  construction and held to it by a property (Phase 3 exit criterion 4). **An exam attempt is a pure
+  function of its run and its answer** (D80): the id is `${runId}:${itemId}:${recordHash(answer)}` and
+  the `ts` is the answer's `answeredAt`. A retry and a second device therefore derive identical records.
+  Never stamp an exam attempt with the submission time, and never key it by run and item alone. Two
+  devices would then hold one id with two contents, and append-only attempts can never converge.
+  `submitExam` schedules scored items through `answerItem` and **never schedules a pilot**: it
+  records the pilot's attempt through `recordAttempt`, `answerItem`'s first half (D41).
 - **Use cases live under `src/use-cases/`**, one file per use case, each a plain async
-  function `(request, deps)` where `deps` are the collaborators the composition root supplies.
+  function `(request, deps)` where `deps` are the collaborators the composition root supplies. A
+  family of small use cases over one aggregate may share a file, as `sync-account.ts` does and as
+  `exam-run.ts` (start, answer, flag, checkpoint, resume) and `submit-exam.ts` (submit, rescore) do.
   They are **pure orchestration**: read the ports, call one or more engine functions, return a
   domain/engine value. The D32 bridge lives here — a use case reads `clock.now()` / `random.next`
   and hands the engine the primitives `now: string` / `() => number`, never the ports. The
