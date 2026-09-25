@@ -84,9 +84,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-slice-from-progress` | **Phase 3 Slice 2 — forms and a bank that can fill them.** A pure form-assembly stage in the factory, wired into the run; checkForms hardened; a baseline bank regenerated with the scripted provider as `content/bank/v2`, carrying v1 forward; `BANK_VERSION` 2; the journey 8 `syncNow` race fixed. **Built; pending merge** (D82, D83). Gate D recorded on the same branch (D84). | 24 September 2026 |
+| `dougkeefe/naypyidaw` | **Phase 3 Slice 3 — the exam runner and results UI, and E2E journey 3.** `/exam`, `/exam/run`, `/exam/results`, the readiness card's exam half, the exam use cases wired, `ExamRun.timeAllowance`/`resumes`, a muted exam token set. In progress. | 25 September 2026 |
 
-*(The prior rows — Phase 3 Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 3 Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
