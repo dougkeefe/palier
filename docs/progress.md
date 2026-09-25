@@ -16,8 +16,9 @@ on one device, offline after one load.
 and **Slice 2 is complete** (`dougkeefe/pangyo`; D69–D72, ADR 21): two devices pair by code and
 converge, on the real route handlers over PGlite. **Slice 3 is built** (`dougkeefe/yamoussoukro`;
 D73–D78): the sync simulator, which found and fixed two real sync defects; the engine golden record; the
-mutation check; every Phase 2 CI gate; and the deploy tooling. **The last Phase 2 exit criterion is the
-public deploy, Gate C**, provisioned with the human. See [Next, decided](#next-decided). The **full-volume published
+mutation check; every Phase 2 CI gate; and the deploy tooling. **Gate C is resolved: the app is live at
+https://palier-virid.vercel.app**, with sync on a Neon database (D78). Phase 2 is complete except for one
+human act: sharing the app with a handful of people. See [Next, decided](#next-decided). The **full-volume published
 bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
 feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
 (D56).
@@ -81,7 +82,7 @@ human for anything expensive.
 | --- | --- | --- | --- |
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
-| 2 Practice MVP | Ship something publicly useful | 3–4 wk | **in progress** |
+| 2 Practice MVP | Ship something publicly useful | 3–4 wk | **built and deployed** (live 24 September 2026; "shared with a handful" pending the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | not started |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | not started |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
@@ -95,7 +96,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/yamoussoukro` | **Phase 2 Slice 3 — convergence proof + public launch (D57), the last Phase 2 slice.** The sync simulator (tier 5) in `@palier/testing` over the memory server and, in the integration lane, the real route handlers on PGlite; the engine golden record; the one-off mutation check; the remaining gates confirmed; deploy tooling, then the public deploy with the human (Gate C, provisioned together). | 24 September 2026 |
+| `dougkeefe/yamoussoukro` → `dougkeefe/phase-2-final-slice` (PR #21) | **Phase 2 Slice 3 — convergence proof + public launch (D57), the last Phase 2 slice.** The sync simulator (tier 5) in `@palier/testing` over the memory server and, in the integration lane, the real route handlers on PGlite; the engine golden record; the one-off mutation check; the remaining gates confirmed; deploy tooling, then the public deploy with the human (Gate C, provisioned together). **All built; deployed at https://palier-virid.vercel.app**, pending merge. | 24 September 2026 |
 
 *(The prior rows — Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -196,11 +197,11 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Slice 3 is built** (`dougkeefe/yamoussoukro`, D73–D78): the sync simulator, the engine golden record,
-the mutation check, every Phase 2 CI gate and the deploy tooling. **One Phase 2 exit criterion remains,
-and it is human-owned:** "deployed publicly and shared with a handful of people", **Gate C**, which is being
-provisioned with the human as this is written. The steps are in `docs/deploy.md`. When the production
-smoke checks pass and the human confirms the app has been shared, tick it: **Phase 2 is then complete.**
+**Slice 3 is built and deployed** (`dougkeefe/yamoussoukro`, PR #21, D73–D78): the sync simulator, the engine
+golden record, the mutation check, every Phase 2 CI gate, and **the public deploy at
+https://palier-virid.vercel.app** (Gate C resolved). **One Phase 2 exit criterion remains, and it is the
+human's act:** sharing the app with a handful of people. When they confirm it, tick it and mark Phase 2
+complete in the status table.
 
 **Next: open Phase 3 with Slice 1, the exam core, no UI.** It needs no human, and it carries two of Phase
 3's four exit criteria.
@@ -256,8 +257,9 @@ and group it into slices mirrored in both documents:
   Gate B.
 - ~~**The `adapters/sync` `ScheduleEntry` merge (D43)**~~ — **resolved 24 September 2026** as Gate B:
   the lower box wins a concurrent edit (D69).
-- **Gate C — hosting and database provisioning** (above). It gates only Slice 3's public deploy, and is
-  being provisioned with the human (`docs/deploy.md`).
+- ~~**Gate C — hosting and database provisioning**~~ — **resolved 24 September 2026**, provisioned with the
+  human: the Vercel project `palier` (dougkeefes-projects) and Neon `palier-db` (Production only). The live
+  URL is https://palier-virid.vercel.app. `docs/deploy.md` is the runbook.
 - **Gate D — exam UI direction** (Phase 3 Slice 3). Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise
   it first.
 
@@ -341,7 +343,7 @@ session-log evidence; nothing is ticked without it.
 - [x] Every adapter passes its port contract suite — `ids`, `dexie` ×6, `bank`, `openai`, `sync`; and `sync` passes it through the real route handlers too, on the memory repository (fast lane) and on PGlite (integration lane). Session log, 24 September 2026, `dougkeefe/pangyo`
 - [x] axe clean and keyboard-complete on onboarding, drill and review, asserted on states [R9]: axe runs on each state in journeys 1, 2 and 4 and on the sync settings, and the drill and review are driven by keyboard. The rerun is in this session's `verify:medium` → Playwright "31 passed" (session log, 24 September 2026, `dougkeefe/yamoussoukro`). Slice 1 first built it (`dougkeefe/algiers`)
 - [x] Lighthouse performance and accessibility both ≥95: median **1.0 / 1.0 on all 9 routes**, max CLS 0, rerun after the security headers (session log, 24 September 2026, `dougkeefe/yamoussoukro`)
-- [ ] Deployed publicly and shared with a handful of people — **Gate C**, being provisioned with the human. The tooling is built (D78, `docs/deploy.md`)
+- [~] Deployed publicly and shared with a handful of people — **deployed**, 24 September 2026, at **https://palier-virid.vercel.app** (Vercel project `palier`, Neon Postgres `palier-db`, both provisioned with the human, Gate C). Every production smoke check passed, including a two-device sync round trip over the live database (session log). **"Shared with a handful of people" is the human's act, and is ticked when they confirm it.**
 
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
 carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
@@ -367,10 +369,10 @@ and each slice's *done* live in the plan). Current position: **Slices 1 and 2 co
 - [x] **Gate B — the `ScheduleEntry` merge decision (human, D43).** `updatedAt` / lower Leitner box /
   device-local. Gates all of Slice 2. **Resolved 24 September 2026 (human decision, `dougkeefe/pangyo`): the
   lower box wins a concurrent edit**, and concurrency is detected by a per-document server revision (D69).
-- [~] **Slice 3 — Convergence proof + public launch.** Sync simulator (tier 5), remaining CI gates +
+- [x] **Slice 3 — Convergence proof + public launch.** Sync simulator (tier 5), remaining CI gates +
   mutation check, full-offline + Lighthouse ≥95 confirmation, public deploy. **Phase 2 complete.**
-  **Built 24 September 2026** (`dougkeefe/yamoussoukro`; D73–D78): all of it except the deploy itself,
-  which is Gate C, being provisioned with the human.
+  **Done 24 September 2026** (`dougkeefe/yamoussoukro`, PR #21; D73–D78), and deployed at
+  https://palier-virid.vercel.app. Only "shared with a handful of people", the human's act, remains.
 
 ### Phase 3: Exams and item statistics — closed pilot
 
@@ -2445,6 +2447,47 @@ was built first:
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/yamoussoukro` → `dougkeefe/phase-2-final-slice` (Gate C: the public deploy)
+
+Conductor renamed the branch to `dougkeefe/phase-2-final-slice` when it was pushed as PR #21; the entries
+below keep the old name. CI on PR #21 passed: both fast and both medium lanes.
+
+- **Provisioned with the human, each step confirmed before it ran:**
+  - the Vercel project `palier` in dougkeefes-projects: root directory `apps/web`, Next.js, Node 22.x, and
+    connected to GitHub, so merging to `main` deploys production;
+  - Neon `palier-db` through the Marketplace, free plan, **Production only**;
+  - `RATE_LIMIT_SALT` generated and piped straight into Production, never printed.
+- **The first deployment went to production, not preview**, because Vercel assigns a project's first
+  deployment to production. It runs PR #21's green-CI code, and the build applied the migrations:
+  "Applying migrations from /vercel/path0/apps/web/drizzle. / Migrations applied." That was the first real
+  run of `applyWithPostgres`.
+- **Smoke checks on https://palier-virid.vercel.app, all passing:**
+  - `/en` → 200 with HSTS, `nosniff`, `no-referrer` and the Permissions-Policy;
+  - `/api/sync` with no bearer → **401**, so the database is wired;
+  - `/sw.js` → 200, `no-cache, no-store, must-revalidate`;
+  - the bank manifest → 200;
+  - a scripted two-device round trip through `httpSyncTransport` against the live database:
+    ```
+    paired into one account: true
+    A pushed: 1 accepted, 0 conflicts
+    B pulled: setting:smoke@1
+    devices: 2
+    after delete, B gets: SyncUnauthorizedError
+    ```
+    The test account deleted itself.
+  - Lighthouse on the live URL (desktop, 3 runs each): `/en` and `/fr/practice/reading` median
+    performance **1.0** and accessibility **1.0**.
+- **CLI side effects, caught and undone:**
+  - `vercel link` appended a short-lived `VERCEL_OIDC_TOKEN` to `.env.local`, which is a symlink to the
+    main checkout's file. The two appended lines were removed, and the existing contents were untouched.
+  - `vercel integration add neon` installed vendor agent skills into the working tree. They were deleted
+    and never committed.
+  - `docs/deploy.md` records both, plus the first-deploy-is-production rule.
+- **Changed:** `apps/web` `engines.node` from `>=22.18` to `22.x`. The range made Vercel choose Node 24 and
+  warn that it would auto-upgrade majors.
+- **Left for the human:** pair two real browsers on the live URL, then share it with a handful of people.
+  That ticks the last Phase 2 exit criterion.
 
 ### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3: fixes from the pre-merge review)
 

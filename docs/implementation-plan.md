@@ -677,6 +677,9 @@ mirrors this list and the two must agree.
   - migrations at deploy and baseline security headers (`docs/deploy.md`).
 
   The public deploy is Gate C, provisioned with the human. `progress.md` D73–D78 has the detail.
+  **Gate C resolved, 24 September 2026:** live at https://palier-virid.vercel.app, with sync on Neon, and every
+  production smoke check passing. Phase 2 is complete except for "shared with a handful of people", which is
+  the human's act.
 - **Slice 2 — Multi-device sync.** After **Gate B**: the sync backend (Postgres + Drizzle, the sync and
   device routes of §10, deferred anonymous registration, pairing by code, rate limiting; no auth lib,
   email or OAuth per ADR 5); `adapters/vault` + `adapters/sync` (device secret / sync identity, pairing

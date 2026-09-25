@@ -62,6 +62,19 @@ DATABASE_URL='postgres://…' pnpm --filter @palier/web db:migrate
 4. **Deploy** `main` to production.
 5. **Smoke-check it** (next section).
 
+**Things the first deploy taught (24 September 2026):**
+- **A project's first deployment is assigned to production**, even from the CLI without `--prod`. So it runs
+  with `VERCEL_ENV=production` and applies the migrations. Deploy only reviewed code first.
+- **Some Vercel CLI commands write into the working tree.** `vercel link` and `vercel integration add`
+  run an env pull into `.env.local` unless given `--no-env-pull`, and in this repository `.env.local` can
+  be a symlink to another checkout. `vercel integration add neon` also installs vendor agent skills
+  (`.agents/`, `.claude/`, `skills-lock.json`). Remove them; they are not project files.
+- **The Neon integration injects about 15 variables** (`DATABASE_URL`, `POSTGRES_*`, `PG*`, `NEON_*`). The app
+  reads only `DATABASE_URL`. Turbo's build warns that the others are not in `turbo.json`, which is harmless,
+  because nothing reads them at build time.
+- `apps/web` pins `"engines": { "node": "22.x" }`. A `>=` range makes Vercel pick the newest major and
+  warn that it will auto-upgrade.
+
 ## Smoke checks
 
 Run these after every production deploy that touches the server or the schema:
