@@ -14,8 +14,11 @@ The single-device UI has landed too (D63–D67), so **Slice 1 is complete**: the
 on one device, offline after one load.
 **Gate B is resolved** (human, 24 September 2026: the lower Leitner box wins a concurrent edit, D69),
 and **Slice 2 is complete** (`dougkeefe/pangyo`; D69–D72, ADR 21): two devices pair by code and
-converge, on the real route handlers over PGlite. **Next step:** Slice 3, starting with the sync
-simulator. See [Next, decided](#next-decided). The **full-volume published
+converge, on the real route handlers over PGlite. **Slice 3 is built** (`dougkeefe/yamoussoukro`;
+D73–D78): the sync simulator, which found and fixed two real sync defects; the engine golden record; the
+mutation check; every Phase 2 CI gate; and the deploy tooling. **Gate C is resolved: the app is live at
+https://palier-virid.vercel.app**, with sync on a Neon database (D78). Phase 2 is complete except for one
+human act: sharing the app with a handful of people. See [Next, decided](#next-decided). The **full-volume published
 bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
 feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
 (D56).
@@ -79,7 +82,7 @@ human for anything expensive.
 | --- | --- | --- | --- |
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
-| 2 Practice MVP | Ship something publicly useful | 3–4 wk | **in progress** |
+| 2 Practice MVP | Ship something publicly useful | 3–4 wk | **built and deployed** (live 24 September 2026; "shared with a handful" pending the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | not started |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | not started |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
@@ -93,9 +96,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/pangyo` | **Phase 2 Slice 2 — multi-device sync (D57).** Gate B resolved (human, 24 September 2026): **the lower Leitner box wins a concurrent edit** (D69). Revisioned sync documents with client-side merge, SHA-256 device secrets (D70, ADR 21); `SyncTransport` + `SyncStateStore` ports, `syncNow` and the pairing use cases; the sync backend in `apps/web/src/server` + route handlers; `adapters/sync`; `/settings/sync` and E2E journey 8. Shipped as ordered parts. **All four parts landed; Slice 2 complete**, pending merge. | 24 September 2026 |
+| `dougkeefe/yamoussoukro` → `dougkeefe/phase-2-final-slice` (PR #21) | **Phase 2 Slice 3 — convergence proof + public launch (D57), the last Phase 2 slice.** The sync simulator (tier 5) in `@palier/testing` over the memory server and, in the integration lane, the real route handlers on PGlite; the engine golden record; the one-off mutation check; the remaining gates confirmed; deploy tooling, then the public deploy with the human (Gate C, provisioned together). **All built; deployed at https://palier-virid.vercel.app**, pending merge. | 24 September 2026 |
 
-*(The prior rows — Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -194,44 +197,52 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next: Slice 3, part 1 — the sync simulator** (implementation-plan.md §6.2 tier 5). It is buildable
-now, and it is the largest piece of Slice 3 that needs no human.
+**Slice 3 is built and deployed** (`dougkeefe/yamoussoukro`, PR #21, D73–D78): the sync simulator, the engine
+golden record, the mutation check, every Phase 2 CI gate, and **the public deploy at
+https://palier-virid.vercel.app** (Gate C resolved). **One Phase 2 exit criterion remains, and it is the
+human's act:** sharing the app with a handful of people. When they confirm it, tick it and mark Phase 2
+complete in the status table.
 
-**Slice 2 is complete** (session log, 24 September 2026, `dougkeefe/pangyo`; D69–D72, ADR 21).
+**Next: open Phase 3 with Slice 1, the exam core, no UI.** It needs no human, and it carries two of Phase
+3's four exit criteria.
 
-**Part 1's scope.**
-- **Put the harness in `@palier/testing`**, beside `memorySyncServer`, which already holds the revision
-  semantics the simulator needs:
-  - two or three virtual devices, each a full `syncNow` graph over the memory stores;
-  - one server, either `memorySyncServer` or the Drizzle repository behind the handlers on PGlite (the
-    PGlite variant sits in the integration lane);
-  - a transport wrapper, driven by `seededRandom`, that delays, drops and reorders calls, and can
-    **partition** a device fully.
-- **Scenarios:** random interleavings of answering (`answerItem` over the fixture bank), importing,
-  pairing and syncing, then a heal and a final round of syncs.
-- **Assertions at quiescence:**
-  - every device holds the same attempt set, with none lost and none duplicated;
-  - every device holds the same schedule;
-  - each schedule entry equals the `mergeRecord` fold of its concurrent versions;
-  - `practiceTrend` is identical on every device;
-  - a device offline for a "week" does not overwrite newer work.
-- **Seed counts:** a few hundred seeds in the medium lane, and a large count under `CI_LANE=nightly`.
+**Opening Phase 3 means**, as D57 did for Phase 2: expand the plan's §7 Phase 3 breakdown into this file,
+and group it into slices mirrored in both documents:
+1. the exam core (below);
+2. forms and a bank that can fill them: the factory's form generation, and a baseline bank regenerated
+   with the scripted provider large enough to fill every variant's scored-plus-pilot count. The
+   committed bank has **10 items and 0 forms**, against the smallest variant's 25 scored items; it stays
+   synthetic (D54, D56);
+3. the runner and results UI and E2E journey 3, behind **Gate D** (exam UI direction: whether to adopt
+   PRD §8.4–§8.5 as Gate A adopted §8 for Slice 1);
+4. telemetry and the item-statistics job. The closed pilot is the plan's human decision gate.
 
-**Done looks like:** the Phase 2 exit criterion "sync simulator passes several hundred seeds including
-full partition and heal, no lost or duplicated attempts" is ticked, with its command output, and
-`pnpm verify` plus `verify:medium` are green within their time budgets.
+**Slice 1's scope:**
+- **Per-variant golden fixtures** at every band boundary, both sides of each exact cut, for all four
+  profile variants (exit criterion 1, [R3]). Follow the pattern of `scorer.golden.test.ts`, driven by
+  `Object.entries(profile.variants)`.
+- **An `ExamRunStore` port.** Dexie's v1 schema already declares
+  `examRuns: 'id, formId, startedAt, submittedAt'` (architecture.md §9.1), so there is no schema bump.
+  It needs the memory and Dexie implementations and a contract suite. A run holds its answers, flags
+  and the **elapsed** exam time at each checkpoint, so a resume restores the clock from elapsed time, not
+  from the wall clock.
+- **Use cases in `@palier/app`:**
+  - `startExam(formId)`, `answerExamItem`, `flagExamItem`, `checkpointExam`, `resumeExam`;
+  - `submitExam`, which calls `scoreExam` and records attempts with `mode: "exam"` (kept out of the
+    practice trend, D64);
+  - `rescoreExam`, idempotent (exit criterion 4) and held to it by a property.
 
-**Then the rest of Slice 3:**
-- wire the remaining Phase 2 CI gates: engine golden regression, contract suites, the simulator in the
-  medium lane, and E2E 1/2/6/7/8;
-- the one-off mutation check;
-- the public deploy, behind **Gate C** below.
+  They run over the fixture bank's two forms.
+- **Sync for exam runs:** a fifth `SyncDocType`, with a `mergeRecord` rule (a submitted run beats an
+  in-progress one, write-once, like sessions). **The simulator gains exam actions**, and its oracle an
+  exam-run check.
 
-**Gate C — hosting and database (human, gates the public deploy only).** Someone with the accounts has
-to provision serverless Postgres (§3: "Neon or equivalent") and a Vercel project. The environment needs
-`DATABASE_URL` and a random `RATE_LIMIT_SALT`, and `apps/web/drizzle/` has to be applied at deploy
-(ADR 21). Until then the deployed app works fully offline-first, and its sync routes answer 503, which
-the UI shows quietly.
+**Done looks like:**
+- the four variant goldens, proven to bite;
+- `examRunStoreContract` passing on memory and Dexie;
+- every new use-case branch tested;
+- the simulator green at the medium-lane seed count with exam runs in play;
+- `pnpm verify` and `verify:medium` green.
 
 **Standing human gates (do not self-direct):**
 
@@ -246,7 +257,11 @@ the UI shows quietly.
   Gate B.
 - ~~**The `adapters/sync` `ScheduleEntry` merge (D43)**~~ — **resolved 24 September 2026** as Gate B:
   the lower box wins a concurrent edit (D69).
-- **Gate C — hosting and database provisioning** (above). It gates only Slice 3's public deploy.
+- ~~**Gate C — hosting and database provisioning**~~ — **resolved 24 September 2026**, provisioned with the
+  human: the Vercel project `palier` (dougkeefes-projects) and Neon `palier-db` (Production only). The live
+  URL is https://palier-virid.vercel.app. `docs/deploy.md` is the runbook.
+- **Gate D — exam UI direction** (Phase 3 Slice 3). Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise
+  it first.
 
 Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's table
 before launch) and the name/domain decision in §12.1.
@@ -316,16 +331,19 @@ session-log evidence; nothing is ticked without it.
 - [x] `@palier/app` use cases: `StartSession`, `AnswerItem`, `CompleteSession`, `RunDiagnostic` landed (20–21 September 2026); `ExportData`, `ImportData`, `WipeData` landed (24 September 2026, `dougkeefe/algiers`; D61, D62); `SyncNow` plus the pairing/device/switch/delete-everywhere use cases landed (24 September 2026, `dougkeefe/pangyo`; D69)
 - [x] UI: the whole single-device set **landed** (24 September 2026, `dougkeefe/algiers`; D63–D67), and the sync settings with pairing by code, the stateful header indicator and the background runner (24 September 2026, `dougkeefe/pangyo`; D72)
 - [x] Item reporting control and the GitHub issue path: on every feedback panel, four reason codes, a prefilled issue on the project repository (24 September 2026; E2E-tested)
-- [ ] The sync simulator (tier 5): two/three-device scenarios, seeded faults, convergence assertions
+- [x] The sync simulator (tier 5): two/three-device scenarios, seeded faults, convergence assertions (24 September 2026, `dougkeefe/yamoussoukro`; D76). It found two real sync defects, both fixed at the source (D74, D75), and a trend-order gap (D73)
 - [x] Every real adapter passes its port contract suite — `ids`, `dexie` (all six ports, `SyncStateStore` included), `bank`, `openai` and `sync` (24 September 2026; `pnpm verify` runs every one)
 
 **Exit criteria** (the actual gate)
 
 - [x] Diagnostic → accuracy per band tag with interval → daily session, on two devices paired by code [R1, R4, R10, R14]. Journey 1 covers the diagnostic to accuracy per band with its interval; **journey 8** covers daily sessions on two browser contexts paired by code, with the progress screen reading identically on both (session log, 24 September 2026, `dougkeefe/pangyo`)
 - [x] Full offline operation after first load [R4] — for everything Phase 2 builds: journey 2 (a whole drill session) passes with the network off after one online load, over real IndexedDB and the service-worker-cached bank (session log, 24 September 2026). Mock exams are Phase 3, and their offline run is Phase 3's journey 3
-- [ ] Engine unit tests exhaustive at every boundary, golden fixtures locked
-- [ ] Sync simulator passes several hundred seeds including full partition and heal, no lost or duplicated attempts
+- [x] Engine unit tests exhaustive at every boundary, golden fixtures locked: 100% branch; the practice-record golden beside the exam-band one (both proven to bite); and the one-off mutation check at 404/410 detected, with all 5 survivors equivalent (session log, 24 September 2026, `dougkeefe/yamoussoukro`; D77)
+- [x] Sync simulator passes several hundred seeds including full partition and heal, no lost or duplicated attempts, and the same trend on every device: 400 seeds on the memory server and 100 through the real route handlers on PGlite in the medium lane, and 4,000 + 200 once by hand (session log, 24 September 2026, `dougkeefe/yamoussoukro`; D76)
 - [x] Every adapter passes its port contract suite — `ids`, `dexie` ×6, `bank`, `openai`, `sync`; and `sync` passes it through the real route handlers too, on the memory repository (fast lane) and on PGlite (integration lane). Session log, 24 September 2026, `dougkeefe/pangyo`
+- [x] axe clean and keyboard-complete on onboarding, drill and review, asserted on states [R9]: axe runs on each state in journeys 1, 2 and 4 and on the sync settings, and the drill and review are driven by keyboard. The rerun is in this session's `verify:medium` → Playwright "31 passed" (session log, 24 September 2026, `dougkeefe/yamoussoukro`). Slice 1 first built it (`dougkeefe/algiers`)
+- [x] Lighthouse performance and accessibility both ≥95: median **1.0 / 1.0 on all 9 routes**, max CLS 0, rerun after the security headers (session log, 24 September 2026, `dougkeefe/yamoussoukro`)
+- [~] Deployed publicly and shared with a handful of people — **deployed**, 24 September 2026, at **https://palier-virid.vercel.app** (Vercel project `palier`, Neon Postgres `palier-db`, both provisioned with the human, Gate C). Every production smoke check passed, including a two-device sync round trip over the live database (session log). **"Shared with a handful of people" is the human's act, and is ticked when they confirm it.**
 
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
 carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
@@ -351,8 +369,10 @@ and each slice's *done* live in the plan). Current position: **Slices 1 and 2 co
 - [x] **Gate B — the `ScheduleEntry` merge decision (human, D43).** `updatedAt` / lower Leitner box /
   device-local. Gates all of Slice 2. **Resolved 24 September 2026 (human decision, `dougkeefe/pangyo`): the
   lower box wins a concurrent edit**, and concurrency is detected by a per-document server revision (D69).
-- [ ] **Slice 3 — Convergence proof + public launch.** Sync simulator (tier 5), remaining CI gates +
+- [x] **Slice 3 — Convergence proof + public launch.** Sync simulator (tier 5), remaining CI gates +
   mutation check, full-offline + Lighthouse ≥95 confirmation, public deploy. **Phase 2 complete.**
+  **Done 24 September 2026** (`dougkeefe/yamoussoukro`, PR #21; D73–D78), and deployed at
+  https://palier-virid.vercel.app. Only "shared with a handful of people", the human's act, remains.
 
 ### Phase 3: Exams and item statistics — closed pilot
 
@@ -2198,11 +2218,381 @@ treatment for high-entropy bearer tokens.
   stream (the D71 collision), journey 8 fails with "Expected 19 items answered, Received 13". Six
   attempts were silently lost to the duplicate no-op.
 
+### D73 — the trend is a function of the attempt *set*: ties break by id, and `recent` orders by id everywhere
+**Date:** 24 September 2026 · **Status:** accepted
+
+§6.2 tier 5 asks that "every device computes the same ability estimate from that set". Two things let
+two devices holding the same attempts disagree:
+
+- **`calculateTrend` sorted by `ts` alone.** Its sort is stable, so attempts with equal `ts` kept their
+  input order, and when `TREND_WINDOW` (100) cut inside such a run the result depended on the order a
+  device happened to receive its attempts. A new tier 2 property, "gives the same trend for the same
+  attempts in any order, even when their times tie", failed on its first run. **Fix:** equal instants
+  order by id (a ULID, so by creation). **No golden or unit value moved:** all 179 engine tests passed
+  unchanged, because only a tie inside the window's cut is affected.
+- **`memoryAttemptStore.recent` returned arrival order; `dexieAttemptStore.recent` returns id order.**
+  The contract's "insertion order" case could not tell the two apart, because its ids were appended in
+  order. For a synced attempt, arrival and creation differ. Two contract cases were **added** ("orders
+  recent by id, so an attempt synced in late sorts by when it was made" and "keeps the highest ids when
+  recent is capped"); Dexie already passed both, the memory store now sorts. None was weakened. The
+  port's doc comment now states the order.
+
+In production (Dexie) neither could bite on its own today, since Dexie orders by id and real `ts` values
+rarely tie to the millisecond; both are fixed because the simulator's trend property depends on them.
+
+**Ids compare by code unit, never `localeCompare`** (changed after review). Collation varies by locale:
+Danish sorts "AA" after "Z", for example, so two devices in two locales could disagree, and IndexedDB
+orders keys by code unit. A contract case, "orders recent by code unit, as IndexedDB orders keys", holds
+both stores to it.
+
+### D74 — a pair redeem that fails in transit forgets the device's identity and ledger
+**Date:** 24 September 2026 · **Status:** accepted. **Found by the sync simulator** (seed 74, 3 devices)
+
+A redeem can succeed on the server and lose its answer. The server has then moved the device's secret
+into the new account (and dropped the old one if it is now empty), while the device still believes its
+old identity. Every later sync went into the new account **from the old account's watermark and ledger**:
+the device pushed its own history there, but never received what the new account held below that
+watermark, and every sync reported success. That is permanent, silent divergence from one lost response.
+The user saw "pairing failed" and might reasonably not retry.
+
+**Fix: a failed redeem changes only a flag, and the next sync asks the server.** On
+`SyncUnavailableError` from the redeem, `pairDevice` sets a new `SyncState` field, `accountUnconfirmed`, and
+changes nothing else. The next `syncNow` calls `registerDevice` first. Registration is idempotent per
+secret (D69 #7), so the server answers with the account the device is really in:
+- **Same account:** the flag clears, and the sync carries on from its ledger.
+- **A different account:** the ledger resets, and the exchange starts from watermark 0.
+
+A device with no identity and the flag set does not wait for a completed session, since pairing was a
+request to sync. Dexie reads a state row saved before the field existed as `false`.
+
+- **Why not the first version of this fix.** The first version reset the ledger and forgot the identity on
+  every failed redeem. Review before merge showed that the common failures (offline, a 429 from the pair
+  rate limit, a 5xx) never reach the server. The reset device then treated every record as a concurrent
+  edit, so the lower box and the local setting won, and **other devices' newer work was rolled back**.
+  The reviewer reproduced it; `sync-account.test.ts` "rolls nothing back when a redeem never reached the
+  server" pins it, and fails against the first version.
+- **Edge accepted:** a flagged device whose secret was revoked meanwhile re-registers into a fresh account
+  instead of being told "removed". It needs two rare failures together, and the result is visible in the
+  device list.
+- **The app's `fakeServer` was not idempotent on registration**, although the port promises it. It now
+  is, and every existing test passed unchanged. New test: `sync-account.test.ts`, "learns on its next
+  sync which account it is in when a redeem's answer was lost" (it failed first).
+- **Proven to bite:** with the flag removed, regression seed 74 fails. With the first version restored,
+  the two new `sync-account` tests fail.
+- **Simulator consequence (D76):** the heal phase now syncs every device once *before* comparing accounts.
+  Otherwise a device whose failed redeem the server *did* apply would join that account only on its next
+  sync, after the heal had already judged it paired (seeds 195 and 339, before the change).
+
+### D75 — sync settles against the live record, not the snapshot it read before the network call
+**Date:** 24 September 2026 · **Status:** accepted. **Found by the sync simulator** (seed 7, 2 devices)
+
+The background runner can sync mid-drill (a `focus` trigger). `syncNow` read every record, waited on the
+network, and then decided "clean, so take the server's copy" against that **snapshot**. An answer made in
+the gap was overwritten: its schedule change vanished, although its attempt survived. With Gate B that
+could hide a failure. A lower box made on the device gave way to the other device's higher one, so an
+item the user just missed would not come back for review.
+
+**Fix:** `settle` re-reads the device's current copy of each pulled record (`liveRecords` in
+`sync/records.ts`: `schedule.get` and `settings.get`, plus one `sessions.all()` per pulled page or push
+batch, since `SessionStore` has no by-id read. Review caught that the first version read all sessions once
+per session document, O(N²) on a large first pull). A copy that changed
+since the snapshot counts as a local edit, so it merges by Gate B instead of being replaced. Attempts are
+immutable and are not re-read. Three tests were added to `sync-now.test.ts`, one each for a schedule entry,
+a setting and a session changed mid-sync. All three failed before the fix.
+
+**Residual, recorded rather than closed:** the window is now one store read wide rather than a network round
+trip: an answer landing *between* `settle`'s read and its write could still be overwritten. Closing it
+needs a transaction spanning both, which the store ports do not offer. **Revisit when** a store port gains
+transactions, or the simulator's interleaving model reaches store-operation granularity (see D76).
+**Proven to bite:** with the re-read removed, seed 7 and three others fail.
+
+### D76 — the sync simulator: where it lives, what it asserts, and what it cannot see
+**Date:** 24 September 2026 · **Status:** accepted
+
+- **Where.** `packages/testing/src/simulator/` (network, device, oracle, run, seeds), exported from the
+  root entry and never from `./in-memory`. The profile is passed in, because `@palier/testing` has no
+  dependency on `@palier/content`. The real-server variant lives in `apps/web`
+  (`src/app/api/simulator.integration.test.ts`), because testing may not import `apps/web`. It drives each
+  device through `httpSyncTransport` → the route files → the handlers → Drizzle → PGlite, with a separate
+  `x-forwarded-for` per device so the per-IP rate limits apply as they would for separate browsers.
+- **The devices are the real use cases** (`startSession`, `answerItem`, `completeSession`, `syncNow`,
+  `requestPairCode`, `pairDevice`, `setSyncEnabled`, `exportData`, `importData`, `practiceTrend`) over
+  the memory stores. Each device has its own id stream, 2^20 apart (D71), and its own clock skew of up to
+  ±3 hours. Like the app's `SyncRunner`, a device runs at most one sync at a time, and study continues
+  while a background sync is in flight.
+- **The network holds each call until a seeded scheduler delivers it**, because the memory server acts when
+  called. It reorders across devices, drops before the server (10%), drops the response after the server
+  has acted (10%), and partitions. The server runs each delivered call to completion, so a run is a total
+  order and replays exactly from its seed.
+- **Four phases, each ending in heal → pair everyone → sync to quiescence → check:**
+  1. **chaos**: all devices at once, with every action and faults;
+  2. **concurrent edits** from a converged state, every device partitioned;
+  3. **study during the device's own sync**;
+  4. **a week offline**: the others sync once a day, *not* to quiescence, so a device's own echo is still
+     in flight when it answers again.
+- **Checks:**
+  - no attempt lost;
+  - none duplicated;
+  - every store identical;
+  - `practiceTrend` identical;
+  - no schedule entry that no answer wrote;
+  - after each partition, every record equals `expectedAfterHeal(base, sides)`. That is: changed on one
+    side means that side's copy (the week-offline property); changed on several means their
+    `mergeRecord` fold (Gate B); a setting changed on several may be any of them, since the last to push
+    wins.
+
+  A lone device's side is built from **what its answers wrote**, not from its store afterwards, because a
+  sync that overwrote an answer (D75), or a device's own echo overwriting its newer box (D69 #5), would
+  otherwise be hidden in the snapshot. That change is what made the ledger-skip revert bite. The first
+  design missed it.
+- **Lanes:**
+
+  | Lane | Seeds |
+  | --- | --- |
+  | Fast (`testing` project) | 16 × two devices + 16 × three, plus the regression seeds and proofs that each check bites |
+  | Medium (`integration-testing`, new gated project; `test:integration` runs it) | 400 on the memory server, and 100 through the real handlers on PGlite |
+  | Nightly (`CI_LANE=nightly`) | 100,000 and 2,000 |
+
+  `PALIER_SIM_SEEDS` and `PALIER_SIM_SEEDS_PGLITE` override the counts. Measured: about 20 ms a seed in
+  memory and about 110 ms on PGlite.
+- **What it cannot see (honest limits):**
+  - interleavings finer than a network call: store operations resolve at once, so an answer never lands
+    between two store calls inside `settle` (D75's residual);
+  - merges between two devices both at home in the three-device week phase, which are legitimate and
+    not checked against answers;
+  - device removal, `deleteEverywhere` and tombstones, which it does not exercise;
+  - a failing seed replays the chaos script as it stood, so each fixed defect also keeps its own named
+    unit test in `@palier/app`.
+
+### D77 — the one-off mutation check: Stryker on the command runner, run in place; 14 gaps closed, 5 equivalents
+**Date:** 24 September 2026 · **Status:** accepted
+
+§6.2 says: "run it once at the end of phase 2, act on what it finds, and drop it from the schedule if it
+finds nothing."
+- **Tooling:** `@stryker-mutator/core` and `@stryker-mutator/vitest-runner` 10.0.0 are root
+  devDependencies. §6.1 names Stryker, and nothing present mutates code, so they replace nothing. There
+  is a root `mutation` script and `stryker.config.json`, in JSON so the default-export exemption list is
+  untouched. `reports/` and `.stryker-tmp/` are gitignored. It is **in no CI lane.**
+- **Two deviations from the obvious setup, both forced:**
+  - **The command runner** (`pnpm exec vitest run --project=engine`), not the vitest runner. Under the
+    root multi-project config, the vitest runner never activated a mutant: 8.35% and "0 tests ran" on
+    seven of eight files, identically with coverage analysis on or off.
+  - **`inPlace: true`**, because Stryker's sandbox copy breaks pnpm's nested workspace links. Stryker
+    restores the files afterwards, and `git status` confirmed that after every run.
+- **First real run: 95.09%** (387 killed of 407, 20 survived, 5 min 24 s). Each survivor was either
+  given a test naming the behaviour, or recorded here as equivalent:
+  - **Closed, 14:**
+    - both error `name`s;
+    - `resolveBand` ordering a cut table given highest-first;
+    - `pointsToBand` at exactly the cut (null, not 0);
+    - the taper at exactly three days, and the mock-exam advice at exactly 24 hours;
+    - the scheduler's refusal message;
+    - the 14-day exclusion at exactly 14 days;
+    - both `subSkillBreakdown` sort keys deciding alone;
+    - an orphaned attempt not taking a trend window slot;
+    - `weakestSubSkills` at exactly its 50-answer window.
+  - **Equivalent, 5, each kept as written:**
+    - `testDate !== undefined`: with no date, the NaN arithmetic already disables the taper;
+    - `mode: "practice"` in the planner and `?? "practice"` in the selector: both are only ever
+      compared with `"diagnostic"`;
+    - `chosen !== null &&` in the scorer: scoring a null response is false anyway;
+    - `new Array(n)` against `new Array()`: filled by index either way.
+- **Second run: 98.54%** (403 killed, 1 timeout, 6 survived, 4 min 57 s). The sixth survivor was a
+  new-visible gap: the taper's review cap was never exceeded by the due reviews in any test. It now has a
+  test ("caps the reviews while tapering…"), proven by applying that mutant by hand. So **404 of 410
+  mutants are detected, and all 5 survivors are equivalent.**
+- **Found alongside:** `weakestSubSkills` windowed on `ts` alone, the same gap D73 closed in the trend. A
+  permutation property failed once its generator actually passed the 50-per-sub-skill window. The fix
+  is the same id tie-break. **No golden value moved.**
+- **Keep it, on demand:** it found real gaps, so per §6.5 it runs again after any engine rewrite
+  (`pnpm mutation`, about 5 minutes). It stays out of every lane.
+
+### D78 — deploy tooling: migrations at a production build only, baseline headers now, the retention jobs in Phase 7
+**Date:** 24 September 2026 · **Status:** accepted
+
+Gate C was provisioned together with the human (their choice). Everything that did not need their accounts
+was built first:
+
+- **Migrations apply at deploy, and only a production deployment or a person applies them.**
+  - `apps/web/src/server/migrate.ts` decides and applies. `vercel.json`'s build command runs it after
+    `next build`, through `scripts/db-migrate.mjs`.
+  - It **skips** with no `DATABASE_URL`, and for any `VERCEL_ENV` other than `production`. So a preview
+    cannot touch the production schema, even if one is misconfigured with a database. Off Vercel, a
+    person with `DATABASE_URL` set has asked for it.
+  - A failed migration fails the deploy, and the old deployment stays live.
+  - Migrations must therefore stay backward-compatible (`docs/deploy.md`).
+  - Rejected: migrating on the server's first request (a race between cold starts, and a schema change
+    under live traffic), and migrating by hand only (every future schema change becomes a human step
+    that will be forgotten).
+  - `migrate.ts` has no relative imports, so Node 22's type stripping runs it: **no new dependency and
+    no build step.** Its decision and orchestration are unit-tested. `applyWithPostgres` has no branch,
+    and its first real run is the first production deploy (session log).
+- **Baseline security headers on every response now, the strict CSP later.** Architecture §12's HSTS,
+  `nosniff`, `Referrer-Policy: no-referrer` and a microphone-on-self-only `Permissions-Policy` are header
+  config with no runtime cost. A public deploy should not ship without them. They are asserted on the
+  production server (`e2e/production.spec.ts`). The strict CSP needs nonces for Next's inline scripts
+  plus tier 11's check on the built output, so it stays Phase 7's. Lighthouse is unchanged at 1.0/1.0.
+- **The 90-day tombstone purge and the 180-day inactive-account deletion move to Phase 7** (ADR 21 left
+  them to "Slice 3 or Phase 7"). Nothing creates a tombstone yet (no record type has a per-record delete),
+  and no account can reach 180 days of inactivity before Phase 7. Building a scheduler now would be a job
+  with nothing to do. The plan's Phase 7 retention work (`implementation-plan.md` §7) is where both land.
+- **`RATE_LIMIT_SALT` is required in production, in the runbook rather than in code.** `db.ts` falls back
+  to a random salt per process, which on serverless means a salt per instance, so the per-IP limits would
+  not hold across instances. `docs/deploy.md` makes setting it a step of Gate C. Making a missing salt
+  fail loudly is left to Phase 7's hardening, because failing the whole sync service over it would trade
+  a weaker limit for an outage.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/yamoussoukro` → `dougkeefe/phase-2-final-slice` (Gate C: the public deploy)
+
+Conductor renamed the branch to `dougkeefe/phase-2-final-slice` when it was pushed as PR #21; the entries
+below keep the old name. CI on PR #21 passed: both fast and both medium lanes.
+
+- **Provisioned with the human, each step confirmed before it ran:**
+  - the Vercel project `palier` in dougkeefes-projects: root directory `apps/web`, Next.js, Node 22.x, and
+    connected to GitHub, so merging to `main` deploys production;
+  - Neon `palier-db` through the Marketplace, free plan, **Production only**;
+  - `RATE_LIMIT_SALT` generated and piped straight into Production, never printed.
+- **The first deployment went to production, not preview**, because Vercel assigns a project's first
+  deployment to production. It runs PR #21's green-CI code, and the build applied the migrations:
+  "Applying migrations from /vercel/path0/apps/web/drizzle. / Migrations applied." That was the first real
+  run of `applyWithPostgres`.
+- **Smoke checks on https://palier-virid.vercel.app, all passing:**
+  - `/en` → 200 with HSTS, `nosniff`, `no-referrer` and the Permissions-Policy;
+  - `/api/sync` with no bearer → **401**, so the database is wired;
+  - `/sw.js` → 200, `no-cache, no-store, must-revalidate`;
+  - the bank manifest → 200;
+  - a scripted two-device round trip through `httpSyncTransport` against the live database:
+    ```
+    paired into one account: true
+    A pushed: 1 accepted, 0 conflicts
+    B pulled: setting:smoke@1
+    devices: 2
+    after delete, B gets: SyncUnauthorizedError
+    ```
+    The test account deleted itself.
+  - Lighthouse on the live URL (desktop, 3 runs each): `/en` and `/fr/practice/reading` median
+    performance **1.0** and accessibility **1.0**.
+- **CLI side effects, caught and undone:**
+  - `vercel link` appended a short-lived `VERCEL_OIDC_TOKEN` to `.env.local`, which is a symlink to the
+    main checkout's file. The two appended lines were removed, and the existing contents were untouched.
+  - `vercel integration add neon` installed vendor agent skills into the working tree. They were deleted
+    and never committed.
+  - `docs/deploy.md` records both, plus the first-deploy-is-production rule.
+- **Changed:** `apps/web` `engines.node` from `>=22.18` to `22.x`. The range made Vercel choose Node 24 and
+  warn that it would auto-upgrade majors.
+- **Left for the human:** pair two real browsers on the live URL, then share it with a handful of people.
+  That ticks the last Phase 2 exit criterion.
+
+### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3: fixes from the pre-merge review)
+
+An independent review of the branch found one serious defect, in this branch's own D74 fix, and four
+lesser points. All are fixed:
+- **D74 revised:** a failed redeem now sets `accountUnconfirmed`, and the next sync confirms through
+  idempotent registration. The first version rolled back other devices' work after an ordinary offline
+  redeem, which the reviewer reproduced. Two new tests fail against the first version.
+- **D73:** ids compare by code unit, not `localeCompare`, with a contract case added.
+- **D75:** one sessions read per page, not per document.
+- `apps/web` pins `engines.node >=22.18`, for the type-stripped migration entry.
+- **D76:** the heal phase settles unconfirmed pairings before comparing accounts (seeds 195 and 339).
+- **Evidence:**
+  - `pnpm verify` → green, 1413 tests (8 todo).
+  - `PALIER_SIM_SEEDS=3000` → clean.
+  - The simulator's fast tests → 83 passed.
+  - With the flag removed, regression seed 74 fails.
+
+### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, parts 4 and 5a: the gates confirmed, the deploy tooling)
+
+- **Built** (D78):
+  - `src/server/migrate.ts` + `scripts/db-migrate.mjs` + `vercel.json`: migrations at a production
+    build only;
+  - baseline security headers on every response, asserted on the production server;
+  - the runbook `docs/deploy.md`, linked from `docs/README.md` and the root `CLAUDE.md`.
+- **Gates rerun, all green:**
+  - `pnpm build` → exit 0.
+  - `pnpm verify:medium` → **50 s** of its 240 s budget: integration "39 passed" (both simulator
+    variants among them), Playwright "31 passed" (the two new header tests among them).
+  - `pnpm --filter @palier/web bundle-size` → "165.7 KB of 180.0 KB … within budget", unchanged.
+  - `pnpm --filter @palier/web lighthouse` → 9 URLs × 5 runs, median performance **1.0** and accessibility
+    **1.0** on every route, max CLS 0.
+  - `pnpm verify` → green, 1405 tests (8 todo), boundaries clean (297 and 130 modules).
+- **Every Phase 2 CI gate §7 names is now live:**
+  - engine golden regression and the port contract suites, in the fast lane;
+  - the sync simulator and PGlite integration, in the medium lane (`test:integration`);
+  - E2E journeys 1, 2, 6, 7 and 8, in the medium lane's Playwright run;
+  - the mutation check, run once (D77).
+
+### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, part 3: the one-off mutation check)
+
+- **Ran** Stryker on `@palier/engine` (D77): first 95.09%, then 98.54% after closing 14 gaps, then one
+  more closed by hand. **404 of 410 mutants are detected; the 5 survivors are equivalent**, and each is
+  named in D77. The exit criterion "engine unit tests exhaustive at every boundary, golden fixtures
+  locked" is ticked.
+- **Also fixed:** `weakestSubSkills`' tie-break (D73's gap, in the planner's targeting). Its permutation
+  property failed first.
+- **Evidence:**
+  - `pnpm mutation` → "All files 95.09" (5 min 24 s); after the tests → "All files 98.54" (4 min 57 s);
+    `git status` clean on `packages/engine/src` after each in-place run.
+  - `pnpm verify` → green, 1396 tests (8 todo), boundaries clean (297 and 127 modules).
+
+### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, part 2: the engine golden record)
+
+- **Built:** `packages/engine/src/__fixtures__/practice-record.golden.json`, the §5 "recorded set of
+  item responses with expected accuracy figures, intervals, schedule states". It holds 12 reading items
+  (A×3, B×5, C×4) and 120 answers, so the 100-attempt window cuts the history, plus the outputs:
+  - the Leitner state after every answer;
+  - the trend (A insufficient; B and C estimated, with Wilson intervals);
+  - one seeded `selectItems`;
+  - one seeded `planDay`.
+
+  Three golden tests replay it, beside the existing exam-band golden. They were recorded after D73's
+  tie-break, so no existing value moved.
+- **Checked independently, not only recorded:** all 120 Leitner rows were recomputed in Python from the
+  profile's `[1, 3, 7, 21]` (0 mismatches). The window was recounted by hand (A 26, B 41/27 correct, C
+  33/13), and both estimated intervals match an independent Wilson formula to 12 decimal places.
+- **Proven to bite, each restored afterwards:**
+  - `TREND_WINDOW` 100 → 99 fails the trend golden;
+  - `WEAKEST_WEIGHT` 3 → 1 fails both selection goldens;
+  - dropping `slow` from the Leitner hold rule fails 9 of 120 schedule rows;
+  - `RECENT_DAYS` 14 → 13 moves nothing, correctly, since the recent answers are 6 days old.
+- **Evidence:** `pnpm verify` → green, 1382 tests (8 todo), boundaries clean (296 and 127 modules).
+
+### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, part 1: the sync simulator, and the two defects it found)
+
+The Phase 2 exit criterion "sync simulator passes several hundred seeds including full partition and heal,
+no lost or duplicated attempts" is **met**.
+
+- **Built** (D76): `packages/testing/src/simulator/` and its PGlite twin in `apps/web`. Also a new gated
+  Vitest project, `integration-testing`, which `test:integration` now runs.
+- **Found and fixed at the source.** Each fix has a named unit test that failed first:
+  - **D74**: a lost pair-redeem answer left a device syncing into its new account from its old watermark,
+    so it silently never received the account's older records (seed 74, 3 devices).
+  - **D75**: an answer made during the device's own background sync was overwritten by the pull (seed 7,
+    2 devices).
+  - **D73**: the trend was not a function of the attempt set. There was a tie-break gap in
+    `calculateTrend`, and a `recent` order that differed between the memory store and Dexie. **No golden
+    value moved.**
+- **A first oracle that could not see a class of bug, and its fix:** reverting the D69 #5 ledger skip did
+  *not* fail the first version, because quiesce rounds consumed every echo and sides were snapshots taken
+  after any loss. Sides are now built from answer writes, and the week phase syncs once a day. After that,
+  the revert failed 7 of 16 two-device seeds.
+- **Evidence:**
+  - `pnpm verify` → green: 1259 tests (8 todo); boundaries clean (292 and 127 modules); thresholds held;
+    ~21 s wall.
+  - `pnpm test:integration` → 5 files, 39 tests, **13.0 s**, which includes 400 memory seeds (~9 s) and
+    100 PGlite seeds (~11 s) in parallel projects.
+  - By hand: `PALIER_SIM_SEEDS=4000` → clean (78 s); `PALIER_SIM_SEEDS_PGLITE=200` → clean (21 s).
+  - **Proven to bite, each restored afterwards:**
+    - ledger skip removed → 7 two-device seeds fail;
+    - D74 fix removed → regression seed 74 fails;
+    - D75 re-read removed → seeds 7 and 12, in both device counts, plus both regression seeds, fail;
+    - colliding id streams (`idSpacing: 1`) → `lost-attempt`;
+    - a server that acknowledges and drops one push → `lost-attempt`.
 
 ### 24 September 2026 — `dougkeefe/pangyo` (Slice 2, part 4: the sync UI and journey 8 — Slice 2 complete)
 

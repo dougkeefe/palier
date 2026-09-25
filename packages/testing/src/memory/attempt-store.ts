@@ -19,9 +19,18 @@ export const memoryAttemptStore = (): AttemptStore => {
       attempts.push(attempt);
       return Promise.resolve(true);
     },
+    // By id, which for a ULID is when the attempt was made — not when this device
+    // happened to receive it. A synced attempt can arrive long after it was answered;
+    // Dexie's `sortBy("id")` orders the same way (by code unit, not by locale), and the
+    // contract holds both to it.
     recent: (skill: Skill, n: number) =>
       Promise.resolve(
-        n <= 0 ? [] : attempts.filter((a) => a.skill === skill).slice(-n),
+        n <= 0
+          ? []
+          : attempts
+              .filter((a) => a.skill === skill)
+              .sort((a, b) => Number(a.id > b.id) - Number(a.id < b.id))
+              .slice(-n),
       ),
     since: (t: ISO) =>
       Promise.resolve(attempts.filter((a) => Date.parse(a.ts) >= Date.parse(t))),

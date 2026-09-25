@@ -221,3 +221,15 @@ describe("selectItems, diagnostic mode", () => {
     expect(selectItems(base, pool, [], seq([0, 0]), NOW).map((p) => p.id)).toEqual([itemId("keep")]);
   });
 });
+
+/** Found by the one-off mutation check (progress.md D77): the exclusion window's edge, exactly. */
+describe("selectItems, the 14-day edge", () => {
+  const base = { skill: "reading", lang: "fr", targetBand: "C", count: 10, mode: "practice" } as const;
+
+  it("still excludes an item attempted exactly 14 days ago", () => {
+    const pool = [item("fresh", "main-idea", "C"), item("edge", "inference", "C")];
+    const attempts: Attempt[] = [anAttempt({ itemId: itemId("edge"), skill: "reading", ts: daysAgo(14) })];
+
+    expect(selectItems(base, pool, attempts, seq([0.1]), NOW).map((p) => p.id)).toEqual([itemId("fresh")]);
+  });
+});

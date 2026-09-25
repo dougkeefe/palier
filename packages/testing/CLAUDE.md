@@ -14,7 +14,13 @@ The sync pieces are:
 - `syncTransportContract` and `syncStateStoreContract`;
 - `syncHandlers`, which serves a memory server over the sync wire protocol for the HTTP adapter. It is
   a deliberate second copy of the route handlers' protocol, checked by `apps/web` running the same
-  contract against the real handlers (progress.md D69).
+  contract against the real handlers (progress.md D69);
+- **the sync simulator** (`src/simulator/`, tier 5, progress.md D76): `runSyncSimulation` drives two or
+  three `simulatedDevice`s — the real `@palier/app` use cases over the memory stores — through a seeded
+  `simulatedNetwork` that holds, reorders, drops and partitions calls, then checks the `oracle.ts`
+  properties after every heal. The server is a parameter (`memorySimulatedServer`, or the real handlers
+  on PGlite from `apps/web`), and so is the exam profile. `SEEDS_PER_LANE` and `REGRESSION_SEEDS` live in
+  `seeds.ts`; the volume run is `simulator.integration.test.ts` in the gated `integration-testing` project.
 
 Test infrastructure as a package, so a use case test runs in milliseconds with no mocking framework.
 
@@ -40,7 +46,7 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
   `@palier/adapters/ids` is held to the same contract. `SyncTransport` and `SyncStateStore`
   likewise, D69.)
 
-## The four mistakes most likely to be made here
+## The five mistakes most likely to be made here
 
 1. **A fixture builder setting an optional key to explicit `undefined`.** Omit it —
    `exactOptionalPropertyTypes` and the JSON round-trip test both object (D14).
@@ -50,4 +56,8 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
    `./in-memory`, `./msw/browser`, `./setup`.
 4. **Importing vitest, msw, PGlite or Node core from anything `./in-memory` reaches.** That
    subpath is what `apps/web`'s composition root bundles into the browser (D59). A test walks
-   its module graph and fails on any package but `@palier/app`/`@palier/domain`.
+   its module graph and fails on any package but `@palier/app`/`@palier/domain`. The simulator
+   uses Node's `setImmediate`, so it is exported from the root entry only.
+5. **Snapshotting a simulated device's store to judge its own edits.** A sync that overwrote an
+   answer leaves the store looking consistent. A lone device's side of a partition is what its
+   answers wrote (`sideOf`), which is why the simulator records answer writes (D76).

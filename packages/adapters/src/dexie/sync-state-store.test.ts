@@ -26,6 +26,13 @@ describe("dexieSyncStateStore", () => {
     const store = dexieSyncStateStore(new PalierDb(dbName()));
     await store.update({ watermark: 2 });
 
-    expect(Object.keys(await store.state()).sort()).toEqual(["enabled", "identity", "lastSyncedAt", "watermark"]);
+    expect(Object.keys(await store.state()).sort()).toEqual(["accountUnconfirmed", "enabled", "identity", "lastSyncedAt", "watermark"]);
+  });
+
+  it("reads a state row saved before a field existed with that field's default", async () => {
+    const db = new PalierDb(dbName());
+    await db.syncMeta.put({ id: "state", identity: null, watermark: 3, enabled: true, lastSyncedAt: null } as never);
+
+    expect(await dexieSyncStateStore(db).state()).toMatchObject({ watermark: 3, accountUnconfirmed: false });
   });
 });

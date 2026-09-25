@@ -1,10 +1,12 @@
 import type {
   DeviceId,
+  DeviceIdentity,
   DeviceSummary,
   KeyVault,
   SyncStateStore,
   SyncTransport,
 } from "../ports/index.js";
+import { SyncUnavailableError } from "../ports/index.js";
 import type { ProgressStores } from "../sync/records.js";
 import { type SyncNowDeps, type SyncNowRequest, type SyncOutcome, syncNow } from "./sync-now.js";
 import { wipeData } from "./wipe-data.js";
@@ -42,14 +44,29 @@ export const requestPairCode = async (
  * device"). The ledger is forgotten first: nothing this device agreed with its old
  * account holds in the new one, so its whole local set is offered and merged with
  * what the account already has. Local progress is never discarded by pairing.
+ *
+ * **A redeem that fails in transit may still have happened** — the server moved this
+ * device to the new account and only its answer was lost — or may never have reached the
+ * server at all, which is far more common (offline, rate-limited, a 5xx). The device
+ * cannot tell which, so it changes nothing but a flag, `accountUnconfirmed`, and its next
+ * sync asks the server: registration is idempotent per secret, so the answer is the
+ * account the device is really in, and the ledger resets only if that changed (progress.md
+ * D74, found by the sync simulator). Resetting on every failure would roll back other
+ * devices' newer work, since every record would then merge as a concurrent edit.
  */
 export const pairDevice = async (
   request: SyncNowRequest & { readonly code: string },
   deps: SyncNowDeps,
 ): Promise<SyncOutcome> => {
-  const identity = await deps.transport.redeemPairCode(request.code, request.label);
+  let identity: DeviceIdentity;
+  try {
+    identity = await deps.transport.redeemPairCode(request.code, request.label);
+  } catch (error) {
+    if (error instanceof SyncUnavailableError) await deps.syncState.update({ accountUnconfirmed: true });
+    throw error;
+  }
   await deps.syncState.resetLedger();
-  await deps.syncState.update({ identity, enabled: true });
+  await deps.syncState.update({ identity, enabled: true, accountUnconfirmed: false });
   return syncNow(request, deps);
 };
 

@@ -162,6 +162,9 @@ export const fakeServer = (): FakeServer => {
       };
       return {
         registerDevice: (label) => {
+          // Idempotent per secret, as the port promises (D69): a live device learns its account.
+          const known = devices.get(secret);
+          if (known !== undefined) return Promise.resolve({ accountId: known.accountId, deviceId: deviceId(known.deviceId) });
           const accountId = `account-${String(++nextId)}`;
           accounts.set(accountId, { revision: 0, docs: new Map() });
           return Promise.resolve(join(accountId, label));

@@ -85,13 +85,17 @@ export const calculateTrend = (
   const bandOf = new Map<ItemId, TargetBand>(items.map((item) => [item.id, item.targetBand]));
 
   // The skill's attempts, most recent first (`ts` is an ISO-8601 instant, so it
-  // sorts lexically), joined to their band tag. An attempt whose item is not in
+  // sorts lexically), with equal instants ordered by id — a ULID, so by creation —
+  // so the window is a function of the attempt *set*, not of the order a device
+  // happened to receive it in (progress.md D73). The id comparison is by code unit,
+  // as IndexedDB orders keys, never `localeCompare`: collation varies by locale, and
+  // two devices in two locales must still agree. Then joined to their band tag. An attempt whose item is not in
   // the bank drops out here rather than consuming a window slot, then the window
   // caps what remains. This is the only place the join can miss, so the empty
   // arm is exercised by the "item not in bank" test.
   const window = attempts
     .filter((a) => a.skill === skill)
-    .sort((a, b) => b.ts.localeCompare(a.ts))
+    .sort((a, b) => b.ts.localeCompare(a.ts) || Number(b.id > a.id) - Number(b.id < a.id))
     .flatMap((a) => {
       const band = bandOf.get(a.itemId);
       return band === undefined ? [] : [{ band, correct: a.correct }];

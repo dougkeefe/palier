@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "node scripts/prepare-public.mjs && next dev",
     "build": "node scripts/prepare-public.mjs && next build",
+    "db:migrate": "node scripts/db-migrate.mjs",
     "start": "next start",
     "check-types": "next typegen && tsc --noEmit",
     "bundle-size": "node scripts/check-bundle-size.mjs",

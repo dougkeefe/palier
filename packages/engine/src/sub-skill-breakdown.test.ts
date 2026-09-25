@@ -65,3 +65,18 @@ describe("subSkillBreakdown", () => {
     expect(subSkillBreakdown("reading", [], [])).toEqual([]);
   });
 });
+
+/** Found by the one-off mutation check (progress.md D77): the two sort keys, each deciding alone. */
+describe("subSkillBreakdown ordering", () => {
+  it("puts the weaker sub-skill first even when it has fewer answers", () => {
+    const { items, attempts } = merge(on("main-idea", 4, 0), on("inference", 10, 5));
+
+    expect(subSkillBreakdown("reading", attempts, items).map((t) => t.subSkill)).toEqual(["main-idea", "inference"]);
+  });
+
+  it("puts the sub-skill with more answers first when two are equally weak, before the name decides", () => {
+    const { items, attempts } = merge(on("main-idea", 8, 4), on("inference", 4, 2));
+
+    expect(subSkillBreakdown("reading", attempts, items).map((t) => t.subSkill)).toEqual(["main-idea", "inference"]);
+  });
+});

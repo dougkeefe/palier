@@ -26,9 +26,22 @@ belongs in `@palier/app`.
 - **`Attempt` carries no `subSkill` or `targetBand`** — any calculation keyed on those joins
   attempts to items by id (`calculateTrend` takes `items` for exactly this), and ignores an
   attempt whose item is absent from the bank.
+- **A calculation over attempts is a function of the attempt set, not of its order.** Two synced
+  devices hold the same attempts in different orders, and must show the same trend (§6.2 tier 5).
+  `calculateTrend` and `weakestSubSkills` break equal `ts` by id, and a property holds each to
+  permutation invariance (progress.md D73, D77). Any new windowed or order-sensitive calculation
+  needs the same tie-break.
+- **Mutation-checked, on demand.** `pnpm mutation` runs Stryker over `src/` (D77). Run it after
+  any engine rewrite, and give every survivor a test or a written reason it is equivalent. It
+  is in no CI lane.
 - **Golden fixtures are the contract** (§5). Recorded outputs live in `src/__fixtures__/*.json`;
   a change that moves a golden value fails its test and must be explained in the PR, never
-  regenerated to make the test pass.
+  regenerated to make the test pass. Two records: `exam-band-boundaries.golden.json` (the scorer
+  at every cut, `scorer.golden.test.ts`) and `practice-record.golden.json`, 120 recorded answers
+  with the Leitner state after each (`scheduler.golden.test.ts`), the trend with its Wilson
+  intervals (`trend-calculator.golden.test.ts`), and one seeded selection and day plan
+  (`selector.golden.test.ts`). They run in the fast lane's `engine` project. That is the
+  "engine golden regression" gate (§7 Phase 2). Per-variant exam goldens are Phase 3's.
 - **Small enough for one person to hold in their head**, and every calculation explainable
   to a user in one sentence (`architecture.md` §7). A change that breaks either property
   needs an ADR.

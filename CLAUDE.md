@@ -83,6 +83,7 @@ the app can import them by package name. It appears in no §3.1 arrow. No packag
 | API routes, performance budgets | `architecture.md` §10, §13 |
 | The content pipeline, its metrics, its descoping options | `content-factory.md`, §6 and §9 especially |
 | A prompt for the next session, or the shape of a review | `docs/prompts.md` |
+| Deploying: environment variables, migrations at deploy, smoke checks, rollback | `docs/deploy.md` |
 | Anything under `apps/web` | `apps/web/AGENTS.md`, maintained by `next dev` |
 
 ## Verify

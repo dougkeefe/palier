@@ -18,7 +18,8 @@ const ledgerId = (entry: LedgerEntry): LedgerRow["id"] => `${LEDGER_PREFIX}${ent
 const toState = (row: SyncStateRow | undefined): SyncState => {
   if (row === undefined) return INITIAL_SYNC_STATE;
   const { id: _id, ...state } = row;
-  return state;
+  // A row written before a field existed reads that field's default (D74's flag, for one).
+  return { ...INITIAL_SYNC_STATE, ...state };
 };
 
 const toEntry = (row: LedgerRow): LedgerEntry => ({

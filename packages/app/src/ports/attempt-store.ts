@@ -17,6 +17,12 @@ import type { ISO } from "./time.js";
  * (progress.md D44). Like `ScheduleStore.get` (D38), it is a signal a use case's
  * correctness needs and `Promise<void>` could not supply.
  *
+ * `recent(skill, n)` returns the skill's `n` attempts with the highest ids, oldest
+ * first. A ULID orders by when the attempt was made, so an attempt that reached this
+ * device late through sync still sorts by its own time, and two devices holding the
+ * same attempts return the same list (the sync simulator's trend property; progress.md
+ * D73).
+ *
  * `all` and `clear` exist for the data-rights use cases [R11]: `exportData` must
  * read every record and `wipeData` must delete them, and no other method can do
  * either. Every store port gains the same pair (progress.md D61). `all` promises

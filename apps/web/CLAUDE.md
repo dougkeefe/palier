@@ -55,6 +55,15 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   - Device secrets are stored as SHA-256 (D70).
   - A schema change means `pnpm --filter @palier/web exec drizzle-kit generate --dialect=postgresql
     --schema=./src/server/schema.ts --out=./drizzle`, with the generated SQL committed.
+  - **Migrations apply at deploy** (`src/server/migrate.ts`, run by `scripts/db-migrate.mjs` from the
+    `vercel.json` build command; progress.md D78). They run only for a production deployment or for a
+    person running `db:migrate` by hand, never for a preview, and they must stay backward-compatible,
+    because the old deployment serves while the new one migrates. `migrate.ts` has no relative imports,
+    so Node's type stripping can run it without a bundler. The runbook is `docs/deploy.md`.
+- **Baseline security headers on every response** (`next.config.ts`, architecture.md §12): HSTS,
+  `nosniff`, `Referrer-Policy: no-referrer`, and a `Permissions-Policy` allowing the microphone on
+  this origin only. They are asserted on the production server in `e2e/production.spec.ts`. The
+  strict CSP is Phase 7's.
 - **Sync in the browser graph** (D71): the container's `sync` port is the real `@palier/adapters/sync`
   transport, same-origin, presenting `vault.deviceSecret()`, in **both** graphs. In hermetic mode each
   page load is its own device, with a random 64-hex secret and a separate id counter, and syncs
@@ -74,7 +83,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   (`src/server/__tests__/`). `syncTransportContract` runs through the HTTP adapter and the real
   route files (`src/app/api/transport.test.ts`), and every `route.ts` holds 95% branch.
 - Integration lane (`integration-web`, `PALIER_INTEGRATION=1`): the same repository and transport
-  contracts on Drizzle over PGlite, with the committed migrations.
+  contracts on Drizzle over PGlite, with the committed migrations; and **the sync simulator through the
+  real route handlers** (`src/app/api/simulator.integration.test.ts`: 100 seeds, 2,000 nightly; D76),
+  with each simulated device presenting its own `x-forwarded-for`.
 - Medium lane (`.github/workflows/verify.yml`): Playwright in three projects.
   **`warmup`** compiles every route once, serially, before the parallel hermetic tests. A cold
   Turbopack dev server under parallel first requests can read a build file mid-write (D67);

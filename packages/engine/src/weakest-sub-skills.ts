@@ -25,10 +25,12 @@ export const weakestSubSkills = (
 ): readonly SubSkill[] => {
   const subSkillOf = new Map<ItemId, SubSkill>(items.map((item) => [item.id, item.subSkill]));
 
-  // The skill's attempts, most recent first, tagged with their sub-skill.
+  // The skill's attempts, most recent first — equal instants by id, so the window is
+  // a function of the attempt set, not of arrival order (progress.md D73, D77) — tagged
+  // with their sub-skill.
   const tagged = attempts
     .filter((a) => a.skill === skill)
-    .sort((a, b) => b.ts.localeCompare(a.ts))
+    .sort((a, b) => b.ts.localeCompare(a.ts) || Number(b.id > a.id) - Number(b.id < a.id))
     .flatMap((a) => {
       const subSkill = subSkillOf.get(a.itemId);
       return subSkill === undefined ? [] : [{ subSkill, correct: a.correct }];
