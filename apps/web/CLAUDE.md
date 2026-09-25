@@ -115,7 +115,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   (**journey 3**: a full exam through a reload and a network drop, scored against an independent oracle) and
   `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
   whose fake timers stall Dexie and React). Axe on the states, (`e2e/`),
-  Lighthouse perf + a11y ≥ 95 (`lighthouserc.json`), bundle-size < 180 KB gzipped
+  Lighthouse perf + a11y ≥ 95 (`lighthouserc.json`, on its own port 3200, so a test server left
+  behind on 3000 by a killed lane can never answer it, D90), bundle-size < 180 KB gzipped
   (`scripts/check-bundle-size.mjs`, override with `PALIER_BUNDLE_BUDGET_KB` to test it).
 
 ## Traps

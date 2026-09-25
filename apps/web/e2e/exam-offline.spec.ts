@@ -80,19 +80,21 @@ test("journey 3: a full 90-minute reading exam survives a reload and a network d
   await expect(page.locator(".pl-timer__time")).toHaveText(/^(90:00|89:5\d)$/);
   await axeClean(page);
 
-  // 2. Answer the first half by keyboard, flagging two.
-  await answerByKeyboard(page, 0, HALF);
+  // 2. Answer the first half by keyboard, flagging two. Before the last of them, let
+  // a few seconds of exam time run, so the answer that stores the clock records it:
+  // thirty keyboard answers alone take under a second, and a clock that reads 90:00
+  // both before and after a reload proves nothing.
+  await answerByKeyboard(page, 0, HALF - 1);
+  await expect(page.locator(".pl-timer__time")).toHaveText(/^89:(5[0-6]|[0-4]\d)$/, { timeout: 10_000 });
+  await answerByKeyboard(page, HALF - 1, HALF);
   await expect(page.locator(".app-exam__count")).toContainText(`Item ${HALF + 1} of 60 · ${HALF} answered`);
-  // Let the clock run past one checkpoint interval (10 s) with nothing answered, so
-  // the time stored comes from a checkpoint and not only from the last answer.
-  await expect(page.locator(".pl-timer__time")).toHaveText(/^89:(4[0-7]|[0-3]\d)$/, { timeout: 20_000 });
   const before = await secondsLeft(page);
 
   // 3. Reload mid-run: the answers, the flags and the clock come back from IndexedDB.
   await page.reload();
   await expect(page.locator(".app-exam__count")).toContainText(`Item ${HALF + 1} of 60 · ${HALF} answered`);
   const after = await secondsLeft(page);
-  expect(after).toBeLessThanOrEqual(90 * 60 - 10);
+  expect(after).toBeLessThanOrEqual(90 * 60 - 4);
   // The clock resumes where it was, give or take the last checkpoint interval (10 s):
   // it never resets, and the time the page was gone is not counted.
   expect(Math.abs(after - before)).toBeLessThanOrEqual(12);

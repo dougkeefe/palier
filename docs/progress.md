@@ -2922,11 +2922,43 @@ test or an E2E assertion.
   `ExamRunStore.unsubmitted()` unused. The scan now uses that indexed read first, and walks every run only
   when the newest is stranded.
 
+### D90 — the medium lane ran out of budget on PR #25, and Lighthouse now has its own port
+**Date:** 25 September 2026 · **Status:** accepted; **the budget's headroom is flagged for the human**
+
+PR #25's push run failed its medium lane, while the pull-request run on the same commit passed.
+- **The root cause is the 240 s budget.** `verify:medium` was killed at exactly 240 s, with 30 of 33
+  Playwright tests passed. The passing run used 200 s. Before this slice, `main`'s last three runs already
+  used 204, 211 and 215 s. This slice's two exam specs added about 15 s, and a slow runner (integration at
+  67 s against 47 s) did the rest.
+- **The Lighthouse `NO_FCP` was a knock-on.** Playwright's hermetic `next dev` and Lighthouse both used
+  `localhost:3000`. `timeout` killed pnpm but not the dev server under it, so `lhci` navigated to that
+  orphaned server, hung for 21 minutes, and failed on `NO_FCP`.
+- **The fixes:**
+  - **Lighthouse serves on port 3200** (`lighthouserc.json`), so a leftover test server can never answer it.
+    Rerun locally: 12 URLs × 5 runs, every median 1.0 / 1.0.
+  - **Journey 3's clock wait is shortened.** It waited past a 10 s checkpoint; now one answer is stamped
+    after about 4 s of exam time, which proves the restored clock just as well. The journey went from
+    20.4 s to 12.6 s locally.
+- **Not fixed, because it is a §6.5 decision:** the lane runs at roughly 200–245 s against a 240 s budget,
+  so runner variance alone can fail it. That was already true on `main`. The human chooses among raising
+  the budget, moving work to nightly, or leaving it as it is.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 September 2026 — `dougkeefe/next-slice-from-progress-v1` (PR #25's medium-lane failure)
+
+- **Diagnosed** (D90). The medium lane was killed at its 240 s budget. The Lighthouse `NO_FCP` that followed
+  came from the orphaned hermetic dev server on port 3000.
+- **Fixed:** Lighthouse moved to port 3200, and journey 3's wait shortened (20.4 s → 12.6 s locally).
+  ```
+  playwright test e2e/exam-offline.spec.ts --project offline → 1 passed (12.6s)
+  pnpm --filter @palier/web lighthouse → exit 0, 12 URLs on localhost:3200 × 5 runs; every median 1.0 / 1.0
+  ```
+- **Flagged:** the lane's headroom against the §6.5 budget (D90).
 
 ### 25 September 2026 — `dougkeefe/next-slice-from-progress-v1` (pre-merge review of Slice 3)
 
