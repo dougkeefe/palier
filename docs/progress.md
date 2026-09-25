@@ -326,6 +326,9 @@ session-log evidence; nothing is ticked without it.
 - [x] Engine unit tests exhaustive at every boundary, golden fixtures locked: 100% branch; the practice-record golden beside the exam-band one (both proven to bite); and the one-off mutation check at 404/410 detected, with all 5 survivors equivalent (session log, 24 September 2026, `dougkeefe/yamoussoukro`; D77)
 - [x] Sync simulator passes several hundred seeds including full partition and heal, no lost or duplicated attempts, and the same trend on every device: 400 seeds on the memory server and 100 through the real route handlers on PGlite in the medium lane, and 4,000 + 200 once by hand (session log, 24 September 2026, `dougkeefe/yamoussoukro`; D76)
 - [x] Every adapter passes its port contract suite — `ids`, `dexie` ×6, `bank`, `openai`, `sync`; and `sync` passes it through the real route handlers too, on the memory repository (fast lane) and on PGlite (integration lane). Session log, 24 September 2026, `dougkeefe/pangyo`
+- [x] axe clean and keyboard-complete on onboarding, drill and review, asserted on states [R9]: axe runs on each state in journeys 1, 2 and 4 and on the sync settings, and the drill and review are driven by keyboard. The rerun is in this session's `verify:medium` → Playwright "31 passed" (session log, 24 September 2026, `dougkeefe/yamoussoukro`). Slice 1 first built it (`dougkeefe/algiers`)
+- [x] Lighthouse performance and accessibility both ≥95: median **1.0 / 1.0 on all 9 routes**, max CLS 0, rerun after the security headers (session log, 24 September 2026, `dougkeefe/yamoussoukro`)
+- [ ] Deployed publicly and shared with a handful of people — **Gate C**, being provisioned with the human. The tooling is built (D78, `docs/deploy.md`)
 
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
 carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
@@ -2365,11 +2368,67 @@ finds nothing."
 - **Keep it, on demand:** it found real gaps, so per §6.5 it runs again after any engine rewrite
   (`pnpm mutation`, about 5 minutes). It stays out of every lane.
 
+### D78 — deploy tooling: migrations at a production build only, baseline headers now, the retention jobs in Phase 7
+**Date:** 24 September 2026 · **Status:** accepted
+
+Gate C was provisioned together with the human (their choice). Everything that did not need their accounts
+was built first:
+
+- **Migrations apply at deploy, and only a production deployment or a person applies them.**
+  - `apps/web/src/server/migrate.ts` decides and applies. `vercel.json`'s build command runs it after
+    `next build`, through `scripts/db-migrate.mjs`.
+  - It **skips** with no `DATABASE_URL`, and for any `VERCEL_ENV` other than `production`. So a preview
+    cannot touch the production schema, even if one is misconfigured with a database. Off Vercel, a
+    person with `DATABASE_URL` set has asked for it.
+  - A failed migration fails the deploy, and the old deployment stays live.
+  - Migrations must therefore stay backward-compatible (`docs/deploy.md`).
+  - Rejected: migrating on the server's first request (a race between cold starts, and a schema change
+    under live traffic), and migrating by hand only (every future schema change becomes a human step
+    that will be forgotten).
+  - `migrate.ts` has no relative imports, so Node 22's type stripping runs it: **no new dependency and
+    no build step.** Its decision and orchestration are unit-tested. `applyWithPostgres` has no branch,
+    and its first real run is the first production deploy (session log).
+- **Baseline security headers on every response now, the strict CSP later.** Architecture §12's HSTS,
+  `nosniff`, `Referrer-Policy: no-referrer` and a microphone-on-self-only `Permissions-Policy` are header
+  config with no runtime cost. A public deploy should not ship without them. They are asserted on the
+  production server (`e2e/production.spec.ts`). The strict CSP needs nonces for Next's inline scripts
+  plus tier 11's check on the built output, so it stays Phase 7's. Lighthouse is unchanged at 1.0/1.0.
+- **The 90-day tombstone purge and the 180-day inactive-account deletion move to Phase 7** (ADR 21 left
+  them to "Slice 3 or Phase 7"). Nothing creates a tombstone yet (no record type has a per-record delete),
+  and no account can reach 180 days of inactivity before Phase 7. Building a scheduler now would be a job
+  with nothing to do. The plan's Phase 7 retention work (`implementation-plan.md` §7) is where both land.
+- **`RATE_LIMIT_SALT` is required in production, in the runbook rather than in code.** `db.ts` falls back
+  to a random salt per process, which on serverless means a salt per instance, so the per-IP limits would
+  not hold across instances. `docs/deploy.md` makes setting it a step of Gate C. Making a missing salt
+  fail loudly is left to Phase 7's hardening, because failing the whole sync service over it would trade
+  a weaker limit for an outage.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, parts 4 and 5a: the gates confirmed, the deploy tooling)
+
+- **Built** (D78):
+  - `src/server/migrate.ts` + `scripts/db-migrate.mjs` + `vercel.json`: migrations at a production
+    build only;
+  - baseline security headers on every response, asserted on the production server;
+  - the runbook `docs/deploy.md`, linked from `docs/README.md` and the root `CLAUDE.md`.
+- **Gates rerun, all green:**
+  - `pnpm build` → exit 0.
+  - `pnpm verify:medium` → **50 s** of its 240 s budget: integration "39 passed" (both simulator
+    variants among them), Playwright "31 passed" (the two new header tests among them).
+  - `pnpm --filter @palier/web bundle-size` → "165.7 KB of 180.0 KB … within budget", unchanged.
+  - `pnpm --filter @palier/web lighthouse` → 9 URLs × 5 runs, median performance **1.0** and accessibility
+    **1.0** on every route, max CLS 0.
+  - `pnpm verify` → green, 1405 tests (8 todo), boundaries clean (297 and 130 modules).
+- **Every Phase 2 CI gate §7 names is now live:**
+  - engine golden regression and the port contract suites, in the fast lane;
+  - the sync simulator and PGlite integration, in the medium lane (`test:integration`);
+  - E2E journeys 1, 2, 6, 7 and 8, in the medium lane's Playwright run;
+  - the mutation check, run once (D77).
 
 ### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, part 3: the one-off mutation check)
 

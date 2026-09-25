@@ -64,3 +64,26 @@ test("journey 4: wrong answers come due, the queue empties, and the empty state 
   await expect(page.getByRole("heading", { name: "Review queue" })).toBeVisible();
   await axeClean(page);
 });
+
+/**
+ * architecture.md §12's baseline headers, on the production server, on a page and on a
+ * bank file alike (progress.md D78).
+ */
+const SECURITY_HEADERS = {
+  "strict-transport-security": "max-age=63072000; includeSubDomains",
+  "x-content-type-options": "nosniff",
+  "referrer-policy": "no-referrer",
+  "permissions-policy": "microphone=(self), camera=(), geolocation=()",
+};
+
+test("sends the baseline security headers with a page", async ({ page }) => {
+  const response = await page.goto("/en");
+
+  expect(response?.headers()).toMatchObject(SECURITY_HEADERS);
+});
+
+test("sends the baseline security headers with a bank file", async ({ request }) => {
+  const response = await request.get("/content/bank/v1/manifest.json");
+
+  expect(response.headers()).toMatchObject(SECURITY_HEADERS);
+});
