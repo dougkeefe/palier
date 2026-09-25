@@ -27,6 +27,15 @@ const paths = (name: GlyphName): JSX.Element => {
           <path d="M12 7.5h.01" />
         </>
       );
+    case "clock":
+      return (
+        <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 2" />
+        </>
+      );
+    case "flag":
+      return <path d="M5 21V4m0 0h11l-2 4 2 4H5" />;
     case "star":
       return <path d="M12 3l2.9 5.9 6.1.9-4.5 4.4 1.1 6.3L12 17.9 6.4 20.9l1.1-6.3L3 10.7l6.1-.9z" />;
   }

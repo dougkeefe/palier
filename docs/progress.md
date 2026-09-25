@@ -2757,6 +2757,39 @@ read them, forced five calls it did not anticipate.
   unanswered counting as wrong, and weakest first by the same comparator as `subSkillBreakdown`. It is new,
   so no golden value moved.
 
+### D86 — the exam token set, a tenth `warning` token, and `Dialog` and `Timer` in `@palier/ui`
+**Date:** 25 September 2026 · **Status:** accepted
+
+Ruling 11 (D84) asked for "a muted `@palier/ui` exam token set … no motion", and §8.4 for a clock that turns
+amber at ten minutes and red at two.
+
+- **The exam set overrides tokens under `[data-mode="exam"]`**, and the rest fall back to the default.
+  - It overrides neutral greys for `bg`, `surface`, `ink` and `ink-muted`, a slate `primary`, a grey
+    `accent`, and slightly deeper `incorrect` and `warning`.
+  - `renderTokensCss` emits these blocks after the `[data-theme]` blocks, in the same three steps: light,
+    then the OS dark preference, then the manual toggle. The toggle selectors are specific enough to beat
+    the OS rule.
+  - The contrast gate now runs every pair over **both sets × both themes**: 60 checks, where there were 26.
+    The drift guard and new order assertions cover the CSS.
+- **`warning` is a tenth token**, `#8A5300` light and `#F2B35B` dark, at 4.5:1 or better on both
+  backgrounds. The amber clock carries information, so it cannot be `accent`, which §10.2 makes decorative
+  and the gate leaves out. The red clock is `incorrect`.
+  - `tokens.test.ts` pinned the nine names, and its list gains `warning`. The shape changed on purpose.
+- **No motion in exam mode, whatever the user's preference.** A `[data-mode="exam"]` rule switches off the
+  transitions and animations the reduced-motion block lists. Exam mode also paints its area in the set's
+  `bg` and `ink`.
+- **`Timer` is presentation only.** The thresholds are the web app's product constants (*Next, decided*),
+  so the tone arrives decided.
+  - The visible `m:ss` is not a live region.
+  - A visually hidden polite span carries the caller's once-a-minute line (§11).
+  - A low-time tone adds a clock glyph and words (§10.2).
+  - The CLAUDE.md line that listed "timer thresholds" as ui logic now says "timer tone classes".
+- **`Dialog` is the native `<dialog>` with `showModal()`.** The platform makes the page inert, holds focus
+  and handles Escape, so no focus-trap code or dependency was needed. Focus goes back to the opener on
+  close. A `side` placement makes it the navigator drawer. jsdom has no modal dialogs, so its tests stand
+  in for `showModal` and `close`.
+- Two glyphs, `clock` and `flag`, join the set.
+
 ---
 
 ## Session log

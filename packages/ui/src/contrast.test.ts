@@ -7,7 +7,7 @@ import {
   parseHex,
   relativeLuminance,
 } from "./contrast.js";
-import { type ThemeName, type TokenName, tokenValue } from "./tokens/tokens.js";
+import { TOKEN_SETS, type ThemeName, type TokenName, tokenValue } from "./tokens/tokens.js";
 
 describe("parseHex", () => {
   it("reads the three channels of a 6-digit hex", () => {
@@ -65,7 +65,7 @@ describe("contrastRatio", () => {
  */
 type Pair = { readonly fg: TokenName; readonly bg: TokenName; readonly min: number };
 
-const TEXT_TOKENS: readonly TokenName[] = ["ink", "ink-muted", "correct", "incorrect", "info"];
+const TEXT_TOKENS: readonly TokenName[] = ["ink", "ink-muted", "correct", "incorrect", "info", "warning"];
 const BACKGROUNDS: readonly TokenName[] = ["bg", "surface"];
 
 const PAIRS: readonly Pair[] = [
@@ -76,16 +76,21 @@ const PAIRS: readonly Pair[] = [
 
 const THEMES: readonly ThemeName[] = ["light", "dark"];
 
+// Both sets are held to the same pairs: the exam runner's muted palette is a whole
+// scheme, not a decoration, so every pair it overrides must still clear the bar.
 describe("token-set contrast gate", () => {
   it.each(
-    THEMES.flatMap((theme) =>
-      PAIRS.map((pair) => ({
-        theme,
-        ...pair,
-        ratio: contrastRatio(tokenValue(pair.fg, theme), tokenValue(pair.bg, theme)),
-      })),
+    TOKEN_SETS.flatMap((set) =>
+      THEMES.flatMap((theme) =>
+        PAIRS.map((pair) => ({
+          set,
+          theme,
+          ...pair,
+          ratio: contrastRatio(tokenValue(pair.fg, theme, set), tokenValue(pair.bg, theme, set)),
+        })),
+      ),
     ),
-  )("$theme: --$fg on --$bg clears $min:1 (is $ratio:1)", ({ ratio, min }) => {
+  )("$set $theme: --$fg on --$bg clears $min:1 (is $ratio:1)", ({ ratio, min }) => {
     expect(ratio).toBeGreaterThanOrEqual(min);
   });
 });
