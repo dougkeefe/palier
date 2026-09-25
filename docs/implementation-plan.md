@@ -777,9 +777,11 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
   **Slice 2 status, 24 September 2026: built** (`progress.md` D82). `content/bank/v2` carries v1's items
   forward under their ids and ships four forms, each id carrying the bank version. A committed-bank test
   holds it byte-identical to a fresh run. The scripted provider had to be rebuilt to reach the volume.
-  Gate D is next, with Slice 4a buildable meanwhile.
+  Gate D was resolved on 25 September 2026 (D84), so Slice 3 is next.
 - **Gate D — exam UI direction (human).** Adopt `product-requirements.md` §8.4–§8.5 as-is, as Gate A
   adopted §8 for Phase 2, or revise it first. Gates Slice 3.
+  **Resolved 25 September 2026** (`progress.md` D84): adopted with twelve rulings, including that pilot
+  items are never revealed to the user. Slice 3 builds to them.
 - **Slice 3 — The runner and results UI, and E2E journey 3.**
   - The runner covers the navigator, flagging, the timer with its amber and red thresholds, checkpoint
     and resume, and pilot handling.

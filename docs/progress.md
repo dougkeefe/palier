@@ -1,13 +1,13 @@
 # Palier: Progress
 
-**Last updated:** 24 September 2026
+**Last updated:** 25 September 2026
 **Current phase:** **Phase 3 (Exams and item statistics) is open.** **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
 four, mirrored in `implementation-plan.md` §7 (D79). **Slice 1 (the exam core) merged (#22); Slice 2
-(forms and a bank that can fill them) is built** (`dougkeefe/next-slice-from-progress`; D82, D83). Next
-is **Gate D** (human), and meanwhile Slice 4a. See [Next, decided](#next-decided). The **full-volume
-published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+(forms and a bank that can fill them) is built** (`dougkeefe/next-slice-from-progress`; D82, D83). **Gate D
+is resolved** (25 September 2026, D84), so next is **Slice 3**, the exam runner and results UI. See
+[Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
 
@@ -71,7 +71,7 @@ human for anything expensive.
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
-| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (Slices 1–2 built; Gate D next, D79, D82) |
+| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (Slices 1–2 built, Gate D resolved; Slice 3 next, D79, D82, D84) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | not started |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
@@ -84,7 +84,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-slice-from-progress` | **Phase 3 Slice 2 — forms and a bank that can fill them.** A pure form-assembly stage in the factory, wired into the run; checkForms hardened; a baseline bank regenerated with the scripted provider as `content/bank/v2`, carrying v1 forward; `BANK_VERSION` 2; the journey 8 `syncNow` race fixed. **Built; pending merge** (D82, D83). | 24 September 2026 |
+| `dougkeefe/next-slice-from-progress` | **Phase 3 Slice 2 — forms and a bank that can fill them.** A pure form-assembly stage in the factory, wired into the run; checkForms hardened; a baseline bank regenerated with the scripted provider as `content/bank/v2`, carrying v1 forward; `BANK_VERSION` 2; the journey 8 `syncNow` race fixed. **Built; pending merge** (D82, D83). Gate D recorded on the same branch (D84). | 24 September 2026 |
 
 *(The prior rows — Phase 3 Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -185,44 +185,89 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 3 Slice 2 is built** (`dougkeefe/next-slice-from-progress`; D82). The committed bank is now
-`content/bank/v2`: 242 items (85 + 6 reading, 147 + 4 writing, v1's 10 carried under their ids),
-24 passages and **one form per profile variant**. `BANK_VERSION` is 2. The journey 8 race is fixed.
+**Phase 3 Slice 2 is built** (`dougkeefe/next-slice-from-progress`; D82): `content/bank/v2` has 242 items
+and one form per profile variant, and `BANK_VERSION` is 2. **Gate D is resolved** (25 September 2026,
+D84): PRD §8.4–§8.5 adopted, with twelve rulings.
 
-**Next: Gate D (human) — the exam UI direction.** Adopt PRD §8.4–§8.5 as-is, as Gate A adopted §8, or
-revise it first. It gates **Slice 3**, the runner and results UI and E2E journey 3. Do not self-direct
-past it: the runner's screens are a product decision.
+**Next: Phase 3 Slice 3, the exam runner and results UI, and E2E journey 3.** It needs no human. It
+carries exit criteria 1 ("runnable") and 2.
 
-**While Gate D is open, build Slice 4a — the item-statistics core and `/api/telemetry`, no UI** (D83).
-It needs neither Gate D nor a runner:
-- **The statistics, pure** — an `@palier/engine` function (architecture.md §7.6, "the only statistics the
-  system computes, and both are one-liners over telemetry"): per item, the proportion correct and the
-  point-biserial against the rest-of-form score, over a list of anonymous outcome events. Minimum
-  response counts before a statistic is trusted, and the retirement rule, **come from the profile**
-  (ADR 9), not code. Golden fixtures, both sides of each threshold.
-- **The telemetry route** — `POST /api/telemetry` in `apps/web/src/server` (architecture.md §9
-  `telemetry_events`, **no account id**, §10: rate limited by IP HMAC as the sync routes are), a
-  committed Drizzle migration, and handler tests on the memory repository plus the PGlite lane.
-- **The job** — a factory command (`palier-factory stats`) that reads an event export, runs the pure
-  statistics, and writes the retirement list for a PR, never committing directly. A retired item leaves
-  the next bank version through the carry-forward (D82), and never a published form.
-- **Exit criterion 3, on synthetic data:** an item seeded with a known proportion correct and one with
-  a deliberately reversed key, both flagged, and the reversed one retired.
+**Scope.** Every ruling below is from D84; build to it rather than re-deciding it.
+- **Wiring.** `startExam`…`rescoreExam` go into `buildUseCases` (`apps/web/src/lib/container.ts`), in
+  both graphs.
+- **Routes, all static.** The service worker cannot precache a dynamic route, and exams must work
+  offline [R4]:
+  - `/[locale]/exam`: choose skill and format, with one line on supervised versus unsupervised, and the
+    1.5× extra-time option. It is reached from home's mock-exam quick action and the readiness card
+    (ruling 12);
+  - `/[locale]/exam/run`: the runner;
+  - `/[locale]/exam/results?run=<id>`: the results.
 
-*Done* for 4a: those four, every branch named (§10), `pnpm verify` and `verify:medium` green. **Slice 4b**
-— the opt-in, the post-exam prompt, client batching and the readiness-card disclosure — needs the
-results screen, so it follows Slice 3.
+  Each is a static RSC shell with one client island and `.app-island`.
+- **The run gains two optional fields**, `timeAllowance` (absent = 1) and `resumes` (absent = 0).
+  - `resumeExam` increments `resumes` (ruling 1).
+  - Because the fields are optional, runs already synced or exported still parse. Keep export
+    `version: 2` if its validator accepts the new fields; otherwise record a version-3 bump beside D81.
+  - Cover the fields in the Dexie/memory contract, `mergeRecord` and export round trips.
+- **The runner** (§8.4):
+  - a muted palette from a new `@palier/ui` exam token set, held by the contrast gate, with no Coco
+    and no motion (ruling 11);
+  - selecting is answering, with no confirm step, and answers can change freely through the navigator
+    drawer, which also flags (ruling 4);
+  - the clock turns amber at 10 minutes left and red at 2, and is a polite live region updated each
+    minute (§11);
+  - the submit dialog counts unanswered and flagged items, and time running out submits
+    automatically (ruling 5);
+  - the rules — the time left with the allowance, the thresholds, the dialog counts, expiry — go in a
+    tested `src/features/exam/*.ts`. The thresholds and 1.5× are product constants there, not exam
+    rules (ADR 9 covers the PSC's numbers, which stay in the profile).
+- **The results** (§8.5), as a tested view model:
+  - the band with the raw score and cuts;
+  - sub-skill **counts** ("4 of 6"), sorted by weakness (ruling 7);
+  - the gap to the next band up, and to the band below when within 2 of its cut (ruling 8);
+  - calibration, with "unsure" = flagged or `changedAnswer`, and the screen saying so (ruling 6);
+  - labels for "paused n times" (ruling 1), "with extra time" (ruling 3) and, on a retake of a form
+    already submitted, "you have seen these items; this result will read high" (ruling 2);
+  - a review walkthrough of every item.
+
+  Two consequences of ruling 9, which does **not** reveal pilots:
+  - every figure counts scored items only, and nothing names or styles a pilot;
+  - "Add to review queue" shows on **any item not already queued**. Wrong scored items are queued at
+    submit, and wrong pilots are not (D41), so a button keyed to "answered right" would expose pilots
+    (ruling 10, D84).
+- **The readiness card's exam half** (§8.2 zone A): the latest submitted run, rescored on the fly
+  ("C, 39 of 50. C starts at 38."). The data-settings import toast also gains the mock-exam count (D81).
+- **Journey 3**, in the `offline` project: a hermetic reload loses the in-memory run.
+  1. Start `reading-supervised` online and answer by keyboard.
+  2. Reload mid-run, and assert the answers, flags and elapsed time came back.
+  3. Take the network down.
+  4. Finish and submit offline.
+  5. Assert the band on results equals the rescore.
+
+  Axe runs on the picker, a runner item, the navigator, the submit dialog and results.
+
+**Done looks like:**
+- all four variants start, run and score from `content/bank/v2`;
+- journey 3 green;
+- axe clean on those states;
+- Lighthouse ≥ 95 on the new routes;
+- the bundle within 180 KB;
+- every new branch tested (§10);
+- `pnpm verify` and `verify:medium` green.
+
+**After it: Slice 4a** (D83), which can also run in a parallel session since it touches no UI, then
+Slice 4b and the closed pilot.
 
 **Standing human gates (do not self-direct):**
 
-- **Gate D — exam UI direction** (Phase 3 Slice 3), above.
 - **The full-volume published bank (D54).** The real-model go-signal exists (session log, 24 September
   2026); the remaining step is the full run to 500–700 published items on a funded key, then shipping
   that bank as `content/bank/v{n}/` (carrying the previous version forward, D82). **Timing settled (D56):
   sequenced to the end**, a 1.0 gate. The baseline bank's French is synthetic (D54), so the app is
   feature-usable before this gate, not study-ready.
 - Resolved: **Gate A** (product and UI direction), **Gate B** (the D43 `ScheduleEntry` merge, D69),
-  **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026.
+  **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026; **Gate D** (exam UI
+  direction, D84) on 25 September 2026.
 
 Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's table
 before launch) and the name/domain decision in §12.1.
@@ -372,9 +417,10 @@ slices". **Keep the two in sync**: the plan holds the fuller scope and each slic
   (`dougkeefe/next-slice-from-progress`; D82; session-log evidence). Factory form generation, and a
   baseline bank regenerated with the scripted provider as `content/bank/v2`, carrying v1 forward, with a
   form per variant (D54, D56).
-- [ ] **Gate D — exam UI direction (human).** Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise it
-  first. Gates Slice 3.
-- [ ] **Slice 3 — The runner and results UI, and E2E journey 3.** Behind Gate D.
+- [x] **Gate D — exam UI direction (human).** Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise it
+  first. Gates Slice 3. **Resolved 25 September 2026 (human decision, D84):** adopted with twelve
+  rulings, eleven as recommended. Ruling 9 goes the other way: pilots are never revealed to the user.
+- [ ] **Slice 3 — The runner and results UI, and E2E journey 3.** Unblocked by Gate D (D84); *Next, decided*.
 - [ ] **Slice 4a — The statistics core, `/api/telemetry` and the job, no UI** (D83). Buildable while
   Gate D is open. Carries exit criterion 3.
 - [ ] **Slice 4b — The opt-in, the post-exam prompt, client batching, the readiness disclosure.** After
@@ -2624,11 +2670,62 @@ None of those needs a runner or Gate D. So Slice 4 becomes:
 The alternative was idling on a human gate, which working-agreement rule 7 treats as a menu. D79 is not
 edited. `implementation-plan.md` §7 mirrors the split.
 
+### D84 — Gate D: PRD §8.4–§8.5 adopted with twelve rulings, and pilots are never revealed
+**Date:** 25 September 2026 · **Status:** accepted (human decision)
+
+Gate D asked whether to adopt the exam screens PRD §8.4–§8.5 describe. Those sections are about ten
+lines. Read against the rest of the PRD and the Slice 1 core, they carry one contradiction and several
+gaps, so the gate was settled as "adopt, with rulings".
+
+| # | Ruling | Why |
+| --- | --- | --- |
+| 1 | **The clock freezes while the tab is closed, and results show "paused n times".** | §6.3 says "no pausing after the first 60 seconds"; §14 says an exam resumes "with the clock as it was". Slice 1's `elapsedMs` already freezes. A dropped connection costs no time, and the result stays honest |
+| 2 | **Retakes allowed**, labelled "you have seen these items; this result will read high" | §6.3's "one attempt per form" would mean one mock exam per variant, ever, while v2 has one form each |
+| 3 | **Optional 1.5× extra time**, and its results are marked | WCAG's essential-time exception applies, but the real SLE offers accommodations |
+| 4 | **Selecting is answering**; no confirm step; answers change freely through the navigator | As the real test works |
+| 5 | **The submit dialog counts unanswered and flagged items**; time running out submits automatically | |
+| 6 | **Confidence is inferred**: "unsure" = flagged or a changed answer, and the screen says so | A per-item sure/unsure toggle would change the exercise |
+| 7 | **Sub-skill results are counts** ("4 of 6"), not percentage bars | About 6 items per sub-skill; R10 |
+| 8 | **Near-miss**: always the gap to the next band up, and to the band below when within 2 of its cut | Computed from the form's cuts |
+| 9 | **Pilots are never revealed to the user** (the human's call; the recommendation was to reveal them after submit) | The real test does not |
+| 10 | **"Add to review queue" on items not already queued** | Wrong scored answers are queued at submit (D41) |
+| 11 | **A muted `@palier/ui` exam token set**; no Coco, no motion | §8.4's "deliberately colder" |
+| 12 | **`/exam` chooses skill and format**, reached from home's quick action and the readiness card | |
+
+**What ruling 9 changes elsewhere.**
+- architecture.md §7.5 said pilots are "marked as such in the review". It is amended in place with a
+  dated note, as §9 has been. The comment on `ExamForm.pilotItemIds` follows.
+- Scoring is unchanged: pilots are still excluded, and `scorer.test.ts` still quotes the original
+  sentence as the spec it was written against.
+- **Two things would give pilots away, so Slice 3 must avoid both:**
+  - Any per-item marker or style.
+  - Ruling 10, if keyed to "answered right". A wrong pilot is never auto-queued (D41), so it would
+    be the one wrong answer showing an "add" button. The button is therefore keyed to "not already in
+    the queue", which covers correct answers and wrong pilots alike.
+- The results' figures count scored items only. That is visible only as the published "of 50" total,
+  which the real score report states too.
+
+**Data the rulings need.** Ruling 1 needs a resume count and ruling 3 a time allowance, so `ExamRun`
+gains two optional fields in Slice 3. Ruling 6 needs nothing new: `ExamAnswer.changedAnswer` and
+`flagged` already exist.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 September 2026 — `dougkeefe/next-slice-from-progress` (Gate D resolved)
+
+- **Gate D resolved by the human** (D84). PRD §8.4–§8.5 are adopted with twelve rulings: 1–8 and 10–12
+  as recommended, and 9 reversed, so pilot items are never revealed to the user.
+- Ruling 9 amends architecture.md §7.5 in place, with a dated note, and the `ExamForm.pilotItemIds`
+  comment. It also fixes how ruling 10's "add to review queue" is keyed, so that it cannot expose pilots.
+- The PRD §8.4 and §8.5 amendment notes point at D84.
+- *Next, decided* is rewritten: **Phase 3 Slice 3**, the runner and results UI and journey 3, then
+  Slice 4a.
+- `implementation-plan.md` §7 is mirrored.
+- Documentation only; no code changed, so no gates were rerun.
 
 ### 24 September 2026 — `dougkeefe/next-slice-from-progress` (Phase 3 Slice 2: forms and a bank that can fill them)
 
