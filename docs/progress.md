@@ -14,8 +14,10 @@ The single-device UI has landed too (D63–D67), so **Slice 1 is complete**: the
 on one device, offline after one load.
 **Gate B is resolved** (human, 24 September 2026: the lower Leitner box wins a concurrent edit, D69),
 and **Slice 2 is complete** (`dougkeefe/pangyo`; D69–D72, ADR 21): two devices pair by code and
-converge, on the real route handlers over PGlite. **Next step:** Slice 3, starting with the sync
-simulator. See [Next, decided](#next-decided). The **full-volume published
+converge, on the real route handlers over PGlite. **Slice 3 is built** (`dougkeefe/yamoussoukro`;
+D73–D78): the sync simulator, which found and fixed two real sync defects; the engine golden record; the
+mutation check; every Phase 2 CI gate; and the deploy tooling. **The last Phase 2 exit criterion is the
+public deploy, Gate C**, provisioned with the human. See [Next, decided](#next-decided). The **full-volume published
 bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
 feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
 (D56).
@@ -194,44 +196,52 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Next: Slice 3, part 1 — the sync simulator** (implementation-plan.md §6.2 tier 5). It is buildable
-now, and it is the largest piece of Slice 3 that needs no human.
+**Slice 3 is built** (`dougkeefe/yamoussoukro`, D73–D78): the sync simulator, the engine golden record,
+the mutation check, every Phase 2 CI gate and the deploy tooling. **One Phase 2 exit criterion remains,
+and it is human-owned:** "deployed publicly and shared with a handful of people", **Gate C**, which is being
+provisioned with the human as this is written. The steps are in `docs/deploy.md`. When the production
+smoke checks pass and the human confirms the app has been shared, tick it: **Phase 2 is then complete.**
 
-**Slice 2 is complete** (session log, 24 September 2026, `dougkeefe/pangyo`; D69–D72, ADR 21).
+**Next: open Phase 3 with Slice 1, the exam core, no UI.** It needs no human, and it carries two of Phase
+3's four exit criteria.
 
-**Part 1's scope.**
-- **Put the harness in `@palier/testing`**, beside `memorySyncServer`, which already holds the revision
-  semantics the simulator needs:
-  - two or three virtual devices, each a full `syncNow` graph over the memory stores;
-  - one server, either `memorySyncServer` or the Drizzle repository behind the handlers on PGlite (the
-    PGlite variant sits in the integration lane);
-  - a transport wrapper, driven by `seededRandom`, that delays, drops and reorders calls, and can
-    **partition** a device fully.
-- **Scenarios:** random interleavings of answering (`answerItem` over the fixture bank), importing,
-  pairing and syncing, then a heal and a final round of syncs.
-- **Assertions at quiescence:**
-  - every device holds the same attempt set, with none lost and none duplicated;
-  - every device holds the same schedule;
-  - each schedule entry equals the `mergeRecord` fold of its concurrent versions;
-  - `practiceTrend` is identical on every device;
-  - a device offline for a "week" does not overwrite newer work.
-- **Seed counts:** a few hundred seeds in the medium lane, and a large count under `CI_LANE=nightly`.
+**Opening Phase 3 means**, as D57 did for Phase 2: expand the plan's §7 Phase 3 breakdown into this file,
+and group it into slices mirrored in both documents:
+1. the exam core (below);
+2. forms and a bank that can fill them: the factory's form generation, and a baseline bank regenerated
+   with the scripted provider large enough to fill every variant's scored-plus-pilot count. The
+   committed bank has **10 items and 0 forms**, against the smallest variant's 25 scored items; it stays
+   synthetic (D54, D56);
+3. the runner and results UI and E2E journey 3, behind **Gate D** (exam UI direction: whether to adopt
+   PRD §8.4–§8.5 as Gate A adopted §8 for Slice 1);
+4. telemetry and the item-statistics job. The closed pilot is the plan's human decision gate.
 
-**Done looks like:** the Phase 2 exit criterion "sync simulator passes several hundred seeds including
-full partition and heal, no lost or duplicated attempts" is ticked, with its command output, and
-`pnpm verify` plus `verify:medium` are green within their time budgets.
+**Slice 1's scope:**
+- **Per-variant golden fixtures** at every band boundary, both sides of each exact cut, for all four
+  profile variants (exit criterion 1, [R3]). Follow the pattern of `scorer.golden.test.ts`, driven by
+  `Object.entries(profile.variants)`.
+- **An `ExamRunStore` port.** Dexie's v1 schema already declares
+  `examRuns: 'id, formId, startedAt, submittedAt'` (architecture.md §9.1), so there is no schema bump.
+  It needs the memory and Dexie implementations and a contract suite. A run holds its answers, flags
+  and the **elapsed** exam time at each checkpoint, so a resume restores the clock from elapsed time, not
+  from the wall clock.
+- **Use cases in `@palier/app`:**
+  - `startExam(formId)`, `answerExamItem`, `flagExamItem`, `checkpointExam`, `resumeExam`;
+  - `submitExam`, which calls `scoreExam` and records attempts with `mode: "exam"` (kept out of the
+    practice trend, D64);
+  - `rescoreExam`, idempotent (exit criterion 4) and held to it by a property.
 
-**Then the rest of Slice 3:**
-- wire the remaining Phase 2 CI gates: engine golden regression, contract suites, the simulator in the
-  medium lane, and E2E 1/2/6/7/8;
-- the one-off mutation check;
-- the public deploy, behind **Gate C** below.
+  They run over the fixture bank's two forms.
+- **Sync for exam runs:** a fifth `SyncDocType`, with a `mergeRecord` rule (a submitted run beats an
+  in-progress one, write-once, like sessions). **The simulator gains exam actions**, and its oracle an
+  exam-run check.
 
-**Gate C — hosting and database (human, gates the public deploy only).** Someone with the accounts has
-to provision serverless Postgres (§3: "Neon or equivalent") and a Vercel project. The environment needs
-`DATABASE_URL` and a random `RATE_LIMIT_SALT`, and `apps/web/drizzle/` has to be applied at deploy
-(ADR 21). Until then the deployed app works fully offline-first, and its sync routes answer 503, which
-the UI shows quietly.
+**Done looks like:**
+- the four variant goldens, proven to bite;
+- `examRunStoreContract` passing on memory and Dexie;
+- every new use-case branch tested;
+- the simulator green at the medium-lane seed count with exam runs in play;
+- `pnpm verify` and `verify:medium` green.
 
 **Standing human gates (do not self-direct):**
 
@@ -246,7 +256,10 @@ the UI shows quietly.
   Gate B.
 - ~~**The `adapters/sync` `ScheduleEntry` merge (D43)**~~ — **resolved 24 September 2026** as Gate B:
   the lower box wins a concurrent edit (D69).
-- **Gate C — hosting and database provisioning** (above). It gates only Slice 3's public deploy.
+- **Gate C — hosting and database provisioning** (above). It gates only Slice 3's public deploy, and is
+  being provisioned with the human (`docs/deploy.md`).
+- **Gate D — exam UI direction** (Phase 3 Slice 3). Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise
+  it first.
 
 Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's table
 before launch) and the name/domain decision in §12.1.
@@ -354,8 +367,10 @@ and each slice's *done* live in the plan). Current position: **Slices 1 and 2 co
 - [x] **Gate B — the `ScheduleEntry` merge decision (human, D43).** `updatedAt` / lower Leitner box /
   device-local. Gates all of Slice 2. **Resolved 24 September 2026 (human decision, `dougkeefe/pangyo`): the
   lower box wins a concurrent edit**, and concurrency is detected by a per-document server revision (D69).
-- [ ] **Slice 3 — Convergence proof + public launch.** Sync simulator (tier 5), remaining CI gates +
+- [~] **Slice 3 — Convergence proof + public launch.** Sync simulator (tier 5), remaining CI gates +
   mutation check, full-offline + Lighthouse ≥95 confirmation, public deploy. **Phase 2 complete.**
+  **Built 24 September 2026** (`dougkeefe/yamoussoukro`; D73–D78): all of it except the deploy itself,
+  which is Gate C, being provisioned with the human.
 
 ### Phase 3: Exams and item statistics — closed pilot
 

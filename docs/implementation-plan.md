@@ -668,6 +668,15 @@ mirrors this list and the two must agree.
   (E2E journey 8, on the real route handlers over PGlite). The sync settings are axe-clean, and
   Lighthouse is 1.0/1.0 on nine routes. **Slice 3** is next. Its public deploy waits on a human
   hosting and database gate ("Gate C" in `progress.md`).
+  **Slice 3 status, 24 September 2026: built, except the deploy itself.** Evidence:
+  - the sync simulator (tier 5): 400 memory-server and 100 real-handler seeds in the medium lane, which
+    found and fixed two sync defects;
+  - the engine golden record;
+  - the one-off mutation check: 404 of 410 mutants detected, all 5 survivors equivalent;
+  - every Phase 2 CI gate live;
+  - migrations at deploy and baseline security headers (`docs/deploy.md`).
+
+  The public deploy is Gate C, provisioned with the human. `progress.md` D73–D78 has the detail.
 - **Slice 2 — Multi-device sync.** After **Gate B**: the sync backend (Postgres + Drizzle, the sync and
   device routes of §10, deferred anonymous registration, pairing by code, rate limiting; no auth lib,
   email or OAuth per ADR 5); `adapters/vault` + `adapters/sync` (device secret / sync identity, pairing
