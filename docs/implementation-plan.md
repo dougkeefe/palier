@@ -803,14 +803,14 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
   **Slice 3 status, 25 September 2026: built** (`progress.md` D85–D87). Every profile variant starts, runs
   and scores from `content/bank/v2`. Journey 3 reloads a 60-item exam mid-run, drops the network, submits
   offline and matches an independent rescore. The run gained an optional time allowance and pause count,
-  and `ItemRepository` gained `forms()` (§3.3, amended in place). Slice 4a is next.
-- **Slice 4 — Telemetry and the item-statistics job**, split in two (`progress.md` D83) so work continues
-  while Gate D is open:
-  - **4a, no UI, buildable before Gate D:** the statistics (proportion correct and point-biserial, with
-    minimum counts and the retirement rule from the profile), `/api/telemetry` with its table, and the
-    job that writes a retirement PR. It carries exit criterion 3, on synthetic data.
-  - **4b, after Slice 3:** the telemetry opt-in, the post-exam prompt, client batching and the
-    readiness-card disclosure.
+  and `ItemRepository` gained `forms()` (§3.3, amended in place). Slice 4 is next, whole (`progress.md` D88).
+- **Slice 4 — Telemetry and the item-statistics job.** `progress.md` D83 split it in two so work could go on
+  while Gate D was open. D88 rejoins it now that Gate D and Slice 3 are done.
+  - **The server and the statistics:** proportion correct and point-biserial, with minimum counts and the
+    retirement rule from the profile; `/api/telemetry` with its table; and the job that writes a
+    retirement PR.
+  - **The client:** the telemetry opt-in, the post-exam prompt, client batching through a persisted queue,
+    and the readiness-card disclosure.
 
   *Done:* exit criterion 3 on synthetic data. **The closed pilot**, 20–30 people, is the human decision
   gate that follows.

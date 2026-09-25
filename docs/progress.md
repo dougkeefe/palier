@@ -6,7 +6,8 @@ exit criterion, "shared with a handful of people", was confirmed by the human on
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
 four, mirrored in `implementation-plan.md` §7 (D79). **Slices 1 and 2 merged (#22, #23); Gate D is resolved
 (D84); Slice 3 (the exam runner and results UI, and journey 3) is built** (`dougkeefe/naypyidaw`; D85–D87),
-so exit criteria 1 and 2 are met. Next is **Slice 4a**, the statistics core, `/api/telemetry` and the job. See
+so exit criteria 1 and 2 are met. Next is **Slice 4**, whole: telemetry, the statistics and the retirement job
+(D88 rejoins D83's split). See
 [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
@@ -71,7 +72,7 @@ human for anything expensive.
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
-| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (Slices 1–3 built, exit criteria 1, 2 and 4 met; Slice 4a next, D79, D83, D87) |
+| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (Slices 1–3 built, exit criteria 1, 2 and 4 met; Slice 4 next, D79, D87, D88) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | not started |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
@@ -188,10 +189,11 @@ Built now rather than retrofitted — §7 is emphatic about this.
 **Phase 3 Slice 3 is built** (`dougkeefe/naypyidaw`; D85–D87): mock exams run from `/exam` through
 `/exam/results`, offline too, and exit criteria 1, 2 and 4 are met.
 
-**Next: Phase 3 Slice 4a, the item statistics core, `POST /api/telemetry` and the retirement job, with no
-UI** (D83). It needs no human, and it carries exit criterion 3.
+**Next: Phase 3 Slice 4, whole: telemetry and the item-statistics job** (D88 rejoins D83's split, since
+Gate D and Slice 3 are both done). It needs no human, and it carries exit criterion 3. The closed pilot, the
+phase's human gate, comes after it.
 
-**Scope.**
+**Scope. The server and the statistics:**
 - **The rules go in the profile** (ADR 9; the plan says "the retirement rule from the profile"). A new
   `itemStatistics` block in `content/profiles/psc-sle.json` and its Zod schema holds:
   - `pCorrectMin: 0.15` and `pCorrectMax: 0.95` (PRD §13.3);
@@ -209,7 +211,7 @@ UI** (D83). It needs no human, and it carries exit criterion 3.
     against `restBucket`;
   - `retirementVerdicts(stats, items, rules)`: each verdict's reasons, applying the minimum counts first.
 
-  Worked examples at every threshold, and a permutation-invariance property (the engine's rule, D73).
+  Worked examples at every threshold, and a permutation-invariance property (D73).
 - **Server** (`apps/web/src/server`):
   - a `telemetry_events` table, with a committed migration;
   - a `POST /api/telemetry` handler that validates a batch with a size cap, rate-limits by the existing IP
@@ -219,19 +221,47 @@ UI** (D83). It needs no human, and it carries exit criterion 3.
   a script in `apps/web/scripts/`.
   - It reads the events, calls the engine, and writes `content/factory/retirements.json` (ids and reasons).
   - A workflow opens that file as a pull request monthly (content-factory.md §6).
-  - Confirm that the selector and the form stage skip a `status: "retired"` item. If either does not,
-    fixing it is part of this slice.
-- **Exit criterion 3:** a seeded synthetic event set, where one item has a known proportion correct and
-  another a reversed key. The job flags and retires exactly those, with the right reasons.
+  - The selector already skips a `status: "retired"` item. The form stage does not check, and making it
+    check is part of this slice.
+
+**Scope. The client:**
+- **The `TelemetrySink` port** (§3.3 already specifies `{ record, flush }`):
+  - a memory implementation and a contract;
+  - an `adapters/telemetry` directory with its own subpath export, which posts batches over `fetch`.
+- **The queue is persisted.** A mock exam can be submitted offline (journey 3), so its events wait in a
+  Dexie `telemetryQueue` table, which means **schema v2**, through the migration harness. They flush on the
+  next sync trigger that finds the network. A queued event carries nothing but the event itself.
+- **The opt-in is off by default and belongs to the device.** It is never synced, because a consent given
+  in one browser must not enrol another (PRD §15: sync and telemetry are separate). If the settings store
+  has no device-local key, adding one is part of this slice.
+- **What is sent:** on submit, only when opted in, one event per answered item, **pilots included**, since
+  they are the items that most need statistics.
+  - The responses come from the stored run, which after a sync is the winning copy (D80), and never from
+    its attempts.
+  - Pilots are still never *revealed* (D84 ruling 9): nothing on screen changes by whether an item was one.
+- **The post-exam prompt** (PRD §15: "made honestly on the results screen after the first mock exam"). It
+  appears once, above the walkthrough, says exactly what is sent and what is not, and can be answered
+  either way or dismissed. Its choice also shows in `/settings/data`. It must be axe-clean and in `en` and
+  `fr`.
+- **The readiness disclosure** (§13.0): the readiness card says how many of the items behind the trend have
+  trusted statistics. That is the ones at or above the profile's minimum counts. Against today's bank it is
+  "none yet".
+
+**Exit criterion 3:** a seeded synthetic event set, where one item has a known proportion correct and
+another a reversed key. The job flags and retires exactly those, with the right reasons.
 
 **Done looks like:**
 - exit criterion 3 green;
 - the route held on PGlite in the integration lane;
+- the sink's contract passing on memory and on the adapter;
+- the Dexie v2 migration tested;
+- an E2E journey that opts in on the results screen, submits offline, and sees the batch arrive once the
+  network returns, with no event carrying an identity;
+- axe clean on the prompt;
 - every new branch tested (§10);
 - `pnpm verify` and `verify:medium` green.
 
-**After it: Slice 4b** (the opt-in, the post-exam prompt on the results screen, client batching that reads
-each run's responses from the winning run per D80, and the readiness disclosure). Then the closed pilot.
+**After it: the closed pilot**, 20–30 people, the human decision gate (implementation-plan.md §7 Phase 3).
 
 **Standing human gates (do not self-direct):**
 
@@ -365,15 +395,15 @@ breakdown, expanded on start. Nothing is ticked without session-log evidence.
 - [x] Exam runner driven by the profile variants: navigator, flagging, timer with amber/red thresholds, checkpoint and resume with the clock preserved, pilot items — the core in Slice 1 (`dougkeefe/minnetonka-v3`, D80); **the UI in Slice 3** (`dougkeefe/naypyidaw`, D85–D87): `/exam`, `/exam/run`, the navigator drawer, the submit dialog, extra time, and the clock frozen while closed with the pauses counted
 - [x] Results screen: band, raw score against the cuts, per-sub-skill breakdown, near-miss from the actual cuts, confidence calibration, review walkthrough — Slice 3 (`/exam/results`, D87), with pilots never revealed (D84 ruling 9), and the readiness card's exam half
 - [x] Form generation in the factory: fixed, immutable, versioned forms per variant — **built** (Slice 2, `dougkeefe/next-slice-from-progress`, D82): `pipeline/forms.ts`, one form per profile variant in `content/bank/v2`, held byte-identical to a fresh run by `committed-bank.test.ts`
-- [ ] Telemetry opt-in, the post-exam prompt, `/api/telemetry`, client batching — the route is Slice 4a, the rest Slice 4b (D83)
-- [ ] The item statistics job: proportion correct and point-biserial per item, minimum counts, a PR retiring items that trip the rules — Slice 4a
-- [ ] Minimum response counts before an item's statistics are trusted, and the readiness-card disclosure — counts Slice 4a, disclosure Slice 4b
+- [ ] Telemetry opt-in, the post-exam prompt, `/api/telemetry`, client batching — Slice 4 (D88)
+- [ ] The item statistics job: proportion correct and point-biserial per item, minimum counts, a PR retiring items that trip the rules — Slice 4
+- [ ] Minimum response counts before an item's statistics are trusted, and the readiness-card disclosure — Slice 4
 
 **Exit criteria** (the actual gate)
 
 - [x] All four exam variants runnable and correctly scored, golden fixture per variant at every cut boundary [R3] — the goldens (Slice 1), the forms (Slice 2), and **runnable** (Slice 3): the production container starts, runs and scores every profile variant from `content/bank/v2` over real IndexedDB, each at the top of its scale with pilots uncounted (`container.test.ts`), and the runner UI drives them (session log, 25 September 2026, `dougkeefe/naypyidaw`)
 - [x] A full 90-minute exam survives reload and network drop (E2E journey 3) — `e2e/exam-offline.spec.ts`: the 60-item, 90-minute supervised reading form, a reload mid-run with the answers, flags and clock restored, the network dropped, submitted offline, and the band equal to an independent `scoreExam` oracle (session log, 25 September 2026)
-- [ ] Statistics job flags and retires a seeded reversed-key item on synthetic data — Slice 4a
+- [ ] Statistics job flags and retires a seeded reversed-key item on synthetic data — Slice 4
 - [x] Scoring is idempotent — `rescoreExam` derives the result from the stored run, and no result is stored (ADR 16). A fast-check property holds submit, rescore and a second rescore deep-equal, with each attempt agreeing with the result. The simulator also rescores on every device after every heal and requires the same result (session log, `dougkeefe/minnetonka-v3`)
 - [ ] Closed pilot run, 20–30 people — the plan's human decision gate, after Slice 4
 
@@ -397,10 +427,11 @@ slices". **Keep the two in sync**: the plan holds the fuller scope and each slic
   rulings, eleven as recommended. Ruling 9 goes the other way: pilots are never revealed to the user.
 - [x] **Slice 3 — The runner and results UI, and E2E journey 3.** **Built 25 September 2026** (`dougkeefe/naypyidaw`;
   D85–D87; session-log evidence). Exit criteria 1 and 2.
-- [ ] **Slice 4a — The statistics core, `/api/telemetry` and the job, no UI** (D83). Buildable while
-  Gate D is open. Carries exit criterion 3.
-- [ ] **Slice 4b — The opt-in, the post-exam prompt, client batching, the readiness disclosure.** After
-  Slice 3. Then the closed pilot (the human gate).
+- [ ] **Slice 4 — Telemetry and the item-statistics job, whole** (D88, rejoining D83's 4a and 4b).
+  - The statistics core, `/api/telemetry` and the retirement job.
+  - The opt-in, the post-exam prompt, the persisted client queue and the readiness disclosure.
+
+  Carries exit criterion 3. *Next, decided*. Then the closed pilot (the human gate).
 
 ### Phase 4: BYOK, generation, writing workshop
 
@@ -2833,11 +2864,38 @@ Phase 3 Slice 3's UI half. It builds to D84's rulings, and these are the calls t
   - The import toast's copy gained a mock-exam count at the end of the sentence, so journey 6's
     "Imported N answers" still matches.
 
+### D88 — Slice 4 is one slice again
+**Date:** 25 September 2026 · **Status:** accepted (human decision); supersedes D83's split
+
+D83 split Slice 4 into **4a** (statistics, route, job, no UI) and **4b** (opt-in, prompt, batching,
+disclosure). The only reason was to keep working while Gate D was open. 4b needed the results screen, and
+the results screen was behind Gate D.
+
+That reason has gone. Gate D was resolved (D84) and Slice 3 has built the results screen (D87). No human
+gate stands between Slice 3 and any part of Slice 4, and the closed pilot follows Slice 4 either way. The
+human asked for Slice 4 to be next as a whole, so it is rejoined. D83 is not edited.
+`implementation-plan.md` §7 mirrors the change.
+
+Rejoining it settles two client questions that 4b would have met:
+- **Telemetry events queue in IndexedDB**, not in memory, because a mock exam can be submitted offline.
+  That needs Dexie schema v2.
+- **The opt-in belongs to the device and never syncs.** Consent given in one browser must not enrol
+  another, and PRD §15 keeps sync and telemetry apart.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 September 2026 — `dougkeefe/naypyidaw` (Slice 4 rejoined)
+
+- **The human asked for Slice 4 to be next as a whole** (D88). D83's 4a/4b split existed only because Gate D
+  was open, and Gate D and Slice 3 are now done, so no gate stands in the way. D83 is not edited.
+- *Next, decided* is rewritten to the whole of Slice 4: the statistics, the route and the job, then the
+  sink, the persisted queue, the device-local opt-in, the post-exam prompt and the readiness disclosure.
+- The Phase 3 breakdown, the slice list and `implementation-plan.md` §7 are mirrored.
+- Documentation only; no code changed, so no gates were rerun.
 
 ### 25 September 2026 — `dougkeefe/naypyidaw` (Phase 3 Slice 3: the exam runner and results UI, and journey 3)
 
