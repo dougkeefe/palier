@@ -29,6 +29,14 @@ export const axeClean = async (page: Page) => {
   expect(results.violations).toEqual([]);
 };
 
+/** Wait until the worker has installed (so precaching is done) and controls the page. */
+export const waitForOfflineReady = async (page: Page) => {
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
+};
+
 /** §8.1 onboarding, placing as asked. Leaves the page wherever onboarding lands. */
 export const onboard = async (page: Page, placement: "diagnostic" | "skip") => {
   await page.goto("/en/start");

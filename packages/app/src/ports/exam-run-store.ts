@@ -43,6 +43,10 @@ export type ExamAnswer = {
  *   instant once it is submitted. It never changes after that.
  * - **No result is stored.** The band is derived by rescoring (ADR 16). That is
  *   safe because the form, and its `bandCuts`, never change.
+ * - **`timeAllowance` and `resumes` are optional** (progress.md D84, rulings 1 and
+ *   3). Absent means 1 and 0, so a run written before they existed, or synced
+ *   from an older build, reads exactly as it did. They are written only when they
+ *   differ from those defaults.
  */
 export type ExamRun = {
   readonly id: SessionId;
@@ -55,6 +59,17 @@ export type ExamRun = {
   /** When the run was last written, by an answer, a flag or a checkpoint. */
   readonly checkpointedAt: ISO;
   readonly submittedAt: ISO | null;
+  /**
+   * The multiplier on the form's time limit: 1.5 for extra time. Absent means 1.
+   * The results say when a run had extra time (D84, ruling 3).
+   */
+  readonly timeAllowance?: number;
+  /**
+   * How many times the run was picked back up after exam time had started to
+   * run. The clock freezes while the tab is closed, and the results say how many
+   * times it was paused (D84, ruling 1). Absent means 0.
+   */
+  readonly resumes?: number;
 };
 
 /**

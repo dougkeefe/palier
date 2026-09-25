@@ -473,6 +473,16 @@ describe("parseExportDocument", () => {
     expect(parseExportDocument(textOf(doc))).toEqual(doc);
   });
 
+  it("reads a run's time allowance and pause count back, and leaves them absent when they were absent", () => {
+    const doc = aDocument({ examRuns: [anExamRun("r-1", { timeAllowance: 1.5, resumes: 3 }), anExamRun("r-2")] });
+
+    const parsed = parseExportDocument(textOf(doc));
+
+    expect(parsed).toEqual(doc);
+    expect(parsed.examRuns[1]).not.toHaveProperty("timeAllowance");
+    expect(parsed.examRuns[1]).not.toHaveProperty("resumes");
+  });
+
   it("names an invalid exam run, for each way one can be wrong", () => {
     const answer = anExamRun("r").answers[0];
     for (const bad of [
@@ -494,6 +504,11 @@ describe("parseExportDocument", () => {
       { ...anExamRun("r"), answers: [{ ...answer, msToConfirm: -5 }] },
       { ...anExamRun("r"), answers: [{ ...answer, changedAnswer: "yes" }] },
       { ...anExamRun("r"), answers: [{ ...answer, answeredAt: "whenever" }] },
+      { ...anExamRun("r"), timeAllowance: 0.5 },
+      { ...anExamRun("r"), timeAllowance: Number.POSITIVE_INFINITY },
+      { ...anExamRun("r"), timeAllowance: "1.5" },
+      { ...anExamRun("r"), resumes: -1 },
+      { ...anExamRun("r"), resumes: 1.5 },
     ]) {
       rejects(textOf({ ...aDocument(), examRuns: [bad] }), /examRuns\[0\] is not a valid exam run/);
     }

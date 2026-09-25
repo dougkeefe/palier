@@ -97,9 +97,13 @@ interface ItemRepository {
   query(c: ItemCriteria): Promise<Item[]>        // skill, subSkill, band, exclude, limit
   passage(id: PassageId): Promise<Passage | null>
   form(id: FormId): Promise<ExamForm | null>
+  forms(): Promise<ExamForm[]>                   // every form the bank ships, no order promised
   scenario(id: ScenarioId): Promise<OralScenario | null>
   bankVersion(): Promise<number>
 }
+// `forms` was added 25 September 2026 with Phase 3 Slice 3: the exam picker pairs the profile's
+// variants with the bank's forms, and deriving a form id from the factory's naming convention
+// would couple the app to it. See progress.md D85.
 
 // Local persistence, one port per aggregate
 interface AttemptStore   { append(a: Attempt): Promise<boolean>; recent(skill: Skill, n: number): Promise<Attempt[]>; since(t: ISO): Promise<Attempt[]>; forItem(id: ItemId): Promise<Attempt[]> }
@@ -129,7 +133,8 @@ interface ExamRunStore   { put(r: ExamRun): Promise<void>; get(id: SessionId): P
 // ELAPSED exam time, so a resume restores the clock without counting the time the tab was
 // closed. `put` is a plain upsert: the write-once `submittedAt` rule lives in the use cases and
 // in sync's mergeRecord. No result is stored, because rescoring derives it (ADR 16). See
-// progress.md D80.
+// progress.md D80. Amended 25 September 2026 (Phase 3 Slice 3, D85): ExamRun gains the optional
+// `timeAllowance` (absent = 1) and `resumes` (absent = 0), for D84's rulings 3 and 1.
 interface OralStore      { /* transcripts and audio blobs, local only */ }
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
 // Amended 24 September 2026: AttemptStore, ScheduleStore, SessionStore and SettingsStore each
@@ -523,7 +528,7 @@ A PR suite that takes fifteen minutes stops being run. Three lanes:
 | Lane | Contents | Budget | When |
 | --- | --- | --- | --- |
 | Fast | Typecheck, lint, dependency-cruiser, **the full unit suite across every package with coverage thresholds**, property (reduced runs), contract, content, i18n parity, contrast | Under 90 seconds | Every push |
-| Medium | Integration with PGlite and fake-indexeddb, sync simulation with a few hundred seeds, E2E on Chromium, axe, bundle size | Under 4 minutes | Every PR |
+| Medium | Integration with PGlite and fake-indexeddb, sync simulation with a few hundred seeds, E2E on Chromium, axe, bundle size | Under 5 minutes *(amended 25 September 2026 from 4, `progress.md` D91)* | Every PR |
 | Nightly | Full property runs, sync simulation at scale, E2E on Firefox and WebKit and mobile viewports, Lighthouse, AI evals, Testcontainers against real Postgres, dependency audit | Unbounded | Nightly, opens issues |
 | One-off | Mutation testing on engine, at the end of phase 2 and after any engine rewrite | Unbounded | On demand |
 
@@ -794,13 +799,18 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
   - journey 3, a full 90-minute exam through a reload and a network drop, which is exit criterion 2;
   - axe clean on the runner and results states;
   - Lighthouse ≥ 95.
-- **Slice 4 — Telemetry and the item-statistics job**, split in two (`progress.md` D83) so work continues
-  while Gate D is open:
-  - **4a, no UI, buildable before Gate D:** the statistics (proportion correct and point-biserial, with
-    minimum counts and the retirement rule from the profile), `/api/telemetry` with its table, and the
-    job that writes a retirement PR. It carries exit criterion 3, on synthetic data.
-  - **4b, after Slice 3:** the telemetry opt-in, the post-exam prompt, client batching and the
-    readiness-card disclosure.
+
+  **Slice 3 status, 25 September 2026: built** (`progress.md` D85–D87). Every profile variant starts, runs
+  and scores from `content/bank/v2`. Journey 3 reloads a 60-item exam mid-run, drops the network, submits
+  offline and matches an independent rescore. The run gained an optional time allowance and pause count,
+  and `ItemRepository` gained `forms()` (§3.3, amended in place). Slice 4 is next, whole (`progress.md` D88).
+- **Slice 4 — Telemetry and the item-statistics job.** `progress.md` D83 split it in two so work could go on
+  while Gate D was open. D88 rejoins it now that Gate D and Slice 3 are done.
+  - **The server and the statistics:** proportion correct and point-biserial, with minimum counts and the
+    retirement rule from the profile; `/api/telemetry` with its table; and the job that writes a
+    retirement PR.
+  - **The client:** the telemetry opt-in, the post-exam prompt, client batching through a persisted queue,
+    and the readiness-card disclosure.
 
   *Done:* exit criterion 3 on synthetic data. **The closed pilot**, 20–30 people, is the human decision
   gate that follows.

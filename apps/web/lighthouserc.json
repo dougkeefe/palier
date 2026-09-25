@@ -1,19 +1,22 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "pnpm --filter @palier/web start",
+      "startServerCommand": "pnpm --filter @palier/web start --port 3200",
       "startServerReadyPattern": "Ready in",
       "startServerReadyTimeout": 60000,
       "url": [
-        "http://localhost:3000/en",
-        "http://localhost:3000/fr",
-        "http://localhost:3000/en/start",
-        "http://localhost:3000/en/home",
-        "http://localhost:3000/fr/practice/reading",
-        "http://localhost:3000/en/review",
-        "http://localhost:3000/fr/progress",
-        "http://localhost:3000/en/settings/data",
-        "http://localhost:3000/fr/settings/sync"
+        "http://localhost:3200/en",
+        "http://localhost:3200/fr",
+        "http://localhost:3200/en/start",
+        "http://localhost:3200/en/home",
+        "http://localhost:3200/fr/practice/reading",
+        "http://localhost:3200/en/review",
+        "http://localhost:3200/fr/progress",
+        "http://localhost:3200/en/settings/data",
+        "http://localhost:3200/fr/settings/sync",
+        "http://localhost:3200/en/exam",
+        "http://localhost:3200/fr/exam/run",
+        "http://localhost:3200/en/exam/results"
       ],
       "numberOfRuns": 5,
       "settings": {

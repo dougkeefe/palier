@@ -7,6 +7,7 @@ import { Callout, Card, EmptyState } from "@palier/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
+import { type ExamReadiness, examReadiness } from "../../features/exam/readiness";
 import { hasAnyEstimate } from "../../features/trend/trend-lines";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
@@ -24,6 +25,8 @@ type Dashboard =
       readonly plan: DayPlan;
       readonly trend: SkillTrend;
       readonly dueCount: number;
+      /** The last submitted mock exam, whichever skill, rescored (§8.2 zone A). */
+      readonly exam: ExamReadiness | null;
     };
 
 /** How far ahead of now "due" reaches for the queue count: due now, nothing later. */
@@ -34,7 +37,7 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
   if (profile === null) return { status: "needs-setup" };
   // A preview, not a session: `planDailySession` records nothing, so looking at the
   // card never counts as having started the day.
-  const [plan, trend, due] = await Promise.all([
+  const [plan, trend, due, latestExam] = await Promise.all([
     container.useCases.planDailySession({
       skill,
       lang: "fr",
@@ -44,16 +47,26 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
     }),
     container.useCases.practiceTrend({ skill }),
     container.schedule.due(container.clock.now(), DUE_LIMIT),
+    container.useCases.latestExamResult(),
   ]);
   // The whole queue, both skills: the card counts what `/review` will show.
-  return { status: "ready", profile, plan, trend, dueCount: due.length };
+  return {
+    status: "ready",
+    profile,
+    plan,
+    trend,
+    dueCount: due.length,
+    exam: latestExam === null ? null : examReadiness(latestExam),
+  };
 };
 
 /**
- * Home (product-requirements.md §8.2). Zone A, the readiness card: the practice trend
- * per band tag with its interval, or a first-run invitation to the diagnostic (§14).
- * The exam result is absent until Phase 3 builds exams, and never a drill-derived band
- * letter. Zone B, today's plan with one primary action. Zone C, the review queue.
+ * Home (product-requirements.md §8.2). Zone A, the readiness card: the last mock
+ * exam's band against its cuts, which leads because it came from a full-length form,
+ * then the practice trend per band tag with its interval, or a first-run invitation
+ * to the diagnostic (§14). The two stay visually distinct, and the practice trend is
+ * never a band letter (D64). Zone B, today's plan with one primary action. Zone C, the
+ * review queue and the mock exam (D84 ruling 12).
  */
 export function HomeDashboard() {
   const t = useTranslations("today");
@@ -118,8 +131,10 @@ export function HomeDashboard() {
       ) : (
         <div className="app-home">
           <Card className="app-home__readiness">
-            <h2>{t("readinessTitle")}</h2>
+            <h2>{t("readinessCardTitle")}</h2>
             {countdown === null ? null : <p className="app-countdown">{t("testCountdown", { days: countdown })}</p>}
+            <ExamHalf exam={dashboard.exam} />
+            <h3>{t("readinessTitle")}</h3>
             {hasAnyEstimate(dashboard.trend) ? (
               <>
                 <TrendMeters trend={dashboard.trend} />
@@ -174,11 +189,42 @@ export function HomeDashboard() {
             <Link href="/review" className="app-link pl-focusable">
               {t("reviewAction")}
             </Link>
+            <Link href="/exam" className="app-link pl-focusable">
+              {t("examAction")}
+            </Link>
             <Link href="/diagnostic" className="app-link pl-focusable">
               {t("diagnosticAgain")}
             </Link>
           </Card>
         </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * The readiness card's exam half: "C, 39 of 50. C starts at 38." (§8.2), or an
+ * invitation to take one. It links to the full result.
+ */
+function ExamHalf({ exam }: { exam: ExamReadiness | null }) {
+  const t = useTranslations("today");
+  return (
+    <div className="app-exam-result">
+      <h3>{t("examTitle")}</h3>
+      {exam === null ? (
+        <>
+          <p>{t("examNone")}</p>
+          <Link href="/exam" className="pl-btn pl-btn--secondary pl-focusable">
+            {t("examAction")}
+          </Link>
+        </>
+      ) : (
+        <>
+          <p className="app-exam-result__line">{t("examResult", { ...exam })}</p>
+          <Link href={{ pathname: "/exam/results", query: { run: exam.runId } }} className="app-link pl-focusable">
+            {t("examResultLink")}
+          </Link>
+        </>
       )}
     </div>
   );

@@ -11,7 +11,7 @@ export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 
 export const buttonClass = (variant: ButtonVariant): string => `pl-btn pl-btn--${variant}`;
 
-export type GlyphName = "check" | "cross" | "info" | "star";
+export type GlyphName = "check" | "cross" | "info" | "star" | "clock" | "flag";
 
 export type OptionOutcome = "correct" | "incorrect";
 
@@ -168,3 +168,29 @@ export const sheetState = (tone: SheetTone): SheetState => ({
   className: `pl-sheet pl-sheet--${tone}`,
   glyph: tone === "correct" ? "check" : tone === "incorrect" ? "cross" : null,
 });
+
+// ---- Timer (§8.4: a visible clock that turns amber at ten minutes and red at two) ----
+
+/**
+ * The clock's tone. The thresholds that pick it are the caller's product rule, not
+ * this package's: the tone arrives already decided.
+ */
+export type TimerTone = "normal" | "warning" | "urgent";
+
+export type TimerState = {
+  readonly className: string;
+  /** A clock glyph once time runs low, beside a text label, so colour is never the only signal (§10.2). */
+  readonly glyph: GlyphName | null;
+};
+
+export const timerState = (tone: TimerTone): TimerState => ({
+  className: `pl-timer pl-timer--${tone}`,
+  glyph: tone === "normal" ? null : "clock",
+});
+
+// ---- Dialog (a modal <dialog>: the exam's submit confirmation and item navigator) ----
+
+/** `center` for a confirmation, `side` for a drawer that slides in from the edge. */
+export type DialogPlacement = "center" | "side";
+
+export const dialogClass = (placement: DialogPlacement): string => `pl-dialog pl-dialog--${placement}`;

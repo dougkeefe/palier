@@ -90,6 +90,18 @@ describe("decodeRecord", () => {
     expect(decodeRecord("setting", "goal", { key: "goal", value: 20 })).toEqual(settingRecord({ key: "goal", value: 20 }));
   });
 
+  it("keeps an exam run's time allowance and pause count through a pull, so a synced run is not silently shortened", () => {
+    const withBoth = { ...aRun, timeAllowance: 1.5, resumes: 2 };
+
+    expect(decodeRecord("examRun", "r-1", withBoth)).toEqual(examRunRecord(withBoth));
+    expect(decodeRecord("examRun", "r-1", { ...aRun, timeAllowance: 0.5 })).toBeNull();
+  });
+
+  it("hashes a run without the optional fields exactly as before they existed, so no ledger turns dirty", () => {
+    expect(recordHash(decodeRecord("examRun", "r-1", aRun)?.value)).toBe(recordHash(aRun));
+    expect(recordHash({ ...aRun, resumes: 1 })).not.toBe(recordHash(aRun));
+  });
+
   it("refuses a payload that is not a valid record of its type", () => {
     expect(decodeRecord("schedule", "i-1", { ...anEntry, box: 0 })).toBeNull();
     expect(decodeRecord("attempt", "a-1", "not a record")).toBeNull();

@@ -347,6 +347,106 @@
   }
 }
 
+/* ---- Exam mode (§8.4: muted, and no motion at all; D84 ruling 11) -----------
+   The muted colours are the exam token set in tokens.css. These rules paint the
+   scoped area in them and switch every transition and animation off, whatever the
+   user's motion preference. */
+
+[data-mode="exam"] {
+  background-color: var(--bg);
+  color: var(--ink);
+}
+
+[data-mode="exam"] :is(.pl-btn, .pl-option, .pl-rail__fill, .pl-band-meter__fill) {
+  transition: none;
+}
+
+[data-mode="exam"] .pl-sheet {
+  animation: none;
+}
+
+/* ---- Timer (the exam clock; the tone always has a glyph and words too) ------- */
+
+.pl-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--ink-muted);
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.pl-timer--warning {
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+.pl-timer--urgent {
+  border-color: var(--incorrect);
+  color: var(--incorrect);
+}
+
+.pl-timer__tone {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* ---- Dialog (a native modal <dialog>; no animation, so nothing fades) -------- */
+
+.pl-dialog {
+  max-width: min(560px, calc(100vw - 32px));
+  padding: 16px;
+  border: 1px solid var(--ink-muted);
+  border-radius: 12px;
+  background-color: var(--surface);
+  color: var(--ink);
+}
+
+.pl-dialog::backdrop {
+  background-color: rgb(0 0 0 / 0.45);
+}
+
+.pl-dialog--side {
+  inset-inline: auto 0;
+  inset-block: 0;
+  height: 100%;
+  max-height: 100%;
+  width: min(380px, 100vw);
+  margin: 0;
+  border-radius: 12px 0 0 12px;
+  overflow-y: auto;
+}
+
+.pl-dialog__heading {
+  margin: 0 0 12px;
+  font-size: 19px;
+}
+
+.pl-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* ---- Visually hidden (read by assistive technology, not drawn) --------------- */
+
+.pl-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---- Toast (a status message; it stays until the next action replaces it) --- */
 
 .pl-toast {

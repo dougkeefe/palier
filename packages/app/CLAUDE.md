@@ -58,6 +58,10 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   checkpoint/resume state `SessionStore` deferred to the exam runner. Like `Session`, `ExamRun` lives
   here, not in `@palier/domain`. Its id is a `SessionId`, because attempts group by `sessionId`. `put`
   is a plain upsert: the write-once `submittedAt` rule lives in the use cases and in `mergeRecord`.
+  The run's optional `timeAllowance` (absent = 1) and `resumes` (absent = 0) are written only when they
+  differ from those defaults, and **`parseExamRun` must copy every run field**, since export, import and
+  sync all rebuild a run through it (progress.md D85). `ItemRepository` gained `forms()` for the exam
+  picker, amended into §3.3 in place.
 - **Sync merges on the device, and only concurrent edits merge** (progress.md D69, Gate B). `syncNow`
   finds dirty records by hashing each one against the ledger, pulls first, then pushes with base
   revisions. A stale base comes back as a conflict. `mergeRecord` (`src/sync/merge.ts`) is the one
@@ -101,6 +105,12 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   devices would then hold one id with two contents, and append-only attempts can never converge.
   `submitExam` schedules scored items through `answerItem` and **never schedules a pilot**: it
   records the pilot's attempt through `recordAttempt`, `answerItem`'s first half (D41).
+  **`resumeExam` writes; `examInProgress` does not.** A resume of a run whose clock has started counts
+  as a pause (`resumes + 1`, D84 ruling 1), so anything that only *looks* for a run in progress, such as
+  the picker, uses `examInProgress`. `exam-report.ts` holds what the results and readiness card read
+  (`examReport`, `latestExamResult`, `examForms`) and `queueForReview`. Every result is rescored.
+  **`examReport` says nothing about the review queue**: a submit queues wrong scored answers and never a
+  pilot, so anything keyed to the queue would single out the wrong pilots (D84 ruling 9, D89).
 - **Use cases live under `src/use-cases/`**, one file per use case, each a plain async
   function `(request, deps)` where `deps` are the collaborators the composition root supplies. A
   family of small use cases over one aggregate may share a file, as `sync-account.ts` does and as

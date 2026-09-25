@@ -80,6 +80,56 @@ describe("createContainer", () => {
     expect(typeof c.useCases.completeSession).toBe("function");
   });
 
+  it("exposes the parsed exam profile, the same one every use case receives", () => {
+    const c = createContainer({ hermetic: true });
+    expect(Object.keys(c.profile.variants).sort()).toEqual([
+      "reading-supervised",
+      "reading-unsupervised",
+      "writing-supervised",
+      "writing-unsupervised",
+    ]);
+  });
+
+  it("runs a mock exam end to end on a fixture form: start, answer, flag, pause, submit, report", async () => {
+    const c = createContainer({ hermetic: true });
+    const [form] = await c.useCases.examForms();
+    if (form === undefined) throw new Error("the fixture bank ships forms");
+    const runId = sessionId(c.ids.ulid());
+
+    const started = await c.useCases.startExam({ runId, formId: form.id, timeAllowance: 1.5 });
+    expect(started.run.timeAllowance).toBe(1.5);
+    expect((await c.useCases.examInProgress())?.run.id).toBe(runId);
+
+    const [first, second] = form.itemIds;
+    if (first === undefined || second === undefined) throw new Error("a form has items");
+    await c.useCases.answerExamItem({
+      runId,
+      itemId: first,
+      response: "a",
+      msToFirstSelect: 500,
+      msToConfirm: 500,
+      changedAnswer: false,
+      elapsedMs: 30_000,
+    });
+    await c.useCases.flagExamItem({ runId, itemId: second, flagged: true, elapsedMs: 40_000 });
+    await c.useCases.checkpointExam({ runId, elapsedMs: 50_000 });
+
+    const resumed = await c.useCases.resumeExam({ runId });
+    expect(resumed?.run.resumes).toBe(1);
+    expect(resumed?.remainingMs).toBe(form.timeLimitMinutes * 60_000 * 1.5 - 50_000);
+
+    const { result } = await c.useCases.submitExam({ runId, elapsedMs: 60_000 });
+    expect(await c.useCases.rescoreExam({ runId })).toEqual(result);
+
+    const report = await c.useCases.examReport({ runId });
+    expect(report.result).toEqual(result);
+    expect(report.retake).toBe(false);
+    expect((await c.useCases.latestExamResult())?.run.id).toBe(runId);
+
+    expect(await c.useCases.queueForReview({ itemId: second })).toBe(true);
+    expect((await c.schedule.get(second))?.due).not.toBeNull();
+  });
+
   it("plans a non-empty daily session from the fixture bank", async () => {
     const c = createContainer({ hermetic: true });
 
@@ -429,6 +479,39 @@ describe("createContainer in production", () => {
     expect(plan.items.every((item) => committedIds.has(item.id))).toBe(true);
     expect(requested).toContain(`${BANK_BASE_PATH}/bank/v${String(BANK_VERSION)}/manifest.json`);
     expect(await c.items.bankVersion()).toBe(BANK_VERSION);
+  });
+
+  it("starts, runs and scores every profile variant from the committed bank's forms, over real IndexedDB [R3]", async () => {
+    const c = createContainer({ hermetic: false });
+    const forms = await c.useCases.examForms();
+
+    for (const [name, variant] of Object.entries(c.profile.variants)) {
+      const form = forms.find((f) => f.skill === variant.skill && f.mode === variant.mode);
+      if (form === undefined) throw new Error(`no committed form for ${name}`);
+      expect(form.itemIds).toHaveLength(variant.items);
+      expect(form.timeLimitMinutes).toBe(variant.minutes);
+
+      const runId = sessionId(c.ids.ulid());
+      await c.useCases.startExam({ runId, formId: form.id });
+      const items = await c.items.byIds(form.itemIds);
+      for (const item of items) {
+        await c.useCases.answerExamItem({
+          runId,
+          itemId: item.id,
+          response: item.key,
+          msToFirstSelect: 1_000,
+          msToConfirm: 1_000,
+          changedAnswer: false,
+          elapsedMs: 60_000,
+        });
+      }
+      const { result } = await c.useCases.submitExam({ runId, elapsedMs: 60_000 });
+
+      // Every scored item right, and pilots not counted: the top of the variant's scale.
+      expect(result.outcome.raw).toBe(variant.scored);
+      expect(result.outcome.scored).toBe(variant.scored);
+      expect(await c.useCases.rescoreExam({ runId })).toEqual(result);
+    }
   });
 
   it("seeds today's selection by the day, so rebuilding the container replays the same plan", async () => {

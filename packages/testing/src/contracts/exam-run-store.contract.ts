@@ -38,6 +38,20 @@ export const examRunStoreContract = (
       expect(await store.get(sessionId("r-1"))).toEqual(run);
     });
 
+    it("keeps a run's time allowance and pause count, and adds neither to a run without them", async () => {
+      const store = await make();
+      const extra = anExamRun({ id: sessionId("r-extra"), elapsedMs: 5_000, timeAllowance: 1.5, resumes: 2 });
+      const plain = anExamRun({ id: sessionId("r-plain") });
+      await store.put(extra);
+      await store.put(plain);
+
+      expect(await store.get(sessionId("r-extra"))).toEqual(extra);
+      const read = await store.get(sessionId("r-plain"));
+      expect(read).toEqual(plain);
+      expect(read).not.toHaveProperty("timeAllowance");
+      expect(read).not.toHaveProperty("resumes");
+    });
+
     it("replaces a run on a second put with the same id", async () => {
       const store = await make();
       await store.put(anExamRun({ id: sessionId("r-1"), elapsedMs: 1_000 }));

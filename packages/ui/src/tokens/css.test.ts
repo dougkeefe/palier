@@ -27,6 +27,29 @@ describe("renderTokensCss", () => {
   });
 });
 
+describe("renderTokensCss — the exam set", () => {
+  const css = renderTokensCss();
+
+  it("declares the exam overrides on [data-mode=\"exam\"], after every default block", () => {
+    const examAt = css.indexOf('[data-mode="exam"] {');
+    expect(examAt).toBeGreaterThan(css.indexOf('[data-theme="dark"] {'));
+    expect(css.slice(examAt)).toMatch(/^\[data-mode="exam"\] \{\n {2}--bg: #F3F3F1;/);
+  });
+
+  it("switches the exam set to dark under the OS preference, then lets a manual toggle win", () => {
+    expect(css).toMatch(/@media \(prefers-color-scheme: dark\) \{\n {2}\[data-mode="exam"\] \{\n {4}--bg: #16181B;/);
+    const osAt = css.lastIndexOf("@media");
+    expect(css.indexOf('[data-theme="dark"] [data-mode="exam"]')).toBeGreaterThan(osAt);
+    expect(css.indexOf('[data-theme="light"] [data-mode="exam"]')).toBeGreaterThan(osAt);
+  });
+
+  it("writes only the tokens the exam set overrides", () => {
+    const examBlock = css.slice(css.indexOf('[data-mode="exam"] {'), css.indexOf("}", css.indexOf('[data-mode="exam"] {')));
+    expect(examBlock).toContain("--primary:");
+    expect(examBlock).not.toContain("--info:");
+  });
+});
+
 describe("tokens.css drift guard", () => {
   it("matches the generator output exactly (regenerate the file if this fails)", () => {
     const committed = readFileSync(

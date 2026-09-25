@@ -13,6 +13,8 @@ import { ProgressRail } from "./ProgressRail.js";
 import { Sheet } from "./Sheet.js";
 import { Mascot } from "./Mascot.js";
 import { Toast } from "./Toast.js";
+import { Timer } from "./Timer.js";
+import { Dialog } from "./Dialog.js";
 
 afterEach(cleanup);
 
@@ -132,10 +134,12 @@ describe("Glyph", () => {
         <Glyph name="cross" />
         <Glyph name="info" />
         <Glyph name="star" />
+        <Glyph name="clock" />
+        <Glyph name="flag" />
       </div>,
     );
     const svgs = container.querySelectorAll("svg[aria-hidden]");
-    expect(svgs).toHaveLength(4);
+    expect(svgs).toHaveLength(6);
   });
 });
 
@@ -208,5 +212,133 @@ describe("Mascot", () => {
     const svg = container.querySelector("svg");
     expect(svg?.getAttribute("aria-hidden")).toBe("true");
     expect(svg?.getAttribute("focusable")).toBe("false");
+  });
+});
+
+describe("Timer", () => {
+  it("shows the time in a labelled group, announcing only the caller's once-a-minute line", () => {
+    render(<Timer label="Time left" text="42:07" tone="normal" announcement="42 minutes left" />);
+    const group = screen.getByRole("group", { name: "Time left" });
+    expect(group?.textContent).toContain("42:07");
+    expect(group.querySelector("[aria-live='polite']")?.textContent).toContain("42 minutes left");
+    expect(group.querySelector("svg")).toBeNull();
+  });
+
+  it("gives a low-time clock a glyph and words as well as its colour class", () => {
+    render(<Timer label="Time left" text="1:59" tone="urgent" toneLabel="Under 2 minutes" announcement="1 minute left" />);
+    const group = screen.getByRole("group", { name: "Time left" });
+    expect(group?.classList.contains("pl-timer--urgent")).toBe(true);
+    expect(group?.textContent).toContain("Under 2 minutes");
+    expect(group.querySelector("svg[aria-hidden]")).not.toBeNull();
+  });
+});
+
+describe("Dialog", () => {
+  // jsdom has no modal dialogs, so stand in for the two methods the component calls.
+  const showModal = vi.fn(function (this: HTMLDialogElement) {
+    this.setAttribute("open", "");
+  });
+  const close = vi.fn(function (this: HTMLDialogElement) {
+    this.removeAttribute("open");
+    this.dispatchEvent(new Event("close"));
+  });
+  HTMLDialogElement.prototype.showModal = showModal;
+  HTMLDialogElement.prototype.close = close;
+
+  afterEach(() => {
+    showModal.mockClear();
+    close.mockClear();
+  });
+
+  it("opens modally when open, labelled by its heading, with its actions after its body", () => {
+    render(
+      <Dialog open onClose={() => undefined} heading="Submit the exam?" actions={<button type="button">Submit</button>}>
+        <p>3 unanswered</p>
+      </Dialog>,
+    );
+    expect(showModal).toHaveBeenCalledTimes(1);
+    const dialog = screen.getByRole("dialog", { name: "Submit the exam?" });
+    expect(dialog?.classList.contains("pl-dialog--center")).toBe(true);
+    expect(dialog.querySelector(".pl-dialog__actions")?.textContent).toContain("Submit");
+  });
+
+  it("stays closed when not open, and places a drawer at the side", () => {
+    const { container } = render(
+      <Dialog open={false} onClose={() => undefined} heading="Items" placement="side">
+        <p>list</p>
+      </Dialog>,
+    );
+    expect(showModal).not.toHaveBeenCalled();
+    expect(container.querySelector("dialog")?.classList.contains("pl-dialog--side")).toBe(true);
+    expect(container.querySelector(".pl-dialog__actions")).toBeNull();
+  });
+
+  it("closes when the caller closes it, reports the close, and gives focus back to the opener", () => {
+    const onClose = vi.fn();
+    const opener = document.createElement("button");
+    document.body.append(opener);
+    opener.focus();
+
+    const { rerender } = render(
+      <Dialog open onClose={onClose} heading="Items">
+        <p>list</p>
+      </Dialog>,
+    );
+    (document.querySelector("dialog button") as HTMLElement | null)?.focus();
+    rerender(
+      <Dialog open={false} onClose={onClose} heading="Items">
+        <p>list</p>
+      </Dialog>,
+    );
+
+    expect(close).toHaveBeenCalledTimes(1);
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(document.activeElement).toBe(opener);
+    opener.remove();
+  });
+
+  it("gives focus back as soon as the caller closes it, without waiting for the close event", () => {
+    // A browser fires "close" a task later; stand in for one that has not fired yet.
+    close.mockImplementationOnce(function (this: HTMLDialogElement) {
+      this.removeAttribute("open");
+    });
+    const opener = document.createElement("button");
+    document.body.append(opener);
+    opener.focus();
+
+    const { rerender } = render(
+      <Dialog open onClose={() => undefined} heading="Items">
+        <button type="button">inside</button>
+      </Dialog>,
+    );
+    (document.querySelector("dialog button") as HTMLElement | null)?.focus();
+    rerender(
+      <Dialog open={false} onClose={() => undefined} heading="Items">
+        <button type="button">inside</button>
+      </Dialog>,
+    );
+
+    expect(document.activeElement).toBe(opener);
+    opener.remove();
+  });
+
+  it("gives focus back and reports it when the dialog closes itself, as on Escape", () => {
+    const onClose = vi.fn();
+    const opener = document.createElement("button");
+    document.body.append(opener);
+    opener.focus();
+
+    render(
+      <Dialog open onClose={onClose} heading="Items">
+        <button type="button">inside</button>
+      </Dialog>,
+    );
+    const dialog = document.querySelector("dialog") as HTMLDialogElement;
+    (dialog.querySelector("button") as HTMLElement).focus();
+    dialog.dispatchEvent(new Event("close"));
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(document.activeElement).toBe(opener);
+    opener.remove();
   });
 });

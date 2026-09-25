@@ -88,10 +88,12 @@ export function DataSettings() {
                 attempts: imported.result.attempts.added + imported.result.attempts.merged,
                 reviews: imported.result.schedule.added + imported.result.schedule.merged,
                 sessions: imported.result.sessions.added + imported.result.sessions.merged,
+                exams: imported.result.examRuns.added + imported.result.examRuns.merged,
                 kept:
                   imported.result.attempts.kept +
                   imported.result.schedule.kept +
                   imported.result.sessions.kept +
+                  imported.result.examRuns.kept +
                   imported.result.settings.kept,
               })}
             </Toast>

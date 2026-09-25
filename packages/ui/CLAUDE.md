@@ -14,11 +14,18 @@ system, not the application.
   together (R8). Content in the non-interface language carries a `lang` attribute, which is
   what makes a screen reader pronounce it; this app mixes languages on every screen.
 - **Colour is never the only signal.** Correct and incorrect also carry a glyph and a label.
-  Every pair clears 4.5:1 for text and 3:1 for UI in both themes, asserted by a unit test
-  over the token set (`product-requirements.md` §10.2).
+  Every pair clears 4.5:1 for text and 3:1 for UI in both themes **and both token sets**, asserted
+  by a unit test over the token set (`product-requirements.md` §10.2).
+- **Two token sets** (progress.md D86). `default` is §10.2's. `exam` is the mock-exam runner's muted
+  set (§8.4, D84 ruling 11): it overrides a subset of tokens under `[data-mode="exam"]`, and the
+  rest fall back. `warning` is the tenth token, the exam clock's amber, because `accent` is
+  decorative and ungated. `tokens.css` is generated: build the package, then write
+  `renderTokensCss()` from `dist/tokens/css.js` over `src/styles/tokens.css`. The drift guard fails
+  until you do. Under `[data-mode="exam"]`, `components.css` switches every transition and
+  animation off.
 - **Accessibility is a build gate, not an audit** (ADR 13). New surfaces get an axe
   assertion on their *states* — panel open, dialog focused — not the initial render alone.
-- Logic (formatters, band-meter geometry, timer thresholds, keyboard handling, registry
+- Logic (formatters, band-meter geometry, timer tone classes, keyboard handling, registry
   lookups) is 90% branch; rendering has no line target on purpose (§6.3).
 - **Primitives:** Button, Card, Callout, EmptyState, Glyph, OptionRow, ProgressRail, and, from
   Slice 1, **BandMeter** (the estimate solid, its interval a lighter band, and no bar at all
@@ -26,7 +33,11 @@ system, not the application.
   focus, not a dialog), **Passage** (serif, 66ch, `lang`-marked), **Toast** (a polite status
   message that does **not** dismiss itself: a timed disappearance is a 2.2.1 problem) and
   **Mascot** (Coco asleep, decorative and `aria-hidden`; the empty state's words carry the
-  meaning, and its "z"s are drawn, not typed, so the no-literals rule holds).
+  meaning, and its "z"s are drawn, not typed, so the no-literals rule holds), and, from Phase 3
+  Slice 3, **Timer** (presentation only: the tone arrives decided, with a glyph and words as well
+  as colour, and the caller's once-a-minute announcement is the only live text) and **Dialog** (a
+  native modal `<dialog>` opened with `showModal()`, labelled by its heading, with a `side`
+  placement for drawers. Focus goes back to the opener on close).
 - **Nothing that carries text fades in.** An `opacity` animation makes its text low-contrast for
   its opening frames, which fails 1.4.3 while it lasts. The Sheet's first draft did, and axe
   caught it (progress.md D65). Animate `transform`, and respect `prefers-reduced-motion`.

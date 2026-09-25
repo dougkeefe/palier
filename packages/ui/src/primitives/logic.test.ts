@@ -4,10 +4,12 @@ import {
   bandMeterGeometry,
   buttonClass,
   calloutState,
+  dialogClass,
   optionRowKeydown,
   optionRowState,
   railGeometry,
   sheetState,
+  timerState,
 } from "./logic.js";
 
 describe("buttonClass", () => {
@@ -156,5 +158,22 @@ describe("sheetState", () => {
 
   it("carries no glyph when neutral", () => {
     expect(sheetState("neutral")).toEqual({ className: "pl-sheet pl-sheet--neutral", glyph: null });
+  });
+});
+
+describe("timerState", () => {
+  it("draws a normal clock with no glyph", () => {
+    expect(timerState("normal")).toEqual({ className: "pl-timer pl-timer--normal", glyph: null });
+  });
+
+  it.each(["warning", "urgent"] as const)("adds a clock glyph to a %s clock, so colour is not the only signal", (tone) => {
+    expect(timerState(tone)).toEqual({ className: `pl-timer pl-timer--${tone}`, glyph: "clock" });
+  });
+});
+
+describe("dialogClass", () => {
+  it("names the placement", () => {
+    expect(dialogClass("center")).toBe("pl-dialog pl-dialog--center");
+    expect(dialogClass("side")).toBe("pl-dialog pl-dialog--side");
   });
 });

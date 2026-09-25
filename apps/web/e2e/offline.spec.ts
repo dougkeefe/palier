@@ -1,6 +1,6 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
-import { BANK_MANIFEST, drillThroughByKeyboard, onboard } from "./helpers";
+import { BANK_MANIFEST, drillThroughByKeyboard, onboard, waitForOfflineReady } from "./helpers";
 
 /**
  * [R4]: "must work with no API key and no network after first load." Runs against a
@@ -11,14 +11,6 @@ import { BANK_MANIFEST, drillThroughByKeyboard, onboard } from "./helpers";
  * locales and the whole served bank on install, so the assertions below include a
  * route and bank shards this page never requested.
  */
-
-/** Wait until the worker has installed (so precaching is done) and controls the page. */
-const waitForOfflineReady = async (page: Page) => {
-  await page.evaluate(async () => {
-    await navigator.serviceWorker.ready;
-  });
-  await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
-};
 
 test("after one online load, the shell reloads with the network off", async ({ page, context }) => {
   await page.goto("/en");

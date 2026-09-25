@@ -93,6 +93,7 @@ const itemsOf = (bank: readonly Item[]): ItemRepository => ({
   ),
   passage: vi.fn(() => Promise.resolve(null)),
   form: vi.fn(() => Promise.resolve(null)),
+  forms: vi.fn(() => Promise.resolve([])),
   scenario: vi.fn(() => Promise.resolve(null)),
   bankVersion: vi.fn(() => Promise.resolve(1)),
 });

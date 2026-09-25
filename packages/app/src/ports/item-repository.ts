@@ -37,6 +37,12 @@ export type ItemRepository = {
   query: (criteria: ItemCriteria) => Promise<readonly Item[]>;
   passage: (id: PassageId) => Promise<Passage | null>;
   form: (id: FormId) => Promise<ExamForm | null>;
+  /**
+   * Every exam form the bank ships, in no promised order. The exam picker pairs
+   * the profile's variants with them (progress.md D85), so the app never derives
+   * a form id from the factory's naming convention.
+   */
+  forms: () => Promise<readonly ExamForm[]>;
   scenario: (id: ScenarioId) => Promise<OralScenario | null>;
   bankVersion: () => Promise<number>;
 };
