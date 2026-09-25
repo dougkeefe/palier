@@ -1,0 +1,3336 @@
+[
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "9SVNR98HC4UAUIUQAT3H",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN planification gouvernance la du delai avec ouvre chaque porte mois porte un.",
+      "fr": "planification gouvernance la du delai avec ouvre chaque porte mois porte un."
+    },
+    "subSkill": "punctuation-and-mechanics",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "health-and-safety",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "9TQUAC4P4A3NU7KCDC8V",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN gouvernance approbation copie les gens gens clair cette membre membre rappel note.",
+      "fr": "gouvernance approbation copie les gens gens clair cette membre membre rappel note."
+    },
+    "subSkill": "punctuation-and-mechanics",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "finance-and-budgets",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "A0ET1QBF3M4PDOEN6VRE",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN administration renseignements avant la cette un fin utile selon ici rappel reçoit.",
+      "fr": "administration renseignements avant la cette un fin utile selon ici rappel reçoit."
+    },
+    "subSkill": "false-friends-and-anglicisms",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "procurement",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "A2QU95KRCM3IBJKSTF48",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN réglementation administration établissement coordination établissement cette bureau pour reçoit mois utile clair bureau mois note.",
+      "fr": "réglementation administration établissement coordination établissement cette bureau pour reçoit mois utile clair bureau mois note."
+    },
+    "subSkill": "agreement",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "finance-and-budgets",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "A6U3C6DACOA21RNIGRPB",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN renseignements établissement usage vise ouvre rappel et usage copie ouvre selon clair.",
+      "fr": "renseignements établissement usage vise ouvre rappel et usage copie ouvre selon clair."
+    },
+    "subSkill": "register-and-formality",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "procurement",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "A7FEOKHVFRCS531F5MG1",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN approbation élaboration consultation administration administration pour chaque vers mois usage tard point et selon cette.",
+      "fr": "approbation élaboration consultation administration administration pour chaque vers mois usage tard point et selon cette."
+    },
+    "subSkill": "false-friends-and-anglicisms",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "finance-and-budgets",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "AE7V33TQTU568BVDRRB3",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN renseignements gouvernance la porte ici et note un bureau vise pour gens.",
+      "fr": "renseignements gouvernance la porte ici et note un bureau vise pour gens."
+    },
+    "subSkill": "verb-tense-and-mood",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "it-and-digital",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "AESP35O3RKSN91RD9BD4",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN approbation consultation administration coordination réglementation le utile jour cadre utile porte avant le copie avec.",
+      "fr": "approbation consultation administration coordination réglementation le utile jour cadre utile porte avant le copie avec."
+    },
+    "subSkill": "verb-tense-and-mood",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "finance-and-budgets",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "AM6AHC58G5FJOF6BUDUA",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN coordination planification approbation coordination planification delai vise le et delai ici la le delai rappel.",
+      "fr": "coordination planification approbation coordination planification delai vise le et delai ici la le delai rappel."
+    },
+    "subSkill": "word-choice-precision",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "procurement",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "AS84417T5L3IPCHN0QBT",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN gouvernance établissement envoi midi note tard le vers note reçoit ouvre bureau.",
+      "fr": "gouvernance établissement envoi midi note tard le vers note reçoit ouvre bureau."
+    },
+    "subSkill": "connectors-and-discourse-markers",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "communications",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "B06TUOCFT4S9KINQT3AE",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN coordination consultation et cette fin copie envoi les note ici les cadre.",
+      "fr": "coordination consultation et cette fin copie envoi les note ici les cadre."
+    },
+    "subSkill": "register-and-formality",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "project-management",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "BBPFKJIA3OIGCE6N6Q0I",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN approbation coordination vers la jour ici texte sujet usage tard porte bureau.",
+      "fr": "approbation coordination vers la jour ici texte sujet usage tard porte bureau."
+    },
+    "subSkill": "punctuation-and-mechanics",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "communications",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "BDT2DBIA06IICPT7OD1N",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN administration coordination pour usage avant envoi sur ouvre et fin copie gens.",
+      "fr": "administration coordination pour usage avant envoi sur ouvre et fin copie gens."
+    },
+    "subSkill": "false-friends-and-anglicisms",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "human-resources",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "BFO56LILHLFLL47HNRCQ",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN gouvernance approbation administration administration élaboration clair bureau du vise porte ouvre membre gens membre le.",
+      "fr": "gouvernance approbation administration administration élaboration clair bureau du vise porte ouvre membre gens membre le."
+    },
+    "subSkill": "sentence-structure",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "it-and-digital",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "BG45NK25FNBQ4R86BLS1",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN consultation approbation établissement établissement coordination clair tard la ici ouvre copie vise porte du point.",
+      "fr": "consultation approbation établissement établissement coordination clair tard la ici ouvre copie vise porte du point."
+    },
+    "subSkill": "sentence-structure",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "policy-and-legislation",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "BKR05RJ6Q3UQRGBBKIGK",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN élaboration planification consultation établissement réglementation du porte tard jour fin usage utile midi point rappel.",
+      "fr": "élaboration planification consultation établissement réglementation du porte tard jour fin usage utile midi point rappel."
+    },
+    "subSkill": "word-choice-precision",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "communications",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "BQHHKGJQ97T5K29JURLF",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN réglementation consultation et membre cette cadre bureau gens mois et fin avant.",
+      "fr": "réglementation consultation et membre cette cadre bureau gens mois et fin avant."
+    },
+    "subSkill": "register-and-formality",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "accessibility",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "BRGQ12I8JOOBK3CDC4KF",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN coordination planification administration gouvernance établissement sur reçoit avec clair avant ici et un avant copie.",
+      "fr": "coordination planification administration gouvernance établissement sur reçoit avec clair avant ici et un avant copie."
+    },
+    "subSkill": "register-and-formality",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "environment",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "C0T4HHFMC7QPFS36VFSO",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN coordination établissement point du copie selon membre usage gens un un vise.",
+      "fr": "coordination établissement point du copie selon membre usage gens un un vise."
+    },
+    "subSkill": "connectors-and-discourse-markers",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "environment",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "C4ILT9988SS2GUPMPUIN",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN consultation réglementation gouvernance approbation renseignements bureau cadre avant sur point fin un et un selon.",
+      "fr": "consultation réglementation gouvernance approbation renseignements bureau cadre avant sur point fin un et un selon."
+    },
+    "subSkill": "prepositions-and-government",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "service-delivery",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "CA1E5AIDIK74DI3LUE3Q",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN gouvernance consultation coordination planification élaboration clair point ouvre suivi utile fin cette usage midi copie.",
+      "fr": "gouvernance consultation coordination planification élaboration clair point ouvre suivi utile fin cette usage midi copie."
+    },
+    "subSkill": "register-and-formality",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "procurement",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "CDT76RNESIQTC7FOTBU7",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN gouvernance gouvernance administration renseignements administration copie point reçoit fin ici porte delai copie reçoit porte.",
+      "fr": "gouvernance gouvernance administration renseignements administration copie point reçoit fin ici porte delai copie reçoit porte."
+    },
+    "subSkill": "pronouns",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "human-resources",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "CIRPA7LAHJ3KS10QS26E",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN consultation administration jour fin midi tard du avant un reçoit avec sujet.",
+      "fr": "consultation administration jour fin midi tard du avant un reçoit avec sujet."
+    },
+    "subSkill": "word-choice-precision",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "it-and-digital",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "CL8KE38I1EF8UEVDI9JN",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN planification renseignements coordination établissement planification point envoi fin ouvre vise note midi vise le ouvre.",
+      "fr": "planification renseignements coordination établissement planification point envoi fin ouvre vise note midi vise le ouvre."
+    },
+    "subSkill": "prepositions-and-government",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "it-and-digital",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "CLD3DV3U5PK44LELIU0J",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN gouvernance approbation approbation consultation élaboration texte pour ici le suivi cette sur suivi du gens.",
+      "fr": "gouvernance approbation approbation consultation élaboration texte pour ici le suivi cette sur suivi du gens."
+    },
+    "subSkill": "agreement",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "official-languages",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "CPDT5LEJEF13QOQLGLTP",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN élaboration administration administration planification administration delai et gens midi la le pour porte jour avant.",
+      "fr": "élaboration administration administration planification administration delai et gens midi la le pour porte jour avant."
+    },
+    "subSkill": "prepositions-and-government",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "official-languages",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "CS05PCM78GKUU89OIEQ8",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN approbation gouvernance note avec clair jour porte bureau tard cette clair selon.",
+      "fr": "approbation gouvernance note avec clair jour porte bureau tard cette clair selon."
+    },
+    "subSkill": "word-choice-precision",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "policy-and-legislation",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "D24FTV370C3NHTU6JUHC",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN renseignements approbation approbation élaboration coordination jour point avec du bureau jour mois sujet cette bureau.",
+      "fr": "renseignements approbation approbation élaboration coordination jour point avec du bureau jour mois sujet cette bureau."
+    },
+    "subSkill": "pronouns",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "accessibility",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "D25KK8AKB1SK8U7OOE5P",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN administration renseignements envoi vise cadre vers clair envoi fin suivi pour sur.",
+      "fr": "administration renseignements envoi vise cadre vers clair envoi fin suivi pour sur."
+    },
+    "subSkill": "prepositions-and-government",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "policy-and-legislation",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "D92A1HPV0RRP5U23VUFH",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN coordination approbation administration coordination administration texte utile envoi note du utile sur utile membre porte.",
+      "fr": "coordination approbation administration coordination administration texte utile envoi note du utile sur utile membre porte."
+    },
+    "subSkill": "verb-tense-and-mood",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "project-management",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "DKSFERLU44A2QMTT8RIS",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN élaboration approbation ouvre envoi chaque texte mois vise rappel avec clair sur.",
+      "fr": "élaboration approbation ouvre envoi chaque texte mois vise rappel avec clair sur."
+    },
+    "subSkill": "pronouns",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "communications",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "DQERDAKMEJIN07BRO6BJ",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN réglementation gouvernance ouvre avec point porte clair selon pour reçoit chaque copie.",
+      "fr": "réglementation gouvernance ouvre avec point porte clair selon pour reçoit chaque copie."
+    },
+    "subSkill": "register-and-formality",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "environment",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "E0GF4HF6QNNINQ07US1T",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN élaboration approbation bureau fin mois gens tard copie vers vers ouvre sujet.",
+      "fr": "élaboration approbation bureau fin mois gens tard copie vers vers ouvre sujet."
+    },
+    "subSkill": "connectors-and-discourse-markers",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "finance-and-budgets",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "E5FQ0CKARM0KFVHO23QP",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN planification coordination envoi note un sujet ici la pour avant suivi un.",
+      "fr": "planification coordination envoi note un sujet ici la pour avant suivi un."
+    },
+    "subSkill": "word-choice-precision",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "finance-and-budgets",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "EBG2I31DN3A9HO8II7MO",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN réglementation administration delai tard envoi bureau reçoit usage le jour sujet cette.",
+      "fr": "réglementation administration delai tard envoi bureau reçoit usage le jour sujet cette."
+    },
+    "subSkill": "verb-tense-and-mood",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "project-management",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "EDJGILEKBIQ4N5B8PBR5",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN établissement réglementation coordination consultation gouvernance vers le midi clair mois note porte suivi note envoi.",
+      "fr": "établissement réglementation coordination consultation gouvernance vers le midi clair mois note porte suivi note envoi."
+    },
+    "subSkill": "agreement",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "project-management",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "EOJK010VRLCJ6RAF3M6B",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN élaboration coordination administration réglementation élaboration la suivi cadre envoi suivi cadre texte mois cadre utile.",
+      "fr": "élaboration coordination administration réglementation élaboration la suivi cadre envoi suivi cadre texte mois cadre utile."
+    },
+    "subSkill": "register-and-formality",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "communications",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "ERC2699Q887V2NMUKTH9",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN administration élaboration gouvernance réglementation planification copie midi utile avec mois suivi tard envoi ici avant.",
+      "fr": "administration élaboration gouvernance réglementation planification copie midi utile avec mois suivi tard envoi ici avant."
+    },
+    "subSkill": "agreement",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "policy-and-legislation",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "EVM9A9BR5STRLB8OE73D",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN planification administration mois chaque mois fin vise delai rappel la cette utile.",
+      "fr": "planification administration mois chaque mois fin vise delai rappel la cette utile."
+    },
+    "subSkill": "verb-tense-and-mood",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "communications",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "F76TB8B84IITS6PNSAR8",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN approbation gouvernance coordination administration gouvernance ouvre tard clair bureau gens texte cadre et tard point.",
+      "fr": "approbation gouvernance coordination administration gouvernance ouvre tard clair bureau gens texte cadre et tard point."
+    },
+    "subSkill": "word-choice-precision",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "official-languages",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "F7UHG6KQ4CHIA63JEN5P",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN gouvernance coordination note bureau avant envoi cadre texte vers ouvre midi tard.",
+      "fr": "gouvernance coordination note bureau avant envoi cadre texte vers ouvre midi tard."
+    },
+    "subSkill": "word-choice-precision",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "official-languages",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "FH4OVOPC02DMPMMCCJO2",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN approbation coordination gouvernance planification administration selon un porte bureau jour copie mois copie avant point.",
+      "fr": "approbation coordination gouvernance planification administration selon un porte bureau jour copie mois copie avant point."
+    },
+    "subSkill": "prepositions-and-government",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "health-and-safety",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "FN6DOA5AMQHJUJOV1H2C",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN élaboration renseignements gens selon et midi selon avec du texte avant fin.",
+      "fr": "élaboration renseignements gens selon et midi selon avec du texte avant fin."
+    },
+    "subSkill": "connectors-and-discourse-markers",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "project-management",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "FNEEV87HV5PHIBEVJSMR",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN planification consultation gouvernance gouvernance administration rappel un cette jour vise fin texte gens tard et.",
+      "fr": "planification consultation gouvernance gouvernance administration rappel un cette jour vise fin texte gens tard et."
+    },
+    "subSkill": "pronouns",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "policy-and-legislation",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "FQ6SQD8UVCV2U31Q965F",
+    "key": "a",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN planification consultation sujet bureau membre bureau avant ici texte sur chaque midi.",
+      "fr": "planification consultation sujet bureau membre bureau avant ici texte sur chaque midi."
+    },
+    "subSkill": "register-and-formality",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "health-and-safety",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "FTENLOO9ICQB12LETVRL",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN administration coordination membre un ici jour un delai point sujet sujet la.",
+      "fr": "administration coordination membre un ici jour un delai point sujet sujet la."
+    },
+    "subSkill": "prepositions-and-government",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "project-management",
+    "type": "error-id",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "GOBBDQ1G0H9M60FTQOA9",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN renseignements élaboration administration administration planification un porte le copie suivi avec et suivi ouvre envoi.",
+      "fr": "renseignements élaboration administration administration planification un porte le copie suivi avec et suivi ouvre envoi."
+    },
+    "subSkill": "pronouns",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "health-and-safety",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-23T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "J2BU3OMGI37N743HJ0UU",
+    "key": "c",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-23T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN planification élaboration renseignements établissement administration point suivi cadre envoi delai texte rappel le bureau ouvre.",
+      "fr": "planification élaboration renseignements établissement administration point suivi cadre envoi delai texte rappel le bureau ouvre."
+    },
+    "subSkill": "pronouns",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "service-delivery",
+    "type": "cloze",
+    "updatedAt": "2026-09-23T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "JPED8VRBSHLKJFUE33IL",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN approbation réglementation jour le porte selon les cadre reçoit pour envoi chaque.",
+      "fr": "approbation réglementation jour le porte selon les cadre reçoit pour envoi chaque."
+    },
+    "subSkill": "false-friends-and-anglicisms",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "project-management",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "blankIndex": 0,
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "N3U54NGT9PR05VG7OLVE",
+    "key": "b",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN administration renseignements réglementation réglementation approbation mois porte clair et avant usage vise fin et les.",
+      "fr": "administration renseignements réglementation réglementation approbation mois porte clair et avant usage vise fin et les."
+    },
+    "subSkill": "pronouns",
+    "tags": [],
+    "targetBand": "C",
+    "topic": "project-management",
+    "type": "cloze",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  },
+  {
+    "createdAt": "2026-09-24T00:00:00.000Z",
+    "explanation": {
+      "en": "the rule taught",
+      "fr": "la règle enseignée"
+    },
+    "id": "OPIT2B464EEN2UNUS1VV",
+    "key": "d",
+    "lang": "fr",
+    "options": [
+      {
+        "id": "a",
+        "rationale": {
+          "en": "because b",
+          "fr": "parce que b"
+        },
+        "text": "distracteur 1"
+      },
+      {
+        "id": "b",
+        "rationale": {
+          "en": "because c",
+          "fr": "parce que c"
+        },
+        "text": "distracteur 2"
+      },
+      {
+        "id": "c",
+        "rationale": {
+          "en": "because d",
+          "fr": "parce que d"
+        },
+        "text": "distracteur 3"
+      },
+      {
+        "id": "d",
+        "rationale": {
+          "en": "because a",
+          "fr": "parce que a"
+        },
+        "text": "bonne réponse"
+      }
+    ],
+    "provenance": {
+      "generator": {
+        "date": "2026-09-24T00:00:00.000Z",
+        "model": "scripted",
+        "promptVersion": "scripted-1"
+      },
+      "origin": "generated"
+    },
+    "skill": "writing",
+    "status": "published",
+    "stem": {
+      "en": "EN coordination renseignements vise le vise avec clair cadre copie vise selon copie.",
+      "fr": "coordination renseignements vise le vise avec clair cadre copie vise selon copie."
+    },
+    "subSkill": "agreement",
+    "tags": [],
+    "targetBand": "B",
+    "topic": "finance-and-budgets",
+    "type": "best-completion",
+    "updatedAt": "2026-09-24T00:00:00.000Z",
+    "version": 1
+  }
+]

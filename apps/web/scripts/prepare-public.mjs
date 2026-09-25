@@ -61,6 +61,36 @@ export const bankBasePathFrom = (source) => {
 };
 
 /**
+ * `BANK_VERSION` from the composition root: the one version this build reads.
+ * @param {string} source
+ * @returns {number}
+ */
+export const bankVersionFrom = (source) => {
+  const version = /export const BANK_VERSION = (\d+);/.exec(source)?.[1];
+  if (version === undefined) throw new Error("prepare-public: no BANK_VERSION in src/lib/container.ts");
+  return Number(version);
+};
+
+/**
+ * The bank manifests the worker precaches: the current version's only. Every version
+ * is still copied and served (bank updates are additive, architecture.md §5.5), and
+ * an older one is cached on first request, but the client reads `BANK_VERSION` alone,
+ * so precaching the rest would download banks nobody asks for, more with every
+ * release (progress.md D82). A build whose `BANK_VERSION` has no committed bank fails.
+ * @param {string} bankBasePath
+ * @param {number} version
+ * @param {readonly string[]} versionDirs the `v{n}` directories holding a manifest
+ * @returns {string[]}
+ */
+export const bankManifestsFor = (bankBasePath, version, versionDirs) => {
+  const dir = `v${String(version)}`;
+  if (!versionDirs.includes(dir)) {
+    throw new Error(`prepare-public: BANK_VERSION is ${String(version)} but content/bank/${dir}/manifest.json does not exist`);
+  }
+  return [`${bankBasePath}/bank/${dir}/manifest.json`];
+};
+
+/**
  * A stamp that changes when any input does: same inputs, same stamp.
  * @param {readonly string[]} inputs
  * @returns {string}
@@ -112,6 +142,7 @@ const main = async () => {
   const publicDir = join(WEB_ROOT, "public");
   const containerSource = await readFile(join(WEB_ROOT, "src/lib/container.ts"), "utf8");
   const bankBasePath = bankBasePathFrom(containerSource);
+  const bankVersion = bankVersionFrom(containerSource);
   const bankDest = join(publicDir, ...bankBasePath.split("/").filter(Boolean), "bank");
 
   // 1. The bank.
@@ -122,14 +153,12 @@ const main = async () => {
   await mkdir(dirname(bankDest), { recursive: true });
   await cp(bankSrc, bankDest, { recursive: true });
 
-  const bankManifests = [];
+  const versionDirs = [];
   for (const entry of await readdir(bankSrc, { withFileTypes: true })) {
     if (!entry.isDirectory() || !/^v\d+$/.test(entry.name)) continue;
-    if (await stat(join(bankSrc, entry.name, "manifest.json")).catch(() => null)) {
-      bankManifests.push(`${bankBasePath}/bank/${entry.name}/manifest.json`);
-    }
+    if (await stat(join(bankSrc, entry.name, "manifest.json")).catch(() => null)) versionDirs.push(entry.name);
   }
-  bankManifests.sort();
+  const bankManifests = bankManifestsFor(bankBasePath, bankVersion, versionDirs);
 
   // 2. The service worker.
   const localeDir = join(WEB_ROOT, "src/app/[locale]");
@@ -156,7 +185,7 @@ const main = async () => {
   await writeFile(join(publicDir, "sw.js"), serviceWorkerSource(compiled, config));
 
   console.log(
-    `prepare-public: bank → ${toPosix(relative(WEB_ROOT, bankDest))} (${bankManifests.length} version(s)); ` +
+    `prepare-public: bank → ${toPosix(relative(WEB_ROOT, bankDest))} (${versionDirs.length} version(s), v${bankVersion} precached); ` +
       `sw.js build ${config.build}, ${routes.length} route(s) × ${locales.length} locale(s)`,
   );
 };

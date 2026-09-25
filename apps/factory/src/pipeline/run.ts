@@ -13,13 +13,15 @@ import type {
 } from "@palier/domain";
 
 import type { BatchReport, HarvestResult, ReviewResult, SourceCandidate } from "../lib/types.js";
+import { hashNum } from "../lib/scripted-key.js";
 import { meterProvider } from "../providers/metered.js";
 import { harvest } from "./harvest.js";
 import { constructPassages } from "./passages.js";
 import { draftItems } from "./draft.js";
 import type { WritingPlanRow } from "./draft.js";
 import { reviewItems } from "./review.js";
-import { validateBank } from "./validate.js";
+import { FormShortfallError, assembleForms } from "./forms.js";
+import { checkForms, validateBank } from "./validate.js";
 import type { ValidationReport } from "./validate.js";
 import { buildBank } from "./bank-build.js";
 import type { BankBuild } from "./bank-build.js";
@@ -32,15 +34,38 @@ import { batchReport } from "./metrics.js";
  * and writing; this function does no I/O.
  */
 
+/**
+ * Passages per source. Sized so every skill publishes about 1.3 times its largest
+ * variant's item count, so a form's pilots are drawn from a real choice rather
+ * than being whatever is left (progress.md D82). A pipeline knob, not an exam rule.
+ */
+export const DEFAULT_PER_SOURCE = 2;
+
 const ITEM_TYPE_CYCLE: readonly ItemType[] = ["cloze", "error-id", "best-completion"];
 
-const defaultWritingPlan = (profile: ExamProfile, bands: readonly TargetBand[]): WritingPlanRow[] =>
-  profile.subSkills.writing.map((subSkill, i) => ({
-    subSkill,
-    type: ITEM_TYPE_CYCLE[i % ITEM_TYPE_CYCLE.length]!,
-    targetBand: bands[i % bands.length]!,
-    topic: profile.topics[i % profile.topics.length]!,
-  }));
+/**
+ * Every writing sub-skill against every profile topic at every drafted band, cycling
+ * the item type, so a bank covers the taxonomy evenly and is large enough to fill
+ * the biggest writing variant with headroom. Sized from the profile, not from a
+ * count in code.
+ */
+export const defaultWritingPlan = (profile: ExamProfile, bands: readonly TargetBand[]): WritingPlanRow[] =>
+  profile.subSkills.writing.flatMap((subSkill, s) =>
+    profile.topics.flatMap((topic, t) =>
+      bands.map((targetBand, b) => ({
+        subSkill,
+        type: ITEM_TYPE_CYCLE[(s + t + b) % ITEM_TYPE_CYCLE.length]!,
+        targetBand,
+        topic,
+      })),
+    ),
+  );
+
+/** A previous bank version's content, carried into this one so its ids stay valid. */
+export type CarriedBank = {
+  readonly items: readonly Item[];
+  readonly passages: readonly Passage[];
+};
 
 export type RunInput = {
   readonly sources: readonly SourceCandidate[];
@@ -55,6 +80,15 @@ export type RunInput = {
   readonly perSource?: number;
   readonly readingSubSkills?: readonly SubSkill[];
   readonly writingPlan?: readonly WritingPlanRow[];
+  /**
+   * The previous bank version's items and passages. A bank update is additive
+   * (architecture.md §5.5): users' attempts and review schedules point at item ids,
+   * so a published item carries into every later version. Carried items are
+   * re-validated with the new ones, never trusted.
+   */
+  readonly carried?: CarriedBank;
+  /** Seeds the form draw; defaults to a hash of the batch id. */
+  readonly formSeed?: number;
 };
 
 export type RunOutput = {
@@ -67,6 +101,7 @@ export type RunOutput = {
   readonly providerFailures: number;
   readonly review: ReviewResult<Item>;
   readonly validation: ValidationReport;
+  readonly forms: readonly ExamForm[];
   readonly bank: BankBuild;
   readonly report: BatchReport;
 };
@@ -74,7 +109,7 @@ export type RunOutput = {
 export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
   const lang: Lang = input.lang ?? "fr";
   const bands: readonly TargetBand[] = input.bands ?? ["B", "C"];
-  const readingSubSkills = input.readingSubSkills ?? input.profile.subSkills.reading.slice(0, 2);
+  const readingSubSkills = input.readingSubSkills ?? input.profile.subSkills.reading;
   const writingPlan = input.writingPlan ?? defaultWritingPlan(input.profile, bands);
 
   const metered = meterProvider(input.provider);
@@ -84,7 +119,7 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
   const passageStage = await constructPassages(harvested.queue, metered.provider, {
     lang,
     bands,
-    perSource: input.perSource ?? 1,
+    perSource: input.perSource ?? DEFAULT_PER_SOURCE,
   });
   const passages = passageStage.passages;
 
@@ -101,13 +136,44 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
   const passageIndex: ReadonlyMap<PassageId, Passage> = new Map(passages.map((p) => [p.id, p]));
   const review = await reviewItems(drafted, metered.provider, passageIndex);
 
-  const forms: readonly ExamForm[] = [];
-  const scenarios: readonly OralScenario[] = [];
-  const validation = validateBank(review.passed, forms, input.profile);
+  // Carried items go first, so a new draft that duplicates one is the item dropped,
+  // and the id users already hold survives.
+  const carriedItems = input.carried?.items ?? [];
+  const carriedIds = new Set(carriedItems.map((i) => i.id));
+  const itemValidation = validateBank([...carriedItems, ...review.passed], [], input.profile);
 
+  // A bank that cannot fill a variant is reported as a form issue, beside the
+  // batch's other numbers, and the CLI refuses to write it (it never ships a short
+  // form). Any other error is a defect and propagates.
+  let forms: readonly ExamForm[] = [];
+  let shortfall: string | null = null;
+  try {
+    forms = assembleForms({
+      items: itemValidation.valid,
+      profile: input.profile,
+      lang,
+      bankVersion: input.bankVersion,
+      seed: input.formSeed ?? hashNum(input.batchId),
+    });
+  } catch (error) {
+    if (!(error instanceof FormShortfallError)) throw error;
+    shortfall = error.message;
+  }
+  const validation: ValidationReport = {
+    ...itemValidation,
+    formIssues: [
+      ...(shortfall === null ? [] : [`cannot assemble forms: ${shortfall}`]),
+      ...checkForms(forms, itemValidation.valid, input.profile),
+    ],
+  };
+
+  const bankPassages = new Map<PassageId, Passage>();
+  for (const passage of [...(input.carried?.passages ?? []), ...passages]) bankPassages.set(passage.id, passage);
+
+  const scenarios: readonly OralScenario[] = [];
   const bank = buildBank({
     items: validation.valid,
-    passages,
+    passages: [...bankPassages.values()],
     forms: [...forms],
     scenarios: [...scenarios],
     version: input.bankVersion,
@@ -123,6 +189,7 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
     itemsDrafted: drafted.length,
     review,
     validation,
+    carriedPublished: validation.valid.filter((i) => carriedIds.has(i.id)).length,
     totalCostUsd: totals.costUsd,
   });
 
@@ -134,6 +201,7 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
     providerFailures: passageStage.failedCalls + draftStage.failedCalls,
     review,
     validation,
+    forms,
     bank,
     report,
   };

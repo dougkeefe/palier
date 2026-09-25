@@ -4,12 +4,14 @@ import type { SyncOutcome } from "@palier/app";
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 import { deviceLabel } from "../../lib/device-label";
-import { type SyncTrigger, delayFor, shouldSync } from "../../lib/sync-triggers";
+import { type SyncTrigger, delayFor, runsAgainAfterCurrent, shouldSync } from "../../lib/sync-triggers";
 import { INITIAL_VIEW, type SyncView, viewFromOutcome, viewFromState, viewSyncing } from "../../features/sync/sync-view";
 import { useContainer } from "../ContainerProvider";
 
 type SyncContextValue = {
   readonly view: SyncView;
+  /** An exchange is in flight: the status line carries it as `aria-busy`. */
+  readonly busy: boolean;
   /** Report something that may warrant a sync (architecture.md §9.4); the runner decides. */
   readonly notify: (trigger: SyncTrigger) => void;
   /** Re-read the stored state, after the settings page changes it. */
@@ -22,6 +24,7 @@ const SYNCING_LABEL_DELAY_MS = 400;
 
 const SyncContext = createContext<SyncContextValue>({
   view: INITIAL_VIEW,
+  busy: false,
   notify: () => undefined,
   refresh: () => Promise.resolve(),
   settle: () => undefined,
@@ -31,7 +34,8 @@ const SyncContext = createContext<SyncContextValue>({
  * Runs sync in the background (architecture.md §9.4) and tells the header and the
  * settings page what it is doing. It syncs on load and on focus when more than five
  * minutes have passed, thirty seconds after a session completes, on reconnect, and on
- * demand. The decisions are `shouldSync`/`delayFor`, and the display is `sync-view.ts`,
+ * demand. A demand made while a run is in flight runs once more after it. The decisions
+ * are `shouldSync`/`delayFor`/`runsAgainAfterCurrent`, and the display is `sync-view.ts`,
  * so this component holds only the listeners. Sync never interrupts study (§11):
  * whatever happens here only moves the quiet indicator.
  */
@@ -40,6 +44,8 @@ export function SyncRunner({ children }: { children: ReactNode }) {
   const [view, setView] = useState<SyncView>(INITIAL_VIEW);
   const lastStarted = useRef<number | null>(null);
   const running = useRef(false);
+  const again = useRef(false);
+  const [busy, setBusy] = useState(false);
   const pending = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const refresh = useCallback(async () => {
@@ -50,9 +56,14 @@ export function SyncRunner({ children }: { children: ReactNode }) {
 
   const run = useCallback(
     async (trigger: SyncTrigger) => {
-      if (container.status !== "ready" || running.current) return;
+      if (container.status !== "ready") return;
+      if (running.current) {
+        if (runsAgainAfterCurrent(trigger)) again.current = true;
+        return;
+      }
       if (!shouldSync(trigger, performance.now(), lastStarted.current)) return;
       running.current = true;
+      setBusy(true);
       lastStarted.current = performance.now();
       // "Syncing…" only once an exchange takes a moment. A run that turns out to have
       // nothing to do (no identity yet, sync off) resolves in milliseconds, and flashing
@@ -66,6 +77,11 @@ export function SyncRunner({ children }: { children: ReactNode }) {
       } finally {
         clearTimeout(showing);
         running.current = false;
+        setBusy(false);
+        if (again.current) {
+          again.current = false;
+          void run("demand");
+        }
       }
     },
     [container],
@@ -108,7 +124,7 @@ export function SyncRunner({ children }: { children: ReactNode }) {
     };
   }, [container, notify, refresh]);
 
-  const value = useMemo(() => ({ view, notify, refresh, settle }), [view, notify, refresh, settle]);
+  const value = useMemo(() => ({ view, busy, notify, refresh, settle }), [view, busy, notify, refresh, settle]);
   return <SyncContext value={value}>{children}</SyncContext>;
 }
 

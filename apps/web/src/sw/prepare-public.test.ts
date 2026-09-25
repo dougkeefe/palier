@@ -7,12 +7,14 @@ import { describe, expect, it } from "vitest";
 
 import {
   bankBasePathFrom,
+  bankManifestsFor,
+  bankVersionFrom,
   buildStampOf,
   localesFrom,
   routesFrom,
   serviceWorkerSource,
 } from "../../scripts/prepare-public.mjs";
-import { BANK_BASE_PATH } from "../lib/container";
+import { BANK_BASE_PATH, BANK_VERSION } from "../lib/container";
 
 const WEB_ROOT = join(dirname(fileURLToPath(import.meta.url)), "../..");
 const read = (path: string) => readFileSync(join(WEB_ROOT, path), "utf8");
@@ -35,6 +37,19 @@ describe("prepare-public", () => {
   it("serves the bank where the composition root expects it, and refuses a root without the constant", () => {
     expect(bankBasePathFrom(read("src/lib/container.ts"))).toBe(BANK_BASE_PATH);
     expect(() => bankBasePathFrom("export const OTHER = 1;")).toThrow(/BANK_BASE_PATH/);
+  });
+
+  it("reads the bank version the composition root reads, and refuses a root without the constant", () => {
+    expect(bankVersionFrom(read("src/lib/container.ts"))).toBe(BANK_VERSION);
+    expect(() => bankVersionFrom("export const OTHER = 1;")).toThrow(/BANK_VERSION/);
+  });
+
+  it("precaches only the current bank version's manifest, however many versions ship", () => {
+    expect(bankManifestsFor("/content", 2, ["v1", "v2"])).toEqual(["/content/bank/v2/manifest.json"]);
+  });
+
+  it("fails the build when the current bank version has no committed manifest", () => {
+    expect(() => bankManifestsFor("/content", 3, ["v1", "v2"])).toThrow(/BANK_VERSION is 3 but content\/bank\/v3\/manifest.json does not exist/);
   });
 
   it("stamps the same inputs identically and any change differently", () => {

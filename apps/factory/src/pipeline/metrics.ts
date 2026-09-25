@@ -46,12 +46,17 @@ export type BatchMetricsInput = {
   readonly itemsDrafted: number;
   readonly review: ReviewResult<Item>;
   readonly validation: ValidationReport;
+  /** Of the published items, how many were carried from the previous bank version
+   * rather than drafted in this batch. They are not this batch's output, so they are
+   * kept out of its published count and its cost per item. */
+  readonly carriedPublished?: number;
   readonly totalCostUsd: number | null;
 };
 
 export const batchReport = (input: BatchMetricsInput): BatchReport => {
   const itemsPassed = input.review.passed.length;
-  const itemsPublished = input.validation.valid.length;
+  const itemsCarried = input.carriedPublished ?? 0;
+  const itemsPublished = input.validation.valid.length - itemsCarried;
   const stage4Yield = input.itemsDrafted === 0 ? 0 : itemsPassed / input.itemsDrafted;
   const costPerAcceptedItemUsd =
     input.totalCostUsd === null || itemsPublished === 0
@@ -68,6 +73,7 @@ export const batchReport = (input: BatchMetricsInput): BatchReport => {
       itemsDrafted: input.itemsDrafted,
       itemsPassed,
       itemsPublished,
+      itemsCarried,
     },
     stage4Yield: Math.round(stage4Yield * 1000) / 1000,
     costPerAcceptedItemUsd,

@@ -290,6 +290,13 @@ Below the rationale, a "Why this matters at level C" line tying the item to a na
 
 Deliberately colder than drill mode. Muted palette, no mascot, no animation, no per-item feedback. Item navigator drawer so users can flag and return, matching the real online testing experience. A visible clock that turns amber at ten minutes and red at two. On submit, a short deliberate pause and then the results screen, which is where the warmth comes back.
 
+*Amendment, 25 September 2026 (Gate D, `progress.md` D84).* §8.4 and §8.5 are adopted as written, with
+twelve rulings recorded in D84. These fill the gaps and settle the conflict between §6.3's "no pausing"
+and §14's resume rule: the clock freezes and results say how many times the exam was paused. Among the
+rulings: retakes are allowed and labelled, a 1.5× extra-time option exists, selecting is answering,
+confidence is inferred from flags and changed answers, sub-skill results are counts, and pilot items are
+never revealed.
+
 ### 8.5 Exam results
 
 - Big band letter with the raw score and the band boundaries shown so the user can see how close they are ("38 of 50, level C starts at 38").

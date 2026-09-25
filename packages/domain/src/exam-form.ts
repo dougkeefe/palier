@@ -24,7 +24,7 @@ export type ExamForm = {
   readonly lang: Lang;
   readonly mode: ExamMode;
   readonly itemIds: readonly ItemId[];
-  /** Excluded from the score, and marked as such in the review. */
+  /** Excluded from the score, and never revealed to the user (progress.md D84). */
   readonly pilotItemIds: readonly ItemId[];
   readonly timeLimitMinutes: number;
   readonly bandCuts: readonly BandCut[];

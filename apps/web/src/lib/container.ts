@@ -112,10 +112,11 @@ import { selectionSeedFor, systemClock } from "./system-clock";
  * prepare-public.mjs), and every manifest `path` already starts `bank/v{n}/`, so
  * the adapter's base is the directory that *contains* `bank/`. Bank versions are
  * additive (architecture.md §5.5): a new one is a new path, so moving this number
- * is the whole of a bank migration on the client.
+ * is the whole of a bank migration on the client. The service worker precaches
+ * this version only (progress.md D82).
  */
 export const BANK_BASE_PATH = "/content";
-export const BANK_VERSION = 1;
+export const BANK_VERSION = 2;
 
 /**
  * The exam profile, parsed once here. Parsing at the composition root is the same

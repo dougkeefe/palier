@@ -190,7 +190,7 @@ export function SyncSettings() {
 
       <Card>
         <h2>{t("statusTitle")}</h2>
-        <p role="status">
+        <p role="status" aria-busy={sync.busy}>
           {line === "statusSynced" && sync.view.lastSyncedAt !== null
             ? t("statusSynced", { when: new Date(sync.view.lastSyncedAt) })
             : t(line)}

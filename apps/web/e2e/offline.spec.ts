@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { drillThroughByKeyboard, onboard } from "./helpers";
+import { BANK_MANIFEST, drillThroughByKeyboard, onboard } from "./helpers";
 
 /**
  * [R4]: "must work with no API key and no network after first load." Runs against a
@@ -42,7 +42,7 @@ test("a route never visited online still opens offline, in the other locale", as
   await expect(page.locator("main")).not.toBeEmpty();
 });
 
-test("every shard of the served bank is readable offline, not only the ones fetched online", async ({
+test("every shard and form of the served bank is readable offline, not only the ones fetched online", async ({
   page,
   context,
 }) => {
@@ -50,18 +50,27 @@ test("every shard of the served bank is readable offline, not only the ones fetc
   await waitForOfflineReady(page);
   await context.setOffline(true);
 
-  const result = await page.evaluate(async () => {
-    const manifest = (await (await fetch("/content/bank/v1/manifest.json")).json()) as {
+  const result = await page.evaluate(async (manifestUrl) => {
+    const manifest = (await (await fetch(manifestUrl)).json()) as {
       shards: { path: string }[];
       passageShards: { path: string }[];
+      forms: { path: string }[];
     };
-    const paths = [...manifest.shards, ...manifest.passageShards].map((entry) => `/content/${entry.path}`);
+    const paths = [...manifest.shards, ...manifest.passageShards, ...manifest.forms].map(
+      (entry) => `/content/${entry.path}`,
+    );
     const responses = await Promise.all(paths.map((path) => fetch(path)));
     const items = (await responses[0]!.json()) as unknown[];
-    return { files: paths.length, allOk: responses.every((r) => r.ok), firstShardItems: items.length };
-  });
+    return {
+      files: paths.length,
+      forms: manifest.forms.length,
+      allOk: responses.every((r) => r.ok),
+      firstShardItems: items.length,
+    };
+  }, BANK_MANIFEST);
 
   expect(result.files).toBeGreaterThan(0);
+  expect(result.forms).toBeGreaterThan(0);
   expect(result.allOk).toBe(true);
   expect(result.firstShardItems).toBeGreaterThan(0);
 });

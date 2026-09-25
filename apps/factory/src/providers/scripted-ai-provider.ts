@@ -11,6 +11,7 @@ import type {
   UsageRecord,
 } from "@palier/domain";
 
+import { contentHash } from "../lib/json.js";
 import { estimateBand, hasFranceMarker } from "../lib/text.js";
 import { findMarkedKey, hashNum } from "../lib/scripted-key.js";
 
@@ -34,9 +35,7 @@ const LONG = [
   "administration", "réglementation", "gouvernance", "approbation", "consultation",
   "coordination", "planification", "élaboration", "renseignements", "établissement",
 ];
-// A wide pool of short (≤7 char) words. Each stem position is chosen by hashing
-// (seed, position), so two stems built from different seeds draw near-independent
-// word sets — keeping synthetic items well below the near-duplicate threshold.
+// A wide pool of short (≤7 char) words.
 const SHORT = [
   "le", "bureau", "ouvre", "avec", "les", "gens", "pour", "jour", "vers", "midi",
   "cette", "note", "porte", "sur", "un", "sujet", "clair", "et", "utile", "ici",
@@ -44,19 +43,28 @@ const SHORT = [
   "selon", "usage", "vise", "point", "suivi", "cadre", "envoi", "delai", "texte", "rappel",
 ];
 
+/**
+ * A word index for one stem position. It goes through SHA-256, not `hashNum`: a
+ * polynomial hash of seeds that differ only in a trailing character lands on
+ * consecutive indices, so every stem was a consecutive run of each pool and a
+ * bank of more than a few dozen items collapsed into near-duplicates (D82).
+ */
+const pick = (pool: readonly string[], key: string): string =>
+  pool[Number.parseInt(contentHash(key).slice(0, 8), 16) % pool.length]!;
+
 /** A stem whose long-word ratio makes `estimateBand` return `band` (see text.ts). */
-const stemForBand = (band: TargetBand, seed: number): string => {
+export const stemForBand = (band: TargetBand, seed: string): string => {
   const longCount = band === "C" ? 5 : band === "B" ? 2 : 0;
   const words: string[] = [];
-  for (let i = 0; i < longCount; i++) words.push(LONG[hashNum(`L:${seed}:${i}`) % LONG.length]!);
-  for (let i = 0; i < 10; i++) words.push(SHORT[hashNum(`S:${seed}:${i}`) % SHORT.length]!);
+  for (let i = 0; i < longCount; i++) words.push(pick(LONG, `L:${seed}:${String(i)}`));
+  for (let i = 0; i < 10; i++) words.push(pick(SHORT, `S:${seed}:${String(i)}`));
   return `${words.join(" ")}.`;
 };
 
 const localised = (fr: string, en: string): Localised => ({ fr, en });
 
-const bodyForBand = (band: TargetBand, seed: number): string =>
-  [0, 1, 2, 3].map((i) => stemForBand(band, seed + i)).join(" ");
+const bodyForBand = (band: TargetBand, seed: string): string =>
+  [0, 1, 2, 3].map((i) => stemForBand(band, `${seed}:${String(i)}`)).join(" ");
 
 export const scriptedAiProvider = (): AiProvider => {
   let usage: UsageRecord | null = null;
@@ -73,7 +81,7 @@ export const scriptedAiProvider = (): AiProvider => {
         lang: req.lang,
         docType: req.docType,
         title: `Note ${req.topic} ${String(i + 1)}`,
-        body: bodyForBand(req.targetBand, hashNum(`${req.topic}:${String(i)}`)),
+        body: bodyForBand(req.targetBand, `${req.topic}:${req.targetBand}:${String(i)}`),
         targetBand: req.targetBand,
         topic: req.topic,
       }));
@@ -85,7 +93,9 @@ export const scriptedAiProvider = (): AiProvider => {
       const { promptSpec, topic, count } = req;
       const passageTag = req.passage?.title ?? "";
       const drafts: ItemDraft[] = Array.from({ length: count }, (_, i) => {
-        const seed = hashNum(`${promptSpec.subSkill}:${topic}:${passageTag}:${String(i)}`) % 9973;
+        // Everything that distinguishes one request from another goes into the seed,
+        // so two plan rows that differ only by band or type still draw distinct stems.
+        const seed = [promptSpec.subSkill, promptSpec.itemType, promptSpec.targetBand, topic, passageTag, String(i)].join(":");
         const stemFr = stemForBand(promptSpec.targetBand, seed);
         const stem = { fr: stemFr, en: `EN ${stemFr}` };
         // The correct option is always "a" here; assembly shuffles positions, so

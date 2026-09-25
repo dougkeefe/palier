@@ -392,7 +392,7 @@ In the final three days before a declared test date, the plan tapers: review onl
 ### 7.5 Scoring
 
 - Drill: per-item, immediate.
-- Mock exam: raw score over scored items only, pilot items excluded and marked as such in the review, then mapped through the form's `bandCuts`, which mirror the published PSC cuts.
+- Mock exam: raw score over scored items only, pilot items excluded and marked as such in the review, then mapped through the form's `bandCuts`, which mirror the published PSC cuts. *(Amended 25 September 2026, Gate D, `progress.md` D84: pilot items are excluded but **never revealed** to the user, in the review or anywhere else, as in the real test.)*
 - The results screen shows the raw score alongside the band and the cut points, so the mapping is transparent and the user can see the distance to the next band.
 
 ### 7.6 Item quality statistics
