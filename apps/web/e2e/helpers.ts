@@ -1,7 +1,19 @@
+import { readFileSync } from "node:fs";
+
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page } from "@playwright/test";
 
+import { bankVersionFrom } from "../scripts/prepare-public.mjs";
+
 /** Shared by the hermetic journeys and the offline project. Not a spec file. */
+
+/**
+ * The manifest of the bank version this build reads, taken from the composition root
+ * the way `prepare-public.mjs` takes it, so a bank bump never leaves a spec behind.
+ */
+export const BANK_MANIFEST = `/content/bank/v${String(
+  bankVersionFrom(readFileSync(new URL("../src/lib/container.ts", import.meta.url), "utf8")),
+)}/manifest.json`;
 
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 

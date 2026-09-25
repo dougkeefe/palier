@@ -239,3 +239,49 @@ describe("httpBankRepository — the committed Phase-1 bank", () => {
     expect(await repo().passage(passageId("MISSING000000000000000"))).toBeNull();
   });
 });
+
+// The committed Phase-3 bank (content/bank/v2/): the first with exam forms, and the
+// version the app reads. Counts are read from its own manifest rather than typed here,
+// so a regenerated bank needs no edit to this test; what is asserted is the shape.
+describe("httpBankRepository — the committed Phase-3 bank, with its forms", () => {
+  const diskPath = (rel: string) => fileURLToPath(new URL(`../../../../content/${rel}`, import.meta.url));
+  const diskFetch: FetchLike = (url) => {
+    try {
+      const text = readFileSync(diskPath(url.slice(`${BASE}/`.length)), "utf8");
+      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(JSON.parse(text)) });
+    } catch {
+      return Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve(null) });
+    }
+  };
+  const manifest = JSON.parse(readFileSync(diskPath("bank/v2/manifest.json"), "utf8")) as {
+    counts: { items: number };
+    forms: { id: string }[];
+  };
+  const repo = () => httpBankRepository({ baseUrl: BASE, version: 2, fetchImpl: diskFetch });
+
+  it("reads every item the manifest counts", async () => {
+    const bank = repo();
+    expect(await bank.bankVersion()).toBe(2);
+    expect(await bank.query({})).toHaveLength(manifest.counts.items);
+  });
+
+  it("serves a form for every exam variant, each resolving all its items and pilots", async () => {
+    const bank = repo();
+    expect(manifest.forms.length).toBeGreaterThan(0);
+    for (const { id } of manifest.forms) {
+      const form = await bank.form(formId(id));
+      expect(form?.id).toBe(id);
+      if (form === null) continue;
+      const items = await bank.byIds(form.itemIds);
+      expect(items).toHaveLength(form.itemIds.length);
+      expect(items.every((i) => i.skill === form.skill && i.lang === form.lang)).toBe(true);
+      for (const pilot of form.pilotItemIds) expect(form.itemIds).toContain(pilot);
+    }
+  });
+
+  it("still holds every item v1 published, under the same id (architecture.md §5.5)", async () => {
+    const v1 = await httpBankRepository({ baseUrl: BASE, version: 1, fetchImpl: diskFetch }).query({});
+    const v2 = await repo().byIds(v1.map((i) => i.id));
+    expect(v2.map((i) => i.id).sort()).toEqual(v1.map((i) => i.id).sort());
+  });
+});

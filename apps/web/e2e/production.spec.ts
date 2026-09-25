@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { axeClean, onboard } from "./helpers";
+import { axeClean, BANK_MANIFEST, onboard } from "./helpers";
 
 /**
  * Journeys that need the **production** graph — real IndexedDB, the served bank, and
@@ -83,7 +83,7 @@ test("sends the baseline security headers with a page", async ({ page }) => {
 });
 
 test("sends the baseline security headers with a bank file", async ({ request }) => {
-  const response = await request.get("/content/bank/v1/manifest.json");
+  const response = await request.get(BANK_MANIFEST);
 
   expect(response.headers()).toMatchObject(SECURITY_HEADERS);
 });

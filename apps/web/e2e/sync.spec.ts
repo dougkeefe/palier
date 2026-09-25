@@ -16,9 +16,22 @@ const openSync = async (page: Page) => {
   await expect(page.getByRole("heading", { level: 1, name: "Sync" })).toBeVisible();
 };
 
+/**
+ * Sync on demand, and return only once *this* exchange has landed. The status can
+ * already read "Last synced" from an earlier run, and the hermetic clock is fixed, so
+ * neither its presence nor its time tells runs apart. So: wait for a pull sent after
+ * the click (every earlier write by the other device is on the server by then), then
+ * for the status to stop being busy, which it does only once the pull is applied.
+ */
 const syncNow = async (page: Page) => {
+  const pull = page.waitForRequest(
+    (request) => request.method() === "GET" && new URL(request.url()).pathname === "/api/sync",
+  );
   await page.getByRole("button", { name: "Sync now" }).click();
-  await expect(page.getByRole("status").filter({ hasText: /^Last synced/ })).toBeVisible();
+  await (await pull).response();
+  const status = page.getByRole("status").filter({ hasText: /^Last synced/ });
+  await expect(status).toBeVisible();
+  await expect(status).toHaveAttribute("aria-busy", "false");
 };
 
 const answeredOn = (page: Page) => page.getByText(/\d+ items? answered/);

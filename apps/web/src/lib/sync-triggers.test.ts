@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { AFTER_SESSION_DELAY_MS, FOCUS_INTERVAL_MS, delayFor, shouldSync } from "./sync-triggers";
+import { AFTER_SESSION_DELAY_MS, FOCUS_INTERVAL_MS, delayFor, runsAgainAfterCurrent, shouldSync } from "./sync-triggers";
 
 describe("shouldSync (architecture.md §9.4)", () => {
   it("syncs on load or focus only when more than five minutes have passed, or never before", () => {
@@ -19,5 +19,17 @@ describe("delayFor", () => {
     expect(delayFor("session-complete")).toBe(AFTER_SESSION_DELAY_MS);
     expect(delayFor("demand")).toBe(0);
     expect(delayFor("focus")).toBe(0);
+  });
+});
+
+describe("runsAgainAfterCurrent", () => {
+  it("queues one more run for a demand made while a sync is in flight", () => {
+    expect(runsAgainAfterCurrent("demand")).toBe(true);
+  });
+
+  it("drops every background trigger that arrives mid-run, since the running exchange covers it", () => {
+    for (const trigger of ["load", "focus", "session-complete", "reconnect"] as const) {
+      expect(runsAgainAfterCurrent(trigger)).toBe(false);
+    }
   });
 });

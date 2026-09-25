@@ -96,6 +96,12 @@ describe("runPipeline (end to end, scripted provider)", () => {
     expect(out.bank.manifest.forms.map((f) => f.id)).toEqual(out.forms.map((f) => f.id).sort());
   });
 
+  it("draws the forms from the given seed, and from the batch id when none is given", async () => {
+    const byBatch = await run();
+    expect((await run({ formSeed: 99 })).forms[0]!.itemIds).not.toEqual(byBatch.forms[0]!.itemIds);
+    expect((await run({ batchId: "sample-0002" })).forms[0]!.itemIds).not.toEqual(byBatch.forms[0]!.itemIds);
+  });
+
   it("reports a bank too small to fill a variant as a form issue, and ships no forms", async () => {
     const out = await run({ perSource: 1, readingSubSkills: profile().subSkills.reading.slice(0, 2) });
     expect(out.forms).toEqual([]);
