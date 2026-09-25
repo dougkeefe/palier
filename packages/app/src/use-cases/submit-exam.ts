@@ -1,0 +1,141 @@
+import type { ExamProfile, ItemId, ItemResponse, SessionId } from "@palier/domain";
+import { attemptId } from "@palier/domain";
+import { type ExamResult, scoreExam } from "@palier/engine";
+
+import type {
+  AttemptStore,
+  Clock,
+  ExamRun,
+  ExamRunStore,
+  ItemRepository,
+  ScheduleStore,
+} from "../ports/index.js";
+import { answerItem, recordAttempt } from "./answer-item.js";
+import { UnknownExamRunError, formOf, laterElapsed } from "./exam-run.js";
+
+/**
+ * The closing half of a mock exam: submit a run, and rescore a submitted one.
+ *
+ * **The result is never stored** (ADR 16). `submitExam` returns what
+ * `rescoreExam` computes, and a later reader rescores. That is safe because a
+ * form, and the `bandCuts` it carries, never change, and `scoreExam` is pure.
+ * It is also what makes scoring idempotent (Phase 3 exit criterion 4): the
+ * stored run is the only input.
+ */
+
+export type RescoreExamRequest = {
+  readonly runId: SessionId;
+};
+
+export type RescoreExamDeps = {
+  readonly items: ItemRepository;
+  readonly examRuns: ExamRunStore;
+};
+
+/** Only a submitted run has a result. An in-progress one is still changing. */
+export class ExamNotSubmittedError extends Error {
+  constructor(readonly runId: SessionId) {
+    super(`Exam run ${runId} has not been submitted, so it has no result yet.`);
+    this.name = "ExamNotSubmittedError";
+  }
+}
+
+const scoreRun = async (run: ExamRun, items: ItemRepository): Promise<ExamResult> => {
+  const form = await formOf(run.formId, items);
+  const bank = await items.byIds(form.itemIds);
+  const responses = new Map<ItemId, ItemResponse>(run.answers.map((a) => [a.itemId, a.response]));
+  return scoreExam(form, bank, responses);
+};
+
+/** Score a submitted run from what is stored. Two calls always agree. */
+export const rescoreExam = async (
+  request: RescoreExamRequest,
+  deps: RescoreExamDeps,
+): Promise<ExamResult> => {
+  const run = await deps.examRuns.get(request.runId);
+  if (run === null) throw new UnknownExamRunError(request.runId);
+  if (run.submittedAt === null) throw new ExamNotSubmittedError(request.runId);
+  return scoreRun(run, deps.items);
+};
+
+export type SubmitExamRequest = {
+  readonly runId: SessionId;
+  readonly elapsedMs: number;
+};
+
+export type SubmitExamDeps = RescoreExamDeps & {
+  readonly clock: Clock;
+  readonly attempts: AttemptStore;
+  readonly schedule: ScheduleStore;
+  readonly profile: ExamProfile;
+};
+
+export type SubmitExamResult = {
+  readonly run: ExamRun;
+  readonly result: ExamResult;
+};
+
+/**
+ * The attempt an exam answer becomes. Its id is derived from the run and the
+ * item, not minted (progress.md D80). A retried submit therefore appends
+ * nothing twice (D44), and neither does the same run submitted on two devices.
+ */
+export const examAttemptId = (runId: SessionId, itemId: ItemId) => attemptId(`${runId}:${itemId}`);
+
+/**
+ * Close a run: record its answers as attempts, then stamp `submittedAt` once.
+ *
+ * - **One attempt per answered item**, with `mode: "exam"`. An unanswered item
+ *   has no response to record, and `scoreExam` counts it wrong.
+ * - **Scored items go through `answerItem`**, so a wrong or wavering answer
+ *   enters the review queue by the D41 rule. `slow` is false: an exam has no
+ *   per-item speed judgement, and the caller owns that threshold (D40).
+ * - **Pilot items record their attempt and are never scheduled.** D41 assigned
+ *   this to SubmitExam, because only the form knows which items are pilots.
+ * - **Attempts first, then the stamp.** If the device dies between the two, a
+ *   retry replays the attempts as no-ops and then stamps. A submitted run, from
+ *   this device or synced from another, replays the same way and keeps its first
+ *   `submittedAt`.
+ */
+export const submitExam = async (
+  request: SubmitExamRequest,
+  deps: SubmitExamDeps,
+): Promise<SubmitExamResult> => {
+  const run = await deps.examRuns.get(request.runId);
+  if (run === null) throw new UnknownExamRunError(request.runId);
+  const form = await formOf(run.formId, deps.items);
+  const pilots = new Set<ItemId>(form.pilotItemIds);
+
+  for (const answer of run.answers) {
+    const attempt = {
+      attemptId: examAttemptId(run.id, answer.itemId),
+      itemId: answer.itemId,
+      response: answer.response,
+      sessionId: run.id,
+      mode: "exam" as const,
+      msToFirstSelect: answer.msToFirstSelect,
+      msToConfirm: answer.msToConfirm,
+      changedAnswer: answer.changedAnswer,
+    };
+    // Sequential on purpose, so a replay writes in the same order as the first pass.
+    if (pilots.has(answer.itemId)) {
+      await recordAttempt(attempt, deps);
+    } else {
+      await answerItem({ ...attempt, slow: false }, deps);
+    }
+  }
+
+  let submitted = run;
+  if (run.submittedAt === null) {
+    const now = deps.clock.now();
+    submitted = {
+      ...run,
+      elapsedMs: laterElapsed(run.elapsedMs, request.elapsedMs),
+      checkpointedAt: now,
+      submittedAt: now,
+    };
+    await deps.examRuns.put(submitted);
+  }
+
+  return { run: submitted, result: await scoreRun(submitted, deps.items) };
+};

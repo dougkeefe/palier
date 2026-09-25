@@ -5,6 +5,37 @@ export type {
 } from "./answer-item.js";
 export { UnknownItemError, answerItem } from "./answer-item.js";
 
+export type {
+  AnswerExamItemRequest,
+  CheckpointExamRequest,
+  ExamRunDeps,
+  FlagExamItemRequest,
+  ResumeExamRequest,
+  ResumeExamResult,
+  StartExamRequest,
+  StartExamResult,
+} from "./exam-run.js";
+export {
+  ExamAlreadySubmittedError,
+  ExamItemNotOnFormError,
+  UnknownExamRunError,
+  UnknownFormError,
+  answerExamItem,
+  checkpointExam,
+  flagExamItem,
+  resumeExam,
+  startExam,
+} from "./exam-run.js";
+
+export type {
+  RescoreExamDeps,
+  RescoreExamRequest,
+  SubmitExamDeps,
+  SubmitExamRequest,
+  SubmitExamResult,
+} from "./submit-exam.js";
+export { ExamNotSubmittedError, examAttemptId, rescoreExam, submitExam } from "./submit-exam.js";
+
 export type { PlanDailySessionDeps, PlanDailySessionRequest } from "./plan-daily-session.js";
 export { planDailySession } from "./plan-daily-session.js";
 

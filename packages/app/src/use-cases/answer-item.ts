@@ -102,6 +102,58 @@ export const answerItem = async (
   request: AnswerItemRequest,
   deps: AnswerItemDeps,
 ): Promise<AnswerItemResult> => {
+  const { attempt, appended } = await recordAttempt(request, deps);
+  const now = attempt.ts;
+
+  const existing = await deps.schedule.get(request.itemId);
+
+  // A retried answer carries the same attemptId, so the append was a no-op
+  // (`appended === false`) and the Leitner move it produced the first time is
+  // already persisted. Re-applying it would advance the box a second time, so
+  // return the schedule as it already stands: the whole use case is idempotent,
+  // not merely the attempt record (D44).
+  if (!appended) return { attempt, review: reviewOf(existing) };
+
+  const { correct } = attempt;
+  const shaky = !correct || request.changedAnswer || request.slow;
+  if (existing === null && !shaky) return { attempt, review: null };
+
+  const review = scheduleReview(
+    deps.profile,
+    currentBox(existing?.box, deps.profile),
+    { correct, changedAnswer: request.changedAnswer, slow: request.slow },
+    now,
+  );
+
+  await deps.schedule.put({
+    itemId: attempt.itemId,
+    due: review.due,
+    skill: attempt.skill,
+    box: review.box,
+  });
+
+  return { attempt, review };
+};
+
+export type RecordAttemptRequest = Omit<AnswerItemRequest, "slow">;
+
+export type RecordAttemptDeps = Pick<AnswerItemDeps, "clock" | "items" | "attempts">;
+
+/**
+ * The first half of `answerItem`: score the answer and append the attempt, with
+ * no Leitner move. `submitExam` calls it directly for pilot items, which are
+ * evidence for the item statistics but must never enter the review queue
+ * (progress.md D41: pilot-ness is a property of the form, and only the exam
+ * use cases hold the form). Not on the package barrel.
+ *
+ * Append first: the attempt is the append-only, conflict-free record
+ * (architecture.md 9.4). If a later schedule write fails, the evidence survives
+ * and the box is recoverable; the other order loses the evidence.
+ */
+export const recordAttempt = async (
+  request: RecordAttemptRequest,
+  deps: RecordAttemptDeps,
+): Promise<{ readonly attempt: Attempt; readonly appended: boolean }> => {
   const now = deps.clock.now();
 
   const [item] = await deps.items.byIds([request.itemId]);
@@ -125,38 +177,7 @@ export const answerItem = async (
     ts: now,
   };
 
-  // Append first: the attempt is the append-only, conflict-free record
-  // (architecture.md 9.4). If the schedule write then fails, the evidence
-  // survives and the box is recoverable; the other order loses the evidence.
-  const appended = await deps.attempts.append(attempt);
-
-  const existing = await deps.schedule.get(request.itemId);
-
-  // A retried answer carries the same attemptId, so the append was a no-op
-  // (`appended === false`) and the Leitner move it produced the first time is
-  // already persisted. Re-applying it would advance the box a second time, so
-  // return the schedule as it already stands: the whole use case is idempotent,
-  // not merely the attempt record (D44).
-  if (!appended) return { attempt, review: reviewOf(existing) };
-
-  const shaky = !correct || request.changedAnswer || request.slow;
-  if (existing === null && !shaky) return { attempt, review: null };
-
-  const review = scheduleReview(
-    deps.profile,
-    currentBox(existing?.box, deps.profile),
-    { correct, changedAnswer: request.changedAnswer, slow: request.slow },
-    now,
-  );
-
-  await deps.schedule.put({
-    itemId: item.id,
-    due: review.due,
-    skill: item.skill,
-    box: review.box,
-  });
-
-  return { attempt, review };
+  return { attempt, appended: await deps.attempts.append(attempt) };
 };
 
 /**
