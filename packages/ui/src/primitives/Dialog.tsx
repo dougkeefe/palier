@@ -1,6 +1,6 @@
 "use client";
 
-import { type JSX, type ReactNode, useEffect, useId, useRef } from "react";
+import { type JSX, type ReactNode, useCallback, useEffect, useId, useRef } from "react";
 
 import { type DialogPlacement, dialogClass } from "./logic.js";
 
@@ -37,6 +37,13 @@ export const Dialog = ({
   const opener = useRef<HTMLElement | null>(null);
   const headingId = useId();
 
+  // Back to whatever held focus before the dialog opened. Idempotent, so the close
+  // event after a caller's close does not move focus a second time.
+  const restore = useCallback(() => {
+    opener.current?.focus();
+    opener.current = null;
+  }, []);
+
   useEffect(() => {
     const dialog = ref.current;
     if (dialog === null) return;
@@ -45,20 +52,23 @@ export const Dialog = ({
       dialog.showModal();
     } else if (!open && dialog.open) {
       dialog.close();
+      // At once, not on the close event, which arrives a task later: a key pressed in
+      // between would otherwise land on whatever the dialog left focused. The caller's
+      // own effects run after this one, so it can still move focus on.
+      restore();
     }
-  }, [open]);
+  }, [open, restore]);
 
   useEffect(() => {
     const dialog = ref.current;
     if (dialog === null) return;
     const closed = (): void => {
-      opener.current?.focus();
-      opener.current = null;
+      restore();
       onClose();
     };
     dialog.addEventListener("close", closed);
     return () => dialog.removeEventListener("close", closed);
-  }, [onClose]);
+  }, [onClose, restore]);
 
   return (
     <dialog ref={ref} className={dialogClass(placement)} aria-labelledby={headingId}>

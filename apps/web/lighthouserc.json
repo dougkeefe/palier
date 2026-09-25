@@ -13,7 +13,10 @@
         "http://localhost:3000/en/review",
         "http://localhost:3000/fr/progress",
         "http://localhost:3000/en/settings/data",
-        "http://localhost:3000/fr/settings/sync"
+        "http://localhost:3000/fr/settings/sync",
+        "http://localhost:3000/en/exam",
+        "http://localhost:3000/fr/exam/run",
+        "http://localhost:3000/en/exam/results"
       ],
       "numberOfRuns": 5,
       "settings": {

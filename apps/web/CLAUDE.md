@@ -30,7 +30,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 - **Islands get the container from `ContainerProvider`** (`src/components/`), which builds it once
   in the browser after hydration and imports the container module lazily, so the adapters stay out of
   the shared first-load JS. The layout passes `hermetic` from the environment. Screens are static RSC
-  shells around one client island each (`/start`, `/home`, `/diagnostic`, `/practice/{reading,writing}`).
+  shells around one client island each (`/start`, `/home`, `/diagnostic`, `/practice/{reading,writing}`,
+  `/exam`, `/exam/run`, `/exam/results`).
   The islands' decisions live in tested `.ts` beside them (`src/features/**`, `src/lib/study.ts`); a
   `.tsx` holds rendering and effects only.
 - **`public/content/` and `public/sw.js` are generated, gitignored and never edited.**
@@ -44,6 +45,18 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   through `parseExamProfileOrThrow` (ADR 18, D42). Import it by package name, never by a
   relative path out of `apps/web` — `no-relative-escape` in `.dependency-cruiser.cjs`
   rejects that, and `.json` is in the cruiser's resolver extensions, so it is caught.
+- **Mock exams** (Phase 3 Slice 3, progress.md D85–D87). The three exam routes are static, and the run is
+  named in `?run=`, which the island reads from `window.location`. Offline, `router.push` falls back to a
+  document load, which the worker serves with `ignoreSearch`.
+  - The runner's rules are in `src/features/exam/`: `rules.ts` holds the product constants and the clock,
+    `runner.ts` the reducer, `results.ts` the results view model, and `readiness.ts` the home card's exam
+    half.
+  - **Every runner write goes through one promise chain**, because answers and checkpoints are both
+    read-modify-write.
+  - **Enter is `preventDefault`ed on an option radio**, or its native click answers the next item.
+  - The runner's section carries `data-mode="exam"`, which gives it `@palier/ui`'s muted token set and no
+    motion.
+  - Nothing names or styles a pilot item (D84 ruling 9).
 - **The R5 non-affiliation statement** is in the footer of every page, from day one.
 - **The sync backend lives in `src/server/` and nowhere else** (ADR 21, progress.md D70).
   - It holds the Drizzle schema, a `SyncRepository` whose every method takes an account id (there
@@ -96,8 +109,10 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   keep it the `chromium` project's dependency. **`chromium`** (hermetic, `next dev`) runs the
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
   titles, and `sync.spec.ts`: journey 8 (two contexts, two devices), journey 7's sync half,
-  and the sync settings' states. **`offline`** (production `next start`, port 3100) runs `offline.spec.ts` (shell,
-  unvisited route, every shard, journeys 2 and 7 with the network off [R4]) and
+  and the sync settings' states, and `exam.spec.ts` (a fixture exam from the picker to its results).
+  **`offline`** (production `next start`, port 3100) runs `offline.spec.ts` (shell,
+  unvisited route, every shard, journeys 2 and 7 with the network off [R4]), `exam-offline.spec.ts`
+  (**journey 3**: a full exam through a reload and a network drop, scored against an independent oracle) and
   `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
   whose fake timers stall Dexie and React). Axe on the states, (`e2e/`),
   Lighthouse perf + a11y ≥ 95 (`lighthouserc.json`), bundle-size < 180 KB gzipped

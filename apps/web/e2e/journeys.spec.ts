@@ -191,6 +191,8 @@ test("every page is titled for its purpose, ahead of the product name (WCAG 2.4.
     ["/en/settings/data", "Your data · Palier"],
     ["/fr/progress", "Progrès · Palier"],
     ["/en/practice/writing", "Written expression · Palier"],
+    ["/en/exam", "Mock exam · Palier"],
+    ["/fr/exam/results", "Résultats de l’examen · Palier"],
     ["/en", "Palier"],
   ] as const) {
     await page.goto(path);

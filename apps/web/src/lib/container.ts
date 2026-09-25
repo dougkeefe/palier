@@ -5,19 +5,30 @@ import type {
   Clock,
   CompleteSessionRequest,
   CompleteSessionResult,
+  AnswerExamItemRequest,
+  CheckpointExamRequest,
   DiagnosticReadoutRequest,
+  ExamReport,
+  ExamReportRequest,
+  ExamRun,
   ExamRunStore,
   ExportDocument,
+  FlagExamItemRequest,
   IdGenerator,
   ImportDataRequest,
   ImportDataResult,
   ItemRepository,
   KeyVault,
+  LatestExamResult,
   PlanDailySessionRequest,
   PracticeTrendRequest,
   ProgressReport,
   ProgressReportRequest,
+  QueueForReviewRequest,
   Random,
+  RescoreExamRequest,
+  ResumeExamRequest,
+  ResumeExamResult,
   ReviewQueueRequest,
   ReviewQueueResult,
   RunDiagnosticRequest,
@@ -25,6 +36,8 @@ import type {
   ScheduleStore,
   SessionStore,
   SettingsStore,
+  StartExamRequest,
+  StartExamResult,
   StartSessionRequest,
   StartSessionResult,
   DeviceId,
@@ -33,26 +46,40 @@ import type {
   SyncOutcome,
   SyncState,
   SyncStateStore,
+  SubmitExamRequest,
+  SubmitExamResult,
   SyncTransport,
 } from "@palier/app";
 import {
+  answerExamItem,
   answerItem,
+  checkpointExam,
   completeSession,
   deleteEverywhere,
   diagnosticReadout,
+  examForms,
+  examInProgress,
+  examReport,
   exportData,
+  flagExamItem,
   importData,
+  latestExamResult,
   listDevices,
   pairDevice,
   planDailySession,
   practiceTrend,
   progressReport,
+  queueForReview,
   removeDevice,
   requestPairCode,
+  rescoreExam,
+  resumeExam,
   reviewQueue,
   runDiagnostic,
   setSyncEnabled,
+  startExam,
   startSession,
+  submitExam,
   syncNow,
   wipeData,
 } from "@palier/app";
@@ -61,9 +88,9 @@ import { dexieStores } from "@palier/adapters/dexie";
 import { webCryptoIdGenerator } from "@palier/adapters/ids";
 import { httpSyncTransport } from "@palier/adapters/sync";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
-import type { ExamProfile } from "@palier/domain";
+import type { ExamForm, ExamProfile } from "@palier/domain";
 import { parseExamProfileOrThrow } from "@palier/domain";
-import type { DayPlan, SkillTrend } from "@palier/engine";
+import type { DayPlan, ExamResult, SkillTrend } from "@palier/engine";
 import {
   counterIdGenerator,
   fakeClock,
@@ -166,6 +193,20 @@ export type UseCases = {
   readonly setSyncEnabled: (request: { readonly enabled: boolean; readonly deleteFromServer?: boolean }) => Promise<void>;
   /** Delete everything, on the server and here [R11]; the server first. */
   readonly deleteEverywhere: () => Promise<void>;
+  /** Mock exams (Phase 3 Slice 3, progress.md D80, D85): the runner's half. */
+  readonly examForms: () => Promise<readonly ExamForm[]>;
+  readonly examInProgress: () => Promise<ResumeExamResult | null>;
+  readonly startExam: (request: StartExamRequest) => Promise<StartExamResult>;
+  readonly resumeExam: (request: ResumeExamRequest) => Promise<ResumeExamResult | null>;
+  readonly answerExamItem: (request: AnswerExamItemRequest) => Promise<ExamRun>;
+  readonly flagExamItem: (request: FlagExamItemRequest) => Promise<ExamRun>;
+  readonly checkpointExam: (request: CheckpointExamRequest) => Promise<ExamRun>;
+  readonly submitExam: (request: SubmitExamRequest) => Promise<SubmitExamResult>;
+  /** And the results' half: every result is rescored from the stored run (ADR 16). */
+  readonly rescoreExam: (request: RescoreExamRequest) => Promise<ExamResult>;
+  readonly examReport: (request: ExamReportRequest) => Promise<ExamReport>;
+  readonly latestExamResult: () => Promise<LatestExamResult | null>;
+  readonly queueForReview: (request: QueueForReviewRequest) => Promise<boolean>;
 };
 
 export type Ports = {
@@ -182,7 +223,7 @@ export type Ports = {
   readonly attempts: AttemptStore;
   readonly schedule: ScheduleStore;
   readonly sessions: SessionStore;
-  /** The mock-exam runs. Their use cases are wired with the runner UI (Phase 3 Slice 3). */
+  /** The mock-exam runs, behind the exam use cases below (Phase 3 Slice 3). */
   readonly examRuns: ExamRunStore;
   readonly settings: SettingsStore;
   readonly vault: KeyVault;
@@ -193,6 +234,11 @@ export type Ports = {
 
 export type Container = Ports & {
   readonly useCases: UseCases;
+  /**
+   * The exam profile, for the screens that show its rules: the exam picker lists
+   * its variants (ADR 9). The same parsed value every use case receives.
+   */
+  readonly profile: ExamProfile;
 };
 
 /**
@@ -293,8 +339,39 @@ function buildUseCases(ports: Ports): UseCases {
     removeDevice: (request) => removeDevice(request, { transport: ports.sync, syncState: ports.syncState }),
     setSyncEnabled: (request) => setSyncEnabled(request, { transport: ports.sync, syncState: ports.syncState }),
     deleteEverywhere: () => deleteEverywhere({ ...syncDeps(ports), vault: ports.vault }),
+    examForms: () => examForms({ items: ports.items }),
+    examInProgress: () => examInProgress({ items: ports.items, examRuns: ports.examRuns }),
+    startExam: (request) => startExam(request, examDeps(ports)),
+    resumeExam: (request) => resumeExam(request, examDeps(ports)),
+    answerExamItem: (request) => answerExamItem(request, examDeps(ports)),
+    flagExamItem: (request) => flagExamItem(request, examDeps(ports)),
+    checkpointExam: (request) => checkpointExam(request, examDeps(ports)),
+    submitExam: (request) =>
+      submitExam(request, {
+        ...examDeps(ports),
+        attempts: ports.attempts,
+        schedule: ports.schedule,
+        profile: PROFILE,
+      }),
+    rescoreExam: (request) => rescoreExam(request, { items: ports.items, examRuns: ports.examRuns }),
+    examReport: (request) =>
+      examReport(request, { items: ports.items, examRuns: ports.examRuns, schedule: ports.schedule }),
+    latestExamResult: () => latestExamResult({ items: ports.items, examRuns: ports.examRuns }),
+    queueForReview: (request) =>
+      queueForReview(request, {
+        clock: ports.clock,
+        items: ports.items,
+        schedule: ports.schedule,
+        profile: PROFILE,
+      }),
   };
 }
+
+const examDeps = (ports: Ports) => ({
+  clock: ports.clock,
+  items: ports.items,
+  examRuns: ports.examRuns,
+});
 
 const syncDeps = (ports: Ports) => ({
   clock: ports.clock,
@@ -328,7 +405,7 @@ export function readEnv(
  */
 export function createContainer(env: Env): Container {
   const ports = env.hermetic ? hermeticPorts() : productionPorts();
-  return { ...ports, useCases: buildUseCases(ports) };
+  return { ...ports, useCases: buildUseCases(ports), profile: PROFILE };
 }
 
 /** The real adapters. Browser-only — see the file comment (D59). */

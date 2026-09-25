@@ -799,6 +799,11 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
   - journey 3, a full 90-minute exam through a reload and a network drop, which is exit criterion 2;
   - axe clean on the runner and results states;
   - Lighthouse ≥ 95.
+
+  **Slice 3 status, 25 September 2026: built** (`progress.md` D85–D87). Every profile variant starts, runs
+  and scores from `content/bank/v2`. Journey 3 reloads a 60-item exam mid-run, drops the network, submits
+  offline and matches an independent rescore. The run gained an optional time allowance and pause count,
+  and `ItemRepository` gained `forms()` (§3.3, amended in place). Slice 4a is next.
 - **Slice 4 — Telemetry and the item-statistics job**, split in two (`progress.md` D83) so work continues
   while Gate D is open:
   - **4a, no UI, buildable before Gate D:** the statistics (proportion correct and point-biserial, with

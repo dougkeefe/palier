@@ -563,3 +563,181 @@ body {
   letter-spacing: 0.15em;
   text-transform: uppercase;
 }
+
+/* ---- Mock exam (§8.4–§8.5, progress.md D84) ----------------------------------
+   The runner page carries data-mode="exam", which applies @palier/ui's muted token
+   set and switches motion off (D86). The page is padded so its own background reads
+   as a distinct, colder surface under the unchanged header. */
+
+.app-exam-page {
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.app-exam {
+  display: grid;
+  gap: 1rem;
+}
+
+.app-exam__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 0.5rem 0;
+  background: var(--bg);
+}
+
+.app-exam__count {
+  margin: 0;
+  flex: 1 1 12rem;
+  color: var(--ink-muted);
+}
+
+.app-exam__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* The navigator drawer: every item as a full-width button, its state in words. */
+.app-navigator {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-navigator__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--ink-muted);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.app-navigator__item[aria-current] {
+  border-color: var(--primary);
+  border-width: 2px;
+}
+
+.app-navigator__state {
+  color: var(--ink-muted);
+}
+
+.app-navigator__number {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* The results: the band letter leads, large (§8.5). */
+.app-result {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.app-result p {
+  margin: 0;
+}
+
+.app-result__band {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--primary);
+}
+
+.app-result__score {
+  font-size: 1.1875rem;
+  font-weight: 600;
+}
+
+.app-cuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-cuts li {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--ink-muted);
+  border-radius: 999px;
+}
+
+.app-cuts li[aria-current] {
+  border-color: var(--primary);
+  border-width: 2px;
+  font-weight: 600;
+}
+
+.app-review-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-review-entry {
+  border: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.app-review-entry > .app-stack {
+  padding: 0 1rem 1rem;
+}
+
+.app-review-entry__summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.app-review-entry__status--correct,
+.app-review-entry__status--incorrect {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
+}
+
+.app-review-entry__status--correct {
+  color: var(--correct);
+}
+
+.app-review-entry__status--incorrect {
+  color: var(--incorrect);
+}
+
+.app-exam-result {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.app-exam-result__line {
+  font-size: 1.1875rem;
+  font-weight: 600;
+  margin: 0;
+}

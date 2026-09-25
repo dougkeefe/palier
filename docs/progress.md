@@ -4,9 +4,9 @@
 **Current phase:** **Phase 3 (Exams and item statistics) is open.** **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
-four, mirrored in `implementation-plan.md` §7 (D79). **Slice 1 (the exam core) merged (#22); Slice 2
-(forms and a bank that can fill them) is built** (`dougkeefe/next-slice-from-progress`; D82, D83). **Gate D
-is resolved** (25 September 2026, D84), so next is **Slice 3**, the exam runner and results UI. See
+four, mirrored in `implementation-plan.md` §7 (D79). **Slices 1 and 2 merged (#22, #23); Gate D is resolved
+(D84); Slice 3 (the exam runner and results UI, and journey 3) is built** (`dougkeefe/naypyidaw`; D85–D87),
+so exit criteria 1 and 2 are met. Next is **Slice 4a**, the statistics core, `/api/telemetry` and the job. See
 [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
@@ -71,7 +71,7 @@ human for anything expensive.
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
-| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (Slices 1–2 built, Gate D resolved; Slice 3 next, D79, D82, D84) |
+| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (Slices 1–3 built, exit criteria 1, 2 and 4 met; Slice 4a next, D79, D83, D87) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | not started |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
@@ -84,7 +84,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/naypyidaw` | **Phase 3 Slice 3 — the exam runner and results UI, and E2E journey 3.** `/exam`, `/exam/run`, `/exam/results`, the readiness card's exam half, the exam use cases wired, `ExamRun.timeAllowance`/`resumes`, a muted exam token set. In progress. | 25 September 2026 |
+| `dougkeefe/naypyidaw` | **Phase 3 Slice 3 — the exam runner and results UI, and E2E journey 3.** `/exam`, `/exam/run`, `/exam/results`, the readiness card's exam half, the exam use cases wired, `ExamRun.timeAllowance`/`resumes`, a muted exam token set. **Built; pending merge** (D85–D87). | 25 September 2026 |
 
 *(The prior rows — Phase 3 Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -185,78 +185,53 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 3 Slice 2 is built** (`dougkeefe/next-slice-from-progress`; D82): `content/bank/v2` has 242 items
-and one form per profile variant, and `BANK_VERSION` is 2. **Gate D is resolved** (25 September 2026,
-D84): PRD §8.4–§8.5 adopted, with twelve rulings.
+**Phase 3 Slice 3 is built** (`dougkeefe/naypyidaw`; D85–D87): mock exams run from `/exam` through
+`/exam/results`, offline too, and exit criteria 1, 2 and 4 are met.
 
-**Next: Phase 3 Slice 3, the exam runner and results UI, and E2E journey 3.** It needs no human. It
-carries exit criteria 1 ("runnable") and 2.
+**Next: Phase 3 Slice 4a, the item statistics core, `POST /api/telemetry` and the retirement job, with no
+UI** (D83). It needs no human, and it carries exit criterion 3.
 
-**Scope.** Every ruling below is from D84; build to it rather than re-deciding it.
-- **Wiring.** `startExam`…`rescoreExam` go into `buildUseCases` (`apps/web/src/lib/container.ts`), in
-  both graphs.
-- **Routes, all static.** The service worker cannot precache a dynamic route, and exams must work
-  offline [R4]:
-  - `/[locale]/exam`: choose skill and format, with one line on supervised versus unsupervised, and the
-    1.5× extra-time option. It is reached from home's mock-exam quick action and the readiness card
-    (ruling 12);
-  - `/[locale]/exam/run`: the runner;
-  - `/[locale]/exam/results?run=<id>`: the results.
+**Scope.**
+- **The rules go in the profile** (ADR 9; the plan says "the retirement rule from the profile"). A new
+  `itemStatistics` block in `content/profiles/psc-sle.json` and its Zod schema holds:
+  - `pCorrectMin: 0.15` and `pCorrectMax: 0.95` (PRD §13.3);
+  - `minResponsesDifficulty: 30` and `minResponsesDiscrimination: 100` (architecture.md §7.6: "usable from
+    around 30", "noisy below about 100");
+  - the rule that a negative point-biserial retires.
 
-  Each is a static RSC shell with one client island and `.app-island`.
-- **The run gains two optional fields**, `timeAllowance` (absent = 1) and `resumes` (absent = 0).
-  - `resumeExam` increments `resumes` (ruling 1).
-  - Because the fields are optional, runs already synced or exported still parse. Keep export
-    `version: 2` if its validator accepts the new fields; otherwise record a version-3 bump beside D81.
-  - Cover the fields in the Dexie/memory contract, `mergeRecord` and export round trips.
-- **The runner** (§8.4):
-  - a muted palette from a new `@palier/ui` exam token set, held by the contrast gate, with no Coco
-    and no motion (ruling 11);
-  - selecting is answering, with no confirm step, and answers can change freely through the navigator
-    drawer, which also flags (ruling 4);
-  - the clock turns amber at 10 minutes left and red at 2, and is a polite live region updated each
-    minute (§11);
-  - the submit dialog counts unanswered and flagged items, and time running out submits
-    automatically (ruling 5);
-  - the rules — the time left with the allowance, the thresholds, the dialog counts, expiry — go in a
-    tested `src/features/exam/*.ts`. The thresholds and 1.5× are product constants there, not exam
-    rules (ADR 9 covers the PSC's numbers, which stay in the profile).
-- **The results** (§8.5), as a tested view model:
-  - the band with the raw score and cuts;
-  - sub-skill **counts** ("4 of 6"), sorted by weakness (ruling 7);
-  - the gap to the next band up, and to the band below when within 2 of its cut (ruling 8);
-  - calibration, with "unsure" = flagged or `changedAnswer`, and the screen saying so (ruling 6);
-  - labels for "paused n times" (ruling 1), "with extra time" (ruling 3) and, on a retake of a form
-    already submitted, "you have seen these items; this result will read high" (ruling 2);
-  - a review walkthrough of every item.
+  Retirement on three user reports stays out, because reports are GitHub issues, not data this job reads.
+- **Domain:** a `TelemetryEvent` type and schema: `itemId`, `correct`, `responseMs`, `bankVersion` and
+  `restBucket`. It has no account or device id (architecture.md §9.2, PRD §15).
+  - `restBucket` is the run's accuracy on its *other* scored items, in quintiles 0–4. That is what makes a
+    point-biserial computable without an ability estimate (ADR 7).
+- **Engine, pure and at 100% branch:**
+  - `itemStatistics(events)`: per item, `n`, the proportion correct and the point-biserial of `correct`
+    against `restBucket`;
+  - `retirementVerdicts(stats, items, rules)`: each verdict's reasons, applying the minimum counts first.
 
-  Two consequences of ruling 9, which does **not** reveal pilots:
-  - every figure counts scored items only, and nothing names or styles a pilot;
-  - "Add to review queue" shows on **any item not already queued**. Wrong scored items are queued at
-    submit, and wrong pilots are not (D41), so a button keyed to "answered right" would expose pilots
-    (ruling 10, D84).
-- **The readiness card's exam half** (§8.2 zone A): the latest submitted run, rescored on the fly
-  ("C, 39 of 50. C starts at 38."). The data-settings import toast also gains the mock-exam count (D81).
-- **Journey 3**, in the `offline` project: a hermetic reload loses the in-memory run.
-  1. Start `reading-supervised` online and answer by keyboard.
-  2. Reload mid-run, and assert the answers, flags and elapsed time came back.
-  3. Take the network down.
-  4. Finish and submit offline.
-  5. Assert the band on results equals the rescore.
-
-  Axe runs on the picker, a runner item, the navigator, the submit dialog and results.
+  Worked examples at every threshold, and a permutation-invariance property (the engine's rule, D73).
+- **Server** (`apps/web/src/server`):
+  - a `telemetry_events` table, with a committed migration;
+  - a `POST /api/telemetry` handler that validates a batch with a size cap, rate-limits by the existing IP
+    HMAC, never stores an IP, and answers 202;
+  - repository and route tests on the memory repository and on PGlite.
+- **The job.** `apps/factory` may not import the engine (§3.1), so the job is a `src/server` function plus
+  a script in `apps/web/scripts/`.
+  - It reads the events, calls the engine, and writes `content/factory/retirements.json` (ids and reasons).
+  - A workflow opens that file as a pull request monthly (content-factory.md §6).
+  - Confirm that the selector and the form stage skip a `status: "retired"` item. If either does not,
+    fixing it is part of this slice.
+- **Exit criterion 3:** a seeded synthetic event set, where one item has a known proportion correct and
+  another a reversed key. The job flags and retires exactly those, with the right reasons.
 
 **Done looks like:**
-- all four variants start, run and score from `content/bank/v2`;
-- journey 3 green;
-- axe clean on those states;
-- Lighthouse ≥ 95 on the new routes;
-- the bundle within 180 KB;
+- exit criterion 3 green;
+- the route held on PGlite in the integration lane;
 - every new branch tested (§10);
 - `pnpm verify` and `verify:medium` green.
 
-**After it: Slice 4a** (D83), which can also run in a parallel session since it touches no UI, then
-Slice 4b and the closed pilot.
+**After it: Slice 4b** (the opt-in, the post-exam prompt on the results screen, client batching that reads
+each run's responses from the winning run per D80, and the readiness disclosure). Then the closed pilot.
 
 **Standing human gates (do not self-direct):**
 
@@ -387,8 +362,8 @@ breakdown, expanded on start. Nothing is ticked without session-log evidence.
 
 **Work breakdown (§7)**
 
-- [~] Exam runner driven by the profile variants: navigator, flagging, timer with amber/red thresholds, checkpoint and resume with the clock preserved, pilot items — **the core is built** (Slice 1, `dougkeefe/minnetonka-v3`, D80): the `ExamRunStore` port on memory and Dexie, the start/answer/flag/checkpoint/resume/submit/rescore use cases, and exam runs synced, exported and wiped. **The UI is Slice 3**
-- [ ] Results screen: band, raw score against the cuts, per-sub-skill breakdown, near-miss from the actual cuts, confidence calibration, review walkthrough — Slice 3
+- [x] Exam runner driven by the profile variants: navigator, flagging, timer with amber/red thresholds, checkpoint and resume with the clock preserved, pilot items — the core in Slice 1 (`dougkeefe/minnetonka-v3`, D80); **the UI in Slice 3** (`dougkeefe/naypyidaw`, D85–D87): `/exam`, `/exam/run`, the navigator drawer, the submit dialog, extra time, and the clock frozen while closed with the pauses counted
+- [x] Results screen: band, raw score against the cuts, per-sub-skill breakdown, near-miss from the actual cuts, confidence calibration, review walkthrough — Slice 3 (`/exam/results`, D87), with pilots never revealed (D84 ruling 9), and the readiness card's exam half
 - [x] Form generation in the factory: fixed, immutable, versioned forms per variant — **built** (Slice 2, `dougkeefe/next-slice-from-progress`, D82): `pipeline/forms.ts`, one form per profile variant in `content/bank/v2`, held byte-identical to a fresh run by `committed-bank.test.ts`
 - [ ] Telemetry opt-in, the post-exam prompt, `/api/telemetry`, client batching — the route is Slice 4a, the rest Slice 4b (D83)
 - [ ] The item statistics job: proportion correct and point-biserial per item, minimum counts, a PR retiring items that trip the rules — Slice 4a
@@ -396,8 +371,8 @@ breakdown, expanded on start. Nothing is ticked without session-log evidence.
 
 **Exit criteria** (the actual gate)
 
-- [~] All four exam variants runnable and correctly scored, golden fixture per variant at every cut boundary [R3] — **the goldens are done** (Slice 1): one per variant, both sides of every exact cut, pilots answered right and not counted, and proven to bite (session log). **The forms exist** (Slice 2: one per variant in `content/bank/v2`, served by `httpBankRepository`). "Runnable" needs Slice 3's runner
-- [ ] A full 90-minute exam survives reload and network drop (E2E journey 3) — Slice 3
+- [x] All four exam variants runnable and correctly scored, golden fixture per variant at every cut boundary [R3] — the goldens (Slice 1), the forms (Slice 2), and **runnable** (Slice 3): the production container starts, runs and scores every profile variant from `content/bank/v2` over real IndexedDB, each at the top of its scale with pilots uncounted (`container.test.ts`), and the runner UI drives them (session log, 25 September 2026, `dougkeefe/naypyidaw`)
+- [x] A full 90-minute exam survives reload and network drop (E2E journey 3) — `e2e/exam-offline.spec.ts`: the 60-item, 90-minute supervised reading form, a reload mid-run with the answers, flags and clock restored, the network dropped, submitted offline, and the band equal to an independent `scoreExam` oracle (session log, 25 September 2026)
 - [ ] Statistics job flags and retires a seeded reversed-key item on synthetic data — Slice 4a
 - [x] Scoring is idempotent — `rescoreExam` derives the result from the stored run, and no result is stored (ADR 16). A fast-check property holds submit, rescore and a second rescore deep-equal, with each attempt agreeing with the result. The simulator also rescores on every device after every heal and requires the same result (session log, `dougkeefe/minnetonka-v3`)
 - [ ] Closed pilot run, 20–30 people — the plan's human decision gate, after Slice 4
@@ -420,7 +395,8 @@ slices". **Keep the two in sync**: the plan holds the fuller scope and each slic
 - [x] **Gate D — exam UI direction (human).** Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise it
   first. Gates Slice 3. **Resolved 25 September 2026 (human decision, D84):** adopted with twelve
   rulings, eleven as recommended. Ruling 9 goes the other way: pilots are never revealed to the user.
-- [ ] **Slice 3 — The runner and results UI, and E2E journey 3.** Unblocked by Gate D (D84); *Next, decided*.
+- [x] **Slice 3 — The runner and results UI, and E2E journey 3.** **Built 25 September 2026** (`dougkeefe/naypyidaw`;
+  D85–D87; session-log evidence). Exit criteria 1 and 2.
 - [ ] **Slice 4a — The statistics core, `/api/telemetry` and the job, no UI** (D83). Buildable while
   Gate D is open. Carries exit criterion 3.
 - [ ] **Slice 4b — The opt-in, the post-exam prompt, client batching, the readiness disclosure.** After
@@ -469,8 +445,8 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | --- | --- | --- | --- |
 | R1 | Practises all three tested skills | 2, 5, 6 | reading and written expression practised end to end (24 September 2026); oral is Phases 5–6 |
 | R2 | Format and register match the real tests | 1 | not started |
-| R3 | Mock exams mirror published structure and cuts | 3 | in progress: every variant's cuts are locked by a golden at each boundary, with pilots excluded (Slice 1), and the committed bank ships a form per variant at its exact item and pilot counts, time and cuts (Slice 2). Runnable is Slice 3 |
-| R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams are Phase 3 |
+| R3 | Mock exams mirror published structure and cuts | 3 | **satisfied for reading and written expression** (25 September 2026): goldens at every cut (Slice 1), a form per variant at its exact counts, time and cuts (Slice 2), and all four variants runnable and scored in the app (Slice 3). The bank's French stays synthetic until the full-volume run (D54) |
+| R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams too: journey 3 finishes and submits a full exam with the network off and reads its results offline (25 September 2026) |
 | R5 | Never presents as official | 0, 7 | not started |
 | R6 | No real test items, no PSC reproduction | 1 | not started |
 | R7 | Rationale per option, explanation per item | 1 | not started |
@@ -2790,11 +2766,146 @@ amber at ten minutes and red at two.
   in for `showModal` and `close`.
 - Two glyphs, `clock` and `flag`, join the set.
 
+### D87 — the exam UI's calls, and three defects journey 3 found
+**Date:** 25 September 2026 · **Status:** accepted
+
+Phase 3 Slice 3's UI half. It builds to D84's rulings, and these are the calls those rulings left open.
+
+- **Navigation is the router's, and offline it falls back to a document load.**
+  - The picker goes to `/exam/run?run=<id>` and the runner to `/exam/results?run=<id>` with next-intl's
+    `router.push`. Offline, the RSC fetch fails and Next loads the document instead. The worker serves that
+    from its cache with `ignoreSearch` (D60), which is why all three routes stay static.
+  - Journey 3 submits offline and lands on the results, so this is proven, not assumed. The plan had
+    guessed a forced `window.location.assign`. That was not needed, and it would have lost the hermetic
+    in-memory run.
+  - The run id is read from `window.location.search` in the island. Nothing uses `useSearchParams`, so no
+    Suspense boundary and no client-side bailout.
+- **The clock** is the run's stored `elapsedMs` plus `performance.now()` since the page loaded. It ticks once
+  a second.
+  - It checkpoints every **10 s** of exam time (`CHECKPOINT_EVERY_MS`, a product constant), on
+    `visibilitychange` → hidden and on `pagehide`, besides every answer and flag. A crash can lose at most
+    10 s.
+  - The thresholds are `AMBER_MS` (10 min) and `RED_MS` (2 min). The live region's line changes only
+    when `announcedMinutes` does (§11).
+  - Time running out submits, and a failed submission retries after 3 s rather than in a tight loop.
+- **Every write goes through one promise chain.** `answerExamItem` and `checkpointExam` each read the run
+  and put it back, so two in flight at once could each drop the other's change: a lost answer. The reducer
+  never awaits anything. It appends each answer and flag to an `outbox`, and the island drains the outbox
+  in order. A failed batch stays in the outbox and is written again, and every write is idempotent.
+- **Keys:** 1–4 choose, and so answer (ruling 4). Enter goes to the next item, and F flags. As in the drill,
+  the reducer resolves them (D67).
+- **Three defects journey 3 found, each fixed at the source.** None of the fixes changes an assertion.
+  1. **Enter on an option also clicked it.** An option is a `<button role="radio">`, so Enter's native click
+     arrived after the reducer had moved on, and it answered the *next* item with this one's choice. The
+     journey saw 31 answers where it had given 30. The listener now calls `preventDefault()` on the Enter
+     it takes. The drill never showed this, because it ignores a select while it records.
+  2. **Focus came back from the navigator a task late.** `Dialog` restored focus on the `close` event,
+     which a browser fires a task after `close()`. A key pressed in between landed on "All items" and
+     reopened the drawer. `Dialog` now restores focus at once when its caller closes it, and the runner
+     then moves focus on to the item. A ui test holds this with a `close()` that fires no event.
+  3. **The first cut of the journey could not see a reload.** Thirty keyboard answers take under a second,
+     so the clock read 90:00 both before and after the reload. The journey now waits past one checkpoint
+     interval before reloading.
+- **Results** (`features/exam/results.ts`):
+  - **The near-miss below** (ruling 8) reads "within 2 of its cut" as `raw − bandMin ≤ 2`. The line then
+    says `raw − bandMin + 1` fewer correct answers would have dropped the result a band.
+  - **The bottom band does not name its own cut**, since "X starts at 0" says nothing and the gap to the next
+    band says it all. For the same reason the readiness card names the next band's cut from X: "X, 5 of 50.
+    A starts at 18."
+  - **Calibration gives counts, not item lists.** A list could give a pilot away by its absence, for
+    example a flagged pilot that is missing from "unsure and right" (ruling 9).
+- **The review walkthrough** shows every item in a closed `<details>`. It reuses the item renderer with
+  `revealed`, and the drill's feedback copy and item-report control. "Add to review queue" is a new use case
+  (D85), keyed to "not queued" (ruling 10).
+- **Home's readiness card** is now titled "Where you stand", with two subsections. The exam half ("Your last
+  mock exam") leads, and the practice trend follows, as §8.2's two distinct things. The "Mock exams arrive
+  later" line is gone. The review card gains the mock-exam link (ruling 12).
+- **Exam mode covers the runner's section only.** The header and footer keep the default palette, for D65's
+  reason: R5 and WCAG 3.2.6 want them the same on every page.
+- **A navigator entry is one ICU message** (`navEntry`), so its accessible name reads "Item 3: answered,
+  flagged". Two adjacent spans would have read "Item 3answered".
+- **Deferred, not dropped:** §14's "resume *or discard*". Nothing discards a run. Starting a new exam leaves
+  the old one unfinished, and `unsubmitted()` offers the newest. A discard needs a store write (a
+  `discardedAt`) and a merge rule, so it waits for a reason stronger than tidiness.
+- **Existing tests touched:**
+  - `offline.spec.ts`'s `waitForOfflineReady` moved to `helpers.ts`, with no assertion changed.
+  - `journeys.spec.ts`'s titles test gained two exam routes.
+  - The import toast's copy gained a mock-exam count at the end of the sentence, so journey 6's
+    "Imported N answers" still matches.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 September 2026 — `dougkeefe/naypyidaw` (Phase 3 Slice 3: the exam runner and results UI, and journey 3)
+
+**Built.** The decisions are recorded in D85–D87.
+- **Core** (D85):
+  - `ExamRun.timeAllowance?` and `resumes?`, parsed through `parseExamRun`, so sync and import keep them.
+  - `resumeExam` counts a pause once exam time has run, and `examInProgress` looks without writing.
+  - `ItemRepository.forms()`, amended into §3.3.
+  - `examReport`, `latestExamResult`, `examForms` and `queueForReview`.
+  - The engine's `examSubSkillBreakdown`, over scored items only.
+- **`@palier/ui`** (D86): an exam token set under `[data-mode="exam"]`, a gated `warning` token, no motion in
+  exam mode, and `Timer` and `Dialog` (native `<dialog>`).
+- **Web** (D87):
+  - the exam use cases wired in both graphs;
+  - `/exam`, `/exam/run` and `/exam/results`, all static;
+  - `features/exam/{rules,runner,results,readiness}.ts`;
+  - the readiness card's exam half and the mock-exam link on home;
+  - the import toast's mock-exam count;
+  - `en` and `fr` copy at parity.
+- **Journey 3** (`e2e/exam-offline.spec.ts`), on the `offline` project, over the 60-item, 90-minute
+  supervised reading form:
+  1. It answers half by keyboard and flags two.
+  2. It waits past a checkpoint and reloads.
+  3. It asserts the answers, the flags and the clock came back.
+  4. It drops the network, finishes and submits offline.
+  5. It asserts the band and raw score on results equal an independent `scoreExam` over the committed
+     files, and "Paused once".
+
+  Axe runs on the picker, a runner item, the navigator, the submit dialog and results. A hermetic
+  `e2e/exam.spec.ts` runs a fixture exam from the picker to the review queue.
+- **Found by journey 3, and fixed at the source** (D87):
+  - Enter on an option's `<button role="radio">` also clicked it, answering the next item.
+  - `Dialog` gave focus back a task late.
+
+**Proven to bite, each reverted afterwards:**
+- `AMBER_MS` at 9 minutes → `rules.test.ts` "puts the thresholds at ten and two minutes" failed.
+- `parseExamRun` dropping `resumes` → 2 failed, in `records.test.ts` and `data-rights.test.ts`.
+- A `pilot` field on the review rows → `results.test.ts` "…pilots included and indistinguishable" failed.
+- The exam `primary` lightened to `#AAB3BD` → the contrast gate failed three pairs, among them "exam light:
+  --primary on --bg clears 3:1 (is 1.91:1)".
+
+**Existing tests changed, and why:**
+- `exam-run.test.ts` "resumes the latest unsubmitted run…" now expects `resumes: 1` and the new checkpoint,
+  which is ruling 1's behaviour (D85).
+- `tokens.test.ts`'s pinned names gained `warning`.
+- `offline.spec.ts`'s helper moved to `helpers.ts`, with no assertion changed.
+- The `journeys.spec.ts` titles test gained two routes.
+- Every local `ItemRepository` stub gained `forms`.
+
+**Gates:**
+```
+pnpm verify                     → exit 0: check-types, lint, boundaries ("no dependency violations" ×2),
+                                  Test Files 125 passed, Tests 1765 passed | 8 todo
+pnpm --filter @palier/web build → prepare-public: … v2 precached; sw.js …, 14 route(s) × 2 locale(s)
+pnpm verify:medium              → exit 0: integration Tests 39 passed; Playwright 33 passed
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB, within budget
+pnpm --filter @palier/web lighthouse  → exit 0, 12 URLs × 5 runs; median performance 1.0 and accessibility 1.0
+                                  on every URL except /en/review at 0.99 performance; /en/exam, /fr/exam/run
+                                  and /en/exam/results 1.0 / 1.0; max CLS 0
+```
+- **Branch coverage of the new code:** `features/exam/*.ts`, `exam-report.ts`, `exam-run.ts`,
+  `export-document.ts`, `sub-skill-breakdown.ts`, ui `logic.ts`, `tokens.ts` and `css.ts` are at 100%.
+  `http-bank-repository.ts` is at 94.4% (unchanged apart from `forms()`, which is covered).
+
+**Not done here, by design:**
+- §14's "discard" of a run in progress (D87);
+- the telemetry opt-in and the post-exam prompt (Slice 4b);
+- Slice 4a, now *Next, decided*.
 
 ### 25 September 2026 — `dougkeefe/next-slice-from-progress` (Gate D resolved)
 

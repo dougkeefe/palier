@@ -296,4 +296,49 @@ describe("Dialog", () => {
     expect(document.activeElement).toBe(opener);
     opener.remove();
   });
+
+  it("gives focus back as soon as the caller closes it, without waiting for the close event", () => {
+    // A browser fires "close" a task later; stand in for one that has not fired yet.
+    close.mockImplementationOnce(function (this: HTMLDialogElement) {
+      this.removeAttribute("open");
+    });
+    const opener = document.createElement("button");
+    document.body.append(opener);
+    opener.focus();
+
+    const { rerender } = render(
+      <Dialog open onClose={() => undefined} heading="Items">
+        <button type="button">inside</button>
+      </Dialog>,
+    );
+    (document.querySelector("dialog button") as HTMLElement | null)?.focus();
+    rerender(
+      <Dialog open={false} onClose={() => undefined} heading="Items">
+        <button type="button">inside</button>
+      </Dialog>,
+    );
+
+    expect(document.activeElement).toBe(opener);
+    opener.remove();
+  });
+
+  it("gives focus back and reports it when the dialog closes itself, as on Escape", () => {
+    const onClose = vi.fn();
+    const opener = document.createElement("button");
+    document.body.append(opener);
+    opener.focus();
+
+    render(
+      <Dialog open onClose={onClose} heading="Items">
+        <button type="button">inside</button>
+      </Dialog>,
+    );
+    const dialog = document.querySelector("dialog") as HTMLDialogElement;
+    (dialog.querySelector("button") as HTMLElement).focus();
+    dialog.dispatchEvent(new Event("close"));
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(document.activeElement).toBe(opener);
+    opener.remove();
+  });
 });
