@@ -232,6 +232,13 @@ export const httpBankRepository = (config: HttpBankConfig): ItemRepository => {
       return loadForm(entry.path);
     },
 
+    // Through the same per-path cache as `form`, so listing and then opening a form
+    // fetches it once.
+    forms: async () => {
+      const manifest = await getManifest();
+      return Promise.all(manifest.forms.map((entry) => loadForm(entry.path)));
+    },
+
     scenario: async (id: ScenarioId) => {
       const scenarios = await getScenarios();
       return scenarios.find((s) => s.id === id) ?? null;

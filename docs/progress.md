@@ -2709,6 +2709,54 @@ gaps, so the gate was settled as "adopt, with rulings".
 gains two optional fields in Slice 3. Ruling 6 needs nothing new: `ExamAnswer.changedAnswer` and
 `flagged` already exist.
 
+### D85 — the exam core's additions for the UI: two optional run fields, `forms()`, and what counts as a pause
+**Date:** 25 September 2026 · **Status:** accepted
+
+Phase 3 Slice 3's core half. *Next, decided* named the two run fields. Building them, and the screens that
+read them, forced five calls it did not anticipate.
+
+- **`ExamRun.timeAllowance?` and `ExamRun.resumes?`** (absent = 1 and 0). They are written only when they
+  differ from the defaults. So a run without extra time, never paused, is byte-identical to one written
+  before the fields existed, and hashes the same, so no sync ledger turns dirty on upgrade.
+  - `startExam` takes the allowance and refuses anything not finite and ≥ 1.
+  - `resumeExam` gives the time left with it, as `runLimitMs(run, form)`.
+- **`parseExamRun` had to learn them, or they would vanish.** It rebuilt a run field by field, and export,
+  import and sync all go through it, so a synced run would have silently lost its extra time. It now
+  validates both fields, copies each only when present, and rejects a malformed value.
+  - **The export stays at version 2**, the condition *Next, decided* set. Absent fields mean the defaults,
+    and an older build ignores the extra keys.
+- **A resume counts as a pause only once exam time has run** (`elapsedMs > 0`).
+  - The picker starts a run, then the runner opens it, so a first load straight after `startExam` must not
+    count.
+  - `resumeExam` therefore writes now: it increments `resumes` and checkpoints. The old read-only lookup
+    is kept as a separate use case, `examInProgress`, because the picker's "resume your exam in progress"
+    card must not count as a pause just by looking.
+  - One existing test changed for this. `exam-run.test.ts` "resumes the latest unsubmitted run…" expected
+    the stored run back unchanged. It now expects `resumes: 1` and the new checkpoint, which is ruling 1's
+    behaviour.
+- **`mergeRecord` is unchanged, so a concurrent `resumes` increment can be lost.** A whole record wins, and
+  the copy with more exam time is kept with its own count. This is the same argument D80 accepts for two
+  in-progress copies' answers: it needs one run open on two devices at once. A merge test names the
+  residual.
+- **`ItemRepository.forms()`**, amended into `implementation-plan.md` §3.3 in place, as D38 and D61 were.
+  - The picker lists the profile's variants (ADR 9) and needs each one's form. The alternative, deriving
+    `fr-${variant}-v${BANK_VERSION}` in the web app, would bind the app to the factory's id convention
+    (D82), and it does not hold for the hermetic fixture forms.
+  - The HTTP adapter lists through `form()`'s per-path cache, so listing and then opening a form fetches
+    it once.
+  - The contract gains two cases. The memory repository, the HTTP adapter and every local stub implement
+    it.
+- **Four new `@palier/app` use cases** (`exam-report.ts`):
+  - `examReport`: the rescored result, the form's items, which items are queued, and whether this is a
+    retake of a form already submitted, with ties broken by run id;
+  - `latestExamResult`: the readiness card, passing over a run whose form has left the bank;
+  - `examForms`;
+  - `queueForReview`: box 1, as a wrong answer gets. It is a no-op on an item already due and reopens a
+    retired one.
+- **One new engine function, `examSubSkillBreakdown`**: tallies per sub-skill over **scored** items only,
+  unanswered counting as wrong, and weakest first by the same comparator as `subSkillBreakdown`. It is new,
+  so no golden value moved.
+
 ---
 
 ## Session log

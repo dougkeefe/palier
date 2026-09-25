@@ -97,9 +97,13 @@ interface ItemRepository {
   query(c: ItemCriteria): Promise<Item[]>        // skill, subSkill, band, exclude, limit
   passage(id: PassageId): Promise<Passage | null>
   form(id: FormId): Promise<ExamForm | null>
+  forms(): Promise<ExamForm[]>                   // every form the bank ships, no order promised
   scenario(id: ScenarioId): Promise<OralScenario | null>
   bankVersion(): Promise<number>
 }
+// `forms` was added 25 September 2026 with Phase 3 Slice 3: the exam picker pairs the profile's
+// variants with the bank's forms, and deriving a form id from the factory's naming convention
+// would couple the app to it. See progress.md D85.
 
 // Local persistence, one port per aggregate
 interface AttemptStore   { append(a: Attempt): Promise<boolean>; recent(skill: Skill, n: number): Promise<Attempt[]>; since(t: ISO): Promise<Attempt[]>; forItem(id: ItemId): Promise<Attempt[]> }
@@ -129,7 +133,8 @@ interface ExamRunStore   { put(r: ExamRun): Promise<void>; get(id: SessionId): P
 // ELAPSED exam time, so a resume restores the clock without counting the time the tab was
 // closed. `put` is a plain upsert: the write-once `submittedAt` rule lives in the use cases and
 // in sync's mergeRecord. No result is stored, because rescoring derives it (ADR 16). See
-// progress.md D80.
+// progress.md D80. Amended 25 September 2026 (Phase 3 Slice 3, D85): ExamRun gains the optional
+// `timeAllowance` (absent = 1) and `resumes` (absent = 0), for D84's rulings 3 and 1.
 interface OralStore      { /* transcripts and audio blobs, local only */ }
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
 // Amended 24 September 2026: AttemptStore, ScheduleStore, SessionStore and SettingsStore each

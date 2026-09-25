@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import type { Attempt, Item, SubSkill } from "@palier/domain";
 import { itemId } from "@palier/domain";
 
-import { subSkillBreakdown } from "./sub-skill-breakdown.js";
+import type { ExamResult, ScoredExamItem } from "./scorer.js";
+import { examSubSkillBreakdown, subSkillBreakdown } from "./sub-skill-breakdown.js";
 import { anAttempt, anItem } from "./__tests__/fixtures.js";
 
 /** `n` attempts on one sub-skill, the first `correct` right. */
@@ -78,5 +79,44 @@ describe("subSkillBreakdown ordering", () => {
     const { items, attempts } = merge(on("main-idea", 8, 4), on("inference", 4, 2));
 
     expect(subSkillBreakdown("reading", attempts, items).map((t) => t.subSkill)).toEqual(["main-idea", "inference"]);
+  });
+});
+
+describe("examSubSkillBreakdown", () => {
+  const scored = (id: string, correct: boolean, pilot = false): ScoredExamItem => ({
+    itemId: itemId(id),
+    chosen: correct ? "a" : null,
+    correct,
+    pilot,
+  });
+  const resultOf = (items: readonly ScoredExamItem[]): ExamResult => ({
+    outcome: { band: "B", rank: 2, raw: 0, scored: 0, bandMin: 0, bandMax: 0, next: null },
+    items,
+  });
+  const bank = [
+    anItem({ id: itemId("m1"), subSkill: "main-idea" }),
+    anItem({ id: itemId("m2"), subSkill: "main-idea" }),
+    anItem({ id: itemId("i1"), subSkill: "inference" }),
+    anItem({ id: itemId("i2"), subSkill: "inference" }),
+    anItem({ id: itemId("p1"), subSkill: "inference" }),
+  ];
+
+  it("counts each scored item on its sub-skill, unanswered as wrong, weakest first", () => {
+    const result = resultOf([scored("m1", true), scored("m2", true), scored("i1", true), scored("i2", false)]);
+
+    expect(examSubSkillBreakdown(result, bank)).toEqual([
+      { subSkill: "inference", attempted: 2, correct: 1 },
+      { subSkill: "main-idea", attempted: 2, correct: 2 },
+    ]);
+  });
+
+  it("leaves pilots out, right or wrong, so the counts add up to the raw score and give no pilot away", () => {
+    const result = resultOf([scored("i1", false), scored("p1", true, true)]);
+
+    expect(examSubSkillBreakdown(result, bank)).toEqual([{ subSkill: "inference", attempted: 1, correct: 0 }]);
+  });
+
+  it("skips an item the bank no longer holds", () => {
+    expect(examSubSkillBreakdown(resultOf([scored("gone", true)]), bank)).toEqual([]);
   });
 });

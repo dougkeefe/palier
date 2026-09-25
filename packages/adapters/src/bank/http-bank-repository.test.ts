@@ -77,6 +77,15 @@ describe("httpBankRepository — delivery behaviour", () => {
     expect(requested.some((u) => u.includes("/forms/"))).toBe(false);
   });
 
+  it("lists every form through the same cache as form(), so opening a listed form fetches nothing more", async () => {
+    const repo = serve();
+
+    expect((await repo.forms()).map((f) => f.id)).toEqual(["f-1"]);
+    const fetched = requested.filter((u) => u.includes("/forms/")).length;
+    await repo.form(formId("f-1"));
+    expect(requested.filter((u) => u.includes("/forms/"))).toHaveLength(fetched);
+  });
+
   it("returns null for a scenario when the oral file is absent (HTTP 404)", async () => {
     const repo = serve({ items: [], passages: [], forms: [], scenarios: [], bankVersion: 3 });
 
@@ -277,6 +286,12 @@ describe("httpBankRepository — the committed Phase-3 bank, with its forms", ()
       expect(items.every((i) => i.skill === form.skill && i.lang === form.lang)).toBe(true);
       for (const pilot of form.pilotItemIds) expect(form.itemIds).toContain(pilot);
     }
+  });
+
+  it("lists one form per profile variant, one for each skill and mode", async () => {
+    const forms = await repo().forms();
+    expect(forms.map((f) => f.id).sort()).toEqual(manifest.forms.map((f) => f.id).sort());
+    expect(new Set(forms.map((f) => `${f.skill}-${f.mode}`)).size).toBe(forms.length);
   });
 
   it("still holds every item v1 published, under the same id (architecture.md §5.5)", async () => {

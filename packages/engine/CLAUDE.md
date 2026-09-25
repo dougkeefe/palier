@@ -5,7 +5,9 @@ scheduler, the selector and the daily planner (`implementation-plan.md` §3.2) �
 engine core is now complete — plus `subSkillBreakdown`, the progress screen's per-sub-skill
 **counts** (whole history, no window, weakest first; progress.md D66). It is deliberately
 separate from `weakestSubSkills`, which the planner uses for targeting and which windows and
-thresholds. It returns tallies, never a percentage, so it makes no estimate (R10). Everything is
+thresholds. It returns tallies, never a percentage, so it makes no estimate (R10). Its sibling
+`examSubSkillBreakdown` tallies one mock exam's **scored** items the same way, with unanswered items
+counted as wrong and pilots left out, since pilots are never revealed (progress.md D84, D85). Everything is
 re-exported from `src/index.ts` — the package's public surface is the barrel, not a relative
 path, so a new algorithm is not done until it is exported there.
 

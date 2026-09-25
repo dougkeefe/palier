@@ -135,6 +135,18 @@ export const itemRepositoryContract = (
       expect(await repo.form(formId("absent"))).toBeNull();
     });
 
+    it("lists every form it ships", async () => {
+      const repo = await make(CONTRACT_BANK);
+
+      expect((await repo.forms()).map((f) => f.id)).toEqual([FORM.id]);
+    });
+
+    it("lists no forms for a bank that ships none", async () => {
+      const repo = await make({ ...CONTRACT_BANK, forms: [] });
+
+      expect(await repo.forms()).toEqual([]);
+    });
+
     it("returns a scenario by id, and null when it is absent", async () => {
       const repo = await make(CONTRACT_BANK);
 

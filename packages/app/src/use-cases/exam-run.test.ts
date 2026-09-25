@@ -10,8 +10,10 @@ import {
   answerExamItem,
   checkpointExam,
   flagExamItem,
+  examInProgress,
   laterElapsed,
   resumeExam,
+  runLimitMs,
   startExam,
 } from "./exam-run.js";
 import { FORM, FORM_ID, NOW, RUN_ID, aRun, clockOf, itemsOf } from "./__tests__/exam-fakes.js";
@@ -76,6 +78,41 @@ describe("startExam", () => {
 
     expect(run).toEqual(answered);
     expect(await deps.examRuns.get(RUN_ID)).toEqual(answered);
+  });
+});
+
+describe("startExam with a time allowance", () => {
+  it("stores an allowance above 1 on the run", async () => {
+    const deps = depsWith();
+
+    const { run } = await startExam({ runId: RUN_ID, formId: FORM_ID, timeAllowance: 1.5 }, deps);
+
+    expect(run.timeAllowance).toBe(1.5);
+    expect((await deps.examRuns.get(RUN_ID))?.timeAllowance).toBe(1.5);
+  });
+
+  it("leaves the default allowance of 1 unwritten, so the run is the one written before allowances existed", async () => {
+    const { run } = await startExam({ runId: RUN_ID, formId: FORM_ID, timeAllowance: 1 }, depsWith());
+
+    expect(run).toEqual(aRun());
+    expect(run).not.toHaveProperty("timeAllowance");
+  });
+
+  it.each([0.5, 0, Number.NaN, Number.POSITIVE_INFINITY])(
+    "throws a RangeError for an allowance of %s, and stores nothing",
+    async (bad) => {
+      const deps = depsWith();
+
+      await expect(startExam({ runId: RUN_ID, formId: FORM_ID, timeAllowance: bad }, deps)).rejects.toThrow(RangeError);
+      expect(await deps.examRuns.get(RUN_ID)).toBeNull();
+    },
+  );
+});
+
+describe("runLimitMs", () => {
+  it("is the form's limit, stretched by the run's allowance when it has one", () => {
+    expect(runLimitMs(aRun(), FORM)).toBe(45 * 60_000);
+    expect(runLimitMs(aRun({ timeAllowance: 1.5 }), FORM)).toBe(67.5 * 60_000);
   });
 });
 
@@ -269,7 +306,36 @@ describe("resumeExam", () => {
 
     const resumed = await resumeExam({}, depsHolding(run));
 
-    expect(resumed).toEqual({ run, form: FORM, remainingMs: 35 * 60_000 });
+    expect(resumed).toEqual({
+      run: { ...run, resumes: 1, checkpointedAt: LATER },
+      form: FORM,
+      remainingMs: 35 * 60_000,
+    });
+  });
+
+  it("counts a resume after exam time has run as a pause, and stores the count with a checkpoint", async () => {
+    const deps = depsHolding(aRun({ elapsedMs: 60_000, resumes: 2 }));
+
+    const resumed = await resumeExam({ runId: RUN_ID }, deps);
+
+    expect(resumed?.run.resumes).toBe(3);
+    expect(await deps.examRuns.get(RUN_ID)).toEqual(resumed?.run);
+  });
+
+  it("does not count opening a run whose clock has not started, and writes nothing", async () => {
+    const run = aRun();
+    const deps = depsHolding(run);
+
+    const resumed = await resumeExam({ runId: RUN_ID }, deps);
+
+    expect(resumed?.run).toEqual(run);
+    expect(await deps.examRuns.get(RUN_ID)).toEqual(run);
+  });
+
+  it("gives the time left with the run's extra time", async () => {
+    const resumed = await resumeExam({}, depsHolding(aRun({ elapsedMs: 50 * 60_000, timeAllowance: 1.5 })));
+
+    expect(resumed?.remainingMs).toBe(17.5 * 60_000);
   });
 
   it("returns null when there is nothing to resume", async () => {
@@ -303,5 +369,19 @@ describe("resumeExam", () => {
 
   it("throws UnknownFormError when the run's form has left the bank", async () => {
     await expect(resumeExam({}, depsHolding(aRun({ formId: formId("gone") })))).rejects.toThrow(UnknownFormError);
+  });
+});
+
+describe("examInProgress", () => {
+  it("finds the latest unsubmitted run with its time left, and writes nothing, so looking is not a pause", async () => {
+    const run = aRun({ elapsedMs: 10 * 60_000 });
+    const deps = depsHolding(run);
+
+    expect(await examInProgress(deps)).toEqual({ run, form: FORM, remainingMs: 35 * 60_000 });
+    expect(await deps.examRuns.get(RUN_ID)).toEqual(run);
+  });
+
+  it("returns null when nothing is in progress", async () => {
+    expect(await examInProgress(depsWith())).toBeNull();
   });
 });

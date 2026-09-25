@@ -22,10 +22,22 @@ export {
   UnknownFormError,
   answerExamItem,
   checkpointExam,
+  examInProgress,
   flagExamItem,
   resumeExam,
+  runLimitMs,
   startExam,
 } from "./exam-run.js";
+
+export type {
+  ExamReport,
+  ExamReportDeps,
+  ExamReportRequest,
+  LatestExamResult,
+  QueueForReviewDeps,
+  QueueForReviewRequest,
+} from "./exam-report.js";
+export { examForms, examReport, latestExamResult, queueForReview } from "./exam-report.js";
 
 export type {
   RescoreExamDeps,

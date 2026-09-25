@@ -106,6 +106,13 @@ describe("mergeRecord — exam runs (a submission never un-happens)", () => {
     expect(bothWays(first, run({ submittedAt: "2026-09-24T10:00:00.000Z" }))).toEqual(first);
   });
 
+  it("keeps the winning copy whole, allowance and pause count included, and adds nothing from the other (D85)", () => {
+    const further = run({ elapsedMs: 900_000, timeAllowance: 1.5, resumes: 1 });
+    // The other device also resumed once. Its increment is lost: a whole record wins,
+    // as D80 accepts for two in-progress copies' answers.
+    expect(bothWays(further, run({ elapsedMs: 300_000, timeAllowance: 1.5, resumes: 1 }))).toEqual(further);
+  });
+
   it("keeps the in-progress copy with more exam time used", () => {
     const further = run({ elapsedMs: 900_000 });
     expect(bothWays(further, run({ elapsedMs: 300_000 }))).toEqual(further);

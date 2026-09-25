@@ -136,6 +136,18 @@ const parseExamAnswer = (raw: unknown): ExamAnswer | null => {
   };
 };
 
+const isAllowance = (value: unknown): value is number =>
+  typeof value === "number" && Number.isFinite(value) && value >= 1;
+
+const isCount = (value: unknown): value is number =>
+  typeof value === "number" && Number.isInteger(value) && value >= 0;
+
+/**
+ * A run, validated. `timeAllowance` and `resumes` are optional (D84): each is
+ * copied only when present, so a run without them round-trips without them and
+ * hashes as it did before they existed. A malformed value rejects the run, like
+ * any other malformed field, rather than being dropped.
+ */
 export const parseExamRun = (raw: unknown, at: string): ExamRun => {
   const invalid = new InvalidExportError(`${at} is not a valid exam run`);
   if (
@@ -148,7 +160,9 @@ export const parseExamRun = (raw: unknown, at: string): ExamRun => {
     !raw.flagged.every(nonEmptyString) ||
     !isDuration(raw.elapsedMs) ||
     !isIso(raw.checkpointedAt) ||
-    !(raw.submittedAt === null || isIso(raw.submittedAt))
+    !(raw.submittedAt === null || isIso(raw.submittedAt)) ||
+    !(raw.timeAllowance === undefined || isAllowance(raw.timeAllowance)) ||
+    !(raw.resumes === undefined || isCount(raw.resumes))
   ) {
     throw invalid;
   }
@@ -163,6 +177,8 @@ export const parseExamRun = (raw: unknown, at: string): ExamRun => {
     elapsedMs: raw.elapsedMs,
     checkpointedAt: raw.checkpointedAt,
     submittedAt: raw.submittedAt,
+    ...(raw.timeAllowance === undefined ? {} : { timeAllowance: raw.timeAllowance }),
+    ...(raw.resumes === undefined ? {} : { resumes: raw.resumes }),
   };
 };
 
