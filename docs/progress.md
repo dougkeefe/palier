@@ -2943,11 +2943,34 @@ PR #25's push run failed its medium lane, while the pull-request run on the same
   so runner variance alone can fail it. That was already true on `main`. The human chooses among raising
   the budget, moving work to nightly, or leaving it as it is.
 
+### D91 — the medium lane's budget is 5 minutes
+**Date:** 25 September 2026 · **Status:** accepted (human decision); settles D90's flag
+
+D90 found the medium lane running at about 200–245 s against its 240 s budget, and `main` at 204–215 s
+before Phase 3 Slice 3, so runner variance alone could fail it. **The human raised the budget to 5
+minutes (300 s).**
+- `implementation-plan.md` §6.5 is amended in place, with a dated note.
+- The workflow's `timeout`, job and step names, error message and step summary follow.
+- The budget is still enforced as a build failure, so a slow test still fails the lane rather than creeping.
+
+The two alternatives were:
+- keeping 4 minutes and moving the 100-seed PGlite simulator run to nightly, which would move Phase 2's
+  medium-lane evidence (D76);
+- leaving the budget as it was.
+
+Slice 4 adds another E2E journey, so the headroom is needed soon either way. There is no branch protection
+on `main`, so renaming the "Medium lane (budget 5m)" check breaks no required status.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 September 2026 — `dougkeefe/next-slice-from-progress-v1` (the medium-lane budget, 4 → 5 minutes)
+
+- **The human chose to raise the medium lane's budget to 5 minutes** (D91). §6.5 is amended and
+  `.github/workflows/verify.yml` follows (`timeout 300s`, "Medium lane (budget 5m)").
 
 ### 25 September 2026 — `dougkeefe/next-slice-from-progress-v1` (PR #25's medium-lane failure)
 

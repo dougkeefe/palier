@@ -528,7 +528,7 @@ A PR suite that takes fifteen minutes stops being run. Three lanes:
 | Lane | Contents | Budget | When |
 | --- | --- | --- | --- |
 | Fast | Typecheck, lint, dependency-cruiser, **the full unit suite across every package with coverage thresholds**, property (reduced runs), contract, content, i18n parity, contrast | Under 90 seconds | Every push |
-| Medium | Integration with PGlite and fake-indexeddb, sync simulation with a few hundred seeds, E2E on Chromium, axe, bundle size | Under 4 minutes | Every PR |
+| Medium | Integration with PGlite and fake-indexeddb, sync simulation with a few hundred seeds, E2E on Chromium, axe, bundle size | Under 5 minutes *(amended 25 September 2026 from 4, `progress.md` D91)* | Every PR |
 | Nightly | Full property runs, sync simulation at scale, E2E on Firefox and WebKit and mobile viewports, Lighthouse, AI evals, Testcontainers against real Postgres, dependency audit | Unbounded | Nightly, opens issues |
 | One-off | Mutation testing on engine, at the end of phase 2 and after any engine rewrite | Unbounded | On demand |
 
