@@ -85,9 +85,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-slice-from-progress-v1` (was `dougkeefe/naypyidaw`) | **Phase 3 Slice 3 — the exam runner and results UI, and E2E journey 3.** `/exam`, `/exam/run`, `/exam/results`, the readiness card's exam half, the exam use cases wired, `ExamRun.timeAllowance`/`resumes`, a muted exam token set. **Built; pending merge** (D85–D87, reviewed D89). | 25 September 2026 |
+| `dougkeefe/next-progress-slice` | **Phase 3 Slice 4 — telemetry and the item-statistics job, whole** (D88): the statistics core, `/api/telemetry` and its table, the job and its monthly PR, the telemetry ports and the persisted queue (Dexie v2), the device-local opt-in, the post-exam prompt and the readiness disclosure. Exit criterion 3. | 25 September 2026 |
 
-*(The prior rows — Phase 3 Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 3 Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
