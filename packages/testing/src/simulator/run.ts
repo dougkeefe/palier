@@ -242,6 +242,9 @@ const healAndCheck = async (
   await drive(network, [
     (async () => {
       for (const device of devices) if (!(await device.deps.syncState.state()).enabled) await device.setSync(true);
+      // One sync each first: a device with an unconfirmed pairing (D74) learns which account
+      // it is really in, so the check below compares accounts the server agrees with.
+      for (const device of devices) await device.sync();
       if ((await host.deps.syncState.state()).identity === null) await host.requestCode();
       const account = (await host.deps.syncState.state()).identity?.accountId;
       for (const guest of guests) {

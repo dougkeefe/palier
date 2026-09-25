@@ -14,7 +14,7 @@ import {
   collectRecords,
   decodeRecord,
   keyOf,
-  readRecord,
+  liveRecords,
   recordHash,
   writeRecord,
 } from "../sync/records.js";
@@ -38,7 +38,10 @@ import {
  *
  * **Deferred registration** (architecture.md §9.3). A device with no identity does not
  * register until it has completed a session, so a visitor who lands and leaves creates
- * nothing on the server.
+ * nothing on the server — unless a pairing is unconfirmed, which was a request to sync.
+ *
+ * **An unconfirmed pairing** (a redeem that failed in transit, progress.md D74) is settled
+ * first: the device asks which account it is in, and starts over only if that moved.
  *
  * **Sync failure never interrupts study** (§11). An unreachable service is an outcome,
  * not a throw. A device the service no longer recognises — removed from the device
@@ -85,13 +88,24 @@ export const syncNow = async (request: SyncNowRequest, deps: SyncNowDeps): Promi
   if (!state.enabled) return { status: "off" };
 
   try {
+    let from = state.watermark;
     if (state.identity === null) {
+      // A pairing whose answer never came was a request to sync, so it does not wait.
       const sessions = await deps.sessions.all();
-      if (!sessions.some((s) => s.completedAt !== null)) return { status: "waiting" };
+      if (!state.accountUnconfirmed && !sessions.some((s) => s.completedAt !== null)) return { status: "waiting" };
       const identity = await deps.transport.registerDevice(request.label);
-      await deps.syncState.update({ identity });
+      await deps.syncState.update({ identity, accountUnconfirmed: false });
+    } else if (state.accountUnconfirmed) {
+      // Registration is idempotent per secret, so it names the account this device is in.
+      // Only if a lost pair redeem moved it does the ledger go, and the exchange start over.
+      const identity = await deps.transport.registerDevice(request.label);
+      if (identity.accountId !== state.identity.accountId) {
+        await deps.syncState.resetLedger();
+        from = 0;
+      }
+      await deps.syncState.update({ identity, accountUnconfirmed: false });
     }
-    const counts = await exchange(request, deps, state.watermark);
+    const counts = await exchange(request, deps, from);
     const at = deps.clock.now();
     await deps.syncState.update({ lastSyncedAt: at });
     return { status: "synced", ...counts, at };
@@ -123,6 +137,9 @@ const exchange = async (request: SyncNowRequest, deps: SyncNowDeps, from: number
     if (changed.length > 0) await deps.syncState.record(changed.splice(0));
   };
 
+  // Renewed for every page and every push batch, so what it caches is never staler than that.
+  let readLive = liveRecords(deps);
+
   /** Bring one server copy into the device: take it, keep ours, or merge the two. */
   const settle = async (doc: SyncDocument) => {
     const remote = decodeRecord(doc.type, doc.id, doc.payload);
@@ -138,7 +155,7 @@ const exchange = async (request: SyncNowRequest, deps: SyncNowDeps, from: number
     // may have changed this record since. Settle against what the device holds now,
     // so that answer counts as a local edit and merges instead of being overwritten.
     let mine = local.get(key);
-    const live = await readRecord(doc.type, doc.id, deps);
+    const live = await readLive(doc.type, doc.id);
     if (live !== null && recordHash(live.value) !== mine?.hash) {
       mine = { record: live, hash: recordHash(live.value) };
       local.set(key, mine);
@@ -164,6 +181,7 @@ const exchange = async (request: SyncNowRequest, deps: SyncNowDeps, from: number
   let watermark = from;
   for (;;) {
     const page = await deps.transport.pull(watermark);
+    readLive = liveRecords(deps);
     for (const doc of page.docs) await settle(doc);
     watermark = page.watermark;
     await flush();
@@ -191,6 +209,7 @@ const exchange = async (request: SyncNowRequest, deps: SyncNowDeps, from: number
         agree({ type: accepted.type, id: accepted.id, revision: accepted.revision, hash: held.hash });
         pushed++;
       }
+      readLive = liveRecords(deps);
       for (const conflict of result.conflicts) await settle(conflict);
       await flush();
     }

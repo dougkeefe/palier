@@ -15,6 +15,12 @@ export type SyncState = {
   readonly watermark: number;
   readonly enabled: boolean;
   readonly lastSyncedAt: ISO | null;
+  /**
+   * A pair redeem failed in transit, so the server may or may not have moved this device
+   * to the code's account. The next sync asks — registration is idempotent per secret —
+   * and starts over only if the account really changed (progress.md D74).
+   */
+  readonly accountUnconfirmed: boolean;
 };
 
 export const INITIAL_SYNC_STATE: SyncState = {
@@ -22,6 +28,7 @@ export const INITIAL_SYNC_STATE: SyncState = {
   watermark: 0,
   enabled: true,
   lastSyncedAt: null,
+  accountUnconfirmed: false,
 };
 
 /**

@@ -46,12 +46,13 @@ export const requestPairCode = async (
  * what the account already has. Local progress is never discarded by pairing.
  *
  * **A redeem that fails in transit may still have happened** — the server moved this
- * device to the new account and only its answer was lost. Keeping the old identity
- * would then sync into the new account with the old account's watermark and ledger,
- * and silently never receive what the new account held below them (found by the sync
- * simulator; progress.md D74). So the device forgets both, and its next sync
- * re-registers: registration is idempotent per secret (D69), so the server says which
- * account the device is really in, and a full exchange from watermark 0 follows.
+ * device to the new account and only its answer was lost — or may never have reached the
+ * server at all, which is far more common (offline, rate-limited, a 5xx). The device
+ * cannot tell which, so it changes nothing but a flag, `accountUnconfirmed`, and its next
+ * sync asks the server: registration is idempotent per secret, so the answer is the
+ * account the device is really in, and the ledger resets only if that changed (progress.md
+ * D74, found by the sync simulator). Resetting on every failure would roll back other
+ * devices' newer work, since every record would then merge as a concurrent edit.
  */
 export const pairDevice = async (
   request: SyncNowRequest & { readonly code: string },
@@ -61,14 +62,11 @@ export const pairDevice = async (
   try {
     identity = await deps.transport.redeemPairCode(request.code, request.label);
   } catch (error) {
-    if (error instanceof SyncUnavailableError) {
-      await deps.syncState.resetLedger();
-      await deps.syncState.update({ identity: null });
-    }
+    if (error instanceof SyncUnavailableError) await deps.syncState.update({ accountUnconfirmed: true });
     throw error;
   }
   await deps.syncState.resetLedger();
-  await deps.syncState.update({ identity, enabled: true });
+  await deps.syncState.update({ identity, enabled: true, accountUnconfirmed: false });
   return syncNow(request, deps);
 };
 

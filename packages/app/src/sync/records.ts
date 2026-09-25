@@ -128,28 +128,34 @@ export const collectRecords = async (stores: ProgressStores): Promise<Map<string
 };
 
 /**
- * The record a device holds under one key *right now* — for a sync that read its
- * snapshot a network round trip ago, while study carried on (progress.md D75). Null
- * when the device holds none. Attempts are never re-read: they are immutable, so the
- * snapshot's copy is still the live one.
+ * A reader of the records a device holds *right now*, for a sync that read its snapshot a
+ * network round trip ago while study carried on (progress.md D75). Null when the device
+ * holds none. Attempts are never re-read: they are immutable, so the snapshot's copy is
+ * still the live one. Sessions have no by-id read, so a reader loads them once and serves
+ * every session document from that; the sync makes one reader per pulled page, so a
+ * large first pull is not one full read per session.
  */
-export const readRecord = async (type: SyncDocType, id: string, stores: ProgressStores): Promise<SyncRecord | null> => {
-  switch (type) {
-    case "attempt":
-      return null;
-    case "schedule": {
-      const entry = await stores.schedule.get(itemId(id));
-      return entry === null ? null : scheduleRecord(entry);
+export const liveRecords = (stores: ProgressStores) => {
+  let sessions: Promise<ReadonlyMap<string, Session>> | undefined;
+  return async (type: SyncDocType, id: string): Promise<SyncRecord | null> => {
+    switch (type) {
+      case "attempt":
+        return null;
+      case "schedule": {
+        const entry = await stores.schedule.get(itemId(id));
+        return entry === null ? null : scheduleRecord(entry);
+      }
+      case "session": {
+        sessions ??= stores.sessions.all().then((all) => new Map(all.map((s) => [s.id, s])));
+        const session = (await sessions).get(id);
+        return session === undefined ? null : sessionRecord(session);
+      }
+      case "setting": {
+        const value = await stores.settings.get<unknown>(id);
+        return value === null ? null : settingRecord({ key: id, value });
+      }
     }
-    case "session": {
-      const session = (await stores.sessions.all()).find((s) => s.id === id);
-      return session === undefined ? null : sessionRecord(session);
-    }
-    case "setting": {
-      const value = await stores.settings.get<unknown>(id);
-      return value === null ? null : settingRecord({ key: id, value });
-    }
-  }
+  };
 };
 
 /**

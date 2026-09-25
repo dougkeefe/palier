@@ -42,6 +42,14 @@ export const attemptStoreContract = (
       expect((await store.recent("reading", 2)).map((a) => a.id)).toEqual(["b", "c"]);
     });
 
+    it("orders recent by code unit, as IndexedDB orders keys, not by any locale's collation", async () => {
+      const store = await make();
+      await store.append(anAttempt({ id: attemptId("a") }));
+      await store.append(anAttempt({ id: attemptId("B") }));
+
+      expect((await store.recent("reading", 10)).map((a) => a.id)).toEqual(["B", "a"]);
+    });
+
     it("returns nothing from recent when asked for no attempts", async () => {
       const store = await make();
       await store.append(anAttempt({ id: attemptId("a") }));

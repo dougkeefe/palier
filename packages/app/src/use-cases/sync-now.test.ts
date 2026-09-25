@@ -106,6 +106,49 @@ describe("syncNow — when it does nothing", () => {
   });
 });
 
+describe("syncNow — after a pairing whose answer never came (progress.md D74)", () => {
+  it("asks the server which account it is in, and keeps its ledger when that has not changed", async () => {
+    const { a } = await aPair();
+    await a.syncState.update({ accountUnconfirmed: true });
+    const { identity } = await a.syncState.state();
+    const register = vi.spyOn(a.transport, "registerDevice");
+    const reset = vi.spyOn(a.syncState, "resetLedger");
+
+    await a.sync();
+
+    expect({ asked: register.mock.calls.length, reset: reset.mock.calls.length, state: await a.syncState.state() }).toMatchObject({
+      asked: 1,
+      reset: 0,
+      state: { identity, accountUnconfirmed: false },
+    });
+  });
+
+  it("starts over in the account the server names when the pairing did move it", async () => {
+    const { server, a } = await aPair();
+    await a.attempts.append(anAttempt("from-a"));
+    await a.sync();
+    const lone = await aStudiedDevice(server, "secret-c");
+    await lone.sync();
+    const { code } = await a.transport.requestPairCode();
+    await lone.transport.redeemPairCode(code, "Tablet");
+    await lone.syncState.update({ accountUnconfirmed: true });
+
+    await lone.sync();
+
+    expect({
+      account: (await lone.syncState.state()).identity?.accountId,
+      attempts: (await lone.attempts.all()).map((x) => x.id),
+    }).toEqual({ account: server.accountOf("secret-a"), attempts: ["from-a"] });
+  });
+
+  it("does not wait for a completed session to learn its account, since pairing was a request to sync", async () => {
+    const server = fakeServer();
+    const device = aDevice(server.transport("secret-z"), { syncState: syncStateStore({ accountUnconfirmed: true }) });
+
+    expect(await device.sync()).toMatchObject({ status: "synced" });
+  });
+});
+
 describe("syncNow — the first sync", () => {
   it("registers once after the first completed session, then pushes every local record", async () => {
     const server = fakeServer();

@@ -2238,6 +2238,11 @@ two devices holding the same attempts disagree:
 In production (Dexie) neither could bite on its own today, since Dexie orders by id and real `ts` values
 rarely tie to the millisecond; both are fixed because the simulator's trend property depends on them.
 
+**Ids compare by code unit, never `localeCompare`** (changed after review). Collation varies by locale:
+Danish sorts "AA" after "Z", for example, so two devices in two locales could disagree, and IndexedDB
+orders keys by code unit. A contract case, "orders recent by code unit, as IndexedDB orders keys", holds
+both stores to it.
+
 ### D74 — a pair redeem that fails in transit forgets the device's identity and ledger
 **Date:** 24 September 2026 · **Status:** accepted. **Found by the sync simulator** (seed 74, 3 devices)
 
@@ -2248,18 +2253,33 @@ the device pushed its own history there, but never received what the new account
 watermark, and every sync reported success. That is permanent, silent divergence from one lost response.
 The user saw "pairing failed" and might reasonably not retry.
 
-**Fix, in `pairDevice`:** on `SyncUnavailableError` from the redeem, reset the ledger and set `identity:
-null` before rethrowing. The next sync re-registers, and because registration is idempotent per secret
-(D69 #7) the server answers with the account the device is really in, followed by a full exchange from
-watermark 0. If the redeem never reached the server, the device simply re-registers into its old account
-and re-offers its records, which conflict and merge harmlessly. Nothing local is lost either way.
-Registration stays deferred until a completed session (§9.3), so a device with no completed session stays
-unregistered until the user retries pairing.
+**Fix: a failed redeem changes only a flag, and the next sync asks the server.** On
+`SyncUnavailableError` from the redeem, `pairDevice` sets a new `SyncState` field, `accountUnconfirmed`, and
+changes nothing else. The next `syncNow` calls `registerDevice` first. Registration is idempotent per
+secret (D69 #7), so the server answers with the account the device is really in:
+- **Same account:** the flag clears, and the sync carries on from its ledger.
+- **A different account:** the ledger resets, and the exchange starts from watermark 0.
 
+A device with no identity and the flag set does not wait for a completed session, since pairing was a
+request to sync. Dexie reads a state row saved before the field existed as `false`.
+
+- **Why not the first version of this fix.** The first version reset the ledger and forgot the identity on
+  every failed redeem. Review before merge showed that the common failures (offline, a 429 from the pair
+  rate limit, a 5xx) never reach the server. The reset device then treated every record as a concurrent
+  edit, so the lower box and the local setting won, and **other devices' newer work was rolled back**.
+  The reviewer reproduced it; `sync-account.test.ts` "rolls nothing back when a redeem never reached the
+  server" pins it, and fails against the first version.
+- **Edge accepted:** a flagged device whose secret was revoked meanwhile re-registers into a fresh account
+  instead of being told "removed". It needs two rare failures together, and the result is visible in the
+  device list.
 - **The app's `fakeServer` was not idempotent on registration**, although the port promises it. It now
-  is, and every existing test passed unchanged. New test: `sync-account.test.ts`, "forgets its account
-  when a redeem's answer is lost, so the next sync learns which account it is in" (it failed first).
-- **Proven to bite:** with the fix removed, regression seed 74 fails.
+  is, and every existing test passed unchanged. New test: `sync-account.test.ts`, "learns on its next
+  sync which account it is in when a redeem's answer was lost" (it failed first).
+- **Proven to bite:** with the flag removed, regression seed 74 fails. With the first version restored,
+  the two new `sync-account` tests fail.
+- **Simulator consequence (D76):** the heal phase now syncs every device once *before* comparing accounts.
+  Otherwise a device whose failed redeem the server *did* apply would join that account only on its next
+  sync, after the heal had already judged it paired (seeds 195 and 339, before the change).
 
 ### D75 — sync settles against the live record, not the snapshot it read before the network call
 **Date:** 24 September 2026 · **Status:** accepted. **Found by the sync simulator** (seed 7, 2 devices)
@@ -2270,8 +2290,10 @@ the gap was overwritten: its schedule change vanished, although its attempt surv
 could hide a failure. A lower box made on the device gave way to the other device's higher one, so an
 item the user just missed would not come back for review.
 
-**Fix:** `settle` re-reads the device's current copy of each pulled record (`readRecord` in
-`sync/records.ts`: `schedule.get`, `settings.get`, `sessions.all()` for a session). A copy that changed
+**Fix:** `settle` re-reads the device's current copy of each pulled record (`liveRecords` in
+`sync/records.ts`: `schedule.get` and `settings.get`, plus one `sessions.all()` per pulled page or push
+batch, since `SessionStore` has no by-id read. Review caught that the first version read all sessions once
+per session document, O(N²) on a large first pull). A copy that changed
 since the snapshot counts as a local edit, so it merges by Gate B instead of being replaced. Attempts are
 immutable and are not re-read. Three tests were added to `sync-now.test.ts`, one each for a schedule entry,
 a setting and a session changed mid-sync. All three failed before the fix.
@@ -2423,6 +2445,23 @@ was built first:
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3: fixes from the pre-merge review)
+
+An independent review of the branch found one serious defect, in this branch's own D74 fix, and four
+lesser points. All are fixed:
+- **D74 revised:** a failed redeem now sets `accountUnconfirmed`, and the next sync confirms through
+  idempotent registration. The first version rolled back other devices' work after an ordinary offline
+  redeem, which the reviewer reproduced. Two new tests fail against the first version.
+- **D73:** ids compare by code unit, not `localeCompare`, with a contract case added.
+- **D75:** one sessions read per page, not per document.
+- `apps/web` pins `engines.node >=22.18`, for the type-stripped migration entry.
+- **D76:** the heal phase settles unconfirmed pairings before comparing accounts (seeds 195 and 339).
+- **Evidence:**
+  - `pnpm verify` → green, 1413 tests (8 todo).
+  - `PALIER_SIM_SEEDS=3000` → clean.
+  - The simulator's fast tests → 83 passed.
+  - With the flag removed, regression seed 74 fails.
 
 ### 24 September 2026 — `dougkeefe/yamoussoukro` (Slice 3, parts 4 and 5a: the gates confirmed, the deploy tooling)
 

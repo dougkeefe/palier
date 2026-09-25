@@ -30,7 +30,7 @@ export const weakestSubSkills = (
   // with their sub-skill.
   const tagged = attempts
     .filter((a) => a.skill === skill)
-    .sort((a, b) => b.ts.localeCompare(a.ts) || b.id.localeCompare(a.id))
+    .sort((a, b) => b.ts.localeCompare(a.ts) || Number(b.id > a.id) - Number(b.id < a.id))
     .flatMap((a) => {
       const subSkill = subSkillOf.get(a.itemId);
       return subSkill === undefined ? [] : [{ subSkill, correct: a.correct }];

@@ -124,7 +124,7 @@ describe("pairDevice", () => {
     expect((await b.syncState.state()).enabled).toBe(true);
   });
 
-  it("forgets its account when a redeem's answer is lost, so the next sync learns which account it is in", async () => {
+  it("learns on its next sync which account it is in when a redeem's answer was lost", async () => {
     const server = fakeServer();
     const a = await aRegisteredDevice(server.transport("secret-a"));
     await a.attempts.append(anAttempt("from-a"));
@@ -147,6 +147,42 @@ describe("pairDevice", () => {
 
     expect((await b.syncState.state()).identity?.accountId).toBe(server.accountOf("secret-a"));
     expect((await b.attempts.all()).map((x) => x.id).sort()).toEqual(["from-a", "from-b"]);
+  });
+
+  it("rolls nothing back when a redeem never reached the server", async () => {
+    const server = fakeServer();
+    const a = await aRegisteredDevice(server.transport("secret-a"));
+    const { code } = await requestPairCode({ label: "Laptop" }, a);
+    const b = aDevice(server.transport("secret-b"));
+    await pairDevice({ code, label: "Phone" }, b);
+    await a.schedule.put({ itemId: itemId("item-x"), due: "2026-09-25T00:00:00.000Z", skill: "reading", box: 2 });
+    await a.settings.set("dailyGoal", 10);
+    await syncNow({ label: "Laptop" }, a);
+    await syncNow({ label: "Phone" }, b);
+    await a.schedule.put({ itemId: itemId("item-x"), due: "2026-10-01T00:00:00.000Z", skill: "reading", box: 3 });
+    await a.settings.set("dailyGoal", 30);
+    await syncNow({ label: "Laptop" }, a);
+    const { code: another } = await requestPairCode({ label: "Laptop" }, a);
+    const offline: SyncTransport = { ...b.transport, redeemPairCode: () => Promise.reject(new SyncUnavailableError("offline")) };
+
+    await expect(pairDevice({ code: another, label: "Phone" }, { ...b, transport: offline })).rejects.toThrow(SyncUnavailableError);
+    await syncNow({ label: "Phone" }, b);
+    await syncNow({ label: "Laptop" }, a);
+
+    expect({ box: (await a.schedule.get(itemId("item-x")))?.box, goal: await a.settings.get("dailyGoal") }).toEqual({ box: 3, goal: 30 });
+  });
+
+  it("keeps its identity and ledger when a redeem fails in transit, and marks its account unconfirmed", async () => {
+    const server = fakeServer();
+    const a = await aRegisteredDevice(server.transport("secret-a"));
+    const { code } = await requestPairCode({ label: "Laptop" }, a);
+    const b = await aRegisteredDevice(server.transport("secret-b"));
+    const before = await b.syncState.state();
+    const offline: SyncTransport = { ...b.transport, redeemPairCode: () => Promise.reject(new SyncUnavailableError("offline")) };
+
+    await expect(pairDevice({ code, label: "Phone" }, { ...b, transport: offline })).rejects.toThrow(SyncUnavailableError);
+
+    expect(await b.syncState.state()).toEqual({ ...before, accountUnconfirmed: true });
   });
 
   it("lets a rejected code through and leaves the device as it was", async () => {
