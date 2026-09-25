@@ -85,7 +85,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/naypyidaw` | **Phase 3 Slice 3 — the exam runner and results UI, and E2E journey 3.** `/exam`, `/exam/run`, `/exam/results`, the readiness card's exam half, the exam use cases wired, `ExamRun.timeAllowance`/`resumes`, a muted exam token set. **Built; pending merge** (D85–D87). | 25 September 2026 |
+| `dougkeefe/next-slice-from-progress-v1` (was `dougkeefe/naypyidaw`) | **Phase 3 Slice 3 — the exam runner and results UI, and E2E journey 3.** `/exam`, `/exam/run`, `/exam/results`, the readiness card's exam half, the exam use cases wired, `ExamRun.timeAllowance`/`resumes`, a muted exam token set. **Built; pending merge** (D85–D87, reviewed D89). | 25 September 2026 |
 
 *(The prior rows — Phase 3 Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -2882,11 +2882,61 @@ Rejoining it settles two client questions that 4b would have met:
 - **The opt-in belongs to the device and never syncs.** Consent given in one browser must not enrol
   another, and PRD §15 keeps sync and telemetry apart.
 
+### D89 — the pre-merge review: ruling 10's button keying gave pilots away, and seven more fixes
+**Date:** 25 September 2026 · **Status:** accepted; **refines D84 ruling 10, in service of ruling 9 (flagged for the human)**
+
+A candid review of the Slice 3 branch before its PR found eight real defects. All are fixed, and each has a
+test or an E2E assertion.
+
+- **🔥 "Add to review queue" keyed to "not already queued" revealed wrong pilots.** D84 chose that keying so
+  a pilot would not be the one *correct* answer with a button. But a submit queues every wrong scored answer
+  and never a pilot (D41), so among the *wrong* answers the pilots were exactly the ones still showing the
+  button. A changed answer gave them away the same way.
+  - The button now starts the same on every item.
+  - A tap on an item already queued is `queueForReview`'s existing no-op, and reads "In your review queue"
+    either way.
+  - `ExamReport.queued` and `ReviewRow.canQueue` are removed, so nothing can key the screen to the queue
+    again.
+  - This departs from ruling 10's letter ("on items not already queued"), and it is ruling 9 that forces it:
+    pilots are never revealed. The human should confirm.
+  - The tests pinning the old keying were written on this branch and are replaced, not weakened.
+    `exam.spec.ts` now asserts all 25 entries start with the button.
+- **⚠️ A run whose form a later bank dropped wedged `/exam` and `/exam/run` for good.** `examInProgress` and
+  `resumeExam({})` threw `UnknownFormError`, and nothing discards a run (D87). Both now take the newest
+  unsubmitted run whose form still resolves, passing over the rest. A *named* run still throws.
+  - One `exam-run.test.ts` case, which expected the throw for the no-id call, now expects the pass-over,
+    and a new case keeps the named throw.
+- **🤔 `latestExamResult` failed the whole home screen** when a run's form was present but an item had left
+  the bank, because `scoreExam` throws. Such a run is now passed over.
+- **🤔 The runner:**
+  - **A write the store refuses** (`ExamAlreadySubmittedError`, the same run submitted in another tab) no
+    longer retries forever and holds the submit back. The runner goes to the results.
+  - **Keys with a modifier or on repeat are ignored**, so Ctrl/Cmd+F no longer flags and a held Enter no
+    longer skips items.
+  - **A passage that fails to load says so**, and the next visit retries.
+  - **Its timers are cleared on unmount**, so a pending results `router.push` cannot pull back someone who
+    has left.
+  - **The submission status line takes focus** when the runner stops running, since that unmounts any open
+    dialog with focus inside it (§11).
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 September 2026 — `dougkeefe/next-slice-from-progress-v1` (pre-merge review of Slice 3)
+
+Conductor renamed the branch from `dougkeefe/naypyidaw`; the entries below keep the old name.
+- **A candid review found eight real defects, all fixed** (D89). The serious one: "Add to review queue" keyed
+  to the queue gave wrong pilots away. It now starts the same on every item, which refines D84 ruling 10 in
+  service of ruling 9. **Flagged for the human.**
+- **Gates:**
+  ```
+  pnpm verify       → exit 0: Test Files 125 passed, Tests 1769 passed | 8 todo; "no dependency violations" ×2
+  pnpm --filter @palier/web build → exit 0
+  pnpm verify:medium → exit 0: integration Tests 39 passed; Playwright 33 passed
+  ```
 
 ### 25 September 2026 — `dougkeefe/naypyidaw` (Slice 4 rejoined)
 

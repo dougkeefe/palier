@@ -367,8 +367,28 @@ describe("resumeExam", () => {
     await expect(resumeExam({ runId: RUN_ID }, depsWith())).rejects.toThrow(UnknownExamRunError);
   });
 
-  it("throws UnknownFormError when the run's form has left the bank", async () => {
-    await expect(resumeExam({}, depsHolding(aRun({ formId: formId("gone") })))).rejects.toThrow(UnknownFormError);
+  it("passes over the newest run when its form has left the bank, for an older one that can resume (D89)", async () => {
+    const older = aRun({ id: sessionId("older"), startedAt: "2026-02-01T00:00:00.000Z" });
+    const stranded = aRun({ id: sessionId("stranded"), formId: formId("gone"), startedAt: "2026-03-02T00:00:00.000Z" });
+    const deps = depsWith({ examRuns: examRunStore([older, stranded]) });
+
+    expect((await resumeExam({}, deps))?.run.id).toBe("older");
+  });
+
+  it("returns null, not a throw, when the only run in progress has a form the bank dropped (D89)", async () => {
+    expect(await resumeExam({}, depsHolding(aRun({ formId: formId("gone") })))).toBeNull();
+  });
+
+  it("still throws UnknownFormError for a named run whose form has left the bank", async () => {
+    await expect(resumeExam({ runId: RUN_ID }, depsHolding(aRun({ formId: formId("gone") })))).rejects.toThrow(
+      UnknownFormError,
+    );
+  });
+
+  it("takes the higher id of two runs started at the same instant", async () => {
+    const deps = depsWith({ examRuns: examRunStore([aRun({ id: sessionId("a") }), aRun({ id: sessionId("b") })]) });
+
+    expect((await examInProgress(deps))?.run.id).toBe("b");
   });
 });
 
@@ -383,5 +403,9 @@ describe("examInProgress", () => {
 
   it("returns null when nothing is in progress", async () => {
     expect(await examInProgress(depsWith())).toBeNull();
+  });
+
+  it("passes over a run whose form has left the bank, so the picker still opens (D89)", async () => {
+    expect(await examInProgress(depsHolding(aRun({ formId: formId("gone") })))).toBeNull();
   });
 });

@@ -355,7 +355,7 @@ function buildUseCases(ports: Ports): UseCases {
       }),
     rescoreExam: (request) => rescoreExam(request, { items: ports.items, examRuns: ports.examRuns }),
     examReport: (request) =>
-      examReport(request, { items: ports.items, examRuns: ports.examRuns, schedule: ports.schedule }),
+      examReport(request, { items: ports.items, examRuns: ports.examRuns }),
     latestExamResult: () => latestExamResult({ items: ports.items, examRuns: ports.examRuns }),
     queueForReview: (request) =>
       queueForReview(request, {

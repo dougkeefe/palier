@@ -360,6 +360,7 @@
     "notFoundTitle": "Ce résultat est introuvable",
     "notFoundBody": "Il a peut-être été supprimé, ou il a été obtenu sur un autre appareil qui n’est pas encore synchronisé.",
     "position": "Item {current} sur {total} · {answered} répondus",
-    "navEntry": "<number>Item {n}</number> : {answered, select, yes {répondu} other {sans réponse}}{flagged, select, yes {, marqué} other {}}{current, select, yes {, item en cours} other {}}"
+    "navEntry": "<number>Item {n}</number> : {answered, select, yes {répondu} other {sans réponse}}{flagged, select, yes {, marqué} other {}}{current, select, yes {, item en cours} other {}}",
+    "passageFailed": "Le texte à lire de cet item n’a pas pu être chargé. Passez à un autre item et revenez pour réessayer."
   }
 }

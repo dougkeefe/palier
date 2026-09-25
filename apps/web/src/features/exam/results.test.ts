@@ -54,7 +54,7 @@ const reportOf = (given: readonly Given[], over: Partial<ExamRun> = {}, extra: P
     ...over,
   };
   const result = scoreExam(FORM, ITEMS, new Map(run.answers.map((a) => [a.itemId, a.response])));
-  return { run, form: FORM, items: ITEMS, result, queued: [], retake: false, ...extra };
+  return { run, form: FORM, items: ITEMS, result, retake: false, ...extra };
 };
 
 const right = (n: number): Given[] => SCORED.slice(0, n).map((id) => ({ id, right: true }));
@@ -153,15 +153,6 @@ describe("the review walkthrough", () => {
     const keys = new Set(view.review.map((r) => Object.keys(r).sort().join()));
     expect(keys.size).toBe(1);
     expect([...keys][0]).not.toContain("pilot");
-  });
-
-  it("offers 'add to review queue' on every item not queued, whether answered right or wrong (ruling 10)", () => {
-    const [queued] = SCORED;
-    if (queued === undefined) throw new Error("scored items");
-    const view = resultsView(reportOf(right(1), {}, { queued: [queued] }));
-    expect(view.review.filter((r) => !r.canQueue).map((r) => r.item.id)).toEqual([queued]);
-    // A right answer and a wrong pilot alike show the button.
-    expect(view.review.find((r) => r.item.id === PILOTS[0])?.canQueue).toBe(true);
   });
 
   it("leaves out an item the bank no longer holds", () => {

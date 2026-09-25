@@ -6,7 +6,7 @@ import { UnknownItemError } from "./answer-item.js";
 import { UnknownExamRunError } from "./exam-run.js";
 import { examForms, examReport, latestExamResult, queueForReview } from "./exam-report.js";
 import { ExamNotSubmittedError } from "./submit-exam.js";
-import { FORM, ITEM_IDS, NOW, RUN_ID, aRun, clockOf, itemsOf, profile } from "./__tests__/exam-fakes.js";
+import { BANK, FORM, ITEM_IDS, NOW, RUN_ID, aRun, clockOf, itemsOf, profile } from "./__tests__/exam-fakes.js";
 import { examRunStore, scheduleStore } from "./__tests__/sync-fakes.js";
 
 // Local stubs rather than @palier/testing (progress.md D37).
@@ -14,7 +14,6 @@ import { examRunStore, scheduleStore } from "./__tests__/sync-fakes.js";
 const SUBMITTED = "2026-03-01T10:00:00.000Z";
 const LATER = "2026-03-02T10:00:00.000Z";
 const Q1 = itemId("q1");
-const Q2 = itemId("q2");
 
 const answerOf = (id: string, response: "a" | "b"): ExamAnswer => ({
   itemId: itemId(id),
@@ -33,10 +32,9 @@ const submitted = (over: Partial<ExamRun> = {}): ExamRun =>
     ...over,
   });
 
-const deps = (runs: readonly ExamRun[], schedule = scheduleStore()) => ({
+const deps = (runs: readonly ExamRun[]) => ({
   items: itemsOf(),
   examRuns: examRunStore(runs),
-  schedule,
 });
 
 describe("examReport", () => {
@@ -49,14 +47,10 @@ describe("examReport", () => {
     expect(report.result.outcome).toMatchObject({ band: "A", raw: 2, scored: 4 });
   });
 
-  it("lists as queued only the items whose schedule entry is still due, so a retired item can be added again", async () => {
-    const schedule = scheduleStore();
-    await schedule.put({ itemId: Q1, due: LATER, skill: "reading", box: 1 });
-    await schedule.put({ itemId: Q2, due: null, skill: "reading", box: 5 });
+  it("says nothing about the review queue, which would single out wrong pilots (D89)", async () => {
+    const report = await examReport({ runId: RUN_ID }, deps([submitted()]));
 
-    const report = await examReport({ runId: RUN_ID }, deps([submitted()], schedule));
-
-    expect(report.queued).toEqual([Q1]);
+    expect(Object.keys(report).sort()).toEqual(["form", "items", "result", "retake", "run"]);
   });
 
   it("is not a retake when no other run on the form was submitted first", async () => {
@@ -125,6 +119,12 @@ describe("latestExamResult", () => {
     const found = await latestExamResult(deps([gone, submitted()]));
 
     expect(found?.run.id).toBe(RUN_ID);
+  });
+
+  it("passes over a run whose form is present but an item has left the bank, rather than failing (D89)", async () => {
+    const shrunk = { items: itemsOf([FORM], BANK.slice(1)), examRuns: examRunStore([submitted()]) };
+
+    expect(await latestExamResult(shrunk)).toBeNull();
   });
 
   it("returns null when every submitted run's form has left the bank", async () => {

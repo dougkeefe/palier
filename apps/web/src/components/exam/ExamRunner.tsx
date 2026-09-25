@@ -1,6 +1,6 @@
 "use client";
 
-import type { ExamRun } from "@palier/app";
+import { type ExamRun, ExamAlreadySubmittedError } from "@palier/app";
 import type { ExamForm, Item, Passage as PassageData } from "@palier/domain";
 import { sessionId } from "@palier/domain";
 import { Button, Callout, Dialog, EmptyState, Glyph, Passage, Timer, itemRenderers } from "@palier/ui";
@@ -161,6 +161,14 @@ function Runner({
     return at;
   }, [elapsedNow, limit]);
 
+  // Every pending timeout, cleared on unmount, so a candidate who has left is never
+  // pulled back to the results by a timer still running.
+  const timers = useRef<number[]>([]);
+  const later = useCallback((fn: () => void, ms: number) => {
+    timers.current.push(window.setTimeout(fn, ms));
+  }, []);
+  useEffect(() => () => timers.current.forEach((id) => window.clearTimeout(id)), []);
+
   const draining = useRef(false);
   const [saveFailed, setSaveFailed] = useState(false);
   const [retry, setRetry] = useState(0);
@@ -169,8 +177,13 @@ function Runner({
 
   const item = currentItem(state);
   const itemRef = useRef<HTMLDivElement>(null);
-  const [loadedPassage, setLoadedPassage] = useState<{ itemId: string; passage: PassageData | null } | null>(null);
-  const passage = item !== null && loadedPassage?.itemId === item.id ? loadedPassage.passage : null;
+  const [loadedPassage, setLoadedPassage] = useState<{
+    itemId: string;
+    passage: PassageData | null;
+    failed: boolean;
+  } | null>(null);
+  const forThisItem = item !== null && loadedPassage?.itemId === item.id ? loadedPassage : null;
+  const passage = forThisItem?.passage ?? null;
 
   const write = useCallback(
     (w: ExamWrite) =>
@@ -202,13 +215,19 @@ function Runner({
         setSaveFailed(false);
         dispatch({ type: "sent", count: batch.length });
       },
-      () => {
+      (error: unknown) => {
         draining.current = false;
+        // Submitted elsewhere, say in another tab: no write can land any more, and
+        // retrying would hold the submit back for good. The result is the one to show.
+        if (error instanceof ExamAlreadySubmittedError) {
+          router.replace({ pathname: "/exam/results", query: { run: run.id } });
+          return;
+        }
         setSaveFailed(true);
-        window.setTimeout(() => setRetry((n) => n + 1), SAVE_RETRY_MS);
+        later(() => setRetry((n) => n + 1), SAVE_RETRY_MS);
       },
     );
-  }, [state.outbox, retry, enqueue, write]);
+  }, [state.outbox, retry, enqueue, write, later, router, run.id]);
 
   // The clock ticks once a second while the exam runs.
   useEffect(() => {
@@ -253,24 +272,28 @@ function Runner({
       () => {
         setSubmitFailed(false);
         dispatch({ type: "submitted" });
-        window.setTimeout(() => router.push({ pathname: "/exam/results", query: { run: run.id } }), SUBMIT_PAUSE_MS);
+        later(() => router.push({ pathname: "/exam/results", query: { run: run.id } }), SUBMIT_PAUSE_MS);
       },
       () => {
         setSubmitFailed(true);
-        window.setTimeout(() => {
+        later(() => {
           submitting.current = false;
           dispatch({ type: "submitFailed" });
         }, SUBMIT_RETRY_MS);
       },
     );
-  }, [state.phase, state.outbox.length, enqueue, container, run.id, stamp, router]);
+  }, [state.phase, state.outbox.length, enqueue, container, run.id, stamp, router, later]);
 
   // The item's passage, if it has one.
   useEffect(() => {
     if (item?.passageId === undefined) return;
     let live = true;
     const forItem = item.id;
-    void container.items.passage(item.passageId).then((p) => live && setLoadedPassage({ itemId: forItem, passage: p }));
+    // A failure says so, and the next visit to the item tries again.
+    container.items.passage(item.passageId).then(
+      (p) => live && setLoadedPassage({ itemId: forItem, passage: p, failed: false }),
+      () => live && setLoadedPassage({ itemId: forItem, passage: null, failed: true }),
+    );
     return () => {
       live = false;
     };
@@ -280,6 +303,9 @@ function Runner({
   // field, and Enter on a real button or link, are left to that control.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      // A browser or system shortcut (Ctrl+F to search the passage), or a held key,
+      // is not an answer, a flag or a move.
+      if (event.metaKey || event.ctrlKey || event.altKey || event.repeat) return;
       const target = event.target as HTMLElement | null;
       if (target !== null && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
         return;
@@ -311,6 +337,12 @@ function Runner({
   useEffect(() => {
     if (state.phase === "running") focusItem();
   }, [state.index, state.phase, focusItem]);
+  // Leaving the item for the submission status unmounts any open dialog with the
+  // focus inside it, so the status line takes focus rather than the page (§11).
+  const statusRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (state.phase !== "running") statusRef.current?.focus();
+  }, [state.phase]);
   // And back to the item when the navigator closes, however it closed.
   const lastPanel = useRef(state.panel);
   useEffect(() => {
@@ -321,7 +353,9 @@ function Runner({
   if (state.phase !== "running") {
     return (
       <div className="app-stack">
-        <p role="status">{state.timedOut ? t("timeUp") : t("submitting")}</p>
+        <p role="status" tabIndex={-1} ref={statusRef}>
+          {state.timedOut ? t("timeUp") : t("submitting")}
+        </p>
         {submitFailed ? <Callout tone="incorrect">{t("submitFailed")}</Callout> : null}
       </div>
     );
@@ -355,6 +389,7 @@ function Runner({
       {passage === null ? null : (
         <Passage title={passage.title} body={passage.body} lang={passage.lang} label={t("passageLabel")} />
       )}
+      {forThisItem?.failed === true ? <Callout tone="incorrect">{t("passageFailed")}</Callout> : null}
       <div ref={itemRef}>
         <Renderer
           key={item.id}

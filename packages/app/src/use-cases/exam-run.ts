@@ -266,9 +266,30 @@ export type ResumeExamResult = {
   readonly remainingMs: number;
 };
 
-const located = async (run: ExamRun, items: ItemRepository): Promise<ResumeExamResult> => {
-  const form = await formOf(run.formId, items);
-  return { run, form, remainingMs: Math.max(0, runLimitMs(run, form) - run.elapsedMs) };
+const resumable = (run: ExamRun, form: ExamForm): ResumeExamResult => ({
+  run,
+  form,
+  remainingMs: Math.max(0, runLimitMs(run, form) - run.elapsedMs),
+});
+
+/** Newest first, by code unit, as every store orders ids (D73). */
+export const descending = (a: string, b: string): number => (a < b ? 1 : a > b ? -1 : 0);
+
+/**
+ * The newest unsubmitted run whose form the bank still ships, with its time left.
+ * A run on a form a later bank dropped cannot be resumed or scored, and nothing
+ * discards a run yet (D87), so it is passed over rather than allowed to wedge the
+ * picker and the runner for good (D89).
+ */
+const newestOpen = async (deps: Pick<ExamRunDeps, "items" | "examRuns">): Promise<ResumeExamResult | null> => {
+  const open = (await deps.examRuns.all())
+    .filter((run) => run.submittedAt === null)
+    .sort((a, b) => descending(a.startedAt, b.startedAt) || descending(a.id, b.id));
+  for (const run of open) {
+    const form = await deps.items.form(run.formId);
+    if (form !== null) return resumable(run, form);
+  }
+  return null;
 };
 
 /**
@@ -278,16 +299,14 @@ const located = async (run: ExamRun, items: ItemRepository): Promise<ResumeExamR
  */
 export const examInProgress = async (
   deps: Pick<ExamRunDeps, "items" | "examRuns">,
-): Promise<ResumeExamResult | null> => {
-  const run = await deps.examRuns.unsubmitted();
-  return run === null ? null : located(run, deps.items);
-};
+): Promise<ResumeExamResult | null> => newestOpen(deps);
 
 /**
- * Pick a run back up. With no id, it returns null when there is nothing to
- * resume, which is the ordinary case and not an error. With an id, an unknown
- * or already-submitted run throws, since the caller named something that
- * cannot be resumed.
+ * Pick a run back up. With no id, it takes the newest run that can still be
+ * resumed, and returns null when there is none, which is the ordinary case and
+ * not an error. With an id, an unknown or already-submitted run, or one whose
+ * form has left the bank, throws, since the caller named something that cannot
+ * be resumed.
  *
  * A resume of a run whose clock has started counts as a pause, and the count is
  * written with a checkpoint (D84, ruling 1). A run with no exam time used yet is
@@ -299,16 +318,17 @@ export const resumeExam = async (
   request: ResumeExamRequest,
   deps: ExamRunDeps,
 ): Promise<ResumeExamResult | null> => {
-  let run: ExamRun;
+  let resumed: ResumeExamResult;
   if (request.runId === undefined) {
-    const latest = await deps.examRuns.unsubmitted();
+    const latest = await newestOpen(deps);
     if (latest === null) return null;
-    run = latest;
+    resumed = latest;
   } else {
-    run = await openRun(request.runId, deps.examRuns);
+    const named = await openRun(request.runId, deps.examRuns);
+    resumed = resumable(named, await formOf(named.formId, deps.items));
   }
 
-  const resumed = await located(run, deps.items);
+  const { run } = resumed;
   if (run.elapsedMs === 0) return resumed;
 
   const paused: ExamRun = { ...run, resumes: (run.resumes ?? 0) + 1, checkpointedAt: deps.clock.now() };

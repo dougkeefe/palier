@@ -8,8 +8,11 @@ import { examSubSkillBreakdown } from "@palier/engine";
  *
  * **Pilots are never revealed** (ruling 9). Every figure below counts scored items
  * only, and the review rows carry nothing that tells a pilot from a scored item:
- * no flag, no class, no different button. The one visible trace is the "of 50"
- * total, which the real score report states too.
+ * no flag, no class, no different button. So "add to review queue" shows on every
+ * item alike, whatever the queue holds: a submit queues wrong scored answers and
+ * never a pilot (D41), so a button keyed to the queue would single out the wrong
+ * pilots (D89). The one visible trace is the "of 50" total, which the real score
+ * report states too.
  */
 
 export type NearMissUp = {
@@ -36,12 +39,6 @@ export type ReviewRow = {
   readonly item: Item;
   readonly chosen: OptionId | null;
   readonly correct: boolean;
-  /**
-   * Whether "add to review queue" shows: every item not already queued (ruling 10).
-   * Never keyed to "answered wrong", which would single out wrong pilots, since
-   * those alone are not queued at submit (D41).
-   */
-  readonly canQueue: boolean;
 };
 
 export type ResultsView = {
@@ -87,7 +84,7 @@ const nearMissDown = (raw: number, bandMin: number, cuts: readonly BandCut[]): N
 };
 
 export const resultsView = (report: ExamReport): ResultsView => {
-  const { run, form, items, result, queued } = report;
+  const { run, form, items, result } = report;
   const { outcome } = result;
   const cuts = [...form.bandCuts].sort((a, b) => a.min - b.min);
 
@@ -104,12 +101,11 @@ export const resultsView = (report: ExamReport): ResultsView => {
   }
 
   const itemById = new Map(items.map((item) => [item.id, item]));
-  const inQueue = new Set(queued);
   const review = result.items.flatMap((scored, i): ReviewRow[] => {
     const item = itemById.get(scored.itemId);
     return item === undefined
       ? []
-      : [{ position: i + 1, item, chosen: scored.chosen, correct: scored.correct, canQueue: !inQueue.has(item.id) }];
+      : [{ position: i + 1, item, chosen: scored.chosen, correct: scored.correct }];
   });
 
   return {

@@ -360,6 +360,7 @@
     "notFoundTitle": "This result could not be found",
     "notFoundBody": "It may have been deleted, or it was taken on another device that has not synced yet.",
     "position": "Item {current} of {total} · {answered} answered",
-    "navEntry": "<number>Item {n}</number>: {answered, select, yes {answered} other {not answered}}{flagged, select, yes {, flagged} other {}}{current, select, yes {, current item} other {}}"
+    "navEntry": "<number>Item {n}</number>: {answered, select, yes {answered} other {not answered}}{flagged, select, yes {, flagged} other {}}{current, select, yes {, current item} other {}}",
+    "passageFailed": "The reading passage for this item could not be loaded. Go to another item and come back to try again."
   }
 }

@@ -145,7 +145,10 @@ function ReviewEntry({ row, container }: { row: ReviewRow; container: Container 
   const t = useTranslations("exam");
   const tDrill = useTranslations("drill");
   const locale = useLocale() === "fr" ? "fr" : "en";
-  const [queue, setQueue] = useState<"idle" | "adding" | "added" | "failed">(row.canQueue ? "idle" : "added");
+  // The same starting state on every item: one keyed to the queue would single out
+  // the wrong pilots, which a submit never queues (D89). A tap on an item already
+  // queued is `queueForReview`'s no-op, and reads the same as a new one.
+  const [queue, setQueue] = useState<"idle" | "adding" | "added" | "failed">("idle");
   const { item } = row;
   const Renderer = itemRenderers[item.type];
   const keyOption = item.options.find((o) => o.id === item.key);

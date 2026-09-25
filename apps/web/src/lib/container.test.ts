@@ -127,7 +127,7 @@ describe("createContainer", () => {
     expect((await c.useCases.latestExamResult())?.run.id).toBe(runId);
 
     expect(await c.useCases.queueForReview({ itemId: second })).toBe(true);
-    expect((await c.useCases.examReport({ runId })).queued).toContain(second);
+    expect((await c.schedule.get(second))?.due).not.toBeNull();
   });
 
   it("plans a non-empty daily session from the fixture bank", async () => {

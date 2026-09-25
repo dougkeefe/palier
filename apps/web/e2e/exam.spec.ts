@@ -61,6 +61,11 @@ test("a mock exam runs from the picker to its results, by keyboard, with the nav
   await expect(page.getByRole("heading", { name: "Every item" })).toBeVisible();
   await axeClean(page);
 
+  // Every item starts with the same button, whether the submit queued it or not, so no
+  // wrong pilot stands out as the one wrong answer left unqueued (D84 ruling 9, D89).
+  await expect(page.locator(".app-review-entry")).toHaveCount(25);
+  await expect(page.locator(".app-review-entry button", { hasText: "Add to review queue" })).toHaveCount(25);
+
   // The walkthrough opens an item, and adds it to the review queue in one tap.
   // Item 2 was left unanswered, so nothing queued it at submit.
   const entry = page.locator(".app-review-entry").nth(1);
