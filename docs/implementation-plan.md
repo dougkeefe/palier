@@ -774,6 +774,10 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
 
   *Done:* the committed bank ships a form per variant, each schema-valid and byte-reproducible, and
   every item on a form is in the bank.
+  **Slice 2 status, 24 September 2026: built** (`progress.md` D82). `content/bank/v2` carries v1's items
+  forward under their ids and ships four forms, each id carrying the bank version. A committed-bank test
+  holds it byte-identical to a fresh run. The scripted provider had to be rebuilt to reach the volume.
+  Gate D is next, with Slice 4a buildable meanwhile.
 - **Gate D — exam UI direction (human).** Adopt `product-requirements.md` §8.4–§8.5 as-is, as Gate A
   adopted §8 for Phase 2, or revise it first. Gates Slice 3.
 - **Slice 3 — The runner and results UI, and E2E journey 3.**
@@ -788,10 +792,13 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
   - journey 3, a full 90-minute exam through a reload and a network drop, which is exit criterion 2;
   - axe clean on the runner and results states;
   - Lighthouse ≥ 95.
-- **Slice 4 — Telemetry and the item-statistics job.**
-  - Telemetry opt-in, the post-exam prompt, `/api/telemetry` and client batching.
-  - The statistics job: proportion correct and point-biserial, minimum counts, and a retirement PR.
-  - The readiness-card disclosure.
+- **Slice 4 — Telemetry and the item-statistics job**, split in two (`progress.md` D83) so work continues
+  while Gate D is open:
+  - **4a, no UI, buildable before Gate D:** the statistics (proportion correct and point-biserial, with
+    minimum counts and the retirement rule from the profile), `/api/telemetry` with its table, and the
+    job that writes a retirement PR. It carries exit criterion 3, on synthetic data.
+  - **4b, after Slice 3:** the telemetry opt-in, the post-exam prompt, client batching and the
+    readiness-card disclosure.
 
   *Done:* exit criterion 3 on synthetic data. **The closed pilot**, 20–30 people, is the human decision
   gate that follows.

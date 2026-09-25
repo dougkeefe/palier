@@ -35,7 +35,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   `.tsx` holds rendering and effects only.
 - **`public/content/` and `public/sw.js` are generated, gitignored and never edited.**
   `scripts/prepare-public.mjs` runs before `dev` and `build`: it copies `content/bank/` and
-  compiles the service worker from `src/sw/worker.ts` (D60). That file may have **no runtime
+  compiles the service worker from `src/sw/worker.ts` (D60). Every bank version is copied, but the
+  worker **precaches only `BANK_VERSION`'s**, which the script reads from `container.ts`; a
+  `BANK_VERSION` with no committed bank fails the build (D82). `worker.ts` may have **no runtime
   imports** (the output is a classic script); a test compiles and runs it. The worker
   registers only in production builds (`src/sw/register.ts`).
 - **The exam profile is parsed here, once**, from `@palier/content/profiles/psc-sle.json`
@@ -71,7 +73,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 - **`SyncRunner`** (`src/components/sync/`) sits in the layout inside `ContainerProvider` and is the
   only thing that calls `syncNow` in the background. The trigger rules are `src/lib/sync-triggers.ts`
   and the display rules are `src/features/sync/sync-view.ts`. Islands report events with
-  `useSync().notify(...)`, for example `"session-complete"` after `completeSession`. "Syncing…"
+  `useSync().notify(...)`, for example `"session-complete"` after `completeSession`. A demand made while
+  a run is in flight runs once more after it (`runsAgainAfterCurrent`), and the settings status line
+  carries `aria-busy` while an exchange is in flight, which is what journey 8 waits on (D82). "Syncing…"
   appears only after 400 ms, so a run with nothing to do never shifts the header (D72).
 
 ## Gates this app owns

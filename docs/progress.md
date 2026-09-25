@@ -4,10 +4,12 @@
 **Current phase:** **Phase 3 (Exams and item statistics) is open.** **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
-four, mirrored in `implementation-plan.md` §7 (D79). **Slice 1, the exam core with no UI, is in flight**
-(`dougkeefe/minnetonka-v3`). See [Next, decided](#next-decided). The **full-volume published bank** (D54)
-is still a standing human gate, **sequenced to the end** (D56): every feature phase (2–6) is built
-against the baseline committed bank, and the content gate runs at 1.0.
+four, mirrored in `implementation-plan.md` §7 (D79). **Slice 1 (the exam core) merged (#22); Slice 2
+(forms and a bank that can fill them) is built** (`dougkeefe/next-slice-from-progress`; D82, D83). Next
+is **Gate D** (human), and meanwhile Slice 4a. See [Next, decided](#next-decided). The **full-volume
+published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
+runs at 1.0.
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -69,7 +71,7 @@ human for anything expensive.
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
-| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (Slice 1 in flight, D79) |
+| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (Slices 1–2 built; Gate D next, D79, D82) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | not started |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
@@ -82,7 +84,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-slice-from-progress` | **Phase 3 Slice 2 — forms and a bank that can fill them.** A pure form-assembly stage in the factory, wired into the run; checkForms hardened; a baseline bank regenerated with the scripted provider as `content/bank/v2`, carrying v1 forward; `BANK_VERSION` 2; the journey 8 `syncNow` race fixed. | 24 September 2026 |
+| `dougkeefe/next-slice-from-progress` | **Phase 3 Slice 2 — forms and a bank that can fill them.** A pure form-assembly stage in the factory, wired into the run; checkForms hardened; a baseline bank regenerated with the scripted provider as `content/bank/v2`, carrying v1 forward; `BANK_VERSION` 2; the journey 8 `syncNow` race fixed. **Built; pending merge** (D82, D83). | 24 September 2026 |
 
 *(The prior rows — Phase 3 Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -183,75 +185,44 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 2 is complete** (24 September 2026). **Phase 3 Slice 1, the exam core, is built** (`dougkeefe/minnetonka-v3`;
-D79–D81): the per-variant goldens, the `ExamRunStore` port, the seven exam use cases, exam runs as a
-synced, exported and wiped aggregate, and the simulator's exam phase. Exit criterion 4 is met.
+**Phase 3 Slice 2 is built** (`dougkeefe/next-slice-from-progress`; D82). The committed bank is now
+`content/bank/v2`: 242 items (85 + 6 reading, 147 + 4 writing, v1's 10 carried under their ids),
+24 passages and **one form per profile variant**. `BANK_VERSION` is 2. The journey 8 race is fixed.
 
-**Next: Phase 3 Slice 2, forms and a bank that can fill them.** It needs no human.
+**Next: Gate D (human) — the exam UI direction.** Adopt PRD §8.4–§8.5 as-is, as Gate A adopted §8, or
+revise it first. It gates **Slice 3**, the runner and results UI and E2E journey 3. Do not self-direct
+past it: the runner's screens are a product decision.
 
-**The gap:**
-- The committed bank (`content/bank/v1/`) has **10 items and 0 forms**.
-- `apps/factory/src/pipeline/run.ts` passes `forms = []` to `validateBank` and `buildBank`.
-- Everything downstream of form generation already exists: `bank-build.ts` writes `forms/<id>.json`
-  with a hash into the manifest; `validate.ts`'s `checkForms` resolves every form's item ids at its
-  variant's exact counts; `httpBankRepository.form()` serves forms.
+**While Gate D is open, build Slice 4a — the item-statistics core and `/api/telemetry`, no UI** (D83).
+It needs neither Gate D nor a runner:
+- **The statistics, pure** — an `@palier/engine` function (architecture.md §7.6, "the only statistics the
+  system computes, and both are one-liners over telemetry"): per item, the proportion correct and the
+  point-biserial against the rest-of-form score, over a list of anonymous outcome events. Minimum
+  response counts before a statistic is trusted, and the retirement rule, **come from the profile**
+  (ADR 9), not code. Golden fixtures, both sides of each threshold.
+- **The telemetry route** — `POST /api/telemetry` in `apps/web/src/server` (architecture.md §9
+  `telemetry_events`, **no account id**, §10: rate limited by IP HMAC as the sync routes are), a
+  committed Drizzle migration, and handler tests on the memory repository plus the PGlite lane.
+- **The job** — a factory command (`palier-factory stats`) that reads an event export, runs the pure
+  statistics, and writes the retirement list for a PR, never committing directly. A retired item leaves
+  the next bank version through the carry-forward (D82), and never a published form.
+- **Exit criterion 3, on synthetic data:** an item seeded with a known proportion correct and one with
+  a deliberately reversed key, both flagged, and the reversed one retired.
 
-**Scope:**
-- **A pure form-assembly stage** in `apps/factory/src/pipeline/`, for example `forms.ts`, taking
-  `(published items, profile, seed)` and returning one `ExamForm` per profile variant, each built from
-  `Object.entries(profile.variants)`:
-  - `items` item ids, of which `items − scored` are pilots;
-  - `bandCuts` copied from `orderedCuts(variant)`;
-  - `timeLimitMinutes` from `variant.minutes`;
-  - `version: 1`.
-
-  Selection is deterministic for a seed, and spreads over sub-skills and bands. If the bank cannot
-  fill a variant, the stage fails loudly and names the shortfall; it never ships a short form. A
-  number in code is the ADR 9 mistake.
-- **Wire it into `run.ts`**, so `validateBank` and `buildBank` receive real forms.
-- **Regenerate the baseline bank with the scripted provider**, large enough for the largest form of
-  each skill: at least 60 reading and 65 writing published items, plus headroom so pilots are not
-  simply the leftovers.
-  - It stays synthetic (D54, D56).
-  - Ship it as `content/bank/v2/`, leaving `v1` as it was, since a published bank version is
-    immutable.
-  - Bump `BANK_VERSION` (`apps/web/src/lib/container.ts`), and follow it wherever the bank version is
-    keyed, including the service worker's bank cache and the E2E bank fixtures.
-
-**Done looks like:**
-- the form stage unit-tested, with every branch named (§10): a form per variant, pilot counts, cuts
-  equal to the profile's, determinism per seed, and a loud shortfall;
-- `checkForms` clean on the new bank;
-- the bank byte-reproducible, since the run test's rebuild is identical;
-- `httpBankRepository` serving all four forms, with `bankHandlers` and the contract;
-- `pnpm verify` and `verify:medium` green, and journey 2 still passing offline on the new bank.
-
-**Then Gate D (human): the exam UI direction.** Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise it
-first. It gates Slice 3, the runner and results UI and E2E journey 3. Slice 2 does not wait on it.
-
-**One known E2E flake to fix in passing** (session log, `dougkeefe/minnetonka-v3`). Journey 8's `syncNow`
-helper waits for a "Last synced" status that can already be showing from the page's earlier sync, so
-it can return before the new sync lands. It failed once in three full runs, and 3 of 3 in isolation
-passed. The fix is to wait for the status to change, not merely to be present.
+*Done* for 4a: those four, every branch named (§10), `pnpm verify` and `verify:medium` green. **Slice 4b**
+— the opt-in, the post-exam prompt, client batching and the readiness-card disclosure — needs the
+results screen, so it follows Slice 3.
 
 **Standing human gates (do not self-direct):**
 
+- **Gate D — exam UI direction** (Phase 3 Slice 3), above.
 - **The full-volume published bank (D54).** The real-model go-signal exists (session log, 24 September
   2026); the remaining step is the full run to 500–700 published items on a funded key, then shipping
-  that bank as `content/bank/v{n}/`. **Timing now settled (D56): sequenced to the end.** Every feature
-  phase (2–6) is built and used against the baseline committed bank; the content run is a 1.0 gate, not
-  a per-phase blocker. The baseline bank's French is synthetic (D54), so the app is feature-usable
-  before this gate, not study-ready.
-- ~~**Product and UI direction**~~ — **resolved 24 September 2026** as Gate A (Phase 2 section): adopt
-  the PRD's §8/§10/§11/§14 direction for the single-device screens. The *pairing* UI is Slice 2, after
-  Gate B.
-- ~~**The `adapters/sync` `ScheduleEntry` merge (D43)**~~ — **resolved 24 September 2026** as Gate B:
-  the lower box wins a concurrent edit (D69).
-- ~~**Gate C — hosting and database provisioning**~~ — **resolved 24 September 2026**, provisioned with the
-  human: the Vercel project `palier` (dougkeefes-projects) and Neon `palier-db` (Production only). The live
-  URL is https://palier-virid.vercel.app. `docs/deploy.md` is the runbook.
-- **Gate D — exam UI direction** (Phase 3 Slice 3). Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise
-  it first. Slice 2 is buildable before it.
+  that bank as `content/bank/v{n}/` (carrying the previous version forward, D82). **Timing settled (D56):
+  sequenced to the end**, a 1.0 gate. The baseline bank's French is synthetic (D54), so the app is
+  feature-usable before this gate, not study-ready.
+- Resolved: **Gate A** (product and UI direction), **Gate B** (the D43 `ScheduleEntry` merge, D69),
+  **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026.
 
 Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's table
 before launch) and the name/domain decision in §12.1.
@@ -373,16 +344,16 @@ breakdown, expanded on start. Nothing is ticked without session-log evidence.
 
 - [~] Exam runner driven by the profile variants: navigator, flagging, timer with amber/red thresholds, checkpoint and resume with the clock preserved, pilot items — **the core is built** (Slice 1, `dougkeefe/minnetonka-v3`, D80): the `ExamRunStore` port on memory and Dexie, the start/answer/flag/checkpoint/resume/submit/rescore use cases, and exam runs synced, exported and wiped. **The UI is Slice 3**
 - [ ] Results screen: band, raw score against the cuts, per-sub-skill breakdown, near-miss from the actual cuts, confidence calibration, review walkthrough — Slice 3
-- [ ] Form generation in the factory: fixed, immutable, versioned forms per variant — Slice 2
-- [ ] Telemetry opt-in, the post-exam prompt, `/api/telemetry`, client batching — Slice 4
-- [ ] The item statistics job: proportion correct and point-biserial per item, minimum counts, a PR retiring items that trip the rules — Slice 4
-- [ ] Minimum response counts before an item's statistics are trusted, and the readiness-card disclosure — Slice 4
+- [x] Form generation in the factory: fixed, immutable, versioned forms per variant — **built** (Slice 2, `dougkeefe/next-slice-from-progress`, D82): `pipeline/forms.ts`, one form per profile variant in `content/bank/v2`, held byte-identical to a fresh run by `committed-bank.test.ts`
+- [ ] Telemetry opt-in, the post-exam prompt, `/api/telemetry`, client batching — the route is Slice 4a, the rest Slice 4b (D83)
+- [ ] The item statistics job: proportion correct and point-biserial per item, minimum counts, a PR retiring items that trip the rules — Slice 4a
+- [ ] Minimum response counts before an item's statistics are trusted, and the readiness-card disclosure — counts Slice 4a, disclosure Slice 4b
 
 **Exit criteria** (the actual gate)
 
-- [~] All four exam variants runnable and correctly scored, golden fixture per variant at every cut boundary [R3] — **the goldens are done** (Slice 1): one per variant, both sides of every exact cut, pilots answered right and not counted, and proven to bite (session log). "Runnable" needs Slice 2's forms and Slice 3's runner
+- [~] All four exam variants runnable and correctly scored, golden fixture per variant at every cut boundary [R3] — **the goldens are done** (Slice 1): one per variant, both sides of every exact cut, pilots answered right and not counted, and proven to bite (session log). **The forms exist** (Slice 2: one per variant in `content/bank/v2`, served by `httpBankRepository`). "Runnable" needs Slice 3's runner
 - [ ] A full 90-minute exam survives reload and network drop (E2E journey 3) — Slice 3
-- [ ] Statistics job flags and retires a seeded reversed-key item on synthetic data — Slice 4
+- [ ] Statistics job flags and retires a seeded reversed-key item on synthetic data — Slice 4a
 - [x] Scoring is idempotent — `rescoreExam` derives the result from the stored run, and no result is stored (ADR 16). A fast-check property holds submit, rescore and a second rescore deep-equal, with each attempt agreeing with the result. The simulator also rescores on every device after every heal and requires the same result (session log, `dougkeefe/minnetonka-v3`)
 - [ ] Closed pilot run, 20–30 people — the plan's human decision gate, after Slice 4
 
@@ -397,12 +368,17 @@ slices". **Keep the two in sync**: the plan holds the fuller scope and each slic
   - exam runs synced, exported and wiped;
   - an exam phase in the simulator, which found that the plan's attempt-id rule could not converge
     (D80).
-- [ ] **Slice 2 — Forms and a bank that can fill them.** Factory form generation, and a baseline bank
-  regenerated with the scripted provider, large enough for every variant's full item count (D54, D56).
+- [x] **Slice 2 — Forms and a bank that can fill them.** **Built 24 September 2026**
+  (`dougkeefe/next-slice-from-progress`; D82; session-log evidence). Factory form generation, and a
+  baseline bank regenerated with the scripted provider as `content/bank/v2`, carrying v1 forward, with a
+  form per variant (D54, D56).
 - [ ] **Gate D — exam UI direction (human).** Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise it
   first. Gates Slice 3.
 - [ ] **Slice 3 — The runner and results UI, and E2E journey 3.** Behind Gate D.
-- [ ] **Slice 4 — Telemetry and the item-statistics job.** Then the closed pilot (the human gate).
+- [ ] **Slice 4a — The statistics core, `/api/telemetry` and the job, no UI** (D83). Buildable while
+  Gate D is open. Carries exit criterion 3.
+- [ ] **Slice 4b — The opt-in, the post-exam prompt, client batching, the readiness disclosure.** After
+  Slice 3. Then the closed pilot (the human gate).
 
 ### Phase 4: BYOK, generation, writing workshop
 
@@ -447,7 +423,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | --- | --- | --- | --- |
 | R1 | Practises all three tested skills | 2, 5, 6 | reading and written expression practised end to end (24 September 2026); oral is Phases 5–6 |
 | R2 | Format and register match the real tests | 1 | not started |
-| R3 | Mock exams mirror published structure and cuts | 3 | in progress: every variant's cuts are locked by a golden at each boundary, with pilots excluded (Phase 3 Slice 1). Runnable forms are Slices 2–3 |
+| R3 | Mock exams mirror published structure and cuts | 3 | in progress: every variant's cuts are locked by a golden at each boundary, with pilots excluded (Slice 1), and the committed bank ships a form per variant at its exact item and pilot counts, time and cuts (Slice 2). Runnable is Slice 3 |
 | R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams are Phase 3 |
 | R5 | Never presents as official | 0, 7 | not started |
 | R6 | No real test items, no PSC reproduction | 1 | not started |
@@ -2552,11 +2528,180 @@ export-list test likewise gained `memoryExamRunStore`.
 The data-settings import toast still counts attempts, reviews and sessions only. Adding mock exams to
 its bilingual copy belongs with the exam UI in Slice 3.
 
+### D82 — forms are assembled per variant; bank v2 carries v1 forward; the scripted provider was rebuilt to fill it
+**Date:** 24 September 2026 · **Status:** accepted
+
+Phase 3 Slice 2. *Next, decided* named the form stage and the bigger bank. Building them turned up four
+things it had not anticipated, and each is settled here.
+
+- **The form stage** (`apps/factory/src/pipeline/forms.ts`) builds one `ExamForm` per
+  `Object.entries(profile.variants)`, and every number in it comes from the variant: `items`, pilots =
+  `items − scored`, `minutes`, `orderedCuts`. The draw is stratified. Sub-skills are taken round-robin
+  in taxonomy order, bands are interleaved within each sub-skill, and the whole draw is seeded
+  (`formSeed`, defaulting to a hash of the batch id). Items on one passage sit together. **Pilots sit
+  at evenly spaced positions** and are drawn like any item, so they are neither leftovers nor
+  findable by position. A bank that cannot fill a variant throws `FormShortfallError`. `runPipeline`
+  reports that as a form issue beside the batch's other numbers, and **the CLI writes no bank with a
+  form issue**.
+- **Form id and version.** *Next, decided* said `version: 1`. The form instead takes
+  `id: ${lang}-${variant}-v${bankVersion}` and `version: bankVersion`. An exam run is rescored from its
+  form (ADR 16), so an id reused with different items would silently rescore old results. With the bank
+  version in the id, a regenerated bank can never do that. **Residual:** a run started on form
+  `…-v2` needs that form in whatever bank the client reads later. The next bank version must therefore
+  **carry forms forward too**, and the carry-forward below covers items and passages only. That is the
+  full-volume content run's first task (D54).
+- **`checkForms` was nearly empty.** It checked id resolution and the total count, silently skipped an
+  unknown variant, and nothing read its output. It now flags:
+  - an unknown variant;
+  - a pilot count, time limit or cut table that differs from the variant's;
+  - an item of another skill or language;
+  - any `examFormSchema` failure.
+- **Bank v2 carries v1 forward.** architecture.md §5.5 promises item ids are stable across versions,
+  and live users hold attempts and schedule entries on v1 ids, which `byIds` silently drops when
+  unknown. The CLI therefore reads `v{n−1}` as `carried`. Carried items are re-validated with the new
+  drafts and placed ahead of them, so a new near-duplicate is the item dropped. The batch report counts
+  them as `itemsCarried`, apart from `itemsPublished`, so yield and cost per item stay this batch's.
+  All 10 of v1's ids are in v2, which the adapter test asserts.
+- **A published version is now protected.** `writeBank` used to delete `content/bank/v{n}` first, so
+  the old default `--bank-version 1` would have destroyed the published v1. The default is now 2
+  (`DEFAULT_BANK_VERSION`), and `run` refuses an existing version without `--force`.
+- **The scripted provider could not fill a bank.** `hashNum` of seeds differing in a trailing digit
+  gives consecutive word indices, so every stem was a run of consecutive words: about 80 distinct stems
+  per band. Writing seeds also ignored band and type. A third of v1's reviewed items were
+  near-duplicates. Each stem word is now picked through SHA-256, and band and type join the seed.
+  **The new v2 run has 0 near-duplicates among 368 drafts.** A consequence: HEAD no longer
+  reproduces v1. That is acceptable, because a published version is immutable and is never
+  regenerated; it stays reproducible from its own commit.
+- **The run is sized from the profile.** All reading sub-skills are drafted per passage, and the
+  writing plan covers every writing sub-skill × topic × band (240 rows). `--per-source` (default 2) is
+  the one knob, tuned by trial:
+
+  | per source | reading | writing |
+  | --- | --- | --- |
+  | 2 | 85 | 147 |
+  | 3 | 128 | 147 |
+
+  2 was chosen: 85 reading is 1.4× the largest reading variant (60), and 147 writing is 2.3× the
+  largest writing variant (65). The whole v2 bank is about 30 KB gzipped.
+- **The committed bank is checked on disk.** `committed-bank.test.ts` reruns the pipeline through the
+  CLI's own `runInputFor`, at the committed report's `generatedAt`, and compares every file under
+  `content/bank/v2`. It also checks the batch report. Before this, "byte-reproducible" was only an
+  in-memory rebuild.
+- **The worker precaches the current bank only.** This refines D60, which precached every served
+  version. `prepare-public.mjs` reads `BANK_VERSION` from the composition root, as it already read
+  `BANK_BASE_PATH`, and the worker precaches that manifest alone. Every version is still copied and
+  served, and an old one is cached on first request. A `BANK_VERSION` with no committed bank fails the
+  build.
+- **The journey 8 flake had two causes.**
+  - The helper waited for a "Last synced" line that was already showing. The hermetic clock is fixed,
+    so the line's time never changes either.
+  - `SyncRunner` silently dropped a "Sync now" pressed while a background run (focus, or the 30 s
+    after-session debounce) was in flight, so an explicit demand could return having pulled before the
+    other device pushed.
+
+  The fixes:
+  - A demand made mid-run now runs once more after it. `runsAgainAfterCurrent` in
+    `lib/sync-triggers.ts` is pure and tested.
+  - The status line carries `aria-busy` while an exchange is in flight.
+  - The helper waits for a pull *sent after* its click, then for the status to stop being busy.
+
+  The test's assertions are unchanged.
+
+### D83 — Slice 4 is split, so work continues while Gate D is open
+**Date:** 24 September 2026 · **Status:** accepted
+
+D79 made Slice 4 (telemetry and the statistics job) follow Slice 3, because its opt-in lives on the
+results screen. Only part of it depends on that screen:
+- the statistics (architecture.md §7.6);
+- the `POST /api/telemetry` route and its table;
+- the retirement job;
+- exit criterion 3, which runs on synthetic data.
+
+None of those needs a runner or Gate D. So Slice 4 becomes:
+- **4a**: the statistics core, the route and the job, no UI, buildable now;
+- **4b**: the opt-in, the post-exam prompt, client batching and the readiness disclosure, after Slice 3.
+
+The alternative was idling on a human gate, which working-agreement rule 7 treats as a menu. D79 is not
+edited. `implementation-plan.md` §7 mirrors the split.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/next-slice-from-progress` (Phase 3 Slice 2: forms and a bank that can fill them)
+
+**Built.** The decisions are recorded in D82 and D83.
+- **`pipeline/forms.ts`**: one form per profile variant. The draw is stratified over sub-skills and
+  bands, pilots are evenly spaced, the cuts and minutes are copied from the variant, and a shortfall is
+  loud.
+- **`checkForms` hardened**: it now checks the variant, the pilot count, the minutes, the cuts, each
+  item's skill and language, and the schema. The CLI writes no bank with a form issue.
+- **The scripted provider rebuilt**: SHA-256 word picks, and band and type in the seed.
+- **The run**: it is sized from the profile (`--per-source`, default 2), carries `v{n−1}` forward,
+  refuses to overwrite a published version without `--force`, and defaults to v2.
+- **`content/bank/v2`**, written by `PALIER_NOW=2026-09-24T00:00:00.000Z node apps/factory/dist/index.js run`:
+  ```
+  run: 232 published / 368 drafted, yield 0.630, cost/item 0.072069 USD
+  discard reasons: {"defensible-distractor":66,"key-mismatch":30,"register":70}
+  bank v2: 242 items, forms fr-reading-supervised-v2, fr-reading-unsupervised-v2, fr-writing-supervised-v2, fr-writing-unsupervised-v2
+  ```
+  - Shards: reading 91, writing 100 + 51. There are 24 passages, and all 10 of v1's item ids are
+    present. `git diff --stat content/bank/v1` is empty.
+  - Gzipped: about 30 KB for the whole version.
+- **`committed-bank.test.ts`** holds v2 byte-identical, file by file, to a fresh run through the CLI's
+  own `runInputFor`, and holds the batch report equal to the committed one.
+- **Web**:
+  - `BANK_VERSION` 2;
+  - the worker precaches the current version only, and the build fails without its bank;
+  - the e2e specs take the manifest from `BANK_VERSION`;
+  - the offline test also reads every form;
+  - the adapter test over the committed v2 checks every form resolving and v1's ids carried.
+- **Journey 8's race** (D82): a demand made mid-run is re-run instead of dropped. The status line
+  carries `aria-busy`, and the helper waits for its own pull, then for the status to stop being busy.
+
+**Proven to bite, each reverted afterwards:**
+- One byte of a v2 reading shard changed (`distracteur 1` → `distracteur 7`) → `committed-bank.test.ts`:
+  "is byte-identical to a fresh run of the pipeline, file for file" failed, naming
+  `bank/v2/fr/reading/0927dad4c659c26e.json`.
+- A pilot dropped in `forms.ts` (`.slice(1)` on `pilotItemIds`) → 11 `forms.test.ts` cases and the
+  committed-bank test failed. The domain schema's "cut table tops out at…" rule throws inside the stage.
+
+**Existing tests changed, and why:**
+- `run.test.ts`'s byte-identical rebuild passed `forms: []`, which hard-coded the old behaviour. It now
+  passes the run's own forms.
+- `cli.test.ts`'s two "`content/bank/v1/manifest.json` exists" checks now look for v2, because the
+  default version changed on purpose. Without that change the default would overwrite the published v1.
+
+**Gates:**
+```
+pnpm verify                     → exit 0: check-types, lint, boundaries ("no dependency violations" ×2),
+                                  Test Files 120 passed, Tests 1609 passed | 8 todo
+pnpm --filter @palier/web build → prepare-public: bank → public/content/bank (2 version(s), v2 precached)
+pnpm verify:medium              → exit 0: integration Tests 39 passed; Playwright 31 passed
+playwright sync.spec.ts -g "journey 8" --repeat-each=3 → 4 passed; a second full `pnpm test:e2e` → 31 passed
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB, within budget
+pnpm --filter @palier/web lighthouse  → exit 0, 9 URLs × 5 runs; median performance 1.0 and accessibility 1.0 on every URL
+```
+- **Branch coverage of the new code:**
+
+  | File | Branch |
+  | --- | --- |
+  | `forms.ts` | 94.7% |
+  | `run.ts` | 91.7% |
+  | `validate.ts` | 100% |
+  | `cli.ts` | 90.7% |
+  | `io.ts` | 100% |
+  | `metrics.ts` | 100% |
+  | `scripted-ai-provider.ts` | 96.7% |
+  | `sync-triggers.ts` | 100% |
+
+**Not done here, by design:**
+- carrying *forms* forward into a later bank. That is the D82 residual, and the full-volume run's first
+  task;
+- the exam UI (Slice 3, behind Gate D);
+- Slice 4a, now *Next, decided* while Gate D is open (D83).
 
 ### 24 September 2026 — `dougkeefe/minnetonka-v3` (Phase 3 Slice 1: the exam core)
 
