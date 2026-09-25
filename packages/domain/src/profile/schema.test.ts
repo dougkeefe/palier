@@ -221,6 +221,49 @@ describe("the oral format", () => {
   });
 });
 
+describe("item statistics rules", () => {
+  const withRules = (rules: Record<string, unknown>): Profile =>
+    withProfile((p) => {
+      p["itemStatistics"] = { ...(p["itemStatistics"] as Record<string, unknown>), ...rules };
+    });
+
+  it("rejects a proportion floor at or above the ceiling, or every item retires", () => {
+    expect(errorsFrom(withRules({ pCorrectMin: 0.95 }))).toMatch(
+      /pCorrectMin \(0.95\) must be below pCorrectMax \(0.95\)/,
+    );
+  });
+
+  it("rejects a proportion outside 0 to 1", () => {
+    expect(errorsFrom(withRules({ pCorrectMax: 1.2 }))).not.toBe("");
+  });
+
+  it("rejects a point-biserial floor outside -1 to 1", () => {
+    expect(errorsFrom(withRules({ pointBiserialMin: -1.5 }))).not.toBe("");
+  });
+
+  it("rejects a minimum response count that is not a positive whole number", () => {
+    expect(errorsFrom(withRules({ minResponsesDifficulty: 0 }))).not.toBe("");
+    expect(errorsFrom(withRules({ minResponsesDiscrimination: 99.5 }))).not.toBe("");
+  });
+
+  it("rejects trusting a point-biserial on fewer responses than a proportion", () => {
+    expect(
+      errorsFrom(withRules({ minResponsesDifficulty: 100, minResponsesDiscrimination: 30 })),
+    ).toMatch(/point-biserial needs more responses than a proportion correct/);
+  });
+
+  it("rejects an unknown rule, since the block is strict", () => {
+    expect(errorsFrom(withRules({ reportsToRetire: 3 }))).not.toBe("");
+  });
+
+  it("rejects a profile with no rules at all", () => {
+    const broken = withProfile((p) => {
+      delete p["itemStatistics"];
+    });
+    expect(errorsFrom(broken)).not.toBe("");
+  });
+});
+
 describe("misfiled sub-skill messages", () => {
   it("reads naturally when several are misfiled", () => {
     const broken = withProfile((p) => {

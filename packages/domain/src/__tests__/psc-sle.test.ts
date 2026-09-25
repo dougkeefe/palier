@@ -83,6 +83,16 @@ describe("the psc-sle profile", () => {
     expect(profile.leitnerIntervalDays).toEqual([1, 3, 7, 21]);
   });
 
+  it("carries the retirement rules of architecture.md 7.6 and PRD 13.3", () => {
+    expect(profile.itemStatistics).toEqual({
+      pCorrectMin: 0.15,
+      pCorrectMax: 0.95,
+      pointBiserialMin: 0,
+      minResponsesDifficulty: 30,
+      minResponsesDiscrimination: 100,
+    });
+  });
+
   it("publishes no raw-score cut table for oral, because the PSC does not", () => {
     expect(profile.oral.cuts).toBeNull();
   });
