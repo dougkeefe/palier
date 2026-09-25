@@ -124,6 +124,25 @@ describe("runFactory", () => {
     expect(report.counts.itemsCarried).toBe(v1Items);
   });
 
+  it("carries the latest published version when the one just below was never written", async () => {
+    await runFactory(["run", "--bank-version", "1"], deps());
+    const v1Items = readManifest(1).counts.items;
+    await runFactory(["run", "--bank-version", "3"], deps());
+    const report = JSON.parse(readFileSync(join(root, BATCH_REPORT_PATH), "utf8")) as {
+      counts: { itemsCarried: number };
+    };
+    expect(report.counts.itemsCarried).toBe(v1Items);
+  });
+
+  it("rejects a bank version or passage count that is not a positive integer", async () => {
+    for (const args of [["--bank-version", "abc"], ["--bank-version", "0"], ["--per-source", "1.5"]]) {
+      log.length = 0;
+      expect(await runFactory(["run", ...args], deps())).toBe(1);
+      expect(log.join(" ")).toMatch(/take a positive integer/);
+    }
+    expect(existsSync(join(root, "content/bank"))).toBe(false);
+  });
+
   it("sizes the run by --per-source", async () => {
     await runFactory(["run", "--bank-version", "1", "--per-source", "3"], deps());
     const report = JSON.parse(readFileSync(join(root, BATCH_REPORT_PATH), "utf8")) as {

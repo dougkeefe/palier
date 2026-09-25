@@ -11,6 +11,7 @@ import {
   loadModels,
   loadPricing,
   loadProfile,
+  latestBankVersionBelow,
   loadPublishedBank,
   loadSources,
   writeBank,
@@ -79,7 +80,10 @@ export type RunOptions = {
  * about what produced `content/bank/`.
  */
 export const runInputFor = (root: string, options: RunOptions): RunInput => {
-  const carried = loadPublishedBank(root, options.bankVersion - 1);
+  // The latest published version below this one, not just n-1: skipping a number
+  // must never drop every id users already hold (architecture.md §5.5).
+  const previous = latestBankVersionBelow(root, options.bankVersion);
+  const carried = previous === null ? null : loadPublishedBank(root, previous);
   return {
     sources: loadSources(root),
     profile: loadProfile(root),
@@ -91,6 +95,11 @@ export const runInputFor = (root: string, options: RunOptions): RunInput => {
     perSource: options.perSource,
     ...(carried === null ? {} : { carried }),
   };
+};
+
+const positiveInteger = (value: string | undefined): number | null => {
+  const n = Number(value);
+  return Number.isInteger(n) && n > 0 ? n : null;
 };
 
 const YIELD_MIN = 0.45;
@@ -116,7 +125,14 @@ export const runFactory = async (argv: readonly string[], deps: CliDeps): Promis
   const promptVersion = useOpenAi ? PROMPT_VERSION : SCRIPTED_PROMPT_VERSION;
 
   if (command === "run") {
-    const bankVersion = Number(values["bank-version"]);
+    const bankVersion = positiveInteger(values["bank-version"]);
+    const perSource = positiveInteger(values["per-source"]);
+    if (bankVersion === null || perSource === null) {
+      deps.log(
+        `--bank-version and --per-source take a positive integer (got ${String(values["bank-version"])} and ${String(values["per-source"])})`,
+      );
+      return 1;
+    }
     // A published bank version is immutable (architecture.md §5.5): users' clients
     // and exam results point into it. Rewriting one takes an explicit --force.
     if (bankVersionExists(deps.root, bankVersion) && !values.force) {
@@ -130,7 +146,7 @@ export const runFactory = async (argv: readonly string[], deps: CliDeps): Promis
       runInputFor(deps.root, {
         now: deps.now,
         bankVersion,
-        perSource: Number(values["per-source"]),
+        perSource,
         provider,
         promptVersion,
       }),

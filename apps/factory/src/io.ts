@@ -61,6 +61,12 @@ const bankDir = (root: string, version: number): string => join(root, "content",
 export const bankVersionExists = (root: string, version: number): boolean =>
   existsSync(join(bankDir(root, version), "manifest.json"));
 
+/** The highest bank version below `version` that has been written, or `null`. */
+export const latestBankVersionBelow = (root: string, version: number): number | null => {
+  for (let v = version - 1; v >= 1; v--) if (bankVersionExists(root, v)) return v;
+  return null;
+};
+
 /**
  * A published bank version's items and passages, read back through its manifest,
  * or `null` when that version was never written. The next version carries them.

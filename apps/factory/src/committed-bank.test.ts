@@ -27,7 +27,11 @@ const filesUnder = (dir: string): string[] =>
     entry.isDirectory() ? filesUnder(join(dir, entry.name)) : [join(dir, entry.name)],
   );
 
-const rerun = async () => {
+// One pipeline run, shared by every test below: it is the heaviest thing in the fast lane.
+let memo: ReturnType<typeof runOnce> | undefined;
+const rerun = () => (memo ??= runOnce());
+
+const runOnce = async () => {
   const committed = JSON.parse(readFileSync(join(REPO, BATCH_REPORT_PATH), "utf8")) as BatchReport;
   return {
     committed,
