@@ -121,6 +121,15 @@ interface SessionStore   { create(s: Session): Promise<void>; complete(id: Sessi
 // planDailySession's lastDayCompleted. `mode` is 9.1's `type` column and reuses AttemptMode,
 // not the oral sessionType. Checkpointing/resume state is deferred to its consumer, the
 // Phase 3 exam runner. See progress.md D45, D46 (D46 closes D36).
+interface ExamRunStore   { put(r: ExamRun): Promise<void>; get(id: SessionId): Promise<ExamRun | null>; unsubmitted(): Promise<ExamRun | null>; all(): Promise<ExamRun[]>; clear(): Promise<void> }
+// Added 24 September 2026 with Phase 3 Slice 1: the exam runner's checkpoint/resume state,
+// which SessionStore deferred to it. ExamRun = { id: SessionId, formId, startedAt,
+// answers: ExamAnswer[], flagged: ItemId[], elapsedMs, checkpointedAt, submittedAt: ISO | null }.
+// ExamAnswer = { itemId, response, msToFirstSelect, msToConfirm, changedAnswer }. The run holds
+// ELAPSED exam time, so a resume restores the clock without counting the time the tab was
+// closed. `put` is a plain upsert: the write-once `submittedAt` rule lives in the use cases and
+// in sync's mergeRecord. No result is stored, because rescoring derives it (ADR 16). See
+// progress.md D80.
 interface OralStore      { /* transcripts and audio blobs, local only */ }
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
 // Amended 24 September 2026: AttemptStore, ScheduleStore, SessionStore and SettingsStore each

@@ -21,6 +21,7 @@ export { HERMETIC_ENV_FLAG, isHermetic } from "../hermetic.js";
 export { FIXTURE_BANK, fixtureBankRepository } from "../fixtures/bank.js";
 export {
   memoryAttemptStore,
+  memoryExamRunStore,
   memoryItemRepository,
   memoryKeyVault,
   memoryScheduleStore,

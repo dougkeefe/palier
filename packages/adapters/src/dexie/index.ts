@@ -1,5 +1,6 @@
 import type {
   AttemptStore,
+  ExamRunStore,
   KeyVault,
   ScheduleStore,
   SessionStore,
@@ -9,6 +10,7 @@ import type {
 
 import { dexieAttemptStore } from "./attempt-store.js";
 import { PalierDb } from "./db.js";
+import { dexieExamRunStore } from "./exam-run-store.js";
 import { dexieKeyVault } from "./key-vault.js";
 import { dexieScheduleStore } from "./schedule-store.js";
 import { dexieSessionStore } from "./session-store.js";
@@ -16,7 +18,7 @@ import { dexieSettingsStore } from "./settings-store.js";
 import { dexieSyncStateStore } from "./sync-state-store.js";
 
 /**
- * The six local store ports, all bound to one `PalierDb`. This is the whole public
+ * The seven local store ports, all bound to one `PalierDb`. This is the whole public
  * surface of the Dexie adapter, and deliberately so: every field is a port type from
  * `@palier/app`, so **no Dexie type crosses the package boundary** (§2.4, the adapter's
  * first invariant). `PalierDb` extends `Dexie` and exposes `Table<...>` accessors, so
@@ -30,6 +32,7 @@ export type DexieStores = {
   readonly attempts: AttemptStore;
   readonly schedule: ScheduleStore;
   readonly sessions: SessionStore;
+  readonly examRuns: ExamRunStore;
   readonly settings: SettingsStore;
   readonly keyVault: KeyVault;
   readonly syncState: SyncStateStore;
@@ -41,6 +44,7 @@ export const dexieStores = (name = "palier"): DexieStores => {
     attempts: dexieAttemptStore(db),
     schedule: dexieScheduleStore(db),
     sessions: dexieSessionStore(db),
+    examRuns: dexieExamRunStore(db),
     settings: dexieSettingsStore(db),
     keyVault: dexieKeyVault(db),
     syncState: dexieSyncStateStore(db),
