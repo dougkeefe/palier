@@ -29,6 +29,22 @@ content *schemas* with the app, never runtime. The `AiProvider` port type is imp
 - **Exam rules come from the profile, never from code** (ADR 9). Item counts, cuts and the
   taxonomy are read from `@palier/content/profiles/psc-sle.json`; the only factory constants are
   pipeline knobs (the review confidence threshold, the near-duplicate threshold, the yield band).
+- **Forms are assembled, never hand-written** (`pipeline/forms.ts`, progress.md D82). One per profile
+  variant, from `Object.entries(profile.variants)`: its item count, `items − scored` pilots at evenly
+  spaced positions, its minutes and `orderedCuts(variant)`. The draw is stratified over sub-skills and
+  bands and deterministic for a seed. The id is `${lang}-${variant}-v${bankVersion}` and `version` is the
+  bank version, so a later bank never reissues an id with different items. A bank that cannot fill a
+  variant is a form issue, and **the CLI writes no bank with a form issue** (`checkForms` checks variant,
+  counts, pilots, minutes, cuts, item skill/lang and the domain schema).
+- **A published bank version is immutable, and the next one carries it forward.** `run` refuses to
+  overwrite an existing `content/bank/v{n}` without `--force`, and reads `v{n-1}`'s items and passages
+  as `carried`: they are re-validated with the new drafts, ahead of them, so an id users already hold
+  survives a near-duplicate (architecture.md §5.5). The batch report counts them as `itemsCarried`, not
+  as the batch's output.
+- **The committed bank is byte-reproducible on disk.** `committed-bank.test.ts` reruns the pipeline
+  through the CLI's own `runInputFor`, at the committed report's `generatedAt`, and compares every file
+  under `content/bank/v{DEFAULT_BANK_VERSION}`. A provider change therefore means a new bank version,
+  regenerated and committed in the same PR.
 - **Every stage has a unit test that names its behaviour** (§10), and the fast lane holds each
   file to 90% branch coverage. `index.ts` (argv/cwd/stdout wiring) is the one coverage exclusion.
 
@@ -44,8 +60,11 @@ eval set's detection rate is a real computed number, not a hardcoded one.
 ## Commands
 
 ```
-palier-factory run            # full pipeline → content/factory/ + content/bank/v1/
+palier-factory run            # full pipeline → content/factory/ + content/bank/v2/ (DEFAULT_BANK_VERSION)
+--bank-version <n>            # write a new version; v{n-1} is carried forward
+--per-source <n>              # passages per source (DEFAULT_PER_SOURCE, sized for form headroom)
+--force                       # rebuild a version that already exists (never a published one)
 palier-factory eval           # review-gate detection on the defect eval set
-PALIER_NOW=<iso> …            # pin the batch timestamp for a reproducible commit
+PALIER_NOW=<iso> …            # pin the batch timestamp for a reproducible commit (v2: 2026-09-24T00:00:00.000Z)
 --provider openai             # use the real adapter (needs OPENAI_API_KEY)
 ```

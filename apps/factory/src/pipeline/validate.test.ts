@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
-import { parseExamProfileOrThrow } from "@palier/domain";
+import { orderedCuts, parseExamProfileOrThrow } from "@palier/domain";
 import type { ExamForm, ExamProfile, Item, ItemOption } from "@palier/domain";
 
 import { checkForms, perItemReasons, validateBank } from "./validate.js";
@@ -118,5 +118,60 @@ describe("checkForms", () => {
   it("flags a form whose item count does not match its variant", () => {
     const it0 = item({ id: "A" as Item["id"] });
     expect(checkForms([form({ itemIds: [it0.id] })], [it0], profile).join(" ")).toMatch(/requires/);
+  });
+
+  // A reading-unsupervised form exactly as the profile describes it: 25 items, no pilots.
+  const unsupervised = profile.variants["reading-unsupervised"]!;
+  const readingItems = Array.from({ length: unsupervised.items }, (_, n) =>
+    item({ id: `R${String(n)}` as Item["id"], skill: "reading" }),
+  );
+  const exact = (over: Partial<ExamForm> = {}): ExamForm =>
+    form({
+      mode: "unsupervised",
+      itemIds: readingItems.map((i) => i.id),
+      pilotItemIds: [],
+      timeLimitMinutes: unsupervised.minutes,
+      bandCuts: orderedCuts(unsupervised),
+      ...over,
+    });
+
+  it("passes a form that is exactly its variant's shape", () => {
+    expect(checkForms([exact()], readingItems, profile)).toEqual([]);
+  });
+
+  it("flags a form that matches no profile variant", () => {
+    const stray = exact({ skill: "oral" as ExamForm["skill"] });
+    expect(checkForms([stray], readingItems, profile).join(" ")).toMatch(/matches no profile variant \(oral-unsupervised\)/);
+  });
+
+  it("flags a pilot count that differs from the variant's", () => {
+    const withPilot = exact({ pilotItemIds: [readingItems[0]!.id] });
+    expect(checkForms([withPilot], readingItems, profile).join(" ")).toMatch(/1 pilot items, variant reading-unsupervised requires 0/);
+  });
+
+  it("flags a time limit that differs from the variant's", () => {
+    expect(checkForms([exact({ timeLimitMinutes: 90 })], readingItems, profile).join(" ")).toMatch(/allows 90 minutes/);
+  });
+
+  it("flags a cut table that differs from the variant's", () => {
+    const moved = orderedCuts(unsupervised).map((c) => (c.band === "C" ? { ...c, min: c.min + 1 } : c));
+    expect(checkForms([exact({ bandCuts: moved })], readingItems, profile).join(" ")).toMatch(/cuts that differ/);
+  });
+
+  it("flags an item whose skill differs from the form's", () => {
+    const mixed = [item({ id: "W" as Item["id"], skill: "writing" }), ...readingItems.slice(1)];
+    const issues = checkForms([exact({ itemIds: mixed.map((i) => i.id) })], mixed, profile);
+    expect(issues.join(" ")).toMatch(/is reading\/fr but item W is writing\/fr/);
+  });
+
+  it("flags an item whose language differs from the form's", () => {
+    const mixed = [item({ id: "E" as Item["id"], skill: "reading", lang: "en" }), ...readingItems.slice(1)];
+    const issues = checkForms([exact({ itemIds: mixed.map((i) => i.id) })], mixed, profile);
+    expect(issues.join(" ")).toMatch(/item E is reading\/en/);
+  });
+
+  it("flags a form the domain schema rejects", () => {
+    const twice = exact({ itemIds: [readingItems[0]!.id, ...readingItems.slice(0, -1).map((i) => i.id)] });
+    expect(checkForms([twice], readingItems, profile).join(" ")).toMatch(/fails the schema: The same item appears twice/);
   });
 });

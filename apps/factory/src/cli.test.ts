@@ -50,6 +50,13 @@ beforeEach(() => {
   }
 });
 
+const readManifest = (version: number) =>
+  JSON.parse(readFileSync(join(root, `content/bank/v${String(version)}/manifest.json`), "utf8")) as {
+    version: number;
+    counts: { items: number };
+    forms: { id: string }[];
+  };
+
 afterEach(() => {
   // mkdtemp dirs are small and OS-cleaned; leaving them avoids racing the run.
 });
@@ -59,7 +66,7 @@ describe("runFactory", () => {
     const code = await runFactory(["run"], deps());
     expect(code).toBe(0);
     expect(existsSync(join(root, BATCH_REPORT_PATH))).toBe(true);
-    expect(existsSync(join(root, "content/bank/v1/manifest.json"))).toBe(true);
+    expect(existsSync(join(root, "content/bank/v2/manifest.json"))).toBe(true);
     const report = JSON.parse(readFileSync(join(root, BATCH_REPORT_PATH), "utf8")) as {
       counts: { itemsPublished: number };
     };
@@ -77,7 +84,61 @@ describe("runFactory", () => {
   it("defaults to the run command", async () => {
     const code = await runFactory([], deps());
     expect(code).toBe(0);
-    expect(existsSync(join(root, "content/bank/v1/manifest.json"))).toBe(true);
+    expect(existsSync(join(root, "content/bank/v2/manifest.json"))).toBe(true);
+  });
+
+  it("writes a form per profile variant into the bank", async () => {
+    await runFactory(["run"], deps());
+    const manifest = readManifest(2);
+    expect(manifest.forms.map((f) => f.id)).toEqual([
+      "fr-reading-supervised-v2",
+      "fr-reading-unsupervised-v2",
+      "fr-writing-supervised-v2",
+      "fr-writing-unsupervised-v2",
+    ]);
+    expect(log.join(" ")).toMatch(/bank v2: \d+ items, forms fr-reading-supervised-v2/);
+  });
+
+  it("refuses to overwrite a bank version that already exists", async () => {
+    await runFactory(["run", "--bank-version", "1"], deps());
+    log.length = 0;
+    const code = await runFactory(["run", "--bank-version", "1"], deps());
+    expect(code).toBe(1);
+    expect(log.join(" ")).toMatch(/refusing to overwrite content\/bank\/v1: a published bank version is immutable/);
+  });
+
+  it("rebuilds an existing bank version when forced", async () => {
+    await runFactory(["run", "--bank-version", "1"], deps());
+    const code = await runFactory(["run", "--bank-version", "1", "--force"], deps());
+    expect(code).toBe(0);
+    expect(readManifest(1).version).toBe(1);
+  });
+
+  it("carries the previous bank version's items into the next", async () => {
+    await runFactory(["run", "--bank-version", "1"], deps());
+    const v1Items = readManifest(1).counts.items;
+    await runFactory(["run", "--bank-version", "2"], deps());
+    const report = JSON.parse(readFileSync(join(root, BATCH_REPORT_PATH), "utf8")) as {
+      counts: { itemsCarried: number };
+    };
+    expect(report.counts.itemsCarried).toBe(v1Items);
+  });
+
+  it("sizes the run by --per-source", async () => {
+    await runFactory(["run", "--bank-version", "1", "--per-source", "3"], deps());
+    const report = JSON.parse(readFileSync(join(root, BATCH_REPORT_PATH), "utf8")) as {
+      counts: { passages: number; sources: number };
+    };
+    expect(report.counts.passages).toBe(report.counts.sources * 3);
+  });
+
+  it("writes no bank, and returns 1, when the bank cannot fill its forms", async () => {
+    const code = await runFactory(["run", "--per-source", "1"], deps());
+    expect(code).toBe(1);
+    expect(existsSync(join(root, "content/bank/v2"))).toBe(false);
+    expect(existsSync(join(root, BATCH_REPORT_PATH))).toBe(true);
+    expect(log.join(" ")).toMatch(/FORM: cannot assemble forms: variant reading-supervised needs 60/);
+    expect(log.join(" ")).toMatch(/bank v2 not written/);
   });
 
   it("rejects an unknown command", async () => {

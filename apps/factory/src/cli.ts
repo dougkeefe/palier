@@ -7,15 +7,18 @@ import {
   BATCH_REPORT_PATH,
   EVAL_REPORT_PATH,
   SOURCE_QUEUE_PATH,
+  bankVersionExists,
   loadModels,
   loadPricing,
   loadProfile,
+  loadPublishedBank,
   loadSources,
   writeBank,
   writeJsonFile,
 } from "./io.js";
 import { scriptedAiProvider } from "./providers/scripted-ai-provider.js";
-import { runPipeline } from "./pipeline/run.js";
+import { DEFAULT_PER_SOURCE, runPipeline } from "./pipeline/run.js";
+import type { RunInput } from "./pipeline/run.js";
 import { discardReasonCounts } from "./pipeline/metrics.js";
 import { buildEvalSet, runEvalDetection } from "./eval/eval-set.js";
 
@@ -55,6 +58,41 @@ export const buildProvider = (
   return scriptedAiProvider();
 };
 
+/** The prompt version the scripted provider's items record. */
+export const SCRIPTED_PROMPT_VERSION = "scripted-1";
+
+/** The bank version a plain `palier-factory run` writes: the next one to publish. */
+export const DEFAULT_BANK_VERSION = 2;
+
+export type RunOptions = {
+  readonly now: string;
+  readonly bankVersion: number;
+  readonly perSource: number;
+  readonly provider: AiProvider;
+  readonly promptVersion: string;
+};
+
+/**
+ * The pipeline's whole input for a run rooted at `root`: the committed profile and
+ * sources, and the previous bank version carried forward. The CLI and the
+ * committed-bank drift test both build their input here, so they cannot disagree
+ * about what produced `content/bank/`.
+ */
+export const runInputFor = (root: string, options: RunOptions): RunInput => {
+  const carried = loadPublishedBank(root, options.bankVersion - 1);
+  return {
+    sources: loadSources(root),
+    profile: loadProfile(root),
+    provider: options.provider,
+    now: options.now,
+    batchId: `batch-${options.now.slice(0, 10)}`,
+    bankVersion: options.bankVersion,
+    promptVersion: options.promptVersion,
+    perSource: options.perSource,
+    ...(carried === null ? {} : { carried }),
+  };
+};
+
 const YIELD_MIN = 0.45;
 const YIELD_MAX = 0.75;
 const DETECTION_BAR = 0.9;
@@ -65,7 +103,9 @@ export const runFactory = async (argv: readonly string[], deps: CliDeps): Promis
     allowPositionals: true,
     options: {
       provider: { type: "string", default: "scripted" },
-      "bank-version": { type: "string", default: "1" },
+      "bank-version": { type: "string", default: String(DEFAULT_BANK_VERSION) },
+      "per-source": { type: "string", default: String(DEFAULT_PER_SOURCE) },
+      force: { type: "boolean", default: false },
       "per-class": { type: "string", default: "10" },
     },
   });
@@ -73,26 +113,39 @@ export const runFactory = async (argv: readonly string[], deps: CliDeps): Promis
   const command = positionals[0] ?? "run";
   const useOpenAi = values.provider === "openai";
   const provider = buildProvider(useOpenAi, deps);
-  const profile = loadProfile(deps.root);
-  const promptVersion = useOpenAi ? PROMPT_VERSION : "scripted-1";
+  const promptVersion = useOpenAi ? PROMPT_VERSION : SCRIPTED_PROMPT_VERSION;
 
   if (command === "run") {
-    const out = await runPipeline({
-      sources: loadSources(deps.root),
-      profile,
-      provider,
-      now: deps.now,
-      batchId: `batch-${deps.now.slice(0, 10)}`,
-      bankVersion: Number(values["bank-version"]),
-      promptVersion,
-    });
+    const bankVersion = Number(values["bank-version"]);
+    // A published bank version is immutable (architecture.md §5.5): users' clients
+    // and exam results point into it. Rewriting one takes an explicit --force.
+    if (bankVersionExists(deps.root, bankVersion) && !values.force) {
+      deps.log(
+        `refusing to overwrite content/bank/v${String(bankVersion)}: a published bank version is immutable. ` +
+          `Pass --bank-version ${String(bankVersion + 1)} for a new one, or --force to rebuild it.`,
+      );
+      return 1;
+    }
+    const out = await runPipeline(
+      runInputFor(deps.root, {
+        now: deps.now,
+        bankVersion,
+        perSource: Number(values["per-source"]),
+        provider,
+        promptVersion,
+      }),
+    );
 
     writeJsonFile(deps.root, SOURCE_QUEUE_PATH, out.harvest);
-    writeBank(deps.root, out.bank);
     writeJsonFile(deps.root, BATCH_REPORT_PATH, out.report);
     // Inspection artefacts: the raw drafts and every discard with its reasons.
     writeJsonFile(deps.root, "content/factory/drafted.json", out.drafted);
     writeJsonFile(deps.root, "content/factory/discards.json", out.review.discarded);
+    // A bank whose forms are wrong or missing is never written: a form is immutable
+    // once published, and every result scored against it would inherit the fault.
+    const formsOk = out.validation.formIssues.length === 0;
+    if (formsOk) writeBank(deps.root, out.bank);
+    else for (const issue of out.validation.formIssues) deps.log(`FORM: ${issue}`);
 
     const y = out.report.stage4Yield;
     deps.log(
@@ -106,11 +159,13 @@ export const runFactory = async (argv: readonly string[], deps: CliDeps): Promis
     const yieldOk = y >= YIELD_MIN && y <= YIELD_MAX;
     if (!yieldOk) deps.log(`WARNING: stage-4 yield ${y.toFixed(3)} is outside [${String(YIELD_MIN)}, ${String(YIELD_MAX)}]`);
     if (!out.validation.keyDistributionOk) deps.log("WARNING: key-position distribution is skewed");
-    return yieldOk && out.validation.keyDistributionOk ? 0 : 1;
+    if (!formsOk) deps.log(`bank v${String(bankVersion)} not written: its forms failed validation`);
+    else deps.log(`bank v${String(bankVersion)}: ${String(out.bank.manifest.counts.items)} items, forms ${out.forms.map((f) => f.id).join(", ")}`);
+    return yieldOk && out.validation.keyDistributionOk && formsOk ? 0 : 1;
   }
 
   if (command === "eval") {
-    const report = await runEvalDetection(buildEvalSet(Number(values["per-class"])), provider, profile);
+    const report = await runEvalDetection(buildEvalSet(Number(values["per-class"])), provider, loadProfile(deps.root));
     writeJsonFile(deps.root, EVAL_REPORT_PATH, report);
     deps.log(`eval: overall ${report.overallRate.toFixed(3)}, min class ${report.minClassRate.toFixed(3)}`);
     return report.minClassRate >= DETECTION_BAR ? 0 : 1;

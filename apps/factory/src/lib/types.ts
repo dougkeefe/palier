@@ -38,7 +38,10 @@ export type BatchReport = {
     readonly passages: number;
     readonly itemsDrafted: number;
     readonly itemsPassed: number;
+    /** Published in this batch; carried items are counted separately. */
     readonly itemsPublished: number;
+    /** Carried from the previous bank version, still valid. */
+    readonly itemsCarried: number;
   };
   /** Stage-4 yield: passed / drafted. Target 0.45–0.75 (§6). */
   readonly stage4Yield: number;

@@ -34,6 +34,18 @@ describe("batchReport", () => {
     expect(r.costPerAcceptedItemUsd).toBeNull();
   });
 
+  it("keeps carried items out of the batch's published count and its cost per item", () => {
+    const r = batchReport({ ...base, itemsDrafted: 10, review: review(6), validation: validation(9), carriedPublished: 4, totalCostUsd: 1 });
+    expect(r.counts.itemsPublished).toBe(5);
+    expect(r.counts.itemsCarried).toBe(4);
+    expect(r.costPerAcceptedItemUsd).toBe(0.2);
+  });
+
+  it("counts no carried items when none were carried", () => {
+    const r = batchReport({ ...base, itemsDrafted: 10, review: review(6), validation: validation(5), totalCostUsd: 1 });
+    expect(r.counts.itemsCarried).toBe(0);
+  });
+
   it("reports null cost when nothing was published", () => {
     const r = batchReport({ ...base, itemsDrafted: 4, review: review(2), validation: validation(0), totalCostUsd: 5 });
     expect(r.costPerAcceptedItemUsd).toBeNull();

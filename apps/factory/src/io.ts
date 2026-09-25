@@ -1,13 +1,14 @@
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 import { parseExamProfileOrThrow } from "@palier/domain";
-import type { ExamProfile } from "@palier/domain";
+import type { ExamProfile, Item, Passage } from "@palier/domain";
 import type { OpenAiModels, OpenAiPricing } from "@palier/adapters/openai";
 
 import { canonicalStringify } from "./lib/json.js";
 import type { SourceCandidate } from "./lib/types.js";
-import type { BankBuild } from "./pipeline/bank-build.js";
+import type { BankBuild, BankManifest } from "./pipeline/bank-build.js";
+import type { CarriedBank } from "./pipeline/run.js";
 
 /**
  * The factory's only file I/O — kept out of the pipeline so the stages stay pure
@@ -54,11 +55,31 @@ export const writeJsonFile = (root: string, relPath: string, data: unknown): voi
   writeFileSync(path, canonicalStringify(data));
 };
 
+const bankDir = (root: string, version: number): string => join(root, "content", "bank", `v${String(version)}`);
+
+/** Whether a bank version has already been written. A published version is immutable. */
+export const bankVersionExists = (root: string, version: number): boolean =>
+  existsSync(join(bankDir(root, version), "manifest.json"));
+
+/**
+ * A published bank version's items and passages, read back through its manifest,
+ * or `null` when that version was never written. The next version carries them.
+ */
+export const loadPublishedBank = (root: string, version: number): CarriedBank | null => {
+  if (!bankVersionExists(root, version)) return null;
+  const manifest = readJson(join(bankDir(root, version), "manifest.json")) as BankManifest;
+  const shard = (path: string): unknown[] => readJson(join(root, "content", path)) as unknown[];
+  return {
+    items: manifest.shards.flatMap((s) => shard(s.path)) as Item[],
+    passages: manifest.passageShards.flatMap((s) => shard(s.path)) as Passage[],
+  };
+};
+
 export const writeBank = (root: string, bank: BankBuild): void => {
   // Clear this version's directory first, so a rebuild leaves no stale,
   // content-hashed shards from an earlier run behind (the bank is additive
   // across versions, so only v{n} is cleared, never sibling versions).
-  rmSync(join(root, "content", "bank", `v${String(bank.version)}`), { recursive: true, force: true });
+  rmSync(bankDir(root, bank.version), { recursive: true, force: true });
   for (const file of bank.files) {
     const path = join(root, "content", file.path);
     mkdirSync(dirname(path), { recursive: true });

@@ -19,8 +19,8 @@ import type { SourceRecord } from "./types.js";
 import { contentHash, contentId } from "./json.js";
 import { readability, wordCount } from "./text.js";
 
-/** A small seeded PRNG so a shuffle is reproducible from the item's content. */
-const mulberry32 = (seed: number): (() => number) => () => {
+/** A small seeded PRNG, so a shuffle is reproducible from its seed. */
+export const mulberry32 = (seed: number): (() => number) => () => {
   let t = (seed += 0x6d2b79f5);
   t = Math.imul(t ^ (t >>> 15), t | 1);
   t ^= t + Math.imul(t ^ (t >>> 7), t | 61);

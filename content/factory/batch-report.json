@@ -1,15 +1,16 @@
 {
-  "batchId": "batch-2026-09-23",
-  "costPerAcceptedItemUsd": 0.133,
+  "batchId": "batch-2026-09-24",
+  "costPerAcceptedItemUsd": 0.072069,
   "counts": {
-    "itemsDrafted": 26,
-    "itemsPassed": 15,
-    "itemsPublished": 10,
-    "passages": 8,
+    "itemsCarried": 10,
+    "itemsDrafted": 368,
+    "itemsPassed": 232,
+    "itemsPublished": 232,
+    "passages": 16,
     "sources": 8
   },
-  "generatedAt": "2026-09-23T00:00:00.000Z",
+  "generatedAt": "2026-09-24T00:00:00.000Z",
   "provider": "scripted",
-  "stage4Yield": 0.577,
-  "totalCostUsd": 1.33
+  "stage4Yield": 0.63,
+  "totalCostUsd": 16.72
 }
