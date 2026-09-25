@@ -1,27 +1,13 @@
 # Palier: Progress
 
 **Last updated:** 24 September 2026
-**Current phase:** **Phase 2 (Practice MVP) is open.** Phase 1 is built (automated content factory,
-ADR 19; the D54 real-model go-signal exists — session log, 24 September 2026). Much of Phase 2 has
-landed ahead of the formal start: the pure `@palier/engine` core, the `@palier/app` practice loop,
-and the `/ids`, `/dexie`, `/openai` adapters. The bank `ItemRepository` (`adapters/bank`) now
-lands too, so the app can plan a day from the real committed bank, not only the fixture bank.
-The web slice has landed too: the production composition root wires the real adapters, and a service
-worker makes the app and the bank work offline after one load (D58–D60). **Gate A is resolved** (adopt
-the PRD's UI direction).
-The data use cases (`exportData`/`importData`/`wipeData`) have landed too (D61, D62).
-The single-device UI has landed too (D63–D67), so **Slice 1 is complete**: the whole practice app works
-on one device, offline after one load.
-**Gate B is resolved** (human, 24 September 2026: the lower Leitner box wins a concurrent edit, D69),
-and **Slice 2 is complete** (`dougkeefe/pangyo`; D69–D72, ADR 21): two devices pair by code and
-converge, on the real route handlers over PGlite. **Slice 3 is built** (`dougkeefe/yamoussoukro`;
-D73–D78): the sync simulator, which found and fixed two real sync defects; the engine golden record; the
-mutation check; every Phase 2 CI gate; and the deploy tooling. **Gate C is resolved: the app is live at
-https://palier-virid.vercel.app**, with sync on a Neon database (D78). Phase 2 is complete except for one
-human act: sharing the app with a handful of people. See [Next, decided](#next-decided). The **full-volume published
-bank** (D54) is a standing human gate that has now been **sequenced to the end**: build every
-feature phase (2–6) against the baseline committed bank, then run the content gate at 1.0
-(D56).
+**Current phase:** **Phase 3 (Exams and item statistics) is open.** **Phase 2 is complete**: the last
+exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
+paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
+four, mirrored in `implementation-plan.md` §7 (D79). **Slice 1, the exam core with no UI, is in flight**
+(`dougkeefe/minnetonka-v3`). See [Next, decided](#next-decided). The **full-volume published bank** (D54)
+is still a standing human gate, **sequenced to the end** (D56): every feature phase (2–6) is built
+against the baseline committed bank, and the content gate runs at 1.0.
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -82,8 +68,8 @@ human for anything expensive.
 | --- | --- | --- | --- |
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
-| 2 Practice MVP | Ship something publicly useful | 3–4 wk | **built and deployed** (live 24 September 2026; "shared with a handful" pending the human) |
-| 3 Exams and item statistics | The number users actually came for | 2 wk | not started |
+| 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
+| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (Slice 1 in flight, D79) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | not started |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
@@ -96,9 +82,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/yamoussoukro` → `dougkeefe/phase-2-final-slice` (PR #21) | **Phase 2 Slice 3 — convergence proof + public launch (D57), the last Phase 2 slice.** The sync simulator (tier 5) in `@palier/testing` over the memory server and, in the integration lane, the real route handlers on PGlite; the engine golden record; the one-off mutation check; the remaining gates confirmed; deploy tooling, then the public deploy with the human (Gate C, provisioned together). **All built; deployed at https://palier-virid.vercel.app**, pending merge. | 24 September 2026 |
+| `dougkeefe/minnetonka-v3` | **Phase 3 Slice 1 — the exam core, no UI (D79).** Per-variant golden fixtures at every cut; the `ExamRunStore` port (memory, Dexie, contract); `startExam`/`answerExamItem`/`flagExamItem`/`checkpointExam`/`resumeExam`/`submitExam`/`rescoreExam`; exam runs as a fifth sync doc type and in export/import/wipe; the simulator gains an exam phase and oracle. | 24 September 2026 |
 
-*(The prior rows — Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -343,12 +329,12 @@ session-log evidence; nothing is ticked without it.
 - [x] Every adapter passes its port contract suite — `ids`, `dexie` ×6, `bank`, `openai`, `sync`; and `sync` passes it through the real route handlers too, on the memory repository (fast lane) and on PGlite (integration lane). Session log, 24 September 2026, `dougkeefe/pangyo`
 - [x] axe clean and keyboard-complete on onboarding, drill and review, asserted on states [R9]: axe runs on each state in journeys 1, 2 and 4 and on the sync settings, and the drill and review are driven by keyboard. The rerun is in this session's `verify:medium` → Playwright "31 passed" (session log, 24 September 2026, `dougkeefe/yamoussoukro`). Slice 1 first built it (`dougkeefe/algiers`)
 - [x] Lighthouse performance and accessibility both ≥95: median **1.0 / 1.0 on all 9 routes**, max CLS 0, rerun after the security headers (session log, 24 September 2026, `dougkeefe/yamoussoukro`)
-- [~] Deployed publicly and shared with a handful of people — **deployed**, 24 September 2026, at **https://palier-virid.vercel.app** (Vercel project `palier`, Neon Postgres `palier-db`, both provisioned with the human, Gate C). Every production smoke check passed, including a two-device sync round trip over the live database (session log). **"Shared with a handful of people" is the human's act, and is ticked when they confirm it.**
+- [x] Deployed publicly and shared with a handful of people — **deployed** 24 September 2026 at **https://palier-virid.vercel.app** (Vercel project `palier`, Neon Postgres `palier-db`, provisioned with the human, Gate C), with every production smoke check passing, including a two-device sync round trip over the live database. **Shared**: the human confirmed on 24 September 2026 that they paired two real browsers on the live URL and shared the link with a handful of people (session log, `dougkeefe/minnetonka-v3`). **Phase 2 complete.**
 
 **Completion slices (D57).** The §7 work breakdown above is grouped into **three** bigger slices that
 carry Phase 2 to every exit criterion, with two human gates between them. This mirrors
 `implementation-plan.md` §7 Phase 2 "Completion slices" — **keep the two in sync** (the fuller scope
-and each slice's *done* live in the plan). Current position: **Slices 1 and 2 complete** (Gate B resolved, D69); Slice 3 is next.
+and each slice's *done* live in the plan). Current position: **all three slices complete; Phase 2 complete** (24 September 2026).
 
 - [x] **Slice 1 — Single-device practice app, offline-complete.** **Done 24 September 2026** (`dougkeefe/algiers`; D58–D67; session-log evidence). Composition-root wiring of
   bank/dexie/ids + service-worker offline cache [R4] **(landed, D58–D60)** +
@@ -372,15 +358,42 @@ and each slice's *done* live in the plan). Current position: **Slices 1 and 2 co
 - [x] **Slice 3 — Convergence proof + public launch.** Sync simulator (tier 5), remaining CI gates +
   mutation check, full-offline + Lighthouse ≥95 confirmation, public deploy. **Phase 2 complete.**
   **Done 24 September 2026** (`dougkeefe/yamoussoukro`, PR #21; D73–D78), and deployed at
-  https://palier-virid.vercel.app. Only "shared with a handful of people", the human's act, remains.
+  https://palier-virid.vercel.app. "Shared with a handful of people" was confirmed by the human the same day.
 
 ### Phase 3: Exams and item statistics — closed pilot
 
-- [ ] All four exam variants runnable and correctly scored, golden fixture per variant at every cut boundary [R3]
-- [ ] A full 90-minute exam survives reload and network drop (E2E journey 3)
-- [ ] Statistics job flags and retires a seeded reversed-key item on synthetic data
-- [ ] Scoring is idempotent
-- [ ] Closed pilot run, 20–30 people
+**Opened 24 September 2026** (`dougkeefe/minnetonka-v3`). The `implementation-plan.md` §7 work
+breakdown, expanded on start. Nothing is ticked without session-log evidence.
+
+**Work breakdown (§7)**
+
+- [ ] Exam runner driven by the profile variants: navigator, flagging, timer with amber/red thresholds, checkpoint and resume with the clock preserved, pilot items — **the core (store, use cases, sync) is Slice 1; the UI is Slice 3**
+- [ ] Results screen: band, raw score against the cuts, per-sub-skill breakdown, near-miss from the actual cuts, confidence calibration, review walkthrough — Slice 3
+- [ ] Form generation in the factory: fixed, immutable, versioned forms per variant — Slice 2
+- [ ] Telemetry opt-in, the post-exam prompt, `/api/telemetry`, client batching — Slice 4
+- [ ] The item statistics job: proportion correct and point-biserial per item, minimum counts, a PR retiring items that trip the rules — Slice 4
+- [ ] Minimum response counts before an item's statistics are trusted, and the readiness-card disclosure — Slice 4
+
+**Exit criteria** (the actual gate)
+
+- [ ] All four exam variants runnable and correctly scored, golden fixture per variant at every cut boundary [R3] — the goldens are Slice 1; "runnable" needs Slice 2's forms and Slice 3's runner
+- [ ] A full 90-minute exam survives reload and network drop (E2E journey 3) — Slice 3
+- [ ] Statistics job flags and retires a seeded reversed-key item on synthetic data — Slice 4
+- [ ] Scoring is idempotent — Slice 1
+- [ ] Closed pilot run, 20–30 people — the plan's human decision gate, after Slice 4
+
+**Completion slices (D79).** Four slices, mirroring `implementation-plan.md` §7 Phase 3 "Completion
+slices". **Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
+
+- [~] **Slice 1 — The exam core, no UI.** Per-variant golden fixtures; the `ExamRunStore` port;
+  start/answer/flag/checkpoint/resume/submit/rescore; exam runs synced, exported and wiped; the simulator
+  gains an exam phase. In flight on `dougkeefe/minnetonka-v3`.
+- [ ] **Slice 2 — Forms and a bank that can fill them.** Factory form generation, and a baseline bank
+  regenerated with the scripted provider, large enough for every variant's full item count (D54, D56).
+- [ ] **Gate D — exam UI direction (human).** Adopt PRD §8.4–§8.5 as-is, as Gate A did, or revise it
+  first. Gates Slice 3.
+- [ ] **Slice 3 — The runner and results UI, and E2E journey 3.** Behind Gate D.
+- [ ] **Slice 4 — Telemetry and the item-statistics job.** Then the closed pilot (the human gate).
 
 ### Phase 4: BYOK, generation, writing workshop
 
@@ -425,7 +438,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | --- | --- | --- | --- |
 | R1 | Practises all three tested skills | 2, 5, 6 | reading and written expression practised end to end (24 September 2026); oral is Phases 5–6 |
 | R2 | Format and register match the real tests | 1 | not started |
-| R3 | Mock exams mirror published structure and cuts | 3 | not started |
+| R3 | Mock exams mirror published structure and cuts | 3 | in progress: Phase 3 Slice 1 (the per-variant goldens) |
 | R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams are Phase 3 |
 | R5 | Never presents as official | 0, 7 | not started |
 | R6 | No real test items, no PSC reproduction | 1 | not started |
@@ -2442,11 +2455,37 @@ was built first:
   fail loudly is left to Phase 7's hardening, because failing the whole sync service over it would trade
   a weaker limit for an outage.
 
+### D79 — Phase 3 is planned as four slices, mirrored in two documents
+**Date:** 24 September 2026 · **Status:** accepted
+
+D57 made a scoped exception to the "one copy of the plan" rule for Phase 2: the slices appear in both
+`implementation-plan.md` §7 and here, and the two must agree. Phase 3 takes the same exception, as the
+Phase 2 *Next, decided* already proposed. D57 is not edited. The four slices:
+
+1. **The exam core, no UI.** It carries two of the four exit criteria: the per-variant goldens [R3] and
+   idempotent scoring.
+2. **Forms and a bank that can fill them.** The committed bank has 10 items and no forms. The smallest
+   variant needs 25 scored items.
+3. **The runner and results UI, and E2E journey 3.** Behind **Gate D**, the exam UI direction.
+4. **Telemetry and the item-statistics job**, then the closed pilot, which is the plan's human gate.
+
+The order follows the dependencies. The UI needs forms to run, the forms need a bank, and the
+statistics job needs submitted runs. Slice 1 needs none of these: it runs over the fixture bank's two
+forms.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 September 2026 — `dougkeefe/minnetonka-v3` (Phase 2 closed; Phase 3 opened)
+
+- **Phase 2 complete.** The human confirmed three things: the live URL works, two real browsers were
+  paired on it, and the link was shared with a handful of people. That was the last exit criterion,
+  and it is now ticked. PR #21 had merged (`a346d19`), so its In-flight row is gone.
+- **Phase 3 opened.** The §7 breakdown is expanded, and the four slices are mirrored in
+  `implementation-plan.md` §7 (D79). Slice 1, the exam core, is claimed on this branch.
 
 ### 24 September 2026 — `dougkeefe/yamoussoukro` → `dougkeefe/phase-2-final-slice` (Gate C: the public deploy)
 
