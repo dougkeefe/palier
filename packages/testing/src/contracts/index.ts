@@ -13,3 +13,6 @@ export { sessionStoreContract } from "./session-store.contract.js";
 export { settingsStoreContract } from "./settings-store.contract.js";
 export { syncStateStoreContract } from "./sync-state-store.contract.js";
 export { contractSecret, syncTransportContract } from "./sync-transport.contract.js";
+export { telemetrySinkContract } from "./telemetry-sink.contract.js";
+export type { TelemetrySinkHarness } from "./telemetry-sink.contract.js";
+export { telemetryStoreContract } from "./telemetry-store.contract.js";

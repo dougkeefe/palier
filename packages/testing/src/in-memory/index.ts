@@ -29,5 +29,7 @@ export {
   memorySettingsStore,
   memorySyncServer,
   memorySyncStateStore,
+  memoryTelemetryCollector,
+  memoryTelemetryStore,
 } from "../memory/index.js";
-export type { MemoryBank, MemorySyncServer } from "../memory/index.js";
+export type { MemoryBank, MemorySyncServer, MemoryTelemetryCollector } from "../memory/index.js";
