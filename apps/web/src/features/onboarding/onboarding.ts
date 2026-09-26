@@ -4,13 +4,24 @@ import type { DailyGoal, StudyProfile } from "../../lib/study";
 
 /**
  * Onboarding's shape (product-requirements.md §8.1): direction, target, placement,
- * daily goal. Step 5, the optional API key, belongs to Phase 4, where keys arrive; the
- * app is complete without it (§8.1: "diagnostic before key, always").
+ * daily goal, and step 5, the optional API key.
+ *
+ * "Diagnostic before key, always" (§8.1), so step 5's place depends on the placement
+ * (progress.md D100). On the **diagnostic** path the wizard ends at the goal, and step 5 is
+ * offered on the diagnostic's readout. On the **skip** path there is no diagnostic, and
+ * step 5 is the wizard's own last step. Either way the count reads "of 5".
  */
-export const ONBOARDING_STEPS = ["direction", "target", "placement", "goal"] as const;
+export const ONBOARDING_STEPS = ["direction", "target", "placement", "goal", "key"] as const;
 export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
+/** §8.1's five, whichever path shows the fifth. */
+export const ONBOARDING_TOTAL = ONBOARDING_STEPS.length;
+
 export type Placement = "diagnostic" | "skip";
+
+/** The steps the wizard itself shows on a path: the key step only where no diagnostic follows. */
+export const stepsFor = (placement: Placement): readonly OnboardingStep[] =>
+  placement === "diagnostic" ? ONBOARDING_STEPS.filter((step) => step !== "key") : ONBOARDING_STEPS;
 
 export type OnboardingChoices = {
   readonly targetBand: TargetBand;
@@ -27,8 +38,10 @@ export const DEFAULT_CHOICES: OnboardingChoices = {
   dailyGoalMinutes: 20,
 };
 
-export const stepAfter = (step: OnboardingStep): OnboardingStep | null =>
-  ONBOARDING_STEPS[ONBOARDING_STEPS.indexOf(step) + 1] ?? null;
+export const stepAfter = (step: OnboardingStep, placement: Placement): OnboardingStep | null => {
+  const steps = stepsFor(placement);
+  return steps[steps.indexOf(step) + 1] ?? null;
+};
 
 export const stepBefore = (step: OnboardingStep): OnboardingStep | null =>
   ONBOARDING_STEPS[ONBOARDING_STEPS.indexOf(step) - 1] ?? null;
@@ -44,6 +57,15 @@ export const profileFrom = (choices: OnboardingChoices): StudyProfile => ({
   testDate: choices.testDate === "" ? null : choices.testDate,
 });
 
-/** Where onboarding lands: the diagnostic if chosen, otherwise today's plan. */
-export const destinationFor = (choices: OnboardingChoices): "/diagnostic" | "/home" =>
-  choices.placement === "diagnostic" ? "/diagnostic" : "/home";
+/**
+ * Where onboarding lands: the key screen when step 5's "Add a key now" was chosen, else the
+ * diagnostic if chosen, otherwise today's plan. The profile is written first either way, so
+ * leaving for the key screen never loses it.
+ */
+export const destinationFor = (
+  choices: OnboardingChoices,
+  { addKey = false }: { readonly addKey?: boolean } = {},
+): "/diagnostic" | "/home" | "/settings/key" => {
+  if (addKey) return "/settings/key";
+  return choices.placement === "diagnostic" ? "/diagnostic" : "/home";
+};

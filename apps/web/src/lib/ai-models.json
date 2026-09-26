@@ -1,0 +1,6 @@
+{
+  "note": "Model ids are data, never hardcoded in TS (architecture.md §8.1). The browser's copy of apps/factory/config/models.json. Phase 4 Slice 1 makes no model call (a key check is GET /models); Slice 4's runtime generation verifies these ids before it uses them.",
+  "passage": "gpt-6-luna",
+  "draft": "gpt-6-luna",
+  "review": "gpt-6-sol"
+}

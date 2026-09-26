@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   DEFAULT_CHOICES,
   ONBOARDING_STEPS,
+  ONBOARDING_TOTAL,
   type OnboardingChoices,
   type OnboardingStep,
   canSkipFrom,
@@ -18,15 +19,21 @@ import {
 import { useRouter } from "../../i18n/navigation";
 import { DAILY_GOALS, writeStudyProfile } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
+import { KeyOffer } from "../key/KeyOffer";
 
 /**
  * Onboarding (product-requirements.md §8.1), as one fieldset per step with native
  * radio inputs: real form controls, so keyboard and screen-reader behaviour come from
  * the platform. Each step's heading takes focus as it appears, so a screen-reader user
  * hears where they are (§11: focus is never lost as a flow advances).
+ *
+ * Step 5, the optional key, is the last step only on the skip path; on the diagnostic path
+ * it is offered on the diagnostic's readout instead (§8.1: "diagnostic before key, always";
+ * progress.md D100). "Add a key now" saves the profile before it leaves for the key screen.
  */
 export function OnboardingWizard() {
   const t = useTranslations("start");
+  const tKey = useTranslations("key");
   const tCommon = useTranslations("common");
   const container = useContainer();
   const router = useRouter();
@@ -48,20 +55,21 @@ export function OnboardingWizard() {
   const choose = (over: Partial<OnboardingChoices>) => setChoices((c) => ({ ...c, ...over }));
   const index = ONBOARDING_STEPS.indexOf(step);
 
-  const finish = async (final: OnboardingChoices) => {
+  const finish = async (final: OnboardingChoices, { addKey = false }: { addKey?: boolean } = {}) => {
     if (container.status !== "ready") return;
     setSaving(true);
     try {
       await writeStudyProfile(container.container.settings, profileFrom(final));
-      router.push(destinationFor(final));
+      router.push(destinationFor(final, { addKey }));
     } catch {
       setFailed(true);
       setSaving(false);
     }
   };
 
+  const after = stepAfter(step, choices.placement);
   const onNext = () => {
-    const next = stepAfter(step);
+    const next = after;
     if (next === null) void finish(choices);
     else setStep(next);
   };
@@ -74,7 +82,7 @@ export function OnboardingWizard() {
         onNext();
       }}
     >
-      <p className="app-muted">{t("stepOf", { current: index + 1, total: ONBOARDING_STEPS.length })}</p>
+      <p className="app-muted">{t("stepOf", { current: index + 1, total: ONBOARDING_TOTAL })}</p>
 
       {step === "direction" ? (
         <fieldset className="app-fieldset">
@@ -179,6 +187,22 @@ export function OnboardingWizard() {
         </fieldset>
       ) : null}
 
+      {step === "key" ? (
+        <KeyOffer
+          heading="h2"
+          headingRef={headingRef}
+          actions={
+            <Button
+              variant="secondary"
+              onClick={() => void finish(choices, { addKey: true })}
+              disabled={saving || container.status !== "ready"}
+            >
+              {tKey("offerAdd")}
+            </Button>
+          }
+        />
+      ) : null}
+
       {failed ? <Callout tone="incorrect">{tCommon("loadFailed")}</Callout> : null}
 
       <div className="app-actions">
@@ -187,13 +211,13 @@ export function OnboardingWizard() {
             {t("back")}
           </Button>
         )}
-        {canSkipFrom(step) && stepAfter(step) !== null ? (
+        {canSkipFrom(step) && after !== null ? (
           <Button variant="ghost" onClick={() => void finish({ ...choices, placement: "skip" })} disabled={saving}>
             {t("placementSkip")}
           </Button>
         ) : null}
         <Button type="submit" disabled={saving || container.status !== "ready"}>
-          {stepAfter(step) === null ? t("finish") : t("next")}
+          {after === null ? t("finish") : t("next")}
         </Button>
       </div>
     </form>

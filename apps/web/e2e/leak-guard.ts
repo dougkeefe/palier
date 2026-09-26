@@ -63,28 +63,29 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
   const pending: Promise<unknown>[] = [];
   const authorizations: string[] = [];
 
+  // Headers are read as sent, synchronously: `allHeaders()` waits for a response, and a
+  // request a reload aborts never gets one. Every header a page sets is among them.
   context.on("request", (request) => {
-    pending.push(
-      request.allHeaders().then((headers) => {
-        const url = request.url();
-        if (url.startsWith(OPENAI_ORIGIN)) {
-          if (headers.authorization !== undefined) authorizations.push(headers.authorization);
-          return;
-        }
-        seen.push({ where: `request URL ${url}`, text: url });
-        seen.push({ where: `request headers ${url}`, text: JSON.stringify(headers) });
-        seen.push({ where: `request body ${url}`, text: request.postData() ?? "" });
-      }),
-    );
+    const url = request.url();
+    const headers = request.headers();
+    if (url.startsWith(OPENAI_ORIGIN)) {
+      if (headers.authorization !== undefined) authorizations.push(headers.authorization);
+      return;
+    }
+    seen.push({ where: `request URL ${url}`, text: url });
+    seen.push({ where: `request headers ${url}`, text: JSON.stringify(headers) });
+    seen.push({ where: `request body ${url}`, text: request.postData() ?? "" });
   });
-  context.on("response", (response) => {
-    const url = new URL(response.url());
-    // What our own server sends back: a pull would show the key if a push had stored it.
-    if (!url.pathname.startsWith("/api/")) return;
+  // What our own server sends back: a pull would show the key if a push had stored it. Read
+  // once the body has fully arrived, so reading it can never hang.
+  context.on("requestfinished", (request) => {
+    const url = new URL(request.url());
+    if (url.origin === OPENAI_ORIGIN || !url.pathname.startsWith("/api/")) return;
     pending.push(
-      response
-        .text()
-        .then((text) => seen.push({ where: `response body ${url.href}`, text }))
+      request
+        .response()
+        .then((response) => response?.text())
+        .then((text) => seen.push({ where: `response body ${url.href}`, text: text ?? "" }))
         .catch(() => undefined),
     );
   });

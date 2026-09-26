@@ -12,6 +12,7 @@ import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { DIAGNOSTIC_SIZE, REVIEW_SET_LIMIT, readStudyProfile, sessionSizeFor } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
+import { KeyOffer } from "../key/KeyOffer";
 import { useSync } from "../sync/SyncRunner";
 import { ReportItem } from "./ReportItem";
 import { TrendMeters } from "./TrendMeters";
@@ -411,9 +412,30 @@ function DrillComplete({ answered, correct }: { answered: number; correct: numbe
   );
 }
 
+/**
+ * The diagnostic's readout. On the diagnostic path it is also where onboarding's step 5,
+ * the optional key, is offered: after the diagnostic, never before (§8.1, progress.md D100).
+ * It is offered only while no key is held, and it is never a gate.
+ */
 function DiagnosticComplete({ skillName, trend }: { skillName: string; trend: SkillTrend | null }) {
   const t = useTranslations("diagnostic");
+  const tKey = useTranslations("key");
   const tCommon = useTranslations("common");
+  const container = useContainer();
+  const [offerKey, setOfferKey] = useState(false);
+
+  useEffect(() => {
+    if (container.status !== "ready") return;
+    let live = true;
+    void container.container.useCases.apiKeyStatus().then(
+      (status) => live && setOfferKey(status === null),
+      () => undefined,
+    );
+    return () => {
+      live = false;
+    };
+  }, [container]);
+
   return (
     <section className="app-stack">
       <h2>{t("resultTitle", { skill: skillName })}</h2>
@@ -422,6 +444,16 @@ function DiagnosticComplete({ skillName, trend }: { skillName: string; trend: Sk
       <Link href="/home" className="pl-btn pl-btn--primary pl-focusable">
         {t("toToday")}
       </Link>
+      {offerKey ? (
+        <KeyOffer
+          heading="h3"
+          actions={
+            <Link href="/settings/key" className="pl-btn pl-btn--secondary pl-focusable">
+              {tKey("offerAdd")}
+            </Link>
+          }
+        />
+      ) : null}
     </section>
   );
 }

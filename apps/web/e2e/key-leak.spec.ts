@@ -60,16 +60,18 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await expect(page.getByRole("heading", { level: 1, name: "Your API key" })).toBeVisible();
   await page.getByLabel("OpenAI API key").fill(SENTINEL);
   await page.getByRole("button", { name: "Save the key" }).click();
-  await expect(page.getByText(`Saved on this device: sk-…${SENTINEL.slice(-4)}`)).toBeVisible();
-  // After entry the field is empty, and the key shows masked, the last four only (§6.2).
-  await expect(page.getByLabel("OpenAI API key")).toHaveValue("");
+  await expect(page.getByText(`Saved on this device: the key ending in ${SENTINEL.slice(-4)}.`)).toBeVisible();
+  // After entry the field is gone, and the key is described by its last four only (§6.2).
+  await expect(page.getByLabel("OpenAI API key")).toHaveCount(0);
   await page.getByRole("button", { name: "Check the key" }).click();
   await expect(page.getByRole("status").filter({ hasText: "This key works." })).toBeVisible();
   // The positive control: the key really was in play, and it went to OpenAI, as a bearer token.
   expect(laptop.watch.openAiAuthorizations()).toEqual([`Bearer ${SENTINEL}`]);
 
-  // 3. A drill, then the review queue.
+  // 3. A drill, then the review queue. The diagnostic used up the fixture bank's reading
+  // items, so the drill is written expression.
   await page.getByRole("link", { name: "Today", exact: true }).click();
+  await page.getByRole("radio", { name: "Written expression" }).check();
   await page.getByRole("link", { name: /^Start, \d+ min$/ }).click();
   await drillThroughByKeyboard(page);
   await page.getByRole("link", { name: "Back to today" }).click();
@@ -82,9 +84,11 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await page.getByRole("radio", { name: /Unsupervised/ }).check();
   await page.getByRole("button", { name: "Start the exam" }).click();
   for (let i = 0; i < 3; i++) {
+    await expect(page.locator(".app-exam__count")).toContainText(`Item ${String(i + 1)} of`);
     await page.keyboard.press("1");
     await page.keyboard.press("Enter");
   }
+  await expect(page.locator(".app-exam__count")).toContainText("3 answered");
   await page.getByRole("button", { name: "Submit the exam" }).click();
   await page.getByRole("dialog", { name: "Submit the exam?" }).getByRole("button", { name: "Submit", exact: true }).click();
   const telemetry = page.waitForResponse((r) => new URL(r.url()).pathname === "/api/telemetry");
@@ -117,7 +121,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
 
   // 7. The key is still held, and still only masked.
   await openSettings(page, "Your API key", "Your API key");
-  await expect(page.getByText(`Saved on this device: sk-…${SENTINEL.slice(-4)}`)).toBeVisible();
+  await expect(page.getByText(`Saved on this device: the key ending in ${SENTINEL.slice(-4)}.`)).toBeVisible();
 
   await laptop.watch.assertNoLeak([page]);
   await phone.watch.assertNoLeak([phone.page]);

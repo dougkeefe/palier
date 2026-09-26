@@ -16,7 +16,7 @@ import { SENTINEL, downloadedText, idsAtRest, stubOpenAi, watchForLeaks } from "
  * This server has no database, so telemetry is stood in for, as journey 9 does.
  */
 
-const MASKED = `sk-…${SENTINEL.slice(-4)}`;
+const MASKED = `the key ending in ${SENTINEL.slice(-4)}.`;
 
 const vaultIds = (page: Page) => idsAtRest(page, "palier", "keyVault");
 
@@ -54,9 +54,11 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   await page.getByRole("button", { name: "Start the exam" }).click();
   await expect(page).toHaveURL(/\/en\/exam\/run\?run=/);
   for (let i = 0; i < 3; i++) {
+    await expect(page.locator(".app-exam__count")).toContainText(`Item ${String(i + 1)} of`);
     await page.keyboard.press("1");
     await page.keyboard.press("Enter");
   }
+  await expect(page.locator(".app-exam__count")).toContainText("3 answered");
   await page.getByRole("button", { name: "Submit the exam" }).click();
   await page.getByRole("dialog", { name: "Submit the exam?" }).getByRole("button", { name: "Submit", exact: true }).click();
   const telemetry = page.waitForRequest((r) => new URL(r.url()).pathname === "/api/telemetry");
