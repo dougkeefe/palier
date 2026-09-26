@@ -835,8 +835,8 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
   (§3.3, amended in place) sit over a Dexie schema v2 queue, with a device-local opt-in asked once on the
   results screen and a readiness-card disclosure. Exit criterion 3 holds in the fast lane and through the
   real handler on PGlite. Journey 9 submits offline, opts in and sees one identity-free batch arrive.
-  **Next is the closed pilot**, the phase's human gate, opened as Gate E (`progress.md` D95): the human
-  first chooses whether it runs on the synthetic baseline bank or after the funded content run.
+  **Next is the closed pilot**, the phase's human gate. Gate E (`progress.md` D95, resolved by D97): a
+  product pilot on the baseline bank, now, with its statistics indicative only. Phase 4 starts beside it.
 
 ---
 
@@ -861,6 +861,23 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
 **CI gates added:** AI schema conformance against recorded fixtures, the key-leak test, nightly live smoke suite, the AI eval harness reporting schema conformance rate.
 
 **Not built:** anything voice.
+
+**Completion slices** (planned 25 September 2026, `progress.md` D97; keep the two in sync). Gate F adopted PRD §8.1
+step 5, §8.7 and §8.10 as written.
+- **Slice 1 — The key, safely.** The tier-11 key-leak test, written first; `/settings/key` (masked field,
+  validate with one cheap call, save, remove, where the key lives) and onboarding step 5; do-not-remember
+  mode; the browser `AiProvider` constructed inside `KeyVault.withApiKey` per call; malformed, 429, 401 and
+  timeout each degrading to a plain state. *Done:* the leak test green across the E2E suite and proven to
+  bite; axe clean; exit criterion 1 and the first half of 2.
+- **Slice 2 — Spend.** The cost ledger over the v1 `costLedger` table, pricing as data, the spend meter
+  (session, week, month), the soft cap with an 80% warning, the per-feature cost table, and the pre-flight
+  estimate. *Done:* exit criterion 3, at **Gate G**, the human's funded test account.
+- **Slice 3 — The writing workshop** (§8.7). The prompt library, the editor with its word target and timer,
+  `assessWriting` with inline offsets, and the model answer with changes highlighted. Submissions stay on the
+  device (R12).
+- **Slice 4 — Runtime item generation and the CI gates.** The compressed draft plus single review, local-only
+  storage, the provenance badge and the one-tap contribution. AI schema conformance against recorded fixtures,
+  the nightly live smoke and the eval harness. *Done:* the second half of exit criterion 2.
 
 ---
 

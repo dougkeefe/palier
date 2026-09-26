@@ -6,8 +6,9 @@ exit criterion, "shared with a handful of people", was confirmed by the human on
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
 four, mirrored in `implementation-plan.md` §7 (D79). **Slices 1–3 merged (#22, #23, #25); Gate D is resolved
 (D84); Slice 4 (telemetry and the item-statistics job) is built** (`dougkeefe/next-progress-slice`; D92–D94),
-so exit criteria 1–4 are met. **Every buildable Phase 3 item is done.** What remains is the phase's human
-gate, **the closed pilot** of 20–30 people. See
+so exit criteria 1–4 are met. **Every buildable Phase 3 item is done.** Gate E is resolved (D97): the
+closed pilot runs now as a **product pilot** on the baseline bank, run by the human, and it ticks the last
+criterion. **Phase 4 starts beside it**, with Slice 1, "the key, safely" (D97). See
 [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
@@ -72,8 +73,8 @@ human for anything expensive.
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
-| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the closed pilot, a human gate, is next; D79, D92–D94) |
-| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | not started |
+| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
+| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **next** (four slices, D97; Slice 1 is *Next, decided*) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
@@ -186,58 +187,83 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 3 Slice 4 is built** (`dougkeefe/next-progress-slice`; D92–D94). Every buildable Phase 3 item is
-done, and exit criteria 1–4 are met. The only open criterion is the one no code can meet.
+**Phase 3 is built** (Slices 1–4, D79–D94). Gate E is resolved (D97): **a product pilot runs now on
+`content/bank/v2`**, run by the human, and its item statistics count as indicative only. The paid content
+run stays at 1.0 (D56). The pilot is a checkpoint, not a blocker (implementation-plan.md §7), so Phase 4
+starts beside it.
 
-**Next: Gate E, the closed pilot (human).** `implementation-plan.md` §7 Phase 3 makes it the phase's
-decision gate: "20 to 30 people, to seed item statistics and to find out whether the bank holds up in
-front of real users". It is a checkpoint rather than a blocker, because nothing a user sees depends on
-the statistics (ADR 7). **No agent should self-direct past it.**
+**Next: Phase 4 Slice 1, "the key, safely"** (D97). Gate F is resolved, so the screens are built to PRD
+§8.1 step 5 and §8.10 as written. It needs no human.
 
-The human has one decision to make first: **what the pilot runs on** (D95).
-- **The baseline bank as it is** (`content/bank/v2`, synthetic French, D54, D56). The pilot then tests the
-  product: the exam flow, the results, sync, and whether people opt in to sharing. Its item statistics
-  describe items the full-volume run will replace, so they cannot validate the bank. D56's own revisit
-  clause names exactly this case ("item-statistics calibration in Phase 3 needing realistic difficulty
-  spread"), and says the feature's *validation*, not its build, moves to after the content run.
-- **The full-volume bank first** (D54's funded run, pulled forward from 1.0). The pilot then does what
-  §7 says it is for. The cost is the paid run, and every form carried forward as D82 requires.
-- **Recommendation:** run the pilot on the baseline bank now, as a product pilot, and record in the gate's
-  entry that its item statistics are indicative only. Re-run the calibration half after the content run,
-  as D56 already provides. That keeps D56's decision and uses the pilot for what the bank can support.
+**Scope:**
+- **The tier-11 key-leak test comes first**, before anything else in the slice (exit criterion 1: "write this
+  test before the key vault, not after").
+  - It is a Playwright test that sets a sentinel key (`sk-palier-sentinel-…`) through the UI, then drives
+    the existing journeys.
+  - It asserts the sentinel never reaches any request to an origin other than `api.openai.com`, in the
+    URL, a header or the body. That covers sync pushes and telemetry batches.
+  - It asserts the sentinel is never at rest in plaintext: localStorage, sessionStorage, or any IndexedDB
+    table dumped as JSON. The `keyVault` rows hold ciphertext only (D50).
+  - It asserts the sentinel is never in an export file, a console message, an error's text, or the DOM
+    after entry, where the field shows it masked.
+  - OpenAI itself is stubbed with `page.route`, so no real key and no network are needed.
+- **`/settings/key`**, per PRD §8.10 without the spend parts, which are Slice 2:
+  - the masked field;
+  - save and remove;
+  - **validate**, which is one cheap call (`GET /v1/models`) and reports the result;
+  - the plain statement of where the key is stored and what it is used for.
+- **Onboarding step 5 (§8.1)**: optional, after the diagnostic, three lines and a link to the key guide.
+- **Do-not-remember mode**: the key is held for this tab only and never written to IndexedDB. The
+  `KeyVault` port shape for it is decided in the slice and recorded, as D38 and D85 were.
+- **The browser `AiProvider` path.** `openAiProvider` takes `apiKey: string` in its config today (the
+  factory's path). In the browser it must be constructed **inside** `KeyVault.withApiKey` per call, so the key
+  never sits in a long-lived variable (§3.3, ADR 2). The composition root wires that, and a test holds it.
+- **Graceful degradation** (exit criterion 2, first half): malformed output, 429, 401 and a timeout each
+  become one of the adapter's own errors. The adapter already translates the first three (Phase 1), so the
+  timeout is added. The key screen shows each one as a plain state, never a raw error.
 
-**What the human does to run it, whichever bank:**
-1. Merge this branch. The production deploy applies migration `0001` (`telemetry_events`) itself (D78).
+**Ports and functions:** `KeyVault` (`putApiKey`, `withApiKey`, `hasApiKey`, `clear`, and possibly a
+do-not-remember variant), `AiProvider` via `@palier/adapters/openai`, and `settings`/`wipeData` as they are.
+Nothing in the engine.
+
+**Done looks like:**
+- the key-leak test green across the E2E suite, and proven to bite by a deliberate leak (for example,
+  logging the key) that fails it;
+- validate and each failure state tested over MSW;
+- axe clean on `/settings/key` and step 5;
+- `en` and `fr` at parity;
+- every new branch tested;
+- `pnpm verify` and `verify:medium` green.
+
+**After it, in order** (D97): Slice 2, spend (the cost ledger and meter; ends at Gate G, the human's funded
+key for the billing check); Slice 3, the writing workshop (§8.7); Slice 4, runtime item generation and the
+Phase 4 CI gates.
+
+**Running now (human): the product pilot** (Gate E, D97).
+1. Merge the Slice 4 branch. The production deploy applies migration `0001` itself.
 2. Add the `TELEMETRY_DATABASE_URL` Actions secret (a read-only role), and allow Actions to open pull
-   requests (`docs/deploy.md`, "The monthly item-statistics job").
-3. Run the new smoke check (`POST /api/telemetry` with an empty batch → 400).
+   requests (`docs/deploy.md`).
+3. Run the smoke check (`POST /api/telemetry` with an empty batch → 400).
 4. Recruit 20–30 people. Each takes at least one mock exam and answers the prompt either way.
-5. After the pilot, run the workflow by hand (`workflow_dispatch`) and read its pull request.
+5. Afterwards, run the item-statistics workflow by hand and read its pull request.
 
-**What the gate records** (a session-log entry, and a D-entry for the decision):
-- how many people took part, how many opted in, how many events arrived;
-- what the first report says, including how many items reached the minimum counts (at 30 people, few
-  will reach 100, and the report's `trusted` flags will say so);
-- the product defects the pilot found, each fixed or filed;
-- the decision: Phase 4 next, or rework first.
-
-**Settled on 25 September 2026 (D96):** D89 is confirmed; D12 is verified against the PSC's published
-tables, all four of which match the profile; the name is Palier, at `palier.dougkeefe.com` eventually.
-
-**After the gate: Phase 4** (BYOK, generation, the writing workshop, `implementation-plan.md` §7). Its first
-slice is decided at the gate, not before, because the pilot may reorder it.
+Record the pilot in a session-log entry: participants, opt-ins, events, what the first report says (its
+statistics are indicative only), and the product defects found, each fixed or filed. That ticks Phase 3's
+last exit criterion.
 
 **Standing human gates (do not self-direct):**
 
 - **The full-volume published bank (D54).** The real-model go-signal exists (session log, 24 September
-  2026). The remaining step is the full run to 500–700 published items on a funded key, then shipping
-  that bank as `content/bank/v{n}/`, carrying the previous version's items *and forms* forward (D82). A
+  2026). The remaining step is the full run to 500–700 published items on a funded key, then shipping that
+  bank as `content/bank/v{n}/`, carrying the previous version's items *and forms* forward (D82). A
   retirement in `content/factory/item-statistics.json` takes effect at that build (D94). **Timing settled
-  (D56): sequenced to the end**, a 1.0 gate, unless Gate E pulls it forward. The baseline bank's French is
-  synthetic (D54), so the app is feature-usable before this gate, not study-ready.
+  (D56, reaffirmed at Gate E): sequenced to the end**, a 1.0 gate. After it, rerun the pilot's calibration
+  half on real items (D97).
+- **Gate G, a funded OpenAI test key** (D97), when Slice 2 reaches the billing check. The human said yes.
 - Resolved: **Gate A** (product and UI direction), **Gate B** (the D43 `ScheduleEntry` merge, D69),
   **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026; **Gate D** (exam UI
-  direction, D84) on 25 September 2026.
+  direction, D84), **Gate E** (the pilot runs on the baseline bank, D97) and **Gate F** (Phase 4 UI
+  direction, D97) on 25 September 2026.
 
 Standing human items: pointing `palier.dougkeefe.com` at the deployment, and §12.1's trademark and
 language-school check before launch (D96). D12 is closed.
@@ -370,7 +396,7 @@ breakdown, expanded on start. Nothing is ticked without session-log evidence.
 - [x] A full 90-minute exam survives reload and network drop (E2E journey 3) — `e2e/exam-offline.spec.ts`: the 60-item, 90-minute supervised reading form, a reload mid-run with the answers, flags and clock restored, the network dropped, submitted offline, and the band equal to an independent `scoreExam` oracle (session log, 25 September 2026)
 - [x] Statistics job flags and retires a seeded reversed-key item on synthetic data — `syntheticTelemetry` seeds 300 respondents over 22 items with a too-easy item (exactly 98% right) and a reversed key. The job retires exactly those two, for `too-easy` and `low-discrimination`, in the fast lane (`item-statistics-job.test.ts`) and end to end through the real route handler on PGlite (`telemetry.integration.test.ts`). Robust over five seeds. Proven to bite: with an ordinary key in place of the reversed one, both fail (session log, 25 September 2026, `dougkeefe/next-progress-slice`)
 - [x] Scoring is idempotent — `rescoreExam` derives the result from the stored run, and no result is stored (ADR 16). A fast-check property holds submit, rescore and a second rescore deep-equal, with each attempt agreeing with the result. The simulator also rescores on every device after every heal and requires the same result (session log, `dougkeefe/minnetonka-v3`)
-- [ ] Closed pilot run, 20–30 people — the plan's human decision gate, now **Gate E** (D95): first, what bank it runs on
+- [ ] Closed pilot run, 20–30 people — the plan's human decision gate. **Gate E resolved (D97): a product pilot on the baseline bank, now**, with its statistics indicative only; running, human
 
 **Completion slices (D79).** Four slices, mirroring `implementation-plan.md` §7 Phase 3 "Completion
 slices". **Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
@@ -400,6 +426,19 @@ slices". **Keep the two in sync**: the plan holds the fuller scope and each slic
   Carries exit criterion 3. Then the closed pilot (the human gate), now *Next, decided*.
 
 ### Phase 4: BYOK, generation, writing workshop
+
+**Planned 25 September 2026 (D97)** as four slices, mirrored in `implementation-plan.md` §7. **Keep the two in
+sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.10 are adopted as written.
+
+- [ ] **Slice 1 — The key, safely.** The tier-11 key-leak test first; `/settings/key` and onboarding step
+  5; validation, do-not-remember, the browser `AiProvider` path through `withApiKey`, and graceful
+  degradation. *Next, decided*.
+- [ ] **Slice 2 — Spend.** The cost ledger, pricing as data, the meter, the soft cap, the per-feature table,
+  and the pre-flight estimate. Ends at **Gate G** (the human's funded test key) for the billing check.
+- [ ] **Slice 3 — The writing workshop** (§8.7), with submissions kept on the device.
+- [ ] **Slice 4 — Runtime item generation and the Phase 4 CI gates.**
+
+**Exit criteria** (the actual gate)
 
 - [ ] **Key-leak test written before the key vault**, and passing (tier 11) [R12]
 - [ ] Every AI response schema-validated before use; malformed / rate-limit / invalid-key / timeout all degrade gracefully
@@ -3072,7 +3111,7 @@ queue and a device-local opt-in. Building them forced these calls.
   not data the job reads.
 
 ### D95 — Gate E: what the closed pilot runs on
-**Date:** 25 September 2026 · **Status:** open (human decision); recommendation recorded
+**Date:** 25 September 2026 · **Status:** **resolved 25 September 2026 by D97** (human: a product pilot on the baseline bank, now; paid content stays at 1.0)
 
 Slice 4 leaves Phase 3 with one open exit criterion, the closed pilot (implementation-plan.md §7: "to seed
 item statistics and to find out whether the bank holds up in front of real users"). D56 put the
@@ -3115,11 +3154,66 @@ The human chooses:
     names its own origin: sync and telemetry are same-origin, and the bank is origin-relative.
   - The trademark and language-school check §12.1 asks for remains the human's, before launch.
 
+### D97 — Gate E: a product pilot now; Phase 4 is four slices, its screens adopted as written, and a funded key when needed
+**Date:** 25 September 2026 · **Status:** accepted (human decisions); resolves D95
+
+- **Gate E (D95) is resolved: a product pilot on `content/bank/v2`, now.** The human chose the
+  recommendation.
+  - The paid content run stays at 1.0, as D56 has it.
+  - The pilot tests the product: the exam flow, the results, sync, and whether people opt in. Its item
+    statistics describe synthetic items, so they are **indicative only**, and no retirement they suggest
+    is merged without that caveat in its review.
+  - The calibration half reruns on real items after the content run, which is what D56's revisit clause
+    provides.
+  - The pilot is a checkpoint, not a blocker (implementation-plan.md §7), so Phase 4 starts beside it.
+    Phase 3's last exit criterion is ticked when the pilot is recorded.
+- **Phase 4 is planned as four slices**, mirrored in `implementation-plan.md` §7. This is the same scoped
+  exception D57 and D79 made: keep the two documents in sync.
+  1. **The key, safely.**
+     - The tier-11 key-leak test first.
+     - `/settings/key` without the spend parts, and onboarding step 5.
+     - Validation, do-not-remember mode, the browser `AiProvider` path through `withApiKey`, and graceful
+       degradation.
+     - This carries exit criterion 1 and the first half of 2.
+  2. **Spend.**
+     - The cost ledger (the v1 `costLedger` table), pricing as data, and the spend meter (session, week,
+       month).
+     - The soft cap with its 80% warning, the per-feature cost table, and the pre-flight estimate.
+     - It ends at **Gate G**, the billing check against a funded test account (exit criterion 3).
+  3. **The writing workshop** (§8.7).
+     - The prompt library, and the editor with its word target and timer.
+     - `assessWriting` (a new `AiProvider` capability with its DTOs in domain, ADR 20), the inline offsets,
+       and the model answer with changes highlighted.
+     - Submissions stay on the device, never synced or exported to the server (R12), which needs a new
+       local table.
+  4. **Runtime item generation and the CI gates.**
+     - The compressed draft plus single review, local-only storage, the provenance badge and the one-tap
+       contribution.
+     - AI schema conformance against recorded fixtures, the nightly live smoke, and the eval harness.
+     - This carries the second half of exit criterion 2.
+
+  The order follows risk: nothing that spends a key is built before the test that proves the key cannot
+  leak. The spend meter comes before any feature that spends.
+- **Gate F is resolved: PRD §8.1 step 5, §8.7 and §8.10 are adopted as written**, as Gates A and D were.
+  The calls they leave open are recorded as they are made, as D87 did.
+- **Gate G: a funded test key, when needed.** The human will provide one when Slice 2 reaches the billing
+  check. Until then, everything is built against recorded fixtures and MSW, as Phase 1 was (D54).
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 September 2026 — `dougkeefe/next-progress-slice` (Gate E resolved, Phase 4 planned)
+
+- **Gate E resolved by the human** (D97): a product pilot runs now on `content/bank/v2`, its statistics
+  indicative only; the paid content run stays at 1.0 (D56). D95 is marked resolved.
+- **Gate F resolved**: PRD §8.1 step 5, §8.7 and §8.10 are adopted as written. **Gate G** is named: the human
+  will provide a funded test key for Slice 2's billing check.
+- **Phase 4 planned as four slices** (D97), mirrored in `implementation-plan.md` §7. *Next, decided* is
+  rewritten to **Phase 4 Slice 1, "the key, safely"**, with the pilot's human steps beside it.
+- Documentation only; no code changed, so no gates were rerun.
 
 ### 25 September 2026 — `dougkeefe/next-progress-slice` (three standing items settled)
 
