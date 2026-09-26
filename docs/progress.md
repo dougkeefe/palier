@@ -89,9 +89,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v2` | **Phase 4 Slice 2 — spend** (D97): the `CostLedger` port over Dexie v1's `costLedger` table, every AI call metered in `withAiProvider`, `pricing.json`, the pure `spendTotals`, the meter, soft cap and per-feature table on `/settings/key`, the pre-flight estimate, and `billing-check.mjs` for Gate G. **Built; pending merge** (D101–D104). **Gate G passed** (session log). | 26 September 2026 |
+| `dougkeefe/next-progress-slice-v3` | **Phase 4 Slice 3 — the writing workshop** (D97): `assessWriting` on `AiProvider`, the `WritingStore` port over a Dexie v3 `writingSubmissions` table (device-local, never synced or exported), the prompt library under `@palier/content`, `/practice/writing/workshop`, and the key-leak test extended to a real spending call. | 26 September 2026 |
 
-*(The prior rows — Phase 4 Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 4 Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
