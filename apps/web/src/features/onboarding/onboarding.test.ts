@@ -3,21 +3,35 @@ import { describe, expect, it } from "vitest";
 import {
   DEFAULT_CHOICES,
   ONBOARDING_STEPS,
+  ONBOARDING_TOTAL,
   canSkipFrom,
   destinationFor,
   profileFrom,
   stepAfter,
   stepBefore,
+  stepsFor,
 } from "./onboarding";
 
 describe("onboarding steps", () => {
-  it("runs direction, target, placement, goal, and nothing after the goal", () => {
-    expect(ONBOARDING_STEPS).toEqual(["direction", "target", "placement", "goal"]);
-    expect(stepAfter("direction")).toBe("target");
-    expect(stepAfter("goal")).toBeNull();
+  it("has §8.1's five steps: direction, target, placement, goal, and the optional key", () => {
+    expect(ONBOARDING_STEPS).toEqual(["direction", "target", "placement", "goal", "key"]);
+    expect(ONBOARDING_TOTAL).toBe(5);
+  });
+
+  it("on the diagnostic path runs direction, target, placement, goal, and nothing after the goal (the key comes after the diagnostic)", () => {
+    expect(stepsFor("diagnostic")).toEqual(["direction", "target", "placement", "goal"]);
+    expect(stepAfter("direction", "diagnostic")).toBe("target");
+    expect(stepAfter("goal", "diagnostic")).toBeNull();
+  });
+
+  it("on the skip path ends with the key step, since no diagnostic follows", () => {
+    expect(stepsFor("skip")).toEqual(ONBOARDING_STEPS);
+    expect(stepAfter("goal", "skip")).toBe("key");
+    expect(stepAfter("key", "skip")).toBeNull();
   });
 
   it("goes back one step at a time, and nowhere before the first", () => {
+    expect(stepBefore("key")).toBe("goal");
     expect(stepBefore("goal")).toBe("placement");
     expect(stepBefore("direction")).toBeNull();
   });
@@ -27,6 +41,7 @@ describe("onboarding steps", () => {
     expect(canSkipFrom("target")).toBe(false);
     expect(canSkipFrom("placement")).toBe(true);
     expect(canSkipFrom("goal")).toBe(true);
+    expect(canSkipFrom("key")).toBe(true);
   });
 });
 
@@ -46,6 +61,11 @@ describe("what onboarding produces", () => {
   it("lands on the diagnostic when chosen, and on today's plan otherwise", () => {
     expect(destinationFor({ ...DEFAULT_CHOICES, placement: "diagnostic" })).toBe("/diagnostic");
     expect(destinationFor(DEFAULT_CHOICES)).toBe("/home");
+  });
+
+  it("lands on the key screen when step 5's 'Add a key now' is chosen", () => {
+    expect(destinationFor(DEFAULT_CHOICES, { addKey: true })).toBe("/settings/key");
+    expect(destinationFor(DEFAULT_CHOICES, { addKey: false })).toBe("/home");
   });
 
   it("defaults a user who skips to C, 20 minutes, no date and no diagnostic", () => {

@@ -6,8 +6,8 @@ export type { ScheduleEntry, ScheduleStore } from "./schedule-store.js";
 export type { Session, SessionStore } from "./session-store.js";
 export type { ExamAnswer, ExamRun, ExamRunStore } from "./exam-run-store.js";
 export type { SettingEntry, SettingsStore } from "./settings-store.js";
-export type { KeyVault } from "./key-vault.js";
-export type { AiProvider } from "./ai-provider.js";
+export type { ApiKeyStorage, KeyVault } from "./key-vault.js";
+export type { AiProvider, AiProviderFactory } from "./ai-provider.js";
 export type {
   DeviceId,
   DeviceIdentity,

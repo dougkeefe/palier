@@ -41,6 +41,45 @@ export const keyVaultContract = (
       expect(await vault.hasApiKey()).toBe(false);
     });
 
+    it("reports a remembered key as held on the device", async () => {
+      const vault = await make();
+      expect(await vault.apiKeyStorage()).toBeNull();
+      await vault.putApiKey("sk-test");
+
+      expect(await vault.apiKeyStorage()).toBe("device");
+    });
+
+    it("holds a key for this tab only when asked not to remember it [R12]", async () => {
+      const vault = await make();
+      await vault.putApiKey("sk-tab", { remember: false });
+
+      expect(await vault.apiKeyStorage()).toBe("tab");
+      expect(await vault.hasApiKey()).toBe(true);
+      expect(await vault.withApiKey((key) => Promise.resolve(key))).toBe("sk-tab");
+    });
+
+    it("replaces a remembered key with a tab-only one, and back", async () => {
+      const vault = await make();
+      await vault.putApiKey("sk-device");
+      await vault.putApiKey("sk-tab", { remember: false });
+      expect(await vault.apiKeyStorage()).toBe("tab");
+      expect(await vault.withApiKey((key) => Promise.resolve(key))).toBe("sk-tab");
+
+      await vault.putApiKey("sk-device-again", { remember: true });
+      expect(await vault.apiKeyStorage()).toBe("device");
+      expect(await vault.withApiKey((key) => Promise.resolve(key))).toBe("sk-device-again");
+    });
+
+    it("forgets a tab-only key after clear [R12]", async () => {
+      const vault = await make();
+      await vault.putApiKey("sk-tab", { remember: false });
+      await vault.clear();
+
+      expect(await vault.hasApiKey()).toBe(false);
+      expect(await vault.apiKeyStorage()).toBeNull();
+      await expect(vault.withApiKey(() => Promise.resolve("never"))).rejects.toThrow();
+    });
+
     it("returns a device secret", async () => {
       const vault = await make();
 
@@ -64,6 +103,11 @@ export const keyVaultContract = (
       const present = await vault.hasApiKey();
       expect(present).toBe(true);
       expect(present as unknown).not.toBe(key);
+
+      // Where it is held is a word, never the key, in either mode.
+      expect(await vault.apiKeyStorage()).toBe("device");
+      await vault.putApiKey(key, { remember: false });
+      expect(await vault.apiKeyStorage()).toBe("tab");
 
       // The device secret is unrelated to the key and must not leak it.
       const secret = await vault.deviceSecret();

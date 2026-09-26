@@ -159,6 +159,7 @@ const vaultOf = (): KeyVault & { readonly apiKeyCleared: () => boolean } => {
     putApiKey: () => Promise.resolve(),
     withApiKey: () => Promise.reject(new Error("no key")),
     hasApiKey: () => Promise.resolve(!cleared),
+    apiKeyStorage: () => Promise.resolve(cleared ? null : "device"),
     clear: () => {
       cleared = true;
       return Promise.resolve();

@@ -25,6 +25,7 @@ const provider: AiProvider = {
   generatePassage: () => Promise.resolve([]),
   generateItems: () => Promise.resolve([draft()]),
   reviewItem: () => Promise.reject(new Error("not used")),
+  verifyKey: () => Promise.resolve(),
   lastUsage: () => null,
 };
 

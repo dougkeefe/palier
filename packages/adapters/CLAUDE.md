@@ -56,6 +56,14 @@ config, never hardcoded (§8.1). It uses `response_format: { type: "json_object"
 re-validation is the contract, not the model's promise. Every HTTP status / network fault /
 malformed body becomes one of our error types (`errors.ts`); no `openai` module is imported at
 all, so the `no-openai-outside-adapters-and-factory` ban is simply never exercised here.
+**Every call races a time limit** (`timeoutMs`, 120 s; `verifyTimeoutMs`, 10 s; progress.md D99), so a
+`fetch` that ignores the abort still ends, as `ProviderTimeoutError`, never retried. A 2xx body that is
+not JSON is `InvalidResponseError`, and **the key is cut out of an echoed error body** before an error
+carries it [R12]. `verifyKey` is `GET /models`, structure-checked for a `data` array.
+
+**The Dexie `KeyVault` holds a tab-only key in its closure** (D98): never written, and a put deletes any
+stored ciphertext first. The closure is the tab's because the composition root builds one vault per
+page load.
 
 **The Dexie subpath exports one Dexie-free thing.** `dexieStores(name?)` returns a `DexieStores`
 whose every field is a port type from `@palier/app`; `PalierDb` (a `Dexie` subclass with

@@ -28,6 +28,9 @@ import type {
  *
  * The DTOs (`GenerateItemsRequest`, `ReviewVerdict`, …) live in `@palier/domain`,
  * not here, so `apps/factory` can build them without importing this layer (ADR 20).
+ *
+ * `verifyKey` is a third §3.3 amendment (progress.md D99, Phase 4 Slice 1): the one cheap
+ * call `/settings/key` makes to report whether the user's key works (PRD §8.10).
  */
 export type AiProvider = {
   /** Which methods this provider supports, so a caller can degrade gracefully. */
@@ -38,6 +41,21 @@ export type AiProvider = {
   generateItems: (req: GenerateItemsRequest) => Promise<readonly ItemDraft[]>;
   /** Review one item blind to its key (§4.4). */
   reviewItem: (req: ReviewRequest) => Promise<ReviewVerdict>;
+  /**
+   * One cheap call that proves the key this provider holds is accepted. Resolves when it
+   * is; otherwise rejects with the provider's own error for the reason (an invalid key, a
+   * rate limit or no credit, a timeout, an unreachable service, a malformed answer). It
+   * spends no tokens and records no usage.
+   */
+  verifyKey: () => Promise<void>;
   /** Token/cost usage from the last call, for the ledger (§8.6). */
   lastUsage: () => UsageRecord | null;
 };
+
+/**
+ * How the browser gets an `AiProvider`: made from the key **inside**
+ * `KeyVault.withApiKey`, once per call, and dropped when the call settles, so the key
+ * never sits in a long-lived variable (implementation-plan.md §3.3, ADR 2, progress.md
+ * D99). The composition root supplies it; `withAiProvider` is the only caller.
+ */
+export type AiProviderFactory = (apiKey: string) => AiProvider;

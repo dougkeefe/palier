@@ -97,6 +97,12 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       expect(usage?.inputTokens).toBeGreaterThanOrEqual(0);
     });
 
+    it("verifies its key with one call that records no usage", async () => {
+      const provider = await make();
+      await expect(provider.verifyKey()).resolves.toBeUndefined();
+      expect(provider.lastUsage()).toBeNull();
+    });
+
     it("returns a schema-valid verdict whose chosen key is one of the options", async () => {
       const provider = await make();
       const verdict = await provider.reviewItem(aReviewRequest());

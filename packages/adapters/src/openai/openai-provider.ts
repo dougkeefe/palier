@@ -18,6 +18,7 @@ import {
   InvalidApiKeyError,
   InvalidResponseError,
   ProviderRequestError,
+  ProviderTimeoutError,
   ProviderUnavailableError,
   RateLimitError,
 } from "./errors.js";
@@ -32,6 +33,10 @@ import { buildPrompt } from "./prompts.js";
  * re-validating every response with the domain Zod schema and retrying once on
  * failure; that re-validation, not the model's promise, is the guarantee.
  * Model ids are configuration, never hardcoded (§8.1).
+ *
+ * Every call has a time limit (progress.md D99): the request is aborted and the call
+ * rejects with `ProviderTimeoutError`, whether or not the `fetch` honours the signal.
+ * `verifyKey` is the one cheap call a key check makes, `GET /models`.
  */
 
 type FetchResponse = {
@@ -42,7 +47,12 @@ type FetchResponse = {
 };
 export type FetchLike = (
   url: string,
-  init: { method: string; headers: Record<string, string>; body: string },
+  init: {
+    method: string;
+    headers: Record<string, string>;
+    body?: string;
+    signal?: AbortSignal;
+  },
 ) => Promise<FetchResponse>;
 
 /** Model ids, as data (§8.1). One per pipeline stage that calls the model. */
@@ -67,6 +77,10 @@ export type OpenAiProviderConfig = {
   /** Re-validation retries on a malformed response (§8.2). Default 1. */
   readonly maxRetries?: number;
   readonly pricing?: OpenAiPricing;
+  /** How long a completion may take before it is abandoned. Default 120 s. */
+  readonly timeoutMs?: number;
+  /** How long `verifyKey`'s one cheap call may take. Default 10 s. */
+  readonly verifyTimeoutMs?: number;
 };
 
 type ChatUsage = { prompt_tokens?: number; completion_tokens?: number };
@@ -76,6 +90,9 @@ type ChatResponse = {
 };
 
 const DEFAULT_BASE_URL = "https://api.openai.com/v1";
+/** Operational limits, not exam rules (ADR 9 does not apply): a reasoning model can take minutes. */
+const DEFAULT_TIMEOUT_MS = 120_000;
+const DEFAULT_VERIFY_TIMEOUT_MS = 10_000;
 
 const defaultFetch: FetchLike = (url, init) =>
   fetch(url, init) as unknown as Promise<FetchResponse>;
@@ -84,7 +101,65 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
   const baseUrl = config.baseUrl ?? DEFAULT_BASE_URL;
   const doFetch = config.fetchImpl ?? defaultFetch;
   const maxRetries = config.maxRetries ?? 1;
+  const timeoutMs = config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  const verifyTimeoutMs = config.verifyTimeoutMs ?? DEFAULT_VERIFY_TIMEOUT_MS;
   let usage: UsageRecord | null = null;
+
+  /**
+   * One HTTP exchange under a time limit: the fetch and the reading of its answer. The
+   * limit races the work rather than trusting the fetch to honour the abort, and it is
+   * rejected before the abort is signalled, so a timeout always reads as a timeout.
+   */
+  const exchange = async <T>(
+    url: string,
+    init: { method: string; headers: Record<string, string>; body?: string },
+    limitMs: number,
+    read: (res: FetchResponse) => Promise<T>,
+  ): Promise<T> => {
+    const controller = new AbortController();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timedOut = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
+        reject(new ProviderTimeoutError("OpenAI did not answer in time."));
+        controller.abort();
+      }, limitMs);
+    });
+    const work = async (): Promise<T> => {
+      let res: FetchResponse;
+      try {
+        res = await doFetch(url, { ...init, signal: controller.signal });
+      } catch (cause) {
+        throw new ProviderUnavailableError("Could not reach OpenAI.", { cause });
+      }
+      return read(res);
+    };
+    try {
+      return await Promise.race([work(), timedOut]);
+    } finally {
+      clearTimeout(timer);
+    }
+  };
+
+  /**
+   * A non-2xx answer, as one of our errors. The body is kept for diagnosis, but with the key
+   * cut out of it first: a proxy that echoed the request would otherwise put the key in an
+   * error's message [R12].
+   */
+  const refuse = async (res: FetchResponse): Promise<never> => {
+    const detail = (await res.text().catch(() => "")).split(config.apiKey).join("[redacted]");
+    if (res.status === 401) throw new InvalidApiKeyError("OpenAI rejected the API key.");
+    if (res.status === 429) throw new RateLimitError("OpenAI rate limit or quota reached.");
+    throw new ProviderRequestError(res.status, detail);
+  };
+
+  /** A 2xx body that is not JSON is a malformed answer, never a raw `SyntaxError`. */
+  const readJson = async (res: FetchResponse): Promise<unknown> => {
+    try {
+      return await res.json();
+    } catch (cause) {
+      throw new InvalidResponseError("OpenAI's answer was not JSON.", { cause });
+    }
+  };
 
   const priceOf = (model: string, u: ChatUsage): number | undefined => {
     const p = config.pricing?.[model];
@@ -104,10 +179,10 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
     };
   };
 
-  const complete = async (model: string, system: string, user: string): Promise<string> => {
-    let res: FetchResponse;
-    try {
-      res = await doFetch(`${baseUrl}/chat/completions`, {
+  const complete = (model: string, system: string, user: string): Promise<string> =>
+    exchange(
+      `${baseUrl}/chat/completions`,
+      {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -121,26 +196,19 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
           ],
           response_format: { type: "json_object" },
         }),
-      });
-    } catch (cause) {
-      throw new ProviderUnavailableError("Could not reach OpenAI.", { cause });
-    }
-
-    if (!res.ok) {
-      const detail = await res.text().catch(() => "");
-      if (res.status === 401) throw new InvalidApiKeyError("OpenAI rejected the API key.");
-      if (res.status === 429) throw new RateLimitError("OpenAI rate limit or quota reached.");
-      throw new ProviderRequestError(res.status, detail);
-    }
-
-    const body = (await res.json()) as ChatResponse;
-    const content = body.choices?.[0]?.message?.content;
-    if (typeof content !== "string") {
-      throw new InvalidResponseError("OpenAI returned no message content.");
-    }
-    recordUsage(model, body.usage ?? {});
-    return content;
-  };
+      },
+      timeoutMs,
+      async (res) => {
+        if (!res.ok) return refuse(res);
+        const body = (await readJson(res)) as ChatResponse;
+        const content = body.choices?.[0]?.message?.content;
+        if (typeof content !== "string") {
+          throw new InvalidResponseError("OpenAI returned no message content.");
+        }
+        recordUsage(model, body.usage ?? {});
+        return content;
+      },
+    );
 
   /**
    * Call the model and re-validate its JSON with `parse`, retrying once with the
@@ -205,9 +273,27 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
       });
     },
 
+    verifyKey: () =>
+      exchange(
+        `${baseUrl}/models`,
+        { method: "GET", headers: { authorization: `Bearer ${config.apiKey}` } },
+        verifyTimeoutMs,
+        async (res) => {
+          if (!res.ok) return refuse(res);
+          const body = await readJson(res);
+          if (!isModelList(body)) {
+            throw new InvalidResponseError("OpenAI's model list was not in the expected shape.");
+          }
+        },
+      ),
+
     lastUsage: () => usage,
   };
 };
+
+/** The structure check on `GET /models` (D55's approach): an object with a `data` array. */
+const isModelList = (body: unknown): boolean =>
+  typeof body === "object" && body !== null && Array.isArray((body as { data?: unknown }).data);
 
 const safeJson = (text: string): unknown => {
   try {

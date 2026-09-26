@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 25 September 2026
+**Last updated:** 26 September 2026
 **Current phase:** **Phase 3 (Exams and item statistics) is open.** **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
@@ -8,7 +8,8 @@ four, mirrored in `implementation-plan.md` §7 (D79). **Slices 1–3 merged (#22
 (D84); Slice 4 (telemetry and the item-statistics job) is built** (`dougkeefe/next-progress-slice`; D92–D94),
 so exit criteria 1–4 are met. **Every buildable Phase 3 item is done.** Gate E is resolved (D97): the
 closed pilot runs now as a **product pilot** on the baseline bank, run by the human, and it ticks the last
-criterion. **Phase 4 starts beside it**, with Slice 1, "the key, safely" (D97). See
+criterion. **Phase 4 started beside it: Slice 1, "the key, safely", is built** (`dougkeefe/next-progress-slice-v1`;
+D98–D100), which meets Phase 4's exit criterion 1 and the first half of 2. Next is Slice 2, spend. See
 [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
@@ -74,7 +75,7 @@ human for anything expensive.
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
-| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **next** (four slices, D97; Slice 1 is *Next, decided*) |
+| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **in progress** (four slices, D97; Slice 1 built, D98–D100; Slice 2 is *Next, decided*) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
@@ -86,9 +87,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice` | **Phase 3 Slice 4 — telemetry and the item-statistics job, whole** (D88): the statistics core, `/api/telemetry` and its table, the job and its monthly PR, the telemetry ports and the persisted queue (Dexie v2), the device-local opt-in, the post-exam prompt and the readiness disclosure. Exit criterion 3. **Built; pending merge** (D92–D94). | 25 September 2026 |
+| `dougkeefe/next-progress-slice-v1` | **Phase 4 Slice 1 — the key, safely** (D97): the tier-11 key-leak test first (`e2e/leak-guard.ts`, `key-leak.spec.ts`, `key-leak-production.spec.ts`), then do-not-remember mode in `KeyVault`, `AiProvider.verifyKey` and the timeout, the key use cases, `/settings/key` and its guide, onboarding step 5, and journey 5. Exit criterion 1 and the first half of 2. **Built; pending merge** (D98–D100). | 26 September 2026 |
 
-*(The prior rows — Phase 3 Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -187,60 +188,60 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 3 is built** (Slices 1–4, D79–D94). Gate E is resolved (D97): **a product pilot runs now on
-`content/bank/v2`**, run by the human, and its item statistics count as indicative only. The paid content
-run stays at 1.0 (D56). The pilot is a checkpoint, not a blocker (implementation-plan.md §7), so Phase 4
-starts beside it.
+**Phase 4 Slice 1 is built** (D98–D100). The key is saved, checked and removed, or held for a tab. Step 5 is
+in onboarding. The tier-11 key-leak test is green and was proven to bite. **The product pilot is still
+running beside it** (Gate E, D97, below).
 
-**Next: Phase 4 Slice 1, "the key, safely"** (D97). Gate F is resolved, so the screens are built to PRD
-§8.1 step 5 and §8.10 as written. It needs no human.
+**Next: Phase 4 Slice 2, "spend"** (D97). It needs no human until its last step, **Gate G**. Build everything
+against MSW and recorded usage, as Phase 1 did (D54).
 
 **Scope:**
-- **The tier-11 key-leak test comes first**, before anything else in the slice (exit criterion 1: "write this
-  test before the key vault, not after").
-  - It is a Playwright test that sets a sentinel key (`sk-palier-sentinel-…`) through the UI, then drives
-    the existing journeys.
-  - It asserts the sentinel never reaches any request to an origin other than `api.openai.com`, in the
-    URL, a header or the body. That covers sync pushes and telemetry batches.
-  - It asserts the sentinel is never at rest in plaintext: localStorage, sessionStorage, or any IndexedDB
-    table dumped as JSON. The `keyVault` rows hold ciphertext only (D50).
-  - It asserts the sentinel is never in an export file, a console message, an error's text, or the DOM
-    after entry, where the field shows it masked.
-  - OpenAI itself is stubbed with `page.route`, so no real key and no network are needed.
-- **`/settings/key`**, per PRD §8.10 without the spend parts, which are Slice 2:
-  - the masked field;
-  - save and remove;
-  - **validate**, which is one cheap call (`GET /v1/models`) and reports the result;
-  - the plain statement of where the key is stored and what it is used for.
-- **Onboarding step 5 (§8.1)**: optional, after the diagnostic, three lines and a link to the key guide.
-- **Do-not-remember mode**: the key is held for this tab only and never written to IndexedDB. The
-  `KeyVault` port shape for it is decided in the slice and recorded, as D38 and D85 were.
-- **The browser `AiProvider` path.** `openAiProvider` takes `apiKey: string` in its config today (the
-  factory's path). In the browser it must be constructed **inside** `KeyVault.withApiKey` per call, so the key
-  never sits in a long-lived variable (§3.3, ADR 2). The composition root wires that, and a test holds it.
-- **Graceful degradation** (exit criterion 2, first half): malformed output, 429, 401 and a timeout each
-  become one of the adapter's own errors. The adapter already translates the first three (Phase 1), so the
-  timeout is added. The key screen shows each one as a plain state, never a raw error.
+- **A `CostLedger` port** over Dexie v1's existing `costLedger: "++id, ts, feature"` table, so no migration
+  is needed. Give it an in-memory double and a contract, and decide its shape in the slice and record it,
+  as D45 did.
+  - It is **never synced and never exported** (architecture.md §9.4). A test holds both.
+  - `wipeData` and `deleteEverywhere` clear it.
+- **Every AI call is recorded**: `withAiProvider` reads `lastUsage()` after the callback and appends it,
+  with the feature's name. It is the one path to a provider (D99), so no AI use case can skip the ledger.
+  The key check spends nothing and records nothing.
+- **Pricing as data**: `apps/web/src/lib/pricing.json`, beside `ai-models.json`, fed to the adapter's
+  existing `pricing` option, so `UsageRecord.costUsd` is filled in. Give it a per-feature table of typical
+  token counts, for the estimates.
+- **A pure `spendTotals`** in the engine, over plain ledger rows and "now", for this session, this week and
+  this month. Decide the session and week boundaries in the slice and record them. Hold it at 100% branch.
+- **On `/settings/key`**, PRD §8.10's remaining parts:
+  - the meter;
+  - a soft monthly cap, with a warning at 80%, and a link to OpenAI's own hard limits, "the real
+    protection";
+  - the per-feature cost table.
+  - Decide in the slice whether the cap syncs, and record it. The ledger does not.
+- **The pre-flight estimate**: a function a spending feature calls before it spends, answering the estimate
+  and whether it would cross the cap. Slice 3 is its first caller.
+- **The billing-check script** for Gate G: `scripts/billing-check.mjs` runs a fixed handful of real calls
+  through the adapter and the ledger on a funded key, and prints the meter's total, to compare with OpenAI's
+  usage page.
 
-**Ports and functions:** `KeyVault` (`putApiKey`, `withApiKey`, `hasApiKey`, `clear`, and possibly a
-do-not-remember variant), `AiProvider` via `@palier/adapters/openai`, and `settings`/`wipeData` as they are.
-Nothing in the engine.
+**Ports and functions:**
+- `CostLedger` (new);
+- `withAiProvider` and `AiProvider.lastUsage` as they are;
+- the adapter's `pricing`;
+- `spendTotals` (new, engine);
+- `settings` for the cap.
 
 **Done looks like:**
-- the key-leak test green across the E2E suite, and proven to bite by a deliberate leak (for example,
-  logging the key) that fails it;
-- validate and each failure state tested over MSW;
-- axe clean on `/settings/key` and step 5;
-- `en` and `fr` at parity;
-- every new branch tested;
-- `pnpm verify` and `verify:medium` green.
+- the ledger's contract green on memory and Dexie;
+- `spendTotals` at 100%;
+- the meter, cap and table on `/settings/key` axe-clean in every state, with `en` and `fr` at parity;
+- the leak test still green, with the ledger's rows in its dump;
+- `pnpm verify` and `verify:medium` green;
+- then **Gate G**: the human runs the billing check on a funded key, and the meter matches OpenAI's billing
+  within a few percent (Phase 4 exit criterion 3).
 
-**After it, in order** (D97): Slice 2, spend (the cost ledger and meter; ends at Gate G, the human's funded
-key for the billing check); Slice 3, the writing workshop (§8.7); Slice 4, runtime item generation and the
-Phase 4 CI gates.
+**After it, in order** (D97): Slice 3, the writing workshop (§8.7), `withAiProvider`'s first spending caller;
+then Slice 4, runtime item generation and the Phase 4 CI gates.
 
 **Running now (human): the product pilot** (Gate E, D97).
-1. Merge the Slice 4 branch. The production deploy applies migration `0001` itself.
+1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
 2. Add the `TELEMETRY_DATABASE_URL` Actions secret (a read-only role), and allow Actions to open pull
    requests (`docs/deploy.md`).
 3. Run the smoke check (`POST /api/telemetry` with an empty batch → 400).
@@ -265,8 +266,13 @@ last exit criterion.
   direction, D84), **Gate E** (the pilot runs on the baseline bank, D97) and **Gate F** (Phase 4 UI
   direction, D97) on 25 September 2026.
 
-Standing human items: pointing `palier.dougkeefe.com` at the deployment, and §12.1's trademark and
-language-school check before launch (D96). D12 is closed.
+Standing human items:
+- pointing `palier.dougkeefe.com` at the deployment;
+- §12.1's trademark and language-school check before launch (D96);
+- **the key guide's screenshots** (`/settings/key/guide`, PRD §8.1 step 5), which need a real OpenAI
+  dashboard (D100).
+
+D12 is closed.
 
 ---
 
@@ -430,18 +436,27 @@ slices". **Keep the two in sync**: the plan holds the fuller scope and each slic
 **Planned 25 September 2026 (D97)** as four slices, mirrored in `implementation-plan.md` §7. **Keep the two in
 sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.10 are adopted as written.
 
-- [ ] **Slice 1 — The key, safely.** The tier-11 key-leak test first; `/settings/key` and onboarding step
-  5; validation, do-not-remember, the browser `AiProvider` path through `withApiKey`, and graceful
-  degradation. *Next, decided*.
+- [x] **Slice 1 — The key, safely.** **Built 26 September 2026** (`dougkeefe/next-progress-slice-v1`; D98–D100;
+  session-log evidence). The tier-11 key-leak test first; `/settings/key` and onboarding step 5;
+  validation, do-not-remember, the browser `AiProvider` path through `withApiKey`, and graceful
+  degradation.
 - [ ] **Slice 2 — Spend.** The cost ledger, pricing as data, the meter, the soft cap, the per-feature table,
   and the pre-flight estimate. Ends at **Gate G** (the human's funded test key) for the billing check.
+  *Next, decided*.
 - [ ] **Slice 3 — The writing workshop** (§8.7), with submissions kept on the device.
 - [ ] **Slice 4 — Runtime item generation and the Phase 4 CI gates.**
 
 **Exit criteria** (the actual gate)
 
-- [ ] **Key-leak test written before the key vault**, and passing (tier 11) [R12]
-- [ ] Every AI response schema-validated before use; malformed / rate-limit / invalid-key / timeout all degrade gracefully
+- [x] **Key-leak test written before the key vault**, and passing (tier 11) [R12]. It was the slice's first
+  commit, ahead of any key code. `key-leak.spec.ts` (hermetic, real sync and telemetry) and
+  `key-leak-production.spec.ts` (real Dexie) are green in the E2E suite. They were proven to bite four
+  ways, each reverted: a logged key, a key written to the synced settings, a key in `localStorage`, and a
+  plaintext IndexedDB row (session log, 26 September 2026, `dougkeefe/next-progress-slice-v1`; D100)
+- [~] Every AI response schema-validated before use; malformed / rate-limit / invalid-key / timeout all degrade gracefully.
+  **First half met** (Slice 1, D99): the adapter turns each into its own error, and the key screen puts each
+  in plain words. This is tested through the real adapter over MSW (`container-key.test.ts`) and in journey
+  5. The second half, schema conformance against recorded fixtures, is Slice 4's
 - [ ] Spend meter matches actual OpenAI billing within a few percent
 
 ### Phase 5: Oral, practice mode
@@ -490,7 +505,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | R9 | WCAG 2.2 AA | 0, all | not started |
 | R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
 | R11 | Export, import, delete, each in one action | 2, 7 | Phase 2 half verified (24 September 2026): `/settings/data` does each in one action; journey 6 round-trips export → delete → import and finds the same progress. Phase 7's server-side delete waits for sync |
-| R12 | Key, audio, transcripts and submissions stay local | 4, 5 | not started |
+| R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). Audio and transcripts are Phase 5, and writing submissions are Phase 4 Slice 3 |
 | R13 | Free and open source | 0, 7 | not started |
 | R14 | Progress across devices, with an off switch | 2 | satisfied and verified on the hermetic lane (24 September 2026): journey 8 pairs two devices by code and both show the same progress; the switch is tested off, with server deletion offered, in `sync.spec.ts`. A public deployment with a real database is Slice 3 |
 
@@ -3199,11 +3214,207 @@ The human chooses:
 - **Gate G: a funded test key, when needed.** The human will provide one when Slice 2 reaches the billing
   check. Until then, everything is built against recorded fixtures and MSW, as Phase 1 was (D54).
 
+
+### D98 — do-not-remember mode is a `KeyVault` option, held in the adapter's closure
+**Date:** 26 September 2026 · **Status:** accepted; §3.3 amended in place, as D38 and D85 were
+
+architecture.md §6.2 asks for an optional "do not remember" mode, with the key held in memory for the
+session only. *Next, decided* left the port shape to this slice.
+
+- **`putApiKey(key, { remember })`**, where `remember` defaults to `true`, so every existing caller is
+  unchanged. There is also a new **`apiKeyStorage(): "device" | "tab" | null`**, because the key screen must
+  say where the key is held. It answers a word, never the key. There is still no `getApiKey`.
+- **A tab-only key lives in the vault adapter's closure and nowhere else.** The composition root builds
+  one vault per page load, so the closure belongs to the tab, and a reload forgets the key.
+  - Putting a tab-only key **deletes any stored ciphertext** first, so the device never holds a key the
+    user asked it not to keep.
+  - Putting a remembered key drops the tab copy. `withApiKey` prefers the tab copy, and `clear` forgets
+    both.
+- **Residual:** two tabs share one IndexedDB. A tab-only key saved in one tab deletes a key the other tab
+  had remembered. The other tab then finds no key and says so. This is the honest reading of "don't keep
+  it on this device".
+- The contract gains four cases. The Dexie adapter adds five of its own:
+  - no `api-key` row after a tab-only put;
+  - a fresh vault over the same database has no key;
+  - a stored key is deleted by a tab-only put;
+  - ciphertext is written again when a remembered key replaces a tab-only one;
+  - the device secret survives clearing a tab-only key.
+- **Existing tests touched:** the local vault stubs in `data-rights.test.ts` and `sync-account.test.ts`
+  gained `apiKeyStorage`. This is a shape change only, and no assertion moved.
+
+### D99 — `AiProvider.verifyKey`, a factory made inside `withApiKey`, and a time limit on every call
+**Date:** 26 September 2026 · **Status:** accepted; §3.3 amended in place
+
+- **`verifyKey(): Promise<void>` joins the port.** It is `GET /v1/models`: one cheap call that spends no
+  tokens and records no usage. It resolves, or throws the adapter's own error.
+  - The adapter structure-checks the answer (D55's approach). A 200 without a `data` array, or a body that
+    is not JSON (a captive portal), is `InvalidResponseError`.
+  - A completion whose 2xx body is not JSON now reads the same way, where it used to escape as a raw
+    `SyntaxError`.
+- **`AiProviderFactory = (apiKey) => AiProvider`, and `withAiProvider` in `@palier/app`.** The browser makes
+  a provider from the key **inside** `KeyVault.withApiKey`, once per call, and drops it when the call
+  settles (§3.3, ADR 2).
+  - `withAiProvider` is the only caller of the factory, and every AI use case goes through it. Slice 1's
+    only such use case is `checkApiKey`.
+  - Tests hold two things: the factory runs only while the vault's callback is active, and after
+    `removeApiKey` nothing is cached.
+  - Both graphs wire the real adapter, as they do the sync transport. The hermetic lane stubs OpenAI with
+    `page.route`, never with a fake in the container.
+- **Every call has a time limit**, which is operational, not an exam rule, so it is not profile data:
+  - `timeoutMs`, default 120 s, for completions (a reasoning model can take minutes);
+  - `verifyTimeoutMs`, default 10 s, for the key check.
+  - The limit **races** the work, so a `fetch` that ignores the abort still times out. It covers reading
+    the body, not just the headers.
+  - The result is `ProviderTimeoutError`, **never retried**: a retried generation could bill twice.
+- **The key is cut out of an echoed error body** before `ProviderRequestError` carries it. A proxy that
+  echoes the request would otherwise put the key in an error's message (tier 11: "never in an error
+  object"). A test runs six failure modes with a sentinel key and finds it in no message, stack, cause or
+  serialisation.
+- **The browser's model ids are data** (`apps/web/src/lib/ai-models.json`, architecture.md §8.1), a copy of
+  the factory's. Slice 1 makes no model call; Slice 4 verifies these ids before it uses them.
+- **`openAiHandlers`** in `@palier/testing` stand in for the models endpoint in six modes (ok, 401, 429,
+  500, malformed, never answers). `container-key.test.ts` runs the key check through the real adapter over
+  them. D53 kept the adapter's own tests on an injected `fetch`, and they stay there.
+- **Existing code and tests touched:**
+  - The factory's `scriptedAiProvider` and `meterProvider` implement `verifyKey`; the meter passes it
+    through and accounts nothing. Each has a new test.
+  - Three factory test doubles and the adapter's `cannedFetch` gained the method, or a `/models` answer and
+    an optional body, because `FetchLike`'s `body` is now optional. No assertion moved.
+
+### D100 — the calls PRD §8.1 step 5 and §8.10 leave open, and how tier 11 runs "the entire suite"
+**Date:** 26 September 2026 · **Status:** accepted (Gate F adopted the PRD as written, so these are recorded as
+made, as D87 did)
+
+- **Where step 5 goes.** "Diagnostic before key, always" (§8.1), but the wizard hands the diagnostic path off
+  to `/diagnostic` after step 4. So:
+  - on the **diagnostic path**, step 5 is offered on the diagnostic's readout, and only while no key is
+    held;
+  - on the **skip path**, where no diagnostic follows, it is the wizard's own fifth step;
+  - the count reads "of 5" on both paths.
+  - Its actions are "Add a key now", which **writes the profile first**, then opens `/settings/key`, and
+    "Start practising". Passing it over costs nothing.
+  - **An existing test changed, deliberately:** `onboarding.test.ts`'s "runs direction, target, placement,
+    goal, and nothing after the goal". It now holds for the diagnostic path, and a new case gives the skip
+    path its fifth step. The behaviour it pinned is the one this slice changes. The E2E helper `onboard()`
+    gains the extra click on the skip path, with no assertion changed.
+- **The copy is honest about ADR 3 as it stands.** It says the key "stays in this browser and is sent only to
+  OpenAI". That is true of everything through Phase 5. The realtime exception joins the copy when Phase 6
+  builds `/api/realtime/secret`. The key screen also says what §6.2 says: the encryption does not protect
+  against a compromise of this site itself, so give Palier a key of its own with a monthly limit.
+- **The key flow is save, then check**, because a check must go through `withAiProvider`, and so through the
+  vault.
+  - The field is `type="password"` and is replaced by the saved state once the key is stored.
+  - The saved state reads "the key ending in abcd": the last four characters of §6.2, read through
+    `withApiKey`, in words rather than a mask a screen reader would spell out.
+  - "Keep it for this tab only" is unchecked by default.
+  - Each result is a sentence (§14): invalid key, out of credit or rate-limited (one 429, since OpenAI uses it
+    for both), timeout, unreachable, malformed, and any other status with its number.
+- **The key guide** is `/settings/key/guide`: five numbered steps (sign in, billing, create the key, set a
+  monthly limit, paste it here), with links to OpenAI's own billing, API-keys and limits pages. It is static,
+  so it works offline. **The screenshots §8.1 asks for are a standing human item**, because they need a real
+  OpenAI dashboard.
+- **How the key-leak test runs "the entire E2E suite with a sentinel key".** §6.2 tier 11 says it does. The
+  hermetic vault lives for one page load, and most specs start with `page.goto`, so a sentinel set per spec
+  would not survive. Tier 11 is therefore **two specs driving every journey's flow by in-app links** once the
+  sentinel is saved through the UI, over a reusable guard (`e2e/leak-guard.ts`):
+  - `key-leak.spec.ts` (hermetic) drives the diagnostic, a drill, review, a mock exam with telemetry
+    shared through the real route, an export, and a pairing with a second device. So real sync pushes and
+    pulls cross the wire.
+  - `key-leak-production.spec.ts` (`offline` project) uses real Dexie and the service worker. It finds a
+    remembered key at rest only as the vault's ciphertext row, through a reload; a tab-only key never
+    written; and a reload forgetting it.
+  - **The guard watches from outside the page**, through the browser context, so the app cannot route
+    around it:
+    - every request's URL, headers and body, the service worker's included;
+    - every same-origin API response body, so a stored key would show in a pull;
+    - WebSocket frames, console messages and uncaught errors.
+  - Then it dumps both Web Storage areas, every IndexedDB row (bytes read as latin1, so plaintext stored as
+    bytes shows), the Cache Storage URLs, the DOM and every field's live value.
+  - **A positive control** asserts the sentinel did reach `api.openai.com`, as a bearer token, so the test
+    cannot pass because the key was never used.
+  - "The sync payload builder" §6.2 names is covered at the wire, where every push is seen, rather than by
+    instrumenting code.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 26 September 2026 — `dougkeefe/next-progress-slice-v1` (Phase 4 Slice 1: the key, safely)
+
+**Built.** The decisions are recorded in D98–D100.
+
+**Order.** The first commit was the tier-11 key-leak test and its guard (`d34da6a`), which failed until
+`/settings/key` existed. The key code came after it.
+
+**What was built:**
+- **App:** `KeyVault` gains do-not-remember mode and `apiKeyStorage` (D98). `AiProvider` gains `verifyKey`,
+  plus `AiProviderFactory` (D99); §3.3 is amended in place. The use cases `saveApiKey`, `removeApiKey`,
+  `apiKeyStatus`, `withAiProvider` and `checkApiKey`.
+- **Adapters:**
+  - `openAiProvider`: `verifyKey` (`GET /models`, structure-checked), a raced time limit on every call
+    (`ProviderTimeoutError`, never retried), a non-JSON 2xx read as `InvalidResponseError`, and the key
+    redacted from an echoed error body.
+  - The Dexie vault holds a tab-only key in its closure.
+- **Testing:** the memory doubles follow; `openAiHandlers` covers the models endpoint in six modes; the
+  `KeyVault` contract gains four cases and `aiProviderContract` one.
+- **Factory:** the scripted and metered providers implement `verifyKey`.
+- **Web:**
+  - `openAiFor` is wired in both graphs, with model ids as data;
+  - `/settings/key` and `/settings/key/guide`;
+  - onboarding step 5 (the wizard's last step on the skip path, the readout's offer on the diagnostic
+    path);
+  - the footer link, the `key` namespace at `en`/`fr` parity, and `/en/settings/key` in Lighthouse.
+- **E2E:**
+  - journey 5 and step 5 (`key.spec.ts`, four tests, with axe on every state);
+  - `key-leak.spec.ts` (hermetic: diagnostic, drill, review, exam with telemetry, export, and a pairing, so
+    real sync crosses the wire);
+  - `key-leak-production.spec.ts` (real Dexie: ciphertext at rest through a reload, a tab-only key never
+    written and forgotten on a reload).
+
+**Two defects the leak specs found in themselves, fixed:**
+- The guard awaited `request.allHeaders()`, which never settles for a request a reload aborts. That stalled
+  the production spec for two minutes before timing out. Headers are now read as sent, and bodies on
+  `requestfinished`.
+- The exam steps pressed keys before the runner was ready, so no answer was recorded and nothing was
+  queued to send. They now wait on each item's counter, as journey 9 does.
+
+**Proven to bite, each reverted afterwards** (the leak specs, with the named assertion):
+1. `console.log(key)` in `saveApiKey` → "the sentinel key reached somewhere other than OpenAI":
+   `"console"`, and the dev server's HMR WebSocket, which forwards browser logs.
+2. The key written to the synced settings store → the export check,
+   `expect(exported).not.toContain(SENTINEL)`. With that check switched off for the run, the guard itself
+   named `request body …/api/sync` and `response body …/api/sync?watermark=0`.
+3. `localStorage.setItem` with the key → `"localStorage[palier.key]"`.
+4. The Dexie vault also writing the key as plaintext into `settings` → the production spec named
+   `"IndexedDB palier.settings"`.
+
+**Existing tests touched, and why:** see D98–D100. No assertion was weakened.
+- Two app vault stubs gained `apiKeyStorage`.
+- Three factory doubles and the adapter's `cannedFetch` gained `verifyKey` or a `/models` answer.
+- `onboarding.test.ts`'s "nothing after the goal" now holds for the diagnostic path, with a new case for
+  the skip path's step 5. This is the behaviour the slice changes.
+- `onboard()` gains the skip path's extra click.
+
+**Gates:**
+```
+pnpm verify        → exit 0: "no dependency violations found" ×2 (349 and 173 modules); Test Files 145 passed,
+                     Tests 2049 passed | 8 todo. New files: api-key.ts 6/6 branches, key-view.ts 41/41,
+                     onboarding.ts 14/14, memory key-vault.ts 9/9, openai-handlers.ts 7/7, metered.ts 6/6;
+                     the only uncovered branches in openai-provider.ts and dexie/key-vault.ts predate the slice
+pnpm verify:medium → exit 0 in 65 s locally: integration Tests 45 passed; Playwright 40 passed (34 before, plus
+                     journey 5 and step 5 ×4 and the two leak specs, 4.4 s and 4.1 s)
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB, within budget
+pnpm --filter @palier/web lighthouse  → exit 0, 13 URLs × 5 runs, no assertion failures; median 1.0 / 1.0 on
+                     every URL except /en/review, /fr/progress and /en/settings/key at 0.99 performance; max CLS 0
+```
+
+**Not done here, by design:**
+- the spend meter, the cap and the cost table (Slice 2, *Next, decided*);
+- the realtime exception in the copy (Phase 6, D100);
+- the key guide's screenshots (a human item);
+- schema conformance against recorded fixtures (Slice 4).
 
 ### 25 September 2026 — `dougkeefe/next-progress-slice` (Gate E resolved, Phase 4 planned)
 

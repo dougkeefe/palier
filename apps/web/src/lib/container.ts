@@ -1,4 +1,6 @@
 import type {
+  AiProviderFactory,
+  ApiKeyStatus,
   AnswerItemRequest,
   AnswerItemResult,
   AttemptStore,
@@ -50,12 +52,17 @@ import type {
   SubmitExamResult,
   SyncTransport,
   FlushTelemetryResult,
+  SaveApiKeyRequest,
   SetTelemetryConsentRequest,
   TelemetryConsent,
   TelemetrySink,
   TelemetryStore,
 } from "@palier/app";
 import {
+  apiKeyStatus,
+  checkApiKey,
+  removeApiKey,
+  saveApiKey,
   answerExamItem,
   answerItem,
   checkpointExam,
@@ -95,6 +102,7 @@ import {
 import { httpBankRepository } from "@palier/adapters/bank";
 import { dexieStores } from "@palier/adapters/dexie";
 import { webCryptoIdGenerator } from "@palier/adapters/ids";
+import { openAiProvider } from "@palier/adapters/openai";
 import { httpSyncTransport } from "@palier/adapters/sync";
 import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
@@ -117,6 +125,7 @@ import {
   seededRandom,
 } from "@palier/testing/in-memory";
 
+import aiModels from "./ai-models.json";
 import { selectionSeedFor, systemClock } from "./system-clock";
 
 /**
@@ -174,6 +183,20 @@ export const BANK_VERSION = 2;
  */
 const PROFILE: ExamProfile = parseExamProfileOrThrow(pscSleProfile);
 
+/**
+ * How the browser makes an `AiProvider`: from the key, inside `KeyVault.withApiKey`, once
+ * per call (`withAiProvider` in `@palier/app` is the only caller), so no provider holding
+ * the key outlives the call (implementation-plan.md §3.3, ADR 2, progress.md D99). It calls
+ * `api.openai.com` directly from the browser; the key never reaches our server
+ * (architecture.md §6.3). Both graphs wire the real adapter, as they do the sync transport:
+ * the hermetic lane stubs OpenAI with `page.route`, never with a fake here.
+ */
+export const openAiFor: AiProviderFactory = (apiKey) =>
+  openAiProvider({
+    apiKey,
+    models: { passage: aiModels.passage, draft: aiModels.draft, review: aiModels.review },
+  });
+
 export type Env = {
   readonly hermetic: boolean;
 };
@@ -224,6 +247,11 @@ export type UseCases = {
   readonly telemetryConsent: () => Promise<TelemetryConsent>;
   readonly setTelemetryConsent: (request: SetTelemetryConsentRequest) => Promise<void>;
   readonly flushTelemetry: () => Promise<FlushTelemetryResult>;
+  /** The user's OpenAI key (PRD §8.10, progress.md D98–D99): kept, described, checked, removed. */
+  readonly saveApiKey: (request: SaveApiKeyRequest) => Promise<void>;
+  readonly apiKeyStatus: () => Promise<ApiKeyStatus | null>;
+  readonly checkApiKey: () => Promise<void>;
+  readonly removeApiKey: () => Promise<void>;
 };
 
 export type Ports = {
@@ -251,6 +279,8 @@ export type Ports = {
   readonly telemetry: TelemetryStore;
   /** The HTTP telemetry sink, same-origin, with no credential and no cookie. */
   readonly telemetrySink: TelemetrySink;
+  /** Makes a provider from the key; only `withAiProvider` calls it (D99). */
+  readonly aiProvider: AiProviderFactory;
 };
 
 export type Container = Ports & {
@@ -397,6 +427,10 @@ function buildUseCases(ports: Ports): UseCases {
     setTelemetryConsent: (request) =>
       setTelemetryConsent(request, { telemetry: ports.telemetry, items: ports.items, examRuns: ports.examRuns }),
     flushTelemetry: () => flushTelemetry({ telemetry: ports.telemetry, sink: ports.telemetrySink }),
+    saveApiKey: (request) => saveApiKey(request, { vault: ports.vault }),
+    apiKeyStatus: () => apiKeyStatus({ vault: ports.vault }),
+    checkApiKey: () => checkApiKey({ vault: ports.vault, aiProvider: ports.aiProvider }),
+    removeApiKey: () => removeApiKey({ vault: ports.vault }),
   };
 }
 
@@ -461,6 +495,7 @@ function productionPorts(): Ports {
     syncState: stores.syncState,
     telemetry: stores.telemetry,
     telemetrySink: httpTelemetrySink({ baseUrl: SYNC_BASE_URL }),
+    aiProvider: openAiFor,
   };
 }
 
@@ -495,6 +530,8 @@ function hermeticPorts(): Ports {
     telemetry: memoryTelemetryStore(),
     // The real HTTP adapter against the dev server's route on PGlite, as sync is.
     telemetrySink: httpTelemetrySink({ baseUrl: SYNC_BASE_URL }),
+    // The real OpenAI adapter too; the journeys stub api.openai.com with `page.route`.
+    aiProvider: openAiFor,
   };
 }
 

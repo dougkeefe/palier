@@ -76,6 +76,8 @@ export const fakeAiProvider = (): AiProvider => {
       return Promise.resolve(verdict);
     },
 
+    verifyKey: () => Promise.resolve(),
+
     lastUsage: () => usage,
   };
 };

@@ -1,5 +1,7 @@
 export type {
   AiProvider,
+  AiProviderFactory,
+  ApiKeyStorage,
   AttemptStore,
   DeviceId,
   DeviceIdentity,
@@ -52,7 +54,11 @@ export {
 } from "./ports/index.js";
 
 export type {
+  AiDeps,
   AnswerExamItemRequest,
+  ApiKeyDeps,
+  ApiKeyStatus,
+  SaveApiKeyRequest,
   AnswerItemDeps,
   AnswerItemRequest,
   AnswerItemResult,
@@ -116,6 +122,13 @@ export type {
   WipeDataDeps,
 } from "./use-cases/index.js";
 export {
+  EmptyApiKeyError,
+  NoApiKeyError,
+  apiKeyStatus,
+  checkApiKey,
+  removeApiKey,
+  saveApiKey,
+  withAiProvider,
   EXPORT_FORMAT,
   EXPORT_VERSION,
   ExamAlreadySubmittedError,

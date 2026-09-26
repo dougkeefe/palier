@@ -158,8 +158,11 @@ interface AiProvider {
   assessOral(req: OralRequest): Promise<OralAssessment>            // deferred to Phase 5
   transcribe(audio: Blob, lang: Lang): Promise<Transcript>         // deferred to Phase 5
   openVoiceSession(cfg: VoiceSessionConfig): Promise<VoiceSession>  // may throw Unsupported; deferred to Phase 6
+  verifyKey(): Promise<void>        // Phase 4 Slice 1, ADDED (progress.md D99): one cheap call; resolves or throws the adapter's own error
   lastUsage(): UsageRecord | null
 }
+// Also added by D99: `type AiProviderFactory = (apiKey: string) => AiProvider`. The browser makes a
+// provider inside `KeyVault.withApiKey`, once per call, through `withAiProvider` in @palier/app.
 
 interface SyncTransport {
   push(items: PushItem[]): Promise<PushResult>                  // PushItem = { type, id, baseRevision: number | null, payload }
@@ -188,10 +191,13 @@ interface SyncStateStore {                                      // a port §3.3 
 }
 
 interface KeyVault {
-  putApiKey(k: string): Promise<void>
+  // Amended in place 26 September 2026 (Phase 4 Slice 1, progress.md D98): do-not-remember mode.
+  // `remember: false` holds the key for this tab only, never written, and replaces a stored one.
+  putApiKey(k: string, options?: { remember: boolean }): Promise<void>   // remember defaults to true
   withApiKey<T>(fn: (k: string) => Promise<T>): Promise<T>   // never returns the key
   hasApiKey(): Promise<boolean>
-  clear(): Promise<void>
+  apiKeyStorage(): Promise<"device" | "tab" | null>          // added (D98): where it is held, never the key
+  clear(): Promise<void>                                      // forgets both modes
   deviceSecret(): Promise<string>
 }
 
@@ -868,7 +874,8 @@ step 5, §8.7 and §8.10 as written.
   validate with one cheap call, save, remove, where the key lives) and onboarding step 5; do-not-remember
   mode; the browser `AiProvider` constructed inside `KeyVault.withApiKey` per call; malformed, 429, 401 and
   timeout each degrading to a plain state. *Done:* the leak test green across the E2E suite and proven to
-  bite; axe clean; exit criterion 1 and the first half of 2.
+  bite; axe clean; exit criterion 1 and the first half of 2. **Built 26 September 2026** (`progress.md`
+  D98–D100).
 - **Slice 2 — Spend.** The cost ledger over the v1 `costLedger` table, pricing as data, the spend meter
   (session, week, month), the soft cap with an 80% warning, the per-feature cost table, and the pre-flight
   estimate. *Done:* exit criterion 3, at **Gate G**, the human's funded test account.

@@ -154,6 +154,9 @@ export const scriptedAiProvider = (): AiProvider => {
       return Promise.resolve(verdict);
     },
 
+    // No key to check: the scripted provider calls no service.
+    verifyKey: () => Promise.resolve(),
+
     lastUsage: () => usage,
   };
 };
