@@ -213,13 +213,14 @@ describe("trendEvidence", () => {
   });
 
   it("trusts an item's statistics from the profile's minimum, and not one response before", () => {
-    const { items, attempts } = history("B", 3, 3);
+    const { items, attempts } = history("B", 4, 4);
     const withStats = [
       { ...items[0]!, stats: stats(rules.minResponsesDifficulty) },
-      { ...items[1]!, stats: stats(rules.minResponsesDifficulty - 1) },
-      items[2]!,
+      { ...items[1]!, stats: stats(rules.minResponsesDifficulty + 50) },
+      { ...items[2]!, stats: stats(rules.minResponsesDifficulty - 1) },
+      items[3]!,
     ];
-    expect(trendEvidence("reading", attempts, withStats, rules)).toEqual({ items: 3, trusted: 1 });
+    expect(trendEvidence("reading", attempts, withStats, rules)).toEqual({ items: 4, trusted: 2 });
   });
 
   it("counts only the items inside the trend's window, as the trend does", () => {

@@ -30,12 +30,12 @@ describe("restBucket", () => {
   });
 
   it("refuses a rest with no other scored item", () => {
-    expect(() => restBucket(0, 0)).toThrow(RangeError);
+    expect(() => restBucket(0, 0)).toThrow(new RangeError("A rest bucket needs at least one other scored item, not 0."));
     expect(() => restBucket(0, 1.5)).toThrow(RangeError);
   });
 
   it("refuses a count of right answers that is not a count", () => {
-    expect(() => restBucket(-1, 10)).toThrow(RangeError);
+    expect(() => restBucket(-1, 10)).toThrow(new RangeError("-1 right of 10 is not a count."));
     expect(() => restBucket(11, 10)).toThrow(RangeError);
     expect(() => restBucket(2.5, 10)).toThrow(RangeError);
   });

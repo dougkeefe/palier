@@ -31,6 +31,12 @@ framework. `.dependency-cruiser.cjs` enforces all three.
   importing the port layer. They are DTOs, not content artefacts, so they are **not** in
   `CONTENT_SCHEMAS` — no JSON Schema is published for them. The `AiProvider` port *interface*
   still lives in `@palier/app` (§3.3); only the data moved down.
+- **The telemetry DTOs live here too, the same way** (progress.md D92–D94): `TelemetryEvent`
+  (`telemetry.ts`, `schemas/telemetry.ts`) and the statistics job's `ItemStatisticsReport` and
+  `ItemVerdict`. `telemetryEventSchema` is a `strictObject` of exactly five fields, so an event that
+  carries an identity is **refused, not stored**: never loosen it. The retirement rules are data, the
+  profile's `itemStatistics` block (ADR 9), and `ItemStats.pointBiserial` is `number | null`, because an
+  item with no variance has no correlation to report.
 - **The item type registry lives here, minus `render`** (ADR 17). `ITEM_TYPE_DEFINITIONS`
   is a `Record<ItemType, ItemTypeDefinition>` (`schema`, `score`, `validate`,
   `generatePrompt`, `a11yContract`), so adding an `ItemType` is a compile error until it has

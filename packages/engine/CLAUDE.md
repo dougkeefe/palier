@@ -7,7 +7,14 @@ engine core is now complete — plus `subSkillBreakdown`, the progress screen's 
 separate from `weakestSubSkills`, which the planner uses for targeting and which windows and
 thresholds. It returns tallies, never a percentage, so it makes no estimate (R10). Its sibling
 `examSubSkillBreakdown` tallies one mock exam's **scored** items the same way, with unanswered items
-counted as wrong and pilots left out, since pilots are never revealed (progress.md D84, D85). Everything is
+counted as wrong and pilots left out, since pilots are never revealed (progress.md D84, D85).
+**Item statistics** (architecture.md §7.6, progress.md D94): `itemStatistics` is a group-by and a
+point-biserial over **whole-number sums**, so it is a function of the event set to the last bit (D73), and
+`retirementVerdicts` applies the profile's `itemStatistics` rules with **the minimum counts first and every
+threshold strict**. `restBucket`/`restBuckets` give an item's quintile on the *other* scored items, which is
+what makes a point-biserial computable without an ability estimate (ADR 7). `trendEvidence` counts the
+items behind the practice trend, and those with trusted statistics, over the trend's own window, for the
+readiness disclosure; it never reweights the trend. Everything is
 re-exported from `src/index.ts` — the package's public surface is the barrel, not a relative
 path, so a new algorithm is not done until it is exported there.
 

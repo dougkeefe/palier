@@ -195,7 +195,20 @@ interface KeyVault {
   deviceSecret(): Promise<string>
 }
 
-interface TelemetrySink { record(e: TelemetryEvent): void; flush(): Promise<void> }
+// Amended in place 25 September 2026 (Phase 3 Slice 4, progress.md D92). One port became
+// two: the queue must survive an offline submit, so it lives in IndexedDB, and a batch goes
+// out over fetch, and one adapter directory cannot hold both (adapters never import each
+// other). `record` and `flush` became use cases over the pair (recordExamTelemetry,
+// flushTelemetry). TelemetryStore is device-local and never synced or exported.
+interface TelemetrySink { send(batch: TelemetryEvent[]): Promise<void> }   // at most TELEMETRY_MAX_BATCH
+interface TelemetryStore {
+  consent(): Promise<'unasked' | 'on' | 'off'>
+  setConsent(c: 'unasked' | 'on' | 'off'): Promise<void>
+  enqueue(events: TelemetryEvent[]): Promise<void>
+  take(limit: number): Promise<{ id: number; event: TelemetryEvent }[]>   // oldest first
+  remove(ids: number[]): Promise<void>
+  clear(): Promise<void>                                                  // queue and consent
+}
 interface Clock  { now(): ISO }
 interface Random { next(): number }
 ```
@@ -814,6 +827,16 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
 
   *Done:* exit criterion 3 on synthetic data. **The closed pilot**, 20–30 people, is the human decision
   gate that follows.
+
+  **Slice 4 status, 25 September 2026: built** (`progress.md` D92–D94). The statistics are pure engine
+  functions under the profile's new `itemStatistics` rules. `POST /api/telemetry` stores identity-free
+  events, and a monthly workflow opens the job's report as a pull request. The factory applies the report
+  at the next bank build, and the form stage skips retired items. On the client, the telemetry ports
+  (§3.3, amended in place) sit over a Dexie schema v2 queue, with a device-local opt-in asked once on the
+  results screen and a readiness-card disclosure. Exit criterion 3 holds in the fast lane and through the
+  real handler on PGlite. Journey 9 submits offline, opts in and sees one identity-free batch arrive.
+  **Next is the closed pilot**, the phase's human gate, opened as Gate E (`progress.md` D95): the human
+  first chooses whether it runs on the synthetic baseline bank or after the funded content run.
 
 ---
 

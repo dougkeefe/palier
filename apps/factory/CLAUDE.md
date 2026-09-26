@@ -41,6 +41,11 @@ content *schemas* with the app, never runtime. The `AiProvider` port type is imp
   as `carried`: they are re-validated with the new drafts, ahead of them, so an id users already hold
   survives a near-duplicate (architecture.md §5.5). The batch report counts them as `itemsCarried`, not
   as the batch's output.
+- **A retirement takes effect at the next bank build** (progress.md D94). `runInputFor` applies
+  `content/factory/item-statistics.json`, which the monthly job in `apps/web` writes, to the carried bank
+  (`pipeline/carry.ts`): judged items gain `stats`, and an item with a reason becomes `status: "retired"`.
+  It stays in the bank for the ids users hold, and the form stage skips it. A damaged report stops the
+  build. The factory never computes a statistic: it may not import the engine (§3.1).
 - **The committed bank is byte-reproducible on disk.** `committed-bank.test.ts` reruns the pipeline
   through the CLI's own `runInputFor`, at the committed report's `generatedAt`, and compares every file
   under `content/bank/v{DEFAULT_BANK_VERSION}`. A provider change therefore means a new bank version,

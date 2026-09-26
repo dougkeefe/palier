@@ -75,6 +75,15 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     person running `db:migrate` by hand, never for a preview, and they must stay backward-compatible,
     because the old deployment serves while the new one migrates. `migrate.ts` has no relative imports,
     so Node's type stripping can run it without a bundler. The runbook is `docs/deploy.md`.
+  - **Telemetry has its own repository, handler and binding** (progress.md D93):
+    `TelemetryRepository`, `createTelemetryApi` and `serveTelemetry`, over the **same** database `db.ts`
+    memoises for sync, so the hermetic lane never builds a second PGlite. `telemetry_events` holds no
+    account, device, IP or timestamp, only the day received. `http.ts` holds the helpers both
+    handlers share.
+  - **The item-statistics job** (`item-statistics-job.ts`, D94) is self-contained like `migrate.ts`, so
+    `scripts/item-statistics.mjs` runs it under type stripping. It reads events through one query,
+    `EVENTS_SQL`, which the Drizzle repository reads through too, and it reads the bank through
+    `@palier/adapters/bank`. A monthly workflow opens its report as a pull request.
 - **Baseline security headers on every response** (`next.config.ts`, architecture.md §12): HSTS,
   `nosniff`, `Referrer-Policy: no-referrer`, and a `Permissions-Policy` allowing the microphone on
   this origin only. They are asserted on the production server in `e2e/production.spec.ts`. The
@@ -86,7 +95,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 - **`SyncRunner`** (`src/components/sync/`) sits in the layout inside `ContainerProvider` and is the
   only thing that calls `syncNow` in the background. The trigger rules are `src/lib/sync-triggers.ts`
   and the display rules are `src/features/sync/sync-view.ts`. Islands report events with
-  `useSync().notify(...)`, for example `"session-complete"` after `completeSession`. A demand made while
+  `useSync().notify(...)`, for example `"session-complete"` after `completeSession` and after
+  `submitExam`. **Every trigger also flushes queued telemetry** (D92), single-flight
+  (`lib/single-flight.ts`), silently, and whatever `shouldSync` or the sync switch says. A demand made while
   a run is in flight runs once more after it (`runsAgainAfterCurrent`), and the settings status line
   carries `aria-busy` while an exchange is in flight, which is what journey 8 waits on (D82). "Syncing…"
   appears only after 400 ms, so a run with nothing to do never shifts the header (D72).
