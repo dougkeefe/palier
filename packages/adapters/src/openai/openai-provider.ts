@@ -161,22 +161,23 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
     }
   };
 
-  const priceOf = (model: string, u: ChatUsage): number | undefined => {
+  const priceOf = (model: string, inputTokens: number, outputTokens: number): number | undefined => {
     const p = config.pricing?.[model];
     if (p === undefined) return undefined;
-    const input = ((u.prompt_tokens ?? 0) / 1_000_000) * p.inputPerMTok;
-    const output = ((u.completion_tokens ?? 0) / 1_000_000) * p.outputPerMTok;
-    return input + output;
+    return (inputTokens / 1_000_000) * p.inputPerMTok + (outputTokens / 1_000_000) * p.outputPerMTok;
   };
 
-  const recordUsage = (model: string, u: ChatUsage): void => {
-    const costUsd = priceOf(model, u);
-    usage = {
-      model,
-      inputTokens: u.prompt_tokens ?? 0,
-      outputTokens: u.completion_tokens ?? 0,
-      ...(costUsd === undefined ? {} : { costUsd }),
-    };
+  /**
+   * Add one completion's tokens to the current method call's usage (progress.md D102). A
+   * method starts from `null`, so `lastUsage()` is the whole of the last call, a retry
+   * included, and never an earlier call's carried over. Pricing is linear, so the summed
+   * tokens price to the sum of the parts.
+   */
+  const addUsage = (model: string, u: ChatUsage): void => {
+    const inputTokens = (usage?.inputTokens ?? 0) + (u.prompt_tokens ?? 0);
+    const outputTokens = (usage?.outputTokens ?? 0) + (u.completion_tokens ?? 0);
+    const costUsd = priceOf(model, inputTokens, outputTokens);
+    usage = { model, inputTokens, outputTokens, ...(costUsd === undefined ? {} : { costUsd }) };
   };
 
   const complete = (model: string, system: string, user: string): Promise<string> =>
@@ -201,11 +202,12 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
       async (res) => {
         if (!res.ok) return refuse(res);
         const body = (await readJson(res)) as ChatResponse;
+        // Billed before it is checked: an answer with no content still cost its tokens.
+        addUsage(model, body.usage ?? {});
         const content = body.choices?.[0]?.message?.content;
         if (typeof content !== "string") {
           throw new InvalidResponseError("OpenAI returned no message content.");
         }
-        recordUsage(model, body.usage ?? {});
         return content;
       },
     );
@@ -221,6 +223,7 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
     baseUser: string,
     parse: (raw: unknown) => T,
   ): Promise<T> => {
+    usage = null;
     let lastError = "";
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       const user =
@@ -273,8 +276,9 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
       });
     },
 
-    verifyKey: () =>
-      exchange(
+    verifyKey: () => {
+      usage = null;
+      return exchange(
         `${baseUrl}/models`,
         { method: "GET", headers: { authorization: `Bearer ${config.apiKey}` } },
         verifyTimeoutMs,
@@ -285,7 +289,8 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
             throw new InvalidResponseError("OpenAI's model list was not in the expected shape.");
           }
         },
-      ),
+      );
+    },
 
     lastUsage: () => usage,
   };

@@ -5,6 +5,8 @@ import type {
   AnswerItemResult,
   AttemptStore,
   Clock,
+  CostLedger,
+  FeatureCost,
   CompleteSessionRequest,
   CompleteSessionResult,
   AnswerExamItemRequest,
@@ -38,6 +40,7 @@ import type {
   ScheduleStore,
   SessionStore,
   SettingsStore,
+  SpendSummary,
   StartExamRequest,
   StartExamResult,
   StartSessionRequest,
@@ -63,6 +66,11 @@ import {
   checkApiKey,
   removeApiKey,
   saveApiKey,
+  featureCosts,
+  preflightSpend,
+  setSpendCap,
+  spendCap,
+  spendSummary,
   answerExamItem,
   answerItem,
   checkpointExam,
@@ -106,15 +114,16 @@ import { openAiProvider } from "@palier/adapters/openai";
 import { httpSyncTransport } from "@palier/adapters/sync";
 import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
-import type { ExamForm, ExamProfile } from "@palier/domain";
+import type { AiFeature, ExamForm, ExamProfile } from "@palier/domain";
 import { parseExamProfileOrThrow } from "@palier/domain";
-import type { DayPlan, ExamResult, SkillTrend, TrendEvidence } from "@palier/engine";
+import type { DayPlan, ExamResult, Preflight, SkillTrend, TrendEvidence } from "@palier/engine";
 import {
   counterIdGenerator,
   fakeClock,
   fixtureBankRepository,
   isHermetic,
   memoryAttemptStore,
+  memoryCostLedger,
   memoryExamRunStore,
   memoryKeyVault,
   memoryScheduleStore,
@@ -126,6 +135,7 @@ import {
 } from "@palier/testing/in-memory";
 
 import aiModels from "./ai-models.json";
+import { PRICING } from "./pricing";
 import { selectionSeedFor, systemClock } from "./system-clock";
 
 /**
@@ -189,12 +199,14 @@ const PROFILE: ExamProfile = parseExamProfileOrThrow(pscSleProfile);
  * the key outlives the call (implementation-plan.md §3.3, ADR 2, progress.md D99). It calls
  * `api.openai.com` directly from the browser; the key never reaches our server
  * (architecture.md §6.3). Both graphs wire the real adapter, as they do the sync transport:
- * the hermetic lane stubs OpenAI with `page.route`, never with a fake here.
+ * the hermetic lane stubs OpenAI with `page.route`, never with a fake here. It prices every
+ * call from `pricing.json`, so the ledger's rows carry dollars as well as tokens (D103).
  */
 export const openAiFor: AiProviderFactory = (apiKey) =>
   openAiProvider({
     apiKey,
     models: { passage: aiModels.passage, draft: aiModels.draft, review: aiModels.review },
+    pricing: PRICING.prices,
   });
 
 export type Env = {
@@ -252,6 +264,12 @@ export type UseCases = {
   readonly apiKeyStatus: () => Promise<ApiKeyStatus | null>;
   readonly checkApiKey: () => Promise<void>;
   readonly removeApiKey: () => Promise<void>;
+  /** Spend (PRD §8.10, progress.md D101–D104): the meter, the soft cap, the table, the pre-flight. */
+  readonly spendSummary: () => Promise<SpendSummary>;
+  readonly spendCap: () => Promise<number | null>;
+  readonly setSpendCap: (request: { readonly capUsd: number | null }) => Promise<void>;
+  readonly featureCosts: () => readonly FeatureCost[];
+  readonly preflightSpend: (request: { readonly feature: AiFeature }) => Promise<Preflight>;
 };
 
 export type Ports = {
@@ -279,8 +297,10 @@ export type Ports = {
   readonly telemetry: TelemetryStore;
   /** The HTTP telemetry sink, same-origin, with no credential and no cookie. */
   readonly telemetrySink: TelemetrySink;
-  /** Makes a provider from the key; only `withAiProvider` calls it (D99). */
+  /** Makes a provider from the key; only `@palier/app`'s key use cases call it (D99, D101). */
   readonly aiProvider: AiProviderFactory;
+  /** What every AI call cost, device-local: never synced, never exported (D101). */
+  readonly costLedger: CostLedger;
 };
 
 export type Container = Ports & {
@@ -297,6 +317,8 @@ export type Container = Ports & {
  * here (implementation-plan.md §3.5); nothing else in the app constructs a port.
  */
 function buildUseCases(ports: Ports): UseCases {
+  // "This session" on the meter: since this tab's container was built (D103).
+  const spendDeps = { ...ports, ledger: ports.costLedger, sessionStart: ports.clock.now(), pricing: PRICING };
   return {
     planDailySession: (request) =>
       planDailySession(request, {
@@ -388,6 +410,7 @@ function buildUseCases(ports: Ports): UseCases {
         settings: ports.settings,
         vault: ports.vault,
         telemetry: ports.telemetry,
+        ledger: ports.costLedger,
       }),
     syncNow: (request) => syncNow(request, syncDeps(ports)),
     syncState: () => ports.syncState.state(),
@@ -396,7 +419,8 @@ function buildUseCases(ports: Ports): UseCases {
     listDevices: () => listDevices({ transport: ports.sync, syncState: ports.syncState }),
     removeDevice: (request) => removeDevice(request, { transport: ports.sync, syncState: ports.syncState }),
     setSyncEnabled: (request) => setSyncEnabled(request, { transport: ports.sync, syncState: ports.syncState }),
-    deleteEverywhere: () => deleteEverywhere({ ...syncDeps(ports), vault: ports.vault, telemetry: ports.telemetry }),
+    deleteEverywhere: () =>
+      deleteEverywhere({ ...syncDeps(ports), vault: ports.vault, telemetry: ports.telemetry, ledger: ports.costLedger }),
     examForms: () => examForms({ items: ports.items }),
     examInProgress: () => examInProgress({ items: ports.items, examRuns: ports.examRuns }),
     startExam: (request) => startExam(request, examDeps(ports)),
@@ -431,6 +455,11 @@ function buildUseCases(ports: Ports): UseCases {
     apiKeyStatus: () => apiKeyStatus({ vault: ports.vault }),
     checkApiKey: () => checkApiKey({ vault: ports.vault, aiProvider: ports.aiProvider }),
     removeApiKey: () => removeApiKey({ vault: ports.vault }),
+    spendSummary: () => spendSummary(spendDeps),
+    spendCap: () => spendCap(spendDeps),
+    setSpendCap: (request) => setSpendCap(request.capUsd, spendDeps),
+    featureCosts: () => featureCosts(spendDeps),
+    preflightSpend: (request) => preflightSpend(request.feature, spendDeps),
   };
 }
 
@@ -496,6 +525,7 @@ function productionPorts(): Ports {
     telemetry: stores.telemetry,
     telemetrySink: httpTelemetrySink({ baseUrl: SYNC_BASE_URL }),
     aiProvider: openAiFor,
+    costLedger: stores.costLedger,
   };
 }
 
@@ -532,6 +562,7 @@ function hermeticPorts(): Ports {
     telemetrySink: httpTelemetrySink({ baseUrl: SYNC_BASE_URL }),
     // The real OpenAI adapter too; the journeys stub api.openai.com with `page.route`.
     aiProvider: openAiFor,
+    costLedger: memoryCostLedger(),
   };
 }
 

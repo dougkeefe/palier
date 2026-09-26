@@ -55,4 +55,12 @@ describe("scriptedAiProvider.verifyKey", () => {
     await expect(provider.verifyKey()).resolves.toBeUndefined();
     expect(provider.lastUsage()).toBeNull();
   });
+
+  it("leaves no earlier call's usage behind (D102)", async () => {
+    const provider = scriptedAiProvider();
+    await provider.generatePassage({ topic: "finance-and-budgets", docType: "memo", targetBand: "B", lang: "fr", count: 1 });
+    expect(provider.lastUsage()).not.toBeNull();
+    await provider.verifyKey();
+    expect(provider.lastUsage()).toBeNull();
+  });
 });

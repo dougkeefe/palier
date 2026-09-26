@@ -8,6 +8,7 @@ export type { ExamAnswer, ExamRun, ExamRunStore } from "./exam-run-store.js";
 export type { SettingEntry, SettingsStore } from "./settings-store.js";
 export type { ApiKeyStorage, KeyVault } from "./key-vault.js";
 export type { AiProvider, AiProviderFactory } from "./ai-provider.js";
+export type { CostEntry, CostLedger } from "./cost-ledger.js";
 export type {
   DeviceId,
   DeviceIdentity,

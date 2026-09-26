@@ -154,8 +154,12 @@ export const scriptedAiProvider = (): AiProvider => {
       return Promise.resolve(verdict);
     },
 
-    // No key to check: the scripted provider calls no service.
-    verifyKey: () => Promise.resolve(),
+    // No key to check: the scripted provider calls no service. It bills nothing, so it
+    // leaves no earlier call's usage behind (progress.md D102).
+    verifyKey: () => {
+      usage = null;
+      return Promise.resolve();
+    },
 
     lastUsage: () => usage,
   };

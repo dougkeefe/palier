@@ -58,6 +58,26 @@ describe("schema migration v1 → v2", () => {
     expect((await stores.syncState.state()).watermark).toBe(7);
     expect(await stores.telemetry.consent()).toBe("unasked");
     expect(await stores.telemetry.take(10)).toEqual([]);
+    // v1's placeholder ledger row survives the upgrade (the count above) but is not an
+    // entry, so it reads as no spend at all (D101).
+    expect(await stores.costLedger.since("1970-01-01T00:00:00.000Z")).toEqual([]);
+  });
+
+  it("gives the migrated database a working cost ledger in v1's own table", async () => {
+    const name = dbName();
+    await aVersionOneDevice(name);
+
+    const stores = dexieStores(name);
+    const entry = {
+      ts: "2026-09-26T10:00:00.000Z",
+      feature: "item-generation",
+      model: "m",
+      inputTokens: 10,
+      outputTokens: 5,
+      costUsd: 0.001,
+    } as const;
+    await stores.costLedger.append(entry);
+    expect(await stores.costLedger.since("2026-09-01T00:00:00.000Z")).toEqual([entry]);
   });
 
   it("gives the new tables to the migrated database", async () => {

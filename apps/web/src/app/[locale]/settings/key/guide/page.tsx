@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { use } from "react";
 
+import { OPENAI_BILLING, OPENAI_KEYS, OPENAI_LIMITS } from "../../../../../features/key/openai-links";
 import { Link } from "../../../../../i18n/navigation";
 
 /**
@@ -11,9 +12,6 @@ import { Link } from "../../../../../i18n/navigation";
  * (architecture.md §6.4). Static, so it works offline. The screenshots §8.1 asks for need a
  * real OpenAI account, and are a standing human item (progress.md D100).
  */
-const OPENAI_BILLING = "https://platform.openai.com/settings/organization/billing/overview";
-const OPENAI_KEYS = "https://platform.openai.com/api-keys";
-const OPENAI_LIMITS = "https://platform.openai.com/settings/organization/limits";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/settings/key/guide">): Promise<Metadata> {
   const { locale } = await params;

@@ -361,6 +361,88 @@ describe("openAiProvider", () => {
   });
 });
 
+const aReview = {
+  itemType: "cloze" as const,
+  stem: localised,
+  options: [option("a"), option("b"), option("c"), option("d")],
+  subSkill: "agreement" as const,
+  targetBand: "B" as const,
+  lang: "fr" as const,
+};
+
+describe("openAiProvider — lastUsage is the whole of the last call (D102)", () => {
+  const priced = { [MODELS.review]: { inputPerMTok: 1, outputPerMTok: 2 } };
+
+  it("sums a retried call's two completions, as OpenAI bills them", async () => {
+    let calls = 0;
+    const flaky: FetchLike = () => {
+      calls++;
+      return Promise.resolve(
+        calls === 1
+          ? chatResponse({ wrong: "shape" }, { prompt_tokens: 300, completion_tokens: 100 })
+          : chatResponse(VERDICT, { prompt_tokens: 400, completion_tokens: 50 }),
+      );
+    };
+    const provider = makeProvider({ fetchImpl: flaky, pricing: priced });
+    await provider.reviewItem(aReview);
+
+    const usage = provider.lastUsage();
+    expect(usage).toMatchObject({ model: MODELS.review, inputTokens: 700, outputTokens: 150 });
+    expect(usage?.costUsd).toBeCloseTo((700 * 1 + 150 * 2) / 1_000_000, 12);
+  });
+
+  it("reports the tokens of a call that failed after it was billed", async () => {
+    const bad: FetchLike = () =>
+      Promise.resolve(chatResponse({ wrong: "shape" }, { prompt_tokens: 200, completion_tokens: 20 }));
+    const provider = makeProvider({ fetchImpl: bad });
+    await expect(provider.reviewItem(aReview)).rejects.toBeInstanceOf(InvalidResponseError);
+    expect(provider.lastUsage()).toMatchObject({ inputTokens: 400, outputTokens: 40 });
+  });
+
+  it("bills an answer that had no content, which still cost its tokens", async () => {
+    const empty: FetchLike = () =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve({ choices: [{ message: {} }], usage: { prompt_tokens: 90, completion_tokens: 0 } }),
+        text: () => Promise.resolve(""),
+      });
+    const provider = makeProvider({ fetchImpl: empty });
+    await expect(provider.reviewItem(aReview)).rejects.toBeInstanceOf(InvalidResponseError);
+    expect(provider.lastUsage()).toMatchObject({ inputTokens: 90, outputTokens: 0 });
+  });
+
+  it("starts each call afresh, so a second call reports only its own tokens", async () => {
+    const provider = makeProvider();
+    await provider.reviewItem(aReview);
+    await provider.reviewItem(aReview);
+    expect(provider.lastUsage()).toMatchObject({ inputTokens: 100, outputTokens: 50 });
+  });
+
+  it("carries nothing over to a call that failed before it was billed", async () => {
+    let calls = 0;
+    const thenRefused: FetchLike = () => {
+      calls++;
+      return Promise.resolve(
+        calls === 1
+          ? chatResponse(VERDICT)
+          : { ok: false, status: 429, json: () => Promise.resolve({}), text: () => Promise.resolve("slow down") },
+      );
+    };
+    const provider = makeProvider({ fetchImpl: thenRefused });
+    await provider.reviewItem(aReview);
+    await expect(provider.reviewItem(aReview)).rejects.toBeInstanceOf(RateLimitError);
+    expect(provider.lastUsage()).toBeNull();
+  });
+
+  it("carries nothing over to a key check, which bills nothing", async () => {
+    const provider = makeProvider();
+    await provider.reviewItem(aReview);
+    await provider.verifyKey();
+    expect(provider.lastUsage()).toBeNull();
+  });
+});
+
 describe("openAiProvider — the key check (verifyKey, D99)", () => {
   it("makes one GET to the model list with the bearer key and no body, and records no usage", async () => {
     const spy = vi.fn(cannedFetch);

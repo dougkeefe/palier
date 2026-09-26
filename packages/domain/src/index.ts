@@ -81,9 +81,12 @@ export { ATTEMPT_MODES } from "./attempt.js";
 // port interface stays in `@palier/app` (§3.3).
 export type {
   AiCapabilities,
+  AiFeature,
+  FeatureCall,
   GenerateItemsRequest,
   GeneratePassageRequest,
   ItemDraft,
+  ModelPrice,
   PassageContext,
   PassageDraft,
   ReviewOption,
@@ -91,6 +94,7 @@ export type {
   ReviewVerdict,
   UsageRecord,
 } from "./ai.js";
+export { AI_FEATURES } from "./ai.js";
 export {
   itemDraftSchema,
   passageDraftSchema,

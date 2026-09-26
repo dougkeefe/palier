@@ -49,3 +49,14 @@ export { restBucket, restBuckets } from "./rest-bucket.js";
 
 export type { ItemStatistic } from "./item-statistics.js";
 export { itemStatistics, retirementVerdicts } from "./item-statistics.js";
+
+export type { CapState, Preflight, SpendRow, SpendTotals } from "./spend.js";
+export {
+  CAP_WARNING_PERCENT,
+  capState,
+  estimateFeatureCost,
+  monthStart,
+  preflight,
+  spendTotals,
+  weekStart,
+} from "./spend.js";

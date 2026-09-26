@@ -1,6 +1,7 @@
 import {
   aiProviderContract,
   attemptStoreContract,
+  costLedgerContract,
   examRunStoreContract,
   itemRepositoryContract,
   keyVaultContract,
@@ -15,6 +16,7 @@ import {
 import {
   fakeAiProvider,
   memoryAttemptStore,
+  memoryCostLedger,
   memoryExamRunStore,
   memoryItemRepository,
   memoryKeyVault,
@@ -46,3 +48,4 @@ syncStateStoreContract("memory", () => Promise.resolve(memorySyncStateStore()));
 syncTransportContract("memory", () => Promise.resolve(memorySyncServer().transport));
 telemetryStoreContract("memory", () => Promise.resolve(memoryTelemetryStore()));
 telemetrySinkContract("memory", () => Promise.resolve(memoryTelemetryCollector()));
+costLedgerContract("memory", () => Promise.resolve(memoryCostLedger()));

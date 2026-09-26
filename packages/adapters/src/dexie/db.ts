@@ -1,4 +1,4 @@
-import type { ExamRun, ISO, LedgerEntry, ScheduleEntry, SyncState, TelemetryConsent } from "@palier/app";
+import type { CostEntry, ExamRun, ISO, LedgerEntry, ScheduleEntry, SyncState, TelemetryConsent } from "@palier/app";
 import type { Attempt, AttemptId, AttemptMode, ItemId, SessionId, TelemetryEvent } from "@palier/domain";
 import { Dexie, type Table } from "dexie";
 
@@ -6,9 +6,10 @@ import { Dexie, type Table } from "dexie";
  * The local IndexedDB database, one Dexie instance per app (architecture.md 9.1).
  *
  * **Version 1** is the documented schema (architecture.md 9.1) **verbatim**, all
- * thirteen tables, even though only seven have adapters today (attempts, schedule,
- * sessions, examRuns, settings, keyVault, syncMeta). Declaring the whole of v1 meant the
- * remaining adapters could land without a schema bump. The unused tables are inert.
+ * thirteen tables, even though only eight have adapters today (attempts, schedule,
+ * sessions, examRuns, settings, keyVault, syncMeta, and costLedger since D101). Declaring the
+ * whole of v1 meant the remaining adapters could land without a schema bump, as the cost
+ * ledger did. The unused tables are inert.
  *
  * **Version 2** adds the two telemetry tables (progress.md D92): the queue of events
  * waiting for the network, and the device-local consent. They are new tables, not a
@@ -79,6 +80,13 @@ export type TelemetryQueueRow = {
   readonly id?: number;
   readonly event: TelemetryEvent;
 };
+
+/**
+ * A cost-ledger row under its auto-incremented key (progress.md D101): the port's `CostEntry`
+ * as it is. v1 declared the table with `ts` and `feature` indexed, and every other field is
+ * unindexed, so the entry needed no schema change. Never synced, never exported.
+ */
+export type CostLedgerRow = CostEntry & { readonly id?: number };
 
 /** The one telemetry-meta row: this device's consent, never synced (progress.md D92). */
 export type TelemetryMetaRow = {
@@ -152,6 +160,10 @@ export class PalierDb extends Dexie {
 
   get syncMeta(): Table<SyncMetaRow, string> {
     return this.table("syncMeta");
+  }
+
+  get costLedger(): Table<CostLedgerRow, number> {
+    return this.table("costLedger");
   }
 
   get telemetryQueue(): Table<TelemetryQueueRow, number> {

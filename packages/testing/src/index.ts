@@ -29,7 +29,7 @@ export type { SyncHandlerOptions } from "./msw/sync-handlers.js";
 export { telemetryHandlers } from "./msw/telemetry-handlers.js";
 export type { TelemetryHandlerOptions } from "./msw/telemetry-handlers.js";
 export { openAiHandlers } from "./msw/openai-handlers.js";
-export type { OpenAiHandlerOptions, OpenAiMode } from "./msw/openai-handlers.js";
+export type { OpenAiCompletion, OpenAiHandlerOptions, OpenAiMode } from "./msw/openai-handlers.js";
 export { mswServer } from "./msw/node.js";
 export { createPgHarness } from "./pglite/harness.js";
 export type { PgHarness } from "./pglite/harness.js";

@@ -46,6 +46,14 @@ describe("@palier/engine public surface", () => {
     expect(typeof engine.subSkillBreakdown).toBe("function");
   });
 
+  it("exports the spend meter, the cap and the pre-flight estimate", () => {
+    expect(typeof engine.spendTotals).toBe("function");
+    expect(typeof engine.estimateFeatureCost).toBe("function");
+    expect(typeof engine.capState).toBe("function");
+    expect(typeof engine.preflight).toBe("function");
+    expect(engine.CAP_WARNING_PERCENT).toBe(80);
+  });
+
   it("exports the daily planner and its budget shares", () => {
     expect(typeof engine.planDay).toBe("function");
     expect(engine.REVIEW_SHARE + engine.NEW_SHARE + engine.MAINTENANCE_SHARE).toBeCloseTo(1);
