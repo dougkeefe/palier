@@ -1,12 +1,15 @@
 import { sql } from "drizzle-orm";
 import {
   bigint,
+  bigserial,
   boolean,
+  date,
   index,
   integer,
   jsonb,
   pgTable,
   primaryKey,
+  smallint,
   text,
   timestamp,
   uuid,
@@ -91,4 +94,22 @@ export const rateLimits = pgTable("rate_limits", {
   key: text("key").primaryKey(),
   windowStart: instant("window_start").notNull(),
   count: integer("count").notNull().default(sql`0`),
+});
+
+/**
+ * Opt-in anonymous item telemetry (architecture.md §9.2, progress.md D93). It deliberately
+ * has **no account id, no device id, no IP and no timestamp**: nothing that links one row
+ * to another or to a person. The day it arrived is kept as a date, so the statistics job
+ * can window by month, and two rows cannot be tied together by their arrival instants.
+ * `rest_bucket` is §9.2's `session_accuracy_bucket`, renamed for what it is: the
+ * quintile of the rest of the exam (D93).
+ */
+export const telemetryEvents = pgTable("telemetry_events", {
+  id: bigserial("id", { mode: "number" }).primaryKey(),
+  itemId: text("item_id").notNull(),
+  correct: boolean("correct").notNull(),
+  responseMs: integer("response_ms").notNull(),
+  restBucket: smallint("rest_bucket").notNull(),
+  bankVersion: integer("bank_version").notNull(),
+  receivedOn: date("received_on", { mode: "string" }).notNull(),
 });

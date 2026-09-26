@@ -10,6 +10,7 @@
     "dev": "node scripts/prepare-public.mjs && next dev",
     "build": "node scripts/prepare-public.mjs && next build",
     "db:migrate": "node scripts/db-migrate.mjs",
+    "item-statistics": "node scripts/item-statistics.mjs",
     "start": "next start",
     "check-types": "next typegen && tsc --noEmit",
     "bundle-size": "node scripts/check-bundle-size.mjs",
