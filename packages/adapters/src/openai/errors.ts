@@ -31,6 +31,13 @@ export class ProviderRequestError extends OpenAiError {
 export class ProviderUnavailableError extends OpenAiError {}
 
 /**
+ * The provider did not answer within the adapter's time limit (progress.md D99). Never
+ * retried: a slow provider is not made faster by asking again, and a retried generation
+ * could bill twice.
+ */
+export class ProviderTimeoutError extends OpenAiError {}
+
+/**
  * The response was well-formed HTTP but the body did not survive re-validation
  * against our schema, even after the one retry the structured-output contract
  * allows (architecture.md §8.2). This is the failure that protects the bank from

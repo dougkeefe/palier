@@ -23,6 +23,11 @@ import type { ApiKeyRow, DeviceKeyRow, DeviceSecretRow, PalierDb } from "./db.js
  *
  * The `device-secret` is a separate value used only as the sync identity seed (§9.3), so
  * `clear` wipes the API key but not the secret or the wrapping key.
+ *
+ * **Do-not-remember mode** (§6.2, progress.md D98): a key put with `remember: false` lives in
+ * this closure and nowhere else. The composition root builds one vault per page load, so the
+ * closure is the tab's, and a reload forgets it. Putting it deletes any stored ciphertext
+ * first; putting a remembered key drops it.
  */
 
 const encoder = new TextEncoder();
@@ -81,8 +86,22 @@ export const dexieKeyVault = (db: PalierDb): KeyVault => {
     });
   };
 
+  /** The do-not-remember key, for this tab only. Never written anywhere. */
+  let tabKey: string | null = null;
+
+  const storedRow = async (): Promise<ApiKeyRow | null> => {
+    const row = await db.keyVault.get(KEY_ID);
+    return row !== undefined && row.id === KEY_ID ? row : null;
+  };
+
   return {
-    putApiKey: async (key: string) => {
+    putApiKey: async (key, options) => {
+      if (!(options?.remember ?? true)) {
+        await db.keyVault.delete(KEY_ID);
+        tabKey = key;
+        return;
+      }
+      tabKey = null;
       const wrappingKey = await deviceKey();
       const iv = globalThis.crypto.getRandomValues(new Uint8Array(IV_BYTES));
       const ciphertext = await globalThis.crypto.subtle.encrypt(
@@ -94,8 +113,9 @@ export const dexieKeyVault = (db: PalierDb): KeyVault => {
       await db.keyVault.put(row);
     },
     withApiKey: async (fn) => {
-      const row = await db.keyVault.get(KEY_ID);
-      if (row === undefined || row.id !== KEY_ID) {
+      if (tabKey !== null) return fn(tabKey);
+      const row = await storedRow();
+      if (row === null) {
         throw new Error("No API key has been stored.");
       }
       const plaintext = await globalThis.crypto.subtle.decrypt(
@@ -105,8 +125,13 @@ export const dexieKeyVault = (db: PalierDb): KeyVault => {
       );
       return fn(decoder.decode(plaintext));
     },
-    hasApiKey: async () => (await db.keyVault.get(KEY_ID)) !== undefined,
+    hasApiKey: async () => tabKey !== null || (await storedRow()) !== null,
+    apiKeyStorage: async () => {
+      if (tabKey !== null) return "tab";
+      return (await storedRow()) === null ? null : "device";
+    },
     clear: async () => {
+      tabKey = null;
       await db.keyVault.delete(KEY_ID);
     },
     deviceSecret: async () => toHex(await deviceSecretBytes()),

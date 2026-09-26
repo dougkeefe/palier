@@ -56,4 +56,62 @@ describe("dexieKeyVault", () => {
     expect(first).toBe(second);
     expect(first).toMatch(/^[0-9a-f]{64}$/);
   });
+
+  describe("do-not-remember mode (D98)", () => {
+    const rowsAtRest = async (db: PalierDb) => (await db.keyVault.toArray()).map((row) => row.id).sort();
+
+    it("never writes a tab-only key: no api-key row, and nothing at rest carries it [R12]", async () => {
+      const key = "sk-tab-only-never-written";
+      const db = new PalierDb(dbName());
+      await dexieKeyVault(db).putApiKey(key, { remember: false });
+
+      expect(await rowsAtRest(db)).not.toContain("api-key");
+      const everything = JSON.stringify(await db.keyVault.toArray());
+      expect(everything).not.toContain(key);
+    });
+
+    it("forgets a tab-only key on a reload, which is a fresh vault over the same database", async () => {
+      const name = dbName();
+      await dexieKeyVault(new PalierDb(name)).putApiKey("sk-tab-only", { remember: false });
+
+      const reloaded = dexieKeyVault(new PalierDb(name));
+      expect(await reloaded.hasApiKey()).toBe(false);
+      expect(await reloaded.apiKeyStorage()).toBeNull();
+    });
+
+    it("deletes a stored key when a tab-only one replaces it", async () => {
+      const db = new PalierDb(dbName());
+      const vault = dexieKeyVault(db);
+      await vault.putApiKey("sk-remembered");
+      expect(await rowsAtRest(db)).toContain("api-key");
+
+      await vault.putApiKey("sk-tab-only", { remember: false });
+
+      expect(await rowsAtRest(db)).not.toContain("api-key");
+      expect(await dexieKeyVault(db).hasApiKey()).toBe(false);
+    });
+
+    it("writes ciphertext again when a remembered key replaces a tab-only one", async () => {
+      const name = dbName();
+      const db = new PalierDb(name);
+      const vault = dexieKeyVault(db);
+      await vault.putApiKey("sk-tab-only", { remember: false });
+      await vault.putApiKey("sk-remembered-after", { remember: true });
+
+      expect(await rowsAtRest(db)).toContain("api-key");
+      const reloaded = dexieKeyVault(new PalierDb(name));
+      expect(await reloaded.withApiKey((k) => Promise.resolve(k))).toBe("sk-remembered-after");
+    });
+
+    it("keeps the device secret and wrapping key when a tab-only key is cleared", async () => {
+      const db = new PalierDb(dbName());
+      const vault = dexieKeyVault(db);
+      const secret = await vault.deviceSecret();
+      await vault.putApiKey("sk-tab-only", { remember: false });
+      await vault.clear();
+
+      expect(await vault.deviceSecret()).toBe(secret);
+      expect(await rowsAtRest(db)).toEqual(["device-secret"]);
+    });
+  });
 });

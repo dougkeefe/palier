@@ -15,8 +15,11 @@ import type {
  * port's shape, not to stand in for a model's judgement. The content factory
  * ships its own richer scripted provider (it may not import `@palier/testing`),
  * so this stays minimal on purpose.
+ *
+ * `verifyKeyFails`, when given, is what `verifyKey` rejects with, so a caller's handling of
+ * each failure can be tested without a network.
  */
-export const fakeAiProvider = (): AiProvider => {
+export const fakeAiProvider = ({ verifyKeyFails }: { readonly verifyKeyFails?: Error } = {}): AiProvider => {
   let usage: UsageRecord | null = null;
   const bill = (tokens: number): void => {
     usage = { model: "fake", inputTokens: tokens, outputTokens: tokens };
@@ -75,6 +78,8 @@ export const fakeAiProvider = (): AiProvider => {
       };
       return Promise.resolve(verdict);
     },
+
+    verifyKey: () => (verifyKeyFails === undefined ? Promise.resolve() : Promise.reject(verifyKeyFails)),
 
     lastUsage: () => usage,
   };

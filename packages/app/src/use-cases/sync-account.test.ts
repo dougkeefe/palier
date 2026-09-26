@@ -51,6 +51,7 @@ const vault = (): KeyVault => ({
   putApiKey: () => Promise.resolve(),
   withApiKey: () => Promise.reject(new Error("no key")),
   hasApiKey: () => Promise.resolve(false),
+  apiKeyStorage: () => Promise.resolve(null),
   clear: () => Promise.resolve(),
   deviceSecret: () => Promise.resolve("secret"),
 });

@@ -8,6 +8,7 @@ import {
   InvalidApiKeyError,
   InvalidResponseError,
   ProviderRequestError,
+  ProviderTimeoutError,
   ProviderUnavailableError,
   RateLimitError,
 } from "./errors.js";
@@ -63,9 +64,18 @@ const chatResponse = (content: unknown, usage = { prompt_tokens: 100, completion
   text: () => Promise.resolve(""),
 });
 
-/** Routes each call to the right envelope by the model in the request body. */
-const cannedFetch: FetchLike = (_url, init) => {
-  const model = (JSON.parse(init.body) as { model: string }).model;
+/** OpenAI's model list, the answer `verifyKey` reads. */
+const modelsResponse = (body: unknown = { object: "list", data: [{ id: "m-draft", object: "model" }] }, status = 200) => ({
+  ok: status >= 200 && status < 300,
+  status,
+  json: () => Promise.resolve(body),
+  text: () => Promise.resolve(JSON.stringify(body)),
+});
+
+/** Routes each call to the right envelope by the model in the request body, or to the model list. */
+const cannedFetch: FetchLike = (url, init) => {
+  if (url.endsWith("/models")) return Promise.resolve(modelsResponse());
+  const model = (JSON.parse(init.body ?? "{}") as { model: string }).model;
   if (model === MODELS.passage) return Promise.resolve(chatResponse(PASSAGE_ENVELOPE));
   if (model === MODELS.draft) return Promise.resolve(chatResponse(ITEM_ENVELOPE));
   return Promise.resolve(chatResponse(VERDICT));
@@ -97,7 +107,7 @@ describe("openAiProvider", () => {
     const [url, init] = spy.mock.calls[0]!;
     expect(url).toContain("/chat/completions");
     expect(init.headers.authorization).toBe("Bearer sk-test");
-    expect((JSON.parse(init.body) as { model: string }).model).toBe(MODELS.draft);
+    expect((JSON.parse(init.body ?? "{}") as { model: string }).model).toBe(MODELS.draft);
   });
 
   it("records token usage after a call, and no usage before", async () => {
@@ -348,5 +358,176 @@ describe("openAiProvider", () => {
     });
     const body = spy.mock.calls[0]![1].body;
     expect(body).toContain("English");
+  });
+});
+
+describe("openAiProvider — the key check (verifyKey, D99)", () => {
+  it("makes one GET to the model list with the bearer key and no body, and records no usage", async () => {
+    const spy = vi.fn(cannedFetch);
+    const provider = makeProvider({ fetchImpl: spy });
+
+    await expect(provider.verifyKey()).resolves.toBeUndefined();
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    const [url, init] = spy.mock.calls[0]!;
+    expect(url).toBe("https://api.openai.com/v1/models");
+    expect(init.method).toBe("GET");
+    expect(init.headers.authorization).toBe("Bearer sk-test");
+    expect(init.body).toBeUndefined();
+    expect(provider.lastUsage()).toBeNull();
+  });
+
+  const verifyWith = (fetchImpl: FetchLike) => makeProvider({ fetchImpl }).verifyKey();
+
+  it.each([
+    [401, InvalidApiKeyError],
+    [429, RateLimitError],
+    [500, ProviderRequestError],
+  ] as const)("translates a %i to our own error", async (status, error) => {
+    const refused: FetchLike = () => Promise.resolve(modelsResponse({ error: { code: "x" } }, status));
+    await expect(verifyWith(refused)).rejects.toBeInstanceOf(error);
+  });
+
+  it("translates a network fault to ProviderUnavailableError", async () => {
+    await expect(verifyWith(() => Promise.reject(new TypeError("Failed to fetch")))).rejects.toBeInstanceOf(
+      ProviderUnavailableError,
+    );
+  });
+
+  it("rejects a 200 that is not a model list as InvalidResponseError", async () => {
+    await expect(verifyWith(() => Promise.resolve(modelsResponse({ object: "list" })))).rejects.toBeInstanceOf(
+      InvalidResponseError,
+    );
+    await expect(verifyWith(() => Promise.resolve(modelsResponse(null)))).rejects.toBeInstanceOf(InvalidResponseError);
+  });
+
+  it("rejects a 200 whose body is not JSON (a captive portal) as InvalidResponseError", async () => {
+    const html: FetchLike = () =>
+      Promise.resolve({ ok: true, status: 200, json: () => Promise.reject(new SyntaxError("<html>")), text: () => Promise.resolve("<html>") });
+    await expect(verifyWith(html)).rejects.toBeInstanceOf(InvalidResponseError);
+  });
+});
+
+describe("openAiProvider — time limits (D99)", () => {
+  /** A fetch that never answers and ignores the abort, the worst case the race must cover. */
+  const hangs = (): { fetchImpl: FetchLike; signals: (AbortSignal | undefined)[] } => {
+    const signals: (AbortSignal | undefined)[] = [];
+    return {
+      signals,
+      fetchImpl: (_url, init) => {
+        signals.push(init.signal);
+        return new Promise(() => undefined);
+      },
+    };
+  };
+
+  it("abandons a key check that outlives its limit as ProviderTimeoutError, and aborts the request", async () => {
+    const { fetchImpl, signals } = hangs();
+    await expect(makeProvider({ fetchImpl, verifyTimeoutMs: 5 }).verifyKey()).rejects.toBeInstanceOf(
+      ProviderTimeoutError,
+    );
+    expect(signals[0]?.aborted).toBe(true);
+  });
+
+  it("abandons a completion that outlives its limit, and never retries it", async () => {
+    const { fetchImpl, signals } = hangs();
+    const provider = makeProvider({ fetchImpl, timeoutMs: 5, maxRetries: 3 });
+    await expect(
+      provider.generateItems({
+        promptSpec: { itemType: "cloze", targetBand: "B", subSkill: "agreement", instructions: "x" },
+        topic: "human-resources",
+        lang: "fr",
+        count: 1,
+      }),
+    ).rejects.toBeInstanceOf(ProviderTimeoutError);
+    expect(signals).toHaveLength(1);
+  });
+
+  it("counts reading the answer inside the limit, not only its headers", async () => {
+    const slowBody: FetchLike = () =>
+      Promise.resolve({ ok: true, status: 200, json: () => new Promise(() => undefined), text: () => Promise.resolve("") });
+    await expect(makeProvider({ fetchImpl: slowBody, verifyTimeoutMs: 5 }).verifyKey()).rejects.toBeInstanceOf(
+      ProviderTimeoutError,
+    );
+  });
+
+  it("clears its timer once the call settles, so nothing fires later", async () => {
+    vi.useFakeTimers();
+    try {
+      await makeProvider().verifyKey();
+      expect(vi.getTimerCount()).toBe(0);
+      await expect(verifyWithStatus(401)).rejects.toBeInstanceOf(InvalidApiKeyError);
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("has a default limit for both kinds of call", async () => {
+    vi.useFakeTimers();
+    try {
+      const { fetchImpl } = hangs();
+      const check = makeProvider({ fetchImpl }).verifyKey();
+      const settled = expect(check).rejects.toBeInstanceOf(ProviderTimeoutError);
+      await vi.advanceTimersByTimeAsync(10_000);
+      await settled;
+
+      const completion = makeProvider({ fetchImpl }).reviewItem({
+        itemType: "cloze",
+        stem: localised,
+        options: [option("a")],
+        subSkill: "agreement",
+        targetBand: "B",
+        lang: "fr",
+      });
+      const late = expect(completion).rejects.toBeInstanceOf(ProviderTimeoutError);
+      await vi.advanceTimersByTimeAsync(119_999);
+      expect(vi.getTimerCount()).toBe(1);
+      await vi.advanceTimersByTimeAsync(1);
+      await late;
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  const verifyWithStatus = (status: number) =>
+    makeProvider({ fetchImpl: () => Promise.resolve(modelsResponse({}, status)) }).verifyKey();
+});
+
+describe("openAiProvider — the key never rides out on an error [R12]", () => {
+  const SENTINEL = "sk-palier-sentinel-adapter-0123456789";
+  const everything = (error: unknown): string => {
+    const e = error as Error & { cause?: unknown };
+    return [e.message, e.stack ?? "", String(e.cause ?? ""), JSON.stringify(e)].join("\n");
+  };
+  const failures: [string, FetchLike][] = [
+    ["a 401", () => Promise.resolve(modelsResponse({ error: { message: "bad key" } }, 401))],
+    ["a 429", () => Promise.resolve(modelsResponse({}, 429))],
+    // A proxy that echoes the request back, key and all, in its error body.
+    ["a 500 echoing the key", () => Promise.resolve(modelsResponse({ echo: `Bearer ${SENTINEL}` }, 500))],
+    ["a network fault", () => Promise.reject(new TypeError("Failed to fetch"))],
+    ["a malformed answer", () => Promise.resolve(modelsResponse({ nope: true }))],
+    ["a timeout", () => new Promise(() => undefined)],
+  ];
+
+  it.each(failures)("keeps the key out of the error for %s", async (_name, fetchImpl) => {
+    const error: unknown = await openAiProvider({ apiKey: SENTINEL, models: MODELS, fetchImpl, verifyTimeoutMs: 5 })
+      .verifyKey()
+      .then(
+        () => null,
+        (e: unknown) => e,
+      );
+    expect(error).toBeInstanceOf(Error);
+    expect(everything(error)).not.toContain(SENTINEL);
+  });
+
+  it("keeps the status and the rest of the body for diagnosis", async () => {
+    const echo: FetchLike = () => Promise.resolve(modelsResponse({ echo: `Bearer ${SENTINEL}` }, 500));
+    const error = await openAiProvider({ apiKey: SENTINEL, models: MODELS, fetchImpl: echo })
+      .verifyKey()
+      .catch((e: unknown) => e);
+    expect(error).toBeInstanceOf(ProviderRequestError);
+    expect((error as ProviderRequestError).status).toBe(500);
+    expect((error as Error).message).toContain("Bearer [redacted]");
   });
 });

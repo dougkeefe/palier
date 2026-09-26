@@ -132,3 +132,14 @@ export type {
 } from "./telemetry.js";
 export { flushTelemetry, recordExamTelemetry, setTelemetryConsent, telemetryConsent } from "./telemetry.js";
 export { examTelemetryEvents } from "./exam-telemetry-events.js";
+
+export type { AiDeps, ApiKeyDeps, ApiKeyStatus, SaveApiKeyRequest } from "./api-key.js";
+export {
+  EmptyApiKeyError,
+  NoApiKeyError,
+  apiKeyStatus,
+  checkApiKey,
+  removeApiKey,
+  saveApiKey,
+  withAiProvider,
+} from "./api-key.js";

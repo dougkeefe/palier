@@ -48,3 +48,11 @@ describe("scriptedAiProvider.generateItems", () => {
     expect(await draftStem("B", "cloze")).not.toBe(await draftStem("B", "error-id"));
   });
 });
+
+describe("scriptedAiProvider.verifyKey", () => {
+  it("accepts without a call, since the scripted provider holds no key and bills nothing", async () => {
+    const provider = scriptedAiProvider();
+    await expect(provider.verifyKey()).resolves.toBeUndefined();
+    expect(provider.lastUsage()).toBeNull();
+  });
+});

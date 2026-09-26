@@ -19,6 +19,7 @@ export {
   InvalidResponseError,
   OpenAiError,
   ProviderRequestError,
+  ProviderTimeoutError,
   ProviderUnavailableError,
   RateLimitError,
 } from "./errors.js";

@@ -18,6 +18,7 @@ const providerWith = (usage: UsageRecord | null): AiProvider => ({
       registerFlag: { flagged: false },
       estimatedBand: "B",
     }),
+  verifyKey: () => Promise.resolve(),
   lastUsage: () => usage,
 });
 
@@ -44,5 +45,17 @@ describe("meterProvider", () => {
     expect(metered.totals().calls).toBe(0);
     expect(metered.provider.capabilities().reviewItem).toBe(true);
     expect(metered.provider.lastUsage()).toBeNull();
+  });
+
+  it("passes a key check through and accounts nothing for it", async () => {
+    let checks = 0;
+    const inner = { ...providerWith({ model: "m", inputTokens: 10, outputTokens: 5, costUsd: 1 }), verifyKey: () => {
+      checks += 1;
+      return Promise.resolve();
+    } };
+    const metered = meterProvider(inner);
+    await metered.provider.verifyKey();
+    expect(checks).toBe(1);
+    expect(metered.totals()).toEqual({ calls: 0, inputTokens: 0, outputTokens: 0, costUsd: null });
   });
 });
