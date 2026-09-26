@@ -8,6 +8,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "../../i18n/navigation";
 import { useContainer } from "../ContainerProvider";
 import { ExportButton } from "./ExportButton";
+import { TelemetrySettings } from "./TelemetrySettings";
 
 type ImportState =
   | { readonly status: "idle" }
@@ -102,6 +103,8 @@ export function DataSettings() {
           {imported.status === "failed" ? <Toast tone="incorrect">{t("importFailed")}</Toast> : null}
         </form>
       </Card>
+
+      <TelemetrySettings />
 
       <Card>
         <h2>{t("deleteTitle")}</h2>

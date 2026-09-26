@@ -29,6 +29,7 @@ import {
 import { Link, useRouter } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { useContainer } from "../ContainerProvider";
+import { useSync } from "../sync/SyncRunner";
 
 type Loaded =
   | { readonly status: "loading" }
@@ -136,6 +137,7 @@ function Runner({
   const t = useTranslations("exam");
   const tDrill = useTranslations("drill");
   const router = useRouter();
+  const { notify } = useSync();
   const [state, dispatch] = useReducer(runnerReducer, null, () => startRunner(run, form, items, performance.now()));
   const limit = limitMs(form, run.timeAllowance ?? 1);
 
@@ -272,6 +274,9 @@ function Runner({
       () => {
         setSubmitFailed(false);
         dispatch({ type: "submitted" });
+        // A submitted exam is a completed session to sync, and its telemetry (if this
+        // device shares) is flushed at once (progress.md D92).
+        notify("session-complete");
         later(() => router.push({ pathname: "/exam/results", query: { run: run.id } }), SUBMIT_PAUSE_MS);
       },
       () => {
@@ -282,7 +287,7 @@ function Runner({
         }, SUBMIT_RETRY_MS);
       },
     );
-  }, [state.phase, state.outbox.length, enqueue, container, run.id, stamp, router, later]);
+  }, [state.phase, state.outbox.length, enqueue, container, run.id, stamp, router, later, notify]);
 
   // The item's passage, if it has one.
   useEffect(() => {

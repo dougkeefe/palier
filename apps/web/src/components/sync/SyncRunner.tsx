@@ -4,6 +4,7 @@ import type { SyncOutcome } from "@palier/app";
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 import { deviceLabel } from "../../lib/device-label";
+import { singleFlight } from "../../lib/single-flight";
 import { type SyncTrigger, delayFor, runsAgainAfterCurrent, shouldSync } from "../../lib/sync-triggers";
 import { INITIAL_VIEW, type SyncView, viewFromOutcome, viewFromState, viewSyncing } from "../../features/sync/sync-view";
 import { useContainer } from "../ContainerProvider";
@@ -18,6 +19,8 @@ type SyncContextValue = {
   readonly refresh: () => Promise<void>;
   /** Show the outcome of an exchange the settings page ran itself (pairing). */
   readonly settle: (outcome: SyncOutcome) => void;
+  /** Send any queued telemetry now, as after an opt-in (progress.md D92). */
+  readonly flushTelemetry: () => void;
 };
 
 const SYNCING_LABEL_DELAY_MS = 400;
@@ -28,6 +31,7 @@ const SyncContext = createContext<SyncContextValue>({
   notify: () => undefined,
   refresh: () => Promise.resolve(),
   settle: () => undefined,
+  flushTelemetry: () => undefined,
 });
 
 /**
@@ -38,6 +42,11 @@ const SyncContext = createContext<SyncContextValue>({
  * are `shouldSync`/`delayFor`/`runsAgainAfterCurrent`, and the display is `sync-view.ts`,
  * so this component holds only the listeners. Sync never interrupts study (§11):
  * whatever happens here only moves the quiet indicator.
+ *
+ * **Every trigger also flushes queued telemetry** (progress.md D92), at once and
+ * whatever `shouldSync` or the sync switch says: telemetry is not sync, and a batch
+ * queued by an offline submit must go out on the next trigger that finds the network.
+ * The flush is single-flight and silent, and does nothing unless this device shares.
  */
 export function SyncRunner({ children }: { children: ReactNode }) {
   const container = useContainer();
@@ -47,6 +56,14 @@ export function SyncRunner({ children }: { children: ReactNode }) {
   const again = useRef(false);
   const [busy, setBusy] = useState(false);
   const pending = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const flush = useMemo(
+    () =>
+      singleFlight(async () => {
+        if (container.status === "ready") await container.container.useCases.flushTelemetry();
+      }),
+    [container],
+  );
+  const flushTelemetry = useCallback(() => void flush(), [flush]);
 
   const refresh = useCallback(async () => {
     if (container.status !== "ready") return;
@@ -89,12 +106,13 @@ export function SyncRunner({ children }: { children: ReactNode }) {
 
   const notify = useCallback(
     (trigger: SyncTrigger) => {
+      void flush();
       const delay = delayFor(trigger);
       clearTimeout(pending.current);
       if (delay === 0) void run(trigger);
       else pending.current = setTimeout(() => void run(trigger), delay);
     },
-    [run],
+    [run, flush],
   );
 
   const settle = useCallback((outcome: SyncOutcome) => {
@@ -124,7 +142,10 @@ export function SyncRunner({ children }: { children: ReactNode }) {
     };
   }, [container, notify, refresh]);
 
-  const value = useMemo(() => ({ view, busy, notify, refresh, settle }), [view, busy, notify, refresh, settle]);
+  const value = useMemo(
+    () => ({ view, busy, notify, refresh, settle, flushTelemetry }),
+    [view, busy, notify, refresh, settle, flushTelemetry],
+  );
   return <SyncContext value={value}>{children}</SyncContext>;
 }
 

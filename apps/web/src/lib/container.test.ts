@@ -130,6 +130,11 @@ describe("createContainer", () => {
     expect((await c.schedule.get(second))?.due).not.toBeNull();
   });
 
+  it("discloses what the practice trend rests on: none of the fixture items has statistics yet", async () => {
+    const c = createContainer({ hermetic: true });
+    expect(await c.useCases.practiceTrendEvidence({ skill: "reading" })).toEqual({ items: 0, trusted: 0 });
+  });
+
   it("plans a non-empty daily session from the fixture bank", async () => {
     const c = createContainer({ hermetic: true });
 
@@ -524,6 +529,60 @@ describe("createContainer in production", () => {
 
   it("round-trips a device's progress through export, wipe and import, over real IndexedDB [R11]", async () => {
     await roundTripsProgress(createContainer({ hermetic: false }));
+  });
+
+  it("queues a submitted exam's telemetry in IndexedDB, keeps it through a reload offline, and flushes it once the route answers (D92)", async () => {
+    const posted: { body: string; credentials: string | undefined }[] = [];
+    let online = false;
+    vi.stubGlobal("fetch", (url: string, init?: { body?: string; credentials?: string }) => {
+      if (url !== "/api/telemetry") return serveCommittedBank(url);
+      if (!online) return Promise.reject(new TypeError("Failed to fetch"));
+      posted.push({ body: init?.body ?? "", credentials: init?.credentials });
+      return Promise.resolve({ ok: true, status: 202 });
+    });
+    const c = createContainer({ hermetic: false });
+    expect(await c.useCases.telemetryConsent()).toBe("unasked");
+    await c.useCases.setTelemetryConsent({ consent: "on" });
+
+    const [form] = await c.useCases.examForms();
+    if (form === undefined) throw new Error("the committed bank ships forms");
+    const runId = sessionId(c.ids.ulid());
+    await c.useCases.startExam({ runId, formId: form.id });
+    const [first] = await c.items.byIds(form.itemIds.slice(0, 1));
+    if (first === undefined) throw new Error("a form has items");
+    await c.useCases.answerExamItem({
+      runId,
+      itemId: first.id,
+      response: first.key,
+      msToFirstSelect: 800,
+      msToConfirm: 1_200,
+      changedAnswer: false,
+      elapsedMs: 10_000,
+    });
+    await c.useCases.submitExam({ runId, elapsedMs: 10_000 });
+
+    // A reload with the network still down: the queue is in IndexedDB, not in memory.
+    const reloaded = createContainer({ hermetic: false });
+    expect(await reloaded.useCases.flushTelemetry()).toEqual({ sent: 0, dropped: 0, pending: true });
+
+    online = true;
+    expect(await reloaded.useCases.flushTelemetry()).toEqual({ sent: 1, dropped: 0, pending: false });
+    expect(posted).toHaveLength(1);
+    expect(posted[0]?.credentials).toBe("omit");
+    const { events } = JSON.parse(posted[0]?.body ?? "{}") as { events: Record<string, unknown>[] };
+    expect(events).toEqual([
+      { itemId: first.id, correct: true, responseMs: 1_200, bankVersion: BANK_VERSION, restBucket: 0 },
+    ]);
+    expect(await reloaded.useCases.flushTelemetry()).toEqual({ sent: 0, dropped: 0, pending: false });
+  });
+
+  it("forgets the telemetry consent and queue on a wipe, back to not asked", async () => {
+    const c = createContainer({ hermetic: false });
+    await c.useCases.setTelemetryConsent({ consent: "on" });
+
+    await c.useCases.wipeData();
+
+    expect(await c.useCases.telemetryConsent()).toBe("unasked");
   });
 
   it("keeps the device secret through a wipe, so the device keeps its sync identity (D50)", async () => {

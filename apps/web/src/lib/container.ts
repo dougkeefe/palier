@@ -49,6 +49,11 @@ import type {
   SubmitExamRequest,
   SubmitExamResult,
   SyncTransport,
+  FlushTelemetryResult,
+  SetTelemetryConsentRequest,
+  TelemetryConsent,
+  TelemetrySink,
+  TelemetryStore,
 } from "@palier/app";
 import {
   answerExamItem,
@@ -62,12 +67,14 @@ import {
   examReport,
   exportData,
   flagExamItem,
+  flushTelemetry,
   importData,
   latestExamResult,
   listDevices,
   pairDevice,
   planDailySession,
   practiceTrend,
+  practiceTrendEvidence,
   progressReport,
   queueForReview,
   removeDevice,
@@ -77,20 +84,23 @@ import {
   reviewQueue,
   runDiagnostic,
   setSyncEnabled,
+  setTelemetryConsent,
   startExam,
   startSession,
   submitExam,
   syncNow,
+  telemetryConsent,
   wipeData,
 } from "@palier/app";
 import { httpBankRepository } from "@palier/adapters/bank";
 import { dexieStores } from "@palier/adapters/dexie";
 import { webCryptoIdGenerator } from "@palier/adapters/ids";
 import { httpSyncTransport } from "@palier/adapters/sync";
+import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
 import type { ExamForm, ExamProfile } from "@palier/domain";
 import { parseExamProfileOrThrow } from "@palier/domain";
-import type { DayPlan, ExamResult, SkillTrend } from "@palier/engine";
+import type { DayPlan, ExamResult, SkillTrend, TrendEvidence } from "@palier/engine";
 import {
   counterIdGenerator,
   fakeClock,
@@ -103,6 +113,7 @@ import {
   memorySessionStore,
   memorySettingsStore,
   memorySyncStateStore,
+  memoryTelemetryStore,
   seededRandom,
 } from "@palier/testing/in-memory";
 
@@ -177,6 +188,8 @@ export type UseCases = {
   readonly diagnosticReadout: (request: DiagnosticReadoutRequest) => Promise<SkillTrend>;
   /** The readiness card's practice trend (D64). */
   readonly practiceTrend: (request: PracticeTrendRequest) => Promise<SkillTrend>;
+  /** What the trend rests on, for the readiness card's disclosure (PRD §13.0, D94). */
+  readonly practiceTrendEvidence: (request: PracticeTrendRequest) => Promise<TrendEvidence>;
   readonly reviewQueue: (request: ReviewQueueRequest) => Promise<ReviewQueueResult>;
   readonly progressReport: (request: ProgressReportRequest) => Promise<ProgressReport>;
   /** The data-rights trio [R11]: one action each (progress.md D61, D62). */
@@ -207,6 +220,10 @@ export type UseCases = {
   readonly examReport: (request: ExamReportRequest) => Promise<ExamReport>;
   readonly latestExamResult: () => Promise<LatestExamResult | null>;
   readonly queueForReview: (request: QueueForReviewRequest) => Promise<boolean>;
+  /** Opt-in anonymous item telemetry (PRD §15, progress.md D92): this device's choice, and the flush. */
+  readonly telemetryConsent: () => Promise<TelemetryConsent>;
+  readonly setTelemetryConsent: (request: SetTelemetryConsentRequest) => Promise<void>;
+  readonly flushTelemetry: () => Promise<FlushTelemetryResult>;
 };
 
 export type Ports = {
@@ -230,6 +247,10 @@ export type Ports = {
   /** The HTTP sync transport, same-origin, presenting the vault's device secret. */
   readonly sync: SyncTransport;
   readonly syncState: SyncStateStore;
+  /** The device-local telemetry consent and queue, never synced (D92). */
+  readonly telemetry: TelemetryStore;
+  /** The HTTP telemetry sink, same-origin, with no credential and no cookie. */
+  readonly telemetrySink: TelemetrySink;
 };
 
 export type Container = Ports & {
@@ -294,6 +315,12 @@ function buildUseCases(ports: Ports): UseCases {
         items: ports.items,
         attempts: ports.attempts,
       }),
+    practiceTrendEvidence: (request) =>
+      practiceTrendEvidence(request, {
+        items: ports.items,
+        attempts: ports.attempts,
+        profile: PROFILE,
+      }),
     reviewQueue: (request) =>
       reviewQueue(request, {
         clock: ports.clock,
@@ -330,6 +357,7 @@ function buildUseCases(ports: Ports): UseCases {
         examRuns: ports.examRuns,
         settings: ports.settings,
         vault: ports.vault,
+        telemetry: ports.telemetry,
       }),
     syncNow: (request) => syncNow(request, syncDeps(ports)),
     syncState: () => ports.syncState.state(),
@@ -338,7 +366,7 @@ function buildUseCases(ports: Ports): UseCases {
     listDevices: () => listDevices({ transport: ports.sync, syncState: ports.syncState }),
     removeDevice: (request) => removeDevice(request, { transport: ports.sync, syncState: ports.syncState }),
     setSyncEnabled: (request) => setSyncEnabled(request, { transport: ports.sync, syncState: ports.syncState }),
-    deleteEverywhere: () => deleteEverywhere({ ...syncDeps(ports), vault: ports.vault }),
+    deleteEverywhere: () => deleteEverywhere({ ...syncDeps(ports), vault: ports.vault, telemetry: ports.telemetry }),
     examForms: () => examForms({ items: ports.items }),
     examInProgress: () => examInProgress({ items: ports.items, examRuns: ports.examRuns }),
     startExam: (request) => startExam(request, examDeps(ports)),
@@ -352,6 +380,7 @@ function buildUseCases(ports: Ports): UseCases {
         attempts: ports.attempts,
         schedule: ports.schedule,
         profile: PROFILE,
+        telemetry: ports.telemetry,
       }),
     rescoreExam: (request) => rescoreExam(request, { items: ports.items, examRuns: ports.examRuns }),
     examReport: (request) =>
@@ -364,6 +393,10 @@ function buildUseCases(ports: Ports): UseCases {
         schedule: ports.schedule,
         profile: PROFILE,
       }),
+    telemetryConsent: () => telemetryConsent({ telemetry: ports.telemetry }),
+    setTelemetryConsent: (request) =>
+      setTelemetryConsent(request, { telemetry: ports.telemetry, items: ports.items, examRuns: ports.examRuns }),
+    flushTelemetry: () => flushTelemetry({ telemetry: ports.telemetry, sink: ports.telemetrySink }),
   };
 }
 
@@ -426,14 +459,16 @@ function productionPorts(): Ports {
     vault: stores.keyVault,
     sync: httpSyncTransport({ baseUrl: SYNC_BASE_URL, credentials: () => stores.keyVault.deviceSecret() }),
     syncState: stores.syncState,
+    telemetry: stores.telemetry,
+    telemetrySink: httpTelemetrySink({ baseUrl: SYNC_BASE_URL }),
   };
 }
 
 /**
  * The in-memory ports and the fixture bank, for the hermetic Playwright lane.
  *
- * Sync is the one exception to "in memory": the transport is the **real** HTTP adapter
- * against the dev server's routes, which run on an in-process PGlite (`src/server/db.ts`),
+ * Sync and the telemetry sink are the exceptions to "in memory": each is the **real** HTTP
+ * adapter against the dev server's routes, which run on an in-process PGlite (`src/server/db.ts`),
  * so E2E journey 8 drives the real route handlers (implementation-plan.md §6.2 tier 6).
  * For that, each hermetic page load is its own device. It gets a device secret the
  * server will accept (64 hex characters) and an id counter started far from any other
@@ -457,6 +492,9 @@ function hermeticPorts(): Ports {
     vault,
     sync: httpSyncTransport({ baseUrl: SYNC_BASE_URL, credentials: () => vault.deviceSecret() }),
     syncState: memorySyncStateStore(),
+    telemetry: memoryTelemetryStore(),
+    // The real HTTP adapter against the dev server's route on PGlite, as sync is.
+    telemetrySink: httpTelemetrySink({ baseUrl: SYNC_BASE_URL }),
   };
 }
 
