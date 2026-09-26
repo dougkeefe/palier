@@ -17,6 +17,7 @@ describe("@palier/engine public surface", () => {
 
   it("exports the trend calculator", () => {
     expect(typeof engine.calculateTrend).toBe("function");
+    expect(typeof engine.trendEvidence).toBe("function");
   });
 
   it("exports the exam scorer", () => {
@@ -32,6 +33,13 @@ describe("@palier/engine public surface", () => {
     expect(typeof engine.selectItems).toBe("function");
     expect(typeof engine.workingSet).toBe("function");
     expect(typeof engine.weakestSubSkills).toBe("function");
+  });
+
+  it("exports the item statistics and the rest bucket", () => {
+    expect(typeof engine.itemStatistics).toBe("function");
+    expect(typeof engine.retirementVerdicts).toBe("function");
+    expect(typeof engine.restBucket).toBe("function");
+    expect(typeof engine.restBuckets).toBe("function");
   });
 
   it("exports the sub-skill breakdown", () => {

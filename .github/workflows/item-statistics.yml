@@ -1,0 +1,81 @@
+# The monthly item-statistics job (architecture.md 7.6 and §11, progress.md D94): read
+# the accumulated telemetry, judge every item against the profile's retirement rules,
+# and open the change to content/factory/item-statistics.json as a pull request.
+# Nothing is retired without review, and a retirement takes effect at the next bank
+# build, which reads the report when it carries the bank forward.
+name: item-statistics
+
+on:
+  schedule:
+    # 06:00 UTC on the first of each month.
+    - cron: "0 6 1 * *"
+  workflow_dispatch:
+
+env:
+  TURBO_TELEMETRY_DISABLED: 1
+  DO_NOT_TRACK: 1
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  item-statistics:
+    name: Item statistics and retirements
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip without a telemetry database
+        id: gate
+        env:
+          TELEMETRY_DATABASE_URL: ${{ secrets.TELEMETRY_DATABASE_URL }}
+        run: |
+          if [ -z "$TELEMETRY_DATABASE_URL" ]; then
+            echo "::notice::TELEMETRY_DATABASE_URL is not set, so there are no events to read (docs/deploy.md)."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.gate.outputs.run == 'true'
+        uses: actions/checkout@v7
+      - if: steps.gate.outputs.run == 'true'
+        uses: pnpm/action-setup@v6
+      - if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - if: steps.gate.outputs.run == 'true'
+        run: pnpm install --frozen-lockfile
+      # The job imports the domain, the engine and the bank adapter through their dist.
+      - if: steps.gate.outputs.run == 'true'
+        run: pnpm exec turbo run build --filter=@palier/web^...
+
+      - name: Run the job
+        if: steps.gate.outputs.run == 'true'
+        env:
+          DATABASE_URL: ${{ secrets.TELEMETRY_DATABASE_URL }}
+        run: pnpm --filter @palier/web item-statistics
+
+      - name: Open a pull request when the report changed
+        if: steps.gate.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- content/factory/item-statistics.json && \
+             git ls-files --error-unmatch content/factory/item-statistics.json >/dev/null 2>&1; then
+            echo "::notice::The report is unchanged; no pull request."
+            exit 0
+          fi
+          branch="item-statistics/$(date -u +%Y-%m)"
+          retiring=$(node -e 'const r=require("./content/factory/item-statistics.json");console.log(r.verdicts.filter(v=>v.reasons.length>0).length)')
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add content/factory/item-statistics.json
+          git commit -m "content: item statistics for $(date -u +%B\ %Y), ${retiring} to retire"
+          git push --force origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "Item statistics for $(date -u +%B\ %Y): ${retiring} to retire" \
+            --body "The monthly item-statistics job (progress.md D94) read the telemetry and judged every item against the profile's retirement rules. An item with a reason in \`verdicts\` retires at the next bank build. Review each one before merging: a retirement is a content decision. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            || echo "::notice::A pull request for $branch is already open; its branch was updated."

@@ -1,16 +1,21 @@
-import type { ExamRun, ISO, LedgerEntry, ScheduleEntry, SyncState } from "@palier/app";
-import type { Attempt, AttemptId, AttemptMode, ItemId, SessionId } from "@palier/domain";
+import type { ExamRun, ISO, LedgerEntry, ScheduleEntry, SyncState, TelemetryConsent } from "@palier/app";
+import type { Attempt, AttemptId, AttemptMode, ItemId, SessionId, TelemetryEvent } from "@palier/domain";
 import { Dexie, type Table } from "dexie";
 
 /**
  * The local IndexedDB database, one Dexie instance per app (architecture.md 9.1).
  *
- * The `stores()` block below is the documented schema version 1 **verbatim**, all
+ * **Version 1** is the documented schema (architecture.md 9.1) **verbatim**, all
  * thirteen tables, even though only seven have adapters today (attempts, schedule,
- * sessions, examRuns, settings, keyVault, syncMeta). Declaring the whole of v1 now means the remaining
- * adapters land without a schema bump — a `version(2)` is reserved for a real shape
- * change, not for turning on a table the schema already anticipated. The unused
- * tables are inert: nothing reads or writes them until their adapter exists.
+ * sessions, examRuns, settings, keyVault, syncMeta). Declaring the whole of v1 meant the
+ * remaining adapters could land without a schema bump. The unused tables are inert.
+ *
+ * **Version 2** adds the two telemetry tables (progress.md D92): the queue of events
+ * waiting for the network, and the device-local consent. They are new tables, not a
+ * change to an old one, so the upgrade moves no data; the migration harness
+ * (`migration.test.ts`) opens a real v1 database with rows in it and proves they
+ * survive. Each version's `stores()` block is exported, so the harness declares the
+ * same v1 the app did.
  *
  * **Why getters, not `field!: Table<...>` declarations.** `tsconfig.base.json` targets
  * ES2022 and does not set `useDefineForClassFields`, so it defaults to `true`; a class
@@ -69,28 +74,51 @@ export type LedgerRow = LedgerEntry & { readonly id: `ledger:${string}` };
 /** Every row the `syncMeta` table holds, discriminated by `id`. */
 export type SyncMetaRow = SyncStateRow | LedgerRow;
 
+/** A queued telemetry event under its auto-incremented key, absent until Dexie assigns it. */
+export type TelemetryQueueRow = {
+  readonly id?: number;
+  readonly event: TelemetryEvent;
+};
+
+/** The one telemetry-meta row: this device's consent, never synced (progress.md D92). */
+export type TelemetryMetaRow = {
+  readonly id: "consent";
+  readonly consent: TelemetryConsent;
+};
+
+/**
+ * architecture.md 9.1, unchanged. `box` is a field of `schedule`, not an index — nothing
+ * queries on it. `schedule.due` is nullable and IndexedDB does not index a null key path,
+ * so a retired entry drops out of the `due` index while staying reachable by its `itemId`
+ * primary key. That exclusion is load-bearing (§9.1).
+ */
+export const SCHEMA_V1 = {
+  profile: "id",
+  attempts: "id, itemId, skill, ts, sessionId",
+  schedule: "itemId, due, skill",
+  sessions: "id, type, startedAt",
+  examRuns: "id, formId, startedAt, submittedAt",
+  oralSessions: "id, scenarioId, startedAt",
+  oralAudio: "sessionId",
+  vocab: "id, term, lang, due",
+  generated: "id, skill, createdAt",
+  costLedger: "++id, ts, feature",
+  settings: "key",
+  keyVault: "id",
+  syncMeta: "id",
+} as const;
+
+/** The tables version 2 adds. Dexie carries every v1 table forward unchanged. */
+export const SCHEMA_V2 = {
+  telemetryQueue: "++id",
+  telemetryMeta: "id",
+} as const;
+
 export class PalierDb extends Dexie {
   constructor(name = "palier") {
     super(name);
-    // architecture.md 9.1, unchanged. `box` is a field of `schedule`, not an index —
-    // nothing queries on it. `schedule.due` is nullable and IndexedDB does not index a
-    // null key path, so a retired entry drops out of the `due` index while staying
-    // reachable by its `itemId` primary key. That exclusion is load-bearing (§9.1).
-    this.version(1).stores({
-      profile: "id",
-      attempts: "id, itemId, skill, ts, sessionId",
-      schedule: "itemId, due, skill",
-      sessions: "id, type, startedAt",
-      examRuns: "id, formId, startedAt, submittedAt",
-      oralSessions: "id, scenarioId, startedAt",
-      oralAudio: "sessionId",
-      vocab: "id, term, lang, due",
-      generated: "id, skill, createdAt",
-      costLedger: "++id, ts, feature",
-      settings: "key",
-      keyVault: "id",
-      syncMeta: "id",
-    });
+    this.version(1).stores(SCHEMA_V1);
+    this.version(2).stores(SCHEMA_V2);
   }
 
   get attempts(): Table<Attempt, AttemptId> {
@@ -124,5 +152,13 @@ export class PalierDb extends Dexie {
 
   get syncMeta(): Table<SyncMetaRow, string> {
     return this.table("syncMeta");
+  }
+
+  get telemetryQueue(): Table<TelemetryQueueRow, number> {
+    return this.table("telemetryQueue");
+  }
+
+  get telemetryMeta(): Table<TelemetryMetaRow, string> {
+    return this.table("telemetryMeta");
   }
 }

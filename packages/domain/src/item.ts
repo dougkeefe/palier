@@ -15,8 +15,11 @@ export type ItemStats = {
   readonly responses: number;
   /** Simple difficulty: the proportion of users who answered correctly. */
   readonly proportionCorrect: number;
-  /** Simple discrimination. Negative is the signature of a broken key. */
-  readonly pointBiserial: number;
+  /**
+   * Simple discrimination. Negative is the signature of a broken key. Null when no
+   * correlation exists: every response the same, or every one from the same rest bucket.
+   */
+  readonly pointBiserial: number | null;
   readonly updatedAt: string;
 };
 

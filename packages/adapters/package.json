@@ -27,6 +27,10 @@
     "./sync": {
       "types": "./dist/sync/index.d.ts",
       "default": "./dist/sync/index.js"
+    },
+    "./telemetry": {
+      "types": "./dist/telemetry/index.d.ts",
+      "default": "./dist/telemetry/index.js"
     }
   },
   "files": [

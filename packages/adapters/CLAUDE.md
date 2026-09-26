@@ -3,14 +3,21 @@
 Every concrete adapter, one directory and one subpath export each: `/dexie`, `/bank`,
 `/openai`, `/sync`, `/vault` (§3.2) — plus `/ids`, the id generator, which §3.2 does not name
 (progress.md D48). A subpath lands with its adapter, not before — an entry resolving to an
-empty module asserts a boundary with nothing behind it (D3). **Five are live.** `./ids` →
+empty module asserts a boundary with nothing behind it (D3). **Six are live.** `./ids` →
 `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto, no npm dependency).
-`./dexie` → `dexieStores` (the seven local store ports — `AttemptStore`, `ScheduleStore`,
-`SessionStore`, `ExamRunStore`, `SettingsStore`, `KeyVault`, `SyncStateStore` — over IndexedDB via
-`dexie`, at schema version 1; progress.md D49/D50, D69 and D80, the last two on the `syncMeta` and
-`examRuns` tables v1 already declared). `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1). `./bank` →
+`./dexie` → `dexieStores` (the eight local store ports — `AttemptStore`, `ScheduleStore`,
+`SessionStore`, `ExamRunStore`, `SettingsStore`, `KeyVault`, `SyncStateStore`, `TelemetryStore` — over
+IndexedDB via `dexie`; progress.md D49/D50, D69 and D80, the last two on the `syncMeta` and
+`examRuns` tables v1 already declared). **Schema version 2** adds `telemetryQueue` and `telemetryMeta`
+(D92). Every version's `stores()` block is an exported constant, and `migration.test.ts` opens a real
+database at the previous version with rows in it and proves they survive: **a new version needs a
+case there**. `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1). `./bank` →
 `httpBankRepository` (the `ItemRepository` over the committed bank shards; progress.md D55).
 `./sync` → `httpSyncTransport` (the `SyncTransport` port over the sync routes; progress.md D69–D71).
+`./telemetry` → `httpTelemetrySink` (the `TelemetrySink` port over `POST /api/telemetry`; D92). It sends
+no credential and `credentials: "omit"`, so no cookie either. A network fault, 429 or 5xx is
+`TelemetryUnavailableError` (the batch waits); any other refusal is `TelemetryRejectedError` (the batch is
+dropped). No retry, since the queue is persisted and the next trigger flushes again.
 **`/vault` will not land** (D71): the device secret it was to hold already lives in `dexieKeyVault`
 (D50), and pairing's hashing is server-side. An empty subpath would assert a boundary with nothing
 behind it.

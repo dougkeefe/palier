@@ -537,6 +537,13 @@ run is absent from the `submittedAt` index, and "the run to resume" walks `start
 runs sync as the fifth document type: a submitted copy beats an in-progress one, and submission is
 write-once.
 
+**Schema version 2, 25 September 2026** (Phase 3 Slice 4, `progress.md` D92). The first real bump adds
+two tables for opt-in telemetry, `telemetryQueue: '++id'` (events waiting for the network, so an exam
+submitted offline is still sent later) and `telemetryMeta: 'id'` (this device's consent). Both are
+device-local: no sync collector reads them and no export carries them, so consent given in one browser
+never enrols another. They are new tables, so the upgrade moves no data. `migration.test.ts` opens a
+real v1 database with rows in every table and proves they survive.
+
 There is deliberately no `estimates` table. The practice trend is derived from the attempt
 log on demand, so there is nothing to persist, nothing to invalidate and nothing to
 reconcile during sync (ADR 16, `implementation-plan.md` §3.3, and section 9.4 below).
@@ -632,6 +639,14 @@ telemetry_events(               -- opt-in, deliberately has no account_id
 - `devices.secret_hash` is **SHA-256** of the 256-bit secret, uniquely indexed, not Argon2id. The secret is random, not a password, so there is nothing for a slow hash to protect.
 - `pair_codes` (hashed, expiring, single use) and `rate_limits` (HMAC of route, IP and day) are added.
 
+*Amended 25 September 2026 (`progress.md` D93):* `telemetry_events` is built as
+`(id, item_id, correct, response_ms, rest_bucket, bank_version, received_on)`.
+- `session_accuracy_bucket` is named `rest_bucket`: it is the run's accuracy on its *other* scored items,
+  in quintiles 0 to 4.
+- `created_at` is `received_on`, a **date**, so no two rows can be linked by their arrival instants.
+- As sketched, it has no account id, and it has no device id and no IP either. It sits behind its own
+  `TelemetryRepository`, since the one read of it, the statistics job's, is over every event.
+
 Every query filters by the request's account id through a repository layer, never by ad hoc query construction. There is no cross-account read path in the codebase at all, which is easier to audit than row-level security policies.
 
 ### 9.3 Identity
@@ -682,6 +697,10 @@ Small by design.
 | `DELETE /api/account/device/:id` | Node | device secret | Revoke a device |
 | `DELETE /api/account` | Node | device secret | Hard delete everything server-side, returns a confirmation |
 | `GET /api/account/devices` | Node | device secret | The account's devices, for the settings list (added 24 September 2026) |
+
+*Amended 25 September 2026 (`progress.md` D93):* `POST /api/telemetry` runs on **Node** too, not Edge.
+It takes `{ events }`: at most 200 events, 64 KB, each exactly the five fields of a `TelemetryEvent`. It
+answers **202**, is rate-limited per IP hash at 120 batches an hour, and answers 503 with no database.
 
 *Amended 24 September 2026 (ADR 21):* every account and sync route runs on **Node**. Next.js 16 deprecates the Edge runtime, and the Postgres driver needs Node. The wire protocol, including every status code, is the table in `packages/testing/src/msw/sync-handlers.ts`. With no database configured, every sync route answers 503.
 

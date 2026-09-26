@@ -270,6 +270,7 @@ export default defineConfig([
         { type: "adapters-openai", pattern: "packages/adapters/src/openai/**" },
         { type: "adapters-bank", pattern: "packages/adapters/src/bank/**" },
         { type: "adapters-sync", pattern: "packages/adapters/src/sync/**" },
+        { type: "adapters-telemetry", pattern: "packages/adapters/src/telemetry/**" },
         { type: "adapters", pattern: "packages/adapters/src/**" },
         { type: "ui", pattern: "packages/ui/src/**" },
         { type: "testing", pattern: "packages/testing/src/**" },

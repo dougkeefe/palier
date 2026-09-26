@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import type { Attempt, Item, TargetBand } from "@palier/domain";
-import { itemId } from "@palier/domain";
+import { attemptId, itemId } from "@palier/domain";
 
-import { MIN_EVIDENCE, TREND_WINDOW, calculateTrend } from "./trend-calculator.js";
+import { MIN_EVIDENCE, TREND_WINDOW, calculateTrend, trendEvidence } from "./trend-calculator.js";
+import { pscSle } from "./__tests__/read-profile.js";
 import { anAttempt, anItem } from "./__tests__/fixtures.js";
 
 /**
@@ -194,5 +195,45 @@ describe("calculateTrend, an attempt whose item left the bank", () => {
     const trend = calculateTrend("reading", [...attempts, orphan], items);
 
     expect(trend.byBand.B).toMatchObject({ attempted: TREND_WINDOW });
+  });
+});
+
+describe("trendEvidence", () => {
+  const rules = pscSle().itemStatistics;
+  const stats = (responses: number) => ({ responses, proportionCorrect: 0.5, pointBiserial: 0.3, updatedAt: "2026-10-01T00:00:00.000Z" });
+
+  it("counts nothing behind an empty trend", () => {
+    expect(trendEvidence("reading", [], [], rules)).toEqual({ items: 0, trusted: 0 });
+  });
+
+  it("counts distinct items, so an item answered twice is one item", () => {
+    const { items, attempts } = history("B", 3, 3);
+    const again = anAttempt({ id: attemptId("01HATTEMPTAGAIN"), itemId: items[0]!.id, ts: new Date(10 * DAY).toISOString() });
+    expect(trendEvidence("reading", [...attempts, again], items, rules)).toEqual({ items: 3, trusted: 0 });
+  });
+
+  it("trusts an item's statistics from the profile's minimum, and not one response before", () => {
+    const { items, attempts } = history("B", 4, 4);
+    const withStats = [
+      { ...items[0]!, stats: stats(rules.minResponsesDifficulty) },
+      { ...items[1]!, stats: stats(rules.minResponsesDifficulty + 50) },
+      { ...items[2]!, stats: stats(rules.minResponsesDifficulty - 1) },
+      items[3]!,
+    ];
+    expect(trendEvidence("reading", attempts, withStats, rules)).toEqual({ items: 4, trusted: 2 });
+  });
+
+  it("counts only the items inside the trend's window, as the trend does", () => {
+    const { items, attempts } = history("B", TREND_WINDOW + 5, 0);
+    // The oldest five fall outside the window; give them trusted statistics.
+    const withStats = items.map((item, i) => (i < 5 ? { ...item, stats: stats(500) } : item));
+    expect(trendEvidence("reading", attempts, withStats, rules)).toEqual({ items: TREND_WINDOW, trusted: 0 });
+  });
+
+  it("leaves out another skill's attempts and an item that left the bank", () => {
+    const reading = history("B", 2, 2);
+    const writing = history("C", 2, 2, { skill: "writing" });
+    const items = [...reading.items.slice(1), ...writing.items];
+    expect(trendEvidence("reading", [...reading.attempts, ...writing.attempts], items, rules)).toEqual({ items: 1, trusted: 0 });
   });
 });

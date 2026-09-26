@@ -2,6 +2,7 @@ import { PAIR_CODE_TTL_MS, SYNC_DOC_TYPES, normalizePairCode } from "@palier/app
 import { z } from "zod";
 
 import type { DeviceRecord, SyncRepository } from "./repository";
+import { clientIp, error, handle, json, readJson, refuse } from "./http";
 import { isDeviceSecret, pairCodeFrom, rateLimitKey, sha256 } from "./secrets";
 
 /**
@@ -73,41 +74,10 @@ const watermarkParam = z.coerce.number().int().nonnegative();
 /** Device ids are UUIDs (`devices.id`); anything else cannot name one, so it is not found. */
 const deviceIdParam = z.uuid();
 
-const json = (body: unknown, status = 200): Response => Response.json(body, { status });
-const error = (code: string, status: number): Response => json({ error: code }, status);
-
-/** Thrown inside a handler to answer with a status; caught at the one boundary below. */
-class Refusal extends Error {
-  constructor(readonly response: Response) {
-    super("refused");
-  }
-}
-
-const refuse = (code: string, status: number): never => {
-  throw new Refusal(error(code, status));
-};
-
 const bearerOf = (request: Request): string | null => {
   const header = request.headers.get("authorization") ?? "";
   const secret = header.startsWith("Bearer ") ? header.slice("Bearer ".length).trim() : "";
   return isDeviceSecret(secret) ? secret : null;
-};
-
-/** The first address in `x-forwarded-for` (the platform's), or a shared bucket. */
-const clientIp = (request: Request): string =>
-  request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-
-const readJson = async <T>(request: Request, schema: z.ZodType<T>): Promise<T> => {
-  const text = await request.text();
-  if (text.length > MAX_BODY_BYTES) refuse("too-large", 413);
-  let raw: unknown;
-  try {
-    raw = JSON.parse(text);
-  } catch {
-    return refuse("invalid-body", 400);
-  }
-  const parsed = schema.safeParse(raw);
-  return parsed.success ? parsed.data : refuse("invalid-body", 400);
 };
 
 const summary = (device: DeviceRecord, self: string) => ({
@@ -138,22 +108,10 @@ export const createSyncApi = (deps: SyncApiDeps): SyncApi => {
     return device;
   };
 
-  /** The one place a `Refusal` becomes its response; anything else is a real failure (500). */
-  const handle =
-    <A extends unknown[]>(run: (request: Request, ...args: A) => Promise<Response>) =>
-    async (request: Request, ...args: A): Promise<Response> => {
-      try {
-        return await run(request, ...args);
-      } catch (thrown) {
-        if (thrown instanceof Refusal) return thrown.response;
-        throw thrown;
-      }
-    };
-
   return {
     registerDevice: handle(async (request) => {
       const secret = bearerOf(request) ?? refuse("unauthorized", 401);
-      const body = await readJson(request, registerBody);
+      const body = await readJson(request, registerBody, MAX_BODY_BYTES);
       const hash = sha256(secret);
       const existing = await repo.deviceBySecretHash(hash);
       if (existing !== null && existing.revokedAt === null) {
@@ -175,7 +133,7 @@ export const createSyncApi = (deps: SyncApiDeps): SyncApi => {
 
     redeemPairCode: handle(async (request) => {
       const secret = bearerOf(request) ?? refuse("unauthorized", 401);
-      const body = await readJson(request, pairBody);
+      const body = await readJson(request, pairBody, MAX_BODY_BYTES);
       await limit(request, "pair");
       const code = normalizePairCode(body.code);
       const accountId = code === null ? null : await repo.redeemPairCode({ hash: sha256(code), at: at() });
@@ -214,7 +172,7 @@ export const createSyncApi = (deps: SyncApiDeps): SyncApi => {
 
     push: handle(async (request) => {
       const device = await authenticate(request);
-      const { items } = await readJson(request, pushBody);
+      const { items } = await readJson(request, pushBody, MAX_BODY_BYTES);
       if (items.length > MAX_PUSH_ITEMS) refuse("too-many-items", 413);
       return json(await repo.push(device.accountId, device.id, items, at()));
     }),

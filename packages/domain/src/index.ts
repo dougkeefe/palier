@@ -97,10 +97,23 @@ export {
   reviewVerdictSchema,
 } from "./schemas/ai.js";
 
+// Opt-in anonymous item telemetry and the statistics job's report (architecture.md
+// 7.6, 9.2). DTOs like the AI ones: no JSON Schema is published for them.
+export type {
+  ItemStatisticsReport,
+  ItemVerdict,
+  RestBucket,
+  RetirementReason,
+  TelemetryEvent,
+} from "./telemetry.js";
+export { REST_BUCKETS, RETIREMENT_REASONS, TELEMETRY_MAX_RESPONSE_MS } from "./telemetry.js";
+export { itemStatisticsReportSchema, telemetryEventSchema } from "./schemas/telemetry.js";
+
 export type {
   CutRange,
   ExamProfile,
   ExamVariant,
+  ItemStatisticsRules,
   OralFormat,
 } from "./profile/exam-profile.js";
 export { examProfileSchema } from "./profile/schema.js";

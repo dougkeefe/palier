@@ -50,7 +50,10 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
   `memorySessionStore` and `sessionStoreContract` exist, progress.md D45. `IdGenerator`
   likewise: `counterIdGenerator` and `idGeneratorContract`, D48 — the Web Crypto adapter in
   `@palier/adapters/ids` is held to the same contract. `SyncTransport` and `SyncStateStore`
-  likewise, D69.)
+  likewise, D69. The telemetry ports likewise, D92: `memoryTelemetryStore`, `memoryTelemetryCollector`
+  (whose `sink` is the memory `TelemetrySink`), `telemetryStoreContract`, `telemetrySinkContract` and
+  `telemetryHandlers`. `syntheticTelemetry` is the seeded set behind Phase 3 exit criterion 3: a too-easy
+  item and a reversed key among twenty ordinary ones.)
 
 ## The five mistakes most likely to be made here
 

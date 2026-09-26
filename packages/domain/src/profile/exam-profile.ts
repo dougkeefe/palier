@@ -68,4 +68,29 @@ export type ExamProfile = {
    * (ADR 8, architecture.md 7.3).
    */
   readonly leitnerIntervalDays: readonly number[];
+  /** The item-quality retirement rules the statistics job applies (architecture.md 7.6). */
+  readonly itemStatistics: ItemStatisticsRules;
+};
+
+/**
+ * When an item's observed responses retire it (architecture.md 7.6, PRD 13.3).
+ * Every threshold is band-independent, because the PRD gives one pair for every
+ * band. These are the retirement rules, not calibration: nothing here reweights
+ * an estimate (ADR 7).
+ */
+export type ItemStatisticsRules = {
+  /** Retire below this proportion correct: nearly nobody gets it right. */
+  readonly pCorrectMin: number;
+  /** Retire above this proportion correct: nearly everybody does. */
+  readonly pCorrectMax: number;
+  /**
+   * Retire below this point-biserial. At 0, a negative correlation retires:
+   * the item punishes the people who know the most, the signature of a broken
+   * key or two defensible answers.
+   */
+  readonly pointBiserialMin: number;
+  /** Responses before the proportion correct is trusted ("usable from around 30"). */
+  readonly minResponsesDifficulty: number;
+  /** Responses before the point-biserial is trusted ("noisy below about 100"). */
+  readonly minResponsesDiscrimination: number;
 };

@@ -201,19 +201,28 @@ export const drizzleSyncRepository = <H extends PgQueryResultHKT>(db: Db<H>): Sy
         return { accepted, conflicts };
       }),
 
-    hit: async (key, windowStart) => {
-      const [row] = await db
-        .insert(rateLimits)
-        .values({ key, windowStart, count: 1 })
-        .onConflictDoUpdate({
-          target: rateLimits.key,
-          set: {
-            count: sql`case when ${rateLimits.windowStart} = excluded.window_start then ${rateLimits.count} + 1 else 1 end`,
-            windowStart: sql`excluded.window_start`,
-          },
-        })
-        .returning({ count: rateLimits.count });
-      return row?.count ?? 1;
-    },
+    hit: rateLimitHit(db),
   };
 };
+
+/**
+ * Count one hit on a rate-limit key within its window, starting again in a new window.
+ * One upsert, so two concurrent hits cannot both read the old count. Shared by the sync
+ * and telemetry repositories, which limit on the same table.
+ */
+export const rateLimitHit =
+  <H extends PgQueryResultHKT>(db: Db<H>) =>
+  async (key: string, windowStart: string): Promise<number> => {
+    const [row] = await db
+      .insert(rateLimits)
+      .values({ key, windowStart, count: 1 })
+      .onConflictDoUpdate({
+        target: rateLimits.key,
+        set: {
+          count: sql`case when ${rateLimits.windowStart} = excluded.window_start then ${rateLimits.count} + 1 else 1 end`,
+          windowStart: sql`excluded.window_start`,
+        },
+      })
+      .returning({ count: rateLimits.count });
+    return row?.count ?? 1;
+  };

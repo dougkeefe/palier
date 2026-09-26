@@ -1,28 +1,35 @@
 "use client";
 
-import type { ItemId } from "@palier/domain";
+import type { ItemId, SessionId } from "@palier/domain";
 import { sessionId } from "@palier/domain";
 import { Button, Callout, Card, EmptyState, Glyph, itemRenderers } from "@palier/ui";
 import { useLocale, useTranslations } from "next-intl";
 import { type ReactNode, useEffect, useState } from "react";
 
 import { type ResultsView, type ReviewRow, resultsView } from "../../features/exam/results";
+import { promptShown } from "../../features/telemetry/telemetry";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { useContainer } from "../ContainerProvider";
 import { ReportItem } from "../practice/ReportItem";
+import { TelemetryPrompt } from "./TelemetryPrompt";
 
 type Loaded =
   | { readonly status: "loading" }
   | { readonly status: "not-found" }
-  | { readonly status: "ready"; readonly view: ResultsView };
+  | { readonly status: "ready"; readonly view: ResultsView; readonly runId: SessionId; readonly askTelemetry: boolean };
 
 const load = async (container: Container): Promise<Loaded> => {
   const id = new URLSearchParams(window.location.search).get("run");
   if (id === null) return { status: "not-found" };
   try {
-    const report = await container.useCases.examReport({ runId: sessionId(id) });
-    return { status: "ready", view: resultsView(report) };
+    const runId = sessionId(id);
+    // Loaded with the report, so the prompt arrives with the rest and moves nothing.
+    const [report, consent] = await Promise.all([
+      container.useCases.examReport({ runId }),
+      container.useCases.telemetryConsent(),
+    ]);
+    return { status: "ready", view: resultsView(report), runId, askTelemetry: promptShown(consent) };
   } catch {
     // An unknown run, one still in progress, or a form this bank no longer ships.
     return { status: "not-found" };
@@ -66,10 +73,22 @@ export function ExamResults() {
       </EmptyState>
     );
   }
-  return <Results container={state.container} view={loaded.view} />;
+  return (
+    <Results container={state.container} view={loaded.view} runId={loaded.runId} askTelemetry={loaded.askTelemetry} />
+  );
 }
 
-function Results({ container, view }: { container: Container; view: ResultsView }) {
+function Results({
+  container,
+  view,
+  runId,
+  askTelemetry,
+}: {
+  container: Container;
+  view: ResultsView;
+  runId: SessionId;
+  askTelemetry: boolean;
+}) {
   const t = useTranslations("exam");
   const tCommon = useTranslations("common");
   const tSub = useTranslations("subSkills");
@@ -113,6 +132,8 @@ function Results({ container, view }: { container: Container; view: ResultsView 
         <p>{t("unsureRight", { count: view.unsureRight })}</p>
         <p className="app-muted">{t("calibrationNote")}</p>
       </section>
+
+      {askTelemetry ? <TelemetryPrompt container={container} runId={runId} /> : null}
 
       <section className="app-stack" aria-labelledby="exam-review">
         <h2 id="exam-review">{t("reviewTitle")}</h2>

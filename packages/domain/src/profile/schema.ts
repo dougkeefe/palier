@@ -116,6 +116,38 @@ const oralFormatShape = z.strictObject({
   }),
 });
 
+const proportionSchema = z.number().min(0).max(1);
+
+export const itemStatisticsRulesShape = z
+  .strictObject({
+    pCorrectMin: proportionSchema,
+    pCorrectMax: proportionSchema,
+    pointBiserialMin: z.number().min(-1).max(1),
+    minResponsesDifficulty: z.number().int().positive(),
+    minResponsesDiscrimination: z.number().int().positive(),
+  })
+  .check((ctx) => {
+    const rules = ctx.value;
+    if (rules.pCorrectMin >= rules.pCorrectMax) {
+      ctx.issues.push({
+        code: "custom",
+        input: rules,
+        path: ["pCorrectMin"],
+        message: `pCorrectMin (${rules.pCorrectMin}) must be below pCorrectMax (${rules.pCorrectMax}), or every item retires.`,
+      });
+    }
+    // A point-biserial needs more responses than a proportion (architecture.md
+    // 7.6), so trusting it sooner would be the wrong way round.
+    if (rules.minResponsesDiscrimination < rules.minResponsesDifficulty) {
+      ctx.issues.push({
+        code: "custom",
+        input: rules,
+        path: ["minResponsesDiscrimination"],
+        message: `minResponsesDiscrimination (${rules.minResponsesDiscrimination}) is below minResponsesDifficulty (${rules.minResponsesDifficulty}), but a point-biserial needs more responses than a proportion correct.`,
+      });
+    }
+  });
+
 export const examProfileShape = z
   .strictObject({
     id: z.string().min(1),
@@ -131,6 +163,7 @@ export const examProfileShape = z
     topics: z.array(topicSchema).min(1),
     oral: oralFormatShape,
     leitnerIntervalDays: z.array(z.number().int().positive()),
+    itemStatistics: itemStatisticsRulesShape,
   })
   .check((ctx) => {
     const profile = ctx.value;

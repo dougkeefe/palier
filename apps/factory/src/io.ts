@@ -1,8 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-import { parseExamProfileOrThrow } from "@palier/domain";
-import type { ExamProfile, Item, Passage } from "@palier/domain";
+import { itemStatisticsReportSchema, parseExamProfileOrThrow } from "@palier/domain";
+import type { ExamProfile, Item, ItemStatisticsReport, Passage } from "@palier/domain";
 import type { OpenAiModels, OpenAiPricing } from "@palier/adapters/openai";
 
 import { canonicalStringify } from "./lib/json.js";
@@ -24,6 +24,8 @@ export const PRICING_PATH = "apps/factory/config/pricing.json";
 export const SOURCE_QUEUE_PATH = "content/factory/source-queue.json";
 export const BATCH_REPORT_PATH = "content/factory/batch-report.json";
 export const EVAL_REPORT_PATH = "content/factory/eval-report.json";
+/** Written by the monthly statistics job in `apps/web` (progress.md D94), read here. */
+export const ITEM_STATISTICS_PATH = "content/factory/item-statistics.json";
 
 const readJson = (path: string): unknown => JSON.parse(readFileSync(path, "utf8"));
 
@@ -47,6 +49,17 @@ export const loadPricing = (root: string): OpenAiPricing => {
     }
   }
   return pricing;
+};
+
+/**
+ * The latest item-statistics report, or `null` before the first one exists. A report
+ * that does not parse throws: it decides which items retire, so a damaged one must stop
+ * the build rather than be read as "retire nothing".
+ */
+export const loadItemStatistics = (root: string): ItemStatisticsReport | null => {
+  const path = join(root, ITEM_STATISTICS_PATH);
+  if (!existsSync(path)) return null;
+  return itemStatisticsReportSchema.parse(readJson(path)) as unknown as ItemStatisticsReport;
 };
 
 export const writeJsonFile = (root: string, relPath: string, data: unknown): void => {

@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { memorySyncRepository } from "../../server/__tests__/memory-repository";
+import { memoryTelemetryRepository } from "../../server/__tests__/memory-telemetry-repository";
 import { type SyncApi, createSyncApi } from "../../server/handlers";
+import { type TelemetryApi, createTelemetryApi } from "../../server/telemetry-handlers";
 
 /**
  * Every route under `src/app/api/` is bound to its handler, and answers 503 when no sync
@@ -9,8 +11,11 @@ import { type SyncApi, createSyncApi } from "../../server/handlers";
  * this holds the binding, which is all a route file is.
  */
 
-const state = vi.hoisted(() => ({ api: null as SyncApi | null }));
-vi.mock("../../server/db", () => ({ syncApi: () => Promise.resolve(state.api) }));
+const state = vi.hoisted(() => ({ api: null as SyncApi | null, telemetry: null as TelemetryApi | null }));
+vi.mock("../../server/db", () => ({
+  syncApi: () => Promise.resolve(state.api),
+  telemetryApi: () => Promise.resolve(state.telemetry),
+}));
 
 const { POST: register } = await import("./account/device/route");
 const { DELETE: revoke } = await import("./account/device/[id]/route");
@@ -19,6 +24,7 @@ const { POST: pair } = await import("./account/pair/route");
 const { GET: devices } = await import("./account/devices/route");
 const { DELETE: deleteAccount } = await import("./account/route");
 const { GET: pull, POST: push } = await import("./sync/route");
+const { POST: telemetry } = await import("./telemetry/route");
 
 const secret = (n: number) => n.toString(16).padStart(64, "0");
 const req = (method: string, path: string, body?: unknown, n = 1) =>
@@ -34,6 +40,11 @@ beforeEach(() => {
     repo: memorySyncRepository(),
     now: () => new Date("2026-09-24T12:00:00.000Z"),
     randomBytes: (n) => Uint8Array.from({ length: n }, (_, i) => i * 7),
+    rateLimitSalt: "salt",
+  });
+  state.telemetry = createTelemetryApi({
+    repo: memoryTelemetryRepository(),
+    now: () => new Date("2026-09-24T12:00:00.000Z"),
     rateLimitSalt: "salt",
   });
 });
@@ -72,5 +83,23 @@ describe("the sync routes", () => {
 
     expect(responses.map((r) => r.status)).toEqual(Array(8).fill(503));
     expect(await responses[0]?.json()).toEqual({ error: "sync-unavailable" });
+  });
+});
+
+describe("the telemetry route", () => {
+  const event = { itemId: "fr-read-0001", correct: true, responseMs: 900, bankVersion: 2, restBucket: 2 };
+  const batch = () => new Request("http://palier.test/api/telemetry", { method: "POST", body: JSON.stringify({ events: [event] }) });
+
+  it("binds to the telemetry handler", async () => {
+    expect((await telemetry(batch())).status).toBe(202);
+  });
+
+  it("answers 503 when no database is configured, so the client keeps its batch", async () => {
+    state.telemetry = null;
+
+    const response = await telemetry(batch());
+
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({ error: "telemetry-unavailable" });
   });
 });

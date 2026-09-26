@@ -42,6 +42,9 @@ const runOnce = async () => {
         perSource: DEFAULT_PER_SOURCE,
         provider: scriptedAiProvider(),
         promptVersion: SCRIPTED_PROMPT_VERSION,
+        // v2 was built on 24 September 2026, before any item-statistics report existed
+        // (progress.md D94). A later report applies to the next version, never to v2.
+        applyItemStatistics: false,
       }),
     ),
   };

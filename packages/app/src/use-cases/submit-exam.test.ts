@@ -14,6 +14,8 @@ import {
 } from "./submit-exam.js";
 import { ITEM_IDS, PILOTS, RUN_ID, aRun, clockOf, itemsOf, profile } from "./__tests__/exam-fakes.js";
 import { attemptStore, examRunStore, scheduleStore } from "./__tests__/sync-fakes.js";
+import { telemetryStore } from "./__tests__/telemetry-fakes.js";
+import { examTelemetryEvents } from "./exam-telemetry-events.js";
 
 // Local stubs rather than @palier/testing (progress.md D37).
 
@@ -271,5 +273,47 @@ describe("scoring is idempotent (property)", () => {
         );
       }),
     );
+  });
+});
+
+describe("submitExam and telemetry", () => {
+  it("queues the exam's events at the first submit while this device shares", async () => {
+    const telemetry = telemetryStore("on");
+    const deps = depsHolding(ANSWERED, { telemetry });
+
+    const { run, result } = await submitExam({ runId: RUN_ID, elapsedMs: 0 }, deps);
+
+    expect(telemetry.queued()).toEqual(examTelemetryEvents(run, result, 3));
+    expect(telemetry.queued()).toHaveLength(ANSWERED.answers.length);
+  });
+
+  it("queues nothing while this device does not share, or was never asked", async () => {
+    for (const consent of ["off", "unasked"] as const) {
+      const telemetry = telemetryStore(consent);
+      await submitExam({ runId: RUN_ID, elapsedMs: 0 }, depsHolding(ANSWERED, { telemetry }));
+      expect(telemetry.queued()).toEqual([]);
+    }
+  });
+
+  it("queues nothing on a replay, or for a run that arrived already submitted", async () => {
+    const telemetry = telemetryStore("on");
+    const deps = depsHolding(ANSWERED, { telemetry });
+    await submitExam({ runId: RUN_ID, elapsedMs: 0 }, deps);
+    await submitExam({ runId: RUN_ID, elapsedMs: 0 }, deps);
+    expect(telemetry.queued()).toHaveLength(ANSWERED.answers.length);
+
+    const synced = telemetryStore("on");
+    await submitExam({ runId: RUN_ID, elapsedMs: 0 }, depsHolding({ ...ANSWERED, submittedAt: SUBMIT_AT }, { telemetry: synced }));
+    expect(synced.queued()).toEqual([]);
+  });
+
+  it("never lets a telemetry failure cost the submission", async () => {
+    const telemetry = { ...telemetryStore("on"), enqueue: () => Promise.reject(new Error("quota")) };
+    const deps = depsHolding(ANSWERED, { telemetry });
+
+    const { run } = await submitExam({ runId: RUN_ID, elapsedMs: 0 }, deps);
+
+    expect(run.submittedAt).toBe(SUBMIT_AT);
+    expect((await deps.examRuns.get(RUN_ID))?.submittedAt).toBe(SUBMIT_AT);
   });
 });

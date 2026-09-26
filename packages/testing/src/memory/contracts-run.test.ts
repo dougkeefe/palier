@@ -9,6 +9,8 @@ import {
   settingsStoreContract,
   syncStateStoreContract,
   syncTransportContract,
+  telemetrySinkContract,
+  telemetryStoreContract,
 } from "../contracts/index.js";
 import {
   fakeAiProvider,
@@ -21,6 +23,8 @@ import {
   memorySettingsStore,
   memorySyncServer,
   memorySyncStateStore,
+  memoryTelemetryCollector,
+  memoryTelemetryStore,
 } from "./index.js";
 
 /**
@@ -40,3 +44,5 @@ keyVaultContract("memory", () => Promise.resolve(memoryKeyVault()));
 aiProviderContract("fake", () => Promise.resolve(fakeAiProvider()));
 syncStateStoreContract("memory", () => Promise.resolve(memorySyncStateStore()));
 syncTransportContract("memory", () => Promise.resolve(memorySyncServer().transport));
+telemetryStoreContract("memory", () => Promise.resolve(memoryTelemetryStore()));
+telemetrySinkContract("memory", () => Promise.resolve(memoryTelemetryCollector()));

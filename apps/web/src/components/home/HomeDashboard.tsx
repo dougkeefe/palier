@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 import { type ExamReadiness, examReadiness } from "../../features/exam/readiness";
+import { type EvidenceLine, evidenceLine } from "../../features/telemetry/telemetry";
 import { hasAnyEstimate } from "../../features/trend/trend-lines";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
@@ -24,6 +25,8 @@ type Dashboard =
       readonly profile: StudyProfile;
       readonly plan: DayPlan;
       readonly trend: SkillTrend;
+      /** What the trend rests on, for the §13.0 disclosure (D94). */
+      readonly evidence: EvidenceLine | null;
       readonly dueCount: number;
       /** The last submitted mock exam, whichever skill, rescored (§8.2 zone A). */
       readonly exam: ExamReadiness | null;
@@ -37,7 +40,7 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
   if (profile === null) return { status: "needs-setup" };
   // A preview, not a session: `planDailySession` records nothing, so looking at the
   // card never counts as having started the day.
-  const [plan, trend, due, latestExam] = await Promise.all([
+  const [plan, trend, evidence, due, latestExam] = await Promise.all([
     container.useCases.planDailySession({
       skill,
       lang: "fr",
@@ -46,6 +49,7 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
       ...(profile.testDate === null ? {} : { testDate: `${profile.testDate}T00:00:00.000Z` }),
     }),
     container.useCases.practiceTrend({ skill }),
+    container.useCases.practiceTrendEvidence({ skill }),
     container.schedule.due(container.clock.now(), DUE_LIMIT),
     container.useCases.latestExamResult(),
   ]);
@@ -55,6 +59,7 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
     profile,
     plan,
     trend,
+    evidence: evidenceLine(evidence, container.profile.itemStatistics.minResponsesDifficulty),
     dueCount: due.length,
     exam: latestExam === null ? null : examReadiness(latestExam),
   };
@@ -142,6 +147,11 @@ export function HomeDashboard() {
                   {t("provenance", { count: dashboard.trend.windowSize, skill: tSkills(skill) })}
                 </p>
                 <p className="app-muted">{t("readinessNote")}</p>
+                {dashboard.evidence === null ? null : (
+                  <p className="app-muted">
+                    {t("trendEvidence", dashboard.evidence)}
+                  </p>
+                )}
               </>
             ) : (
               <div className="app-stack">

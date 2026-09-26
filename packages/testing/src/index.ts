@@ -17,6 +17,8 @@ export {
 } from "./fixtures/builders.js";
 export type { Builder } from "./fixtures/builders.js";
 export { FIXTURE_BANK, fixtureBankRepository } from "./fixtures/bank.js";
+export { syntheticTelemetry } from "./fixtures/synthetic-telemetry.js";
+export type { SyntheticTelemetry, SyntheticTelemetryOptions } from "./fixtures/synthetic-telemetry.js";
 export * from "./memory/index.js";
 export * from "./contracts/index.js";
 export { handlers } from "./msw/handlers.js";
@@ -24,6 +26,8 @@ export { bankHandlers } from "./msw/bank-handlers.js";
 export type { BankHandlerOptions } from "./msw/bank-handlers.js";
 export { syncHandlers } from "./msw/sync-handlers.js";
 export type { SyncHandlerOptions } from "./msw/sync-handlers.js";
+export { telemetryHandlers } from "./msw/telemetry-handlers.js";
+export type { TelemetryHandlerOptions } from "./msw/telemetry-handlers.js";
 export { mswServer } from "./msw/node.js";
 export { createPgHarness } from "./pglite/harness.js";
 export type { PgHarness } from "./pglite/harness.js";

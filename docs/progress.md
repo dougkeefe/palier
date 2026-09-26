@@ -4,10 +4,11 @@
 **Current phase:** **Phase 3 (Exams and item statistics) is open.** **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
-four, mirrored in `implementation-plan.md` §7 (D79). **Slices 1 and 2 merged (#22, #23); Gate D is resolved
-(D84); Slice 3 (the exam runner and results UI, and journey 3) is built** (`dougkeefe/naypyidaw`; D85–D87),
-so exit criteria 1 and 2 are met. Next is **Slice 4**, whole: telemetry, the statistics and the retirement job
-(D88 rejoins D83's split). See
+four, mirrored in `implementation-plan.md` §7 (D79). **Slices 1–3 merged (#22, #23, #25); Gate D is resolved
+(D84); Slice 4 (telemetry and the item-statistics job) is built** (`dougkeefe/next-progress-slice`; D92–D94),
+so exit criteria 1–4 are met. **Every buildable Phase 3 item is done.** Gate E is resolved (D97): the
+closed pilot runs now as a **product pilot** on the baseline bank, run by the human, and it ticks the last
+criterion. **Phase 4 starts beside it**, with Slice 1, "the key, safely" (D97). See
 [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
@@ -72,8 +73,8 @@ human for anything expensive.
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
-| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (Slices 1–3 built, exit criteria 1, 2 and 4 met; Slice 4 next, D79, D87, D88) |
-| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | not started |
+| 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
+| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **next** (four slices, D97; Slice 1 is *Next, decided*) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
@@ -85,9 +86,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-slice-from-progress-v1` (was `dougkeefe/naypyidaw`) | **Phase 3 Slice 3 — the exam runner and results UI, and E2E journey 3.** `/exam`, `/exam/run`, `/exam/results`, the readiness card's exam half, the exam use cases wired, `ExamRun.timeAllowance`/`resumes`, a muted exam token set. **Built; pending merge** (D85–D87, reviewed D89). | 25 September 2026 |
+| `dougkeefe/next-progress-slice` | **Phase 3 Slice 4 — telemetry and the item-statistics job, whole** (D88): the statistics core, `/api/telemetry` and its table, the job and its monthly PR, the telemetry ports and the persisted queue (Dexie v2), the device-local opt-in, the post-exam prompt and the readiness disclosure. Exit criterion 3. **Built; pending merge** (D92–D94). | 25 September 2026 |
 
-*(The prior rows — Phase 3 Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 3 Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -102,7 +103,7 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 - [x] Monorepo: pnpm workspaces, Turborepo, TypeScript project references, strict everywhere
 - [x] Eight workspaces created (`apps/web`, `apps/factory`, six `packages/*`), each with an explicit `exports` map
 - [x] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current) — all six written, plus the root router `CLAUDE.md`; D4 resolved, D15 recorded
-- [ ] Name decided and domain registered (§12.1 — "Palier" is still a working name)
+- [~] Name decided and domain registered (§12.1) — **name decided: Palier** (D96). The domain will be `palier.dougkeefe.com`, not yet pointed at the deployment
 - [x] `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0), `README` non-affiliation statement [R5, R13]
 - [x] `adr/README.md` covering the format, the never-edit-only-supersede rule, and numbers-on-acceptance (D16)
 
@@ -186,96 +187,86 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 3 Slice 3 is built** (`dougkeefe/naypyidaw`; D85–D87): mock exams run from `/exam` through
-`/exam/results`, offline too, and exit criteria 1, 2 and 4 are met.
+**Phase 3 is built** (Slices 1–4, D79–D94). Gate E is resolved (D97): **a product pilot runs now on
+`content/bank/v2`**, run by the human, and its item statistics count as indicative only. The paid content
+run stays at 1.0 (D56). The pilot is a checkpoint, not a blocker (implementation-plan.md §7), so Phase 4
+starts beside it.
 
-**Next: Phase 3 Slice 4, whole: telemetry and the item-statistics job** (D88 rejoins D83's split, since
-Gate D and Slice 3 are both done). It needs no human, and it carries exit criterion 3. The closed pilot, the
-phase's human gate, comes after it.
+**Next: Phase 4 Slice 1, "the key, safely"** (D97). Gate F is resolved, so the screens are built to PRD
+§8.1 step 5 and §8.10 as written. It needs no human.
 
-**Scope. The server and the statistics:**
-- **The rules go in the profile** (ADR 9; the plan says "the retirement rule from the profile"). A new
-  `itemStatistics` block in `content/profiles/psc-sle.json` and its Zod schema holds:
-  - `pCorrectMin: 0.15` and `pCorrectMax: 0.95` (PRD §13.3);
-  - `minResponsesDifficulty: 30` and `minResponsesDiscrimination: 100` (architecture.md §7.6: "usable from
-    around 30", "noisy below about 100");
-  - the rule that a negative point-biserial retires.
+**Scope:**
+- **The tier-11 key-leak test comes first**, before anything else in the slice (exit criterion 1: "write this
+  test before the key vault, not after").
+  - It is a Playwright test that sets a sentinel key (`sk-palier-sentinel-…`) through the UI, then drives
+    the existing journeys.
+  - It asserts the sentinel never reaches any request to an origin other than `api.openai.com`, in the
+    URL, a header or the body. That covers sync pushes and telemetry batches.
+  - It asserts the sentinel is never at rest in plaintext: localStorage, sessionStorage, or any IndexedDB
+    table dumped as JSON. The `keyVault` rows hold ciphertext only (D50).
+  - It asserts the sentinel is never in an export file, a console message, an error's text, or the DOM
+    after entry, where the field shows it masked.
+  - OpenAI itself is stubbed with `page.route`, so no real key and no network are needed.
+- **`/settings/key`**, per PRD §8.10 without the spend parts, which are Slice 2:
+  - the masked field;
+  - save and remove;
+  - **validate**, which is one cheap call (`GET /v1/models`) and reports the result;
+  - the plain statement of where the key is stored and what it is used for.
+- **Onboarding step 5 (§8.1)**: optional, after the diagnostic, three lines and a link to the key guide.
+- **Do-not-remember mode**: the key is held for this tab only and never written to IndexedDB. The
+  `KeyVault` port shape for it is decided in the slice and recorded, as D38 and D85 were.
+- **The browser `AiProvider` path.** `openAiProvider` takes `apiKey: string` in its config today (the
+  factory's path). In the browser it must be constructed **inside** `KeyVault.withApiKey` per call, so the key
+  never sits in a long-lived variable (§3.3, ADR 2). The composition root wires that, and a test holds it.
+- **Graceful degradation** (exit criterion 2, first half): malformed output, 429, 401 and a timeout each
+  become one of the adapter's own errors. The adapter already translates the first three (Phase 1), so the
+  timeout is added. The key screen shows each one as a plain state, never a raw error.
 
-  Retirement on three user reports stays out, because reports are GitHub issues, not data this job reads.
-- **Domain:** a `TelemetryEvent` type and schema: `itemId`, `correct`, `responseMs`, `bankVersion` and
-  `restBucket`. It has no account or device id (architecture.md §9.2, PRD §15).
-  - `restBucket` is the run's accuracy on its *other* scored items, in quintiles 0–4. That is what makes a
-    point-biserial computable without an ability estimate (ADR 7).
-- **Engine, pure and at 100% branch:**
-  - `itemStatistics(events)`: per item, `n`, the proportion correct and the point-biserial of `correct`
-    against `restBucket`;
-  - `retirementVerdicts(stats, items, rules)`: each verdict's reasons, applying the minimum counts first.
-
-  Worked examples at every threshold, and a permutation-invariance property (D73).
-- **Server** (`apps/web/src/server`):
-  - a `telemetry_events` table, with a committed migration;
-  - a `POST /api/telemetry` handler that validates a batch with a size cap, rate-limits by the existing IP
-    HMAC, never stores an IP, and answers 202;
-  - repository and route tests on the memory repository and on PGlite.
-- **The job.** `apps/factory` may not import the engine (§3.1), so the job is a `src/server` function plus
-  a script in `apps/web/scripts/`.
-  - It reads the events, calls the engine, and writes `content/factory/retirements.json` (ids and reasons).
-  - A workflow opens that file as a pull request monthly (content-factory.md §6).
-  - The selector already skips a `status: "retired"` item. The form stage does not check, and making it
-    check is part of this slice.
-
-**Scope. The client:**
-- **The `TelemetrySink` port** (§3.3 already specifies `{ record, flush }`):
-  - a memory implementation and a contract;
-  - an `adapters/telemetry` directory with its own subpath export, which posts batches over `fetch`.
-- **The queue is persisted.** A mock exam can be submitted offline (journey 3), so its events wait in a
-  Dexie `telemetryQueue` table, which means **schema v2**, through the migration harness. They flush on the
-  next sync trigger that finds the network. A queued event carries nothing but the event itself.
-- **The opt-in is off by default and belongs to the device.** It is never synced, because a consent given
-  in one browser must not enrol another (PRD §15: sync and telemetry are separate). If the settings store
-  has no device-local key, adding one is part of this slice.
-- **What is sent:** on submit, only when opted in, one event per answered item, **pilots included**, since
-  they are the items that most need statistics.
-  - The responses come from the stored run, which after a sync is the winning copy (D80), and never from
-    its attempts.
-  - Pilots are still never *revealed* (D84 ruling 9): nothing on screen changes by whether an item was one.
-- **The post-exam prompt** (PRD §15: "made honestly on the results screen after the first mock exam"). It
-  appears once, above the walkthrough, says exactly what is sent and what is not, and can be answered
-  either way or dismissed. Its choice also shows in `/settings/data`. It must be axe-clean and in `en` and
-  `fr`.
-- **The readiness disclosure** (§13.0): the readiness card says how many of the items behind the trend have
-  trusted statistics. That is the ones at or above the profile's minimum counts. Against today's bank it is
-  "none yet".
-
-**Exit criterion 3:** a seeded synthetic event set, where one item has a known proportion correct and
-another a reversed key. The job flags and retires exactly those, with the right reasons.
+**Ports and functions:** `KeyVault` (`putApiKey`, `withApiKey`, `hasApiKey`, `clear`, and possibly a
+do-not-remember variant), `AiProvider` via `@palier/adapters/openai`, and `settings`/`wipeData` as they are.
+Nothing in the engine.
 
 **Done looks like:**
-- exit criterion 3 green;
-- the route held on PGlite in the integration lane;
-- the sink's contract passing on memory and on the adapter;
-- the Dexie v2 migration tested;
-- an E2E journey that opts in on the results screen, submits offline, and sees the batch arrive once the
-  network returns, with no event carrying an identity;
-- axe clean on the prompt;
-- every new branch tested (§10);
+- the key-leak test green across the E2E suite, and proven to bite by a deliberate leak (for example,
+  logging the key) that fails it;
+- validate and each failure state tested over MSW;
+- axe clean on `/settings/key` and step 5;
+- `en` and `fr` at parity;
+- every new branch tested;
 - `pnpm verify` and `verify:medium` green.
 
-**After it: the closed pilot**, 20–30 people, the human decision gate (implementation-plan.md §7 Phase 3).
+**After it, in order** (D97): Slice 2, spend (the cost ledger and meter; ends at Gate G, the human's funded
+key for the billing check); Slice 3, the writing workshop (§8.7); Slice 4, runtime item generation and the
+Phase 4 CI gates.
+
+**Running now (human): the product pilot** (Gate E, D97).
+1. Merge the Slice 4 branch. The production deploy applies migration `0001` itself.
+2. Add the `TELEMETRY_DATABASE_URL` Actions secret (a read-only role), and allow Actions to open pull
+   requests (`docs/deploy.md`).
+3. Run the smoke check (`POST /api/telemetry` with an empty batch → 400).
+4. Recruit 20–30 people. Each takes at least one mock exam and answers the prompt either way.
+5. Afterwards, run the item-statistics workflow by hand and read its pull request.
+
+Record the pilot in a session-log entry: participants, opt-ins, events, what the first report says (its
+statistics are indicative only), and the product defects found, each fixed or filed. That ticks Phase 3's
+last exit criterion.
 
 **Standing human gates (do not self-direct):**
 
 - **The full-volume published bank (D54).** The real-model go-signal exists (session log, 24 September
-  2026); the remaining step is the full run to 500–700 published items on a funded key, then shipping
-  that bank as `content/bank/v{n}/` (carrying the previous version forward, D82). **Timing settled (D56):
-  sequenced to the end**, a 1.0 gate. The baseline bank's French is synthetic (D54), so the app is
-  feature-usable before this gate, not study-ready.
+  2026). The remaining step is the full run to 500–700 published items on a funded key, then shipping that
+  bank as `content/bank/v{n}/`, carrying the previous version's items *and forms* forward (D82). A
+  retirement in `content/factory/item-statistics.json` takes effect at that build (D94). **Timing settled
+  (D56, reaffirmed at Gate E): sequenced to the end**, a 1.0 gate. After it, rerun the pilot's calibration
+  half on real items (D97).
+- **Gate G, a funded OpenAI test key** (D97), when Slice 2 reaches the billing check. The human said yes.
 - Resolved: **Gate A** (product and UI direction), **Gate B** (the D43 `ScheduleEntry` merge, D69),
   **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026; **Gate D** (exam UI
-  direction, D84) on 25 September 2026.
+  direction, D84), **Gate E** (the pilot runs on the baseline bank, D97) and **Gate F** (Phase 4 UI
+  direction, D97) on 25 September 2026.
 
-Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's table
-before launch) and the name/domain decision in §12.1.
+Standing human items: pointing `palier.dougkeefe.com` at the deployment, and §12.1's trademark and
+language-school check before launch (D96). D12 is closed.
 
 ---
 
@@ -395,17 +386,17 @@ breakdown, expanded on start. Nothing is ticked without session-log evidence.
 - [x] Exam runner driven by the profile variants: navigator, flagging, timer with amber/red thresholds, checkpoint and resume with the clock preserved, pilot items — the core in Slice 1 (`dougkeefe/minnetonka-v3`, D80); **the UI in Slice 3** (`dougkeefe/naypyidaw`, D85–D87): `/exam`, `/exam/run`, the navigator drawer, the submit dialog, extra time, and the clock frozen while closed with the pauses counted
 - [x] Results screen: band, raw score against the cuts, per-sub-skill breakdown, near-miss from the actual cuts, confidence calibration, review walkthrough — Slice 3 (`/exam/results`, D87), with pilots never revealed (D84 ruling 9), and the readiness card's exam half
 - [x] Form generation in the factory: fixed, immutable, versioned forms per variant — **built** (Slice 2, `dougkeefe/next-slice-from-progress`, D82): `pipeline/forms.ts`, one form per profile variant in `content/bank/v2`, held byte-identical to a fresh run by `committed-bank.test.ts`
-- [ ] Telemetry opt-in, the post-exam prompt, `/api/telemetry`, client batching — Slice 4 (D88)
-- [ ] The item statistics job: proportion correct and point-biserial per item, minimum counts, a PR retiring items that trip the rules — Slice 4
-- [ ] Minimum response counts before an item's statistics are trusted, and the readiness-card disclosure — Slice 4
+- [x] Telemetry opt-in, the post-exam prompt, `/api/telemetry`, client batching — Slice 4 (`dougkeefe/next-progress-slice`, D92, D93): the device-local consent asked once on the results screen and shown in `/settings/data`, a Dexie v2 queue flushed on every sync trigger, and a strict, capped, rate-limited `POST /api/telemetry` storing identity-free rows
+- [x] The item statistics job: proportion correct and point-biserial per item, minimum counts, a PR retiring items that trip the rules — Slice 4 (D94): `itemStatistics` and `retirementVerdicts` in the engine, `scripts/item-statistics.mjs`, the monthly `item-statistics.yml`, and the factory retiring at the next bank build
+- [x] Minimum response counts before an item's statistics are trusted, and the readiness-card disclosure — Slice 4 (D94): the profile's `minResponsesDifficulty` and `minResponsesDiscrimination`, and "None of the items behind this trend has enough recorded answers yet…" on home
 
 **Exit criteria** (the actual gate)
 
 - [x] All four exam variants runnable and correctly scored, golden fixture per variant at every cut boundary [R3] — the goldens (Slice 1), the forms (Slice 2), and **runnable** (Slice 3): the production container starts, runs and scores every profile variant from `content/bank/v2` over real IndexedDB, each at the top of its scale with pilots uncounted (`container.test.ts`), and the runner UI drives them (session log, 25 September 2026, `dougkeefe/naypyidaw`)
 - [x] A full 90-minute exam survives reload and network drop (E2E journey 3) — `e2e/exam-offline.spec.ts`: the 60-item, 90-minute supervised reading form, a reload mid-run with the answers, flags and clock restored, the network dropped, submitted offline, and the band equal to an independent `scoreExam` oracle (session log, 25 September 2026)
-- [ ] Statistics job flags and retires a seeded reversed-key item on synthetic data — Slice 4
+- [x] Statistics job flags and retires a seeded reversed-key item on synthetic data — `syntheticTelemetry` seeds 300 respondents over 22 items with a too-easy item (exactly 98% right) and a reversed key. The job retires exactly those two, for `too-easy` and `low-discrimination`, in the fast lane (`item-statistics-job.test.ts`) and end to end through the real route handler on PGlite (`telemetry.integration.test.ts`). Robust over five seeds. Proven to bite: with an ordinary key in place of the reversed one, both fail (session log, 25 September 2026, `dougkeefe/next-progress-slice`)
 - [x] Scoring is idempotent — `rescoreExam` derives the result from the stored run, and no result is stored (ADR 16). A fast-check property holds submit, rescore and a second rescore deep-equal, with each attempt agreeing with the result. The simulator also rescores on every device after every heal and requires the same result (session log, `dougkeefe/minnetonka-v3`)
-- [ ] Closed pilot run, 20–30 people — the plan's human decision gate, after Slice 4
+- [ ] Closed pilot run, 20–30 people — the plan's human decision gate. **Gate E resolved (D97): a product pilot on the baseline bank, now**, with its statistics indicative only; running, human
 
 **Completion slices (D79).** Four slices, mirroring `implementation-plan.md` §7 Phase 3 "Completion
 slices". **Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
@@ -427,13 +418,27 @@ slices". **Keep the two in sync**: the plan holds the fuller scope and each slic
   rulings, eleven as recommended. Ruling 9 goes the other way: pilots are never revealed to the user.
 - [x] **Slice 3 — The runner and results UI, and E2E journey 3.** **Built 25 September 2026** (`dougkeefe/naypyidaw`;
   D85–D87; session-log evidence). Exit criteria 1 and 2.
-- [ ] **Slice 4 — Telemetry and the item-statistics job, whole** (D88, rejoining D83's 4a and 4b).
+- [x] **Slice 4 — Telemetry and the item-statistics job, whole** (D88, rejoining D83's 4a and 4b).
+  **Built 25 September 2026** (`dougkeefe/next-progress-slice`; D92–D94; session-log evidence).
   - The statistics core, `/api/telemetry` and the retirement job.
   - The opt-in, the post-exam prompt, the persisted client queue and the readiness disclosure.
 
-  Carries exit criterion 3. *Next, decided*. Then the closed pilot (the human gate).
+  Carries exit criterion 3. Then the closed pilot (the human gate), now *Next, decided*.
 
 ### Phase 4: BYOK, generation, writing workshop
+
+**Planned 25 September 2026 (D97)** as four slices, mirrored in `implementation-plan.md` §7. **Keep the two in
+sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.10 are adopted as written.
+
+- [ ] **Slice 1 — The key, safely.** The tier-11 key-leak test first; `/settings/key` and onboarding step
+  5; validation, do-not-remember, the browser `AiProvider` path through `withApiKey`, and graceful
+  degradation. *Next, decided*.
+- [ ] **Slice 2 — Spend.** The cost ledger, pricing as data, the meter, the soft cap, the per-feature table,
+  and the pre-flight estimate. Ends at **Gate G** (the human's funded test key) for the billing check.
+- [ ] **Slice 3 — The writing workshop** (§8.7), with submissions kept on the device.
+- [ ] **Slice 4 — Runtime item generation and the Phase 4 CI gates.**
+
+**Exit criteria** (the actual gate)
 
 - [ ] **Key-leak test written before the key vault**, and passing (tier 11) [R12]
 - [ ] Every AI response schema-validated before use; malformed / rate-limit / invalid-key / timeout all degrade gracefully
@@ -719,7 +724,7 @@ exemption is now "framework file conventions" and the list names
 adding a line to that list needs a better reason than convenience.
 
 ### D12 — `writing-unsupervised` carries an inferred `X 0-10` band
-**Date:** 19 September 2026 · **Status:** open until checked against the PSC
+**Date:** 19 September 2026 · **Status:** **resolved 25 September 2026 by D96** (checked against the PSC: the published table has `X` at 0 to 10)
 
 `product-requirements.md` §5.2 gave the unsupervised written expression bands as
 `A 11-16, B 17-23, C 24-30`, leaving raw scores **0 to 10 mapping to no band at
@@ -2883,7 +2888,7 @@ Rejoining it settles two client questions that 4b would have met:
   another, and PRD §15 keeps sync and telemetry apart.
 
 ### D89 — the pre-merge review: ruling 10's button keying gave pilots away, and seven more fixes
-**Date:** 25 September 2026 · **Status:** accepted; **refines D84 ruling 10, in service of ruling 9 (flagged for the human)**
+**Date:** 25 September 2026 · **Status:** accepted; **refines D84 ruling 10, in service of ruling 9; confirmed by the human 25 September 2026 (D96)**
 
 A candid review of the Slice 3 branch before its PR found eight real defects. All are fixed, and each has a
 test or an E2E assertion.
@@ -2961,11 +2966,333 @@ The two alternatives were:
 Slice 4 adds another E2E journey, so the headroom is needed soon either way. There is no branch protection
 on `main`, so renaming the "Medium lane (budget 5m)" check breaks no required status.
 
+### D92 — telemetry is two ports, the consent is device-local, and saying yes on the prompt shares that exam
+**Date:** 25 September 2026 · **Status:** accepted
+
+Phase 3 Slice 4's client half. *Next, decided* named `TelemetrySink { record, flush }` from §3.3, a persisted
+queue and a device-local opt-in. Building them forced these calls.
+
+- **One port became two**, amended into §3.3 in place, as D38, D61 and D85 were.
+  - The queue must survive an offline submit, so it lives in IndexedDB. The batch goes out over `fetch`.
+    One adapter directory cannot hold both, because adapter directories never import each other.
+  - **`TelemetrySink { send(batch) }`** is the network half. `adapters/telemetry` has `httpTelemetrySink`,
+    with its own `./telemetry` subpath.
+  - **`TelemetryStore`** is the device-local half: the consent (`"unasked" | "on" | "off"`) and the queue.
+    It is `dexieTelemetryStore` in production.
+  - `record` and `flush` became use cases over the pair: `recordExamTelemetry` and `flushTelemetry`, with
+    `telemetryConsent` and `setTelemetryConsent`.
+- **The consent is device-local by construction.** No sync collector reads the store and no export carries
+  it, exactly like `SyncStateStore`. So consent given in one browser never enrols another (PRD §15).
+  `wipeData` and `deleteEverywhere` clear it, back to "unasked" with an empty queue.
+- **Dexie schema v2 adds `telemetryQueue: "++id"` and `telemetryMeta: "id"`.**
+  - **The migration harness did not exist.** Phase 2's breakdown ticks "`adapters/dexie` … with the
+    migration harness (D49/D50)", but `db.ts` had only `version(1)`, and nothing opened an old database.
+  - It is built now: each version's `stores()` block is an exported constant. `migration.test.ts` opens a
+    database as a v1 build did, with realistic rows in every v1 table, reopens it as `PalierDb`, and asserts
+    every row survived and the new store starts empty. With `version(2)` removed, all three cases fail.
+- **What is sent, and when.**
+  - One event per answered item, pilots included. It is built from the stored run and its rescore, never
+    from its attempts (D80).
+  - `responseMs` is the answer's `msToConfirm`, rounded and clamped to the wire's bound.
+  - `restBucket` is the quintile on the *other* scored items: an unanswered item counts wrong, as in
+    `scoreExam`, and a pilot's rest is every scored item (`restBuckets` in the engine).
+  - **`submitExam` queues only at the first stamp**, and only while consent is "on". So a replay, or a
+    run synced in already submitted, never queues. **A telemetry failure never costs a submission**: the run
+    is stored first, and a queue failure is swallowed.
+  - Residual: the same run submitted offline on two devices, both sharing, sends twice. This is D80's
+    case again, and at pilot scale it moves a proportion by one response.
+- **Saying yes on the prompt shares the exam on screen.** That is the exam whose case the prompt makes, and
+  it is what lets journey 9 submit offline and then opt in. It happens only when consent was not already
+  "on", so an exam queued at submit is not queued twice. Turning sharing on from `/settings/data` shares
+  future exams only.
+- **"No thanks" is the dismissal.** *Next, decided* asked for "answered either way or dismissed". Both leave
+  sharing off, and the prompt never returns either way, so a third control would be the same button twice.
+- **Turning sharing off empties the queue.** Nothing waiting is sent after a no.
+- **A refused batch is dropped.** *Next, decided* did not anticipate this. The sink turns a network fault,
+  429 or 5xx into `TelemetryUnavailableError`, and the batch waits. Any other refusal (400, 413) is
+  `TelemetryRejectedError`. Without the second error, one batch an older build wrote and the server now
+  refuses would hold up the queue forever. A batch leaves the queue only once the service has answered
+  it, so an event can arrive twice, never not at all.
+- **Every sync trigger flushes**, at once, single-flight (`lib/single-flight.ts`), silently, and whatever
+  `shouldSync` or the sync switch says, since telemetry is not sync.
+  - **A found gap:** `ExamRunner` never told the sync runner about a submitted exam, so a submitted exam
+    waited for the next focus to sync. It now calls `notify("session-complete")`.
+- **The request carries no identity at all**: no `Authorization` header, and `credentials: "omit"`, so not
+  even the locale cookie. Journey 9 asserts both.
+- **Existing tests touched, and why:**
+  - `data-rights.test.ts`'s and `sync-account.test.ts`'s device fixtures gained a telemetry store, because
+    `wipeData` and `deleteEverywhere` now take one. No assertion changed, and a new case in each asserts the
+    clear.
+  - `dexie/index.test.ts`'s "wires all seven ports" became eight, with one more assertion. The shape
+    changed on purpose.
+  - `routes.test.ts`'s mock of `server/db` gained `telemetryApi`.
+
+### D93 — the telemetry route: Node, its own repository, a date and no identity
+**Date:** 25 September 2026 · **Status:** accepted
+
+- **Node, not Edge.** architecture.md §10 lists `POST /api/telemetry` on Edge. D70 and `apps/web/CLAUDE.md`
+  put every route on Node, because Next 16 deprecates Edge and the Postgres driver needs Node. §10 is
+  amended with a note.
+- **The table is `telemetry_events(id, item_id, correct, response_ms, rest_bucket, bank_version,
+  received_on)`**, migration `0001`, additive, so safe while the old deployment serves (D78).
+  - `rest_bucket` is §9.2's `session_accuracy_bucket`, named for what it is.
+  - **`created_at` became `received_on`, a date.** Arrival instants could link one person's events
+    together, and the job needs no more than a month.
+  - As sketched, it has no account id. It also has no device id and no IP. §9.2 is amended.
+- **Its own repository, handler and binding** (`TelemetryRepository`, `createTelemetryApi`,
+  `serveTelemetry`).
+  - `SyncRepository` can only ever read one account's records, and telemetry has no accounts. The job reads
+    every event.
+  - Both repositories share one database, which `db.ts` now memoises once. So the hermetic lane never builds
+    a second PGlite, and `SyncApi`'s pinned key list in `db.test.ts` is untouched.
+  - The rate-limit upsert became `rateLimitHit`, shared by both repositories. The sync handlers' request
+    helpers moved to `http.ts` unchanged, with the body cap now a parameter.
+- **Limits are operational constants in the handler**, as `RATE_LIMITS` is:
+  - a 64 KB body;
+  - at most `TELEMETRY_MAX_BATCH` (200) events, the client's own cap, read from `@palier/app` so the two
+    cannot drift; more is 413;
+  - 120 batches an hour per IP hash. That is generous, because a government office's pilot shares one
+    egress address.
+- **Validation is the domain's strict schema.** An event carrying an identity is 400 and is never stored.
+  A valid batch is 202 with no body.
+- **The smoke check** in `docs/deploy.md` posts an empty batch and expects 400, which proves a database is
+  configured without adding an event to the statistics.
+
+### D94 — the retirement rules are profile data, one report file, and a retirement takes effect at the next bank build
+**Date:** 25 September 2026 · **Status:** accepted
+
+- **The profile gains `itemStatistics`** (ADR 9): `pCorrectMin 0.15`, `pCorrectMax 0.95`,
+  `pointBiserialMin 0`, `minResponsesDifficulty 30` and `minResponsesDiscrimination 100`.
+  - "A negative point-biserial retires" is written as a floor, retiring **below** it, so it can be retuned.
+  - Every threshold is strict: exactly 0.95 right, or a point-biserial of exactly 0, keeps the item.
+  - The thresholds are band-independent, because PRD §13.3 gives one pair for every band. "At its target
+    band" is read as the item's own proportion; events carry no respondent band to condition on.
+  - The schema refuses a floor at or above the ceiling, and trusting a point-biserial on fewer responses than
+    a proportion.
+  - The profile's `version` stays 1: nothing reads it, and the block is additive.
+- **The engine:** `itemStatistics` (a group-by and a point-biserial over whole-number sums, so it is a
+  function of the event set to the last bit, D73) and `retirementVerdicts` (minimum counts first). Both are
+  at 100% branch, with worked examples at 29/30 and 99/100 responses and at each threshold, and a
+  permutation property.
+  - A correlation with no variance is `null`, never 0.
+  - **`ItemStats.pointBiserial` is therefore `number | null`.** This is a content-schema change, and
+    `docs/schemas/item.schema.json` is regenerated. No bank item carries stats yet, so nothing moves.
+- **One report file, `content/factory/item-statistics.json`, where *Next, decided* named
+  `retirements.json`.** It holds a verdict for every item with events: responses, proportion, point-biserial,
+  which checks were trusted, and the reasons. A retirement is a verdict with a reason. The factory needs the
+  stats as well as the ids, for the readiness disclosure, and one file keeps them from disagreeing. It is
+  parsed by the domain's `itemStatisticsReportSchema` on both sides.
+- **The job** (`apps/web/src/server/item-statistics-job.ts`, run by `scripts/item-statistics.mjs`) is
+  self-contained like `migrate.ts`, so Node's type stripping runs it with no build step.
+  - It reads events through `EVENTS_SQL`, which the Drizzle repository reads through too, so the integration
+    lane reads exactly as the job does.
+  - It reads the bank through `@palier/adapters/bank` over a file-backed `fetch`, so no second bank loader
+    exists.
+  - Its bank version is `BANK_VERSION`, read from the composition root as `prepare-public.mjs` reads it.
+- **The workflow** (`.github/workflows/item-statistics.yml`) runs monthly and on demand, and opens the report
+  as a pull request with `gh`, so no new action is needed.
+  - It skips with a notice when `TELEMETRY_DATABASE_URL` is not set. That secret, and allowing Actions to
+    open pull requests, are human steps in `docs/deploy.md`.
+  - A pull request opened with the workflow token starts no other workflow, so its checks are run by hand.
+- **A retirement takes effect at the next bank build.** Nothing wrote `status: "retired"` anywhere.
+  - Now `runInputFor` applies the report to the carried bank (`pipeline/carry.ts`): judged items gain
+    `stats`, and an item with a reason becomes retired. It stays in the bank for the ids users hold, as
+    architecture.md §5.5 requires.
+  - The form stage skips a retired item. The test proves it bites: 64 items fill the 60-item form, and with
+    5 retired they no longer do.
+  - A damaged report stops the build rather than read as "retire nothing".
+  - `committed-bank.test.ts` passes `applyItemStatistics: false`, because v2 was built before any report
+    existed, and a later report applies to the next version, never to v2. Its assertions are unchanged.
+- **"Trusted" means at least `minResponsesDifficulty` responses**: a proportion correct is usable from about
+  30. The readiness card says how many of the items behind the practice trend are trusted, over the trend's
+  own window (`trendEvidence`). Against today's bank that is "None of the items behind this trend has enough
+  recorded answers yet…". The statistics never reweight the trend (ADR 7).
+- **Three user reports also retire an item** (PRD §13.3). This stays out, because reports are GitHub issues,
+  not data the job reads.
+
+### D95 — Gate E: what the closed pilot runs on
+**Date:** 25 September 2026 · **Status:** **resolved 25 September 2026 by D97** (human: a product pilot on the baseline bank, now; paid content stays at 1.0)
+
+Slice 4 leaves Phase 3 with one open exit criterion, the closed pilot (implementation-plan.md §7: "to seed
+item statistics and to find out whether the bank holds up in front of real users"). D56 put the
+full-volume content run at 1.0, so the bank today is the synthetic baseline (D54). A pilot on it can test
+the product, but its item statistics would describe items the content run replaces. D56's revisit clause
+names this very case and moves the feature's *validation* to after the content run.
+
+The human chooses:
+- **a product pilot on `content/bank/v2`**, with its statistics recorded as indicative only, and the
+  calibration half rerun after the content run (the recommendation, because it keeps D56); or
+- **the funded content run first**, pulled forward from 1.0, so the pilot calibrates real items.
+
+### D96 — three standing items settled: D89 confirmed, D12 verified, the name is Palier
+**Date:** 25 September 2026 · **Status:** accepted (human decisions); D12 verified against the source
+
+- **D89 is confirmed** (the human, on the recommendation). "Add to review queue" starts the same on every
+  item of the walkthrough. This departs from D84 ruling 10's wording ("on items not already queued"),
+  because keying the button to the queue singled out the wrong pilots, and ruling 9 says pilots are never
+  revealed. Nothing changes in code.
+- **D12 is verified, and closed.** The human asked for the check to be made, not assumed. Every cut table
+  in `content/profiles/psc-sle.json` was compared with the PSC's own pages on 25 September 2026, and all
+  four match exactly:
+
+  | Variant | PSC page | Published | Profile |
+  | --- | --- | --- | --- |
+  | writing, unsupervised | [Unsupervised Test of Written Expression](https://www.canada.ca/en/public-service-commission/services/second-language-testing-public-service/managers/unsupervised-test-written-expression.html) (modified 2025-04-25) | X 0–10, A 11–16, B 17–23, C 24–30 | the same |
+  | reading, unsupervised | [Unsupervised Test of Reading Comprehension](https://www.canada.ca/en/public-service-commission/services/second-language-testing-public-service/unsupervised-test-reading-comprehension.html) (2025-04-25) | X 0–8, A 9–13, B 14–18, C 19–25 | the same |
+  | writing, supervised | [SLE, Test of Written Expression](https://www.canada.ca/en/public-service-commission/services/second-language-testing-public-service/managers/sle-written.html) (2026-03-06) | X 0–19, A 20–30, B 31–42, C 43–51, E 52–55 | the same |
+  | reading, supervised | [SLE, Test of Reading Comprehension](https://www.canada.ca/en/public-service-commission/services/second-language-testing-public-service/managers/sle-reading.html) (2026-03-06) | X 0–17, A 18–27, B 28–37, C 38–44, E 45–50 | the same |
+
+  The unsupervised writing page states it outright: "An 'X' is the result for those below level 'A' who
+  obtain a score of 0 to 10." The inference was right, and it is now transcribed. No number moves, so no
+  golden changes. The PRD §5.2 footnote gains a verification note.
+  - **Re-check these when the PSC revises its tests.** The two unsupervised pages were last modified on
+    25 April 2025 and the two supervised ones on 6 March 2026, and ADR 9 exists because these numbers
+    change without notice.
+- **The name stays Palier, and the domain will be `palier.dougkeefe.com`** (the human). It replaces §12.1's
+  `.ca` shortlist. palier.ca, seuil.ca and niveauc.ca were already registered (WHOIS, 25 September 2026).
+  - Pointing the subdomain at the Vercel project is a later human step, "eventually". Nothing in the app
+    names its own origin: sync and telemetry are same-origin, and the bank is origin-relative.
+  - The trademark and language-school check §12.1 asks for remains the human's, before launch.
+
+### D97 — Gate E: a product pilot now; Phase 4 is four slices, its screens adopted as written, and a funded key when needed
+**Date:** 25 September 2026 · **Status:** accepted (human decisions); resolves D95
+
+- **Gate E (D95) is resolved: a product pilot on `content/bank/v2`, now.** The human chose the
+  recommendation.
+  - The paid content run stays at 1.0, as D56 has it.
+  - The pilot tests the product: the exam flow, the results, sync, and whether people opt in. Its item
+    statistics describe synthetic items, so they are **indicative only**, and no retirement they suggest
+    is merged without that caveat in its review.
+  - The calibration half reruns on real items after the content run, which is what D56's revisit clause
+    provides.
+  - The pilot is a checkpoint, not a blocker (implementation-plan.md §7), so Phase 4 starts beside it.
+    Phase 3's last exit criterion is ticked when the pilot is recorded.
+- **Phase 4 is planned as four slices**, mirrored in `implementation-plan.md` §7. This is the same scoped
+  exception D57 and D79 made: keep the two documents in sync.
+  1. **The key, safely.**
+     - The tier-11 key-leak test first.
+     - `/settings/key` without the spend parts, and onboarding step 5.
+     - Validation, do-not-remember mode, the browser `AiProvider` path through `withApiKey`, and graceful
+       degradation.
+     - This carries exit criterion 1 and the first half of 2.
+  2. **Spend.**
+     - The cost ledger (the v1 `costLedger` table), pricing as data, and the spend meter (session, week,
+       month).
+     - The soft cap with its 80% warning, the per-feature cost table, and the pre-flight estimate.
+     - It ends at **Gate G**, the billing check against a funded test account (exit criterion 3).
+  3. **The writing workshop** (§8.7).
+     - The prompt library, and the editor with its word target and timer.
+     - `assessWriting` (a new `AiProvider` capability with its DTOs in domain, ADR 20), the inline offsets,
+       and the model answer with changes highlighted.
+     - Submissions stay on the device, never synced or exported to the server (R12), which needs a new
+       local table.
+  4. **Runtime item generation and the CI gates.**
+     - The compressed draft plus single review, local-only storage, the provenance badge and the one-tap
+       contribution.
+     - AI schema conformance against recorded fixtures, the nightly live smoke, and the eval harness.
+     - This carries the second half of exit criterion 2.
+
+  The order follows risk: nothing that spends a key is built before the test that proves the key cannot
+  leak. The spend meter comes before any feature that spends.
+- **Gate F is resolved: PRD §8.1 step 5, §8.7 and §8.10 are adopted as written**, as Gates A and D were.
+  The calls they leave open are recorded as they are made, as D87 did.
+- **Gate G: a funded test key, when needed.** The human will provide one when Slice 2 reaches the billing
+  check. Until then, everything is built against recorded fixtures and MSW, as Phase 1 was (D54).
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 September 2026 — `dougkeefe/next-progress-slice` (Gate E resolved, Phase 4 planned)
+
+- **Gate E resolved by the human** (D97): a product pilot runs now on `content/bank/v2`, its statistics
+  indicative only; the paid content run stays at 1.0 (D56). D95 is marked resolved.
+- **Gate F resolved**: PRD §8.1 step 5, §8.7 and §8.10 are adopted as written. **Gate G** is named: the human
+  will provide a funded test key for Slice 2's billing check.
+- **Phase 4 planned as four slices** (D97), mirrored in `implementation-plan.md` §7. *Next, decided* is
+  rewritten to **Phase 4 Slice 1, "the key, safely"**, with the pilot's human steps beside it.
+- Documentation only; no code changed, so no gates were rerun.
+
+### 25 September 2026 — `dougkeefe/next-progress-slice` (three standing items settled)
+
+- **The human confirmed D89** and chose the name **Palier**, with the domain **`palier.dougkeefe.com`**
+  (D96).
+- **D12 is verified and closed.** All four cut tables in `psc-sle.json` were compared with the PSC's
+  published pages, and each matches. The unsupervised writing page gives "X … a score of 0 to 10" (D96,
+  with the URLs and their modified dates).
+- Documentation only; no code changed, so no gates were rerun.
+
+### 25 September 2026 — `dougkeefe/next-progress-slice` (Phase 3 Slice 4: telemetry and the item-statistics job)
+
+**Built.** The decisions are recorded in D92–D94, and Gate E is opened as D95.
+- **Domain:** the profile's `itemStatistics` rules; the `TelemetryEvent` DTO (strict: an identity is
+  refused); the `ItemStatisticsReport` DTO; `ItemStats.pointBiserial` made nullable. The JSON Schemas are
+  regenerated.
+- **Engine:** `itemStatistics`, `retirementVerdicts`, `restBucket`/`restBuckets` and `trendEvidence`, all
+  at 100% branch. No golden value moved.
+- **App:** the `TelemetrySink` and `TelemetryStore` ports (§3.3 amended). The use cases
+  `recordExamTelemetry`, `flushTelemetry`, `telemetryConsent`, `setTelemetryConsent` and
+  `practiceTrendEvidence`. `submitExam` queues at the first stamp; `wipeData` and `deleteEverywhere`
+  clear the store.
+- **Testing:** memory ports, two contracts, `telemetryHandlers`, and `syntheticTelemetry`.
+- **Adapters:** Dexie schema v2 with a real migration harness; `httpTelemetrySink` on `./telemetry`.
+- **Server:** `telemetry_events` (migration `0001`), `POST /api/telemetry`, the job and
+  `scripts/item-statistics.mjs`, and the monthly `item-statistics.yml`.
+- **Factory:** the report is applied at the next bank build, and forms skip retired items.
+- **Web:** both graphs wired; every sync trigger flushes; the exam runner notifies after a submit; the
+  post-exam prompt; the `/settings/data` card; the readiness disclosure; `en` and `fr` at parity.
+- **Journey 9** (`e2e/telemetry-offline.spec.ts`, the `offline` project):
+  1. It submits the unsupervised reading exam offline.
+  2. It opts in on the results screen, still offline, with axe on the prompt.
+  3. It sees nothing sent, then exactly one batch once the network returns: five events of exactly
+     five fields, with no `Authorization` header and no cookie.
+  4. It sees nothing sent again after a reload, and the prompt gone.
+  5. It finds sharing on in `/settings/data`.
+
+**Proven to bite, each reverted afterwards:**
+- The synthetic set with an ordinary key in place of the reversed one → exit criterion 3 failed in
+  `item-statistics-job.test.ts` (2 cases) and in `telemetry.integration.test.ts`.
+- `telemetryEventShape` as `z.object` rather than `z.strictObject` → "rejects an event that carries an
+  identity" (domain) and "refuses an event that carries an identity, so it is never stored" (route) failed.
+- `version(2)` removed from `PalierDb` → all three `migration.test.ts` cases failed.
+- The flush taken out of `SyncRunner.notify` → journey 9 failed at "the batch arrives, once"
+  (`expect.poll(() => batches.length).toBe(1)`).
+
+**Mutation check** on the changed engine files (`pnpm mutation --mutate …`, in place, D77): 224 mutants,
+95.1% on the first run.
+- **Three real gaps**, closed: the two `RangeError` messages in `restBucket` were not asserted, and the
+  `trendEvidence` trusted-count test was symmetric, so `>=` → `<` kept the count at 1. The rerun of those
+  lines is at 100%.
+- **Eight equivalents**: the id tie-breaks in the sort comparators, four in `itemStatistics` and four in
+  `trendWindow`. V8's sort only ever tests `< 0`, and item ids are unique, so they sort identically.
+
+**Existing tests touched, and why:** see D92 and D94. No assertion was weakened.
+- Device fixtures gained a telemetry store.
+- "seven ports" became eight.
+- A route mock gained `telemetryApi`.
+- `committed-bank.test.ts` states v2 was built with no report.
+
+**Gates:**
+```
+pnpm verify        → exit 0: "no dependency violations found" ×2; Test Files 141 passed, Tests 1955 passed | 8 todo
+                     New files at 100% branch: engine item-statistics.ts, rest-bucket.ts; app telemetry.ts,
+                     exam-telemetry-events.ts; adapters telemetry-store.ts, http-telemetry-sink.ts;
+                     web telemetry-handlers.ts, telemetry/route.ts, single-flight.ts, features/telemetry
+PALIER_INTEGRATION=1 … telemetry.integration.test.ts → 6 passed (contract on PGlite; 6,600 events through the handler)
+pnpm verify:medium → exit 0 in 63 s locally: integration Tests 45 passed; Playwright 34 passed (journey 9: 5.9 s)
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB, within budget
+pnpm --filter @palier/web lighthouse  → exit 0, 12 URLs × 5 runs, no assertion failures; median 1.0 / 1.0
+                     on every URL except /en/review and /fr/progress at 0.99 performance; max CLS 0
+node scripts/item-statistics.mjs (no DATABASE_URL) → exits 1 with its message, after every import resolved
+                     under type stripping
+```
+
+**Not done here, by design:**
+- the closed pilot (Gate E, D95);
+- the first real run of `readEventsWithPostgres`, which is the first scheduled job;
+- the "three reports retire" rule (D94).
 
 ### 25 September 2026 — `dougkeefe/next-slice-from-progress-v1` (the medium-lane budget, 4 → 5 minutes)
 

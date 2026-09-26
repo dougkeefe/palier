@@ -195,7 +195,20 @@ interface KeyVault {
   deviceSecret(): Promise<string>
 }
 
-interface TelemetrySink { record(e: TelemetryEvent): void; flush(): Promise<void> }
+// Amended in place 25 September 2026 (Phase 3 Slice 4, progress.md D92). One port became
+// two: the queue must survive an offline submit, so it lives in IndexedDB, and a batch goes
+// out over fetch, and one adapter directory cannot hold both (adapters never import each
+// other). `record` and `flush` became use cases over the pair (recordExamTelemetry,
+// flushTelemetry). TelemetryStore is device-local and never synced or exported.
+interface TelemetrySink { send(batch: TelemetryEvent[]): Promise<void> }   // at most TELEMETRY_MAX_BATCH
+interface TelemetryStore {
+  consent(): Promise<'unasked' | 'on' | 'off'>
+  setConsent(c: 'unasked' | 'on' | 'off'): Promise<void>
+  enqueue(events: TelemetryEvent[]): Promise<void>
+  take(limit: number): Promise<{ id: number; event: TelemetryEvent }[]>   // oldest first
+  remove(ids: number[]): Promise<void>
+  clear(): Promise<void>                                                  // queue and consent
+}
 interface Clock  { now(): ISO }
 interface Random { next(): number }
 ```
@@ -815,6 +828,16 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
   *Done:* exit criterion 3 on synthetic data. **The closed pilot**, 20–30 people, is the human decision
   gate that follows.
 
+  **Slice 4 status, 25 September 2026: built** (`progress.md` D92–D94). The statistics are pure engine
+  functions under the profile's new `itemStatistics` rules. `POST /api/telemetry` stores identity-free
+  events, and a monthly workflow opens the job's report as a pull request. The factory applies the report
+  at the next bank build, and the form stage skips retired items. On the client, the telemetry ports
+  (§3.3, amended in place) sit over a Dexie schema v2 queue, with a device-local opt-in asked once on the
+  results screen and a readiness-card disclosure. Exit criterion 3 holds in the fast lane and through the
+  real handler on PGlite. Journey 9 submits offline, opts in and sees one identity-free batch arrive.
+  **Next is the closed pilot**, the phase's human gate. Gate E (`progress.md` D95, resolved by D97): a
+  product pilot on the baseline bank, now, with its statistics indicative only. Phase 4 starts beside it.
+
 ---
 
 ### Phase 4: BYOK, generation and the writing workshop
@@ -838,6 +861,23 @@ as Phase 2's were (`progress.md` D57 and D79). `progress.md` mirrors this list, 
 **CI gates added:** AI schema conformance against recorded fixtures, the key-leak test, nightly live smoke suite, the AI eval harness reporting schema conformance rate.
 
 **Not built:** anything voice.
+
+**Completion slices** (planned 25 September 2026, `progress.md` D97; keep the two in sync). Gate F adopted PRD §8.1
+step 5, §8.7 and §8.10 as written.
+- **Slice 1 — The key, safely.** The tier-11 key-leak test, written first; `/settings/key` (masked field,
+  validate with one cheap call, save, remove, where the key lives) and onboarding step 5; do-not-remember
+  mode; the browser `AiProvider` constructed inside `KeyVault.withApiKey` per call; malformed, 429, 401 and
+  timeout each degrading to a plain state. *Done:* the leak test green across the E2E suite and proven to
+  bite; axe clean; exit criterion 1 and the first half of 2.
+- **Slice 2 — Spend.** The cost ledger over the v1 `costLedger` table, pricing as data, the spend meter
+  (session, week, month), the soft cap with an 80% warning, the per-feature cost table, and the pre-flight
+  estimate. *Done:* exit criterion 3, at **Gate G**, the human's funded test account.
+- **Slice 3 — The writing workshop** (§8.7). The prompt library, the editor with its word target and timer,
+  `assessWriting` with inline offsets, and the model answer with changes highlighted. Submissions stay on the
+  device (R12).
+- **Slice 4 — Runtime item generation and the CI gates.** The compressed draft plus single review, local-only
+  storage, the provenance badge and the one-tap contribution. AI schema conformance against recorded fixtures,
+  the nightly live smoke and the eval harness. *Done:* the second half of exit criterion 2.
 
 ---
 

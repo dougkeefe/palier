@@ -13,8 +13,8 @@ export {
   pointsToBand,
 } from "./band-mapper.js";
 
-export type { BandTrend, SkillTrend } from "./trend-calculator.js";
-export { MIN_EVIDENCE, TREND_WINDOW, calculateTrend } from "./trend-calculator.js";
+export type { BandTrend, SkillTrend, TrendEvidence } from "./trend-calculator.js";
+export { MIN_EVIDENCE, TREND_WINDOW, calculateTrend, trendEvidence } from "./trend-calculator.js";
 
 export type { ExamResult, ScoredExamItem } from "./scorer.js";
 export { scoreExam } from "./scorer.js";
@@ -44,3 +44,8 @@ export {
 
 export type { SubSkillTally } from "./sub-skill-breakdown.js";
 export { examSubSkillBreakdown, subSkillBreakdown } from "./sub-skill-breakdown.js";
+
+export { restBucket, restBuckets } from "./rest-bucket.js";
+
+export type { ItemStatistic } from "./item-statistics.js";
+export { itemStatistics, retirementVerdicts } from "./item-statistics.js";

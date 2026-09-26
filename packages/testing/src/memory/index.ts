@@ -10,3 +10,6 @@ export { memorySettingsStore } from "./settings-store.js";
 export { memorySyncServer } from "./sync-server.js";
 export type { MemorySyncServer, MemorySyncServerOptions, SyncService } from "./sync-server.js";
 export { memorySyncStateStore } from "./sync-state-store.js";
+export { memoryTelemetryCollector } from "./telemetry-collector.js";
+export type { MemoryTelemetryCollector } from "./telemetry-collector.js";
+export { memoryTelemetryStore } from "./telemetry-store.js";
