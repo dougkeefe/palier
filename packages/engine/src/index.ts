@@ -44,3 +44,8 @@ export {
 
 export type { SubSkillTally } from "./sub-skill-breakdown.js";
 export { examSubSkillBreakdown, subSkillBreakdown } from "./sub-skill-breakdown.js";
+
+export { restBucket, restBuckets } from "./rest-bucket.js";
+
+export type { ItemStatistic } from "./item-statistics.js";
+export { itemStatistics, retirementVerdicts } from "./item-statistics.js";

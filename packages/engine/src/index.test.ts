@@ -34,6 +34,13 @@ describe("@palier/engine public surface", () => {
     expect(typeof engine.weakestSubSkills).toBe("function");
   });
 
+  it("exports the item statistics and the rest bucket", () => {
+    expect(typeof engine.itemStatistics).toBe("function");
+    expect(typeof engine.retirementVerdicts).toBe("function");
+    expect(typeof engine.restBucket).toBe("function");
+    expect(typeof engine.restBuckets).toBe("function");
+  });
+
   it("exports the sub-skill breakdown", () => {
     expect(typeof engine.subSkillBreakdown).toBe("function");
   });
