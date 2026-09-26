@@ -87,9 +87,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v1` | **Phase 4 Slice 1 — the key, safely** (D97): the tier-11 key-leak test first (`e2e/leak-guard.ts`, `key-leak.spec.ts`, `key-leak-production.spec.ts`), then do-not-remember mode in `KeyVault`, `AiProvider.verifyKey` and the timeout, the key use cases, `/settings/key` and its guide, onboarding step 5, and journey 5. Exit criterion 1 and the first half of 2. **Built; pending merge** (D98–D100). | 26 September 2026 |
+| `dougkeefe/adelaide` | **Phase 4 Slice 2 — spend** (D97): the `CostLedger` port over Dexie v1's `costLedger` table, every AI call metered in `withAiProvider`, `pricing.json`, the pure `spendTotals`, the meter, soft cap and per-feature table on `/settings/key`, the pre-flight estimate, and `billing-check.mjs` for Gate G. | 26 September 2026 |
 
-*(The prior rows — Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 4 Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
