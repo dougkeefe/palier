@@ -6,7 +6,7 @@ import { itemId, itemStatisticsReportSchema, parseExamProfileOrThrow } from "@pa
 import { syntheticTelemetry } from "@palier/testing";
 import { describe, expect, it } from "vitest";
 
-import { EVENTS_SQL, bankItems, buildReport, eventsFromRows, reportText, runItemStatistics } from "./item-statistics-job";
+import { EVENTS_SQL, bankItems, buildReport, eventsFromRows, reportText, rowsOf, runItemStatistics } from "./item-statistics-job";
 
 const require = createRequire(import.meta.url);
 const PROFILE_PATH = require.resolve("@palier/content/profiles/psc-sle.json");
@@ -68,6 +68,14 @@ describe("eventsFromRows", () => {
   });
 });
 
+describe("rowsOf", () => {
+  it("reads postgres.js's rows and PGlite's { rows } alike", () => {
+    const rows = [{ item_id: "a" }];
+    expect(rowsOf(rows)).toBe(rows);
+    expect(rowsOf({ rows, fields: [] })).toBe(rows);
+  });
+});
+
 describe("reportText", () => {
   it("writes two-space JSON with a trailing newline, so a rerun diffs cleanly", () => {
     const report = buildReport({ events: [], items: [], bankVersion: 2, profile, generatedAt: "2026-10-01T06:00:00.000Z" });
@@ -82,6 +90,10 @@ describe("bankItems and runItemStatistics — over the committed bank", () => {
   it("reads items from the committed bank through the bank adapter, passing over an unknown id", async () => {
     const items = await bankItems(CONTENT_DIR, 2, [...IN_BANK, "not-in-any-bank"]);
     expect(items.map((item) => item.id).sort()).toEqual([...IN_BANK].sort());
+  });
+
+  it("refuses a bank version that was never published, rather than judge against nothing", async () => {
+    await expect(bankItems(CONTENT_DIR, 999, IN_BANK)).rejects.toThrow();
   });
 
   it("judges the bank's items from the events, and gives no verdict for an item the bank lacks", async () => {

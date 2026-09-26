@@ -27,6 +27,10 @@ import { itemStatistics, retirementVerdicts } from "@palier/engine";
 export const EVENTS_SQL =
   "select item_id, correct, response_ms, rest_bucket, bank_version from telemetry_events order by id";
 
+/** The rows of a query result: postgres.js answers with the rows, PGlite with `{ rows }`. */
+export const rowsOf = (result: unknown): readonly Record<string, unknown>[] =>
+  (Array.isArray(result) ? result : (result as { rows: unknown[] }).rows) as Record<string, unknown>[];
+
 /**
  * Rows as either driver returns them, parsed back into events. A row the schema refuses
  * throws: the route validated every one on the way in, so a bad row is a defect worth

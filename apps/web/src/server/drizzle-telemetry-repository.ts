@@ -2,7 +2,7 @@ import { sql } from "drizzle-orm";
 import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
 
 import { rateLimitHit } from "./drizzle-repository";
-import { EVENTS_SQL, eventsFromRows } from "./item-statistics-job";
+import { EVENTS_SQL, eventsFromRows, rowsOf } from "./item-statistics-job";
 import { telemetryEvents } from "./schema";
 import type { TelemetryRepository } from "./telemetry-repository";
 
@@ -24,11 +24,6 @@ export const drizzleTelemetryRepository = <H extends PgQueryResultHKT>(db: PgDat
       })),
     );
   },
-  events: async () => {
-    const result: unknown = await db.execute(sql.raw(EVENTS_SQL));
-    // postgres.js answers with the rows; PGlite with `{ rows }`.
-    const rows = Array.isArray(result) ? result : (result as { rows: unknown[] }).rows;
-    return eventsFromRows(rows as Record<string, unknown>[]);
-  },
+  events: async () => eventsFromRows(rowsOf(await db.execute(sql.raw(EVENTS_SQL)))),
   hit: rateLimitHit(db),
 });

@@ -44,13 +44,16 @@ export const syntheticTelemetry = (options: SyntheticTelemetryOptions = {}): Syn
   const respondents = options.respondents ?? 300;
   const bankVersion = options.bankVersion ?? 2;
 
-  const ordinary = Array.from({ length: ORDINARY }, (_, i) => itemId(`syn-${String(i + 1).padStart(2, "0")}`));
+  // Difficulties spread evenly over [-1, 1], so every ordinary item is answered by
+  // between roughly a quarter and three quarters of people.
+  const ordinaryItems = Array.from({ length: ORDINARY }, (_, i) => ({
+    id: itemId(`syn-${String(i + 1).padStart(2, "0")}`),
+    difficulty: -1 + (2 * i) / (ORDINARY - 1),
+  }));
+  const ordinary = ordinaryItems.map((item) => item.id);
   const tooEasy = itemId("syn-too-easy");
   const reversedKey = itemId("syn-reversed-key");
   const ids = [...ordinary, tooEasy, reversedKey];
-  // Difficulties spread evenly over [-1, 1], so every ordinary item is answered by
-  // between roughly a quarter and three quarters of people.
-  const difficulty = ordinary.map((_, i) => -1 + (2 * i) / (ORDINARY - 1));
 
   /** Sum of twelve uniforms, less six: close enough to a standard normal. */
   const normal = (): number => Array.from({ length: 12 }, () => random.next()).reduce((a, b) => a + b, 0) - 6;
@@ -67,7 +70,7 @@ export const syntheticTelemetry = (options: SyntheticTelemetryOptions = {}): Syn
 
   const events: TelemetryEvent[] = [];
   abilities.forEach((ability, person) => {
-    const right = new Map<ItemId, boolean>(ordinary.map((id, i) => [id, random.next() < chance(ability, difficulty[i] ?? 0)]));
+    const right = new Map<ItemId, boolean>(ordinaryItems.map((item) => [item.id, random.next() < chance(ability, item.difficulty)]));
     right.set(tooEasy, !weakest.has(person));
     right.set(reversedKey, !(random.next() < chance(ability, 0)));
 
