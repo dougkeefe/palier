@@ -12,7 +12,12 @@ Knows what the product does, nothing about how anything is stored, fetched or re
 - **Use cases receive their collaborators.** `Clock`, `Random`, stores and providers are
   parameters supplied by the composition root (§3.5); nothing here constructs a concrete one.
 - **`KeyVault.withApiKey` hands the key to a callback and never returns it** (§3.3). Do not
-  add a `getApiKey` — the shape is the control (ADR 2, ADR 3).
+  add a `getApiKey` — the shape is the control (ADR 2, ADR 3). `putApiKey(key, { remember: false })`
+  holds it for this tab only, and `apiKeyStorage()` says where it is held, in a word (progress.md D98).
+- **A provider is made from the key inside `withApiKey`, once per call** (`use-cases/api-key.ts`,
+  D99). `withAiProvider(deps, fn)` is the one path from the key to an `AiProvider`, through the
+  `AiProviderFactory` the composition root supplies; every AI use case goes through it, and nothing
+  caches the provider. `AiProvider.verifyKey()` is the key screen's one cheap call (`checkApiKey`).
 - **Ports are transcribed from §3.3, not invented.** Eight live under `src/ports/`:
   `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`,
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the

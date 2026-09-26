@@ -31,7 +31,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   in the browser after hydration and imports the container module lazily, so the adapters stay out of
   the shared first-load JS. The layout passes `hermetic` from the environment. Screens are static RSC
   shells around one client island each (`/start`, `/home`, `/diagnostic`, `/practice/{reading,writing}`,
-  `/exam`, `/exam/run`, `/exam/results`).
+  `/exam`, `/exam/run`, `/exam/results`, `/settings/{data,sync,key}`).
   The islands' decisions live in tested `.ts` beside them (`src/features/**`, `src/lib/study.ts`); a
   `.tsx` holds rendering and effects only.
 - **`public/content/` and `public/sw.js` are generated, gitignored and never edited.**
@@ -101,6 +101,20 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   a run is in flight runs once more after it (`runsAgainAfterCurrent`), and the settings status line
   carries `aria-busy` while an exchange is in flight, which is what journey 8 waits on (D82). "Syncing…"
   appears only after 400 ms, so a run with nothing to do never shifts the header (D72).
+- **The user's key** (Phase 4 Slice 1, progress.md D98–D100).
+  - The container's `aiProvider` is `openAiFor`, the real `@palier/adapters/openai` in **both** graphs,
+    over model ids that are data (`src/lib/ai-models.json`). It is only ever called by `withAiProvider`,
+    inside the vault's callback. The browser calls `api.openai.com` directly; the key never reaches
+    `src/server`.
+  - `/settings/key` (`components/key/KeySettings.tsx`, with its decisions in `features/key/key-view.ts`)
+    saves, checks, removes and keeps a key for a tab. Every check result is a sentence mapped by error
+    **name**, never the raw error. `/settings/key/guide` is static.
+  - Onboarding's step 5 is the wizard's last step on the skip path, and an offer on the diagnostic readout
+    on the diagnostic path ("diagnostic before key, always"). `components/key/KeyOffer.tsx` serves both.
+  - **Tier 11, the key-leak test**, is `e2e/key-leak.spec.ts` (hermetic, with real sync and telemetry)
+    and `e2e/key-leak-production.spec.ts` (real Dexie), over `e2e/leak-guard.ts`. A new flow that can
+    touch the key belongs in the first. The guard reads request headers synchronously and response bodies
+    on `requestfinished`, because `allHeaders()` never settles for a request a reload aborts.
 
 ## Gates this app owns
 
@@ -119,11 +133,13 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   Turbopack dev server under parallel first requests can read a build file mid-write (D67);
   keep it the `chromium` project's dependency. **`chromium`** (hermetic, `next dev`) runs the
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
-  titles, and `sync.spec.ts`: journey 8 (two contexts, two devices), journey 7's sync half,
+  titles, **journey 5 and step 5** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
+  and `sync.spec.ts`: journey 8 (two contexts, two devices), journey 7's sync half,
   and the sync settings' states, and `exam.spec.ts` (a fixture exam from the picker to its results).
   **`offline`** (production `next start`, port 3100) runs `offline.spec.ts` (shell,
   unvisited route, every shard, journeys 2 and 7 with the network off [R4]), `exam-offline.spec.ts`
   (**journey 3**: a full exam through a reload and a network drop, scored against an independent oracle) and
+  `key-leak-production.spec.ts` (the key at rest, both modes, through a reload), and
   `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
   whose fake timers stall Dexie and React). Axe on the states, (`e2e/`),
   Lighthouse perf + a11y ≥ 95 (`lighthouserc.json`, on its own port 3200, so a test server left

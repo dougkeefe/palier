@@ -7,7 +7,9 @@ canonical 60-item fixture bank (§3.2), and the MSW handlers — including `bank
 serves an `ItemRepositoryBank` as the manifest + content-hashed shards the real bank ships, so the
 HTTP bank adapter is held to the same `itemRepositoryContract` the in-memory repo passes (it
 re-implements the factory's `buildBank` grouping, since this package may not import the factory).
-The sync pieces are:
+`openAiHandlers({ mode })` stand in for OpenAI's models endpoint in each state a key check can end in
+(ok, 401, 429, 500, malformed, never answers; progress.md D99), with an `onAuthorization` spy. The
+in-memory `KeyVault` keeps D98's two modes apart as the Dexie vault does. The sync pieces are:
 - `memorySyncServer`, the whole sync service in memory: revisions, pairing, revocation, and a
   `transport(secret)` per device;
 - `memorySyncStateStore`;
