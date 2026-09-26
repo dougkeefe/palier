@@ -103,14 +103,24 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   appears only after 400 ms, so a run with nothing to do never shifts the header (D72).
 - **The user's key** (Phase 4 Slice 1, progress.md D98–D100).
   - The container's `aiProvider` is `openAiFor`, the real `@palier/adapters/openai` in **both** graphs,
-    over model ids that are data (`src/lib/ai-models.json`). It is only ever called by `withAiProvider`,
-    inside the vault's callback. The browser calls `api.openai.com` directly; the key never reaches
+    over model ids that are data (`src/lib/ai-models.json`). It is only ever called inside the vault's
+    callback by `@palier/app`'s key use cases: `withAiProvider`, metered, and `checkApiKey` (D101). The browser calls `api.openai.com` directly; the key never reaches
     `src/server`.
   - `/settings/key` (`components/key/KeySettings.tsx`, with its decisions in `features/key/key-view.ts`)
     saves, checks, removes and keeps a key for a tab. Every check result is a sentence mapped by error
     **name**, never the raw error. `/settings/key/guide` is static.
   - Onboarding's step 5 is the wizard's last step on the skip path, and an offer on the diagnostic readout
     on the diagnostic path ("diagnostic before key, always"). `components/key/KeyOffer.tsx` serves both.
+  - **Spend** (Phase 4 Slice 2, progress.md D101–D104). `src/lib/pricing.json` is pricing as data,
+    structure-checked by `src/lib/pricing.ts` and held equal to the factory's rates by a test;
+    `openAiFor` passes its `models`, so every call is priced. The container's `costLedger` is Dexie's in
+    production and memory's when hermetic, and "this session" is since the container was built.
+    `components/key/SpendSettings.tsx` (decisions in `features/key/spend-view.ts`) is the meter, the soft
+    cap (a synced setting) and the per-feature table, below the key cards, key or no key.
+    `container-spend.test.ts` runs a real call through both graphs over MSW; `spend-production.spec.ts`
+    seeds `costLedger` rows in real IndexedDB for the warning states, since no screen spends until
+    Slice 3. **Gate G's billing check** is `scripts/billing-check.mjs` over `src/lib/billing-check.ts`
+    (no relative imports, for type stripping); the runbook is `docs/deploy.md`.
   - **Tier 11, the key-leak test**, is `e2e/key-leak.spec.ts` (hermetic, with real sync and telemetry)
     and `e2e/key-leak-production.spec.ts` (real Dexie), over `e2e/leak-guard.ts`. A new flow that can
     touch the key belongs in the first. The guard reads request headers synchronously and response bodies
@@ -139,7 +149,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   **`offline`** (production `next start`, port 3100) runs `offline.spec.ts` (shell,
   unvisited route, every shard, journeys 2 and 7 with the network off [R4]), `exam-offline.spec.ts`
   (**journey 3**: a full exam through a reload and a network drop, scored against an independent oracle) and
-  `key-leak-production.spec.ts` (the key at rest, both modes, through a reload), and
+  `key-leak-production.spec.ts` (the key at rest, both modes, through a reload, with a ledger row in
+  the dump), `spend-production.spec.ts` (the meter and the cap's warnings over real IndexedDB), and
   `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
   whose fake timers stall Dexie and React). Axe on the states, (`e2e/`),
   Lighthouse perf + a11y ≥ 95 (`lighthouserc.json`, on its own port 3200, so a test server left

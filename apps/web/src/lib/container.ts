@@ -195,7 +195,8 @@ const PROFILE: ExamProfile = parseExamProfileOrThrow(pscSleProfile);
 
 /**
  * How the browser makes an `AiProvider`: from the key, inside `KeyVault.withApiKey`, once
- * per call (`withAiProvider` in `@palier/app` is the only caller), so no provider holding
+ * per call (only `@palier/app`'s key use cases call it: `withAiProvider`, which meters every
+ * spending call into the cost ledger, and `checkApiKey`; D101), so no provider holding
  * the key outlives the call (implementation-plan.md §3.3, ADR 2, progress.md D99). It calls
  * `api.openai.com` directly from the browser; the key never reaches our server
  * (architecture.md §6.3). Both graphs wire the real adapter, as they do the sync transport:

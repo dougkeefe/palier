@@ -8,9 +8,11 @@ four, mirrored in `implementation-plan.md` §7 (D79). **Slices 1–3 merged (#22
 (D84); Slice 4 (telemetry and the item-statistics job) is built** (`dougkeefe/next-progress-slice`; D92–D94),
 so exit criteria 1–4 are met. **Every buildable Phase 3 item is done.** Gate E is resolved (D97): the
 closed pilot runs now as a **product pilot** on the baseline bank, run by the human, and it ticks the last
-criterion. **Phase 4 started beside it: Slice 1, "the key, safely", is built** (`dougkeefe/next-progress-slice-v1`;
-D98–D100), which meets Phase 4's exit criterion 1 and the first half of 2. Next is Slice 2, spend. See
-[Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+criterion. **Phase 4 started beside it: Slice 1, "the key, safely", merged (#28; D98–D100)**, meeting Phase 4's
+exit criterion 1 and the first half of 2. **Slice 2, "spend", is built** (`dougkeefe/adelaide`; D101–D104):
+the cost ledger, pricing as data, the meter, the soft cap and the pre-flight estimate. Its exit criterion 3
+waits on **Gate G**, the human's billing check on a funded key. Next is Slice 3, the writing workshop,
+beside Gate G. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
 
@@ -75,7 +77,7 @@ human for anything expensive.
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
-| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **in progress** (four slices, D97; Slice 1 built, D98–D100; Slice 2 is *Next, decided*) |
+| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **in progress** (four slices, D97; Slice 1 merged, D98–D100; Slice 2 built, D101–D104, awaiting Gate G; Slice 3 is *Next, decided*) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
@@ -87,7 +89,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/adelaide` | **Phase 4 Slice 2 — spend** (D97): the `CostLedger` port over Dexie v1's `costLedger` table, every AI call metered in `withAiProvider`, `pricing.json`, the pure `spendTotals`, the meter, soft cap and per-feature table on `/settings/key`, the pre-flight estimate, and `billing-check.mjs` for Gate G. | 26 September 2026 |
+| `dougkeefe/adelaide` | **Phase 4 Slice 2 — spend** (D97): the `CostLedger` port over Dexie v1's `costLedger` table, every AI call metered in `withAiProvider`, `pricing.json`, the pure `spendTotals`, the meter, soft cap and per-feature table on `/settings/key`, the pre-flight estimate, and `billing-check.mjs` for Gate G. **Built; pending merge** (D101–D104). Gate G is the human's. | 26 September 2026 |
 
 *(The prior rows — Phase 4 Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -188,57 +190,77 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 4 Slice 1 is built** (D98–D100). The key is saved, checked and removed, or held for a tab. Step 5 is
-in onboarding. The tier-11 key-leak test is green and was proven to bite. **The product pilot is still
-running beside it** (Gate E, D97, below).
+**Phase 4 Slice 2 is built** (D101–D104). Every spending call is metered into a device-local ledger, and the
+meter, the soft cap and the per-feature table are on `/settings/key`. `preflightSpend` is ready for its first
+caller. **Gate G runs beside the next slice** (human, below), and so does the product pilot (Gate E, D97).
 
-**Next: Phase 4 Slice 2, "spend"** (D97). It needs no human until its last step, **Gate G**. Build everything
-against MSW and recorded usage, as Phase 1 did (D54).
+**Next: Phase 4 Slice 3, "the writing workshop"** (PRD §8.7, architecture.md §8.4, D97). Gate F adopted §8.7
+as written, so no human is needed. Build against MSW and recorded completions, as Slice 2 did.
 
 **Scope:**
-- **A `CostLedger` port** over Dexie v1's existing `costLedger: "++id, ts, feature"` table, so no migration
-  is needed. Give it an in-memory double and a contract, and decide its shape in the slice and record it,
-  as D45 did.
-  - It is **never synced and never exported** (architecture.md §9.4). A test holds both.
-  - `wipeData` and `deleteEverywhere` clear it.
-- **Every AI call is recorded**: `withAiProvider` reads `lastUsage()` after the callback and appends it,
-  with the feature's name. It is the one path to a provider (D99), so no AI use case can skip the ledger.
-  The key check spends nothing and records nothing.
-- **Pricing as data**: `apps/web/src/lib/pricing.json`, beside `ai-models.json`, fed to the adapter's
-  existing `pricing` option, so `UsageRecord.costUsd` is filled in. Give it a per-feature table of typical
-  token counts, for the estimates.
-- **A pure `spendTotals`** in the engine, over plain ledger rows and "now", for this session, this week and
-  this month. Decide the session and week boundaries in the slice and record them. Hold it at 100% branch.
-- **On `/settings/key`**, PRD §8.10's remaining parts:
-  - the meter;
-  - a soft monthly cap, with a warning at 80%, and a link to OpenAI's own hard limits, "the real
-    protection";
-  - the per-feature cost table.
-  - Decide in the slice whether the cap syncs, and record it. The ledger does not.
-- **The pre-flight estimate**: a function a spending feature calls before it spends, answering the estimate
-  and whether it would cross the cap. Slice 3 is its first caller.
-- **The billing-check script** for Gate G: `scripts/billing-check.mjs` runs a fixed handful of real calls
-  through the adapter and the ledger on a funded key, and prints the meter's total, to compare with OpenAI's
-  usage page.
+- **`assessWriting(req: WritingRequest): Promise<WritingAssessment>` joins `AiProvider`** (§3.3 amended in
+  place). Its DTOs and the Zod re-validation schema go in `@palier/domain` (ADR 20).
+  - The request is the prompt, the user's text and the target band.
+  - The answer is five criteria, each with a band and evidence: register, structure, grammar and mechanics,
+    vocabulary precision, and task achievement. It also has an inline error list, as `{ start, end }` offsets
+    into the user's own text with a correction and a rule, and a model answer at the target band.
+  - The adapter calls the `assess` role (`ai-models.json`, D103) and re-validates. **An offset outside the
+    text, or ranges that overlap, is a malformed answer**, retried once, then `InvalidResponseError`.
+  - The fake and the contract follow.
+- **Submissions stay on the device (R12):**
+  - a new **`WritingStore`** port (`put`, `get`, `all`, `clear`);
+  - **Dexie v3** adds a `writingSubmissions` table, with a v2 → v3 case in `migration.test.ts`;
+  - it is never synced and never exported (architecture.md §9.4), and `wipeData` and `deleteEverywhere`
+    clear it.
+  - A submission holds the text, the prompt id, when it was written, and the assessment once there is one.
+- **The prompt library is content data.**
+  - It is a `WritingPrompt` Zod schema in domain. It is a content artefact, so it goes in `CONTENT_SCHEMAS`
+    with a generated JSON Schema.
+  - Each prompt has a register-true task (a briefing-note paragraph, a reply to a client, a meeting
+    summary), a word target and a suggested time.
+  - A small baseline set is committed under `@palier/content`. Generating more in the factory is the
+    content run's (D56). Decide the path and the authoring in the slice, and record it.
+- **`/practice/writing/workshop`**, marked as supplementary, as §8.7 says:
+  - pick a prompt;
+  - a plain editor with a live word count against the target, and an elapsed-time display that is **not**
+    enforced;
+  - "Get feedback", which shows `preflightSpend("writing-feedback")`: the estimate, and the cap warning when
+    `after` is near or over. It never blocks.
+  - Then `withAiProvider(…, "writing-feedback", …)` makes the one call, and the feedback shows the five
+    criteria, the errors inline over the user's text by offset, and the model answer with its changes
+    highlighted.
+  - With no key, PRD §14's compact inline card: what it does, what it costs (from `featureCosts`), and a
+    link to add a key. Never a modal.
+  - Drop "Both arrive in coming updates" for this row of the table.
+- **The word diff** for the model answer is a pure function in `apps/web/src/features/writing/`, an LCS
+  over words, with tests.
 
 **Ports and functions:**
-- `CostLedger` (new);
-- `withAiProvider` and `AiProvider.lastUsage` as they are;
-- the adapter's `pricing`;
-- `spendTotals` (new, engine);
-- `settings` for the cap.
+- `AiProvider.assessWriting` (new);
+- `WritingStore` (new);
+- `withAiProvider` and `preflightSpend` as they are;
+- `featureCosts` for the no-key card.
 
 **Done looks like:**
-- the ledger's contract green on memory and Dexie;
-- `spendTotals` at 100%;
-- the meter, cap and table on `/settings/key` axe-clean in every state, with `en` and `fr` at parity;
-- the leak test still green, with the ledger's rows in its dump;
-- `pnpm verify` and `verify:medium` green;
-- then **Gate G**: the human runs the billing check on a funded key, and the meter matches OpenAI's billing
-  within a few percent (Phase 4 exit criterion 3).
+- the `WritingStore` contract green on memory and Dexie, with the migration case;
+- the adapter's `assessWriting` tested for malformed, overlapping and out-of-range offsets, 429, 401 and
+  timeout;
+- the workshop axe-clean in every state (no key, editing, pre-flight with a warning, feedback, failure),
+  with `en` and `fr` at parity;
+- **the key-leak test extended**. The hermetic spec drives a workshop submission against a stubbed
+  completion, so a **real call's** ledger row is in the dump, and asserts **the submission's text reaches
+  no origin but `api.openai.com`**. That is R12's writing half;
+- `pnpm verify` and `verify:medium` green.
 
-**After it, in order** (D97): Slice 3, the writing workshop (§8.7), `withAiProvider`'s first spending caller;
-then Slice 4, runtime item generation and the Phase 4 CI gates.
+**After it** (D97): Slice 4, runtime item generation and the Phase 4 CI gates.
+
+**Running now (human): Gate G, the billing check** (D97, D103; `docs/deploy.md`, "Gate G").
+1. Make a test key of its own on a funded account with a low monthly limit.
+2. Run `OPENAI_API_KEY='sk-…' pnpm --filter @palier/web billing-check`, after building the packages.
+3. Compare its tokens and meter total with OpenAI's usage page for the printed window. The tokens should
+   match exactly, and the dollars within a few percent. A dollar gap with matching tokens means
+   `pricing.json`'s rates: correct them together with the factory's.
+4. Record both figures in a session-log entry. That ticks Phase 4's exit criterion 3.
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
@@ -260,7 +282,8 @@ last exit criterion.
   retirement in `content/factory/item-statistics.json` takes effect at that build (D94). **Timing settled
   (D56, reaffirmed at Gate E): sequenced to the end**, a 1.0 gate. After it, rerun the pilot's calibration
   half on real items (D97).
-- **Gate G, a funded OpenAI test key** (D97), when Slice 2 reaches the billing check. The human said yes.
+- **Gate G, a funded OpenAI test key** (D97): Slice 2 has reached the billing check, so it is **running now**
+  (above). The human said yes.
 - Resolved: **Gate A** (product and UI direction), **Gate B** (the D43 `ScheduleEntry` merge, D69),
   **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026; **Gate D** (exam UI
   direction, D84), **Gate E** (the pilot runs on the baseline bank, D97) and **Gate F** (Phase 4 UI
@@ -440,10 +463,11 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
   session-log evidence). The tier-11 key-leak test first; `/settings/key` and onboarding step 5;
   validation, do-not-remember, the browser `AiProvider` path through `withApiKey`, and graceful
   degradation.
-- [ ] **Slice 2 — Spend.** The cost ledger, pricing as data, the meter, the soft cap, the per-feature table,
-  and the pre-flight estimate. Ends at **Gate G** (the human's funded test key) for the billing check.
-  *Next, decided*.
-- [ ] **Slice 3 — The writing workshop** (§8.7), with submissions kept on the device.
+- [x] **Slice 2 — Spend.** **Built 26 September 2026** (`dougkeefe/adelaide`; D101–D104; session-log
+  evidence). The cost ledger, every spending call metered in `withAiProvider`, pricing as data, the meter,
+  the soft cap, the per-feature table, the pre-flight estimate, and the billing check. It ends at
+  **Gate G** (the human's funded test key), which ticks exit criterion 3.
+- [ ] **Slice 3 — The writing workshop** (§8.7), with submissions kept on the device. *Next, decided*.
 - [ ] **Slice 4 — Runtime item generation and the Phase 4 CI gates.**
 
 **Exit criteria** (the actual gate)
@@ -457,7 +481,9 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
   **First half met** (Slice 1, D99): the adapter turns each into its own error, and the key screen puts each
   in plain words. This is tested through the real adapter over MSW (`container-key.test.ts`) and in journey
   5. The second half, schema conformance against recorded fixtures, is Slice 4's
-- [ ] Spend meter matches actual OpenAI billing within a few percent
+- [ ] Spend meter matches actual OpenAI billing within a few percent. **Built, awaiting Gate G** (D103): the
+  meter, the ledger and `pnpm --filter @palier/web billing-check` exist and are tested over MSW. The run on a
+  funded key is the human's (`docs/deploy.md`, "Gate G")
 
 ### Phase 5: Oral, practice mode
 
@@ -3335,11 +3361,227 @@ made, as D87 did)
   - "The sync payload builder" §6.2 names is covered at the wire, where every push is seen, rather than by
     instrumenting code.
 
+### D101 — the `CostLedger` port, and every spending call metered inside `withAiProvider`
+**Date:** 26 September 2026 · **Status:** accepted; §3.3 amended in place, as D69 and D92 were
+
+*Next, decided* left the ledger's shape to this slice. D45 is the model for that.
+
+- **`CostLedger { append, since(from), clear }`**, a port §3.3 did not name.
+  - `CostEntry` is `{ ts, feature, model, inputTokens, outputTokens, costUsd: number | null }`. `null` means
+    the model is unpriced, so the meter can say its total is a floor, not a zero that reads as free.
+  - `since` is at or after `from`, oldest first, and has no upper bound, because money spent is spent.
+  - **There is no `all()`.** D61 added it for export, and the ledger is never exported.
+- **It is device-local: never synced and never exported** (architecture.md §9.4), like `TelemetryStore`.
+  - No sync collector takes it, and `exportData`'s deps do not include it.
+  - `wipeData` and `deleteEverywhere` clear it.
+  - Tests hold all four. In `@palier/app`, export carries no entry, and a wipe or delete-everywhere
+    empties it. In the container, the production graph's pushes over the real sync routes carry no entry.
+- **`AiFeature`** is `"writing-feedback" | "item-generation"`, as `AI_FEATURES` in `@palier/domain` beside
+  the other AI DTOs (ADR 20). Phase 5 adds the oral features. A key check spends nothing, so it is not a
+  feature.
+- **The Dexie adapter is over v1's own `costLedger: "++id, ts, feature"` table**, so no migration.
+  - `since` walks the `ts` index, which orders by the ISO string and then by the `++id` key.
+  - A row that is not a whole entry reads as nothing. That includes the `{ ts, feature: "none" }` placeholder
+    the migration harness seeds as a v1 row, and the harness now asserts it.
+- **`withAiProvider(deps, feature, fn)` meters every spending call.**
+  - It hands `fn` the provider wrapped. Once each method settles, resolved or thrown, its `lastUsage()` is
+    appended under `feature` at `clock.now()`, when it is not null. A call that failed after it was billed
+    is still recorded, because OpenAI still bills it.
+  - The wrap is generic, over the provider's own methods: every method but `capabilities`, `verifyKey` and
+    `lastUsage` is metered. So Slice 3's `assessWriting` is metered with no edit here, and a test proves it
+    with a method the port does not have yet.
+  - **The methods a callback makes must be sequential**, since `lastUsage` reads the last call. This is
+    documented at the wrapper. Slices 3 and 4 make their calls one at a time.
+  - `MeteredAiDeps` adds `ledger` and `clock` to D99's `AiDeps`.
+- **`checkApiKey` is not metered at all.** It shares `withAiProvider`'s private path to the factory,
+  `withProvider`, so the factory still has one caller module (D99), and it needs no ledger.
+- **Existing tests touched:**
+  - The `withAiProvider` cases in `api-key.test.ts` gain the feature argument, and their deps gain a ledger
+    stub and a clock. No assertion moved.
+  - The `data-rights` and `sync-account` device stubs gain a ledger.
+  - The container wiring lists gain `costLedger`.
+  - `@palier/testing/in-memory`'s exact key list gains `memoryCostLedger`.
+  - `dexieStores` wires nine ports, not eight.
+
+### D102 — `lastUsage()` covers the whole of the last method call
+**Date:** 26 September 2026 · **Status:** accepted; §3.3 amended in place
+
+The adapter overwrote `usage` on every completion. `callValidated` retries once on a malformed reply, so a
+retried call reported only its second completion. A call that failed before any completion left the
+*previous* call's usage behind, for a meter to count twice. Either would have missed Gate G.
+
+- **Each method starts from `null`, and every completion in it adds to the total**, a retry included.
+  - A method that fails before it is billed leaves `null`.
+  - One that fails after it is billed (malformed twice) still reports what it spent.
+  - A 2xx answer with no content is billed **before** the content check, because its tokens were spent. It
+    is not retried: it throws outside the parse retry, as before.
+- `verifyKey` resets usage too, so it can never carry an earlier call's usage forward. The fake, the
+  scripted provider and the adapter all do this. `aiProviderContract` gains the case "a key check after a
+  billed call reports none".
+- **Side effect, deliberate:** the factory's `meterProvider` now counts retries, as OpenAI bills them. The
+  committed factory reports were made with the scripted provider, which never retries, so **no committed
+  figure or golden moves**.
+- `priceOf` now takes the summed counts. Pricing is linear, so this equals the sum of the parts. It also
+  removed two `?? 0` branches the change had made dead.
+
+### D103 — pricing as data, and what "session", "week" and "month" mean
+**Date:** 26 September 2026 · **Status:** accepted
+
+- **`apps/web/src/lib/pricing.json`** holds `models` (USD per MTok, the adapter's `OpenAiPricing` shape)
+  and `features`.
+  - `features` gives a typical use of each feature as its calls, `{ role, inputTokens, outputTokens }`,
+    with roles from `ai-models.json`. One entry may stand for several calls to one role, since pricing is
+    linear.
+  - `src/lib/pricing.ts` structure-checks it at the edge, as the profile is.
+  - `openAiFor` passes `models` to the adapter, so every ledger row is priced.
+- **`ai-models.json` gains `assess`**, the model writing feedback will use. It is priced now, for the table,
+  and Slice 3 wires it.
+- **Tests hold it honest:**
+  - every feature's estimate is priced;
+  - every model the app configures has a price;
+  - the browser's rates equal `apps/factory/config/pricing.json`'s for every shared id.
+- **The rates and the token counts are placeholders**, as the factory's are. Gate G checks the rates, and
+  measured counts replace the typical ones as each feature lands. The maintainer CI job that refreshes the
+  file (architecture.md §8.6) is **Phase 7**, listed in `docs/deploy.md`'s "not yet built".
+- **The meter's windows:**
+  - **This session** is since this tab's container was built, the lifetime D98 gives a tab-only key.
+  - **This week** starts Monday 00:00 UTC, and **this month** the 1st at 00:00 UTC.
+  - UTC so the meter buckets as OpenAI's usage page does, which is the Gate G comparison. The key screen
+    says so in words.
+- **The 80% warning is `CAP_WARNING_PERCENT` in the engine**, not profile data. It is PRD §8.10 product
+  behaviour, not a §5 exam rule (ADR 9).
+  - `capState` compares whole micro-dollars, so 80% and 100% are exact boundaries rather than wherever a
+    float lands. The case is 0.24 of 0.30, where 0.3 × 0.8 is 0.24000000000000002.
+- **The pre-flight** is `preflightSpend(feature)`. It returns the estimate and the cap state before and
+  after, and the caller warns when `after` is near or over. It never blocks, because the cap is soft and
+  OpenAI's limit is the real one. An unpriced feature has a `null` estimate and cannot move the state.
+- **The billing check** is `src/lib/billing-check.ts` (no relative imports, so Node's type stripping runs
+  it) and `scripts/billing-check.mjs`.
+  - It makes three `reviewItem` calls and two `generateItems` calls through `withAiProvider`, with a memory
+    vault and ledger.
+  - It prints the meter's total and the UTC window, and never the key.
+  - It stops at the first failure rather than report a partial total.
+  - The Gate G runbook is in `docs/deploy.md`.
+
+### D104 — the cap syncs; the ledger does not; and the calls §8.10 leaves open
+**Date:** 26 September 2026 · **Status:** accepted (Gate F adopted §8.10 as written, so these are recorded as
+made, as D87 and D100 were)
+
+- **The cap is a setting, `spendCap`, and so it syncs and exports.** The ledger does neither.
+  - The cap is a preference, like the daily goal. Setting it once should hold on every device.
+  - It needs no migration.
+  - Each device compares it with **its own** spending, and the screen says so: "Spending is counted on each
+    device separately. OpenAI's own limit covers all of them, and it is the real protection."
+  - The other choice was a device-local cap, which needs a Dexie v3 table. It buys nothing the sentence
+    does not.
+  - A stored value that is not a positive, finite number reads as no cap. `null` removes it.
+- **The screen** (`components/key/SpendSettings.tsx`, decisions in `features/key/spend-view.ts`) sits below
+  the key cards and shows **whether or not a key is held**, since what was spent stays spent.
+  - **The meter** is a `<dl>` of three figures in US dollars, per locale: "US$1.25" and "1,25 $ US". A spend
+    too small to round to a cent reads "under US$0.01", never a zero that reads as free. A note appears if
+    this month has unpriced calls.
+  - **The cap** is a decimal field. It takes a French comma, a dollar sign and spaces, and refuses blank,
+    non-numbers and zero, each with its own sentence.
+    - Near the cap the note is `info`; at or past it, `incorrect`. `@palier/ui` has no warning callout, and
+      a new primitive was not worth it for one note.
+    - The share of the cap is rounded down, so 79.9% never reads 80.
+    - The link is to OpenAI's limits page. It is now `features/key/openai-links.ts`, shared with the guide.
+  - **The per-feature table** has a caption, column headers and row headers. Estimates under a cent show
+    four places. A line says honestly that **both features arrive in coming updates** (Slices 3 and 4), as
+    onboarding's offer already names them.
+- **How E2E reaches the spending states.**
+  - No screen spends until Slice 3. So `spend-production.spec.ts` (the `offline` project, real Dexie) writes
+    rows into `costLedger` the way the adapter does, reloads, and reads the figures, the near and over
+    warnings (axe on each), an unpriced note, "under US$0.01" and a wipe.
+  - `key-leak-production.spec.ts` seeds one row and asserts the ledger is in its at-rest dump.
+  - That a real call writes such a row is proven below the browser: `container-spend.test.ts` runs the
+    real adapter over MSW completions through both graphs. The first spending screen puts a real call in
+    the leak spec (Slice 3).
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 26 September 2026 — `dougkeefe/adelaide` (Phase 4 Slice 2: spend)
+
+**Built.** The decisions are recorded in D101–D104. Slice 1 had merged as #28, so its In-flight row was
+replaced in this branch's first commit.
+
+**What was built:**
+- **Domain:** `AI_FEATURES`/`AiFeature`, `ModelPrice` and `FeatureCall`.
+- **Engine:** `spend.ts`, with `spendTotals` (session, UTC week, UTC month), `capState` in whole micro-dollars
+  against `CAP_WARNING_PERCENT`, `estimateFeatureCost` and `preflight`. It has unit and fast-check tests.
+- **App:**
+  - the `CostLedger` port;
+  - `withAiProvider(deps, feature, fn)`, which meters every spending method generically, with `checkApiKey`
+    left unmetered;
+  - `spendSummary`, `spendCap`/`setSpendCap`, `featureCosts` and `preflightSpend`;
+  - `wipeData` and `deleteEverywhere` clear the ledger.
+  - §3.3 is amended in place.
+- **Adapters:**
+  - `dexieCostLedger` over v1's `costLedger` table, so no migration, and it reads v1's placeholder row as
+    nothing;
+  - `openAiProvider`'s `lastUsage()` is now the whole of the last call, retries included (D102).
+- **Testing:** `memoryCostLedger`, `costLedgerContract`, completions with `usage` in `openAiHandlers`, and
+  the D102 case in `aiProviderContract`.
+- **Factory:** the scripted provider's `verifyKey` leaves no earlier usage behind (D102). No committed
+  figure moved.
+- **Web:**
+  - `pricing.json` and `pricing.ts`, with the drift test against the factory's rates;
+  - `openAiFor` priced;
+  - `costLedger` in both graphs;
+  - `SpendSettings` on `/settings/key` (the meter, the soft cap, the per-feature table), with `en`/`fr` at
+    parity;
+  - `container-spend.test.ts`, and a container test that the sync pushes carry no ledger entry;
+  - `billing-check.ts` and `scripts/billing-check.mjs`, with the Gate G runbook in `docs/deploy.md`.
+- **E2E:**
+  - `key.spec.ts` gains the spend section (refusals, set, remove, the table, axe on each state) and its
+    French parity;
+  - new `spend-production.spec.ts` (real Dexie): the figures, near and over with axe, the unpriced note,
+    "under US$0.01", and a wipe;
+  - `key-leak-production.spec.ts` asserts a ledger row is in its at-rest dump.
+
+**Proven to bite, each reverted afterwards:**
+1. `deps.ledger.clear()` removed from `wipeData` → "empties the cost ledger, which only this device ever
+   held (D101)", "empties the cost ledger with the rest of this device's data", and the container's
+   "empties the ledger on a wipe and on delete-everywhere" (7 failed).
+2. `pricing` dropped from `openAiFor` → every priced assertion in `container-spend.test.ts` failed (8
+   failed), starting with "records a call priced from pricing.json".
+3. `verifyKey` taken out of `UNMETERED` → "never meters the key check, capabilities or lastUsage, which
+   spend nothing".
+4. The adapter overwriting usage per completion again (the pre-D102 behaviour) → "sums a retried call's two
+   completions", "reports the tokens of a call that failed after it was billed", "bills a retried call
+   twice" in both graphs, and both billing-check cases (6 failed).
+
+**Existing tests touched, and why:** see D101 and D102. Each is a shape change, and no assertion was
+weakened.
+- `api-key.test.ts`'s `withAiProvider` cases gain the feature argument, a ledger stub and a clock.
+- The `data-rights` and `sync-account` device stubs gain a ledger.
+- The wiring lists in `container.test.ts` gain `costLedger`.
+- The `@palier/testing/in-memory` key list gains `memoryCostLedger`.
+- `dexieStores` "wires all nine ports".
+
+**Gates:**
+```
+pnpm verify        → exit 0: "no dependency violations found" ×2 (361 and 184 modules); Test Files 154 passed,
+                     Tests 2196 passed | 8 todo. Branches: engine spend.ts 24/24, app spend.ts 9/9, api-key.ts
+                     12/12, dexie cost-ledger.ts 11/11, pricing.ts 25/25, spend-view.ts 18/18,
+                     openai-handlers.ts 16/16; openai-provider.ts's 3 uncovered branches predate the slice
+pnpm verify:medium → exit 0: integration Tests 45 passed; Playwright 43 passed (40 before, plus the spend section
+                     and its French parity in key.spec.ts, and spend-production.spec.ts)
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB, within budget
+pnpm --filter @palier/web lighthouse  → exit 0, 13 URLs × 5 runs, no assertion failures; median 1.0 / 1.0 on
+                     every URL except /en/review, /en/settings/key and /fr/progress at 0.99 performance
+pnpm --filter @palier/web billing-check (no OPENAI_API_KEY) → exit 1, "OPENAI_API_KEY is not set. Gate G needs a
+                     funded test key; see docs/deploy.md."
+```
+
+**Not done here, by design:**
+- **Gate G**, the billing check on a funded key. It is the human's, and it ticks exit criterion 3;
+- a screen that spends (Slice 3 is *Next, decided*), so the leak spec's ledger row is seeded for now (D104);
+- the maintainer CI job that refreshes `pricing.json` (Phase 7, D103).
 
 ### 26 September 2026 — `dougkeefe/next-progress-slice-v1` (Phase 4 Slice 1: the key, safely)
 
