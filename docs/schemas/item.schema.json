@@ -186,9 +186,16 @@
           "maximum": 1
         },
         "pointBiserial": {
-          "type": "number",
-          "minimum": -1,
-          "maximum": 1
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "updatedAt": {
           "type": "string",

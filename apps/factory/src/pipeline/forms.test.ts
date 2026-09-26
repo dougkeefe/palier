@@ -130,6 +130,14 @@ describe("assembleForms", () => {
     for (const form of forms({ items: [...bank(12), stray] })) expect(form.itemIds).not.toContain("stray");
   });
 
+  it("ignores a retired item, which stays in the bank but never sits on a new form", () => {
+    // 8 reading sub-skills × 8 = 64 items fill the supervised 60; retire 5 and they no longer do.
+    expect(() => forms({ items: bank(8) })).not.toThrow();
+    const retiring = new Set(["reading-0-0", "reading-1-0", "reading-2-0", "reading-3-0", "reading-4-0"]);
+    const items = bank(8).map((i) => (retiring.has(i.id) ? { ...i, status: "retired" as const } : i));
+    expect(() => forms({ items })).toThrow(/variant reading-supervised needs 60 reading items in fr, the bank has 59/);
+  });
+
   it("refuses to ship a short form, naming the variant and the shortfall", () => {
     // 8 reading sub-skills × 7 = 56 items: enough for the unsupervised 25, not the supervised 60.
     const attempt = () => forms({ items: bank(7) });

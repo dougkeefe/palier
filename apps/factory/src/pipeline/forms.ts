@@ -82,6 +82,8 @@ export const pilotPositions = (total: number, pilots: number): readonly number[]
 const assembleOne = (name: string, variant: ExamVariant, input: FormStageInput): ExamForm => {
   const taxonomy = input.profile.subSkills[variant.skill];
   const pool = input.items
+    // A retired item stays in the bank for the ids users hold, but never sits on a new form.
+    .filter((i) => i.status !== "retired")
     .filter((i) => i.skill === variant.skill && i.lang === input.lang && taxonomy.includes(i.subSkill))
     .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 

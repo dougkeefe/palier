@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
@@ -12,6 +12,7 @@ import { scriptedAiProvider } from "./providers/scripted-ai-provider.js";
 import {
   BATCH_REPORT_PATH,
   EVAL_REPORT_PATH,
+  ITEM_STATISTICS_PATH,
   MODELS_PATH,
   PRICING_PATH,
   PROFILE_PATH,
@@ -122,6 +123,55 @@ describe("runFactory", () => {
       counts: { itemsCarried: number };
     };
     expect(report.counts.itemsCarried).toBe(v1Items);
+  });
+
+  it("applies the item-statistics report to the carried bank: stats on, the retired off every new form", async () => {
+    await runFactory(["run", "--bank-version", "1"], deps());
+    const v1 = readManifest(1) as unknown as { shards: { path: string }[] };
+    const [first, second] = v1.shards.flatMap(
+      (s) => JSON.parse(readFileSync(join(root, "content", s.path), "utf8")) as { id: string }[],
+    );
+    const verdict = (id: string, reasons: string[]) => ({
+      itemId: id,
+      responses: 150,
+      proportionCorrect: 0.5,
+      pointBiserial: reasons.length > 0 ? -0.3 : 0.4,
+      trusted: { difficulty: true, discrimination: true },
+      reasons,
+    });
+    const profile = JSON.parse(readFileSync(join(root, PROFILE_PATH), "utf8")) as { itemStatistics: unknown };
+    const report = {
+      generatedAt: "2026-10-01T06:00:00.000Z",
+      bankVersion: 1,
+      events: 300,
+      rules: profile.itemStatistics,
+      verdicts: [verdict(second!.id, []), verdict(first!.id, ["low-discrimination"])],
+    };
+    mkdirSync(join(root, "content/factory"), { recursive: true });
+    writeFileSync(join(root, ITEM_STATISTICS_PATH), JSON.stringify(report));
+
+    await runFactory(["run", "--bank-version", "2"], deps());
+
+    const v2 = readManifest(2) as unknown as { shards: { path: string }[]; forms: { path: string }[] };
+    const items = new Map(
+      v2.shards
+        .flatMap((s) => JSON.parse(readFileSync(join(root, "content", s.path), "utf8")) as { id: string; status: string; stats?: unknown }[])
+        .map((i) => [i.id, i]),
+    );
+    expect(items.get(first!.id)).toMatchObject({ status: "retired", stats: { responses: 150, pointBiserial: -0.3 } });
+    expect(items.get(second!.id)).toMatchObject({ status: "published", stats: { updatedAt: "2026-10-01T06:00:00.000Z" } });
+    for (const form of v2.forms) {
+      const { itemIds } = JSON.parse(readFileSync(join(root, "content", form.path), "utf8")) as { itemIds: string[] };
+      expect(itemIds).not.toContain(first!.id);
+    }
+  });
+
+  it("refuses to build from a damaged item-statistics report", async () => {
+    await runFactory(["run", "--bank-version", "1"], deps());
+    mkdirSync(join(root, "content/factory"), { recursive: true });
+    writeFileSync(join(root, ITEM_STATISTICS_PATH), JSON.stringify({ verdicts: "not a list" }));
+
+    await expect(runFactory(["run", "--bank-version", "2"], deps())).rejects.toThrow();
   });
 
   it("carries the latest published version when the one just below was never written", async () => {

@@ -37,7 +37,7 @@ export const itemStatsShape = z.strictObject({
   proportionCorrect: z.number().min(0).max(1),
   // Point-biserial is a correlation, so it is bounded at -1 and 1. Negative is
   // meaningful: it is the signature of a broken key (architecture.md 7.6).
-  pointBiserial: z.number().min(-1).max(1),
+  pointBiserial: z.number().min(-1).max(1).nullable(),
   updatedAt: isoSchema,
 });
 

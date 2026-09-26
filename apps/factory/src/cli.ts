@@ -12,12 +12,14 @@ import {
   loadPricing,
   loadProfile,
   latestBankVersionBelow,
+  loadItemStatistics,
   loadPublishedBank,
   loadSources,
   writeBank,
   writeJsonFile,
 } from "./io.js";
 import { scriptedAiProvider } from "./providers/scripted-ai-provider.js";
+import { applyStatistics } from "./pipeline/carry.js";
 import { DEFAULT_PER_SOURCE, runPipeline } from "./pipeline/run.js";
 import type { RunInput } from "./pipeline/run.js";
 import { discardReasonCounts } from "./pipeline/metrics.js";
@@ -71,6 +73,11 @@ export type RunOptions = {
   readonly perSource: number;
   readonly provider: AiProvider;
   readonly promptVersion: string;
+  /**
+   * Apply `content/factory/item-statistics.json` to the carried bank (the default).
+   * Off only to reproduce a version built before the report existed.
+   */
+  readonly applyItemStatistics?: boolean;
 };
 
 /**
@@ -83,7 +90,10 @@ export const runInputFor = (root: string, options: RunOptions): RunInput => {
   // The latest published version below this one, not just n-1: skipping a number
   // must never drop every id users already hold (architecture.md §5.5).
   const previous = latestBankVersionBelow(root, options.bankVersion);
-  const carried = previous === null ? null : loadPublishedBank(root, previous);
+  const published = previous === null ? null : loadPublishedBank(root, previous);
+  // Where a retirement takes effect: the carried bank gains the statistics (D94).
+  const carried =
+    published === null ? null : applyStatistics(published, options.applyItemStatistics === false ? null : loadItemStatistics(root));
   return {
     sources: loadSources(root),
     profile: loadProfile(root),

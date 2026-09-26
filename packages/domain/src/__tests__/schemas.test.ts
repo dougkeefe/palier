@@ -134,6 +134,13 @@ describe("itemSchema", () => {
     expect(itemSchema.safeParse(flagged).success).toBe(true);
   });
 
+  it("accepts statistics with no point-biserial, for an item with no correlation to compute", () => {
+    const uniform = aValidItem({
+      stats: { responses: 40, proportionCorrect: 1, pointBiserial: null, updatedAt: "2026-01-01T00:00:00.000Z" },
+    });
+    expect(itemSchema.safeParse(uniform).success).toBe(true);
+  });
+
   it("rejects a non-ISO timestamp", () => {
     expect(itemSchema.safeParse({ ...aValidItem(), createdAt: "yesterday" }).success).toBe(
       false,
