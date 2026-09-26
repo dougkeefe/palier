@@ -1,0 +1,74 @@
+[
+  {
+    "id": "wp-briefing-01",
+    "lang": "fr",
+    "register": "briefing-note",
+    "title": {
+      "en": "Briefing note: a delay in a service modernization project",
+      "fr": "Note d'information : retard d'un projet de modernisation"
+    },
+    "task": "Votre directrice vous demande un paragraphe pour la note d'information destinée au sous-ministre adjoint. Le projet de modernisation du système de traitement des demandes accuse un retard de trois mois, parce que le fournisseur a livré une version qui ne respectait pas les normes d'accessibilité. Résumez la situation, précisez les conséquences pour les clients et proposez une mesure pour limiter les répercussions.",
+    "wordTarget": 150,
+    "suggestedMinutes": 20
+  },
+  {
+    "id": "wp-briefing-02",
+    "lang": "fr",
+    "register": "briefing-note",
+    "title": {
+      "en": "Briefing note: recommending a telework pilot",
+      "fr": "Note d'information : recommander un projet pilote de télétravail"
+    },
+    "task": "Rédigez la section « Recommandation » d'une note d'information au directeur général. Votre équipe propose de prolonger de six mois un projet pilote de télétravail hybride dans la région de l'Atlantique. Présentez la recommandation, deux raisons qui la justifient et un risque à surveiller.",
+    "wordTarget": 140,
+    "suggestedMinutes": 20
+  },
+  {
+    "id": "wp-reply-01",
+    "lang": "fr",
+    "register": "client-reply",
+    "title": {
+      "en": "Reply to a client whose application is late",
+      "fr": "Réponse à une cliente dont la demande tarde"
+    },
+    "task": "Une cliente écrit au ministère pour se plaindre : elle a présenté sa demande de prestation il y a dix semaines et n'a reçu aucune nouvelle. Le délai de traitement habituel est de huit semaines. Rédigez une réponse courtoise qui reconnaît le retard, explique la prochaine étape et lui indique comment suivre l'état de sa demande.",
+    "wordTarget": 130,
+    "suggestedMinutes": 15
+  },
+  {
+    "id": "wp-reply-02",
+    "lang": "fr",
+    "register": "client-reply",
+    "title": {
+      "en": "Reply to an organization asking for an extension",
+      "fr": "Réponse à un organisme qui demande une prolongation"
+    },
+    "task": "Un organisme sans but lucratif demande une prolongation de trois semaines pour déposer le rapport final d'un projet financé par votre programme. Les lignes directrices permettent une prolongation d'au plus deux semaines. Répondez au directeur de l'organisme : accordez ce qui est possible, expliquez la limite et précisez la nouvelle date d'échéance.",
+    "wordTarget": 120,
+    "suggestedMinutes": 15
+  },
+  {
+    "id": "wp-summary-01",
+    "lang": "fr",
+    "register": "meeting-summary",
+    "title": {
+      "en": "Summary of a planning meeting",
+      "fr": "Compte rendu d'une réunion de planification"
+    },
+    "task": "Vous avez assisté à la réunion de planification de votre équipe. On y a décidé de reporter le lancement de la campagne d'information au mois de mars, de confier la révision des textes à l'équipe des communications et de tenir un point de suivi toutes les deux semaines. Rédigez le compte rendu destiné aux membres absents : décisions, responsables et prochaines étapes.",
+    "wordTarget": 150,
+    "suggestedMinutes": 20
+  },
+  {
+    "id": "wp-summary-02",
+    "lang": "fr",
+    "register": "meeting-summary",
+    "title": {
+      "en": "Summary of a consultation with regional offices",
+      "fr": "Compte rendu d'une consultation avec les bureaux régionaux"
+    },
+    "task": "Votre direction a consulté les bureaux régionaux sur un nouveau formulaire en ligne. Les bureaux de l'Ouest appuient le changement, ceux du Québec demandent une période d'essai et ceux du Nord signalent des problèmes de connexion. Rédigez un bref compte rendu qui présente ces points de vue de façon neutre et indique ce que la direction fera ensuite.",
+    "wordTarget": 150,
+    "suggestedMinutes": 20
+  }
+]

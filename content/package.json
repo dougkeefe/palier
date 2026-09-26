@@ -4,9 +4,11 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./profiles/psc-sle.json": "./profiles/psc-sle.json"
+    "./profiles/psc-sle.json": "./profiles/psc-sle.json",
+    "./writing/prompts.json": "./writing/prompts.json"
   },
   "files": [
-    "profiles"
+    "profiles",
+    "writing"
   ]
 }

@@ -41,6 +41,10 @@ import type {
   SessionStore,
   SettingsStore,
   SpendSummary,
+  SaveWritingRequest,
+  WritingFeedbackRequest,
+  WritingStore,
+  WritingSubmission,
   StartExamRequest,
   StartExamResult,
   StartSessionRequest,
@@ -106,6 +110,10 @@ import {
   syncNow,
   telemetryConsent,
   wipeData,
+  requestWritingFeedback,
+  saveWriting,
+  writingHistory,
+  writingPrompts,
 } from "@palier/app";
 import { httpBankRepository } from "@palier/adapters/bank";
 import { dexieStores } from "@palier/adapters/dexie";
@@ -114,8 +122,9 @@ import { openAiProvider } from "@palier/adapters/openai";
 import { httpSyncTransport } from "@palier/adapters/sync";
 import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
-import type { AiFeature, ExamForm, ExamProfile } from "@palier/domain";
-import { parseExamProfileOrThrow } from "@palier/domain";
+import writingPromptLibrary from "@palier/content/writing/prompts.json";
+import type { AiFeature, ExamForm, ExamProfile, WritingPrompt } from "@palier/domain";
+import { parseExamProfileOrThrow, parseWritingPromptsOrThrow } from "@palier/domain";
 import type { DayPlan, ExamResult, Preflight, SkillTrend, TrendEvidence } from "@palier/engine";
 import {
   counterIdGenerator,
@@ -131,6 +140,7 @@ import {
   memorySettingsStore,
   memorySyncStateStore,
   memoryTelemetryStore,
+  memoryWritingStore,
   seededRandom,
 } from "@palier/testing/in-memory";
 
@@ -194,6 +204,12 @@ export const BANK_VERSION = 2;
 const PROFILE: ExamProfile = parseExamProfileOrThrow(pscSleProfile);
 
 /**
+ * The writing workshop's prompt library, parsed once here the way the profile is, and
+ * bundled the same way: it is small and the workshop needs it at once (progress.md D107).
+ */
+const WRITING_PROMPTS: readonly WritingPrompt[] = parseWritingPromptsOrThrow(writingPromptLibrary);
+
+/**
  * How the browser makes an `AiProvider`: from the key, inside `KeyVault.withApiKey`, once
  * per call (only `@palier/app`'s key use cases call it: `withAiProvider`, which meters every
  * spending call into the cost ledger, and `checkApiKey`; D101), so no provider holding
@@ -206,7 +222,7 @@ const PROFILE: ExamProfile = parseExamProfileOrThrow(pscSleProfile);
 export const openAiFor: AiProviderFactory = (apiKey) =>
   openAiProvider({
     apiKey,
-    models: { passage: aiModels.passage, draft: aiModels.draft, review: aiModels.review },
+    models: { passage: aiModels.passage, draft: aiModels.draft, review: aiModels.review, assess: aiModels.assess },
     pricing: PRICING.prices,
   });
 
@@ -271,6 +287,11 @@ export type UseCases = {
   readonly setSpendCap: (request: { readonly capUsd: number | null }) => Promise<void>;
   readonly featureCosts: () => readonly FeatureCost[];
   readonly preflightSpend: (request: { readonly feature: AiFeature }) => Promise<Preflight>;
+  /** The writing workshop (PRD §8.7, progress.md D105–D108): prompts, save, feedback, history. */
+  readonly writingPrompts: () => readonly WritingPrompt[];
+  readonly saveWriting: (request: SaveWritingRequest) => Promise<WritingSubmission>;
+  readonly requestWritingFeedback: (request: WritingFeedbackRequest) => Promise<WritingSubmission>;
+  readonly writingHistory: () => Promise<readonly WritingSubmission[]>;
 };
 
 export type Ports = {
@@ -302,6 +323,8 @@ export type Ports = {
   readonly aiProvider: AiProviderFactory;
   /** What every AI call cost, device-local: never synced, never exported (D101). */
   readonly costLedger: CostLedger;
+  /** The writing workshop's submissions, device-local: never synced, never exported (D106) [R12]. */
+  readonly writing: WritingStore;
 };
 
 export type Container = Ports & {
@@ -412,6 +435,7 @@ function buildUseCases(ports: Ports): UseCases {
         vault: ports.vault,
         telemetry: ports.telemetry,
         ledger: ports.costLedger,
+        writing: ports.writing,
       }),
     syncNow: (request) => syncNow(request, syncDeps(ports)),
     syncState: () => ports.syncState.state(),
@@ -421,7 +445,13 @@ function buildUseCases(ports: Ports): UseCases {
     removeDevice: (request) => removeDevice(request, { transport: ports.sync, syncState: ports.syncState }),
     setSyncEnabled: (request) => setSyncEnabled(request, { transport: ports.sync, syncState: ports.syncState }),
     deleteEverywhere: () =>
-      deleteEverywhere({ ...syncDeps(ports), vault: ports.vault, telemetry: ports.telemetry, ledger: ports.costLedger }),
+      deleteEverywhere({
+        ...syncDeps(ports),
+        vault: ports.vault,
+        telemetry: ports.telemetry,
+        ledger: ports.costLedger,
+        writing: ports.writing,
+      }),
     examForms: () => examForms({ items: ports.items }),
     examInProgress: () => examInProgress({ items: ports.items, examRuns: ports.examRuns }),
     startExam: (request) => startExam(request, examDeps(ports)),
@@ -461,6 +491,19 @@ function buildUseCases(ports: Ports): UseCases {
     setSpendCap: (request) => setSpendCap(request.capUsd, spendDeps),
     featureCosts: () => featureCosts(spendDeps),
     preflightSpend: (request) => preflightSpend(request.feature, spendDeps),
+    writingPrompts: () => writingPrompts({ prompts: WRITING_PROMPTS }),
+    saveWriting: (request) =>
+      saveWriting(request, { prompts: WRITING_PROMPTS, writing: ports.writing, ids: ports.ids, clock: ports.clock }),
+    requestWritingFeedback: (request) =>
+      requestWritingFeedback(request, {
+        prompts: WRITING_PROMPTS,
+        writing: ports.writing,
+        vault: ports.vault,
+        aiProvider: ports.aiProvider,
+        ledger: ports.costLedger,
+        clock: ports.clock,
+      }),
+    writingHistory: () => writingHistory({ writing: ports.writing }),
   };
 }
 
@@ -527,6 +570,7 @@ function productionPorts(): Ports {
     telemetrySink: httpTelemetrySink({ baseUrl: SYNC_BASE_URL }),
     aiProvider: openAiFor,
     costLedger: stores.costLedger,
+    writing: stores.writing,
   };
 }
 
@@ -564,6 +608,7 @@ function hermeticPorts(): Ports {
     // The real OpenAI adapter too; the journeys stub api.openai.com with `page.route`.
     aiProvider: openAiFor,
     costLedger: memoryCostLedger(),
+    writing: memoryWritingStore(),
   };
 }
 

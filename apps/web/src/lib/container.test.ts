@@ -45,6 +45,7 @@ describe("createContainer", () => {
     expect(c.settings).toBeDefined();
     expect(c.vault).toBeDefined();
     expect(c.costLedger).toBeDefined();
+    expect(c.writing).toBeDefined();
 
     // The IdGenerator mints valid, strictly increasing ULIDs (behaviour proven by
     // the contract suite in @palier/testing; here we assert wiring only).
@@ -430,6 +431,7 @@ describe("createContainer in production", () => {
     expect(c.sync).toBeDefined();
     expect(c.syncState).toBeDefined();
     expect(c.costLedger).toBeDefined();
+    expect(c.writing).toBeDefined();
     expect(Number.isNaN(Date.parse(c.clock.now()))).toBe(false);
     expect(c.ids.ulid()).toMatch(/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{26}$/);
     // Construction is lazy: the bank has not fetched its manifest yet.
@@ -638,6 +640,61 @@ describe("createContainer in production", () => {
     expect(wire).not.toContain("item-generation");
     expect(wire).not.toContain("inputTokens");
     await c.useCases.deleteEverywhere();
+  });
+
+  it("never pushes a writing submission or its feedback to the sync service (D106) [R12]", async () => {
+    server.api = createSyncApi({
+      repo: memorySyncRepository(),
+      now: () => new Date(),
+      randomBytes: (n) => crypto.getRandomValues(new Uint8Array(n)),
+      rateLimitSalt: "salt",
+    });
+    const routes = await routeFetch();
+    const pushed: string[] = [];
+    const written = "Madame, je vous écris au sujet du dossier Fernleaf-7731.";
+    const criterion = { band: "B", evidence: "Le registre convient." };
+    const feedback = {
+      criteria: { register: criterion, structure: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+      errors: [{ excerpt: "Fernleaf-7731", correction: "Fernleaf-7731", rule: "Rule Quillwort-4410" }],
+      modelAnswer: "Madame, je vous écris au sujet du dossier Fernleaf-7731. Model Tamarack-2219.",
+    };
+    vi.stubGlobal("fetch", (url: string, init?: { method: string; headers: Record<string, string>; body?: string }) => {
+      if (url.startsWith("https://api.openai.com/")) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () =>
+            Promise.resolve({
+              choices: [{ message: { content: JSON.stringify(feedback) } }],
+              usage: { prompt_tokens: 900, completion_tokens: 700 },
+            }),
+          text: () => Promise.resolve(""),
+        });
+      }
+      if (!url.startsWith("/api/")) return serveCommittedBank(url);
+      if (init?.body !== undefined) pushed.push(init.body);
+      return routes(`http://palier.test${url}`, init ?? { method: "GET", headers: {} });
+    });
+    const c = createContainer({ hermetic: false });
+    await c.vault.putApiKey("sk-test-not-a-real-key");
+    const [prompt] = c.useCases.writingPrompts();
+    if (prompt === undefined) throw new Error("the library ships prompts");
+    const saved = await c.useCases.saveWriting({ promptId: prompt.id, text: written });
+    await c.useCases.requestWritingFeedback({ submissionId: saved.id, targetBand: "B", feedbackLang: "en" });
+    expect((await c.useCases.writingHistory())[0]?.assessment).not.toBeNull();
+    const id = sessionId(c.ids.ulid());
+    await c.useCases.startSession({ sessionId: id, mode: "drill", plan: { skill: "reading", lang: "fr", targetBand: "C", sessionSize: 1 } });
+    await c.useCases.completeSession({ sessionId: id });
+
+    expect(await c.useCases.syncNow({ label: "Test" })).toMatchObject({ status: "synced" });
+
+    const wire = pushed.join("\n");
+    expect(wire.length).toBeGreaterThan(0);
+    for (const marker of ["Fernleaf-7731", "Quillwort-4410", "Tamarack-2219", prompt.id]) {
+      expect(wire).not.toContain(marker);
+    }
+    await c.useCases.deleteEverywhere();
+    expect(await c.useCases.writingHistory()).toEqual([]);
   });
 
   it("forgets the telemetry consent and queue on a wipe, back to not asked", async () => {
