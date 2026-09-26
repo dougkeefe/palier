@@ -6,7 +6,7 @@ import { dexieStores } from "./index.js";
 const dbName = (): string => `palier-stores-${globalThis.crypto.randomUUID()}`;
 
 describe("dexieStores", () => {
-  it("wires all seven ports to one named database", async () => {
+  it("wires all eight ports to one named database", async () => {
     const stores = dexieStores(dbName());
 
     await stores.attempts.append(anAttempt());
@@ -14,12 +14,14 @@ describe("dexieStores", () => {
     await stores.keyVault.putApiKey("sk-wired");
     await stores.syncState.update({ watermark: 3 });
     await stores.examRuns.put(anExamRun());
+    await stores.telemetry.setConsent("on");
 
     expect(await stores.attempts.recent("reading", 10)).toHaveLength(1);
     expect(await stores.settings.get<string>("locale")).toBe("fr");
     expect(await stores.keyVault.hasApiKey()).toBe(true);
     expect((await stores.syncState.state()).watermark).toBe(3);
     expect(await stores.examRuns.all()).toHaveLength(1);
+    expect(await stores.telemetry.consent()).toBe("on");
   });
 
   it("binds the name to a persistent database two calls share", async () => {

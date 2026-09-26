@@ -44,9 +44,10 @@ export type TelemetryStore = {
 
 /**
  * The network half: send one batch, at most `TELEMETRY_MAX_BATCH` events. It resolves
- * once the service has accepted the batch, and rejects with `TelemetryUnavailableError`
- * when it could not be delivered — offline, rate-limited, or no service — so the caller
- * keeps the batch for later.
+ * once the service has accepted the batch. It rejects with `TelemetryUnavailableError`
+ * when the batch could not be delivered — offline, rate-limited, or no service — so the
+ * caller keeps it for later; and with `TelemetryRejectedError` when the service refused
+ * the batch itself, which no retry will change.
  */
 export type TelemetrySink = {
   send: (batch: readonly TelemetryEvent[]) => Promise<void>;
@@ -63,5 +64,16 @@ export class TelemetryUnavailableError extends Error {
   constructor(readonly reason: string) {
     super(`Telemetry is unavailable: ${reason}.`);
     this.name = "TelemetryUnavailableError";
+  }
+}
+
+/**
+ * The service refused the batch as malformed. Sending it again would be refused again,
+ * so the caller drops it rather than let one bad batch hold up the queue for good.
+ */
+export class TelemetryRejectedError extends Error {
+  constructor(readonly status: number) {
+    super(`The telemetry service refused a batch (HTTP ${String(status)}).`);
+    this.name = "TelemetryRejectedError";
   }
 }

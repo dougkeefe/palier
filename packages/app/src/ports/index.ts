@@ -38,4 +38,9 @@ export type {
   TelemetrySink,
   TelemetryStore,
 } from "./telemetry.js";
-export { TELEMETRY_CONSENTS, TELEMETRY_MAX_BATCH, TelemetryUnavailableError } from "./telemetry.js";
+export {
+  TELEMETRY_CONSENTS,
+  TELEMETRY_MAX_BATCH,
+  TelemetryRejectedError,
+  TelemetryUnavailableError,
+} from "./telemetry.js";

@@ -7,7 +7,7 @@ import type {
   TelemetrySink,
   TelemetryStore,
 } from "../ports/index.js";
-import { TELEMETRY_MAX_BATCH, TelemetryUnavailableError } from "../ports/index.js";
+import { TELEMETRY_MAX_BATCH, TelemetryRejectedError, TelemetryUnavailableError } from "../ports/index.js";
 import { examTelemetryEvents } from "./exam-telemetry-events.js";
 import { UnknownExamRunError } from "./exam-run.js";
 import { ExamNotSubmittedError, rescoreExam } from "./submit-exam.js";
@@ -99,6 +99,8 @@ export type FlushTelemetryDeps = TelemetryDeps & {
 export type FlushTelemetryResult = {
   /** Events the service accepted. */
   readonly sent: number;
+  /** Events in a batch the service refused as malformed, dropped rather than retried. */
+  readonly dropped: number;
   /** True when a batch could not be delivered and waits for the next flush. */
   readonly pending: boolean;
 };
@@ -106,27 +108,33 @@ export type FlushTelemetryResult = {
 /**
  * Send what is queued, oldest first, in batches of at most `TELEMETRY_MAX_BATCH`.
  *
- * - A batch leaves the queue **only after the service accepted it**. If the device
- *   dies in between, the next flush sends it again: an event can arrive twice, never
- *   not at all. At pilot scale a duplicate moves a proportion by a response; a loss
- *   would be silent.
- * - An undeliverable batch stops the flush and stays queued (`pending`). Any other
- *   failure is a defect, and is thrown.
+ * - A batch leaves the queue **only after the service answered it**. If the device dies
+ *   in between, the next flush sends it again: an event can arrive twice, never not at
+ *   all. At pilot scale a duplicate moves a proportion by a response; a loss would be
+ *   silent.
+ * - An undeliverable batch stops the flush and stays queued (`pending`).
+ * - A batch the service **refused** is dropped and the flush goes on, so one bad batch
+ *   (from an older build, say) cannot hold the queue up for good.
+ * - Any other failure is a defect, and is thrown.
  * - Nothing is sent unless this device's consent is `"on"`.
  */
 export const flushTelemetry = async (deps: FlushTelemetryDeps): Promise<FlushTelemetryResult> => {
-  if ((await deps.telemetry.consent()) !== "on") return { sent: 0, pending: false };
+  if ((await deps.telemetry.consent()) !== "on") return { sent: 0, dropped: 0, pending: false };
   let sent = 0;
+  let dropped = 0;
   for (;;) {
     const batch = await deps.telemetry.take(TELEMETRY_MAX_BATCH);
-    if (batch.length === 0) return { sent, pending: false };
+    if (batch.length === 0) return { sent, dropped, pending: false };
+    let accepted = true;
     try {
       await deps.sink.send(batch.map((queued) => queued.event));
     } catch (error) {
-      if (error instanceof TelemetryUnavailableError) return { sent, pending: true };
-      throw error;
+      if (error instanceof TelemetryUnavailableError) return { sent, dropped, pending: true };
+      if (!(error instanceof TelemetryRejectedError)) throw error;
+      accepted = false;
     }
     await deps.telemetry.remove(batch.map((queued) => queued.id));
-    sent += batch.length;
+    if (accepted) sent += batch.length;
+    else dropped += batch.length;
   }
 };

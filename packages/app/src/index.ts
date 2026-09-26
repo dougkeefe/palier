@@ -47,6 +47,7 @@ export {
   deviceId,
   TELEMETRY_CONSENTS,
   TELEMETRY_MAX_BATCH,
+  TelemetryRejectedError,
   TelemetryUnavailableError,
 } from "./ports/index.js";
 

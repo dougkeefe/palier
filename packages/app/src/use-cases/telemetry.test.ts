@@ -4,7 +4,7 @@ import { scoreExam } from "@palier/engine";
 import { describe, expect, it } from "vitest";
 
 import type { ExamAnswer, ExamRun } from "../ports/index.js";
-import { TELEMETRY_MAX_BATCH, TelemetryUnavailableError } from "../ports/index.js";
+import { TELEMETRY_MAX_BATCH, TelemetryRejectedError, TelemetryUnavailableError } from "../ports/index.js";
 import { examTelemetryEvents } from "./exam-telemetry-events.js";
 import { UnknownExamRunError } from "./exam-run.js";
 import { ExamNotSubmittedError } from "./submit-exam.js";
@@ -171,14 +171,14 @@ describe("flushTelemetry", () => {
     for (const consent of ["off", "unasked"] as const) {
       const telemetry = await queued(consent, 3);
       const sink = sinkOf();
-      expect(await flushTelemetry({ telemetry, sink })).toEqual({ sent: 0, pending: false });
+      expect(await flushTelemetry({ telemetry, sink })).toEqual({ sent: 0, dropped: 0, pending: false });
       expect(sink.batches()).toEqual([]);
     }
   });
 
   it("sends an empty queue as nothing", async () => {
     const sink = sinkOf();
-    expect(await flushTelemetry({ telemetry: telemetryStore("on"), sink })).toEqual({ sent: 0, pending: false });
+    expect(await flushTelemetry({ telemetry: telemetryStore("on"), sink })).toEqual({ sent: 0, dropped: 0, pending: false });
     expect(sink.batches()).toEqual([]);
   });
 
@@ -186,7 +186,7 @@ describe("flushTelemetry", () => {
     const telemetry = await queued("on", TELEMETRY_MAX_BATCH * 2 + 50);
     const sink = sinkOf();
 
-    expect(await flushTelemetry({ telemetry, sink })).toEqual({ sent: TELEMETRY_MAX_BATCH * 2 + 50, pending: false });
+    expect(await flushTelemetry({ telemetry, sink })).toEqual({ sent: TELEMETRY_MAX_BATCH * 2 + 50, dropped: 0, pending: false });
     expect(sink.batches().map((b) => b.length)).toEqual([TELEMETRY_MAX_BATCH, TELEMETRY_MAX_BATCH, 50]);
     expect(sink.batches()[0]?.[0]?.itemId).toBe("i-0");
     expect(telemetry.queued()).toEqual([]);
@@ -196,8 +196,17 @@ describe("flushTelemetry", () => {
     const telemetry = await queued("on", TELEMETRY_MAX_BATCH + 10);
     const sink = sinkOf(new Map([[1, new TelemetryUnavailableError("offline")]]));
 
-    expect(await flushTelemetry({ telemetry, sink })).toEqual({ sent: TELEMETRY_MAX_BATCH, pending: true });
+    expect(await flushTelemetry({ telemetry, sink })).toEqual({ sent: TELEMETRY_MAX_BATCH, dropped: 0, pending: true });
     expect(telemetry.queued()).toHaveLength(10);
+  });
+
+  it("drops a batch the service refused and goes on, so it cannot hold the queue up", async () => {
+    const telemetry = await queued("on", TELEMETRY_MAX_BATCH + 10);
+    const sink = sinkOf(new Map([[0, new TelemetryRejectedError(400)]]));
+
+    expect(await flushTelemetry({ telemetry, sink })).toEqual({ sent: 10, dropped: TELEMETRY_MAX_BATCH, pending: false });
+    expect(telemetry.queued()).toEqual([]);
+    expect(sink.batches().map((b) => b.length)).toEqual([10]);
   });
 
   it("throws any other failure, and keeps the batch", async () => {
