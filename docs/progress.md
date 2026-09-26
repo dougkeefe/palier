@@ -9,7 +9,7 @@ four, mirrored in `implementation-plan.md` §7 (D79). **Slices 1–3 merged (#22
 so exit criteria 1–4 are met. **Every buildable Phase 3 item is done.** Gate E is resolved (D97): the
 closed pilot runs now as a **product pilot** on the baseline bank, run by the human, and it ticks the last
 criterion. **Phase 4 started beside it: Slice 1, "the key, safely", merged (#28; D98–D100)**, meeting Phase 4's
-exit criterion 1 and the first half of 2. **Slice 2, "spend", is built** (`dougkeefe/adelaide`; D101–D104):
+exit criterion 1 and the first half of 2. **Slice 2, "spend", is built** (`dougkeefe/next-progress-slice-v2`; D101–D104):
 the cost ledger, pricing as data, the meter, the soft cap and the pre-flight estimate. Its exit criterion 3
 waits on **Gate G**, the human's billing check on a funded key. Next is Slice 3, the writing workshop,
 beside Gate G. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
@@ -89,7 +89,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/adelaide` | **Phase 4 Slice 2 — spend** (D97): the `CostLedger` port over Dexie v1's `costLedger` table, every AI call metered in `withAiProvider`, `pricing.json`, the pure `spendTotals`, the meter, soft cap and per-feature table on `/settings/key`, the pre-flight estimate, and `billing-check.mjs` for Gate G. **Built; pending merge** (D101–D104). Gate G is the human's. | 26 September 2026 |
+| `dougkeefe/next-progress-slice-v2` | **Phase 4 Slice 2 — spend** (D97): the `CostLedger` port over Dexie v1's `costLedger` table, every AI call metered in `withAiProvider`, `pricing.json`, the pure `spendTotals`, the meter, soft cap and per-feature table on `/settings/key`, the pre-flight estimate, and `billing-check.mjs` for Gate G. **Built; pending merge** (D101–D104). Gate G is the human's. | 26 September 2026 |
 
 *(The prior rows — Phase 4 Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -463,7 +463,7 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
   session-log evidence). The tier-11 key-leak test first; `/settings/key` and onboarding step 5;
   validation, do-not-remember, the browser `AiProvider` path through `withApiKey`, and graceful
   degradation.
-- [x] **Slice 2 — Spend.** **Built 26 September 2026** (`dougkeefe/adelaide`; D101–D104; session-log
+- [x] **Slice 2 — Spend.** **Built 26 September 2026** (`dougkeefe/next-progress-slice-v2`; D101–D104; session-log
   evidence). The cost ledger, every spending call metered in `withAiProvider`, pricing as data, the meter,
   the soft cap, the per-feature table, the pre-flight estimate, and the billing check. It ends at
   **Gate G** (the human's funded test key), which ticks exit criterion 3.
@@ -3504,7 +3504,7 @@ made, as D87 and D100 were)
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 26 September 2026 — `dougkeefe/adelaide` (Phase 4 Slice 2: spend)
+### 26 September 2026 — `dougkeefe/next-progress-slice-v2` (Phase 4 Slice 2: spend)
 
 **Built.** The decisions are recorded in D101–D104. Slice 1 had merged as #28, so its In-flight row was
 replaced in this branch's first commit.
