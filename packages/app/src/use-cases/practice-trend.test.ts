@@ -3,7 +3,8 @@ import { attemptId, itemId, sessionId } from "@palier/domain";
 import { describe, expect, it, vi } from "vitest";
 
 import type { AttemptStore, ItemRepository } from "../ports/index.js";
-import { PRACTICE_MODES, practiceTrend } from "./practice-trend.js";
+import { PRACTICE_MODES, practiceTrend, practiceTrendEvidence } from "./practice-trend.js";
+import { profile } from "./__tests__/exam-fakes.js";
 
 // Local fixtures rather than @palier/testing (progress.md D37).
 
@@ -112,5 +113,27 @@ describe("practiceTrend", () => {
 
   it("names exactly the three practice modes", () => {
     expect([...PRACTICE_MODES].sort()).toEqual(["diagnostic", "drill", "review"]);
+  });
+});
+
+describe("practiceTrendEvidence", () => {
+  it("counts the items behind the practice trend and how many have trusted statistics", async () => {
+    const attempts = [
+      ...Array.from({ length: 3 }, () => anAttempt("drill", true)),
+      ...Array.from({ length: 2 }, () => anAttempt("exam", true)),
+    ];
+    const deps = depsFor(attempts);
+    const trusted = attempts[0]!.itemId;
+    vi.mocked(deps.items.byIds).mockImplementation((ids) =>
+      Promise.resolve(
+        ids.map((id) =>
+          id === trusted
+            ? { ...makeItem(id), stats: { responses: 30, proportionCorrect: 0.6, pointBiserial: 0.2, updatedAt: NOW } }
+            : makeItem(id),
+        ),
+      ),
+    );
+
+    expect(await practiceTrendEvidence({ skill: "reading" }, { ...deps, profile })).toEqual({ items: 3, trusted: 1 });
   });
 });

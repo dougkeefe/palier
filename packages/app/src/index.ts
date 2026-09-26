@@ -29,6 +29,10 @@ export type {
   SyncState,
   SyncStateStore,
   SyncTransport,
+  QueuedTelemetryEvent,
+  TelemetryConsent,
+  TelemetrySink,
+  TelemetryStore,
 } from "./ports/index.js";
 export {
   INITIAL_SYNC_STATE,
@@ -41,6 +45,9 @@ export {
   SyncUnauthorizedError,
   SyncUnavailableError,
   deviceId,
+  TELEMETRY_CONSENTS,
+  TELEMETRY_MAX_BATCH,
+  TelemetryUnavailableError,
 } from "./ports/index.js";
 
 export type {
@@ -69,8 +76,15 @@ export type {
   LatestExamResult,
   PlanDailySessionDeps,
   PlanDailySessionRequest,
+  FlushTelemetryDeps,
+  FlushTelemetryResult,
   PracticeTrendDeps,
+  PracticeTrendEvidenceDeps,
   PracticeTrendRequest,
+  RecordExamTelemetryDeps,
+  RecordExamTelemetryRequest,
+  SetTelemetryConsentRequest,
+  TelemetryDeps,
   ProgressReport,
   ProgressReportDeps,
   ProgressReportRequest,
@@ -132,6 +146,7 @@ export {
   parseExportDocument,
   planDailySession,
   practiceTrend,
+  practiceTrendEvidence,
   progressReport,
   queueForReview,
   latestExamResult,
@@ -148,6 +163,11 @@ export {
   submitExam,
   syncNow,
   wipeData,
+  examTelemetryEvents,
+  flushTelemetry,
+  recordExamTelemetry,
+  setTelemetryConsent,
+  telemetryConsent,
 } from "./use-cases/index.js";
 
 export type { ProgressStores, SyncRecord } from "./sync/records.js";

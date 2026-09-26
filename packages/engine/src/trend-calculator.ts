@@ -1,4 +1,4 @@
-import type { Attempt, Item, ItemId, ScoredSkill, TargetBand } from "@palier/domain";
+import type { Attempt, Item, ItemId, ItemStatisticsRules, ScoredSkill, TargetBand } from "@palier/domain";
 import { TARGET_BANDS } from "@palier/domain";
 
 /**
@@ -77,30 +77,47 @@ const trendFor = (correct: number, attempted: number): BandTrend => {
   };
 };
 
-export const calculateTrend = (
+/**
+ * The attempts a skill's trend rests on: its most recent `TREND_WINDOW` attempts
+ * whose item the bank still holds, each joined to its item. Shared by
+ * `calculateTrend` and `trendEvidence`, so the figure and its disclosure always
+ * describe the same attempts.
+ */
+const trendWindow = (
   skill: ScoredSkill,
   attempts: readonly Attempt[],
   items: readonly Item[],
-): SkillTrend => {
-  const bandOf = new Map<ItemId, TargetBand>(items.map((item) => [item.id, item.targetBand]));
+): readonly { readonly item: Item; readonly correct: boolean }[] => {
+  const byId = new Map<ItemId, Item>(items.map((item) => [item.id, item]));
 
   // The skill's attempts, most recent first (`ts` is an ISO-8601 instant, so it
   // sorts lexically), with equal instants ordered by id — a ULID, so by creation —
   // so the window is a function of the attempt *set*, not of the order a device
   // happened to receive it in (progress.md D73). The id comparison is by code unit,
   // as IndexedDB orders keys, never `localeCompare`: collation varies by locale, and
-  // two devices in two locales must still agree. Then joined to their band tag. An attempt whose item is not in
+  // two devices in two locales must still agree. Then joined to their item. An attempt whose item is not in
   // the bank drops out here rather than consuming a window slot, then the window
   // caps what remains. This is the only place the join can miss, so the empty
   // arm is exercised by the "item not in bank" test.
-  const window = attempts
+  return attempts
     .filter((a) => a.skill === skill)
     .sort((a, b) => b.ts.localeCompare(a.ts) || Number(b.id > a.id) - Number(b.id < a.id))
     .flatMap((a) => {
-      const band = bandOf.get(a.itemId);
-      return band === undefined ? [] : [{ band, correct: a.correct }];
+      const item = byId.get(a.itemId);
+      return item === undefined ? [] : [{ item, correct: a.correct }];
     })
     .slice(0, TREND_WINDOW);
+};
+
+export const calculateTrend = (
+  skill: ScoredSkill,
+  attempts: readonly Attempt[],
+  items: readonly Item[],
+): SkillTrend => {
+  const window = trendWindow(skill, attempts, items).map(({ item, correct }) => ({
+    band: item.targetBand,
+    correct,
+  }));
 
   const tally = new Map<TargetBand, { attempted: number; correct: number }>();
   for (const { band, correct } of window) {
@@ -118,4 +135,29 @@ export const calculateTrend = (
   ) as Record<TargetBand, BandTrend>;
 
   return { skill, windowSize: window.length, byBand };
+};
+
+/**
+ * What the trend rests on, for the readiness card to disclose (PRD 13.0: "the
+ * estimate discloses what it rests on"): how many distinct items are behind it,
+ * and how many of those have **trusted statistics**, meaning at least the
+ * profile's `minResponsesDifficulty` responses. The statistics retire bad items;
+ * they never reweight the trend (ADR 7), so this is a disclosure and nothing else.
+ */
+export type TrendEvidence = {
+  readonly items: number;
+  readonly trusted: number;
+};
+
+export const trendEvidence = (
+  skill: ScoredSkill,
+  attempts: readonly Attempt[],
+  items: readonly Item[],
+  rules: ItemStatisticsRules,
+): TrendEvidence => {
+  const behind = new Map<ItemId, Item>(trendWindow(skill, attempts, items).map(({ item }) => [item.id, item]));
+  const trusted = [...behind.values()].filter(
+    (item) => item.stats !== undefined && item.stats.responses >= rules.minResponsesDifficulty,
+  );
+  return { items: behind.size, trusted: trusted.length };
 };

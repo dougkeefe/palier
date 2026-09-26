@@ -23,6 +23,7 @@ import {
 import { importData } from "./import-data.js";
 import { wipeData } from "./wipe-data.js";
 import { examRunStore } from "./__tests__/sync-fakes.js";
+import { telemetryStore } from "./__tests__/telemetry-fakes.js";
 
 // Local stubs rather than @palier/testing (progress.md D37). These are small
 // *stateful* stores, because export → wipe → import is only meaningful over state.
@@ -177,6 +178,7 @@ const aDevice = async () => {
     examRuns: examRunStore(),
     settings: settingsStore(),
     vault: vaultOf(),
+    telemetry: telemetryStore("on"),
   };
   await device.attempts.append(anAttempt("b"));
   await device.attempts.append(anAttempt("a", { skill: "writing" }));
@@ -252,6 +254,15 @@ describe("wipeData", () => {
     expect(await device.examRuns.all()).toEqual([]);
     expect(await device.settings.all()).toEqual([]);
     expect(device.vault.apiKeyCleared()).toBe(true);
+  });
+
+  it("empties the telemetry queue and forgets the consent, back to not asked", async () => {
+    const device = await aDevice();
+    await device.telemetry.enqueue([{ itemId: itemId("item-a"), correct: true, responseMs: 900, bankVersion: 2, restBucket: 2 }]);
+    await wipeData(device);
+
+    expect(device.telemetry.queued()).toEqual([]);
+    expect(await device.telemetry.consent()).toBe("unasked");
   });
 
   it("keeps the device secret, which is the device's sync identity, not the user's progress", async () => {

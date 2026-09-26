@@ -21,6 +21,7 @@ import {
   setSyncEnabled,
 } from "./sync-account.js";
 import { syncNow } from "./sync-now.js";
+import { telemetryStore } from "./__tests__/telemetry-fakes.js";
 
 const NOW = "2026-09-24T12:00:00.000Z";
 
@@ -64,6 +65,7 @@ const aDevice = (transport: SyncTransport) => ({
   examRuns: examRunStore(),
   settings: settingsStore(),
   vault: vault(),
+  telemetry: telemetryStore("on"),
 });
 
 const aRegisteredDevice = async (transport: SyncTransport) => {
@@ -290,6 +292,14 @@ describe("deleteEverywhere", () => {
     expect(await device.attempts.all()).toEqual([]);
     expect(await device.sessions.all()).toEqual([]);
     expect((await device.syncState.state()).identity).toBeNull();
+  });
+
+  it("forgets the telemetry consent with the rest of this device's data", async () => {
+    const device = await aRegisteredDevice(fakeServer().transport("secret-a"));
+
+    await deleteEverywhere(device);
+
+    expect(await device.telemetry.consent()).toBe("unasked");
   });
 
   it("touches nothing local when the server cannot be reached", async () => {

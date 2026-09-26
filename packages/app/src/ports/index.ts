@@ -32,3 +32,10 @@ export {
 } from "./sync-transport.js";
 export type { LedgerEntry, SyncState, SyncStateStore } from "./sync-state-store.js";
 export { INITIAL_SYNC_STATE } from "./sync-state-store.js";
+export type {
+  QueuedTelemetryEvent,
+  TelemetryConsent,
+  TelemetrySink,
+  TelemetryStore,
+} from "./telemetry.js";
+export { TELEMETRY_CONSENTS, TELEMETRY_MAX_BATCH, TelemetryUnavailableError } from "./telemetry.js";

@@ -5,6 +5,7 @@ import type {
   KeyVault,
   SyncStateStore,
   SyncTransport,
+  TelemetryStore,
 } from "../ports/index.js";
 import { SyncUnavailableError } from "../ports/index.js";
 import type { ProgressStores } from "../sync/records.js";
@@ -115,6 +116,7 @@ export const setSyncEnabled = async (
 export type DeleteEverywhereDeps = ProgressStores &
   SyncAccountDeps & {
     readonly vault: KeyVault;
+    readonly telemetry: TelemetryStore;
   };
 
 /**

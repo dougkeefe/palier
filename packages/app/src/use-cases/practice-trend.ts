@@ -1,5 +1,5 @@
-import type { AttemptMode, ScoredSkill } from "@palier/domain";
-import { type SkillTrend, calculateTrend } from "@palier/engine";
+import type { Attempt, AttemptMode, ExamProfile, Item, ScoredSkill } from "@palier/domain";
+import { type SkillTrend, type TrendEvidence, calculateTrend, trendEvidence } from "@palier/engine";
 
 import type { AttemptStore, ItemRepository } from "../ports/index.js";
 
@@ -37,12 +37,37 @@ export type PracticeTrendDeps = {
   readonly attempts: AttemptStore;
 };
 
+const practiceRecord = async (
+  request: PracticeTrendRequest,
+  deps: PracticeTrendDeps,
+): Promise<{ practice: readonly Attempt[]; items: readonly Item[] }> => {
+  const recent = await deps.attempts.recent(request.skill, RECENT_ATTEMPTS_FETCHED);
+  const practice = recent.filter((attempt) => PRACTICE_MODES.includes(attempt.mode));
+  const items = await deps.items.byIds(practice.map((attempt) => attempt.itemId));
+  return { practice, items };
+};
+
 export const practiceTrend = async (
   request: PracticeTrendRequest,
   deps: PracticeTrendDeps,
 ): Promise<SkillTrend> => {
-  const recent = await deps.attempts.recent(request.skill, RECENT_ATTEMPTS_FETCHED);
-  const practice = recent.filter((attempt) => PRACTICE_MODES.includes(attempt.mode));
-  const items = await deps.items.byIds(practice.map((attempt) => attempt.itemId));
+  const { practice, items } = await practiceRecord(request, deps);
   return calculateTrend(request.skill, practice, items);
+};
+
+export type PracticeTrendEvidenceDeps = PracticeTrendDeps & {
+  readonly profile: ExamProfile;
+};
+
+/**
+ * What the practice trend rests on, for the readiness card to disclose (PRD §13.0):
+ * how many items are behind it, and how many have trusted response statistics under
+ * the profile's minimum count. Over the same attempts as `practiceTrend`.
+ */
+export const practiceTrendEvidence = async (
+  request: PracticeTrendRequest,
+  deps: PracticeTrendEvidenceDeps,
+): Promise<TrendEvidence> => {
+  const { practice, items } = await practiceRecord(request, deps);
+  return trendEvidence(request.skill, practice, items, deps.profile.itemStatistics);
 };

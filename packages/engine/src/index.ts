@@ -13,8 +13,8 @@ export {
   pointsToBand,
 } from "./band-mapper.js";
 
-export type { BandTrend, SkillTrend } from "./trend-calculator.js";
-export { MIN_EVIDENCE, TREND_WINDOW, calculateTrend } from "./trend-calculator.js";
+export type { BandTrend, SkillTrend, TrendEvidence } from "./trend-calculator.js";
+export { MIN_EVIDENCE, TREND_WINDOW, calculateTrend, trendEvidence } from "./trend-calculator.js";
 
 export type { ExamResult, ScoredExamItem } from "./scorer.js";
 export { scoreExam } from "./scorer.js";

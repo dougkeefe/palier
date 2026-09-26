@@ -10,9 +10,11 @@ import type {
   ExamRunStore,
   ItemRepository,
   ScheduleStore,
+  TelemetryStore,
 } from "../ports/index.js";
 import { recordHash } from "../sync/records.js";
 import { answerItem, recordAttempt } from "./answer-item.js";
+import { examTelemetryEvents } from "./exam-telemetry-events.js";
 import { UnknownExamRunError, formOf, laterElapsed } from "./exam-run.js";
 
 /**
@@ -70,6 +72,8 @@ export type SubmitExamDeps = RescoreExamDeps & {
   readonly attempts: AttemptStore;
   readonly schedule: ScheduleStore;
   readonly profile: ExamProfile;
+  /** Where a submitted exam's events queue, when this device shares them (§15). */
+  readonly telemetry?: TelemetryStore;
 };
 
 export type SubmitExamResult = {
@@ -140,17 +144,36 @@ export const submitExam = async (
     }
   }
 
-  let submitted = run;
-  if (run.submittedAt === null) {
-    const now = deps.clock.now();
-    submitted = {
-      ...run,
-      elapsedMs: laterElapsed(run.elapsedMs, request.elapsedMs),
-      checkpointedAt: now,
-      submittedAt: now,
-    };
-    await deps.examRuns.put(submitted);
-  }
+  if (run.submittedAt !== null) return { run, result: await scoreRun(run, deps.items) };
 
-  return { run: submitted, result: await scoreRun(submitted, deps.items) };
+  const now = deps.clock.now();
+  const submitted: ExamRun = {
+    ...run,
+    elapsedMs: laterElapsed(run.elapsedMs, request.elapsedMs),
+    checkpointedAt: now,
+    submittedAt: now,
+  };
+  await deps.examRuns.put(submitted);
+  const result = await scoreRun(submitted, deps.items);
+  await queueTelemetry(submitted, result, deps);
+  return { run: submitted, result };
+};
+
+/**
+ * Queue the exam's telemetry, at the first submit only and only while this device
+ * shares it (progress.md D92). A replay, or a run synced in already submitted, never
+ * queues, so one device sends one exam once.
+ *
+ * **Telemetry never costs a submission.** The run is stored before this runs, and a
+ * failure here is swallowed: the exam is the user's, the events are the bank's.
+ */
+const queueTelemetry = async (run: ExamRun, result: ExamResult, deps: SubmitExamDeps): Promise<void> => {
+  const telemetry = deps.telemetry;
+  if (telemetry === undefined) return;
+  try {
+    if ((await telemetry.consent()) !== "on") return;
+    await telemetry.enqueue(examTelemetryEvents(run, result, await deps.items.bankVersion()));
+  } catch {
+    // Deliberately empty: see above.
+  }
 };

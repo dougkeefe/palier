@@ -24,8 +24,8 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   §4.2 needs it) and `generateItems`/`generatePassage` return **drafts**, not assembled
   `Item[]`/`Passage[]`, so id-minting and provenance stay the factory's job, not the adapter's.
   Its DTOs live in `@palier/domain`, not here (ADR 20). `assessWriting`/`assessOral`/
-  `transcribe`/`openVoiceSession` and `TelemetrySink`/`OralStore` are still deferred to their
-  phases (`SyncTransport` has since landed, below).
+  `transcribe`/`openVoiceSession` and `OralStore` are still deferred to their
+  phases (`SyncTransport` and the telemetry ports have since landed, below).
   `IdGenerator` is a *ninth* port §3.3 does not name at all, decided here (progress.md D48):
   `{ ulid(): string }`, content-agnostic — it mints the id, the caller brands it
   (`attemptId(gen.ulid())`). It exists because nothing in the app may mint an id (`ids.ts`,
@@ -62,6 +62,18 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   differ from those defaults, and **`parseExamRun` must copy every run field**, since export, import and
   sync all rebuild a run through it (progress.md D85). `ItemRepository` gained `forms()` for the exam
   picker, amended into §3.3 in place.
+  **The telemetry ports have landed** (`ports/telemetry.ts`, Phase 3 Slice 4, progress.md D92), as
+  **two** where §3.3 wrote one `TelemetrySink { record, flush }`: the queue must survive an offline
+  submit (IndexedDB) and the batch goes out over `fetch`, and one adapter directory cannot hold both.
+  - **`TelemetrySink { send(batch) }`** is the network half. It rejects with
+    `TelemetryUnavailableError` to keep a batch for later.
+  - **`TelemetryStore`** is the device-local half: the consent (`"unasked" | "on" | "off"`) and the
+    queue. **No sync collector and no export reads it**, like `SyncStateStore`, so consent given in
+    one browser never enrols another. `wipeData` and `deleteEverywhere` clear it.
+  - `record` and `flush` are use cases (`use-cases/telemetry.ts`). `submitExam` queues only at the
+    first stamp and only while consent is `"on"`, and **a telemetry failure never costs a
+    submission**. Events come from the stored run and its rescore, never its attempts (D80).
+    `TELEMETRY_MAX_BATCH` is the one batch cap, read by the server too.
 - **Sync merges on the device, and only concurrent edits merge** (progress.md D69, Gate B). `syncNow`
   finds dirty records by hashing each one against the ledger, pulls first, then pushes with base
   revisions. A stale base comes back as a conflict. `mergeRecord` (`src/sync/merge.ts`) is the one

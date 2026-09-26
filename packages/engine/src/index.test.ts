@@ -17,6 +17,7 @@ describe("@palier/engine public surface", () => {
 
   it("exports the trend calculator", () => {
     expect(typeof engine.calculateTrend).toBe("function");
+    expect(typeof engine.trendEvidence).toBe("function");
   });
 
   it("exports the exam scorer", () => {
