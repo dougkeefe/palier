@@ -64,10 +64,11 @@ const NOW = "2026-09-26T12:00:00.000Z";
 const clock = { now: () => NOW };
 
 const providerStub = (verify: () => Promise<void> = () => Promise.resolve()): AiProvider => ({
-  capabilities: () => ({ generatePassage: false, generateItems: false, reviewItem: false }),
+  capabilities: () => ({ generatePassage: false, generateItems: false, reviewItem: false, assessWriting: false }),
   generatePassage: () => Promise.reject(new Error("unused")),
   generateItems: () => Promise.reject(new Error("unused")),
   reviewItem: () => Promise.reject(new Error("unused")),
+  assessWriting: () => Promise.reject(new Error("unused")),
   verifyKey: verify,
   lastUsage: () => null,
 });
@@ -185,13 +186,15 @@ const spendingProvider = (usages: (UsageRecord | null)[], fail = false) => {
     usage = usages.shift() ?? null;
     return fail ? Promise.reject(new Error("malformed twice")) : Promise.resolve();
   };
-  const provider: AiProvider & { assessWriting: () => Promise<string> } = {
-    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true }),
+  const provider: AiProvider & { assessOral: () => Promise<string> } = {
+    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true }),
     generatePassage: () => next().then(() => []),
     generateItems: () => next().then(() => []),
     reviewItem: () => next().then(() => ({}) as never),
-    // Not on the port yet (Slice 3): stands in for a capability added later.
-    assessWriting: () => next().then(() => "assessed"),
+    assessWriting: () => next().then(() => ({}) as never),
+    // Not on the port yet (Phase 5): stands in for a capability added later. It was
+    // `assessWriting` until Slice 3 put that on the port (progress.md D105).
+    assessOral: () => next().then(() => "assessed"),
     verifyKey: () => {
       usage = { model: "never-billed", inputTokens: 1, outputTokens: 1, costUsd: 1 };
       return Promise.resolve();
@@ -250,7 +253,7 @@ describe("withAiProvider — every call is written to the cost ledger (D101)", (
   it("meters a capability the port gains later, without an edit to the wrapper", async () => {
     const { deps, entries } = await setUp(spendingProvider([{ model: "m", inputTokens: 1, outputTokens: 2 }]));
     const result = await withAiProvider(deps, "writing-feedback", (ai) =>
-      (ai as unknown as { assessWriting: () => Promise<string> }).assessWriting(),
+      (ai as unknown as { assessOral: () => Promise<string> }).assessOral(),
     );
     expect(result).toBe("assessed");
     expect(entries.map((e) => e.feature)).toEqual(["writing-feedback"]);

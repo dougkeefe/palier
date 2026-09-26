@@ -6,6 +6,7 @@ import {
   itemShape,
   oralScenarioShape,
   passageShape,
+  writingPromptShape,
 } from "./content.js";
 import { examProfileShape } from "../profile/schema.js";
 
@@ -26,6 +27,7 @@ export const CONTENT_SCHEMAS = {
   "exam-form": examFormShape,
   attempt: attemptShape,
   "exam-profile": examProfileShape,
+  "writing-prompt": writingPromptShape,
 } as const satisfies Record<string, z.ZodType>;
 
 export type ContentSchemaName = keyof typeof CONTENT_SCHEMAS;

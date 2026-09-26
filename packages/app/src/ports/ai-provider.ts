@@ -7,6 +7,8 @@ import type {
   ReviewRequest,
   ReviewVerdict,
   UsageRecord,
+  WritingAssessment,
+  WritingRequest,
 } from "@palier/domain";
 
 /**
@@ -29,6 +31,8 @@ import type {
  * The DTOs (`GenerateItemsRequest`, `ReviewVerdict`, …) live in `@palier/domain`,
  * not here, so `apps/factory` can build them without importing this layer (ADR 20).
  *
+ * `assessWriting` is §3.3's own method, landed with Phase 4 Slice 3 (progress.md D105).
+ *
  * `verifyKey` is a third §3.3 amendment (progress.md D99, Phase 4 Slice 1): the one cheap
  * call `/settings/key` makes to report whether the user's key works (PRD §8.10).
  */
@@ -41,6 +45,13 @@ export type AiProvider = {
   generateItems: (req: GenerateItemsRequest) => Promise<readonly ItemDraft[]>;
   /** Review one item blind to its key (§4.4). */
   reviewItem: (req: ReviewRequest) => Promise<ReviewVerdict>;
+  /**
+   * Feedback on a piece of writing (architecture.md §8.4): a band and evidence per
+   * criterion, the errors as offsets into `req.text` that `checkErrorOffsets` accepts,
+   * and a model answer at the target band. A provider that cannot place its errors
+   * rejects rather than return offsets the screen would draw over the wrong words.
+   */
+  assessWriting: (req: WritingRequest) => Promise<WritingAssessment>;
   /**
    * One cheap call that proves the key this provider holds is accepted. Resolves when it
    * is; otherwise rejects with the provider's own error for the reason (an invalid key, a

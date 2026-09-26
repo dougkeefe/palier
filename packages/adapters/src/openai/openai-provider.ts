@@ -1,8 +1,10 @@
 import type { AiProvider } from "@palier/app";
 import {
+  assembleAssessment,
   itemDraftSchema,
   passageDraftSchema,
   reviewVerdictSchema,
+  writingFeedbackDraftSchema,
 } from "@palier/domain";
 import type {
   GenerateItemsRequest,
@@ -12,6 +14,9 @@ import type {
   ReviewRequest,
   ReviewVerdict,
   UsageRecord,
+  WritingAssessment,
+  WritingFeedbackDraft,
+  WritingRequest,
 } from "@palier/domain";
 
 import {
@@ -55,11 +60,17 @@ export type FetchLike = (
   },
 ) => Promise<FetchResponse>;
 
-/** Model ids, as data (§8.1). One per pipeline stage that calls the model. */
+/**
+ * Model ids, as data (§8.1). One per stage that calls the model: the factory's three,
+ * and `assess` for writing feedback (progress.md D105). The factory never assesses
+ * writing, so `assess` is optional; `assessWriting` without it is a configuration
+ * error, refused before any request is made.
+ */
 export type OpenAiModels = {
   readonly passage: string;
   readonly draft: string;
   readonly review: string;
+  readonly assess?: string;
 };
 
 /** Per-model prices, for the cost ledger (§8.6). Absent → `costUsd` is omitted. */
@@ -243,7 +254,12 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
   };
 
   return {
-    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true }),
+    capabilities: () => ({
+      generatePassage: true,
+      generateItems: true,
+      reviewItem: true,
+      assessWriting: config.models.assess !== undefined,
+    }),
 
     generatePassage: (req: GeneratePassageRequest) => {
       const { system, user } = buildPrompt.passage(req);
@@ -273,6 +289,27 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
         const result = reviewVerdictSchema.safeParse(raw);
         if (!result.success) throw new Error(result.error.message);
         return result.data as ReviewVerdict;
+      });
+    },
+
+    /**
+     * The model quotes each error's words and `assembleAssessment` places them (D105). An
+     * excerpt that is not in the text, or two on the same words, fails the parse, so it is
+     * retried once like any malformed answer and then becomes `InvalidResponseError`.
+     */
+    assessWriting: (req: WritingRequest) => {
+      const model = config.models.assess;
+      if (model === undefined) {
+        usage = null;
+        return Promise.reject(new Error("No model is configured for writing feedback (models.assess)."));
+      }
+      const { system, user } = buildPrompt.writing(req);
+      return callValidated(model, system, user, (raw): WritingAssessment => {
+        const result = writingFeedbackDraftSchema.safeParse(raw);
+        if (!result.success) throw new Error(result.error.message);
+        const assembled = assembleAssessment(req.text, result.data as WritingFeedbackDraft);
+        if (!assembled.ok) throw new Error(assembled.problem);
+        return assembled.assessment;
       });
     },
 

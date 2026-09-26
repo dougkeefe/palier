@@ -82,6 +82,7 @@ export { ATTEMPT_MODES } from "./attempt.js";
 export type {
   AiCapabilities,
   AiFeature,
+  CriterionAssessment,
   FeatureCall,
   GenerateItemsRequest,
   GeneratePassageRequest,
@@ -93,13 +94,29 @@ export type {
   ReviewRequest,
   ReviewVerdict,
   UsageRecord,
+  WritingAssessment,
+  WritingCriterion,
+  WritingError,
+  WritingErrorDraft,
+  WritingFeedbackDraft,
+  WritingRequest,
 } from "./ai.js";
-export { AI_FEATURES } from "./ai.js";
+export { AI_FEATURES, WRITING_CRITERIA } from "./ai.js";
 export {
   itemDraftSchema,
   passageDraftSchema,
   reviewVerdictSchema,
+  writingAssessmentSchema,
+  writingFeedbackDraftSchema,
 } from "./schemas/ai.js";
+export type { AssembleResult, PlaceErrorsResult } from "./writing.js";
+export { assembleAssessment, checkErrorOffsets, placeErrors } from "./writing.js";
+
+// The writing workshop's prompt library, a content artefact (progress.md D107).
+export type { WritingPrompt, WritingRegister } from "./writing-prompt.js";
+export { WRITING_REGISTERS } from "./writing-prompt.js";
+export type { WritingPromptsParseResult } from "./writing-prompts.js";
+export { parseWritingPrompts, parseWritingPromptsOrThrow } from "./writing-prompts.js";
 
 // Opt-in anonymous item telemetry and the statistics job's report (architecture.md
 // 7.6, 9.2). DTOs like the AI ones: no JSON Schema is published for them.
@@ -138,6 +155,7 @@ export {
   itemSchema,
   oralScenarioSchema,
   passageSchema,
+  writingPromptSchema,
 } from "./schemas/content.js";
 export type { ContentSchemaName } from "./schemas/index.js";
 export { CONTENT_SCHEMA_NAMES, CONTENT_SCHEMAS } from "./schemas/index.js";

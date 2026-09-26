@@ -12,6 +12,7 @@ import {
   syncTransportContract,
   telemetrySinkContract,
   telemetryStoreContract,
+  writingStoreContract,
 } from "../contracts/index.js";
 import {
   fakeAiProvider,
@@ -27,6 +28,7 @@ import {
   memorySyncStateStore,
   memoryTelemetryCollector,
   memoryTelemetryStore,
+  memoryWritingStore,
 } from "./index.js";
 
 /**
@@ -49,3 +51,4 @@ syncTransportContract("memory", () => Promise.resolve(memorySyncServer().transpo
 telemetryStoreContract("memory", () => Promise.resolve(memoryTelemetryStore()));
 telemetrySinkContract("memory", () => Promise.resolve(memoryTelemetryCollector()));
 costLedgerContract("memory", () => Promise.resolve(memoryCostLedger()));
+writingStoreContract("memory", () => Promise.resolve(memoryWritingStore()));

@@ -2,11 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import type { AiProvider } from "@palier/app";
 import {
+  checkErrorOffsets,
   itemDraftSchema,
   passageDraftSchema,
   reviewVerdictSchema,
+  writingAssessmentSchema,
 } from "@palier/domain";
-import type { GenerateItemsRequest, ReviewRequest } from "@palier/domain";
+import type { GenerateItemsRequest, ReviewRequest, WritingRequest } from "@palier/domain";
 
 /**
  * The substitutability contract for an `AiProvider` (implementation-plan.md §6.2
@@ -44,6 +46,15 @@ const aReviewRequest = (): ReviewRequest => ({
   lang: "fr",
 });
 
+const aWritingRequest = (): WritingRequest => ({
+  task: "Rédigez un court paragraphe pour informer votre équipe d'un changement.",
+  wordTarget: 80,
+  text: "Bonjour à tous, la réunion de lundi est reporter à mardi.",
+  targetBand: "B",
+  lang: "fr",
+  feedbackLang: "en",
+});
+
 export const aiProviderContract = (name: string, make: () => Promise<AiProvider>): void => {
   describe(`AiProvider contract: ${name}`, () => {
     it("reports its capabilities as booleans", async () => {
@@ -51,6 +62,7 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       expect(typeof caps.generatePassage).toBe("boolean");
       expect(typeof caps.generateItems).toBe("boolean");
       expect(typeof caps.reviewItem).toBe("boolean");
+      expect(typeof caps.assessWriting).toBe("boolean");
     });
 
     it("has no usage before any call", async () => {
@@ -108,6 +120,15 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       await provider.generateItems(anItemsRequest(1));
       await provider.verifyKey();
       expect(provider.lastUsage()).toBeNull();
+    });
+
+    it("assesses writing schema-valid, with every error inside the text and none overlapping (D105)", async () => {
+      const provider = await make();
+      const request = aWritingRequest();
+      const assessment = await provider.assessWriting(request);
+      expect(writingAssessmentSchema.safeParse(assessment).success).toBe(true);
+      expect(checkErrorOffsets(request.text, assessment.errors)).toBeNull();
+      expect(provider.lastUsage()).not.toBeNull();
     });
 
     it("returns a schema-valid verdict whose chosen key is one of the options", async () => {

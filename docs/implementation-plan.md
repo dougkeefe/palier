@@ -154,7 +154,8 @@ interface AiProvider {
   generatePassage(req: GeneratePassageRequest): Promise<PassageDraft[]>   // Phase 1, added
   generateItems(req: GenerateItemsRequest): Promise<ItemDraft[]>          // draft, not Item[]
   reviewItem(req: ReviewRequest): Promise<ReviewVerdict>
-  assessWriting(req: WritingRequest): Promise<WritingAssessment>   // deferred to Phase 4
+  assessWriting(req: WritingRequest): Promise<WritingAssessment>   // Phase 4 Slice 3 (progress.md D105): errors as
+                                    // offsets checkErrorOffsets accepts; the model reports excerpts, the adapter places them
   assessOral(req: OralRequest): Promise<OralAssessment>            // deferred to Phase 5
   transcribe(audio: Blob, lang: Lang): Promise<Transcript>         // deferred to Phase 5
   openVoiceSession(cfg: VoiceSessionConfig): Promise<VoiceSession>  // may throw Unsupported; deferred to Phase 6
@@ -210,6 +211,17 @@ interface KeyVault {
 interface CostLedger {
   append(entry: CostEntry): Promise<void>
   since(from: ISO): Promise<CostEntry[]>                        // at or after `from`, oldest first
+  clear(): Promise<void>
+}
+
+// Added 26 September 2026 with Phase 4 Slice 3 (progress.md D106): the writing workshop's submissions, a
+// port §3.3 did not name. Device-local like CostLedger: never synced, never exported [R12]; wipeData and
+// deleteEverywhere clear it. WritingSubmission = { id, promptId, text, writtenAt: ISO,
+// assessment: WritingAssessment | null }, and a use case never changes the text of an assessed one.
+interface WritingStore {
+  put(submission: WritingSubmission): Promise<void>             // upsert by id
+  get(id: string): Promise<WritingSubmission | null>
+  all(): Promise<WritingSubmission[]>                           // newest first by writtenAt
   clear(): Promise<void>
 }
 

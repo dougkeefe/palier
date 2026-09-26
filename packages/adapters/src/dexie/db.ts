@@ -1,4 +1,13 @@
-import type { CostEntry, ExamRun, ISO, LedgerEntry, ScheduleEntry, SyncState, TelemetryConsent } from "@palier/app";
+import type {
+  CostEntry,
+  ExamRun,
+  ISO,
+  LedgerEntry,
+  ScheduleEntry,
+  SyncState,
+  TelemetryConsent,
+  WritingSubmission,
+} from "@palier/app";
 import type { Attempt, AttemptId, AttemptMode, ItemId, SessionId, TelemetryEvent } from "@palier/domain";
 import { Dexie, type Table } from "dexie";
 
@@ -17,6 +26,10 @@ import { Dexie, type Table } from "dexie";
  * (`migration.test.ts`) opens a real v1 database with rows in it and proves they
  * survive. Each version's `stores()` block is exported, so the harness declares the
  * same v1 the app did.
+ *
+ * **Version 3** adds `writingSubmissions` (progress.md D106), the writing workshop's
+ * submissions, indexed by `writtenAt` for the newest-first history. A new table again, so
+ * the upgrade moves no data. Never synced and never exported [R12].
  *
  * **Why getters, not `field!: Table<...>` declarations.** `tsconfig.base.json` targets
  * ES2022 and does not set `useDefineForClassFields`, so it defaults to `true`; a class
@@ -88,6 +101,9 @@ export type TelemetryQueueRow = {
  */
 export type CostLedgerRow = CostEntry & { readonly id?: number };
 
+/** A writing-workshop submission, stored as the port's `WritingSubmission` (progress.md D106). */
+export type WritingSubmissionRow = WritingSubmission;
+
 /** The one telemetry-meta row: this device's consent, never synced (progress.md D92). */
 export type TelemetryMetaRow = {
   readonly id: "consent";
@@ -122,11 +138,17 @@ export const SCHEMA_V2 = {
   telemetryMeta: "id",
 } as const;
 
+/** The table version 3 adds (progress.md D106). */
+export const SCHEMA_V3 = {
+  writingSubmissions: "id, writtenAt",
+} as const;
+
 export class PalierDb extends Dexie {
   constructor(name = "palier") {
     super(name);
     this.version(1).stores(SCHEMA_V1);
     this.version(2).stores(SCHEMA_V2);
+    this.version(3).stores(SCHEMA_V3);
   }
 
   get attempts(): Table<Attempt, AttemptId> {
@@ -172,5 +194,9 @@ export class PalierDb extends Dexie {
 
   get telemetryMeta(): Table<TelemetryMetaRow, string> {
     return this.table("telemetryMeta");
+  }
+
+  get writingSubmissions(): Table<WritingSubmissionRow, string> {
+    return this.table("writingSubmissions");
   }
 }

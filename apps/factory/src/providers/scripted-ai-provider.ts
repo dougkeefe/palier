@@ -73,7 +73,7 @@ export const scriptedAiProvider = (): AiProvider => {
   };
 
   return {
-    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true }),
+    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: false }),
 
     generatePassage: (req) => {
       bill(200);
@@ -156,6 +156,13 @@ export const scriptedAiProvider = (): AiProvider => {
 
     // No key to check: the scripted provider calls no service. It bills nothing, so it
     // leaves no earlier call's usage behind (progress.md D102).
+    // The factory never assesses writing (progress.md D105), so this provider says so
+    // rather than invent feedback, and bills nothing.
+    assessWriting: () => {
+      usage = null;
+      return Promise.reject(new Error("The scripted provider does not assess writing."));
+    },
+
     verifyKey: () => {
       usage = null;
       return Promise.resolve();

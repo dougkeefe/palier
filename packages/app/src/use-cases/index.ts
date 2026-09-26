@@ -154,3 +154,20 @@ export {
   spendCap,
   spendSummary,
 } from "./spend.js";
+
+export type {
+  SaveWritingDeps,
+  SaveWritingRequest,
+  WritingDeps,
+  WritingFeedbackDeps,
+  WritingFeedbackRequest,
+} from "./writing.js";
+export {
+  EmptyWritingError,
+  UnknownWritingPromptError,
+  UnknownWritingSubmissionError,
+  requestWritingFeedback,
+  saveWriting,
+  writingHistory,
+  writingPrompts,
+} from "./writing.js";

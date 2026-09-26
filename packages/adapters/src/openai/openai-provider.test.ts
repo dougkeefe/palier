@@ -13,7 +13,7 @@ import {
   RateLimitError,
 } from "./errors.js";
 
-const MODELS = { passage: "m-passage", draft: "m-draft", review: "m-review" } as const;
+const MODELS = { passage: "m-passage", draft: "m-draft", review: "m-review", assess: "m-assess" } as const;
 
 const localised = { en: "en", fr: "fr" };
 const option = (id: "a" | "b" | "c" | "d") => ({ id, text: `opt ${id}`, rationale: localised });
@@ -56,6 +56,15 @@ const VERDICT = {
   estimatedBand: "B",
 };
 
+const WRITTEN = "Bonjour à tous, la réunion de lundi est reporter à mardi. Merci de votre compréhension.";
+
+const criterion = { band: "B", evidence: "« Bonjour à tous » convient à un courriel d'équipe." };
+const FEEDBACK = {
+  criteria: { register: criterion, structure: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+  errors: [{ excerpt: "est reporter", correction: "est reportée", rule: "Accord du participe passé avec être" }],
+  modelAnswer: "Bonjour à tous, la réunion de lundi est reportée à mardi. Merci de votre compréhension.",
+};
+
 /** A response body in the shape the provider reads, wrapping `content` JSON. */
 const chatResponse = (content: unknown, usage = { prompt_tokens: 100, completion_tokens: 50 }) => ({
   ok: true,
@@ -78,6 +87,7 @@ const cannedFetch: FetchLike = (url, init) => {
   const model = (JSON.parse(init.body ?? "{}") as { model: string }).model;
   if (model === MODELS.passage) return Promise.resolve(chatResponse(PASSAGE_ENVELOPE));
   if (model === MODELS.draft) return Promise.resolve(chatResponse(ITEM_ENVELOPE));
+  if (model === MODELS.assess) return Promise.resolve(chatResponse(FEEDBACK));
   return Promise.resolve(chatResponse(VERDICT));
 };
 
@@ -88,12 +98,18 @@ const makeProvider = (over: Partial<OpenAiProviderConfig> = {}) =>
 aiProviderContract("openai", () => Promise.resolve(makeProvider()));
 
 describe("openAiProvider", () => {
-  it("reports every Phase-1 capability", () => {
+  it("reports every capability, writing feedback included when a model is configured for it", () => {
     expect(makeProvider().capabilities()).toEqual({
       generatePassage: true,
       generateItems: true,
       reviewItem: true,
+      assessWriting: true,
     });
+  });
+
+  it("reports no writing feedback when no assess model is configured, as the factory's is not", () => {
+    const { assess: _assess, ...factoryModels } = MODELS;
+    expect(makeProvider({ models: factoryModels }).capabilities().assessWriting).toBe(false);
   });
 
   it("sends the configured model and a bearer key", async () => {
@@ -611,5 +627,136 @@ describe("openAiProvider — the key never rides out on an error [R12]", () => {
     expect(error).toBeInstanceOf(ProviderRequestError);
     expect((error as ProviderRequestError).status).toBe(500);
     expect((error as Error).message).toContain("Bearer [redacted]");
+  });
+});
+
+describe("openAiProvider — assessWriting (D105)", () => {
+  const aRequest = {
+    task: "Informez votre équipe du report d'une réunion.",
+    wordTarget: 80,
+    text: WRITTEN,
+    targetBand: "C",
+    lang: "fr",
+    feedbackLang: "en",
+  } as const;
+
+  /** A fetch that answers each completion with the next body, repeating the last. */
+  const answers = (...bodies: unknown[]): { fetchImpl: FetchLike; sent: () => string[] } => {
+    const sent: string[] = [];
+    return {
+      sent: () => sent,
+      fetchImpl: (_url, init) => {
+        sent.push(init.body ?? "");
+        const body = bodies.length > 1 ? bodies.shift() : bodies[0];
+        return Promise.resolve(chatResponse(body));
+      },
+    };
+  };
+
+  it("places each quoted error at its offsets in the writer's own text", async () => {
+    const assessment = await makeProvider().assessWriting(aRequest);
+    const start = WRITTEN.indexOf("est reporter");
+    expect(assessment.errors).toEqual([
+      { start, end: start + "est reporter".length, correction: "est reportée", rule: "Accord du participe passé avec être" },
+    ]);
+    expect(assessment.criteria.grammar).toEqual(criterion);
+    expect(assessment.modelAnswer).toBe(FEEDBACK.modelAnswer);
+  });
+
+  it("calls the assess model with the task, the text, the band and both languages", async () => {
+    const { fetchImpl, sent } = answers(FEEDBACK);
+    await makeProvider({ fetchImpl }).assessWriting(aRequest);
+    const body = JSON.parse(sent()[0] ?? "{}") as { model: string; messages: { content: string }[] };
+    const user = body.messages[1]?.content ?? "";
+    expect(body.model).toBe("m-assess");
+    expect(user).toContain(aRequest.task);
+    expect(user).toContain(WRITTEN);
+    expect(user).toContain("level C");
+    expect(user).toContain("evidence and the rules in English");
+    expect(user).toContain("model answer in French");
+  });
+
+  it("retries an excerpt that is not in the text, then accepts a corrected answer", async () => {
+    const miscopied = { ...FEEDBACK, errors: [{ excerpt: "est reportez", correction: "x", rule: "r" }] };
+    const { fetchImpl, sent } = answers(miscopied, FEEDBACK);
+    const assessment = await makeProvider({ fetchImpl }).assessWriting(aRequest);
+    expect(sent()).toHaveLength(2);
+    expect(sent()[1]).toContain('\\"est reportez\\" is not in the text');
+    expect(assessment.errors).toHaveLength(1);
+  });
+
+  it("refuses an excerpt outside the text twice as InvalidResponseError", async () => {
+    const miscopied = { ...FEEDBACK, errors: [{ excerpt: "absent", correction: "x", rule: "r" }] };
+    await expect(makeProvider({ fetchImpl: answers(miscopied).fetchImpl }).assessWriting(aRequest)).rejects.toThrow(
+      InvalidResponseError,
+    );
+  });
+
+  it("refuses two errors on overlapping words as InvalidResponseError", async () => {
+    const overlapping = {
+      ...FEEDBACK,
+      errors: [
+        { excerpt: "lundi est reporter", correction: "x", rule: "r" },
+        { excerpt: "est reporter à mardi", correction: "y", rule: "r" },
+      ],
+    };
+    await expect(
+      makeProvider({ fetchImpl: answers(overlapping).fetchImpl }).assessWriting(aRequest),
+    ).rejects.toThrow(/overlap/u);
+  });
+
+  it("refuses an answer in the wrong shape as InvalidResponseError: offsets instead of excerpts", async () => {
+    const offsets = { ...FEEDBACK, errors: [{ start: 0, end: 7, correction: "x", rule: "r" }] };
+    await expect(makeProvider({ fetchImpl: answers(offsets).fetchImpl }).assessWriting(aRequest)).rejects.toThrow(
+      InvalidResponseError,
+    );
+  });
+
+  it("refuses an answer missing a criterion as InvalidResponseError", async () => {
+    const { task: _task, ...four } = FEEDBACK.criteria;
+    await expect(
+      makeProvider({ fetchImpl: answers({ ...FEEDBACK, criteria: four }).fetchImpl }).assessWriting(aRequest),
+    ).rejects.toThrow(InvalidResponseError);
+  });
+
+  it("bills both completions of a retried assessment (D102)", async () => {
+    const miscopied = { ...FEEDBACK, errors: [{ excerpt: "absent", correction: "x", rule: "r" }] };
+    const provider = makeProvider({ fetchImpl: answers(miscopied, FEEDBACK).fetchImpl });
+    await provider.assessWriting(aRequest);
+    expect(provider.lastUsage()).toMatchObject({ model: "m-assess", inputTokens: 200, outputTokens: 100 });
+  });
+
+  const refusing = (status: number): FetchLike => () =>
+    Promise.resolve({ ok: false, status, json: () => Promise.resolve({}), text: () => Promise.resolve("no") });
+
+  it("translates 401 to InvalidApiKeyError and 429 to RateLimitError", async () => {
+    await expect(makeProvider({ fetchImpl: refusing(401) }).assessWriting(aRequest)).rejects.toBeInstanceOf(
+      InvalidApiKeyError,
+    );
+    await expect(makeProvider({ fetchImpl: refusing(429) }).assessWriting(aRequest)).rejects.toBeInstanceOf(
+      RateLimitError,
+    );
+  });
+
+  it("abandons an assessment that outlives its limit as ProviderTimeoutError, never retried", async () => {
+    let calls = 0;
+    const hangs: FetchLike = () => {
+      calls++;
+      return new Promise(() => undefined);
+    };
+    await expect(
+      makeProvider({ fetchImpl: hangs, timeoutMs: 5, maxRetries: 3 }).assessWriting(aRequest),
+    ).rejects.toBeInstanceOf(ProviderTimeoutError);
+    expect(calls).toBe(1);
+  });
+
+  it("refuses to run with no assess model, before any request and with no usage", async () => {
+    const { assess: _assess, ...factoryModels } = MODELS;
+    const spy = vi.fn(cannedFetch);
+    const provider = makeProvider({ models: factoryModels, fetchImpl: spy });
+    await provider.reviewItem(aReview);
+    await expect(provider.assessWriting(aRequest)).rejects.toThrow(/models\.assess/u);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(provider.lastUsage()).toBeNull();
   });
 });

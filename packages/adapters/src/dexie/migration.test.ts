@@ -3,7 +3,7 @@ import { attemptId, itemId } from "@palier/domain";
 import { Dexie } from "dexie";
 import { describe, expect, it } from "vitest";
 
-import { PalierDb, SCHEMA_V1 } from "./db.js";
+import { PalierDb, SCHEMA_V1, SCHEMA_V2 } from "./db.js";
 import { dexieStores } from "./index.js";
 
 /**
@@ -11,6 +11,9 @@ import { dexieStores } from "./index.js";
  * to N+1 with realistic data"). A database is opened exactly as a v1 build of the app
  * opened it, filled with the rows a real device holds, closed, and reopened by today's
  * `PalierDb`. Every row must survive, and the new tables must work.
+ *
+ * Each version keeps its own case: a v1 device upgrades straight to today's version, and
+ * so does a v2 one (progress.md D106), so both paths are held.
  */
 const dbName = (): string => `palier-migration-${globalThis.crypto.randomUUID()}`;
 
@@ -33,14 +36,14 @@ const aVersionOneDevice = async (name: string) => {
   return rows;
 };
 
-describe("schema migration v1 → v2", () => {
+describe("schema migration v1 → current", () => {
   it("keeps every row a v1 device held", async () => {
     const name = dbName();
     const rows = await aVersionOneDevice(name);
 
     const db = new PalierDb(name);
     await db.open();
-    expect(db.verno).toBe(2);
+    expect(db.verno).toBe(3);
     for (const [table, list] of Object.entries(rows)) {
       expect(await db.table(table).count(), table).toBe(list.length);
     }
@@ -88,5 +91,76 @@ describe("schema migration v1 → v2", () => {
     await stores.telemetry.setConsent("on");
     await stores.telemetry.enqueue([{ itemId: itemId("item-1"), correct: true, responseMs: 1, bankVersion: 2, restBucket: 0 }]);
     expect(await stores.telemetry.take(10)).toHaveLength(1);
+  });
+});
+
+/** Open `name` as the app did at schema version 2, and fill it: v1's rows plus telemetry. */
+const aVersionTwoDevice = async (name: string) => {
+  const v1Rows = await aVersionOneDevice(name);
+  const v2 = new Dexie(name);
+  v2.version(1).stores(SCHEMA_V1);
+  v2.version(2).stores(SCHEMA_V2);
+  const rows = {
+    ...v1Rows,
+    costLedger: [
+      ...v1Rows.costLedger,
+      {
+        ts: "2026-09-26T10:00:00.000Z",
+        feature: "writing-feedback",
+        model: "gpt-6-sol",
+        inputTokens: 2_500,
+        outputTokens: 2_000,
+        costUsd: 0.021,
+      },
+    ],
+    telemetryQueue: [{ event: { itemId: itemId("item-1"), correct: false, responseMs: 4_200, bankVersion: 2, restBucket: 1 } }],
+    telemetryMeta: [{ id: "consent", consent: "on" }],
+  } as const;
+  await v2.table("costLedger").add(rows.costLedger[1]);
+  await v2.table("telemetryQueue").bulkAdd([...rows.telemetryQueue]);
+  await v2.table("telemetryMeta").bulkAdd([...rows.telemetryMeta]);
+  v2.close();
+  return rows;
+};
+
+describe("schema migration v2 → v3", () => {
+  it("keeps every row a v2 device held", async () => {
+    const name = dbName();
+    const rows = await aVersionTwoDevice(name);
+
+    const db = new PalierDb(name);
+    await db.open();
+    expect(db.verno).toBe(3);
+    for (const [table, list] of Object.entries(rows)) {
+      expect(await db.table(table).count(), table).toBe(list.length);
+    }
+    expect(await db.telemetryMeta.toArray()).toEqual(rows.telemetryMeta);
+  });
+
+  it("reads the migrated rows through the ports, and the writing store starts empty", async () => {
+    const name = dbName();
+    await aVersionTwoDevice(name);
+
+    const stores = dexieStores(name);
+    expect(await stores.telemetry.consent()).toBe("on");
+    expect(await stores.telemetry.take(10)).toHaveLength(1);
+    expect(await stores.costLedger.since("2026-09-01T00:00:00.000Z")).toHaveLength(1);
+    expect(await stores.writing.all()).toEqual([]);
+  });
+
+  it("gives the migrated database a working writing store", async () => {
+    const name = dbName();
+    await aVersionTwoDevice(name);
+
+    const stores = dexieStores(name);
+    const submission = {
+      id: "sub-1",
+      promptId: "wp-reply-01",
+      text: "Madame, je vous remercie de votre message.",
+      writtenAt: "2026-09-26T11:00:00.000Z",
+      assessment: null,
+    };
+    await stores.writing.put(submission);
+    expect(await stores.writing.all()).toEqual([submission]);
   });
 });

@@ -2,6 +2,7 @@ import * as z from "zod";
 
 import { DOC_TYPES } from "../passage.js";
 import {
+  bandSchema,
   itemTypeSchema,
   langSchema,
   localisedSchema,
@@ -59,6 +60,55 @@ export const reviewVerdictShape = z.strictObject({
   estimatedBand: targetBandSchema,
 });
 
+const criterionShape = z.strictObject({
+  band: bandSchema,
+  evidence: z.string().min(1),
+});
+
+/** Exactly the five criteria of `WRITING_CRITERIA`, no more and none missing. */
+const criteriaShape = z.strictObject({
+  register: criterionShape,
+  structure: criterionShape,
+  grammar: criterionShape,
+  vocabulary: criterionShape,
+  task: criterionShape,
+});
+
+/**
+ * What the model returns for writing feedback: errors as excerpts, not offsets
+ * (progress.md D105). `placeErrors` turns them into a `WritingAssessment`.
+ */
+export const writingFeedbackDraftShape = z.strictObject({
+  criteria: criteriaShape,
+  errors: z.array(
+    z.strictObject({
+      excerpt: z.string().min(1),
+      correction: z.string().min(1),
+      rule: z.string().min(1),
+    }),
+  ),
+  modelAnswer: z.string().min(1),
+});
+
+/**
+ * A placed assessment's shape. The offsets are checked against the text by
+ * `checkErrorOffsets`, which a schema cannot do because it does not see the text.
+ */
+export const writingAssessmentShape = z.strictObject({
+  criteria: criteriaShape,
+  errors: z.array(
+    z.strictObject({
+      start: z.number().int().nonnegative(),
+      end: z.number().int().positive(),
+      correction: z.string().min(1),
+      rule: z.string().min(1),
+    }),
+  ),
+  modelAnswer: z.string().min(1),
+});
+
 export const passageDraftSchema = passageDraftShape.readonly();
 export const itemDraftSchema = itemDraftShape.readonly();
 export const reviewVerdictSchema = reviewVerdictShape.readonly();
+export const writingFeedbackDraftSchema = writingFeedbackDraftShape.readonly();
+export const writingAssessmentSchema = writingAssessmentShape.readonly();

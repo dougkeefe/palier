@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { itemDraftSchema, passageDraftSchema, reviewVerdictSchema } from "../schemas/ai.js";
+import {
+  itemDraftSchema,
+  passageDraftSchema,
+  reviewVerdictSchema,
+  writingAssessmentSchema,
+  writingFeedbackDraftSchema,
+} from "../schemas/ai.js";
 
 const aLocalised = () => ({ en: "en text", fr: "texte fr" });
 
@@ -109,5 +115,88 @@ describe("reviewVerdictSchema", () => {
 
   it("rejects an unknown estimated band", () => {
     expect(reviewVerdictSchema.safeParse(aValidVerdict({ estimatedBand: "X" })).success).toBe(false);
+  });
+});
+
+const aCriterion = { band: "B", evidence: "Le registre est soutenu." };
+const fiveCriteria = () => ({
+  register: aCriterion,
+  structure: aCriterion,
+  grammar: aCriterion,
+  vocabulary: aCriterion,
+  task: aCriterion,
+});
+
+const aValidFeedbackDraft = (over: Record<string, unknown> = {}) => ({
+  criteria: fiveCriteria(),
+  errors: [{ excerpt: "est reporter", correction: "est reportée", rule: "Accord du participe passé" }],
+  modelAnswer: "Je vous informe que la réunion est reportée.",
+  ...over,
+});
+
+const aValidAssessment = (over: Record<string, unknown> = {}) => ({
+  criteria: fiveCriteria(),
+  errors: [{ start: 3, end: 9, correction: "est reportée", rule: "Accord" }],
+  modelAnswer: "Je vous informe que la réunion est reportée.",
+  ...over,
+});
+
+describe("writingFeedbackDraftSchema", () => {
+  it("accepts a valid draft, and one with no errors", () => {
+    expect(writingFeedbackDraftSchema.safeParse(aValidFeedbackDraft()).success).toBe(true);
+    expect(writingFeedbackDraftSchema.safeParse(aValidFeedbackDraft({ errors: [] })).success).toBe(true);
+  });
+
+  it("accepts any PSC band for a criterion, X and E included", () => {
+    const criteria = { ...fiveCriteria(), grammar: { band: "X", evidence: "e" }, task: { band: "E", evidence: "e" } };
+    expect(writingFeedbackDraftSchema.safeParse(aValidFeedbackDraft({ criteria })).success).toBe(true);
+  });
+
+  it("refuses a missing criterion", () => {
+    const { task: _task, ...four } = fiveCriteria();
+    expect(writingFeedbackDraftSchema.safeParse(aValidFeedbackDraft({ criteria: four })).success).toBe(false);
+  });
+
+  it("refuses a criterion the feedback does not have", () => {
+    const criteria = { ...fiveCriteria(), spelling: aCriterion };
+    expect(writingFeedbackDraftSchema.safeParse(aValidFeedbackDraft({ criteria })).success).toBe(false);
+  });
+
+  it("refuses a band that is not a PSC level, and blank evidence", () => {
+    const badBand = { ...fiveCriteria(), register: { band: "D", evidence: "e" } };
+    const blank = { ...fiveCriteria(), register: { band: "B", evidence: "" } };
+    expect(writingFeedbackDraftSchema.safeParse(aValidFeedbackDraft({ criteria: badBand })).success).toBe(false);
+    expect(writingFeedbackDraftSchema.safeParse(aValidFeedbackDraft({ criteria: blank })).success).toBe(false);
+  });
+
+  it("refuses an error given as offsets rather than an excerpt", () => {
+    const errors = [{ start: 0, end: 3, correction: "c", rule: "r" }];
+    expect(writingFeedbackDraftSchema.safeParse(aValidFeedbackDraft({ errors })).success).toBe(false);
+  });
+
+  it("refuses a blank model answer", () => {
+    expect(writingFeedbackDraftSchema.safeParse(aValidFeedbackDraft({ modelAnswer: "" })).success).toBe(false);
+  });
+});
+
+describe("writingAssessmentSchema", () => {
+  it("accepts a valid assessment", () => {
+    expect(writingAssessmentSchema.safeParse(aValidAssessment()).success).toBe(true);
+  });
+
+  it("refuses a negative start, a zero end and a fractional offset", () => {
+    for (const bad of [
+      { start: -1, end: 2 },
+      { start: 0, end: 0 },
+      { start: 0.5, end: 2 },
+    ]) {
+      const errors = [{ ...bad, correction: "c", rule: "r" }];
+      expect(writingAssessmentSchema.safeParse(aValidAssessment({ errors })).success).toBe(false);
+    }
+  });
+
+  it("refuses an error given as an excerpt rather than offsets", () => {
+    const errors = [{ excerpt: "x", correction: "c", rule: "r" }];
+    expect(writingAssessmentSchema.safeParse(aValidAssessment({ errors })).success).toBe(false);
   });
 });

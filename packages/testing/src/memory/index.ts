@@ -14,3 +14,4 @@ export { memorySyncStateStore } from "./sync-state-store.js";
 export { memoryTelemetryCollector } from "./telemetry-collector.js";
 export type { MemoryTelemetryCollector } from "./telemetry-collector.js";
 export { memoryTelemetryStore } from "./telemetry-store.js";
+export { memoryWritingStore } from "./writing-store.js";

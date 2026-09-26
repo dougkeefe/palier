@@ -37,6 +37,8 @@ export type {
   TelemetryConsent,
   TelemetrySink,
   TelemetryStore,
+  WritingStore,
+  WritingSubmission,
 } from "./ports/index.js";
 export {
   INITIAL_SYNC_STATE,
@@ -127,6 +129,11 @@ export type {
   SyncNowRequest,
   SyncOutcome,
   WipeDataDeps,
+  SaveWritingDeps,
+  SaveWritingRequest,
+  WritingDeps,
+  WritingFeedbackDeps,
+  WritingFeedbackRequest,
 } from "./use-cases/index.js";
 export {
   EmptyApiKeyError,
@@ -196,6 +203,13 @@ export {
   recordExamTelemetry,
   setTelemetryConsent,
   telemetryConsent,
+  EmptyWritingError,
+  UnknownWritingPromptError,
+  UnknownWritingSubmissionError,
+  requestWritingFeedback,
+  saveWriting,
+  writingHistory,
+  writingPrompts,
 } from "./use-cases/index.js";
 
 export type { ProgressStores, SyncRecord } from "./sync/records.js";

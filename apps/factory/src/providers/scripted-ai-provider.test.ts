@@ -64,3 +64,15 @@ describe("scriptedAiProvider.verifyKey", () => {
     expect(provider.lastUsage()).toBeNull();
   });
 });
+
+describe("scriptedAiProvider.assessWriting", () => {
+  it("says it does not assess writing, in its capabilities and when asked, and bills nothing", async () => {
+    const provider = scriptedAiProvider();
+    await provider.generatePassage({ topic: "finance-and-budgets", docType: "memo", targetBand: "B", lang: "fr", count: 1 });
+    expect(provider.capabilities().assessWriting).toBe(false);
+    await expect(
+      provider.assessWriting({ task: "t", wordTarget: 50, text: "Du texte.", targetBand: "B", lang: "fr", feedbackLang: "en" }),
+    ).rejects.toThrow("does not assess writing");
+    expect(provider.lastUsage()).toBeNull();
+  });
+});

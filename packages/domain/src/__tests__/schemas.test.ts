@@ -6,6 +6,7 @@ import {
   itemSchema,
   oralScenarioSchema,
   passageSchema,
+  writingPromptSchema,
 } from "../index.js";
 import {
   aValidAttempt,
@@ -308,5 +309,43 @@ describe("attemptSchema", () => {
     expect(
       attemptSchema.safeParse({ ...aValidAttempt(), mode: "practice" }).success,
     ).toBe(false);
+  });
+});
+
+describe("writingPromptSchema", () => {
+  const aValidPrompt = (over: Record<string, unknown> = {}) => ({
+    id: "wp-briefing-01",
+    lang: "fr",
+    register: "briefing-note",
+    title: { en: "A briefing note", fr: "Une note d'information" },
+    task: "Rédigez un paragraphe de note d'information.",
+    wordTarget: 150,
+    suggestedMinutes: 20,
+    ...over,
+  });
+
+  it("accepts a valid prompt", () => {
+    expect(writingPromptSchema.safeParse(aValidPrompt()).success).toBe(true);
+  });
+
+  it("rejects a register the workshop does not offer", () => {
+    expect(writingPromptSchema.safeParse(aValidPrompt({ register: "essay" })).success).toBe(false);
+  });
+
+  it("rejects a title missing a locale, since the picker reads in either", () => {
+    expect(writingPromptSchema.safeParse(aValidPrompt({ title: { fr: "Seul" } })).success).toBe(false);
+  });
+
+  it("rejects a blank task", () => {
+    expect(writingPromptSchema.safeParse(aValidPrompt({ task: "" })).success).toBe(false);
+  });
+
+  it("rejects a word target or suggested time that is not a positive whole number", () => {
+    expect(writingPromptSchema.safeParse(aValidPrompt({ wordTarget: 0 })).success).toBe(false);
+    expect(writingPromptSchema.safeParse(aValidPrompt({ suggestedMinutes: 2.5 })).success).toBe(false);
+  });
+
+  it("rejects a field it does not know", () => {
+    expect(writingPromptSchema.safeParse(aValidPrompt({ targetBand: "C" })).success).toBe(false);
   });
 });

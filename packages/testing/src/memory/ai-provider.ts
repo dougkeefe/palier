@@ -6,6 +6,7 @@ import type {
   PassageDraft,
   ReviewVerdict,
   UsageRecord,
+  WritingAssessment,
 } from "@palier/domain";
 
 /**
@@ -23,7 +24,7 @@ export const fakeAiProvider = (): AiProvider => {
   };
 
   return {
-    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true }),
+    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true }),
 
     generatePassage: (req) => {
       bill(10);
@@ -74,6 +75,36 @@ export const fakeAiProvider = (): AiProvider => {
         estimatedBand: req.targetBand,
       };
       return Promise.resolve(verdict);
+    },
+
+    // Every criterion at the target band, and the first word marked, so the offsets are
+    // always inside the text (D105). A text with no word has no error to mark.
+    assessWriting: (req) => {
+      bill(20);
+      const firstWord = /\S+/u.exec(req.text);
+      const criterion = { band: req.targetBand, evidence: "evidence quoted from the text" };
+      const assessment: WritingAssessment = {
+        criteria: {
+          register: criterion,
+          structure: criterion,
+          grammar: criterion,
+          vocabulary: criterion,
+          task: criterion,
+        },
+        errors:
+          firstWord === null
+            ? []
+            : [
+                {
+                  start: firstWord.index,
+                  end: firstWord.index + firstWord[0].length,
+                  correction: firstWord[0],
+                  rule: "the rule the correction applies",
+                },
+              ],
+        modelAnswer: `${req.text.trim()} (model answer)`,
+      };
+      return Promise.resolve(assessment);
     },
 
     // Bills nothing, and so leaves no earlier call's usage behind (D102).

@@ -22,6 +22,7 @@ import {
 } from "./sync-account.js";
 import { syncNow } from "./sync-now.js";
 import { aCostEntry, costLedger } from "./__tests__/spend-fakes.js";
+import { aSubmission, writingStore } from "./__tests__/writing-fakes.js";
 import { telemetryStore } from "./__tests__/telemetry-fakes.js";
 
 const NOW = "2026-09-24T12:00:00.000Z";
@@ -69,6 +70,7 @@ const aDevice = (transport: SyncTransport) => ({
   vault: vault(),
   telemetry: telemetryStore("on"),
   ledger: costLedger([aCostEntry()]),
+  writing: writingStore([aSubmission()]),
 });
 
 const aRegisteredDevice = async (transport: SyncTransport) => {
@@ -311,6 +313,14 @@ describe("deleteEverywhere", () => {
     await deleteEverywhere(device);
 
     expect(device.ledger.entries()).toEqual([]);
+  });
+
+  it("empties the writing workshop's submissions with the rest of this device's data", async () => {
+    const device = await aRegisteredDevice(fakeServer().transport("secret-a"));
+
+    await deleteEverywhere(device);
+
+    expect(await device.writing.all()).toEqual([]);
   });
 
   it("touches nothing local when the server cannot be reached", async () => {

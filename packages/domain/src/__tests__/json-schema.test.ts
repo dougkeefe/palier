@@ -38,6 +38,7 @@ describe("the published JSON Schemas", () => {
       "item",
       "oral-scenario",
       "passage",
+      "writing-prompt",
     ]);
   });
 });
