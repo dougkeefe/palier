@@ -102,7 +102,7 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 - [x] Monorepo: pnpm workspaces, Turborepo, TypeScript project references, strict everywhere
 - [x] Eight workspaces created (`apps/web`, `apps/factory`, six `packages/*`), each with an explicit `exports` map
 - [x] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current) — all six written, plus the root router `CLAUDE.md`; D4 resolved, D15 recorded
-- [ ] Name decided and domain registered (§12.1 — "Palier" is still a working name)
+- [~] Name decided and domain registered (§12.1) — **name decided: Palier** (D96). The domain will be `palier.dougkeefe.com`, not yet pointed at the deployment
 - [x] `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0), `README` non-affiliation statement [R5, R13]
 - [x] `adr/README.md` covering the format, the never-edit-only-supersede rule, and numbers-on-acceptance (D16)
 
@@ -221,9 +221,8 @@ The human has one decision to make first: **what the pilot runs on** (D95).
 - the product defects the pilot found, each fixed or filed;
 - the decision: Phase 4 next, or rework first.
 
-**Also waiting on the human, unchanged:** the confirmation D89 flagged (ruling 10's button now starts the
-same on every item, in service of ruling 9); D12 (the inferred `X 0-10` band); and the name and domain
-(§12.1).
+**Settled on 25 September 2026 (D96):** D89 is confirmed; D12 is verified against the PSC's published
+tables, all four of which match the profile; the name is Palier, at `palier.dougkeefe.com` eventually.
 
 **After the gate: Phase 4** (BYOK, generation, the writing workshop, `implementation-plan.md` §7). Its first
 slice is decided at the gate, not before, because the pilot may reorder it.
@@ -240,8 +239,8 @@ slice is decided at the gate, not before, because the pilot may reorder it.
   **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026; **Gate D** (exam UI
   direction, D84) on 25 September 2026.
 
-Standing human items, unchanged: **D12** (the inferred `X 0-10` band, checked against the PSC's table
-before launch) and the name/domain decision in §12.1.
+Standing human items: pointing `palier.dougkeefe.com` at the deployment, and §12.1's trademark and
+language-school check before launch (D96). D12 is closed.
 
 ---
 
@@ -686,7 +685,7 @@ exemption is now "framework file conventions" and the list names
 adding a line to that list needs a better reason than convenience.
 
 ### D12 — `writing-unsupervised` carries an inferred `X 0-10` band
-**Date:** 19 September 2026 · **Status:** open until checked against the PSC
+**Date:** 19 September 2026 · **Status:** **resolved 25 September 2026 by D96** (checked against the PSC: the published table has `X` at 0 to 10)
 
 `product-requirements.md` §5.2 gave the unsupervised written expression bands as
 `A 11-16, B 17-23, C 24-30`, leaving raw scores **0 to 10 mapping to no band at
@@ -2850,7 +2849,7 @@ Rejoining it settles two client questions that 4b would have met:
   another, and PRD §15 keeps sync and telemetry apart.
 
 ### D89 — the pre-merge review: ruling 10's button keying gave pilots away, and seven more fixes
-**Date:** 25 September 2026 · **Status:** accepted; **refines D84 ruling 10, in service of ruling 9 (flagged for the human)**
+**Date:** 25 September 2026 · **Status:** accepted; **refines D84 ruling 10, in service of ruling 9; confirmed by the human 25 September 2026 (D96)**
 
 A candid review of the Slice 3 branch before its PR found eight real defects. All are fixed, and each has a
 test or an E2E assertion.
@@ -3086,11 +3085,50 @@ The human chooses:
   calibration half rerun after the content run (the recommendation, because it keeps D56); or
 - **the funded content run first**, pulled forward from 1.0, so the pilot calibrates real items.
 
+### D96 — three standing items settled: D89 confirmed, D12 verified, the name is Palier
+**Date:** 25 September 2026 · **Status:** accepted (human decisions); D12 verified against the source
+
+- **D89 is confirmed** (the human, on the recommendation). "Add to review queue" starts the same on every
+  item of the walkthrough. This departs from D84 ruling 10's wording ("on items not already queued"),
+  because keying the button to the queue singled out the wrong pilots, and ruling 9 says pilots are never
+  revealed. Nothing changes in code.
+- **D12 is verified, and closed.** The human asked for the check to be made, not assumed. Every cut table
+  in `content/profiles/psc-sle.json` was compared with the PSC's own pages on 25 September 2026, and all
+  four match exactly:
+
+  | Variant | PSC page | Published | Profile |
+  | --- | --- | --- | --- |
+  | writing, unsupervised | [Unsupervised Test of Written Expression](https://www.canada.ca/en/public-service-commission/services/second-language-testing-public-service/managers/unsupervised-test-written-expression.html) (modified 2025-04-25) | X 0–10, A 11–16, B 17–23, C 24–30 | the same |
+  | reading, unsupervised | [Unsupervised Test of Reading Comprehension](https://www.canada.ca/en/public-service-commission/services/second-language-testing-public-service/unsupervised-test-reading-comprehension.html) (2025-04-25) | X 0–8, A 9–13, B 14–18, C 19–25 | the same |
+  | writing, supervised | [SLE, Test of Written Expression](https://www.canada.ca/en/public-service-commission/services/second-language-testing-public-service/managers/sle-written.html) (2026-03-06) | X 0–19, A 20–30, B 31–42, C 43–51, E 52–55 | the same |
+  | reading, supervised | [SLE, Test of Reading Comprehension](https://www.canada.ca/en/public-service-commission/services/second-language-testing-public-service/managers/sle-reading.html) (2026-03-06) | X 0–17, A 18–27, B 28–37, C 38–44, E 45–50 | the same |
+
+  The unsupervised writing page states it outright: "An 'X' is the result for those below level 'A' who
+  obtain a score of 0 to 10." The inference was right, and it is now transcribed. No number moves, so no
+  golden changes. The PRD §5.2 footnote gains a verification note.
+  - **Re-check these when the PSC revises its tests.** The two unsupervised pages were last modified on
+    25 April 2025 and the two supervised ones on 6 March 2026, and ADR 9 exists because these numbers
+    change without notice.
+- **The name stays Palier, and the domain will be `palier.dougkeefe.com`** (the human). It replaces §12.1's
+  `.ca` shortlist. palier.ca, seuil.ca and niveauc.ca were already registered (WHOIS, 25 September 2026).
+  - Pointing the subdomain at the Vercel project is a later human step, "eventually". Nothing in the app
+    names its own origin: sync and telemetry are same-origin, and the bank is origin-relative.
+  - The trademark and language-school check §12.1 asks for remains the human's, before launch.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 25 September 2026 — `dougkeefe/next-progress-slice` (three standing items settled)
+
+- **The human confirmed D89** and chose the name **Palier**, with the domain **`palier.dougkeefe.com`**
+  (D96).
+- **D12 is verified and closed.** All four cut tables in `psc-sle.json` were compared with the PSC's
+  published pages, and each matches. The unsupervised writing page gives "X … a score of 0 to 10" (D96,
+  with the URLs and their modified dates).
+- Documentation only; no code changed, so no gates were rerun.
 
 ### 25 September 2026 — `dougkeefe/next-progress-slice` (Phase 3 Slice 4: telemetry and the item-statistics job)
 

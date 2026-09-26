@@ -161,6 +161,8 @@ Everything in the product is anchored to the published structure of the real tes
 
 **This should be checked against the PSC's published table before launch.** It is the one number in this section that nobody has verified against a source, and a wrong band boundary is silent: it produces a plausible result for every user, forever, with nothing to notice. See deviation D12 in `progress.md`.
 
+**Verified 25 September 2026** (`progress.md` D96): the PSC's page for the unsupervised test of written expression states "An 'X' is the result for those below level 'A' who obtain a score of 0 to 10." The row is now transcribed, not inferred, and the other three cut tables match their published pages too.
+
 Worth noting for the product copy: the written expression test is entirely multiple choice. It measures knowledge of grammar, vocabulary and other aspects of written expression, not composition. Many candidates arrive expecting to write an essay. Palier should correct that expectation early, while still offering an optional free-writing workshop because the skill transfers to the oral test.
 
 ### 5.3 Oral proficiency
@@ -400,7 +402,7 @@ The direction is playful and obviously unofficial. Consumer-app polish, distinct
 
 ### 10.1 Brand
 
-**Name.** Working name Palier, French for a level or a landing on a staircase, and readable in English. Shortlist to check for domain availability: palier.ca, seuil.ca, niveauc.ca, monpalier.ca. Confirm no trademark conflict and no confusion with existing language schools before committing.
+**Name.** Working name Palier, French for a level or a landing on a staircase, and readable in English. Shortlist to check for domain availability: palier.ca, seuil.ca, niveauc.ca, monpalier.ca. Confirm no trademark conflict and no confusion with existing language schools before committing. *(Decided 25 September 2026, `progress.md` D96: the name stays Palier, and the app will live at `palier.dougkeefe.com`. The trademark and language-school check is still to do before launch.)*
 
 **Mascot.** A parrot named Coco. Reasons: language, repetition, a bit ridiculous, and impossible to mistake for a government symbol. Deliberately avoid beavers, maple leaves, geese, and anything in red and white. Coco appears in onboarding, empty states, milestones and the oral studio idle state, and never in mock exam mode or on the results screen, where the product needs to be taken seriously.
 
