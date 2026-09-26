@@ -5,10 +5,11 @@ Every concrete adapter, one directory and one subpath export each: `/dexie`, `/b
 (progress.md D48). A subpath lands with its adapter, not before — an entry resolving to an
 empty module asserts a boundary with nothing behind it (D3). **Six are live.** `./ids` →
 `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto, no npm dependency).
-`./dexie` → `dexieStores` (the eight local store ports — `AttemptStore`, `ScheduleStore`,
-`SessionStore`, `ExamRunStore`, `SettingsStore`, `KeyVault`, `SyncStateStore`, `TelemetryStore` — over
-IndexedDB via `dexie`; progress.md D49/D50, D69 and D80, the last two on the `syncMeta` and
-`examRuns` tables v1 already declared). **Schema version 2** adds `telemetryQueue` and `telemetryMeta`
+`./dexie` → `dexieStores` (the nine local store ports — `AttemptStore`, `ScheduleStore`,
+`SessionStore`, `ExamRunStore`, `SettingsStore`, `KeyVault`, `SyncStateStore`, `TelemetryStore`,
+`CostLedger` — over IndexedDB via `dexie`; progress.md D49/D50, D69, D80 and D101, the last three on the
+`syncMeta`, `examRuns` and `costLedger` tables v1 already declared). The cost ledger reads a row that is
+not a whole entry as nothing, v1's `{ ts, feature: "none" }` placeholder included. **Schema version 2** adds `telemetryQueue` and `telemetryMeta`
 (D92). Every version's `stores()` block is an exported constant, and `migration.test.ts` opens a real
 database at the previous version with rows in it and proves they survive: **a new version needs a
 case there**. `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1). `./bank` →
@@ -60,6 +61,10 @@ all, so the `no-openai-outside-adapters-and-factory` ban is simply never exercis
 `fetch` that ignores the abort still ends, as `ProviderTimeoutError`, never retried. A 2xx body that is
 not JSON is `InvalidResponseError`, and **the key is cut out of an echoed error body** before an error
 carries it [R12]. `verifyKey` is `GET /models`, structure-checked for a `data` array.
+**`lastUsage()` is the whole of the last method call** (D102): each method starts from `null` and every
+completion adds to it, a retry included, and a 2xx answer is billed before its content is checked. So a
+failed-but-billed call still reports its tokens, and no call inherits an earlier one's. With `pricing`, the
+summed tokens are priced into `costUsd`.
 
 **The Dexie `KeyVault` holds a tab-only key in its closure** (D98): never written, and a put deletes any
 stored ciphertext first. The closure is the tab's because the composition root builds one vault per

@@ -108,6 +108,30 @@ Two one-time settings, both human steps:
 To run it by hand: `DATABASE_URL='postgres://…' pnpm --filter @palier/web item-statistics`, after
 `pnpm exec turbo run build --filter=@palier/web^...`.
 
+## Gate G: the billing check
+
+Phase 4's third exit criterion is that the spend meter matches OpenAI's billing within a few percent on a
+test account (`progress.md` D97, D103). It is a human step, because it spends real money on a funded key.
+
+1. On OpenAI, make a test key of its own, on an account with credit and a low monthly limit. Note the time.
+2. Build the packages, then run the check:
+   ```
+   pnpm exec turbo run build --filter=@palier/web^...
+   OPENAI_API_KEY='sk-…' pnpm --filter @palier/web billing-check
+   ```
+   It makes three `reviewItem` calls and two `generateItems` calls through the real adapter, priced from
+   `apps/web/src/lib/pricing.json`, into a cost ledger. It prints each call's tokens and cost, the totals,
+   **what the meter says**, and the UTC window. It never prints the key. Expect a few cents.
+3. Wait for OpenAI's usage page to catch up (it can lag), then read that key's usage for the window: tokens
+   and dollars.
+4. Compare.
+   - **The tokens should match exactly.** A token mismatch is a defect in the adapter's usage capture.
+   - **The dollars should match within a few percent.** A dollar mismatch with matching tokens means
+     `pricing.json`'s rates are wrong. Correct them from OpenAI's pricing page, together with
+     `apps/factory/config/pricing.json`, which a test holds equal. Then run the check again.
+5. Record the two figures, the models and the date in a session-log entry. That ticks Phase 4's exit
+   criterion 3. Revoke the test key afterwards.
+
 ## Rolling back
 
 Vercel → Deployments → pick the previous production deployment → **Promote**. The schema does not roll
@@ -121,3 +145,4 @@ offline-first, and sync answers 503.
   Nothing creates a tombstone yet, and no account can be 180 days old, so these are Phase 7's
   scheduled jobs (`progress.md` D78).
 - A strict Content-Security-Policy with nonces, and the tier-11 check on the built output (Phase 7).
+- The maintainer CI job that refreshes `pricing.json` from OpenAI's prices (`architecture.md` §8.6; Phase 7, `progress.md` D103).

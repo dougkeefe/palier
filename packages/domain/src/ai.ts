@@ -148,3 +148,29 @@ export type UsageRecord = {
   readonly outputTokens: number;
   readonly costUsd?: number | undefined;
 };
+
+/**
+ * The features that spend the user's key, the names the cost ledger records a
+ * call under (architecture.md §8.6, progress.md D101). Writing feedback is Phase 4
+ * Slice 3 and item generation Slice 4; the oral features join with Phase 5. A key
+ * check spends nothing, so it is not a feature.
+ */
+export const AI_FEATURES = ["writing-feedback", "item-generation"] as const;
+export type AiFeature = (typeof AI_FEATURES)[number];
+
+/** A model's price in USD per million tokens, from `pricing.json` (§8.6). */
+export type ModelPrice = {
+  readonly inputPerMTok: number;
+  readonly outputPerMTok: number;
+};
+
+/**
+ * One typical call a feature makes, for the per-feature estimate (D103). `role`
+ * names a model in the app's model configuration, so a model change moves the
+ * estimate with it.
+ */
+export type FeatureCall = {
+  readonly role: string;
+  readonly inputTokens: number;
+  readonly outputTokens: number;
+};

@@ -1,4 +1,5 @@
 export { fakeAiProvider } from "./ai-provider.js";
+export { memoryCostLedger } from "./cost-ledger.js";
 export { memoryAttemptStore } from "./attempt-store.js";
 export { memoryExamRunStore } from "./exam-run-store.js";
 export { memoryItemRepository } from "./item-repository.js";

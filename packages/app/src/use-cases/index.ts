@@ -133,7 +133,7 @@ export type {
 export { flushTelemetry, recordExamTelemetry, setTelemetryConsent, telemetryConsent } from "./telemetry.js";
 export { examTelemetryEvents } from "./exam-telemetry-events.js";
 
-export type { AiDeps, ApiKeyDeps, ApiKeyStatus, SaveApiKeyRequest } from "./api-key.js";
+export type { AiDeps, ApiKeyDeps, ApiKeyStatus, MeteredAiDeps, SaveApiKeyRequest } from "./api-key.js";
 export {
   EmptyApiKeyError,
   NoApiKeyError,
@@ -143,3 +143,14 @@ export {
   saveApiKey,
   withAiProvider,
 } from "./api-key.js";
+
+export type { FeatureCost, SpendDeps, SpendPricing, SpendSummary } from "./spend.js";
+export {
+  InvalidSpendCapError,
+  SPEND_CAP_KEY,
+  featureCosts,
+  preflightSpend,
+  setSpendCap,
+  spendCap,
+  spendSummary,
+} from "./spend.js";

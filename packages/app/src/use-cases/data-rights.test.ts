@@ -23,6 +23,7 @@ import {
 import { importData } from "./import-data.js";
 import { wipeData } from "./wipe-data.js";
 import { examRunStore } from "./__tests__/sync-fakes.js";
+import { aCostEntry, costLedger } from "./__tests__/spend-fakes.js";
 import { telemetryStore } from "./__tests__/telemetry-fakes.js";
 
 // Local stubs rather than @palier/testing (progress.md D37). These are small
@@ -180,6 +181,7 @@ const aDevice = async () => {
     settings: settingsStore(),
     vault: vaultOf(),
     telemetry: telemetryStore("on"),
+    ledger: costLedger([aCostEntry()]),
   };
   await device.attempts.append(anAttempt("b"));
   await device.attempts.append(anAttempt("a", { skill: "writing" }));
@@ -233,6 +235,15 @@ describe("exportData", () => {
     expect(textOf(await exportData(await aDevice()))).toBe(textOf(doc));
   });
 
+  it("never carries the cost ledger, which is never exported (architecture.md §9.4, D101)", async () => {
+    const device = await aDevice();
+    const text = textOf(await exportData(device));
+
+    expect(device.ledger.entries()).toHaveLength(1);
+    expect(text).not.toContain("writing-feedback");
+    expect(text).not.toContain("inputTokens");
+  });
+
   it("never carries the API key or the device secret", async () => {
     const device = await aDevice();
     const text = textOf(await exportData(device));
@@ -264,6 +275,13 @@ describe("wipeData", () => {
 
     expect(device.telemetry.queued()).toEqual([]);
     expect(await device.telemetry.consent()).toBe("unasked");
+  });
+
+  it("empties the cost ledger, which only this device ever held (D101)", async () => {
+    const device = await aDevice();
+    await wipeData(device);
+
+    expect(device.ledger.entries()).toEqual([]);
   });
 
   it("keeps the device secret, which is the device's sync identity, not the user's progress", async () => {

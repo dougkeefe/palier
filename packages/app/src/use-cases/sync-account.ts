@@ -1,4 +1,5 @@
 import type {
+  CostLedger,
   DeviceId,
   DeviceIdentity,
   DeviceSummary,
@@ -117,6 +118,7 @@ export type DeleteEverywhereDeps = ProgressStores &
   SyncAccountDeps & {
     readonly vault: KeyVault;
     readonly telemetry: TelemetryStore;
+    readonly ledger: CostLedger;
   };
 
 /**

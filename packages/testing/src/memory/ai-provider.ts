@@ -76,7 +76,11 @@ export const fakeAiProvider = (): AiProvider => {
       return Promise.resolve(verdict);
     },
 
-    verifyKey: () => Promise.resolve(),
+    // Bills nothing, and so leaves no earlier call's usage behind (D102).
+    verifyKey: () => {
+      usage = null;
+      return Promise.resolve();
+    },
 
     lastUsage: () => usage,
   };

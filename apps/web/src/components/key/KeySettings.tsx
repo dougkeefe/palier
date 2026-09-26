@@ -14,14 +14,15 @@ import {
 } from "../../features/key/key-view";
 import { Link } from "../../i18n/navigation";
 import { useContainer } from "../ContainerProvider";
+import { SpendSettings } from "./SpendSettings";
 
 /**
- * `/settings/key` (product-requirements.md §8.10 without the spend parts, which are Phase 4
- * Slice 2; progress.md D100), top to bottom:
+ * `/settings/key`'s key half (product-requirements.md §8.10; progress.md D100), top to bottom:
  * - with no key, the masked field, "for this tab only", and save;
  * - with a key, where it is held and how it ends, check and remove, and the check's result
  *   in plain words (§14), never the raw error;
- * - the plain statement of where the key is kept and what it is used for, with the guide.
+ * - the plain statement of where the key is kept and what it is used for, with the guide;
+ * - then the spend half, `SpendSettings` (Phase 4 Slice 2, D101–D104).
  *
  * The field is cleared as soon as the key is saved, and the key is never shown again, only
  * its last four characters (architecture.md §6.2). Focus moves to what replaced the form,
@@ -176,6 +177,8 @@ export function KeySettings() {
           {t("guideLink")}
         </Link>
       </Card>
+
+      <SpendSettings />
     </div>
   );
 }

@@ -48,7 +48,12 @@ export type AiProvider = {
    * spends no tokens and records no usage.
    */
   verifyKey: () => Promise<void>;
-  /** Token/cost usage from the last call, for the ledger (§8.6). */
+  /**
+   * Token/cost usage of the **whole** of the last method call, for the ledger (§8.6,
+   * progress.md D102): every request it made, a retry included, so a retried call is billed
+   * twice as OpenAI bills it. `null` when that call made no billed request (it failed first,
+   * or it was `verifyKey`); never an earlier call's usage carried over.
+   */
   lastUsage: () => UsageRecord | null;
 };
 
@@ -56,6 +61,7 @@ export type AiProvider = {
  * How the browser gets an `AiProvider`: made from the key **inside**
  * `KeyVault.withApiKey`, once per call, and dropped when the call settles, so the key
  * never sits in a long-lived variable (implementation-plan.md §3.3, ADR 2, progress.md
- * D99). The composition root supplies it; `withAiProvider` is the only caller.
+ * D99). The composition root supplies it; only `use-cases/api-key.ts` calls it, through
+ * `withAiProvider` for a spending call and `checkApiKey` for the key check (D101).
  */
 export type AiProviderFactory = (apiKey: string) => AiProvider;

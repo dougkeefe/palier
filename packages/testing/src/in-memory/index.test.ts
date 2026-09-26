@@ -54,6 +54,7 @@ describe("@palier/testing/in-memory", () => {
         "fixtureBankRepository",
         "isHermetic",
         "memoryAttemptStore",
+        "memoryCostLedger",
         "memoryExamRunStore",
         "memoryItemRepository",
         "memoryKeyVault",

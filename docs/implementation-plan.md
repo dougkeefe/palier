@@ -159,7 +159,8 @@ interface AiProvider {
   transcribe(audio: Blob, lang: Lang): Promise<Transcript>         // deferred to Phase 5
   openVoiceSession(cfg: VoiceSessionConfig): Promise<VoiceSession>  // may throw Unsupported; deferred to Phase 6
   verifyKey(): Promise<void>        // Phase 4 Slice 1, ADDED (progress.md D99): one cheap call; resolves or throws the adapter's own error
-  lastUsage(): UsageRecord | null
+  lastUsage(): UsageRecord | null   // amended 26 September 2026 (progress.md D102): the WHOLE last method call, retries
+                                    // included; null when it billed nothing. Never an earlier call's usage carried over
 }
 // Also added by D99: `type AiProviderFactory = (apiKey: string) => AiProvider`. The browser makes a
 // provider inside `KeyVault.withApiKey`, once per call, through `withAiProvider` in @palier/app.
@@ -199,6 +200,17 @@ interface KeyVault {
   apiKeyStorage(): Promise<"device" | "tab" | null>          // added (D98): where it is held, never the key
   clear(): Promise<void>                                      // forgets both modes
   deviceSecret(): Promise<string>
+}
+
+// Added 26 September 2026 with Phase 4 Slice 2 (progress.md D101): the local cost ledger, a port §3.3 did
+// not name. Device-local: never synced, never exported (architecture.md §9.4); wipeData and
+// deleteEverywhere clear it. No all(), because nothing exports it. withAiProvider(deps, feature, fn)
+// appends every spending call's lastUsage() to it, so no AI use case can skip it; the key check is not
+// metered. CostEntry = { ts, feature: AiFeature, model, inputTokens, outputTokens, costUsd: number | null }.
+interface CostLedger {
+  append(entry: CostEntry): Promise<void>
+  since(from: ISO): Promise<CostEntry[]>                        // at or after `from`, oldest first
+  clear(): Promise<void>
 }
 
 // Amended in place 25 September 2026 (Phase 3 Slice 4, progress.md D92). One port became
@@ -878,7 +890,8 @@ step 5, §8.7 and §8.10 as written.
   D98–D100).
 - **Slice 2 — Spend.** The cost ledger over the v1 `costLedger` table, pricing as data, the spend meter
   (session, week, month), the soft cap with an 80% warning, the per-feature cost table, and the pre-flight
-  estimate. *Done:* exit criterion 3, at **Gate G**, the human's funded test account.
+  estimate. *Done:* exit criterion 3, at **Gate G**, the human's funded test account. **Built 26 September
+  2026** (`progress.md` D101–D104); Gate G, the billing check (`docs/deploy.md`), is the human's.
 - **Slice 3 — The writing workshop** (§8.7). The prompt library, the editor with its word target and timer,
   `assessWriting` with inline offsets, and the model answer with changes highlighted. Submissions stay on the
   device (R12).

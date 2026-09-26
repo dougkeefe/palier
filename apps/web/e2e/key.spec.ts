@@ -119,3 +119,65 @@ test("the key screen and its guide render in French too, at parity", async ({ pa
   await expect(page.getByRole("heading", { level: 1, name: "Créer une clé OpenAI" })).toBeVisible();
   await axeClean(page);
 });
+
+test("the spend section: an empty meter, a cap refused, set and removed, and the per-feature table (PRD §8.10, D101–D104)", async ({
+  page,
+}) => {
+  await page.goto("/en/settings/key");
+  await expect(page.getByRole("heading", { name: "What you have spent" })).toBeVisible();
+
+  // Nothing spent on this device yet: three zeroes, and no cap.
+  const meter = page.locator(".app-meter");
+  for (const window of ["This session", "This week", "This month"]) {
+    await expect(meter.getByText(window, { exact: true })).toBeVisible();
+  }
+  await expect(meter.getByText("US$0.00")).toHaveCount(3);
+  await expect(page.getByText("Spending is counted on each device separately.")).toBeVisible();
+  await expect(page.getByText("No cap is set.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Set a hard limit on OpenAI’s limits page" })).toHaveAttribute(
+    "href",
+    /^https:\/\/platform\.openai\.com\//,
+  );
+  await axeClean(page);
+
+  // A cap that is not an amount is refused, and says why.
+  const cap = page.getByLabel("Monthly cap, in US dollars");
+  const setCap = page.getByRole("button", { name: "Set the cap" });
+  await setCap.click();
+  await expect(page.getByRole("status").filter({ hasText: "Type an amount first." })).toBeVisible();
+  await cap.fill("five");
+  await setCap.click();
+  await expect(page.getByRole("status").filter({ hasText: "That is not an amount." })).toBeVisible();
+  await cap.fill("0");
+  await setCap.click();
+  await expect(page.getByRole("status").filter({ hasText: "A cap must be more than zero." })).toBeVisible();
+  await axeClean(page);
+
+  // Set, then removed.
+  await cap.fill("12,50");
+  await setCap.click();
+  await expect(page.getByRole("status").filter({ hasText: "The cap is set." })).toBeVisible();
+  await expect(page.getByText("Your cap is US$12.50 a month. This month is at 0 percent of it.")).toBeVisible();
+  await axeClean(page);
+  await page.getByRole("button", { name: "Remove the cap" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "The cap has been removed." })).toBeVisible();
+  await expect(page.getByText("No cap is set.")).toBeVisible();
+
+  // The per-feature table: a caption, column headers, and a figure for every feature.
+  const table = page.getByRole("table", { name: "Estimated cost of one typical use" });
+  await expect(table.getByRole("columnheader")).toHaveText(["Feature", "What it does", "Typical cost"]);
+  for (const feature of ["Writing feedback", "Fresh practice items"]) {
+    const row = table.getByRole("row").filter({ has: page.getByRole("rowheader", { name: feature }) });
+    await expect(row.getByRole("cell").last()).toHaveText(/^US\$\d+\.\d{2,4}$/);
+  }
+  await axeClean(page);
+});
+
+test("the spend section renders in French too, at parity", async ({ page }) => {
+  await page.goto("/fr/settings/key");
+  await expect(page.getByRole("heading", { name: "Ce que vous avez dépensé" })).toBeVisible();
+  await expect(page.getByLabel("Plafond mensuel, en dollars américains")).toBeVisible();
+  await expect(page.getByRole("table", { name: "Coût estimé d’une utilisation typique" })).toBeVisible();
+  await expect(page.locator(".app-meter").getByText(/0,00\s\$\sUS/)).toHaveCount(3);
+  await axeClean(page);
+});

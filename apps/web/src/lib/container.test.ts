@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 
+import { withAiProvider } from "@palier/app";
 import { attemptId, formId, sessionId } from "@palier/domain";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -43,6 +44,7 @@ describe("createContainer", () => {
     expect(c.examRuns).toBeDefined();
     expect(c.settings).toBeDefined();
     expect(c.vault).toBeDefined();
+    expect(c.costLedger).toBeDefined();
 
     // The IdGenerator mints valid, strictly increasing ULIDs (behaviour proven by
     // the contract suite in @palier/testing; here we assert wiring only).
@@ -427,6 +429,7 @@ describe("createContainer in production", () => {
     expect(c.vault).toBeDefined();
     expect(c.sync).toBeDefined();
     expect(c.syncState).toBeDefined();
+    expect(c.costLedger).toBeDefined();
     expect(Number.isNaN(Date.parse(c.clock.now()))).toBe(false);
     expect(c.ids.ulid()).toMatch(/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{26}$/);
     // Construction is lazy: the bank has not fetched its manifest yet.
@@ -574,6 +577,67 @@ describe("createContainer in production", () => {
       { itemId: first.id, correct: true, responseMs: 1_200, bankVersion: BANK_VERSION, restBucket: 0 },
     ]);
     expect(await reloaded.useCases.flushTelemetry()).toEqual({ sent: 0, dropped: 0, pending: false });
+  });
+
+  it("never pushes the cost ledger to the sync service, and pushes the cap with the settings (D101, D104)", async () => {
+    server.api = createSyncApi({
+      repo: memorySyncRepository(),
+      now: () => new Date(),
+      randomBytes: (n) => crypto.getRandomValues(new Uint8Array(n)),
+      rateLimitSalt: "salt",
+    });
+    const routes = await routeFetch();
+    const pushed: string[] = [];
+    const verdict = {
+      chosenKey: "a",
+      confidence: 0.9,
+      defensibleDistractors: [],
+      optionCases: { a: "a", b: "b", c: "c", d: "d" },
+      registerFlag: { flagged: false },
+      estimatedBand: "B",
+    };
+    vi.stubGlobal("fetch", (url: string, init?: { method: string; headers: Record<string, string>; body?: string }) => {
+      if (url.startsWith("https://api.openai.com/")) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () =>
+            Promise.resolve({
+              choices: [{ message: { content: JSON.stringify(verdict) } }],
+              usage: { prompt_tokens: 500, completion_tokens: 100 },
+            }),
+          text: () => Promise.resolve(""),
+        });
+      }
+      if (!url.startsWith("/api/")) return serveCommittedBank(url);
+      if (init?.body !== undefined) pushed.push(init.body);
+      return routes(`http://palier.test${url}`, init ?? { method: "GET", headers: {} });
+    });
+    const c = createContainer({ hermetic: false });
+    await c.vault.putApiKey("sk-test-not-a-real-key");
+    await withAiProvider({ vault: c.vault, aiProvider: c.aiProvider, ledger: c.costLedger, clock: c.clock }, "item-generation", (ai) =>
+      ai.reviewItem({
+        itemType: "cloze",
+        stem: { en: "x", fr: "x" },
+        options: [{ id: "a", text: "a" }],
+        subSkill: "agreement",
+        targetBand: "B",
+        lang: "fr",
+      }),
+    );
+    expect(await c.costLedger.since("1970-01-01T00:00:00.000Z")).toHaveLength(1);
+    await c.useCases.setSpendCap({ capUsd: 9 });
+    const id = sessionId(c.ids.ulid());
+    await c.useCases.startSession({ sessionId: id, mode: "drill", plan: { skill: "reading", lang: "fr", targetBand: "C", sessionSize: 1 } });
+    await c.useCases.completeSession({ sessionId: id });
+
+    expect(await c.useCases.syncNow({ label: "Test" })).toMatchObject({ status: "synced" });
+
+    const wire = pushed.join("\n");
+    expect(wire).toContain("spendCap");
+    expect(wire).not.toContain("item-generation");
+    expect(wire).not.toContain("inputTokens");
+    await c.useCases.deleteEverywhere();
   });
 
   it("forgets the telemetry consent and queue on a wipe, back to not asked", async () => {

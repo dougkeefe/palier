@@ -21,6 +21,7 @@ import {
   setSyncEnabled,
 } from "./sync-account.js";
 import { syncNow } from "./sync-now.js";
+import { aCostEntry, costLedger } from "./__tests__/spend-fakes.js";
 import { telemetryStore } from "./__tests__/telemetry-fakes.js";
 
 const NOW = "2026-09-24T12:00:00.000Z";
@@ -67,6 +68,7 @@ const aDevice = (transport: SyncTransport) => ({
   settings: settingsStore(),
   vault: vault(),
   telemetry: telemetryStore("on"),
+  ledger: costLedger([aCostEntry()]),
 });
 
 const aRegisteredDevice = async (transport: SyncTransport) => {
@@ -301,6 +303,14 @@ describe("deleteEverywhere", () => {
     await deleteEverywhere(device);
 
     expect(await device.telemetry.consent()).toBe("unasked");
+  });
+
+  it("empties the cost ledger with the rest of this device's data", async () => {
+    const device = await aRegisteredDevice(fakeServer().transport("secret-a"));
+
+    await deleteEverywhere(device);
+
+    expect(device.ledger.entries()).toEqual([]);
   });
 
   it("touches nothing local when the server cannot be reached", async () => {

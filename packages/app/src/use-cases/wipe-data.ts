@@ -1,5 +1,6 @@
 import type {
   AttemptStore,
+  CostLedger,
   ExamRunStore,
   KeyVault,
   ScheduleStore,
@@ -11,7 +12,8 @@ import type {
 /**
  * Delete everything on this device in one action [R11] (implementation-plan.md 3.2,
  * `WipeData`): every attempt, schedule entry, session, exam run and setting, the stored
- * API key, and the telemetry queue with its consent, back to "not asked" (progress.md D92).
+ * API key, the telemetry queue with its consent, back to "not asked" (progress.md D92), and
+ * the cost ledger (D101).
  *
  * The **device secret survives**. `KeyVault.clear` removes the API key and leaves the
  * secret and its wrapping key (progress.md D50), because the secret is this device's
@@ -29,6 +31,7 @@ export type WipeDataDeps = {
   readonly settings: SettingsStore;
   readonly vault: KeyVault;
   readonly telemetry: TelemetryStore;
+  readonly ledger: CostLedger;
 };
 
 export const wipeData = async (deps: WipeDataDeps): Promise<void> => {
@@ -40,5 +43,6 @@ export const wipeData = async (deps: WipeDataDeps): Promise<void> => {
     deps.settings.clear(),
     deps.vault.clear(),
     deps.telemetry.clear(),
+    deps.ledger.clear(),
   ]);
 };

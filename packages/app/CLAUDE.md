@@ -15,9 +15,18 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   add a `getApiKey` — the shape is the control (ADR 2, ADR 3). `putApiKey(key, { remember: false })`
   holds it for this tab only, and `apiKeyStorage()` says where it is held, in a word (progress.md D98).
 - **A provider is made from the key inside `withApiKey`, once per call** (`use-cases/api-key.ts`,
-  D99). `withAiProvider(deps, fn)` is the one path from the key to an `AiProvider`, through the
-  `AiProviderFactory` the composition root supplies; every AI use case goes through it, and nothing
-  caches the provider. `AiProvider.verifyKey()` is the key screen's one cheap call (`checkApiKey`).
+  D99). `withAiProvider(deps, feature, fn)` is the one path from the key to a spending `AiProvider`,
+  through the `AiProviderFactory` the composition root supplies; every AI use case goes through it, and
+  nothing caches the provider. `AiProvider.verifyKey()` is the key screen's one cheap call
+  (`checkApiKey`), which shares the private path to the factory and is **never metered**.
+- **Every spending call is written to the `CostLedger`** (`ports/cost-ledger.ts`, progress.md D101):
+  `withAiProvider` wraps the provider generically, so every method but `capabilities`, `verifyKey` and
+  `lastUsage` appends its `lastUsage()` once it settles, a failed-but-billed call included. **The
+  methods one callback makes must be sequential**, because `lastUsage` is the last call's, the whole of it,
+  retries included (D102). The ledger is **device-local, never synced and never exported**, like
+  `TelemetryStore`; `wipeData` and `deleteEverywhere` clear it. The meter, the soft cap (`spendCap`, a
+  **synced** setting, D104), the per-feature table and `preflightSpend` are `use-cases/spend.ts`, over the
+  engine's `spendTotals`, `capState` and `preflight`, with pricing handed in as data (D103).
 - **Ports are transcribed from §3.3, not invented.** Eight live under `src/ports/`:
   `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`,
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the

@@ -46,6 +46,30 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   // …and it survives a reload, still masked.
   await page.reload();
   await expect(page.getByText(`Saved on this device: ${MASKED}`)).toBeVisible();
+  // The cost ledger is in the dump, with a row in it, so the check over it is not vacuous.
+  // The row is written as the adapter writes one, since no screen spends until Slice 3 (D101).
+  await page.evaluate(async () => {
+    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+      const open = indexedDB.open("palier");
+      open.onsuccess = () => resolve(open.result);
+      open.onerror = () => reject(open.error);
+    });
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction("costLedger", "readwrite");
+      tx.objectStore("costLedger").add({
+        ts: new Date().toISOString(),
+        feature: "writing-feedback",
+        model: "gpt-6-sol",
+        inputTokens: 2_500,
+        outputTokens: 2_000,
+        costUsd: 0.021,
+      });
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    db.close();
+  });
+  expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(1);
   await watch.assertNoLeak([page]);
 
   // 3. A mock exam, submitted, with its answers shared.

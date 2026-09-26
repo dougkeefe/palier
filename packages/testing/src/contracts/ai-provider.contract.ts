@@ -103,6 +103,13 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       expect(provider.lastUsage()).toBeNull();
     });
 
+    it("carries no usage over from an earlier call: a key check after a billed call reports none (D102)", async () => {
+      const provider = await make();
+      await provider.generateItems(anItemsRequest(1));
+      await provider.verifyKey();
+      expect(provider.lastUsage()).toBeNull();
+    });
+
     it("returns a schema-valid verdict whose chosen key is one of the options", async () => {
       const provider = await make();
       const verdict = await provider.reviewItem(aReviewRequest());

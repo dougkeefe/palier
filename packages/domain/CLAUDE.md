@@ -25,7 +25,8 @@ framework. `.dependency-cruiser.cjs` enforces all three.
 - 100% branch (§6.3), with one test per rejection reason — the content suite's error
   messages depend on them being accurate.
 - **The AI boundary DTOs live here** (ADR 20). `AiCapabilities`, the `generate*`/`review*`
-  request types, `ItemDraft`/`PassageDraft`, `ReviewVerdict` and `UsageRecord` (`ai.ts`), plus
+  request types, `ItemDraft`/`PassageDraft`, `ReviewVerdict` and `UsageRecord` (`ai.ts`), the spend
+  vocabulary `AI_FEATURES`/`AiFeature`, `ModelPrice` and `FeatureCall` (progress.md D101, D103), plus
   the structured-output re-validation schemas (`schemas/ai.ts`, architecture.md §8.2). They sit
   in domain, not `@palier/app`, so `apps/factory` can build requests and read verdicts without
   importing the port layer. They are DTOs, not content artefacts, so they are **not** in
