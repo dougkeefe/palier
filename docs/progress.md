@@ -86,9 +86,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice` | **Phase 3 Slice 4 — telemetry and the item-statistics job, whole** (D88): the statistics core, `/api/telemetry` and its table, the job and its monthly PR, the telemetry ports and the persisted queue (Dexie v2), the device-local opt-in, the post-exam prompt and the readiness disclosure. Exit criterion 3. **Built; pending merge** (D92–D94). | 25 September 2026 |
+| `dougkeefe/nairobi` | **Phase 4 Slice 1 — the key, safely** (D97): the tier-11 key-leak test first (`e2e/leak-guard.ts`, `key-leak.spec.ts`, `key-leak-production.spec.ts`), then do-not-remember mode in `KeyVault`, `AiProvider.verifyKey` and the timeout, the key use cases, `/settings/key` and its guide, onboarding step 5, and journey 5. Exit criterion 1 and the first half of 2. | 26 September 2026 |
 
-*(The prior rows — Phase 3 Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 

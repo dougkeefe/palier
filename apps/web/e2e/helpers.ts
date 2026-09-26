@@ -37,8 +37,16 @@ export const waitForOfflineReady = async (page: Page) => {
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
 };
 
-/** §8.1 onboarding, placing as asked. Leaves the page wherever onboarding lands. */
-export const onboard = async (page: Page, placement: "diagnostic" | "skip") => {
+/**
+ * §8.1 onboarding, placing as asked. Leaves the page wherever onboarding lands. On the skip
+ * path the wizard's last step is step 5, the optional key: it is passed over unless `addKey`
+ * (progress.md D100). On the diagnostic path, step 5 comes after the diagnostic instead.
+ */
+export const onboard = async (
+  page: Page,
+  placement: "diagnostic" | "skip",
+  { addKey = false }: { addKey?: boolean } = {},
+) => {
   await page.goto("/en/start");
   const next = page.getByRole("button", { name: "Continue" });
   await expect(next).toBeEnabled();
@@ -53,6 +61,14 @@ export const onboard = async (page: Page, placement: "diagnostic" | "skip") => {
   await next.click();
 
   await page.getByRole("radio", { name: "20 minutes a day" }).check();
+  if (placement === "skip") {
+    await next.click();
+    await expect(page.getByRole("heading", { name: "An OpenAI key, if you want one" })).toBeFocused();
+    if (addKey) {
+      await page.getByRole("button", { name: "Add a key now" }).click();
+      return;
+    }
+  }
   await page.getByRole("button", { name: "Start practising" }).click();
 };
 
