@@ -8,7 +8,7 @@ four, mirrored in `implementation-plan.md` §7 (D79). **Slices 1–3 merged (#22
 (D84); Slice 4 (telemetry and the item-statistics job) is built** (`dougkeefe/next-progress-slice`; D92–D94),
 so exit criteria 1–4 are met. **Every buildable Phase 3 item is done.** Gate E is resolved (D97): the
 closed pilot runs now as a **product pilot** on the baseline bank, run by the human, and it ticks the last
-criterion. **Phase 4 started beside it: Slice 1, "the key, safely", is built** (`dougkeefe/nairobi`;
+criterion. **Phase 4 started beside it: Slice 1, "the key, safely", is built** (`dougkeefe/next-progress-slice-v1`;
 D98–D100), which meets Phase 4's exit criterion 1 and the first half of 2. Next is Slice 2, spend. See
 [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
@@ -87,7 +87,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/nairobi` | **Phase 4 Slice 1 — the key, safely** (D97): the tier-11 key-leak test first (`e2e/leak-guard.ts`, `key-leak.spec.ts`, `key-leak-production.spec.ts`), then do-not-remember mode in `KeyVault`, `AiProvider.verifyKey` and the timeout, the key use cases, `/settings/key` and its guide, onboarding step 5, and journey 5. Exit criterion 1 and the first half of 2. **Built; pending merge** (D98–D100). | 26 September 2026 |
+| `dougkeefe/next-progress-slice-v1` | **Phase 4 Slice 1 — the key, safely** (D97): the tier-11 key-leak test first (`e2e/leak-guard.ts`, `key-leak.spec.ts`, `key-leak-production.spec.ts`), then do-not-remember mode in `KeyVault`, `AiProvider.verifyKey` and the timeout, the key use cases, `/settings/key` and its guide, onboarding step 5, and journey 5. Exit criterion 1 and the first half of 2. **Built; pending merge** (D98–D100). | 26 September 2026 |
 
 *(The prior rows — Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -436,7 +436,7 @@ slices". **Keep the two in sync**: the plan holds the fuller scope and each slic
 **Planned 25 September 2026 (D97)** as four slices, mirrored in `implementation-plan.md` §7. **Keep the two in
 sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.10 are adopted as written.
 
-- [x] **Slice 1 — The key, safely.** **Built 26 September 2026** (`dougkeefe/nairobi`; D98–D100;
+- [x] **Slice 1 — The key, safely.** **Built 26 September 2026** (`dougkeefe/next-progress-slice-v1`; D98–D100;
   session-log evidence). The tier-11 key-leak test first; `/settings/key` and onboarding step 5;
   validation, do-not-remember, the browser `AiProvider` path through `withApiKey`, and graceful
   degradation.
@@ -452,7 +452,7 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
   commit, ahead of any key code. `key-leak.spec.ts` (hermetic, real sync and telemetry) and
   `key-leak-production.spec.ts` (real Dexie) are green in the E2E suite. They were proven to bite four
   ways, each reverted: a logged key, a key written to the synced settings, a key in `localStorage`, and a
-  plaintext IndexedDB row (session log, 26 September 2026, `dougkeefe/nairobi`; D100)
+  plaintext IndexedDB row (session log, 26 September 2026, `dougkeefe/next-progress-slice-v1`; D100)
 - [~] Every AI response schema-validated before use; malformed / rate-limit / invalid-key / timeout all degrade gracefully.
   **First half met** (Slice 1, D99): the adapter turns each into its own error, and the key screen puts each
   in plain words. This is tested through the real adapter over MSW (`container-key.test.ts`) and in journey
@@ -3341,7 +3341,7 @@ made, as D87 did)
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 26 September 2026 — `dougkeefe/nairobi` (Phase 4 Slice 1: the key, safely)
+### 26 September 2026 — `dougkeefe/next-progress-slice-v1` (Phase 4 Slice 1: the key, safely)
 
 **Built.** The decisions are recorded in D98–D100.
 
