@@ -10,9 +10,9 @@ so exit criteria 1–4 are met. **Every buildable Phase 3 item is done.** Gate E
 closed pilot runs now as a **product pilot** on the baseline bank, run by the human, and it ticks the last
 criterion. **Phase 4 started beside it: Slice 1, "the key, safely", merged (#28; D98–D100)**, meeting Phase 4's
 exit criterion 1 and the first half of 2. **Slice 2, "spend", is built** (`dougkeefe/next-progress-slice-v2`; D101–D104):
-the cost ledger, pricing as data, the meter, the soft cap and the pre-flight estimate. Its exit criterion 3
-waits on **Gate G**, the human's billing check on a funded key. Next is Slice 3, the writing workshop,
-beside Gate G. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+the cost ledger, pricing as data, the meter, the soft cap and the pre-flight estimate. **Gate G passed** the
+same day: the meter matched OpenAI's billing exactly, which meets Phase 4's exit criterion 3. Next is Slice 3,
+the writing workshop. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
 
@@ -77,7 +77,7 @@ human for anything expensive.
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
-| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **in progress** (four slices, D97; Slice 1 merged, D98–D100; Slice 2 built, D101–D104, awaiting Gate G; Slice 3 is *Next, decided*) |
+| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **in progress** (four slices, D97; Slice 1 merged, D98–D100; Slice 2 built, D101–D104, and Gate G passed; exit criteria 1 and 3 met; Slice 3 is *Next, decided*) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
@@ -89,7 +89,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v2` | **Phase 4 Slice 2 — spend** (D97): the `CostLedger` port over Dexie v1's `costLedger` table, every AI call metered in `withAiProvider`, `pricing.json`, the pure `spendTotals`, the meter, soft cap and per-feature table on `/settings/key`, the pre-flight estimate, and `billing-check.mjs` for Gate G. **Built; pending merge** (D101–D104). Gate G is the human's. | 26 September 2026 |
+| `dougkeefe/next-progress-slice-v2` | **Phase 4 Slice 2 — spend** (D97): the `CostLedger` port over Dexie v1's `costLedger` table, every AI call metered in `withAiProvider`, `pricing.json`, the pure `spendTotals`, the meter, soft cap and per-feature table on `/settings/key`, the pre-flight estimate, and `billing-check.mjs` for Gate G. **Built; pending merge** (D101–D104). **Gate G passed** (session log). | 26 September 2026 |
 
 *(The prior rows — Phase 4 Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -192,7 +192,8 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 **Phase 4 Slice 2 is built** (D101–D104). Every spending call is metered into a device-local ledger, and the
 meter, the soft cap and the per-feature table are on `/settings/key`. `preflightSpend` is ready for its first
-caller. **Gate G runs beside the next slice** (human, below), and so does the product pilot (Gate E, D97).
+caller. **Gate G passed** (session log, 26 September 2026): the meter matched OpenAI's billing exactly, in tokens
+and in dollars. The product pilot still runs beside the next slice (Gate E, D97).
 
 **Next: Phase 4 Slice 3, "the writing workshop"** (PRD §8.7, architecture.md §8.4, D97). Gate F adopted §8.7
 as written, so no human is needed. Build against MSW and recorded completions, as Slice 2 did.
@@ -254,14 +255,6 @@ as written, so no human is needed. Build against MSW and recorded completions, a
 
 **After it** (D97): Slice 4, runtime item generation and the Phase 4 CI gates.
 
-**Running now (human): Gate G, the billing check** (D97, D103; `docs/deploy.md`, "Gate G").
-1. Make a test key of its own on a funded account with a low monthly limit.
-2. Run `OPENAI_API_KEY='sk-…' pnpm --filter @palier/web billing-check`, after building the packages.
-3. Compare its tokens and meter total with OpenAI's usage page for the printed window. The tokens should
-   match exactly, and the dollars within a few percent. A dollar gap with matching tokens means
-   `pricing.json`'s rates: correct them together with the factory's.
-4. Record both figures in a session-log entry. That ticks Phase 4's exit criterion 3.
-
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
 2. Add the `TELEMETRY_DATABASE_URL` Actions secret (a read-only role), and allow Actions to open pull
@@ -282,12 +275,10 @@ last exit criterion.
   retirement in `content/factory/item-statistics.json` takes effect at that build (D94). **Timing settled
   (D56, reaffirmed at Gate E): sequenced to the end**, a 1.0 gate. After it, rerun the pilot's calibration
   half on real items (D97).
-- **Gate G, a funded OpenAI test key** (D97): Slice 2 has reached the billing check, so it is **running now**
-  (above). The human said yes.
 - Resolved: **Gate A** (product and UI direction), **Gate B** (the D43 `ScheduleEntry` merge, D69),
   **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026; **Gate D** (exam UI
   direction, D84), **Gate E** (the pilot runs on the baseline bank, D97) and **Gate F** (Phase 4 UI
-  direction, D97) on 25 September 2026.
+  direction, D97) on 25 September 2026; **Gate G** (the billing check, session log) on 26 September 2026.
 
 Standing human items:
 - pointing `palier.dougkeefe.com` at the deployment;
@@ -465,8 +456,8 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
   degradation.
 - [x] **Slice 2 — Spend.** **Built 26 September 2026** (`dougkeefe/next-progress-slice-v2`; D101–D104; session-log
   evidence). The cost ledger, every spending call metered in `withAiProvider`, pricing as data, the meter,
-  the soft cap, the per-feature table, the pre-flight estimate, and the billing check. It ends at
-  **Gate G** (the human's funded test key), which ticks exit criterion 3.
+  the soft cap, the per-feature table, the pre-flight estimate, and the billing check. **Gate G passed** the
+  same day, which ticks exit criterion 3.
 - [ ] **Slice 3 — The writing workshop** (§8.7), with submissions kept on the device. *Next, decided*.
 - [ ] **Slice 4 — Runtime item generation and the Phase 4 CI gates.**
 
@@ -481,9 +472,10 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
   **First half met** (Slice 1, D99): the adapter turns each into its own error, and the key screen puts each
   in plain words. This is tested through the real adapter over MSW (`container-key.test.ts`) and in journey
   5. The second half, schema conformance against recorded fixtures, is Slice 4's
-- [ ] Spend meter matches actual OpenAI billing within a few percent. **Built, awaiting Gate G** (D103): the
-  meter, the ledger and `pnpm --filter @palier/web billing-check` exist and are tested over MSW. The run on a
-  funded key is the human's (`docs/deploy.md`, "Gate G")
+- [x] Spend meter matches actual OpenAI billing within a few percent. **Gate G, 26 September 2026:** the human
+  ran `pnpm --filter @palier/web billing-check` on a funded test key. OpenAI's usage data matched the meter
+  100%: 2,393 input and 4,114 output tokens, and US$0.037698. See the session log,
+  `dougkeefe/next-progress-slice-v2`, and D103
 
 ### Phase 5: Oral, practice mode
 
@@ -3503,6 +3495,42 @@ made, as D87 and D100 were)
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 26 September 2026 — `dougkeefe/next-progress-slice-v2` (Gate G: the billing check passed)
+
+**The human ran Gate G** (D97, D103; `docs/deploy.md`, "Gate G") on a funded test key in a project of its own.
+The billing check printed:
+
+```
+2026-09-26T22:36:19.371Z  gpt-6-sol  in 667  out 723  US$0.007118
+2026-09-26T22:36:28.486Z  gpt-6-sol  in 293  out 598  US$0.005370
+2026-09-26T22:36:48.529Z  gpt-6-sol  in 667  out 799  US$0.007726
+2026-09-26T22:36:54.497Z  gpt-6-luna  in 383  out 732  US$0.006622
+2026-09-26T22:37:04.893Z  gpt-6-luna  in 383  out 1262  US$0.010862
+calls: 5  input tokens: 2393  output tokens: 4114
+the meter says: US$0.037698 this month, from these calls alone
+window (UTC): 2026-09-26T22:36:05.209Z to 2026-09-26T22:37:04.894Z
+```
+
+- **Result:** OpenAI's usage data, once it caught up, **matched 100%**, as the human reported.
+- **Per model:**
+  - `gpt-6-sol`: 1,627 in, 2,120 out, US$0.020214;
+  - `gpt-6-luna`: 766 in, 1,994 out, US$0.017484.
+- **Phase 4 exit criterion 3 is ticked.** Gate G is resolved.
+- **The rates are confirmed.** `pricing.json`'s rates of $2 in and $8 out per million tokens, for both models,
+  are now confirmed rather than placeholders. The notes in `apps/web/src/lib/pricing.json` and
+  `apps/factory/config/pricing.json` say so. The per-feature token counts are still typical figures, not
+  measured ones (D103).
+- **The usage page was empty for the first eight minutes or more**, with every key filtered in. It then caught up.
+  The runbook already says to wait. The Usage and Costs APIs, with an admin key, are the exact alternative.
+- **Worth carrying into Slice 4: two of the three reviews were probably retried once.**
+  - Reviews 1 and 3 billed 667 input tokens and review 2 only 293, though the prompts differ by one number. That
+    fits a first reply that failed validation, then a retry carrying the error: 293 + about 374.
+  - Their output tokens, about twice review 2's, fit the same reading.
+  - The meter counted both attempts, which is what D102 is for, and the match confirms it.
+  - Two retries in three reviews is a signal about the review prompt on `gpt-6-sol`. Runtime generation (Slice
+    4) should measure its schema-conformance rate there, which its eval harness gate does.
+- Documentation and data notes only; no code changed, so no gates were rerun.
 
 ### 26 September 2026 — `dougkeefe/next-progress-slice-v2` (Phase 4 Slice 2: spend)
 
