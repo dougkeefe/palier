@@ -4,7 +4,7 @@ import type { ItemType, TargetBand } from "@palier/domain";
 
 import { estimateBand, normaliseStem, tokenJaccard } from "../lib/text.js";
 import { NEAR_DUPLICATE_THRESHOLD } from "../pipeline/validate.js";
-import { scriptedAiProvider, stemForBand } from "./scripted-ai-provider.js";
+import { scriptedAiProvider, scriptedScenario, stemForBand } from "./scripted-ai-provider.js";
 
 const draftStem = async (band: TargetBand, type: ItemType = "cloze"): Promise<string> => {
   const [draft] = await scriptedAiProvider().generateItems({
@@ -74,5 +74,38 @@ describe("scriptedAiProvider.assessWriting", () => {
       provider.assessWriting({ task: "t", wordTarget: 50, text: "Du texte.", targetBand: "B", lang: "fr", feedbackLang: "en" }),
     ).rejects.toThrow("does not assess writing");
     expect(provider.lastUsage()).toBeNull();
+  });
+});
+
+describe("the scripted scenario plan (D114)", () => {
+  const request = (sessionType: "warmup" | "work" | "opinion" | "situation" | "full", minutes: number) =>
+    ({ sessionType, targetBand: "C", lang: "fr", topic: "procurement", minutes }) as const;
+
+  it.each([
+    ["warmup", 5, [3, 2]],
+    ["work", 10, [4, 3, 3]],
+    ["opinion", 12, [4, 4, 4]],
+    ["situation", 8, [3, 3, 2]],
+    ["full", 22, [5, 5, 4, 4, 4]],
+  ] as const)("plans a %s session of %i minutes as %j, filling it exactly", (type, minutes, split) => {
+    const { phases } = scriptedScenario(request(type, minutes));
+    expect(phases.map((p) => p.minutes)).toEqual(split);
+    for (const phase of phases) {
+      expect(phase.seedQuestions).toHaveLength(1);
+      expect(phase.escalation).toHaveLength(1);
+      expect(phase.deescalation).toHaveLength(1);
+    }
+  });
+
+  it("is a pure function of the request, and differs between requests", () => {
+    expect(scriptedScenario(request("work", 10))).toEqual(scriptedScenario(request("work", 10)));
+    expect(scriptedScenario({ ...request("work", 10), topic: "environment" })).not.toEqual(scriptedScenario(request("work", 10)));
+  });
+
+  it("bills the call and says it can plan scenarios", async () => {
+    const provider = scriptedAiProvider();
+    await provider.generateScenario(request("work", 10));
+    expect(provider.capabilities().generateScenario).toBe(true);
+    expect(provider.lastUsage()).toMatchObject({ model: "scripted", inputTokens: 250 });
   });
 });

@@ -21,7 +21,12 @@ describe("buildBank", () => {
     expect(paths.some((p) => p.startsWith("bank/v1/fr/writing/"))).toBe(true);
     expect(paths).toContain("bank/v1/forms/f1.json");
     expect(paths).toContain("bank/v1/oral/scenarios.json");
-    expect(bank.manifest.counts).toEqual({ items: 3, passages: 1, forms: 1 });
+    expect(bank.manifest.counts).toEqual({ items: 3, passages: 1, forms: 1, scenarios: 1 });
+  });
+
+  it("lists the scenarios file in the manifest, hashed, so a client finds it there (D114)", () => {
+    const bank = buildBank({ items: [], passages: [], forms: [], scenarios: [{ id: "s1" } as unknown as OralScenario], version: 3 });
+    expect(bank.manifest.scenarios).toEqual({ path: "bank/v3/oral/scenarios.json", hash: expect.stringMatching(/^[0-9a-f]{16}$/) });
   });
 
   it("is byte-identical on a rebuild", () => {
@@ -32,5 +37,6 @@ describe("buildBank", () => {
   it("omits the oral shard when there are no scenarios", () => {
     const bank = buildBank({ items: [item("a", "writing")], passages: [], forms: [], scenarios: [], version: 1 });
     expect(bank.files.some((f) => f.path.includes("oral"))).toBe(false);
+    expect(bank.manifest.scenarios).toBeNull();
   });
 });

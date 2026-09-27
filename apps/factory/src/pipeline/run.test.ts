@@ -6,7 +6,7 @@ import { itemSchema, itemTypeDefinition, parseExamProfileOrThrow } from "@palier
 import type { ExamProfile, Item } from "@palier/domain";
 
 import { scriptedAiProvider } from "../providers/scripted-ai-provider.js";
-import type { SourceCandidate } from "../lib/types.js";
+import type { OralSessionPlan, SourceCandidate } from "../lib/types.js";
 import { buildBank } from "./bank-build.js";
 import { defaultWritingPlan, runPipeline } from "./run.js";
 import type { RunInput } from "./run.js";
@@ -148,6 +148,33 @@ describe("runPipeline (end to end, scripted provider)", () => {
     expect(out.report.counts.itemsPublished).toBe(out.validation.valid.length - 5);
   });
 
+  it("keeps a carried passage's published record over this batch's copy of it (D114)", async () => {
+    const previous = await run();
+    const published = { ...previous.passages[0]!, source: { ...previous.passages[0]!.source, retrievedAt: "2026-01-01T00:00:00.000Z" } };
+    const out = await run({ bankVersion: 2, batchId: "sample-0002", carried: { items: [], passages: [published] } });
+    const passageFile = out.bank.files.filter((f) => f.path.includes("/passages/")).map((f) => f.content).join("");
+    expect(passageFile).toContain("2026-01-01T00:00:00.000Z");
+  });
+
+  it("carries a previous version's forms beside this version's, so a run sat on one still rescores (D114)", async () => {
+    const previous = await run();
+    const carried = { items: previous.validation.valid, passages: previous.passages, forms: previous.forms };
+    const out = await run({ bankVersion: 2, batchId: "sample-0002", carried });
+    const ids = out.forms.map((f) => f.id);
+    expect(ids.filter((id) => id.endsWith("-v1"))).toEqual(previous.forms.map((f) => f.id));
+    expect(ids.filter((id) => id.endsWith("-v2"))).toHaveLength(previous.forms.length);
+    expect(out.validation.formIssues).toEqual([]);
+    expect(out.bank.manifest.forms.map((f) => f.id)).toEqual([...ids].sort());
+  });
+
+  it("reports a carried form that names an item the bank no longer holds, so the bank is not written", async () => {
+    const previous = await run();
+    const form = previous.forms[0]!;
+    const broken = { ...form, itemIds: [...form.itemIds.slice(1), "GONE" as Item["id"]] };
+    const out = await run({ bankVersion: 2, carried: { items: previous.validation.valid, passages: previous.passages, forms: [broken] } });
+    expect(out.validation.formIssues).toContain(`form ${form.id} references missing item GONE`);
+  });
+
   it("re-validates a carried item and reports it when it no longer passes", async () => {
     const previous = await run();
     const stale = { ...previous.validation.valid[0]!, id: "STALE", subSkill: "not-a-sub-skill" } as unknown as Item;
@@ -155,6 +182,51 @@ describe("runPipeline (end to end, scripted provider)", () => {
     expect(out.validation.valid.map((i) => i.id)).not.toContain(stale.id);
     expect(out.validation.rejected.find((r) => r.itemId === stale.id)?.reasons.join(" ")).toMatch(/not in the profile taxonomy/);
     expect(out.report.counts.itemsCarried).toBe(0);
+  });
+});
+
+const ORAL_PLAN: OralSessionPlan = {
+  lang: "fr",
+  bands: ["B", "C"],
+  sessions: [
+    { sessionType: "warmup", minutes: 5 },
+    { sessionType: "full", minutes: 22 },
+  ],
+};
+
+describe("runPipeline, with oral scenarios (D114)", () => {
+  it("plans none when the batch has no oral plan", async () => {
+    const out = await run();
+    expect(out.scenarios).toEqual([]);
+    expect(out.bank.manifest.scenarios).toBeNull();
+    expect(out.report.counts.scenarios).toBe(0);
+  });
+
+  it("plans one scenario per session type at each band, filling each session's minutes, and ships them", async () => {
+    const out = await run({ oralPlan: ORAL_PLAN });
+    expect(out.scenarios.map((s) => `${s.sessionType}-${s.targetBand}`)).toEqual(["warmup-B", "warmup-C", "full-B", "full-C"]);
+    for (const scenario of out.scenarios) {
+      const minutes = scenario.sessionType === "warmup" ? 5 : 22;
+      expect(scenario.phases.reduce((sum, p) => sum + p.minutes, 0)).toBe(minutes);
+    }
+    expect(out.bank.manifest.counts.scenarios).toBe(4);
+    expect(out.bank.manifest.scenarios?.path).toBe("bank/v1/oral/scenarios.json");
+    expect(out.report.counts).toMatchObject({ scenarios: 4, scenariosCarried: 0 });
+  });
+
+  it("keeps a carried scenario over a regenerated copy, and counts it apart", async () => {
+    const previous = await run({ oralPlan: ORAL_PLAN });
+    const carried = { items: previous.validation.valid, passages: previous.passages, scenarios: previous.scenarios.slice(0, 1) };
+    const out = await run({ bankVersion: 2, oralPlan: ORAL_PLAN, carried });
+    expect(out.scenarios.map((s) => s.id)).toEqual(previous.scenarios.map((s) => s.id));
+    expect(out.report.counts).toMatchObject({ scenarios: 3, scenariosCarried: 1 });
+  });
+
+  it("meters the scenario calls into the batch's cost, and still records the item stages' provider", async () => {
+    const without = await run();
+    const withScenarios = await run({ oralPlan: ORAL_PLAN });
+    expect(withScenarios.report.totalCostUsd).toBeGreaterThan(without.report.totalCostUsd ?? 0);
+    expect(withScenarios.report.provider).toBe("scripted");
   });
 });
 

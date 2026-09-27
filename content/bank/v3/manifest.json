@@ -1,0 +1,87 @@
+{
+  "counts": {
+    "forms": 8,
+    "items": 242,
+    "passages": 24,
+    "scenarios": 10
+  },
+  "forms": [
+    {
+      "hash": "71db31e8c499cb56",
+      "id": "fr-reading-supervised-v2",
+      "path": "bank/v3/forms/fr-reading-supervised-v2.json"
+    },
+    {
+      "hash": "f88a2b4a857d87ac",
+      "id": "fr-reading-supervised-v3",
+      "path": "bank/v3/forms/fr-reading-supervised-v3.json"
+    },
+    {
+      "hash": "e2958d396106ae72",
+      "id": "fr-reading-unsupervised-v2",
+      "path": "bank/v3/forms/fr-reading-unsupervised-v2.json"
+    },
+    {
+      "hash": "b2e29277ea04e440",
+      "id": "fr-reading-unsupervised-v3",
+      "path": "bank/v3/forms/fr-reading-unsupervised-v3.json"
+    },
+    {
+      "hash": "017963360039b450",
+      "id": "fr-writing-supervised-v2",
+      "path": "bank/v3/forms/fr-writing-supervised-v2.json"
+    },
+    {
+      "hash": "fdc715d0b323aa87",
+      "id": "fr-writing-supervised-v3",
+      "path": "bank/v3/forms/fr-writing-supervised-v3.json"
+    },
+    {
+      "hash": "eed57e1b0a3d3a12",
+      "id": "fr-writing-unsupervised-v2",
+      "path": "bank/v3/forms/fr-writing-unsupervised-v2.json"
+    },
+    {
+      "hash": "6d2d216ac51a2cb4",
+      "id": "fr-writing-unsupervised-v3",
+      "path": "bank/v3/forms/fr-writing-unsupervised-v3.json"
+    }
+  ],
+  "passageShards": [
+    {
+      "count": 24,
+      "hash": "3328f0c9aebc899c",
+      "lang": "*",
+      "path": "bank/v3/passages/3328f0c9aebc899c.json",
+      "skill": "passage"
+    }
+  ],
+  "scenarios": {
+    "hash": "848464aeb64ac1a9",
+    "path": "bank/v3/oral/scenarios.json"
+  },
+  "shards": [
+    {
+      "count": 91,
+      "hash": "0927dad4c659c26e",
+      "lang": "fr",
+      "path": "bank/v3/fr/reading/0927dad4c659c26e.json",
+      "skill": "reading"
+    },
+    {
+      "count": 100,
+      "hash": "46cd3e7c37886177",
+      "lang": "fr",
+      "path": "bank/v3/fr/writing/46cd3e7c37886177.json",
+      "skill": "writing"
+    },
+    {
+      "count": 51,
+      "hash": "0987d2ba955bf631",
+      "lang": "fr",
+      "path": "bank/v3/fr/writing/0987d2ba955bf631.json",
+      "skill": "writing"
+    }
+  ],
+  "version": 3
+}

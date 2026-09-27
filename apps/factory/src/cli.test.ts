@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import type { AiProvider } from "@palier/adapters/openai";
 
-import { buildProvider, runFactory } from "./cli.js";
+import { DEFAULT_BANK_VERSION, buildProvider, runFactory } from "./cli.js";
 import type { CliDeps } from "./cli.js";
 import { scriptedAiProvider } from "./providers/scripted-ai-provider.js";
 import {
@@ -14,6 +14,7 @@ import {
   EVAL_REPORT_PATH,
   ITEM_STATISTICS_PATH,
   MODELS_PATH,
+  ORAL_SESSIONS_PATH,
   PRICING_PATH,
   PROFILE_PATH,
   RECORDED_COMPLETIONS_DIR,
@@ -21,9 +22,11 @@ import {
 } from "./io.js";
 
 const REPO = process.cwd();
+/** What a plain `run` writes: the default version, `v3` since Phase 5 Slice 1 (D114). */
+const DEFAULT = `v${String(DEFAULT_BANK_VERSION)}`;
 // The eval reads the recorded completions too (progress.md D112), so they are inputs like the rest.
 const RECORDED = readdirSync(join(REPO, RECORDED_COMPLETIONS_DIR)).map((file) => `${RECORDED_COMPLETIONS_DIR}/${file}`);
-const INPUTS = [PROFILE_PATH, SOURCES_PATH, MODELS_PATH, PRICING_PATH, ...RECORDED];
+const INPUTS = [PROFILE_PATH, SOURCES_PATH, ORAL_SESSIONS_PATH, MODELS_PATH, PRICING_PATH, ...RECORDED];
 
 let root: string;
 const log: string[] = [];
@@ -70,7 +73,7 @@ describe("runFactory", () => {
     const code = await runFactory(["run"], deps());
     expect(code).toBe(0);
     expect(existsSync(join(root, BATCH_REPORT_PATH))).toBe(true);
-    expect(existsSync(join(root, "content/bank/v2/manifest.json"))).toBe(true);
+    expect(existsSync(join(root, `content/bank/${DEFAULT}/manifest.json`))).toBe(true);
     const report = JSON.parse(readFileSync(join(root, BATCH_REPORT_PATH), "utf8")) as {
       counts: { itemsPublished: number };
     };
@@ -89,19 +92,19 @@ describe("runFactory", () => {
   it("defaults to the run command", async () => {
     const code = await runFactory([], deps());
     expect(code).toBe(0);
-    expect(existsSync(join(root, "content/bank/v2/manifest.json"))).toBe(true);
+    expect(existsSync(join(root, `content/bank/${DEFAULT}/manifest.json`))).toBe(true);
   });
 
   it("writes a form per profile variant into the bank", async () => {
     await runFactory(["run"], deps());
-    const manifest = readManifest(2);
+    const manifest = readManifest(DEFAULT_BANK_VERSION);
     expect(manifest.forms.map((f) => f.id)).toEqual([
-      "fr-reading-supervised-v2",
-      "fr-reading-unsupervised-v2",
-      "fr-writing-supervised-v2",
-      "fr-writing-unsupervised-v2",
+      `fr-reading-supervised-${DEFAULT}`,
+      `fr-reading-unsupervised-${DEFAULT}`,
+      `fr-writing-supervised-${DEFAULT}`,
+      `fr-writing-unsupervised-${DEFAULT}`,
     ]);
-    expect(log.join(" ")).toMatch(/bank v2: \d+ items, forms fr-reading-supervised-v2/);
+    expect(log.join(" ")).toMatch(new RegExp(`bank ${DEFAULT}: \\d+ items, forms fr-reading-supervised-${DEFAULT}`));
   });
 
   it("refuses to overwrite a bank version that already exists", async () => {
@@ -117,6 +120,19 @@ describe("runFactory", () => {
     const code = await runFactory(["run", "--bank-version", "1", "--force"], deps());
     expect(code).toBe(0);
     expect(readManifest(1).version).toBe(1);
+  });
+
+  it("carries the previous version's forms and scenarios into the next, as they were published (D114)", async () => {
+    await runFactory(["run", "--bank-version", "1"], deps());
+    const v1 = readManifest(1) as unknown as { forms: { id: string }[]; scenarios: { path: string } };
+    await runFactory(["run", "--bank-version", "2"], deps());
+    const v2 = readManifest(2) as unknown as { forms: { id: string }[]; scenarios: { path: string } };
+    for (const { id } of v1.forms) expect(v2.forms.map((f) => f.id)).toContain(id);
+    const scenariosOf = (path: string) => JSON.parse(readFileSync(join(root, "content", path), "utf8")) as { id: string }[];
+    expect(scenariosOf(v2.scenarios.path).map((s) => s.id)).toEqual(scenariosOf(v1.scenarios.path).map((s) => s.id));
+    const report = JSON.parse(readFileSync(join(root, BATCH_REPORT_PATH), "utf8")) as { counts: { scenariosCarried: number } };
+    expect(report.counts.scenariosCarried).toBe(10);
+    expect(log.join(" ")).toMatch(/scenarios: 0 new, 10 carried, 0 discarded, 0 failed calls/);
   });
 
   it("carries the previous bank version's items into the next", async () => {
@@ -164,7 +180,11 @@ describe("runFactory", () => {
     );
     expect(items.get(first!.id)).toMatchObject({ status: "retired", stats: { responses: 150, pointBiserial: -0.3 } });
     expect(items.get(second!.id)).toMatchObject({ status: "published", stats: { updatedAt: "2026-10-01T06:00:00.000Z" } });
-    for (const form of v2.forms) {
+    // v1's forms are carried as they were published, so a run sat on one still rescores (D114);
+    // it is the forms v2 draws itself that must leave the retired item out.
+    const own = v2.forms.filter((form) => form.path.endsWith("-v2.json"));
+    expect(own).toHaveLength(4);
+    for (const form of own) {
       const { itemIds } = JSON.parse(readFileSync(join(root, "content", form.path), "utf8")) as { itemIds: string[] };
       expect(itemIds).not.toContain(first!.id);
     }
@@ -208,10 +228,10 @@ describe("runFactory", () => {
   it("writes no bank, and returns 1, when the bank cannot fill its forms", async () => {
     const code = await runFactory(["run", "--per-source", "1"], deps());
     expect(code).toBe(1);
-    expect(existsSync(join(root, "content/bank/v2"))).toBe(false);
+    expect(existsSync(join(root, `content/bank/${DEFAULT}`))).toBe(false);
     expect(existsSync(join(root, BATCH_REPORT_PATH))).toBe(true);
     expect(log.join(" ")).toMatch(/FORM: cannot assemble forms: variant reading-supervised needs 60/);
-    expect(log.join(" ")).toMatch(/bank v2 not written/);
+    expect(log.join(" ")).toMatch(new RegExp(`bank ${DEFAULT} not written`));
   });
 
   it("rejects an unknown command", async () => {
@@ -224,7 +244,7 @@ describe("runFactory", () => {
     // A provider that drafts valid items but whose reviewer rejects every one:
     // yield collapses to 0, tripping the out-of-band warning.
     const rejectAll: AiProvider = {
-      capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: false }),
+      capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: false, generateScenario: false }),
       generatePassage: () => Promise.resolve([]),
       generateItems: (req) =>
         Promise.resolve([
@@ -250,6 +270,7 @@ describe("runFactory", () => {
           estimatedBand: "B",
         }),
       assessWriting: () => Promise.reject(new Error("not used")),
+      generateScenario: () => Promise.reject(new Error("not used")),
       verifyKey: () => Promise.resolve(),
       lastUsage: () => ({ model: "stub", inputTokens: 1, outputTokens: 1 }),
     };

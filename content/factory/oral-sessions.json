@@ -1,0 +1,12 @@
+{
+  "note": "The oral scenarios a batch plans (progress.md D114): each session type at its length from product-requirements.md §8.6, at bands B and C. Session lengths are Palier's product, not a PSC rule (the PSC publishes no phase breakdown, §5.3), so they are factory configuration, as the source queue is.",
+  "lang": "fr",
+  "bands": ["B", "C"],
+  "sessions": [
+    { "sessionType": "warmup", "minutes": 5 },
+    { "sessionType": "work", "minutes": 10 },
+    { "sessionType": "opinion", "minutes": 12 },
+    { "sessionType": "situation", "minutes": 8 },
+    { "sessionType": "full", "minutes": 22 }
+  ]
+}

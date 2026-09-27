@@ -67,9 +67,6 @@ const matches = (item: Item, c: ItemCriteria): boolean => {
   return true;
 };
 
-/** A 404 on an optional resource (the un-manifested scenarios file) is "not present", not a failure. */
-const NOT_FOUND = Symbol("not-found");
-
 export const httpBankRepository = (config: HttpBankConfig): ItemRepository => {
   const version = config.version ?? 1;
   const base = config.baseUrl.replace(/\/+$/, "");
@@ -78,17 +75,15 @@ export const httpBankRepository = (config: HttpBankConfig): ItemRepository => {
 
   /**
    * Fetch and JSON-parse one URL. A network fault or a non-ok status is a
-   * `BankUnavailableError`; a body that is not JSON is a `BankContentError`. When
-   * `optional`, a 404 returns the `NOT_FOUND` sentinel instead of throwing.
+   * `BankUnavailableError`; a body that is not JSON is a `BankContentError`.
    */
-  const fetchJson = async (url: string, optional = false): Promise<unknown> => {
+  const fetchJson = async (url: string): Promise<unknown> => {
     let res: FetchResponse;
     try {
       res = await doFetch(url);
     } catch (cause) {
       throw new BankUnavailableError(`Could not reach the bank at ${url}.`, { cause });
     }
-    if (optional && res.status === 404) return NOT_FOUND;
     if (!res.ok) {
       throw new BankUnavailableError(`Bank fetch failed (${String(res.status)}) for ${url}.`);
     }
@@ -181,16 +176,14 @@ export const httpBankRepository = (config: HttpBankConfig): ItemRepository => {
   };
 
   /**
-   * The oral scenarios file is written by the factory only when scenarios exist
-   * and is **not** listed in the manifest (bank-build.ts). Its absence (HTTP 404)
-   * is therefore normal, not an error: it means the bank has no scenarios.
+   * The oral scenarios file is listed in the manifest's `scenarios` entry (progress.md
+   * D114), so a bank with none, v1 and v2 included, fetches nothing for them.
    */
   const getScenarios = (): Promise<readonly OralScenario[]> => {
     scenariosPromise ??= (async () => {
-      const url = `${root}/oral/scenarios.json`;
-      const raw = await fetchJson(url, true);
-      if (raw === NOT_FOUND) return [];
-      return asArray<OralScenario>(raw, url);
+      const entry = (await getManifest()).scenarios;
+      if (entry === null) return [];
+      return asArray<OralScenario>(await fetchJson(`${base}/${entry.path}`), entry.path);
     })().catch((err: unknown) => {
       scenariosPromise = undefined;
       throw err;
@@ -243,6 +236,8 @@ export const httpBankRepository = (config: HttpBankConfig): ItemRepository => {
       const scenarios = await getScenarios();
       return scenarios.find((s) => s.id === id) ?? null;
     },
+
+    scenarios: () => getScenarios(),
 
     bankVersion: async () => (await getManifest()).version,
   };

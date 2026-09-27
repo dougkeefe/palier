@@ -22,9 +22,13 @@ const manifest = JSON.parse(readFileSync(content(BANK_MANIFEST.replace(/^\/conte
   shards: { path: string }[];
   forms: { id: string; path: string }[];
 };
-const formEntry = manifest.forms.find((f) => f.id.includes("reading-supervised"));
-if (formEntry === undefined) throw new Error("the committed bank has a supervised reading form");
-const FORM = JSON.parse(readFileSync(content(formEntry.path), "utf8")) as ExamForm;
+// The form the picker offers: the highest version for the variant (D85). Since bank v3 a bank also
+// carries the forms earlier versions published, so the first match by name is no longer it (D114).
+const FORM = manifest.forms
+  .filter((f) => f.id.includes("reading-supervised-"))
+  .map((f) => JSON.parse(readFileSync(content(f.path), "utf8")) as ExamForm)
+  .sort((a, b) => b.version - a.version)[0];
+if (FORM === undefined) throw new Error("the committed bank has a supervised reading form");
 const BANK = manifest.shards.flatMap((s) => JSON.parse(readFileSync(content(s.path), "utf8")) as Item[]);
 const ITEMS = FORM.itemIds.map((id) => {
   const item = BANK.find((i) => i.id === id);

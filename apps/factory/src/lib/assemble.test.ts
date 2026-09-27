@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { OPTION_IDS } from "@palier/domain";
 import type { ItemDraft, OptionId } from "@palier/domain";
 
-import { debiasKeyPosition } from "./assemble.js";
+import { assembleScenario, debiasKeyPosition } from "./assemble.js";
 
 const draft = (stemFr: string, over: Partial<ItemDraft> = {}): ItemDraft => ({
   type: "cloze",
@@ -51,5 +51,26 @@ describe("debiasKeyPosition", () => {
     const result = debiasKeyPosition(three);
     expect(result.key).toBe("a");
     expect(result.options).toHaveLength(3);
+  });
+});
+
+describe("assembleScenario (D114)", () => {
+  const draft = {
+    phases: [
+      { name: "Mise en train", minutes: 5, intent: "i", seedQuestions: ["q"], escalation: ["e"], deescalation: ["d"] },
+    ],
+  };
+  const meta = { sessionType: "warmup", targetBand: "B", lang: "fr", topic: "procurement" } as const;
+
+  it("copies what was asked for onto the plan, under a content-derived id", () => {
+    const scenario = assembleScenario(draft, meta);
+    expect(scenario).toMatchObject({ ...meta, phases: draft.phases });
+    expect(assembleScenario(draft, meta).id).toBe(scenario.id);
+  });
+
+  it("gives a different plan, or the same plan asked for differently, a different id", () => {
+    const id = assembleScenario(draft, meta).id;
+    expect(assembleScenario(draft, { ...meta, targetBand: "C" }).id).not.toBe(id);
+    expect(assembleScenario({ phases: [{ ...draft.phases[0]!, minutes: 4 }] }, meta).id).not.toBe(id);
   });
 });

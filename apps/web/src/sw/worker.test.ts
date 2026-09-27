@@ -48,18 +48,26 @@ describe("the precache lists", () => {
     expect(staticAssetsIn("<p>no assets</p>")).toEqual([]);
   });
 
-  it("lists every shard, passage shard and form a bank manifest names, under the served base", () => {
+  it("lists every shard, passage shard, form and the scenarios file a bank manifest names, under the served base", () => {
     const manifest = {
       shards: [{ path: "bank/v1/fr/reading/r.json" }, { nope: true }, null],
       passageShards: [{ path: "bank/v1/passages/p.json" }],
       forms: [{ path: "bank/v1/forms/f.json" }],
+      scenarios: { path: "bank/v1/oral/scenarios.json", hash: "h" },
       version: 1,
     };
     expect(bankFilesIn(manifest, "/content")).toEqual([
       "/content/bank/v1/fr/reading/r.json",
       "/content/bank/v1/passages/p.json",
       "/content/bank/v1/forms/f.json",
+      "/content/bank/v1/oral/scenarios.json",
     ]);
+  });
+
+  it("lists no scenarios file for a bank with none, whether the entry is null or, before v3, absent", () => {
+    const files = (scenarios?: null) => bankFilesIn({ shards: [], passageShards: [], forms: [], ...(scenarios === undefined ? {} : { scenarios }) }, "/content");
+    expect(files(null)).toEqual([]);
+    expect(files()).toEqual([]);
   });
 
   it("lists nothing from a manifest that is not an object or has no entry arrays", () => {

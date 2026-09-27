@@ -14,7 +14,13 @@ import {
   RateLimitError,
 } from "./errors.js";
 
-const MODELS = { passage: "m-passage", draft: "m-draft", review: "m-review", assess: "m-assess" } as const;
+const MODELS = {
+  passage: "m-passage",
+  draft: "m-draft",
+  review: "m-review",
+  assess: "m-assess",
+  scenario: "m-scenario",
+} as const;
 
 const localised = { en: "en", fr: "fr" };
 const option = (id: "a" | "b" | "c" | "d") => ({ id, text: `opt ${id}`, rationale: localised });
@@ -66,6 +72,17 @@ const FEEDBACK = {
   modelAnswer: "Bonjour à tous, la réunion de lundi est reportée à mardi. Merci de votre compréhension.",
 };
 
+const aPhase = (minutes: number) => ({
+  name: "Mise en train",
+  minutes,
+  intent: "Establish a baseline.",
+  seedQuestions: ["Parlez-moi de votre rôle."],
+  escalation: ["Qu'auriez-vous fait autrement ?"],
+  deescalation: ["Décrivez une journée type."],
+});
+/** A 10-minute plan, the length the contract asks for. */
+const SCENARIO_PLAN = { phases: [aPhase(3), aPhase(4), aPhase(3)] };
+
 /** A response body in the shape the provider reads, wrapping `content` JSON. */
 const chatResponse = (content: unknown, usage = { prompt_tokens: 100, completion_tokens: 50 }) => ({
   ok: true,
@@ -89,6 +106,7 @@ const cannedFetch: FetchLike = (url, init) => {
   if (model === MODELS.passage) return Promise.resolve(chatResponse(PASSAGE_ENVELOPE));
   if (model === MODELS.draft) return Promise.resolve(chatResponse(ITEM_ENVELOPE));
   if (model === MODELS.assess) return Promise.resolve(chatResponse(FEEDBACK));
+  if (model === MODELS.scenario) return Promise.resolve(chatResponse(SCENARIO_PLAN));
   return Promise.resolve(chatResponse(VERDICT));
 };
 
@@ -99,18 +117,24 @@ const makeProvider = (over: Partial<OpenAiProviderConfig> = {}) =>
 aiProviderContract("openai", () => Promise.resolve(makeProvider()));
 
 describe("openAiProvider", () => {
-  it("reports every capability, writing feedback included when a model is configured for it", () => {
+  it("reports every capability, writing feedback and scenarios included when their models are configured", () => {
     expect(makeProvider().capabilities()).toEqual({
       generatePassage: true,
       generateItems: true,
       reviewItem: true,
       assessWriting: true,
+      generateScenario: true,
     });
   });
 
   it("reports no writing feedback when no assess model is configured, as the factory's is not", () => {
     const { assess: _assess, ...factoryModels } = MODELS;
     expect(makeProvider({ models: factoryModels }).capabilities().assessWriting).toBe(false);
+  });
+
+  it("reports no scenarios when no scenario model is configured, as the browser's is not", () => {
+    const { scenario: _scenario, ...browserModels } = MODELS;
+    expect(makeProvider({ models: browserModels }).capabilities().generateScenario).toBe(false);
   });
 
   it("sends the configured model and a bearer key", async () => {
@@ -774,6 +798,63 @@ describe("openAiProvider — assessWriting (D105)", () => {
     const provider = makeProvider({ models: factoryModels, fetchImpl: spy });
     await provider.reviewItem(aReview);
     await expect(provider.assessWriting(aRequest)).rejects.toThrow(/models\.assess/u);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(provider.lastUsage()).toBeNull();
+  });
+});
+
+describe("openAiProvider — generateScenario (D114)", () => {
+  const aRequest = { sessionType: "opinion", targetBand: "C", lang: "fr", topic: "environment", minutes: 10 } as const;
+
+  const answers = (...bodies: unknown[]): { fetchImpl: FetchLike; sent: () => string[] } => {
+    const sent: string[] = [];
+    return {
+      sent: () => sent,
+      fetchImpl: (_url, init) => {
+        sent.push(init.body ?? "");
+        const body = bodies.length > 1 ? bodies.shift() : bodies[0];
+        return Promise.resolve(chatResponse(body));
+      },
+    };
+  };
+
+  it("returns the plan, and asks for the session's type, purpose, topic, band and exact minutes", async () => {
+    const { fetchImpl, sent } = answers(SCENARIO_PLAN);
+    const draft = await makeProvider({ fetchImpl }).generateScenario(aRequest);
+    const body = JSON.parse(sent()[0] ?? "{}") as { model: string; messages: { content: string }[] };
+    const user = body.messages[1]?.content ?? "";
+
+    expect(draft).toEqual(SCENARIO_PLAN);
+    expect(body.model).toBe("m-scenario");
+    expect(user).toContain('"opinion"');
+    expect(user).toContain("policy trade-offs");
+    expect(user).toContain('"environment"');
+    expect(user).toContain('band "C"');
+    expect(user).toContain("add up to exactly 10");
+  });
+
+  it("retries a plan whose phases do not fill the session, then accepts one that does", async () => {
+    const short = { phases: [aPhase(3), aPhase(4)] };
+    const { fetchImpl, sent } = answers(short, SCENARIO_PLAN);
+
+    expect(await makeProvider({ fetchImpl }).generateScenario(aRequest)).toEqual(SCENARIO_PLAN);
+    expect(sent()).toHaveLength(2);
+    expect(sent()[1]).toContain("add up to 7 minutes, not 10");
+  });
+
+  it("refuses a plan that fails the schema twice as InvalidResponseError", async () => {
+    const { fetchImpl } = answers({ phases: [] });
+
+    await expect(makeProvider({ fetchImpl }).generateScenario(aRequest)).rejects.toBeInstanceOf(InvalidResponseError);
+  });
+
+  it("refuses to run with no scenario model, before any request and with no usage", async () => {
+    const { scenario: _scenario, ...browserModels } = MODELS;
+    const spy = vi.fn(cannedFetch);
+    const provider = makeProvider({ models: browserModels, fetchImpl: spy });
+    await provider.reviewItem(aReview);
+
+    await expect(provider.generateScenario(aRequest)).rejects.toThrow(/models\.scenario/u);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(provider.lastUsage()).toBeNull();
   });

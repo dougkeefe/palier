@@ -14,6 +14,7 @@ import {
   latestBankVersionBelow,
   loadItemStatistics,
   loadPublishedBank,
+  loadOralSessions,
   loadSources,
   writeBank,
   writeJsonFile,
@@ -65,7 +66,7 @@ export const buildProvider = (
 export const SCRIPTED_PROMPT_VERSION = "scripted-1";
 
 /** The bank version a plain `palier-factory run` writes: the next one to publish. */
-export const DEFAULT_BANK_VERSION = 2;
+export const DEFAULT_BANK_VERSION = 3;
 
 export type RunOptions = {
   readonly now: string;
@@ -96,6 +97,7 @@ export const runInputFor = (root: string, options: RunOptions): RunInput => {
     published === null ? null : applyStatistics(published, options.applyItemStatistics === false ? null : loadItemStatistics(root));
   return {
     sources: loadSources(root),
+    oralPlan: loadOralSessions(root),
     profile: loadProfile(root),
     provider: options.provider,
     now: options.now,
@@ -187,6 +189,11 @@ export const runFactory = async (argv: readonly string[], deps: CliDeps): Promis
     if (!out.validation.keyDistributionOk) deps.log("WARNING: key-position distribution is skewed");
     if (!formsOk) deps.log(`bank v${String(bankVersion)} not written: its forms failed validation`);
     else deps.log(`bank v${String(bankVersion)}: ${String(out.bank.manifest.counts.items)} items, forms ${out.forms.map((f) => f.id).join(", ")}`);
+    deps.log(
+      `scenarios: ${String(out.report.counts.scenarios)} new, ${String(out.report.counts.scenariosCarried)} carried, ` +
+        `${String(out.scenarioStage.rejected.length)} discarded, ${String(out.scenarioStage.failedCalls)} failed calls`,
+    );
+    for (const rejection of out.scenarioStage.rejected) deps.log(`SCENARIO ${rejection.id}: ${rejection.reasons.join("; ")}`);
     return yieldOk && out.validation.keyDistributionOk && formsOk ? 0 : 1;
   }
 

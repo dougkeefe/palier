@@ -86,10 +86,20 @@ describe("httpBankRepository — delivery behaviour", () => {
     expect(requested.filter((u) => u.includes("/forms/"))).toHaveLength(fetched);
   });
 
-  it("returns null for a scenario when the oral file is absent (HTTP 404)", async () => {
+  it("ships no scenarios when the manifest lists none, and fetches nothing for them", async () => {
     const repo = serve({ items: [], passages: [], forms: [], scenarios: [], bankVersion: 3 });
 
     expect(await repo.scenario(scenarioId("s-1"))).toBeNull();
+    expect(await repo.scenarios()).toEqual([]);
+    expect(requested.filter((u) => u.includes("/oral/"))).toEqual([]);
+  });
+
+  it("fetches the scenarios file once, for listing and looking up alike", async () => {
+    const repo = serve();
+
+    expect(await repo.scenarios()).toHaveLength(CONTRACT_BANK.scenarios.length);
+    await repo.scenario(scenarioId("s-1"));
+    expect(requested.filter((u) => u.includes("/oral/"))).toHaveLength(1);
   });
 
   it("normalizes a trailing slash on the base url", async () => {
@@ -177,13 +187,34 @@ describe("httpBankRepository — error translation", () => {
     await expect(repo.query({})).rejects.toBeInstanceOf(BankContentError);
   });
 
-  it("surfaces a non-404 error and a malformed body from the scenarios file", async () => {
-    await expect(repoWith({ [scenariosUrl]: { status: 500 } }).scenario(scenarioId("s"))).rejects.toBeInstanceOf(
-      BankUnavailableError,
-    );
-    await expect(repoWith({ [scenariosUrl]: { body: { not: "array" } } }).scenario(scenarioId("s"))).rejects.toBeInstanceOf(
-      BankContentError,
-    );
+  it("surfaces a failed fetch and a malformed body from a listed scenarios file, and retries after", async () => {
+    const listing = {
+      body: {
+        version: 3,
+        shards: [],
+        passageShards: [],
+        forms: [],
+        scenarios: { path: "bank/v1/oral/scenarios.json", hash: "h" },
+      },
+    };
+    await expect(
+      repoWith({ [manifestUrl]: listing, [scenariosUrl]: { status: 500 } }).scenario(scenarioId("s")),
+    ).rejects.toBeInstanceOf(BankUnavailableError);
+    await expect(
+      repoWith({ [manifestUrl]: listing, [scenariosUrl]: { body: { not: "array" } } }).scenarios(),
+    ).rejects.toBeInstanceOf(BankContentError);
+
+    let calls = 0;
+    const flaky: FetchLike = (url) => {
+      if (url === manifestUrl) return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(listing.body) });
+      calls += 1;
+      return calls === 1
+        ? Promise.reject(new Error("network down"))
+        : Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve([]) });
+    };
+    const repo = httpBankRepository({ baseUrl: BASE, version: 1, fetchImpl: flaky });
+    await expect(repo.scenarios()).rejects.toBeInstanceOf(BankUnavailableError);
+    expect(await repo.scenarios()).toEqual([]);
   });
 
   it("rejects every shape of malformed manifest", async () => {
@@ -198,6 +229,9 @@ describe("httpBankRepository — error translation", () => {
       { version: 1, shards: [{ path: "p", hash: "h", lang: "fr", skill: "reading" }], passageShards: [], forms: [] },
       { version: 1, shards: [{ path: "p", hash: "h", count: 1, skill: "reading" }], passageShards: [], forms: [] },
       { version: 1, shards: [{ path: "p", hash: "h", count: 1, lang: "fr" }], passageShards: [], forms: [] },
+      { version: 1, shards: [], passageShards: [], forms: [], scenarios: "oral/scenarios.json" },
+      { version: 1, shards: [], passageShards: [], forms: [], scenarios: { hash: "h" } },
+      { version: 1, shards: [], passageShards: [], forms: [], scenarios: { path: "p" } },
       { version: 1, shards: [], passageShards: {}, forms: [] },
       { version: 1, shards: [], passageShards: [], forms: {} },
       { version: 1, shards: [], passageShards: [], forms: [null] },
@@ -298,5 +332,43 @@ describe("httpBankRepository — the committed Phase-3 bank, with its forms", ()
     const v1 = await httpBankRepository({ baseUrl: BASE, version: 1, fetchImpl: diskFetch }).query({});
     const v2 = await repo().byIds(v1.map((i) => i.id));
     expect(v2.map((i) => i.id).sort()).toEqual(v1.map((i) => i.id).sort());
+  });
+});
+
+// The committed Phase-5 bank (content/bank/v3/), the first with oral scenarios (D114),
+// and the version the app reads. It carries v2 forward whole: every item, and every form a
+// user may have sat, beside v3's own forms.
+describe("httpBankRepository — the committed Phase-5 bank, with its scenarios", () => {
+  const diskPath = (rel: string) => fileURLToPath(new URL(`../../../../content/${rel}`, import.meta.url));
+  const diskFetch: FetchLike = (url) => {
+    try {
+      const text = readFileSync(diskPath(url.slice(`${BASE}/`.length)), "utf8");
+      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(JSON.parse(text)) });
+    } catch {
+      return Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve(null) });
+    }
+  };
+  const at = (version: number) => httpBankRepository({ baseUrl: BASE, version, fetchImpl: diskFetch });
+
+  it("ships an oral scenario for every session type at B and at C", async () => {
+    const scenarios = await at(3).scenarios();
+    expect(scenarios.map((s) => `${s.sessionType}-${s.targetBand}`).sort()).toEqual(
+      ["full", "opinion", "situation", "warmup", "work"].flatMap((type) => [`${type}-B`, `${type}-C`]).sort(),
+    );
+    const first = scenarios[0];
+    if (first !== undefined) expect(await at(3).scenario(first.id)).toEqual(first);
+  });
+
+  it("holds every item and every form v2 published, exactly as published", async () => {
+    const v2Items = await at(2).query({});
+    const v3Items = await at(3).byIds(v2Items.map((i) => i.id));
+    expect(v3Items).toEqual(v2Items);
+    const v3Forms = await at(3).forms();
+    for (const form of await at(2).forms()) expect(v3Forms).toContainEqual(form);
+  });
+
+  it("reads banks v1 and v2, which predate the scenarios entry, as shipping none", async () => {
+    expect(await at(1).scenarios()).toEqual([]);
+    expect(await at(2).scenarios()).toEqual([]);
   });
 });

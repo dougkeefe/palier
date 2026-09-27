@@ -1,6 +1,8 @@
 import type {
   GenerateItemsRequest,
   GeneratePassageRequest,
+  GenerateScenarioRequest,
+  OralSessionType,
   ReviewRequest,
   WritingRequest,
 } from "@palier/domain";
@@ -18,8 +20,8 @@ const QUOTED_BANDS = TARGET_BANDS.map((band) => `"${band}"`);
  * uses `response_format: { type: "json_object" }` and re-validates the body — the
  * schema description here is guidance, the Zod re-validation is the contract.
  *
- * `writing` was added with Phase 4 Slice 3 (progress.md D105). Adding a prompt does not
- * change the others, so the version stays: nothing the factory generates is traced to it.
+ * `writing` was added with Phase 4 Slice 3 (progress.md D105), and `scenario` with Phase 5
+ * Slice 1 (D114). Adding a prompt does not change the others, so the version stays.
  *
  * **Version 4** (Phase 4 Slice 4, progress.md D112): the review prompt names the band scale.
  * The first recorded live run found three of five reviews answering `estimatedBand` as a CEFR
@@ -155,4 +157,48 @@ const writing = (req: WritingRequest): { system: string; user: string } => {
   };
 };
 
-export const buildPrompt = { passage, items, review, writing };
+/** What each session type rehearses (product-requirements.md §8.6). */
+const SESSION_PURPOSE: Readonly<Record<OralSessionType, string>> = {
+  warmup: "introductions, the candidate's role and department; low pressure",
+  work: "describing their job, a project, a problem they solved",
+  opinion: "policy trade-offs, hypotheticals, what they would have done differently; the C-level discriminator",
+  situation: "handling a workplace scenario: briefing a colleague, declining a request, explaining a delay to a client",
+  full: "every part of the interview in turn, under exam conditions",
+};
+
+/**
+ * The factory's oral scenario plan (progress.md D114). The client drives the phases
+ * (architecture.md §8.5), so each phase carries its own minutes, and they must add up to
+ * the session's length, which the adapter checks before it accepts the plan.
+ */
+const scenario = (req: GenerateScenarioRequest): { system: string; user: string } => {
+  const example = JSON.stringify({
+    phases: [
+      {
+        name: "Nom court de la phase",
+        minutes: 3,
+        intent: "What this phase probes, in English, for the examiner",
+        seedQuestions: ["Question d'ouverture…"],
+        escalation: ["Relance plus exigeante si le candidat s'en sort…"],
+        deescalation: ["Reformulation plus simple s'il peine…"],
+      },
+    ],
+  });
+  return {
+    system: [
+      REGISTER,
+      "You plan a rehearsal of the Public Service Commission's oral interview, run by an examiner",
+      "who speaks only the target language, never coaches and keeps their own turns short.",
+    ].join(" "),
+    user: [
+      `Plan a ${String(req.minutes)}-minute "${req.sessionType}" session in ${languageName(req.lang)}, rehearsing`,
+      `${SESSION_PURPOSE[req.sessionType]}, on the topic "${req.topic}", pitched at band "${req.targetBand}".`,
+      `Split it into phases whose minutes add up to exactly ${String(req.minutes)}.`,
+      "Give every phase at least one seed question, one harder follow-up for a candidate who is coping,",
+      "and one simpler reframe for a candidate who is struggling, all in the target language.",
+      `Reply with JSON only, in this shape: ${example}`,
+    ].join(" "),
+  };
+};
+
+export const buildPrompt = { passage, items, review, writing, scenario };

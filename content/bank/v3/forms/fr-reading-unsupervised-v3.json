@@ -1,0 +1,58 @@
+{
+  "bandCuts": [
+    {
+      "band": "X",
+      "max": 8,
+      "min": 0
+    },
+    {
+      "band": "A",
+      "max": 13,
+      "min": 9
+    },
+    {
+      "band": "B",
+      "max": 18,
+      "min": 14
+    },
+    {
+      "band": "C",
+      "max": 25,
+      "min": 19
+    }
+  ],
+  "id": "fr-reading-unsupervised-v3",
+  "itemIds": [
+    "CECT575G640FNSUT8688",
+    "2R30MDNPAOOI14Q6H0TJ",
+    "9J6OQSVU5Q3566RS9IOU",
+    "3A5JUQNARFS1O7S877PL",
+    "54DKNVGL9G75QNHPVS3A",
+    "C9RT94FHLF3TBTSHD26R",
+    "4OBQHOEJHTO6SC6L9AV9",
+    "26DC5JUCHPTRPGM22VSV",
+    "12C46JOIBJF2EGIG9MUG",
+    "9J3U1FHMCF5GVNTPVBEV",
+    "B3KE3DTNID48H1RP2JVD",
+    "936168BG9U5M3S3SCVB4",
+    "6MJNCVKOS0B8R7ARB6CM",
+    "1TFMV4DN9GT81M6DQ449",
+    "8SSHOU7CP7AVSEP8DK6A",
+    "CHGHN61FPR0GGJ57CFPM",
+    "9SUO5N01NPD7FLCJE3LA",
+    "87EAOQQAT09PL5PE60VG",
+    "ADKH3O0ICSIKBROPCH5V",
+    "ACTULGAO2960N7LUGD5U",
+    "1FRMCOPQELK955R5D9IV",
+    "5TLP701HFB7A9FKR8F7H",
+    "4CHO8IJGNOMBRN0QD11L",
+    "60UGKG957777DF1U50HM",
+    "BH0K21PCT37HHV45DT4A"
+  ],
+  "lang": "fr",
+  "mode": "unsupervised",
+  "pilotItemIds": [],
+  "skill": "reading",
+  "timeLimitMinutes": 45,
+  "version": 3
+}

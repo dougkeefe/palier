@@ -1,12 +1,16 @@
 import type { AiProvider } from "@palier/adapters/openai";
 import { OPTION_IDS } from "@palier/domain";
 import type {
+  GenerateScenarioRequest,
   ItemDraft,
   Localised,
   OptionId,
+  OralPhase,
+  OralSessionType,
   PassageDraft,
   ReviewRequest,
   ReviewVerdict,
+  ScenarioDraft,
   TargetBand,
   UsageRecord,
 } from "@palier/domain";
@@ -66,6 +70,57 @@ const localised = (fr: string, en: string): Localised => ({ fr, en });
 const bodyForBand = (band: TargetBand, seed: string): string =>
   [0, 1, 2, 3].map((i) => stemForBand(band, `${seed}:${String(i)}`)).join(" ");
 
+/** How many phases each session type is planned in: two for the warm-up, five for the simulation. */
+const SCENARIO_PHASES: Readonly<Record<OralSessionType, number>> = {
+  warmup: 2,
+  work: 3,
+  opinion: 3,
+  situation: 3,
+  full: 5,
+};
+
+const PHASE_NAMES = ["Mise en train", "Description", "Approfondissement", "Mise en situation", "Synthèse"];
+const OPENERS = [
+  "Parlez-moi de votre rôle au sein de votre équipe.",
+  "Décrivez un dossier sur lequel vous avez travaillé récemment.",
+  "Comment votre direction a-t-elle abordé ce changement ?",
+  "Que feriez-vous si un client contestait cette décision ?",
+  "Résumez les principaux enjeux dont nous avons parlé.",
+  "Expliquez à un nouveau collègue comment fonctionne ce processus.",
+];
+const HARDER = [
+  "Qu'auriez-vous fait autrement, avec le recul ?",
+  "Quels compromis cette décision impose-t-elle à votre ministère ?",
+  "Comment défendriez-vous cette position devant un comité ?",
+  "Quelles seraient les conséquences si le budget était réduit de moitié ?",
+];
+const SIMPLER = [
+  "Décrivez une journée type dans votre poste.",
+  "Qui sont les personnes avec qui vous travaillez le plus souvent ?",
+  "Qu'est-ce qui vous plaît dans ce travail ?",
+  "Pouvez-vous me donner un exemple concret ?",
+];
+
+/**
+ * A phase plan that fills `req.minutes` exactly: whole minutes spread as evenly as the
+ * count allows, the longer phases first. French questions from fixed pools, seeded by
+ * every field of the request, so two requests draw different plans and a rebuild the same.
+ */
+export const scriptedScenario = (req: GenerateScenarioRequest): ScenarioDraft => {
+  const count = SCENARIO_PHASES[req.sessionType];
+  const seed = [req.sessionType, req.targetBand, req.lang, req.topic, String(req.minutes)].join(":");
+  const base = Math.floor(req.minutes / count);
+  const phases: OralPhase[] = Array.from({ length: count }, (_, i) => ({
+    name: PHASE_NAMES[i % PHASE_NAMES.length]!,
+    minutes: base + (i < req.minutes - base * count ? 1 : 0),
+    intent: `Phase ${String(i + 1)} of a ${req.sessionType} session on ${req.topic}, at band ${req.targetBand}.`,
+    seedQuestions: [pick(OPENERS, `open:${seed}:${String(i)}`)],
+    escalation: [pick(HARDER, `up:${seed}:${String(i)}`)],
+    deescalation: [pick(SIMPLER, `down:${seed}:${String(i)}`)],
+  }));
+  return { phases };
+};
+
 export const scriptedAiProvider = (): AiProvider => {
   let usage: UsageRecord | null = null;
   const bill = (tokens: number): void => {
@@ -73,7 +128,13 @@ export const scriptedAiProvider = (): AiProvider => {
   };
 
   return {
-    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: false }),
+    capabilities: () => ({
+      generatePassage: true,
+      generateItems: true,
+      reviewItem: true,
+      assessWriting: false,
+      generateScenario: true,
+    }),
 
     generatePassage: (req) => {
       bill(200);
@@ -161,6 +222,11 @@ export const scriptedAiProvider = (): AiProvider => {
     assessWriting: () => {
       usage = null;
       return Promise.reject(new Error("The scripted provider does not assess writing."));
+    },
+
+    generateScenario: (req) => {
+      bill(250);
+      return Promise.resolve(scriptedScenario(req));
     },
 
     verifyKey: () => {

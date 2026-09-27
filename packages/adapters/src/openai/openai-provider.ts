@@ -4,15 +4,18 @@ import {
   itemDraftSchema,
   passageDraftSchema,
   reviewVerdictSchema,
+  scenarioDraftSchema,
   writingFeedbackDraftSchema,
 } from "@palier/domain";
 import type {
   GenerateItemsRequest,
   GeneratePassageRequest,
+  GenerateScenarioRequest,
   ItemDraft,
   PassageDraft,
   ReviewRequest,
   ReviewVerdict,
+  ScenarioDraft,
   UsageRecord,
   WritingAssessment,
   WritingFeedbackDraft,
@@ -62,8 +65,9 @@ export type FetchLike = (
 
 /**
  * Model ids, as data (§8.1). One per stage that calls the model: the factory's three,
- * and `assess` for writing feedback (progress.md D105). The factory never assesses
- * writing, so `assess` is optional; `assessWriting` without it is a configuration
+ * `assess` for writing feedback (progress.md D105), and `scenario` for the factory's oral
+ * scenarios (D114). The factory never assesses writing and the browser never plans a
+ * scenario, so both are optional; either call without its model is a configuration
  * error, refused before any request is made.
  */
 export type OpenAiModels = {
@@ -71,6 +75,7 @@ export type OpenAiModels = {
   readonly draft: string;
   readonly review: string;
   readonly assess?: string;
+  readonly scenario?: string;
 };
 
 /** Per-model prices, for the cost ledger (§8.6). Absent → `costUsd` is omitted. */
@@ -259,6 +264,7 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
       generateItems: true,
       reviewItem: true,
       assessWriting: config.models.assess !== undefined,
+      generateScenario: config.models.scenario !== undefined,
     }),
 
     generatePassage: (req: GeneratePassageRequest) => {
@@ -310,6 +316,28 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
         const assembled = assembleAssessment(req.text, result.data as WritingFeedbackDraft);
         if (!assembled.ok) throw new Error(assembled.problem);
         return assembled.assessment;
+      });
+    },
+
+    /**
+     * A plan whose phases do not fill the session is refused at the parse, so it is retried
+     * once like any malformed answer rather than paid for and then discarded by the factory.
+     */
+    generateScenario: (req: GenerateScenarioRequest) => {
+      const model = config.models.scenario;
+      if (model === undefined) {
+        usage = null;
+        return Promise.reject(new Error("No model is configured for oral scenarios (models.scenario)."));
+      }
+      const { system, user } = buildPrompt.scenario(req);
+      return callValidated(model, system, user, (raw): ScenarioDraft => {
+        const result = scenarioDraftSchema.safeParse(raw);
+        if (!result.success) throw new Error(result.error.message);
+        const minutes = result.data.phases.reduce((sum, phase) => sum + phase.minutes, 0);
+        if (Math.abs(minutes - req.minutes) > 1e-9) {
+          throw new Error(`the phases add up to ${String(minutes)} minutes, not ${String(req.minutes)}`);
+        }
+        return result.data as ScenarioDraft;
       });
     },
 

@@ -50,6 +50,8 @@ export type BatchMetricsInput = {
    * rather than drafted in this batch. They are not this batch's output, so they are
    * kept out of its published count and its cost per item. */
   readonly carriedPublished?: number;
+  /** Oral scenarios published in this batch, and carried from the previous version. */
+  readonly scenarios?: { readonly published: number; readonly carried: number };
   readonly totalCostUsd: number | null;
 };
 
@@ -74,6 +76,8 @@ export const batchReport = (input: BatchMetricsInput): BatchReport => {
       itemsPassed,
       itemsPublished,
       itemsCarried,
+      scenarios: input.scenarios?.published ?? 0,
+      scenariosCarried: input.scenarios?.carried ?? 0,
     },
     stage4Yield: Math.round(stage4Yield * 1000) / 1000,
     costPerAcceptedItemUsd,

@@ -3,8 +3,10 @@ import { join, relative, sep } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { ORAL_SESSION_TYPES } from "@palier/domain";
+
 import { DEFAULT_BANK_VERSION, SCRIPTED_PROMPT_VERSION, runInputFor } from "./cli.js";
-import { BATCH_REPORT_PATH, loadProfile } from "./io.js";
+import { BATCH_REPORT_PATH, loadProfile, loadPublishedBank } from "./io.js";
 import { canonicalStringify } from "./lib/json.js";
 import type { BatchReport } from "./lib/types.js";
 import { DEFAULT_PER_SOURCE, runPipeline } from "./pipeline/run.js";
@@ -42,8 +44,9 @@ const runOnce = async () => {
         perSource: DEFAULT_PER_SOURCE,
         provider: scriptedAiProvider(),
         promptVersion: SCRIPTED_PROMPT_VERSION,
-        // v2 was built on 24 September 2026, before any item-statistics report existed
-        // (progress.md D94). A later report applies to the next version, never to v2.
+        // The committed version was built before any item-statistics report existed
+        // (progress.md D94): v3 on 27 September 2026. A later report applies to the next
+        // version, never to one already published.
         applyItemStatistics: false,
       }),
     ),
@@ -66,10 +69,26 @@ describe(`the committed bank (content/bank/v${String(DEFAULT_BANK_VERSION)})`, (
     expect(canonicalStringify(out.report)).toBe(canonicalStringify(committed));
   });
 
-  it("ships a clean form for every profile variant", async () => {
+  it("ships a clean form of its own for every profile variant", async () => {
     const { out } = await rerun();
     expect(out.validation.formIssues).toEqual([]);
-    expect(out.forms).toHaveLength(Object.keys(loadProfile(REPO).variants).length);
+    const own = out.forms.filter((f) => f.version === DEFAULT_BANK_VERSION);
+    expect(own).toHaveLength(Object.keys(loadProfile(REPO).variants).length);
     expect(out.bank.manifest.forms.map((f) => f.id)).toEqual(out.forms.map((f) => f.id).sort());
+  });
+
+  it("carries every form the previous version published, so an exam sat on one still rescores (D114)", async () => {
+    const { out } = await rerun();
+    const previous = loadPublishedBank(REPO, DEFAULT_BANK_VERSION - 1);
+    expect(previous?.forms?.length).toBeGreaterThan(0);
+    for (const form of previous?.forms ?? []) expect(out.forms).toContainEqual(form);
+  });
+
+  it("ships an oral scenario for every session type at B and at C (D114)", async () => {
+    const { out } = await rerun();
+    expect(out.scenarioStage.rejected).toEqual([]);
+    expect(out.scenarios.map((s) => `${s.sessionType}-${s.targetBand}`).sort()).toEqual(
+      ORAL_SESSION_TYPES.flatMap((type) => [`${type}-B`, `${type}-C`]).sort(),
+    );
   });
 });

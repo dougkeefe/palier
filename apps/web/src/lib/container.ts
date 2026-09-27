@@ -194,7 +194,7 @@ import { selectionSeedFor, systemClock } from "./system-clock";
  * this version only (progress.md D82).
  */
 export const BANK_BASE_PATH = "/content";
-export const BANK_VERSION = 2;
+export const BANK_VERSION = 3;
 
 /**
  * The exam profile, parsed once here. Parsing at the composition root is the same

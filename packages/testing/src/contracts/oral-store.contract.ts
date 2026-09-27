@@ -126,7 +126,7 @@ export const oralStoreContract = (name: string, make: () => Promise<OralStore>):
       await store.putAudio(b.id, aRecording("b"));
       await store.deleteAudio([a.id, sessionId("absent")]);
 
-      expect(await store.audio(a.id)).toBeNull();
+      expect(await contentsOf(await store.audio(a.id))).toBeNull();
       expect(await contentsOf(await store.audio(b.id))).toMatchObject({ text: "b" });
       expect(await store.all()).toEqual([b, a]);
     });
