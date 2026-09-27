@@ -46,6 +46,7 @@ describe("createContainer", () => {
     expect(c.vault).toBeDefined();
     expect(c.costLedger).toBeDefined();
     expect(c.writing).toBeDefined();
+    expect(c.generated).toBeDefined();
 
     // The IdGenerator mints valid, strictly increasing ULIDs (behaviour proven by
     // the contract suite in @palier/testing; here we assert wiring only).
@@ -432,6 +433,7 @@ describe("createContainer in production", () => {
     expect(c.syncState).toBeDefined();
     expect(c.costLedger).toBeDefined();
     expect(c.writing).toBeDefined();
+    expect(c.generated).toBeDefined();
     expect(Number.isNaN(Date.parse(c.clock.now()))).toBe(false);
     expect(c.ids.ulid()).toMatch(/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{26}$/);
     // Construction is lazy: the bank has not fetched its manifest yet.

@@ -22,6 +22,7 @@ import {
 } from "./sync-account.js";
 import { syncNow } from "./sync-now.js";
 import { aCostEntry, costLedger } from "./__tests__/spend-fakes.js";
+import { aGeneratedSet, generatedStore } from "./__tests__/generated-fakes.js";
 import { aSubmission, writingStore } from "./__tests__/writing-fakes.js";
 import { telemetryStore } from "./__tests__/telemetry-fakes.js";
 
@@ -71,6 +72,7 @@ const aDevice = (transport: SyncTransport) => ({
   telemetry: telemetryStore("on"),
   ledger: costLedger([aCostEntry()]),
   writing: writingStore([aSubmission()]),
+  generated: generatedStore([aGeneratedSet()]),
 });
 
 const aRegisteredDevice = async (transport: SyncTransport) => {
@@ -321,6 +323,14 @@ describe("deleteEverywhere", () => {
     await deleteEverywhere(device);
 
     expect(await device.writing.all()).toEqual([]);
+  });
+
+  it("empties the runtime-generated sets with the rest of this device's data (D110)", async () => {
+    const device = await aRegisteredDevice(fakeServer().transport("secret-a"));
+
+    await deleteEverywhere(device);
+
+    expect(device.generated.sets()).toEqual([]);
   });
 
   it("touches nothing local when the server cannot be reached", async () => {

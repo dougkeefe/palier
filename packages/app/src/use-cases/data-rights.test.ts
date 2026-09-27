@@ -24,6 +24,7 @@ import { importData } from "./import-data.js";
 import { wipeData } from "./wipe-data.js";
 import { examRunStore } from "./__tests__/sync-fakes.js";
 import { aCostEntry, costLedger } from "./__tests__/spend-fakes.js";
+import { aGeneratedSet, generatedStore } from "./__tests__/generated-fakes.js";
 import { aSubmission, writingStore } from "./__tests__/writing-fakes.js";
 import { telemetryStore } from "./__tests__/telemetry-fakes.js";
 
@@ -184,6 +185,7 @@ const aDevice = async () => {
     telemetry: telemetryStore("on"),
     ledger: costLedger([aCostEntry()]),
     writing: writingStore([aSubmission()]),
+    generated: generatedStore([aGeneratedSet()]),
   };
   await device.attempts.append(anAttempt("b"));
   await device.attempts.append(anAttempt("a", { skill: "writing" }));
@@ -255,6 +257,15 @@ describe("exportData", () => {
     expect(text).not.toContain("promptId");
   });
 
+  it("never carries a runtime-generated set, which is never exported (D110)", async () => {
+    const device = await aDevice();
+    const text = textOf(await exportData(device));
+
+    expect(device.generated.sets()).toHaveLength(1);
+    expect(text).not.toContain("GENERATED-MARKER");
+    expect(text).not.toContain("gen-1");
+  });
+
   it("never carries the API key or the device secret", async () => {
     const device = await aDevice();
     const text = textOf(await exportData(device));
@@ -300,6 +311,13 @@ describe("wipeData", () => {
     await wipeData(device);
 
     expect(await device.writing.all()).toEqual([]);
+  });
+
+  it("empties the runtime-generated sets, which only this device ever held (D110)", async () => {
+    const device = await aDevice();
+    await wipeData(device);
+
+    expect(device.generated.sets()).toEqual([]);
   });
 
   it("keeps the device secret, which is the device's sync identity, not the user's progress", async () => {

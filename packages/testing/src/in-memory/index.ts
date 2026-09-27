@@ -33,5 +33,6 @@ export {
   memoryTelemetryCollector,
   memoryTelemetryStore,
   memoryWritingStore,
+  memoryGeneratedItemStore,
 } from "../memory/index.js";
 export type { MemoryBank, MemorySyncServer, MemoryTelemetryCollector } from "../memory/index.js";

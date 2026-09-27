@@ -1,4 +1,4 @@
-import { anAttempt, anExamRun, aScheduleEntry, aSession } from "@palier/testing";
+import { anAttempt, anExamRun, anItem, aScheduleEntry, aSession } from "@palier/testing";
 import { attemptId, itemId } from "@palier/domain";
 import { Dexie } from "dexie";
 import { describe, expect, it } from "vitest";
@@ -30,6 +30,7 @@ const aVersionOneDevice = async (name: string) => {
     keyVault: [{ id: "device-secret", bytes: new Uint8Array([1, 2, 3]) }],
     syncMeta: [{ id: "state", identity: null, watermark: 7, enabled: true, lastSyncedAt: null, accountUnconfirmed: false }],
     costLedger: [{ ts: "2026-09-20T10:00:00.000Z", feature: "none" }],
+    generated: [{ id: "gen-legacy", skill: "writing", createdAt: "2026-09-20T10:00:00.000Z" }],
   } as const;
   for (const [table, list] of Object.entries(rows)) await v1.table(table).bulkAdd([...list]);
   v1.close();
@@ -64,6 +65,18 @@ describe("schema migration v1 → current", () => {
     // v1's placeholder ledger row survives the upgrade (the count above) but is not an
     // entry, so it reads as no spend at all (D101).
     expect(await stores.costLedger.since("1970-01-01T00:00:00.000Z")).toEqual([]);
+    // Likewise a `generated` row that is not a whole item reads as no set (D110).
+    expect(await stores.generated.latestSet("writing")).toBeNull();
+  });
+
+  it("gives the migrated database a working generated-item store in v1's own table", async () => {
+    const name = dbName();
+    await aVersionOneDevice(name);
+
+    const stores = dexieStores(name);
+    const set = { id: "set-1", skill: "writing", createdAt: "2026-09-26T10:00:00.000Z", items: [anItem({ id: itemId("gen-1"), skill: "writing", type: "error-id", subSkill: "agreement" })] } as const;
+    await stores.generated.putSet(set);
+    expect(await stores.generated.latestSet("writing")).toEqual(set);
   });
 
   it("gives the migrated database a working cost ledger in v1's own table", async () => {

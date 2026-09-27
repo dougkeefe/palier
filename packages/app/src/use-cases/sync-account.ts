@@ -8,6 +8,7 @@ import type {
   SyncTransport,
   TelemetryStore,
   WritingStore,
+  GeneratedItemStore,
 } from "../ports/index.js";
 import { SyncUnavailableError } from "../ports/index.js";
 import type { ProgressStores } from "../sync/records.js";
@@ -121,6 +122,7 @@ export type DeleteEverywhereDeps = ProgressStores &
     readonly telemetry: TelemetryStore;
     readonly ledger: CostLedger;
     readonly writing: WritingStore;
+    readonly generated: GeneratedItemStore;
   };
 
 /**

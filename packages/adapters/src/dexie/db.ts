@@ -8,7 +8,16 @@ import type {
   TelemetryConsent,
   WritingSubmission,
 } from "@palier/app";
-import type { Attempt, AttemptId, AttemptMode, ItemId, SessionId, TelemetryEvent } from "@palier/domain";
+import type {
+  Attempt,
+  AttemptId,
+  AttemptMode,
+  Item,
+  ItemId,
+  ScoredSkill,
+  SessionId,
+  TelemetryEvent,
+} from "@palier/domain";
 import { Dexie, type Table } from "dexie";
 
 /**
@@ -30,6 +39,10 @@ import { Dexie, type Table } from "dexie";
  * **Version 3** adds `writingSubmissions` (progress.md D106), the writing workshop's
  * submissions, indexed by `writtenAt` for the newest-first history. A new table again, so
  * the upgrade moves no data. Never synced and never exported [R12].
+ *
+ * **v1's `generated` table gains its adapter** (progress.md D110) without a version bump,
+ * as the cost ledger did: one row per runtime-generated item, keyed by the item's id, with
+ * `skill` and `createdAt` indexed as v1 declared them. Never synced and never exported.
  *
  * **Why getters, not `field!: Table<...>` declarations.** `tsconfig.base.json` targets
  * ES2022 and does not set `useDefineForClassFields`, so it defaults to `true`; a class
@@ -100,6 +113,19 @@ export type TelemetryQueueRow = {
  * unindexed, so the entry needed no schema change. Never synced, never exported.
  */
 export type CostLedgerRow = CostEntry & { readonly id?: number };
+
+/**
+ * One runtime-generated item (progress.md D110), keyed by its id in v1's `generated` table.
+ * `skill` and `createdAt` are v1's indexes; `setId` and `position` put the set back together.
+ */
+export type GeneratedItemRow = {
+  readonly id: ItemId;
+  readonly skill: ScoredSkill;
+  readonly createdAt: ISO;
+  readonly setId: string;
+  readonly position: number;
+  readonly item: Item;
+};
 
 /** A writing-workshop submission, stored as the port's `WritingSubmission` (progress.md D106). */
 export type WritingSubmissionRow = WritingSubmission;
@@ -198,5 +224,9 @@ export class PalierDb extends Dexie {
 
   get writingSubmissions(): Table<WritingSubmissionRow, string> {
     return this.table("writingSubmissions");
+  }
+
+  get generated(): Table<GeneratedItemRow, ItemId> {
+    return this.table("generated");
   }
 }

@@ -45,6 +45,7 @@ import type {
   WritingFeedbackRequest,
   WritingStore,
   WritingSubmission,
+  GeneratedItemStore,
   StartExamRequest,
   StartExamResult,
   StartSessionRequest,
@@ -141,6 +142,7 @@ import {
   memorySyncStateStore,
   memoryTelemetryStore,
   memoryWritingStore,
+  memoryGeneratedItemStore,
   seededRandom,
 } from "@palier/testing/in-memory";
 
@@ -325,6 +327,8 @@ export type Ports = {
   readonly costLedger: CostLedger;
   /** The writing workshop's submissions, device-local: never synced, never exported (D106) [R12]. */
   readonly writing: WritingStore;
+  /** Runtime-generated item sets, device-local: never synced, never exported (D110). */
+  readonly generated: GeneratedItemStore;
 };
 
 export type Container = Ports & {
@@ -436,6 +440,7 @@ function buildUseCases(ports: Ports): UseCases {
         telemetry: ports.telemetry,
         ledger: ports.costLedger,
         writing: ports.writing,
+        generated: ports.generated,
       }),
     syncNow: (request) => syncNow(request, syncDeps(ports)),
     syncState: () => ports.syncState.state(),
@@ -451,6 +456,7 @@ function buildUseCases(ports: Ports): UseCases {
         telemetry: ports.telemetry,
         ledger: ports.costLedger,
         writing: ports.writing,
+        generated: ports.generated,
       }),
     examForms: () => examForms({ items: ports.items }),
     examInProgress: () => examInProgress({ items: ports.items, examRuns: ports.examRuns }),
@@ -571,6 +577,7 @@ function productionPorts(): Ports {
     aiProvider: openAiFor,
     costLedger: stores.costLedger,
     writing: stores.writing,
+    generated: stores.generated,
   };
 }
 
@@ -609,6 +616,7 @@ function hermeticPorts(): Ports {
     aiProvider: openAiFor,
     costLedger: memoryCostLedger(),
     writing: memoryWritingStore(),
+    generated: memoryGeneratedItemStore(),
   };
 }
 

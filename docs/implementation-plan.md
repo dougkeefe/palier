@@ -225,6 +225,17 @@ interface WritingStore {
   clear(): Promise<void>
 }
 
+// Added 26 September 2026 with Phase 4 Slice 4 (progress.md D110): runtime-generated item sets, a port
+// §3.3 did not name. Device-local like WritingStore: never synced, never exported; wipeData and
+// deleteEverywhere clear it. GeneratedSet = { id, skill, createdAt: ISO, items: Item[] }. No Attempt is ever
+// written for a generated item (scoreGeneratedAnswer scores it locally), so none reaches the practice trend.
+interface GeneratedItemStore {
+  putSet(set: GeneratedSet): Promise<void>                      // a set with no items is not kept
+  latestSet(skill: ScoredSkill): Promise<GeneratedSet | null>    // newest by createdAt, ties by id
+  item(id: ItemId): Promise<Item | null>
+  clear(): Promise<void>
+}
+
 // Amended in place 25 September 2026 (Phase 3 Slice 4, progress.md D92). One port became
 // two: the queue must survive an offline submit, so it lives in IndexedDB, and a batch goes
 // out over fetch, and one adapter directory cannot hold both (adapters never import each

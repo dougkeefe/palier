@@ -39,6 +39,8 @@ export type {
   TelemetryStore,
   WritingStore,
   WritingSubmission,
+  GeneratedItemStore,
+  GeneratedSet,
 } from "./ports/index.js";
 export {
   INITIAL_SYNC_STATE,
