@@ -107,3 +107,21 @@ export const writeAndGetFeedback = async (page: Page, text: string) => {
   await page.getByRole("button", { name: "Send for feedback" }).click();
   await expect(page.getByRole("heading", { name: "Feedback", exact: true })).toBeFocused();
 };
+
+/**
+ * Runtime generation's one spending path (progress.md D110–D111), from the fresh-set screen:
+ * generate past the pre-flight, wait for the result's heading, which takes focus, practise the
+ * set by keyboard, and come back to the screen. Returns how many items the set held.
+ */
+export const generateAndPractise = async (page: Page) => {
+  await page.getByRole("button", { name: "Generate a fresh set" }).click();
+  await expect(page.getByRole("heading", { name: "Before generating" })).toBeFocused();
+  await page.getByRole("button", { name: "Generate the set" }).click();
+  await expect(page.getByRole("heading", { name: "Your fresh set" })).toBeFocused();
+  await page.getByRole("button", { name: "Practise this set" }).click();
+  const total = await drillThroughByKeyboard(page);
+  await expect(page.getByRole("heading", { name: "Set complete" })).toBeVisible();
+  await page.getByRole("button", { name: "Back to fresh items" }).click();
+  await expect(page.getByRole("heading", { name: "Your last generated set" })).toBeVisible();
+  return total;
+};

@@ -22,6 +22,10 @@ import { type BrowserContext, type Download, expect, type Page } from "@playwrig
  * writes {@link SUBMISSION_SENTINEL} into its text, and `assertNoLeak`'s `deviceOnly` lets it
  * appear only on this device (the page, a field, the `writingSubmissions` store) and in a
  * request to OpenAI, which {@link LeakWatch.openAiBodies} proves it reached.
+ *
+ * Runtime-generated items are held the same way (progress.md D110): the stubbed draft carries
+ * {@link GENERATED_SENTINEL} in every stem, and `deviceOnly` lets it sit on this device (the
+ * page, the `generated` store) and go back to OpenAI in a review request, and nowhere else.
  */
 
 /** A syntactically plausible key that no real account holds, and that nothing else contains. */
@@ -33,12 +37,19 @@ export const SENTINEL = "sk-palier-sentinel-5e17c0de9a1b4f6e8d2c7b3a";
  */
 export const SUBMISSION_SENTINEL = "Quenouillard5e17";
 
+/**
+ * A word the stubbed draft writes into every generated stem (D110), so the guard can follow the
+ * items. They were made on this device, may stay on it and go to OpenAI for review, and nothing more.
+ */
+export const GENERATED_SENTINEL = "Brindillard7c42";
+
 /** The only origin the key may reach (architecture.md §6.3). */
 const OPENAI_ORIGIN = "https://api.openai.com";
 
 /**
  * `onDevice` marks a place that is this device's own copy: the page as drawn, a field's
- * value, and the workshop's store. A submission may be there, and nowhere else but OpenAI.
+ * value, the workshop's store and the generated items' store. A submission or a generated item
+ * may be there, and nowhere else but OpenAI.
  */
 type Seen = { readonly where: string; readonly text: string; readonly onDevice?: boolean };
 
@@ -97,14 +108,95 @@ export const feedbackAnswer = (
   },
 });
 
+/** A chat completion carrying `content` as the model's JSON reply, billed as `usage`. */
+const completion = (content: unknown, promptTokens: number, completionTokens: number): OpenAiAnswer => ({
+  status: 200,
+  body: {
+    choices: [{ message: { content: JSON.stringify(content) } }],
+    usage: { prompt_tokens: promptTokens, completion_tokens: completionTokens },
+  },
+});
+
+/** Every message's content in a chat-completion request body, joined, or "" when it has none. */
+export const promptOf = (body: string): string => {
+  try {
+    const parsed = JSON.parse(body) as { messages?: readonly { content?: unknown }[] };
+    return (parsed.messages ?? []).map((m) => (typeof m.content === "string" ? m.content : "")).join("\n");
+  } catch {
+    return "";
+  }
+};
+
+const asked = (prompt: string, pattern: RegExp, fallback: string): string => pattern.exec(prompt)?.[1] ?? fallback;
+
 /**
- * Stub OpenAI: the models endpoint `/settings/key` checks, and the completions the workshop
- * asks for feedback with. It answers CORS like the real API, because the browser calls it
- * cross-origin. `answer` sees the request's path, so a spec can script a failure for one call.
+ * A draft answering a generation prompt (D110): the count, type, sub-skill, band and topic it
+ * asked for, each stem carrying {@link GENERATED_SENTINEL} and each right answer starting "RIGHT".
+ */
+export const generatedItemsAnswer = (body: string): OpenAiAnswer => {
+  const prompt = promptOf(body);
+  const type = asked(prompt, /of type "([a-z-]+)"/, "error-id");
+  const count = Number(asked(prompt, /Produce (\d+) item/, "1"));
+  const items = Array.from({ length: count }, (_, i) => ({
+    type,
+    stem: { en: `Choose the right form (${i + 1}).`, fr: `Choisissez la bonne forme (${i + 1}) : ${GENERATED_SENTINEL}.` },
+    ...(type === "cloze" ? { blankIndex: 0 } : {}),
+    options: [
+      { id: "a", text: `RIGHT ${i + 1}`, rationale: { en: "It agrees with the subject.", fr: "Il s’accorde avec le sujet." } },
+      { id: "b", text: `faux ${i + 1} b`, rationale: { en: "It does not agree.", fr: "Il ne s’accorde pas." } },
+      { id: "c", text: `faux ${i + 1} c`, rationale: { en: "The wrong mood.", fr: "Le mauvais mode." } },
+      { id: "d", text: `faux ${i + 1} d`, rationale: { en: "The wrong tense.", fr: "Le mauvais temps." } },
+    ],
+    key: "a",
+    explanation: { en: "The participle agrees with its subject.", fr: "Le participe s’accorde avec son sujet." },
+    subSkill: asked(prompt, /sub-skill "([a-z-]+)"/, "agreement"),
+    targetBand: asked(prompt, /band ([ABC])\b/, "C"),
+    topic: asked(prompt, /topic "([a-z-]+)"/, "finance-and-budgets"),
+  }));
+  return completion({ items }, 383, 1_262);
+};
+
+/** An honest review (D110): it chooses the "RIGHT" option wherever the key was moved to. */
+export const reviewAnswer = (body: string): OpenAiAnswer => {
+  const prompt = promptOf(body);
+  return completion(
+    {
+      chosenKey: asked(prompt, /^([abcd])\) RIGHT/m, "a"),
+      confidence: 0.93,
+      defensibleDistractors: [],
+      optionCases: { a: "case a", b: "case b", c: "case c", d: "case d" },
+      registerFlag: { flagged: false },
+      estimatedBand: asked(prompt, /intended band ([ABC])/, "C"),
+    },
+    293,
+    598,
+  );
+};
+
+/** Which completion a request is: a generation draft, a review, or (otherwise) writing feedback. */
+export const completionKind = (body: string): "draft" | "review" | "feedback" => {
+  const prompt = promptOf(body);
+  if (/Produce \d+ item\(s\)/.test(prompt)) return "draft";
+  if (prompt.includes("adversarial reviewer")) return "review";
+  return "feedback";
+};
+
+/** The default completion for each kind: a set that passes, and feedback that fits any text. */
+export const defaultCompletion = (body: string): OpenAiAnswer => {
+  const kind = completionKind(body);
+  return kind === "draft" ? generatedItemsAnswer(body) : kind === "review" ? reviewAnswer(body) : feedbackAnswer();
+};
+
+/**
+ * Stub OpenAI: the models endpoint `/settings/key` checks, and the completions the workshop and
+ * the fresh-set screen ask for. It answers CORS like the real API, because the browser calls it
+ * cross-origin. `answer` sees the request's path and body, so a spec can script a failure for one
+ * call, or tell a draft from a review ({@link completionKind}).
  */
 export const stubOpenAi = async (
   context: BrowserContext,
-  answer: (path: string) => OpenAiAnswer = (path) => (path.endsWith("/chat/completions") ? feedbackAnswer() : MODELS_ANSWER),
+  answer: (path: string, body: string) => OpenAiAnswer = (path, body) =>
+    path.endsWith("/chat/completions") ? defaultCompletion(body) : MODELS_ANSWER,
 ) => {
   await context.route(`${OPENAI_ORIGIN}/**`, async (route) => {
     const cors = {
@@ -113,7 +205,7 @@ export const stubOpenAi = async (
       "access-control-allow-methods": "GET, POST, OPTIONS",
     };
     if (route.request().method() === "OPTIONS") return route.fulfill({ status: 204, headers: cors });
-    const { status, body } = answer(new URL(route.request().url()).pathname);
+    const { status, body } = answer(new URL(route.request().url()).pathname, route.request().postData() ?? "");
     return route.fulfill({ status, headers: { ...cors, "content-type": "application/json" }, body: JSON.stringify(body) });
   });
 };
@@ -176,7 +268,7 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
       expect(found(SENTINEL, places), "the sentinel key reached somewhere other than OpenAI").toEqual([]);
       for (const needle of deviceOnly) {
         const offDevice = places.filter((s) => s.onDevice !== true);
-        expect(found(needle, offDevice), `"${needle}" reached somewhere other than OpenAI and the workshop's own copy on this device`).toEqual([]);
+        expect(found(needle, offDevice), `"${needle}" reached somewhere other than OpenAI and its own copy on this device`).toEqual([]);
       }
       for (const needle of nowhere) {
         expect(found(needle, places), `"${needle}" is somewhere it should never be`).toEqual([]);
@@ -227,11 +319,12 @@ const atRest = (page: Page): Promise<Seen[]> =>
           request.onsuccess = () => resolve(request.result);
           request.onerror = () => reject(request.error);
         });
-        // The workshop's own store is where a submission lives on the device (D106).
+        // The workshop's own store is where a submission lives on the device (D106), and the
+        // generated store is where a generated item does (D110).
         out.push({
           where: `IndexedDB ${name}.${store}`,
           text: JSON.stringify(rows.map(render)),
-          onDevice: store === "writingSubmissions",
+          onDevice: store === "writingSubmissions" || store === "generated",
         });
       }
       db.close();
