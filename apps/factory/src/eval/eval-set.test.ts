@@ -2,11 +2,10 @@ import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
-import { parseExamProfileOrThrow } from "@palier/domain";
+import { gateReasons, parseExamProfileOrThrow, reviewRequestFor } from "@palier/domain";
 import type { ExamProfile } from "@palier/domain";
 
 import { scriptedAiProvider } from "../providers/scripted-ai-provider.js";
-import { gateReasons, reviewRequestFor } from "../pipeline/review.js";
 import { perItemReasons } from "../pipeline/validate.js";
 import {
   DEFECT_CLASSES,

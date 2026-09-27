@@ -1,9 +1,8 @@
 import type { AiProvider } from "@palier/adapters/openai";
-import { OPTION_IDS, itemId } from "@palier/domain";
+import { OPTION_IDS, gateReasons, itemId, reviewRequestFor } from "@palier/domain";
 import type { ExamProfile, Item, ItemOption, OptionId, SubSkill, TargetBand } from "@palier/domain";
 
 import { correctIndex } from "../lib/scripted-key.js";
-import { gateReasons, reviewRequestFor } from "../pipeline/review.js";
 import { perItemReasons } from "../pipeline/validate.js";
 
 /**

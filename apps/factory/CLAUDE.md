@@ -28,7 +28,10 @@ content *schemas* with the app, never runtime. The `AiProvider` port type is imp
   quoting nothing; a `derived` passage records its licence and url or the schema rejects it.
 - **Exam rules come from the profile, never from code** (ADR 9). Item counts, cuts and the
   taxonomy are read from `@palier/content/profiles/psc-sle.json`; the only factory constants are
-  pipeline knobs (the review confidence threshold, the near-duplicate threshold, the yield band).
+  pipeline knobs (the near-duplicate threshold, the yield band). The review confidence threshold and
+  the gate itself, `gateReasons` and `reviewRequestFor`, live in `@palier/domain` since progress.md D109,
+  shared with the browser's runtime generation; `pipeline/review.ts` keeps only the loop.
+  `committed-eval.test.ts` holds `content/factory/eval-report.json` equal to a fresh `eval`.
 - **Forms are assembled, never hand-written** (`pipeline/forms.ts`, progress.md D82). One per profile
   variant, from `Object.entries(profile.variants)`: its item count, `items − scored` pilots at evenly
   spaced positions, its minutes and `orderedCuts(variant)`. The draw is stratified over sub-skills and
