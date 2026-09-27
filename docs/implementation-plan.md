@@ -906,7 +906,9 @@ step 5, §8.7 and §8.10 as written.
   2026** (`progress.md` D101–D104); Gate G, the billing check (`docs/deploy.md`), is the human's.
 - **Slice 3 — The writing workshop** (§8.7). The prompt library, the editor with its word target and timer,
   `assessWriting` with inline offsets, and the model answer with changes highlighted. Submissions stay on the
-  device (R12).
+  device (R12). **Built 26 September 2026** (`progress.md` D105–D108): the model quotes its errors and domain
+  places them, the `WritingStore` port over Dexie v3, the prompt library under `@palier/content`, and the key-leak
+  test following the submission's text.
 - **Slice 4 — Runtime item generation and the CI gates.** The compressed draft plus single review, local-only
   storage, the provenance badge and the one-tap contribution. AI schema conformance against recorded fixtures,
   the nightly live smoke and the eval harness. *Done:* the second half of exit criterion 2.

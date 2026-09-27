@@ -5,14 +5,19 @@ Every concrete adapter, one directory and one subpath export each: `/dexie`, `/b
 (progress.md D48). A subpath lands with its adapter, not before — an entry resolving to an
 empty module asserts a boundary with nothing behind it (D3). **Six are live.** `./ids` →
 `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto, no npm dependency).
-`./dexie` → `dexieStores` (the nine local store ports — `AttemptStore`, `ScheduleStore`,
+`./dexie` → `dexieStores` (the ten local store ports — `AttemptStore`, `ScheduleStore`,
 `SessionStore`, `ExamRunStore`, `SettingsStore`, `KeyVault`, `SyncStateStore`, `TelemetryStore`,
-`CostLedger` — over IndexedDB via `dexie`; progress.md D49/D50, D69, D80 and D101, the last three on the
+`CostLedger`, `WritingStore` — over IndexedDB via `dexie`; progress.md D49/D50, D69, D80 and D101, the last three on the
 `syncMeta`, `examRuns` and `costLedger` tables v1 already declared). The cost ledger reads a row that is
 not a whole entry as nothing, v1's `{ ts, feature: "none" }` placeholder included. **Schema version 2** adds `telemetryQueue` and `telemetryMeta`
-(D92). Every version's `stores()` block is an exported constant, and `migration.test.ts` opens a real
+(D92), and **version 3** adds `writingSubmissions` (D106). The writing store reads a row without a whole id, prompt,
+text and instant as nothing, and a row whose assessment is broken, or whose offsets no longer fit its text, as the
+text unassessed: the writing is the user's. Every version's `stores()` block is an exported constant, and `migration.test.ts` opens a real
 database at the previous version with rows in it and proves they survive: **a new version needs a
-case there**. `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1). `./bank` →
+case there**. `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1; `assessWriting` since Phase 4
+Slice 3, on the optional `models.assess`. **The model quotes each error's words and `@palier/domain`'s
+`assembleAssessment` places them**; an excerpt not in the text, or two on the same words, is a malformed answer,
+retried once, then `InvalidResponseError`; D105). `./bank` →
 `httpBankRepository` (the `ItemRepository` over the committed bank shards; progress.md D55).
 `./sync` → `httpSyncTransport` (the `SyncTransport` port over the sync routes; progress.md D69–D71).
 `./telemetry` → `httpTelemetrySink` (the `TelemetrySink` port over `POST /api/telemetry`; D92). It sends

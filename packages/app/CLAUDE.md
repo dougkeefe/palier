@@ -27,6 +27,12 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   `TelemetryStore`; `wipeData` and `deleteEverywhere` clear it. The meter, the soft cap (`spendCap`, a
   **synced** setting, D104), the per-feature table and `preflightSpend` are `use-cases/spend.ts`, over the
   engine's `spendTotals`, `capState` and `preflight`, with pricing handed in as data (D103).
+- **Writing workshop submissions are device-local too** (`ports/writing-store.ts`, `use-cases/writing.ts`,
+  progress.md D105–D106). `WritingStore { put, get, all, clear }` is never synced and never exported; `wipeData`
+  and `deleteEverywhere` clear it. **Every save is a new submission**, because an assessment's offsets point
+  into the exact text it assessed: `saveWriting` then `requestWritingFeedback`, which goes through
+  `withAiProvider(…, "writing-feedback", …)`, keeps the text unassessed on a failure, and returns an existing
+  assessment without spending. `AiProvider.assessWriting` has landed; its DTOs are in `@palier/domain`.
 - **Ports are transcribed from §3.3, not invented.** Eight live under `src/ports/`:
   `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`,
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the

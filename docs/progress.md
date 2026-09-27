@@ -11,8 +11,11 @@ closed pilot runs now as a **product pilot** on the baseline bank, run by the hu
 criterion. **Phase 4 started beside it: Slice 1, "the key, safely", merged (#28; D98–D100)**, meeting Phase 4's
 exit criterion 1 and the first half of 2. **Slice 2, "spend", is built** (`dougkeefe/next-progress-slice-v2`; D101–D104):
 the cost ledger, pricing as data, the meter, the soft cap and the pre-flight estimate. **Gate G passed** the
-same day: the meter matched OpenAI's billing exactly, which meets Phase 4's exit criterion 3. Next is Slice 3,
-the writing workshop. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+same day: the meter matched OpenAI's billing exactly, which meets Phase 4's exit criterion 3. Slice 2 merged (#30).
+**Slice 3, "the writing workshop", is built** (`dougkeefe/next-progress-slice-v3`; D105–D108): `assessWriting`,
+submissions kept on the device, the prompt library and `/practice/writing/workshop`, with the key-leak test
+following the submission's text (R12's writing half). Next is Slice 4, runtime item generation and the Phase 4
+CI gates. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
 
@@ -77,7 +80,7 @@ human for anything expensive.
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
-| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **in progress** (four slices, D97; Slice 1 merged, D98–D100; Slice 2 built, D101–D104, and Gate G passed; exit criteria 1 and 3 met; Slice 3 is *Next, decided*) |
+| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **in progress** (four slices, D97; Slices 1–2 merged, D98–D104, and Gate G passed; Slice 3 built, D105–D108; exit criteria 1 and 3 met; Slice 4 is *Next, decided*) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
@@ -89,7 +92,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v3` | **Phase 4 Slice 3 — the writing workshop** (D97): `assessWriting` on `AiProvider`, the `WritingStore` port over a Dexie v3 `writingSubmissions` table (device-local, never synced or exported), the prompt library under `@palier/content`, `/practice/writing/workshop`, and the key-leak test extended to a real spending call. | 26 September 2026 |
+| `dougkeefe/next-progress-slice-v3` | **Phase 4 Slice 3 — the writing workshop** (D97): `assessWriting` on `AiProvider`, the `WritingStore` port over a Dexie v3 `writingSubmissions` table (device-local, never synced or exported), the prompt library under `@palier/content`, `/practice/writing/workshop`, and the key-leak test extended to a real spending call. **Built; pending merge** (D105–D108). | 26 September 2026 |
 
 *(The prior rows — Phase 4 Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -190,70 +193,71 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 4 Slice 2 is built** (D101–D104). Every spending call is metered into a device-local ledger, and the
-meter, the soft cap and the per-feature table are on `/settings/key`. `preflightSpend` is ready for its first
-caller. **Gate G passed** (session log, 26 September 2026): the meter matched OpenAI's billing exactly, in tokens
-and in dollars. The product pilot still runs beside the next slice (Gate E, D97).
+**Phase 4 Slice 3 is built** (D105–D108). The writing workshop spends through `withAiProvider`. Submissions stay on
+the device, in Dexie v3's `writingSubmissions`, and the key-leak test follows their text (R12's writing half). The
+product pilot still runs beside the next slice (Gate E, D97).
 
-**Next: Phase 4 Slice 3, "the writing workshop"** (PRD §8.7, architecture.md §8.4, D97). Gate F adopted §8.7
-as written, so no human is needed. Build against MSW and recorded completions, as Slice 2 did.
+**Next: Phase 4 Slice 4, "runtime item generation and the CI gates"** (architecture.md §8.3, PRD §13.0, D97). It
+carries the second half of exit criterion 2, and then Phase 4 is done. Build against MSW and recorded completions,
+as Slices 2 and 3 did.
 
 **Scope:**
-- **`assessWriting(req: WritingRequest): Promise<WritingAssessment>` joins `AiProvider`** (§3.3 amended in
-  place). Its DTOs and the Zod re-validation schema go in `@palier/domain` (ADR 20).
-  - The request is the prompt, the user's text and the target band.
-  - The answer is five criteria, each with a band and evidence: register, structure, grammar and mechanics,
-    vocabulary precision, and task achievement. It also has an inline error list, as `{ start, end }` offsets
-    into the user's own text with a correction and a rule, and a model answer at the target band.
-  - The adapter calls the `assess` role (`ai-models.json`, D103) and re-validates. **An offset outside the
-    text, or ranges that overlap, is a malformed answer**, retried once, then `InvalidResponseError`.
-  - The fake and the contract follow.
-- **Submissions stay on the device (R12):**
-  - a new **`WritingStore`** port (`put`, `get`, `all`, `clear`);
-  - **Dexie v3** adds a `writingSubmissions` table, with a v2 → v3 case in `migration.test.ts`;
-  - it is never synced and never exported (architecture.md §9.4), and `wipeData` and `deleteEverywhere`
+- **The review gate moves down to `@palier/domain`.** The factory's `gateReasons` and `CONFIDENCE_THRESHOLD`
+  (`apps/factory/src/pipeline/review.ts`) are pure over an `Item` and a `ReviewVerdict`. The browser needs the same
+  gate, and the factory may import only domain and the openai adapter.
+  - Move them, do not copy them. The factory imports them back, and its eval report must not move.
+  - The threshold is a content-quality bar, not a §5 exam rule, so it is not profile data.
+  - Record the move against ADR 20's *revisit when* clause (D105 left it for this slice): say whether the runtime
+    use case is the evidence it names, and decide.
+- **`generatePracticeSet` in `@palier/app`:** a compressed factory in the browser, on the user's key.
+  - It drafts `n` items for a sub-skill at the target band through the registry's `generatePrompt`, then reviews
+    each **blind**, one call at a time, since `lastUsage` is sequential (D101).
+  - It discards on any gate reason and never repairs.
+  - All of it runs inside one `withAiProvider(…, "item-generation", …)`, so every call is metered.
+  - It assembles each passing draft into an `Item` whose provenance says `origin: 'generated'`, never reviewed by a
+    human and not calibrated.
+- **A `GeneratedItemStore` port** over v1's `generated: "id, skill, createdAt"` table, which needs no migration.
+  - It is device-local, never synced and never exported, like `WritingStore` (D106). Wipe and delete-everywhere
     clear it.
-  - A submission holds the text, the prompt id, when it was written, and the assessment once there is one.
-- **The prompt library is content data.**
-  - It is a `WritingPrompt` Zod schema in domain. It is a content artefact, so it goes in `CONTENT_SCHEMAS`
-    with a generated JSON Schema.
-  - Each prompt has a register-true task (a briefing-note paragraph, a reply to a client, a meeting
-    summary), a word target and a suggested time.
-  - A small baseline set is committed under `@palier/content`. Generating more in the factory is the
-    content run's (D56). Decide the path and the authoring in the slice, and record it.
-- **`/practice/writing/workshop`**, marked as supplementary, as §8.7 says:
-  - pick a prompt;
-  - a plain editor with a live word count against the target, and an elapsed-time display that is **not**
-    enforced;
-  - "Get feedback", which shows `preflightSpend("writing-feedback")`: the estimate, and the cap warning when
-    `after` is near or over. It never blocks.
-  - Then `withAiProvider(…, "writing-feedback", …)` makes the one call, and the feedback shows the five
-    criteria, the errors inline over the user's text by offset, and the model answer with its changes
-    highlighted.
-  - With no key, PRD §14's compact inline card: what it does, what it costs (from `featureCosts`), and a
-    link to add a key. Never a modal.
-  - Drop "Both arrive in coming updates" for this row of the table.
-- **The word diff** for the model answer is a pure function in `apps/web/src/features/writing/`, an LCS
-  over words, with tests.
+  - **Generated items never enter the practice trend** (architecture.md §8.3). Say how in the slice: either their
+    attempts are tagged, or their ids are kept out of `practiceTrend`'s input. Test it.
+- **The screen:** a "Generate a fresh set" action on the drill page, with the pre-flight exactly as the workshop
+  has it (`preflightSpend("item-generation")`) and the no-key card when there is no key.
+  - Practise the set with the existing renderers.
+  - Each item carries the **provenance badge** (PRD §13.0: generated just now, reviewed by one automated check,
+    not calibrated), shown on request.
+  - **One tap to contribute** opens a pre-filled GitHub issue, reusing `ReportItem`'s issue-URL pattern.
+  - Drop the per-feature table's "arrive in a coming update" line.
+- **The CI gates** (§7 Phase 4 "CI gates added"):
+  - **Schema conformance against recorded fixtures.** Commit recorded completion bodies for `generateItems`,
+    `reviewItem` and `assessWriting` under `packages/testing`, and run the adapter over them in the fast lane.
+  - **The eval harness reports a schema-conformance rate** from those fixtures, beside the factory's existing eval
+    set.
+  - **The nightly live smoke** is a job in `nightly.yml` that makes one real `verifyKey`, `assessWriting` and
+    `generateItems` call through the adapter. It **skips, and says so, when the `OPENAI_SMOKE_KEY` secret is
+    absent**. It records the measured token counts, which replace `pricing.json`'s typical figures for both
+    features (D103).
 
 **Ports and functions:**
-- `AiProvider.assessWriting` (new);
-- `WritingStore` (new);
-- `withAiProvider` and `preflightSpend` as they are;
-- `featureCosts` for the no-key card.
+- `AiProvider.generateItems` and `reviewItem`, as they are;
+- `withAiProvider` and `preflightSpend`;
+- the registry's `generatePrompt` and `validate`;
+- the moved `gateReasons`;
+- `GeneratedItemStore` (new).
 
 **Done looks like:**
-- the `WritingStore` contract green on memory and Dexie, with the migration case;
-- the adapter's `assessWriting` tested for malformed, overlapping and out-of-range offsets, 429, 401 and
-  timeout;
-- the workshop axe-clean in every state (no key, editing, pre-flight with a warning, feedback, failure),
-  with `en` and `fr` at parity;
-- **the key-leak test extended**. The hermetic spec drives a workshop submission against a stubbed
-  completion, so a **real call's** ledger row is in the dump, and asserts **the submission's text reaches
-  no origin but `api.openai.com`**. That is R12's writing half;
-- `pnpm verify` and `verify:medium` green.
+- the gate moved with the factory's committed eval figures unchanged;
+- `generatePracticeSet` tested for pass, discard, a malformed draft, 429 and timeout, and metered once per call;
+- the `GeneratedItemStore` contract green on memory and Dexie;
+- the generated set practised with its badge, axe-clean in every state and in both locales, and the key-leak specs
+  driving one generation;
+- the recorded-fixture conformance and the eval rate in the fast lane, and the nightly job green (or skipped, saying
+  why);
+- `pnpm verify` and `verify:medium` green;
+- **Phase 4's exit criterion 2 ticked, and with it Phase 4.**
 
-**After it** (D97): Slice 4, runtime item generation and the Phase 4 CI gates.
+**Human, when the nightly job lands:** add the `OPENAI_SMOKE_KEY` Actions secret, a key of its own with a small
+monthly limit (`docs/deploy.md` gains the step).
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
@@ -284,7 +288,8 @@ Standing human items:
 - pointing `palier.dougkeefe.com` at the deployment;
 - §12.1's trademark and language-school check before launch (D96);
 - **the key guide's screenshots** (`/settings/key/guide`, PRD §8.1 step 5), which need a real OpenAI
-  dashboard (D100).
+  dashboard (D100);
+- **a human read of the six workshop prompts' French** (D107), with the rest of Phase 7's R8 review.
 
 D12 is closed.
 
@@ -458,8 +463,11 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
   evidence). The cost ledger, every spending call metered in `withAiProvider`, pricing as data, the meter,
   the soft cap, the per-feature table, the pre-flight estimate, and the billing check. **Gate G passed** the
   same day, which ticks exit criterion 3.
-- [ ] **Slice 3 — The writing workshop** (§8.7), with submissions kept on the device. *Next, decided*.
-- [ ] **Slice 4 — Runtime item generation and the Phase 4 CI gates.**
+- [x] **Slice 3 — The writing workshop** (§8.7), with submissions kept on the device. **Built 26 September 2026**
+  (`dougkeefe/next-progress-slice-v3`; D105–D108; session-log evidence). `assessWriting` with inline offsets, the
+  `WritingStore` port over Dexie v3, the prompt library, the workshop screen, and the key-leak test extended to the
+  submission's text.
+- [ ] **Slice 4 — Runtime item generation and the Phase 4 CI gates.** *Next, decided*.
 
 **Exit criteria** (the actual gate)
 
@@ -523,7 +531,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | R9 | WCAG 2.2 AA | 0, all | not started |
 | R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
 | R11 | Export, import, delete, each in one action | 2, 7 | Phase 2 half verified (24 September 2026): `/settings/data` does each in one action; journey 6 round-trips export → delete → import and finds the same progress. Phase 7's server-side delete waits for sync |
-| R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). Audio and transcripts are Phase 5, and writing submissions are Phase 4 Slice 3 |
+| R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). **The writing half is satisfied and verified** (26 September 2026, Slice 3): the leak guard follows a submission's text and finds it only in requests to `api.openai.com` and in this device's own copy (the page, the field, `writingSubmissions`), never in a push, a pull, an export, Web Storage or the paired phone; proven to bite three ways (D106). Audio and transcripts are Phase 5 |
 | R13 | Free and open source | 0, 7 | not started |
 | R14 | Progress across devices, with an off switch | 2 | satisfied and verified on the hermetic lane (24 September 2026): journey 8 pairs two devices by code and both show the same progress; the switch is tested off, with server deletion offered, in `sync.spec.ts`. A public deployment with a real database is Slice 3 |
 
@@ -3490,11 +3498,230 @@ made, as D87 and D100 were)
     real adapter over MSW completions through both graphs. The first spending screen puts a real call in
     the leak spec (Slice 3).
 
+### D105 — `assessWriting`: the model quotes its errors, and the offsets are computed in domain
+**Date:** 26 September 2026 · **Status:** accepted; §3.3 amended in place, as D99 and D101 were
+
+*Next, decided* asked for errors as `{ start, end }` offsets into the user's text, with an offset outside the text,
+or two ranges that overlap, counted as a malformed answer.
+
+- **The DTOs are in `@palier/domain`** (`ai.ts`, `schemas/ai.ts`), as ADR 20 has it:
+  - `WritingRequest` is `{ task, wordTarget, text, targetBand, lang, feedbackLang }`. `feedbackLang` is the
+    interface language, so the evidence and the rules read in the language the user reads the app in, while the
+    corrections and the model answer stay in the language being practised.
+  - `WritingAssessment` is `{ criteria, errors, modelAnswer }`. `criteria` is a `strictObject` of exactly the five
+    `WRITING_CRITERIA`, each `{ band: Band, evidence }`. Any PSC level is allowed, X and E included, since a
+    criterion can fall below A or reach the exemption level.
+  - `AiCapabilities` gains `assessWriting`.
+- **A model reports excerpts, never offsets.** Language models count characters badly. An answer with a miscounted
+  offset would draw a correction over the wrong words, and it would still pass any range check.
+  - So the wire shape is `WritingFeedbackDraft`: each error is `{ excerpt, correction, rule }`, with `excerpt`
+    copied exactly from the text.
+  - The pure `placeErrors` finds each excerpt, searching from where the last one ended. That way a repeated phrase
+    lands on its next occurrence, and a list out of reading order still places.
+  - `checkErrorOffsets` then holds every range inside the text, with none overlapping.
+  - Both live in `domain/src/writing.ts`, so the adapter, the fake, the Dexie read path and the screen share one
+    rule. An excerpt that is not in the text, or two on the same words, is the "out of range" and "overlapping"
+    case *Next, decided* named. It fails the parse, is retried once with the reason, and then becomes
+    `InvalidResponseError`.
+  - This is the same draft-then-assemble split D52 made for `ItemDraft`, and the port still returns offsets.
+- **`OpenAiModels.assess` is optional.** The factory never assesses writing and configures no such model.
+  `capabilities().assessWriting` is false without it, and the call is refused before any request.
+  - `PROMPT_VERSION` stays at 3. Adding a prompt changes none of the others, and nothing the factory generates is
+    traced to the new one.
+- **ADR 20's *revisit when* clause** names "a runtime browser-generation use case in Phase 4" as the evidence that
+  would reunite the DTOs with the port in `@palier/app`. `requestWritingFeedback` is such a consumer. But the
+  factory still consumes the generate and review DTOs, so moving only the writing ones would give the AI DTOs two
+  homes. The clause's evidence has appeared in part. Slice 4, which adds the runtime generation use case the clause
+  actually names, is where to weigh it properly.
+- **The factory's providers:** the scripted provider declares `assessWriting: false` and rejects, billing nothing.
+  The meter passes the call through and accounts for it. Each has a test.
+- **Existing tests touched:**
+  - `api-key.test.ts`'s "meters a capability the port gains later" used `assessWriting` as its stand-in for a
+    future method. It now uses `assessOral`, a Phase 5 method, because `assessWriting` is on the port. Its
+    assertions are unchanged.
+  - The adapter's "reports every Phase-1 capability" now expects `assessWriting: true`, because its test models
+    configure `assess`. A new case covers `false` without it.
+  - Stub providers in `api-key.test.ts`, `metered.test.ts`, `cli.test.ts` and `draft.test.ts` gained the
+    method. That is a shape change only.
+
+### D106 — the `WritingStore` port, Dexie v3, and R12's writing half
+**Date:** 26 September 2026 · **Status:** accepted; §3.3 amended in place
+
+- **`WritingStore { put, get, all, clear }`** over `WritingSubmission = { id, promptId, text, writtenAt,
+  assessment | null }`. It lives in `@palier/app`, not domain, as `ExamRun` does. `all` is newest first.
+- **Every save is a new submission.** An assessment's offsets point into the exact text it assessed, so an
+  assessed submission's text never changes.
+  - `saveWriting` then `requestWritingFeedback` are two use cases, so a failed call keeps the text and "Try again"
+    asks about the same submission.
+  - A submission that already has feedback returns it and spends nothing, so a double tap never pays twice.
+  - The screen reuses the last save while the text is unchanged, and saves anew once it changes.
+- **Device-local: never synced, never exported** (architecture.md §9.4), like `CostLedger` (D101). No sync
+  collector takes it, `exportData`'s deps do not include it, and `wipeData` and `deleteEverywhere` clear it.
+  - Tests hold all four: in `@palier/app` (`data-rights`, `sync-account`), in `container-writing.test.ts` over
+    both graphs, and in `container.test.ts`. There, the production graph's real sync pushes carry none of four
+    marker strings from the text, the feedback and the prompt id.
+- **Dexie v3** adds `writingSubmissions: "id, writtenAt"`. It is a new table, so the upgrade moves no data.
+  - The read path checks structure at the edge (D55). A row without a whole id, prompt, text and instant reads
+    as nothing.
+  - A row whose assessment is broken, or whose offsets no longer fit its text, **keeps its text and reads as
+    unassessed**. The writing is the user's, and the feedback can be asked for again.
+  - The migration harness gains a v2 device (v1's rows plus telemetry, and a real ledger row), and a v2 → v3
+    case with the same three checks as v1 → v2.
+  - **An existing test changed, deliberately:** `migration.test.ts`'s "v1 → v2" suite asserted `verno` 2. It is
+    now "v1 → current", asserting 3, since a v1 device now upgrades straight to v3. Its other assertions are
+    unchanged.
+  - `dexieStores` wires ten ports, not nine.
+- **The key-leak test follows the submission** (tier 11, R12's writing half).
+  - The guard (`e2e/leak-guard.ts`) gains:
+    - a `SUBMISSION_SENTINEL` word;
+    - `openAiBodies()`, the positive control;
+    - `assertNoLeak(pages, { deviceOnly, nowhere })`.
+  - A `deviceOnly` text may appear only in requests to OpenAI and in this device's own copy, which is the page,
+    a field's value and the `writingSubmissions` store. A `nowhere` text may appear nowhere at all.
+  - `key-leak.spec.ts` (hermetic) writes a submission from the drill page's link, against a stubbed completion,
+    before the pairing. The laptop is held to `deviceOnly` and the paired phone to `nowhere`.
+  - `key-leak-production.spec.ts` (real Dexie) does the same. **D104's seeded ledger row is gone**: the dump now
+    walks a real metered row and a real submission row.
+  - Both export checks also refuse the sentinel word.
+  - Each `assertNoLeak` now checks its own at-rest dump plus the event stream, rather than accumulating every
+    earlier dump. The earlier dumps were already checked when they were taken.
+  - **Proven to bite three ways, each reverted:**
+    - the text in a synced setting, caught by the export check;
+    - the text in a console line, caught by the guard, hermetic;
+    - the text in `localStorage`, caught by the guard on the production build.
+
+### D107 — the prompt library is `@palier/content/writing/prompts.json`
+**Date:** 26 September 2026 · **Status:** accepted
+
+*Next, decided* asked the slice to decide the path and the authoring.
+
+- **The path:** `content/writing/prompts.json`, published as `./writing/prompts.json` in `@palier/content`'s
+  exports map, with `writing` added to `files`, as ADR 18 prescribes for a new artefact.
+- **How the app loads it:** bundled and parsed once at the composition root by `parseWritingPromptsOrThrow`, the way
+  the profile is. It is small and the workshop needs it at once. The bank's HTTP path is for shards.
+- **The schema:** `WritingPrompt` (`id`, `lang`, `register`, a both-locale `title`, `task`, `wordTarget`,
+  `suggestedMinutes`) is a content artefact, so it is in `CONTENT_SCHEMAS` as `writing-prompt`, with
+  `docs/schemas/writing-prompt.schema.json` generated and drift-checked.
+  - The library is an array with at least one prompt and no repeated id, since a submission names its prompt by
+    id.
+  - `WRITING_REGISTERS` are the three §8.7 names: briefing note, reply to a client, meeting summary.
+  - A domain test reads the committed file and holds it valid, all three registers present, and French for now.
+- **The authoring:** six prompts, two per register, hand-written for this slice in Canadian federal French. They
+  are original scenarios, with no PSC material (R6).
+  - The task is in the practised language, as a bank stem is. The title is in both, so the picker reads in the
+    interface language.
+  - Generating more in the factory belongs to the content run (D56). The English mirror adds English prompts
+    in Phase 8.
+  - The French has not been reviewed by a human. That is Phase 7's R8 review, with the rest of the content.
+
+### D108 — the calls PRD §8.7 leaves open
+**Date:** 26 September 2026 · **Status:** accepted (Gate F adopted §8.7 as written, so these are recorded as made,
+as D87, D100 and D104 were)
+
+- **The route** is `/practice/writing/workshop`, a static island like every other screen. The writing drill's page
+  links to it in an aside, which is also how the hermetic leak spec reaches it by in-app links.
+- **Marked as supplementary** by an `info` callout at the top of every state: "the real test of written expression
+  is multiple choice".
+- **The editor:**
+  - a plain `<textarea>` with `lang` set to the prompt's language;
+  - a live word count against the target, with a tone (below, near, over; "near" is within a tenth either way);
+  - an elapsed-time display in `@palier/ui`'s `Timer`, counting up, **never enforced**.
+  - A screen reader hears the count in tens, and exactly from the target on, not on each keystroke. It hears the
+    time once a minute.
+- **Nothing is saved until "Get feedback".** Without a key nothing is saved at all: the user can practise writing,
+  and PRD §14's inline card takes the button's place. The card says what the feedback does, what it costs (from
+  `featureCosts`) and links to the key. It is never a dialog.
+- **The pre-flight** is a step between "Get feedback" and the call. It shows the estimate, or says there is none,
+  and an `info` or `incorrect` callout when `after` is near or over the cap. It never blocks: "Send for feedback"
+  is always there.
+- **The target band** is the study profile's, or C when there is none.
+- **The feedback:**
+  - the five criteria in a `<dl>`, each with its level and evidence;
+  - the user's text with each error in a numbered `<mark>`, a wavy underline as well as a colour (WCAG 1.4.1),
+    and the numbered corrections below with their rules;
+  - the model answer diffed word by word against the user's text, with `<ins>` and `<del>`, visually hidden
+    "added:"/"removed:" words for screen readers, and an underline or strike as well as colour.
+  - **Known limit:** the diff joins words with single spaces, so the model answer shows without its paragraph
+    breaks. The user's own text keeps them.
+- **Failures** are the key screen's error names (`checkFailure`) in workshop words, each saying the text is kept.
+- **History:** "Your earlier writing" lists this device's submissions, newest first, with or without feedback. It
+  says they are never synced or exported. Opening one with feedback shows it again for free. Opening one without
+  puts it back in the editor, ready to ask again.
+- **The per-feature table's line** now names only item generation as still to come.
+- **The workshop route joins the Lighthouse list** at `/fr/practice/writing/workshop`. It measured 0.99 on
+  performance and 1.0 on accessibility.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 26 September 2026 — `dougkeefe/next-progress-slice-v3` (Phase 4 Slice 3: the writing workshop)
+
+**Built.** The decisions are recorded in D105–D108. Slice 2 had merged as #30, so its In-flight row was replaced
+in this branch's first commit.
+
+**What was built:**
+- **Domain:**
+  - the writing DTOs and `writingFeedbackDraftSchema`/`writingAssessmentSchema`;
+  - `checkErrorOffsets`, `placeErrors` and `assembleAssessment`;
+  - the `WritingPrompt` content schema in `CONTENT_SCHEMAS`, with `docs/schemas/writing-prompt.schema.json`
+    generated, and `parseWritingPrompts`.
+- **App:**
+  - `AiProvider.assessWriting` and the `WritingStore` port;
+  - `writingPrompts`, `saveWriting`, `requestWritingFeedback` (through `withAiProvider`, metered as
+    `writing-feedback`) and `writingHistory`;
+  - `wipeData` and `deleteEverywhere` clear submissions.
+  - §3.3 is amended in place.
+- **Testing:** the fake's `assessWriting`, the contract case, `memoryWritingStore` and `writingStoreContract`.
+- **Adapters:**
+  - openai `assessWriting` on the `assess` model, with excerpts placed and retried once;
+  - Dexie v3 `writingSubmissions`, `dexieWritingStore`, and a v2 → v3 migration case.
+- **Factory:** the scripted provider declines and the meter passes the call through.
+- **Content:** six French prompts at `content/writing/prompts.json`, exported by package name.
+- **Web:**
+  - the container parses the library and wires the store in both graphs and `assess` into the adapter;
+  - `features/writing/` holds the word diff, the inline segments and the workshop reducer;
+  - `/practice/writing/workshop`, with the no-key card, the pre-flight, the feedback and the history;
+  - a link from the writing drill;
+  - the `writing` namespace in both locales.
+- **E2E:**
+  - `workshop.spec.ts`: every state axe-clean, and French at parity;
+  - both key-leak specs follow the submission's text (D106), proven to bite three ways;
+  - a French page title check.
+
+**Evidence** (run on this branch before the docs commit):
+
+```
+pnpm verify          → check-types, lint, boundaries (375 + 196 modules, no violations),
+                       test: 163 files, 2350 passed, 8 todo; coverage thresholds met
+pnpm verify:medium   → integration: 6 files, 45 passed; E2E (CI=1): 46 passed (51.8s)
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB
+lhci autorun (the two writing routes, 3 runs) → /fr/practice/writing/workshop: performance 0.99,
+                       accessibility 1; /en/practice/writing: 1, 1
+```
+
+The three bites, each reverted, with the diff checked clean after:
+
+- a synced setting holding the text failed `key-leak.spec.ts` at the export check;
+- a `console.info` of the text failed it at the guard (`"console"`);
+- `localStorage` holding the text, on a rebuilt production server, failed `key-leak-production.spec.ts` at the
+  guard (`"localStorage[draft]"`).
+
+**One unexplained E2E failure, recorded rather than retried away** (§6.5's zero-flake policy):
+- `key-leak-production.spec.ts` failed once, on a rerun of four specs after the docs edits. Its error was not
+  captured.
+- It has not recurred in seven runs since: once alone, three times with those four specs, and three times in the
+  full suite (46/46 each).
+- If it recurs, capture the trace and open an issue the same day. The new workshop step (the lazily loaded
+  container, then the editor's focus) is the first suspect.
+
+**Not done here:**
+- the French prompts' human review, which is Phase 7's R8 review;
+- measured token counts for `writing-feedback` in `pricing.json`, which are still typical figures (D103). A real
+  call on a funded key would measure them, and Slice 4's nightly live smoke is the natural place.
+- **Next, decided** is rewritten to Slice 4.
 
 ### 26 September 2026 — `dougkeefe/next-progress-slice-v2` (Gate G: the billing check passed)
 
