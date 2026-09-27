@@ -33,6 +33,17 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   into the exact text it assessed: `saveWriting` then `requestWritingFeedback`, which goes through
   `withAiProvider(…, "writing-feedback", …)`, keeps the text unassessed on a failure, and returns an existing
   assessment without spending. `AiProvider.assessWriting` has landed; its DTOs are in `@palier/domain`.
+- **Runtime-generated items are device-local and never enter the trend** (`ports/generated-item-store.ts`,
+  `use-cases/generate.ts`, progress.md D110). `generatePracticeSet` is a compressed factory on the user's key:
+  one `generateItems` call of `GENERATED_SET_SIZE`, then one **blind** `reviewItem` per draft, one at a time,
+  all inside `withAiProvider(…, "item-generation", …)`. A draft is discarded, never repaired, on the item
+  schema, the type's `validate`, a mismatch with what was asked, or `gateReasons` (now in `@palier/domain`,
+  D109). A failed call rethrows and keeps nothing. Written expression only (D110). The survivors go to
+  `GeneratedItemStore { putSet, latestSet, item, clear }`, never synced or exported, cleared by `wipeData` and
+  `deleteEverywhere`. **`scoreGeneratedAnswer` writes nothing**: no `Attempt`, no schedule entry, no session.
+  That is the whole of how a generated item stays out of `practiceTrend`; never route one through
+  `answerItem`/`recordAttempt`. The item type, topic and key position come from `Random` (selection, never
+  an id); the id is `gen-` plus an `IdGenerator` ULID, so it can never collide with a bank id.
 - **Ports are transcribed from §3.3, not invented.** Eight live under `src/ports/`:
   `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`,
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the
