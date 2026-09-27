@@ -53,3 +53,60 @@ jobs:
               body: `The nightly lane failed. Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
               labels: ['nightly'],
             });
+
+  live-smoke:
+    # The nightly live smoke (Phase 4 CI gate, progress.md D112): one real key check, three set
+    # drafts, five reviews and two writing assessments through the adapter, measuring the tokens
+    # each costs and checking every configured model id is still listed. A fork, or a repository
+    # without the secret, skips it and says so; a failed call or a missing model opens an issue.
+    name: Live smoke against the OpenAI API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip without a smoke key
+        id: gate
+        env:
+          OPENAI_SMOKE_KEY: ${{ secrets.OPENAI_SMOKE_KEY }}
+        run: |
+          if [ -z "$OPENAI_SMOKE_KEY" ]; then
+            echo "::notice::OPENAI_SMOKE_KEY is not set, so no live call was made (docs/deploy.md)."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.gate.outputs.run == 'true'
+        uses: actions/checkout@v7
+      - if: steps.gate.outputs.run == 'true'
+        uses: pnpm/action-setup@v6
+      - if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - if: steps.gate.outputs.run == 'true'
+        run: pnpm install --frozen-lockfile
+      - if: steps.gate.outputs.run == 'true'
+        run: pnpm exec turbo run build --filter=@palier/web^...
+      - name: Run the live smoke
+        if: steps.gate.outputs.run == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_SMOKE_KEY }}
+        run: |
+          set -o pipefail
+          {
+            echo "## Live smoke"
+            echo '```'
+            pnpm --filter @palier/web live-smoke 2>&1
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Open an issue on failure
+        if: failure()
+        uses: actions/github-script@v8
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Nightly live smoke failed on ${context.sha.slice(0, 7)}`,
+              body: `A live OpenAI call failed, or a configured model is no longer listed. Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              labels: ['nightly'],
+            });

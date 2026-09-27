@@ -153,6 +153,13 @@ describe("live-smoke.mjs", () => {
     expect(reviews.completions).toHaveLength(LIVE_SMOKE_REVIEWS);
   });
 
+  it("records with LIVE_SMOKE_RECORD=1 as well, for a shell that cannot pass --record", async () => {
+    const c = capture();
+    await main({ argv: [], env: { OPENAI_API_KEY: KEY, LIVE_SMOKE_RECORD: "1" }, fetchImpl: network().fetchImpl, ...c.io });
+
+    expect(c.files.size).toBe(3);
+  });
+
   it("exits 1 when a live call fails, naming the adapter's error", async () => {
     const c = capture();
     expect(await main({ argv: [], env: { OPENAI_API_KEY: KEY }, fetchImpl: network({ status: 429 }).fetchImpl, ...c.io })).toBe(1);

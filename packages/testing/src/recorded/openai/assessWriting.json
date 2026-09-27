@@ -1,0 +1,45 @@
+{
+  "note": "Recorded from the live API by `pnpm --filter @palier/web live-smoke --record` (progress.md D112). Regenerate, never hand-edit.",
+  "recordedAt": "2026-09-27T10:52:43.407Z",
+  "promptVersion": "4",
+  "completions": [
+    {
+      "method": "assessWriting",
+      "model": "gpt-6-sol",
+      "request": {
+        "task": "Votre directrice vous demande un paragraphe pour la note d'information destinée au sous-ministre adjoint. Le projet de modernisation du système de traitement des demandes accuse un retard de trois mois, parce que le fournisseur a livré une version qui ne respectait pas les normes d'accessibilité. Résumez la situation, précisez les conséquences pour les clients et proposez une mesure pour limiter les répercussions.",
+        "wordTarget": 150,
+        "text": "Bonjour à tous, la réunion de lundi est reporter à mardi. Les documents seront envoyer demain. Merci de votre compréhension.",
+        "targetBand": "C",
+        "lang": "fr",
+        "feedbackLang": "en"
+      },
+      "attempt": 1,
+      "content": "{\n  \"criteria\": {\n    \"register\": {\n      \"band\": \"B\",\n      \"evidence\": \"“Bonjour à tous” and “Merci de votre compréhension” suit a brief message to colleagues, but not a briefing note for an assistant deputy minister.\"\n    },\n    \"structure\": {\n      \"band\": \"B\",\n      \"evidence\": \"The three sentences form a clear, short workplace message. They do not form the requested briefing paragraph or organize the situation, client impacts and proposed measure.\"\n    },\n    \"grammar\": {\n      \"band\": \"B\",\n      \"evidence\": \"The sentences are understandable, but “est reporter” and “seront envoyer” use infinitives where past participles are required.\"\n    },\n    \"vocabulary\": {\n      \"band\": \"B\",\n      \"evidence\": \"“La réunion” and “Les documents” are clear for a routine message, but the text contains none of the precise vocabulary needed to describe the project delay or accessibility issue.\"\n    },\n    \"task\": {\n      \"band\": \"X\",\n      \"evidence\": \"The text concerns a meeting and documents. It does not address the three-month delay, the supplier’s inaccessible version, consequences for clients or a measure to limit the impacts.\"\n    }\n  },\n  \"errors\": [\n    {\n      \"excerpt\": \"reporter\",\n      \"correction\": \"reportée\",\n      \"rule\": \"A passive construction requires a past participle; it agrees with the feminine singular subject “la réunion.”\"\n    },\n    {\n      \"excerpt\": \"envoyer\",\n      \"correction\": \"envoyés\",\n      \"rule\": \"A passive construction requires a past participle; it agrees with the masculine plural subject “Les documents.”\"\n    }\n  ],\n  \"modelAnswer\": \"Le projet de modernisation du système de traitement des demandes accuse un retard de trois mois, le fournisseur ayant livré une version qui ne respecte pas les normes d’accessibilité. Cette version ne peut être mise en service en l’état. Le report retarde les améliorations attendues par les clients et pourrait prolonger les délais de traitement pendant la période de transition. Pour limiter les répercussions, il est proposé d’établir un plan de continuité : maintenir les modalités actuelles de traitement, suivre les délais et informer les clients de tout changement qui touche leur demande. Dans le cadre de ce plan, la réunion de suivi prévue lundi serait reportée à mardi afin de confirmer avec le fournisseur les correctifs requis et le calendrier révisé. Les documents de suivi seraient envoyés demain pour permettre aux responsables de préparer cette rencontre. La mise en service demeurerait conditionnelle à la vérification de l’accessibilité de la version corrigée.\"\n}",
+      "usage": {
+        "prompt_tokens": 523,
+        "completion_tokens": 1803
+      },
+      "conformant": true
+    },
+    {
+      "method": "assessWriting",
+      "model": "gpt-6-sol",
+      "request": {
+        "task": "Rédigez la section « Recommandation » d'une note d'information au directeur général. Votre équipe propose de prolonger de six mois un projet pilote de télétravail hybride dans la région de l'Atlantique. Présentez la recommandation, deux raisons qui la justifient et un risque à surveiller.",
+        "wordTarget": 140,
+        "text": "Madame, nous avons bien reçu votre demande et nous vous répondrons dans les plus bref délais. Veuillez agréer nos salutations.",
+        "targetBand": "C",
+        "lang": "fr",
+        "feedbackLang": "en"
+      },
+      "attempt": 1,
+      "content": "{\n  \"criteria\": {\n    \"register\": {\n      \"band\": \"B\",\n      \"evidence\": \"“Madame” and “Veuillez agréer nos salutations” show a formal tone, but they belong to a letter, not the recommendation section of a briefing note.\"\n    },\n    \"structure\": {\n      \"band\": \"A\",\n      \"evidence\": \"The text moves from an acknowledgement, “nous avons bien reçu votre demande”, to a closing formula. It does not organize a recommendation, two reasons and a risk.\"\n    },\n    \"grammar\": {\n      \"band\": \"B\",\n      \"evidence\": \"The sentences are understandable, but “les plus bref délais” contains an adjective-agreement error. The text does not demonstrate control of the more complex sentences expected at level C.\"\n    },\n    \"vocabulary\": {\n      \"band\": \"A\",\n      \"evidence\": \"Words such as “demande” and “délais” convey a routine exchange, but the text uses no precise vocabulary for the proposed pilot, its justification or its risks.\"\n    },\n    \"task\": {\n      \"band\": \"X\",\n      \"evidence\": \"“nous vous répondrons” postpones the response. The text gives no recommendation to extend the pilot, no supporting reasons and no risk to monitor.\"\n    }\n  },\n  \"errors\": [\n    {\n      \"excerpt\": \"Madame,\",\n      \"correction\": \"Recommandation\",\n      \"rule\": \"Use a section heading rather than a letter salutation in a briefing note.\"\n    },\n    {\n      \"excerpt\": \"nous avons bien reçu votre demande\",\n      \"correction\": \"En réponse à votre demande, nous recommandons de prolonger de six mois le projet pilote de télétravail hybride dans la région de l’Atlantique\",\n      \"rule\": \"State the requested recommendation instead of merely acknowledging the request.\"\n    },\n    {\n      \"excerpt\": \"nous vous répondrons\",\n      \"correction\": \"nous présenterons les résultats de cette prolongation\",\n      \"rule\": \"A recommendation section must provide an answer now, not defer it.\"\n    },\n    {\n      \"excerpt\": \"les plus bref délais\",\n      \"correction\": \"les plus brefs délais\",\n      \"rule\": \"The adjective must agree in number with the plural noun « délais ».\"\n    },\n    {\n      \"excerpt\": \"Veuillez agréer nos salutations.\",\n      \"correction\": \"Il faudra toutefois surveiller les effets du télétravail hybride sur la coordination des équipes.\",\n      \"rule\": \"End a recommendation section with relevant analysis, not a letter closing.\"\n    }\n  ],\n  \"modelAnswer\": \"Recommandation\\n\\nEn réponse à votre demande, nous recommandons de prolonger de six mois le projet pilote de télétravail hybride dans la région de l’Atlantique, sans décider à ce stade de son maintien permanent.\\n\\nCette prolongation donnerait d’abord à l’équipe le temps de recueillir des données sur une période plus longue et de vérifier si le modèle permet de maintenir la qualité des services. Elle permettrait aussi de consulter les gestionnaires et le personnel, puis d’ajuster les modalités avant de soumettre une proposition définitive.\\n\\nLe principal risque à surveiller est une coordination moins efficace entre les membres des équipes, notamment lorsque leurs journées de présence ne coïncident pas. Nous proposons donc de suivre les délais de traitement et de recueillir régulièrement les commentaires des équipes. Un bilan transmis à la fin des six mois appuierait la décision sur la suite du projet pilote.\"\n}",
+      "usage": {
+        "prompt_tokens": 511,
+        "completion_tokens": 1663
+      },
+      "conformant": true
+    }
+  ]
+}

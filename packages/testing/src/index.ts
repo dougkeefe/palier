@@ -31,6 +31,8 @@ export type { TelemetryHandlerOptions } from "./msw/telemetry-handlers.js";
 export { openAiHandlers } from "./msw/openai-handlers.js";
 export type { OpenAiCompletion, OpenAiHandlerOptions, OpenAiMode } from "./msw/openai-handlers.js";
 export { draftsFor, generationCompletions, verdictFor } from "./msw/openai-generation.js";
+export type { RecordedCompletion, RecordedRun } from "./recorded/index.js";
+export { RECORDED_RUNS, recordedCompletions } from "./recorded/index.js";
 export { mswServer } from "./msw/node.js";
 export { createPgHarness } from "./pglite/harness.js";
 export type { PgHarness } from "./pglite/harness.js";

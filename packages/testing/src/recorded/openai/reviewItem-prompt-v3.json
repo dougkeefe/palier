@@ -1,0 +1,319 @@
+{
+  "note": "Recorded from the live API on prompt version 3, before the review prompt named the band scale (progress.md D112). Kept as the real refusals that found the defect: three of five first replies gave estimatedBand as a CEFR level or a sentence. Never hand-edit.",
+  "recordedAt": "2026-09-27T10:36:47.998Z",
+  "promptVersion": "3",
+  "completions": [
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "Managers are ____ to submit the completed timesheets by the deadline.",
+          "fr": "Les gestionnaires sont ____ de transmettre les feuilles de temps dûment remplies avant la date limite."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "informés"
+          },
+          {
+            "id": "b",
+            "text": "informée"
+          },
+          {
+            "id": "c",
+            "text": "informées"
+          },
+          {
+            "id": "d",
+            "text": "informé"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.94,\n  \"defensibleDistractors\": [\"c\"],\n  \"optionCases\": {\n    \"a\": \"Informés is masculine plural, the default agreement when the managers’ genders are unspecified.\",\n    \"b\": \"Informée could describe one female manager, but it is singular and cannot agree with les gestionnaires.\",\n    \"c\": \"Informées is correct if the managers referred to are all women. Nothing in the stem rules that out.\",\n    \"d\": \"Informé could describe one male manager, but it is singular and cannot agree with les gestionnaires.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": true,\n    \"note\": \"« Sont informés de transmettre » reads like a translation of “are informed to submit” and is unnatural for this administrative instruction. « Sont priés de transmettre » or « sont informés qu’ils doivent transmettre » would be idiomatic.\"\n  },\n  \"estimatedBand\": \"B — agreement is relatively basic, though the epicene noun makes the answer ambiguous without context.\"\n}",
+      "usage": {
+        "prompt_tokens": 296,
+        "completion_tokens": 902
+      },
+      "conformant": false
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "Managers are ____ to submit the completed timesheets by the deadline.",
+          "fr": "Les gestionnaires sont ____ de transmettre les feuilles de temps dûment remplies avant la date limite."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "informés"
+          },
+          {
+            "id": "b",
+            "text": "informée"
+          },
+          {
+            "id": "c",
+            "text": "informées"
+          },
+          {
+            "id": "d",
+            "text": "informé"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 2,
+      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.7,\n  \"defensibleDistractors\": [\"c\"],\n  \"optionCases\": {\n    \"a\": \"« Informés » agrees with a masculine or mixed-gender plural group of gestionnaires; this is the default reading without further context.\",\n    \"b\": \"« Informée » would agree with one female manager, but « les gestionnaires » is plural.\",\n    \"c\": \"« Informées » is correct if all the managers referred to are women. The noun « gestionnaires » does not rule out that reading.\",\n    \"d\": \"« Informé » would agree with one male manager, but « les gestionnaires » is plural.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": true,\n    \"note\": \"« Sont informés de transmettre » reads like a translation of “are informed to submit.” An instruction would more naturally say « sont priés de transmettre » or « sont informés qu’ils doivent transmettre ». The Canadian administrative register itself is appropriate.\"\n  },\n  \"estimatedBand\": \"A\"\n}",
+      "usage": {
+        "prompt_tokens": 377,
+        "completion_tokens": 652
+      },
+      "conformant": true
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "The leave request was ____ by the supervisor.",
+          "fr": "La demande de congé a été ____ par la superviseure."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "approuvés"
+          },
+          {
+            "id": "b",
+            "text": "approuvée"
+          },
+          {
+            "id": "c",
+            "text": "approuvé"
+          },
+          {
+            "id": "d",
+            "text": "approuvées"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"b\",\n  \"confidence\": 1.0,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Approuvés » pourrait s’accorder avec plusieurs congés, mais le sujet « la demande » est féminin singulier.\",\n    \"b\": \"« Approuvée » s’accorde avec « la demande », sujet féminin singulier de la construction passive.\",\n    \"c\": \"« Approuvé » pourrait s’accorder avec « le congé », mais « congé » n’est pas le sujet.\",\n    \"d\": \"« Approuvées » conviendrait à « les demandes », mais le sujet est singulier.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B1\"\n}",
+      "usage": {
+        "prompt_tokens": 292,
+        "completion_tokens": 332
+      },
+      "conformant": false
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "The leave request was ____ by the supervisor.",
+          "fr": "La demande de congé a été ____ par la superviseure."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "approuvés"
+          },
+          {
+            "id": "b",
+            "text": "approuvée"
+          },
+          {
+            "id": "c",
+            "text": "approuvé"
+          },
+          {
+            "id": "d",
+            "text": "approuvées"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 2,
+      "content": "{\n  \"chosenKey\": \"b\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Approuvés » would agree with a masculine plural subject, but « la demande » is feminine singular.\",\n    \"b\": \"« Approuvée » agrees with « la demande », the feminine singular subject of the passive construction.\",\n    \"c\": \"« Approuvé » could agree with « congé » if it were the subject, but here « congé » is part of « de congé » and does not control agreement.\",\n    \"d\": \"« Approuvées » would agree with feminine plural « demandes », not singular « demande ».\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "usage": {
+        "prompt_tokens": 373,
+        "completion_tokens": 366
+      },
+      "conformant": true
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "The new employees have ____ their onboarding forms.",
+          "fr": "Les nouvelles recrues ont ____ leur formulaire d’intégration."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "remplie"
+          },
+          {
+            "id": "b",
+            "text": "remplis"
+          },
+          {
+            "id": "c",
+            "text": "remplies"
+          },
+          {
+            "id": "d",
+            "text": "rempli"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"d\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Remplie » would agree with a preceding feminine singular direct object, as in « la fiche qu’elles ont remplie ». There is none here.\",\n    \"b\": \"« Remplis » could agree with a preceding masculine plural direct object. Here, « formulaire » is singular and follows the verb.\",\n    \"c\": \"« Remplies » could agree with a preceding feminine plural direct object. Agreement with the feminine plural subject « recrues » is tempting but incorrect with « avoir » here.\",\n    \"d\": \"« Rempli » is correct: with « avoir », the past participle does not agree with a direct object that follows it (« leur formulaire »).\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B1\"\n}",
+      "usage": {
+        "prompt_tokens": 287,
+        "completion_tokens": 496
+      },
+      "conformant": false
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "The new employees have ____ their onboarding forms.",
+          "fr": "Les nouvelles recrues ont ____ leur formulaire d’intégration."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "remplie"
+          },
+          {
+            "id": "b",
+            "text": "remplis"
+          },
+          {
+            "id": "c",
+            "text": "remplies"
+          },
+          {
+            "id": "d",
+            "text": "rempli"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 2,
+      "content": "{\n  \"chosenKey\": \"d\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Remplie » would require a preceding feminine singular direct object; none appears here.\",\n    \"b\": \"« Remplis » might seem to agree with a plural group, but a past participle with « avoir » does not agree with the subject.\",\n    \"c\": \"« Remplies » matches the feminine plural « recrues », but the participle does not agree with that subject.\",\n    \"d\": \"« Rempli » is correct: with « avoir », the participle does not agree with the direct object « leur formulaire d’intégration » when it follows the verb.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "usage": {
+        "prompt_tokens": 368,
+        "completion_tokens": 357
+      },
+      "conformant": true
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "The additional hours ____ during the reporting period will be reviewed by the manager.",
+          "fr": "Les heures supplémentaires ____ pendant la période visée seront examinées par la gestionnaire."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "effectué"
+          },
+          {
+            "id": "b",
+            "text": "effectués"
+          },
+          {
+            "id": "c",
+            "text": "effectuées"
+          },
+          {
+            "id": "d",
+            "text": "effectuée"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"c\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Effectué » would agree with an implied masculine singular noun, but the noun modified here is « heures », which is feminine plural.\",\n    \"b\": \"« Effectués » has the right plural number but would require a masculine noun.\",\n    \"c\": \"« Effectuées » agrees in gender and number with « heures supplémentaires ».\",\n    \"d\": \"« Effectuée » has the right feminine gender but would require a singular noun.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "usage": {
+        "prompt_tokens": 292,
+        "completion_tokens": 330
+      },
+      "conformant": true
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "The human resources committee is ____ with reviewing the staffing files.",
+          "fr": "Le comité des ressources humaines est ____ de vérifier les dossiers de dotation."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "chargé"
+          },
+          {
+            "id": "b",
+            "text": "chargée"
+          },
+          {
+            "id": "c",
+            "text": "chargés"
+          },
+          {
+            "id": "d",
+            "text": "chargées"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Chargé » agrees with « le comité », which is masculine singular.\",\n    \"b\": \"This could seem plausible if the reader focuses on the feminine noun « ressources », but it does not agree with the subject « comité ».\",\n    \"c\": \"A committee has multiple members, but « le comité » is grammatically singular; « est » confirms singular agreement.\",\n    \"d\": \"This matches « ressources humaines » in gender and number, but that phrase is not the subject.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "usage": {
+        "prompt_tokens": 290,
+        "completion_tokens": 336
+      },
+      "conformant": true
+    }
+  ]
+}

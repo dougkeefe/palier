@@ -22,6 +22,7 @@ sync as unavailable (ADR 21, `architecture.md` §11).
 | `RATE_LIMIT_SALT` | 32 random bytes as hex (`openssl rand -hex 32`). It keys the per-IP rate-limit HMAC. Without it each serverless instance picks its own salt, and the limits stop holding across instances | Vercel, Production (and Preview, if a preview ever gets a database) |
 
 | `TELEMETRY_DATABASE_URL` | A **read-only** connection string to the same database, for the monthly item-statistics job (`progress.md` D94). It only ever runs `select … from telemetry_events`. Without it, the workflow skips with a notice | GitHub → Settings → Secrets and variables → Actions |
+| `OPENAI_SMOKE_KEY` | An OpenAI key **of its own**, with a small monthly limit, for the nightly live smoke (`progress.md` D112). Each run spends about US$0.15. Without it, the job skips with a notice | GitHub → Settings → Secrets and variables → Actions |
 
 **Keep `DATABASE_URL` out of Preview.** A preview then runs exactly like a deployment without a
 database: fully usable, with sync answering 503. The build's migration step also refuses to run for
@@ -131,6 +132,35 @@ test account (`progress.md` D97, D103). It is a human step, because it spends re
      `apps/factory/config/pricing.json`, which a test holds equal. Then run the check again.
 5. Record the two figures, the models and the date in a session-log entry. That ticks Phase 4's exit
    criterion 3. Revoke the test key afterwards.
+
+## The nightly live smoke, and re-recording the conformance fixtures
+
+The `live-smoke` job in `.github/workflows/nightly.yml` runs `pnpm --filter @palier/web live-smoke` on the
+`OPENAI_SMOKE_KEY` secret (`progress.md` D112). It makes one key check, three set drafts, five reviews and
+two writing assessments through the real adapter. It writes the measured tokens and the `pricing.json`
+`features` block to the run's summary. A failed call, or a model in `apps/web/src/lib/ai-models.json` that
+OpenAI no longer lists, fails the job and opens an issue. It never prints the key.
+
+1. On OpenAI, make a key of its own with a small monthly limit (US$5 is plenty).
+2. Add it as the `OPENAI_SMOKE_KEY` Actions secret, then run the nightly workflow by hand once.
+
+**Re-record the fixtures** when a prompt changes (bump `PROMPT_VERSION` in
+`packages/adapters/src/openai/prompts.ts` first), or when a model id changes. From your own terminal, so the
+key never lands in a transcript or your shell history:
+
+```
+pnpm exec turbo run build --filter=@palier/web^...
+read -rs OPENAI_API_KEY && export OPENAI_API_KEY     # paste the key; nothing is echoed
+LIVE_SMOKE_RECORD=1 node apps/web/scripts/live-smoke.mjs
+unset OPENAI_API_KEY
+node apps/factory/dist/index.js eval                 # the eval report carries the new conformance rate
+```
+
+It overwrites `packages/testing/src/recorded/openai/{generateItems,reviewItem,assessWriting}.json`. To keep an
+old run as a before-and-after, rename it first, as `reviewItem-prompt-v3.json` was, and add it to
+`packages/testing/src/recorded/index.ts`. Commit the fixtures with the regenerated
+`content/factory/eval-report.json`, which `committed-eval.test.ts` holds equal to a fresh run. Copy the printed
+`features` block into `apps/web/src/lib/pricing.json` if the counts moved.
 
 ## Rolling back
 

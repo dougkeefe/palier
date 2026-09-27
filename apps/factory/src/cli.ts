@@ -23,7 +23,7 @@ import { applyStatistics } from "./pipeline/carry.js";
 import { DEFAULT_PER_SOURCE, runPipeline } from "./pipeline/run.js";
 import type { RunInput } from "./pipeline/run.js";
 import { discardReasonCounts } from "./pipeline/metrics.js";
-import { buildEvalSet, runEvalDetection } from "./eval/eval-set.js";
+import { runEval } from "./eval/report.js";
 
 /**
  * The factory CLI (content-factory.md §4). Subcommands `run` and `eval`. It stays
@@ -191,9 +191,13 @@ export const runFactory = async (argv: readonly string[], deps: CliDeps): Promis
   }
 
   if (command === "eval") {
-    const report = await runEvalDetection(buildEvalSet(Number(values["per-class"])), provider, loadProfile(deps.root));
+    const report = await runEval(deps.root, provider, Number(values["per-class"]));
     writeJsonFile(deps.root, EVAL_REPORT_PATH, report);
     deps.log(`eval: overall ${report.overallRate.toFixed(3)}, min class ${report.minClassRate.toFixed(3)}`);
+    deps.log(
+      `schema conformance on prompt v${report.schemaConformance.promptVersion}: ${report.schemaConformance.rate.toFixed(3)} ` +
+        `over ${report.schemaConformance.measuredOn.join(", ")}`,
+    );
     return report.minClassRate >= DETECTION_BAR ? 0 : 1;
   }
 

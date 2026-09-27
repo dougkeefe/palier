@@ -1,0 +1,202 @@
+{
+  "note": "Recorded from the live API by `pnpm --filter @palier/web live-smoke --record` (progress.md D112). Regenerate, never hand-edit.",
+  "recordedAt": "2026-09-27T10:52:43.407Z",
+  "promptVersion": "4",
+  "completions": [
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "Leave requests are ____ by the HR team every Friday.",
+          "fr": "Les demandes de congé sont ____ par l’équipe des RH chaque vendredi."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "traités"
+          },
+          {
+            "id": "b",
+            "text": "traitée"
+          },
+          {
+            "id": "c",
+            "text": "traitées"
+          },
+          {
+            "id": "d",
+            "text": "traiter"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"c\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Traités » is plural, but masculine; it does not agree with the feminine plural subject « les demandes ».\",\n    \"b\": \"« Traitée » is feminine, but singular. It would agree with « l’équipe », which is not the subject.\",\n    \"c\": \"« Traitées » agrees in gender and number with « les demandes » in this passive construction.\",\n    \"d\": \"« Traiter » is an infinitive; « sont » requires a past participle here.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "usage": {
+        "prompt_tokens": 328,
+        "completion_tokens": 366
+      },
+      "conformant": true
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "Staffing advisers are ____ to keep recruitment files confidential.",
+          "fr": "Les conseillères en dotation sont ____ de préserver la confidentialité des dossiers de recrutement."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "chargé"
+          },
+          {
+            "id": "b",
+            "text": "chargées"
+          },
+          {
+            "id": "c",
+            "text": "chargée"
+          },
+          {
+            "id": "d",
+            "text": "charger"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"b\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Chargé » would agree with a masculine singular subject, but « les conseillères » is feminine plural.\",\n    \"b\": \"« Chargées » agrees in gender and number with « les conseillères » in « sont chargées de ».\",\n    \"c\": \"« Chargée » has the right gender but is singular.\",\n    \"d\": \"« Charger » is an infinitive and does not fit after « sont » in this construction.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"A\"\n}",
+      "usage": {
+        "prompt_tokens": 330,
+        "completion_tokens": 386
+      },
+      "conformant": true
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "The forms must be ____ before they are added to the file.",
+          "fr": "Les formulaires doivent être ____ avant d’être versés au dossier."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "signée"
+          },
+          {
+            "id": "b",
+            "text": "signer"
+          },
+          {
+            "id": "c",
+            "text": "signées"
+          },
+          {
+            "id": "d",
+            "text": "signés"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"d\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Signée » agrees with a feminine singular noun, not « les formulaires ».\",\n    \"b\": \"« Signer » is an infinitive, but the passive construction « doivent être » requires a past participle.\",\n    \"c\": \"« Signées » has the right plural number but the wrong gender for « les formulaires ».\",\n    \"d\": \"« Signés » is the masculine plural past participle required by « les formulaires doivent être ».\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "usage": {
+        "prompt_tokens": 327,
+        "completion_tokens": 352
+      },
+      "conformant": true
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "The interviews scheduled for this week have been ____ at the managers’ request.",
+          "fr": "Les entrevues prévues cette semaine ont été ____ à la demande des gestionnaires."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "reportées"
+          },
+          {
+            "id": "b",
+            "text": "reporté"
+          },
+          {
+            "id": "c",
+            "text": "reportée"
+          },
+          {
+            "id": "d",
+            "text": "reporter"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Reportées » agrees in feminine plural with « les entrevues », the subject of the passive construction « ont été reportées ».\",\n    \"b\": \"« Reporté » is the correct past participle for a masculine singular subject, but it does not agree with « les entrevues ».\",\n    \"c\": \"« Reportée » would fit a feminine singular subject such as « l’entrevue », but not the plural subject here.\",\n    \"d\": \"« Reporter » conveys the intended action, but the infinitive cannot follow « ont été » in this passive construction.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "usage": {
+        "prompt_tokens": 330,
+        "completion_tokens": 302
+      },
+      "conformant": true
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "New employees must be ____ in the benefits plan when they start work.",
+          "fr": "Les nouvelles recrues doivent être ____ au régime d’avantages sociaux dès leur entrée en fonction."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "inscrit"
+          },
+          {
+            "id": "b",
+            "text": "inscrire"
+          },
+          {
+            "id": "c",
+            "text": "inscrites"
+          },
+          {
+            "id": "d",
+            "text": "inscrite"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"c\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Inscrit » is the masculine singular past participle, but it does not agree with « les nouvelles recrues ».\",\n    \"b\": \"« Inscrire » conveys the intended action, but the infinitive cannot follow « être » in this passive construction.\",\n    \"c\": \"« Inscrites » is the feminine plural past participle agreeing with « les nouvelles recrues ».\",\n    \"d\": \"« Inscrite » has the right gender, but it is singular rather than plural.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "usage": {
+        "prompt_tokens": 331,
+        "completion_tokens": 321
+      },
+      "conformant": true
+    }
+  ]
+}

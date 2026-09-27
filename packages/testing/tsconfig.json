@@ -5,7 +5,8 @@
     "outDir": "dist"
   },
   "include": [
-    "src"
+    "src",
+    "src/recorded/openai/*.json"
   ],
   "exclude": [
     "node_modules",

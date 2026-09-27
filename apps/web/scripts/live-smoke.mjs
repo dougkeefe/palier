@@ -2,6 +2,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
 
+import { PROMPT_VERSION } from "@palier/adapters/openai";
+
 import { runLiveSmoke } from "../src/lib/live-smoke.ts";
 
 /**
@@ -15,7 +17,7 @@ import { runLiveSmoke } from "../src/lib/live-smoke.ts";
  *   `OPENAI_SMOKE_KEY` secret is set, and a fork without the secret is not a failure.
  * - **A failed call, or a configured model OpenAI no longer lists, exits 1**, so the nightly
  *   lane opens its issue.
- * - **`--record`** writes each completion to `packages/testing/src/recorded/openai/`, one file per
+ * - **`--record`** (or `LIVE_SMOKE_RECORD=1`, for a shell or a chat that mangles `--`) writes each completion to `packages/testing/src/recorded/openai/`, one file per
  *   method, as the schema-conformance fixtures. The files hold the message content and the token
  *   counts, never a header, an id or the key.
  *
@@ -51,6 +53,7 @@ export const recordings = (result) =>
       {
         note: "Recorded from the live API by `pnpm --filter @palier/web live-smoke --record` (progress.md D112). Regenerate, never hand-edit.",
         recordedAt: result.startedAt,
+        promptVersion: PROMPT_VERSION,
         completions: result.completions.filter((c) => c.method === method),
       },
       null,
@@ -113,7 +116,7 @@ export const main = async ({
   const conformant = result.completions.filter((c) => c.conformant).length;
   log(`completions: ${String(result.completions.length)}, ${String(conformant)} accepted on the first try`);
   log(`measured features for pricing.json: ${JSON.stringify(measuredFeatures(result))}`);
-  if (argv.includes("--record")) {
+  if (argv.includes("--record") || env.LIVE_SMOKE_RECORD === "1") {
     for (const file of recordings(result)) write(file.name, file.content);
     log(`recorded ${String(result.completions.length)} completion(s) to packages/testing/src/recorded/openai/`);
   }

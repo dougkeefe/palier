@@ -27,5 +27,40 @@
     }
   },
   "minClassRate": 1,
-  "overallRate": 1
+  "overallRate": 1,
+  "schemaConformance": {
+    "byMethod": {
+      "assessWriting": {
+        "conformant": 2,
+        "rate": 1,
+        "total": 2
+      },
+      "generateItems": {
+        "conformant": 3,
+        "rate": 1,
+        "total": 3
+      },
+      "reviewItem": {
+        "conformant": 5,
+        "rate": 1,
+        "total": 5
+      }
+    },
+    "earlier": [
+      {
+        "conformant": 5,
+        "file": "reviewItem-prompt-v3.json",
+        "promptVersion": "3",
+        "rate": 0.625,
+        "total": 8
+      }
+    ],
+    "measuredOn": [
+      "assessWriting.json",
+      "generateItems.json",
+      "reviewItem.json"
+    ],
+    "promptVersion": "4",
+    "rate": 1
+  }
 }

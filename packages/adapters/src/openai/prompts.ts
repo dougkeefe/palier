@@ -4,6 +4,10 @@ import type {
   ReviewRequest,
   WritingRequest,
 } from "@palier/domain";
+import { TARGET_BANDS } from "@palier/domain";
+
+/** The PSC levels a reviewer may estimate, quoted as the JSON must carry them. */
+const QUOTED_BANDS = TARGET_BANDS.map((band) => `"${band}"`);
 
 /**
  * The prompts the adapter sends, versioned (architecture.md §8.2). The factory
@@ -16,8 +20,13 @@ import type {
  *
  * `writing` was added with Phase 4 Slice 3 (progress.md D105). Adding a prompt does not
  * change the others, so the version stays: nothing the factory generates is traced to it.
+ *
+ * **Version 4** (Phase 4 Slice 4, progress.md D112): the review prompt names the band scale.
+ * The first recorded live run found three of five reviews answering `estimatedBand` as a CEFR
+ * level ("B1") or a sentence, each refused by the schema and paid for twice. The scale is the
+ * domain's `TARGET_BANDS`, never typed here.
  */
-export const PROMPT_VERSION = "3";
+export const PROMPT_VERSION = "4";
 
 const REGISTER = [
   "You write in Canadian federal public-service French: the register of a real",
@@ -95,9 +104,9 @@ const review = (req: ReviewRequest): { system: string; user: string } => {
       "from English, uses France-specific rather than Canadian usage, or reads as an artificial language-",
       "textbook exercise. Formal, administrative, institutional Canadian public-service register is CORRECT",
       "and EXPECTED — do NOT flag it merely for being formal, generic, or 'textbook-like' in tone. When in",
-      "doubt, do not flag. (4) estimate the band the item actually tests.",
+      `doubt, do not flag. (4) estimate the band the item actually tests, on the PSC scale: exactly one of ${QUOTED_BANDS.join(", ")}, never a CEFR level and never a sentence.`,
       "List any options other than your answer that are also defensibly correct.",
-      'Reply with JSON: { "chosenKey", "confidence", "defensibleDistractors": [], "optionCases": {"a","b","c","d"}, "registerFlag": {"flagged", "note"?}, "estimatedBand" }.',
+      `Reply with JSON: { "chosenKey", "confidence", "defensibleDistractors": [], "optionCases": {"a","b","c","d"}, "registerFlag": {"flagged", "note"?}, "estimatedBand": ${QUOTED_BANDS.join(" | ")} }.`,
     ].join(" "),
   };
 };

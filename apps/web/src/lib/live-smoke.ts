@@ -16,6 +16,7 @@ import type {
   WritingRequest,
 } from "@palier/domain";
 import { itemTypeDefinition } from "@palier/domain";
+import type { RecordedCompletion } from "@palier/testing";
 import { memoryCostLedger, memoryKeyVault } from "@palier/testing/in-memory";
 
 /**
@@ -32,27 +33,12 @@ import { memoryCostLedger, memoryKeyVault } from "@palier/testing/in-memory";
  *
  * It reports the measured tokens per feature, which replace `pricing.json`'s typical figures
  * (D103), and each completion with whether it passed the adapter's schema on its own, which
- * `--record` commits as the fixtures. Self-contained, with no relative import, so
+ * `--record` commits as the fixtures, in `@palier/testing`'s `RecordedCompletion` shape. Self-contained, with no relative import, so
  * `scripts/live-smoke.mjs` runs it under Node's type stripping, as `billing-check.ts` is.
  */
 
 /** How many drafts it reviews: runtime generation's set size, so the review figure is one set's. */
 export const LIVE_SMOKE_REVIEWS = GENERATED_SET_SIZE;
-
-/** A completion as OpenAI sent it, the fixture the conformance gate replays. */
-export type RecordedCompletion = {
-  readonly method: "generateItems" | "reviewItem" | "assessWriting";
-  readonly model: string;
-  /** The port request the call was made with, so a replay makes the same call. */
-  readonly request: GenerateItemsRequest | ReviewRequest | WritingRequest;
-  /** 1 for the first completion of a call, 2 for the adapter's one retry. */
-  readonly attempt: number;
-  /** The message content exactly as it arrived: what the adapter parses. */
-  readonly content: string;
-  readonly usage: { readonly prompt_tokens: number; readonly completion_tokens: number };
-  /** Whether the adapter accepted this completion without a retry. */
-  readonly conformant: boolean;
-};
 
 export type FeatureMeasure = {
   readonly calls: number;

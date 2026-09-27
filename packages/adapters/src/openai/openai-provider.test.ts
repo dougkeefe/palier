@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { aiProviderContract } from "@palier/testing";
 
 import { openAiProvider } from "./openai-provider.js";
+import { PROMPT_VERSION } from "./prompts.js";
 import type { FetchLike, OpenAiProviderConfig } from "./openai-provider.js";
 import {
   InvalidApiKeyError,
@@ -124,6 +125,23 @@ describe("openAiProvider", () => {
     expect(url).toContain("/chat/completions");
     expect(init.headers.authorization).toBe("Bearer sk-test");
     expect((JSON.parse(init.body ?? "{}") as { model: string }).model).toBe(MODELS.draft);
+  });
+
+  it("asks the reviewer for a band on the PSC scale, never a CEFR level (prompt version 4, D112)", async () => {
+    const spy = vi.fn(cannedFetch);
+    await makeProvider({ fetchImpl: spy }).reviewItem({
+      itemType: "cloze",
+      stem: localised,
+      options: [option("a"), option("b"), option("c"), option("d")],
+      subSkill: "agreement",
+      targetBand: "B",
+      lang: "fr",
+    });
+    const [, init] = spy.mock.calls[0]!;
+    const user = (JSON.parse(init.body ?? "{}") as { messages: { content: string }[] }).messages[1]?.content ?? "";
+    expect(user).toContain('exactly one of "A", "B", "C", never a CEFR level');
+    expect(user).toContain('"estimatedBand": "A" | "B" | "C"');
+    expect(PROMPT_VERSION).toBe("4");
   });
 
   it("records token usage after a call, and no usage before", async () => {
