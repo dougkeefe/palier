@@ -44,6 +44,21 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   That is the whole of how a generated item stays out of `practiceTrend`; never route one through
   `answerItem`/`recordAttempt`. The item type, topic and key position come from `Random` (selection, never
   an id); the id is `gen-` plus an `IdGenerator` ULID, so it can never collide with a bank id.
+- **Spoken sessions (Phase 5 Slice 1, progress.md D115–D116).** `OralStore { put, get, all, putAudio, audio,
+  audioIndex, deleteAudio, clear }` over `OralSession = { id, scenarioId, startedAt, endedAt, endReason, turns }`,
+  device-local like `WritingStore`: **never synced and never exported**, cleared by `wipeData` and
+  `deleteEverywhere`. A recording is a `Blob`; a full device is the port's own `StorageQuotaError`. The
+  retention policy is in the use cases, never the store: `saveOralAudio` keeps `AUDIO_KEEP_SESSIONS` (10)
+  sessions' recordings and, on a quota error, evicts the oldest and **reports it**; `oralStorageEstimate` warns
+  at `AUDIO_WARNING_BYTES` (200 MB of Palier's own audio, not the origin's estimate); `cleanUpAudio` deletes
+  every recording and **never a transcript** (architecture.md §9.1). `OralTransport { open(req, sink), direct,
+  close }` is **push**, one shape for the turn-based and the full-duplex transports: whole turns with their
+  `startMs`/`endMs`, difficulty flags, and exactly one `closed { failed }`, last. `startOralSessionRun` drives the
+  engine's machine over it: the session id comes in the request (D39), earlier sessions left running are
+  stamped `interrupted`, one queue serialises events, ticks and the end control, each turn is saved as it
+  arrives with the machine's phase, and the end is written only when the transport says `closed`, so an answer
+  in flight is kept. Its end-to-end test runs in `@palier/testing` (`memory/oral-session.test.ts`), since an
+  app test may not import it (D37).
 - **Ports are transcribed from §3.3, not invented.** Eight live under `src/ports/`:
   `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`,
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the
@@ -54,9 +69,10 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   amended in place with two D-log decisions — `generatePassage` is added (content-factory.md
   §4.2 needs it) and `generateItems`/`generatePassage` return **drafts**, not assembled
   `Item[]`/`Passage[]`, so id-minting and provenance stay the factory's job, not the adapter's.
-  Its DTOs live in `@palier/domain`, not here (ADR 20). `assessWriting`/`assessOral`/
-  `transcribe`/`openVoiceSession` and `OralStore` are still deferred to their
-  phases (`SyncTransport` and the telemetry ports have since landed, below).
+  Its DTOs live in `@palier/domain`, not here (ADR 20). `assessOral`/`transcribe`/
+  `openVoiceSession` are still deferred to their slices (`assessWriting`, `SyncTransport`, the
+  telemetry ports and `generateScenario` have since landed; **`OralStore` and `OralTransport`
+  landed with Phase 5 Slice 1**, below).
   `IdGenerator` is a *ninth* port §3.3 does not name at all, decided here (progress.md D48):
   `{ ulid(): string }`, content-agnostic — it mints the id, the caller brands it
   (`attemptId(gen.ulid())`). It exists because nothing in the app may mint an id (`ids.ts`,

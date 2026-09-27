@@ -19,7 +19,14 @@ readiness disclosure; it never reweights the trend. **Spend** (`spend.ts`, progr
 UTC) and this month (the 1st, 00:00 UTC), with no upper bound; `capState` compares **whole micro-dollars**
 against `CAP_WARNING_PERCENT` (PRD §8.10's 80%, product behaviour, not profile data), so 80% and 100% are
 exact; `estimateFeatureCost` is `null`, never a low figure, when a model is unpriced; `preflight` gives the
-cap state before and after an estimate. Everything is
+cap state before and after an estimate. **The oral session machine** (`oral-session.ts`, progress.md D116),
+the engine's first state machine: `startOralSession(phases)` enters phase 0, and `stepOralSession(state, event)`
+takes a tick, a difficulty flag, an end request or a closed transport, each stamped `atMs` since the session
+opened, and returns the next state and the commands (`enter-phase`, `adapt`, `close` with a reason) for
+`@palier/app`'s driver to carry out. **Phases are entered in order and never skipped or repeated**, even
+when one event crosses several boundaries; at or past the scenario's length the session is `completed`
+with every phase entered; **every close carries a reason**, exactly once, and an ended machine says nothing
+more; an earlier `atMs` than one already seen counts as the later. Property-tested, nine invariants. Everything is
 re-exported from `src/index.ts` — the package's public surface is the barrel, not a relative
 path, so a new algorithm is not done until it is exported there.
 

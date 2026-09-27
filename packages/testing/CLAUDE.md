@@ -57,8 +57,12 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
 - **Nothing here reads the system clock or calls `Math.random`** (§6.4).
 - **Do not invent a port §3.3 has not specified.** The ports now come from `@palier/app`;
   the in-memory impls and contract suites import them from there (`ports.stub.ts` is gone).
-  A store that needs a port §3.3 omits — now only `OralStore` — waits for it to land
-  in `@palier/app` rather than being stubbed here. (`ExamRunStore` has landed: `memoryExamRunStore`,
+  A store that needs a port §3.3 omits waits for it to land in `@palier/app` rather than
+  being stubbed here. (`OralStore` and `OralTransport` have landed, Phase 5 Slice 1, D115–D116:
+  `memoryOralStore({ quotaBytes? })`, whose quota lets a test fill the device, `memoryOralTransport(script)`,
+  a scripted examiner with `advance`, `hangUp` and `directives`, `oralStoreContract` and
+  `oralTransportContract`. `memory/oral-session.test.ts` drives `startOralSessionRun` over the fake transport
+  for every fixture scenario: Phase 5's exit criterion 5. The fixture bank holds one scenario per session type.) (`ExamRunStore` has landed: `memoryExamRunStore`,
   `examRunStoreContract` and `anExamRun`, progress.md D80. `SessionStore` has landed:
   `memorySessionStore` and `sessionStoreContract` exist, progress.md D45. `IdGenerator`
   likewise: `counterIdGenerator` and `idGeneratorContract`, D48 — the Web Crypto adapter in

@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 26 September 2026
+**Last updated:** 27 September 2026
 **Current phase:** **Phase 3 (Exams and item statistics) is open.** **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
@@ -16,8 +16,11 @@ same day: the meter matched OpenAI's billing exactly, which meets Phase 4's exit
 is built** (`dougkeefe/next-progress-slice-v4`; D109–D112): the review gate in domain, `generatePracticeSet` on the
 user's key (written expression only), device-local generated sets at `/practice/writing/generate`, and the Phase 4
 CI gates: live-recorded schema-conformance fixtures, which found and fixed a review-prompt defect, the eval's
-conformance rate and the nightly live smoke. **That ticks exit criterion 2, and Phase 4 is complete.** Gate H, Phase
-5's direction, is resolved (D113), so Phase 5 is planned as three slices, and Slice 1 is next. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+conformance rate and the nightly live smoke. **That ticks exit criterion 2, and Phase 4 is complete** (merged, #32).
+Gate H, Phase 5's direction, is resolved (D113), so Phase 5 is planned as three slices. **Slice 1, "the session core,
+no UI", is built** (`dougkeefe/next-progress-slice-v5`; D114–D116): scenarios through the bank (bank v3, with v2's
+forms carried forward), the `OralStore` with §9.1's retention, the engine's session machine, and the `OralTransport`
+port, driven end to end over a fake transport, which ticks exit criterion 5. Slice 2 is next. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
 
@@ -82,8 +85,8 @@ human for anything expensive.
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
-| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete on Slice 4's merge** (four slices, D97; Slices 1–3 merged, D98–D108, and Gate G passed; Slice 4 built, D109–D112; all three exit criteria met) |
-| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **planned** (Gate H resolved; three slices, D113; Slice 1 is *Next, decided*) |
+| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
+| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **in progress** (Gate H resolved; three slices, D113; Slice 1 built, D114–D116, exit criterion 5 met; Slice 2 is *Next, decided*) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
@@ -94,7 +97,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v5` | **Phase 5 Slice 1 — the session core, no UI** (D113): scenarios through the bank (a factory scenario stage over `AiProvider.generateScenario`, bank v3 carrying v2's items *and forms* forward, `ItemRepository.scenarios()`), the `OralStore` port over v1's `oralSessions`/`oralAudio` tables with architecture.md §9.1's retention, the pure session machine in the engine, and the `OralTransport` port with a memory fake and contract suite. Carries exit criterion 5. | 27 September 2026 |
+| `dougkeefe/next-progress-slice-v5` | **Phase 5 Slice 1 — the session core, no UI** (D113): scenarios through the bank (a factory scenario stage over `AiProvider.generateScenario`, bank v3 carrying v2's items *and forms* forward, `ItemRepository.scenarios()`), the `OralStore` port over v1's `oralSessions`/`oralAudio` tables with architecture.md §9.1's retention, the pure session machine in the engine, and the `OralTransport` port with a memory fake and contract suite. **Built; pending merge** (D114–D116). | 27 September 2026 |
 
 *(The prior rows — Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -195,61 +198,76 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 4 is complete** once Slice 4 merges (D109–D112). **Gate H is resolved** (D113): PRD §8.6's practice mode
-and report are adopted, with all five session types and a per-session pronunciation opt-in. GPT-Live is noted for
-Phase 6. The product pilot still runs beside it (Gate E, D97).
+**Phase 5 Slice 1 is built** (`dougkeefe/next-progress-slice-v5`; D114–D116), which ticks exit criterion 5. The
+product pilot still runs beside it (Gate E, D97).
 
-**Next: Phase 5 Slice 1, "the session core, no UI"** (implementation-plan.md §7 Phase 5, D113). It carries exit
-criterion 5. The existing groundwork:
-- `OralScenario` and its schema are in domain;
-- `ItemRepository.scenario(id)` is on the port;
-- Dexie v1 already declares `oralSessions: "id, scenarioId, startedAt"` and `oralAudio: "sessionId"`, so no
-  migration is needed;
-- the profile carries the oral bands and descriptors.
+**Next: Phase 5 Slice 2, "the turn loop on the key"** (implementation-plan.md §7 Phase 5, D113). It carries exit
+criterion 3. Gate H adopted PRD §8.6's practice mode and §14's states as written, so the screen's open calls are
+recorded as made, as D111's were. **It opens no new gate.** Its groundwork:
+- bank v3's ten scenarios, one per session type at B and C, reached through `ItemRepository.scenarios()`;
+- the `OralStore` and its retention use cases;
+- the engine's machine;
+- `OralTransport` with its contract;
+- `startOralSessionRun`, which already drives a session end to end over a fake transport.
 
 **Scope:**
-- **Scenarios reach the app through the bank**, as items and forms do.
-  - `ItemRepository` gains `scenarios()` for the session picker, as D85 added `forms()`.
-  - The factory gains a scenario stage over a new `AiProvider.generateScenario`, with its DTOs in domain (ADR 20,
-    D109), and the scripted provider fills it in the baseline.
-  - **Bank v3** carries v2's items and forms forward (D82's pattern), plus at least one scenario per session type at
-    B and C. It is held byte-identical by `committed-bank.test.ts`, and `BANK_VERSION` moves to 3.
-  - The five session lengths (5, 10, 12, 8 and 22 minutes, PRD §8.6) are factory configuration, as the source queue
-    is. Each scenario's phases carry their own minutes.
-  - The real-model scenarios come with the full-volume content run (D56).
-- **An `OralStore` port** over v1's two tables. §3.3 names it and gives no signature, so decide it here, as D45 and
-  D106 did.
-  - Transcripts are turns: speaker, text, phase, and `startMs`/`endMs` (GPT-Live's shape, D113). Audio blobs are
-    stored per session.
-  - **Device-local: never synced and never exported.** `wipeData` and `deleteEverywhere` clear it.
-  - **Retention is architecture.md §9.1's:**
-    - keep the last 10 sessions' audio, and every transcript;
-    - `storageEstimate` warns at 200 MB;
-    - `cleanUpAudio` is one action;
-    - on `QuotaExceededError`, evict the oldest audio first and say so.
-  - These are storage policy, not §5 rules, so they are constants in app, as `CAP_WARNING_PERCENT` is.
-- **The session state machine**, pure in the engine.
-  - Phases run in order, and the client advances each by its elapsed minutes (architecture.md §8.5).
-  - Escalation or de-escalation follows a flag.
-  - An end, or an early close, always carries a reason.
-- **An `OralTransport` port** in app: the examiner's turn out, the candidate's utterance in with its timings, and a
-  close with a reason.
-  - It is shaped so both Slice 2's turn-based transport and a full-duplex one (Phase 6, D113) can implement it.
-  - `@palier/testing` gets a memory fake and `oralTransportContract`.
+- **Three `AiProvider` capabilities**, their DTOs in domain (ADR 20):
+  - `transcribe(audio: Blob, lang) → Transcript`, §3.3's own method, where `Transcript` is the text, and word
+    timings if the model gives them;
+  - `speak(text, lang) → Blob`, the examiner's voice, a §3.3 amendment;
+  - `examinerTurn(req) → { text, difficulty? }`, a §3.3 amendment. The text model gets the scenario's current
+    phase, its register and the transcript so far, and writes the examiner's next short question (architecture.md
+    §8.5, "transcript plus history goes to the text model").
+  - Each goes on its own optional model role in `ai-models.json` and the adapter, refused before any request
+    without it, as `assess` is. Audio is priced in `pricing.json` (§8.6).
+  - `AI_FEATURES` gains `"oral-practice"`, so a session's spend is metered and shown.
+- **The turn-based transport lives in `@palier/app`** (`turnBasedTransport`), because it is orchestration over
+  ports and nothing vendor-specific. It implements `OralTransport` and passes `oralTransportContract`.
+  - On a directive, one `examinerTurn` produces the question, `speak` voices it, and a `turn` is emitted.
+  - It then waits on a new **`AnswerSource` port** for the candidate's clip or typed answer. A clip goes to
+    `transcribe`, and the answer is emitted as a `turn` with its times.
+  - `difficulty` comes back from `examinerTurn`.
+  - Every call runs inside `withAiProvider(…, "oral-practice", …)` (D101).
+  - The browser's recorder is `AnswerSource`'s adapter in `apps/web`, over `MediaRecorder`, a platform API.
+- **`/practice/oral`**, practice mode only, built to PRD §8.6 and §14:
+  - a picker over the five session types with each length and the cost estimate up front, the full simulation's
+    22 minutes stated;
+  - the session screen: the question as text and audio, record and stop, a phase indicator, the elapsed time, and
+    the end control;
+  - no transcript during the session, as §8.6 has it for studio mode; record the call made for practice mode;
+  - the screen's timer calls `tick`;
+  - the recording is saved with `saveOralAudio` when the session ends, saying what was evicted;
+  - `oralStorageEstimate`'s warning and `cleanUpAudio` in the data settings.
+- **Mic permission and recovery** (§14): a level check before starting (§8.5 step 1); a denied permission shows
+  recovery steps per browser and offers **typed answers**, a text `AnswerSource`. No key shows the no-key card
+  (`NoKeyCard`).
+- **The key-leak test extended to audio** (exit criterion 3, R12):
+  - a sentinel clip reaches only `api.openai.com`'s transcription endpoint;
+  - a sentinel transcript reaches only OpenAI and this device's `oralSessions`, never a push, an export, Web
+    Storage or the paired phone;
+  - no recording is uploaded at all, because pronunciation is Slice 3.
+  - Proven to bite, as D100 and D106 were.
+- **Recorded fixtures for the new methods**, from the live API, never hand-written (D112), and the nightly smoke
+  extended to them.
 
-**Ports and functions:** `ItemRepository.scenario`/`scenarios`, `AiProvider.generateScenario`, `OralStore` (new),
-`OralTransport` (new), and the engine's session machine.
+**Ports and functions:** `AiProvider.transcribe`/`speak`/`examinerTurn`, `AnswerSource` (new),
+`turnBasedTransport`, `startOralSessionRun`, `saveOralAudio`, `oralStorageEstimate`, `cleanUpAudio`, and
+`ItemRepository.scenarios`.
 
 **Done looks like:**
-- bank v3 committed and reproducible, with a scenario per session type, and the factory's committed reports updated
-  with their changes explained;
-- the `OralStore` contract green on memory and Dexie, with the retention and eviction tested;
-- the state machine property-tested: it always ends within the scenario's minutes, never skips or repeats a phase,
-  and a close always carries a reason;
-- the machine driven end to end against the fake transport, which is **exit criterion 5 ticked**;
+- a practice session runs end to end on the hermetic lane, with `page.route` standing in for OpenAI, both spoken
+  and typed, every state axe-clean, and French at parity;
+- the extended key-leak specs green on both lanes, proven to bite: **exit criterion 3 ticked**;
+- `turnBasedTransport` passes `oralTransportContract`;
+- recorded fixtures replayed in the fast lane;
 - `pnpm verify` and `verify:medium` green.
 
-**Human, once Slice 4 merges:**
+**Human, during Slice 2:**
+- a funded key for the fixture recording, run from their own terminal as D112's was (`OPENAI_SMOKE_KEY`'s will
+  do);
+- confirming the transcription and speech model ids and their prices for `ai-models.json` and `pricing.json`.
+
+**Human, still open from Phase 4 Slice 4 (merged, #32):**
 - add the `OPENAI_SMOKE_KEY` Actions secret, a key of its own with a small monthly limit (`docs/deploy.md`, "The
   nightly live smoke"), and run the nightly workflow once by hand;
 - read the `generate` namespace's French, with the rest of Phase 7's R8 review.
@@ -503,8 +521,12 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
 sync.** Gate H is resolved: PRD §8.6's practice mode and report are adopted, with all five session types and
 pronunciation offered as a per-session opt-in.
 
-- [ ] **Slice 1 — The session core, no UI.** *Next, decided*.
-- [ ] **Slice 2 — The turn loop on the key.**
+- [x] **Slice 1 — The session core, no UI.** **Built 27 September 2026** (`dougkeefe/next-progress-slice-v5`;
+  D114–D116; session-log evidence). The scenario stage over `generateScenario` and bank v3, with v2's items and forms
+  carried forward and ten scenarios; `ItemRepository.scenarios()`; the `OralStore` on memory and Dexie with §9.1's
+  retention in the use cases; the engine's session machine; `OralTransport` with its fake and contract; and
+  `startOralSessionRun`, the driver.
+- [ ] **Slice 2 — The turn loop on the key.** *Next, decided*.
 - [ ] **Slice 3 — `assessOral` and the report**, ending at **Gate I** (exit criterion 1, human).
 
 **Exit criteria** (the actual gate)
@@ -513,7 +535,12 @@ pronunciation offered as a per-session opt-in.
 - [ ] Cost per session measured and displayed accurately
 - [ ] Audio reaches nowhere but OpenAI: each answer's clip only its transcription call, and the stored session recording only on an explicit per-session pronunciation opt-in, asserted by the extended key-leak test [R12] (amended in place, D113)
 - [ ] Scoring stability: same transcript five times, at most one band of variation
-- [ ] Session state machine contract-tested against a fake transport
+- [x] Session state machine contract-tested against a fake transport. **Met** (Slice 1, D116):
+  `packages/testing/src/memory/oral-session.test.ts` drives the real driver, `startOralSessionRun`, over
+  `memoryOralTransport`, which `oralTransportContract` holds. It runs every fixture scenario, one per session type,
+  with a `FakeClock`, and covers an early end, both drops and an in-flight answer. The machine's nine properties hold
+  it at nightly strength. It was proven to bite: stamping every turn phase 0 failed all five session types (session
+  log, 27 September 2026, `dougkeefe/next-progress-slice-v5`)
 
 ### Phase 6: Oral, studio mode
 
@@ -553,7 +580,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | R9 | WCAG 2.2 AA | 0, all | not started |
 | R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
 | R11 | Export, import, delete, each in one action | 2, 7 | Phase 2 half verified (24 September 2026): `/settings/data` does each in one action; journey 6 round-trips export → delete → import and finds the same progress. Phase 7's server-side delete waits for sync |
-| R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). **The writing half is satisfied and verified** (26 September 2026, Slice 3): the leak guard follows a submission's text and finds it only in requests to `api.openai.com` and in this device's own copy (the page, the field, `writingSubmissions`), never in a push, a pull, an export, Web Storage or the paired phone; proven to bite three ways (D106). **Runtime-generated items are held the same way** (27 September 2026, Slice 4, D110): a generated stem reaches only OpenAI, in review requests, and this device's `generated` table and page. It never appears in a push, an export, Web Storage or on the paired phone, and no attempt is ever written for it. Audio and transcripts are Phase 5 |
+| R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). **The writing half is satisfied and verified** (26 September 2026, Slice 3): the leak guard follows a submission's text and finds it only in requests to `api.openai.com` and in this device's own copy (the page, the field, `writingSubmissions`), never in a push, a pull, an export, Web Storage or the paired phone; proven to bite three ways (D106). **Runtime-generated items are held the same way** (27 September 2026, Slice 4, D110): a generated stem reaches only OpenAI, in review requests, and this device's `generated` table and page. It never appears in a push, an export, Web Storage or on the paired phone, and no attempt is ever written for it. Audio and transcripts are Phase 5: **the store that holds them is device-local by construction** (27 September 2026, Slice 1, D115). It is never synced and never exported, and a wipe and a delete-everywhere clear it, over both graphs. The audio leak test that verifies it is Slice 2 |
 | R13 | Free and open source | 0, 7 | not started |
 | R14 | Progress across devices, with an off switch | 2 | satisfied and verified on the hermetic lane (24 September 2026): journey 8 pairs two devices by code and both show the same progress; the switch is tested off, with server deletion offered, in `sync.spec.ts`. A public deployment with a real database is Slice 3 |
 
@@ -3925,11 +3952,296 @@ these are recorded as made, as D87, D100, D104 and D108 were)
 
      The model id is data (`ai-models.json`). The Live protocol is adapter work.
 
+### D114 — scenarios through the bank: the scenario stage, bank v3, and the carry-forward D82 left open
+**Date:** 27 September 2026 · **Status:** accepted; §3.3 amended in place (`ItemRepository.scenarios`,
+`AiProvider.generateScenario`), as D85 and D105 were
+
+- **`AiProvider.generateScenario(req) → ScenarioDraft`**, a fourth §3.3 amendment.
+  - `GenerateScenarioRequest = { sessionType, targetBand: "B" | "C", lang, topic, minutes }` and
+    `ScenarioDraft = { phases }` live in domain (ADR 20). The draft is the phase plan only: the factory copies
+    the type, band, language and topic it asked for, and mints the id, as it does for passages and items.
+  - `AiCapabilities` gains `generateScenario`. `oralScenarioShape` is unchanged, so no published JSON Schema
+    moved. A scenario has no minutes of its own: its length is the sum of its phases'.
+  - Every implementation gained the method: the OpenAI adapter, the scripted provider, the factory's meter,
+    the fake, and seven test stubs (shape only, as D105 recorded). The app's generic `metered` needed nothing.
+- **The OpenAI adapter plans on an optional `models.scenario`**, as `assess` is optional. Without it, the
+  capability is false and the call is refused before any request.
+  - A plan whose minutes do not fill the session is refused **at the parse**, so it is retried once like any
+    malformed answer, rather than paid for and then discarded by the factory.
+  - The prompt names the session type's purpose from PRD §8.6. `PROMPT_VERSION` stays 4, because adding a
+    prompt changes no other (D105's precedent).
+  - The factory's `models.json` sets `scenario` to the drafter's model. The browser's `ai-models.json` has
+    none: nothing in the browser plans a scenario.
+  - **No recorded fixture yet.** D112's rule is recorded, never hand-written, and this session had no key. A
+    scenario recording belongs to the full-volume run (D56); `RECORDED_METHODS` is unchanged.
+- **The scenario stage** (`apps/factory/src/pipeline/scenarios.ts`).
+  - `content/factory/oral-sessions.json` names each session type and its length (5, 10, 12, 8 and 22 minutes,
+    PRD §8.6), and the bands, B and C. **These are factory configuration, not profile data** (ADR 9): PRD §5.3
+    says the PSC publishes no phase breakdown, so a session's length is Palier's product, not an exam rule.
+    It is loaded and shape-checked by `loadOralSessions`.
+  - One call per session and band, on a topic fixed by hashing the pair, so a rebuild picks the same one.
+  - **Discard, never repair**, on four grounds: the scenario schema; phases whose minutes do not fill the
+    session; a phase with no harder follow-up or no simpler reframe, because the session's difficulty flag
+    would have nowhere to go; a duplicate. A failed call is counted and skipped, as the other stages do.
+  - It runs **after** the item stages. The batch report's `provider` is taken before it, so it stays the item
+    stages' model.
+  - The scripted provider fills it: 2 phases for the warm-up, 5 for the simulation and 3 otherwise, whole
+    minutes spread evenly, and French questions from fixed pools seeded by the request.
+- **The carry-forward now covers forms and scenarios.** This closes D82's residual, which named it "the
+  full-volume content run's first task". It could not wait for that run: v3 without v2's forms would have
+  dropped the forms that the pilot's mock exams rescore from (ADR 16).
+  - `CarriedBank` gains optional `forms` and `scenarios`; `loadPublishedBank` reads both through the
+    manifest.
+  - **Carried forms sit beside the new version's own**, and `checkForms` checks both. The exam picker already
+    offers the highest version per variant (`variantChoices`), so no UI moved.
+  - Carried scenarios go ahead of new ones, so a regenerated duplicate is the one dropped.
+- **A deviation found by building v3: a carried passage now keeps its published record.**
+  - `runPipeline` used to write the batch's passages over the carried ones by id. A re-constructed passage has
+    the same id, because the id is its body, but a new `source.retrievedAt`. So a published passage's
+    provenance was being rewritten to a later retrieval date.
+  - v2 did this to v1's passages. v2 is published and is left as it is.
+  - Carried passages now win, as carried items do, and a test names it. v3's passage shard is byte-identical
+    to v2's.
+- **The manifest lists the scenarios file**: `scenarios: { path, hash }`, or `null` with none, plus
+  `counts.scenarios`.
+  - Before this, the file was written but not listed. The service worker never precached it, and the adapter
+    found it by a 404 probe.
+  - The bank adapter now reads the entry, and a bank with none fetches nothing. v1 and v2 predate the key and
+    read as shipping none.
+  - `bankFilesIn` precaches the file. MSW's `bankHandlers` lists it.
+- **`ItemRepository.scenarios()`**, beside `scenario(id)`, for Slice 2's session picker, as D85 added `forms()`.
+  It is on the memory repository, the HTTP adapter and `itemRepositoryContract`. One-line stubs went into the
+  eight app test fakes D85 touched.
+- **Bank v3 is committed**, built with `PALIER_NOW=2026-09-27T00:00:00.000Z`.
+  - The item seeds do not depend on the batch id, so the re-drafted items are v2's own, and each is dropped as a
+    duplicate of its carried self. v3 publishes **0 new items and carries all 242**. The item and passage shards
+    are byte-identical to v2's.
+  - v3 carries v2's four forms, byte-identical, beside four new `fr-*-v3` forms, and holds **10 scenarios**,
+    one per session type at B and C.
+  - `DEFAULT_BANK_VERSION` and `BANK_VERSION` are 3.
+- **The committed reports moved, each explained.** `batch-report.json`:
+  - `itemsPublished` fell from 232 to 0, and `itemsCarried` rose from 10 to 242, for the reason above;
+  - `costPerAcceptedItemUsd` is `null`, because no item was published this batch (`metrics.ts`'s existing
+    rule);
+  - `totalCostUsd` rose from 16.72 to 16.97, which is the ten scripted scenario calls;
+  - the new `scenarios: 10` and `scenariosCarried: 0`;
+  - the batch id and `generatedAt` are the new date.
+
+  `drafted.json` and `source-queue.json` differ only by date. `eval-report.json` did not move.
+- **Existing tests touched, with no assertion weakened:**
+  - `committed-bank.test.ts`: "one form per variant" became "one form of its own per variant", because v3
+    also ships v2's. It gained "carries every form the previous version published" and "ships a scenario for
+    every session type at B and C".
+  - `cli.test.ts`: the temporary root copies `oral-sessions.json`, since it is an input now. The
+    default-version tests read `DEFAULT_BANK_VERSION` instead of a literal `v2`. The retired-item check covers
+    the forms v2 draws itself; v1's forms are carried as published, retired item and all, which is the point.
+  - `bank-build.test.ts`: the manifest counts gained `scenarios`.
+  - `bank-handlers.test.ts`: the contract bank holds two scenarios now, and the manifest lists them.
+  - `http-bank-repository.test.ts`: the scenarios error test had passed vacuously. Its manifest 404'd before
+    the scenarios file was ever fetched. It now serves a manifest that lists the file.
+
+### D115 — the `OralStore` port, and architecture.md §9.1's retention in the use cases
+**Date:** 27 September 2026 · **Status:** accepted; §3.3 amended in place (it named `OralStore` and gave no
+signature), as D45 and D106 were
+
+- **`OralStore { put, get, all, putAudio, audio, audioIndex, deleteAudio, clear }`** over `OralSession = { id:
+  SessionId, scenarioId, startedAt, endedAt, endReason, turns }` and `OralAudioEntry = { sessionId, bytes,
+  startedAt }`.
+  - The session is an aggregate owned by its store, in app, as `WritingSubmission` is. Its parts, `OralTurn` and
+    `OralEndReason`, are domain's (D116).
+  - `endedAt` and `endReason` are both null or both set. `turns` only grows.
+  - `all` is newest first, and `audioIndex` oldest first with each recording's size, so the policy never reads
+    a blob to choose one.
+  - `putAudio` rejects for an unknown session, replaces an earlier recording, and rejects with the port's own
+    `StorageQuotaError` when the device is full, storing nothing.
+  - **A recording is a `Blob`**, not bytes. §3.3's `transcribe(audio: Blob, …)` already takes one,
+    `MediaRecorder` produces one, and IndexedDB stores it without a copy on the heap. It is a platform type,
+    not a vendor's, and the base tsconfig has the DOM lib.
+- **Device-local: never synced and never exported** [R12]. No sync collector takes it, `exportData`'s deps do not
+  include it, and `wipeData` and `deleteEverywhere` clear it. Tests hold this in `data-rights`,
+  `sync-account` and `container-oral.test.ts`, the last over both graphs.
+- **The retention policy is in the use cases, not the store** (`packages/app/src/use-cases/oral.ts`).
+  - `AUDIO_KEEP_SESSIONS` (10) and `AUDIO_WARNING_BYTES` (200 MB) are storage policy, not §5 rules, so they are
+    app constants. *Next, decided* said "as `CAP_WARNING_PERCENT` is", but that constant lives in the engine;
+    the right precedent is `GENERATED_SET_SIZE`.
+  - **`saveOralAudio`** first deletes the oldest other recordings down to `KEEP − 1`, quietly, because that is
+    the policy the user was told. On a quota error it evicts the oldest and tries again, and it **reports** what
+    it evicted, because §9.1 says to tell the user. With nothing left to evict it rethrows. A failure that is
+    not the quota evicts nothing.
+  - **`oralStorageEstimate` counts Palier's own stored audio**, not `navigator.storage.estimate`. It is
+    deterministic, it needs no new port, and audio is the one thing that grows (attempts are about 4 MB a year).
+    The browser's figure covers the whole origin, the cached bank included, and some browsers pad it.
+  - **`cleanUpAudio`** deletes every recording in one action. It **never deletes a transcript**: §9.1 keeps
+    transcripts forever.
+- **The Dexie adapter is over v1's own `oralSessions` and `oralAudio` tables**, so there is no version bump and
+  `verno` stays 3.
+  - A session reads only if it is whole: an end and a reason both set or both null, and every turn passing
+    `oralTurnSchema`.
+  - A recording row keeps `bytes` and its session's `startedAt` beside the blob.
+  - `putAudio` checks the session and writes in one transaction.
+  - **`QuotaExceededError`**, by name or as a Dexie wrapper's `inner`, becomes `StorageQuotaError`.
+    fake-indexeddb cannot run out of room, so a test injects the failure.
+  - The plan also named Safari's `UnknownError`, and it was dropped: it is not specific to quota, and taking
+    it for quota would evict a user's recordings on an unrelated fault.
+  - The migration harness seeds v1 placeholder oral rows, which read as none. A new case proves a working
+    store in v1's own tables.
+- **Existing tests touched, shape only:**
+  - the `data-rights` and `sync-account` device stubs gained `oral`;
+  - `@palier/testing/in-memory`'s exact key list gained `memoryOralStore`;
+  - `dexieStores` wires twelve ports, so `index.test.ts`'s case name changed and it writes one more row;
+  - the container wiring lists gained `oral`.
+
+### D116 — the session machine, the `OralTransport` port, and the driver that joins them
+**Date:** 27 September 2026 · **Status:** accepted; §3.3 amended in place (a port it did not name, as D69's
+`SyncStateStore` was)
+
+- **The vocabulary is in domain** (`oral-session.ts`): `OralTurn = { speaker, text, phase, startMs, endMs }`,
+  `ORAL_END_REASONS`, `OralDirection` and `OralRegister`, and `oralTurnSchema` with a type-level test.
+  - Domain is the one place the engine, the app and Slice 3's `assessOral` DTOs can all reach.
+  - Times are milliseconds since the session opened, GPT-Live's `start_ms`/`end_ms` shape (D113).
+  - **The end reasons are `completed`, `ended-by-user`, `transport-closed`, `transport-failed` and
+    `interrupted`.** There is no time-cap reason: a session completes at its scenario's length (22 minutes at
+    most), and §8.6's 25-minute disconnect is a studio-mode guard for Phase 6.
+- **The machine is pure, in the engine** (`startOralSession`, `stepOralSession`), the engine's first state
+  machine.
+  - Time arrives as `atMs` on each event (D32). A phase boundary is the running total of minutes, rounded once,
+    so fractional minutes never drift.
+  - One event crossing several boundaries **enters each phase in turn**, and never jumps.
+  - Difficulty emits `adapt` for the current phase, only when the register changes. A phase always starts at its
+    baseline.
+  - At or past the length the session closes `completed`, whatever the event, with every phase entered.
+  - Every close carries a reason, exactly once, and an ended machine emits nothing. An earlier `atMs` counts as
+    the later.
+  - **Nine properties** hold this over any plan and any events, among them: never skip or repeat a phase, end by
+    the length, one close with a reason, and tick density does not matter. They pass at nightly strength, and
+    the file is at 100% coverage.
+- **`OralTransport { open(req, sink), direct(directive), close() }` is push, one shape for both transports.**
+  - Events are whole turns with their times, difficulty flags, and exactly one `closed { failed }`, last.
+  - A full-duplex client must send phase boundaries on time while the candidate is silent, so a pull loop
+    waiting on the next utterance could not drive it. The screen's timer ticks the session instead, as it
+    checkpoints an exam.
+  - The sink is handed over at `open`, so no event precedes a listener.
+  - `direct` rejects before `open` and is a no-op after close. `close` is idempotent, and resolves once
+    `closed` has been delivered.
+  - Turn timings need only `0 ≤ startMs ≤ endMs`, with `startMs` never decreasing for one speaker: turns
+    overlap in a full-duplex session, and transcription lags.
+- **The driver is `startOralSessionRun`**, in app, and returns `{ scenario, tick, endByUser, ended }`.
+  - The session id comes in the request (D39). **A second start under a stored id rejects**, so a double tap
+    never opens two connections under one id. The plan said it would return the stored session; a session
+    cannot resume, so there is nothing to return.
+  - Earlier sessions left running are stamped `interrupted` first.
+  - Time is wall-clock elapsed from the start. A session never resumes, so, unlike an exam run, no elapsed time
+    needs carrying.
+  - One queue carries the transport's events, the ticks and the end control.
+  - Each turn is saved as it arrives, stamped with the machine's phase once it has caught up with the clock.
+  - The end is written only when the transport says `closed`, so an answer still in flight is kept.
+  - A transport that cannot open ends the session `transport-failed`, and the error is rethrown. A directive that
+    fails rejects `ended`.
+- **`@palier/testing`**: `memoryOralTransport(script, { deliverOnClose? })` is a scripted examiner, clock-free,
+  with `advance`, `hangUp` and `directives`. `oralTransportContract` runs over a harness any transport can
+  implement.
+- **Exit criterion 5's test is `packages/testing/src/memory/oral-session.test.ts`**, not an app test, because an
+  app test may not import `@palier/testing` (D37).
+  - It runs the real driver over the fake transport with a `FakeClock` and the memory store, for every
+    fixture-bank scenario, one per session type.
+  - For each, it checks that every phase is directed once, in order, and that the session completes at the
+    length with every turn stamped with its phase.
+  - It also covers an early end, a drop both clean and failed, an answer delivered after close was asked, and
+    an interrupted session.
+- **The hermetic graph wires no transport and no oral use cases.** Slice 2 is the first consumer. Only the store
+  is wired, so a wipe clears it.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 27 September 2026 — `dougkeefe/next-progress-slice-v5` (Phase 5 Slice 1: the session core, no UI)
+
+**Built.** The decisions are recorded in D114–D116. Phase 4 Slice 4 had merged as #32, so its In-flight row was
+replaced in this branch's first commit. The contracts landed in their own commit before any implementation.
+
+**What was built:**
+- **Domain:**
+  - the oral session vocabulary (`OralTurn`, `ORAL_END_REASONS`, `OralDirection`, `OralRegister`) and
+    `oralTurnSchema`, with a type-level test;
+  - `GenerateScenarioRequest`, `ScenarioDraft` and `scenarioDraftSchema`;
+  - `AiCapabilities.generateScenario`.
+- **Engine:** `startOralSession` and `stepOralSession`, the session machine, with nine properties.
+- **App:**
+  - the `OralStore` and `OralTransport` ports, `StorageQuotaError`, `ItemRepository.scenarios()` and
+    `AiProvider.generateScenario`;
+  - `startOralSessionRun`, `saveOralAudio`, `oralStorageEstimate` and `cleanUpAudio`, with `AUDIO_KEEP_SESSIONS`
+    and `AUDIO_WARNING_BYTES`;
+  - `wipeData` and `deleteEverywhere` clear the oral store;
+  - §3.3 amended in place.
+- **Testing:**
+  - `memoryOralStore`, `memoryOralTransport`, `oralStoreContract` and `oralTransportContract`;
+  - the `generateScenario` contract case and the `scenarios()` contract cases;
+  - a fixture scenario per session type;
+  - `memory/oral-session.test.ts`, exit criterion 5.
+- **Adapters:**
+  - `dexieOralStore` over v1's own tables, with no version bump;
+  - the bank adapter reads the manifest's scenarios entry and serves `scenarios()`;
+  - the OpenAI adapter's `generateScenario` on an optional `models.scenario`, with its prompt.
+- **Factory:**
+  - the scenario stage and `content/factory/oral-sessions.json`;
+  - the scripted provider's plans and the meter's pass-through;
+  - forms and scenarios carried forward, and a carried passage keeping its published record;
+  - the manifest's `scenarios` entry, and `DEFAULT_BANK_VERSION` 3.
+- **Content:** bank v3, and the batch report, `drafted.json` and `source-queue.json` regenerated (D114 explains
+  each change).
+- **Web:**
+  - `BANK_VERSION` 3;
+  - the service worker precaches the scenarios file;
+  - the container wires the oral store in both graphs, and `container-oral.test.ts` holds it device-local;
+  - two offline E2E specs now take the form the picker offers.
+
+**The bank v3 run** (`PALIER_NOW=2026-09-27T00:00:00.000Z node apps/factory/dist/index.js run --provider scripted
+--bank-version 3`):
+
+```
+run: 0 published / 368 drafted, yield 0.630, cost/item null USD
+bank v3: 242 items, forms fr-reading-supervised-v2, …-v2 (4), fr-reading-supervised-v3, …-v3 (4)
+scenarios: 10 new, 0 carried, 0 discarded, 0 failed calls
+exit 0; v2's item, passage and form files are byte-identical in v3 (cmp); a --force rebuild leaves content/ clean
+```
+
+**Found while building, and fixed:**
+- **A carried passage's provenance was being rewritten.** The first v3 build's passage shard differed from v2's
+  only in `source.retrievedAt`. Carried passages now win, as carried items do (D114).
+- **Two offline E2E journeys failed on v3** (exam-offline, telemetry-offline). Each took the manifest's first form
+  by name, now `-v2`, while the picker offers the highest version, `-v3`, as D85 designed. The specs now take the
+  form the picker takes. The app did not change.
+- **A second E2E run failed four sync and key-leak journeys**, in 4.8 minutes. The proven-to-bite checks had
+  rebuilt `@palier/app`'s `dist` under the running `next dev` server. Run alone on a clean build, all 51 passed.
+
+**Evidence** (run on this branch before the docs commit):
+
+```
+pnpm verify          → check-types, lint, boundaries (423 + 208 modules, no violations),
+                       test: 187 files, 2726 passed, 8 todo; coverage thresholds met
+pnpm test:integration → 6 files, 45 passed
+pnpm test:e2e (CI=1)  → 51 passed (1.1m)
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB
+CI_LANE=nightly vitest run packages/engine/src/oral-session.property → 8 passed
+coverage: engine oral-session.ts, app oral.ts, dexie oral-store.ts, domain oral-session.ts: 100% branches
+```
+
+**Proven to bite, each reverted, with the diff checked clean after:**
+- the machine jumping straight to the phase that holds the time, rather than entering each, failed five tests,
+  among them "enters phases 0, 1, 2… in order, never skipping or repeating one";
+- `wipeData` no longer clearing the oral store failed the wipe and the delete-everywhere tests (D115);
+- `loadPublishedBank` carrying no forms failed `committed-bank.test.ts` twice ("byte-identical", "carries every
+  form the previous version published") and the CLI's carry test;
+- the driver stamping every turn phase 0 failed exit criterion 5's test for all five session types.
+
+**Not done here:**
+- a recorded fixture for `generateScenario`, which waits for the full-volume run's key (D112, D56);
+- any UI, the turn-based transport and the audio leak test, which are Slice 2;
+- the real-model scenarios, which come with the full-volume content run (D56).
+- **Next, decided** is rewritten to Slice 2.
 
 ### 27 September 2026 — `dougkeefe/next-progress-slice-v4` (pre-merge review: 20 fixes)
 

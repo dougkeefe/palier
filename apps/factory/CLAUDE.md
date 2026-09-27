@@ -46,10 +46,21 @@ content *schemas* with the app, never runtime. The `AiProvider` port type is imp
   variant is a form issue, and **the CLI writes no bank with a form issue** (`checkForms` checks variant,
   counts, pilots, minutes, cuts, item skill/lang and the domain schema).
 - **A published bank version is immutable, and the next one carries it forward.** `run` refuses to
-  overwrite an existing `content/bank/v{n}` without `--force`, and reads `v{n-1}`'s items and passages
-  as `carried`: they are re-validated with the new drafts, ahead of them, so an id users already hold
-  survives a near-duplicate (architecture.md §5.5). The batch report counts them as `itemsCarried`, not
-  as the batch's output.
+  overwrite an existing `content/bank/v{n}` without `--force`, and reads `v{n-1}`'s items, passages,
+  **forms and oral scenarios** as `carried` (progress.md D114, which closed D82's residual). Items are
+  re-validated with the new drafts, ahead of them, so an id users already hold survives a near-duplicate
+  (architecture.md §5.5). **A carried passage keeps its published record** over this batch's copy of the
+  same passage, provenance included. **Carried forms sit beside this version's own**, checked by
+  `checkForms` like them, because an exam run is rescored from the form it was sat on; the app offers the
+  highest version per variant. Carried scenarios go ahead of new ones. The batch report counts them as
+  `itemsCarried` and `scenariosCarried`, not as the batch's output.
+- **Oral scenarios are a stage too** (`pipeline/scenarios.ts`, D114). `content/factory/oral-sessions.json`
+  names each session type and its length (PRD §8.6; Palier's product, not a §5 rule, so not profile data)
+  and the bands, B and C. One `generateScenario` call per session and band, on a topic fixed by the pair;
+  `assembleScenario` mints a content-derived id. **Discard, never repair**: the schema, phases whose
+  minutes do not fill the session, a phase with no harder follow-up or no simpler reframe, a duplicate. It
+  runs after the item stages, so the batch report's `provider` stays the item stages' model. The manifest
+  lists the file as `scenarios: { path, hash }`, or `null` with none; v1 and v2 predate the key.
 - **A retirement takes effect at the next bank build** (progress.md D94). `runInputFor` applies
   `content/factory/item-statistics.json`, which the monthly job in `apps/web` writes, to the carried bank
   (`pipeline/carry.ts`): judged items gain `stats`, and an item with a reason becomes `status: "retired"`.
@@ -74,11 +85,11 @@ eval set's detection rate is a real computed number, not a hardcoded one.
 ## Commands
 
 ```
-palier-factory run            # full pipeline → content/factory/ + content/bank/v2/ (DEFAULT_BANK_VERSION)
+palier-factory run            # full pipeline → content/factory/ + content/bank/v3/ (DEFAULT_BANK_VERSION)
 --bank-version <n>            # write a new version; v{n-1} is carried forward
 --per-source <n>              # passages per source (DEFAULT_PER_SOURCE, sized for form headroom)
 --force                       # rebuild a version that already exists (never a published one)
 palier-factory eval           # review-gate detection on the defect eval set, plus schema conformance on the recorded completions
-PALIER_NOW=<iso> …            # pin the batch timestamp for a reproducible commit (v2: 2026-09-24T00:00:00.000Z)
+PALIER_NOW=<iso> …            # pin the batch timestamp for a reproducible commit (v3: 2026-09-27T00:00:00.000Z)
 --provider openai             # use the real adapter (needs OPENAI_API_KEY)
 ```
