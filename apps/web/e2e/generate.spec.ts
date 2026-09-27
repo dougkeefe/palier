@@ -118,8 +118,8 @@ test("with a key: the pre-flight warns past the cap, a failure says so plainly, 
   await page.getByRole("button", { name: "Try again" }).click();
   await page.getByRole("button", { name: "Generate the set" }).click();
   await expect(page.getByRole("status").filter({ hasText: "Drafting and checking the set" })).toBeVisible();
-  // Its controls are disabled while it works, so focus rests on the busy form itself.
-  await expect(page.locator('[aria-busy="true"]')).toBeFocused();
+  // Its controls are disabled while it works, so focus rests on the status line that says so.
+  await expect(page.getByRole("status").filter({ hasText: "Drafting and checking the set" }).locator("..")).toBeFocused();
   await axeClean(page);
   release();
   hold = null;

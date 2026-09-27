@@ -586,7 +586,7 @@
     "noKeyAdd": "Ajouter une clé",
     "resultTitle": "Votre nouvelle série",
     "resultSome": "{kept, plural, one {# ébauche sur {drafted} a réussi} other {# ébauches sur {drafted} ont réussi}} la vérification automatisée.",
-    "resultNone": "{drafted, plural, =0 {OpenAI n’a renvoyé aucune ébauche : il n’y a donc rien à pratiquer.} one {La seule ébauche n’a pas réussi la vérification automatisée : il n’y a donc rien à pratiquer.} other {Aucune des # ébauches n’a réussi la vérification automatisée : il n’y a donc rien à pratiquer.}} Son coût figure dans votre suivi des dépenses.",
+    "resultNone": "{drafted, plural, =0 {OpenAI n’a renvoyé aucune ébauche : il n’y a donc rien à pratiquer.} one {La seule ébauche n’a pas réussi la vérification automatisée : il n’y a donc rien à pratiquer.} other {Aucune des # ébauches n’a réussi la vérification automatisée : il n’y a donc rien à pratiquer.}} Le coût de cette demande figure dans votre suivi des dépenses.",
     "resultWhy": "Une ébauche est écartée quand la vérification y trouve plus d’une réponse défendable, une clé douteuse, un mauvais registre ou un mauvais niveau.",
     "practise": "Pratiquer cette série",
     "generateAnother": "Générer une autre série",

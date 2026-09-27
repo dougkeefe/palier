@@ -276,14 +276,14 @@ describe("generatePracticeSet (progress.md D110)", () => {
     expect(scripted.reviewRequests).toHaveLength(1);
   });
 
-  it("reviews no more drafts than it asked for, and counts the rest as discarded", async () => {
+  it("reviews no more drafts than it asked for, and drops the rest unchecked and uncounted", async () => {
     const scripted = scriptedProvider(drafts(GENERATED_SET_SIZE + 3));
     const { deps, entries } = depsFor(scripted.provider);
 
     const result = await generatePracticeSet(REQUEST, deps);
 
     expect(scripted.reviewRequests).toHaveLength(GENERATED_SET_SIZE);
-    expect(result).toMatchObject({ drafted: GENERATED_SET_SIZE + 3, discarded: 3 });
+    expect(result).toMatchObject({ drafted: GENERATED_SET_SIZE, discarded: 0 });
     expect(result.set?.items).toHaveLength(GENERATED_SET_SIZE);
     expect(entries).toHaveLength(1 + GENERATED_SET_SIZE);
   });

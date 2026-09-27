@@ -3958,6 +3958,13 @@ another package's fixtures by path, is accepted as documented in D112 and the fa
 - **Docs:** the runbook builds the factory, the smoke key's limit is US$10, the factory's `CLAUDE.md` names the eval's
   new input, and three small inconsistencies are gone.
 
+**A second review pass over the fixes** found four more, all applied:
+- `drafted` counts only the drafts that were reviewed, so "N of M passed the check" never counts unchecked extras as
+  failures;
+- focus while generating rests on the status line, and `aria-busy` is gone because it could silence that live region;
+- a no-key failure mid-run focuses the no-key card's heading;
+- the French cost sentence now names its referent, and the English matches it.
+
 **Evidence** (after the fixes):
 
 ```

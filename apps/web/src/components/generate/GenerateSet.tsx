@@ -101,23 +101,26 @@ function Generator({
   const [state, dispatch] = useReducer(generator, initialSubSkill, initialGenerator);
   const resultRef = useRef<HTMLHeadingElement>(null);
   const subSkillRef = useRef<HTMLSelectElement>(null);
-  const formRef = useRef<HTMLDivElement>(null);
+  const statusRef = useRef<HTMLDivElement>(null);
+  const noKeyRef = useRef<HTMLHeadingElement>(null);
   const moved = useRef(false);
   const { useCases } = container;
   const notCounted = <Callout tone="info">{t("notCounted")}</Callout>;
   const estimateUsd = useCases.featureCosts().find((cost) => cost.feature === "item-generation")?.estimateUsd ?? null;
 
   // Focus follows the user's move, so it never falls back to the page (WCAG 2.4.3): to the
-  // result's heading once a set arrives; to the busy form while one is generating, since its
-  // controls are disabled; and back to the sub-skill after a cancel, a failure or a finished set.
+  // result's heading once a set arrives; to the status line while one is generating, since the
+  // controls are disabled and it says what is happening; to the no-key card if the key went
+  // mid-run; and back to the sub-skill after a cancel, a failure or a finished set.
   const requestKind = state.phase === "choosing" ? state.request.kind : null;
   useEffect(() => {
     if (!moved.current) return;
     moved.current = false;
     if (state.phase === "result") resultRef.current?.focus();
-    else if (requestKind === "sending") formRef.current?.focus();
+    else if (!setup.keyHeld) noKeyRef.current?.focus();
+    else if (requestKind === "sending") statusRef.current?.focus();
     else if (requestKind === "idle" || requestKind === "failed") subSkillRef.current?.focus();
-  }, [state.phase, requestKind]);
+  }, [state.phase, requestKind, setup.keyHeld]);
 
   const back = () => {
     moved.current = true;
@@ -184,7 +187,7 @@ function Generator({
       <p>{t("intro")}</p>
       {notCounted}
       {!setup.keyHeld ? (
-        <NoKeyCard namespace="generate" estimateUsd={estimateUsd} />
+        <NoKeyCard namespace="generate" estimateUsd={estimateUsd} headingRef={noKeyRef} />
       ) : request.kind === "confirming" ? (
         <Preflight
           estimateUsd={request.preflight.estimateUsd}
@@ -197,7 +200,7 @@ function Generator({
         />
       ) : (
         <Card>
-          <div ref={formRef} tabIndex={-1} aria-busy={request.kind === "sending"} className="app-stack">
+          <div className="app-stack">
             <label className="app-field" htmlFor={`${id}-sub-skill`}>
               <span>{t("subSkillLabel")}</span>
               <select
@@ -224,7 +227,11 @@ function Generator({
                 {request.kind === "failed" ? t("tryAgain") : t("generate")}
               </Button>
             </div>
-            {request.kind === "sending" ? <Toast tone="info">{t("sending")}</Toast> : null}
+            {request.kind === "sending" ? (
+              <div ref={statusRef} tabIndex={-1}>
+                <Toast tone="info">{t("sending")}</Toast>
+              </div>
+            ) : null}
             {request.kind === "failed" ? <Toast tone="incorrect">{t(failureMessage(request.failure))}</Toast> : null}
           </div>
         </Card>

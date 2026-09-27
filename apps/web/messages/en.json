@@ -586,7 +586,7 @@
     "noKeyAdd": "Add a key",
     "resultTitle": "Your fresh set",
     "resultSome": "{kept} of {drafted, plural, one {# draft} other {# drafts}} passed the automated check.",
-    "resultNone": "{drafted, plural, =0 {OpenAI returned no drafts, so there is nothing to practise.} one {The one draft did not pass the automated check, so there is nothing to practise.} other {None of the # drafts passed the automated check, so there is nothing to practise.}} What it cost is in your spend meter.",
+    "resultNone": "{drafted, plural, =0 {OpenAI returned no drafts, so there is nothing to practise.} one {The one draft did not pass the automated check, so there is nothing to practise.} other {None of the # drafts passed the automated check, so there is nothing to practise.}} The cost of this request is in your spend meter.",
     "resultWhy": "A draft is discarded when the check finds more than one defensible answer, a doubtful key, the wrong register or the wrong level.",
     "practise": "Practise this set",
     "generateAnother": "Generate another set",
