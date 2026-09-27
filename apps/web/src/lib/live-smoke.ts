@@ -150,10 +150,14 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
     const from = seen.length;
     const keep = (accepted: boolean) =>
       seen.slice(from).forEach((exchange, index, all) => {
-        const body = JSON.parse(exchange.text) as {
-          choices?: { message?: { content?: unknown } }[];
-          usage?: { prompt_tokens?: number; completion_tokens?: number };
-        };
+        // An error page (a gateway's HTML, say) is no completion: skip it, so the adapter's own
+        // error is the one that surfaces, never a SyntaxError of ours.
+        let body: { choices?: { message?: { content?: unknown } }[]; usage?: { prompt_tokens?: number; completion_tokens?: number } };
+        try {
+          body = JSON.parse(exchange.text) as typeof body;
+        } catch {
+          return;
+        }
         const content = body.choices?.[0]?.message?.content;
         if (typeof content !== "string") return;
         completions.push({
@@ -188,6 +192,20 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
   })();
   const missingModels = [...new Set(Object.values(deps.models))].filter((id) => !listed.has(id));
   seen.length = 0;
+  const empty: MethodMeasure = { calls: 0, inputTokens: 0, outputTokens: 0 };
+  const nothing: FeatureMeasure = { ...empty, costUsd: 0 };
+  // A retired model is the thing this check exists for: stop before paying for any call it would fail.
+  if (missingModels.length > 0) {
+    return {
+      startedAt,
+      endedAt: now(),
+      calls: [],
+      byFeature: { "writing-feedback": nothing, "item-generation": nothing },
+      byMethod: { generateItems: empty, reviewItem: empty, assessWriting: empty },
+      missingModels,
+      completions: [],
+    };
+  }
 
   const drafts: ItemDraft[] = [];
   for (const type of GENERATED_ITEM_TYPES) {

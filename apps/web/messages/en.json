@@ -585,8 +585,8 @@
     "noKeyStill": "The drills and mock exams work without one.",
     "noKeyAdd": "Add a key",
     "resultTitle": "Your fresh set",
-    "resultSome": "{kept} of {drafted} drafts passed the automated check.",
-    "resultNone": "None of the {drafted} drafts passed the automated check, so there is nothing to practise. What they cost is in your spend meter.",
+    "resultSome": "{kept} of {drafted, plural, one {# draft} other {# drafts}} passed the automated check.",
+    "resultNone": "{drafted, plural, =0 {OpenAI returned no drafts, so there is nothing to practise.} one {The one draft did not pass the automated check, so there is nothing to practise.} other {None of the # drafts passed the automated check, so there is nothing to practise.}} What it cost is in your spend meter.",
     "resultWhy": "A draft is discarded when the check finds more than one defensible answer, a doubtful key, the wrong register or the wrong level.",
     "practise": "Practise this set",
     "generateAnother": "Generate another set",
@@ -602,6 +602,7 @@
     "contributeNote": "Opens a prefilled GitHub issue in a new tab. Nothing is sent until you submit it.",
     "linkTitle": "Fresh practice items",
     "linkBody": "With your own OpenAI key: a new set of items for the sub-skill you choose, checked before you see it.",
-    "linkOpen": "Generate a fresh set"
+    "linkOpen": "Generate a fresh set",
+    "scoreFailed": "This item is no longer on this device, so it cannot be scored."
   }
 }

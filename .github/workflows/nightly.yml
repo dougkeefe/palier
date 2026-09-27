@@ -87,26 +87,31 @@ jobs:
       - if: steps.gate.outputs.run == 'true'
         run: pnpm exec turbo run build --filter=@palier/web^...
       - name: Run the live smoke
+        id: smoke
         if: steps.gate.outputs.run == 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_SMOKE_KEY }}
+        # The output is captured first, so a failing run still closes the summary's code fence.
         run: |
-          set -o pipefail
-          {
-            echo "## Live smoke"
-            echo '```'
-            pnpm --filter @palier/web live-smoke 2>&1
-            echo '```'
-          } | tee -a "$GITHUB_STEP_SUMMARY"
+          set +e
+          out=$(pnpm --filter @palier/web live-smoke 2>&1)
+          status=$?
+          printf '## Live smoke\n```\n%s\n```\n' "$out" | tee -a "$GITHUB_STEP_SUMMARY"
+          exit $status
       - name: Open an issue on failure
         if: failure()
         uses: actions/github-script@v8
+        env:
+          SMOKE_OUTCOME: ${{ steps.smoke.outcome }}
         with:
           script: |
+            const cause = process.env.SMOKE_OUTCOME === 'failure'
+              ? 'A live OpenAI call failed, or a configured model is no longer listed.'
+              : 'The job failed before the smoke ran (checkout, install or build).';
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `Nightly live smoke failed on ${context.sha.slice(0, 7)}`,
-              body: `A live OpenAI call failed, or a configured model is no longer listed. Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              body: `${cause} Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
               labels: ['nightly'],
             });

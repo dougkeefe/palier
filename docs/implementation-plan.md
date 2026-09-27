@@ -225,7 +225,7 @@ interface WritingStore {
   clear(): Promise<void>
 }
 
-// Added 26 September 2026 with Phase 4 Slice 4 (progress.md D110): runtime-generated item sets, a port
+// Added 27 September 2026 with Phase 4 Slice 4 (progress.md D110): runtime-generated item sets, a port
 // §3.3 did not name. Device-local like WritingStore: never synced, never exported; wipeData and
 // deleteEverywhere clear it. GeneratedSet = { id, skill, createdAt: ISO, items: Item[] }. No Attempt is ever
 // written for a generated item (scoreGeneratedAnswer scores it locally), so none reaches the practice trend.

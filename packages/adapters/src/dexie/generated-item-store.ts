@@ -42,7 +42,11 @@ const rowsOf = (set: GeneratedSet): GeneratedItemRow[] =>
 export const dexieGeneratedItemStore = (db: PalierDb): GeneratedItemStore => ({
   putSet: async (set) => {
     if (set.items.length === 0) return;
-    await db.generated.bulkPut(rowsOf(set));
+    // A set put again replaces itself: its old rows go first, so no stale item survives by position.
+    await db.transaction("rw", db.generated, async () => {
+      await db.generated.filter((row) => row.setId === set.id).delete();
+      await db.generated.bulkPut(rowsOf(set));
+    });
   },
   latestSet: async (skill: ScoredSkill) => {
     const rows = (await db.generated.where("skill").equals(skill).toArray())

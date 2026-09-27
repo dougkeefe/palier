@@ -22,7 +22,7 @@ sync as unavailable (ADR 21, `architecture.md` §11).
 | `RATE_LIMIT_SALT` | 32 random bytes as hex (`openssl rand -hex 32`). It keys the per-IP rate-limit HMAC. Without it each serverless instance picks its own salt, and the limits stop holding across instances | Vercel, Production (and Preview, if a preview ever gets a database) |
 
 | `TELEMETRY_DATABASE_URL` | A **read-only** connection string to the same database, for the monthly item-statistics job (`progress.md` D94). It only ever runs `select … from telemetry_events`. Without it, the workflow skips with a notice | GitHub → Settings → Secrets and variables → Actions |
-| `OPENAI_SMOKE_KEY` | An OpenAI key **of its own**, with a small monthly limit, for the nightly live smoke (`progress.md` D112). Each run spends about US$0.15. Without it, the job skips with a notice | GitHub → Settings → Secrets and variables → Actions |
+| `OPENAI_SMOKE_KEY` | An OpenAI key **of its own**, with a small monthly limit, for the nightly live smoke (`progress.md` D112). Each run spends about US$0.15, so about US$4.50 a month at one run a night. Without it, the job skips with a notice | GitHub → Settings → Secrets and variables → Actions |
 
 **Keep `DATABASE_URL` out of Preview.** A preview then runs exactly like a deployment without a
 database: fully usable, with sync answering 503. The build's migration step also refuses to run for
@@ -141,7 +141,9 @@ two writing assessments through the real adapter. It writes the measured tokens 
 `features` block to the run's summary. A failed call, or a model in `apps/web/src/lib/ai-models.json` that
 OpenAI no longer lists, fails the job and opens an issue. It never prints the key.
 
-1. On OpenAI, make a key of its own with a small monthly limit (US$5 is plenty).
+1. On OpenAI, make a key of its own with a monthly limit of **US$10**. A month of nightly runs is about US$4.50, and
+   the headroom covers runs by hand and a prompt that starts retrying. A limit hit near month end fails every call
+   with a 429 and opens a misleading issue each night.
 2. Add it as the `OPENAI_SMOKE_KEY` Actions secret, then run the nightly workflow by hand once.
 
 **Re-record the fixtures** when a prompt changes (bump `PROMPT_VERSION` in
@@ -149,7 +151,7 @@ OpenAI no longer lists, fails the job and opens an issue. It never prints the ke
 key never lands in a transcript or your shell history:
 
 ```
-pnpm exec turbo run build --filter=@palier/web^...
+pnpm exec turbo run build --filter=@palier/web^... --filter=@palier/factory
 read -rs OPENAI_API_KEY && export OPENAI_API_KEY     # paste the key; nothing is echoed
 LIVE_SMOKE_RECORD=1 node apps/web/scripts/live-smoke.mjs
 unset OPENAI_API_KEY

@@ -25,10 +25,10 @@ const FEEDBACK = {
   modelAnswer: "Une réponse modèle.",
 };
 
-type Options = { listed?: readonly string[]; malformedFirstReview?: boolean; status?: number };
+type Options = { listed?: readonly string[]; malformedFirstReview?: boolean; status?: number; htmlError?: boolean };
 
 /** A network that answers like OpenAI, recording each request's headers and body. */
-const network = ({ listed = Object.values(MODELS), malformedFirstReview = false, status = 200 }: Options = {}) => {
+const network = ({ listed = Object.values(MODELS), malformedFirstReview = false, status = 200, htmlError = false }: Options = {}) => {
   const requests: { url: string; headers: Record<string, string>; body: string }[] = [];
   let reviews = 0;
   const reply = (s: number, body: unknown) => ({
@@ -40,7 +40,13 @@ const network = ({ listed = Object.values(MODELS), malformedFirstReview = false,
   const fetchImpl: FetchLike = (url, init) => {
     requests.push({ url, headers: init.headers, body: init.body ?? "" });
     if (url.endsWith("/models")) return Promise.resolve(reply(200, { object: "list", data: listed.map((id) => ({ id })) }));
+    if (htmlError) {
+      return Promise.resolve({ ok: false, status: 502, json: () => Promise.reject(new SyntaxError("html")), text: () => Promise.resolve("<html>Bad gateway</html>") });
+    }
     if (status !== 200) return Promise.resolve(reply(status, { error: { code: "rate_limit_exceeded" } }));
+    // A model OpenAI no longer lists answers as a retired one does.
+    const model = (JSON.parse(init.body ?? "{}") as { model: string }).model;
+    if (!listed.includes(model)) return Promise.resolve(reply(404, { error: { code: "model_not_found" } }));
     const prompt = (JSON.parse(init.body ?? "{}") as { messages: { content: string }[] }).messages.map((m) => m.content).join("\n");
     const content = prompt.includes("Produce ")
       ? draftsFor(prompt, "SMOKE")
@@ -97,10 +103,13 @@ describe("runLiveSmoke", () => {
     expect(result.byFeature["item-generation"].inputTokens).toBe(300 * (3 + LIVE_SMOKE_REVIEWS + 1));
   });
 
-  it("names a configured model OpenAI no longer lists", async () => {
-    const result = await run(network({ listed: [MODELS.draft] }).fetchImpl);
+  it("names a configured model OpenAI no longer lists, and stops before paying for any call", async () => {
+    const { fetchImpl, requests } = network({ listed: [MODELS.draft] });
+    const result = await run(fetchImpl);
 
     expect(result.missingModels).toEqual([...new Set([MODELS.review, MODELS.assess])].filter((m) => m !== MODELS.draft));
+    expect(requests.filter((r) => r.url.endsWith("/chat/completions"))).toEqual([]);
+    expect(result.calls).toEqual([]);
   });
 
   it("sends the key to OpenAI as a bearer token, and records none of it", async () => {
@@ -166,12 +175,20 @@ describe("live-smoke.mjs", () => {
     expect(c.err.join("\n")).toContain("RateLimitError");
   });
 
+  it("names the adapter's error, not a parse error, when OpenAI answers with an HTML error page", async () => {
+    const c = capture();
+    expect(await main({ argv: [], env: { OPENAI_API_KEY: KEY }, fetchImpl: network({ htmlError: true }).fetchImpl, ...c.io })).toBe(1);
+    expect(c.err.join("\n")).toContain("ProviderRequestError");
+    expect(c.err.join("\n")).not.toContain("SyntaxError");
+  });
+
   it("exits 1 when a configured model is no longer listed", async () => {
     const c = capture();
     expect(
       await main({ argv: [], env: { OPENAI_API_KEY: KEY }, fetchImpl: network({ listed: [] }).fetchImpl, ...c.io }),
     ).toBe(1);
-    expect(c.err.join("\n")).toMatch(/no longer lists/);
+    expect(c.err.join("\n")).toMatch(/no longer lists .* No other call was made\./);
+    expect(c.files.size).toBe(0);
   });
 });
 

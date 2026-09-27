@@ -44,7 +44,7 @@ export type RecordedRun = {
 const METHODS = new Set(["generateItems", "reviewItem", "assessWriting"]);
 
 /** A hand edit, or a recorder that changed shape, fails here rather than as a confusing replay. */
-const runOf = (file: string, raw: unknown): RecordedRun => {
+export const runOf = (file: string, raw: unknown): RecordedRun => {
   const { recordedAt, promptVersion, completions } = raw as { recordedAt?: unknown; promptVersion?: unknown; completions?: unknown };
   if (typeof recordedAt !== "string" || typeof promptVersion !== "string" || !Array.isArray(completions)) {
     throw new Error(`${file} is not a recorded run`);

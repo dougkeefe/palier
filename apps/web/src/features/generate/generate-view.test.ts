@@ -69,6 +69,16 @@ describe("generator", () => {
     expect(generator(sending, { type: "choose-sub-skill", subSkill: "pronouns" })).toBe(sending);
   });
 
+  it("ignores a pre-flight that lands while a set is being generated, so Send cannot come back mid-request", () => {
+    const sending = generator(generator(choosing, { type: "preflighted", preflight: PREFLIGHT }), { type: "sending" });
+    expect(generator(sending, { type: "preflighted", preflight: PREFLIGHT })).toBe(sending);
+  });
+
+  it("does nothing on cancel mid-request, so the Generate button stays disabled", () => {
+    const sending = generator(choosing, { type: "sending" });
+    expect(generator(sending, { type: "cancel" })).toBe(sending);
+  });
+
   it("practises a set, and comes back to choosing with the same sub-skill", () => {
     const practising = generator(choosing, { type: "practise", set: SET });
     expect(practising).toEqual({ phase: "practising", subSkill: "agreement", set: SET });

@@ -2,7 +2,8 @@ import type { GeneratedItemStore, GeneratedSet } from "@palier/app";
 
 /**
  * Runtime-generated sets, in memory (progress.md D110). `latestSet` is the newest set
- * for a skill by `createdAt`, ties broken by id; a set with no items is not kept.
+ * for a skill by `createdAt` in string order (canonical UTC, as the port requires), ties
+ * broken by id; a set with no items is not kept, and a set put again replaces itself.
  */
 export const memoryGeneratedItemStore = (): GeneratedItemStore => {
   const sets = new Map<string, GeneratedSet>();
@@ -14,7 +15,7 @@ export const memoryGeneratedItemStore = (): GeneratedItemStore => {
     latestSet: (skill) => {
       const newest = [...sets.values()]
         .filter((set) => set.skill === skill)
-        .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || (a.id < b.id ? 1 : -1))[0];
+        .sort((a, b) => (a.createdAt === b.createdAt ? (a.id < b.id ? 1 : -1) : a.createdAt < b.createdAt ? 1 : -1))[0];
       return Promise.resolve(newest ?? null);
     },
     item: (id) =>

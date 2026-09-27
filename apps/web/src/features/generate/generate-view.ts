@@ -54,20 +54,24 @@ const IDLE: RequestState = { kind: "idle" };
 
 export const initialGenerator = (subSkill: SubSkill): GeneratorState => ({ phase: "choosing", subSkill, request: IDLE });
 
+/** Whether the screen may take a new request: choosing, and nothing being generated. */
+const idleChoosing = (state: GeneratorState): state is Extract<GeneratorState, { phase: "choosing" }> =>
+  state.phase === "choosing" && state.request.kind !== "sending";
+
 /**
- * The screen's one reducer. Choosing a sub-skill is allowed only while nothing is in flight;
- * a failure keeps the chosen sub-skill so "Try again" asks for the same thing.
+ * The screen's one reducer. Nothing that starts or changes a request is taken while a set is
+ * being generated: a pre-flight that lands late (a double click on Generate) or a cancel would
+ * otherwise bring Send back mid-request, and a second paid run with it. A failure keeps the
+ * chosen sub-skill so "Try again" asks for the same thing.
  */
 export const generator = (state: GeneratorState, action: GeneratorAction): GeneratorState => {
   switch (action.type) {
     case "choose-sub-skill":
-      return state.phase === "choosing" && state.request.kind !== "sending"
-        ? { phase: "choosing", subSkill: action.subSkill, request: IDLE }
-        : state;
+      return idleChoosing(state) ? { phase: "choosing", subSkill: action.subSkill, request: IDLE } : state;
     case "preflighted":
-      return state.phase === "choosing" ? { ...state, request: { kind: "confirming", preflight: action.preflight } } : state;
+      return idleChoosing(state) ? { ...state, request: { kind: "confirming", preflight: action.preflight } } : state;
     case "cancel":
-      return state.phase === "choosing" ? { ...state, request: IDLE } : state;
+      return idleChoosing(state) ? { ...state, request: IDLE } : state;
     case "sending":
       return state.phase === "choosing" ? { ...state, request: { kind: "sending" } } : state;
     case "failed":

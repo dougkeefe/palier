@@ -89,6 +89,11 @@ test("with a key: the pre-flight warns past the cap, a failure says so plainly, 
   await expect(page.getByText("The set is written at your target level, C.")).toBeVisible();
   await axeClean(page);
 
+  // "Not now" puts focus back on the sub-skill, never on the page (WCAG 2.4.3).
+  await page.getByRole("button", { name: "Generate a fresh set" }).click();
+  await page.getByRole("button", { name: "Not now" }).click();
+  await expect(subSkill).toBeFocused();
+
   // The pre-flight: the estimate, and the warning past the cap. It never blocks.
   await page.getByRole("button", { name: "Generate a fresh set" }).click();
   await expect(page.getByRole("heading", { name: "Before generating" })).toBeFocused();
@@ -101,6 +106,7 @@ test("with a key: the pre-flight warns past the cap, a failure says so plainly, 
   await page.getByRole("button", { name: "Generate the set" }).click();
   await expect(page.getByRole("status").filter({ hasText: "has reached its usage limit or is out of credit" })).toBeVisible();
   await expect(subSkill).toHaveValue("pronouns");
+  await expect(subSkill).toBeFocused();
   await axeClean(page);
 
   // Try again, held mid-draft: the sending state.
@@ -112,6 +118,8 @@ test("with a key: the pre-flight warns past the cap, a failure says so plainly, 
   await page.getByRole("button", { name: "Try again" }).click();
   await page.getByRole("button", { name: "Generate the set" }).click();
   await expect(page.getByRole("status").filter({ hasText: "Drafting and checking the set" })).toBeVisible();
+  // Its controls are disabled while it works, so focus rests on the busy form itself.
+  await expect(page.locator('[aria-busy="true"]')).toBeFocused();
   await axeClean(page);
   release();
   hold = null;
@@ -154,6 +162,7 @@ test("with a key: the pre-flight warns past the cap, a failure says so plainly, 
   // Back on the screen, the last set is offered again.
   await page.getByRole("button", { name: "Back to fresh items" }).click();
   await expect(page.getByRole("heading", { name: "Your last generated set" })).toBeVisible();
+  await expect(page.getByLabel("Sub-skill to practise")).toBeFocused();
   await expect(page.getByText(/^5 items, generated/)).toBeVisible();
   await axeClean(page);
 });

@@ -36,9 +36,6 @@ type Loaded =
       readonly sessionId: SessionId;
     };
 
-/** Runtime-generated items carry this id prefix, which no bank id has (D110). */
-const GENERATED_ID_PREFIX = "gen-";
-
 /** The practice language is French until the English mirror (Phase 8). */
 const TARGET_LANG = "fr" as const;
 
@@ -361,7 +358,7 @@ function Runner({
           statusLabels={{ correct: t("statusCorrect"), incorrect: t("statusIncorrect") }}
         />
       </div>
-      {recordFailed ? <Callout tone="incorrect">{t("recordFailed")}</Callout> : null}
+      {recordFailed ? <RecordFailed generated={mode === "generated"} onDone={onDone} /> : null}
       {inFeedback && mode !== "diagnostic" ? (
         <Feedback
           item={item}
@@ -369,6 +366,7 @@ function Runner({
           correct={state.outcomes.at(-1) === "correct"}
           headingRef={feedbackRef}
           container={container}
+          generated={mode === "generated"}
           last={state.index === items.length - 1}
           onNext={() => dispatch({ type: "next", at: performance.now() })}
         />
@@ -395,6 +393,7 @@ function Feedback({
   correct,
   headingRef,
   container,
+  generated,
   last,
   onNext,
 }: {
@@ -403,6 +402,8 @@ function Feedback({
   correct: boolean;
   headingRef: Ref<HTMLHeadingElement>;
   container: Container;
+  /** A runtime-generated item carries its provenance badge and contribution; there is no bank item to report. */
+  generated: boolean;
   last: boolean;
   onNext: () => void;
 }) {
@@ -439,12 +440,31 @@ function Feedback({
       <p className="app-feedback__matters">
         {t("whyMatters", { band: item.targetBand, subSkill: tSub(item.subSkill) })}
       </p>
-      {item.id.startsWith(GENERATED_ID_PREFIX) ? (
+      {generated ? (
         <GeneratedProvenance item={item} />
       ) : (
         <ReportItem item={item} container={container} />
       )}
     </Sheet>
+  );
+}
+
+/**
+ * An answer that could not be recorded. A drill says so and asks for a retry. A generated set
+ * saves nothing, so its only failure is an item no longer on this device (a wipe in another
+ * tab, say), where a retry can never succeed: it says so and offers the way back instead.
+ */
+function RecordFailed({ generated, onDone }: { generated: boolean; onDone: (() => void) | undefined }) {
+  const t = useTranslations("drill");
+  const tGenerate = useTranslations("generate");
+  if (!generated) return <Callout tone="incorrect">{t("recordFailed")}</Callout>;
+  return (
+    <Callout tone="incorrect">
+      {tGenerate("scoreFailed")}{" "}
+      <Button variant="secondary" onClick={onDone}>
+        {tGenerate("back")}
+      </Button>
+    </Callout>
   );
 }
 

@@ -69,18 +69,36 @@ export const loadItemStatistics = (root: string): ItemStatisticsReport | null =>
   return itemStatisticsReportSchema.parse(readJson(path)) as unknown as ItemStatisticsReport;
 };
 
-/** Every recorded run, sorted by file name. A file that is not a run fails loudly. */
+const RECORDED_METHODS = new Set(["generateItems", "reviewItem", "assessWriting"]);
+
+/**
+ * Every recorded run, sorted by file name. A file that is not a run, or a completion that is not
+ * a whole recorded completion, fails loudly rather than quietly moving the rate (the same checks
+ * `@palier/testing`'s `runOf` makes for the replay gate).
+ */
 export const loadRecordedRuns = (root: string): RecordedRunData[] => {
   const dir = join(root, RECORDED_COMPLETIONS_DIR);
   return readdirSync(dir)
     .filter((file) => file.endsWith(".json"))
     .sort()
     .map((file) => {
-      const raw = readJson(join(dir, file)) as Partial<RecordedRunData>;
+      const raw = readJson(join(dir, file)) as { promptVersion?: unknown; completions?: unknown };
       if (typeof raw.promptVersion !== "string" || !Array.isArray(raw.completions)) {
         throw new Error(`${file} is not a recorded run`);
       }
-      return { file, promptVersion: raw.promptVersion, completions: raw.completions };
+      for (const [index, c] of (raw.completions as Partial<Record<keyof RecordedRunData["completions"][number], unknown>>[]).entries()) {
+        if (
+          !RECORDED_METHODS.has(c.method as string) ||
+          typeof c.model !== "string" ||
+          typeof c.content !== "string" ||
+          typeof c.attempt !== "number" ||
+          typeof c.request !== "object" ||
+          c.request === null
+        ) {
+          throw new Error(`${file}: completion ${String(index)} is not a recorded completion`);
+        }
+      }
+      return { file, promptVersion: raw.promptVersion, completions: raw.completions as RecordedRunData["completions"] };
     });
 };
 

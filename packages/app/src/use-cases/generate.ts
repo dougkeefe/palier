@@ -187,8 +187,10 @@ export const generatePracticeSet = async (
   const now = deps.clock.now();
 
   const { kept, drafted } = await withAiProvider(deps, "item-generation", async (ai) => {
-    const drafts = await ai.generateItems({ promptSpec, topic, lang: request.lang, count: GENERATED_SET_SIZE });
+    const returned = await ai.generateItems({ promptSpec, topic, lang: request.lang, count: GENERATED_SET_SIZE });
     const model = ai.lastUsage()?.model ?? "unknown";
+    // A model that returns more than it was asked for gets no more paid reviews: the rest are discarded.
+    const drafts = returned.slice(0, GENERATED_SET_SIZE);
     const passed: Item[] = [];
     for (const draft of drafts) {
       const item = assembleGenerated(
@@ -201,7 +203,7 @@ export const generatePracticeSet = async (
       const verdict = await ai.reviewItem(reviewRequestFor(item));
       if (gateReasons(item, verdict).length === 0) passed.push(item);
     }
-    return { kept: passed, drafted: drafts.length };
+    return { kept: passed, drafted: returned.length };
   });
 
   const set: GeneratedSet | null =

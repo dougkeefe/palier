@@ -63,6 +63,16 @@ export const generatedItemStoreContract = (name: string, make: () => Promise<Gen
       expect((await store.latestSet("writing"))?.id).toBe("s-b");
     });
 
+    it("replaces a set put again under the same id, its old items gone", async () => {
+      const store = await make();
+      await store.putSet(aSet("s1", "2026-09-26T10:00:00.000Z", [generated("gen-a"), generated("gen-b")]));
+      const again = aSet("s1", "2026-09-26T10:00:00.000Z", [generated("gen-c")]);
+      await store.putSet(again);
+
+      expect(await store.latestSet("writing")).toEqual(again);
+      expect(await store.item(itemId("gen-a"))).toBeNull();
+    });
+
     it("keeps no set that has no items", async () => {
       const store = await make();
       await store.putSet(aSet("kept", "2026-09-25T10:00:00.000Z", [generated("gen-k")]));

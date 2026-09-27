@@ -82,7 +82,7 @@ human for anything expensive.
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
-| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97; Slices 1–3 merged, D98–D108, and Gate G passed; Slice 4 built, D109–D112; all three exit criteria met) |
+| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete on Slice 4's merge** (four slices, D97; Slices 1–3 merged, D98–D108, and Gate G passed; Slice 4 built, D109–D112; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **planned** (Gate H resolved; three slices, D113; Slice 1 is *Next, decided*) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
@@ -94,7 +94,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v4` | **Phase 4 Slice 4 — runtime item generation and the CI gates** (D97): the review gate moved to `@palier/domain`, `generatePracticeSet` on the user's key (written expression only, by human decision), a device-local `GeneratedItemStore` over v1's `generated` table, "Generate a fresh set" on the writing drill page with its provenance badge and one-tap contribution, recorded-fixture schema conformance, the eval harness's conformance rate, and the nightly live smoke. **Built; pending merge** (D109–D112). | 26 September 2026 |
+| `dougkeefe/next-progress-slice-v4` | **Phase 4 Slice 4 — runtime item generation and the CI gates** (D97): the review gate moved to `@palier/domain`, `generatePracticeSet` on the user's key (written expression only, by human decision), a device-local `GeneratedItemStore` over v1's `generated` table, "Generate a fresh set" at `/practice/writing/generate`, linked from the writing drill, with its provenance badge and one-tap contribution, recorded-fixture schema conformance, the eval harness's conformance rate, and the nightly live smoke. **Built; pending merge** (D109–D112). | 26 September 2026 |
 
 *(The prior rows — Phase 4 Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -249,12 +249,18 @@ criterion 5. The existing groundwork:
 - the machine driven end to end against the fake transport, which is **exit criterion 5 ticked**;
 - `pnpm verify` and `verify:medium` green.
 
-**Human, now that Slice 4 has landed:**
+**Human, once Slice 4 merges:**
 - add the `OPENAI_SMOKE_KEY` Actions secret, a key of its own with a small monthly limit (`docs/deploy.md`, "The
   nightly live smoke"), and run the nightly workflow once by hand;
 - read the `generate` namespace's French, with the rest of Phase 7's R8 review.
 
-**Named, not scheduled:** reading-set generation (D110).
+**Named, not scheduled:**
+- reading-set generation (D110);
+- **a generation that outlives its screen** (pre-merge review, finding 13). Leaving `/practice/writing/generate`
+  mid-run keeps spending out of sight, and a wipe made meanwhile is refilled when the run finishes. The workshop
+  shares the shape. The fix is an in-flight flag a remount reads, and a wipe counter `putSet` checks before writing;
+- **one `debiasKeyPosition`** (finding 16). The browser's shuffle copies the factory's. Move one pure
+  `debiasKeyPosition(draft, next)` into domain for both, with the factory's golden output unchanged.
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
@@ -3842,6 +3848,17 @@ these are recorded as made, as D87, D100, D104 and D108 were)
     a setup change only, and one assertion was added for the new log line.
   - `openAiHandlers`' completions may now be a function of the prompt, with the existing callers unchanged.
   - `stubOpenAi`'s answer callback also receives the request body, with the existing callers unchanged.
+- **Amended before merge, after the pre-merge review** (session log, 27 September 2026). The first definition above
+  counted retries.
+  - **The rate is now over first replies only.** A retry's reply is still replayed by the gate, but it never counts
+    toward the rate, and the factory keeps each completion's `attempt`.
+  - The prompt-3 run therefore reads **2 of 5 (0.4)**, not 5 of 8. Prompt 4 stays at 1.0 over 10.
+  - A rate is `null`, not 0, when nothing was recorded on the shipping prompt.
+  - The factory's loader now checks each completion as `runOf` does. A test holds `RECORDED_RUNS` equal to the files
+    on disk.
+  - The smoke stops before any paid call when a configured model is missing, and names the adapter's error when
+    OpenAI answers with an error page that is not JSON.
+  - The smoke key's suggested limit is US$10, since a month of nightly runs is about US$4.50.
 
 ### D113 — Gate H: PRD §8.6's practice mode adopted with the recommendations, Phase 5 is three slices, and GPT-Live noted for studio mode
 **Date:** 27 September 2026 · **Status:** accepted (human decisions); resolves Gate H
@@ -3913,6 +3930,41 @@ these are recorded as made, as D87, D100, D104 and D108 were)
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 27 September 2026 — `dougkeefe/next-progress-slice-v4` (pre-merge review: 20 fixes)
+
+**A candid review of the whole branch** (three parallel reviewers, constructive tone) found 23 issues, none critical.
+The human chose to fix 20. Findings 13 and 16 are named follow-ups in *Next, decided*, and 23, the factory reading
+another package's fixtures by path, is accepted as documented in D112 and the factory's `CLAUDE.md`.
+- **Money:**
+  - a draft call returning more than `GENERATED_SET_SIZE` drafts no longer buys more reviews;
+  - a pre-flight that lands late, or a cancel, is ignored while a set is generating, so Send cannot come back
+    mid-request.
+- **Accessibility:** focus follows every move on the fresh-set screen: Not now, Send, a failure, Generate another set
+  and Back to fresh items. The spec asserts `toBeFocused()` for each.
+- **Correctness:**
+  - putting a `GeneratedItemStore` set again replaces it in both stores, and the port states its unique-id and
+    canonical-UTC assumptions;
+  - whether an item is generated now comes from the runner's mode, not a copied `gen-` prefix;
+  - generated mode's failure says the item is gone and offers the way back;
+  - dates in the workshop history and the last set are formatted in the device's own time zone. next-intl handed the
+    static pages the build machine's zone.
+- **CI and the eval:**
+  - the conformance rate counts first replies only, and nothing measured is `null` (D112, amended);
+  - the loaders are validated and tested;
+  - the smoke stops before paying when a model is missing, and names the adapter's error on a page that is not JSON;
+  - the nightly summary's fence always closes, and the issue says whether the smoke or the build failed.
+- **Copy:** the French grammar in `lastBody` and `doneBody`, and plural-aware result lines in both locales.
+- **Docs:** the runbook builds the factory, the smoke key's limit is US$10, the factory's `CLAUDE.md` names the eval's
+  new input, and three small inconsistencies are gone.
+
+**Evidence** (after the fixes):
+
+```
+pnpm verify          → boundaries (398 + 207 modules, no violations), test: 175 files, 2521 passed, 8 todo
+pnpm verify:medium   → integration: 6 files, 45 passed; E2E (CI=1): 50 passed (59.4s)
+node apps/factory/dist/index.js eval → schema conformance on prompt v4: 1.000; prompt-3 run 2 of 5 (0.4)
+```
 
 ### 27 September 2026 — `dougkeefe/next-progress-slice-v4` (Gate H resolved; Phase 5 planned)
 

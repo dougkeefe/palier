@@ -27,10 +27,16 @@ export type GeneratedSet = {
  * Generated items never enter the practice trend: no `Attempt` is ever written for
  * one (`scoreGeneratedAnswer`), so they cannot reach `practiceTrend`'s input.
  *
- * - `putSet` keeps every item of the set; a set with no items is not kept.
+ * - `putSet` keeps every item of the set; a set with no items is not kept. Putting
+ *   a set again under the same id **replaces** it, its old items gone.
  * - `latestSet` is the newest set for a skill by `createdAt` (ties by id), its
  *   items in the order they were put, or null when there is none.
  * - `item` finds one item of any kept set.
+ *
+ * Two assumptions every caller keeps, because the Dexie table is keyed by item id:
+ * **an item id belongs to one set** (`gen-` plus a fresh ULID, D110), and
+ * **`createdAt` is a canonical UTC `toISOString()`** from the clock, so string order
+ * is time order in every implementation.
  */
 export type GeneratedItemStore = {
   putSet: (set: GeneratedSet) => Promise<void>;

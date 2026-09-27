@@ -107,6 +107,10 @@ export const main = async ({
     error(`live-smoke: a live call failed with ${name}, the adapter's own name for the fault. Nothing was recorded.`);
     return 1;
   }
+  if (result.missingModels.length > 0) {
+    error(`live-smoke: OpenAI no longer lists ${result.missingModels.join(", ")}. Update src/lib/ai-models.json. No other call was made.`);
+    return 1;
+  }
   for (const [method, m] of Object.entries(result.byMethod)) {
     log(`${method}: ${String(m.calls)} call(s), average in ${String(m.inputTokens)}  out ${String(m.outputTokens)}`);
   }
@@ -119,10 +123,6 @@ export const main = async ({
   if (argv.includes("--record") || env.LIVE_SMOKE_RECORD === "1") {
     for (const file of recordings(result)) write(file.name, file.content);
     log(`recorded ${String(result.completions.length)} completion(s) to packages/testing/src/recorded/openai/`);
-  }
-  if (result.missingModels.length > 0) {
-    error(`live-smoke: OpenAI no longer lists ${result.missingModels.join(", ")}. Update src/lib/ai-models.json.`);
-    return 1;
   }
   return 0;
 };

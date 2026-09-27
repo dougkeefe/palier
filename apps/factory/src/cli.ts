@@ -194,9 +194,11 @@ export const runFactory = async (argv: readonly string[], deps: CliDeps): Promis
     const report = await runEval(deps.root, provider, Number(values["per-class"]));
     writeJsonFile(deps.root, EVAL_REPORT_PATH, report);
     deps.log(`eval: overall ${report.overallRate.toFixed(3)}, min class ${report.minClassRate.toFixed(3)}`);
+    const { promptVersion, rate, measuredOn } = report.schemaConformance;
     deps.log(
-      `schema conformance on prompt v${report.schemaConformance.promptVersion}: ${report.schemaConformance.rate.toFixed(3)} ` +
-        `over ${report.schemaConformance.measuredOn.join(", ")}`,
+      rate === null
+        ? `schema conformance: no recorded run on prompt v${promptVersion}; re-record (docs/deploy.md)`
+        : `schema conformance on prompt v${promptVersion}: ${rate.toFixed(3)} over ${measuredOn.join(", ")}`,
     );
     return report.minClassRate >= DETECTION_BAR ? 0 : 1;
   }

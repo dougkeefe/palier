@@ -22,6 +22,7 @@ import {
 } from "../../features/writing/workshop-view";
 import type { Container } from "../../lib/container";
 import { readStudyProfile } from "../../lib/study";
+import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
 import { WritingFeedback } from "./WritingFeedback";
@@ -406,7 +407,7 @@ function History({
           const prompt = promptOf(submission.promptId) as WritingPrompt;
           const label = t("historyItem", {
             title: prompt.title[locale],
-            date: format.dateTime(new Date(submission.writtenAt), { dateStyle: "medium", timeStyle: "short" }),
+            date: format.dateTime(new Date(submission.writtenAt), { dateStyle: "medium", timeStyle: "short", timeZone: deviceTimeZone() }),
           });
           return (
             <li key={submission.id} className="app-history">

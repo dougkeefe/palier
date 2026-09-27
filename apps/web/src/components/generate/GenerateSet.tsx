@@ -17,6 +17,7 @@ import { estimateText } from "../../features/key/spend-view";
 import { preflightNotice } from "../../features/writing/workshop-view";
 import type { Container } from "../../lib/container";
 import { readStudyProfile } from "../../lib/study";
+import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
 import { PracticeSession } from "../practice/PracticeSession";
@@ -99,23 +100,36 @@ function Generator({
   const id = useId();
   const [state, dispatch] = useReducer(generator, initialSubSkill, initialGenerator);
   const resultRef = useRef<HTMLHeadingElement>(null);
+  const subSkillRef = useRef<HTMLSelectElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
   const moved = useRef(false);
   const { useCases } = container;
   const notCounted = <Callout tone="info">{t("notCounted")}</Callout>;
   const estimateUsd = useCases.featureCosts().find((cost) => cost.feature === "item-generation")?.estimateUsd ?? null;
 
-  // Focus follows the user's move: to the result's heading once a set arrives.
+  // Focus follows the user's move, so it never falls back to the page (WCAG 2.4.3): to the
+  // result's heading once a set arrives; to the busy form while one is generating, since its
+  // controls are disabled; and back to the sub-skill after a cancel, a failure or a finished set.
+  const requestKind = state.phase === "choosing" ? state.request.kind : null;
   useEffect(() => {
     if (!moved.current) return;
     moved.current = false;
     if (state.phase === "result") resultRef.current?.focus();
-  }, [state.phase]);
+    else if (requestKind === "sending") formRef.current?.focus();
+    else if (requestKind === "idle" || requestKind === "failed") subSkillRef.current?.focus();
+  }, [state.phase, requestKind]);
+
+  const back = () => {
+    moved.current = true;
+    dispatch({ type: "back" });
+  };
 
   const onGenerate = async () => {
     dispatch({ type: "preflighted", preflight: await useCases.preflightSpend({ feature: "item-generation" }) });
   };
 
   const onSend = async (subSkill: SubSkill) => {
+    moved.current = true;
     dispatch({ type: "sending" });
     try {
       const result = await useCases.generatePracticeSet({ subSkill, targetBand: setup.targetBand, lang: TARGET_LANG });
@@ -125,6 +139,7 @@ function Generator({
     } catch (error) {
       const failure = generateFailure(error);
       if (failure === "no-key") onSetup((current) => current && { ...current, keyHeld: false });
+      moved.current = true;
       dispatch({ type: "failed", failure });
     }
   };
@@ -133,7 +148,7 @@ function Generator({
     return (
       <div className="app-stack">
         {notCounted}
-        <PracticeSession key={state.set.id} mode="generated" set={state.set} onDone={() => dispatch({ type: "back" })} />
+        <PracticeSession key={state.set.id} mode="generated" set={state.set} onDone={back} />
       </div>
     );
   }
@@ -153,7 +168,7 @@ function Generator({
             <p className="app-muted">{t("resultWhy")}</p>
             <div className="app-actions">
               {set === null ? null : <Button onClick={() => dispatch({ type: "practise", set })}>{t("practise")}</Button>}
-              <Button variant="secondary" onClick={() => dispatch({ type: "back" })}>
+              <Button variant="secondary" onClick={back}>
                 {t("generateAnother")}
               </Button>
             </div>
@@ -175,14 +190,18 @@ function Generator({
           estimateUsd={request.preflight.estimateUsd}
           notice={preflightNotice(request.preflight)}
           onSend={() => void onSend(subSkill)}
-          onCancel={() => dispatch({ type: "cancel" })}
+          onCancel={() => {
+            moved.current = true;
+            dispatch({ type: "cancel" });
+          }}
         />
       ) : (
         <Card>
-          <div className="app-stack">
+          <div ref={formRef} tabIndex={-1} aria-busy={request.kind === "sending"} className="app-stack">
             <label className="app-field" htmlFor={`${id}-sub-skill`}>
               <span>{t("subSkillLabel")}</span>
               <select
+                ref={subSkillRef}
                 id={`${id}-sub-skill`}
                 className="app-input"
                 aria-describedby={`${id}-sub-skill-hint`}
@@ -265,7 +284,7 @@ function LastSet({ set, onPractise }: { set: GeneratedSet; onPractise: () => voi
       <p>
         {t("lastBody", {
           count: set.items.length,
-          date: format.dateTime(new Date(set.createdAt), { dateStyle: "medium", timeStyle: "short" }),
+          date: format.dateTime(new Date(set.createdAt), { dateStyle: "medium", timeStyle: "short", timeZone: deviceTimeZone() }),
         })}
       </p>
       <div className="app-actions">

@@ -48,11 +48,11 @@
     },
     "earlier": [
       {
-        "conformant": 5,
+        "conformant": 2,
         "file": "reviewItem-prompt-v3.json",
         "promptVersion": "3",
-        "rate": 0.625,
-        "total": 8
+        "rate": 0.4,
+        "total": 5
       }
     ],
     "measuredOn": [
