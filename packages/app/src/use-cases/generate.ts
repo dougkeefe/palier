@@ -65,7 +65,9 @@ export type GeneratePracticeSetRequest = {
 export type GeneratePracticeSetResult = {
   /** The kept set, or null when no draft passed. */
   readonly set: GeneratedSet | null;
+  /** Drafts that were checked: at most `GENERATED_SET_SIZE`. Extras a model returns are dropped unchecked and uncounted. */
   readonly drafted: number;
+  /** `drafted` less the drafts kept. */
   readonly discarded: number;
 };
 

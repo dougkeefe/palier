@@ -3962,15 +3962,18 @@ another package's fixtures by path, is accepted as documented in D112 and the fa
 - `drafted` counts only the drafts that were reviewed, so "N of M passed the check" never counts unchecked extras as
   failures;
 - focus while generating rests on the status line, and `aria-busy` is gone because it could silence that live region;
-- a no-key failure mid-run focuses the no-key card's heading;
+- a no-key failure mid-run focuses the no-key card's heading. The new `generate-production.spec.ts` stages it on the
+  production build, where a second tab removes the key from the shared IndexedDB vault while the first is at the
+  pre-flight;
 - the French cost sentence now names its referent, and the English matches it.
 
 **Evidence** (after the fixes):
 
 ```
 pnpm verify          → boundaries (398 + 207 modules, no violations), test: 175 files, 2521 passed, 8 todo
-pnpm verify:medium   → integration: 6 files, 45 passed; E2E (CI=1): 50 passed (59.4s)
+pnpm verify:medium   → integration: 6 files, 45 passed; E2E (CI=1): 51 passed (53.4s), with generate-production.spec.ts
 node apps/factory/dist/index.js eval → schema conformance on prompt v4: 1.000; prompt-3 run 2 of 5 (0.4)
+generate-production.spec.ts, with NoKeyCard's headingRef dropped → fails at toBeFocused; reverted, rebuilt clean
 ```
 
 ### 27 September 2026 — `dougkeefe/next-progress-slice-v4` (Gate H resolved; Phase 5 planned)
