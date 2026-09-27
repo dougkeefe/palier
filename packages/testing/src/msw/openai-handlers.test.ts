@@ -98,6 +98,36 @@ describe("openAiHandlers — chat completions, with the usage the ledger reads (
     expect(seen).toEqual(["Bearer sk-handler-test", "Bearer sk-handler-test", "Bearer sk-handler-test"]);
   });
 
+  it("answers a completion whose content is a function of the prompt it was sent (D110)", async () => {
+    mswServer.use(
+      ...openAiHandlers({
+        mode: "ok",
+        completions: [{ content: (prompt: string) => ({ echoed: prompt }), usage: { prompt_tokens: 3, completion_tokens: 4 } }],
+      }),
+    );
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ model: "m", messages: [{ role: "system", content: "be brief" }, { role: "user", content: "hello" }] }),
+    });
+
+    expect(await response.json()).toEqual({
+      choices: [{ message: { content: JSON.stringify({ echoed: "be brief\nhello" }) } }],
+      usage: { prompt_tokens: 3, completion_tokens: 4 },
+    });
+  });
+
+  it("hands a function an empty prompt when the body is not JSON", async () => {
+    mswServer.use(
+      ...openAiHandlers({ mode: "ok", completions: [{ content: (prompt: string) => ({ echoed: prompt }), usage: { prompt_tokens: 0, completion_tokens: 0 } }] }),
+    );
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", { method: "POST", body: "not json" });
+
+    expect(await response.json()).toMatchObject({ choices: [{ message: { content: '{"echoed":""}' } }] });
+  });
+
   it("answers an empty object for no tokens when nothing was scripted", async () => {
     mswServer.use(...openAiHandlers({ mode: "ok" }));
 

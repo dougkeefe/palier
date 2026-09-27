@@ -23,7 +23,7 @@ import {
 import type { Container } from "../../lib/container";
 import { readStudyProfile } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
-import { NoKeyCard } from "./NoKeyCard";
+import { NoKeyCard } from "../key/NoKeyCard";
 import { WritingFeedback } from "./WritingFeedback";
 
 /** Without a study profile, feedback aims at C, the level the SLE workshop is for (D108). */
@@ -219,7 +219,7 @@ export function WritingWorkshop() {
         onEdit={(text) => dispatch({ type: "edit", text })}
       />
       {!setup.keyHeld ? (
-        <NoKeyCard estimateUsd={estimateUsd} />
+        <NoKeyCard namespace="writing" estimateUsd={estimateUsd} />
       ) : request.kind === "confirming" ? (
         <Preflight
           estimateUsd={request.preflight.estimateUsd}

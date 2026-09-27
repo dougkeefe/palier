@@ -1,5 +1,6 @@
 "use client";
 
+import type { GeneratedSet } from "@palier/app";
 import type { Item, Passage as PassageData, ScoredSkill, SessionId } from "@palier/domain";
 import { attemptId, sessionId } from "@palier/domain";
 import type { SkillTrend } from "@palier/engine";
@@ -14,14 +15,16 @@ import { DIAGNOSTIC_SIZE, REVIEW_SET_LIMIT, readStudyProfile, sessionSizeFor } f
 import { useContainer } from "../ContainerProvider";
 import { KeyOffer } from "../key/KeyOffer";
 import { useSync } from "../sync/SyncRunner";
+import { GeneratedProvenance } from "./GeneratedProvenance";
 import { ReportItem } from "./ReportItem";
 import { TrendMeters } from "./TrendMeters";
 
-export type PracticeMode = "drill" | "diagnostic" | "review";
+export type PracticeMode = "drill" | "diagnostic" | "review" | "generated";
 
 export type PracticeSessionProps =
   | { readonly mode: "drill" | "diagnostic"; readonly skill: ScoredSkill }
-  | { readonly mode: "review" };
+  | { readonly mode: "review" }
+  | { readonly mode: "generated"; readonly set: GeneratedSet; readonly onDone: () => void };
 
 type Loaded =
   | { readonly status: "loading" }
@@ -32,6 +35,9 @@ type Loaded =
       readonly items: readonly Item[];
       readonly sessionId: SessionId;
     };
+
+/** Runtime-generated items carry this id prefix, which no bank id has (D110). */
+const GENERATED_ID_PREFIX = "gen-";
 
 /** The practice language is French until the English mirror (Phase 8). */
 const TARGET_LANG = "fr" as const;
@@ -45,8 +51,35 @@ const TARGET_LANG = "fr" as const;
  * `reviewQueue`'s due stack), in whether each answer is followed by feedback (a
  * diagnostic gives none until the end, so it measures rather than teaches), and in the
  * ending (a summary, or accuracy per band with its interval, R10).
+ *
+ * A generated set (architecture.md §8.3, progress.md D110–D111) is the one exception to the
+ * answer loop: its items were made on this device, so it is handed in whole rather than
+ * loaded, and each answer is scored by `scoreGeneratedAnswer`, which writes no attempt, no
+ * schedule entry and no session. It never reaches the trend and never syncs.
  */
 export function PracticeSession(props: PracticeSessionProps) {
+  if (props.mode === "generated") return <GeneratedSession set={props.set} onDone={props.onDone} />;
+  return <LoadedSession {...props} />;
+}
+
+function GeneratedSession({ set, onDone }: { set: GeneratedSet; onDone: () => void }) {
+  const t = useTranslations("common");
+  const state = useContainer();
+  if (state.status === "failed") return <Callout tone="incorrect">{t("loadFailed")}</Callout>;
+  if (state.status !== "ready") return <p role="status">{t("loading")}</p>;
+  return (
+    <Runner
+      container={state.container}
+      mode="generated"
+      skill={set.skill}
+      items={set.items}
+      sessionId={sessionId(set.id)}
+      onDone={onDone}
+    />
+  );
+}
+
+function LoadedSession(props: Exclude<PracticeSessionProps, { readonly mode: "generated" }>) {
   const { mode } = props;
   const skill = props.mode === "review" ? null : props.skill;
   const t = useTranslations("common");
@@ -83,7 +116,11 @@ export function PracticeSession(props: PracticeSessionProps) {
   );
 }
 
-const load = async (container: Container, skill: ScoredSkill | null, mode: PracticeMode): Promise<Loaded> => {
+const load = async (
+  container: Container,
+  skill: ScoredSkill | null,
+  mode: Exclude<PracticeMode, "generated">,
+): Promise<Loaded> => {
   if (mode === "review" || skill === null) {
     const { items } = await container.useCases.reviewQueue({ limit: REVIEW_SET_LIMIT });
     return { status: "ready", items, sessionId: sessionId(container.ids.ulid()) };
@@ -138,12 +175,14 @@ function Runner({
   skill,
   items,
   sessionId: session,
+  onDone,
 }: {
   container: Container;
   mode: PracticeMode;
   skill: ScoredSkill | null;
   items: readonly Item[];
   sessionId: SessionId;
+  onDone?: () => void;
 }) {
   const t = useTranslations("drill");
   const tCommon = useTranslations("common");
@@ -178,36 +217,45 @@ function Runner({
     if (state.phase !== "recording") return;
     const pending = pendingAnswer(state, performance.now());
     if (pending === null) return;
-    const id = attemptIds.current.get(state.index) ?? container.ids.ulid();
-    attemptIds.current.set(state.index, id);
     let live = true;
-    container.useCases
-      .answerItem({
-        attemptId: attemptId(id),
-        itemId: pending.item.id,
-        response: pending.response,
-        sessionId: session,
-        mode,
-        msToFirstSelect: pending.msToFirstSelect,
-        msToConfirm: pending.msToConfirm,
-        changedAnswer: pending.changedAnswer,
-        // No timing threshold exists yet (D40): "slow" waits for real timing data.
-        slow: false,
-      })
-      .then(
-        (result) => {
-          if (!live) return;
-          setRecordFailed(false);
-          dispatch({ type: "answered", correct: result.attempt.correct });
-          // A diagnostic gives no per-item feedback: straight on to the next item.
-          if (mode === "diagnostic") dispatch({ type: "next", at: performance.now() });
-        },
-        () => {
-          if (!live) return;
-          setRecordFailed(true);
-          dispatch({ type: "failed" });
-        },
-      );
+    const record = (): Promise<boolean> => {
+      // A generated item is scored on the device and recorded nowhere (D110).
+      if (mode === "generated") {
+        return container.useCases
+          .scoreGeneratedAnswer({ itemId: pending.item.id, response: pending.response })
+          .then((result) => result.correct);
+      }
+      const id = attemptIds.current.get(state.index) ?? container.ids.ulid();
+      attemptIds.current.set(state.index, id);
+      return container.useCases
+        .answerItem({
+          attemptId: attemptId(id),
+          itemId: pending.item.id,
+          response: pending.response,
+          sessionId: session,
+          mode,
+          msToFirstSelect: pending.msToFirstSelect,
+          msToConfirm: pending.msToConfirm,
+          changedAnswer: pending.changedAnswer,
+          // No timing threshold exists yet (D40): "slow" waits for real timing data.
+          slow: false,
+        })
+        .then((result) => result.attempt.correct);
+    };
+    record().then(
+      (correct) => {
+        if (!live) return;
+        setRecordFailed(false);
+        dispatch({ type: "answered", correct });
+        // A diagnostic gives no per-item feedback: straight on to the next item.
+        if (mode === "diagnostic") dispatch({ type: "next", at: performance.now() });
+      },
+      () => {
+        if (!live) return;
+        setRecordFailed(true);
+        dispatch({ type: "failed" });
+      },
+    );
     return () => {
       live = false;
     };
@@ -278,6 +326,7 @@ function Runner({
   }
 
   if (state.phase === "complete") {
+    if (mode === "generated") return <GeneratedComplete {...summaryOf(state)} onDone={onDone} />;
     return mode === "diagnostic" && skill !== null ? (
       <DiagnosticComplete skillName={tSkills(skill)} trend={trend} />
     ) : (
@@ -390,8 +439,33 @@ function Feedback({
       <p className="app-feedback__matters">
         {t("whyMatters", { band: item.targetBand, subSkill: tSub(item.subSkill) })}
       </p>
-      <ReportItem item={item} container={container} />
+      {item.id.startsWith(GENERATED_ID_PREFIX) ? (
+        <GeneratedProvenance item={item} />
+      ) : (
+        <ReportItem item={item} container={container} />
+      )}
     </Sheet>
+  );
+}
+
+/**
+ * The end of a generated set: the score, a reminder that it never counts, and the way back to
+ * the fresh-set screen. No session is closed and no sync is triggered, because nothing was
+ * recorded (D110).
+ */
+function GeneratedComplete({ answered, correct, onDone }: { answered: number; correct: number; onDone: (() => void) | undefined }) {
+  const t = useTranslations("generate");
+  return (
+    <EmptyState
+      heading={t("doneTitle")}
+      action={
+        <Button variant="primary" onClick={onDone}>
+          {t("back")}
+        </Button>
+      }
+    >
+      {t("doneBody", { correct, answered })}
+    </EmptyState>
   );
 }
 

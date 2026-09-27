@@ -46,6 +46,10 @@ import type {
   WritingStore,
   WritingSubmission,
   GeneratedItemStore,
+  GeneratedSet,
+  GeneratePracticeSetRequest,
+  GeneratePracticeSetResult,
+  ScoreGeneratedAnswerRequest,
   StartExamRequest,
   StartExamResult,
   StartSessionRequest,
@@ -115,11 +119,14 @@ import {
   saveWriting,
   writingHistory,
   writingPrompts,
+  generatePracticeSet,
+  latestGeneratedSet,
+  scoreGeneratedAnswer,
 } from "@palier/app";
 import { httpBankRepository } from "@palier/adapters/bank";
 import { dexieStores } from "@palier/adapters/dexie";
 import { webCryptoIdGenerator } from "@palier/adapters/ids";
-import { openAiProvider } from "@palier/adapters/openai";
+import { PROMPT_VERSION, openAiProvider } from "@palier/adapters/openai";
 import { httpSyncTransport } from "@palier/adapters/sync";
 import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
@@ -294,6 +301,13 @@ export type UseCases = {
   readonly saveWriting: (request: SaveWritingRequest) => Promise<WritingSubmission>;
   readonly requestWritingFeedback: (request: WritingFeedbackRequest) => Promise<WritingSubmission>;
   readonly writingHistory: () => Promise<readonly WritingSubmission[]>;
+  /**
+   * Runtime item generation (architecture.md §8.3, progress.md D110–D111): a fresh set on the user's key,
+   * the last one kept on this device, and answers scored without writing an attempt.
+   */
+  readonly generatePracticeSet: (request: GeneratePracticeSetRequest) => Promise<GeneratePracticeSetResult>;
+  readonly latestGeneratedSet: () => Promise<GeneratedSet | null>;
+  readonly scoreGeneratedAnswer: (request: ScoreGeneratedAnswerRequest) => Promise<{ readonly correct: boolean }>;
 };
 
 export type Ports = {
@@ -510,6 +524,19 @@ function buildUseCases(ports: Ports): UseCases {
         clock: ports.clock,
       }),
     writingHistory: () => writingHistory({ writing: ports.writing }),
+    generatePracticeSet: (request) =>
+      generatePracticeSet(request, {
+        vault: ports.vault,
+        aiProvider: ports.aiProvider,
+        ledger: ports.costLedger,
+        clock: ports.clock,
+        generated: ports.generated,
+        ids: ports.ids,
+        random: ports.random,
+        promptVersion: PROMPT_VERSION,
+      }),
+    latestGeneratedSet: () => latestGeneratedSet({ generated: ports.generated }),
+    scoreGeneratedAnswer: (request) => scoreGeneratedAnswer(request, { generated: ports.generated }),
   };
 }
 

@@ -17,12 +17,18 @@ import { delay, http, HttpResponse } from "msw";
  * | `slow` | never answers, so the caller's timeout decides |
  *
  * `completions` answers each completion in turn, the last one repeating, so a test can
- * script a malformed first reply and a good retry. `onAuthorization` sees each request's
+ * script a malformed first reply and a good retry. A completion's `content` may instead be a
+ * function of the request's prompt (every message's content, joined), for an answer that
+ * depends on what was asked — a draft of the requested type, or a verdict that finds the
+ * right option wherever the key was moved (progress.md D110). `onAuthorization` sees each request's
  * `authorization` header, so a test can prove the key reached this origin, and only this one.
  */
 export type OpenAiMode = "ok" | "invalid-key" | "rate-limited" | "server-error" | "malformed" | "slow";
 
-/** One scripted completion: the JSON the model "replied" with, and what it cost in tokens. */
+/**
+ * One scripted completion: the JSON the model "replied" with, or a function of the prompt
+ * that returns it, and what it cost in tokens.
+ */
 export type OpenAiCompletion = {
   readonly content: unknown;
   readonly usage: { readonly prompt_tokens: number; readonly completion_tokens: number };
@@ -53,6 +59,12 @@ const refusal = async (mode: Exclude<OpenAiMode, "ok" | "malformed">) => {
   }
 };
 
+/** Every message's content in a chat-completion request, joined, or "" when there is none. */
+const promptOf = async (request: Request): Promise<string> => {
+  const body = (await request.json().catch(() => ({}))) as { messages?: readonly { content?: unknown }[] };
+  return (body.messages ?? []).map((m) => (typeof m.content === "string" ? m.content : "")).join("\n");
+};
+
 const NO_COMPLETION: OpenAiCompletion = { content: {}, usage: { prompt_tokens: 0, completion_tokens: 0 } };
 
 export const openAiHandlers = ({
@@ -69,13 +81,14 @@ export const openAiHandlers = ({
       if (mode === "malformed") return HttpResponse.json({ object: "list" });
       return refusal(mode);
     }),
-    http.post(`${baseUrl}/chat/completions`, ({ request }) => {
+    http.post(`${baseUrl}/chat/completions`, async ({ request }) => {
       onAuthorization?.(request.headers.get("authorization"));
       const next = completions[Math.min(answered, completions.length - 1)] ?? NO_COMPLETION;
       answered += 1;
       if (mode === "ok") {
+        const content = typeof next.content === "function" ? (next.content as (prompt: string) => unknown)(await promptOf(request)) : next.content;
         return HttpResponse.json({
-          choices: [{ message: { content: JSON.stringify(next.content) } }],
+          choices: [{ message: { content: JSON.stringify(content) } }],
           usage: next.usage,
         });
       }

@@ -1,3 +1,5 @@
+import type { Item } from "@palier/domain";
+
 /**
  * Item reporting (product-requirements.md §13.0): "a flag control ... offers four
  * reasons ... and files a GitHub issue with the item id." The zero-backend path is a
@@ -35,6 +37,42 @@ export const reportIssueUrl = (report: ItemReport): string => {
     "",
   ].join("\n");
   const params = new URLSearchParams({ title, body, labels: `item-report,reason:${report.reason}` });
+  return `${REPOSITORY_URL}/issues/new?${params.toString()}`;
+};
+
+/**
+ * The one-tap contribution for a runtime-generated item (architecture.md §8.3, progress.md
+ * D111): a prefilled GitHub issue carrying the whole item, so a maintainer can put it through
+ * the factory's gates. It has no bank version, because it never came from the bank, and it says
+ * what the item is: generated just now, reviewed by one automated check, not calibrated.
+ * Nothing leaves the device until the user submits the issue themselves.
+ */
+export const contributeIssueUrl = (item: Item): string => {
+  const title = `Item contribution: ${item.subSkill}, band ${item.targetBand} (${item.type})`;
+  const contribution = {
+    type: item.type,
+    lang: item.lang,
+    stem: item.stem,
+    ...(item.blankIndex === undefined ? {} : { blankIndex: item.blankIndex }),
+    options: item.options,
+    key: item.key,
+    explanation: item.explanation,
+    subSkill: item.subSkill,
+    targetBand: item.targetBand,
+    topic: item.topic,
+    provenance: item.provenance,
+  };
+  const body = [
+    "Generated in Palier on the contributor's own key, and reviewed by one automated check. Not reviewed by a person, not calibrated.",
+    "",
+    "```json",
+    JSON.stringify(contribution, null, 2),
+    "```",
+    "",
+    "**Why it is worth adding (optional):**",
+    "",
+  ].join("\n");
+  const params = new URLSearchParams({ title, body, labels: "item-contribution" });
   return `${REPOSITORY_URL}/issues/new?${params.toString()}`;
 };
 
