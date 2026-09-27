@@ -922,7 +922,11 @@ step 5, §8.7 and §8.10 as written.
   test following the submission's text.
 - **Slice 4 — Runtime item generation and the CI gates.** The compressed draft plus single review, local-only
   storage, the provenance badge and the one-tap contribution. AI schema conformance against recorded fixtures,
-  the nightly live smoke and the eval harness. *Done:* the second half of exit criterion 2.
+  the nightly live smoke and the eval harness. *Done:* the second half of exit criterion 2. **Built 27 September 2026**
+  (`progress.md` D109–D112): the review gate moved to `@palier/domain`, `generatePracticeSet` and the
+  `GeneratedItemStore` port (written expression only, by human decision), `/practice/writing/generate`, fixtures
+  recorded from the live API and replayed in the fast lane, the eval's conformance rate, and the nightly live smoke.
+  The first recording found the review prompt's band-scale defect, fixed in prompt version 4. **Phase 4 is complete.**
 
 ---
 
