@@ -206,10 +206,17 @@ Gates A, D and F, it needs the human's call before any slice code:
    leaves open, with a recommendation for each:
    - **Which session types practice mode offers.** Recommended: all five, with the full simulation's 22 minutes
      stated beside its estimate.
-   - **Where audio lives, and for how long.** §8.6 asks for local storage with a one-tap delete, and names no
-     retention period. Recommended: IndexedDB only, never synced, with a 30-day default the settings can change.
-   - **Whether pronunciation is offered in Phase 5.** Recommended: not assessed by default. The per-session opt-in
-     uploads audio, which exit criterion 3's extended leak test must cover.
+   - **Audio leaving the device: two documents disagree.** R12 and architecture.md §8.5 let audio go to the AI
+     provider, and practice mode transcribes every answer through OpenAI. implementation-plan.md §7's Phase 5 exit
+     criterion 3 says audio never leaves the device unless the user opts into pronunciation. Recommended: keep R12
+     and §8.5, and read criterion 3 as being about the *stored session recording*. Each answer's clip goes only to
+     OpenAI's transcription call, and the saved recording is uploaded only on a per-session pronunciation opt-in.
+     The extended leak test asserts both. Recorded as a D-entry, as D17 did for earlier contradictions.
+   - **Whether pronunciation is offered in Phase 5.** Recommended: yes, off by default, and asked each session, as
+     §8.5 has it, so criterion 3 has an opt-in to test.
+   - *Not open:* how long audio is kept. architecture.md §9.1's storage budget already sets it: the last 10
+     sessions' audio, transcripts kept, a warning at 200 MB, a one-tap cleanup, and the oldest audio evicted on
+     `QuotaExceededError`.
 2. **Approve Phase 5 as three slices**, to be mirrored in implementation-plan.md §7 as D79 and D97 did:
    1. **The session core, no UI.** The `OralStore` port (§3.3 names it but gives no signature) over a new Dexie
       table, with a retention policy. Oral scenarios for the five session types from the factory. The turn-based
