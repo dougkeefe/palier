@@ -4,6 +4,7 @@ import {
   itemDraftSchema,
   passageDraftSchema,
   reviewVerdictSchema,
+  scenarioDraftSchema,
   writingAssessmentSchema,
   writingFeedbackDraftSchema,
 } from "../schemas/ai.js";
@@ -198,5 +199,37 @@ describe("writingAssessmentSchema", () => {
   it("refuses an error given as an excerpt rather than offsets", () => {
     const errors = [{ excerpt: "x", correction: "c", rule: "r" }];
     expect(writingAssessmentSchema.safeParse(aValidAssessment({ errors })).success).toBe(false);
+  });
+});
+
+const aPhase = (over: Record<string, unknown> = {}) => ({
+  name: "Mise en train",
+  minutes: 2,
+  intent: "Établir une base.",
+  seedQuestions: ["Parlez-moi de votre rôle."],
+  escalation: ["Qu'auriez-vous fait autrement ?"],
+  deescalation: ["Décrivez une journée type."],
+  ...over,
+});
+
+describe("scenarioDraftSchema", () => {
+  it("accepts a phase plan", () => {
+    expect(scenarioDraftSchema.safeParse({ phases: [aPhase(), aPhase({ name: "Suite", minutes: 3 })] }).success).toBe(true);
+  });
+
+  it("rejects a plan with no phases", () => {
+    expect(scenarioDraftSchema.safeParse({ phases: [] }).success).toBe(false);
+  });
+
+  it("rejects a phase with no seed question", () => {
+    expect(scenarioDraftSchema.safeParse({ phases: [aPhase({ seedQuestions: [] })] }).success).toBe(false);
+  });
+
+  it("rejects a phase of no minutes", () => {
+    expect(scenarioDraftSchema.safeParse({ phases: [aPhase({ minutes: 0 })] }).success).toBe(false);
+  });
+
+  it("rejects a field the factory assembles, such as the id", () => {
+    expect(scenarioDraftSchema.safeParse({ id: "s-1", phases: [aPhase()] }).success).toBe(false);
   });
 });

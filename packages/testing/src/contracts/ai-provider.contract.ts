@@ -6,9 +6,10 @@ import {
   itemDraftSchema,
   passageDraftSchema,
   reviewVerdictSchema,
+  scenarioDraftSchema,
   writingAssessmentSchema,
 } from "@palier/domain";
-import type { GenerateItemsRequest, ReviewRequest, WritingRequest } from "@palier/domain";
+import type { GenerateItemsRequest, GenerateScenarioRequest, ReviewRequest, WritingRequest } from "@palier/domain";
 
 /**
  * The substitutability contract for an `AiProvider` (implementation-plan.md §6.2
@@ -55,6 +56,14 @@ const aWritingRequest = (): WritingRequest => ({
   feedbackLang: "en",
 });
 
+const aScenarioRequest = (): GenerateScenarioRequest => ({
+  sessionType: "work",
+  targetBand: "C",
+  lang: "fr",
+  topic: "project-management",
+  minutes: 10,
+});
+
 export const aiProviderContract = (name: string, make: () => Promise<AiProvider>): void => {
   describe(`AiProvider contract: ${name}`, () => {
     it("reports its capabilities as booleans", async () => {
@@ -63,6 +72,7 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       expect(typeof caps.generateItems).toBe("boolean");
       expect(typeof caps.reviewItem).toBe("boolean");
       expect(typeof caps.assessWriting).toBe("boolean");
+      expect(typeof caps.generateScenario).toBe("boolean");
     });
 
     it("has no usage before any call", async () => {
@@ -128,6 +138,15 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       const assessment = await provider.assessWriting(request);
       expect(writingAssessmentSchema.safeParse(assessment).success).toBe(true);
       expect(checkErrorOffsets(request.text, assessment.errors)).toBeNull();
+      expect(provider.lastUsage()).not.toBeNull();
+    });
+
+    it("plans a schema-valid scenario whose phases fill the minutes asked for (D114)", async () => {
+      const provider = await make();
+      const request = aScenarioRequest();
+      const draft = await provider.generateScenario(request);
+      expect(scenarioDraftSchema.safeParse(draft).success).toBe(true);
+      expect(draft.phases.reduce((sum, phase) => sum + phase.minutes, 0)).toBe(request.minutes);
       expect(provider.lastUsage()).not.toBeNull();
     });
 

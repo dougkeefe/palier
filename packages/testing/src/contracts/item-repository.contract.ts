@@ -41,12 +41,13 @@ const WRITING_AGREE = anItem({
 const PASSAGE = aPassage({ id: passageId("p-1") });
 const FORM = anExamForm({ id: formId("f-1") });
 const SCENARIO = anOralScenario({ id: scenarioId("s-1") });
+const SECOND_SCENARIO = anOralScenario({ id: scenarioId("s-2"), sessionType: "warmup", targetBand: "B" });
 
 export const CONTRACT_BANK: ItemRepositoryBank = {
   items: [READING_MAIN, READING_INFER, WRITING_AGREE],
   passages: [PASSAGE],
   forms: [FORM],
-  scenarios: [SCENARIO],
+  scenarios: [SCENARIO, SECOND_SCENARIO],
   bankVersion: 7,
 };
 
@@ -152,6 +153,18 @@ export const itemRepositoryContract = (
 
       expect((await repo.scenario(SCENARIO.id))?.id).toBe(SCENARIO.id);
       expect(await repo.scenario(scenarioId("absent"))).toBeNull();
+    });
+
+    it("lists every scenario it ships", async () => {
+      const repo = await make(CONTRACT_BANK);
+
+      expect((await repo.scenarios()).map((s) => s.id).sort()).toEqual([SCENARIO.id, SECOND_SCENARIO.id]);
+    });
+
+    it("lists no scenarios for a bank that ships none", async () => {
+      const repo = await make({ ...CONTRACT_BANK, scenarios: [] });
+
+      expect(await repo.scenarios()).toEqual([]);
     });
 
     it("reports the bank version", async () => {

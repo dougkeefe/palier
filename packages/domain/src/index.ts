@@ -86,6 +86,7 @@ export type {
   FeatureCall,
   GenerateItemsRequest,
   GeneratePassageRequest,
+  GenerateScenarioRequest,
   ItemDraft,
   ModelPrice,
   PassageContext,
@@ -93,6 +94,7 @@ export type {
   ReviewOption,
   ReviewRequest,
   ReviewVerdict,
+  ScenarioDraft,
   UsageRecord,
   WritingAssessment,
   WritingCriterion,
@@ -106,9 +108,15 @@ export {
   itemDraftSchema,
   passageDraftSchema,
   reviewVerdictSchema,
+  scenarioDraftSchema,
   writingAssessmentSchema,
   writingFeedbackDraftSchema,
 } from "./schemas/ai.js";
+
+// A spoken session's vocabulary: turns, end reasons, directions (progress.md D116).
+export type { OralDirection, OralEndReason, OralRegister, OralSpeaker, OralTurn } from "./oral-session.js";
+export { ORAL_END_REASONS, ORAL_SPEAKERS } from "./oral-session.js";
+export { oralTurnSchema } from "./schemas/oral.js";
 // The adversarial-review gate, shared by the factory and runtime generation (progress.md D109).
 export { CONFIDENCE_THRESHOLD, gateReasons, reviewRequestFor } from "./review-gate.js";
 export type { AssembleResult, PlaceErrorsResult } from "./writing.js";

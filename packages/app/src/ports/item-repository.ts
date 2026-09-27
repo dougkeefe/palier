@@ -44,5 +44,10 @@ export type ItemRepository = {
    */
   forms: () => Promise<readonly ExamForm[]>;
   scenario: (id: ScenarioId) => Promise<OralScenario | null>;
+  /**
+   * Every oral scenario the bank ships, in no promised order, for the session
+   * picker (progress.md D114), as `forms` serves the exam picker.
+   */
+  scenarios: () => Promise<readonly OralScenario[]>;
   bankVersion: () => Promise<number>;
 };

@@ -99,11 +99,13 @@ interface ItemRepository {
   form(id: FormId): Promise<ExamForm | null>
   forms(): Promise<ExamForm[]>                   // every form the bank ships, no order promised
   scenario(id: ScenarioId): Promise<OralScenario | null>
+  scenarios(): Promise<OralScenario[]>           // every scenario the bank ships, no order promised
   bankVersion(): Promise<number>
 }
 // `forms` was added 25 September 2026 with Phase 3 Slice 3: the exam picker pairs the profile's
 // variants with the bank's forms, and deriving a form id from the factory's naming convention
-// would couple the app to it. See progress.md D85.
+// would couple the app to it. See progress.md D85. `scenarios` was added 27 September 2026 with
+// Phase 5 Slice 1, for the oral session picker in the same way (progress.md D114).
 
 // Local persistence, one port per aggregate
 interface AttemptStore   { append(a: Attempt): Promise<boolean>; recent(skill: Skill, n: number): Promise<Attempt[]>; since(t: ISO): Promise<Attempt[]>; forItem(id: ItemId): Promise<Attempt[]> }
@@ -135,7 +137,20 @@ interface ExamRunStore   { put(r: ExamRun): Promise<void>; get(id: SessionId): P
 // in sync's mergeRecord. No result is stored, because rescoring derives it (ADR 16). See
 // progress.md D80. Amended 25 September 2026 (Phase 3 Slice 3, D85): ExamRun gains the optional
 // `timeAllowance` (absent = 1) and `resumes` (absent = 0), for D84's rulings 3 and 1.
-interface OralStore      { /* transcripts and audio blobs, local only */ }
+interface OralStore      { put(s: OralSession): Promise<void>; get(id: SessionId): Promise<OralSession | null>; all(): Promise<OralSession[]>;
+                           putAudio(id: SessionId, audio: Blob): Promise<void>; audio(id: SessionId): Promise<Blob | null>;
+                           audioIndex(): Promise<OralAudioEntry[]>; deleteAudio(ids: SessionId[]): Promise<void>; clear(): Promise<void> }
+// Decided 27 September 2026 with Phase 5 Slice 1 (progress.md D115). Device-local: never synced,
+// never exported; wipeData and deleteEverywhere clear it. OralSession = { id, scenarioId, startedAt,
+// endedAt: ISO | null, endReason: OralEndReason | null, turns: OralTurn[] }; OralTurn = { speaker,
+// text, phase, startMs, endMs }, domain's. `all` is newest first, `audioIndex` oldest first with each
+// recording's size; `putAudio` rejects for an unknown session, and with StorageQuotaError when the
+// device is full. The retention policy (architecture.md §9.1) is in the use cases, not the store.
+interface OralTransport  { open(req: { scenario: OralScenario }, sink: (e: OralTransportEvent) => void): Promise<void>;
+                           direct(d: { phase: number; register: OralRegister }): Promise<void>; close(): Promise<void> }
+// A port §3.3 did not name, added 27 September 2026 (progress.md D116). One shape for the turn-based
+// (Phase 5) and full-duplex (Phase 6) transports. Push: the transport sends whole turns with their
+// start/end ms, difficulty flags, and exactly one `closed { failed }`, last; the client drives the phases.
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
 // Amended 24 September 2026: AttemptStore, ScheduleStore, SessionStore and SettingsStore each
 // gained `all()` and `clear()` (SettingsStore's `all()` returns `{ key, value }` entries). The
@@ -156,6 +171,8 @@ interface AiProvider {
   reviewItem(req: ReviewRequest): Promise<ReviewVerdict>
   assessWriting(req: WritingRequest): Promise<WritingAssessment>   // Phase 4 Slice 3 (progress.md D105): errors as
                                     // offsets checkErrorOffsets accepts; the model reports excerpts, the adapter places them
+  generateScenario(req: GenerateScenarioRequest): Promise<ScenarioDraft>  // Phase 5 Slice 1, ADDED (progress.md D114):
+                                    // the factory's scenario stage; a phase plan, assembled by the factory
   assessOral(req: OralRequest): Promise<OralAssessment>            // deferred to Phase 5
   transcribe(audio: Blob, lang: Lang): Promise<Transcript>         // deferred to Phase 5
   openVoiceSession(cfg: VoiceSessionConfig): Promise<VoiceSession>  // may throw Unsupported; deferred to Phase 6

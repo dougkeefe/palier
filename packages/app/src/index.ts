@@ -41,6 +41,12 @@ export type {
   WritingSubmission,
   GeneratedItemStore,
   GeneratedSet,
+  OralAudioEntry,
+  OralDirective,
+  OralSession,
+  OralStore,
+  OralTransport,
+  OralTransportEvent,
 } from "./ports/index.js";
 export {
   INITIAL_SYNC_STATE,
@@ -57,6 +63,7 @@ export {
   TELEMETRY_MAX_BATCH,
   TelemetryRejectedError,
   TelemetryUnavailableError,
+  StorageQuotaError,
 } from "./ports/index.js";
 
 export type {
