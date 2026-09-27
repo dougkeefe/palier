@@ -1,6 +1,6 @@
 import type { ItemOption } from "./item.js";
 import type { Localised, LocalisedRich } from "./localised.js";
-import type { TargetBand } from "./bands.js";
+import type { Band, TargetBand } from "./bands.js";
 import type { DocType } from "./passage.js";
 import type { ItemType, Lang, OptionId } from "./skills.js";
 import type { SubSkill } from "./sub-skills.js";
@@ -16,10 +16,10 @@ import type { PromptSpec } from "./item-types/definition.js";
  * moved down, because they are Zod-schema'd content-adjacent data and that is
  * domain's job (architecture.md §8.2).
  *
- * Phase 1 defines only what the content factory consumes. The writing/oral/
- * transcribe/voice requests and responses land with their phases (4–5), the
- * same "the minimum the consumer needs" discipline the ports layer already
- * uses (progress.md D45).
+ * Phase 1 defined what the content factory consumes; Phase 4 Slice 3 adds writing
+ * feedback (progress.md D105). The oral/transcribe/voice requests and responses
+ * land with Phase 5, the same "the minimum the consumer needs" discipline the
+ * ports layer already uses (progress.md D45).
  */
 
 /** Which of the `AiProvider` methods a concrete provider supports. */
@@ -27,6 +27,7 @@ export type AiCapabilities = {
   readonly generatePassage: boolean;
   readonly generateItems: boolean;
   readonly reviewItem: boolean;
+  readonly assessWriting: boolean;
 };
 
 /**
@@ -136,6 +137,79 @@ export type ReviewVerdict = {
   readonly registerFlag: { readonly flagged: boolean; readonly note?: string | undefined };
   /** The band the reviewer thinks the item actually tests. */
   readonly estimatedBand: TargetBand;
+};
+
+/**
+ * The five criteria writing feedback is structured by (product-requirements.md
+ * §8.7, architecture.md §8.4), in the order the feedback shows them.
+ */
+export const WRITING_CRITERIA = [
+  "register",
+  "structure",
+  "grammar",
+  "vocabulary",
+  "task",
+] as const;
+export type WritingCriterion = (typeof WRITING_CRITERIA)[number];
+
+/**
+ * What `assessWriting` is sent (architecture.md §8.4): the prompt, the user's own
+ * text and the band they are aiming at. `lang` is the language the text is
+ * written in; `feedbackLang` is the interface language, so the evidence and the
+ * rules read in the language the user reads the app in.
+ */
+export type WritingRequest = {
+  readonly task: string;
+  readonly wordTarget: number;
+  readonly text: string;
+  readonly targetBand: TargetBand;
+  readonly lang: Lang;
+  readonly feedbackLang: Lang;
+};
+
+/** One criterion's judgement: a band and the evidence for it. */
+export type CriterionAssessment = {
+  readonly band: Band;
+  readonly evidence: string;
+};
+
+/**
+ * One error in the user's own text, as `[start, end)` offsets into it (UTF-16
+ * code units, JavaScript string indices), so the feedback is drawn inline over
+ * what they wrote (architecture.md §8.4). `checkErrorOffsets` holds the ranges
+ * inside the text and apart from each other.
+ */
+export type WritingError = {
+  readonly start: number;
+  readonly end: number;
+  readonly correction: string;
+  readonly rule: string;
+};
+
+/** What `assessWriting` returns, placed and checked (progress.md D105). */
+export type WritingAssessment = {
+  readonly criteria: Readonly<Record<WritingCriterion, CriterionAssessment>>;
+  readonly errors: readonly WritingError[];
+  readonly modelAnswer: string;
+};
+
+/**
+ * One error as a model reports it: the exact words, not offsets. Language models
+ * count characters badly, so the adapter asks for the excerpt and `placeErrors`
+ * finds it in the text, which turns a miscount into a malformed answer that is
+ * retried rather than a correction drawn over the wrong words (progress.md D105).
+ */
+export type WritingErrorDraft = {
+  readonly excerpt: string;
+  readonly correction: string;
+  readonly rule: string;
+};
+
+/** The model's creative output, before its errors are placed. */
+export type WritingFeedbackDraft = {
+  readonly criteria: Readonly<Record<WritingCriterion, CriterionAssessment>>;
+  readonly errors: readonly WritingErrorDraft[];
+  readonly modelAnswer: string;
 };
 
 /**

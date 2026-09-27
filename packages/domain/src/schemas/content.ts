@@ -3,6 +3,7 @@ import * as z from "zod";
 import { DOC_TYPES, LICENCES } from "../passage.js";
 import { ATTEMPT_MODES } from "../attempt.js";
 import { ORAL_SESSION_TYPES } from "../oral-scenario.js";
+import { WRITING_REGISTERS } from "../writing-prompt.js";
 import {
   bandSchema,
   contentStatusSchema,
@@ -264,8 +265,19 @@ export const attemptShape = z.strictObject({
   ts: isoSchema,
 });
 
+export const writingPromptShape = z.strictObject({
+  id: idSchema,
+  lang: langSchema,
+  register: z.enum(WRITING_REGISTERS),
+  title: localisedSchema,
+  task: z.string().min(1),
+  wordTarget: z.number().int().positive(),
+  suggestedMinutes: z.number().int().positive(),
+});
+
 export const itemSchema = itemShape.readonly();
 export const passageSchema = passageShape.readonly();
 export const oralScenarioSchema = oralScenarioShape.readonly();
 export const examFormSchema = examFormShape.readonly();
 export const attemptSchema = attemptShape.readonly();
+export const writingPromptSchema = writingPromptShape.readonly();

@@ -1,7 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { onboard, waitForOfflineReady } from "./helpers";
-import { SENTINEL, downloadedText, idsAtRest, stubOpenAi, watchForLeaks } from "./leak-guard";
+import { onboard, waitForOfflineReady, writeAndGetFeedback } from "./helpers";
+import { SENTINEL, SUBMISSION_SENTINEL, downloadedText, idsAtRest, stubOpenAi, watchForLeaks } from "./leak-guard";
 
 /**
  * The key-leak test's at-rest half (tier 11; Phase 4 exit criterion 1; [R12]), against the
@@ -10,8 +10,10 @@ import { SENTINEL, downloadedText, idsAtRest, stubOpenAi, watchForLeaks } from "
  *
  * It asserts what only a real browser store can show. A remembered key is at rest as
  * ciphertext in the vault's `api-key` row and nowhere else, across a reload. A key kept
- * "for this tab only" is never written at all, and a reload forgets it. And through an
- * exam with telemetry shared and an export, the sentinel reaches nothing but OpenAI.
+ * "for this tab only" is never written at all, and a reload forgets it. And through a writing
+ * workshop submission, an exam with telemetry shared and an export, the sentinel reaches
+ * nothing but OpenAI. The submission is at rest in `writingSubmissions` and its call in the
+ * cost ledger, both real rows the dump walks (D104's seeded row is gone, D106).
  *
  * This server has no database, so telemetry is stood in for, as journey 9 does.
  */
@@ -46,31 +48,14 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   // …and it survives a reload, still masked.
   await page.reload();
   await expect(page.getByText(`Saved on this device: ${MASKED}`)).toBeVisible();
-  // The cost ledger is in the dump, with a row in it, so the check over it is not vacuous.
-  // The row is written as the adapter writes one, since no screen spends until Slice 3 (D101).
-  await page.evaluate(async () => {
-    const db = await new Promise<IDBDatabase>((resolve, reject) => {
-      const open = indexedDB.open("palier");
-      open.onsuccess = () => resolve(open.result);
-      open.onerror = () => reject(open.error);
-    });
-    await new Promise<void>((resolve, reject) => {
-      const tx = db.transaction("costLedger", "readwrite");
-      tx.objectStore("costLedger").add({
-        ts: new Date().toISOString(),
-        feature: "writing-feedback",
-        model: "gpt-6-sol",
-        inputTokens: 2_500,
-        outputTokens: 2_000,
-        costUsd: 0.021,
-      });
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    });
-    db.close();
-  });
+  // A workshop submission that really spends: the call is metered into the ledger and the text
+  // is kept in the workshop's own store, so the dump walks two real rows (D104, D106).
+  await page.goto("/en/practice/writing/workshop");
+  await writeAndGetFeedback(page, `Madame, votre demande ${SUBMISSION_SENTINEL} est en cours de traitement.`);
+  expect(watch.openAiBodies().filter((body) => body.includes(SUBMISSION_SENTINEL))).toHaveLength(1);
+  expect(await idsAtRest(page, "palier", "writingSubmissions")).toHaveLength(1);
   expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(1);
-  await watch.assertNoLeak([page]);
+  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL] });
 
   // 3. A mock exam, submitted, with its answers shared.
   await page.goto("/en/exam");
@@ -98,6 +83,7 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   const exported = await downloadedText(download);
   expect(exported).toContain("attempts");
   expect(exported).not.toContain(SENTINEL);
+  expect(exported).not.toContain(SUBMISSION_SENTINEL);
 
   // 5. Replace it with a key for this tab only: the stored row goes, and nothing replaces it.
   await page.goto("/en/settings/key");
@@ -110,12 +96,12 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   await page.getByRole("button", { name: "Check the key" }).click();
   await expect(page.getByRole("status").filter({ hasText: "This key works." })).toBeVisible();
   expect(await vaultIds(page)).not.toContain("api-key");
-  await watch.assertNoLeak([page]);
+  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL] });
 
   // 6. A reload forgets it.
   await page.reload();
   await expect(page.getByLabel("OpenAI API key")).toBeVisible();
   await expect(page.getByText(MASKED)).toHaveCount(0);
   expect(await vaultIds(page)).not.toContain("api-key");
-  await watch.assertNoLeak([page]);
+  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL] });
 });

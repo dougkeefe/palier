@@ -11,7 +11,9 @@ re-implements the factory's `buildBank` grouping, since this package may not imp
 (ok, 401, 429, 500, malformed, never answers; progress.md D99), with an `onAuthorization` spy, and for
 chat completions, answering a scripted `completions` list in turn (the last repeating) with its `usage`
 block, so a retry and the ledger can be driven through the real adapter (D101). `memoryCostLedger` and
-`costLedgerContract` follow the `CostLedger` port. The
+`costLedgerContract` follow the `CostLedger` port, and `memoryWritingStore` and `writingStoreContract` the
+`WritingStore` port (D106). `fakeAiProvider.assessWriting` marks the text's first word, so its offsets always fit,
+and `aiProviderContract` holds every provider's assessment schema-valid with offsets `checkErrorOffsets` accepts. The
 in-memory `KeyVault` keeps D98's two modes apart as the Dexie vault does. The sync pieces are:
 - `memorySyncServer`, the whole sync service in memory: revisions, pairing, revocation, and a
   `transport(secret)` per device;

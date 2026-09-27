@@ -118,12 +118,19 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `components/key/SpendSettings.tsx` (decisions in `features/key/spend-view.ts`) is the meter, the soft
     cap (a synced setting) and the per-feature table, below the key cards, key or no key.
     `container-spend.test.ts` runs a real call through both graphs over MSW; `spend-production.spec.ts`
-    seeds `costLedger` rows in real IndexedDB for the warning states, since no screen spends until
-    Slice 3. **Gate G's billing check** is `scripts/billing-check.mjs` over `src/lib/billing-check.ts`
+    seeds `costLedger` rows in real IndexedDB for the warning states. **Gate G's billing check** is `scripts/billing-check.mjs` over `src/lib/billing-check.ts`
     (no relative imports, for type stripping); the runbook is `docs/deploy.md`.
+  - **The writing workshop** (Phase 4 Slice 3, progress.md D105–D108) is `/practice/writing/workshop`,
+    linked from the writing drill. `components/writing/` renders it; its decisions are in
+    `features/writing/` (the reducer, the word diff, the inline error segments). The prompt library is
+    `@palier/content/writing/prompts.json`, parsed once in the container by `parseWritingPromptsOrThrow`, like
+    the profile. Nothing is saved until feedback is asked for; submissions are the container's `writing` store,
+    **never synced and never exported**, cleared by wipe and delete-everywhere. `container-writing.test.ts`
+    runs the real adapter over MSW through both graphs.
   - **Tier 11, the key-leak test**, is `e2e/key-leak.spec.ts` (hermetic, with real sync and telemetry)
     and `e2e/key-leak-production.spec.ts` (real Dexie), over `e2e/leak-guard.ts`. A new flow that can
-    touch the key belongs in the first. The guard reads request headers synchronously and response bodies
+    touch the key belongs in the first. A flow that holds user writing passes it to `assertNoLeak` as
+    `deviceOnly` (allowed only on this device's own copy and in requests to OpenAI) or `nowhere` (D106). The guard reads request headers synchronously and response bodies
     on `requestfinished`, because `allHeaders()` never settles for a request a reload aborts.
 
 ## Gates this app owns

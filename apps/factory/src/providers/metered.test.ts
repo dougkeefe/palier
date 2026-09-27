@@ -6,7 +6,7 @@ import type { UsageRecord } from "@palier/domain";
 import { meterProvider } from "./metered.js";
 
 const providerWith = (usage: UsageRecord | null): AiProvider => ({
-  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true }),
+  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true }),
   generatePassage: () => Promise.resolve([]),
   generateItems: () => Promise.resolve([]),
   reviewItem: () =>
@@ -18,6 +18,7 @@ const providerWith = (usage: UsageRecord | null): AiProvider => ({
       registerFlag: { flagged: false },
       estimatedBand: "B",
     }),
+  assessWriting: () => Promise.resolve({} as never),
   verifyKey: () => Promise.resolve(),
   lastUsage: () => usage,
 });
@@ -45,6 +46,19 @@ describe("meterProvider", () => {
     expect(metered.totals().calls).toBe(0);
     expect(metered.provider.capabilities().reviewItem).toBe(true);
     expect(metered.provider.lastUsage()).toBeNull();
+  });
+
+  it("accounts writing feedback like any other spending call", async () => {
+    const metered = meterProvider(providerWith({ model: "m", inputTokens: 30, outputTokens: 20, costUsd: 1 }));
+    await metered.provider.assessWriting({
+      task: "t",
+      wordTarget: 50,
+      text: "Du texte.",
+      targetBand: "B",
+      lang: "fr",
+      feedbackLang: "en",
+    });
+    expect(metered.totals()).toEqual({ calls: 1, inputTokens: 30, outputTokens: 20, costUsd: 1 });
   });
 
   it("passes a key check through and accounts nothing for it", async () => {

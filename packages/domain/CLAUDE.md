@@ -32,6 +32,12 @@ framework. `.dependency-cruiser.cjs` enforces all three.
   importing the port layer. They are DTOs, not content artefacts, so they are **not** in
   `CONTENT_SCHEMAS` — no JSON Schema is published for them. The `AiProvider` port *interface*
   still lives in `@palier/app` (§3.3); only the data moved down.
+- **Writing feedback's DTOs and invariants live here too** (progress.md D105). `WritingRequest`,
+  `WritingAssessment` and the model-facing `WritingFeedbackDraft` (`ai.ts`, `schemas/ai.ts`), and in
+  `writing.ts` the pure rules every layer shares: `checkErrorOffsets` (every range inside the text, none
+  overlapping) and `placeErrors`, which turns a model's excerpts into offsets. **A model reports excerpts,
+  never offsets**; the offsets are computed here. The prompt library's `WritingPrompt` is a content artefact,
+  so it *is* in `CONTENT_SCHEMAS` (`writing-prompt`), parsed by `parseWritingPrompts` (D107).
 - **The telemetry DTOs live here too, the same way** (progress.md D92–D94): `TelemetryEvent`
   (`telemetry.ts`, `schemas/telemetry.ts`) and the statistics job's `ItemStatisticsReport` and
   `ItemVerdict`. `telemetryEventSchema` is a `strictObject` of exactly five fields, so an event that

@@ -65,6 +65,7 @@ describe("@palier/testing/in-memory", () => {
         "memorySyncStateStore",
         "memoryTelemetryCollector",
         "memoryTelemetryStore",
+        "memoryWritingStore",
         "seededRandom",
       ].sort(),
     );

@@ -9,6 +9,7 @@ export type { SettingEntry, SettingsStore } from "./settings-store.js";
 export type { ApiKeyStorage, KeyVault } from "./key-vault.js";
 export type { AiProvider, AiProviderFactory } from "./ai-provider.js";
 export type { CostEntry, CostLedger } from "./cost-ledger.js";
+export type { WritingStore, WritingSubmission } from "./writing-store.js";
 export type {
   DeviceId,
   DeviceIdentity,

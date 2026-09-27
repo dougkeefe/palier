@@ -91,3 +91,19 @@ export const drillThroughByKeyboard = async (page: Page) => {
   }
   return total;
 };
+
+/**
+ * The writing workshop's one spending path (progress.md D105–D108), from the prompt list: pick
+ * the first prompt, write `text`, ask for feedback, send it past the pre-flight, and wait for
+ * the feedback's heading, which takes focus.
+ */
+export const writeAndGetFeedback = async (page: Page, text: string) => {
+  await page.getByRole("button", { name: "Write this" }).first().click();
+  const editor = page.getByRole("textbox", { name: "Your text" });
+  await expect(editor).toBeFocused();
+  await editor.fill(text);
+  await page.getByRole("button", { name: "Get feedback" }).click();
+  await expect(page.getByRole("heading", { name: "Before you send" })).toBeFocused();
+  await page.getByRole("button", { name: "Send for feedback" }).click();
+  await expect(page.getByRole("heading", { name: "Feedback", exact: true })).toBeFocused();
+};

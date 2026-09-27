@@ -24,6 +24,7 @@ import { importData } from "./import-data.js";
 import { wipeData } from "./wipe-data.js";
 import { examRunStore } from "./__tests__/sync-fakes.js";
 import { aCostEntry, costLedger } from "./__tests__/spend-fakes.js";
+import { aSubmission, writingStore } from "./__tests__/writing-fakes.js";
 import { telemetryStore } from "./__tests__/telemetry-fakes.js";
 
 // Local stubs rather than @palier/testing (progress.md D37). These are small
@@ -182,6 +183,7 @@ const aDevice = async () => {
     vault: vaultOf(),
     telemetry: telemetryStore("on"),
     ledger: costLedger([aCostEntry()]),
+    writing: writingStore([aSubmission()]),
   };
   await device.attempts.append(anAttempt("b"));
   await device.attempts.append(anAttempt("a", { skill: "writing" }));
@@ -244,6 +246,15 @@ describe("exportData", () => {
     expect(text).not.toContain("inputTokens");
   });
 
+  it("never carries the writing workshop's submissions, which are never exported (D106) [R12]", async () => {
+    const device = await aDevice();
+    const text = textOf(await exportData(device));
+
+    expect(await device.writing.all()).toHaveLength(1);
+    expect(text).not.toContain(aSubmission().text);
+    expect(text).not.toContain("promptId");
+  });
+
   it("never carries the API key or the device secret", async () => {
     const device = await aDevice();
     const text = textOf(await exportData(device));
@@ -282,6 +293,13 @@ describe("wipeData", () => {
     await wipeData(device);
 
     expect(device.ledger.entries()).toEqual([]);
+  });
+
+  it("empties the writing workshop's submissions, which only this device ever held (D106)", async () => {
+    const device = await aDevice();
+    await wipeData(device);
+
+    expect(await device.writing.all()).toEqual([]);
   });
 
   it("keeps the device secret, which is the device's sync identity, not the user's progress", async () => {

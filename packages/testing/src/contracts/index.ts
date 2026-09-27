@@ -17,3 +17,4 @@ export { contractSecret, syncTransportContract } from "./sync-transport.contract
 export { telemetrySinkContract } from "./telemetry-sink.contract.js";
 export type { TelemetrySinkHarness } from "./telemetry-sink.contract.js";
 export { telemetryStoreContract } from "./telemetry-store.contract.js";
+export { writingStoreContract } from "./writing-store.contract.js";
