@@ -60,3 +60,6 @@ export {
   spendTotals,
   weekStart,
 } from "./spend.js";
+
+export type { OralSessionCommand, OralSessionEvent, OralSessionState, OralStep } from "./oral-session.js";
+export { startOralSession, stepOralSession } from "./oral-session.js";
