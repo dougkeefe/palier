@@ -48,6 +48,7 @@ describe("createContainer", () => {
     expect(c.costLedger).toBeDefined();
     expect(c.writing).toBeDefined();
     expect(c.generated).toBeDefined();
+    expect(c.oral).toBeDefined();
 
     // The IdGenerator mints valid, strictly increasing ULIDs (behaviour proven by
     // the contract suite in @palier/testing; here we assert wiring only).
@@ -435,6 +436,7 @@ describe("createContainer in production", () => {
     expect(c.costLedger).toBeDefined();
     expect(c.writing).toBeDefined();
     expect(c.generated).toBeDefined();
+    expect(c.oral).toBeDefined();
     expect(Number.isNaN(Date.parse(c.clock.now()))).toBe(false);
     expect(c.ids.ulid()).toMatch(/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{26}$/);
     // Construction is lazy: the bank has not fetched its manifest yet.
@@ -492,6 +494,26 @@ describe("createContainer in production", () => {
     expect(plan.items.every((item) => committedIds.has(item.id))).toBe(true);
     expect(requested).toContain(`${BANK_BASE_PATH}/bank/v${String(BANK_VERSION)}/manifest.json`);
     expect(await c.items.bankVersion()).toBe(BANK_VERSION);
+  });
+
+  it("reads an oral scenario for every session type at B and C from the committed bank (D114)", async () => {
+    const c = createContainer({ hermetic: false });
+    const scenarios = await c.items.scenarios();
+
+    expect(scenarios.map((s) => `${s.sessionType}-${s.targetBand}`).sort()).toEqual(
+      ["full", "opinion", "situation", "warmup", "work"].flatMap((type) => [`${type}-B`, `${type}-C`]).sort(),
+    );
+    expect(requested).toContain(`${BANK_BASE_PATH}/bank/v${String(BANK_VERSION)}/oral/scenarios.json`);
+  });
+
+  it("still serves the forms bank v2 published, so a mock exam sat on one rescores after the move to v3 (D114)", async () => {
+    const c = createContainer({ hermetic: false });
+    const ids = (await c.useCases.examForms()).map((f) => f.id);
+
+    for (const variant of Object.keys(c.profile.variants)) {
+      expect(ids).toContain(`fr-${variant}-v2`);
+      expect(ids).toContain(`fr-${variant}-v${String(BANK_VERSION)}`);
+    }
   });
 
   it("starts, runs and scores every profile variant from the committed bank's forms, over real IndexedDB [R3]", async () => {

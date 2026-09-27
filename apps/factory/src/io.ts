@@ -2,12 +2,13 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { dirname, join } from "node:path";
 
 import { itemStatisticsReportSchema, parseExamProfileOrThrow } from "@palier/domain";
-import type { ExamProfile, Item, ItemStatisticsReport, Passage } from "@palier/domain";
+import { ORAL_SESSION_TYPES } from "@palier/domain";
+import type { ExamForm, ExamProfile, Item, ItemStatisticsReport, OralScenario, Passage } from "@palier/domain";
 import type { OpenAiModels, OpenAiPricing } from "@palier/adapters/openai";
 
 import type { RecordedRunData } from "./eval/conformance.js";
 import { canonicalStringify } from "./lib/json.js";
-import type { SourceCandidate } from "./lib/types.js";
+import type { OralSessionPlan, SourceCandidate } from "./lib/types.js";
 import type { BankBuild, BankManifest } from "./pipeline/bank-build.js";
 import type { CarriedBank } from "./pipeline/run.js";
 
@@ -20,6 +21,8 @@ import type { CarriedBank } from "./pipeline/run.js";
 
 export const PROFILE_PATH = "content/profiles/psc-sle.json";
 export const SOURCES_PATH = "content/factory/sources.seed.json";
+/** The oral sessions a batch plans scenarios for (progress.md D114). */
+export const ORAL_SESSIONS_PATH = "content/factory/oral-sessions.json";
 export const MODELS_PATH = "apps/factory/config/models.json";
 export const PRICING_PATH = "apps/factory/config/pricing.json";
 export const SOURCE_QUEUE_PATH = "content/factory/source-queue.json";
@@ -44,7 +47,33 @@ export const loadSources = (root: string): SourceCandidate[] =>
 
 export const loadModels = (root: string): OpenAiModels => {
   const raw = readJson(join(root, MODELS_PATH)) as Record<string, string>;
-  return { passage: raw.passage!, draft: raw.draft!, review: raw.review! };
+  return {
+    passage: raw.passage!,
+    draft: raw.draft!,
+    review: raw.review!,
+    ...(raw.scenario === undefined ? {} : { scenario: raw.scenario }),
+  };
+};
+
+/**
+ * The oral session plan, shape-checked, because a session length that is not a positive
+ * number, or a type the domain does not know, would build scenarios no client can run.
+ */
+export const loadOralSessions = (root: string): OralSessionPlan => {
+  const raw = readJson(join(root, ORAL_SESSIONS_PATH)) as Partial<Record<keyof OralSessionPlan, unknown>>;
+  const { lang, bands, sessions } = raw;
+  if (lang !== "fr" && lang !== "en") throw new Error(`${ORAL_SESSIONS_PATH}: lang must be "fr" or "en"`);
+  if (!Array.isArray(bands) || bands.length === 0 || !bands.every((b) => b === "B" || b === "C")) {
+    throw new Error(`${ORAL_SESSIONS_PATH}: bands must list B and/or C`);
+  }
+  if (!Array.isArray(sessions) || sessions.length === 0) throw new Error(`${ORAL_SESSIONS_PATH}: sessions must be a list`);
+  for (const [index, session] of (sessions as Partial<Record<"sessionType" | "minutes", unknown>>[]).entries()) {
+    const known = (ORAL_SESSION_TYPES as readonly unknown[]).includes(session.sessionType);
+    if (!known || typeof session.minutes !== "number" || !(session.minutes > 0)) {
+      throw new Error(`${ORAL_SESSIONS_PATH}: session ${String(index)} needs a known sessionType and positive minutes`);
+    }
+  }
+  return raw as OralSessionPlan;
 };
 
 export const loadPricing = (root: string): OpenAiPricing => {
@@ -121,16 +150,20 @@ export const latestBankVersionBelow = (root: string, version: number): number | 
 };
 
 /**
- * A published bank version's items and passages, read back through its manifest,
- * or `null` when that version was never written. The next version carries them.
+ * A published bank version's items, passages, forms and scenarios, read back through its
+ * manifest, or `null` when that version was never written. The next version carries them
+ * (D82, D114). v1 lists no forms and v1 and v2 no scenarios, which read as none.
  */
 export const loadPublishedBank = (root: string, version: number): CarriedBank | null => {
   if (!bankVersionExists(root, version)) return null;
-  const manifest = readJson(join(bankDir(root, version), "manifest.json")) as BankManifest;
-  const shard = (path: string): unknown[] => readJson(join(root, "content", path)) as unknown[];
+  const manifest = readJson(join(bankDir(root, version), "manifest.json")) as Partial<BankManifest> &
+    Pick<BankManifest, "shards" | "passageShards">;
+  const file = (path: string): unknown => readJson(join(root, "content", path));
   return {
-    items: manifest.shards.flatMap((s) => shard(s.path)) as Item[],
-    passages: manifest.passageShards.flatMap((s) => shard(s.path)) as Passage[],
+    items: manifest.shards.flatMap((s) => file(s.path) as unknown[]) as Item[],
+    passages: manifest.passageShards.flatMap((s) => file(s.path) as unknown[]) as Passage[],
+    forms: (manifest.forms ?? []).map((f) => file(f.path) as ExamForm),
+    scenarios: manifest.scenarios ? (file(manifest.scenarios.path) as OralScenario[]) : [],
   };
 };
 

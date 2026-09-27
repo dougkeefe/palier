@@ -84,6 +84,7 @@ export const itemsOf = (forms: readonly ExamForm[] = [FORM], bank: readonly Item
   form: (id) => Promise.resolve(forms.find((f) => f.id === id) ?? null),
   forms: () => Promise.resolve(forms),
   scenario: () => Promise.resolve(null),
+  scenarios: () => Promise.resolve([]),
   bankVersion: () => Promise.resolve(3),
 });
 

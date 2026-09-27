@@ -1,5 +1,5 @@
 import { anAttempt, anExamRun, anItem, aScheduleEntry, aSession } from "@palier/testing";
-import { attemptId, itemId } from "@palier/domain";
+import { attemptId, itemId, scenarioId, sessionId } from "@palier/domain";
 import { Dexie } from "dexie";
 import { describe, expect, it } from "vitest";
 
@@ -31,6 +31,8 @@ const aVersionOneDevice = async (name: string) => {
     syncMeta: [{ id: "state", identity: null, watermark: 7, enabled: true, lastSyncedAt: null, accountUnconfirmed: false }],
     costLedger: [{ ts: "2026-09-20T10:00:00.000Z", feature: "none" }],
     generated: [{ id: "gen-legacy", skill: "writing", createdAt: "2026-09-20T10:00:00.000Z" }],
+    oralSessions: [{ id: "oral-legacy", scenarioId: "scn-legacy", startedAt: "2026-09-20T10:00:00.000Z" }],
+    oralAudio: [{ sessionId: "oral-legacy" }],
   } as const;
   for (const [table, list] of Object.entries(rows)) await v1.table(table).bulkAdd([...list]);
   v1.close();
@@ -67,6 +69,28 @@ describe("schema migration v1 → current", () => {
     expect(await stores.costLedger.since("1970-01-01T00:00:00.000Z")).toEqual([]);
     // Likewise a `generated` row that is not a whole item reads as no set (D110).
     expect(await stores.generated.latestSet("writing")).toBeNull();
+    // And v1's placeholder oral rows, not a whole session or recording, read as none (D115).
+    expect(await stores.oral.all()).toEqual([]);
+    expect(await stores.oral.audioIndex()).toEqual([]);
+  });
+
+  it("gives the migrated database a working oral store in v1's own tables", async () => {
+    const name = dbName();
+    await aVersionOneDevice(name);
+
+    const stores = dexieStores(name);
+    const session = {
+      id: sessionId("oral-1"),
+      scenarioId: scenarioId("scn-1"),
+      startedAt: "2026-09-27T10:00:00.000Z",
+      endedAt: null,
+      endReason: null,
+      turns: [{ speaker: "examiner", text: "Bonjour.", phase: 0, startMs: 0, endMs: 900 }],
+    } as const;
+    await stores.oral.put(session);
+    await stores.oral.putAudio(session.id, new Blob(["son"]));
+    expect(await stores.oral.all()).toEqual([session]);
+    expect(await stores.oral.audioIndex()).toEqual([{ sessionId: session.id, bytes: 3, startedAt: session.startedAt }]);
   });
 
   it("gives the migrated database a working generated-item store in v1's own table", async () => {

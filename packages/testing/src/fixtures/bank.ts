@@ -1,5 +1,14 @@
 import type { ItemRepository } from "@palier/app";
-import type { ExamForm, Item, ItemOption, OptionId, Passage, TargetBand } from "@palier/domain";
+import type {
+  ExamForm,
+  Item,
+  ItemOption,
+  OptionId,
+  OralScenario,
+  OralSessionType,
+  Passage,
+  TargetBand,
+} from "@palier/domain";
 import {
   OPTION_IDS,
   READING_SUB_SKILLS,
@@ -137,15 +146,48 @@ const forms: readonly ExamForm[] = [
 ];
 
 /**
- * The bank as a `MemoryBank` seed. Includes forms and one oral scenario as well
- * as the sixty items and their passages, so `ItemRepository.form`/`scenario`
+ * One scenario per session type (PRD §8.6), at the session's length, so a picker
+ * and the session driver have every shape to run: the warm-up in two phases, the
+ * full simulation in five, the rest in three (progress.md D114).
+ */
+const SCENARIO_PLAN: readonly {
+  readonly sessionType: OralSessionType;
+  readonly targetBand: "B" | "C";
+  readonly minutes: readonly number[];
+}[] = [
+  { sessionType: "warmup", targetBand: "B", minutes: [2, 3] },
+  { sessionType: "work", targetBand: "C", minutes: [2, 5, 3] },
+  { sessionType: "opinion", targetBand: "C", minutes: [3, 5, 4] },
+  { sessionType: "situation", targetBand: "B", minutes: [2, 4, 2] },
+  { sessionType: "full", targetBand: "C", minutes: [3, 5, 5, 5, 4] },
+];
+
+const scenarios: readonly OralScenario[] = SCENARIO_PLAN.map(({ sessionType, targetBand, minutes }) =>
+  anOralScenario({
+    id: scenarioId(`fixture-scenario-${sessionType}-${targetBand.toLowerCase()}`),
+    sessionType,
+    targetBand,
+    phases: minutes.map((m, i) => ({
+      name: `Phase ${String(i + 1)}`,
+      minutes: m,
+      intent: `Sonder le candidat, phase ${String(i + 1)}.`,
+      seedQuestions: [`Question d'ouverture ${String(i + 1)}.`],
+      escalation: [`Relance plus exigeante ${String(i + 1)}.`],
+      deescalation: [`Reformulation plus simple ${String(i + 1)}.`],
+    })),
+  }),
+);
+
+/**
+ * The bank as a `MemoryBank` seed. Includes forms and a scenario per session type
+ * as well as the sixty items and their passages, so `ItemRepository.form`/`scenario`
  * have fixture data too (progress.md deviation D31).
  */
 export const FIXTURE_BANK: MemoryBank = {
   items,
   passages,
   forms,
-  scenarios: [anOralScenario({ id: scenarioId("fixture-scenario-01") })],
+  scenarios,
   bankVersion: FIXTURE_BANK_VERSION,
 };
 

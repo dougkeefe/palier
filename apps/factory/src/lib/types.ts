@@ -1,4 +1,4 @@
-import type { DocType, Licence, Topic } from "@palier/domain";
+import type { DocType, Lang, Licence, OralSessionType, Topic } from "@palier/domain";
 
 /** A candidate source as it appears in the committed seed (harvest input). */
 export type SourceCandidate = {
@@ -7,6 +7,18 @@ export type SourceCandidate = {
   readonly topic: Topic;
   readonly licence: Licence;
   readonly licenceNote?: string;
+};
+
+/**
+ * The oral scenarios a batch plans (progress.md D114), from `content/factory/oral-sessions.json`:
+ * each session type at its length (product-requirements.md §8.6), at each band. Session lengths
+ * are Palier's own product, not a §5 exam rule (the PSC publishes no phase breakdown, §5.3), so
+ * they are factory configuration, as the source queue is, and not profile data.
+ */
+export type OralSessionPlan = {
+  readonly lang: Lang;
+  readonly bands: readonly ("B" | "C")[];
+  readonly sessions: readonly { readonly sessionType: OralSessionType; readonly minutes: number }[];
 };
 
 /** A source that cleared the licence gate (harvest output, content-factory.md §4.1). */
@@ -42,6 +54,9 @@ export type BatchReport = {
     readonly itemsPublished: number;
     /** Carried from the previous bank version, still valid. */
     readonly itemsCarried: number;
+    /** Oral scenarios published in this batch (progress.md D114); carried ones apart. */
+    readonly scenarios: number;
+    readonly scenariosCarried: number;
   };
   /** Stage-4 yield: passed / drafted. Target 0.45–0.75 (§6). */
   readonly stage4Yield: number;

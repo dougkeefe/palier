@@ -11,7 +11,7 @@ import {
   targetBandSchema,
   topicSchema,
 } from "./primitives.js";
-import { itemOptionShape } from "./content.js";
+import { itemOptionShape, oralPhaseShape } from "./content.js";
 
 /**
  * Schemas for the AI structured-output payloads (architecture.md §8.2). Every
@@ -107,8 +107,14 @@ export const writingAssessmentShape = z.strictObject({
   modelAnswer: z.string().min(1),
 });
 
+/** A scenario's phase plan (progress.md D114). The factory checks the minutes. */
+export const scenarioDraftShape = z.strictObject({
+  phases: z.array(oralPhaseShape).min(1),
+});
+
 export const passageDraftSchema = passageDraftShape.readonly();
 export const itemDraftSchema = itemDraftShape.readonly();
 export const reviewVerdictSchema = reviewVerdictShape.readonly();
 export const writingFeedbackDraftSchema = writingFeedbackDraftShape.readonly();
 export const writingAssessmentSchema = writingAssessmentShape.readonly();
+export const scenarioDraftSchema = scenarioDraftShape.readonly();

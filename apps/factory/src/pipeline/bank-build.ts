@@ -26,10 +26,21 @@ export type ShardEntry = {
 
 export type BankManifest = {
   readonly version: number;
-  readonly counts: { readonly items: number; readonly passages: number; readonly forms: number };
+  readonly counts: {
+    readonly items: number;
+    readonly passages: number;
+    readonly forms: number;
+    readonly scenarios: number;
+  };
   readonly shards: readonly ShardEntry[];
   readonly passageShards: readonly ShardEntry[];
   readonly forms: readonly { readonly id: string; readonly path: string; readonly hash: string }[];
+  /**
+   * The oral scenarios file, listed so a client and its service worker find it through the
+   * manifest like every other file (progress.md D114); null when the bank has none. Banks
+   * v1 and v2 were written before the entry and carry no key, which reads the same way.
+   */
+  readonly scenarios: { readonly path: string; readonly hash: string } | null;
 };
 
 export type BankBuild = { readonly version: number; readonly files: readonly BankFile[]; readonly manifest: BankManifest };
@@ -97,16 +108,25 @@ export const buildBank = (input: BankInput): BankBuild => {
     (forms as { id: string; path: string; hash: string }[]).push({ id: form.id, path, hash });
   }
 
+  let scenarios: BankManifest["scenarios"] = null;
   if (input.scenarios.length > 0) {
-    files.push({ path: `${base}/oral/scenarios.json`, content: canonicalStringify(byId(input.scenarios)) });
+    const path = `${base}/oral/scenarios.json`;
+    files.push({ path, content: canonicalStringify(byId(input.scenarios)) });
+    scenarios = { path, hash: contentHash(byId(input.scenarios)).slice(0, 16) };
   }
 
   const manifest: BankManifest = {
     version: input.version,
-    counts: { items: input.items.length, passages: input.passages.length, forms: input.forms.length },
+    counts: {
+      items: input.items.length,
+      passages: input.passages.length,
+      forms: input.forms.length,
+      scenarios: input.scenarios.length,
+    },
     shards,
     passageShards,
     forms,
+    scenarios,
   };
   files.push({ path: `${base}/manifest.json`, content: canonicalStringify(manifest) });
 

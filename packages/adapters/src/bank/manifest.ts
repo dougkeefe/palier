@@ -27,11 +27,22 @@ export type ManifestForm = {
   readonly hash: string;
 };
 
+/** The oral scenarios file (progress.md D114). One per bank, listed so a cache can take it. */
+export type ManifestScenarios = {
+  readonly path: string;
+  readonly hash: string;
+};
+
 export type BankManifest = {
   readonly version: number;
   readonly shards: readonly ManifestShard[];
   readonly passageShards: readonly ManifestShard[];
   readonly forms: readonly ManifestForm[];
+  /**
+   * Null when the bank ships no scenarios. Banks v1 and v2 predate the entry and carry
+   * no key at all, which reads the same way: neither ever held a scenario.
+   */
+  readonly scenarios: ManifestScenarios | null;
 };
 
 const isObject = (v: unknown): v is Record<string, unknown> =>
@@ -57,6 +68,15 @@ const asForm = (v: unknown, where: string): ManifestForm => {
   return { id, path, hash };
 };
 
+const asScenarios = (v: unknown): ManifestScenarios | null => {
+  if (v === undefined || v === null) return null;
+  if (!isObject(v)) throw new Error("manifest.scenarios is not an object");
+  const { path, hash } = v;
+  if (typeof path !== "string") throw new Error("manifest.scenarios.path is not a string");
+  if (typeof hash !== "string") throw new Error("manifest.scenarios.hash is not a string");
+  return { path, hash };
+};
+
 const asArray = (v: unknown, where: string): readonly unknown[] => {
   if (!Array.isArray(v)) throw new Error(`${where} is not an array`);
   return v;
@@ -69,7 +89,7 @@ const asArray = (v: unknown, where: string): readonly unknown[] => {
  */
 export const parseManifest = (raw: unknown): BankManifest => {
   if (!isObject(raw)) throw new Error("manifest is not an object");
-  const { version, shards, passageShards, forms } = raw;
+  const { version, shards, passageShards, forms, scenarios } = raw;
   if (typeof version !== "number") throw new Error("manifest.version is not a number");
   return {
     version,
@@ -78,5 +98,6 @@ export const parseManifest = (raw: unknown): BankManifest => {
       asShard(s, `passageShards[${String(i)}]`),
     ),
     forms: asArray(forms, "manifest.forms").map((f, i) => asForm(f, `forms[${String(i)}]`)),
+    scenarios: asScenarios(scenarios),
   };
 };

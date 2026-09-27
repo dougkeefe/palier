@@ -11,6 +11,9 @@ export type { AiProvider, AiProviderFactory } from "./ai-provider.js";
 export type { CostEntry, CostLedger } from "./cost-ledger.js";
 export type { WritingStore, WritingSubmission } from "./writing-store.js";
 export type { GeneratedItemStore, GeneratedSet } from "./generated-item-store.js";
+export type { OralAudioEntry, OralSession, OralStore } from "./oral-store.js";
+export { StorageQuotaError } from "./oral-store.js";
+export type { OralDirective, OralTransport, OralTransportEvent } from "./oral-transport.js";
 export type {
   DeviceId,
   DeviceIdentity,

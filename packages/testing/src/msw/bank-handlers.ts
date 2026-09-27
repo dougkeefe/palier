@@ -20,9 +20,9 @@ import type { ItemRepositoryBank } from "../contracts/item-repository.contract.j
  * body is `bank.bankVersion`, which is what `bankVersion()` reports — the two are
  * allowed to differ, which is how the contract asserts a specific bank version.
  *
- * The oral scenarios file is served with an explicit **404 when the bank has no
- * scenarios**, mirroring the factory not writing the file — so the adapter's
- * "absent scenarios → null" path is exercised against a real not-found, not a stub.
+ * The oral scenarios file is listed in the manifest's `scenarios` entry, as the
+ * factory lists it (progress.md D114), and a bank with none lists `null` and serves
+ * an explicit **404** there, mirroring the factory not writing the file.
  */
 export type BankHandlerOptions = {
   readonly baseUrl: string;
@@ -74,18 +74,25 @@ export const bankHandlers = (bank: ItemRepositoryBank, opts: BankHandlerOptions)
   }
 
   const scenarios: readonly OralScenario[] = bank.scenarios;
+  const scenarioPath = `${root}/oral/scenarios.json`;
   handlers.push(
-    http.get(`${base}/${root}/oral/scenarios.json`, () =>
+    http.get(`${base}/${scenarioPath}`, () =>
       scenarios.length > 0 ? HttpResponse.json(scenarios) : new HttpResponse(null, { status: 404 }),
     ),
   );
 
   const manifest = {
     version: bank.bankVersion,
-    counts: { items: bank.items.length, passages: bank.passages.length, forms: bank.forms.length },
+    counts: {
+      items: bank.items.length,
+      passages: bank.passages.length,
+      forms: bank.forms.length,
+      scenarios: scenarios.length,
+    },
     shards,
     passageShards,
     forms,
+    scenarios: scenarios.length > 0 ? { path: scenarioPath, hash: "scenarios" } : null,
   };
   handlers.unshift(http.get(`${base}/${root}/manifest.json`, () => HttpResponse.json(manifest)));
 

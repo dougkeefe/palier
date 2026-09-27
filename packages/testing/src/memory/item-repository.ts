@@ -47,6 +47,7 @@ export const memoryItemRepository = (bank: MemoryBank = {}): ItemRepository => {
     form: (id) => Promise.resolve(forms.get(id) ?? null),
     forms: () => Promise.resolve([...forms.values()]),
     scenario: (id) => Promise.resolve(scenarios.get(id) ?? null),
+    scenarios: () => Promise.resolve([...scenarios.values()]),
     bankVersion: () => Promise.resolve(version),
   };
 };

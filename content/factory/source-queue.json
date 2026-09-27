@@ -4,28 +4,28 @@
       "docType": "bulletin",
       "licence": "OGL-Canada-2.0",
       "licenceNote": "Open Government Licence – Canada 2.0",
-      "retrievedAt": "2026-09-24T00:00:00.000Z",
+      "retrievedAt": "2026-09-27T00:00:00.000Z",
       "topic": "human-resources",
       "url": "https://www.canada.ca/en/treasury-board-secretariat/services/values-ethics.html"
     },
     {
       "docType": "report-excerpt",
       "licence": "OGL-Canada-2.0",
-      "retrievedAt": "2026-09-24T00:00:00.000Z",
+      "retrievedAt": "2026-09-27T00:00:00.000Z",
       "topic": "finance-and-budgets",
       "url": "https://www.canada.ca/en/department-finance/programs/financial-sector-policy.html"
     },
     {
       "docType": "note",
       "licence": "canada.ca-non-commercial",
-      "retrievedAt": "2026-09-24T00:00:00.000Z",
+      "retrievedAt": "2026-09-27T00:00:00.000Z",
       "topic": "it-and-digital",
       "url": "https://www.canada.ca/en/government/system/digital-government.html"
     },
     {
       "docType": "memo",
       "licence": "OGL-Canada-2.0",
-      "retrievedAt": "2026-09-24T00:00:00.000Z",
+      "retrievedAt": "2026-09-27T00:00:00.000Z",
       "topic": "service-delivery",
       "url": "https://www.canada.ca/en/employment-social-development/services/delivery.html"
     },
@@ -33,28 +33,28 @@
       "docType": "report-excerpt",
       "licence": "public-domain",
       "licenceNote": "Federal statute, reproducible",
-      "retrievedAt": "2026-09-24T00:00:00.000Z",
+      "retrievedAt": "2026-09-27T00:00:00.000Z",
       "topic": "policy-and-legislation",
       "url": "https://laws-lois.justice.gc.ca/eng/acts/O-3.01/"
     },
     {
       "docType": "bulletin",
       "licence": "OGL-Canada-2.0",
-      "retrievedAt": "2026-09-24T00:00:00.000Z",
+      "retrievedAt": "2026-09-27T00:00:00.000Z",
       "topic": "health-and-safety",
       "url": "https://www.canada.ca/en/employment-social-development/services/health-safety/reports.html"
     },
     {
       "docType": "note",
       "licence": "canada.ca-non-commercial",
-      "retrievedAt": "2026-09-24T00:00:00.000Z",
+      "retrievedAt": "2026-09-27T00:00:00.000Z",
       "topic": "procurement",
       "url": "https://www.tpsgc-pwgsc.gc.ca/app-acq/index-eng.html"
     },
     {
       "docType": "memo",
       "licence": "OGL-Canada-2.0",
-      "retrievedAt": "2026-09-24T00:00:00.000Z",
+      "retrievedAt": "2026-09-27T00:00:00.000Z",
       "topic": "project-management",
       "url": "https://www.canada.ca/en/treasury-board-secretariat/topics/project-management.html"
     }

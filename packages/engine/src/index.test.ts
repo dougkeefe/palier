@@ -46,6 +46,11 @@ describe("@palier/engine public surface", () => {
     expect(typeof engine.subSkillBreakdown).toBe("function");
   });
 
+  it("exports the oral session machine", () => {
+    expect(typeof engine.startOralSession).toBe("function");
+    expect(typeof engine.stepOralSession).toBe("function");
+  });
+
   it("exports the spend meter, the cap and the pre-flight estimate", () => {
     expect(typeof engine.spendTotals).toBe("function");
     expect(typeof engine.estimateFeatureCost).toBe("function");

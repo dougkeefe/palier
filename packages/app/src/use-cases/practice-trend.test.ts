@@ -62,6 +62,7 @@ const depsFor = (attempts: readonly Attempt[]) => {
     form: vi.fn(() => Promise.resolve(null)),
     forms: vi.fn(() => Promise.resolve([])),
     scenario: vi.fn(() => Promise.resolve(null)),
+    scenarios: vi.fn(() => Promise.resolve([])),
     bankVersion: vi.fn(() => Promise.resolve(1)),
   };
   const store: AttemptStore = {

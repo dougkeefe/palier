@@ -95,19 +95,24 @@ export const staticAssetsIn = (html: string): string[] => [
   ...new Set(html.match(/\/_next\/static\/[^"'\\\s)]+/g) ?? []),
 ];
 
-/** Every file a bank manifest names, as origin-relative URLs under the served base. */
+/**
+ * Every file a bank manifest names, as origin-relative URLs under the served base: its
+ * shards, passage shards and forms, and its one oral scenarios file when it lists one
+ * (progress.md D114), so a session's scenario is there offline too.
+ */
 export const bankFilesIn = (manifest: unknown, bankBasePath: string): string[] => {
   if (typeof manifest !== "object" || manifest === null) return [];
   const record = manifest as Record<string, unknown>;
   const paths: string[] = [];
+  const add = (entry: unknown): void => {
+    const path = (entry as { path?: unknown } | null)?.path;
+    if (typeof path === "string") paths.push(`${bankBasePath}/${path}`);
+  };
   for (const key of ["shards", "passageShards", "forms"]) {
     const entries = record[key];
-    if (!Array.isArray(entries)) continue;
-    for (const entry of entries as unknown[]) {
-      const path = (entry as { path?: unknown } | null)?.path;
-      if (typeof path === "string") paths.push(`${bankBasePath}/${path}`);
-    }
+    if (Array.isArray(entries)) (entries as unknown[]).forEach(add);
   }
+  add(record.scenarios);
   return paths;
 };
 

@@ -41,6 +41,12 @@ export type {
   WritingSubmission,
   GeneratedItemStore,
   GeneratedSet,
+  OralAudioEntry,
+  OralDirective,
+  OralSession,
+  OralStore,
+  OralTransport,
+  OralTransportEvent,
 } from "./ports/index.js";
 export {
   INITIAL_SYNC_STATE,
@@ -57,6 +63,7 @@ export {
   TELEMETRY_MAX_BATCH,
   TelemetryRejectedError,
   TelemetryUnavailableError,
+  StorageQuotaError,
 } from "./ports/index.js";
 
 export type {
@@ -140,6 +147,12 @@ export type {
   GeneratePracticeSetResult,
   ScoreGeneratedAnswerRequest,
   WritingFeedbackRequest,
+  OralAudioDeps,
+  OralSessionRun,
+  OralSessionRunDeps,
+  OralStorageEstimate,
+  SaveOralAudioResult,
+  StartOralSessionRequest,
 } from "./use-cases/index.js";
 export {
   EmptyApiKeyError,
@@ -223,6 +236,14 @@ export {
   generatePracticeSet,
   latestGeneratedSet,
   scoreGeneratedAnswer,
+  AUDIO_KEEP_SESSIONS,
+  AUDIO_WARNING_BYTES,
+  OralSessionExistsError,
+  UnknownScenarioError,
+  cleanUpAudio,
+  oralStorageEstimate,
+  saveOralAudio,
+  startOralSessionRun,
 } from "./use-cases/index.js";
 
 export type { ProgressStores, SyncRecord } from "./sync/records.js";

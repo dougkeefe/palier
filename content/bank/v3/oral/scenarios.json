@@ -1,0 +1,540 @@
+[
+  {
+    "id": "4P181GBSQCUO8JOE082G",
+    "lang": "fr",
+    "phases": [
+      {
+        "deescalation": [
+          "Pouvez-vous me donner un exemple concret ?"
+        ],
+        "escalation": [
+          "Qu'auriez-vous fait autrement, avec le recul ?"
+        ],
+        "intent": "Phase 1 of a opinion session on communications, at band C.",
+        "minutes": 4,
+        "name": "Mise en train",
+        "seedQuestions": [
+          "Que feriez-vous si un client contestait cette décision ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Qu'est-ce qui vous plaît dans ce travail ?"
+        ],
+        "escalation": [
+          "Quels compromis cette décision impose-t-elle à votre ministère ?"
+        ],
+        "intent": "Phase 2 of a opinion session on communications, at band C.",
+        "minutes": 4,
+        "name": "Description",
+        "seedQuestions": [
+          "Expliquez à un nouveau collègue comment fonctionne ce processus."
+        ]
+      },
+      {
+        "deescalation": [
+          "Qui sont les personnes avec qui vous travaillez le plus souvent ?"
+        ],
+        "escalation": [
+          "Qu'auriez-vous fait autrement, avec le recul ?"
+        ],
+        "intent": "Phase 3 of a opinion session on communications, at band C.",
+        "minutes": 4,
+        "name": "Approfondissement",
+        "seedQuestions": [
+          "Que feriez-vous si un client contestait cette décision ?"
+        ]
+      }
+    ],
+    "sessionType": "opinion",
+    "targetBand": "C",
+    "topic": "communications"
+  },
+  {
+    "id": "6IK7038HUC8C1N772I9L",
+    "lang": "fr",
+    "phases": [
+      {
+        "deescalation": [
+          "Décrivez une journée type dans votre poste."
+        ],
+        "escalation": [
+          "Quelles seraient les conséquences si le budget était réduit de moitié ?"
+        ],
+        "intent": "Phase 1 of a situation session on communications, at band C.",
+        "minutes": 3,
+        "name": "Mise en train",
+        "seedQuestions": [
+          "Comment votre direction a-t-elle abordé ce changement ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Qu'est-ce qui vous plaît dans ce travail ?"
+        ],
+        "escalation": [
+          "Qu'auriez-vous fait autrement, avec le recul ?"
+        ],
+        "intent": "Phase 2 of a situation session on communications, at band C.",
+        "minutes": 3,
+        "name": "Description",
+        "seedQuestions": [
+          "Parlez-moi de votre rôle au sein de votre équipe."
+        ]
+      },
+      {
+        "deescalation": [
+          "Pouvez-vous me donner un exemple concret ?"
+        ],
+        "escalation": [
+          "Quels compromis cette décision impose-t-elle à votre ministère ?"
+        ],
+        "intent": "Phase 3 of a situation session on communications, at band C.",
+        "minutes": 2,
+        "name": "Approfondissement",
+        "seedQuestions": [
+          "Décrivez un dossier sur lequel vous avez travaillé récemment."
+        ]
+      }
+    ],
+    "sessionType": "situation",
+    "targetBand": "C",
+    "topic": "communications"
+  },
+  {
+    "id": "704IHNU22VKHO1H7PCJU",
+    "lang": "fr",
+    "phases": [
+      {
+        "deescalation": [
+          "Qu'est-ce qui vous plaît dans ce travail ?"
+        ],
+        "escalation": [
+          "Quels compromis cette décision impose-t-elle à votre ministère ?"
+        ],
+        "intent": "Phase 1 of a work session on procurement, at band C.",
+        "minutes": 4,
+        "name": "Mise en train",
+        "seedQuestions": [
+          "Décrivez un dossier sur lequel vous avez travaillé récemment."
+        ]
+      },
+      {
+        "deescalation": [
+          "Qui sont les personnes avec qui vous travaillez le plus souvent ?"
+        ],
+        "escalation": [
+          "Quelles seraient les conséquences si le budget était réduit de moitié ?"
+        ],
+        "intent": "Phase 2 of a work session on procurement, at band C.",
+        "minutes": 3,
+        "name": "Description",
+        "seedQuestions": [
+          "Que feriez-vous si un client contestait cette décision ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Qui sont les personnes avec qui vous travaillez le plus souvent ?"
+        ],
+        "escalation": [
+          "Comment défendriez-vous cette position devant un comité ?"
+        ],
+        "intent": "Phase 3 of a work session on procurement, at band C.",
+        "minutes": 3,
+        "name": "Approfondissement",
+        "seedQuestions": [
+          "Décrivez un dossier sur lequel vous avez travaillé récemment."
+        ]
+      }
+    ],
+    "sessionType": "work",
+    "targetBand": "C",
+    "topic": "procurement"
+  },
+  {
+    "id": "A75VR17L80MNH4BSMB1S",
+    "lang": "fr",
+    "phases": [
+      {
+        "deescalation": [
+          "Qu'est-ce qui vous plaît dans ce travail ?"
+        ],
+        "escalation": [
+          "Qu'auriez-vous fait autrement, avec le recul ?"
+        ],
+        "intent": "Phase 1 of a opinion session on procurement, at band B.",
+        "minutes": 4,
+        "name": "Mise en train",
+        "seedQuestions": [
+          "Parlez-moi de votre rôle au sein de votre équipe."
+        ]
+      },
+      {
+        "deescalation": [
+          "Pouvez-vous me donner un exemple concret ?"
+        ],
+        "escalation": [
+          "Quelles seraient les conséquences si le budget était réduit de moitié ?"
+        ],
+        "intent": "Phase 2 of a opinion session on procurement, at band B.",
+        "minutes": 4,
+        "name": "Description",
+        "seedQuestions": [
+          "Comment votre direction a-t-elle abordé ce changement ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Pouvez-vous me donner un exemple concret ?"
+        ],
+        "escalation": [
+          "Quels compromis cette décision impose-t-elle à votre ministère ?"
+        ],
+        "intent": "Phase 3 of a opinion session on procurement, at band B.",
+        "minutes": 4,
+        "name": "Approfondissement",
+        "seedQuestions": [
+          "Expliquez à un nouveau collègue comment fonctionne ce processus."
+        ]
+      }
+    ],
+    "sessionType": "opinion",
+    "targetBand": "B",
+    "topic": "procurement"
+  },
+  {
+    "id": "B00CTJNAV06LTM5BCJ03",
+    "lang": "fr",
+    "phases": [
+      {
+        "deescalation": [
+          "Décrivez une journée type dans votre poste."
+        ],
+        "escalation": [
+          "Quels compromis cette décision impose-t-elle à votre ministère ?"
+        ],
+        "intent": "Phase 1 of a full session on communications, at band B.",
+        "minutes": 5,
+        "name": "Mise en train",
+        "seedQuestions": [
+          "Décrivez un dossier sur lequel vous avez travaillé récemment."
+        ]
+      },
+      {
+        "deescalation": [
+          "Décrivez une journée type dans votre poste."
+        ],
+        "escalation": [
+          "Comment défendriez-vous cette position devant un comité ?"
+        ],
+        "intent": "Phase 2 of a full session on communications, at band B.",
+        "minutes": 5,
+        "name": "Description",
+        "seedQuestions": [
+          "Que feriez-vous si un client contestait cette décision ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Qu'est-ce qui vous plaît dans ce travail ?"
+        ],
+        "escalation": [
+          "Qu'auriez-vous fait autrement, avec le recul ?"
+        ],
+        "intent": "Phase 3 of a full session on communications, at band B.",
+        "minutes": 4,
+        "name": "Approfondissement",
+        "seedQuestions": [
+          "Parlez-moi de votre rôle au sein de votre équipe."
+        ]
+      },
+      {
+        "deescalation": [
+          "Qu'est-ce qui vous plaît dans ce travail ?"
+        ],
+        "escalation": [
+          "Quelles seraient les conséquences si le budget était réduit de moitié ?"
+        ],
+        "intent": "Phase 4 of a full session on communications, at band B.",
+        "minutes": 4,
+        "name": "Mise en situation",
+        "seedQuestions": [
+          "Que feriez-vous si un client contestait cette décision ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Pouvez-vous me donner un exemple concret ?"
+        ],
+        "escalation": [
+          "Quels compromis cette décision impose-t-elle à votre ministère ?"
+        ],
+        "intent": "Phase 5 of a full session on communications, at band B.",
+        "minutes": 4,
+        "name": "Synthèse",
+        "seedQuestions": [
+          "Que feriez-vous si un client contestait cette décision ?"
+        ]
+      }
+    ],
+    "sessionType": "full",
+    "targetBand": "B",
+    "topic": "communications"
+  },
+  {
+    "id": "BVS03STOP1FK89KGAJO4",
+    "lang": "fr",
+    "phases": [
+      {
+        "deescalation": [
+          "Pouvez-vous me donner un exemple concret ?"
+        ],
+        "escalation": [
+          "Qu'auriez-vous fait autrement, avec le recul ?"
+        ],
+        "intent": "Phase 1 of a work session on health-and-safety, at band B.",
+        "minutes": 4,
+        "name": "Mise en train",
+        "seedQuestions": [
+          "Que feriez-vous si un client contestait cette décision ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Pouvez-vous me donner un exemple concret ?"
+        ],
+        "escalation": [
+          "Comment défendriez-vous cette position devant un comité ?"
+        ],
+        "intent": "Phase 2 of a work session on health-and-safety, at band B.",
+        "minutes": 3,
+        "name": "Description",
+        "seedQuestions": [
+          "Que feriez-vous si un client contestait cette décision ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Qu'est-ce qui vous plaît dans ce travail ?"
+        ],
+        "escalation": [
+          "Qu'auriez-vous fait autrement, avec le recul ?"
+        ],
+        "intent": "Phase 3 of a work session on health-and-safety, at band B.",
+        "minutes": 3,
+        "name": "Approfondissement",
+        "seedQuestions": [
+          "Comment votre direction a-t-elle abordé ce changement ?"
+        ]
+      }
+    ],
+    "sessionType": "work",
+    "targetBand": "B",
+    "topic": "health-and-safety"
+  },
+  {
+    "id": "CHAL4OONCJI4SGP2DVAD",
+    "lang": "fr",
+    "phases": [
+      {
+        "deescalation": [
+          "Qui sont les personnes avec qui vous travaillez le plus souvent ?"
+        ],
+        "escalation": [
+          "Comment défendriez-vous cette position devant un comité ?"
+        ],
+        "intent": "Phase 1 of a situation session on procurement, at band B.",
+        "minutes": 3,
+        "name": "Mise en train",
+        "seedQuestions": [
+          "Décrivez un dossier sur lequel vous avez travaillé récemment."
+        ]
+      },
+      {
+        "deescalation": [
+          "Pouvez-vous me donner un exemple concret ?"
+        ],
+        "escalation": [
+          "Quelles seraient les conséquences si le budget était réduit de moitié ?"
+        ],
+        "intent": "Phase 2 of a situation session on procurement, at band B.",
+        "minutes": 3,
+        "name": "Description",
+        "seedQuestions": [
+          "Comment votre direction a-t-elle abordé ce changement ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Qu'est-ce qui vous plaît dans ce travail ?"
+        ],
+        "escalation": [
+          "Quels compromis cette décision impose-t-elle à votre ministère ?"
+        ],
+        "intent": "Phase 3 of a situation session on procurement, at band B.",
+        "minutes": 2,
+        "name": "Approfondissement",
+        "seedQuestions": [
+          "Comment votre direction a-t-elle abordé ce changement ?"
+        ]
+      }
+    ],
+    "sessionType": "situation",
+    "targetBand": "B",
+    "topic": "procurement"
+  },
+  {
+    "id": "CMN3IS6GM5BGDUC7LNGS",
+    "lang": "fr",
+    "phases": [
+      {
+        "deescalation": [
+          "Qu'est-ce qui vous plaît dans ce travail ?"
+        ],
+        "escalation": [
+          "Qu'auriez-vous fait autrement, avec le recul ?"
+        ],
+        "intent": "Phase 1 of a warmup session on human-resources, at band B.",
+        "minutes": 3,
+        "name": "Mise en train",
+        "seedQuestions": [
+          "Que feriez-vous si un client contestait cette décision ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Décrivez une journée type dans votre poste."
+        ],
+        "escalation": [
+          "Comment défendriez-vous cette position devant un comité ?"
+        ],
+        "intent": "Phase 2 of a warmup session on human-resources, at band B.",
+        "minutes": 2,
+        "name": "Description",
+        "seedQuestions": [
+          "Résumez les principaux enjeux dont nous avons parlé."
+        ]
+      }
+    ],
+    "sessionType": "warmup",
+    "targetBand": "B",
+    "topic": "human-resources"
+  },
+  {
+    "id": "DCRMCU8K7P67HMMUBCE0",
+    "lang": "fr",
+    "phases": [
+      {
+        "deescalation": [
+          "Décrivez une journée type dans votre poste."
+        ],
+        "escalation": [
+          "Qu'auriez-vous fait autrement, avec le recul ?"
+        ],
+        "intent": "Phase 1 of a full session on project-management, at band C.",
+        "minutes": 5,
+        "name": "Mise en train",
+        "seedQuestions": [
+          "Expliquez à un nouveau collègue comment fonctionne ce processus."
+        ]
+      },
+      {
+        "deescalation": [
+          "Pouvez-vous me donner un exemple concret ?"
+        ],
+        "escalation": [
+          "Quelles seraient les conséquences si le budget était réduit de moitié ?"
+        ],
+        "intent": "Phase 2 of a full session on project-management, at band C.",
+        "minutes": 5,
+        "name": "Description",
+        "seedQuestions": [
+          "Que feriez-vous si un client contestait cette décision ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Pouvez-vous me donner un exemple concret ?"
+        ],
+        "escalation": [
+          "Quelles seraient les conséquences si le budget était réduit de moitié ?"
+        ],
+        "intent": "Phase 3 of a full session on project-management, at band C.",
+        "minutes": 4,
+        "name": "Approfondissement",
+        "seedQuestions": [
+          "Expliquez à un nouveau collègue comment fonctionne ce processus."
+        ]
+      },
+      {
+        "deescalation": [
+          "Qui sont les personnes avec qui vous travaillez le plus souvent ?"
+        ],
+        "escalation": [
+          "Comment défendriez-vous cette position devant un comité ?"
+        ],
+        "intent": "Phase 4 of a full session on project-management, at band C.",
+        "minutes": 4,
+        "name": "Mise en situation",
+        "seedQuestions": [
+          "Résumez les principaux enjeux dont nous avons parlé."
+        ]
+      },
+      {
+        "deescalation": [
+          "Pouvez-vous me donner un exemple concret ?"
+        ],
+        "escalation": [
+          "Quels compromis cette décision impose-t-elle à votre ministère ?"
+        ],
+        "intent": "Phase 5 of a full session on project-management, at band C.",
+        "minutes": 4,
+        "name": "Synthèse",
+        "seedQuestions": [
+          "Expliquez à un nouveau collègue comment fonctionne ce processus."
+        ]
+      }
+    ],
+    "sessionType": "full",
+    "targetBand": "C",
+    "topic": "project-management"
+  },
+  {
+    "id": "E8JVA3KIQCMLH80DBBFK",
+    "lang": "fr",
+    "phases": [
+      {
+        "deescalation": [
+          "Décrivez une journée type dans votre poste."
+        ],
+        "escalation": [
+          "Comment défendriez-vous cette position devant un comité ?"
+        ],
+        "intent": "Phase 1 of a warmup session on finance-and-budgets, at band C.",
+        "minutes": 3,
+        "name": "Mise en train",
+        "seedQuestions": [
+          "Comment votre direction a-t-elle abordé ce changement ?"
+        ]
+      },
+      {
+        "deescalation": [
+          "Qui sont les personnes avec qui vous travaillez le plus souvent ?"
+        ],
+        "escalation": [
+          "Quelles seraient les conséquences si le budget était réduit de moitié ?"
+        ],
+        "intent": "Phase 2 of a warmup session on finance-and-budgets, at band C.",
+        "minutes": 2,
+        "name": "Description",
+        "seedQuestions": [
+          "Que feriez-vous si un client contestait cette décision ?"
+        ]
+      }
+    ],
+    "sessionType": "warmup",
+    "targetBand": "C",
+    "topic": "finance-and-budgets"
+  }
+]

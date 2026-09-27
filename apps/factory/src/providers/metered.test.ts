@@ -6,7 +6,7 @@ import type { UsageRecord } from "@palier/domain";
 import { meterProvider } from "./metered.js";
 
 const providerWith = (usage: UsageRecord | null): AiProvider => ({
-  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true }),
+  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true }),
   generatePassage: () => Promise.resolve([]),
   generateItems: () => Promise.resolve([]),
   reviewItem: () =>
@@ -19,6 +19,7 @@ const providerWith = (usage: UsageRecord | null): AiProvider => ({
       estimatedBand: "B",
     }),
   assessWriting: () => Promise.resolve({} as never),
+  generateScenario: () => Promise.resolve({ phases: [] }),
   verifyKey: () => Promise.resolve(),
   lastUsage: () => usage,
 });
@@ -59,6 +60,12 @@ describe("meterProvider", () => {
       feedbackLang: "en",
     });
     expect(metered.totals()).toEqual({ calls: 1, inputTokens: 30, outputTokens: 20, costUsd: 1 });
+  });
+
+  it("accounts a scenario plan like any other spending call (D114)", async () => {
+    const metered = meterProvider(providerWith({ model: "m", inputTokens: 40, outputTokens: 60, costUsd: 0.5 }));
+    await metered.provider.generateScenario({ sessionType: "work", targetBand: "C", lang: "fr", topic: "procurement", minutes: 10 });
+    expect(metered.totals()).toEqual({ calls: 1, inputTokens: 40, outputTokens: 60, costUsd: 0.5 });
   });
 
   it("passes a key check through and accounts nothing for it", async () => {

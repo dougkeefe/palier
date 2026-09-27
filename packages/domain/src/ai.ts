@@ -1,6 +1,7 @@
 import type { ItemOption } from "./item.js";
 import type { Localised, LocalisedRich } from "./localised.js";
 import type { Band, TargetBand } from "./bands.js";
+import type { OralPhase, OralSessionType } from "./oral-scenario.js";
 import type { DocType } from "./passage.js";
 import type { ItemType, Lang, OptionId } from "./skills.js";
 import type { SubSkill } from "./sub-skills.js";
@@ -17,8 +18,9 @@ import type { PromptSpec } from "./item-types/definition.js";
  * domain's job (architecture.md §8.2).
  *
  * Phase 1 defined what the content factory consumes; Phase 4 Slice 3 adds writing
- * feedback (progress.md D105). The oral/transcribe/voice requests and responses
- * land with Phase 5, the same "the minimum the consumer needs" discipline the
+ * feedback (progress.md D105), and Phase 5 Slice 1 the factory's oral scenarios
+ * (D114). The oral assessment, transcription and voice requests and responses land
+ * with their slices, the same "the minimum the consumer needs" discipline the
  * ports layer already uses (progress.md D45).
  */
 
@@ -28,6 +30,7 @@ export type AiCapabilities = {
   readonly generateItems: boolean;
   readonly reviewItem: boolean;
   readonly assessWriting: boolean;
+  readonly generateScenario: boolean;
 };
 
 /**
@@ -95,6 +98,28 @@ export type ItemDraft = {
   readonly subSkill: SubSkill;
   readonly targetBand: TargetBand;
   readonly topic: Topic;
+};
+
+/**
+ * What a provider is asked to plan an oral scenario for (progress.md D114): the
+ * session type and its length from the factory's configuration, and the band and
+ * topic. The phases' minutes must add up to `minutes`, which the factory checks.
+ */
+export type GenerateScenarioRequest = {
+  readonly sessionType: OralSessionType;
+  readonly targetBand: "B" | "C";
+  readonly lang: Lang;
+  readonly topic: Topic;
+  readonly minutes: number;
+};
+
+/**
+ * The creative output of `generateScenario`: the phase plan only. The factory
+ * assembles the `OralScenario` around it, minting the id and copying the type,
+ * band, language and topic it asked for, as it does for passages and items.
+ */
+export type ScenarioDraft = {
+  readonly phases: readonly OralPhase[];
 };
 
 /** One option as the reviewer sees it: id and text only — no rationale, no key. */

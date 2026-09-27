@@ -1,0 +1,97 @@
+import type { OralAudioEntry, OralSession, OralStore } from "@palier/app";
+import { StorageQuotaError } from "@palier/app";
+import type { OralEndReason, SessionId } from "@palier/domain";
+import { ORAL_END_REASONS, oralTurnSchema } from "@palier/domain";
+
+import type { OralAudioRow, PalierDb } from "./db.js";
+
+const isText = (value: unknown): value is string => typeof value === "string" && value.length > 0;
+const isInstant = (value: unknown): value is string => typeof value === "string" && !Number.isNaN(Date.parse(value));
+const isEndReason = (value: unknown): value is OralEndReason =>
+  typeof value === "string" && (ORAL_END_REASONS as readonly string[]).includes(value);
+
+/**
+ * The structure check at the edge (D55's approach). A session reads only if it is whole:
+ * its ids and start, an end and a reason that are both set or both null, and every turn
+ * a whole `OralTurn`. Anything else reads as nothing, so a broken row never reaches the
+ * report or the assessment.
+ */
+const sessionOf = (raw: unknown): OralSession | null => {
+  if (raw === undefined || raw === null) return null;
+  const { id, scenarioId, startedAt, endedAt, endReason, turns } = raw as Partial<Record<keyof OralSession, unknown>>;
+  if (!isText(id) || !isText(scenarioId) || !isInstant(startedAt)) return null;
+  const running = endedAt === null && endReason === null;
+  const ended = isInstant(endedAt) && isEndReason(endReason);
+  if (!running && !ended) return null;
+  if (!Array.isArray(turns) || !turns.every((turn) => oralTurnSchema.safeParse(turn).success)) return null;
+  return raw as OralSession;
+};
+
+const audioOf = (raw: unknown): OralAudioRow | null => {
+  if (raw === undefined || raw === null) return null;
+  const { sessionId, blob, bytes, startedAt } = raw as Partial<Record<keyof OralAudioRow, unknown>>;
+  if (!isText(sessionId) || !(blob instanceof Blob) || typeof bytes !== "number" || !isInstant(startedAt)) return null;
+  return raw as OralAudioRow;
+};
+
+/**
+ * Whether a failed write was the device running out of room. Dexie names the error after
+ * the browser's own, and a wrapped one carries it as `inner`; matched by name, as the
+ * attempt store matches `ConstraintError`, because the class differs across realms.
+ */
+export const isQuotaError = (error: unknown): boolean => {
+  if (!(error instanceof Error)) return false;
+  const inner = (error as { readonly inner?: unknown }).inner;
+  return error.name === "QuotaExceededError" || (inner instanceof Error && inner.name === "QuotaExceededError");
+};
+
+/**
+ * Spoken sessions and their recordings over v1's own `oralSessions` and `oralAudio`
+ * tables (progress.md D115), with no version bump. Device-local: no sync collector reads
+ * either table, and no export carries them.
+ *
+ * - A session is stored as the port's `OralSession`; `startedAt` and `scenarioId` are
+ *   v1's indexes. `all` is newest first and `audioIndex` oldest first, by `startedAt`.
+ * - A recording row keeps its session's `startedAt` and its size beside the blob, so the
+ *   retention policy lists recordings without reading one.
+ * - A full device becomes `StorageQuotaError` at this edge, and nothing is stored.
+ */
+export const dexieOralStore = (db: PalierDb): OralStore => ({
+  put: async (session) => {
+    await db.oralSessions.put(session);
+  },
+  get: async (id) => sessionOf(await db.oralSessions.get(id)),
+  all: async () =>
+    (await db.oralSessions.toArray())
+      .map(sessionOf)
+      .filter((session): session is OralSession => session !== null)
+      .sort((a, b) => Date.parse(b.startedAt) - Date.parse(a.startedAt)),
+  putAudio: async (id: SessionId, audio: Blob) => {
+    try {
+      await db.transaction("rw", db.oralSessions, db.oralAudio, async () => {
+        const session = sessionOf(await db.oralSessions.get(id));
+        if (session === null) throw new Error(`No oral session ${id} holds this recording.`);
+        await db.oralAudio.put({ sessionId: id, blob: audio, bytes: audio.size, startedAt: session.startedAt });
+      });
+    } catch (error) {
+      if (isQuotaError(error)) throw new StorageQuotaError();
+      throw error;
+    }
+  },
+  audio: async (id) => audioOf(await db.oralAudio.get(id))?.blob ?? null,
+  audioIndex: async () =>
+    (await db.oralAudio.toArray())
+      .map(audioOf)
+      .filter((row): row is OralAudioRow => row !== null)
+      .map(({ sessionId, bytes, startedAt }): OralAudioEntry => ({ sessionId, bytes, startedAt }))
+      .sort((a, b) => Date.parse(a.startedAt) - Date.parse(b.startedAt)),
+  deleteAudio: async (ids) => {
+    await db.oralAudio.bulkDelete([...ids]);
+  },
+  clear: async () => {
+    await db.transaction("rw", db.oralSessions, db.oralAudio, async () => {
+      await db.oralSessions.clear();
+      await db.oralAudio.clear();
+    });
+  },
+});

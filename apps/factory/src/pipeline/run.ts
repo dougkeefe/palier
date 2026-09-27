@@ -12,7 +12,7 @@ import type {
   TargetBand,
 } from "@palier/domain";
 
-import type { BatchReport, HarvestResult, ReviewResult, SourceCandidate } from "../lib/types.js";
+import type { BatchReport, HarvestResult, OralSessionPlan, ReviewResult, SourceCandidate } from "../lib/types.js";
 import { hashNum } from "../lib/scripted-key.js";
 import { meterProvider } from "../providers/metered.js";
 import { harvest } from "./harvest.js";
@@ -20,6 +20,8 @@ import { constructPassages } from "./passages.js";
 import { draftItems } from "./draft.js";
 import type { WritingPlanRow } from "./draft.js";
 import { reviewItems } from "./review.js";
+import { constructScenarios } from "./scenarios.js";
+import type { ScenarioStageResult } from "./scenarios.js";
 import { FormShortfallError, assembleForms } from "./forms.js";
 import { checkForms, validateBank } from "./validate.js";
 import type { ValidationReport } from "./validate.js";
@@ -61,10 +63,17 @@ export const defaultWritingPlan = (profile: ExamProfile, bands: readonly TargetB
     ),
   );
 
-/** A previous bank version's content, carried into this one so its ids stay valid. */
+/**
+ * A previous bank version's content, carried into this one so its ids stay valid. Its
+ * forms too (progress.md D114, closing D82's residual): an exam run is rescored from its
+ * form, so a form a user sat must be in every later bank. And its oral scenarios, so a
+ * session's scenario id stays valid. Banks v1 and v2 predate both, so each may be absent.
+ */
 export type CarriedBank = {
   readonly items: readonly Item[];
   readonly passages: readonly Passage[];
+  readonly forms?: readonly ExamForm[];
+  readonly scenarios?: readonly OralScenario[];
 };
 
 export type RunInput = {
@@ -89,6 +98,8 @@ export type RunInput = {
   readonly carried?: CarriedBank;
   /** Seeds the form draw; defaults to a hash of the batch id. */
   readonly formSeed?: number;
+  /** The oral scenarios to plan (progress.md D114). Absent, the batch plans none. */
+  readonly oralPlan?: OralSessionPlan;
 };
 
 export type RunOutput = {
@@ -102,6 +113,9 @@ export type RunOutput = {
   readonly review: ReviewResult<Item>;
   readonly validation: ValidationReport;
   readonly forms: readonly ExamForm[];
+  /** The scenario stage's own result: what it kept, what it discarded and why. */
+  readonly scenarioStage: ScenarioStageResult;
+  readonly scenarios: readonly OralScenario[];
   readonly bank: BankBuild;
   readonly report: BatchReport;
 };
@@ -135,6 +149,13 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
 
   const passageIndex: ReadonlyMap<PassageId, Passage> = new Map(passages.map((p) => [p.id, p]));
   const review = await reviewItems(drafted, metered.provider, passageIndex);
+  // The item stages' model, taken before the scenario stage calls its own.
+  const itemModel = metered.provider.lastUsage()?.model ?? "scripted";
+
+  const scenarioStage: ScenarioStageResult =
+    input.oralPlan === undefined
+      ? { scenarios: [], rejected: [], failedCalls: 0 }
+      : await constructScenarios(input.oralPlan, metered.provider, input.profile.topics);
 
   // Carried items go first, so a new draft that duplicates one is the item dropped,
   // and the id users already hold survives.
@@ -159,22 +180,34 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
     if (!(error instanceof FormShortfallError)) throw error;
     shortfall = error.message;
   }
+  // Carried forms sit beside this version's, and are checked the same way: a form a user
+  // sat must still resolve every item it names (D114).
+  const carriedForms = input.carried?.forms ?? [];
+  const allForms = [...carriedForms, ...forms.filter((f) => !carriedForms.some((c) => c.id === f.id))];
   const validation: ValidationReport = {
     ...itemValidation,
     formIssues: [
       ...(shortfall === null ? [] : [`cannot assemble forms: ${shortfall}`]),
-      ...checkForms(forms, itemValidation.valid, input.profile),
+      ...checkForms(allForms, itemValidation.valid, input.profile),
     ],
   };
 
+  // A carried passage wins over this batch's copy of it, as a carried item does: its record,
+  // provenance included, was published and never changes (D114). The two share an id only
+  // when the body is the same; what differs is when the source was retrieved.
   const bankPassages = new Map<PassageId, Passage>();
-  for (const passage of [...(input.carried?.passages ?? []), ...passages]) bankPassages.set(passage.id, passage);
+  for (const passage of [...(input.carried?.passages ?? []), ...passages]) {
+    if (!bankPassages.has(passage.id)) bankPassages.set(passage.id, passage);
+  }
 
-  const scenarios: readonly OralScenario[] = [];
+  // Carried scenarios go first, so a regenerated duplicate is the one dropped.
+  const carriedScenarios = input.carried?.scenarios ?? [];
+  const newScenarios = scenarioStage.scenarios.filter((s) => !carriedScenarios.some((c) => c.id === s.id));
+  const scenarios: readonly OralScenario[] = [...carriedScenarios, ...newScenarios];
   const bank = buildBank({
     items: validation.valid,
     passages: [...bankPassages.values()],
-    forms: [...forms],
+    forms: allForms,
     scenarios: [...scenarios],
     version: input.bankVersion,
   });
@@ -183,13 +216,14 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
   const report = batchReport({
     batchId: input.batchId,
     generatedAt: input.now,
-    provider: metered.provider.lastUsage()?.model ?? "scripted",
+    provider: itemModel,
     sources: harvested.queue.length,
     passages: passages.length,
     itemsDrafted: drafted.length,
     review,
     validation,
     carriedPublished: validation.valid.filter((i) => carriedIds.has(i.id)).length,
+    scenarios: { published: newScenarios.length, carried: carriedScenarios.length },
     totalCostUsd: totals.costUsd,
   });
 
@@ -201,7 +235,9 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
     providerFailures: passageStage.failedCalls + draftStage.failedCalls,
     review,
     validation,
-    forms,
+    forms: allForms,
+    scenarioStage,
+    scenarios,
     bank,
     report,
   };

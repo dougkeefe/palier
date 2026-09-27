@@ -5,14 +5,17 @@ Every concrete adapter, one directory and one subpath export each: `/dexie`, `/b
 (progress.md D48). A subpath lands with its adapter, not before — an entry resolving to an
 empty module asserts a boundary with nothing behind it (D3). **Six are live.** `./ids` →
 `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto, no npm dependency).
-`./dexie` → `dexieStores` (the eleven local store ports — `AttemptStore`, `ScheduleStore`,
+`./dexie` → `dexieStores` (the twelve local store ports — `AttemptStore`, `ScheduleStore`,
 `SessionStore`, `ExamRunStore`, `SettingsStore`, `KeyVault`, `SyncStateStore`, `TelemetryStore`,
-`CostLedger`, `WritingStore`, `GeneratedItemStore` — over IndexedDB via `dexie`; progress.md D49/D50, D69, D80 and D101, the last three on the
+`CostLedger`, `WritingStore`, `GeneratedItemStore`, `OralStore` — over IndexedDB via `dexie`; progress.md D49/D50, D69, D80 and D101, the last three on the
 `syncMeta`, `examRuns` and `costLedger` tables v1 already declared). The cost ledger reads a row that is
 not a whole entry as nothing, v1's `{ ts, feature: "none" }` placeholder included. **Schema version 2** adds `telemetryQueue` and `telemetryMeta`
 (D92), and **version 3** adds `writingSubmissions` (D106). The generated-item store is over v1's own `generated` table, one row per
 item with `setId` and `position` beside v1's `skill` and `createdAt` indexes, and reads a row whose item is not a whole `Item` of
-the row's id and skill as nothing (D110). The writing store reads a row without a whole id, prompt,
+the row's id and skill as nothing (D110). The oral store is over v1's own `oralSessions` and `oralAudio` tables
+(D115): a session reads only whole, with an end and a reason both set or both null and every turn a whole
+`OralTurn`; a recording row keeps its blob's size and its session's start beside it; and a write refused as
+`QuotaExceededError` (by name, or as a wrapper's `inner`) becomes the port's `StorageQuotaError`. The writing store reads a row without a whole id, prompt,
 text and instant as nothing, and a row whose assessment is broken, or whose offsets no longer fit its text, as the
 text unassessed: the writing is the user's. Every version's `stores()` block is an exported constant, and `migration.test.ts` opens a real
 database at the previous version with rows in it and proves they survive: **a new version needs a

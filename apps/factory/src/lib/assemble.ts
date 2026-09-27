@@ -2,6 +2,7 @@ import {
   OPTION_IDS,
   itemId,
   passageId,
+  scenarioId,
 } from "@palier/domain";
 import type {
   Item,
@@ -9,10 +10,14 @@ import type {
   ItemOption,
   Lang,
   OptionId,
+  OralScenario,
+  OralSessionType,
   Passage,
   PassageDraft,
   PassageId,
+  ScenarioDraft,
   ScoredSkill,
+  Topic,
 } from "@palier/domain";
 
 import type { SourceRecord } from "./types.js";
@@ -137,3 +142,24 @@ export const assembleItem = (draft: ItemDraft, meta: ItemMeta): Item => {
     updatedAt: meta.now,
   };
 };
+
+/** What the factory asked a scenario plan for, and so copies onto it rather than trusting the draft. */
+export type ScenarioMeta = {
+  readonly sessionType: OralSessionType;
+  readonly targetBand: "B" | "C";
+  readonly lang: Lang;
+  readonly topic: Topic;
+};
+
+/**
+ * An oral scenario from its phase plan (progress.md D114). The id is content-derived, as an
+ * item's is, so a rebuild is byte-identical and an unchanged scenario keeps its id.
+ */
+export const assembleScenario = (draft: ScenarioDraft, meta: ScenarioMeta): OralScenario => ({
+  id: scenarioId(contentId({ k: "scenario", ...meta, phases: draft.phases })),
+  lang: meta.lang,
+  sessionType: meta.sessionType,
+  targetBand: meta.targetBand,
+  phases: draft.phases,
+  topic: meta.topic,
+});

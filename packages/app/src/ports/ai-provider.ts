@@ -2,10 +2,12 @@ import type {
   AiCapabilities,
   GenerateItemsRequest,
   GeneratePassageRequest,
+  GenerateScenarioRequest,
   ItemDraft,
   PassageDraft,
   ReviewRequest,
   ReviewVerdict,
+  ScenarioDraft,
   UsageRecord,
   WritingAssessment,
   WritingRequest,
@@ -18,10 +20,10 @@ import type {
  * vendor error and payload into our types at the edge (§8.2), and accounts for
  * cost. Nothing above this port knows OpenAI exists.
  *
- * **This is the Phase-1 subset.** §3.3 lists `assessWriting`, `assessOral`,
- * `transcribe` and `openVoiceSession` as well; those and their net-new domain
- * types land with their phases (4–5), the same "the minimum the consumer needs"
- * discipline the store ports already use (progress.md D45). Two §3.3 amendments
+ * **Not yet the whole of §3.3.** `assessOral`, `transcribe` and `openVoiceSession`
+ * and their net-new domain types land with their slices (Phase 5 Slices 2–3 and
+ * Phase 6), the same "the minimum the consumer needs" discipline the store ports
+ * already use (progress.md D45). Two §3.3 amendments
  * are recorded in the D-log: `generatePassage` is added (the factory's stage 2
  * needs AI passage construction, content-factory.md §4.2), and `generateItems`/
  * `generatePassage` return **drafts** rather than assembled `Item[]`/`Passage[]`
@@ -32,6 +34,10 @@ import type {
  * not here, so `apps/factory` can build them without importing this layer (ADR 20).
  *
  * `assessWriting` is §3.3's own method, landed with Phase 4 Slice 3 (progress.md D105).
+ *
+ * `generateScenario` is a fourth amendment (progress.md D114, Phase 5 Slice 1): the
+ * factory's scenario stage plans an oral scenario's phases through it, and it returns
+ * a draft, as `generatePassage` does.
  *
  * `verifyKey` is a third §3.3 amendment (progress.md D99, Phase 4 Slice 1): the one cheap
  * call `/settings/key` makes to report whether the user's key works (PRD §8.10).
@@ -52,6 +58,12 @@ export type AiProvider = {
    * rejects rather than return offsets the screen would draw over the wrong words.
    */
   assessWriting: (req: WritingRequest) => Promise<WritingAssessment>;
+  /**
+   * Plan an oral scenario's phases for a session type, band and topic (progress.md
+   * D114). The factory assembles the `OralScenario` and checks that the phases' minutes
+   * add up to `req.minutes`, discarding the plan if not.
+   */
+  generateScenario: (req: GenerateScenarioRequest) => Promise<ScenarioDraft>;
   /**
    * One cheap call that proves the key this provider holds is accepted. Resolves when it
    * is; otherwise rejects with the provider's own error for the reason (an invalid key, a

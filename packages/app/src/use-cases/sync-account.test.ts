@@ -23,6 +23,7 @@ import {
 import { syncNow } from "./sync-now.js";
 import { aCostEntry, costLedger } from "./__tests__/spend-fakes.js";
 import { aGeneratedSet, generatedStore } from "./__tests__/generated-fakes.js";
+import { anOralSession, oralStore } from "./__tests__/oral-fakes.js";
 import { aSubmission, writingStore } from "./__tests__/writing-fakes.js";
 import { telemetryStore } from "./__tests__/telemetry-fakes.js";
 
@@ -73,6 +74,7 @@ const aDevice = (transport: SyncTransport) => ({
   ledger: costLedger([aCostEntry()]),
   writing: writingStore([aSubmission()]),
   generated: generatedStore([aGeneratedSet()]),
+  oral: oralStore([anOralSession()]),
 });
 
 const aRegisteredDevice = async (transport: SyncTransport) => {
@@ -331,6 +333,14 @@ describe("deleteEverywhere", () => {
     await deleteEverywhere(device);
 
     expect(device.generated.sets()).toEqual([]);
+  });
+
+  it("empties the spoken sessions with the rest of this device's data (D115)", async () => {
+    const device = await aRegisteredDevice(fakeServer().transport("secret-a"));
+
+    await deleteEverywhere(device);
+
+    expect(await device.oral.all()).toEqual([]);
   });
 
   it("touches nothing local when the server cannot be reached", async () => {

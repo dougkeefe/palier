@@ -16,3 +16,6 @@ export type { MemoryTelemetryCollector } from "./telemetry-collector.js";
 export { memoryTelemetryStore } from "./telemetry-store.js";
 export { memoryWritingStore } from "./writing-store.js";
 export { memoryGeneratedItemStore } from "./generated-item-store.js";
+export { memoryOralStore } from "./oral-store.js";
+export { memoryOralTransport } from "./oral-transport.js";
+export type { MemoryOralTransport, OralScriptEntry } from "./oral-transport.js";

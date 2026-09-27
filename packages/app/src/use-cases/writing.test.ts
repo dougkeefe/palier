@@ -48,7 +48,7 @@ const assessingProvider = (outcome: "ok" | "fail" = "ok") => {
   const requests: WritingRequest[] = [];
   let usage: UsageRecord | null = null;
   const provider: AiProvider = {
-    capabilities: () => ({ generatePassage: false, generateItems: false, reviewItem: false, assessWriting: true }),
+    capabilities: () => ({ generatePassage: false, generateItems: false, reviewItem: false, assessWriting: true, generateScenario: false }),
     generatePassage: () => Promise.reject(new Error("unused")),
     generateItems: () => Promise.reject(new Error("unused")),
     reviewItem: () => Promise.reject(new Error("unused")),
@@ -57,6 +57,7 @@ const assessingProvider = (outcome: "ok" | "fail" = "ok") => {
       usage = USAGE;
       return outcome === "ok" ? Promise.resolve(anAssessment()) : Promise.reject(new Error("malformed twice"));
     },
+    generateScenario: () => Promise.reject(new Error("unused")),
     verifyKey: () => Promise.resolve(),
     lastUsage: () => usage,
   };

@@ -187,3 +187,22 @@ export {
   latestGeneratedSet,
   scoreGeneratedAnswer,
 } from "./generate.js";
+
+export type {
+  OralAudioDeps,
+  OralSessionRun,
+  OralSessionRunDeps,
+  OralStorageEstimate,
+  SaveOralAudioResult,
+  StartOralSessionRequest,
+} from "./oral.js";
+export {
+  AUDIO_KEEP_SESSIONS,
+  AUDIO_WARNING_BYTES,
+  OralSessionExistsError,
+  UnknownScenarioError,
+  cleanUpAudio,
+  oralStorageEstimate,
+  saveOralAudio,
+  startOralSessionRun,
+} from "./oral.js";
