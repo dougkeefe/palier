@@ -59,6 +59,7 @@ describe("@palier/testing/in-memory", () => {
         "memoryGeneratedItemStore",
         "memoryItemRepository",
         "memoryKeyVault",
+        "memoryOralStore",
         "memoryScheduleStore",
         "memorySessionStore",
         "memorySettingsStore",

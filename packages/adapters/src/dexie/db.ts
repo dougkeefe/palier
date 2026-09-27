@@ -3,6 +3,7 @@ import type {
   ExamRun,
   ISO,
   LedgerEntry,
+  OralSession,
   ScheduleEntry,
   SyncState,
   TelemetryConsent,
@@ -43,6 +44,11 @@ import { Dexie, type Table } from "dexie";
  * **v1's `generated` table gains its adapter** (progress.md D110) without a version bump,
  * as the cost ledger did: one row per runtime-generated item, keyed by the item's id, with
  * `skill` and `createdAt` indexed as v1 declared them. Never synced and never exported.
+ *
+ * **v1's `oralSessions` and `oralAudio` tables gain their adapter** (progress.md D115), again
+ * without a version bump: a session keyed by its id with `scenarioId` and `startedAt` indexed
+ * as v1 declared them, and a recording keyed by its session's id. Never synced and never
+ * exported.
  *
  * **Why getters, not `field!: Table<...>` declarations.** `tsconfig.base.json` targets
  * ES2022 and does not set `useDefineForClassFields`, so it defaults to `true`; a class
@@ -125,6 +131,20 @@ export type GeneratedItemRow = {
   readonly setId: string;
   readonly position: number;
   readonly item: Item;
+};
+
+/** A spoken session, stored as the port's `OralSession` (progress.md D115). */
+export type OralSessionRow = OralSession;
+
+/**
+ * A session's recording, keyed by the session's id (progress.md D115). Its size and its
+ * session's start sit beside the blob, so the retention policy never reads a blob to list one.
+ */
+export type OralAudioRow = {
+  readonly sessionId: SessionId;
+  readonly blob: Blob;
+  readonly bytes: number;
+  readonly startedAt: ISO;
 };
 
 /** A writing-workshop submission, stored as the port's `WritingSubmission` (progress.md D106). */
@@ -228,5 +248,13 @@ export class PalierDb extends Dexie {
 
   get generated(): Table<GeneratedItemRow, ItemId> {
     return this.table("generated");
+  }
+
+  get oralSessions(): Table<OralSessionRow, SessionId> {
+    return this.table("oralSessions");
+  }
+
+  get oralAudio(): Table<OralAudioRow, SessionId> {
+    return this.table("oralAudio");
   }
 }

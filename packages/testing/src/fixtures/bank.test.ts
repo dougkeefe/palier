@@ -1,6 +1,7 @@
 import {
   ITEM_TYPES,
   OPTION_IDS,
+  ORAL_SESSION_TYPES,
   SUB_SKILLS_BY_SKILL,
   examFormSchema,
   itemSchema,
@@ -73,6 +74,14 @@ describe("the canonical fixture bank", () => {
   it("has every exam form pass the exam-form schema", () => {
     const invalid = forms.filter((form) => !examFormSchema.safeParse(form).success);
     expect(invalid.map((form) => form.id)).toEqual([]);
+  });
+
+  it("holds one scenario per session type, each with somewhere to escalate and de-escalate", () => {
+    expect(scenarios.map((scenario) => scenario.sessionType).sort()).toEqual([...ORAL_SESSION_TYPES].sort());
+    for (const phase of scenarios.flatMap((scenario) => scenario.phases)) {
+      expect(phase.escalation.length).toBeGreaterThan(0);
+      expect(phase.deescalation.length).toBeGreaterThan(0);
+    }
   });
 
   it("has every oral scenario pass the oral-scenario schema", () => {

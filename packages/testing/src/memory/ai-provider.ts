@@ -24,7 +24,7 @@ export const fakeAiProvider = (): AiProvider => {
   };
 
   return {
-    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true }),
+    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true }),
 
     generatePassage: (req) => {
       bill(10);
@@ -58,6 +58,21 @@ export const fakeAiProvider = (): AiProvider => {
         ...(promptSpec.itemType === "cloze" ? { blankIndex: 0 } : {}),
       }));
       return Promise.resolve(drafts);
+    },
+
+    // Two halves of the minutes asked for, so the plan always fills the session exactly.
+    generateScenario: (req) => {
+      bill(10);
+      const half = req.minutes / 2;
+      const phases = ["Mise en train", "Approfondissement"].map((name) => ({
+        name,
+        minutes: half,
+        intent: `Sonder le candidat sur ${req.topic}.`,
+        seedQuestions: ["Parlez-moi de votre rôle."],
+        escalation: ["Qu'auriez-vous fait autrement ?"],
+        deescalation: ["Décrivez une journée type."],
+      }));
+      return Promise.resolve({ phases });
     },
 
     reviewItem: (req) => {

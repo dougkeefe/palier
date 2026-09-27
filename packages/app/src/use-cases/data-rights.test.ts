@@ -25,6 +25,7 @@ import { wipeData } from "./wipe-data.js";
 import { examRunStore } from "./__tests__/sync-fakes.js";
 import { aCostEntry, costLedger } from "./__tests__/spend-fakes.js";
 import { aGeneratedSet, generatedStore } from "./__tests__/generated-fakes.js";
+import { anOralSession, oralStore } from "./__tests__/oral-fakes.js";
 import { aSubmission, writingStore } from "./__tests__/writing-fakes.js";
 import { telemetryStore } from "./__tests__/telemetry-fakes.js";
 
@@ -186,6 +187,11 @@ const aDevice = async () => {
     ledger: costLedger([aCostEntry()]),
     writing: writingStore([aSubmission()]),
     generated: generatedStore([aGeneratedSet()]),
+    oral: oralStore([
+      anOralSession({
+        turns: [{ speaker: "candidate", text: "ORAL-TRANSCRIPT-MARKER", phase: 0, startMs: 0, endMs: 900 }],
+      }),
+    ]),
   };
   await device.attempts.append(anAttempt("b"));
   await device.attempts.append(anAttempt("a", { skill: "writing" }));
@@ -266,6 +272,16 @@ describe("exportData", () => {
     expect(text).not.toContain("gen-1");
   });
 
+  it("never carries a spoken session or its transcript, which are never exported (D115)", async () => {
+    const device = await aDevice();
+    await device.oral.putAudio(anOralSession().id, new Blob(["son"]));
+    const text = textOf(await exportData(device));
+
+    expect(await device.oral.all()).toHaveLength(1);
+    expect(text).not.toContain("ORAL-TRANSCRIPT-MARKER");
+    expect(text).not.toContain(anOralSession().id);
+  });
+
   it("never carries the API key or the device secret", async () => {
     const device = await aDevice();
     const text = textOf(await exportData(device));
@@ -318,6 +334,15 @@ describe("wipeData", () => {
     await wipeData(device);
 
     expect(device.generated.sets()).toEqual([]);
+  });
+
+  it("empties the spoken sessions and their recordings, which only this device ever held (D115)", async () => {
+    const device = await aDevice();
+    await device.oral.putAudio(anOralSession().id, new Blob(["son"]));
+    await wipeData(device);
+
+    expect(await device.oral.all()).toEqual([]);
+    expect(await device.oral.audioIndex()).toEqual([]);
   });
 
   it("keeps the device secret, which is the device's sync identity, not the user's progress", async () => {

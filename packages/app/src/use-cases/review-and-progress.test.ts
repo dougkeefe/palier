@@ -44,6 +44,7 @@ const itemsFrom = (bank: readonly Item[]): ItemRepository => ({
   form: vi.fn(() => Promise.resolve(null)),
   forms: vi.fn(() => Promise.resolve([])),
   scenario: vi.fn(() => Promise.resolve(null)),
+  scenarios: vi.fn(() => Promise.resolve([])),
   bankVersion: vi.fn(() => Promise.resolve(1)),
 });
 

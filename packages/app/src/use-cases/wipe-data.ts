@@ -9,14 +9,15 @@ import type {
   TelemetryStore,
   WritingStore,
   GeneratedItemStore,
+  OralStore,
 } from "../ports/index.js";
 
 /**
  * Delete everything on this device in one action [R11] (implementation-plan.md 3.2,
  * `WipeData`): every attempt, schedule entry, session, exam run and setting, the stored
  * API key, the telemetry queue with its consent, back to "not asked" (progress.md D92), and
- * the cost ledger (D101), the writing workshop's submissions (D106) and the runtime-generated
- * item sets (D110).
+ * the cost ledger (D101), the writing workshop's submissions (D106), the runtime-generated
+ * item sets (D110) and the spoken sessions with their recordings (D115).
  *
  * The **device secret survives**. `KeyVault.clear` removes the API key and leaves the
  * secret and its wrapping key (progress.md D50), because the secret is this device's
@@ -37,6 +38,7 @@ export type WipeDataDeps = {
   readonly ledger: CostLedger;
   readonly writing: WritingStore;
   readonly generated: GeneratedItemStore;
+  readonly oral: OralStore;
 };
 
 export const wipeData = async (deps: WipeDataDeps): Promise<void> => {
@@ -51,5 +53,6 @@ export const wipeData = async (deps: WipeDataDeps): Promise<void> => {
     deps.ledger.clear(),
     deps.writing.clear(),
     deps.generated.clear(),
+    deps.oral.clear(),
   ]);
 };

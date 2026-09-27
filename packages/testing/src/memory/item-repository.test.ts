@@ -18,6 +18,7 @@ describe("memoryItemRepository with an omitted bank", () => {
     expect(await repo.passage(passageId("x"))).toBeNull();
     expect(await repo.form(formId("x"))).toBeNull();
     expect(await repo.scenario(scenarioId("x"))).toBeNull();
+    expect(await repo.scenarios()).toEqual([]);
     expect(await repo.bankVersion()).toBe(1);
   });
 });

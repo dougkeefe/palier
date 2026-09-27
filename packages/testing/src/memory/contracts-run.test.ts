@@ -14,6 +14,8 @@ import {
   telemetryStoreContract,
   writingStoreContract,
   generatedItemStoreContract,
+  oralStoreContract,
+  oralTransportContract,
 } from "../contracts/index.js";
 import {
   fakeAiProvider,
@@ -31,6 +33,8 @@ import {
   memoryTelemetryStore,
   memoryWritingStore,
   memoryGeneratedItemStore,
+  memoryOralStore,
+  memoryOralTransport,
 } from "./index.js";
 
 /**
@@ -55,3 +59,15 @@ telemetrySinkContract("memory", () => Promise.resolve(memoryTelemetryCollector()
 costLedgerContract("memory", () => Promise.resolve(memoryCostLedger()));
 writingStoreContract("memory", () => Promise.resolve(memoryWritingStore()));
 generatedItemStoreContract("memory", () => Promise.resolve(memoryGeneratedItemStore()));
+oralStoreContract("memory", () => Promise.resolve(memoryOralStore()));
+// Overlapping turns and a flag, as a full-duplex session would give them.
+oralTransportContract("memory", () =>
+  Promise.resolve(
+    memoryOralTransport([
+      { atMs: 2_000, kind: "turn", speaker: "examiner", text: "Parlez-moi de votre rôle.", startMs: 0, endMs: 2_000 },
+      { atMs: 9_000, kind: "turn", speaker: "candidate", text: "Je suis analyste.", startMs: 1_800, endMs: 9_000 },
+      { atMs: 9_500, kind: "difficulty", direction: "escalate" },
+      { atMs: 12_000, kind: "turn", speaker: "examiner", text: "Et ensuite ?", startMs: 9_600, endMs: 12_000 },
+    ]),
+  ),
+);

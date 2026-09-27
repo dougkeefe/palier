@@ -27,6 +27,7 @@ describe("bankHandlers", () => {
       shards: readonly unknown[];
       passageShards: readonly unknown[];
       forms: readonly unknown[];
+      scenarios: { path: string } | null;
     };
     expect(manifest.version).toBe(7);
     expect(manifest.shards).toHaveLength(2); // fr/reading and fr/writing
@@ -35,7 +36,8 @@ describe("bankHandlers", () => {
 
     // The reading shard groups both reading items (exercises the existing-group path).
     expect((await getJson("bank/v1/fr/reading/fr-reading.json")) as unknown[]).toHaveLength(2);
-    expect((await getJson("bank/v1/oral/scenarios.json")) as unknown[]).toHaveLength(1);
+    expect(manifest.scenarios?.path).toBe("bank/v1/oral/scenarios.json");
+    expect((await getJson("bank/v1/oral/scenarios.json")) as unknown[]).toHaveLength(CONTRACT_BANK.scenarios.length);
 
     const formId = CONTRACT_BANK.forms[0]?.id;
     expect(formId).toBeDefined();
@@ -54,7 +56,9 @@ describe("bankHandlers", () => {
     const manifest = (await getJson("bank/v1/manifest.json")) as {
       shards: readonly unknown[];
       passageShards: readonly unknown[];
+      scenarios: unknown;
     };
+    expect(manifest.scenarios).toBeNull();
     expect(manifest.shards).toHaveLength(0);
     expect(manifest.passageShards).toHaveLength(0);
     expect((await fetch(`${BASE}/bank/v1/oral/scenarios.json`)).status).toBe(404);

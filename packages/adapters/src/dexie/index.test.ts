@@ -1,5 +1,5 @@
 import { anAttempt, anExamRun, anItem } from "@palier/testing";
-import { itemId } from "@palier/domain";
+import { itemId, scenarioId, sessionId } from "@palier/domain";
 import { describe, expect, it } from "vitest";
 
 import { dexieStores } from "./index.js";
@@ -7,7 +7,7 @@ import { dexieStores } from "./index.js";
 const dbName = (): string => `palier-stores-${globalThis.crypto.randomUUID()}`;
 
 describe("dexieStores", () => {
-  it("wires all eleven ports to one named database", async () => {
+  it("wires all twelve ports to one named database", async () => {
     const stores = dexieStores(dbName());
 
     await stores.attempts.append(anAttempt());
@@ -39,6 +39,15 @@ describe("dexieStores", () => {
       items: [anItem({ id: itemId("gen-1"), skill: "writing", type: "error-id", subSkill: "agreement" })],
     });
 
+    await stores.oral.put({
+      id: sessionId("oral-1"),
+      scenarioId: scenarioId("scn-1"),
+      startedAt: "2026-09-27T10:00:00.000Z",
+      endedAt: null,
+      endReason: null,
+      turns: [],
+    });
+
     expect(await stores.attempts.recent("reading", 10)).toHaveLength(1);
     expect(await stores.settings.get<string>("locale")).toBe("fr");
     expect(await stores.keyVault.hasApiKey()).toBe(true);
@@ -48,6 +57,7 @@ describe("dexieStores", () => {
     expect(await stores.costLedger.since("2026-09-01T00:00:00.000Z")).toHaveLength(1);
     expect(await stores.writing.all()).toHaveLength(1);
     expect((await stores.generated.latestSet("writing"))?.items).toHaveLength(1);
+    expect(await stores.oral.all()).toHaveLength(1);
   });
 
   it("binds the name to a persistent database two calls share", async () => {

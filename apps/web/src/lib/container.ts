@@ -47,6 +47,7 @@ import type {
   WritingSubmission,
   GeneratedItemStore,
   GeneratedSet,
+  OralStore,
   GeneratePracticeSetRequest,
   GeneratePracticeSetResult,
   ScoreGeneratedAnswerRequest,
@@ -150,6 +151,7 @@ import {
   memoryTelemetryStore,
   memoryWritingStore,
   memoryGeneratedItemStore,
+  memoryOralStore,
   seededRandom,
 } from "@palier/testing/in-memory";
 
@@ -343,6 +345,11 @@ export type Ports = {
   readonly writing: WritingStore;
   /** Runtime-generated item sets, device-local: never synced, never exported (D110). */
   readonly generated: GeneratedItemStore;
+  /**
+   * Spoken sessions and their recordings, device-local: never synced, never exported (D115).
+   * Wired now so a wipe and a delete-everywhere clear it; its first screen is Phase 5 Slice 2.
+   */
+  readonly oral: OralStore;
 };
 
 export type Container = Ports & {
@@ -455,6 +462,7 @@ function buildUseCases(ports: Ports): UseCases {
         ledger: ports.costLedger,
         writing: ports.writing,
         generated: ports.generated,
+        oral: ports.oral,
       }),
     syncNow: (request) => syncNow(request, syncDeps(ports)),
     syncState: () => ports.syncState.state(),
@@ -471,6 +479,7 @@ function buildUseCases(ports: Ports): UseCases {
         ledger: ports.costLedger,
         writing: ports.writing,
         generated: ports.generated,
+        oral: ports.oral,
       }),
     examForms: () => examForms({ items: ports.items }),
     examInProgress: () => examInProgress({ items: ports.items, examRuns: ports.examRuns }),
@@ -605,6 +614,7 @@ function productionPorts(): Ports {
     costLedger: stores.costLedger,
     writing: stores.writing,
     generated: stores.generated,
+    oral: stores.oral,
   };
 }
 
@@ -644,6 +654,7 @@ function hermeticPorts(): Ports {
     costLedger: memoryCostLedger(),
     writing: memoryWritingStore(),
     generated: memoryGeneratedItemStore(),
+    oral: memoryOralStore(),
   };
 }
 
