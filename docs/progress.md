@@ -92,9 +92,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v3` | **Phase 4 Slice 3 — the writing workshop** (D97): `assessWriting` on `AiProvider`, the `WritingStore` port over a Dexie v3 `writingSubmissions` table (device-local, never synced or exported), the prompt library under `@palier/content`, `/practice/writing/workshop`, and the key-leak test extended to a real spending call. **Built; pending merge** (D105–D108). | 26 September 2026 |
+| `dougkeefe/next-progress-slice-v4` | **Phase 4 Slice 4 — runtime item generation and the CI gates** (D97): the review gate moved to `@palier/domain`, `generatePracticeSet` on the user's key (written expression only, by human decision), a device-local `GeneratedItemStore` over v1's `generated` table, "Generate a fresh set" on the writing drill page with its provenance badge and one-tap contribution, recorded-fixture schema conformance, the eval harness's conformance rate, and the nightly live smoke. | 26 September 2026 |
 
-*(The prior rows — Phase 4 Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 4 Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
