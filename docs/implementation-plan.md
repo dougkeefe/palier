@@ -949,18 +949,33 @@ Practice mode first, deliberately. It delivers most of the learning value, it is
 
 - A 10 minute session produces a report a user would act on.
 - Cost per session measured and displayed accurately.
-- Audio never leaves the device unless the user opts into the pronunciation criterion, and that opt-in is explicit each time. Asserted by extending the key-leak test's instrumentation to audio blobs.
+- Audio reaches nowhere but OpenAI: each answer's clip only its transcription call, and the stored session recording only when the user opts into the pronunciation criterion, an opt-in that is explicit each time. Asserted by extending the key-leak test's instrumentation to audio blobs. *(Amended in place 27 September 2026, `progress.md` D113: the earlier wording, "audio never leaves the device unless the user opts into the pronunciation criterion", contradicted R12 and architecture.md §8.5, since practice mode transcribes every answer.)*
 - **Scoring stability eval passes:** the same transcript scored five times varies by at most one band, with per-criterion agreement above the threshold. An unstable scorer undermines the whole feature, because users compare one session to the next.
 - The session state machine is contract-tested against a fake transport, so phase 6 inherits a tested machine and only has to add real WebRTC underneath it.
 
 **Not built:** realtime voice.
+
+**Completion slices** (planned 27 September 2026, `progress.md` D113; keep the two in sync). Gate H adopted PRD §8.6's
+practice mode and report, with all five session types and pronunciation as a per-session opt-in.
+- **Slice 1 — The session core, no UI.** Scenarios through the bank (a factory scenario stage over
+  `AiProvider.generateScenario`, bank v3 carrying v2 forward, `ItemRepository.scenarios()`); the `OralStore` port over
+  v1's `oralSessions` and `oralAudio` tables with architecture.md §9.1's retention; the session state machine, pure;
+  the `OralTransport` port, shaped for a full-duplex transport too, with a memory fake and a contract suite. *Done:*
+  exit criterion 5.
+- **Slice 2 — The turn loop on the key.** `transcribe` and speech as `AiProvider` capabilities, the turn-based
+  transport, `/practice/oral` in practice mode, mic permission and recovery with a typed-answer fallback, local
+  recording, and the key-leak test extended to audio. *Done:* exit criterion 3.
+- **Slice 3 — `assessOral` and the report.** Per-criterion bands with quoted evidence, three ranked fixes into the
+  scheduler, missing vocabulary, the marked-up transcript, device-side fluency metrics, the pronunciation opt-in, cost
+  per session measured and shown, and the scoring-stability eval recorded live. *Done:* exit criteria 2 and 4, then
+  **Gate I** (exit criterion 1, human).
 
 ---
 
 ### Phase 6: Oral, studio mode
 **2 weeks. Goal: the feature people tell their colleagues about.**
 
-**Decision gate before starting.** If phase 5's reports are landing well and measured cost for realtime is high, the honest answer may be to ship 1.0 without studio mode and add it later. Make that call on evidence.
+**Decision gate before starting.** If phase 5's reports are landing well and measured cost for realtime is high, the honest answer may be to ship 1.0 without studio mode and add it later. Make that call on evidence. *(Noted 27 September 2026, `progress.md` D113: GPT-Live, `gpt-live-1` on the Live API, is published at US$0.05 a minute. It is the leading candidate for this phase. Using it would supersede ADR 3's mechanism with a new ADR, because the Live API exchanges the browser's connection offer through a server holding the key rather than minting a Realtime client secret.)*
 
 **Work breakdown**
 

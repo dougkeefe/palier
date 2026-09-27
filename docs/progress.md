@@ -16,8 +16,8 @@ same day: the meter matched OpenAI's billing exactly, which meets Phase 4's exit
 is built** (`dougkeefe/next-progress-slice-v4`; D109–D112): the review gate in domain, `generatePracticeSet` on the
 user's key (written expression only), device-local generated sets at `/practice/writing/generate`, and the Phase 4
 CI gates: live-recorded schema-conformance fixtures, which found and fixed a review-prompt defect, the eval's
-conformance rate and the nightly live smoke. **That ticks exit criterion 2, and Phase 4 is complete.** Next is Gate
-H, Phase 5's direction (human). See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+conformance rate and the nightly live smoke. **That ticks exit criterion 2, and Phase 4 is complete.** Gate H, Phase
+5's direction, is resolved (D113), so Phase 5 is planned as three slices, and Slice 1 is next. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
 
@@ -83,7 +83,7 @@ human for anything expensive.
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97; Slices 1–3 merged, D98–D108, and Gate G passed; Slice 4 built, D109–D112; all three exit criteria met) |
-| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
+| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **planned** (Gate H resolved; three slices, D113; Slice 1 is *Next, decided*) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
@@ -195,50 +195,66 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 4 is complete** once Slice 4 merges (D109–D112). The key is safe, spend is metered and matched billing,
-the workshop gives feedback, a fresh set is generated and reviewed on the user's key, and every AI response is
-held to recorded live output. The product pilot still runs beside it (Gate E, D97).
+**Phase 4 is complete** once Slice 4 merges (D109–D112). **Gate H is resolved** (D113): PRD §8.6's practice mode
+and report are adopted, with all five session types and a per-session pronunciation opt-in. GPT-Live is noted for
+Phase 6. The product pilot still runs beside it (Gate E, D97).
 
-**Next: Gate H — Phase 5's direction (human).** Phase 5 is oral practice mode (implementation-plan.md §7). Like
-Gates A, D and F, it needs the human's call before any slice code:
+**Next: Phase 5 Slice 1, "the session core, no UI"** (implementation-plan.md §7 Phase 5, D113). It carries exit
+criterion 5. The existing groundwork:
+- `OralScenario` and its schema are in domain;
+- `ItemRepository.scenario(id)` is on the port;
+- Dexie v1 already declares `oralSessions: "id, scenarioId, startedAt"` and `oralAudio: "sessionId"`, so no
+  migration is needed;
+- the profile carries the oral bands and descriptors.
 
-1. **Adopt PRD §8.6's practice mode and post-session report as written, or revise them first.** The calls it
-   leaves open, with a recommendation for each:
-   - **Which session types practice mode offers.** Recommended: all five, with the full simulation's 22 minutes
-     stated beside its estimate.
-   - **Audio leaving the device: two documents disagree.** R12 and architecture.md §8.5 let audio go to the AI
-     provider, and practice mode transcribes every answer through OpenAI. implementation-plan.md §7's Phase 5 exit
-     criterion 3 says audio never leaves the device unless the user opts into pronunciation. Recommended: keep R12
-     and §8.5, and read criterion 3 as being about the *stored session recording*. Each answer's clip goes only to
-     OpenAI's transcription call, and the saved recording is uploaded only on a per-session pronunciation opt-in.
-     The extended leak test asserts both. Recorded as a D-entry, as D17 did for earlier contradictions.
-   - **Whether pronunciation is offered in Phase 5.** Recommended: yes, off by default, and asked each session, as
-     §8.5 has it, so criterion 3 has an opt-in to test.
-   - *Not open:* how long audio is kept. architecture.md §9.1's storage budget already sets it: the last 10
-     sessions' audio, transcripts kept, a warning at 200 MB, a one-tap cleanup, and the oldest audio evicted on
-     `QuotaExceededError`.
-2. **Approve Phase 5 as three slices**, to be mirrored in implementation-plan.md §7 as D79 and D97 did:
-   1. **The session core, no UI.** The `OralStore` port (§3.3 names it but gives no signature) over a new Dexie
-      table, with a retention policy. Oral scenarios for the five session types from the factory. The turn-based
-      session state machine, pure, contract-tested against a fake transport (exit criterion 5).
-   2. **The turn loop on the key.** `transcribe` and speech as new `AiProvider` capabilities, with their DTOs in
-      domain (ADR 20, as D109 left it). `/practice/oral` in practice mode, mic permission with a typed-answer
-      fallback, and the key-leak test extended to audio blobs (exit criterion 3).
-   3. **`assessOral` and the report.** Per-criterion bands with quoted evidence, three ranked fixes that feed the
-      scheduler, fluency metrics computed on the device, cost per session measured and shown (exit criterion 2),
-      and the scoring-stability eval (exit criterion 4). Record it with the live smoke's `--record`, as D112 did.
-3. **A funded key when Slice 3 needs one**, for the stability eval and the cost measurement. `OPENAI_SMOKE_KEY`'s key
-   will do.
+**Scope:**
+- **Scenarios reach the app through the bank**, as items and forms do.
+  - `ItemRepository` gains `scenarios()` for the session picker, as D85 added `forms()`.
+  - The factory gains a scenario stage over a new `AiProvider.generateScenario`, with its DTOs in domain (ADR 20,
+    D109), and the scripted provider fills it in the baseline.
+  - **Bank v3** carries v2's items and forms forward (D82's pattern), plus at least one scenario per session type at
+    B and C. It is held byte-identical by `committed-bank.test.ts`, and `BANK_VERSION` moves to 3.
+  - The five session lengths (5, 10, 12, 8 and 22 minutes, PRD §8.6) are factory configuration, as the source queue
+    is. Each scenario's phases carry their own minutes.
+  - The real-model scenarios come with the full-volume content run (D56).
+- **An `OralStore` port** over v1's two tables. §3.3 names it and gives no signature, so decide it here, as D45 and
+  D106 did.
+  - Transcripts are turns: speaker, text, phase, and `startMs`/`endMs` (GPT-Live's shape, D113). Audio blobs are
+    stored per session.
+  - **Device-local: never synced and never exported.** `wipeData` and `deleteEverywhere` clear it.
+  - **Retention is architecture.md §9.1's:**
+    - keep the last 10 sessions' audio, and every transcript;
+    - `storageEstimate` warns at 200 MB;
+    - `cleanUpAudio` is one action;
+    - on `QuotaExceededError`, evict the oldest audio first and say so.
+  - These are storage policy, not §5 rules, so they are constants in app, as `CAP_WARNING_PERCENT` is.
+- **The session state machine**, pure in the engine.
+  - Phases run in order, and the client advances each by its elapsed minutes (architecture.md §8.5).
+  - Escalation or de-escalation follows a flag.
+  - An end, or an early close, always carries a reason.
+- **An `OralTransport` port** in app: the examiner's turn out, the candidate's utterance in with its timings, and a
+  close with a reason.
+  - It is shaped so both Slice 2's turn-based transport and a full-duplex one (Phase 6, D113) can implement it.
+  - `@palier/testing` gets a memory fake and `oralTransportContract`.
 
-Exit criterion 1, "a report a user would act on", is a human judgement. It becomes Gate I at the end of Slice 3.
+**Ports and functions:** `ItemRepository.scenario`/`scenarios`, `AiProvider.generateScenario`, `OralStore` (new),
+`OralTransport` (new), and the engine's session machine.
+
+**Done looks like:**
+- bank v3 committed and reproducible, with a scenario per session type, and the factory's committed reports updated
+  with their changes explained;
+- the `OralStore` contract green on memory and Dexie, with the retention and eviction tested;
+- the state machine property-tested: it always ends within the scenario's minutes, never skips or repeats a phase,
+  and a close always carries a reason;
+- the machine driven end to end against the fake transport, which is **exit criterion 5 ticked**;
+- `pnpm verify` and `verify:medium` green.
 
 **Human, now that Slice 4 has landed:**
 - add the `OPENAI_SMOKE_KEY` Actions secret, a key of its own with a small monthly limit (`docs/deploy.md`, "The
   nightly live smoke"), and run the nightly workflow once by hand;
 - read the `generate` namespace's French, with the rest of Phase 7's R8 review.
 
-**Named, not scheduled:** reading-set generation (D110), which needs a generated passage kept on the device and a
-runner that can show it.
+**Named, not scheduled:** reading-set generation (D110).
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
@@ -263,7 +279,8 @@ last exit criterion.
 - Resolved: **Gate A** (product and UI direction), **Gate B** (the D43 `ScheduleEntry` merge, D69),
   **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026; **Gate D** (exam UI
   direction, D84), **Gate E** (the pilot runs on the baseline bank, D97) and **Gate F** (Phase 4 UI
-  direction, D97) on 25 September 2026; **Gate G** (the billing check, session log) on 26 September 2026.
+  direction, D97) on 25 September 2026; **Gate G** (the billing check, session log) on 26 September 2026; **Gate H**
+  (Phase 5 direction, D113) on 27 September 2026.
 
 Standing human items:
 - pointing `palier.dougkeefe.com` at the deployment;
@@ -476,15 +493,25 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
 
 ### Phase 5: Oral, practice mode
 
-- [ ] A 10-minute session produces a report a user would act on
+**Planned 27 September 2026 (D113)** as three slices, mirrored in `implementation-plan.md` §7. **Keep the two in
+sync.** Gate H is resolved: PRD §8.6's practice mode and report are adopted, with all five session types and
+pronunciation offered as a per-session opt-in.
+
+- [ ] **Slice 1 — The session core, no UI.** *Next, decided*.
+- [ ] **Slice 2 — The turn loop on the key.**
+- [ ] **Slice 3 — `assessOral` and the report**, ending at **Gate I** (exit criterion 1, human).
+
+**Exit criteria** (the actual gate)
+
+- [ ] A 10-minute session produces a report a user would act on (Gate I)
 - [ ] Cost per session measured and displayed accurately
-- [ ] Audio never leaves the device without an explicit per-session opt-in, asserted by the extended key-leak test [R12]
+- [ ] Audio reaches nowhere but OpenAI: each answer's clip only its transcription call, and the stored session recording only on an explicit per-session pronunciation opt-in, asserted by the extended key-leak test [R12] (amended in place, D113)
 - [ ] Scoring stability: same transcript five times, at most one band of variation
 - [ ] Session state machine contract-tested against a fake transport
 
 ### Phase 6: Oral, studio mode
 
-**Decision gate before starting.** If phase 5's reports land well and measured realtime cost is high, shipping 1.0 without studio mode is the honest answer. Record that call here with its evidence.
+**Decision gate before starting.** If phase 5's reports land well and measured realtime cost is high, shipping 1.0 without studio mode is the honest answer. Record that call here with its evidence. **Noted 27 September 2026 (D113):** GPT-Live's published US$0.05 a minute probably removes the "cost is high" premise. It is the leading candidate, and adopting it needs an ADR superseding ADR 3's mechanism, plus the checks D113 lists.
 
 - [ ] Session establishes in under 2.5 seconds from tap to first word
 - [ ] Disconnection mid-session recovers or fails cleanly with the transcript preserved
@@ -3816,11 +3843,90 @@ these are recorded as made, as D87, D100, D104 and D108 were)
   - `openAiHandlers`' completions may now be a function of the prompt, with the existing callers unchanged.
   - `stubOpenAi`'s answer callback also receives the request body, with the existing callers unchanged.
 
+### D113 — Gate H: PRD §8.6's practice mode adopted with the recommendations, Phase 5 is three slices, and GPT-Live noted for studio mode
+**Date:** 27 September 2026 · **Status:** accepted (human decisions); resolves Gate H
+
+- **Gate H is resolved.** The human adopted PRD §8.6's practice mode and post-session report as written, with the
+  recommendations:
+  - **All five session types** are offered in practice mode. The full simulation's 22 minutes are stated beside its
+    estimate.
+  - **Pronunciation is offered in Phase 5.** It is off by default and asked each session, as architecture.md §8.5
+    has it.
+  - **How long audio is kept was never open.** architecture.md §9.1's storage budget already sets it: the last 10
+    sessions' audio, transcripts kept, a warning at 200 MB, a one-tap cleanup, and the oldest audio evicted on
+    `QuotaExceededError`.
+- **A contradiction resolved rather than carried, as D17 did.**
+  - R12 and architecture.md §8.5 let audio go to the configured AI provider, and practice mode must transcribe every
+    answer.
+  - implementation-plan.md §7's Phase 5 exit criterion 3 said audio never leaves the device unless the user opts
+    into pronunciation.
+  - **R12 and §8.5 stand. The criterion is about the stored session recording.** Each answer's clip goes only to
+    OpenAI's transcription call. The saved recording is uploaded only on that session's pronunciation opt-in. The
+    extended key-leak test asserts both.
+  - The criterion is amended in place in both documents, with this entry named.
+- **Phase 5 is planned as three slices**, mirrored in implementation-plan.md §7, the same scoped exception D79 and D97
+  made. Keep the two in sync.
+  1. **The session core, no UI.**
+  2. **The turn loop on the key.**
+  3. **`assessOral` and the report.**
+
+  Exit criterion 1, "a report a user would act on", is a human judgement. It is **Gate I**, at the end of Slice 3.
+  A funded key is needed when Slice 3 measures cost and stability, and `OPENAI_SMOKE_KEY`'s will do.
+- **GPT-Live, noted by the human for consideration.** Its model page
+  (developers.openai.com/api/docs/models/gpt-live-1) and the Live API guides, read on 27 September 2026, say:
+  - it is **`gpt-live-1`**, a full-duplex voice model with audio and text in and out, and function calling;
+  - it is served **only by the Live API** (`v1/live/sessions`), not by the Realtime API, Chat Completions or
+    Responses;
+  - a browser connects over **WebRTC**, with audio on media tracks and JSON events on a data channel;
+  - **US$0.05 a minute, billed per second.** Delegating to a backend model or tools is billed separately;
+  - transcripts arrive as `session.input_transcript.delta` and `session.output_transcript.delta`, each with `start_ms`
+    and `end_ms`;
+  - "Keep the API key on your backend": a server exchanges the browser's connection offer, and no short-lived browser
+    credential is documented;
+  - **not documented:** French recognition and voices (the voice table shows English and Portuguese variants), and
+    the session duration limit.
+- **What GPT-Live changes:**
+  1. **Not Phase 5 as adopted.** Practice mode's other reasons still hold: it works on a weak connection, it gives a
+     weaker candidate time to think, and it builds the report before the realtime complexity. Its cost advantage
+     narrows. Slice 3 measures the real ratio (exit criterion 2) rather than assuming one (principle 8).
+  2. **Slice 1's transport port is shaped so a full-duplex transport can sit beside the turn-based one.** Utterances
+     carry their timings as GPT-Live's transcript deltas do, phase boundaries stay client-driven, and a session closes
+     with a reason. This is what exit criterion 5 exists for.
+  3. **It is the leading candidate for Phase 6's studio mode.** At the published price a 10-minute session is about
+     US$0.50, and the 22-minute simulation about US$1.10. **The Phase 6 decision gate's premise, "measured realtime
+     cost is high", probably no longer holds.** That is decided at that gate, on measured cost.
+  4. **ADR 3 stands, and adopting GPT-Live would need a new ADR superseding its mechanism**, never an edit.
+     - ADR 3's decision names the `/v1/realtime/client_secrets` mint.
+     - The Live API's documented path has a server exchange the connection offer using the key. That is the same
+       exception, one stateless call per session, through a different call.
+     - ADR 3's *revisit when* is: "OpenAI documents a browser-direct realtime auth path, or the feature is dropped."
+       **That evidence has not appeared**: the Live docs say to keep the key on the backend.
+  5. **Before Phase 6 commits to it, verify:**
+     - French recognition and a French voice at C-level quality;
+     - the session length limit against the 22-minute simulation and §8.5's 25-minute cap;
+     - whether a short-lived browser credential exists.
+
+     The model id is data (`ai-models.json`). The Live protocol is adapter work.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 27 September 2026 — `dougkeefe/next-progress-slice-v4` (Gate H resolved; Phase 5 planned)
+
+**Docs only** (D113). The human adopted Gate H with the recommendations: PRD §8.6's practice mode and report as
+written, all five session types, and pronunciation as a per-session opt-in.
+- Audio retention was never open; architecture.md §9.1 sets it.
+- Phase 5's exit criterion 3 contradicted R12 and §8.5. It is amended in place in both documents, and now covers the
+  stored recording. Each answer's clip goes only to OpenAI's transcription call.
+- Phase 5 is three slices, mirrored in implementation-plan.md §7. Exit criterion 1 is Gate I.
+- **GPT-Live** (`gpt-live-1`), raised by the human, was read from OpenAI's docs:
+  - It leaves Phase 5 as adopted. It shapes Slice 1's transport port.
+  - It is the leading candidate for Phase 6's studio mode, and probably removes that gate's cost premise.
+  - Adopting it needs an ADR superseding ADR 3's mechanism, because ADR 3's *revisit when* evidence has not appeared.
+- **Next, decided** is rewritten to Phase 5 Slice 1.
 
 ### 27 September 2026 — `dougkeefe/next-progress-slice-v4` (Phase 4 Slice 4: runtime item generation and the CI gates)
 
