@@ -38,6 +38,13 @@ framework. `.dependency-cruiser.cjs` enforces all three.
   overlapping) and `placeErrors`, which turns a model's excerpts into offsets. **A model reports excerpts,
   never offsets**; the offsets are computed here. The prompt library's `WritingPrompt` is a content artefact,
   so it *is* in `CONTENT_SCHEMAS` (`writing-prompt`), parsed by `parseWritingPrompts` (D107).
+- **The adversarial-review gate lives here** (`review-gate.ts`, progress.md D109): `gateReasons`,
+  `CONFIDENCE_THRESHOLD` and the key-blind `reviewRequestFor`, pure over an `Item` and a `ReviewVerdict`.
+  The factory's stage 4 and the browser's `generatePracticeSet` share it, and domain is the one package both
+  can reach. **The reason strings are load-bearing**: the factory's metrics classify a discard by each
+  string's opening words, so never reword one without `apps/factory/src/pipeline/metrics.ts`. The threshold
+  is a content-quality bar, not profile data (ADR 9). ADR 20's *revisit when* evidence appeared with this
+  move, and the DTOs stayed here (D109).
 - **The telemetry DTOs live here too, the same way** (progress.md D92–D94): `TelemetryEvent`
   (`telemetry.ts`, `schemas/telemetry.ts`) and the statistics job's `ItemStatisticsReport` and
   `ItemVerdict`. `telemetryEventSchema` is a `strictObject` of exactly five fields, so an event that

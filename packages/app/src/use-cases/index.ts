@@ -171,3 +171,19 @@ export {
   writingHistory,
   writingPrompts,
 } from "./writing.js";
+
+export type {
+  GeneratePracticeSetDeps,
+  GeneratePracticeSetRequest,
+  GeneratePracticeSetResult,
+  ScoreGeneratedAnswerRequest,
+} from "./generate.js";
+export {
+  GENERATED_ITEM_TYPES,
+  GENERATED_SET_SIZE,
+  UnknownGeneratedItemError,
+  UnsupportedSubSkillError,
+  generatePracticeSet,
+  latestGeneratedSet,
+  scoreGeneratedAnswer,
+} from "./generate.js";

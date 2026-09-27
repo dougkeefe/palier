@@ -14,7 +14,13 @@ block, so a retry and the ledger can be driven through the real adapter (D101). 
 `costLedgerContract` follow the `CostLedger` port, and `memoryWritingStore` and `writingStoreContract` the
 `WritingStore` port (D106). `fakeAiProvider.assessWriting` marks the text's first word, so its offsets always fit,
 and `aiProviderContract` holds every provider's assessment schema-valid with offsets `checkErrorOffsets` accepts. The
-in-memory `KeyVault` keeps D98's two modes apart as the Dexie vault does. The sync pieces are:
+in-memory `KeyVault` keeps D98's two modes apart as the Dexie vault does. `memoryGeneratedItemStore` and
+`generatedItemStoreContract` follow the `GeneratedItemStore` port (D110). A scripted completion's `content` may be a
+function of the prompt, and `generationCompletions`, `draftsFor` and `verdictFor` use it: a draft of exactly what was asked
+for, and an honest reviewer that finds the "RIGHT" option wherever the key was moved. **`src/recorded/openai/` holds the
+AI schema-conformance fixtures** (D112): completions recorded from the live API by `apps/web`'s `live-smoke --record`,
+never hand-written, loaded and shape-checked as `RECORDED_RUNS`. The factory reads the same files by path, and a new
+file needs a line in `src/recorded/index.ts`. The sync pieces are:
 - `memorySyncServer`, the whole sync service in memory: revisions, pairing, revocation, and a
   `transport(secret)` per device;
 - `memorySyncStateStore`;

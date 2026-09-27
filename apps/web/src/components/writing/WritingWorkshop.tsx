@@ -22,8 +22,9 @@ import {
 } from "../../features/writing/workshop-view";
 import type { Container } from "../../lib/container";
 import { readStudyProfile } from "../../lib/study";
+import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
-import { NoKeyCard } from "./NoKeyCard";
+import { NoKeyCard } from "../key/NoKeyCard";
 import { WritingFeedback } from "./WritingFeedback";
 
 /** Without a study profile, feedback aims at C, the level the SLE workshop is for (D108). */
@@ -219,7 +220,7 @@ export function WritingWorkshop() {
         onEdit={(text) => dispatch({ type: "edit", text })}
       />
       {!setup.keyHeld ? (
-        <NoKeyCard estimateUsd={estimateUsd} />
+        <NoKeyCard namespace="writing" estimateUsd={estimateUsd} />
       ) : request.kind === "confirming" ? (
         <Preflight
           estimateUsd={request.preflight.estimateUsd}
@@ -406,7 +407,7 @@ function History({
           const prompt = promptOf(submission.promptId) as WritingPrompt;
           const label = t("historyItem", {
             title: prompt.title[locale],
-            date: format.dateTime(new Date(submission.writtenAt), { dateStyle: "medium", timeStyle: "short" }),
+            date: format.dateTime(new Date(submission.writtenAt), { dateStyle: "medium", timeStyle: "short", timeZone: deviceTimeZone() }),
           });
           return (
             <li key={submission.id} className="app-history">

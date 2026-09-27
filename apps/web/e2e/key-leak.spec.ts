@@ -1,7 +1,14 @@
 import { type Browser, expect, type Page, test } from "@playwright/test";
 
-import { drillThroughByKeyboard, onboard, setSize, writeAndGetFeedback } from "./helpers";
-import { SENTINEL, SUBMISSION_SENTINEL, downloadedText, stubOpenAi, watchForLeaks } from "./leak-guard";
+import { drillThroughByKeyboard, generateAndPractise, onboard, setSize, writeAndGetFeedback } from "./helpers";
+import {
+  GENERATED_SENTINEL,
+  SENTINEL,
+  SUBMISSION_SENTINEL,
+  downloadedText,
+  stubOpenAi,
+  watchForLeaks,
+} from "./leak-guard";
 
 /**
  * The key-leak test, tier 11 (implementation-plan.md §6.2; Phase 4 exit criterion 1; [R12]),
@@ -15,7 +22,8 @@ import { SENTINEL, SUBMISSION_SENTINEL, downloadedText, stubOpenAi, watchForLeak
  * asserts the sentinel reached nowhere but OpenAI: no request or response of our own, no
  * console line, no error, no storage, no DOM, no field and no export file. The submission's
  * text is followed too (R12's writing half, D106): it reached OpenAI, stays on this device,
- * went nowhere else, and never arrived on the paired phone.
+ * went nowhere else, and never arrived on the paired phone. So is a runtime-generated set
+ * (D110): drafted and reviewed on the key, practised, kept on this device alone.
  *
  * The hermetic container lives for one page load, so this moves by in-app links only. The
  * at-rest half on real IndexedDB is `key-leak-production.spec.ts`.
@@ -83,6 +91,16 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   // The positive control for the text: it went to OpenAI, once, with the key.
   expect(laptop.watch.openAiBodies().filter((body) => body.includes(SUBMISSION_SENTINEL))).toHaveLength(1);
   expect(laptop.watch.openAiAuthorizations()).toEqual([`Bearer ${SENTINEL}`, `Bearer ${SENTINEL}`]);
+  // 3b. A fresh set from the writing drill's page: one draft and five blind reviews, all on the
+  // key, then practised. Every review carries a generated stem back to OpenAI, and only there.
+  await page.getByRole("link", { name: "Today", exact: true }).click();
+  await page.getByRole("radio", { name: "Written expression" }).check();
+  await page.getByRole("link", { name: /^Start, \d+ min$/ }).click();
+  await page.getByRole("link", { name: "Generate a fresh set" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Fresh practice items" })).toBeVisible();
+  expect(await generateAndPractise(page)).toBe(5);
+  expect(laptop.watch.openAiBodies().filter((body) => body.includes(GENERATED_SENTINEL))).toHaveLength(5);
+  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 8 }, () => `Bearer ${SENTINEL}`));
   await page.getByRole("link", { name: "Today", exact: true }).click();
   await page.getByRole("link", { name: "Review", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
@@ -114,6 +132,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(exported).toContain("attempts");
   expect(exported).not.toContain(SENTINEL);
   expect(exported).not.toContain(SUBMISSION_SENTINEL);
+  expect(exported).not.toContain(GENERATED_SENTINEL);
 
   // 6. Sync, and a second device paired by code: real pushes and pulls through the routes.
   await openSettings(page, "Sync", "Sync");
@@ -133,6 +152,6 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await openSettings(page, "Your API key", "Your API key");
   await expect(page.getByText(`Saved on this device: the key ending in ${SENTINEL.slice(-4)}.`)).toBeVisible();
 
-  await laptop.watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL] });
-  await phone.watch.assertNoLeak([phone.page], { nowhere: [SUBMISSION_SENTINEL] });
+  await laptop.watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL] });
+  await phone.watch.assertNoLeak([phone.page], { nowhere: [SUBMISSION_SENTINEL, GENERATED_SENTINEL] });
 });

@@ -1,10 +1,11 @@
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 import { itemStatisticsReportSchema, parseExamProfileOrThrow } from "@palier/domain";
 import type { ExamProfile, Item, ItemStatisticsReport, Passage } from "@palier/domain";
 import type { OpenAiModels, OpenAiPricing } from "@palier/adapters/openai";
 
+import type { RecordedRunData } from "./eval/conformance.js";
 import { canonicalStringify } from "./lib/json.js";
 import type { SourceCandidate } from "./lib/types.js";
 import type { BankBuild, BankManifest } from "./pipeline/bank-build.js";
@@ -24,6 +25,12 @@ export const PRICING_PATH = "apps/factory/config/pricing.json";
 export const SOURCE_QUEUE_PATH = "content/factory/source-queue.json";
 export const BATCH_REPORT_PATH = "content/factory/batch-report.json";
 export const EVAL_REPORT_PATH = "content/factory/eval-report.json";
+/**
+ * The live API's recorded completions (progress.md D112), written by `apps/web`'s live smoke
+ * with `--record` into `@palier/testing`. Read here by path, since the factory may not import
+ * that package; the eval reports its schema-conformance rate from them.
+ */
+export const RECORDED_COMPLETIONS_DIR = "packages/testing/src/recorded/openai";
 /** Written by the monthly statistics job in `apps/web` (progress.md D94), read here. */
 export const ITEM_STATISTICS_PATH = "content/factory/item-statistics.json";
 
@@ -60,6 +67,39 @@ export const loadItemStatistics = (root: string): ItemStatisticsReport | null =>
   const path = join(root, ITEM_STATISTICS_PATH);
   if (!existsSync(path)) return null;
   return itemStatisticsReportSchema.parse(readJson(path)) as unknown as ItemStatisticsReport;
+};
+
+const RECORDED_METHODS = new Set(["generateItems", "reviewItem", "assessWriting"]);
+
+/**
+ * Every recorded run, sorted by file name. A file that is not a run, or a completion that is not
+ * a whole recorded completion, fails loudly rather than quietly moving the rate (the same checks
+ * `@palier/testing`'s `runOf` makes for the replay gate).
+ */
+export const loadRecordedRuns = (root: string): RecordedRunData[] => {
+  const dir = join(root, RECORDED_COMPLETIONS_DIR);
+  return readdirSync(dir)
+    .filter((file) => file.endsWith(".json"))
+    .sort()
+    .map((file) => {
+      const raw = readJson(join(dir, file)) as { promptVersion?: unknown; completions?: unknown };
+      if (typeof raw.promptVersion !== "string" || !Array.isArray(raw.completions)) {
+        throw new Error(`${file} is not a recorded run`);
+      }
+      for (const [index, c] of (raw.completions as Partial<Record<keyof RecordedRunData["completions"][number], unknown>>[]).entries()) {
+        if (
+          !RECORDED_METHODS.has(c.method as string) ||
+          typeof c.model !== "string" ||
+          typeof c.content !== "string" ||
+          typeof c.attempt !== "number" ||
+          typeof c.request !== "object" ||
+          c.request === null
+        ) {
+          throw new Error(`${file}: completion ${String(index)} is not a recorded completion`);
+        }
+      }
+      return { file, promptVersion: raw.promptVersion, completions: raw.completions as RecordedRunData["completions"] };
+    });
 };
 
 export const writeJsonFile = (root: string, relPath: string, data: unknown): void => {

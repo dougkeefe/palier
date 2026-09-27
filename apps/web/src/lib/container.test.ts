@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 
 import { withAiProvider } from "@palier/app";
 import { attemptId, formId, sessionId } from "@palier/domain";
+import { draftsFor, verdictFor } from "@palier/testing";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { routeFetch } from "../app/api/__tests__/route-fetch";
@@ -46,6 +47,7 @@ describe("createContainer", () => {
     expect(c.vault).toBeDefined();
     expect(c.costLedger).toBeDefined();
     expect(c.writing).toBeDefined();
+    expect(c.generated).toBeDefined();
 
     // The IdGenerator mints valid, strictly increasing ULIDs (behaviour proven by
     // the contract suite in @palier/testing; here we assert wiring only).
@@ -432,6 +434,7 @@ describe("createContainer in production", () => {
     expect(c.syncState).toBeDefined();
     expect(c.costLedger).toBeDefined();
     expect(c.writing).toBeDefined();
+    expect(c.generated).toBeDefined();
     expect(Number.isNaN(Date.parse(c.clock.now()))).toBe(false);
     expect(c.ids.ulid()).toMatch(/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{26}$/);
     // Construction is lazy: the bank has not fetched its manifest yet.
@@ -695,6 +698,54 @@ describe("createContainer in production", () => {
     }
     await c.useCases.deleteEverywhere();
     expect(await c.useCases.writingHistory()).toEqual([]);
+  });
+
+  it("never pushes a generated item to the sync service (D110)", async () => {
+    server.api = createSyncApi({
+      repo: memorySyncRepository(),
+      now: () => new Date(),
+      randomBytes: (n) => crypto.getRandomValues(new Uint8Array(n)),
+      rateLimitSalt: "salt",
+    });
+    const routes = await routeFetch();
+    const pushed: string[] = [];
+    const marker = "Bladderwort-6628";
+    vi.stubGlobal("fetch", (url: string, init?: { method: string; headers: Record<string, string>; body?: string }) => {
+      if (url.startsWith("https://api.openai.com/")) {
+        const prompt = (JSON.parse(init?.body ?? "{}") as { messages?: { content: string }[] }).messages?.map((m) => m.content).join("\n") ?? "";
+        const content = prompt.includes("Produce ") ? draftsFor(prompt, marker) : verdictFor(prompt);
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () =>
+            Promise.resolve({
+              choices: [{ message: { content: JSON.stringify(content) } }],
+              usage: { prompt_tokens: 400, completion_tokens: 600 },
+            }),
+          text: () => Promise.resolve(""),
+        });
+      }
+      if (!url.startsWith("/api/")) return serveCommittedBank(url);
+      if (init?.body !== undefined) pushed.push(init.body);
+      return routes(`http://palier.test${url}`, init ?? { method: "GET", headers: {} });
+    });
+    const c = createContainer({ hermetic: false });
+    await c.vault.putApiKey("sk-test-not-a-real-key");
+    const { set } = await c.useCases.generatePracticeSet({ subSkill: "agreement", targetBand: "C", lang: "fr" });
+    expect(set?.items.length).toBeGreaterThan(0);
+    for (const item of set?.items ?? []) await c.useCases.scoreGeneratedAnswer({ itemId: item.id, response: item.key });
+    const id = sessionId(c.ids.ulid());
+    await c.useCases.startSession({ sessionId: id, mode: "drill", plan: { skill: "reading", lang: "fr", targetBand: "C", sessionSize: 1 } });
+    await c.useCases.completeSession({ sessionId: id });
+
+    expect(await c.useCases.syncNow({ label: "Test" })).toMatchObject({ status: "synced" });
+
+    const wire = pushed.join("\n");
+    expect(wire.length).toBeGreaterThan(0);
+    expect(wire).not.toContain(marker);
+    expect(wire).not.toContain("gen-");
+    await c.useCases.deleteEverywhere();
+    expect(await c.useCases.latestGeneratedSet()).toBeNull();
   });
 
   it("forgets the telemetry consent and queue on a wipe, back to not asked", async () => {

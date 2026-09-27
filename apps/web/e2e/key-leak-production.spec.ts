@@ -1,7 +1,15 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { onboard, waitForOfflineReady, writeAndGetFeedback } from "./helpers";
-import { SENTINEL, SUBMISSION_SENTINEL, downloadedText, idsAtRest, stubOpenAi, watchForLeaks } from "./leak-guard";
+import { generateAndPractise, onboard, waitForOfflineReady, writeAndGetFeedback } from "./helpers";
+import {
+  GENERATED_SENTINEL,
+  SENTINEL,
+  SUBMISSION_SENTINEL,
+  downloadedText,
+  idsAtRest,
+  stubOpenAi,
+  watchForLeaks,
+} from "./leak-guard";
 
 /**
  * The key-leak test's at-rest half (tier 11; Phase 4 exit criterion 1; [R12]), against the
@@ -13,7 +21,9 @@ import { SENTINEL, SUBMISSION_SENTINEL, downloadedText, idsAtRest, stubOpenAi, w
  * "for this tab only" is never written at all, and a reload forgets it. And through a writing
  * workshop submission, an exam with telemetry shared and an export, the sentinel reaches
  * nothing but OpenAI. The submission is at rest in `writingSubmissions` and its call in the
- * cost ledger, both real rows the dump walks (D104's seeded row is gone, D106).
+ * cost ledger, both real rows the dump walks (D104's seeded row is gone, D106). A generated set
+ * is at rest in v1's `generated` table, one row per item, survives a reload, and its six calls
+ * are in the ledger (D110).
  *
  * This server has no database, so telemetry is stood in for, as journey 9 does.
  */
@@ -57,6 +67,18 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(1);
   await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL] });
 
+  // 2b. A fresh set: drafted and reviewed on the key, practised, and kept in the generated
+  // table, where a reload finds it again; one ledger row per call (D110).
+  await page.goto("/en/practice/writing/generate");
+  expect(await generateAndPractise(page)).toBe(5);
+  expect(watch.openAiBodies().filter((body) => body.includes(GENERATED_SENTINEL))).toHaveLength(5);
+  expect(await idsAtRest(page, "palier", "generated")).toHaveLength(5);
+  expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(1 + 6);
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Your last generated set" })).toBeVisible();
+  await expect(page.getByText(/^5 items, generated/)).toBeVisible();
+  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL] });
+
   // 3. A mock exam, submitted, with its answers shared.
   await page.goto("/en/exam");
   await page.getByRole("radio", { name: /Unsupervised/ }).check();
@@ -84,6 +106,7 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   expect(exported).toContain("attempts");
   expect(exported).not.toContain(SENTINEL);
   expect(exported).not.toContain(SUBMISSION_SENTINEL);
+  expect(exported).not.toContain(GENERATED_SENTINEL);
 
   // 5. Replace it with a key for this tab only: the stored row goes, and nothing replaces it.
   await page.goto("/en/settings/key");
@@ -96,12 +119,12 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   await page.getByRole("button", { name: "Check the key" }).click();
   await expect(page.getByRole("status").filter({ hasText: "This key works." })).toBeVisible();
   expect(await vaultIds(page)).not.toContain("api-key");
-  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL] });
+  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL] });
 
   // 6. A reload forgets it.
   await page.reload();
   await expect(page.getByLabel("OpenAI API key")).toBeVisible();
   await expect(page.getByText(MASKED)).toHaveCount(0);
   expect(await vaultIds(page)).not.toContain("api-key");
-  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL] });
+  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL] });
 });

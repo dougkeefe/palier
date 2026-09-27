@@ -109,6 +109,8 @@ export {
   writingAssessmentSchema,
   writingFeedbackDraftSchema,
 } from "./schemas/ai.js";
+// The adversarial-review gate, shared by the factory and runtime generation (progress.md D109).
+export { CONFIDENCE_THRESHOLD, gateReasons, reviewRequestFor } from "./review-gate.js";
 export type { AssembleResult, PlaceErrorsResult } from "./writing.js";
 export { assembleAssessment, checkErrorOffsets, placeErrors } from "./writing.js";
 

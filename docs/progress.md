@@ -12,10 +12,12 @@ criterion. **Phase 4 started beside it: Slice 1, "the key, safely", merged (#28;
 exit criterion 1 and the first half of 2. **Slice 2, "spend", is built** (`dougkeefe/next-progress-slice-v2`; D101–D104):
 the cost ledger, pricing as data, the meter, the soft cap and the pre-flight estimate. **Gate G passed** the
 same day: the meter matched OpenAI's billing exactly, which meets Phase 4's exit criterion 3. Slice 2 merged (#30).
-**Slice 3, "the writing workshop", is built** (`dougkeefe/next-progress-slice-v3`; D105–D108): `assessWriting`,
-submissions kept on the device, the prompt library and `/practice/writing/workshop`, with the key-leak test
-following the submission's text (R12's writing half). Next is Slice 4, runtime item generation and the Phase 4
-CI gates. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+**Slice 3, "the writing workshop", merged (#31; D105–D108).** **Slice 4, "runtime item generation and the CI gates",
+is built** (`dougkeefe/next-progress-slice-v4`; D109–D112): the review gate in domain, `generatePracticeSet` on the
+user's key (written expression only), device-local generated sets at `/practice/writing/generate`, and the Phase 4
+CI gates: live-recorded schema-conformance fixtures, which found and fixed a review-prompt defect, the eval's
+conformance rate and the nightly live smoke. **That ticks exit criterion 2, and Phase 4 is complete.** Gate H, Phase
+5's direction, is resolved (D113), so Phase 5 is planned as three slices, and Slice 1 is next. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
 
@@ -80,8 +82,8 @@ human for anything expensive.
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
-| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **in progress** (four slices, D97; Slices 1–2 merged, D98–D104, and Gate G passed; Slice 3 built, D105–D108; exit criteria 1 and 3 met; Slice 4 is *Next, decided*) |
-| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | not started |
+| 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete on Slice 4's merge** (four slices, D97; Slices 1–3 merged, D98–D108, and Gate G passed; Slice 4 built, D109–D112; all three exit criteria met) |
+| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **planned** (Gate H resolved; three slices, D113; Slice 1 is *Next, decided*) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
@@ -92,9 +94,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v3` | **Phase 4 Slice 3 — the writing workshop** (D97): `assessWriting` on `AiProvider`, the `WritingStore` port over a Dexie v3 `writingSubmissions` table (device-local, never synced or exported), the prompt library under `@palier/content`, `/practice/writing/workshop`, and the key-leak test extended to a real spending call. **Built; pending merge** (D105–D108). | 26 September 2026 |
+| `dougkeefe/next-progress-slice-v4` | **Phase 4 Slice 4 — runtime item generation and the CI gates** (D97): the review gate moved to `@palier/domain`, `generatePracticeSet` on the user's key (written expression only, by human decision), a device-local `GeneratedItemStore` over v1's `generated` table, "Generate a fresh set" at `/practice/writing/generate`, linked from the writing drill, with its provenance badge and one-tap contribution, recorded-fixture schema conformance, the eval harness's conformance rate, and the nightly live smoke. **Built; pending merge** (D109–D112). | 26 September 2026 |
 
-*(The prior rows — Phase 4 Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 4 Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -193,71 +195,72 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 4 Slice 3 is built** (D105–D108). The writing workshop spends through `withAiProvider`. Submissions stay on
-the device, in Dexie v3's `writingSubmissions`, and the key-leak test follows their text (R12's writing half). The
-product pilot still runs beside the next slice (Gate E, D97).
+**Phase 4 is complete** once Slice 4 merges (D109–D112). **Gate H is resolved** (D113): PRD §8.6's practice mode
+and report are adopted, with all five session types and a per-session pronunciation opt-in. GPT-Live is noted for
+Phase 6. The product pilot still runs beside it (Gate E, D97).
 
-**Next: Phase 4 Slice 4, "runtime item generation and the CI gates"** (architecture.md §8.3, PRD §13.0, D97). It
-carries the second half of exit criterion 2, and then Phase 4 is done. Build against MSW and recorded completions,
-as Slices 2 and 3 did.
+**Next: Phase 5 Slice 1, "the session core, no UI"** (implementation-plan.md §7 Phase 5, D113). It carries exit
+criterion 5. The existing groundwork:
+- `OralScenario` and its schema are in domain;
+- `ItemRepository.scenario(id)` is on the port;
+- Dexie v1 already declares `oralSessions: "id, scenarioId, startedAt"` and `oralAudio: "sessionId"`, so no
+  migration is needed;
+- the profile carries the oral bands and descriptors.
 
 **Scope:**
-- **The review gate moves down to `@palier/domain`.** The factory's `gateReasons` and `CONFIDENCE_THRESHOLD`
-  (`apps/factory/src/pipeline/review.ts`) are pure over an `Item` and a `ReviewVerdict`. The browser needs the same
-  gate, and the factory may import only domain and the openai adapter.
-  - Move them, do not copy them. The factory imports them back, and its eval report must not move.
-  - The threshold is a content-quality bar, not a §5 exam rule, so it is not profile data.
-  - Record the move against ADR 20's *revisit when* clause (D105 left it for this slice): say whether the runtime
-    use case is the evidence it names, and decide.
-- **`generatePracticeSet` in `@palier/app`:** a compressed factory in the browser, on the user's key.
-  - It drafts `n` items for a sub-skill at the target band through the registry's `generatePrompt`, then reviews
-    each **blind**, one call at a time, since `lastUsage` is sequential (D101).
-  - It discards on any gate reason and never repairs.
-  - All of it runs inside one `withAiProvider(…, "item-generation", …)`, so every call is metered.
-  - It assembles each passing draft into an `Item` whose provenance says `origin: 'generated'`, never reviewed by a
-    human and not calibrated.
-- **A `GeneratedItemStore` port** over v1's `generated: "id, skill, createdAt"` table, which needs no migration.
-  - It is device-local, never synced and never exported, like `WritingStore` (D106). Wipe and delete-everywhere
-    clear it.
-  - **Generated items never enter the practice trend** (architecture.md §8.3). Say how in the slice: either their
-    attempts are tagged, or their ids are kept out of `practiceTrend`'s input. Test it.
-- **The screen:** a "Generate a fresh set" action on the drill page, with the pre-flight exactly as the workshop
-  has it (`preflightSpend("item-generation")`) and the no-key card when there is no key.
-  - Practise the set with the existing renderers.
-  - Each item carries the **provenance badge** (PRD §13.0: generated just now, reviewed by one automated check,
-    not calibrated), shown on request.
-  - **One tap to contribute** opens a pre-filled GitHub issue, reusing `ReportItem`'s issue-URL pattern.
-  - Drop the per-feature table's "arrive in a coming update" line.
-- **The CI gates** (§7 Phase 4 "CI gates added"):
-  - **Schema conformance against recorded fixtures.** Commit recorded completion bodies for `generateItems`,
-    `reviewItem` and `assessWriting` under `packages/testing`, and run the adapter over them in the fast lane.
-  - **The eval harness reports a schema-conformance rate** from those fixtures, beside the factory's existing eval
-    set.
-  - **The nightly live smoke** is a job in `nightly.yml` that makes one real `verifyKey`, `assessWriting` and
-    `generateItems` call through the adapter. It **skips, and says so, when the `OPENAI_SMOKE_KEY` secret is
-    absent**. It records the measured token counts, which replace `pricing.json`'s typical figures for both
-    features (D103).
+- **Scenarios reach the app through the bank**, as items and forms do.
+  - `ItemRepository` gains `scenarios()` for the session picker, as D85 added `forms()`.
+  - The factory gains a scenario stage over a new `AiProvider.generateScenario`, with its DTOs in domain (ADR 20,
+    D109), and the scripted provider fills it in the baseline.
+  - **Bank v3** carries v2's items and forms forward (D82's pattern), plus at least one scenario per session type at
+    B and C. It is held byte-identical by `committed-bank.test.ts`, and `BANK_VERSION` moves to 3.
+  - The five session lengths (5, 10, 12, 8 and 22 minutes, PRD §8.6) are factory configuration, as the source queue
+    is. Each scenario's phases carry their own minutes.
+  - The real-model scenarios come with the full-volume content run (D56).
+- **An `OralStore` port** over v1's two tables. §3.3 names it and gives no signature, so decide it here, as D45 and
+  D106 did.
+  - Transcripts are turns: speaker, text, phase, and `startMs`/`endMs` (GPT-Live's shape, D113). Audio blobs are
+    stored per session.
+  - **Device-local: never synced and never exported.** `wipeData` and `deleteEverywhere` clear it.
+  - **Retention is architecture.md §9.1's:**
+    - keep the last 10 sessions' audio, and every transcript;
+    - `storageEstimate` warns at 200 MB;
+    - `cleanUpAudio` is one action;
+    - on `QuotaExceededError`, evict the oldest audio first and say so.
+  - These are storage policy, not §5 rules, so they are constants in app, as `CAP_WARNING_PERCENT` is.
+- **The session state machine**, pure in the engine.
+  - Phases run in order, and the client advances each by its elapsed minutes (architecture.md §8.5).
+  - Escalation or de-escalation follows a flag.
+  - An end, or an early close, always carries a reason.
+- **An `OralTransport` port** in app: the examiner's turn out, the candidate's utterance in with its timings, and a
+  close with a reason.
+  - It is shaped so both Slice 2's turn-based transport and a full-duplex one (Phase 6, D113) can implement it.
+  - `@palier/testing` gets a memory fake and `oralTransportContract`.
 
-**Ports and functions:**
-- `AiProvider.generateItems` and `reviewItem`, as they are;
-- `withAiProvider` and `preflightSpend`;
-- the registry's `generatePrompt` and `validate`;
-- the moved `gateReasons`;
-- `GeneratedItemStore` (new).
+**Ports and functions:** `ItemRepository.scenario`/`scenarios`, `AiProvider.generateScenario`, `OralStore` (new),
+`OralTransport` (new), and the engine's session machine.
 
 **Done looks like:**
-- the gate moved with the factory's committed eval figures unchanged;
-- `generatePracticeSet` tested for pass, discard, a malformed draft, 429 and timeout, and metered once per call;
-- the `GeneratedItemStore` contract green on memory and Dexie;
-- the generated set practised with its badge, axe-clean in every state and in both locales, and the key-leak specs
-  driving one generation;
-- the recorded-fixture conformance and the eval rate in the fast lane, and the nightly job green (or skipped, saying
-  why);
-- `pnpm verify` and `verify:medium` green;
-- **Phase 4's exit criterion 2 ticked, and with it Phase 4.**
+- bank v3 committed and reproducible, with a scenario per session type, and the factory's committed reports updated
+  with their changes explained;
+- the `OralStore` contract green on memory and Dexie, with the retention and eviction tested;
+- the state machine property-tested: it always ends within the scenario's minutes, never skips or repeats a phase,
+  and a close always carries a reason;
+- the machine driven end to end against the fake transport, which is **exit criterion 5 ticked**;
+- `pnpm verify` and `verify:medium` green.
 
-**Human, when the nightly job lands:** add the `OPENAI_SMOKE_KEY` Actions secret, a key of its own with a small
-monthly limit (`docs/deploy.md` gains the step).
+**Human, once Slice 4 merges:**
+- add the `OPENAI_SMOKE_KEY` Actions secret, a key of its own with a small monthly limit (`docs/deploy.md`, "The
+  nightly live smoke"), and run the nightly workflow once by hand;
+- read the `generate` namespace's French, with the rest of Phase 7's R8 review.
+
+**Named, not scheduled:**
+- reading-set generation (D110);
+- **a generation that outlives its screen** (pre-merge review, finding 13). Leaving `/practice/writing/generate`
+  mid-run keeps spending out of sight, and a wipe made meanwhile is refilled when the run finishes. The workshop
+  shares the shape. The fix is an in-flight flag a remount reads, and a wipe counter `putSet` checks before writing;
+- **one `debiasKeyPosition`** (finding 16). The browser's shuffle copies the factory's. Move one pure
+  `debiasKeyPosition(draft, next)` into domain for both, with the factory's golden output unchanged.
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
@@ -282,7 +285,8 @@ last exit criterion.
 - Resolved: **Gate A** (product and UI direction), **Gate B** (the D43 `ScheduleEntry` merge, D69),
   **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026; **Gate D** (exam UI
   direction, D84), **Gate E** (the pilot runs on the baseline bank, D97) and **Gate F** (Phase 4 UI
-  direction, D97) on 25 September 2026; **Gate G** (the billing check, session log) on 26 September 2026.
+  direction, D97) on 25 September 2026; **Gate G** (the billing check, session log) on 26 September 2026; **Gate H**
+  (Phase 5 direction, D113) on 27 September 2026.
 
 Standing human items:
 - pointing `palier.dougkeefe.com` at the deployment;
@@ -467,7 +471,11 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
   (`dougkeefe/next-progress-slice-v3`; D105–D108; session-log evidence). `assessWriting` with inline offsets, the
   `WritingStore` port over Dexie v3, the prompt library, the workshop screen, and the key-leak test extended to the
   submission's text.
-- [ ] **Slice 4 — Runtime item generation and the Phase 4 CI gates.** *Next, decided*.
+- [x] **Slice 4 — Runtime item generation and the Phase 4 CI gates.** **Built 27 September 2026**
+  (`dougkeefe/next-progress-slice-v4`; D109–D112; session-log evidence). The review gate in `@palier/domain`,
+  `generatePracticeSet` and the `GeneratedItemStore` port, `/practice/writing/generate` with the provenance badge and
+  the one-tap contribution, the key-leak specs following a generated set, and the CI gates: live-recorded fixtures,
+  the eval's conformance rate, the nightly smoke, and prompt version 4, which fixed what the first recording found.
 
 **Exit criteria** (the actual gate)
 
@@ -476,10 +484,14 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
   `key-leak-production.spec.ts` (real Dexie) are green in the E2E suite. They were proven to bite four
   ways, each reverted: a logged key, a key written to the synced settings, a key in `localStorage`, and a
   plaintext IndexedDB row (session log, 26 September 2026, `dougkeefe/next-progress-slice-v1`; D100)
-- [~] Every AI response schema-validated before use; malformed / rate-limit / invalid-key / timeout all degrade gracefully.
+- [x] Every AI response schema-validated before use; malformed / rate-limit / invalid-key / timeout all degrade gracefully.
   **First half met** (Slice 1, D99): the adapter turns each into its own error, and the key screen puts each
   in plain words. This is tested through the real adapter over MSW (`container-key.test.ts`) and in journey
-  5. The second half, schema conformance against recorded fixtures, is Slice 4's
+  5. **Second half met** (Slice 4, D112): 18 completions recorded from the live API are replayed through the
+  adapter in the fast lane, and each must get the verdict it got when recorded. The gate was proven to bite both
+  ways. The eval reports 1.0 conformance on prompt version 4. The generation path degrades through the same
+  names (`generate.spec.ts`, `container-generate.test.ts`) (session log, 27 September 2026,
+  `dougkeefe/next-progress-slice-v4`)
 - [x] Spend meter matches actual OpenAI billing within a few percent. **Gate G, 26 September 2026:** the human
   ran `pnpm --filter @palier/web billing-check` on a funded test key. OpenAI's usage data matched the meter
   100%: 2,393 input and 4,114 output tokens, and US$0.037698. See the session log,
@@ -487,15 +499,25 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
 
 ### Phase 5: Oral, practice mode
 
-- [ ] A 10-minute session produces a report a user would act on
+**Planned 27 September 2026 (D113)** as three slices, mirrored in `implementation-plan.md` §7. **Keep the two in
+sync.** Gate H is resolved: PRD §8.6's practice mode and report are adopted, with all five session types and
+pronunciation offered as a per-session opt-in.
+
+- [ ] **Slice 1 — The session core, no UI.** *Next, decided*.
+- [ ] **Slice 2 — The turn loop on the key.**
+- [ ] **Slice 3 — `assessOral` and the report**, ending at **Gate I** (exit criterion 1, human).
+
+**Exit criteria** (the actual gate)
+
+- [ ] A 10-minute session produces a report a user would act on (Gate I)
 - [ ] Cost per session measured and displayed accurately
-- [ ] Audio never leaves the device without an explicit per-session opt-in, asserted by the extended key-leak test [R12]
+- [ ] Audio reaches nowhere but OpenAI: each answer's clip only its transcription call, and the stored session recording only on an explicit per-session pronunciation opt-in, asserted by the extended key-leak test [R12] (amended in place, D113)
 - [ ] Scoring stability: same transcript five times, at most one band of variation
 - [ ] Session state machine contract-tested against a fake transport
 
 ### Phase 6: Oral, studio mode
 
-**Decision gate before starting.** If phase 5's reports land well and measured realtime cost is high, shipping 1.0 without studio mode is the honest answer. Record that call here with its evidence.
+**Decision gate before starting.** If phase 5's reports land well and measured realtime cost is high, shipping 1.0 without studio mode is the honest answer. Record that call here with its evidence. **Noted 27 September 2026 (D113):** GPT-Live's published US$0.05 a minute probably removes the "cost is high" premise. It is the leading candidate, and adopting it needs an ADR superseding ADR 3's mechanism, plus the checks D113 lists.
 
 - [ ] Session establishes in under 2.5 seconds from tap to first word
 - [ ] Disconnection mid-session recovers or fails cleanly with the transcript preserved
@@ -531,7 +553,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | R9 | WCAG 2.2 AA | 0, all | not started |
 | R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
 | R11 | Export, import, delete, each in one action | 2, 7 | Phase 2 half verified (24 September 2026): `/settings/data` does each in one action; journey 6 round-trips export → delete → import and finds the same progress. Phase 7's server-side delete waits for sync |
-| R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). **The writing half is satisfied and verified** (26 September 2026, Slice 3): the leak guard follows a submission's text and finds it only in requests to `api.openai.com` and in this device's own copy (the page, the field, `writingSubmissions`), never in a push, a pull, an export, Web Storage or the paired phone; proven to bite three ways (D106). Audio and transcripts are Phase 5 |
+| R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). **The writing half is satisfied and verified** (26 September 2026, Slice 3): the leak guard follows a submission's text and finds it only in requests to `api.openai.com` and in this device's own copy (the page, the field, `writingSubmissions`), never in a push, a pull, an export, Web Storage or the paired phone; proven to bite three ways (D106). **Runtime-generated items are held the same way** (27 September 2026, Slice 4, D110): a generated stem reaches only OpenAI, in review requests, and this device's `generated` table and page. It never appears in a push, an export, Web Storage or on the paired phone, and no attempt is ever written for it. Audio and transcripts are Phase 5 |
 | R13 | Free and open source | 0, 7 | not started |
 | R14 | Progress across devices, with an off switch | 2 | satisfied and verified on the hermetic lane (24 September 2026): journey 8 pairs two devices by code and both show the same progress; the switch is tested off, with server deletion offered, in `sync.spec.ts`. A public deployment with a real database is Slice 3 |
 
@@ -3651,11 +3673,416 @@ as D87, D100 and D104 were)
 - **The workshop route joins the Lighthouse list** at `/fr/practice/writing/workshop`. It measured 0.99 on
   performance and 1.0 on accessibility.
 
+### D109 — the review gate moves to `@palier/domain`, and ADR 20 stands
+**Date:** 27 September 2026 · **Status:** accepted
+
+*Next, decided* asked the slice to move the gate, not copy it, and to weigh ADR 20's *revisit when* clause.
+
+- **What moved.** `gateReasons`, `CONFIDENCE_THRESHOLD` and `reviewRequestFor` went from
+  `apps/factory/src/pipeline/review.ts` to `packages/domain/src/review-gate.ts`, unchanged. All three are pure,
+  and their one runtime import is `bandRank`. The factory imports them back. `reviewItems`, the loop, stays in the
+  factory.
+- **The reason strings moved byte for byte.** `apps/factory/src/pipeline/metrics.ts` classifies a discard by each
+  string's opening words, so rewording one would silently move the batch report's discard counts.
+- **A new guard.** `committed-eval.test.ts` holds `content/factory/eval-report.json` equal to a fresh
+  `palier-factory eval`. Nothing checked that file before; only the batch report was drift-tested. The move left
+  both reports as they were, and `committed-bank.test.ts` passed unchanged.
+- **The threshold stays a content-quality bar, not profile data** (ADR 9). It is not a §5 exam rule.
+- **ADR 20's *revisit when* clause** says: "A second consumer of these DTOs appears that is naturally an
+  `@palier/app` concern (for example a runtime browser-generation use case in Phase 4) and would read more
+  naturally with the types beside the port."
+  - **That evidence has now appeared**: `generatePracticeSet` is exactly that use case.
+  - **The ruling is that the DTOs stay in domain.** Reuniting them with the port would give the factory an
+    `@palier/app` dependency, which the factory boundary's documented intent forbids.
+  - The move itself points the other way. The gate had to live where both the factory and the browser can reach
+    it, and that is domain.
+  - No superseding ADR is needed, because the decision did not change.
+
+### D110 — `generatePracticeSet`, the `GeneratedItemStore` port, and how a generated item stays out of the trend
+**Date:** 27 September 2026 · **Status:** accepted; §3.3 amended in place, as D101 and D106 were
+
+- **Written expression only, by human decision** (this session). Sets use the three sentence-level types the
+  factory already cycles: cloze, error-id and best-completion. None needs a passage.
+  - A reading set would need a generated passage, somewhere to keep it, and a runner that can show a passage that
+    is not in the bank.
+  - Reading-set generation is a named follow-up, not scheduled.
+- **`generatePracticeSet({ subSkill, targetBand, lang })`** is in `packages/app/src/use-cases/generate.ts`.
+  - It picks the item type and a `Topic` with `Random`, which is selection randomness and never an id (D39).
+  - It makes one `generateItems` call of `GENERATED_SET_SIZE` (5), then one blind `reviewItem` per draft, one at a
+    time (D101). All of it runs inside one `withAiProvider(…, "item-generation", …)`.
+  - **A draft is discarded, never repaired**, on any of four grounds: the item schema, the type's own `validate`, a
+    type, sub-skill or band other than what was asked, or `gateReasons`.
+  - **A failed call rethrows and keeps nothing**: no key, 401, 429, timeout, or malformed twice. Whatever it
+    billed is already metered.
+  - Keeping the items that passed before a review failed was the other choice. It would hand over a set cut short
+    by a network fault, with some drafts never reviewed at all.
+  - A set in which nothing passed is a result, not an error.
+- **Assembly.**
+  - The id is `gen-` plus an `IdGenerator` ULID, so it can never collide with a bank id.
+  - The key position is shuffled with `Random`, as the factory's is from a content hash.
+  - Provenance is `{ origin: "generated", generator: { model, promptVersion, date } }`, with the model taken from
+    `lastUsage()` and the prompt version handed in by the composition root.
+  - There is no `stats` and no `reviewedBy`, so the item reads as uncalibrated and not reviewed by a person.
+  - `GENERATED_SET_SIZE` is product behaviour, not a §5 rule, so it is a constant in app, as
+    `CAP_WARNING_PERCENT` is.
+- **`GeneratedItemStore { putSet, latestSet, item, clear }`** over `GeneratedSet = { id, skill, createdAt, items }`.
+  - It lives in `@palier/app`, as `WritingSubmission` does.
+  - `latestSet` is the newest set by `createdAt`, with ties broken by id. A set with no items is not kept.
+  - **The Dexie adapter is over v1's own `generated: "id, skill, createdAt"` table**, so there is no schema bump
+    and `verno` stays 3. It writes one row per item, adding `setId` and `position`.
+  - A row whose item is not a whole `Item` of the row's own id and skill reads as nothing (D55).
+  - The migration harness seeds a v1 `generated` row, which survives the upgrade and reads as no set.
+  - **Device-local: never synced, never exported.** No sync collector takes it, `exportData`'s deps do not
+    include it, and `wipeData` and `deleteEverywhere` clear it. Tests hold this in `data-rights`, in
+    `sync-account`, in `container-generate.test.ts` over both graphs, and on the wire in `container.test.ts`,
+    where the production graph's real sync pushes carry no generated marker and no `gen-` id.
+- **How a generated item stays out of the practice trend: no `Attempt` is ever written for it.**
+  `scoreGeneratedAnswer` scores the answer by the type's own `score` and writes nothing: no attempt, no schedule
+  entry, no session.
+  - So a generated item cannot reach `practiceTrend`'s input, and nothing about it can sync. That is the
+    structural form of *Next, decided*'s "their ids are kept out".
+  - A tag on `Attempt` was the other choice, and it was rejected. It would change the export format, the sync
+    hash and import merging, and generated attempts would still sync.
+  - Tests: in `@palier/app`, the use case is handed the whole device and neither `attempts.append` nor
+    `schedule.put` is called, with `practiceTrend` equal before and after. In the container, a whole set answered
+    leaves the hermetic trend unchanged and both graphs' attempts and schedule empty.
+- **Existing tests touched, shape only, with no assertion moved:**
+  - the `data-rights` and `sync-account` device stubs gained `generated`;
+  - `@palier/testing/in-memory`'s exact key list gained `memoryGeneratedItemStore`;
+  - `dexieStores` wires eleven ports, so `index.test.ts`'s case name changed and it writes one more row;
+  - the container wiring lists gained `generated`.
+
+### D111 — the calls the fresh-set screen leaves open
+**Date:** 27 September 2026 · **Status:** accepted (the screen follows Gate F's adopted §8.7 and §8.10 patterns, so
+these are recorded as made, as D87, D100, D104 and D108 were)
+
+- **The route is `/practice/writing/generate`**, linked from the writing drill's page in an aside beside the
+  workshop link.
+  - *Next, decided* put the action "on the drill page". It became its own route because a drill listens for §8.3's
+    keys on the whole window, so two runners on one page would both answer.
+  - The hermetic leak spec reaches it by in-app links.
+- **The screen, `components/generate/GenerateSet.tsx`, with its decisions in `features/generate/generate-view.ts`:**
+  - An intro, and an `info` callout saying generated items are kept on this device only, never synced or
+    exported, and never counted in progress.
+  - A sub-skill select over the profile's written-expression taxonomy (ADR 9). It defaults to the first entry,
+    and the set is written at the study profile's target band, or C.
+  - The pre-flight exactly as the workshop's: the estimate, and an `info` or `incorrect` note near or past the cap.
+    It never blocks.
+  - A status toast while the set is drafting. Failures are `checkFailure`'s names, in generation words.
+  - The result is "N of 5 drafts passed the automated check", or that none did, with what gets a draft discarded.
+  - "Your last generated set" is read from the store, so a reload never loses a set that was paid for.
+- **Practising** goes through `PracticeSession`'s new `mode: "generated"`. The set is handed in whole, and each
+  answer goes to `scoreGeneratedAnswer`.
+  - No session is started or completed, and no sync is notified.
+  - The end says the set never counts, and goes back to the screen.
+- **The provenance badge** (PRD §13.0) is a disclosure on a generated item's feedback, in place of `ReportItem`,
+  since there is no bank item to report. It reads: "Generated just now on your key. Reviewed by one automated check,
+  not by a person. Not calibrated against real answers."
+- **One tap to contribute** is `contributeIssueUrl(item)` in `lib/report.ts`, beside `reportIssueUrl`.
+  - It uses the same repository and pattern, with the label `item-contribution`.
+  - The body carries the whole item as fenced JSON: the stem, options, key, rationales, explanation, sub-skill, band,
+    topic and provenance.
+  - It has no bank version and no `gen-` id, since neither means anything off this device.
+- **`NoKeyCard` moved to `components/key/`** and takes a namespace, shared by the workshop and this screen.
+  - **An existing message key was renamed:** `writing.noKeyStillWrite` became `noKeyStill`. No test named it.
+- **The per-feature table's "arrive in a coming update" line is gone** (`key.featuresComing`).
+- **The route joins the Lighthouse list** at `/fr/practice/writing/generate`.
+
+### D112 — the Phase 4 CI gates: recorded fixtures, the eval's rate, the nightly smoke, and a prompt fix they found
+**Date:** 27 September 2026 · **Status:** accepted
+
+- **The fixtures are recorded from the live API, never hand-written.** The human provided a key this session, and
+  ran the recorder from their own terminal so the key never entered the transcript.
+  - The recorder is `apps/web/src/lib/live-smoke.ts`, run by `scripts/live-smoke.mjs`.
+  - It makes a fixed set of calls through `withAiProvider`, with a tee on `fetch` that keeps each completion as it
+    arrived: a key check, 3 `generateItems` (one per sentence-level type, at the set size), 5 `reviewItem` and 2
+    `assessWriting`.
+- **Where the fixtures live: `packages/testing/src/recorded/openai/`**, one file per method.
+  - Each file is `{ note, recordedAt, promptVersion, completions }`. Each completion keeps the port request, the
+    message content exactly as it arrived, its usage, its attempt number, and whether the adapter accepted it
+    without a retry.
+  - **The files carry no header, no response id and no key.** A test holds this.
+  - `@palier/testing` loads and shape-checks them as `RECORDED_RUNS`. Its tsconfig lists the JSON, and there is no
+    new `exports` entry because the root entry carries them.
+  - The factory may not import `@palier/testing`, so it reads the same files by path
+    (`RECORDED_COMPLETIONS_DIR`, `loadRecordedRuns`).
+  - *Next, decided* sketched `<method>-<n>.json`. One file per method, stamped with the prompt version, keeps a
+    before and after legible.
+- **Conformance is measured on the first attempt.** `packages/adapters/src/openai/recorded-fixtures.test.ts` replays
+  every recorded completion through the real adapter with `maxRetries: 0`. Each must get the verdict it got when
+  recorded: accepted, or refused as `InvalidResponseError`. **Proven to bite both ways, each reverted:**
+  - capping `confidence` at 0.5 in the domain schema failed every accepted review;
+  - loosening `estimatedBand` to any string failed the three prompt-3 refusals.
+- **The first recording found a defect: the review prompt never named the band scale.**
+  - Three of five reviews answered `estimatedBand` as "B1" (twice) or as a sentence. The schema refused each, and
+    the adapter paid for a retry.
+  - That is the retry Gate G's figures hinted at (session log, 26 September 2026).
+  - **`PROMPT_VERSION` is now 4.** The review prompt asks for exactly one of `"A"`, `"B"`, `"C"`, from domain's
+    `TARGET_BANDS`, never a CEFR level or a sentence. A new adapter test pins the wording.
+  - **The re-recording conforms 10 of 10.** A review's average fell from 515 input and 754 output tokens to 329 and
+    345.
+  - The prompt-3 reviews are kept as `reviewItem-prompt-v3.json`: real refusals, so the gate holds in both
+    directions.
+  - The committed bank is untouched, because it records `SCRIPTED_PROMPT_VERSION`.
+- **The eval harness reports the rate.** `palier-factory eval` now writes `schemaConformance` beside the detection
+  figures, through one `runEval` that the CLI and `committed-eval.test.ts` share.
+  - The report gives the prompt version, the files it is measured on, the count per method, the overall rate, and
+    the older runs as `earlier`.
+  - On prompt 4 it is 1.0 over 10 completions. The prompt-3 file is 5 of 8 completions: the three refused first
+    replies, their three retries, and two that passed first time.
+  - The detection figures did not move. It reports; it does not gate.
+- **The nightly live smoke** is a second job in `nightly.yml`.
+  - It gates on `OPENAI_SMOKE_KEY` in the `item-statistics.yml` pattern: without the secret it posts a
+    `::notice::` and skips. The script itself exits 0 without a key.
+  - A failed call, or a model in `ai-models.json` that OpenAI no longer lists (architecture.md §8.1), exits 1, and
+    the job's own step opens an issue.
+  - It writes its measured tokens to the run's summary.
+  - `LIVE_SMOKE_RECORD=1` records as `--record` does. The chat turned `--` into an em dash when the command was
+    pasted, so the environment switch was added for that.
+- **`pricing.json`'s token counts are now measured** (D103):
+  - writing feedback is 517 input and 1,733 output tokens;
+  - a generated set is one draft call of 392 and 3,915, plus five reviews totalling 1,645 and 1,725.
+  - That is about US$0.015 a submission and US$0.049 a set at the confirmed rates.
+- **Existing tests touched:**
+  - `cli.test.ts`'s temporary root now copies the recorded fixtures, because they are an input of `eval`. That is
+    a setup change only, and one assertion was added for the new log line.
+  - `openAiHandlers`' completions may now be a function of the prompt, with the existing callers unchanged.
+  - `stubOpenAi`'s answer callback also receives the request body, with the existing callers unchanged.
+- **Amended before merge, after the pre-merge review** (session log, 27 September 2026). The first definition above
+  counted retries.
+  - **The rate is now over first replies only.** A retry's reply is still replayed by the gate, but it never counts
+    toward the rate, and the factory keeps each completion's `attempt`.
+  - The prompt-3 run therefore reads **2 of 5 (0.4)**, not 5 of 8. Prompt 4 stays at 1.0 over 10.
+  - A rate is `null`, not 0, when nothing was recorded on the shipping prompt.
+  - The factory's loader now checks each completion as `runOf` does. A test holds `RECORDED_RUNS` equal to the files
+    on disk.
+  - The smoke stops before any paid call when a configured model is missing, and names the adapter's error when
+    OpenAI answers with an error page that is not JSON.
+  - The smoke key's suggested limit is US$10, since a month of nightly runs is about US$4.50.
+
+### D113 — Gate H: PRD §8.6's practice mode adopted with the recommendations, Phase 5 is three slices, and GPT-Live noted for studio mode
+**Date:** 27 September 2026 · **Status:** accepted (human decisions); resolves Gate H
+
+- **Gate H is resolved.** The human adopted PRD §8.6's practice mode and post-session report as written, with the
+  recommendations:
+  - **All five session types** are offered in practice mode. The full simulation's 22 minutes are stated beside its
+    estimate.
+  - **Pronunciation is offered in Phase 5.** It is off by default and asked each session, as architecture.md §8.5
+    has it.
+  - **How long audio is kept was never open.** architecture.md §9.1's storage budget already sets it: the last 10
+    sessions' audio, transcripts kept, a warning at 200 MB, a one-tap cleanup, and the oldest audio evicted on
+    `QuotaExceededError`.
+- **A contradiction resolved rather than carried, as D17 did.**
+  - R12 and architecture.md §8.5 let audio go to the configured AI provider, and practice mode must transcribe every
+    answer.
+  - implementation-plan.md §7's Phase 5 exit criterion 3 said audio never leaves the device unless the user opts
+    into pronunciation.
+  - **R12 and §8.5 stand. The criterion is about the stored session recording.** Each answer's clip goes only to
+    OpenAI's transcription call. The saved recording is uploaded only on that session's pronunciation opt-in. The
+    extended key-leak test asserts both.
+  - The criterion is amended in place in both documents, with this entry named.
+- **Phase 5 is planned as three slices**, mirrored in implementation-plan.md §7, the same scoped exception D79 and D97
+  made. Keep the two in sync.
+  1. **The session core, no UI.**
+  2. **The turn loop on the key.**
+  3. **`assessOral` and the report.**
+
+  Exit criterion 1, "a report a user would act on", is a human judgement. It is **Gate I**, at the end of Slice 3.
+  A funded key is needed when Slice 3 measures cost and stability, and `OPENAI_SMOKE_KEY`'s will do.
+- **GPT-Live, noted by the human for consideration.** Its model page
+  (developers.openai.com/api/docs/models/gpt-live-1) and the Live API guides, read on 27 September 2026, say:
+  - it is **`gpt-live-1`**, a full-duplex voice model with audio and text in and out, and function calling;
+  - it is served **only by the Live API** (`v1/live/sessions`), not by the Realtime API, Chat Completions or
+    Responses;
+  - a browser connects over **WebRTC**, with audio on media tracks and JSON events on a data channel;
+  - **US$0.05 a minute, billed per second.** Delegating to a backend model or tools is billed separately;
+  - transcripts arrive as `session.input_transcript.delta` and `session.output_transcript.delta`, each with `start_ms`
+    and `end_ms`;
+  - "Keep the API key on your backend": a server exchanges the browser's connection offer, and no short-lived browser
+    credential is documented;
+  - **not documented:** French recognition and voices (the voice table shows English and Portuguese variants), and
+    the session duration limit.
+- **What GPT-Live changes:**
+  1. **Not Phase 5 as adopted.** Practice mode's other reasons still hold: it works on a weak connection, it gives a
+     weaker candidate time to think, and it builds the report before the realtime complexity. Its cost advantage
+     narrows. Slice 3 measures the real ratio (exit criterion 2) rather than assuming one (principle 8).
+  2. **Slice 1's transport port is shaped so a full-duplex transport can sit beside the turn-based one.** Utterances
+     carry their timings as GPT-Live's transcript deltas do, phase boundaries stay client-driven, and a session closes
+     with a reason. This is what exit criterion 5 exists for.
+  3. **It is the leading candidate for Phase 6's studio mode.** At the published price a 10-minute session is about
+     US$0.50, and the 22-minute simulation about US$1.10. **The Phase 6 decision gate's premise, "measured realtime
+     cost is high", probably no longer holds.** That is decided at that gate, on measured cost.
+  4. **ADR 3 stands, and adopting GPT-Live would need a new ADR superseding its mechanism**, never an edit.
+     - ADR 3's decision names the `/v1/realtime/client_secrets` mint.
+     - The Live API's documented path has a server exchange the connection offer using the key. That is the same
+       exception, one stateless call per session, through a different call.
+     - ADR 3's *revisit when* is: "OpenAI documents a browser-direct realtime auth path, or the feature is dropped."
+       **That evidence has not appeared**: the Live docs say to keep the key on the backend.
+  5. **Before Phase 6 commits to it, verify:**
+     - French recognition and a French voice at C-level quality;
+     - the session length limit against the 22-minute simulation and §8.5's 25-minute cap;
+     - whether a short-lived browser credential exists.
+
+     The model id is data (`ai-models.json`). The Live protocol is adapter work.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 27 September 2026 — `dougkeefe/next-progress-slice-v4` (pre-merge review: 20 fixes)
+
+**A candid review of the whole branch** (three parallel reviewers, constructive tone) found 23 issues, none critical.
+The human chose to fix 20. Findings 13 and 16 are named follow-ups in *Next, decided*, and 23, the factory reading
+another package's fixtures by path, is accepted as documented in D112 and the factory's `CLAUDE.md`.
+- **Money:**
+  - a draft call returning more than `GENERATED_SET_SIZE` drafts no longer buys more reviews;
+  - a pre-flight that lands late, or a cancel, is ignored while a set is generating, so Send cannot come back
+    mid-request.
+- **Accessibility:** focus follows every move on the fresh-set screen: Not now, Send, a failure, Generate another set
+  and Back to fresh items. The spec asserts `toBeFocused()` for each.
+- **Correctness:**
+  - putting a `GeneratedItemStore` set again replaces it in both stores, and the port states its unique-id and
+    canonical-UTC assumptions;
+  - whether an item is generated now comes from the runner's mode, not a copied `gen-` prefix;
+  - generated mode's failure says the item is gone and offers the way back;
+  - dates in the workshop history and the last set are formatted in the device's own time zone. next-intl handed the
+    static pages the build machine's zone.
+- **CI and the eval:**
+  - the conformance rate counts first replies only, and nothing measured is `null` (D112, amended);
+  - the loaders are validated and tested;
+  - the smoke stops before paying when a model is missing, and names the adapter's error on a page that is not JSON;
+  - the nightly summary's fence always closes, and the issue says whether the smoke or the build failed.
+- **Copy:** the French grammar in `lastBody` and `doneBody`, and plural-aware result lines in both locales.
+- **Docs:** the runbook builds the factory, the smoke key's limit is US$10, the factory's `CLAUDE.md` names the eval's
+  new input, and three small inconsistencies are gone.
+
+**A second review pass over the fixes** found four more, all applied:
+- `drafted` counts only the drafts that were reviewed, so "N of M passed the check" never counts unchecked extras as
+  failures;
+- focus while generating rests on the status line, and `aria-busy` is gone because it could silence that live region;
+- a no-key failure mid-run focuses the no-key card's heading. The new `generate-production.spec.ts` stages it on the
+  production build, where a second tab removes the key from the shared IndexedDB vault while the first is at the
+  pre-flight;
+- the French cost sentence now names its referent, and the English matches it.
+
+**Evidence** (after the fixes):
+
+```
+pnpm verify          → boundaries (398 + 207 modules, no violations), test: 175 files, 2521 passed, 8 todo
+pnpm verify:medium   → integration: 6 files, 45 passed; E2E (CI=1): 51 passed (53.4s), with generate-production.spec.ts
+node apps/factory/dist/index.js eval → schema conformance on prompt v4: 1.000; prompt-3 run 2 of 5 (0.4)
+generate-production.spec.ts, with NoKeyCard's headingRef dropped → fails at toBeFocused; reverted, rebuilt clean
+```
+
+### 27 September 2026 — `dougkeefe/next-progress-slice-v4` (Gate H resolved; Phase 5 planned)
+
+**Docs only** (D113). The human adopted Gate H with the recommendations: PRD §8.6's practice mode and report as
+written, all five session types, and pronunciation as a per-session opt-in.
+- Audio retention was never open; architecture.md §9.1 sets it.
+- Phase 5's exit criterion 3 contradicted R12 and §8.5. It is amended in place in both documents, and now covers the
+  stored recording. Each answer's clip goes only to OpenAI's transcription call.
+- Phase 5 is three slices, mirrored in implementation-plan.md §7. Exit criterion 1 is Gate I.
+- **GPT-Live** (`gpt-live-1`), raised by the human, was read from OpenAI's docs:
+  - It leaves Phase 5 as adopted. It shapes Slice 1's transport port.
+  - It is the leading candidate for Phase 6's studio mode, and probably removes that gate's cost premise.
+  - Adopting it needs an ADR superseding ADR 3's mechanism, because ADR 3's *revisit when* evidence has not appeared.
+- **Next, decided** is rewritten to Phase 5 Slice 1.
+
+### 27 September 2026 — `dougkeefe/next-progress-slice-v4` (Phase 4 Slice 4: runtime item generation and the CI gates)
+
+**Built.** The decisions are recorded in D109–D112. Slice 3 had merged as #31, so its In-flight row was replaced in
+this branch's first commit. Two human decisions were taken at the start: **written expression only** for generated
+sets, and **real recorded fixtures on the human's own key**, recorded this session.
+
+**What was built:**
+- **Domain:** `review-gate.ts`, holding `gateReasons`, `CONFIDENCE_THRESHOLD` and `reviewRequestFor`, moved from the
+  factory unchanged (D109).
+- **App:**
+  - the `GeneratedItemStore` port;
+  - `generatePracticeSet`, `latestGeneratedSet` and `scoreGeneratedAnswer`, which writes nothing;
+  - `wipeData` and `deleteEverywhere` clear generated sets;
+  - §3.3 amended in place (D110).
+- **Testing:**
+  - `memoryGeneratedItemStore` and `generatedItemStoreContract`;
+  - MSW completions that answer the prompt, used by `generationCompletions`, `draftsFor` and `verdictFor`;
+  - the recorded fixtures and `RECORDED_RUNS`.
+- **Adapters:**
+  - `dexieGeneratedItemStore` over v1's `generated` table, with no schema bump;
+  - `PROMPT_VERSION` 4, whose review prompt names the band scale;
+  - `recorded-fixtures.test.ts`.
+- **Factory:**
+  - the gate imported back from domain;
+  - `committed-eval.test.ts`;
+  - `eval/conformance.ts` and `eval/report.ts`, so `palier-factory eval` writes `schemaConformance`.
+- **Web:**
+  - the container wires the store and the three use cases in both graphs;
+  - `/practice/writing/generate` (`GenerateSet`, `features/generate/`), linked from the writing drill;
+  - `PracticeSession`'s generated mode, with `GeneratedProvenance` and `contributeIssueUrl`;
+  - `NoKeyCard` shared under `components/key/`;
+  - the `generate` namespace in both locales, and the per-feature table's coming-soon line removed;
+  - `live-smoke.ts` and `scripts/live-smoke.mjs`;
+  - `pricing.json`'s token counts, now measured.
+- **E2E:**
+  - `generate.spec.ts`: every state axe-clean, and French at parity;
+  - both key-leak specs generate and practise a set, following `GENERATED_SENTINEL`;
+  - a French page title check.
+- **CI:** the `live-smoke` job in `nightly.yml`, gated on `OPENAI_SMOKE_KEY`.
+- **Docs:** `docs/deploy.md` gained the secret and the re-recording runbook.
+
+**The recording, on the human's key** (run from their own terminal, so no key entered this transcript):
+
+```
+# prompt version 3 (first run)
+generateItems: 3 call(s), average in 392  out 4354
+reviewItem: 5 call(s), average in 515  out 754
+assessWriting: 2 call(s), average in 517  out 1546
+writing-feedback: 2 call(s), in 1034  out 3092  US$0.026804
+item-generation: 8 call(s), in 3750  out 16834  US$0.142172
+completions: 13, 10 accepted on the first try
+
+# prompt version 4 (after the fix, committed)
+generateItems: 3 call(s), average in 392  out 3915
+reviewItem: 5 call(s), average in 329  out 345
+assessWriting: 2 call(s), average in 517  out 1733
+writing-feedback: 2 call(s), in 1034  out 3466  US$0.029796
+item-generation: 8 call(s), in 2821  out 13471  US$0.113410
+completions: 10, 10 accepted on the first try
+```
+
+The three refused first replies on prompt 3 all answered `estimatedBand` with "B1" or a sentence. That is the defect
+D112 records, and the retries Gate G's figures hinted at. **Phase 4's exit criterion 2 is ticked, and with it Phase 4.**
+
+**Evidence** (run on this branch before the docs commit):
+
+```
+pnpm verify          → check-types, lint, boundaries (397 + 205 modules, no violations),
+                       test: 173 files, 2499 passed, 8 todo; coverage thresholds met
+pnpm verify:medium   → integration: 6 files, 45 passed; E2E (CI=1): 50 passed (1.0m)
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB
+lhci autorun (3 runs) → /fr/practice/writing/generate: performance 0.99, accessibility 1;
+                        /en/practice/writing: 1, 1
+node apps/factory/dist/index.js eval → overall 1.000, min class 1.000; schema conformance on
+                       prompt v4: 1.000 over assessWriting.json, generateItems.json, reviewItem.json
+                       (detection figures byte-identical to the committed report before the slice)
+```
+
+**Proven to bite, each reverted, with the diff checked clean after:**
+- the generated stem in a synced setting failed `key-leak.spec.ts` at the export check;
+- a `console.info` of the stem failed it at the guard (`"console"`);
+- the stem in `localStorage`, on a rebuilt production server, failed `key-leak-production.spec.ts` at the guard
+  (`"localStorage[biteStem]"`). The server was rebuilt clean afterwards;
+- `scoreGeneratedAnswer` appending an attempt failed "writes no attempt and no schedule entry, so the practice trend
+  is unchanged";
+- capping `confidence` at 0.5 in the domain schema failed every accepted review replay;
+- loosening `estimatedBand` to any string failed the three prompt-3 refusals.
+
+**Not done here:**
+- reading-set generation, which is named and unscheduled (D110);
+- the `generate` namespace's French, which goes with Phase 7's R8 review;
+- the `OPENAI_SMOKE_KEY` secret, which is the human's step. Until it is set, the nightly job skips and says so.
+- **Next, decided** is rewritten to Gate H.
 
 ### 26 September 2026 — `dougkeefe/next-progress-slice-v3` (Phase 4 Slice 3: the writing workshop)
 

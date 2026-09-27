@@ -31,6 +31,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   in the browser after hydration and imports the container module lazily, so the adapters stay out of
   the shared first-load JS. The layout passes `hermetic` from the environment. Screens are static RSC
   shells around one client island each (`/start`, `/home`, `/diagnostic`, `/practice/{reading,writing}`,
+  `/practice/writing/{workshop,generate}`,
   `/exam`, `/exam/run`, `/exam/results`, `/settings/{data,sync,key}`).
   The islands' decisions live in tested `.ts` beside them (`src/features/**`, `src/lib/study.ts`); a
   `.tsx` holds rendering and effects only.
@@ -127,6 +128,16 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     the profile. Nothing is saved until feedback is asked for; submissions are the container's `writing` store,
     **never synced and never exported**, cleared by wipe and delete-everywhere. `container-writing.test.ts`
     runs the real adapter over MSW through both graphs.
+  - **Fresh practice items** (Phase 4 Slice 4, progress.md D110–D111) are `/practice/writing/generate`, linked
+    from the writing drill. It is its own route because a drill listens for §8.3's keys on the whole window.
+    `components/generate/GenerateSet.tsx` renders it; its decisions are in `features/generate/generate-view.ts`.
+    The set is practised through `PracticeSession`'s `mode: "generated"`, which scores with
+    `scoreGeneratedAnswer` and **writes no attempt, no schedule entry and no session**, so it never syncs and
+    never reaches the trend. A generated item's feedback carries `GeneratedProvenance` (the §13.0 badge and the
+    `contributeIssueUrl` contribution) in place of `ReportItem`. The container's `generated` store is Dexie's v1
+    `generated` table in production, **never synced and never exported**, cleared by wipe and
+    delete-everywhere. `components/key/NoKeyCard.tsx` is shared with the workshop, by namespace.
+    `container-generate.test.ts` runs the real adapter over MSW through both graphs.
   - **Tier 11, the key-leak test**, is `e2e/key-leak.spec.ts` (hermetic, with real sync and telemetry)
     and `e2e/key-leak-production.spec.ts` (real Dexie), over `e2e/leak-guard.ts`. A new flow that can
     touch the key belongs in the first. A flow that holds user writing passes it to `assertNoLeak` as

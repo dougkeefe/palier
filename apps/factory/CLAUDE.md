@@ -28,7 +28,16 @@ content *schemas* with the app, never runtime. The `AiProvider` port type is imp
   quoting nothing; a `derived` passage records its licence and url or the schema rejects it.
 - **Exam rules come from the profile, never from code** (ADR 9). Item counts, cuts and the
   taxonomy are read from `@palier/content/profiles/psc-sle.json`; the only factory constants are
-  pipeline knobs (the review confidence threshold, the near-duplicate threshold, the yield band).
+  pipeline knobs (the near-duplicate threshold, the yield band). The review confidence threshold and
+  the gate itself, `gateReasons` and `reviewRequestFor`, live in `@palier/domain` since progress.md D109,
+  shared with the browser's runtime generation; `pipeline/review.ts` keeps only the loop.
+  `committed-eval.test.ts` holds `content/factory/eval-report.json` equal to a fresh `eval`.
+- **The eval also reports schema conformance on the live API's recorded completions** (progress.md D112):
+  `eval/conformance.ts` replays each recorded first reply through `@palier/adapters/openai` with no retry, and
+  the headline is over the runs on the shipping `PROMPT_VERSION` (null when there are none). **The fixtures are
+  read by path** (`RECORDED_COMPLETIONS_DIR`, `packages/testing/src/recorded/openai/`), because the factory may
+  not import `@palier/testing`. dependency-cruiser cannot see that edge, so moving those files breaks `eval` and
+  `committed-eval.test.ts`. A re-recording is committed with its regenerated report.
 - **Forms are assembled, never hand-written** (`pipeline/forms.ts`, progress.md D82). One per profile
   variant, from `Object.entries(profile.variants)`: its item count, `items − scored` pilots at evenly
   spaced positions, its minutes and `orderedCuts(variant)`. The draw is stratified over sub-skills and
@@ -69,7 +78,7 @@ palier-factory run            # full pipeline → content/factory/ + content/ban
 --bank-version <n>            # write a new version; v{n-1} is carried forward
 --per-source <n>              # passages per source (DEFAULT_PER_SOURCE, sized for form headroom)
 --force                       # rebuild a version that already exists (never a published one)
-palier-factory eval           # review-gate detection on the defect eval set
+palier-factory eval           # review-gate detection on the defect eval set, plus schema conformance on the recorded completions
 PALIER_NOW=<iso> …            # pin the batch timestamp for a reproducible commit (v2: 2026-09-24T00:00:00.000Z)
 --provider openai             # use the real adapter (needs OPENAI_API_KEY)
 ```

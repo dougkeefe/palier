@@ -12,6 +12,7 @@
     "db:migrate": "node scripts/db-migrate.mjs",
     "item-statistics": "node scripts/item-statistics.mjs",
     "billing-check": "node scripts/billing-check.mjs",
+    "live-smoke": "node scripts/live-smoke.mjs",
     "start": "next start",
     "check-types": "next typegen && tsc --noEmit",
     "bundle-size": "node scripts/check-bundle-size.mjs",

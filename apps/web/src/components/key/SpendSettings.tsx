@@ -173,7 +173,6 @@ export function SpendSettings() {
               ))}
             </tbody>
           </table>
-          <p className="app-muted">{t("featuresComing")}</p>
         </div>
       </Card>
     </>

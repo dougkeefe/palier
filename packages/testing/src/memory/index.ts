@@ -15,3 +15,4 @@ export { memoryTelemetryCollector } from "./telemetry-collector.js";
 export type { MemoryTelemetryCollector } from "./telemetry-collector.js";
 export { memoryTelemetryStore } from "./telemetry-store.js";
 export { memoryWritingStore } from "./writing-store.js";
+export { memoryGeneratedItemStore } from "./generated-item-store.js";

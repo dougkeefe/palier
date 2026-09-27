@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
@@ -16,11 +16,14 @@ import {
   MODELS_PATH,
   PRICING_PATH,
   PROFILE_PATH,
+  RECORDED_COMPLETIONS_DIR,
   SOURCES_PATH,
 } from "./io.js";
 
 const REPO = process.cwd();
-const INPUTS = [PROFILE_PATH, SOURCES_PATH, MODELS_PATH, PRICING_PATH];
+// The eval reads the recorded completions too (progress.md D112), so they are inputs like the rest.
+const RECORDED = readdirSync(join(REPO, RECORDED_COMPLETIONS_DIR)).map((file) => `${RECORDED_COMPLETIONS_DIR}/${file}`);
+const INPUTS = [PROFILE_PATH, SOURCES_PATH, MODELS_PATH, PRICING_PATH, ...RECORDED];
 
 let root: string;
 const log: string[] = [];
@@ -80,6 +83,7 @@ describe("runFactory", () => {
     expect(code).toBe(0);
     expect(existsSync(join(root, EVAL_REPORT_PATH))).toBe(true);
     expect(log.join(" ")).toMatch(/eval: overall/);
+    expect(log.join(" ")).toMatch(/schema conformance on prompt v\d+: \d\.\d{3} over /);
   });
 
   it("defaults to the run command", async () => {

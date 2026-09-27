@@ -39,6 +39,8 @@ export type {
   TelemetryStore,
   WritingStore,
   WritingSubmission,
+  GeneratedItemStore,
+  GeneratedSet,
 } from "./ports/index.js";
 export {
   INITIAL_SYNC_STATE,
@@ -133,6 +135,10 @@ export type {
   SaveWritingRequest,
   WritingDeps,
   WritingFeedbackDeps,
+  GeneratePracticeSetDeps,
+  GeneratePracticeSetRequest,
+  GeneratePracticeSetResult,
+  ScoreGeneratedAnswerRequest,
   WritingFeedbackRequest,
 } from "./use-cases/index.js";
 export {
@@ -210,6 +216,13 @@ export {
   saveWriting,
   writingHistory,
   writingPrompts,
+  GENERATED_ITEM_TYPES,
+  GENERATED_SET_SIZE,
+  UnknownGeneratedItemError,
+  UnsupportedSubSkillError,
+  generatePracticeSet,
+  latestGeneratedSet,
+  scoreGeneratedAnswer,
 } from "./use-cases/index.js";
 
 export type { ProgressStores, SyncRecord } from "./sync/records.js";

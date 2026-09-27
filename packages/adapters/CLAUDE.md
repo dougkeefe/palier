@@ -5,19 +5,24 @@ Every concrete adapter, one directory and one subpath export each: `/dexie`, `/b
 (progress.md D48). A subpath lands with its adapter, not before — an entry resolving to an
 empty module asserts a boundary with nothing behind it (D3). **Six are live.** `./ids` →
 `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto, no npm dependency).
-`./dexie` → `dexieStores` (the ten local store ports — `AttemptStore`, `ScheduleStore`,
+`./dexie` → `dexieStores` (the eleven local store ports — `AttemptStore`, `ScheduleStore`,
 `SessionStore`, `ExamRunStore`, `SettingsStore`, `KeyVault`, `SyncStateStore`, `TelemetryStore`,
-`CostLedger`, `WritingStore` — over IndexedDB via `dexie`; progress.md D49/D50, D69, D80 and D101, the last three on the
+`CostLedger`, `WritingStore`, `GeneratedItemStore` — over IndexedDB via `dexie`; progress.md D49/D50, D69, D80 and D101, the last three on the
 `syncMeta`, `examRuns` and `costLedger` tables v1 already declared). The cost ledger reads a row that is
 not a whole entry as nothing, v1's `{ ts, feature: "none" }` placeholder included. **Schema version 2** adds `telemetryQueue` and `telemetryMeta`
-(D92), and **version 3** adds `writingSubmissions` (D106). The writing store reads a row without a whole id, prompt,
+(D92), and **version 3** adds `writingSubmissions` (D106). The generated-item store is over v1's own `generated` table, one row per
+item with `setId` and `position` beside v1's `skill` and `createdAt` indexes, and reads a row whose item is not a whole `Item` of
+the row's id and skill as nothing (D110). The writing store reads a row without a whole id, prompt,
 text and instant as nothing, and a row whose assessment is broken, or whose offsets no longer fit its text, as the
 text unassessed: the writing is the user's. Every version's `stores()` block is an exported constant, and `migration.test.ts` opens a real
 database at the previous version with rows in it and proves they survive: **a new version needs a
 case there**. `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1; `assessWriting` since Phase 4
 Slice 3, on the optional `models.assess`. **The model quotes each error's words and `@palier/domain`'s
 `assembleAssessment` places them**; an excerpt not in the text, or two on the same words, is a malformed answer,
-retried once, then `InvalidResponseError`; D105). `./bank` →
+retried once, then `InvalidResponseError`; D105). **`PROMPT_VERSION` is 4** since the review prompt named the band
+scale (D112). **`recorded-fixtures.test.ts` replays every completion the live API really sent** (`@palier/testing`'s
+`RECORDED_RUNS`) with no retry and requires the verdict it got when recorded, so a schema or parser change that would
+refuse real output, or accept what was refused, fails the fast lane. `./bank` →
 `httpBankRepository` (the `ItemRepository` over the committed bank shards; progress.md D55).
 `./sync` → `httpSyncTransport` (the `SyncTransport` port over the sync routes; progress.md D69–D71).
 `./telemetry` → `httpTelemetrySink` (the `TelemetrySink` port over `POST /api/telemetry`; D92). It sends

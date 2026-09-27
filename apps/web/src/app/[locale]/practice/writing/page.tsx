@@ -19,6 +19,7 @@ export default function WritingDrillPage({ params }: PageProps<"/[locale]/practi
   setRequestLocale(locale);
   const t = useTranslations("skills");
   const tWriting = useTranslations("writing");
+  const tGenerate = useTranslations("generate");
 
   return (
     <section className="app-stack app-island">
@@ -29,6 +30,13 @@ export default function WritingDrillPage({ params }: PageProps<"/[locale]/practi
         <p className="app-muted">{tWriting("linkBody")}</p>
         <Link href="/practice/writing/workshop" className="app-link pl-focusable">
           {tWriting("linkOpen")}
+        </Link>
+      </aside>
+      <aside className="app-stack" aria-labelledby="generate-link-title">
+        <h2 id="generate-link-title">{tGenerate("linkTitle")}</h2>
+        <p className="app-muted">{tGenerate("linkBody")}</p>
+        <Link href="/practice/writing/generate" className="app-link pl-focusable">
+          {tGenerate("linkOpen")}
         </Link>
       </aside>
     </section>
