@@ -16,7 +16,7 @@ import type { ExaminerTurnRequest, GenerateItemsRequest, OralRequest, ReviewRequ
 /**
  * The methods whose replies are a prompt's structured output, and so have a conformance rate.
  * The examiner joined with Phase 5 Slice 2 (progress.md D117), and the oral report with Slice 3
- * (D122), which has no recording until the human first runs one on a funded key.
+ * (D122), first recorded on a funded key on 28 September 2026 (D128).
  */
 export const CONFORMANCE_METHODS = ["generateItems", "reviewItem", "assessWriting", "examinerTurn", "assessOral"] as const;
 export type ConformanceMethod = (typeof CONFORMANCE_METHODS)[number];

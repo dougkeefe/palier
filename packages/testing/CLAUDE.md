@@ -16,8 +16,9 @@ block, so a retry and the ledger can be driven through the real adapter (D101). 
 and `aiProviderContract` holds every provider's assessment schema-valid with offsets `checkErrorOffsets` accepts.
 `fakeAiProvider.assessOral` (D122) marks and quotes the candidate's first spoken word, and refuses a session with
 no answer, billing nothing; the contract holds every provider's report to `checkOralAssessment`. `oralStoreContract`
-round-trips a report, and `costLedgerContract` an entry's `sessionId` (D125). `assessOral` is in `RECORDED_METHODS`
-but has **no recording yet**: `assessOral.json` and `assessOral-stability.json` are the human's first funded runs. The
+round-trips a report, and `costLedgerContract` an entry's `sessionId` (D125). `assessOral` is recorded (D128): the live
+smoke's one report in `assessOral.json`, and one session scored five times in `assessOral-stability.json`, which the
+factory's eval also reads for the scorer's stability (D126). Both are in `RECORDED_RUNS` and the replay gate. The
 in-memory `KeyVault` keeps D98's two modes apart as the Dexie vault does. `memoryGeneratedItemStore` and
 `generatedItemStoreContract` follow the `GeneratedItemStore` port (D110). A scripted completion's `content` may be a
 function of the prompt, and `generationCompletions`, `draftsFor` and `verdictFor` use it: a draft of exactly what was asked
