@@ -1,10 +1,11 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { axeClean, practiseSpeaking } from "./helpers";
+import { axeClean, getOralReport, practiseSpeaking } from "./helpers";
 import {
   EXAMINER_QUESTION,
   MODELS_ANSWER,
   type OpenAiAnswer,
+  REPORT_SENTINEL,
   SENTINEL,
   TRANSCRIPT_SENTINEL,
   defaultAnswer,
@@ -55,11 +56,11 @@ test("without a key: every session with its length and estimate, PRD §14's inli
   await axeClean(page);
 });
 
-test("a spoken session: the level check, the pre-flight, the question voiced, two recorded answers, and the transcript at the end", async ({
+test("a spoken session: the level check, the pre-flight, the question voiced, two recorded answers, the transcript, and its report", async ({
   page,
   context,
 }) => {
-  test.setTimeout(90_000);
+  test.setTimeout(150_000);
   await stubOpenAi(context);
   await installFakeAudio(context);
   await openOral(page);
@@ -91,7 +92,47 @@ test("a spoken session: the level check, the pre-flight, the question voiced, tw
   await expect(transcript.getByText(TRANSCRIPT_SENTINEL, { exact: false })).toHaveCount(2);
   await expect(page.getByText("The recording of your answers is kept on this device only.", { exact: false })).toBeVisible();
 
-  // The data settings show the recording, and delete it in one action, transcripts kept.
+  // The report (D126): asked for on the key past its pre-flight, then every part of it, axe on each state.
+  const reportStates: string[] = [];
+  await getOralReport(page, {
+    onState: async (state) => {
+      reportStates.push(state);
+      if (state === "offer") await expect(page.getByText(/^About US\$\d+\.\d+, paid to OpenAI directly\.$/)).toBeVisible();
+      if (state === "pre-flight") await expect(page.getByText(/^This report should cost about US\$/)).toBeVisible();
+      await axeClean(page);
+    },
+  });
+  expect(reportStates).toEqual(["offer", "pre-flight", "report"]);
+  const report = page.getByRole("region", { name: "Your report" });
+  await expect(report.getByText("Level B", { exact: true })).toHaveCount(5);
+  await expect(report.getByText("Not assessed", { exact: true })).toBeVisible();
+  await expect(report.getByRole("link", { name: "Practise agreement in written expression" })).toBeVisible();
+  await expect(report.getByRole("link", { name: "Practise inference in reading" })).toBeVisible();
+  await expect(report.getByRole("heading", { name: "Five useful words you did not use" })).toBeVisible();
+  // Each error is a button that shows its correction beside it, in the practised language.
+  const mark = report.getByRole("button", { expanded: false }).first();
+  await expect(page.getByText(REPORT_SENTINEL, { exact: false })).toBeHidden();
+  await mark.click();
+  await expect(report.getByRole("button", { expanded: true })).toHaveCount(1);
+  await expect(page.getByText(REPORT_SENTINEL, { exact: false })).toBeVisible();
+  await axeClean(page);
+  // The fluency is measured on this device from the two spoken answers, and the cost from the ledger.
+  await expect(page.getByText("Measured over your 2 spoken answers.", { exact: false })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "What it cost" })).toBeVisible();
+  // The recording plays here and is deleted in one tap, the report and transcript kept.
+  await expect(page.getByLabel("The recording of your answers")).toBeVisible();
+  await page.getByRole("button", { name: "Delete this recording" }).click();
+  await expect(page.getByText("There is no recording of this session on this device.")).toBeVisible();
+  await expect(report).toBeVisible();
+
+  // Back at the picker, the session is listed with its report ready.
+  await page.getByRole("link", { name: "Back to spoken practice" }).first().click();
+  const earlier = page.getByRole("region", { name: "Your earlier sessions" });
+  await expect(earlier.getByText("Report ready")).toBeVisible();
+  await axeClean(page);
+
+  // The data settings, reached from a fresh session's end, delete the rest in one action, transcripts kept.
+  await practiseSpeaking(page, { session: "Warm-up", answers: 1 });
   await page.getByRole("link", { name: "Open your data settings" }).click();
   await expect(page.getByRole("heading", { name: "Recordings of your spoken practice" })).toBeVisible();
   await expect(page.getByText(/^They take \d+(\.\d)? MB on this device\.$/)).toBeVisible();
@@ -149,6 +190,15 @@ test("a call OpenAI refuses ends the session, names why in words, and keeps the 
   await expect(page.getByText("Your transcript so far is kept on this device.", { exact: false })).toBeVisible();
   await expect(page.getByRole("region", { name: "Transcript" }).getByText("Je travaille aux finances.")).toBeVisible();
   await axeClean(page);
+
+  // The report is refused the same way (D126): named in words, the transcript kept, and offered again.
+  await page.getByRole("link", { name: "See the report on this session" }).click();
+  await page.getByRole("button", { name: "Get the report" }).click();
+  await page.getByRole("button", { name: "Send for the report" }).click();
+  await expect(page.getByText("OpenAI did not accept your key.", { exact: false })).toBeVisible();
+  await expect(page.getByText("Your transcript is kept on this device, and you can ask again.", { exact: false })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
+  await axeClean(page);
 });
 
 test("en français : la même pratique, à parité", async ({ page, context }) => {
@@ -180,5 +230,18 @@ test("en français : la même pratique, à parité", async ({ page, context }) =
   await page.getByRole("button", { name: "Terminer la séance" }).click();
   await expect(page.getByRole("heading", { name: "Séance terminée" })).toBeFocused();
   await expect(page.getByText("Vous avez terminé la séance.")).toBeVisible();
+  await axeClean(page);
+
+  // Le bilan, à parité (D126).
+  await page.getByRole("link", { name: "Voir le bilan de cette séance" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Bilan d’une séance orale" })).toBeVisible();
+  await page.getByRole("button", { name: "Obtenir le bilan" }).click();
+  await expect(page.getByRole("heading", { name: "Avant de demander" })).toBeFocused();
+  await axeClean(page);
+  await page.getByRole("button", { name: "Demander le bilan" }).click();
+  const bilan = page.getByRole("region", { name: "Votre bilan" });
+  await expect(bilan.getByText("Non évaluée", { exact: true })).toBeVisible();
+  await expect(page.getByText("Vous avez tapé vos réponses : il n’y a pas de parole à mesurer.")).toBeVisible();
+  await bilan.getByRole("button", { expanded: false }).first().click();
   await axeClean(page);
 });

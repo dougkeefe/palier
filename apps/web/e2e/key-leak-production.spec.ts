@@ -6,6 +6,7 @@ import {
   GENERATED_SENTINEL,
   SENTINEL,
   SUBMISSION_SENTINEL,
+  REPORT_SENTINEL,
   TRANSCRIPT_SENTINEL,
   downloadedText,
   idsAtRest,
@@ -100,7 +101,23 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   expect(watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
   await page.reload();
   expect(await recordingsAtRest(page)).toEqual([recorderMarker(1)]);
-  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL] });
+  await watch.assertNoLeak([page], {
+    deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL, REPORT_SENTINEL],
+  });
+
+  // 2d. Its report (D126), from the list of past sessions: one more ledger row, the report at rest
+  // with its session in `oralSessions`, still there after a reload, and the recording still uploaded nowhere.
+  await page.getByRole("region", { name: "Your earlier sessions" }).getByRole("link", { name: "Open" }).click();
+  await page.getByRole("button", { name: "Get the report" }).click();
+  await page.getByRole("button", { name: "Send for the report" }).click();
+  await expect(page.getByRole("region", { name: "Your report" })).toBeVisible();
+  expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(1 + 6 + 5 + 1);
+  expect(watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
+  await page.reload();
+  await expect(page.getByRole("region", { name: "Your report" })).toBeVisible();
+  await watch.assertNoLeak([page], {
+    deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL, REPORT_SENTINEL],
+  });
 
   // 3. A mock exam, submitted, with its answers shared.
   await page.goto("/en/exam");
@@ -144,12 +161,16 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   await page.getByRole("button", { name: "Check the key" }).click();
   await expect(page.getByRole("status").filter({ hasText: "This key works." })).toBeVisible();
   expect(await vaultIds(page)).not.toContain("api-key");
-  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL] });
+  await watch.assertNoLeak([page], {
+    deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL, REPORT_SENTINEL],
+  });
 
   // 6. A reload forgets it.
   await page.reload();
   await expect(page.getByLabel("OpenAI API key")).toBeVisible();
   await expect(page.getByText(MASKED)).toHaveCount(0);
   expect(await vaultIds(page)).not.toContain("api-key");
-  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL] });
+  await watch.assertNoLeak([page], {
+    deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL, REPORT_SENTINEL],
+  });
 });

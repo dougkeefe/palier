@@ -1,9 +1,18 @@
 import { type Browser, expect, type Page, test } from "@playwright/test";
 
-import { drillThroughByKeyboard, generateAndPractise, onboard, practiseSpeaking, setSize, writeAndGetFeedback } from "./helpers";
+import {
+  drillThroughByKeyboard,
+  generateAndPractise,
+  getOralReport,
+  onboard,
+  practiseSpeaking,
+  setSize,
+  writeAndGetFeedback,
+} from "./helpers";
 import {
   AUDIO_SENTINEL,
   GENERATED_SENTINEL,
+  REPORT_SENTINEL,
   SENTINEL,
   SUBMISSION_SENTINEL,
   TRANSCRIPT_SENTINEL,
@@ -30,7 +39,8 @@ import {
  * (D110): drafted and reviewed on the key, practised, kept on this device alone. So is a spoken
  * practice session (Phase 5 exit criterion 3, D120): each answer's clip reaches only OpenAI's
  * transcription endpoint, the session recording reaches no request at all, and the transcript stays
- * on this device and goes back to OpenAI only in the examiner's next question.
+ * on this device and goes back to OpenAI only in the examiner's next question and in the request for
+ * its report (D126), whose words stay on this device.
  *
  * The hermetic container lives for one page load, so this moves by in-app links only. The
  * at-rest half on real IndexedDB is `key-leak-production.spec.ts`.
@@ -128,6 +138,16 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(new Set(heardBack.map((request) => request.path))).toEqual(new Set(["/v1/chat/completions"]));
   // Three questions written and voiced, and two clips transcribed: 3 × 2 + 2 more calls on the key.
   expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 16 }, () => `Bearer ${SENTINEL}`));
+  // 3d. The session's report (D126): one more completion on the key, carrying the transcript and no audio.
+  await getOralReport(page);
+  await page.getByRole("region", { name: "Your report" }).getByRole("button", { expanded: false }).first().click();
+  await expect(page.getByText(REPORT_SENTINEL, { exact: false })).toBeVisible();
+  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 17 }, () => `Bearer ${SENTINEL}`));
+  const reportRequest = laptop.watch.openAiRequests().at(-1);
+  expect(reportRequest?.path).toBe("/v1/chat/completions");
+  expect(reportRequest?.body).toContain(TRANSCRIPT_SENTINEL);
+  expect(reportRequest?.body).not.toContain(AUDIO_SENTINEL);
+  expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
 
   await page.getByRole("link", { name: "Today", exact: true }).click();
   await page.getByRole("link", { name: "Review", exact: true }).click();
@@ -163,6 +183,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(exported).not.toContain(GENERATED_SENTINEL);
   expect(exported).not.toContain(TRANSCRIPT_SENTINEL);
   expect(exported).not.toContain(AUDIO_SENTINEL);
+  expect(exported).not.toContain(REPORT_SENTINEL);
 
   // 6. Sync, and a second device paired by code: real pushes and pulls through the routes.
   await openSettings(page, "Sync", "Sync");
@@ -182,8 +203,10 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await openSettings(page, "Your API key", "Your API key");
   await expect(page.getByText(`Saved on this device: the key ending in ${SENTINEL.slice(-4)}.`)).toBeVisible();
 
-  await laptop.watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL] });
+  await laptop.watch.assertNoLeak([page], {
+    deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL, REPORT_SENTINEL],
+  });
   await phone.watch.assertNoLeak([phone.page], {
-    nowhere: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL],
+    nowhere: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL, REPORT_SENTINEL],
   });
 });
