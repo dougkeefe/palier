@@ -110,6 +110,7 @@ describe("schemaConformance", () => {
         reviewItem: { total: 2, conformant: 2, rate: 1 },
         assessWriting: { total: 0, conformant: 0, rate: null },
         examinerTurn: { total: 0, conformant: 0, rate: null },
+        assessOral: { total: 0, conformant: 0, rate: null },
       },
       rate: 1,
       earlier: [{ file: "reviewItem-prompt-v3.json", promptVersion: "3", total: 2, conformant: 1, rate: 0.5 }],

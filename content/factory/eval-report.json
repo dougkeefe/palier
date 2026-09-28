@@ -27,9 +27,15 @@
     }
   },
   "minClassRate": 1,
+  "oralStability": null,
   "overallRate": 1,
   "schemaConformance": {
     "byMethod": {
+      "assessOral": {
+        "conformant": 0,
+        "rate": null,
+        "total": 0
+      },
       "assessWriting": {
         "conformant": 2,
         "rate": 1,

@@ -207,6 +207,16 @@ export const runFactory = async (argv: readonly string[], deps: CliDeps): Promis
         ? `schema conformance: no recorded run on prompt v${promptVersion}; re-record (docs/deploy.md)`
         : `schema conformance on prompt v${promptVersion}: ${rate.toFixed(3)} over ${measuredOn.join(", ")}`,
     );
+    const stability = report.oralStability;
+    deps.log(
+      stability === null
+        ? "oral stability: not recorded yet; run `pnpm --filter @palier/web oral-stability` on a funded key (progress.md D126)"
+        : `oral stability over ${String(stability.runs)} report(s): ${stability.passed ? "passed" : "FAILED"} (` +
+            Object.entries(stability.byCriterion)
+              .map(([criterion, c]) => `${criterion} spread ${String(c.spread)}, agreement ${c.agreement.toFixed(2)}`)
+              .join("; ") +
+            ")",
+    );
     return report.minClassRate >= DETECTION_BAR ? 0 : 1;
   }
 
