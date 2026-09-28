@@ -35,6 +35,11 @@
         "rate": 1,
         "total": 2
       },
+      "examinerTurn": {
+        "conformant": 0,
+        "rate": null,
+        "total": 0
+      },
       "generateItems": {
         "conformant": 3,
         "rate": 1,

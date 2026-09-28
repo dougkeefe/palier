@@ -47,6 +47,9 @@ export type {
   OralStore,
   OralTransport,
   OralTransportEvent,
+  AnswerSource,
+  CandidateAnswer,
+  ExaminerQuestion,
 } from "./ports/index.js";
 export {
   INITIAL_SYNC_STATE,

@@ -134,6 +134,9 @@ export const scriptedAiProvider = (): AiProvider => {
       reviewItem: true,
       assessWriting: false,
       generateScenario: true,
+      transcribe: false,
+      speak: false,
+      examinerTurn: false,
     }),
 
     generatePassage: (req) => {
@@ -227,6 +230,21 @@ export const scriptedAiProvider = (): AiProvider => {
     generateScenario: (req) => {
       bill(250);
       return Promise.resolve(scriptedScenario(req));
+    },
+
+    // The factory runs no spoken session (progress.md D117), so, as with writing, the
+    // scripted provider says so rather than invent a voice, and bills nothing.
+    transcribe: () => {
+      usage = null;
+      return Promise.reject(new Error("The scripted provider does not transcribe."));
+    },
+    speak: () => {
+      usage = null;
+      return Promise.reject(new Error("The scripted provider does not speak."));
+    },
+    examinerTurn: () => {
+      usage = null;
+      return Promise.reject(new Error("The scripted provider runs no oral session."));
     },
 
     verifyKey: () => {

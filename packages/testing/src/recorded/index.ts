@@ -1,4 +1,11 @@
-import type { GenerateItemsRequest, ReviewRequest, WritingRequest } from "@palier/domain";
+import type {
+  ExaminerTurnRequest,
+  GenerateItemsRequest,
+  Lang,
+  ReviewRequest,
+  SpeechRequest,
+  WritingRequest,
+} from "@palier/domain";
 
 import assessWriting from "./openai/assessWriting.json" with { type: "json" };
 import generateItems from "./openai/generateItems.json" with { type: "json" };
@@ -15,17 +22,41 @@ import reviewItem from "./openai/reviewItem.json" with { type: "json" };
  * adapter change that would refuse real model output (or accept what it refused) fails CI. The
  * factory's eval reads the same files by path for its conformance rate, since it may not import
  * this package.
+ *
+ * The turn loop's three joined with Phase 5 Slice 2 (progress.md D117). An `examinerTurn` is a
+ * completion like the others. A `transcribe` keeps the transcription's JSON body as it arrived, and
+ * its request describes the clip rather than carrying it: no audio is ever committed. A `speak`
+ * keeps what arrived as `{ "contentType", "bytes" }`, for the same reason.
  */
+
+/** A transcription's request as recorded: the clip described, never kept (D117). */
+export type RecordedTranscribeRequest = {
+  readonly lang: Lang;
+  readonly durationMs: number;
+  readonly audio: { readonly type: string; readonly bytes: number };
+};
+
+/** What a recorded voice answered with: its content type and its size, not its audio (D117). */
+export type RecordedSpeech = { readonly contentType: string; readonly bytes: number };
 
 /** One completion as OpenAI sent it. The web recorder writes this shape. */
 export type RecordedCompletion = {
-  readonly method: "generateItems" | "reviewItem" | "assessWriting";
+  readonly method: "generateItems" | "reviewItem" | "assessWriting" | "examinerTurn" | "transcribe" | "speak";
   readonly model: string;
   /** The port request the call was made with, so a replay makes the same call. */
-  readonly request: GenerateItemsRequest | ReviewRequest | WritingRequest;
+  readonly request:
+    | GenerateItemsRequest
+    | ReviewRequest
+    | WritingRequest
+    | ExaminerTurnRequest
+    | RecordedTranscribeRequest
+    | SpeechRequest;
   /** 1 for the first completion of a call, 2 for the adapter's one retry. */
   readonly attempt: number;
-  /** The message content exactly as it arrived: what the adapter parses. */
+  /**
+   * The message content exactly as it arrived: what the adapter parses. A transcription's whole
+   * JSON body; a voice's `RecordedSpeech` as JSON.
+   */
   readonly content: string;
   readonly usage: { readonly prompt_tokens: number; readonly completion_tokens: number };
   /** Whether the adapter accepted this completion without a retry. */
@@ -41,7 +72,7 @@ export type RecordedRun = {
   readonly completions: readonly RecordedCompletion[];
 };
 
-const METHODS = new Set(["generateItems", "reviewItem", "assessWriting"]);
+const METHODS = new Set(["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak"]);
 
 /** A hand edit, or a recorder that changed shape, fails here rather than as a confusing replay. */
 export const runOf = (file: string, raw: unknown): RecordedRun => {

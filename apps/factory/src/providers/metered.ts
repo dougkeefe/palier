@@ -62,6 +62,23 @@ export const meterProvider = (inner: AiProvider): MeteredProvider => {
       account();
       return out;
     },
+    // The factory makes no oral call (progress.md D117); each is passed through and
+    // accounted like any other, so the meter never hides one that is made.
+    transcribe: async (req) => {
+      const out = await inner.transcribe(req);
+      account();
+      return out;
+    },
+    speak: async (req) => {
+      const out = await inner.speak(req);
+      account();
+      return out;
+    },
+    examinerTurn: async (req) => {
+      const out = await inner.examinerTurn(req);
+      account();
+      return out;
+    },
     // A key check spends no tokens, so there is nothing to account.
     verifyKey: () => inner.verifyKey(),
     lastUsage: () => inner.lastUsage(),

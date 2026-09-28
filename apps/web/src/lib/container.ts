@@ -156,7 +156,7 @@ import {
 } from "@palier/testing/in-memory";
 
 import aiModels from "./ai-models.json";
-import { PRICING } from "./pricing";
+import { EXAMINER_VOICE, PRICING } from "./pricing";
 import { selectionSeedFor, systemClock } from "./system-clock";
 
 /**
@@ -233,8 +233,17 @@ const WRITING_PROMPTS: readonly WritingPrompt[] = parseWritingPromptsOrThrow(wri
 export const openAiFor: AiProviderFactory = (apiKey) =>
   openAiProvider({
     apiKey,
-    models: { passage: aiModels.passage, draft: aiModels.draft, review: aiModels.review, assess: aiModels.assess },
+    models: {
+      passage: aiModels.passage,
+      draft: aiModels.draft,
+      review: aiModels.review,
+      assess: aiModels.assess,
+      transcribe: aiModels.transcribe,
+      speech: aiModels.speech,
+      examiner: aiModels.examiner,
+    },
     pricing: PRICING.prices,
+    voice: EXAMINER_VOICE,
   });
 
 export type Env = {

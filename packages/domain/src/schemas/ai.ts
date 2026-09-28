@@ -112,9 +112,19 @@ export const scenarioDraftShape = z.strictObject({
   phases: z.array(oralPhaseShape).min(1),
 });
 
+/**
+ * The examiner's next turn in practice mode (progress.md D117): a short question in
+ * the language being practised, and a difficulty flag or `null`.
+ */
+export const examinerTurnShape = z.strictObject({
+  text: z.string().trim().min(1),
+  difficulty: z.enum(["escalate", "deescalate"]).nullable(),
+});
+
 export const passageDraftSchema = passageDraftShape.readonly();
 export const itemDraftSchema = itemDraftShape.readonly();
 export const reviewVerdictSchema = reviewVerdictShape.readonly();
 export const writingFeedbackDraftSchema = writingFeedbackDraftShape.readonly();
 export const writingAssessmentSchema = writingAssessmentShape.readonly();
 export const scenarioDraftSchema = scenarioDraftShape.readonly();
+export const examinerTurnSchema = examinerTurnShape.readonly();

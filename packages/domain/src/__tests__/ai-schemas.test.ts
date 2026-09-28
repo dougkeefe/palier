@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  examinerTurnSchema,
   itemDraftSchema,
   passageDraftSchema,
   reviewVerdictSchema,
@@ -231,5 +232,29 @@ describe("scenarioDraftSchema", () => {
 
   it("rejects a field the factory assembles, such as the id", () => {
     expect(scenarioDraftSchema.safeParse({ id: "s-1", phases: [aPhase()] }).success).toBe(false);
+  });
+});
+
+describe("examinerTurnSchema", () => {
+  it("accepts a question with no difficulty flag", () => {
+    expect(examinerTurnSchema.safeParse({ text: "Parlez-moi de votre poste.", difficulty: null }).success).toBe(true);
+  });
+
+  it("accepts either direction as a flag", () => {
+    expect(examinerTurnSchema.safeParse({ text: "Et si le budget était réduit ?", difficulty: "escalate" }).success).toBe(true);
+    expect(examinerTurnSchema.safeParse({ text: "Que faites-vous le matin ?", difficulty: "deescalate" }).success).toBe(true);
+  });
+
+  it("rejects an empty or blank question", () => {
+    expect(examinerTurnSchema.safeParse({ text: "   ", difficulty: null }).success).toBe(false);
+  });
+
+  it("rejects a flag that is not a direction, and a missing flag", () => {
+    expect(examinerTurnSchema.safeParse({ text: "Bonjour.", difficulty: "harder" }).success).toBe(false);
+    expect(examinerTurnSchema.safeParse({ text: "Bonjour." }).success).toBe(false);
+  });
+
+  it("rejects a field it does not define, such as a note", () => {
+    expect(examinerTurnSchema.safeParse({ text: "Bonjour.", difficulty: null, note: "good" }).success).toBe(false);
   });
 });

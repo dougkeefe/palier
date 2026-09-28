@@ -54,7 +54,7 @@ const review = (c: Container) =>
 
 const reviewPrice = (input: number, output: number): number => {
   const price = PRICING.prices[aiModels.review];
-  if (price === undefined) throw new Error("the review model is priced");
+  if (price === undefined || !("inputPerMTok" in price)) throw new Error("the review model is priced by the token");
   return (input / 1_000_000) * price.inputPerMTok + (output / 1_000_000) * price.outputPerMTok;
 };
 
@@ -173,7 +173,7 @@ describe.each([
 describe("the per-feature table", () => {
   it("prices a typical use of every feature from pricing.json", () => {
     const costs = createContainer({ hermetic: true }).useCases.featureCosts();
-    expect(costs.map((cost) => cost.feature)).toEqual(["writing-feedback", "item-generation"]);
+    expect(costs.map((cost) => cost.feature)).toEqual(["writing-feedback", "item-generation", "oral-practice"]);
     for (const cost of costs) expect(cost.estimateUsd).toBeGreaterThan(0);
   });
 });

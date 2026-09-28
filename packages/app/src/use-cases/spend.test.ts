@@ -17,16 +17,22 @@ const NOW = "2026-10-01T12:00:00.000Z"; // a Thursday; the week began Monday 28 
 const SESSION = "2026-10-01T11:00:00.000Z";
 
 const pricing: SpendPricing = {
-  models: { draft: "m-small", review: "m-large", assess: "m-large" },
+  models: { draft: "m-small", review: "m-large", assess: "m-large", examiner: "m-small", transcribe: "m-minute" },
   prices: {
     "m-small": { inputPerMTok: 1, outputPerMTok: 4 },
     "m-large": { inputPerMTok: 2, outputPerMTok: 8 },
+    "m-minute": { perMinute: 0.5 },
   },
   features: {
     "writing-feedback": [{ role: "assess", inputTokens: 500_000, outputTokens: 125_000 }], // 1 + 1
     "item-generation": [
       { role: "draft", inputTokens: 1_000_000, outputTokens: 250_000 }, // 1 + 1
       { role: "review", inputTokens: 250_000, outputTokens: 0 }, // 0.5
+    ],
+    // One minute of practice (D117).
+    "oral-practice": [
+      { role: "examiner", inputTokens: 100_000, outputTokens: 0 }, // 0.1
+      { role: "transcribe", minutes: 0.2 }, // 0.1
     ],
   },
 };
@@ -106,14 +112,15 @@ describe("spendSummary", () => {
 describe("featureCosts", () => {
   it("prices a typical use of every feature, in the features' order", () => {
     const costs = featureCosts(aDevice());
-    expect(costs.map((c) => c.feature)).toEqual(["writing-feedback", "item-generation"]);
+    expect(costs.map((c) => c.feature)).toEqual(["writing-feedback", "item-generation", "oral-practice"]);
     expect(costs[0]?.estimateUsd).toBeCloseTo(2, 10);
     expect(costs[1]?.estimateUsd).toBeCloseTo(2.5, 10);
+    expect(costs[2]?.estimateUsd).toBeCloseTo(0.2, 10);
   });
 
   it("gives no figure for a feature whose model is unpriced", () => {
     const costs = featureCosts({ pricing: { ...pricing, prices: { "m-small": { inputPerMTok: 1, outputPerMTok: 4 } } } });
-    expect(costs.map((c) => c.estimateUsd)).toEqual([null, null]);
+    expect(costs.map((c) => c.estimateUsd)).toEqual([null, null, null]);
   });
 });
 
@@ -132,6 +139,16 @@ describe("preflightSpend", () => {
     const device = aDevice([aCostEntry({ ts: "2026-10-01T09:00:00.000Z", costUsd: 4 })]);
     await setSpendCap(5, device);
     expect(await preflightSpend("writing-feedback", device)).toMatchObject({ before: "near", after: "over" });
+  });
+
+  it("prices a quantity of typical uses, such as a session's minutes of practice (D117)", async () => {
+    const device = aDevice([aCostEntry({ ts: "2026-10-01T09:00:00.000Z", costUsd: 2 })]);
+    await setSpendCap(5, device);
+
+    const answer = await preflightSpend("oral-practice", device, 10);
+
+    expect(answer.estimateUsd).toBeCloseTo(2, 10);
+    expect(answer).toMatchObject({ before: "under", after: "near" });
   });
 
   it("spends nothing and records nothing itself", async () => {

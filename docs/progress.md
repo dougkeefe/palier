@@ -4151,6 +4151,76 @@ signature), as D45 and D106 were
 - **The hermetic graph wires no transport and no oral use cases.** Slice 2 is the first consumer. Only the store
   is wired, so a wipe clears it.
 
+### D117 — the turn loop's three capabilities, and pricing in the unit each model is billed by
+**Date:** 27 September 2026 · **Status:** accepted; §3.3 amended in place (`transcribe` amended, `speak` and
+`examinerTurn` added), as D105 and D114 were
+
+- **The models are a human decision this session: `gpt-transcribe` and `tts-1`.** OpenAI's pricing page, read on 27
+  September 2026, bills gpt-transcribe at US$0.0045 a minute and tts-1 at US$15 per million characters. The speech
+  endpoint reports no usage, so a token-billed voice (`gpt-4o-mini-tts`) could only ever be estimated. Both chosen
+  units are ones the device measures: a clip's length and the characters sent. That keeps Gate G's promise that the
+  meter matches the bill (principle 8).
+- **GPT-Live was weighed against practice mode first, at the human's request.** Practice mode comes to roughly
+  US$0.01–0.02 a minute: transcription about US$0.003, speech about US$0.005, and the examiner's text calls about
+  US$0.007, which grow with the transcript. GPT-Live is US$0.05 a minute. So practice mode is about **3–4× cheaper,
+  not the 10×** the plan assumed. Gate H stands on its other reasons, and Slice 3 measures the real ratio (D113).
+- **The DTOs are in domain** (ADR 20):
+  - `TranscribeRequest { audio: Blob, lang, durationMs }` and `Transcript { text }`. §3.3's `transcribe(audio, lang)`
+    becomes a request, because the recorder's measured `durationMs` is what prices the call when the response reports
+    no usage. That is the amendment.
+  - `SpeechRequest { text, lang }`, which returns a `Blob`, the platform type D115 already admits.
+  - `ExaminerTurnRequest { sessionType, targetBand, lang, topic, phase, register, transcript }` and `ExaminerTurn {
+    text, difficulty }`. The phase and the register come from the client, which drives the phases (architecture.md
+    §8.5 step 5); the model writes one short question and flags the last answer. `examinerTurnSchema` re-validates the
+    reply.
+  - `AiCapabilities` gains all three, and `AI_FEATURES` gains `"oral-practice"`.
+- **The adapter** (`openai-provider.ts`):
+  - `FetchLike` widens: a body may be `FormData`, and a response may offer `headers` and `blob()`.
+  - **`transcribe`** posts the clip once as multipart to `/audio/transcriptions`, with `language` and
+    `response_format: json`. The file name carries the format, since OpenAI reads it from the extension. The seconds
+    billed are the response's own when it reports `usage.type: "duration"`, and otherwise the recorder's `durationMs`.
+    Reported tokens are kept either way. **It is never retried**: that would upload the clip twice.
+  - **`speak`** posts JSON to `/audio/speech` with the model, the words, the voice and `mp3`, and reads the body as a
+    `Blob`. It bills the characters sent. A 2xx answer that is not audio, or is empty, is `InvalidResponseError`, still
+    billed.
+  - **`examinerTurn`** goes through `callValidated`, with the new `buildPrompt.examiner`: architecture.md §8.5 step
+    4's persona, the phase's intent and its three question lists, the register's instruction, the conversation so far,
+    and the reply shape. `PROMPT_VERSION` stays 4, following D105's precedent.
+  - Each call has its own optional role (`transcribe`, `speech`, `examiner`) and is refused before any request without
+    it, as `assess` and `scenario` are. The voice is configuration (`voice`, default `alloy`).
+- **Pricing is a union in the unit OpenAI bills by.**
+  - `ModelPrice` is `TokenPrice | MinutePrice | CharacterPrice`, and `FeatureCall` is the matching union.
+    `UsageRecord` gains optional `audioSeconds` and `characters`.
+  - **One pricing rule, `costOf`, in domain**, serves both the adapter, which prices each call, and the engine's
+    `estimateFeatureCost`. It is `null`, never zero, when the unit the model is priced in was not measured. The
+    adapter may not import the engine, so domain is the place both can reach. No golden moved: the token arithmetic is
+    unchanged.
+  - `estimateFeatureCost` and `preflightSpend` take a quantity. **`oral-practice`'s typical use is one minute**, so a
+    session's estimate is its minutes times that.
+  - `pricing.json` prices `gpt-transcribe` per minute and `tts-1` per million characters. Its `oral-practice` entry
+    is one minute: about 1.5 examiner turns (1,500 input and 60 output tokens), 180 characters voiced and 0.6 minutes
+    transcribed, about US$0.009. **These are placeholders until Slice 3 measures a session** (exit criterion 2).
+  - `ai-models.json` gains `transcribe`, `speech` and `examiner` (gpt-6-luna), and `voice` ("sage"), which
+    `roleModels` leaves out because it is not a model.
+- **The factory:**
+  - `meterProvider` passes each new method through and accounts it.
+  - The scripted provider declares all three false and rejects, billing nothing, as it does for `assessWriting`.
+  - The eval's `CONFORMANCE_METHODS` gains `examinerTurn`. `RECORDED_METHODS` also has `transcribe` and `speak`,
+    which are recorded for the adapter's replay gate but kept out of the rate, since no prompt writes them.
+    `eval-report.json` gains `examinerTurn` at 0 of 0, rate `null`, until the recording.
+- **Recorded fixtures take audio without keeping it.** A `transcribe` completion keeps the response body and describes
+  the clip by type and size. A `speak` completion keeps `{ contentType, bytes }`. The replay gate rebuilds a blob of
+  that size. The live smoke voices a fixed French question, transcribes that same audio (so nobody's voice is
+  recorded), and asks the examiner twice.
+- **Existing tests touched, with no assertion weakened:**
+  - `AI_FEATURES`' exact list and the per-feature lists in `spend.test.ts`, `container-spend.test.ts` and
+    `pricing.test.ts` gained `oral-practice`, and their fixtures gained an entry for it;
+  - the adapter's "reports every capability" gained the three, since its test models configure them;
+  - `eval/conformance.test.ts`'s `byMethod` gained `examinerTurn`;
+  - the live smoke's `byMethod` gained three empty entries, and `--record` now writes six files;
+  - seven `AiProvider` stubs gained the methods, a shape change only;
+  - two web tests narrowed a price to its token form before reading `inputPerMTok`.
+
 ---
 
 ## Session log

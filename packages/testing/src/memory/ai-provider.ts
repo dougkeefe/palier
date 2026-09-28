@@ -22,9 +22,21 @@ export const fakeAiProvider = (): AiProvider => {
   const bill = (tokens: number): void => {
     usage = { model: "fake", inputTokens: tokens, outputTokens: tokens };
   };
+  const billAudio = (units: { readonly audioSeconds?: number; readonly characters?: number }): void => {
+    usage = { model: "fake-audio", inputTokens: 0, outputTokens: 0, ...units };
+  };
 
   return {
-    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true }),
+    capabilities: () => ({
+      generatePassage: true,
+      generateItems: true,
+      reviewItem: true,
+      assessWriting: true,
+      generateScenario: true,
+      transcribe: true,
+      speak: true,
+      examinerTurn: true,
+    }),
 
     generatePassage: (req) => {
       bill(10);
@@ -120,6 +132,28 @@ export const fakeAiProvider = (): AiProvider => {
         modelAnswer: `${req.text.trim()} (model answer)`,
       };
       return Promise.resolve(assessment);
+    },
+
+    // The clip's own bytes read as text, so a scripted answer's words come back as its
+    // transcript, and the seconds billed are the length the recorder measured (D117).
+    transcribe: async (req) => {
+      billAudio({ audioSeconds: req.durationMs / 1000 });
+      return { text: await req.audio.text() };
+    },
+
+    // The words as the "audio", so a test can tell which question a clip voices.
+    speak: (req) => {
+      billAudio({ characters: req.text.length });
+      return Promise.resolve(new Blob([req.text], { type: "audio/mpeg" }));
+    },
+
+    // The phase's first question in the register asked for, or its seed question when
+    // that list is empty, and never a difficulty flag of its own.
+    examinerTurn: (req) => {
+      bill(15);
+      const lists = { baseline: req.phase.seedQuestions, escalate: req.phase.escalation, deescalate: req.phase.deescalation };
+      const text = lists[req.register][0] ?? req.phase.seedQuestions[0] ?? req.phase.intent;
+      return Promise.resolve({ text, difficulty: null });
     },
 
     // Bills nothing, and so leaves no earlier call's usage behind (D102).

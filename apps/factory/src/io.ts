@@ -6,7 +6,7 @@ import { ORAL_SESSION_TYPES } from "@palier/domain";
 import type { ExamForm, ExamProfile, Item, ItemStatisticsReport, OralScenario, Passage } from "@palier/domain";
 import type { OpenAiModels, OpenAiPricing } from "@palier/adapters/openai";
 
-import type { RecordedRunData } from "./eval/conformance.js";
+import { RECORDED_METHODS, type RecordedRunData } from "./eval/conformance.js";
 import { canonicalStringify } from "./lib/json.js";
 import type { OralSessionPlan, SourceCandidate } from "./lib/types.js";
 import type { BankBuild, BankManifest } from "./pipeline/bank-build.js";
@@ -98,7 +98,7 @@ export const loadItemStatistics = (root: string): ItemStatisticsReport | null =>
   return itemStatisticsReportSchema.parse(readJson(path)) as unknown as ItemStatisticsReport;
 };
 
-const RECORDED_METHODS = new Set(["generateItems", "reviewItem", "assessWriting"]);
+const RECORDED_METHOD_NAMES: ReadonlySet<string> = new Set(RECORDED_METHODS);
 
 /**
  * Every recorded run, sorted by file name. A file that is not a run, or a completion that is not
@@ -117,7 +117,7 @@ export const loadRecordedRuns = (root: string): RecordedRunData[] => {
       }
       for (const [index, c] of (raw.completions as Partial<Record<keyof RecordedRunData["completions"][number], unknown>>[]).entries()) {
         if (
-          !RECORDED_METHODS.has(c.method as string) ||
+          !RECORDED_METHOD_NAMES.has(c.method as string) ||
           typeof c.model !== "string" ||
           typeof c.content !== "string" ||
           typeof c.attempt !== "number" ||

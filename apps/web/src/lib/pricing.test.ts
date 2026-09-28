@@ -14,7 +14,7 @@ const factoryPricing = JSON.parse(
 const models = { draft: "m" };
 const good = {
   models: { m: { inputPerMTok: 1, outputPerMTok: 2 } },
-  features: { "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }], "item-generation": [] },
+  features: { "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }], "item-generation": [], "oral-practice": [] },
 };
 
 describe("PRICING, this build's pricing.json", () => {
@@ -41,6 +41,10 @@ describe("roleModels", () => {
   it("takes every role and leaves out the note", () => {
     expect(roleModels({ note: "why", draft: "m-1", review: "m-2", broken: 3 })).toEqual({ draft: "m-1", review: "m-2" });
   });
+
+  it("leaves out the examiner's voice, which is not a model (D117)", () => {
+    expect(roleModels({ speech: "tts-1", voice: "sage" })).toEqual({ speech: "tts-1" });
+  });
 });
 
 describe("parsePricing", () => {
@@ -48,8 +52,18 @@ describe("parsePricing", () => {
     expect(parsePricing(good, models)).toEqual({
       models,
       prices: { m: { inputPerMTok: 1, outputPerMTok: 2 } },
-      features: { "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }], "item-generation": [] },
+      features: { "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }], "item-generation": [], "oral-practice": [] },
     });
+  });
+
+  it("reads audio priced by the minute and by the character, and calls in those units (D117)", () => {
+    const audio = {
+      models: { ...good.models, stt: { perMinute: 0.0045 }, tts: { perMChars: 15 } },
+      features: { ...good.features, "oral-practice": [{ role: "transcribe", minutes: 0.6 }, { role: "speech", characters: 180 }] },
+    };
+    const parsed = parsePricing(audio, models);
+    expect(parsed.prices).toEqual({ m: { inputPerMTok: 1, outputPerMTok: 2 }, stt: { perMinute: 0.0045 }, tts: { perMChars: 15 } });
+    expect(parsed.features["oral-practice"]).toEqual([{ role: "transcribe", minutes: 0.6 }, { role: "speech", characters: 180 }]);
   });
 
   it.each([
@@ -57,6 +71,13 @@ describe("parsePricing", () => {
     ["no features", { models: {} }, "expected `models` and `features`"],
     ["a price that is not two rates", { ...good, models: { m: { inputPerMTok: -1, outputPerMTok: 2 } } }, "the price of m"],
     ["a price that is not an object", { ...good, models: { m: 2 } }, "the price of m"],
+    ["a negative rate per minute", { ...good, models: { m: { perMinute: -1 } } }, "the price of m"],
+    ["a price in two units at once", { ...good, models: { m: { perMinute: 1, perMChars: 1 } } }, "the price of m"],
+    [
+      "a call in no unit",
+      { ...good, features: { ...good.features, "oral-practice": [{ role: "speech", seconds: 3 }] } },
+      "a call of oral-practice",
+    ],
     ["a feature missing", { ...good, features: { "writing-feedback": [] } }, "item-generation has no typical calls"],
     [
       "a call with no role",

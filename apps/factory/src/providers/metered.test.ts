@@ -6,7 +6,7 @@ import type { UsageRecord } from "@palier/domain";
 import { meterProvider } from "./metered.js";
 
 const providerWith = (usage: UsageRecord | null): AiProvider => ({
-  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true }),
+  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true, transcribe: true, speak: true, examinerTurn: true }),
   generatePassage: () => Promise.resolve([]),
   generateItems: () => Promise.resolve([]),
   reviewItem: () =>
@@ -20,6 +20,9 @@ const providerWith = (usage: UsageRecord | null): AiProvider => ({
     }),
   assessWriting: () => Promise.resolve({} as never),
   generateScenario: () => Promise.resolve({ phases: [] }),
+  transcribe: () => Promise.resolve({ text: "" }),
+  speak: () => Promise.resolve(new Blob()),
+  examinerTurn: () => Promise.resolve({ text: "q", difficulty: null }),
   verifyKey: () => Promise.resolve(),
   lastUsage: () => usage,
 });
@@ -66,6 +69,23 @@ describe("meterProvider", () => {
     const metered = meterProvider(providerWith({ model: "m", inputTokens: 40, outputTokens: 60, costUsd: 0.5 }));
     await metered.provider.generateScenario({ sessionType: "work", targetBand: "C", lang: "fr", topic: "procurement", minutes: 10 });
     expect(metered.totals()).toEqual({ calls: 1, inputTokens: 40, outputTokens: 60, costUsd: 0.5 });
+  });
+
+  it("accounts each oral call like any other spending call, though the factory makes none (D117)", async () => {
+    const metered = meterProvider(providerWith({ model: "m", inputTokens: 0, outputTokens: 0, costUsd: 0.25 }));
+    await metered.provider.transcribe({ audio: new Blob(["x"]), lang: "fr", durationMs: 1000 });
+    await metered.provider.speak({ text: "Bonjour.", lang: "fr" });
+    const turn = await metered.provider.examinerTurn({
+      sessionType: "work",
+      targetBand: "C",
+      lang: "fr",
+      topic: "procurement",
+      phase: { name: "p", minutes: 1, intent: "i", seedQuestions: ["q"], escalation: [], deescalation: [] },
+      register: "baseline",
+      transcript: [],
+    });
+    expect(turn.text).toBe("q");
+    expect(metered.totals()).toEqual({ calls: 3, inputTokens: 0, outputTokens: 0, costUsd: 0.75 });
   });
 
   it("passes a key check through and accounts nothing for it", async () => {

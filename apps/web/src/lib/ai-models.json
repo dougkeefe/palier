@@ -1,7 +1,11 @@
 {
-  "note": "Model ids are data, never hardcoded in TS (architecture.md §8.1). The browser's copy of apps/factory/config/models.json, plus `assess`, the model writing feedback will use (Phase 4 Slice 3; progress.md D103 prices it now, for the per-feature table). Phase 4 Slice 1 makes no model call (a key check is GET /models); Slice 4's runtime generation verifies these ids before it uses them.",
+  "note": "Model ids are data, never hardcoded in TS (architecture.md §8.1). The browser's copy of apps/factory/config/models.json, plus `assess`, the model writing feedback uses (Phase 4 Slice 3; progress.md D103), and the oral practice turn loop's three (Phase 5 Slice 2, D117, human decision 27 September 2026): `transcribe` (gpt-transcribe, billed by the minute), `speech` (tts-1, billed by the character; both units the device measures, so the meter matches the bill) and `examiner` (the text model that writes each question). `voice` is the examiner's voice, not a model, so `roleModels` leaves it out. The nightly live smoke checks every id is still listed.",
   "passage": "gpt-6-luna",
   "draft": "gpt-6-luna",
   "review": "gpt-6-sol",
-  "assess": "gpt-6-sol"
+  "assess": "gpt-6-sol",
+  "transcribe": "gpt-transcribe",
+  "speech": "tts-1",
+  "examiner": "gpt-6-luna",
+  "voice": "sage"
 }

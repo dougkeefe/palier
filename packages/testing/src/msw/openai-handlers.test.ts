@@ -151,3 +151,67 @@ describe("openAiHandlers — chat completions, with the usage the ledger reads (
     expect((await complete()).status).toBe(429);
   });
 });
+
+describe("openAiHandlers — the turn loop's audio endpoints (D117)", () => {
+  const transcribe = (clip = "clip-bytes") => {
+    const form = new FormData();
+    form.append("file", new Blob([clip], { type: "audio/webm" }), "answer.webm");
+    form.append("model", "gpt-transcribe");
+    return fetch("https://api.openai.com/v1/audio/transcriptions", {
+      method: "POST",
+      headers: { authorization: "Bearer sk-handler-test" },
+      body: form,
+    });
+  };
+  const speak = (input: string) =>
+    fetch("https://api.openai.com/v1/audio/speech", {
+      method: "POST",
+      headers: { authorization: "Bearer sk-handler-test", "content-type": "application/json" },
+      body: JSON.stringify({ model: "tts-1", input, voice: "alloy" }),
+    });
+
+  it("transcribes to the scripted text, and shows the test each clip that was uploaded", async () => {
+    const uploads: string[] = [];
+    const seen: (string | null)[] = [];
+    mswServer.use(
+      ...openAiHandlers({
+        mode: "ok",
+        onAuthorization: (a) => seen.push(a),
+        onUpload: (clip) => void clip.text().then((t) => uploads.push(t)),
+      }),
+    );
+
+    const response = await transcribe();
+
+    expect(await response.json()).toEqual({ text: "Je suis analyste des politiques." });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(uploads).toEqual(["clip-bytes"]);
+    expect(seen).toEqual(["Bearer sk-handler-test"]);
+  });
+
+  it("transcribes as a function of the clip's own bytes, when asked to", async () => {
+    mswServer.use(...openAiHandlers({ mode: "ok", transcript: (clip) => `heard ${clip}` }));
+    expect(await (await transcribe("bonjour")).json()).toEqual({ text: "heard bonjour" });
+  });
+
+  it("voices the words as audio bytes that carry them", async () => {
+    mswServer.use(...openAiHandlers({ mode: "ok" }));
+
+    const response = await speak("Bonjour.");
+
+    expect(response.headers.get("content-type")).toBe("audio/mpeg");
+    expect(await response.text()).toBe("ID3:Bonjour.");
+  });
+
+  it("answers malformed with a transcription that has no text, and speech that is not audio", async () => {
+    mswServer.use(...openAiHandlers({ mode: "malformed" }));
+    expect(await (await transcribe()).json()).toEqual({});
+    expect((await speak("Bonjour.")).headers.get("content-type")).toContain("application/json");
+  });
+
+  it("refuses both with the mode's status", async () => {
+    mswServer.use(...openAiHandlers({ mode: "invalid-key" }));
+    expect((await transcribe()).status).toBe(401);
+    expect((await speak("Bonjour.")).status).toBe(401);
+  });
+});

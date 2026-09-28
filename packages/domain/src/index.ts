@@ -82,12 +82,16 @@ export { ATTEMPT_MODES } from "./attempt.js";
 export type {
   AiCapabilities,
   AiFeature,
+  CharacterPrice,
   CriterionAssessment,
+  ExaminerTurn,
+  ExaminerTurnRequest,
   FeatureCall,
   GenerateItemsRequest,
   GeneratePassageRequest,
   GenerateScenarioRequest,
   ItemDraft,
+  MinutePrice,
   ModelPrice,
   PassageContext,
   PassageDraft,
@@ -95,6 +99,10 @@ export type {
   ReviewRequest,
   ReviewVerdict,
   ScenarioDraft,
+  SpeechRequest,
+  TokenPrice,
+  TranscribeRequest,
+  Transcript,
   UsageRecord,
   WritingAssessment,
   WritingCriterion,
@@ -104,7 +112,10 @@ export type {
   WritingRequest,
 } from "./ai.js";
 export { AI_FEATURES, WRITING_CRITERIA } from "./ai.js";
+export type { BilledAmounts } from "./pricing.js";
+export { costOf } from "./pricing.js";
 export {
+  examinerTurnSchema,
   itemDraftSchema,
   passageDraftSchema,
   reviewVerdictSchema,

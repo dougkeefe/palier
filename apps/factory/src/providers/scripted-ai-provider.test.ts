@@ -77,6 +77,33 @@ describe("scriptedAiProvider.assessWriting", () => {
   });
 });
 
+describe("scriptedAiProvider's oral methods (D117)", () => {
+  it("says it runs no spoken session, in its capabilities and when asked, and bills nothing", async () => {
+    const provider = scriptedAiProvider();
+    const caps = provider.capabilities();
+    expect([caps.transcribe, caps.speak, caps.examinerTurn]).toEqual([false, false, false]);
+    const calls = [
+      () => provider.transcribe({ audio: new Blob(["x"]), lang: "fr", durationMs: 1000 }),
+      () => provider.speak({ text: "Bonjour.", lang: "fr" }),
+      () =>
+        provider.examinerTurn({
+          sessionType: "work",
+          targetBand: "C",
+          lang: "fr",
+          topic: "procurement",
+          phase: { name: "p", minutes: 1, intent: "i", seedQuestions: ["q"], escalation: [], deescalation: [] },
+          register: "baseline",
+          transcript: [],
+        }),
+    ];
+    for (const call of calls) {
+      await provider.generatePassage({ topic: "finance-and-budgets", docType: "memo", targetBand: "B", lang: "fr", count: 1 });
+      await expect(call()).rejects.toThrow(/scripted provider/);
+      expect(provider.lastUsage()).toBeNull();
+    }
+  });
+});
+
 describe("the scripted scenario plan (D114)", () => {
   const request = (sessionType: "warmup" | "work" | "opinion" | "situation" | "full", minutes: number) =>
     ({ sessionType, targetBand: "C", lang: "fr", topic: "procurement", minutes }) as const;
