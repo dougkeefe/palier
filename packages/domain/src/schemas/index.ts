@@ -4,6 +4,7 @@ import {
   attemptShape,
   examFormShape,
   itemShape,
+  oralFillersShape,
   oralScenarioShape,
   passageShape,
   writingPromptShape,
@@ -28,6 +29,7 @@ export const CONTENT_SCHEMAS = {
   attempt: attemptShape,
   "exam-profile": examProfileShape,
   "writing-prompt": writingPromptShape,
+  "oral-fillers": oralFillersShape,
 } as const satisfies Record<string, z.ZodType>;
 
 export type ContentSchemaName = keyof typeof CONTENT_SCHEMAS;

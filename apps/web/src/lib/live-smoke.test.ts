@@ -5,8 +5,9 @@ import { parseWritingPromptsOrThrow } from "@palier/domain";
 import { describe, expect, it } from "vitest";
 
 import { main, measuredFeatures, recordings } from "../../scripts/live-smoke.mjs";
+import { main as stabilityMain } from "../../scripts/oral-stability.mjs";
 import aiModels from "./ai-models.json";
-import { LIVE_SMOKE_REVIEWS, runLiveSmoke } from "./live-smoke";
+import { LIVE_SMOKE_REVIEWS, ORAL_STABILITY_RUNS, runLiveSmoke, runOralStability } from "./live-smoke";
 import { PRICING } from "./pricing";
 
 /**
@@ -25,6 +26,20 @@ const FEEDBACK = {
   criteria: { register: criterion, structure: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
   errors: [],
   modelAnswer: "Une réponse modèle.",
+};
+
+const DESCRIPTORS = { A: "Descriptor A.", B: "Descriptor B.", C: "Descriptor C." };
+
+/** A report whose every excerpt is in the fixed session's first answer (D122). */
+const ORAL_REPORT = {
+  criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+  fixes: [
+    { criterion: "grammar", subSkill: "agreement", advice: "a", evidence: "e" },
+    { criterion: "grammar", subSkill: "verb-tense-and-mood", advice: "a", evidence: "e" },
+    { criterion: "vocabulary", subSkill: "word-choice-precision", advice: "a", evidence: "e" },
+  ],
+  missingWords: ["Euh", "analyste", "provinces", "notes", "urgents"].map((excerpt) => ({ word: "w", turn: 1, excerpt, example: "x" })),
+  errors: [{ turn: 1, excerpt: "devient", correction: "deviennent", rule: "accord" }],
 };
 
 type Options = { listed?: readonly string[]; malformedFirstReview?: boolean; status?: number; htmlError?: boolean };
@@ -78,17 +93,19 @@ const network = ({
           : verdictFor(prompt)
         : prompt.includes("You are the examiner")
           ? { text: "Parlez-moi de votre poste.", difficulty: null }
-          : FEEDBACK;
+          : prompt.includes("assessing a rehearsal")
+            ? ORAL_REPORT
+            : FEEDBACK;
     return Promise.resolve(reply(200, { id: "chatcmpl-x", choices: [{ message: { content: JSON.stringify(content) } }], usage: { prompt_tokens: 300, completion_tokens: 500 } }));
   };
   return { fetchImpl, requests };
 };
 
 const run = (fetchImpl: FetchLike) =>
-  runLiveSmoke({ apiKey: KEY, models: MODELS, prices: PRICING.prices, prompts: PROMPTS, fetchImpl });
+  runLiveSmoke({ apiKey: KEY, models: MODELS, prices: PRICING.prices, descriptors: DESCRIPTORS, prompts: PROMPTS, fetchImpl });
 
 describe("runLiveSmoke", () => {
-  it("checks the key, drafts one set per sentence-level type, reviews one set's worth, and assesses two texts", async () => {
+  it("checks the key, drafts one set per sentence-level type, reviews one set's worth, assesses two texts and reports on one session", async () => {
     const { fetchImpl, requests } = network();
 
     const result = await run(fetchImpl);
@@ -101,9 +118,11 @@ describe("runLiveSmoke", () => {
       examinerTurn: { calls: 0, inputTokens: 0, outputTokens: 0 },
       transcribe: { calls: 0, inputTokens: 0, outputTokens: 0 },
       speak: { calls: 0, inputTokens: 0, outputTokens: 0 },
+      assessOral: { calls: 1, inputTokens: 300, outputTokens: 500 },
     });
     expect(result.byFeature["item-generation"].calls).toBe(3 + LIVE_SMOKE_REVIEWS);
     expect(result.byFeature["writing-feedback"].calls).toBe(2);
+    expect(result.byFeature["oral-assessment"].calls).toBe(1);
     expect(result.byFeature["item-generation"].costUsd).toBeGreaterThan(0);
     expect(result.missingModels).toEqual([]);
   });
@@ -111,7 +130,7 @@ describe("runLiveSmoke", () => {
   it("keeps every completion with the request it answered, each accepted on the first try", async () => {
     const result = await run(network().fetchImpl);
 
-    expect(result.completions).toHaveLength(3 + LIVE_SMOKE_REVIEWS + 2);
+    expect(result.completions).toHaveLength(3 + LIVE_SMOKE_REVIEWS + 2 + 1);
     expect(result.completions.every((c) => c.conformant && c.attempt === 1)).toBe(true);
     const [draft] = result.completions;
     expect(draft).toMatchObject({ method: "generateItems", model: MODELS.draft, request: { count: 5, lang: "fr" } });
@@ -153,7 +172,15 @@ describe("runLiveSmoke", () => {
 
 describe("runLiveSmoke — the oral turn loop's three (D117)", () => {
   const runOral = (fetchImpl: FetchLike) =>
-    runLiveSmoke({ apiKey: KEY, models: { ...MODELS, ...ORAL }, voice: "sage", prices: PRICING.prices, prompts: PROMPTS, fetchImpl });
+    runLiveSmoke({
+      apiKey: KEY,
+      models: { ...MODELS, ...ORAL },
+      voice: "sage",
+      prices: PRICING.prices,
+      descriptors: DESCRIPTORS,
+      prompts: PROMPTS,
+      fetchImpl,
+    });
 
   it("voices a question, transcribes that same audio, and asks the examiner twice, all metered as oral practice", async () => {
     const { fetchImpl, requests } = network();
@@ -191,6 +218,70 @@ describe("runLiveSmoke — the oral turn loop's three (D117)", () => {
   });
 });
 
+describe("runLiveSmoke — the report on a session (D122)", () => {
+  it("asks for the fixed session's report with the profile's descriptors, metered as the oral report", async () => {
+    const { fetchImpl, requests } = network();
+    const result = await run(fetchImpl);
+
+    const report = result.completions.find((c) => c.method === "assessOral");
+    expect(report).toMatchObject({ model: MODELS.assess, conformant: true, request: { descriptors: DESCRIPTORS, targetBand: "C" } });
+    const sent = requests.map((r) => r.body).find((body) => typeof body === "string" && body.includes("assessing a rehearsal"));
+    expect(sent).toContain("Level C: Descriptor C.");
+    expect(result.calls.filter((c) => c.feature === "oral-assessment")).toHaveLength(1);
+  });
+});
+
+describe("runOralStability (D126)", () => {
+  it("scores the same session five times and makes no other call", async () => {
+    const { fetchImpl, requests } = network();
+    const result = await runOralStability({ apiKey: KEY, models: MODELS, prices: PRICING.prices, descriptors: DESCRIPTORS, fetchImpl });
+
+    expect(ORAL_STABILITY_RUNS).toBe(5);
+    expect(requests).toHaveLength(5);
+    expect(result.completions.map((c) => c.method)).toEqual(Array(5).fill("assessOral"));
+    expect(new Set(result.completions.map((c) => JSON.stringify(c.request))).size).toBe(1);
+    expect(result.calls.map((c) => c.feature)).toEqual(Array(5).fill("oral-assessment"));
+  });
+});
+
+describe("oral-stability.mjs", () => {
+  const capture = () => {
+    const out: string[] = [];
+    const err: string[] = [];
+    const files = new Map<string, string>();
+    return {
+      out,
+      err,
+      files,
+      io: { log: (l: string) => out.push(l), error: (l: string) => err.push(l), write: (n: string, c: string) => files.set(n, c) },
+    };
+  };
+
+  it("skips, says so, and exits 0 without a key", async () => {
+    const c = capture();
+    expect(await stabilityMain({ env: {}, ...c.io })).toBe(0);
+    expect(c.out.join("\n")).toMatch(/^oral-stability: skipped\. OPENAI_API_KEY is not set/);
+    expect(c.files.size).toBe(0);
+  });
+
+  it("records the five reports as one fixture file, and never the key", async () => {
+    const c = capture();
+    expect(await stabilityMain({ env: { OPENAI_API_KEY: KEY }, fetchImpl: network().fetchImpl, ...c.io })).toBe(0);
+    expect([...c.files.keys()]).toEqual(["assessOral-stability.json"]);
+    const file = c.files.get("assessOral-stability.json") ?? "";
+    expect((JSON.parse(file) as { completions: unknown[] }).completions).toHaveLength(5);
+    expect(file).not.toContain(KEY);
+    expect(c.out.join("\n")).toContain("recorded 5 report(s)");
+  });
+
+  it("exits 1 and records nothing when a call fails, naming the adapter's error", async () => {
+    const c = capture();
+    expect(await stabilityMain({ env: { OPENAI_API_KEY: KEY }, fetchImpl: network({ status: 429 }).fetchImpl, ...c.io })).toBe(1);
+    expect(c.err.join("\n")).toContain("RateLimitError");
+    expect(c.files.size).toBe(0);
+  });
+});
+
 describe("live-smoke.mjs", () => {
   const capture = () => {
     const out: string[] = [];
@@ -225,6 +316,7 @@ describe("live-smoke.mjs", () => {
     await main({ argv: ["--record"], env: { OPENAI_API_KEY: KEY }, fetchImpl: network().fetchImpl, ...c.io });
 
     expect([...c.files.keys()].sort()).toEqual([
+      "assessOral.json",
       "assessWriting.json",
       "examinerTurn.json",
       "generateItems.json",
@@ -240,7 +332,7 @@ describe("live-smoke.mjs", () => {
     const c = capture();
     await main({ argv: [], env: { OPENAI_API_KEY: KEY, LIVE_SMOKE_RECORD: "1" }, fetchImpl: network().fetchImpl, ...c.io });
 
-    expect(c.files.size).toBe(6);
+    expect(c.files.size).toBe(7);
   });
 
   it("exits 1 when a live call fails, naming the adapter's error", async () => {
@@ -267,14 +359,16 @@ describe("live-smoke.mjs", () => {
 });
 
 describe("measuredFeatures", () => {
-  it("prices a set as one draft call and one set's worth of reviews, and feedback as one call", () => {
+  it("prices a set as one draft call and one set's worth of reviews, and feedback and a report as one call each", () => {
     const byMethod = {
       generateItems: { calls: 3, inputTokens: 400, outputTokens: 1_200 },
       reviewItem: { calls: 5, inputTokens: 300, outputTokens: 600 },
       assessWriting: { calls: 2, inputTokens: 900, outputTokens: 800 },
+      assessOral: { calls: 1, inputTokens: 2_000, outputTokens: 1_100 },
     };
     expect(measuredFeatures({ byMethod })).toEqual({
       "writing-feedback": [{ role: "assess", inputTokens: 900, outputTokens: 800 }],
+      "oral-assessment": [{ role: "assess", inputTokens: 2_000, outputTokens: 1_100 }],
       "item-generation": [
         { role: "draft", inputTokens: 400, outputTokens: 1_200 },
         { role: "review", inputTokens: 1_500, outputTokens: 3_000 },

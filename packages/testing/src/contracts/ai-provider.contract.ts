@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import type { AiProvider } from "@palier/app";
 import {
   checkErrorOffsets,
+  checkOralAssessment,
+  oralAssessmentSchema,
   examinerTurnSchema,
   itemDraftSchema,
   passageDraftSchema,
@@ -14,6 +16,7 @@ import type {
   ExaminerTurnRequest,
   GenerateItemsRequest,
   GenerateScenarioRequest,
+  OralRequest,
   ReviewRequest,
   WritingRequest,
 } from "@palier/domain";
@@ -91,6 +94,31 @@ const anExaminerRequest = (): ExaminerTurnRequest => ({
   ],
 });
 
+const anOralRequest = (): OralRequest => ({
+  sessionType: "work",
+  targetBand: "C",
+  lang: "fr",
+  feedbackLang: "en",
+  topic: "project-management",
+  phases: [{ name: "Votre travail", intent: "Faire décrire au candidat un projet récent." }],
+  turns: [
+    { speaker: "examiner", text: "Parlez-moi d'un projet que vous avez mené.", phase: 0, startMs: 0, endMs: 0 },
+    {
+      speaker: "candidate",
+      text: "J'ai mené un projet de modernisation, mais les délais était très serrés.",
+      phase: 0,
+      startMs: 2_000,
+      endMs: 9_000,
+      input: "voice",
+    },
+  ],
+  descriptors: {
+    A: "Understands speech on concrete and routine topics.",
+    B: "Understands the main points of clear standard speech on work topics.",
+    C: "Understands complex speech on abstract and specialised topics.",
+  },
+});
+
 export const aiProviderContract = (name: string, make: () => Promise<AiProvider>): void => {
   describe(`AiProvider contract: ${name}`, () => {
     it("reports its capabilities as booleans", async () => {
@@ -103,6 +131,7 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       expect(typeof caps.transcribe).toBe("boolean");
       expect(typeof caps.speak).toBe("boolean");
       expect(typeof caps.examinerTurn).toBe("boolean");
+      expect(typeof caps.assessOral).toBe("boolean");
     });
 
     it("has no usage before any call", async () => {
@@ -203,6 +232,15 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       const provider = await make();
       const turn = await provider.examinerTurn(anExaminerRequest());
       expect(examinerTurnSchema.safeParse(turn).success).toBe(true);
+      expect(provider.lastUsage()).not.toBeNull();
+    });
+
+    it("assesses a session schema-valid, with every error and word inside a candidate's turn (D122)", async () => {
+      const provider = await make();
+      const request = anOralRequest();
+      const assessment = await provider.assessOral(request);
+      expect(oralAssessmentSchema.safeParse(assessment).success).toBe(true);
+      expect(checkOralAssessment(request.turns, assessment)).toBeNull();
       expect(provider.lastUsage()).not.toBeNull();
     });
 

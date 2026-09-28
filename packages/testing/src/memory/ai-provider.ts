@@ -2,7 +2,9 @@ import type { AiProvider } from "@palier/app";
 import { OPTION_IDS } from "@palier/domain";
 import type {
   ItemDraft,
+  MissingWord,
   OptionId,
+  OralAssessment,
   PassageDraft,
   ReviewVerdict,
   UsageRecord,
@@ -36,6 +38,7 @@ export const fakeAiProvider = (): AiProvider => {
       transcribe: true,
       speak: true,
       examinerTurn: true,
+      assessOral: true,
     }),
 
     generatePassage: (req) => {
@@ -154,6 +157,37 @@ export const fakeAiProvider = (): AiProvider => {
       const lists = { baseline: req.phase.seedQuestions, escalate: req.phase.escalation, deescalate: req.phase.deescalation };
       const text = lists[req.register][0] ?? req.phase.seedQuestions[0] ?? req.phase.intent;
       return Promise.resolve({ text, difficulty: null });
+    },
+
+    // Every criterion at the target band, three fixed fixes, and the first word of the
+    // candidate's first turn that has one marked and quoted five times, so every offset
+    // and excerpt is inside a candidate's turn (D122). A session in which the candidate
+    // said nothing has nothing to assess, and is refused, billing nothing.
+    assessOral: (req) => {
+      const index = req.turns.findIndex((turn) => turn.speaker === "candidate" && /\S/u.test(turn.text));
+      const said = index === -1 ? null : /\S+/u.exec((req.turns[index] as { readonly text: string }).text);
+      if (said === null) {
+        usage = null;
+        return Promise.reject(new Error("The candidate said nothing to assess."));
+      }
+      bill(40);
+      const criterion = { band: req.targetBand, evidence: "evidence quoted from the transcript" };
+      const word: MissingWord = { word: "néanmoins", turn: index, excerpt: said[0], example: `${said[0]}, néanmoins.` };
+      const fix = (subSkill: OralAssessment["fixes"][number]["subSkill"]) => ({
+        criterion: "grammar" as const,
+        subSkill,
+        advice: "the advice the fix gives",
+        evidence: said[0],
+      });
+      const assessment: OralAssessment = {
+        criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+        fixes: [fix("agreement"), fix("verb-tense-and-mood"), fix("connectors-and-discourse-markers")],
+        missingWords: [word, word, word, word, word],
+        errors: [
+          { turn: index, start: said.index, end: said.index + said[0].length, correction: said[0], rule: "the rule the correction applies" },
+        ],
+      };
+      return Promise.resolve(assessment);
     },
 
     // Bills nothing, and so leaves no earlier call's usage behind (D102).

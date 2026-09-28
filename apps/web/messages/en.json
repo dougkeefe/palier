@@ -472,6 +472,8 @@
     "featureUse_item-generation": "A new set of practice items, written and checked for you.",
     "feature_oral-practice": "Spoken practice",
     "featureUse_oral-practice": "One minute of a spoken practice session: the examiner's questions, voiced, and your answers transcribed.",
+    "feature_oral-assessment": "Report on a spoken session",
+    "featureUse_oral-assessment": "One report on a spoken session: a level and evidence for each criterion, three things to work on, five useful words and your answers corrected.",
     "offerHeading": "An OpenAI key, if you want one",
     "offerUnlocks": "A key turns on the parts that use AI: feedback on your writing, fresh practice items written for you, and spoken practice with an examiner.",
     "offerCosts": "You pay OpenAI directly for what you use, and you can set a monthly limit on your OpenAI account.",

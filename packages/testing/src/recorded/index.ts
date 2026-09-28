@@ -2,6 +2,7 @@ import type {
   ExaminerTurnRequest,
   GenerateItemsRequest,
   Lang,
+  OralRequest,
   ReviewRequest,
   SpeechRequest,
   WritingRequest,
@@ -30,6 +31,10 @@ import transcribe from "./openai/transcribe.json" with { type: "json" };
  * completion like the others. A `transcribe` keeps the transcription's JSON body as it arrived, and
  * its request describes the clip rather than carrying it: no audio is ever committed. A `speak`
  * keeps what arrived as `{ "contentType", "bytes" }`, for the same reason.
+ *
+ * `assessOral` joins with Slice 3 (progress.md D122), and is **not recorded yet**: the nightly
+ * smoke's call becomes `assessOral.json`, and the stability recording's five `assessOral-stability.json`,
+ * each when the human first runs it on a funded key. A fixture is recorded, never hand-written (D112).
  */
 
 /** A transcription's request as recorded: the clip described, never kept (D117). */
@@ -44,7 +49,7 @@ export type RecordedSpeech = { readonly contentType: string; readonly bytes: num
 
 /** One completion as OpenAI sent it. The web recorder writes this shape. */
 export type RecordedCompletion = {
-  readonly method: "generateItems" | "reviewItem" | "assessWriting" | "examinerTurn" | "transcribe" | "speak";
+  readonly method: "generateItems" | "reviewItem" | "assessWriting" | "examinerTurn" | "transcribe" | "speak" | "assessOral";
   readonly model: string;
   /** The port request the call was made with, so a replay makes the same call. */
   readonly request:
@@ -53,7 +58,8 @@ export type RecordedCompletion = {
     | WritingRequest
     | ExaminerTurnRequest
     | RecordedTranscribeRequest
-    | SpeechRequest;
+    | SpeechRequest
+    | OralRequest;
   /** 1 for the first completion of a call, 2 for the adapter's one retry. */
   readonly attempt: number;
   /**
@@ -75,7 +81,7 @@ export type RecordedRun = {
   readonly completions: readonly RecordedCompletion[];
 };
 
-const METHODS = new Set(["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak"]);
+const METHODS = new Set(["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak", "assessOral"]);
 
 /** A hand edit, or a recorder that changed shape, fails here rather than as a confusing replay. */
 export const runOf = (file: string, raw: unknown): RecordedRun => {

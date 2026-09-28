@@ -38,11 +38,22 @@ export type OralDirection = "escalate" | "deescalate";
 export type OralRegister = "baseline" | OralDirection;
 
 /**
+ * How a candidate's answer arrived (progress.md D122): spoken and transcribed, or
+ * typed. The fluency metrics count only spoken answers, because a typed answer has
+ * no speech to time and its `startMs` is when the question was shown, not when the
+ * candidate began (D118).
+ */
+export const ORAL_INPUTS = ["voice", "typed"] as const;
+export type OralInput = (typeof ORAL_INPUTS)[number];
+
+/**
  * One utterance, whole. Times are milliseconds since the session opened, the shape
  * GPT-Live's transcript deltas carry (`start_ms`/`end_ms`, progress.md D113), so a
  * turn-based and a full-duplex transport write the same record. Turns may overlap
  * in a full-duplex session. `phase` indexes the scenario's `phases`, and is stamped
- * by the client, which drives the phases (architecture.md §8.5 step 5).
+ * by the client, which drives the phases (architecture.md §8.5 step 5). `input` is
+ * set on a candidate's turn by the transport that took it; a turn stored before
+ * Slice 3 has none, and counts as untimed.
  */
 export type OralTurn = {
   readonly speaker: OralSpeaker;
@@ -50,4 +61,5 @@ export type OralTurn = {
   readonly phase: number;
   readonly startMs: number;
   readonly endMs: number;
+  readonly input?: OralInput | undefined;
 };

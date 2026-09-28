@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { ORAL_END_REASONS, ORAL_SPEAKERS } from "./oral-session.js";
+import { ORAL_END_REASONS, ORAL_INPUTS, ORAL_SPEAKERS } from "./oral-session.js";
 import { oralTurnSchema } from "./schemas/oral.js";
 
 const aTurn = (over: Record<string, unknown> = {}) => ({
@@ -20,6 +20,10 @@ describe("the oral session vocabulary", () => {
   it("has two speakers", () => {
     expect(ORAL_SPEAKERS).toEqual(["examiner", "candidate"]);
   });
+
+  it("has two ways an answer arrives", () => {
+    expect(ORAL_INPUTS).toEqual(["voice", "typed"]);
+  });
 });
 
 describe("oralTurnSchema", () => {
@@ -29,6 +33,12 @@ describe("oralTurnSchema", () => {
 
   it("accepts an instant turn and an empty transcription", () => {
     expect(oralTurnSchema.safeParse(aTurn({ text: "", startMs: 10, endMs: 10 })).success).toBe(true);
+  });
+
+  it("accepts a turn that says how it arrived, and one stored before it could", () => {
+    expect(oralTurnSchema.safeParse(aTurn({ input: "voice" })).success).toBe(true);
+    expect(oralTurnSchema.safeParse(aTurn({ input: "typed" })).success).toBe(true);
+    expect(oralTurnSchema.safeParse(aTurn()).success).toBe(true);
   });
 
   it("rejects a turn that ends before it starts", () => {
@@ -45,6 +55,7 @@ describe("oralTurnSchema", () => {
     ["a fractional end", { endMs: 4_500.5 }],
     ["text that is not a string", { text: 3 }],
     ["an extra field", { confidence: 0.9 }],
+    ["an unknown input", { input: "signed" }],
   ])("rejects %s", (_name, over) => {
     expect(oralTurnSchema.safeParse(aTurn(over)).success).toBe(false);
   });

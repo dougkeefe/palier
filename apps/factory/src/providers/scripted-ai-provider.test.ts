@@ -77,11 +77,11 @@ describe("scriptedAiProvider.assessWriting", () => {
   });
 });
 
-describe("scriptedAiProvider's oral methods (D117)", () => {
+describe("scriptedAiProvider's oral methods (D117, D122)", () => {
   it("says it runs no spoken session, in its capabilities and when asked, and bills nothing", async () => {
     const provider = scriptedAiProvider();
     const caps = provider.capabilities();
-    expect([caps.transcribe, caps.speak, caps.examinerTurn]).toEqual([false, false, false]);
+    expect([caps.transcribe, caps.speak, caps.examinerTurn, caps.assessOral]).toEqual([false, false, false, false]);
     const calls = [
       () => provider.transcribe({ audio: new Blob(["x"]), lang: "fr", durationMs: 1000 }),
       () => provider.speak({ text: "Bonjour.", lang: "fr" }),
@@ -94,6 +94,17 @@ describe("scriptedAiProvider's oral methods (D117)", () => {
           phase: { name: "p", minutes: 1, intent: "i", seedQuestions: ["q"], escalation: [], deescalation: [] },
           register: "baseline",
           transcript: [],
+        }),
+      () =>
+        provider.assessOral({
+          sessionType: "work",
+          targetBand: "C",
+          lang: "fr",
+          feedbackLang: "en",
+          topic: "procurement",
+          phases: [{ name: "p", intent: "i" }],
+          turns: [],
+          descriptors: { A: "a", B: "b", C: "c" },
         }),
     ];
     for (const call of calls) {

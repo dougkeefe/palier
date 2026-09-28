@@ -275,9 +275,23 @@ export const writingPromptShape = z.strictObject({
   suggestedMinutes: z.number().int().positive(),
 });
 
+/**
+ * The words a candidate fills a pause with, per language (progress.md D123): the
+ * fluency metrics count them. Language, not an exam rule, so content data rather than
+ * profile data (ADR 9, ADR 18). Each entry is a word or a short phrase, matched whole
+ * and without regard to case.
+ */
+const fillerListShape = z.array(z.string().trim().min(1)).min(1);
+
+export const oralFillersShape = z.strictObject({
+  en: fillerListShape,
+  fr: fillerListShape,
+});
+
 export const itemSchema = itemShape.readonly();
 export const passageSchema = passageShape.readonly();
 export const oralScenarioSchema = oralScenarioShape.readonly();
 export const examFormSchema = examFormShape.readonly();
 export const attemptSchema = attemptShape.readonly();
 export const writingPromptSchema = writingPromptShape.readonly();
+export const oralFillersSchema = oralFillersShape.readonly();

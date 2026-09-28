@@ -92,6 +92,14 @@ export type {
   GenerateScenarioRequest,
   ItemDraft,
   MinutePrice,
+  MissingWord,
+  OralAssessment,
+  OralAssessmentDraft,
+  OralCriterion,
+  OralFix,
+  OralRequest,
+  OralTurnError,
+  OralTurnErrorDraft,
   ModelPrice,
   PassageContext,
   PassageDraft,
@@ -99,6 +107,7 @@ export type {
   ReviewRequest,
   ReviewVerdict,
   ScenarioDraft,
+  ScoredSubSkill,
   SpeechRequest,
   TokenPrice,
   TranscribeRequest,
@@ -111,12 +120,14 @@ export type {
   WritingFeedbackDraft,
   WritingRequest,
 } from "./ai.js";
-export { AI_FEATURES, WRITING_CRITERIA } from "./ai.js";
+export { AI_FEATURES, ORAL_CRITERIA, WRITING_CRITERIA } from "./ai.js";
 export type { BilledAmounts } from "./pricing.js";
 export { costOf } from "./pricing.js";
 export {
   examinerTurnSchema,
   itemDraftSchema,
+  oralAssessmentDraftSchema,
+  oralAssessmentSchema,
   passageDraftSchema,
   reviewVerdictSchema,
   scenarioDraftSchema,
@@ -125,9 +136,19 @@ export {
 } from "./schemas/ai.js";
 
 // A spoken session's vocabulary: turns, end reasons, directions (progress.md D116).
-export type { OralDirection, OralEndReason, OralRegister, OralSpeaker, OralTurn } from "./oral-session.js";
-export { ORAL_END_REASONS, ORAL_SPEAKERS } from "./oral-session.js";
+export type {
+  OralDirection,
+  OralEndReason,
+  OralInput,
+  OralRegister,
+  OralSpeaker,
+  OralTurn,
+} from "./oral-session.js";
+export { ORAL_END_REASONS, ORAL_INPUTS, ORAL_SPEAKERS } from "./oral-session.js";
 export { oralTurnSchema } from "./schemas/oral.js";
+// The oral report's placement rule, D105's per turn (progress.md D122).
+export type { AssembleOralResult } from "./oral-assessment.js";
+export { assembleOralAssessment, checkOralAssessment } from "./oral-assessment.js";
 // The adversarial-review gate, shared by the factory and runtime generation (progress.md D109).
 export { CONFIDENCE_THRESHOLD, gateReasons, reviewRequestFor } from "./review-gate.js";
 export type { AssembleResult, PlaceErrorsResult } from "./writing.js";
@@ -138,6 +159,10 @@ export type { WritingPrompt, WritingRegister } from "./writing-prompt.js";
 export { WRITING_REGISTERS } from "./writing-prompt.js";
 export type { WritingPromptsParseResult } from "./writing-prompts.js";
 export { parseWritingPrompts, parseWritingPromptsOrThrow } from "./writing-prompts.js";
+
+// The oral filler list, a content artefact the fluency metrics read (progress.md D123).
+export type { OralFillers, OralFillersParseResult } from "./oral-fillers.js";
+export { parseOralFillers, parseOralFillersOrThrow } from "./oral-fillers.js";
 
 // Opt-in anonymous item telemetry and the statistics job's report (architecture.md
 // 7.6, 9.2). DTOs like the AI ones: no JSON Schema is published for them.
@@ -174,6 +199,7 @@ export {
   attemptSchema,
   examFormSchema,
   itemSchema,
+  oralFillersSchema,
   oralScenarioSchema,
   passageSchema,
   writingPromptSchema,

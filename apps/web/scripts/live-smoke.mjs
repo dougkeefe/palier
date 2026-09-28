@@ -9,7 +9,7 @@ import { runLiveSmoke } from "../src/lib/live-smoke.ts";
 /**
  * The nightly live smoke and the fixture recorder (Phase 4 CI gates, progress.md D112): a fixed
  * set of real calls on the key in `OPENAI_API_KEY`, through the adapter and the ledger, the oral
- * turn loop's three included (D117). It prints
+ * turn loop's three (D117) and one session's report (D122) included. It prints
  * the measured tokens per method and per feature, and the `features` block that replaces
  * `pricing.json`'s typical figures (D103). The key is read from the environment and handed to the
  * vault; it is never printed.
@@ -36,6 +36,9 @@ export const measuredFeatures = (result) => ({
   "writing-feedback": [
     { role: "assess", inputTokens: result.byMethod.assessWriting.inputTokens, outputTokens: result.byMethod.assessWriting.outputTokens },
   ],
+  "oral-assessment": [
+    { role: "assess", inputTokens: result.byMethod.assessOral.inputTokens, outputTokens: result.byMethod.assessOral.outputTokens },
+  ],
   "item-generation": [
     { role: "draft", inputTokens: result.byMethod.generateItems.inputTokens, outputTokens: result.byMethod.generateItems.outputTokens },
     {
@@ -46,8 +49,12 @@ export const measuredFeatures = (result) => ({
   ],
 });
 
-/** Every method the recorder keeps, the oral turn loop's three included (D117). */
-const RECORDED_METHODS = ["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak"];
+/** Every method the recorder keeps, the oral turn loop's three (D117) and the report (D122) included. */
+const RECORDED_METHODS = ["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak", "assessOral"];
+
+/** The profile's oral level descriptors in English, which the report's prompt quotes (ADR 9). */
+export const englishDescriptors = (profile) =>
+  Object.fromEntries(Object.entries(profile.oral.descriptors).map(([band, text]) => [band, text.en]));
 
 /** The fixture files a run records, one per method it made a call of, as `{ path, content }`. */
 export const recordings = (result) =>
@@ -97,6 +104,7 @@ export const main = async ({
   const { note: _models, voice, ...roles } = require("../src/lib/ai-models.json");
   const pricing = require("../src/lib/pricing.json");
   const prompts = require("@palier/content/writing/prompts.json");
+  const profile = require("@palier/content/profiles/psc-sle.json");
   let result;
   try {
     result = await runLiveSmoke({
@@ -112,6 +120,7 @@ export const main = async ({
       },
       voice,
       prices: pricing.models,
+      descriptors: englishDescriptors(profile),
       prompts,
       ...(fetchImpl === undefined ? {} : { fetchImpl }),
     });

@@ -6,7 +6,7 @@ import type { UsageRecord } from "@palier/domain";
 import { meterProvider } from "./metered.js";
 
 const providerWith = (usage: UsageRecord | null): AiProvider => ({
-  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true, transcribe: true, speak: true, examinerTurn: true }),
+  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true, transcribe: true, speak: true, examinerTurn: true, assessOral: true }),
   generatePassage: () => Promise.resolve([]),
   generateItems: () => Promise.resolve([]),
   reviewItem: () =>
@@ -23,6 +23,7 @@ const providerWith = (usage: UsageRecord | null): AiProvider => ({
   transcribe: () => Promise.resolve({ text: "" }),
   speak: () => Promise.resolve(new Blob()),
   examinerTurn: () => Promise.resolve({ text: "q", difficulty: null }),
+  assessOral: () => Promise.resolve({} as never),
   verifyKey: () => Promise.resolve(),
   lastUsage: () => usage,
 });
@@ -86,6 +87,21 @@ describe("meterProvider", () => {
     });
     expect(turn.text).toBe("q");
     expect(metered.totals()).toEqual({ calls: 3, inputTokens: 0, outputTokens: 0, costUsd: 0.75 });
+  });
+
+  it("accounts an oral report like any other spending call (D122)", async () => {
+    const metered = meterProvider(providerWith({ model: "m", inputTokens: 900, outputTokens: 300, costUsd: 0.02 }));
+    await metered.provider.assessOral({
+      sessionType: "work",
+      targetBand: "C",
+      lang: "fr",
+      feedbackLang: "en",
+      topic: "procurement",
+      phases: [{ name: "p", intent: "i" }],
+      turns: [],
+      descriptors: { A: "a", B: "b", C: "c" },
+    });
+    expect(metered.totals()).toEqual({ calls: 1, inputTokens: 900, outputTokens: 300, costUsd: 0.02 });
   });
 
   it("passes a key check through and accounts nothing for it", async () => {

@@ -12,6 +12,7 @@ import type {
   GenerateItemsRequest,
   ItemDraft,
   ModelPrice,
+  OralRequest,
   ReviewRequest,
   SpeechRequest,
   WritingPrompt,
@@ -34,7 +35,9 @@ import { memoryCostLedger, memoryKeyVault } from "@palier/testing/in-memory";
  * - `assessWriting` on two workshop prompts;
  * - the oral turn loop's three (Phase 5 Slice 2, D117): `speak` on a fixed French question, then
  *   `transcribe` that same audio, so no recording of anyone's voice is needed, then two
- *   `examinerTurn`s, an opening and a follow-up.
+ *   `examinerTurn`s, an opening and a follow-up;
+ * - `assessOral` on one fixed session, `ORAL_SESSION` (Phase 5 Slice 3, D122). `runOralStability`
+ *   scores that same session five times, for the stability eval.
  *
  * Audio is never kept: a transcription is recorded with its clip described (type and size), and
  * a voice as its content type and size.
@@ -73,6 +76,8 @@ export type LiveSmokeDeps = {
   /** The examiner's voice (D117). */
   readonly voice?: string;
   readonly prices: Readonly<Record<string, ModelPrice>>;
+  /** The profile's oral level descriptors in English, quoted by the report's prompt (ADR 9). */
+  readonly descriptors: OralRequest["descriptors"];
   /** Two workshop prompts to assess writing against. */
   readonly prompts: readonly WritingPrompt[];
   readonly now?: () => string;
@@ -151,6 +156,52 @@ const EXAMINER_REQUESTS: readonly ExaminerTurnRequest[] = [
     ],
   },
 ];
+
+/**
+ * The session the report is asked for (D122), fixed so the nightly smoke and the stability
+ * recording score the same words. A work discussion at C: two spoken answers with errors worth
+ * marking and a filler, and one typed. The level descriptors are the profile's, handed in (ADR 9).
+ */
+const ORAL_SESSION: Omit<OralRequest, "descriptors"> = {
+  sessionType: "work",
+  targetBand: "C",
+  lang: "fr",
+  feedbackLang: "en",
+  topic: "project-management",
+  phases: [
+    { name: "Votre travail", intent: "Have the candidate describe their role and a recent project in detail." },
+    { name: "Recul", intent: "Push for reflection: what would they do differently, and why." },
+  ],
+  turns: [
+    { speaker: "examiner", text: "Bonjour. Parlez-moi de votre poste actuel.", phase: 0, startMs: 0, endMs: 3_000 },
+    {
+      speaker: "candidate",
+      text: "Euh, je suis analyste principale des politiques. Je coordonne les consultations avec les provinces, et je rédige des notes pour la sous-ministre quand les dossiers devient urgents.",
+      phase: 0,
+      startMs: 4_500,
+      endMs: 19_000,
+      input: "voice",
+    },
+    { speaker: "examiner", text: "Décrivez un projet récent dont vous êtes fière.", phase: 0, startMs: 19_500, endMs: 22_000 },
+    {
+      speaker: "candidate",
+      text: "L'année passée, on a modernisé le processus de demande de subventions. Le défi c'était que les régions voulait garder leurs propres formulaires, alors j'ai organisé des ateliers pour trouver un compromis.",
+      phase: 0,
+      startMs: 23_800,
+      endMs: 41_000,
+      input: "voice",
+    },
+    { speaker: "examiner", text: "Qu'auriez-vous fait autrement si le budget avait été réduit de moitié ?", phase: 1, startMs: 41_500, endMs: 45_000 },
+    {
+      speaker: "candidate",
+      text: "Si le budget aurait été réduit, j'aurais priorisé les régions avec le plus de demandes et reporté le reste à l'année suivante.",
+      phase: 1,
+      startMs: 45_000,
+      endMs: 70_000,
+      input: "typed",
+    },
+  ],
+};
 
 const reviewOf = (draft: ItemDraft): ReviewRequest => ({
   itemType: draft.type,
@@ -248,7 +299,11 @@ const recordedContent = (
 
 const platformFetch: FetchLike = (url, init) => fetch(url, init);
 
-export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult> => {
+/**
+ * The machinery both runs share: the vault holding the key, the ledger, the tee on `fetch`, and
+ * `call`, one metered call with its completions kept.
+ */
+const recorder = async (deps: Pick<LiveSmokeDeps, "apiKey" | "models" | "voice" | "prices" | "now" | "fetchImpl">) => {
   const now = deps.now ?? (() => new Date().toISOString());
   const vault = memoryKeyVault();
   await vault.putApiKey(deps.apiKey, { remember: false });
@@ -303,6 +358,11 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
   };
 
   const startedAt = now();
+  return { now, ai, ledger, seen, completions, billed, call, startedAt };
+};
+
+export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult> => {
+  const { now, ai, ledger, seen, completions, billed, call, startedAt } = await recorder(deps);
 
   await withAiProvider(ai, "item-generation", (provider) => provider.verifyKey());
   const listed = (() => {
@@ -320,7 +380,12 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
       startedAt,
       endedAt: now(),
       calls: [],
-      byFeature: { "writing-feedback": nothing, "item-generation": nothing, "oral-practice": nothing },
+      byFeature: {
+        "writing-feedback": nothing,
+        "item-generation": nothing,
+        "oral-practice": nothing,
+        "oral-assessment": nothing,
+      },
       byMethod: {
         generateItems: empty,
         reviewItem: empty,
@@ -328,6 +393,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
         examinerTurn: empty,
         transcribe: empty,
         speak: empty,
+        assessOral: empty,
       },
       missingModels,
       completions: [],
@@ -366,6 +432,8 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
       await call("oral-practice", "examinerTurn", request, (p) => p.examinerTurn(request));
     }
   }
+  const session: OralRequest = { ...ORAL_SESSION, descriptors: deps.descriptors };
+  await call("oral-assessment", "assessOral", session, (p) => p.assessOral(session));
 
   const calls = await ledger.since(startedAt);
   const measure = (feature: AiFeature): FeatureMeasure => {
@@ -394,6 +462,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
       "writing-feedback": measure("writing-feedback"),
       "item-generation": measure("item-generation"),
       "oral-practice": measure("oral-practice"),
+      "oral-assessment": measure("oral-assessment"),
     },
     byMethod: {
       generateItems: average("generateItems"),
@@ -402,8 +471,35 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
       examinerTurn: average("examinerTurn"),
       transcribe: average("transcribe"),
       speak: average("speak"),
+      assessOral: average("assessOral"),
     },
     missingModels,
     completions,
   };
+};
+
+/** How many times the stability recording scores the one session: Phase 5 exit criterion 4's five. */
+export const ORAL_STABILITY_RUNS = 5;
+
+export type OralStabilityResult = {
+  readonly startedAt: string;
+  readonly calls: readonly CostEntry[];
+  readonly completions: readonly RecordedCompletion[];
+};
+
+/**
+ * The scoring-stability recording (Phase 5 exit criterion 4, progress.md D126): the same fixed
+ * session, `ORAL_SESSION`, scored `ORAL_STABILITY_RUNS` times through the path the browser takes,
+ * one call after another, its completions kept. The factory's eval reads the file it becomes and
+ * reports how far the bands moved. It makes no other call.
+ */
+export const runOralStability = async (
+  deps: Pick<LiveSmokeDeps, "apiKey" | "models" | "prices" | "descriptors" | "now" | "fetchImpl">,
+): Promise<OralStabilityResult> => {
+  const { ledger, completions, call, startedAt } = await recorder(deps);
+  const session: OralRequest = { ...ORAL_SESSION, descriptors: deps.descriptors };
+  for (let run = 0; run < ORAL_STABILITY_RUNS; run += 1) {
+    await call("oral-assessment", "assessOral", session, (p) => p.assessOral(session));
+  }
+  return { startedAt, calls: await ledger.since(startedAt), completions };
 };

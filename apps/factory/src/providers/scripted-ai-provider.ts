@@ -137,6 +137,7 @@ export const scriptedAiProvider = (): AiProvider => {
       transcribe: false,
       speak: false,
       examinerTurn: false,
+      assessOral: false,
     }),
 
     generatePassage: (req) => {
@@ -245,6 +246,10 @@ export const scriptedAiProvider = (): AiProvider => {
     examinerTurn: () => {
       usage = null;
       return Promise.reject(new Error("The scripted provider runs no oral session."));
+    },
+    assessOral: () => {
+      usage = null;
+      return Promise.reject(new Error("The scripted provider assesses no oral session."));
     },
 
     verifyKey: () => {

@@ -6,6 +6,8 @@ import type {
   GeneratePassageRequest,
   GenerateScenarioRequest,
   ItemDraft,
+  OralAssessment,
+  OralRequest,
   PassageDraft,
   ReviewRequest,
   ReviewVerdict,
@@ -25,8 +27,8 @@ import type {
  * vendor error and payload into our types at the edge (§8.2), and accounts for
  * cost. Nothing above this port knows OpenAI exists.
  *
- * **Not yet the whole of §3.3.** `assessOral` and `openVoiceSession` and their
- * net-new domain types land with their slices (Phase 5 Slice 3 and Phase 6), the same "the minimum the consumer needs" discipline the store ports
+ * **Not yet the whole of §3.3.** `openVoiceSession` and its net-new domain types land
+ * with Phase 6, the same "the minimum the consumer needs" discipline the store ports
  * already use (progress.md D45). Two §3.3 amendments
  * are recorded in the D-log: `generatePassage` is added (the factory's stage 2
  * needs AI passage construction, content-factory.md §4.2), and `generateItems`/
@@ -46,6 +48,8 @@ import type {
  * Phase 5 Slice 2 (progress.md D117) adds the turn loop's three: `transcribe`, §3.3's own
  * method, amended to take a request that carries the clip's measured duration, which is
  * what a per-minute model is priced by; and `speak` and `examinerTurn`, two amendments.
+ *
+ * `assessOral` is §3.3's own method, landed with Phase 5 Slice 3 (progress.md D122).
  *
  * `verifyKey` is a third §3.3 amendment (progress.md D99, Phase 4 Slice 1): the one cheap
  * call `/settings/key` makes to report whether the user's key works (PRD §8.10).
@@ -89,6 +93,14 @@ export type AiProvider = {
    * coping or struggling, so the client can adapt the phase.
    */
   examinerTurn: (req: ExaminerTurnRequest) => Promise<ExaminerTurn>;
+  /**
+   * The report on a whole spoken session (architecture.md §8.5, "post-session scoring";
+   * progress.md D122): a band and quoted evidence per criterion, three fixes most costly
+   * first, five missing words in the candidate's own sentences, and the errors in the
+   * candidate's turns as offsets that `checkOralAssessment` accepts over `req.turns`. A
+   * provider that cannot place its errors rejects, as `assessWriting` does.
+   */
+  assessOral: (req: OralRequest) => Promise<OralAssessment>;
   /**
    * One cheap call that proves the key this provider holds is accepted. Resolves when it
    * is; otherwise rejects with the provider's own error for the reason (an invalid key, a

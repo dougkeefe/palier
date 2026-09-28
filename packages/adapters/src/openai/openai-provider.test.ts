@@ -125,6 +125,33 @@ const speechResponse = (type = "audio/mpeg", bytes = "ID3-audio") => ({
 
 const EXAMINER_TURN = { text: " Parlez-moi d'un projet récent. ", difficulty: null };
 
+/** The candidate's words in the oral contract's session (`aiProviderContract`) and in `ORAL_TURNS`. */
+const SAID = "J'ai mené un projet de modernisation, mais les délais était très serrés.";
+
+const ORAL_TURNS = [
+  { speaker: "examiner", text: "Parlez-moi d'un projet que vous avez mené.", phase: 0, startMs: 0, endMs: 0 },
+  { speaker: "candidate", text: SAID, phase: 0, startMs: 2_000, endMs: 9_000, input: "voice" },
+  { speaker: "examiner", text: "Qu'auriez-vous fait autrement ?", phase: 1, startMs: 9_500, endMs: 9_500 },
+  { speaker: "candidate", text: "Je aurais demandé plus de temps.", phase: 1, startMs: 11_000, endMs: 14_000, input: "typed" },
+] as const;
+
+const aMissingWord = (excerpt: string) => ({ word: "échéancier", turn: 1, excerpt, example: "Nous avions un échéancier serré." });
+
+/** An oral report whose every excerpt is in turn 1, the contract's candidate turn. */
+const ORAL_REPORT = {
+  criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+  fixes: [
+    { criterion: "grammar", subSkill: "agreement", advice: "Accordez le verbe.", evidence: "les délais était" },
+    { criterion: "vocabulary", subSkill: "word-choice-precision", advice: "Précisez.", evidence: "très serrés" },
+    { criterion: "task", subSkill: "connectors-and-discourse-markers", advice: "Enchaînez.", evidence: "mais" },
+  ],
+  missingWords: ["J'ai mené", "un projet", "de modernisation", "les délais", "très serrés"].map(aMissingWord),
+  errors: [{ turn: 1, excerpt: "était", correction: "étaient", rule: "Accord du verbe avec le sujet" }],
+};
+
+/** The oral report's prompt, told from writing feedback's, which shares its model. */
+const isOralReport = (body: string): boolean => body.includes("assessing a rehearsal");
+
 /** Routes each call to the right envelope by the model in the request body, or to the model list. */
 const cannedFetch: FetchLike = (url, init) => {
   if (url.endsWith("/models")) return Promise.resolve(modelsResponse());
@@ -133,7 +160,9 @@ const cannedFetch: FetchLike = (url, init) => {
   const model = (JSON.parse(textOf(init.body) || "{}") as { model: string }).model;
   if (model === MODELS.passage) return Promise.resolve(chatResponse(PASSAGE_ENVELOPE));
   if (model === MODELS.draft) return Promise.resolve(chatResponse(ITEM_ENVELOPE));
-  if (model === MODELS.assess) return Promise.resolve(chatResponse(FEEDBACK));
+  if (model === MODELS.assess) {
+    return Promise.resolve(chatResponse(isOralReport(textOf(init.body)) ? ORAL_REPORT : FEEDBACK));
+  }
   if (model === MODELS.scenario) return Promise.resolve(chatResponse(SCENARIO_PLAN));
   if (model === MODELS.examiner) return Promise.resolve(chatResponse(EXAMINER_TURN));
   return Promise.resolve(chatResponse(VERDICT));
@@ -156,12 +185,14 @@ describe("openAiProvider", () => {
       transcribe: true,
       speak: true,
       examinerTurn: true,
+      assessOral: true,
     });
   });
 
-  it("reports no writing feedback when no assess model is configured, as the factory's is not", () => {
+  it("reports no writing feedback and no oral report when no assess model is configured, as the factory's is not", () => {
     const { assess: _assess, ...factoryModels } = MODELS;
-    expect(makeProvider({ models: factoryModels }).capabilities().assessWriting).toBe(false);
+    const caps = makeProvider({ models: factoryModels }).capabilities();
+    expect([caps.assessWriting, caps.assessOral]).toEqual([false, false]);
   });
 
   it("reports no scenarios when no scenario model is configured, as the browser's is not", () => {
@@ -830,6 +861,132 @@ describe("openAiProvider — assessWriting (D105)", () => {
     const provider = makeProvider({ models: factoryModels, fetchImpl: spy });
     await provider.reviewItem(aReview);
     await expect(provider.assessWriting(aRequest)).rejects.toThrow(/models\.assess/u);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(provider.lastUsage()).toBeNull();
+  });
+});
+
+describe("openAiProvider — assessOral (D122)", () => {
+  const aRequest = {
+    sessionType: "work",
+    targetBand: "C",
+    lang: "fr",
+    feedbackLang: "en",
+    topic: "project-management",
+    phases: [
+      { name: "Votre projet", intent: "Have the candidate describe a recent project." },
+      { name: "Recul", intent: "Push for reflection." },
+    ],
+    turns: ORAL_TURNS,
+    descriptors: { A: "Descriptor A.", B: "Descriptor B.", C: "Descriptor C." },
+  } as const;
+
+  const answers = (...bodies: unknown[]): { fetchImpl: FetchLike; sent: () => string[] } => {
+    const sent: string[] = [];
+    return {
+      sent: () => sent,
+      fetchImpl: (_url, init) => {
+        sent.push(textOf(init.body));
+        const body = bodies.length > 1 ? bodies.shift() : bodies[0];
+        return Promise.resolve(chatResponse(body));
+      },
+    };
+  };
+
+  it("places each quoted error at its offsets in the candidate's own turn", async () => {
+    const report = await makeProvider().assessOral(aRequest);
+    const start = SAID.indexOf("était");
+    expect(report.errors).toEqual([
+      { turn: 1, start, end: start + "était".length, correction: "étaient", rule: "Accord du verbe avec le sujet" },
+    ]);
+    expect(report.fixes.map((fix) => fix.subSkill)).toEqual([
+      "agreement",
+      "word-choice-precision",
+      "connectors-and-discourse-markers",
+    ]);
+    expect(report.missingWords).toHaveLength(5);
+  });
+
+  it("calls the assess model with the numbered turns, the phases, the descriptors, the band and both languages", async () => {
+    const { fetchImpl, sent } = answers(ORAL_REPORT);
+    await makeProvider({ fetchImpl }).assessOral(aRequest);
+    const body = JSON.parse(sent()[0] ?? "{}") as { model: string; messages: { content: string }[] };
+    const user = body.messages[1]?.content ?? "";
+    expect(body.model).toBe("m-assess");
+    expect(user).toContain(`[1] Candidate: ${SAID}`);
+    expect(user).toContain("[0] Examiner: Parlez-moi");
+    expect(user).toContain("[3] Candidate (typed): Je aurais");
+    expect(user).toContain('"Recul" (Push for reflection.)');
+    expect(user).toContain("Level C: Descriptor C.");
+    expect(user).toContain("aiming at level C");
+    expect(user).toContain("evidence, the advice and the rules in English");
+    expect(user).toContain("corrections in French");
+    expect(user).toContain('"verb-tense-and-mood"');
+    expect(user).toContain('"main-idea"');
+    expect(user).not.toContain('"fluency-and-hesitation"');
+  });
+
+  it("retries an excerpt that is not in the turn it names, then accepts a corrected answer", async () => {
+    const miscopied = { ...ORAL_REPORT, errors: [{ turn: 3, excerpt: "était", correction: "x", rule: "r" }] };
+    const { fetchImpl, sent } = answers(miscopied, ORAL_REPORT);
+    const report = await makeProvider({ fetchImpl }).assessOral(aRequest);
+    expect(sent()).toHaveLength(2);
+    expect(sent()[1]).toContain('turn 3, error 0: \\"était\\" is not in the text');
+    expect(report.errors).toHaveLength(1);
+  });
+
+  it("retries an error on the examiner's turn, which is not the candidate's to correct", async () => {
+    const onExaminer = { ...ORAL_REPORT, errors: [{ turn: 0, excerpt: "Parlez", correction: "x", rule: "r" }] };
+    const { fetchImpl, sent } = answers(onExaminer, ORAL_REPORT);
+    await makeProvider({ fetchImpl }).assessOral(aRequest);
+    expect(sent()[1]).toContain("turn 0 is the examiner's");
+  });
+
+  it("refuses a fix on an oral sub-skill, twice, as InvalidResponseError", async () => {
+    const oralFix = { ...ORAL_REPORT, fixes: [...ORAL_REPORT.fixes.slice(0, 2), { ...ORAL_REPORT.fixes[0], subSkill: "fluency-and-hesitation" }] };
+    await expect(makeProvider({ fetchImpl: answers(oralFix).fetchImpl }).assessOral(aRequest)).rejects.toThrow(
+      InvalidResponseError,
+    );
+  });
+
+  it("refuses a missing word quoted from words the candidate never said, twice, as InvalidResponseError", async () => {
+    const invented = { ...ORAL_REPORT, missingWords: [aMissingWord("des crédits"), ...ORAL_REPORT.missingWords.slice(1)] };
+    await expect(makeProvider({ fetchImpl: answers(invented).fetchImpl }).assessOral(aRequest)).rejects.toThrow(
+      /is not in turn 1/u,
+    );
+  });
+
+  it("bills both completions of a retried report (D102)", async () => {
+    const miscopied = { ...ORAL_REPORT, errors: [{ turn: 1, excerpt: "absent", correction: "x", rule: "r" }] };
+    const provider = makeProvider({ fetchImpl: answers(miscopied, ORAL_REPORT).fetchImpl });
+    await provider.assessOral(aRequest);
+    expect(provider.lastUsage()).toMatchObject({ model: "m-assess", inputTokens: 200, outputTokens: 100 });
+  });
+
+  it("abandons a report that outlives its limit as ProviderTimeoutError, never retried", async () => {
+    let calls = 0;
+    const hangs: FetchLike = () => {
+      calls++;
+      return new Promise(() => undefined);
+    };
+    await expect(
+      makeProvider({ fetchImpl: hangs, timeoutMs: 5, maxRetries: 3 }).assessOral(aRequest),
+    ).rejects.toBeInstanceOf(ProviderTimeoutError);
+    expect(calls).toBe(1);
+  });
+
+  it("translates 401 to InvalidApiKeyError", async () => {
+    const refusing: FetchLike = () =>
+      Promise.resolve({ ok: false, status: 401, json: () => Promise.resolve({}), text: () => Promise.resolve("no") });
+    await expect(makeProvider({ fetchImpl: refusing }).assessOral(aRequest)).rejects.toBeInstanceOf(InvalidApiKeyError);
+  });
+
+  it("refuses to run with no assess model, before any request and with no usage", async () => {
+    const { assess: _assess, ...factoryModels } = MODELS;
+    const spy = vi.fn(cannedFetch);
+    const provider = makeProvider({ models: factoryModels, fetchImpl: spy });
+    await provider.reviewItem(aReview);
+    await expect(provider.assessOral(aRequest)).rejects.toThrow(/models\.assess/u);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(provider.lastUsage()).toBeNull();
   });
