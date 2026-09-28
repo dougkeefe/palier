@@ -7,8 +7,10 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 
 ## Invariants
 
-- **Locale-prefixed routing.** Every route lives under `src/app/[locale]/`; `/en` and
-  `/fr` are prerendered, `/` redirects. `src/i18n/{routing,request,navigation}.ts`
+- **Locale-prefixed routing.** Every route lives under `src/app/[locale]/`; `/` redirects.
+  **Every page renders per request** (ADR 22): the layout reads the CSP's nonce from the request,
+  so nothing under `[locale]` is prerendered. Do not add `generateStaticParams`, `force-static` or a
+  `revalidate` to a page: a static page has no nonce and cannot run. `src/i18n/{routing,request,navigation}.ts`
   configure next-intl; `src/proxy.ts` negotiates the locale. In Next.js 16 Middleware
   was renamed **Proxy**, so the file is `proxy.ts` (deviation D24).
 - **No hardcoded user-visible strings.** Every string goes through next-intl and lives
@@ -29,7 +31,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   (it re-exports vitest-based contract suites, `msw/node` and PGlite — D59).
 - **Islands get the container from `ContainerProvider`** (`src/components/`), which builds it once
   in the browser after hydration and imports the container module lazily, so the adapters stay out of
-  the shared first-load JS. The layout passes `hermetic` from the environment. Screens are static RSC
+  the shared first-load JS. The layout passes `hermetic` from the environment. Screens are thin RSC
   shells around one client island each (`/start`, `/home`, `/diagnostic`, `/practice/{reading,writing}`,
   `/practice/writing/{workshop,generate}`, `/practice/oral`, `/practice/oral/report`,
   `/exam`, `/exam/run`, `/exam/results`, `/settings/{data,sync,key}`).
@@ -46,7 +48,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   through `parseExamProfileOrThrow` (ADR 18, D42). Import it by package name, never by a
   relative path out of `apps/web` — `no-relative-escape` in `.dependency-cruiser.cjs`
   rejects that, and `.json` is in the cruiser's resolver extensions, so it is caught.
-- **Mock exams** (Phase 3 Slice 3, progress.md D85–D87). The three exam routes are static, and the run is
+- **Mock exams** (Phase 3 Slice 3, progress.md D85–D87). The three exam routes take no route parameter, and the run is
   named in `?run=`, which the island reads from `window.location`. Offline, `router.push` falls back to a
   document load, which the worker serves with `ignoreSearch`.
   - The runner's rules are in `src/features/exam/`: `rules.ts` holds the product constants and the clock,
@@ -87,8 +89,23 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `@palier/adapters/bank`. A monthly workflow opens its report as a pull request.
 - **Baseline security headers on every response** (`next.config.ts`, architecture.md §12): HSTS,
   `nosniff`, `Referrer-Policy: no-referrer`, and a `Permissions-Policy` allowing the microphone on
-  this origin only. They are asserted on the production server in `e2e/production.spec.ts`. The
-  strict CSP is Phase 7's.
+  this origin only. They are asserted on the production server in `e2e/production.spec.ts`.
+- **The strict CSP on every page** (Phase 7 Slice 1; ADR 22, progress.md D133–D136).
+  - `src/proxy.ts` mints a nonce per request and sets the policy from `lib/csp.ts` on the request, where
+    Next reads the nonce, and on the response.
+  - Production has `script-src 'self' 'nonce-…'`, `connect-src 'self' https://api.openai.com`, and Trusted
+    Types enforced. `next dev` gets a relaxed policy.
+  - **A new origin the browser must reach is a `csp.ts` change with its test**, never a loosening
+    elsewhere.
+  - **Nothing may write HTML or script strings to the DOM.** `dangerouslySetInnerHTML`, `innerHTML` and
+    `eval` are refused by Trusted Types in production. The one inline script is the Trusted Types policy
+    (`lib/trusted-types.ts`), nonced in the layout's `<head>`. It passes a script URL unchanged, because
+    Turbopack finds a chunk by its `src` text.
+  - `src/instrumentation-client.ts` sets zod's `jitless` before any app code runs, since zod's `new
+    Function` is refused.
+  - `e2e/csp-production.spec.ts` holds every page, in both locales, to **zero violations** on the built
+    output. Its red team proves each way to run script or send the key elsewhere is refused. A new page
+    joins its `PAGES` list.
 - **Sync in the browser graph** (D71): the container's `sync` port is the real `@palier/adapters/sync`
   transport, same-origin, presenting `vault.deviceSecret()`, in **both** graphs. In hermetic mode each
   page load is its own device, with a random 64-hex secret and a separate id counter, and syncs
@@ -194,7 +211,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   `key-leak-production.spec.ts` (the key at rest, both modes, through a reload, with a ledger row in
   the dump), `oral-production.spec.ts` (a phase crossed by time), `spend-production.spec.ts` (the meter and the cap's warnings over real IndexedDB), and
   `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
-  whose fake timers stall Dexie and React). Axe on the states, (`e2e/`),
+  whose fake timers stall Dexie and React), and `csp-production.spec.ts` (every page's nonce and zero
+  violations, and the red team, D136). Axe on the states, (`e2e/`),
   Lighthouse perf + a11y ≥ 95 (`lighthouserc.json`, on its own port 3200, so a test server left
   behind on 3000 by a killed lane can never answer it, D90), bundle-size < 180 KB gzipped
   (`scripts/check-bundle-size.mjs`, override with `PALIER_BUNDLE_BUDGET_KB` to test it).

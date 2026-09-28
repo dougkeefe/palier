@@ -8,3 +8,12 @@ packages:
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+
+# `pnpm audit` names the private `@palier/content` workspace by its directory, `content`,
+# at 0.0.0, and so matches it against the unrelated npm package `content`. No package of
+# that name is in the lockfile, so these two advisories cannot apply (progress.md D135).
+# Every other advisory still fails the audit step in CI.
+auditConfig:
+  ignoreGhsas:
+    - GHSA-x6wp-rfwh-hcx7
+    - GHSA-5854-jvxx-2cg9

@@ -1,0 +1,21 @@
+# Dependabot (architecture.md §6.4, §12; progress.md D135). A supply-chain compromise of a
+# client dependency is the other realistic path to the user's key, so updates are
+# proposed weekly rather than discovered. Every update is a pull request that must pass
+# `verify` like any other, and "no new dependency without a note" still applies to
+# anything an update brings in.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # One pull request for the patch and minor updates that pass on their own…
+      minor-and-patch:
+        update-types: [minor, patch]
+    # …and a pull request each for a major, which is read, not merged on green.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { migrateDatabase, migrationDecision } from "./migrate";
+import { migrateDatabase, migrationDecision, missingProductionSecret } from "./migrate";
 
 const URL_ = "postgres://user:pw@db.example/palier";
 
@@ -63,5 +63,51 @@ describe("migrateDatabase", () => {
     const apply = vi.fn(() => Promise.reject(new Error("relation already exists")));
 
     await expect(migrateDatabase({ env: { DATABASE_URL: URL_ }, apply, log: () => undefined })).rejects.toThrow("relation already exists");
+  });
+});
+
+describe("missingProductionSecret", () => {
+  const production = { DATABASE_URL: URL_, VERCEL_ENV: "production" };
+
+  it("names RATE_LIMIT_SALT when a production deployment with a database has none", () => {
+    expect(missingProductionSecret(production)).toBe("RATE_LIMIT_SALT");
+  });
+
+  it("treats an empty salt as none", () => {
+    expect(missingProductionSecret({ ...production, RATE_LIMIT_SALT: "" })).toBe("RATE_LIMIT_SALT");
+  });
+
+  it("passes a production deployment that has its salt", () => {
+    expect(missingProductionSecret({ ...production, RATE_LIMIT_SALT: "s3cret" })).toBeNull();
+  });
+
+  it("does not hold a preview, a person off Vercel, or a deployment with no database to it", () => {
+    expect(missingProductionSecret({ DATABASE_URL: URL_, VERCEL_ENV: "preview" })).toBeNull();
+    expect(missingProductionSecret({ DATABASE_URL: URL_ })).toBeNull();
+    expect(missingProductionSecret({ VERCEL_ENV: "production" })).toBeNull();
+    expect(missingProductionSecret({ VERCEL_ENV: "production", DATABASE_URL: "" })).toBeNull();
+  });
+});
+
+describe("migrateDatabase in a production deployment", () => {
+  it("fails the deploy, before migrating anything, when the salt is missing", async () => {
+    const apply = vi.fn(() => Promise.resolve());
+
+    await expect(
+      migrateDatabase({ env: { DATABASE_URL: URL_, VERCEL_ENV: "production" }, apply, log: () => undefined }),
+    ).rejects.toThrow("RATE_LIMIT_SALT is not set for this production deployment");
+    expect(apply).not.toHaveBeenCalled();
+  });
+
+  it("migrates when the salt is set", async () => {
+    const apply = vi.fn(() => Promise.resolve());
+
+    const ran = await migrateDatabase({
+      env: { DATABASE_URL: URL_, VERCEL_ENV: "production", RATE_LIMIT_SALT: "s3cret" },
+      apply,
+      log: () => undefined,
+    });
+
+    expect(ran).toBe(true);
   });
 });

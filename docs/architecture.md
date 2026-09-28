@@ -73,7 +73,7 @@
                     └────────────────────────┘
 ```
 
-Three things to notice. First, the item bank is a static asset, so the core product is a CDN-served experience with no backend dependency and no cold starts. Second, the only server code in the paid path is a stateless token minter small enough to review in one sitting, which is also the only place the user's key touches our infrastructure. Third, sync is on the side of the architecture, never in front of it: every read the session engine makes comes from IndexedDB, so a sync outage is invisible to someone studying.
+Three things to notice. First, the item bank is a static asset, so the core product is a CDN-served experience with no backend dependency and no cold starts. *(Amended 28 September 2026, ADR 22, `progress.md` D133: the bank and the chunks are still static, but each page's HTML now renders per request so the strict CSP can carry a nonce. Studying still depends on no backend, since the service worker serves every page offline.)* Second, the only server code in the paid path is a stateless token minter small enough to review in one sitting, which is also the only place the user's key touches our infrastructure. Third, sync is on the side of the architecture, never in front of it: every read the session engine makes comes from IndexedDB, so a sync outage is invisible to someone studying.
 
 ---
 
@@ -303,7 +303,7 @@ Rejected alternatives, recorded so the decision is not relitigated: WebSocket fr
 
 ### 6.4 Additional controls
 
-- Strict CSP with no inline script, `connect-src` limited to self, `api.openai.com` and the bank origin, and Trusted Types where supported. XSS is the real threat to a browser-held key, so this is the main mitigation.
+- Strict CSP with no inline script, `connect-src` limited to self, `api.openai.com` and the bank origin, and Trusted Types where supported. XSS is the real threat to a browser-held key, so this is the main mitigation. *(Implemented 28 September 2026, Phase 7 Slice 1, ADR 22, `progress.md` D133–D136: a per-request nonce set by `src/proxy.ts`, Trusted Types enforced with one `default` policy, and the bank on this origin, so `connect-src` is `'self' https://api.openai.com`. The nonce is why pages render per request.)*
 - No third-party scripts at all. No analytics SDK, no tag manager, no font CDN.
 - Subresource integrity on anything not same-origin.
 - Dependabot plus a lockfile audit gate in CI, since a supply chain compromise of a client dependency is the other realistic path to the key.
@@ -704,7 +704,7 @@ answers **202**, is rate-limited per IP hash at 120 batches an hour, and answers
 
 *Amended 24 September 2026 (ADR 21):* every account and sync route runs on **Node**. Next.js 16 deprecates the Edge runtime, and the Postgres driver needs Node. The wire protocol, including every status code, is the table in `packages/testing/src/msw/sync-handlers.ts`. With no database configured, every sync route answers 503.
 
-Everything else is static: the app shell, the bank bundles, and the library content.
+Everything else is static: the app shell, the bank bundles, and the library content. *(Amended 28 September 2026, ADR 22: the app shell's HTML renders per request, for the CSP's nonce. The bank bundles and the chunks stay static.)*
 
 ---
 
@@ -731,7 +731,7 @@ Sync being on by default is a real change to this posture and the specification 
 - **Third parties:** OpenAI, on the user's own account and under their own agreement with OpenAI, which the onboarding states plainly. Vercel as host. Nothing else.
 - **Security headers:** strict CSP as in 6.4, HSTS, `X-Content-Type-Options`, `Referrer-Policy: no-referrer`, `Permissions-Policy` allowing microphone on the app origin only.
 - **Dependency hygiene:** lockfile committed, `npm audit` gate in CI, Dependabot, no dependency added without an entry in `docs/adr/`.
-- **Disclosure:** a `SECURITY.md` with a contact address and a 90 day coordinated disclosure commitment.
+- **Disclosure:** a `SECURITY.md` with a contact address and a 90 day coordinated disclosure commitment. *(Written 28 September 2026, `progress.md` D135. The contact is GitHub's private vulnerability reporting rather than an email address, so no personal address is published.)*
 - **Data rights:** export everything to JSON in one tap, import it back, delete everything locally and server-side in one tap with a confirmation.
 
 Note on the Privacy Act: this is a personal, non-governmental project holding no government information, so the Act does not apply to it. Keep it that way. Do not accept departmental data, do not add SSO against a GC identity provider, and do not add any feature where a manager can see an employee's results.

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { isHermetic } from "@palier/testing/in-memory";
@@ -11,6 +12,8 @@ import { Header } from "../../components/Header";
 import { ServiceWorkerRegistrar } from "../../components/ServiceWorkerRegistrar";
 import { SyncRunner } from "../../components/sync/SyncRunner";
 import { routing } from "../../i18n/routing";
+import { NONCE_HEADER } from "../../lib/csp";
+import { TRUSTED_TYPES_SCRIPT } from "../../lib/trusted-types";
 
 // The design system of record. Imported once here, ahead of the app's own
 // globals, so the token custom properties exist before any rule uses them.
@@ -18,12 +21,9 @@ import "@palier/ui/tokens.css";
 import "@palier/ui/components.css";
 import "../globals.css";
 
-// Every route lives under [locale], so this is the app's root layout. Both
-// locales are prerendered.
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
-
+// Every route lives under [locale], so this is the app's root layout. Every page renders
+// per request, because the strict CSP's nonce is fresh per response (ADR 22, progress.md
+// D133), so no locale is prerendered.
 export async function generateMetadata({
   params,
 }: {
@@ -43,13 +43,19 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
 
-  // Opt this request into static rendering with the resolved locale.
+  // Hands next-intl the resolved locale, so no component has to read it from a header.
   setRequestLocale(locale);
+  // The proxy's nonce, for the one inline script this app writes (lib/trusted-types.ts).
+  const nonce = (await headers()).get(NONCE_HEADER) ?? undefined;
 
   const t = await getTranslations("nav");
 
   return (
     <html lang={locale}>
+      <head>
+        {/* In the head, so the Trusted Types policy exists before the chunk loader's first write. */}
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: TRUSTED_TYPES_SCRIPT }} />
+      </head>
       <body>
         <a href="#main" className="app-skip-link pl-focusable">
           {t("skipToContent")}

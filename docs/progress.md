@@ -212,7 +212,7 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 **Phase 6's decision gate is resolved: studio mode is deferred past 1.0** (28 September 2026, human, D131). Phase 7 follows
 Phase 5 directly and is planned as four slices and three gates (D132), mirrored in `implementation-plan.md` §7. **Slice 1,
-security hardening, is built** on `dougkeefe/port-au-prince` (D133–D136). Phase 5's deferred cost check (D130) and the product
+security hardening, is built** on `dougkeefe/port-au-prince` (D133–D137). Phase 5's deferred cost check (D130) and the product
 pilot (Gate E, D97) still run beside it, both the human's.
 
 **Next: Phase 7 Slice 2 — server lifecycle and observability.** No new product surface beyond the error states, so no gate
@@ -570,7 +570,7 @@ Nothing is ticked without session-log evidence.
 - [ ] Accessibility audit with VoiceOver and NVDA on the core flows, and a screen-reader user's pass if one can be arranged.
   Human (Gate L). An agent builds PRD §11's shortcut sheet and audits the `lang` attributes beforehand, in Slice 3
 - [~] Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to leak the key.
-  **Slice 1, built on this branch** (D133–D136)
+  **Slice 1, built on this branch** (D133–D137)
 - [ ] The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
   Slice 4, scoped by Gate K; the articles' French is part of Gate L
 - [~] Observability: the client diagnostic bundle, the prefilled issue path, no error reporting service (ADR 15). **The
@@ -4848,11 +4848,174 @@ merged, none critical. The human chose to fix all of them.
 - **Exit criterion 1's "no known security defects"** cannot be ticked by the agent that built the hardening. Slice 1 gives the
   evidence; Gate L's red-team read is the human's.
 
+### D133 — the strict CSP is nonce-based, so every page renders per request (ADR 22)
+**Date:** 28 September 2026 · **Status:** accepted (human decision on the spike's evidence); Phase 7 Slice 1
+
+- **The spike came first, on the built output**, as the plan said. What it found:
+  - Next 16 writes two inline `self.__next_f.push(…)` scripts into every page, so `script-src 'self'` stops hydration;
+  - `experimental.sri` adds `integrity` to the external chunks and leaves the inline scripts alone;
+  - hashing the inline scripts would need a second build to bake per-route headers, and a difference between the two
+    builds would break hydration in production;
+  - a nonce through `src/proxy.ts` gave zero violations on all 19 routes.
+- **The human chose nonces with per-request rendering** over static pages with build-time hashes, and over
+  `'unsafe-inline'`. **ADR 22** records it, because architecture.md said "the app shell is static". It is amended in
+  place.
+- **Built:**
+  - `lib/csp.ts`: a pure policy builder and `withContentSecurityPolicy`, one test per directive and per dev branch;
+  - `proxy.ts`: it composes that with next-intl, which forwards the request's headers to the render
+    (`NextResponse.next({ request: { headers } })`), so Next sees the nonce;
+  - the layout reads `x-nonce`, and `generateStaticParams` is gone.
+- **Deliberate choices in the policy:**
+  - **no `'strict-dynamic'`**, which would trust any origin a trusted script loads from;
+  - **`style-src 'self'`**, since the built pages have no inline style;
+  - **the bank is same-origin**, so `connect-src` is `'self' https://api.openai.com`;
+  - `media-src blob:` is for the examiner's voice and the recording.
+- **`next dev` is relaxed** (`'unsafe-eval'`, inline styles, `ws:`, no Trusted Types), so the hermetic lane runs a
+  policy but not the strict one. The strict one is held on the build by `e2e/csp-production.spec.ts`: both locales,
+  every page, every script nonced, zero violations, and a fresh nonce per response.
+- **What it cost, measured:**
+  - bundle 165.9 KB of 180 (was 165.7);
+  - E2E 63 passed, the offline journeys among them, since the service worker caches each page with its own header;
+  - Lighthouse: the session log has the figures.
+- Pages answer `Cache-Control: private, no-store`, a function invocation per view. `docs/deploy.md` gains the post-deploy
+  check.
+
+### D134 — Trusted Types enforced: one default policy, passed through unchanged, and zod's code generation off
+**Date:** 28 September 2026 · **Status:** accepted
+
+- **`require-trusted-types-for 'script'` and `trusted-types default`** are enforced in production.
+- **The spike's violations came from three places:**
+  - Turbopack's chunk loader assigning `script.src`;
+  - `serviceWorker.register`;
+  - zod 4's `allowsEval` probe, `Function("")`.
+- **The policy is `lib/trusted-types.ts`**, a self-contained installer serialised into one inline, nonced script in the
+  layout's `<head>`. It is the app's only inline script:
+  - a script URL passes only if it is this origin's `/_next/static/` or `/sw.js`;
+  - there is no HTML or script factory, so `innerHTML`, `eval` and `Function` stay refused.
+- **A defect the E2E suite found, recorded because it is not obvious.** The first policy returned the URL made absolute.
+  Every page loaded with zero violations, but every production journey failed, because the container never became
+  ready.
+  - Turbopack finds a loaded chunk by its `src` attribute's text, so a lazily imported chunk waited forever.
+  - The policy now returns its input unchanged, after checking it, and a unit test holds that.
+  - The zero-violations spec cannot catch this class of fault. The production journeys can, and they did.
+- **zod's `jitless` is set in `src/instrumentation-client.ts`**, Next's file that runs before any app code.
+  - A `z.config` in `container.ts` came too late, because some module in the graph parses as it loads.
+  - The file sets `globalThis.__zod_globalConfig` without importing zod. zod reads that object when it loads, so zod
+    stays out of the shared first-load JS.
+  - That global is zod's internal hook, not a documented API. If a zod upgrade stops reading it, the E2E gate fails on
+    the first page that parses, which is where it should be caught.
+  - The server's handlers keep the fast path.
+
+### D135 — the supply chain: the audit gate, Dependabot, and `SECURITY.md` through GitHub's private reporting
+**Date:** 28 September 2026 · **Status:** accepted
+
+- **`pnpm audit --prod --audit-level=high`** is a step in the fast job, outside its timed window, since it calls the
+  registry. It covers production dependencies only, because dev tooling never ships to a browser that holds a key.
+- **Two false positives are ignored, with the reason in `pnpm-workspace.yaml`.**
+  - `pnpm audit` names the private `@palier/content` workspace by its directory, `content`, at 0.0.0. It then matches
+    that against the unrelated npm package `content` (GHSA-x6wp-rfwh-hcx7, GHSA-5854-jvxx-2cg9).
+  - No package of that name is in the lockfile.
+- **The whole tree, dev tooling included, has three high advisories**, all under `@lhci/cli`: `tmp` <0.2.6 and
+  `extract-zip` ≤2.0.1 (twice), through `inquirer` and `@puppeteer/browsers`. They are dev-only and run only on CI's
+  Lighthouse step, so they are recorded, not gated. Dependabot will propose the updates.
+- **`.github/dependabot.yml`:** npm weekly, with minor and patch grouped and each major its own pull request;
+  github-actions monthly.
+- **`SECURITY.md`:**
+  - the reporting route, the 90-day coordinated disclosure architecture.md §12 asks for, and the scope;
+  - the key's protections stated honestly, including ADR 3's dormant exception and the one thing a CSP cannot stop,
+    a running script navigating the page away.
+- **One deviation from §12:** it asks for "a contact address", and the route is GitHub's private vulnerability reporting
+  instead, so no personal address is published. **The human must enable it** in the repository's settings.
+
+### D136 — the deliberate attempt to leak the key, written as tests the policy must stop
+**Date:** 28 September 2026 · **Status:** accepted; Gate L's red-team read is the human's (D132)
+
+- **Two red-team tests in `e2e/csp-production.spec.ts`**, on the production build.
+- **The injected tag.** A script tag written through `page.addScriptTag`, inline or from another origin, does not run.
+- **Code already running** in the page (`page.evaluate`) tries each way to run more script: a written inline script, a
+  foreign script, a `data:` script, and HTML with an `onerror`. Each is refused by Trusted Types.
+- **It also tries each way to send the sentinel key to another origin:** `fetch`, `sendBeacon`, an image, a websocket
+  and a form post. Each is refused before it leaves.
+  - The reports name `connect-src`, `img-src`, `form-action` and Trusted Types.
+  - Nothing reaches the attacker's origin. That is recorded where a request would be answered, since Chromium also
+    reports a request that the policy then blocks on the page's `request` event.
+- **Not tried, and why:** DevTools evaluation is exempt from the policy's eval check, so `eval` and `Function` prove
+  nothing there. The header test holds `'unsafe-eval'` out, and zod's refused probe (D134) was the page's own `Function`.
+- **Proven to bite, twice, each reverted:**
+  - with `script-src 'self' 'unsafe-inline'`, no Trusted Types and `connect-src *`, all five tests failed;
+  - with only `connect-src *`, the red team failed on `fetch: "ran"`.
+- **What a CSP cannot stop:** script that is already running navigating the top-level page to another origin, with the
+  key in the URL. `navigate-to` never shipped in any browser. The defence is that no script the app did not ship can run,
+  and `SECURITY.md` says so.
+
+### D137 — a missing `RATE_LIMIT_SALT` fails the production deploy, never a request
+**Date:** 28 September 2026 · **Status:** accepted; closes D78's deferred item
+
+- D78 left "a missing salt fails loudly" to Phase 7. It gave its reason: failing the running sync service over it would
+  trade a weaker limit for an outage.
+- **`migrateDatabase` now throws before any migration** on a production deploy (`VERCEL_ENV=production`) that has a
+  `DATABASE_URL` and no salt, or an empty one. It is the step the build command already runs.
+  - A preview, a person migrating by hand, and a deploy with no database are not held to it.
+  - `db.ts` keeps its runtime fallback.
+- **If Production's `RATE_LIMIT_SALT` was never set, the next production deploy fails.** That is the intent. The
+  runbook's environment table says so.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 28 September 2026 — `dougkeefe/port-au-prince` (Phase 6's gate resolved; Phase 7 planned; Phase 7 Slice 1, security hardening)
+
+**Phase 5 closed had merged as #38**, so its In-flight row was replaced by this branch's in the first commit.
+
+**Human decisions this session:**
+- **Phase 6's decision gate: studio mode is deferred past 1.0**, and Phase 7 is next (D131). This session first made
+  D113's documentation checks 2 and 3. The Live API has a duration limit it does not publish, and no short-lived browser
+  credential. Its voice table lists no French voice. The human also asked that every document be aligned, and it is: this
+  file, `implementation-plan.md` §7–§11, the PRD §8.6, §16 and §17, architecture.md §6.3, §10, §14 and §20, and two code
+  comments.
+- **The CSP mechanism: nonces with per-request pages** (D133, ADR 22), chosen on the spike's evidence over static pages
+  with build-time hashes and over `'unsafe-inline'`.
+
+**Planned:** Phase 7 as four slices and three gates (D132), mirrored in `implementation-plan.md` §7. The §7 breakdown is
+expanded above, with what already existed ticked `[~]`.
+
+**Built, Slice 1** (D133–D137):
+- the strict CSP (`lib/csp.ts`, `proxy.ts`, the layout's nonce);
+- Trusted Types with one default policy (`lib/trusted-types.ts`);
+- zod jitless in `instrumentation-client.ts`;
+- `e2e/csp-production.spec.ts`: every page in both locales and the red team;
+- the audit step and Dependabot;
+- `SECURITY.md`;
+- `RATE_LIMIT_SALT` failing a production deploy;
+- ADR 22, and `apps/web/CLAUDE.md`'s invariants.
+
+No new dependency.
+
+**Evidence** (after the last code change, on a fresh production build):
+
+```
+pnpm verify          → check-types, lint, boundaries (451 + 237 modules, no violations),
+                       test: 210 files, 3178 passed, 8 todo; coverage thresholds met
+CI=1 pnpm test:e2e    → 63 passed (1.1m) — the 58 before, and csp-production.spec.ts's 5
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.9 KB of 180.0 KB (was 165.7)
+pnpm --filter @palier/web lighthouse  → 17 URLs × 5 runs, every assertion passed;
+                       lowest median performance 0.99, accessibility 1.00 on all, max CLS 0
+pnpm audit --prod --audit-level=high  → 2 high, both ignored (the `content` false positive, D135); exit 0
+git diff packages/engine/src/__fixtures__ → empty
+```
+
+**Proven to bite** (each reverted, then rebuilt):
+- `script-src 'self' 'unsafe-inline'`, no Trusted Types and `connect-src *` → all 5 CSP tests failed;
+- only `connect-src *` → the red team failed on `fetch: "ran"`.
+
+**Found by the suite and fixed** (D134): a Trusted Types policy returning absolute URLs left every lazily imported chunk
+waiting. Nine production journeys failed on a disabled "Continue", with zero violations reported.
+
+**Ticked:** none. Slice 1 is `[~]` until it merges, and exit criterion 1's security half waits on Gate L's red-team read
+(D132). *Next, decided* names Slice 2.
 
 ### 28 September 2026 — `dougkeefe/next-progress-slice-v6` (Phase 5 closed: the stability recording, Gate I, criterion 2 deferred)
 
