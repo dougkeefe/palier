@@ -1,6 +1,6 @@
 {
   "note": "Recorded from the live API by `pnpm --filter @palier/web live-smoke --record` (progress.md D112). Regenerate, never hand-edit.",
-  "recordedAt": "2026-09-28T01:38:58.898Z",
+  "recordedAt": "2026-09-28T18:49:15.175Z",
   "promptVersion": "4",
   "completions": [
     {
@@ -9,25 +9,25 @@
       "request": {
         "itemType": "cloze",
         "stem": {
-          "en": "The offer letters that the human resources team prepared _____ yesterday are ready to send.",
-          "fr": "Les lettres d’offre que l’équipe des ressources humaines a _____ hier sont prêtes à être envoyées."
+          "en": "Each of the shortlisted candidates ___ the required security screening.",
+          "fr": "Chacune des personnes candidates présélectionnées ___ la vérification de sécurité requise."
         },
         "options": [
           {
             "id": "a",
-            "text": "préparé"
+            "text": "has completed"
           },
           {
             "id": "b",
-            "text": "préparés"
+            "text": "have completed"
           },
           {
             "id": "c",
-            "text": "préparée"
+            "text": "is completed"
           },
           {
             "id": "d",
-            "text": "préparées"
+            "text": "were completing"
           }
         ],
         "subSkill": "agreement",
@@ -35,10 +35,127 @@
         "lang": "fr"
       },
       "attempt": 1,
-      "content": "{\n  \"chosenKey\": \"d\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Préparé » is the default form with avoir, but it must agree here with the preceding direct object « les lettres d’offre ».\",\n    \"b\": \"The plural ending reflects « les lettres », but « lettres » is feminine, not masculine.\",\n    \"c\": \"The feminine ending could be prompted by the nearby « offre », but the antecedent of « que » is the plural « les lettres d’offre ».\",\n    \"d\": \"Correct: « que » represents the preceding feminine plural direct object « les lettres d’offre », so the past participle is « préparées ».\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.86,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"“Chacune” is singular, so “has completed” is the best match for subject–verb agreement.\",\n    \"b\": \"The nearby plural “personnes candidates” could attract a plural verb, but “chacune” remains the subject and requires singular agreement.\",\n    \"c\": \"“Is” agrees with a singular subject, but the passive construction does not make sense with the candidate as its subject.\",\n    \"d\": \"A past-progressive meaning is conceivable in another context, but “were” does not agree with “chacune.”\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false,\n    \"note\": \"The French is acceptable Canadian administrative usage. The separate item-design problem is that English options cannot grammatically complete the French sentence.\"\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "usage": {
+        "prompt_tokens": 333,
+        "completion_tokens": 725
+      },
+      "conformant": true
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "The list of employees eligible for the bilingual bonus ___ each month by the staffing team.",
+          "fr": "La liste des membres du personnel admissibles à la prime au bilinguisme ___ chaque mois par l’équipe de dotation."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "is reviewed"
+          },
+          {
+            "id": "b",
+            "text": "are reviewed"
+          },
+          {
+            "id": "c",
+            "text": "review"
+          },
+          {
+            "id": "d",
+            "text": "have reviewed"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.8,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"In an English version of the sentence, the singular head noun “list” takes “is reviewed,” and “by the staffing team” calls for a passive verb.\",\n    \"b\": \"The nearby plural “members” could attract plural agreement, but the subject’s head noun is singular.\",\n    \"c\": \"“Review” could fit a plural subject in an active sentence, but not this subject-and-agent structure.\",\n    \"d\": \"“Have reviewed” could describe a plural subject’s completed action, but it conflicts with both the singular head noun and the passive agent.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false,\n    \"note\": \"The French is natural Canadian administrative language. The item is nevertheless invalid as a French cloze: none of the English options completes the French sentence.\"\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "usage": {
+        "prompt_tokens": 338,
+        "completion_tokens": 613
+      },
+      "conformant": true
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "Neither the manager nor the advisers ___ available to answer questions about the staffing process.",
+          "fr": "Ni la gestionnaire ni les conseillers ___ disponibles pour répondre aux questions sur le processus de dotation."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "are"
+          },
+          {
+            "id": "b",
+            "text": "is"
+          },
+          {
+            "id": "c",
+            "text": "was"
+          },
+          {
+            "id": "d",
+            "text": "has been"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.85,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"The strongest choice if the sentence is translated into English: “Neither the manager nor the advisers are available.” It is not, however, a French word that can fill the blank.\",\n    \"b\": \"“Is” could agree with the singular “la gestionnaire,” but not with the nearer plural “les conseillers”; it also cannot fill a French blank.\",\n    \"c\": \"“Was” could describe past availability of the singular manager, but the nearer subject is plural, and the stem gives no past-time cue.\",\n    \"d\": \"“Has been” could describe the manager’s availability up to now, but it is singular and has no supporting time cue.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false,\n    \"note\": \"The French is natural Canadian administrative usage. The item’s problem is that every answer option is in English; the French blank requires « sont ».\"\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "usage": {
+        "prompt_tokens": 332,
+        "completion_tokens": 728
+      },
+      "conformant": true
+    },
+    {
+      "method": "reviewItem",
+      "model": "gpt-6-sol",
+      "request": {
+        "itemType": "cloze",
+        "stem": {
+          "en": "The information in the applicants’ files ___ confidential and is shared only with authorized staff.",
+          "fr": "Les renseignements contenus dans les dossiers des personnes candidates ___ confidentiels et ne sont communiqués qu’au personnel autorisé."
+        },
+        "options": [
+          {
+            "id": "a",
+            "text": "is"
+          },
+          {
+            "id": "b",
+            "text": "are"
+          },
+          {
+            "id": "c",
+            "text": "seem"
+          },
+          {
+            "id": "d",
+            "text": "have been"
+          }
+        ],
+        "subSkill": "agreement",
+        "targetBand": "C",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\n  \"chosenKey\": \"b\",\n  \"confidence\": 0.55,\n  \"defensibleDistractors\": [\"c\", \"d\"],\n  \"optionCases\": {\n    \"a\": \"“Is” would fit a singular English subject such as “information,” but the French subject, “Les renseignements,” is plural.\",\n    \"b\": \"“Are” expresses the intended plural agreement and the meaning “sont confidentiels.” It is the likely intended answer, although an English word cannot complete this French sentence.\",\n    \"c\": \"“Seem” agrees with a plural subject and could express “semblent confidentiels.” It changes the claim from certainty to appearance, but agreement alone does not rule it out.\",\n    \"d\": \"“Have been” agrees with a plural subject and could express “ont été confidentiels.” Its tense is less natural beside the present-tense “ne sont communiqués,” but it is not excluded by agreement.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false,\n    \"note\": \"The French stem is natural Canadian administrative French. The defect is that every answer option is in English, not the stem’s register.\"\n  },\n  \"estimatedBand\": \"B\"\n}",
       "usage": {
         "prompt_tokens": 335,
-        "completion_tokens": 540
+        "completion_tokens": 777
       },
       "conformant": true
     },
@@ -48,25 +165,25 @@
       "request": {
         "itemType": "cloze",
         "stem": {
-          "en": "The agents responsible for recruitment are _____ with coordinating the interview schedule.",
-          "fr": "Les agentes responsables du recrutement sont _____ de coordonner l’horaire des entrevues."
+          "en": "A number of employees ___ for the internal language training offered this fall.",
+          "fr": "Un certain nombre de membres du personnel ___ pour la formation linguistique interne offerte cet automne."
         },
         "options": [
           {
             "id": "a",
-            "text": "chargée"
+            "text": "have requested to register"
           },
           {
             "id": "b",
-            "text": "chargées"
+            "text": "has requested to register"
           },
           {
             "id": "c",
-            "text": "chargé"
+            "text": "is requesting to register"
           },
           {
             "id": "d",
-            "text": "chargés"
+            "text": "was requesting to register"
           }
         ],
         "subSkill": "agreement",
@@ -74,127 +191,10 @@
         "lang": "fr"
       },
       "attempt": 1,
-      "content": "{\n  \"chosenKey\": \"b\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Chargée » would agree with one female agent, but « les agentes » is plural.\",\n    \"b\": \"« Chargées » agrees in feminine plural with « les agentes ».\",\n    \"c\": \"« Chargé » is masculine singular and cannot agree with « les agentes ».\",\n    \"d\": \"« Chargés » would agree with masculine or mixed-gender « agents », not the feminine plural « agentes ».\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"A\"\n}",
+      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.78,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"The strongest intended answer: in English, “a certain number of members” normally takes a plural verb, “have.”\",\n    \"b\": \"One could try treating “a certain number” as a singular quantity, but “has” is not the natural agreement for members making requests.\",\n    \"c\": \"A present-time request could fit the autumn context, but the singular “is” has the same agreement problem.\",\n    \"d\": \"A past request could fit a supplied narrative context, but none is given, and “was” also has the agreement problem.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": true,\n    \"note\": \"The French stem is appropriate institutional Canadian French. The item is nevertheless unfit as a French cloze: every completion is in English, so none produces a French sentence.\"\n  },\n  \"estimatedBand\": \"B\"\n}",
       "usage": {
-        "prompt_tokens": 331,
-        "completion_tokens": 415
-      },
-      "conformant": true
-    },
-    {
-      "method": "reviewItem",
-      "model": "gpt-6-sol",
-      "request": {
-        "itemType": "cloze",
-        "stem": {
-          "en": "The committee members have _____ on the selection criteria for the staffing process.",
-          "fr": "Les membres du comité se sont _____ sur les critères de sélection du processus de dotation."
-        },
-        "options": [
-          {
-            "id": "a",
-            "text": "mise d’accord"
-          },
-          {
-            "id": "b",
-            "text": "mis d’accord"
-          },
-          {
-            "id": "c",
-            "text": "mis d’accords"
-          },
-          {
-            "id": "d",
-            "text": "mises d’accord"
-          }
-        ],
-        "subSkill": "agreement",
-        "targetBand": "C",
-        "lang": "fr"
-      },
-      "attempt": 1,
-      "content": "{\n  \"chosenKey\": \"b\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Mise » is feminine singular, but « les membres » requires a plural participle.\",\n    \"b\": \"« Les membres » is grammatically masculine plural, so « se sont mis d’accord » has the required agreement and the fixed expression « d’accord ».\",\n    \"c\": \"« Mis » agrees with the subject, but the fixed expression is « d’accord », not « d’accords ».\",\n    \"d\": \"« Mises » would suit a feminine plural subject, but « membres » is grammatically masculine even when the people referred to are women.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
-      "usage": {
-        "prompt_tokens": 337,
-        "completion_tokens": 530
-      },
-      "conformant": true
-    },
-    {
-      "method": "reviewItem",
-      "model": "gpt-6-sol",
-      "request": {
-        "itemType": "cloze",
-        "stem": {
-          "en": "A copy of the supporting documents will be _____ to the employee’s file.",
-          "fr": "Une copie des pièces justificatives sera _____ au dossier de la personne employée."
-        },
-        "options": [
-          {
-            "id": "a",
-            "text": "attaché"
-          },
-          {
-            "id": "b",
-            "text": "attachées"
-          },
-          {
-            "id": "c",
-            "text": "attachée"
-          },
-          {
-            "id": "d",
-            "text": "attachés"
-          }
-        ],
-        "subSkill": "agreement",
-        "targetBand": "C",
-        "lang": "fr"
-      },
-      "attempt": 1,
-      "content": "{\n  \"chosenKey\": \"c\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Attaché » pourrait sembler s’accorder avec « dossier », mais « dossier » n’est pas le sujet.\",\n    \"b\": \"« Attachées » s’accorde avec « pièces justificatives », mais ce groupe complète « copie »; il n’est pas le sujet.\",\n    \"c\": \"« Attachée » s’accorde avec le sujet féminin singulier « une copie ».\",\n    \"d\": \"« Attachés » pourrait convenir à un sujet implicite comme « documents », mais aucun sujet masculin pluriel n’apparaît ici.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
-      "usage": {
-        "prompt_tokens": 330,
-        "completion_tokens": 458
-      },
-      "conformant": true
-    },
-    {
-      "method": "reviewItem",
-      "model": "gpt-6-sol",
-      "request": {
-        "itemType": "cloze",
-        "stem": {
-          "en": "The number of vacant positions _____ to be confirmed before the posting is issued.",
-          "fr": "Le nombre de postes vacants _____ à confirmer avant la diffusion de l’affichage."
-        },
-        "options": [
-          {
-            "id": "a",
-            "text": "demeurent"
-          },
-          {
-            "id": "b",
-            "text": "demeurons"
-          },
-          {
-            "id": "c",
-            "text": "demeurez"
-          },
-          {
-            "id": "d",
-            "text": "demeure"
-          }
-        ],
-        "subSkill": "agreement",
-        "targetBand": "C",
-        "lang": "fr"
-      },
-      "attempt": 1,
-      "content": "{\n  \"chosenKey\": \"d\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Postes vacants » est pluriel, ce qui peut attirer l’accord au pluriel, mais le sujet est « le nombre », singulier.\",\n    \"b\": \"« Demeurons » conviendrait avec « nous », mais pas avec « le nombre ».\",\n    \"c\": \"« Demeurez » conviendrait avec « vous », mais pas avec « le nombre ».\",\n    \"d\": \"« Demeure » s’accorde avec le noyau singulier du sujet, « le nombre ».\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
-      "usage": {
-        "prompt_tokens": 330,
-        "completion_tokens": 459
+        "prompt_tokens": 341,
+        "completion_tokens": 933
       },
       "conformant": true
     }

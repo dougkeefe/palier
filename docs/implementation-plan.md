@@ -1004,7 +1004,8 @@ practice mode and report, with all five session types and pronunciation as a per
   scheduler, missing vocabulary, the marked-up transcript, device-side fluency metrics, the pronunciation opt-in
   (**deferred to Gate J** by the human, `progress.md` D122: the `pronounce` role ships unconfigured), cost per session
   measured and shown, and the scoring-stability eval recorded live. *Done:* exit criteria 2 and 4, then
-  **Gate I** (exit criterion 1, human).
+  **Gate I** (exit criterion 1, human). *(Noted 28 September 2026, `progress.md` D128–D130: criterion 4 met on the live
+  recording, Gate I passed, and criterion 2 deferred by the human, to be run and the oral pricing recalibrated later.)*
 
 ---
 

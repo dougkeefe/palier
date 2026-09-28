@@ -1,6 +1,6 @@
 {
   "note": "Recorded from the live API by `pnpm --filter @palier/web live-smoke --record` (progress.md D112). Regenerate, never hand-edit.",
-  "recordedAt": "2026-09-28T01:38:58.898Z",
+  "recordedAt": "2026-09-28T18:49:15.175Z",
   "promptVersion": "4",
   "completions": [
     {
@@ -33,7 +33,7 @@
       "content": "{\"text\":\"Bonjour. Parlez-moi de votre poste actuel.\",\"difficulty\":null}",
       "usage": {
         "prompt_tokens": 352,
-        "completion_tokens": 62
+        "completion_tokens": 23
       },
       "conformant": true
     },
@@ -73,10 +73,10 @@
         ]
       },
       "attempt": 1,
-      "content": "{\"text\":\"Si le budget d’un projet de consultation avait été réduit de moitié, qu’auriez-vous changé et pourquoi ?\",\"difficulty\":\"escalate\"}",
+      "content": "{\"text\":\"Qu’auriez-vous fait autrement si le budget de votre projet avait été réduit de moitié?\",\"difficulty\":\"escalate\"}",
       "usage": {
         "prompt_tokens": 400,
-        "completion_tokens": 115
+        "completion_tokens": 104
       },
       "conformant": true
     }

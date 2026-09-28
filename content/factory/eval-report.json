@@ -27,14 +27,80 @@
     }
   },
   "minClassRate": 1,
-  "oralStability": null,
+  "oralStability": {
+    "agreementThreshold": 0.8,
+    "byCriterion": {
+      "comprehension": {
+        "agreement": 1,
+        "bands": [
+          "C",
+          "C",
+          "C",
+          "C",
+          "C"
+        ],
+        "spread": 0
+      },
+      "fluency": {
+        "agreement": 1,
+        "bands": [
+          "C",
+          "C",
+          "C",
+          "C",
+          "C"
+        ],
+        "spread": 0
+      },
+      "grammar": {
+        "agreement": 1,
+        "bands": [
+          "B",
+          "B",
+          "B",
+          "B",
+          "B"
+        ],
+        "spread": 0
+      },
+      "task": {
+        "agreement": 1,
+        "bands": [
+          "C",
+          "C",
+          "C",
+          "C",
+          "C"
+        ],
+        "spread": 0
+      },
+      "vocabulary": {
+        "agreement": 1,
+        "bands": [
+          "C",
+          "C",
+          "C",
+          "C",
+          "C"
+        ],
+        "spread": 0
+      }
+    },
+    "current": true,
+    "failedRuns": 0,
+    "file": "assessOral-stability.json",
+    "maxSpread": 1,
+    "passed": true,
+    "promptVersion": "4",
+    "runs": 5
+  },
   "overallRate": 1,
   "schemaConformance": {
     "byMethod": {
       "assessOral": {
-        "conformant": 0,
-        "rate": null,
-        "total": 0
+        "conformant": 6,
+        "rate": 1,
+        "total": 6
       },
       "assessWriting": {
         "conformant": 2,
@@ -67,6 +133,8 @@
       }
     ],
     "measuredOn": [
+      "assessOral-stability.json",
+      "assessOral.json",
       "assessWriting.json",
       "examinerTurn.json",
       "generateItems.json",

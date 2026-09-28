@@ -1,0 +1,822 @@
+{
+  "note": "Recorded from the live API by `pnpm --filter @palier/web oral-stability` (progress.md D126): one session scored five times. Regenerate, never hand-edit.",
+  "recordedAt": "2026-09-28T18:43:34.095Z",
+  "promptVersion": "4",
+  "completions": [
+    {
+      "method": "assessOral",
+      "model": "gpt-6-sol",
+      "request": {
+        "sessionType": "work",
+        "targetBand": "C",
+        "lang": "fr",
+        "feedbackLang": "en",
+        "topic": "project-management",
+        "phases": [
+          {
+            "name": "Votre travail",
+            "intent": "Have the candidate describe their role and a recent project in detail."
+          },
+          {
+            "name": "Recul et opinion",
+            "intent": "Push for hypotheticals, trade-offs and a reasoned opinion."
+          }
+        ],
+        "turns": [
+          {
+            "speaker": "examiner",
+            "text": "Bonjour. Pour commencer, parlez-moi de votre poste actuel.",
+            "phase": 0,
+            "startMs": 0,
+            "endMs": 0
+          },
+          {
+            "speaker": "candidate",
+            "text": "Euh, je suis analyste principale des politiques au ministère. Je coordonne les consultations avec les provinces et les territoires, et je rédige des notes d'information pour la sous-ministre. Depuis deux ans, je travaille surtout sur le financement des programmes de formation, ce qui veut dire que je dois comprendre à la fois les chiffres et les enjeux politique.",
+            "phase": 0,
+            "startMs": 5900,
+            "endMs": 33519,
+            "input": "voice",
+            "pauseMs": 1900
+          },
+          {
+            "speaker": "examiner",
+            "text": "Qu'est-ce qui vous plaît le plus dans ce travail ?",
+            "phase": 0,
+            "startMs": 35019,
+            "endMs": 35019
+          },
+          {
+            "speaker": "candidate",
+            "text": "Ce que j'aime le plus, c'est quand une note que j'ai écrit aide vraiment à prendre une décision. Par exemple, l'automne dernier, on a préparé une analyse des options pour les stages rémunérés, et la sous-ministre a retenu la deuxième option presque sans changement. C'était satisfaisant de voir que le travail d'équipe avait porté fruit.",
+            "phase": 0,
+            "startMs": 40419,
+            "endMs": 66609,
+            "input": "voice",
+            "pauseMs": 1400
+          },
+          {
+            "speaker": "examiner",
+            "text": "Décrivez un projet récent dont vous êtes fière.",
+            "phase": 0,
+            "startMs": 68109,
+            "endMs": 68109
+          },
+          {
+            "speaker": "candidate",
+            "text": "L'année passée, on a modernisé le processus de demande de subventions. Le défi, c'était que chaque région voulait garder ses propres formulaires, et les délais de traitement était très longs, parfois six mois. J'ai organisé des ateliers avec les régions pour comprendre leurs besoins, puis on a conçu un formulaire commun avec quelques sections adaptables. Au bout d'un an, le délai moyen est passé à trois mois.",
+            "phase": 0,
+            "startMs": 74709,
+            "endMs": 106613,
+            "input": "voice",
+            "pauseMs": 2600
+          },
+          {
+            "speaker": "examiner",
+            "text": "Comment avez-vous convaincu les régions qui résistaient ?",
+            "phase": 0,
+            "startMs": 108113,
+            "endMs": 108113
+          },
+          {
+            "speaker": "candidate",
+            "text": "Euh, il y avait surtout une région qui craignait de perdre sa souplesse. Je les ai rencontrés plusieurs fois, et on a fait un projet pilote chez eux d'abord. Quand ils ont vu que leurs demandeurs remplissait le nouveau formulaire plus vite, ils ont accepté. Je pense que c'est important d'écouter avant de proposer une solution.",
+            "phase": 0,
+            "startMs": 114313,
+            "endMs": 140979,
+            "input": "voice",
+            "pauseMs": 2200
+          },
+          {
+            "speaker": "examiner",
+            "text": "Qu'auriez-vous fait autrement si le budget du projet avait été réduit de moitié ?",
+            "phase": 1,
+            "startMs": 142479,
+            "endMs": 142479
+          },
+          {
+            "speaker": "candidate",
+            "text": "Si le budget aurait été réduit de moitié, j'aurais priorisé les deux régions qui recevaient le plus de demandes, et j'aurais reporté les autres à l'année suivante. J'aurais aussi réutilisé les outils numériques qu'on avait déjà au lieu d'en acheter de nouveaux. Ce serait moins ambitieux, mais on aurait quand même des résultats mesurables.",
+            "phase": 1,
+            "startMs": 149579,
+            "endMs": 175293,
+            "input": "voice",
+            "pauseMs": 3100
+          },
+          {
+            "speaker": "examiner",
+            "text": "Selon vous, faut-il toujours consulter les parties prenantes avant une décision, même quand le temps presse ?",
+            "phase": 1,
+            "startMs": 176793,
+            "endMs": 176793
+          },
+          {
+            "speaker": "candidate",
+            "text": "C'est une bonne question. Je crois qu'il faut consulter, mais la forme peut changer selon l'urgence. Quand le temps presse, on peut faire une consultation ciblée avec les groupes les plus touchés, plutôt qu'une grande consultation publique. Le risque, sinon, c'est de prendre une décision qui sera contestée plus tard, et on perd encore plus de temps à la corriger.",
+            "phase": 1,
+            "startMs": 184193,
+            "endMs": 212764,
+            "input": "voice",
+            "pauseMs": 3400
+          },
+          {
+            "speaker": "examiner",
+            "text": "Et si deux groupes consultés ont des positions opposées ?",
+            "phase": 1,
+            "startMs": 214264,
+            "endMs": 214264
+          },
+          {
+            "speaker": "candidate",
+            "text": "Dans ce cas, euh, je présenterais les deux positions de façon neutre dans la note, avec les conséquences de chaque option. Ce n'est pas à moi de trancher, c'est la décision de la haute direction. Mais je peux proposer des mesures d'atténuation pour le groupe qui serait moins favorisé, pour que la décision soit plus facile à accepter.",
+            "phase": 1,
+            "startMs": 220764,
+            "endMs": 248383,
+            "input": "voice",
+            "pauseMs": 2500
+          },
+          {
+            "speaker": "examiner",
+            "text": "Pour terminer, comment vous voyez-vous dans cinq ans ?",
+            "phase": 1,
+            "startMs": 249883,
+            "endMs": 249883
+          },
+          {
+            "speaker": "candidate",
+            "text": "Dans cinq ans, j'aimerais gérer une petite équipe d'analystes. J'ai déjà encadré deux étudiants cet été, et j'ai trouvé ça très enrichissant. Je voudrais aussi améliorer mon français à l'oral, surtout pour les réunions avec les partenaires francophones, parce que je me sens encore moins à l'aise quand la discussion devient très technique.",
+            "phase": 1,
+            "startMs": 255683,
+            "endMs": 280921,
+            "input": "voice",
+            "pauseMs": 1800
+          }
+        ],
+        "descriptors": {
+          "A": "Understands speech on concrete and routine topics; short exchanges, everyday activities, basic vocabulary; pronunciation needs listener attention.",
+          "B": "Understands the main points of clear standard speech on work topics; simple descriptions and explanations; some spontaneity with pauses for grammar; generally clear pronunciation despite accent.",
+          "C": "Understands linguistically complex speech on specialized topics; detailed descriptions, summarises discussions, responds to complex questions; broad vocabulary, natural delivery, rare mispronunciations that do not impede communication."
+        }
+      },
+      "attempt": 1,
+      "content": "{\n  \"criteria\": {\n    \"comprehension\": {\n      \"band\": \"C\",\n      \"evidence\": \"The candidate understood the complex hypotheticals and opinion questions. In turn 9, she adjusted the project plan to a halved budget; in turn 13, she addressed opposing positions and proposed « des mesures d'atténuation ».\"\n    },\n    \"fluency\": {\n      \"band\": \"C\",\n      \"evidence\": \"The answers keep moving through explanations and qualifications, particularly in turns 9 and 11. « Euh » appears in a few answers but does not interrupt the reasoning. A transcript cannot establish speaking pace or pronunciation.\"\n    },\n    \"grammar\": {\n      \"band\": \"B\",\n      \"evidence\": \"The candidate uses conditional forms to develop her answers, but recurring agreement errors and « Si le budget aurait été réduit de moitié » show that accuracy is not yet consistent under speaking pressure.\"\n    },\n    \"vocabulary\": {\n      \"band\": \"C\",\n      \"evidence\": \"Workplace and policy terms are varied and precise, including « formulaire commun », « consultation ciblée » and « mesures d'atténuation ». The candidate can discuss both project delivery and decision-making.\"\n    },\n    \"task\": {\n      \"band\": \"C\",\n      \"evidence\": \"The project answer identifies a constraint, an approach and an outcome: « le délai moyen est passé à trois mois ». The candidate also explains a budget trade-off and gives a reasoned view on consultation. More detail about her own implementation role would make the project account stronger.\"\n    }\n  },\n  \"fixes\": [\n    {\n      \"criterion\": \"grammar\",\n      \"subSkill\": \"verb-tense-and-mood\",\n      \"advice\": \"For a past hypothetical, use the pluperfect after si, then the past conditional for the result. Practise saying the whole budget answer with that pattern.\",\n      \"evidence\": \"Turn 9: « Si le budget aurait été réduit de moitié, j'aurais priorisé ».\"\n    },\n    {\n      \"criterion\": \"grammar\",\n      \"subSkill\": \"agreement\",\n      \"advice\": \"When speaking, check the subject of each verb and the noun referred to by a past participle. This would address several separate errors without slowing the whole answer.\",\n      \"evidence\": \"Turns 3, 5 and 7 include « une note que j'ai écrit », « les délais de traitement était » and « leurs demandeurs remplissait ».\"\n    },\n    {\n      \"criterion\": \"task\",\n      \"subSkill\": \"specific-detail\",\n      \"advice\": \"In a project answer, add one sentence specifying what you personally managed between consultation and rollout, and how you assessed the result. Keep the distinction between your actions and the team's actions clear.\",\n      \"evidence\": \"Turn 5 moves from « J'ai organisé des ateliers » to « on a conçu un formulaire commun », then to the reduced processing time, without explaining the intervening project-management steps.\"\n    }\n  ],\n  \"missingWords\": [\n    {\n      \"word\": \"jalons\",\n      \"turn\": 5,\n      \"excerpt\": \"J'ai organisé des ateliers avec les régions pour comprendre leurs besoins, puis on a conçu un formulaire commun avec quelques sections adaptables.\",\n      \"example\": \"Les ateliers avec les régions et la conception d'un formulaire commun ont été deux jalons du projet.\"\n    },\n    {\n      \"word\": \"marge de manœuvre\",\n      \"turn\": 7,\n      \"excerpt\": \"une région qui craignait de perdre sa souplesse\",\n      \"example\": \"Il y avait surtout une région qui craignait de perdre sa marge de manœuvre.\"\n    },\n    {\n      \"word\": \"déploiement progressif\",\n      \"turn\": 9,\n      \"excerpt\": \"j'aurais reporté les autres à l'année suivante\",\n      \"example\": \"J'aurais opté pour un déploiement progressif : les deux régions qui recevaient le plus de demandes d'abord, puis les autres l'année suivante.\"\n    },\n    {\n      \"word\": \"indicateurs de rendement\",\n      \"turn\": 9,\n      \"excerpt\": \"on aurait quand même des résultats mesurables\",\n      \"example\": \"Ce serait moins ambitieux, mais on pourrait quand même utiliser des indicateurs de rendement pour mesurer les résultats.\"\n    },\n    {\n      \"word\": \"critères d'arbitrage\",\n      \"turn\": 13,\n      \"excerpt\": \"avec les conséquences de chaque option\",\n      \"example\": \"Je présenterais les deux positions de façon neutre dans la note, avec les critères d'arbitrage et les conséquences de chaque option.\"\n    }\n  ],\n  \"errors\": [\n    {\n      \"turn\": 1,\n      \"excerpt\": \"enjeux politique\",\n      \"correction\": \"enjeux politiques\",\n      \"rule\": \"An adjective agrees in number with the noun it modifies.\"\n    },\n    {\n      \"turn\": 3,\n      \"excerpt\": \"une note que j'ai écrit\",\n      \"correction\": \"une note que j'ai écrite\",\n      \"rule\": \"With avoir, a past participle agrees with a preceding direct object.\"\n    },\n    {\n      \"turn\": 5,\n      \"excerpt\": \"les délais de traitement était\",\n      \"correction\": \"les délais de traitement étaient\",\n      \"rule\": \"A finite verb agrees in number with its subject.\"\n    },\n    {\n      \"turn\": 7,\n      \"excerpt\": \"leurs demandeurs remplissait\",\n      \"correction\": \"leurs demandeurs remplissaient\",\n      \"rule\": \"A finite verb agrees in number with its subject.\"\n    },\n    {\n      \"turn\": 9,\n      \"excerpt\": \"Si le budget aurait été réduit de moitié\",\n      \"correction\": \"Si le budget avait été réduit de moitié\",\n      \"rule\": \"A past hypothetical si-clause takes the pluperfect, not the past conditional.\"\n    }\n  ]\n}",
+      "usage": {
+        "prompt_tokens": 1796,
+        "completion_tokens": 2712
+      },
+      "conformant": true
+    },
+    {
+      "method": "assessOral",
+      "model": "gpt-6-sol",
+      "request": {
+        "sessionType": "work",
+        "targetBand": "C",
+        "lang": "fr",
+        "feedbackLang": "en",
+        "topic": "project-management",
+        "phases": [
+          {
+            "name": "Votre travail",
+            "intent": "Have the candidate describe their role and a recent project in detail."
+          },
+          {
+            "name": "Recul et opinion",
+            "intent": "Push for hypotheticals, trade-offs and a reasoned opinion."
+          }
+        ],
+        "turns": [
+          {
+            "speaker": "examiner",
+            "text": "Bonjour. Pour commencer, parlez-moi de votre poste actuel.",
+            "phase": 0,
+            "startMs": 0,
+            "endMs": 0
+          },
+          {
+            "speaker": "candidate",
+            "text": "Euh, je suis analyste principale des politiques au ministère. Je coordonne les consultations avec les provinces et les territoires, et je rédige des notes d'information pour la sous-ministre. Depuis deux ans, je travaille surtout sur le financement des programmes de formation, ce qui veut dire que je dois comprendre à la fois les chiffres et les enjeux politique.",
+            "phase": 0,
+            "startMs": 5900,
+            "endMs": 33519,
+            "input": "voice",
+            "pauseMs": 1900
+          },
+          {
+            "speaker": "examiner",
+            "text": "Qu'est-ce qui vous plaît le plus dans ce travail ?",
+            "phase": 0,
+            "startMs": 35019,
+            "endMs": 35019
+          },
+          {
+            "speaker": "candidate",
+            "text": "Ce que j'aime le plus, c'est quand une note que j'ai écrit aide vraiment à prendre une décision. Par exemple, l'automne dernier, on a préparé une analyse des options pour les stages rémunérés, et la sous-ministre a retenu la deuxième option presque sans changement. C'était satisfaisant de voir que le travail d'équipe avait porté fruit.",
+            "phase": 0,
+            "startMs": 40419,
+            "endMs": 66609,
+            "input": "voice",
+            "pauseMs": 1400
+          },
+          {
+            "speaker": "examiner",
+            "text": "Décrivez un projet récent dont vous êtes fière.",
+            "phase": 0,
+            "startMs": 68109,
+            "endMs": 68109
+          },
+          {
+            "speaker": "candidate",
+            "text": "L'année passée, on a modernisé le processus de demande de subventions. Le défi, c'était que chaque région voulait garder ses propres formulaires, et les délais de traitement était très longs, parfois six mois. J'ai organisé des ateliers avec les régions pour comprendre leurs besoins, puis on a conçu un formulaire commun avec quelques sections adaptables. Au bout d'un an, le délai moyen est passé à trois mois.",
+            "phase": 0,
+            "startMs": 74709,
+            "endMs": 106613,
+            "input": "voice",
+            "pauseMs": 2600
+          },
+          {
+            "speaker": "examiner",
+            "text": "Comment avez-vous convaincu les régions qui résistaient ?",
+            "phase": 0,
+            "startMs": 108113,
+            "endMs": 108113
+          },
+          {
+            "speaker": "candidate",
+            "text": "Euh, il y avait surtout une région qui craignait de perdre sa souplesse. Je les ai rencontrés plusieurs fois, et on a fait un projet pilote chez eux d'abord. Quand ils ont vu que leurs demandeurs remplissait le nouveau formulaire plus vite, ils ont accepté. Je pense que c'est important d'écouter avant de proposer une solution.",
+            "phase": 0,
+            "startMs": 114313,
+            "endMs": 140979,
+            "input": "voice",
+            "pauseMs": 2200
+          },
+          {
+            "speaker": "examiner",
+            "text": "Qu'auriez-vous fait autrement si le budget du projet avait été réduit de moitié ?",
+            "phase": 1,
+            "startMs": 142479,
+            "endMs": 142479
+          },
+          {
+            "speaker": "candidate",
+            "text": "Si le budget aurait été réduit de moitié, j'aurais priorisé les deux régions qui recevaient le plus de demandes, et j'aurais reporté les autres à l'année suivante. J'aurais aussi réutilisé les outils numériques qu'on avait déjà au lieu d'en acheter de nouveaux. Ce serait moins ambitieux, mais on aurait quand même des résultats mesurables.",
+            "phase": 1,
+            "startMs": 149579,
+            "endMs": 175293,
+            "input": "voice",
+            "pauseMs": 3100
+          },
+          {
+            "speaker": "examiner",
+            "text": "Selon vous, faut-il toujours consulter les parties prenantes avant une décision, même quand le temps presse ?",
+            "phase": 1,
+            "startMs": 176793,
+            "endMs": 176793
+          },
+          {
+            "speaker": "candidate",
+            "text": "C'est une bonne question. Je crois qu'il faut consulter, mais la forme peut changer selon l'urgence. Quand le temps presse, on peut faire une consultation ciblée avec les groupes les plus touchés, plutôt qu'une grande consultation publique. Le risque, sinon, c'est de prendre une décision qui sera contestée plus tard, et on perd encore plus de temps à la corriger.",
+            "phase": 1,
+            "startMs": 184193,
+            "endMs": 212764,
+            "input": "voice",
+            "pauseMs": 3400
+          },
+          {
+            "speaker": "examiner",
+            "text": "Et si deux groupes consultés ont des positions opposées ?",
+            "phase": 1,
+            "startMs": 214264,
+            "endMs": 214264
+          },
+          {
+            "speaker": "candidate",
+            "text": "Dans ce cas, euh, je présenterais les deux positions de façon neutre dans la note, avec les conséquences de chaque option. Ce n'est pas à moi de trancher, c'est la décision de la haute direction. Mais je peux proposer des mesures d'atténuation pour le groupe qui serait moins favorisé, pour que la décision soit plus facile à accepter.",
+            "phase": 1,
+            "startMs": 220764,
+            "endMs": 248383,
+            "input": "voice",
+            "pauseMs": 2500
+          },
+          {
+            "speaker": "examiner",
+            "text": "Pour terminer, comment vous voyez-vous dans cinq ans ?",
+            "phase": 1,
+            "startMs": 249883,
+            "endMs": 249883
+          },
+          {
+            "speaker": "candidate",
+            "text": "Dans cinq ans, j'aimerais gérer une petite équipe d'analystes. J'ai déjà encadré deux étudiants cet été, et j'ai trouvé ça très enrichissant. Je voudrais aussi améliorer mon français à l'oral, surtout pour les réunions avec les partenaires francophones, parce que je me sens encore moins à l'aise quand la discussion devient très technique.",
+            "phase": 1,
+            "startMs": 255683,
+            "endMs": 280921,
+            "input": "voice",
+            "pauseMs": 1800
+          }
+        ],
+        "descriptors": {
+          "A": "Understands speech on concrete and routine topics; short exchanges, everyday activities, basic vocabulary; pronunciation needs listener attention.",
+          "B": "Understands the main points of clear standard speech on work topics; simple descriptions and explanations; some spontaneity with pauses for grammar; generally clear pronunciation despite accent.",
+          "C": "Understands linguistically complex speech on specialized topics; detailed descriptions, summarises discussions, responds to complex questions; broad vocabulary, natural delivery, rare mispronunciations that do not impede communication."
+        }
+      },
+      "attempt": 1,
+      "content": "{\n  \"criteria\": {\n    \"comprehension\": {\n      \"band\": \"C\",\n      \"evidence\": \"The candidate understood both the hypothetical budget cut and the questions about competing views. The responses beginning « j'aurais priorisé les deux régions » and « je présenterais les deux positions de façon neutre » address those questions directly.\"\n    },\n    \"fluency\": {\n      \"band\": \"C\",\n      \"evidence\": \"The answers sustain explanations and move from a position to its consequences, as in « Quand le temps presse » followed by « Le risque, sinon ». The transcript records a few hesitations, including « Euh », but no abandoned answer. Pace and pronunciation cannot be assessed from it.\"\n    },\n    \"grammar\": {\n      \"band\": \"B\",\n      \"evidence\": \"The candidate uses conditional forms to discuss alternatives, but recurring agreement errors and « Si le budget aurait été réduit de moitié » reduce accuracy when the questions become more demanding.\"\n    },\n    \"vocabulary\": {\n      \"band\": \"C\",\n      \"evidence\": \"The candidate uses relevant workplace terms precisely, including « consultation ciblée », « parties prenantes » and « mesures d'atténuation ». More project-management terms would help explain the implementation and results.\"\n    },\n    \"task\": {\n      \"band\": \"C\",\n      \"evidence\": \"The project answer identifies a problem, actions and an outcome: « J'ai organisé des ateliers », « on a conçu un formulaire commun » and « le délai moyen est passé à trois mois ». The hypothetical and opinion answers are reasoned, though the candidate could explain the basis for choosing the two priority regions more fully.\"\n    }\n  },\n  \"fixes\": [\n    {\n      \"criterion\": \"grammar\",\n      \"subSkill\": \"verb-tense-and-mood\",\n      \"advice\": \"Practise budget-cut hypotheticals with a past condition followed by a past conditional result. Use the pluperfect after si, not the conditional.\",\n      \"evidence\": \"Turn 9: « Si le budget aurait été réduit de moitié, j'aurais priorisé ».\"\n    },\n    {\n      \"criterion\": \"grammar\",\n      \"subSkill\": \"agreement\",\n      \"advice\": \"In a final speaking check, identify the subject of each verb and the noun linked to each adjective or past participle. Agreement slips recur even in otherwise clear answers.\",\n      \"evidence\": \"Turns 1, 3, 5 and 7 include « enjeux politique », « une note que j'ai écrit », « les délais de traitement était » and « leurs demandeurs remplissait ».\"\n    },\n    {\n      \"criterion\": \"task\",\n      \"subSkill\": \"specific-detail\",\n      \"advice\": \"When proposing a reduced scope, add the reason for the priority and one way to measure whether the smaller project succeeded.\",\n      \"evidence\": \"Turn 9 proposes « les deux régions qui recevaient le plus de demandes » and « des résultats mesurables », but does not specify a measure.\"\n    }\n  ],\n  \"missingWords\": [\n    {\n      \"word\": \"exigences régionales\",\n      \"turn\": 5,\n      \"excerpt\": \"chaque région voulait garder ses propres formulaires\",\n      \"example\": \"Le défi était de concilier les exigences régionales dans un formulaire commun.\"\n    },\n    {\n      \"word\": \"goulot d'étranglement\",\n      \"turn\": 5,\n      \"excerpt\": \"les délais de traitement était très longs, parfois six mois\",\n      \"example\": \"Les délais de traitement constituaient un goulot d'étranglement : ils atteignaient parfois six mois.\"\n    },\n    {\n      \"word\": \"indicateur de rendement\",\n      \"turn\": 5,\n      \"excerpt\": \"le délai moyen est passé à trois mois\",\n      \"example\": \"Notre indicateur de rendement était le délai moyen de traitement, qui est passé à trois mois.\"\n    },\n    {\n      \"word\": \"déploiement\",\n      \"turn\": 9,\n      \"excerpt\": \"j'aurais reporté les autres à l'année suivante\",\n      \"example\": \"J'aurais reporté le déploiement dans les autres régions à l'année suivante.\"\n    },\n    {\n      \"word\": \"compromis\",\n      \"turn\": 9,\n      \"excerpt\": \"Ce serait moins ambitieux, mais on aurait quand même des résultats mesurables.\",\n      \"example\": \"Ce compromis serait moins ambitieux, mais il permettrait quand même d'obtenir des résultats mesurables.\"\n    }\n  ],\n  \"errors\": [\n    {\n      \"turn\": 1,\n      \"excerpt\": \"enjeux politique\",\n      \"correction\": \"enjeux politiques\",\n      \"rule\": \"An adjective agrees in number with the noun it modifies.\"\n    },\n    {\n      \"turn\": 3,\n      \"excerpt\": \"une note que j'ai écrit\",\n      \"correction\": \"une note que j'ai écrite\",\n      \"rule\": \"With avoir, the past participle agrees with a preceding direct object; que refers to the feminine singular note.\"\n    },\n    {\n      \"turn\": 5,\n      \"excerpt\": \"les délais de traitement était\",\n      \"correction\": \"les délais de traitement étaient\",\n      \"rule\": \"A verb agrees in number with its subject.\"\n    },\n    {\n      \"turn\": 7,\n      \"excerpt\": \"leurs demandeurs remplissait\",\n      \"correction\": \"leurs demandeurs remplissaient\",\n      \"rule\": \"A verb agrees in number with its subject.\"\n    },\n    {\n      \"turn\": 9,\n      \"excerpt\": \"Si le budget aurait été réduit\",\n      \"correction\": \"Si le budget avait été réduit\",\n      \"rule\": \"A past hypothetical condition introduced by si takes the pluperfect, not the conditional.\"\n    }\n  ]\n}",
+      "usage": {
+        "prompt_tokens": 1796,
+        "completion_tokens": 2502
+      },
+      "conformant": true
+    },
+    {
+      "method": "assessOral",
+      "model": "gpt-6-sol",
+      "request": {
+        "sessionType": "work",
+        "targetBand": "C",
+        "lang": "fr",
+        "feedbackLang": "en",
+        "topic": "project-management",
+        "phases": [
+          {
+            "name": "Votre travail",
+            "intent": "Have the candidate describe their role and a recent project in detail."
+          },
+          {
+            "name": "Recul et opinion",
+            "intent": "Push for hypotheticals, trade-offs and a reasoned opinion."
+          }
+        ],
+        "turns": [
+          {
+            "speaker": "examiner",
+            "text": "Bonjour. Pour commencer, parlez-moi de votre poste actuel.",
+            "phase": 0,
+            "startMs": 0,
+            "endMs": 0
+          },
+          {
+            "speaker": "candidate",
+            "text": "Euh, je suis analyste principale des politiques au ministère. Je coordonne les consultations avec les provinces et les territoires, et je rédige des notes d'information pour la sous-ministre. Depuis deux ans, je travaille surtout sur le financement des programmes de formation, ce qui veut dire que je dois comprendre à la fois les chiffres et les enjeux politique.",
+            "phase": 0,
+            "startMs": 5900,
+            "endMs": 33519,
+            "input": "voice",
+            "pauseMs": 1900
+          },
+          {
+            "speaker": "examiner",
+            "text": "Qu'est-ce qui vous plaît le plus dans ce travail ?",
+            "phase": 0,
+            "startMs": 35019,
+            "endMs": 35019
+          },
+          {
+            "speaker": "candidate",
+            "text": "Ce que j'aime le plus, c'est quand une note que j'ai écrit aide vraiment à prendre une décision. Par exemple, l'automne dernier, on a préparé une analyse des options pour les stages rémunérés, et la sous-ministre a retenu la deuxième option presque sans changement. C'était satisfaisant de voir que le travail d'équipe avait porté fruit.",
+            "phase": 0,
+            "startMs": 40419,
+            "endMs": 66609,
+            "input": "voice",
+            "pauseMs": 1400
+          },
+          {
+            "speaker": "examiner",
+            "text": "Décrivez un projet récent dont vous êtes fière.",
+            "phase": 0,
+            "startMs": 68109,
+            "endMs": 68109
+          },
+          {
+            "speaker": "candidate",
+            "text": "L'année passée, on a modernisé le processus de demande de subventions. Le défi, c'était que chaque région voulait garder ses propres formulaires, et les délais de traitement était très longs, parfois six mois. J'ai organisé des ateliers avec les régions pour comprendre leurs besoins, puis on a conçu un formulaire commun avec quelques sections adaptables. Au bout d'un an, le délai moyen est passé à trois mois.",
+            "phase": 0,
+            "startMs": 74709,
+            "endMs": 106613,
+            "input": "voice",
+            "pauseMs": 2600
+          },
+          {
+            "speaker": "examiner",
+            "text": "Comment avez-vous convaincu les régions qui résistaient ?",
+            "phase": 0,
+            "startMs": 108113,
+            "endMs": 108113
+          },
+          {
+            "speaker": "candidate",
+            "text": "Euh, il y avait surtout une région qui craignait de perdre sa souplesse. Je les ai rencontrés plusieurs fois, et on a fait un projet pilote chez eux d'abord. Quand ils ont vu que leurs demandeurs remplissait le nouveau formulaire plus vite, ils ont accepté. Je pense que c'est important d'écouter avant de proposer une solution.",
+            "phase": 0,
+            "startMs": 114313,
+            "endMs": 140979,
+            "input": "voice",
+            "pauseMs": 2200
+          },
+          {
+            "speaker": "examiner",
+            "text": "Qu'auriez-vous fait autrement si le budget du projet avait été réduit de moitié ?",
+            "phase": 1,
+            "startMs": 142479,
+            "endMs": 142479
+          },
+          {
+            "speaker": "candidate",
+            "text": "Si le budget aurait été réduit de moitié, j'aurais priorisé les deux régions qui recevaient le plus de demandes, et j'aurais reporté les autres à l'année suivante. J'aurais aussi réutilisé les outils numériques qu'on avait déjà au lieu d'en acheter de nouveaux. Ce serait moins ambitieux, mais on aurait quand même des résultats mesurables.",
+            "phase": 1,
+            "startMs": 149579,
+            "endMs": 175293,
+            "input": "voice",
+            "pauseMs": 3100
+          },
+          {
+            "speaker": "examiner",
+            "text": "Selon vous, faut-il toujours consulter les parties prenantes avant une décision, même quand le temps presse ?",
+            "phase": 1,
+            "startMs": 176793,
+            "endMs": 176793
+          },
+          {
+            "speaker": "candidate",
+            "text": "C'est une bonne question. Je crois qu'il faut consulter, mais la forme peut changer selon l'urgence. Quand le temps presse, on peut faire une consultation ciblée avec les groupes les plus touchés, plutôt qu'une grande consultation publique. Le risque, sinon, c'est de prendre une décision qui sera contestée plus tard, et on perd encore plus de temps à la corriger.",
+            "phase": 1,
+            "startMs": 184193,
+            "endMs": 212764,
+            "input": "voice",
+            "pauseMs": 3400
+          },
+          {
+            "speaker": "examiner",
+            "text": "Et si deux groupes consultés ont des positions opposées ?",
+            "phase": 1,
+            "startMs": 214264,
+            "endMs": 214264
+          },
+          {
+            "speaker": "candidate",
+            "text": "Dans ce cas, euh, je présenterais les deux positions de façon neutre dans la note, avec les conséquences de chaque option. Ce n'est pas à moi de trancher, c'est la décision de la haute direction. Mais je peux proposer des mesures d'atténuation pour le groupe qui serait moins favorisé, pour que la décision soit plus facile à accepter.",
+            "phase": 1,
+            "startMs": 220764,
+            "endMs": 248383,
+            "input": "voice",
+            "pauseMs": 2500
+          },
+          {
+            "speaker": "examiner",
+            "text": "Pour terminer, comment vous voyez-vous dans cinq ans ?",
+            "phase": 1,
+            "startMs": 249883,
+            "endMs": 249883
+          },
+          {
+            "speaker": "candidate",
+            "text": "Dans cinq ans, j'aimerais gérer une petite équipe d'analystes. J'ai déjà encadré deux étudiants cet été, et j'ai trouvé ça très enrichissant. Je voudrais aussi améliorer mon français à l'oral, surtout pour les réunions avec les partenaires francophones, parce que je me sens encore moins à l'aise quand la discussion devient très technique.",
+            "phase": 1,
+            "startMs": 255683,
+            "endMs": 280921,
+            "input": "voice",
+            "pauseMs": 1800
+          }
+        ],
+        "descriptors": {
+          "A": "Understands speech on concrete and routine topics; short exchanges, everyday activities, basic vocabulary; pronunciation needs listener attention.",
+          "B": "Understands the main points of clear standard speech on work topics; simple descriptions and explanations; some spontaneity with pauses for grammar; generally clear pronunciation despite accent.",
+          "C": "Understands linguistically complex speech on specialized topics; detailed descriptions, summarises discussions, responds to complex questions; broad vocabulary, natural delivery, rare mispronunciations that do not impede communication."
+        }
+      },
+      "attempt": 1,
+      "content": "{\n  \"criteria\": {\n    \"comprehension\": {\n      \"band\": \"C\",\n      \"evidence\": \"The candidate understood the complex questions. In the reduced-budget scenario, they proposed priorities and explained the trade-off: « j'aurais priorisé les deux régions » and « Ce serait moins ambitieux ». They also distinguished urgent, targeted consultation from a broader process.\"\n    },\n    \"fluency\": {\n      \"band\": \"C\",\n      \"evidence\": \"The answers sustain an idea through several steps, for example: « Je les ai rencontrés plusieurs fois, et on a fait un projet pilote chez eux d'abord. Quand ils ont vu que leurs demandeurs remplissait le nouveau formulaire plus vite, ils ont accepté. » There are occasional « Euh » hesitations, but the transcript shows no abandoned answers. Speaking pace cannot be determined from text.\"\n    },\n    \"grammar\": {\n      \"band\": \"B\",\n      \"evidence\": \"Meaning remains clear, but agreement errors recur in « les enjeux politique », « une note que j'ai écrit », « les délais de traitement était » and « leurs demandeurs remplissait ». The hypothetical « Si le budget aurait été réduit de moitié » also uses the wrong verb form.\"\n    },\n    \"vocabulary\": {\n      \"band\": \"C\",\n      \"evidence\": \"Work-related terms are varied and generally precise: « projet pilote », « consultation ciblée », « délai moyen » and « mesures d'atténuation ». More explicit project-management terms would make the explanations sharper.\"\n    },\n    \"task\": {\n      \"band\": \"C\",\n      \"evidence\": \"The candidate describes a project from problem to result, including a change from « parfois six mois » to « trois mois ». They answer the hypothetical and give a reasoned view on consultation. The answer about opposing groups could go further by naming the criteria used to compare their positions.\"\n    }\n  },\n  \"fixes\": [\n    {\n      \"criterion\": \"grammar\",\n      \"subSkill\": \"verb-tense-and-mood\",\n      \"advice\": \"Practise past hypotheticals with si followed by the pluperfect, then the past conditional. Rehearse the budget answer using that pattern before adding the proposed actions.\",\n      \"evidence\": \"« Si le budget aurait été réduit de moitié, j'aurais priorisé les deux régions »\"\n    },\n    {\n      \"criterion\": \"grammar\",\n      \"subSkill\": \"agreement\",\n      \"advice\": \"Before finishing a sentence, check plural subjects against their verbs and nouns against their modifiers. Also check whether a direct object placed before avoir requires the past participle to agree.\",\n      \"evidence\": \"« les délais de traitement était », « leurs demandeurs remplissait », « les enjeux politique » and « une note que j'ai écrit »\"\n    },\n    {\n      \"criterion\": \"task\",\n      \"subSkill\": \"specific-detail\",\n      \"advice\": \"When stakeholders disagree, name one or two decision criteria, explain how each option measures against them, and distinguish your analysis from the decision reserved for senior management.\",\n      \"evidence\": \"« je présenterais les deux positions de façon neutre dans la note, avec les conséquences de chaque option »\"\n    }\n  ],\n  \"missingWords\": [\n    {\n      \"word\": \"indicateur de rendement\",\n      \"turn\": 5,\n      \"excerpt\": \"le délai moyen est passé à trois mois\",\n      \"example\": \"Le délai moyen, un indicateur de rendement du projet, est passé à trois mois.\"\n    },\n    {\n      \"word\": \"plan de déploiement\",\n      \"turn\": 5,\n      \"excerpt\": \"un formulaire commun avec quelques sections adaptables\",\n      \"example\": \"Un plan de déploiement par région aurait facilité l'adoption du formulaire commun avec quelques sections adaptables.\"\n    },\n    {\n      \"word\": \"critères de priorisation\",\n      \"turn\": 9,\n      \"excerpt\": \"j'aurais priorisé les deux régions\",\n      \"example\": \"J'aurais établi des critères de priorisation et commencé par les deux régions qui recevaient le plus de demandes.\"\n    },\n    {\n      \"word\": \"compromis\",\n      \"turn\": 9,\n      \"excerpt\": \"Ce serait moins ambitieux\",\n      \"example\": \"Ce compromis serait moins ambitieux, mais il donnerait quand même des résultats mesurables.\"\n    },\n    {\n      \"word\": \"arbitrage\",\n      \"turn\": 13,\n      \"excerpt\": \"les conséquences de chaque option\",\n      \"example\": \"Je présenterais les conséquences de chaque option pour éclairer l'arbitrage de la haute direction.\"\n    }\n  ],\n  \"errors\": [\n    {\n      \"turn\": 1,\n      \"excerpt\": \"les enjeux politique\",\n      \"correction\": \"les enjeux politiques\",\n      \"rule\": \"An adjective agrees in number with the noun it modifies.\"\n    },\n    {\n      \"turn\": 3,\n      \"excerpt\": \"une note que j'ai écrit\",\n      \"correction\": \"une note que j'ai écrite\",\n      \"rule\": \"With avoir, the past participle agrees with a direct object placed before the verb.\"\n    },\n    {\n      \"turn\": 5,\n      \"excerpt\": \"les délais de traitement était\",\n      \"correction\": \"les délais de traitement étaient\",\n      \"rule\": \"The verb agrees in number with its subject, les délais.\"\n    },\n    {\n      \"turn\": 7,\n      \"excerpt\": \"leurs demandeurs remplissait\",\n      \"correction\": \"leurs demandeurs remplissaient\",\n      \"rule\": \"The verb agrees in number with its subject, leurs demandeurs.\"\n    },\n    {\n      \"turn\": 9,\n      \"excerpt\": \"Si le budget aurait été réduit de moitié\",\n      \"correction\": \"Si le budget avait été réduit de moitié\",\n      \"rule\": \"In a past hypothetical condition, si takes the pluperfect, not the past conditional.\"\n    }\n  ]\n}",
+      "usage": {
+        "prompt_tokens": 1796,
+        "completion_tokens": 2761
+      },
+      "conformant": true
+    },
+    {
+      "method": "assessOral",
+      "model": "gpt-6-sol",
+      "request": {
+        "sessionType": "work",
+        "targetBand": "C",
+        "lang": "fr",
+        "feedbackLang": "en",
+        "topic": "project-management",
+        "phases": [
+          {
+            "name": "Votre travail",
+            "intent": "Have the candidate describe their role and a recent project in detail."
+          },
+          {
+            "name": "Recul et opinion",
+            "intent": "Push for hypotheticals, trade-offs and a reasoned opinion."
+          }
+        ],
+        "turns": [
+          {
+            "speaker": "examiner",
+            "text": "Bonjour. Pour commencer, parlez-moi de votre poste actuel.",
+            "phase": 0,
+            "startMs": 0,
+            "endMs": 0
+          },
+          {
+            "speaker": "candidate",
+            "text": "Euh, je suis analyste principale des politiques au ministère. Je coordonne les consultations avec les provinces et les territoires, et je rédige des notes d'information pour la sous-ministre. Depuis deux ans, je travaille surtout sur le financement des programmes de formation, ce qui veut dire que je dois comprendre à la fois les chiffres et les enjeux politique.",
+            "phase": 0,
+            "startMs": 5900,
+            "endMs": 33519,
+            "input": "voice",
+            "pauseMs": 1900
+          },
+          {
+            "speaker": "examiner",
+            "text": "Qu'est-ce qui vous plaît le plus dans ce travail ?",
+            "phase": 0,
+            "startMs": 35019,
+            "endMs": 35019
+          },
+          {
+            "speaker": "candidate",
+            "text": "Ce que j'aime le plus, c'est quand une note que j'ai écrit aide vraiment à prendre une décision. Par exemple, l'automne dernier, on a préparé une analyse des options pour les stages rémunérés, et la sous-ministre a retenu la deuxième option presque sans changement. C'était satisfaisant de voir que le travail d'équipe avait porté fruit.",
+            "phase": 0,
+            "startMs": 40419,
+            "endMs": 66609,
+            "input": "voice",
+            "pauseMs": 1400
+          },
+          {
+            "speaker": "examiner",
+            "text": "Décrivez un projet récent dont vous êtes fière.",
+            "phase": 0,
+            "startMs": 68109,
+            "endMs": 68109
+          },
+          {
+            "speaker": "candidate",
+            "text": "L'année passée, on a modernisé le processus de demande de subventions. Le défi, c'était que chaque région voulait garder ses propres formulaires, et les délais de traitement était très longs, parfois six mois. J'ai organisé des ateliers avec les régions pour comprendre leurs besoins, puis on a conçu un formulaire commun avec quelques sections adaptables. Au bout d'un an, le délai moyen est passé à trois mois.",
+            "phase": 0,
+            "startMs": 74709,
+            "endMs": 106613,
+            "input": "voice",
+            "pauseMs": 2600
+          },
+          {
+            "speaker": "examiner",
+            "text": "Comment avez-vous convaincu les régions qui résistaient ?",
+            "phase": 0,
+            "startMs": 108113,
+            "endMs": 108113
+          },
+          {
+            "speaker": "candidate",
+            "text": "Euh, il y avait surtout une région qui craignait de perdre sa souplesse. Je les ai rencontrés plusieurs fois, et on a fait un projet pilote chez eux d'abord. Quand ils ont vu que leurs demandeurs remplissait le nouveau formulaire plus vite, ils ont accepté. Je pense que c'est important d'écouter avant de proposer une solution.",
+            "phase": 0,
+            "startMs": 114313,
+            "endMs": 140979,
+            "input": "voice",
+            "pauseMs": 2200
+          },
+          {
+            "speaker": "examiner",
+            "text": "Qu'auriez-vous fait autrement si le budget du projet avait été réduit de moitié ?",
+            "phase": 1,
+            "startMs": 142479,
+            "endMs": 142479
+          },
+          {
+            "speaker": "candidate",
+            "text": "Si le budget aurait été réduit de moitié, j'aurais priorisé les deux régions qui recevaient le plus de demandes, et j'aurais reporté les autres à l'année suivante. J'aurais aussi réutilisé les outils numériques qu'on avait déjà au lieu d'en acheter de nouveaux. Ce serait moins ambitieux, mais on aurait quand même des résultats mesurables.",
+            "phase": 1,
+            "startMs": 149579,
+            "endMs": 175293,
+            "input": "voice",
+            "pauseMs": 3100
+          },
+          {
+            "speaker": "examiner",
+            "text": "Selon vous, faut-il toujours consulter les parties prenantes avant une décision, même quand le temps presse ?",
+            "phase": 1,
+            "startMs": 176793,
+            "endMs": 176793
+          },
+          {
+            "speaker": "candidate",
+            "text": "C'est une bonne question. Je crois qu'il faut consulter, mais la forme peut changer selon l'urgence. Quand le temps presse, on peut faire une consultation ciblée avec les groupes les plus touchés, plutôt qu'une grande consultation publique. Le risque, sinon, c'est de prendre une décision qui sera contestée plus tard, et on perd encore plus de temps à la corriger.",
+            "phase": 1,
+            "startMs": 184193,
+            "endMs": 212764,
+            "input": "voice",
+            "pauseMs": 3400
+          },
+          {
+            "speaker": "examiner",
+            "text": "Et si deux groupes consultés ont des positions opposées ?",
+            "phase": 1,
+            "startMs": 214264,
+            "endMs": 214264
+          },
+          {
+            "speaker": "candidate",
+            "text": "Dans ce cas, euh, je présenterais les deux positions de façon neutre dans la note, avec les conséquences de chaque option. Ce n'est pas à moi de trancher, c'est la décision de la haute direction. Mais je peux proposer des mesures d'atténuation pour le groupe qui serait moins favorisé, pour que la décision soit plus facile à accepter.",
+            "phase": 1,
+            "startMs": 220764,
+            "endMs": 248383,
+            "input": "voice",
+            "pauseMs": 2500
+          },
+          {
+            "speaker": "examiner",
+            "text": "Pour terminer, comment vous voyez-vous dans cinq ans ?",
+            "phase": 1,
+            "startMs": 249883,
+            "endMs": 249883
+          },
+          {
+            "speaker": "candidate",
+            "text": "Dans cinq ans, j'aimerais gérer une petite équipe d'analystes. J'ai déjà encadré deux étudiants cet été, et j'ai trouvé ça très enrichissant. Je voudrais aussi améliorer mon français à l'oral, surtout pour les réunions avec les partenaires francophones, parce que je me sens encore moins à l'aise quand la discussion devient très technique.",
+            "phase": 1,
+            "startMs": 255683,
+            "endMs": 280921,
+            "input": "voice",
+            "pauseMs": 1800
+          }
+        ],
+        "descriptors": {
+          "A": "Understands speech on concrete and routine topics; short exchanges, everyday activities, basic vocabulary; pronunciation needs listener attention.",
+          "B": "Understands the main points of clear standard speech on work topics; simple descriptions and explanations; some spontaneity with pauses for grammar; generally clear pronunciation despite accent.",
+          "C": "Understands linguistically complex speech on specialized topics; detailed descriptions, summarises discussions, responds to complex questions; broad vocabulary, natural delivery, rare mispronunciations that do not impede communication."
+        }
+      },
+      "attempt": 1,
+      "content": "{\n  \"criteria\": {\n    \"comprehension\": {\n      \"band\": \"C\",\n      \"evidence\": \"The answers address both complex follow-ups: the candidate proposes priorities under a halved budget — « j'aurais priorisé les deux régions » — and explains how consultation should change when time is short — « la forme peut changer selon l'urgence ».\"\n    },\n    \"fluency\": {\n      \"band\": \"C\",\n      \"evidence\": \"The transcript shows sustained answers that move from a situation to an action and a result, with only occasional marked hesitation, such as « euh » in turns 7 and 13. Speaking pace cannot be assessed from a transcript.\"\n    },\n    \"grammar\": {\n      \"band\": \"B\",\n      \"evidence\": \"Complex sentences remain understandable, but repeated agreement errors — « les délais de traitement était », « leurs demandeurs remplissait » — and « Si le budget aurait été réduit » reduce accuracy under pressure.\"\n    },\n    \"vocabulary\": {\n      \"band\": \"C\",\n      \"evidence\": \"The candidate uses relevant, fairly precise workplace vocabulary, including « analyse des options », « consultation ciblée » and « mesures d'atténuation ». More project-management terms would make some answers sharper.\"\n    },\n    \"task\": {\n      \"band\": \"C\",\n      \"evidence\": \"The project account identifies a problem, describes the workshops and common form, and gives a measurable result: « le délai moyen est passé à trois mois ». The opinion answers give reasons and acknowledge trade-offs, though the criteria for choosing between opposing positions could be developed.\"\n    }\n  },\n  \"fixes\": [\n    {\n      \"criterion\": \"grammar\",\n      \"subSkill\": \"verb-tense-and-mood\",\n      \"advice\": \"In a past counterfactual, use the pluperfect after “si”, then the past conditional for the result. Practise giving the budget answer aloud with that pattern.\",\n      \"evidence\": \"Turn 9: « Si le budget aurait été réduit de moitié, j'aurais priorisé ».\"\n    },\n    {\n      \"criterion\": \"grammar\",\n      \"subSkill\": \"agreement\",\n      \"advice\": \"Before finishing a sentence, check plural subjects against their verbs and a preceding direct object against a past participle used with “avoir”. These errors recur across the project account.\",\n      \"evidence\": \"Turns 3, 5 and 7: « une note que j'ai écrit », « les délais de traitement était », « leurs demandeurs remplissait ».\"\n    },\n    {\n      \"criterion\": \"task\",\n      \"subSkill\": \"specific-detail\",\n      \"advice\": \"When asked about opposing positions, name the criteria you would use to compare options—such as impact, cost and implementation risk—before explaining what you would recommend to decision-makers.\",\n      \"evidence\": \"Turn 13 says the note would present « les conséquences de chaque option », but does not say how those consequences would be weighed.\"\n    }\n  ],\n  \"missingWords\": [\n    {\n      \"word\": \"plan de déploiement\",\n      \"turn\": 5,\n      \"excerpt\": \"on a conçu un formulaire commun\",\n      \"example\": \"Puis on a conçu un formulaire commun avec quelques sections adaptables et établi un plan de déploiement par région.\"\n    },\n    {\n      \"word\": \"indicateur de rendement\",\n      \"turn\": 5,\n      \"excerpt\": \"le délai moyen est passé à trois mois\",\n      \"example\": \"Au bout d'un an, notre indicateur de rendement, le délai moyen de traitement, était passé de six à trois mois.\"\n    },\n    {\n      \"word\": \"marge de manœuvre\",\n      \"turn\": 7,\n      \"excerpt\": \"perdre sa souplesse\",\n      \"example\": \"Il y avait surtout une région qui craignait de perdre sa marge de manœuvre.\"\n    },\n    {\n      \"word\": \"échéancier\",\n      \"turn\": 9,\n      \"excerpt\": \"j'aurais reporté les autres à l'année suivante\",\n      \"example\": \"J'aurais ajusté l'échéancier pour traiter en priorité les deux régions qui recevaient le plus de demandes et reporter le déploiement dans les autres régions à l'année suivante.\"\n    },\n    {\n      \"word\": \"critères de décision\",\n      \"turn\": 13,\n      \"excerpt\": \"avec les conséquences de chaque option\",\n      \"example\": \"Dans ce cas, je présenterais les deux positions de façon neutre dans la note, avec les conséquences de chaque option et des critères de décision explicites.\"\n    }\n  ],\n  \"errors\": [\n    {\n      \"turn\": 1,\n      \"excerpt\": \"enjeux politique\",\n      \"correction\": \"enjeux politiques\",\n      \"rule\": \"An adjective agrees in number with the plural noun it modifies.\"\n    },\n    {\n      \"turn\": 3,\n      \"excerpt\": \"que j'ai écrit\",\n      \"correction\": \"que j'ai écrite\",\n      \"rule\": \"With “avoir”, the past participle agrees with a preceding direct object; “que” refers to the feminine singular “note”.\"\n    },\n    {\n      \"turn\": 5,\n      \"excerpt\": \"les délais de traitement était\",\n      \"correction\": \"les délais de traitement étaient\",\n      \"rule\": \"A verb agrees in number with its plural subject.\"\n    },\n    {\n      \"turn\": 7,\n      \"excerpt\": \"leurs demandeurs remplissait\",\n      \"correction\": \"leurs demandeurs remplissaient\",\n      \"rule\": \"A verb agrees in number with its plural subject.\"\n    },\n    {\n      \"turn\": 9,\n      \"excerpt\": \"Si le budget aurait été réduit\",\n      \"correction\": \"Si le budget avait été réduit\",\n      \"rule\": \"A past counterfactual “si” clause takes the pluperfect, not the past conditional.\"\n    }\n  ]\n}",
+      "usage": {
+        "prompt_tokens": 1796,
+        "completion_tokens": 3068
+      },
+      "conformant": true
+    },
+    {
+      "method": "assessOral",
+      "model": "gpt-6-sol",
+      "request": {
+        "sessionType": "work",
+        "targetBand": "C",
+        "lang": "fr",
+        "feedbackLang": "en",
+        "topic": "project-management",
+        "phases": [
+          {
+            "name": "Votre travail",
+            "intent": "Have the candidate describe their role and a recent project in detail."
+          },
+          {
+            "name": "Recul et opinion",
+            "intent": "Push for hypotheticals, trade-offs and a reasoned opinion."
+          }
+        ],
+        "turns": [
+          {
+            "speaker": "examiner",
+            "text": "Bonjour. Pour commencer, parlez-moi de votre poste actuel.",
+            "phase": 0,
+            "startMs": 0,
+            "endMs": 0
+          },
+          {
+            "speaker": "candidate",
+            "text": "Euh, je suis analyste principale des politiques au ministère. Je coordonne les consultations avec les provinces et les territoires, et je rédige des notes d'information pour la sous-ministre. Depuis deux ans, je travaille surtout sur le financement des programmes de formation, ce qui veut dire que je dois comprendre à la fois les chiffres et les enjeux politique.",
+            "phase": 0,
+            "startMs": 5900,
+            "endMs": 33519,
+            "input": "voice",
+            "pauseMs": 1900
+          },
+          {
+            "speaker": "examiner",
+            "text": "Qu'est-ce qui vous plaît le plus dans ce travail ?",
+            "phase": 0,
+            "startMs": 35019,
+            "endMs": 35019
+          },
+          {
+            "speaker": "candidate",
+            "text": "Ce que j'aime le plus, c'est quand une note que j'ai écrit aide vraiment à prendre une décision. Par exemple, l'automne dernier, on a préparé une analyse des options pour les stages rémunérés, et la sous-ministre a retenu la deuxième option presque sans changement. C'était satisfaisant de voir que le travail d'équipe avait porté fruit.",
+            "phase": 0,
+            "startMs": 40419,
+            "endMs": 66609,
+            "input": "voice",
+            "pauseMs": 1400
+          },
+          {
+            "speaker": "examiner",
+            "text": "Décrivez un projet récent dont vous êtes fière.",
+            "phase": 0,
+            "startMs": 68109,
+            "endMs": 68109
+          },
+          {
+            "speaker": "candidate",
+            "text": "L'année passée, on a modernisé le processus de demande de subventions. Le défi, c'était que chaque région voulait garder ses propres formulaires, et les délais de traitement était très longs, parfois six mois. J'ai organisé des ateliers avec les régions pour comprendre leurs besoins, puis on a conçu un formulaire commun avec quelques sections adaptables. Au bout d'un an, le délai moyen est passé à trois mois.",
+            "phase": 0,
+            "startMs": 74709,
+            "endMs": 106613,
+            "input": "voice",
+            "pauseMs": 2600
+          },
+          {
+            "speaker": "examiner",
+            "text": "Comment avez-vous convaincu les régions qui résistaient ?",
+            "phase": 0,
+            "startMs": 108113,
+            "endMs": 108113
+          },
+          {
+            "speaker": "candidate",
+            "text": "Euh, il y avait surtout une région qui craignait de perdre sa souplesse. Je les ai rencontrés plusieurs fois, et on a fait un projet pilote chez eux d'abord. Quand ils ont vu que leurs demandeurs remplissait le nouveau formulaire plus vite, ils ont accepté. Je pense que c'est important d'écouter avant de proposer une solution.",
+            "phase": 0,
+            "startMs": 114313,
+            "endMs": 140979,
+            "input": "voice",
+            "pauseMs": 2200
+          },
+          {
+            "speaker": "examiner",
+            "text": "Qu'auriez-vous fait autrement si le budget du projet avait été réduit de moitié ?",
+            "phase": 1,
+            "startMs": 142479,
+            "endMs": 142479
+          },
+          {
+            "speaker": "candidate",
+            "text": "Si le budget aurait été réduit de moitié, j'aurais priorisé les deux régions qui recevaient le plus de demandes, et j'aurais reporté les autres à l'année suivante. J'aurais aussi réutilisé les outils numériques qu'on avait déjà au lieu d'en acheter de nouveaux. Ce serait moins ambitieux, mais on aurait quand même des résultats mesurables.",
+            "phase": 1,
+            "startMs": 149579,
+            "endMs": 175293,
+            "input": "voice",
+            "pauseMs": 3100
+          },
+          {
+            "speaker": "examiner",
+            "text": "Selon vous, faut-il toujours consulter les parties prenantes avant une décision, même quand le temps presse ?",
+            "phase": 1,
+            "startMs": 176793,
+            "endMs": 176793
+          },
+          {
+            "speaker": "candidate",
+            "text": "C'est une bonne question. Je crois qu'il faut consulter, mais la forme peut changer selon l'urgence. Quand le temps presse, on peut faire une consultation ciblée avec les groupes les plus touchés, plutôt qu'une grande consultation publique. Le risque, sinon, c'est de prendre une décision qui sera contestée plus tard, et on perd encore plus de temps à la corriger.",
+            "phase": 1,
+            "startMs": 184193,
+            "endMs": 212764,
+            "input": "voice",
+            "pauseMs": 3400
+          },
+          {
+            "speaker": "examiner",
+            "text": "Et si deux groupes consultés ont des positions opposées ?",
+            "phase": 1,
+            "startMs": 214264,
+            "endMs": 214264
+          },
+          {
+            "speaker": "candidate",
+            "text": "Dans ce cas, euh, je présenterais les deux positions de façon neutre dans la note, avec les conséquences de chaque option. Ce n'est pas à moi de trancher, c'est la décision de la haute direction. Mais je peux proposer des mesures d'atténuation pour le groupe qui serait moins favorisé, pour que la décision soit plus facile à accepter.",
+            "phase": 1,
+            "startMs": 220764,
+            "endMs": 248383,
+            "input": "voice",
+            "pauseMs": 2500
+          },
+          {
+            "speaker": "examiner",
+            "text": "Pour terminer, comment vous voyez-vous dans cinq ans ?",
+            "phase": 1,
+            "startMs": 249883,
+            "endMs": 249883
+          },
+          {
+            "speaker": "candidate",
+            "text": "Dans cinq ans, j'aimerais gérer une petite équipe d'analystes. J'ai déjà encadré deux étudiants cet été, et j'ai trouvé ça très enrichissant. Je voudrais aussi améliorer mon français à l'oral, surtout pour les réunions avec les partenaires francophones, parce que je me sens encore moins à l'aise quand la discussion devient très technique.",
+            "phase": 1,
+            "startMs": 255683,
+            "endMs": 280921,
+            "input": "voice",
+            "pauseMs": 1800
+          }
+        ],
+        "descriptors": {
+          "A": "Understands speech on concrete and routine topics; short exchanges, everyday activities, basic vocabulary; pronunciation needs listener attention.",
+          "B": "Understands the main points of clear standard speech on work topics; simple descriptions and explanations; some spontaneity with pauses for grammar; generally clear pronunciation despite accent.",
+          "C": "Understands linguistically complex speech on specialized topics; detailed descriptions, summarises discussions, responds to complex questions; broad vocabulary, natural delivery, rare mispronunciations that do not impede communication."
+        }
+      },
+      "attempt": 1,
+      "content": "{\n  \"criteria\": {\n    \"comprehension\": {\n      \"band\": \"C\",\n      \"evidence\": \"The candidate answers both complex questions directly: a halved budget leads to a phased approach (turn 9), and opposing views lead to a neutral presentation of options and mitigation measures (turn 13).\"\n    },\n    \"fluency\": {\n      \"band\": \"C\",\n      \"evidence\": \"The answers develop without losing the thread, including the spontaneous qualification « il faut consulter, mais la forme peut changer selon l'urgence » (turn 11). The occasional « Euh » does not interrupt the response. A transcript cannot establish speaking pace or delivery.\"\n    },\n    \"grammar\": {\n      \"band\": \"B\",\n      \"evidence\": \"The candidate uses complex sentences and hypothetical reasoning, but « Si le budget aurait été réduit de moitié » (turn 9) and repeated agreement errors such as « les délais de traitement était » (turn 5) reduce accuracy.\"\n    },\n    \"vocabulary\": {\n      \"band\": \"C\",\n      \"evidence\": \"Workplace terms are varied and apt, including « parties prenantes », « consultation ciblée » and « mesures d'atténuation ». Some choices could express the project's trade-offs more precisely.\"\n    },\n    \"task\": {\n      \"band\": \"C\",\n      \"evidence\": \"The project account follows the problem, action and result: « chaque région voulait garder ses propres formulaires » and « le délai moyen est passé à trois mois » (turn 5). The answers also take a reasoned position on consultation, although the budget scenario could explain its trade-offs further.\"\n    }\n  },\n  \"fixes\": [\n    {\n      \"criterion\": \"grammar\",\n      \"subSkill\": \"verb-tense-and-mood\",\n      \"advice\": \"Practise budget and project hypotheticals with a past-tense if-clause followed by a conditional result. Do not put the conditional in the if-clause.\",\n      \"evidence\": \"Turn 9: « Si le budget aurait été réduit de moitié, j'aurais priorisé ».\"\n    },\n    {\n      \"criterion\": \"grammar\",\n      \"subSkill\": \"agreement\",\n      \"advice\": \"Before finishing a sentence, check plural subjects against their verbs and check whether a preceding direct object requires past-participle agreement.\",\n      \"evidence\": \"Turn 5: « les délais de traitement était »; turn 7: « leurs demandeurs remplissait »; turn 3: « une note que j'ai écrit ».\"\n    },\n    {\n      \"criterion\": \"task\",\n      \"subSkill\": \"specific-detail\",\n      \"advice\": \"In a hypothetical answer, state what the proposed choice protects and what it sacrifices. One concrete consequence for the regions deferred would make the budget trade-off more persuasive.\",\n      \"evidence\": \"Turn 9 identifies a choice but sums up its cost only as « Ce serait moins ambitieux ».\"\n    }\n  ],\n  \"missingWords\": [\n    {\n      \"word\": \"recenser\",\n      \"turn\": 5,\n      \"excerpt\": \"pour comprendre leurs besoins\",\n      \"example\": \"J'ai organisé des ateliers avec les régions pour recenser leurs besoins, puis on a conçu un formulaire commun avec quelques sections adaptables.\"\n    },\n    {\n      \"word\": \"marge de manœuvre\",\n      \"turn\": 7,\n      \"excerpt\": \"perdre sa souplesse\",\n      \"example\": \"Il y avait surtout une région qui craignait de perdre sa marge de manœuvre.\"\n    },\n    {\n      \"word\": \"déploiement progressif\",\n      \"turn\": 9,\n      \"excerpt\": \"j'aurais reporté les autres à l'année suivante\",\n      \"example\": \"J'aurais opté pour un déploiement progressif en reportant le travail dans les autres régions à l'année suivante.\"\n    },\n    {\n      \"word\": \"arbitrage\",\n      \"turn\": 9,\n      \"excerpt\": \"Ce serait moins ambitieux\",\n      \"example\": \"Ce serait un arbitrage entre la portée du projet et l'obtention de résultats mesurables.\"\n    },\n    {\n      \"word\": \"répercussions\",\n      \"turn\": 13,\n      \"excerpt\": \"les conséquences de chaque option\",\n      \"example\": \"Je présenterais les deux positions de façon neutre dans la note, avec les répercussions de chaque option.\"\n    }\n  ],\n  \"errors\": [\n    {\n      \"turn\": 1,\n      \"excerpt\": \"enjeux politique\",\n      \"correction\": \"enjeux politiques\",\n      \"rule\": \"An adjective agrees in number with the noun it modifies.\"\n    },\n    {\n      \"turn\": 3,\n      \"excerpt\": \"une note que j'ai écrit\",\n      \"correction\": \"une note que j'ai écrite\",\n      \"rule\": \"With avoir, the past participle agrees with a direct object placed before the verb.\"\n    },\n    {\n      \"turn\": 5,\n      \"excerpt\": \"les délais de traitement était\",\n      \"correction\": \"les délais de traitement étaient\",\n      \"rule\": \"The verb agrees in number with its plural subject.\"\n    },\n    {\n      \"turn\": 7,\n      \"excerpt\": \"leurs demandeurs remplissait\",\n      \"correction\": \"leurs demandeurs remplissaient\",\n      \"rule\": \"The verb agrees in number with its plural subject.\"\n    },\n    {\n      \"turn\": 9,\n      \"excerpt\": \"Si le budget aurait été réduit\",\n      \"correction\": \"Si le budget avait été réduit\",\n      \"rule\": \"A hypothetical si-clause referring to an unreal past uses the pluperfect, not the past conditional.\"\n    }\n  ]\n}",
+      "usage": {
+        "prompt_tokens": 1796,
+        "completion_tokens": 2600
+      },
+      "conformant": true
+    }
+  ]
+}

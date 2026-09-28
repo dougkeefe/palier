@@ -161,9 +161,8 @@ node apps/factory/dist/index.js eval                 # the eval report carries t
 ```
 
 It overwrites `packages/testing/src/recorded/openai/{generateItems,reviewItem,assessWriting,examinerTurn,transcribe,speak,assessOral}.json`.
-The first recording of `assessOral.json` also adds `"assessOral"` to the method set that
-`packages/adapters/src/openai/recorded-fixtures.test.ts` expects, and imports the file into
-`packages/testing/src/recorded/index.ts`'s `RECORDED_RUNS` (`progress.md` D122).
+`assessOral.json` was first recorded on 28 September 2026 and is in `RECORDED_RUNS` and the replay test's method set
+(`progress.md` D128).
 No audio is ever written: a transcription is recorded with its clip described by type and size, and a voice by
 its content type and size (D117). To keep an
 old run as a before-and-after, rename it first, as `reviewItem-prompt-v3.json` was, and add it to
@@ -192,9 +191,9 @@ unset OPENAI_API_KEY
 node apps/factory/dist/index.js eval                 # prints the stability beside the conformance rate
 ```
 
-It writes `packages/testing/src/recorded/openai/assessOral-stability.json`. Import it into
-`packages/testing/src/recorded/index.ts`'s `RECORDED_RUNS`, add `"assessOral"` to the replay test's method set,
-and commit it with the regenerated `content/factory/eval-report.json`. The eval passes a criterion whose band moves
+It overwrites `packages/testing/src/recorded/openai/assessOral-stability.json`, which is already in `RECORDED_RUNS`
+(first recorded 28 September 2026, `progress.md` D128). Commit it with the regenerated
+`content/factory/eval-report.json`. The eval passes a criterion whose band moves
 at most one level across the five reports, with four in five agreeing (`apps/factory/src/eval/oral-stability.ts`).
 A failure is a prompt to fix, not a threshold to move.
 
@@ -203,6 +202,42 @@ spoken answers, then ask for its report. The report shows the session's cost fro
 with OpenAI's usage page for the window, as the billing check does above. Then update `pricing.json`: the
 `oral-practice` minute is the session's own calls divided by its minutes, per role, and `oral-assessment` is its
 report's tokens.
+
+To read the session's figures, paste this into the browser's console **on the production site**, after the report
+has arrived. It only reads. It prints counts, no transcript text and no key, so its output is safe to share:
+
+```js
+(async () => {
+  const db = await new Promise((ok, no) => { const r = indexedDB.open("palier"); r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error); });
+  const all = (t) => new Promise((ok, no) => { const r = db.transaction(t).objectStore(t).getAll(); r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error); });
+  const [sessions, ledger] = await Promise.all([all("oralSessions"), all("costLedger")]);
+  db.close();
+  const s = sessions.filter((x) => x.endedAt && x.assessment).sort((a, b) => b.startedAt.localeCompare(a.startedAt))[0];
+  if (!s) return console.log("No ended session with a report on this device yet.");
+  const rows = ledger.filter((r) => r.sessionId === s.id);
+  const by = {};
+  for (const r of rows) {
+    const b = (by[`${r.feature} · ${r.model}`] ??= { calls: 0, inputTokens: 0, outputTokens: 0, usd: 0, unpriced: 0 });
+    b.calls++; b.inputTokens += r.inputTokens; b.outputTokens += r.outputTokens;
+    if (r.costUsd === null) b.unpriced++; else b.usd += r.costUsd;
+  }
+  const spoken = s.turns.filter((t) => t.speaker === "candidate" && t.input === "voice");
+  console.log(JSON.stringify({
+    window: { from: rows[0]?.ts, to: rows.at(-1)?.ts },
+    minutes: (Date.parse(s.endedAt) - Date.parse(s.startedAt)) / 60000,
+    endReason: s.endReason,
+    examinerTurns: s.turns.filter((t) => t.speaker === "examiner").length,
+    examinerChars: s.turns.filter((t) => t.speaker === "examiner").reduce((n, t) => n + t.text.length, 0),
+    spokenAnswers: spoken.length,
+    spokenMinutes: spoken.reduce((n, t) => n + (t.endMs - t.startMs), 0) / 60000,
+    byFeatureModel: by,
+  }, null, 2));
+})();
+```
+
+The ledger keeps dollars and tokens, not an audio call's characters or seconds (D101), so tts-1's characters are its
+cost ÷ US$15 per million, and gpt-transcribe's minutes its cost ÷ US$0.0045. `examinerChars` and `spokenMinutes`
+cross-check them.
 
 ## Rolling back
 

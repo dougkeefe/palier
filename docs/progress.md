@@ -23,11 +23,12 @@ no UI", merged (#34; D114–D116)**: scenarios through the bank (bank v3, with v
 fake transport, which ticks exit criterion 5. **Slice 2, "the turn loop on the key", is built** (`dougkeefe/next-slice-from-progress-v2`;
 D117–D120): `transcribe`, `speak` and `examinerTurn` on gpt-transcribe, tts-1 and the text model, the `AnswerSource`
 port and `turnBasedTransport`, `/practice/oral` in practice mode with typed answers, local recording, and the key-leak
-test extended to audio, which ticks exit criterion 3. It merged (#35). **Slice 3, "`assessOral` and the report", is built**
-(`dougkeefe/check-last-branch-commit`; D122–D126): `assessOral` on the `assess` role, fluency metrics in the engine, the
+test extended to audio, which ticks exit criterion 3. It merged (#35). **Slice 3, "`assessOral` and the report", merged (#37)**
+(`dougkeefe/check-last-branch-commit`; D122–D127): `assessOral` on the `assess` role, fluency metrics in the engine, the
 report at `/practice/oral/report`, the fixes into tomorrow's plan (closing D35), a session's cost from its own ledger rows,
-and the stability eval. Gate J is deferred by the human, so pronunciation reads "not assessed". Exit criteria 2 and 4 wait on
-the human's funded runs, then Gate I. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+and the stability eval. Gate J is deferred by the human, so pronunciation reads "not assessed". **Exit criterion 4 is met** (D128): the scorer
+gave the same band on every criterion in all five live reports. **Gate I passed** (D129, human). **Phase 5 is complete on four of its five criteria**: the fifth, the real session's cost
+check, is deferred by the human (D130). Phase 6's decision gate is open. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
 
@@ -93,7 +94,7 @@ human for anything expensive.
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
-| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **in progress** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 built, D122–D126, exit criteria 2 and 4 pending the human's funded runs, then Gate I) |
+| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
@@ -104,9 +105,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/check-last-branch-commit` | **Phase 5 Slice 3 — `assessOral` and the report** (D113): `AiProvider.assessOral` on the `assess` role, fluency metrics in the engine, the report at `/practice/oral/report`, the fixes into tomorrow's plan (closing D35), a session's cost from its own ledger rows, and the stability eval's plumbing. Gate J deferred by the human: the `pronounce` role ships unconfigured. **Built, reviewed (32 fixes, D127); pending merge** (D122–D127). | 28 September 2026 |
+| `dougkeefe/next-progress-slice-v6` | **Phase 5 closed — the funded runs' follow-up.** `assessOral.json` and `assessOral-stability.json` were recorded by the human and imported into the replay gate, and the stability eval passed (criterion 4, D128). Gate I passed (D129). Criterion 2 is deferred by the human (D130). **Built; pending merge.** | 28 September 2026 |
 
-*(The prior rows — Phase 5 Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -205,36 +206,32 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 5 Slice 3 is built** (`dougkeefe/check-last-branch-commit`; D122–D126). Everything a session can do without a funded
-key is done. The product pilot still runs beside it (Gate E, D97).
+**Phase 5 is complete on four of its five criteria** (D128–D130). The fifth, the real session's cost check, is deferred by the
+human, and its runbook is in `docs/deploy.md`. The product pilot still runs beside it (Gate E, D97).
 
-**Next: the human's two funded runs, then Gate I.** They tick Phase 5's exit criteria 4 and 2, in that order, and nothing
-else is to be built first. There is no agent slice ahead of them: Phase 6 is gated on Phase 5's evidence (its decision gate),
-and the evidence is these runs.
+**Next: Phase 6's decision gate (human).** Is studio mode built for 1.0, and on what? Nothing is to be built before it is
+decided, since Phase 6's work breakdown depends on the answer.
 
-1. **The stability recording** (exit criterion 4), from your own terminal, `docs/deploy.md` "The oral scorer's stability":
-   - `pnpm --filter @palier/web oral-stability` on a funded key. It scores `STABILITY_SESSION` (about five minutes, eight
-     spoken answers; synthetic, D127) five times, a few cents, and writes
-     `packages/testing/src/recorded/openai/assessOral-stability.json`, a report refused twice included.
-   - The agent session that follows then imports it into `RECORDED_RUNS`, adds `"assessOral"` to the replay test's method set,
-     regenerates `eval-report.json`, and reads `oralStability`. **Passed ticks criterion 4.** Failed is a prompt to fix, with a
-     `PROMPT_VERSION` bump and a re-recording, never a threshold to move (D126).
-   - The same session runs `LIVE_SMOKE_RECORD=1 node apps/web/scripts/live-smoke.mjs` too, or asks you to, so `assessOral.json`
-     joins the conformance rate.
-2. **A real 10-minute session** (exit criterion 2), on the production site, spoken, then its report:
-   - read the report's cost, and OpenAI's usage page for the window, as Gate G did (`docs/deploy.md`);
-   - they should match within a few percent. Then `pricing.json`'s `oral-practice` minute becomes the session's own calls over
-     its minutes, per role, and `oral-assessment` its report's tokens, both replacing placeholders (D117, D122). **That ticks
-     criterion 2**, and compares practice mode's real cost with GPT-Live's US$0.05 a minute (D113, D117).
-3. **Gate I** (exit criterion 1, a human judgement): is that 10-minute session's report one a user would act on? Record the
-   answer and what would change it. **If yes, Phase 5 is complete** and Phase 6's decision gate opens, with GPT-Live as the
-   leading candidate and D113's three checks to make first. If no, what the report lacks is the next slice.
+- **The evidence at the gate:** Gate I passed, so practice mode's reports land (D129). Practice mode's placeholder estimate is
+  about US$0.0076 a minute, and GPT-Live is published at US$0.05 a minute (D130, D113).
+  - At that price, studio mode is affordable. The gate's premise, "measured realtime cost is high", probably does not hold.
+  - The question is whether realtime is worth building, and whether GPT-Live can carry it.
+- **GPT-Live is the leading candidate.** D113's three checks come before committing to it:
+  1. French recognition and a French voice at C-level quality, which needs the human's ear;
+  2. the session length limit, against the 22-minute simulation and the 25-minute cap;
+  3. whether a short-lived browser credential exists.
+
+  Checks 2 and 3 are documentation reads an agent session can make on request, and check 1 is the human's.
+- **Adopting it needs a new ADR superseding ADR 3's mechanism**, never an edit. ADR 3's *revisit when*, "OpenAI documents a
+  browser-direct realtime auth path", has not been met, since the Live docs keep the key on a backend (D113).
+- **If studio mode is built,** Phase 6 is planned as slices mirrored in `implementation-plan.md` §7, as D79, D97 and D113 did.
+  **If not,** Phase 7 (polish and hardening, 1.0) is next, and studio mode waits until after 1.0.
 
 **Gate J, still open (human):** confirm the pronunciation model and its price. OpenAI's pricing page listed, on 27 September
 2026, audio-capable chat models priced per million audio tokens, such as `gpt-audio-mini` at US$10 in. Chat-completions audio
 input takes WAV or MP3 only, and the recording is WebM/Opus. So Gate J's slice is: a `pronounce` role and a method on
 `AiProvider`, the recording converted to WAV in the browser (Web Audio, no new dependency), the opt-in on the pre-flight, off by
-default and asked each session, and the key-leak test's opt-in half, ticked and unticked (D113, D122). It does not block Gate I.
+default and asked each session, and the key-leak test's opt-in half, ticked and unticked (D113, D122). It does not block Phase 6's gate.
 
 **Also for the human:**
 - **listen to the examiner's voice** (`tts-1`, "sage") in French, and say whether it will do or another voice should be data in
@@ -280,7 +277,7 @@ last exit criterion.
   **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026; **Gate D** (exam UI
   direction, D84), **Gate E** (the pilot runs on the baseline bank, D97) and **Gate F** (Phase 4 UI
   direction, D97) on 25 September 2026; **Gate G** (the billing check, session log) on 26 September 2026; **Gate H**
-  (Phase 5 direction, D113) on 27 September 2026.
+  (Phase 5 direction, D113) on 27 September 2026; **Gate I** (the oral report, D129) on 28 September 2026.
 
 Standing human items:
 - pointing `palier.dougkeefe.com` at the deployment;
@@ -508,18 +505,23 @@ pronunciation offered as a per-session opt-in.
   contract; `/practice/oral` with the level check, per-browser recovery and typed answers; the recording kept on this
   device and cleaned from the data settings; the key-leak test following audio and transcripts; and recorded fixtures
   for the three new methods, all accepted first time.
-- [~] **Slice 3 — `assessOral` and the report**, ending at **Gate I** (exit criterion 1, human). **Built 28 September 2026**
-  (`dougkeefe/check-last-branch-commit`; D122–D126; session-log evidence): `assessOral` on the `assess` role with the offsets
+- [x] **Slice 3 — `assessOral` and the report**, ending at **Gate I** (exit criterion 1, human). **Built 28 September 2026, merged (#37)**
+  (`dougkeefe/check-last-branch-commit`; D122–D127; session-log evidence): `assessOral` on the `assess` role with the offsets
   placed per turn; `fluencyMetrics` over spoken answers; the fixes into `StartSession`'s plan (D35 closed); `CostEntry.sessionId`;
   the report at `/practice/oral/report` and the list of past sessions; the stability eval and its recorder. Gate J deferred
-  (human). Exit criteria 2 and 4 wait on the human's funded runs (*Next, decided*).
+  (human). Exit criterion 4 met (D128); Gate I passed (D129); criterion 2 deferred by the human (D130).
 
 **Exit criteria** (the actual gate)
 
-- [ ] A 10-minute session produces a report a user would act on (Gate I)
-- [ ] Cost per session measured and displayed accurately
+- [x] A 10-minute session produces a report a user would act on (Gate I). **Passed** (28 September 2026, human decision, D129)
+- [!] Cost per session measured and displayed accurately. **Deferred by the human** (28 September 2026, D130): the cost is
+  measured from each session's own ledger rows and shown on the report (D125, D127); the comparison with OpenAI's usage page,
+  and recalibrating `pricing.json`'s oral placeholders, run later, when the human chooses
 - [x] Audio reaches nowhere but OpenAI: each answer's clip only its transcription call, and the stored session recording only on an explicit per-session pronunciation opt-in, asserted by the extended key-leak test [R12] (amended in place, D113). **Met** (Slice 2, D120). There is no opt-in yet, so the recording must reach no request at all, and it reaches none. In the hermetic journey each clip's bytes are in exactly one request, to `/v1/audio/transcriptions`. The recording's bytes are in no request; the transcript is only on this device and in the examiner's next request; the paired phone and the export see neither. On real IndexedDB the recording is at rest in `oralAudio` through a reload. Proven to bite three ways (session log, 27 September 2026, `dougkeefe/next-slice-from-progress-v2`). Slice 3's opt-in must keep the recording's check green when the box is left unticked
-- [ ] Scoring stability: same transcript five times, at most one band of variation
+- [x] Scoring stability: same transcript five times, at most one band of variation. **Met** (28 September 2026, D128): the
+  human recorded `STABILITY_SESSION` scored five times on a funded key, and every criterion's band was the same in all five
+  (spread 0, agreement 1.00; the bar is at most 1 and at least 0.8). `node apps/factory/dist/index.js eval` → "oral stability
+  over 5 call(s): passed". The session is synthetic; a real one is the stronger evidence, named, not scheduled
 - [x] Session state machine contract-tested against a fake transport. **Met** (Slice 1, D116):
   `packages/testing/src/memory/oral-session.test.ts` drives the real driver, `startOralSessionRun`, over
   `memoryOralTransport`, which `oralTransportContract` holds. It runs every fixture scenario, one per session type,
@@ -4642,11 +4644,124 @@ merged, none critical. The human chose to fix all of them.
   - the controller test that could not fail now proves the last question's heard time never carries into the next;
   - a container built again, as a change of language builds one, is proven to join a request still out.
 
+### D128 — `assessOral` recorded live: the stability eval passes, and the smoke's re-measured counts go into pricing
+**Date:** 28 September 2026 · **Status:** accepted; ticks Phase 5 exit criterion 4
+
+- **The human ran both recordings from their own terminal**, in this worktree, on a funded key the agent never saw (deploy.md).
+  - `pnpm --filter @palier/web oral-stability` gave 5 reports out of 5, 5 completions and US$0.127104.
+  - `LIVE_SMOKE_RECORD=1 node apps/web/scripts/live-smoke.mjs` gave 15 completions, all 15 accepted on the first try.
+- **The stability eval passes, with no variation at all.** `STABILITY_SESSION` was scored five times. Every report gave
+  comprehension C, fluency C, grammar B, vocabulary C and task C, so every criterion has spread 0 and agreement 1.00. The
+  bar is at most one level of spread and at least 0.8 agreement (D126).
+  - The evidence the model quotes differs from report to report, but the bands do not.
+  - **Said plainly, as D127 did:** the session is synthetic, and it was written to read as a B-or-C candidate. A real
+    session scored the same way is the stronger evidence. That remains named, not scheduled.
+- **Both files join the replay gate.** `assessOral.json` and `assessOral-stability.json` are in `RECORDED_RUNS`, and the
+  replay test's expected method set gains `"assessOral"`. D122 and deploy.md named this step. The set grew because a
+  method now has a recording, and no assertion was weakened.
+  - The eval's conformance rate on prompt version 4 is 1.000, over eight files.
+  - No recorded verdict flipped: nothing on version 4 is refused, and `reviewItem-prompt-v3.json` still holds the three
+    refusals that keep the gate two-sided.
+- **`pricing.json`'s two measured features were refreshed from the smoke**, as deploy.md says to do when the counts move:
+  - `writing-feedback` output went from 1,620 to 1,813;
+  - the draft's output went from 4,631 to 4,482;
+  - the review went from 1,665 in and 2,400 out to 1,680 in and 3,775 out.
+
+  `oral-practice` and `oral-assessment` stay placeholders until a real 10-minute session measures them (exit criterion 2).
+  The smoke's own report line (1,151 in, 2,169 out) is a short fixed session and is not copied. The stability run's
+  US$0.025 or so per report is synthetic too, and is not copied either.
+- **Docs:** the `@palier/testing` CLAUDE.md, the eval's `CONFORMANCE_METHODS` comment and deploy.md's one-time import
+  steps now say the recordings exist.
+- **deploy.md gains a read-only console snippet for criterion 2.** The ledger keeps no audio call's characters or seconds, so
+  the snippet reads the session's own ledger rows and turns, and the per-role figures are derived from cost. It is
+  documentation, not shipped code, and has no test. It is the one route to those figures without adding a field to
+  `CostEntry`, and one real session does not justify that field.
+
+### D129 — Gate I passed: the report is one a user would act on
+**Date:** 28 September 2026 · **Status:** accepted (human decision); resolves Gate I and ticks Phase 5 exit criterion 1
+
+- **The human confirmed that Gate I passes**: the post-session report (D122–D127) is one a user would act on.
+- **Phase 5 is not complete yet.** Exit criterion 2, the real 10-minute session's cost compared with OpenAI's usage page,
+  is still to run (D125, *Next, decided*). It is a measurement, not a judgement, so it no longer holds up anything else.
+- **What would reopen it** was not stated at the gate. The agent's suggestion, not the human's: the product pilot's users
+  (Gate E, D97) ignoring a report's fixes, or a real session's report disagreeing with the candidate's own sense of their level.
+- **Gate J stays open** and did not block this gate: pronunciation still reads "not assessed".
+
+### D130 — Phase 5 exit criterion 2 deferred; Phase 5 closes on the other four, and Phase 6's decision gate opens
+**Date:** 28 September 2026 · **Status:** accepted (human decision); amends D129's "Phase 5 is not complete yet"
+
+- **The human deferred the 10-minute session's cost check.** They will run it later and recalibrate if needed. What it would
+  have ticked:
+  - "measured": each session's cost is already read from its own ledger rows (D125);
+  - "displayed": the report already shows it, line by line (D127);
+  - "accurately": this half is what waits, meaning the match with OpenAI's usage page. Gate G's rule applies when it runs:
+    tokens exact, dollars within a few percent.
+- **`pricing.json`'s `oral-practice` and `oral-assessment` stay placeholders**, and the note already says so. They drive only
+  the pre-flight estimate. The meter and the report price each call from `models`, whose rates Gate G confirmed, so what a
+  user is shown having spent does not depend on the placeholders.
+- **Phase 5 is marked complete on criteria 1, 3, 4 and 5**, with criterion 2 marked `[!]`, deferred by the human's decision.
+  The runbook is unchanged, in `docs/deploy.md` "A measured 10-minute session", with its console snippet.
+- **Phase 6's decision gate opens on the estimate, labelled as one.** The placeholders price a practice minute at about
+  **US$0.0076**:
+  - examiner, 564 in and 134 out on gpt-6-luna: about US$0.0022;
+  - voice, 180 characters on tts-1: US$0.0027;
+  - transcription, 0.6 minutes on gpt-transcribe: US$0.0027.
+
+  GPT-Live is published at US$0.05 a minute, so practice mode's estimate is about a seventh of it. The recalibration can
+  move this figure, but no plausible error closes a gap of that size.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 28 September 2026 — `dougkeefe/next-progress-slice-v6` (Phase 5 closed: the stability recording, Gate I, criterion 2 deferred)
+
+**Phase 5 Slice 3 had merged as #37**, so its In-flight row was replaced by this branch's. **The human chose the funded runs
+first** over an agent slice. They ran both recordings from their own terminal, and this session did the follow-up (D128). They
+then passed Gate I (D129) and deferred criterion 2 (D130).
+
+**The human's runs** (key never in this session):
+
+```
+pnpm --filter @palier/web oral-stability
+  → recorded 5 report(s) of 5, 5 completion(s), US$0.127104
+LIVE_SMOKE_RECORD=1 node apps/web/scripts/live-smoke.mjs
+  → completions: 15, 15 accepted on the first try; recorded 15 completion(s)
+  → measured features for pricing.json: writing-feedback assess 517/1813; item-generation draft 392/4482, review 1680/3775
+```
+
+**Evidence** (run on this branch, after the last code and data change):
+
+```
+node apps/factory/dist/index.js eval
+  → eval: overall 1.000, min class 1.000
+  → schema conformance on prompt v4: 1.000 over assessOral-stability.json, assessOral.json, assessWriting.json,
+    examinerTurn.json, generateItems.json, reviewItem.json, speak.json, transcribe.json
+  → oral stability over 5 call(s): passed (comprehension spread 0, agreement 1.00; fluency spread 0, agreement 1.00;
+    grammar spread 0, agreement 1.00; vocabulary spread 0, agreement 1.00; task spread 0, agreement 1.00)
+pnpm verify          → check-types, lint, boundaries (451 + 229 modules, no violations),
+                       test: 207 files, 3143 passed, 8 todo; coverage thresholds met
+CI=1 pnpm test:e2e    → 58 passed (1.1m), on a fresh production build
+git diff packages/engine/src/__fixtures__ → empty
+```
+
+**Human decisions this session:**
+- **Gate I passed** (D129): the report is one a user would act on. That ticks exit criterion 1.
+- **Exit criterion 2 is deferred** (D130): the real 10-minute session's cost check runs later, and the oral placeholders in
+  `pricing.json` are recalibrated then if needed.
+
+**Ticked:** exit criteria 1 and 4. **Deferred (`[!]`):** criterion 2. Phase 5 is marked complete on four of its five criteria,
+and *Next, decided* names Phase 6's decision gate.
+
+**A candid review of the branch** (constructive tone) found 6 issues, none critical, and the human chose to fix all 6:
+- this log's entries sat above its preamble, and there were three of them for one session, so they are now this one;
+- D129 had recorded a decision the human did not make;
+- D130 cited Phase 3 as a finished phase;
+- deploy.md's console snippet threw with no reported session on the device, and left its connection open;
+- `implementation-plan.md` §7 did not record the deferral;
+- one line in deploy.md was over-long.
 
 ### 28 September 2026 — `dougkeefe/check-last-branch-commit` (pre-merge review: 32 fixes)
 

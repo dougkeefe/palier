@@ -8,6 +8,8 @@ import type {
   WritingRequest,
 } from "@palier/domain";
 
+import assessOralStability from "./openai/assessOral-stability.json" with { type: "json" };
+import assessOral from "./openai/assessOral.json" with { type: "json" };
 import assessWriting from "./openai/assessWriting.json" with { type: "json" };
 import examinerTurn from "./openai/examinerTurn.json" with { type: "json" };
 import generateItems from "./openai/generateItems.json" with { type: "json" };
@@ -32,9 +34,10 @@ import transcribe from "./openai/transcribe.json" with { type: "json" };
  * its request describes the clip rather than carrying it: no audio is ever committed. A `speak`
  * keeps what arrived as `{ "contentType", "bytes" }`, for the same reason.
  *
- * `assessOral` joins with Slice 3 (progress.md D122), and is **not recorded yet**: the nightly
- * smoke's call becomes `assessOral.json`, and the stability recording's five `assessOral-stability.json`,
- * each when the human first runs it on a funded key. A fixture is recorded, never hand-written (D112).
+ * `assessOral` joins with Slice 3 (progress.md D122), first recorded on a funded key on 28 September
+ * 2026 (D128): the live smoke's one report is `assessOral.json`, and the stability recording's five
+ * reports of one session are `assessOral-stability.json`, which the factory's eval also reads for the
+ * scorer's stability (D126). A fixture is recorded, never hand-written (D112).
  */
 
 /** A transcription's request as recorded: the clip described, never kept (D117). */
@@ -114,6 +117,8 @@ export const RECORDED_RUNS: readonly RecordedRun[] = [
   runOf("examinerTurn.json", examinerTurn),
   runOf("transcribe.json", transcribe),
   runOf("speak.json", speak),
+  runOf("assessOral.json", assessOral),
+  runOf("assessOral-stability.json", assessOralStability),
 ];
 
 /** Every recorded completion, across the runs. */
