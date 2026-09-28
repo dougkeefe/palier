@@ -202,6 +202,9 @@ export function HomeDashboard() {
             <Link href="/exam" className="app-link pl-focusable">
               {t("examAction")}
             </Link>
+            <Link href="/practice/oral" className="app-link pl-focusable">
+              {t("oralAction")}
+            </Link>
             <Link href="/diagnostic" className="app-link pl-focusable">
               {t("diagnosticAgain")}
             </Link>

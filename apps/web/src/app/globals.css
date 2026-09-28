@@ -883,3 +883,33 @@ body {
   gap: 0.5rem;
   align-items: center;
 }
+
+/* Spoken practice (progress.md D119): the phase and the timer on one line, the question large enough to read at a glance. */
+.app-oral-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-oral-question {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.app-oral-transcript {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.app-steps {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.app-meter {
+  inline-size: 100%;
+  max-inline-size: 20rem;
+}

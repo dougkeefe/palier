@@ -18,7 +18,7 @@ export function NoKeyCard({
   estimateUsd,
   headingRef,
 }: {
-  namespace: "writing" | "generate";
+  namespace: "writing" | "generate" | "oral";
   estimateUsd: number | null;
   /** Given when the card can replace a control that held focus, so focus can land on its heading. */
   headingRef?: Ref<HTMLHeadingElement>;

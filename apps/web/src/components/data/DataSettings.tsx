@@ -8,6 +8,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "../../i18n/navigation";
 import { useContainer } from "../ContainerProvider";
 import { ExportButton } from "./ExportButton";
+import { OralStorageSettings } from "./OralStorageSettings";
 import { TelemetrySettings } from "./TelemetrySettings";
 
 type ImportState =
@@ -105,6 +106,8 @@ export function DataSettings() {
       </Card>
 
       <TelemetrySettings />
+
+      <OralStorageSettings />
 
       <Card>
         <h2>{t("deleteTitle")}</h2>

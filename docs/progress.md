@@ -4271,6 +4271,57 @@ signature), as D45 and D106 were
   - testing: the contract run; `memory/oral-practice.test.ts`, a whole session per fixture session type, each asking in
     every phase in order and completing at its length; and `memoryAnswerSource`'s own cases.
 
+### D119 — the calls PRD §8.6's practice mode and §14 leave open
+**Date:** 27 September 2026 · **Status:** accepted (Gate H adopted §8.6's practice mode and §14's states as written, so
+these are recorded as made, as D87, D108 and D111 were)
+
+- **The route is `/practice/oral`**, a static island (`components/oral/OralPractice.tsx`). Its decisions are in
+  `features/oral/`: the reducer, the failure words and the estimate in `practice-view.ts`, the microphone rules in
+  `mic.ts`, and the `AnswerSource` bridge in `answer-bridge.ts`. Home's actions card links to it ("Practise
+  speaking"), so the hermetic journeys arrive by links.
+- **The steps: pick, check the microphone, confirm, run, end.** An action from another step is ignored, so a late
+  question after the end cannot move the screen.
+  - **The picker** lists the five session types in PRD §8.6's order, from `oralSessionChoices`. Each shows its purpose
+    and "N minutes · about US$X", which is `oral-practice`'s per-minute estimate times its minutes. The full
+    simulation's 22 minutes are stated there.
+  - **Without a key**, `NoKeyCard` (namespace `oral`, at the per-minute estimate) sits above the list, and the list
+    has no Choose buttons: the user can read what each session covers.
+  - **The microphone step** is architecture.md §8.5 step 1's three-second level check, over an `AnalyserNode`
+    (`lib/oral/level.ts`), with a live `<meter>`. The loudest reading is judged against `QUIET_LEVEL` (0.01 RMS), a
+    product threshold. Nothing is recorded or sent.
+    - **A refusal** (`NotAllowedError`, `SecurityError`) shows the recovery steps for the browser's own menus: Chrome,
+      Edge, Firefox, Safari, or a generic two. It then offers to check again, or to answer by typing.
+    - **No device**, a browser that cannot record, or another fault each get their own sentence and the typed
+      offer.
+    - **"Answer by typing instead" is offered at every point of the check**, not only after a refusal, so a user in
+      an open-plan office can choose it.
+  - **The pre-flight** is the workshop's pattern, at the session's minutes (`preflightSpend`'s quantity, D117). It
+    says where each answer goes: a recorded one to OpenAI to be written down, with the recording staying on this
+    device; a typed one to OpenAI. It never blocks.
+  - **The session screen** shows the part ("Part 2 of 3", from the question's phase), the elapsed time in
+    `@palier/ui`'s `Timer`, the examiner's question in words (`lang="fr"`) with its voice played as it arrives and
+    "Play the question again", then Record, "Stop and send" or a text field, and "End the session". A status toast
+    covers each wait.
+  - **No running transcript during the session.** §8.6 says so for studio mode; practice mode shows the question as
+    text, which it requires, and nothing else, because reading back what one said changes the exercise as much as it
+    does in studio mode.
+  - **The screen's timer ticks the session each second** (`run.tick()`), so a phase boundary is at most a second late,
+    and its elapsed time is `performance.now()`'s, as the exam runner's is.
+  - **The end** says why it ended, names a failure with the key screen's words and says the transcript is kept,
+    reports any recordings evicted to make room (§9.1), says the recording is kept on this device only, and **shows
+    the stored transcript**. It says the report arrives in a coming update (Slice 3) and links to the data settings.
+- **The recordings** (`lib/oral/recorder.ts`, over a `MediaKit` a test fakes):
+  - one `MediaRecorder` per answer, whose measured length goes with the clip;
+  - **one session recorder, resumed while the candidate answers and paused otherwise**, so the recording
+    `saveOralAudio` keeps holds their answers and nothing else. A typed session has no recording.
+  - Formats are tried in order: Opus in WebM, WebM, MP4, which the transcription endpoint all reads.
+- **`/settings/data` gains the recordings** (`components/data/OralStorageSettings.tsx`): their size in megabytes,
+  §9.1's warning at 200 MB, and "Delete all recordings" in one action, which keeps every transcript.
+- **The hermetic clock is frozen**, so on the hermetic lane a session never crosses a phase by time, and every turn is
+  stamped at 0 ms. The hermetic journeys end by the end control. A phase crossed by time is proven on the production
+  build with `page.clock` (D120), and below the browser by D118's tests.
+- **The route joins the Lighthouse list** at `/fr/practice/oral`.
+
 ---
 
 ## Session log

@@ -31,7 +31,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   in the browser after hydration and imports the container module lazily, so the adapters stay out of
   the shared first-load JS. The layout passes `hermetic` from the environment. Screens are static RSC
   shells around one client island each (`/start`, `/home`, `/diagnostic`, `/practice/{reading,writing}`,
-  `/practice/writing/{workshop,generate}`,
+  `/practice/writing/{workshop,generate}`, `/practice/oral`,
   `/exam`, `/exam/run`, `/exam/results`, `/settings/{data,sync,key}`).
   The islands' decisions live in tested `.ts` beside them (`src/features/**`, `src/lib/study.ts`); a
   `.tsx` holds rendering and effects only.
@@ -138,6 +138,15 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `generated` table in production, **never synced and never exported**, cleared by wipe and
     delete-everywhere. `components/key/NoKeyCard.tsx` is shared with the workshop, by namespace.
     `container-generate.test.ts` runs the real adapter over MSW through both graphs.
+  - **Spoken practice** (Phase 5 Slice 2, progress.md D117–D119) is `/practice/oral`, linked from home's actions
+    card. `components/oral/OralPractice.tsx` renders it; its decisions are in `features/oral/` (the reducer, the
+    microphone rules and the `AnswerSource` bridge). The recorder and the level check are `lib/oral/`, over a
+    `MediaKit` and a `LevelKit` a test fakes. The session is `startOralPractice`: the app's turn-based transport
+    over the real adapter, metered as `oral-practice`. **Only the current question is shown during a session**,
+    never a running transcript. The session recording (the candidate's answers only) is kept by `saveOralAudio`,
+    **never uploaded in this slice, never synced and never exported**; `/settings/data` shows its size and deletes
+    it in one action. The hermetic clock is frozen, so hermetic journeys end a session by its end control.
+    `container-oral.test.ts` runs a real session through both graphs over MSW.
   - **Tier 11, the key-leak test**, is `e2e/key-leak.spec.ts` (hermetic, with real sync and telemetry)
     and `e2e/key-leak-production.spec.ts` (real Dexie), over `e2e/leak-guard.ts`. A new flow that can
     touch the key belongs in the first. A flow that holds user writing passes it to `assertNoLeak` as
