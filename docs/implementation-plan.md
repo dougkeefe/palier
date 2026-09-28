@@ -146,6 +146,9 @@ interface OralStore      { put(s: OralSession): Promise<void>; get(id: SessionId
 // text, phase, startMs, endMs }, domain's. `all` is newest first, `audioIndex` oldest first with each
 // recording's size; `putAudio` rejects for an unknown session, and with StorageQuotaError when the
 // device is full. The retention policy (architecture.md §9.1) is in the use cases, not the store.
+// Amended 28 September 2026 (Phase 5 Slice 3, progress.md D122, D126): OralSession gains
+// `assessment: OralAssessment | null`, the report on it, and OralTurn an optional `input: "voice" | "typed"`,
+// which the fluency metrics need. A stored report whose offsets no longer fit its turns reads as unassessed.
 interface OralTransport  { open(req: { scenario: OralScenario }, sink: (e: OralTransportEvent) => void): Promise<void>;
                            direct(d: { phase: number; register: OralRegister }): Promise<void>; close(): Promise<void> }
 // A port §3.3 did not name, added 27 September 2026 (progress.md D116). One shape for the turn-based
@@ -165,8 +168,8 @@ interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string,
 // External services
 interface AiProvider {
   // Amended in place 23 September 2026 (progress.md D52, ADR 20). Phase 1 built the
-  // factory-facing subset only; the writing/oral/transcribe/voice methods land with
-  // their phases (4–5). `generatePassage` was ADDED (§4.2 needs it), and generate*
+  // factory-facing subset only; the writing/oral/transcribe/voice methods landed with
+  // their phases (4–5); only openVoiceSession (Phase 6) is still to come. `generatePassage` was ADDED (§4.2 needs it), and generate*
   // return DRAFTS (the factory assembles the full artefact), not Item[]/Passage[].
   // The request/response DTOs live in @palier/domain, not here (ADR 20).
   capabilities(): AiCapabilities                                   // which of the below are supported
@@ -177,7 +180,9 @@ interface AiProvider {
                                     // offsets checkErrorOffsets accepts; the model reports excerpts, the adapter places them
   generateScenario(req: GenerateScenarioRequest): Promise<ScenarioDraft>  // Phase 5 Slice 1, ADDED (progress.md D114):
                                     // the factory's scenario stage; a phase plan, assembled by the factory
-  assessOral(req: OralRequest): Promise<OralAssessment>            // deferred to Phase 5 Slice 3
+  assessOral(req: OralRequest): Promise<OralAssessment>            // Phase 5 Slice 3 (progress.md D122): per-criterion
+                                    // bands with quoted evidence, three fixes on drillable sub-skills, five missing words,
+                                    // and the errors placed per candidate turn; the model quotes, the adapter places
   transcribe(req: TranscribeRequest): Promise<Transcript>          // Phase 5 Slice 2, AMENDED (progress.md D117): was
                                     // (audio: Blob, lang); the request adds the clip's measured durationMs, which prices it
   speak(req: SpeechRequest): Promise<Blob>                         // Phase 5 Slice 2, ADDED (D117): the examiner's voice
@@ -233,6 +238,9 @@ interface KeyVault {
 // deleteEverywhere clear it. No all(), because nothing exports it. withAiProvider(deps, feature, fn)
 // appends every spending call's lastUsage() to it, so no AI use case can skip it; the key check is not
 // metered. CostEntry = { ts, feature: AiFeature, model, inputTokens, outputTokens, costUsd: number | null }.
+// Amended 28 September 2026 (Phase 5 Slice 3, progress.md D125): CostEntry gains an optional `sessionId`,
+// the spoken session a call was for, which withAiProvider(deps, feature, fn, { sessionId }) stamps, so a
+// session's cost is its own rows exactly.
 interface CostLedger {
   append(entry: CostEntry): Promise<void>
   since(from: ISO): Promise<CostEntry[]>                        // at or after `from`, oldest first

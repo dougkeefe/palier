@@ -137,8 +137,9 @@ test account (`progress.md` D97, D103). It is a human step, because it spends re
 
 The `live-smoke` job in `.github/workflows/nightly.yml` runs `pnpm --filter @palier/web live-smoke` on the
 `OPENAI_SMOKE_KEY` secret (`progress.md` D112). It makes one key check, three set drafts, five reviews,
-two writing assessments, and the oral turn loop's calls (D117): one question voiced by `tts-1`, that same
-audio transcribed by `gpt-transcribe`, and two examiner turns, through the real adapter. It writes the measured tokens and the `pricing.json`
+two writing assessments, the oral turn loop's calls (D117): one question voiced by `tts-1`, that same
+audio transcribed by `gpt-transcribe`, and two examiner turns, and one fixed session's report (D122), through the
+real adapter. It writes the measured tokens and the `pricing.json`
 `features` block to the run's summary. A failed call, or a model in `apps/web/src/lib/ai-models.json` that
 OpenAI no longer lists, fails the job and opens an issue. It never prints the key.
 
@@ -159,15 +160,45 @@ unset OPENAI_API_KEY
 node apps/factory/dist/index.js eval                 # the eval report carries the new conformance rate
 ```
 
-It overwrites `packages/testing/src/recorded/openai/{generateItems,reviewItem,assessWriting,examinerTurn,transcribe,speak}.json`.
+It overwrites `packages/testing/src/recorded/openai/{generateItems,reviewItem,assessWriting,examinerTurn,transcribe,speak,assessOral}.json`.
+The first recording of `assessOral.json` also adds `"assessOral"` to the method set that
+`packages/adapters/src/openai/recorded-fixtures.test.ts` expects, and imports the file into
+`packages/testing/src/recorded/index.ts`'s `RECORDED_RUNS` (`progress.md` D122).
 No audio is ever written: a transcription is recorded with its clip described by type and size, and a voice by
 its content type and size (D117). To keep an
 old run as a before-and-after, rename it first, as `reviewItem-prompt-v3.json` was, and add it to
 `packages/testing/src/recorded/index.ts`. Commit the fixtures with the regenerated
 `content/factory/eval-report.json`, which `committed-eval.test.ts` holds equal to a fresh run. If the counts
 moved, copy the printed `writing-feedback` and `item-generation` entries into `apps/web/src/lib/pricing.json`.
-**Replace only those two**: the printed block has no `oral-practice`, which is priced per minute of a session
-until Phase 5 Slice 3 measures one (`progress.md` D117, D121).
+**Replace only those two**: the printed block's `oral-assessment` is a short fixed session's report, and
+`oral-practice` is not printed at all. Both are priced from a real 10-minute session instead (below).
+
+## The oral scorer's stability, and a measured session's cost
+
+Phase 5's exit criteria 2 and 4 (`progress.md` D125, D126). Both are run by you, on a funded key, from your own
+terminal and browser.
+
+**The stability recording** scores one fixed session five times, about five report calls, a few cents:
+
+```
+pnpm exec turbo run build --filter=@palier/web^... --filter=@palier/factory
+read -rs OPENAI_API_KEY && export OPENAI_API_KEY     # paste the key; nothing is echoed
+pnpm --filter @palier/web oral-stability
+unset OPENAI_API_KEY
+node apps/factory/dist/index.js eval                 # prints the stability beside the conformance rate
+```
+
+It writes `packages/testing/src/recorded/openai/assessOral-stability.json`. Import it into
+`packages/testing/src/recorded/index.ts`'s `RECORDED_RUNS`, add `"assessOral"` to the replay test's method set,
+and commit it with the regenerated `content/factory/eval-report.json`. The eval passes a criterion whose band moves
+at most one level across the five reports, with four in five agreeing (`apps/factory/src/eval/oral-stability.ts`).
+A failure is a prompt to fix, not a threshold to move.
+
+**A measured 10-minute session**: on the production site, with the key, run a 10-minute work discussion with
+spoken answers, then ask for its report. The report shows the session's cost from its own ledger rows. Compare it
+with OpenAI's usage page for the window, as the billing check does above. Then update `pricing.json`: the
+`oral-practice` minute is the session's own calls divided by its minutes, per role, and `oral-assessment` is its
+report's tokens.
 
 ## Rolling back
 

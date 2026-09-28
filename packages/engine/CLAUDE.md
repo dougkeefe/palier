@@ -26,7 +26,12 @@ opened, and returns the next state and the commands (`enter-phase`, `adapt`, `cl
 `@palier/app`'s driver to carry out. **Phases are entered in order and never skipped or repeated**, even
 when one event crosses several boundaries; at or past the scenario's length the session is `completed`
 with every phase entered; **every close carries a reason**, exactly once, and an ended machine says nothing
-more; an earlier `atMs` than one already seen counts as the later. Property-tested, nine invariants. Everything is
+more; an earlier `atMs` than one already seen counts as the later. Property-tested, nine invariants. **Fluency**
+(`fluency.ts`, progress.md D123): `fluencyMetrics(turns, fillers)` gives words a minute, the filler count and the mean
+pause **over spoken answers only** (`input: "voice"`), each `null` rather than zero when nothing spoken measures it;
+the filler list is handed in, since it is content data. **An oral report's fixes bias the plan** (D124, closing D35):
+`SelectionCriteria.boost` weights its sub-skills as the weakest are, in practice mode only, and `DayPlanInput.focusSubSkills`
+passes them to new items, never maintenance. Absent or empty changes nothing, so the goldens did not move. Everything is
 re-exported from `src/index.ts` — the package's public surface is the barrel, not a relative
 path, so a new algorithm is not done until it is exported there.
 

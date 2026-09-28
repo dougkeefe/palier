@@ -68,6 +68,16 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   question. `close` aborts the wait, delivers a turn in flight, then `closed`. Any failed call closes it failed
   and `lastError` keeps the error for the screen. `startOralPracticeRun` composes it with `startOralSessionRun`,
   and `oralSessionChoices` offers one scenario per session type at the study band (A practises at B).
+- **The oral report** (`use-cases/oral-report.ts`, Phase 5 Slice 3, progress.md D122–D126). `OralSession.assessment`
+  is `OralAssessment | null`, as a writing submission's is. `requestOralReport` refuses an unknown or running session,
+  one with no answer, or one whose scenario is gone, **before any request**; returns a report already made without
+  spending; otherwise makes one `withAiProvider(…, "oral-assessment", …)` call, quoting the profile's descriptors in the
+  interface language, and keeps the result on the session. **A call is recorded under the session it is for**:
+  `CostEntry.sessionId`, stamped by `withAiProvider`'s optional fourth argument, which the turn-based transport and the
+  report both pass (D125), so `oralReport` costs a session from its own rows, never a time window. `oralReport` also
+  computes the fluency (the engine's, D123) and `oralHistory` lists ended sessions. **`StartSession` derives
+  `focusSubSkills`** from the newest assessed session's fixes, through `oral: Pick<OralStore, "all">`, as it derives
+  `lastDayCompleted` (D124, closing D35). Each candidate's turn says how it arrived (`input`).
 - **Ports are transcribed from §3.3, not invented.** Eight live under `src/ports/`:
   `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`,
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the

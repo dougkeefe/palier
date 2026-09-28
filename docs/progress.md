@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 27 September 2026
+**Last updated:** 28 September 2026
 **Current phase:** **Phase 3 (Exams and item statistics) is open.** **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
@@ -23,7 +23,11 @@ no UI", merged (#34; D114–D116)**: scenarios through the bank (bank v3, with v
 fake transport, which ticks exit criterion 5. **Slice 2, "the turn loop on the key", is built** (`dougkeefe/next-slice-from-progress-v2`;
 D117–D120): `transcribe`, `speak` and `examinerTurn` on gpt-transcribe, tts-1 and the text model, the `AnswerSource`
 port and `turnBasedTransport`, `/practice/oral` in practice mode with typed answers, local recording, and the key-leak
-test extended to audio, which ticks exit criterion 3. Slice 3 is next. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+test extended to audio, which ticks exit criterion 3. It merged (#35). **Slice 3, "`assessOral` and the report", is built**
+(`dougkeefe/check-last-branch-commit`; D122–D126): `assessOral` on the `assess` role, fluency metrics in the engine, the
+report at `/practice/oral/report`, the fixes into tomorrow's plan (closing D35), a session's cost from its own ledger rows,
+and the stability eval. Gate J is deferred by the human, so pronunciation reads "not assessed". Exit criteria 2 and 4 wait on
+the human's funded runs, then Gate I. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
 
@@ -89,7 +93,7 @@ human for anything expensive.
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
-| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **in progress** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 built, D117–D120, exit criterion 3 met; Slice 3 is *Next, decided*) |
+| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **in progress** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 built, D122–D126, exit criteria 2 and 4 pending the human's funded runs, then Gate I) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
@@ -100,7 +104,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/check-last-branch-commit` | **Phase 5 Slice 3 — `assessOral` and the report** (D113): `AiProvider.assessOral` on the `assess` role, fluency metrics in the engine, the report at `/practice/oral/report`, the fixes into tomorrow's plan (closing D35), a session's cost from its own ledger rows, and the stability eval's plumbing. Gate J deferred by the human: the `pronounce` role ships unconfigured. | 28 September 2026 |
+| `dougkeefe/check-last-branch-commit` | **Phase 5 Slice 3 — `assessOral` and the report** (D113): `AiProvider.assessOral` on the `assess` role, fluency metrics in the engine, the report at `/practice/oral/report`, the fixes into tomorrow's plan (closing D35), a session's cost from its own ledger rows, and the stability eval's plumbing. Gate J deferred by the human: the `pronounce` role ships unconfigured. **Built; pending merge** (D122–D126). | 28 September 2026 |
 
 *(The prior rows — Phase 5 Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -201,112 +205,55 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 5 Slice 2 is built** (`dougkeefe/next-slice-from-progress-v2`; D117–D120), which ticks exit criterion 3. The product pilot
-still runs beside it (Gate E, D97).
+**Phase 5 Slice 3 is built** (`dougkeefe/check-last-branch-commit`; D122–D126). Everything a session can do without a funded
+key is done. The product pilot still runs beside it (Gate E, D97).
 
-**Next: Phase 5 Slice 3, "`assessOral` and the report"** (implementation-plan.md §7 Phase 5, D113). It carries exit
-criteria 2 and 4, and ends at **Gate I**, exit criterion 1, a human judgement. Gate H adopted PRD §8.6's report as
-written, so the screen's open calls are recorded as made, as D119's were. **One human decision gates one part of it:
-Gate J, the pronunciation model and its price** (below). Everything else is built without waiting for it. If Gate J
-is not settled when the rest is done, the `pronounce` role ships unconfigured: the opt-in is not offered, the call is
-refused before any request as every unconfigured role is, and pronunciation reads "not assessed".
+**Next: the human's two funded runs, then Gate I.** They tick Phase 5's exit criteria 4 and 2, in that order, and nothing
+else is to be built first. There is no agent slice ahead of them: Phase 6 is gated on Phase 5's evidence (its decision gate),
+and the evidence is these runs.
 
-**Groundwork:**
-- stored sessions with whole turns and their times (`OralStore`, D115);
-- the recording of the candidate's answers on the device (`saveOralAudio`, D119);
-- every call metered as `oral-practice` (D117);
-- the profile's oral level descriptors (`oral.descriptors`, ADR 9);
-- the end screen's transcript (D119).
+1. **The stability recording** (exit criterion 4), from your own terminal, `docs/deploy.md` "The oral scorer's stability":
+   - `pnpm --filter @palier/web oral-stability` on a funded key. It scores `ORAL_SESSION` five times, a few cents, and writes
+     `packages/testing/src/recorded/openai/assessOral-stability.json`.
+   - The agent session that follows then imports it into `RECORDED_RUNS`, adds `"assessOral"` to the replay test's method set,
+     regenerates `eval-report.json`, and reads `oralStability`. **Passed ticks criterion 4.** Failed is a prompt to fix, with a
+     `PROMPT_VERSION` bump and a re-recording, never a threshold to move (D126).
+   - The same session runs `LIVE_SMOKE_RECORD=1 node apps/web/scripts/live-smoke.mjs` too, or asks you to, so `assessOral.json`
+     joins the conformance rate.
+2. **A real 10-minute session** (exit criterion 2), on the production site, spoken, then its report:
+   - read the report's cost, and OpenAI's usage page for the window, as Gate G did (`docs/deploy.md`);
+   - they should match within a few percent. Then `pricing.json`'s `oral-practice` minute becomes the session's own calls over
+     its minutes, per role, and `oral-assessment` its report's tokens, both replacing placeholders (D117, D122). **That ticks
+     criterion 2**, and compares practice mode's real cost with GPT-Live's US$0.05 a minute (D113, D117).
+3. **Gate I** (exit criterion 1, a human judgement): is that 10-minute session's report one a user would act on? Record the
+   answer and what would change it. **If yes, Phase 5 is complete** and Phase 6's decision gate opens, with GPT-Live as the
+   leading candidate and D113's three checks to make first. If no, what the report lacks is the next slice.
 
-**Scope:**
-- **`AiProvider.assessOral(req: OralRequest) → OralAssessment`**, §3.3's own method, with its DTOs in domain (ADR 20).
-  - The request carries the scenario, the turns, the target band, the profile's descriptors quoted in the prompt
-    (architecture.md §8.5), and `feedbackLang`.
-  - The answer carries:
-    - per-criterion bands with quoted evidence: comprehension, fluency, grammatical accuracy, vocabulary range and
-      task achievement (PRD §8.6);
-    - three fixes ranked by how much they cost the band, each mapped to a profile sub-skill;
-    - five missing words, each with the candidate's own sentence;
-    - the errors in the candidate's own turns.
-  - **The model quotes excerpts; the offsets are placed in domain**, D105's rule, per candidate turn. An excerpt not in
-    its turn fails the parse and is retried once.
-  - On the `assess` model role writing feedback already uses, and refused before any request without it. A new
-    feature, `"oral-assessment"`, so the report's call is metered and shown apart from the session's.
-- **Fluency metrics, pure, in the engine**, from the turns' times, never asked of the model (architecture.md §8.5):
-  - words per minute of the candidate's speech;
-  - filler count, from a per-language filler list that is **content data**, `@palier/content/oral/fillers.json`
-    (ADR 18). Fillers are language, not an exam rule, so they are not profile data;
-  - mean pause: the gap between the examiner's turn and the candidate's answer. Clips only; a typed answer has no
-    pause.
-- **The loop into the scheduler, closing D35.** The three fixes' sub-skills bias tomorrow's plan. It is an additive
-  `DayPlanInput` field, and the Planner's golden fixtures must not move for a plan without one. The latest report's
-  fixes are the input.
-- **Cost per session measured and shown** (exit criterion 2): the report shows the session's cost from its ledger
-  rows, and the pre-flight's `oral-practice` minute takes measured figures from a real 10-minute session.
-- **The pronunciation opt-in.**
-  - Off by default and asked each session at the pre-flight, as architecture.md §8.5 has it. It says in words that
-    the recording is uploaded to OpenAI on the user's key.
-  - When on, the saved recording goes to an audio-capable model for a pronunciation and intelligibility judgement
-    only. Its role is `pronounce`, and **the human confirms its model and price** (below).
-  - Otherwise pronunciation reads "not assessed".
-  - **The key-leak test gains the opt-in**: the recording reaches that model's endpoint only when ticked, and no
-    request when not. Exit criterion 3 stays green.
-- **The report screen**, PRD §8.6, reached from the end of a session and from a list of past sessions:
-  - the criteria, the three fixes each linking to its drill, the five words, the marked-up transcript with
-    corrections on tap, the fillers and words per minute;
-  - the recording's playback, deletable in one tap. **Transcript sync with playback is named, not scheduled**: the
-    turns have times but a clip is not yet cut from the recording.
-  - axe on every state, French at parity. The report route joins the Lighthouse list.
-- **Scoring stability** (exit criterion 4): the same recorded transcript scored five times varies by at most one band
-  per criterion, with per-criterion agreement above a threshold. **The threshold is an eval parameter, not profile
-  data**, set at 0.8 agreement.
-  - It is recorded live (D112's rule): a `live-smoke` step, or its own script under `scripts/`, writes the five
-    assessments as recorded fixtures.
-  - The factory's eval reports the stability beside the conformance rate.
-- **Recorded fixtures for `assessOral`**, from the live API, and the nightly smoke extended to it.
+**Gate J, still open (human):** confirm the pronunciation model and its price. OpenAI's pricing page listed, on 27 September
+2026, audio-capable chat models priced per million audio tokens, such as `gpt-audio-mini` at US$10 in. Chat-completions audio
+input takes WAV or MP3 only, and the recording is WebM/Opus. So Gate J's slice is: a `pronounce` role and a method on
+`AiProvider`, the recording converted to WAV in the browser (Web Audio, no new dependency), the opt-in on the pre-flight, off by
+default and asked each session, and the key-leak test's opt-in half, ticked and unticked (D113, D122). It does not block Gate I.
 
-**Ports and functions:** `AiProvider.assessOral`, `withAiProvider`, `OralStore`, `ScheduleStore`, `planDailySession`
-(its new input), `CostLedger.since`, and the profile's `oral.descriptors`.
-
-**Done looks like:**
-- a session's report on the hermetic lane, over stubbed OpenAI, every state axe-clean, French at parity;
-- the opt-in's key-leak specs green on both lanes, proven to bite;
-- fluency metrics at 100% branches with properties;
-- the Planner's goldens unchanged without oral findings;
-- the stability eval recorded and passing: **exit criterion 4 ticked**;
-- a measured 10-minute session's cost shown and matching the ledger: **exit criterion 2 ticked**;
-- `pnpm verify` and `verify:medium` green.
-
-Then **Gate I**: the human runs a 10-minute session and judges whether the report is one a user would act on.
-
-**Human, during Slice 3:**
-- a funded key for the stability recording and one real 10-minute session, run from their own terminal and browser;
-- **Gate J: confirm the pronunciation model and its price.** The candidates on OpenAI's pricing page, 27 September 2026, are
-  audio-capable chat models priced per million audio tokens, such as `gpt-audio-mini` at US$10 in. They are
-  meterable only if the response reports audio tokens, which the recording will show;
-- **listen to the examiner's voice** (`tts-1`, "sage") in French, and say whether it will do or another voice should
-  be data in `ai-models.json`.
-
-**Human, still open from Phase 4 Slice 4 (merged, #32):**
-- add the `OPENAI_SMOKE_KEY` Actions secret, a key of its own with a small monthly limit (`docs/deploy.md`, "The
-  nightly live smoke"), and run the nightly workflow once by hand. The smoke now also makes the oral calls, about
-  half a cent more a run;
-- read the `generate` namespace's French, with the rest of Phase 7's R8 review. **The `oral` namespace's French** joins
-  that review.
+**Also for the human:**
+- **listen to the examiner's voice** (`tts-1`, "sage") in French, and say whether it will do or another voice should be data in
+  `ai-models.json`;
+- add the `OPENAI_SMOKE_KEY` Actions secret (`docs/deploy.md`) and run the nightly workflow once by hand. The smoke now also
+  asks for one report, about two cents more a run;
+- read the `generate`, `oral` and **`oralReport`** namespaces' French, with the rest of Phase 7's R8 review.
 
 **Named, not scheduled:**
 - reading-set generation (D110);
-- **a generation that outlives its screen** (pre-merge review, finding 13). Leaving `/practice/writing/generate`
-  mid-run keeps spending out of sight, and a wipe made meanwhile is refilled when the run finishes. The workshop
-  shares the shape. The fix is an in-flight flag a remount reads, and a wipe counter `putSet` checks before writing;
-- **one `debiasKeyPosition`** (finding 16). The browser's shuffle copies the factory's. Move one pure
-  `debiasKeyPosition(draft, next)` into domain for both, with the factory's golden output unchanged;
-- **the vocabulary queue** (PRD §8.6's "added to the vocabulary queue"). The report shows the five words. A queue
-  needs v1's `vocab` table behind a port and a vocabulary item type in the registry (ADR 17), which is more than
-  Slice 3 needs;
-- **a spoken session that outlives its screen.** Leaving `/practice/oral` mid-session ends it as the page unmounts,
-  but a hard close leaves it to be stamped `interrupted` at the next start (D116), so its transcript is kept and it
-  has no report.
+- **a generation that outlives its screen** (pre-merge review of Phase 4 Slice 4, finding 13). The workshop and the report share
+  the shape: leaving mid-call keeps spending out of sight. The fix is an in-flight flag a remount reads;
+- **one `debiasKeyPosition`** in domain for the factory and the browser (finding 16);
+- **the vocabulary queue** (PRD §8.6's "added to the vocabulary queue"): v1's `vocab` table behind a port and a vocabulary item
+  type in the registry (ADR 17);
+- **transcript sync with playback** (PRD §8.6): the turns have times, but no clip is cut from the recording;
+- **a drill filtered to one sub-skill**, so a fix's link lands on that sub-skill today rather than biasing the next plan (D124);
+- **fillers the transcription drops**: asking the transcription to keep hesitations (its `prompt` parameter) (D123);
+- **a spoken session that outlives its screen**: a hard close leaves it to be stamped `interrupted` at the next start (D116). It
+  keeps its transcript, and now has a report to ask for, since it has ended.
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
@@ -554,13 +501,17 @@ pronunciation offered as a per-session opt-in.
   carried forward and ten scenarios; `ItemRepository.scenarios()`; the `OralStore` on memory and Dexie with §9.1's
   retention in the use cases; the engine's session machine; `OralTransport` with its fake and contract; and
   `startOralSessionRun`, the driver.
-- [x] **Slice 2 — The turn loop on the key.** **Built 27 September 2026** (`dougkeefe/next-slice-from-progress-v2`; D117–D120;
+- [x] **Slice 2 — The turn loop on the key.** **Built 27 September 2026, merged (#35)** (`dougkeefe/next-slice-from-progress-v2`; D117–D121;
   session-log evidence). `transcribe`, `speak` and `examinerTurn` on gpt-transcribe and tts-1 (human decision), priced
   in the unit each is billed by; the `AnswerSource` port and `turnBasedTransport` in app, held to the transport
   contract; `/practice/oral` with the level check, per-browser recovery and typed answers; the recording kept on this
   device and cleaned from the data settings; the key-leak test following audio and transcripts; and recorded fixtures
   for the three new methods, all accepted first time.
-- [ ] **Slice 3 — `assessOral` and the report**, ending at **Gate I** (exit criterion 1, human). *Next, decided*.
+- [~] **Slice 3 — `assessOral` and the report**, ending at **Gate I** (exit criterion 1, human). **Built 28 September 2026**
+  (`dougkeefe/check-last-branch-commit`; D122–D126; session-log evidence): `assessOral` on the `assess` role with the offsets
+  placed per turn; `fluencyMetrics` over spoken answers; the fixes into `StartSession`'s plan (D35 closed); `CostEntry.sessionId`;
+  the report at `/practice/oral/report` and the list of past sessions; the stability eval and its recorder. Gate J deferred
+  (human). Exit criteria 2 and 4 wait on the human's funded runs (*Next, decided*).
 
 **Exit criteria** (the actual gate)
 
@@ -1333,7 +1284,7 @@ Revisit when a real "minutes per day" goal in the UI needs converting to counts;
 minute→count model behind the same `planDay(sessionSize)` seam, no caller change.
 
 ### D35 — Oral-session-findings injection is deferred to Phase 5
-**Date:** 20 September 2026 · **Status:** open, closes with the oral session types (Phase 5)
+**Date:** 20 September 2026 · **Status:** **resolved 28 September 2026 by D124** (Phase 5 Slice 3): the latest oral report's fixes are `focusSubSkills`, an additive `DayPlanInput` field, as this entry foresaw
 
 §7.4 lists three plan adjustments: test-date proximity, **recent oral session findings (inject
 targeted items)**, and yesterday's completion. The first and third model cleanly from plain inputs
@@ -4465,11 +4416,201 @@ chose to fix all of them.
   synthesised microphone leaves untested.
 - **Proven to bite, a fourth way:** a clip written to `localStorage` in base64 fails the guard (session log).
 
+### D122 — `assessOral`: the model names the turn and quotes it, the offsets are placed per turn, and each fix names a drillable sub-skill
+**Date:** 28 September 2026 · **Status:** accepted (two human decisions this session); §3.3 amended in place, as D105 and D117 were
+
+- **The human's two decisions, taken at planning:**
+  - **Gate J is deferred.** The `pronounce` role ships unconfigured: the pronunciation opt-in is not offered, no call is made, and
+    pronunciation reads "not assessed". Found while planning, for when Gate J is picked up: chat-completions audio input takes
+    only WAV or MP3, and the saved recording is WebM/Opus, so the opt-in also needs the browser to convert it to WAV (Web Audio,
+    no new dependency).
+  - **A fix names the oral criterion it cost and a reading or writing sub-skill.** The bank has no oral items, so an oral
+    sub-skill would reach no item and bias nothing (D124). The model picks from the profile's eighteen scored sub-skills, which
+    the prompt lists; a fix on an oral one fails the parse.
+- **The DTOs are in domain** (ADR 20; `ai.ts`, `schemas/ai.ts`):
+  - `ORAL_CRITERIA` are PRD §8.6's five transcript criteria: comprehension, fluency, grammar, vocabulary, task. Pronunciation is
+    not among them.
+  - `OralRequest = { sessionType, targetBand, lang, feedbackLang, topic, phases: { name, intent }[], turns, descriptors }`. The
+    use case takes the descriptors from the profile, in `feedbackLang`, so the adapter never reads content (ADR 9).
+  - `OralAssessment = { criteria, fixes, missingWords, errors }`: exactly three `OralFix { criterion, subSkill: ScoredSubSkill,
+    advice, evidence }` in rank order, exactly five `MissingWord { word, turn, excerpt, example }`, and `OralTurnError { turn,
+    start, end, correction, rule }`.
+  - `AiCapabilities.assessOral`, and `AI_FEATURES` gains `"oral-assessment"`, so a report is metered and shown apart from its session.
+- **D105's rule, per turn** (`oral-assessment.ts`). The wire shape `OralAssessmentDraft` gives each error as `{ turn, excerpt, … }`.
+  `assembleOralAssessment` groups them by turn and runs `placeErrors` over each turn's own text. A problem is an error or a
+  missing word naming a turn that does not exist or is the examiner's, an excerpt not in its turn, or two errors on the same
+  words. `checkOralAssessment` holds a stored report to the same rule.
+- **`OralTurn` gains an optional `input: "voice" | "typed"`**, set by the turn-based transport on each candidate's turn. The pause
+  metric needs it (D123), and it could not be recovered: a typed answer's `startMs` is when its question was shown. A turn stored
+  before it has none and counts as untimed. The transport event carries it, and the driver stores it.
+- **The adapter** puts `assessOral` on writing feedback's `assess` role and refuses it before any request without one. The prompt
+  numbers the turns, marks a typed answer, quotes the three descriptors, lists the scored sub-skills, and asks for evidence,
+  advice and rules in `feedbackLang` and words, examples and corrections in `lang`. `PROMPT_VERSION` stays 4 (D105's precedent).
+- **Every provider gained the method:** the adapter; the fake, which marks the candidate's first spoken word and refuses a silent
+  session billing nothing; `aiProviderContract`; the scripted provider (false, rejects, bills nothing); the factory's meter; and
+  seven test stubs, a shape change only. `api-key.test.ts`'s "a capability the port gains later" moved off `assessOral` to
+  `openVoiceSession`, its assertions unchanged, as D105 moved it off `assessWriting`.
+- **Recorded fixtures, not yet recorded.** The nightly smoke now asks for one fixed session's report (`ORAL_SESSION`, its
+  descriptors from the profile), and `--record` would write `assessOral.json`. `RECORDED_METHODS`, the replay switch and the
+  eval's `CONFORMANCE_METHODS` take the method. This session had no key, and D112's rule is that a fixture is recorded, never
+  hand-written, so the replay test's method set says so and waits for the human's first run.
+- **Existing tests touched, with no assertion weakened:** `AI_FEATURES`' exact list and the per-feature fixtures in `spend.test.ts`,
+  `pricing.test.ts` and `container-spend.test.ts` gained `oral-assessment`; the adapter's "reports every capability" gained
+  `assessOral`; three transport tests' `toEqual` on a candidate's turn gained `input`; the eval's `byMethod` gained `assessOral`;
+  the live smoke's `byMethod`, its completion count (+1) and its recorded file list (+1) gained the report.
+
+### D123 — fluency metrics, over spoken answers only, with the filler list as content data
+**Date:** 28 September 2026 · **Status:** accepted
+
+- **`fluencyMetrics(turns, fillers)` is pure, in the engine** (`fluency.ts`), never asked of the model (architecture.md §8.5).
+  - **Words a minute:** the words of every spoken answer over the time they were spoken. A word is letters or digits joined by
+    an apostrophe or a hyphen, so "j'ai" and "sous-ministre" are one each.
+  - **Fillers:** each word or phrase of the list, matched whole and without regard to case, so "ben" is not found in
+    "bénéficie" and "tu sais" is two words in order.
+  - **Mean pause:** from the end of the examiner's question to the start of the spoken answer after it, clamped at zero. A typed
+    answer consumes its question and is not timed.
+  - **Only `input: "voice"` answers count**, and each figure is `null`, never zero, when no spoken answer measures it.
+  - Four properties: turn order does not change the counts or the rate; a typed answer changes nothing; one more filler said
+    is counted once more; nothing is negative. 100% of branches.
+- **`content/oral/fillers.json`**, `{ en, fr }`, published as `./oral/fillers.json` (ADR 18, D107's pattern). Fillers are language,
+  not an exam rule, so not profile data. `oralFillersShape` is in `CONTENT_SCHEMAS` as `oral-fillers`, with
+  `docs/schemas/oral-fillers.schema.json` generated; `parseOralFillers` refuses a filler listed twice in any case. The
+  container parses it once.
+- **Said plainly:** a transcription model may drop some hesitations, so the count is what the transcript kept. The report says so.
+  Asking the transcription to keep them (its `prompt` parameter) is named, not scheduled.
+
+### D124 — the loop into the scheduler, closing D35
+**Date:** 28 September 2026 · **Status:** accepted; **resolves D35**
+
+- `SelectionCriteria.boost` weights its sub-skills at `WEAKEST_WEIGHT`, as the weakest are, **in practice mode only**.
+  `DayPlanInput.focusSubSkills` passes to new items only; maintenance is unchanged. A sub-skill of another skill reaches no
+  item, because the skill filter is first: a writing fix biases the writing plan and not the reading one.
+- `planDailySession`'s request gains `focusSubSkills`. **`StartSession` derives it**, as it derives `lastDayCompleted` (D36, D46):
+  the newest assessed `OralSession`'s fixes, through `oral: Pick<OralStore, "all">`. The sync simulator's device holds none.
+- **The goldens did not move** (`selector.golden.test.ts`; `git diff` on the fixture is empty). A property holds a plan with no
+  findings equal to one with an empty list, and one with any findings to the budget and disjoint buckets.
+- "Each linking to its drill" (PRD §8.6) links to the fix's skill's practice page, whose next plan already draws that
+  sub-skill. A drill filtered to one sub-skill is named, not scheduled.
+
+### D125 — a session's cost comes from its own ledger rows
+**Date:** 28 September 2026 · **Status:** accepted; §3.3 amended in place
+
+- **`CostEntry` gains an optional `sessionId`.** `withAiProvider(deps, feature, fn, { sessionId })` stamps it; the turn-based
+  transport (through `startOralPracticeRun`) and `requestOralReport` pass the session's id. A time window would be a guess: two
+  sessions a minute apart, or a report asked for a week later, would be priced wrong.
+- The Dexie ledger keeps it when it is a non-empty string, unindexed, so there is no version bump and `verno` stays 3. A row
+  written before it reads as belonging to no session.
+- `oralReport` gives `{ practiceUsd, reportUsd, unpriced }` from the session's rows since it started; the screen says "at least"
+  when a row was unpriced (D103).
+- **Phase 5 exit criterion 2 is not ticked here.** The cost is measured and shown; "accurately" is the human's comparison of a
+  real 10-minute session's figure with OpenAI's usage page (`docs/deploy.md`), which also replaces `pricing.json`'s
+  `oral-practice` and `oral-assessment` placeholders with measured figures.
+
+### D126 — the report's use cases, its screen, and the stability eval
+**Date:** 28 September 2026 · **Status:** accepted (Gate H adopted PRD §8.6's report as written, so these calls are recorded as made, as D119's were)
+
+- **`OralSession.assessment: OralAssessment | null`**, the `WritingSubmission` pattern. The driver writes `null`. The Dexie read path
+  re-validates a stored report against its turns, and a broken one, or none on a pre-Slice-3 row, **keeps the transcript and
+  reads as unassessed**.
+- **`requestOralReport`** refuses an unknown or running session, one with no answer, or one whose scenario the bank no longer
+  holds, before any request; returns an existing report spending nothing; and keeps a new one on the session. A failed call
+  keeps it unassessed. **`oralReport`** gives the session, its scenario, the fluency and the cost; **`oralHistory`** lists ended
+  sessions newest first.
+- **The route is `/practice/oral/report?session=…`**, a static island (`components/oral/OralReport.tsx`, decisions in
+  `features/oral/report-view.ts`), the exam results' query-string pattern, so the worker serves it offline with `ignoreSearch`.
+  A session's end links to it, when the session was stored with an answer, and the picker lists "Your earlier sessions".
+- **The screen:** the session, its date and how it ended; its cost, practice and report apart; the offer, on the key, with the
+  workshop's pre-flight, or the no-key card (namespace `oralReport`); the five criteria in a `<dl>` with pronunciation "not
+  assessed"; the three fixes, each with its evidence and a link to its skill's practice; the five words, each with the sentence
+  said and said again; **the transcript with each error a button** (`aria-expanded`) that shows its correction and rule beside
+  it, since PRD §8.6 says "on hover or tap", and a hover-only correction is out of reach of a keyboard or a screen reader; the
+  fluency figures, or "you typed your answers"; and the recording, in an `<audio controls>`, deleted in one tap.
+- **Named, not scheduled:** transcript sync with playback (the turns have times, but a clip is not cut from the recording); the
+  vocabulary queue; a drill filtered to one sub-skill.
+- **The stability eval** (`apps/factory/src/eval/oral-stability.ts`): the reports in `assessOral-stability.json`, replayed through
+  the adapter, pass when there are at least five and every criterion's band moves **at most one level** with **agreement 0.8**
+  (four in five on one band). Both are eval parameters, not profile data. `eval-report.json` gains `oralStability: null` and an
+  empty `assessOral` entry, and nothing else moved. `pnpm --filter @palier/web oral-stability` (`scripts/oral-stability.mjs`)
+  records the five, and writes nothing if a call fails. **Phase 5 exit criterion 4 is not ticked here**: it needs that recording,
+  on a funded key.
+- **The key-leak test follows the report.** The report request is one more chat completion on the key, carrying the transcript
+  and no audio; the report's words (`REPORT_SENTINEL`, in the stub's correction) are on the page and at rest in `oralSessions`,
+  through a reload, and never in an export, a push or on the paired phone. The recording's marker is still in no request, so
+  exit criterion 3 stays green with no opt-in. **Proven to bite:** the recording's bytes added to the report request failed the
+  hermetic journey (session log).
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 28 September 2026 — `dougkeefe/check-last-branch-commit` (Phase 5 Slice 3: `assessOral` and the report)
+
+**Built.** The decisions are recorded in D122–D126. Slice 2 had merged as #35, so its In-flight row was replaced in this
+branch's first commit.
+
+**Human decisions this session:**
+- **Gate J is deferred.** The `pronounce` role ships unconfigured, so pronunciation reads "not assessed" (D122);
+- **a fix names the oral criterion it cost and a reading or writing sub-skill**, because the bank has no oral items (D122, D124).
+
+**What was built:**
+- **Domain:** `OralRequest`, `OralAssessment`, `OralAssessmentDraft`, their schemas and a type-level test;
+  `assembleOralAssessment` and `checkOralAssessment`, D105's rule per turn; `OralTurn.input`; `AI_FEATURES` gains
+  `oral-assessment`; the filler list as the `oral-fillers` content artefact, with its JSON Schema.
+- **Content:** `content/oral/fillers.json`, published as `./oral/fillers.json`.
+- **Engine:** `fluencyMetrics`, with four properties; the selector's `boost` and the planner's `focusSubSkills` (D35 closed).
+- **App:** `AiProvider.assessOral`; `requestOralReport`, `oralReport`, `oralHistory`, `oralFocusSubSkills`;
+  `OralSession.assessment`; `CostEntry.sessionId` and `withAiProvider`'s tag; the transport's `input` and session tag;
+  `StartSession`'s focus; §3.3 amended in place.
+- **Adapters:** the OpenAI adapter's `assessOral` and its prompt; the Dexie oral store re-validating a report; the Dexie ledger
+  keeping `sessionId`.
+- **Testing:** the fake's `assessOral`; the contract's report case; the oral store and ledger contracts' new round trips;
+  `assessOral` in the recorded completions' types.
+- **Factory:** the meter and the scripted provider; `assessOral` in the conformance methods; `oralStability`, beside the
+  conformance rate in `eval-report.json`.
+- **Web:** `/practice/oral/report`, its view model and screen; the end screen's link; the picker's past sessions; the
+  `oralReport` namespace in both languages; the container's report use cases and fillers; `container-oral.test.ts` asking for a
+  report through both graphs; `pricing.json`'s `oral-assessment` placeholder; the live smoke's report and `scripts/oral-stability.mjs`.
+- **E2E:** `oral.spec.ts` through the report's states, a refused report and a French pass; both key-leak specs following the
+  report; the report route in the Lighthouse list and the titles test.
+
+**Found while building, and fixed:**
+- **The level descriptors were first typed into the live smoke's fixed session**, which is the ADR 9 mistake. They now come from
+  the profile, through the script.
+- **A stored turn could not say it was typed.** Its `startMs` is when its question was shown, so the pause metric needed
+  `OralTurn.input` (D122).
+- **A session's cost from a time window would misprice** two sessions a minute apart, or a report asked for later. The ledger
+  row names its session instead (D125).
+
+**Evidence** (run on this branch, after the last code change):
+
+```
+pnpm verify          → check-types, lint, boundaries (449 + 229 modules, no violations),
+                       test: 207 files, 3075 passed, 8 todo; coverage thresholds met
+                       (fluency.ts, oral-assessment.ts, oral-fillers.ts, oral-report.ts, report-view.ts,
+                        oral-stability.ts, selector.ts, planner.ts: 100% of branches)
+pnpm test:integration → 6 files, 45 passed
+CI=1 pnpm test:e2e    → 57 passed (59.9s), on a fresh production build
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB
+pnpm --filter @palier/web lighthouse  → 17 URLs × 5, every assertion met; lowest median 0.99;
+                                        /fr/practice/oral/report 0.99 / 1.0
+node apps/factory/dist/index.js eval  → overall 1.000, conformance 1.000 on prompt v4;
+                                        "oral stability: not recorded yet"
+git diff packages/engine/src/__fixtures__ → empty: the Planner's goldens did not move
+```
+
+**Proven to bite, each run and reverted, with `git diff` clean after:**
+- `focusSubSkills` ignored in `planDay`: three tests failed, the planner's and `StartSession`'s;
+- a miscopied excerpt placed anyway in `assembleOralAssessment`: four failed, among them the adapter's retry;
+- the session recording's bytes added to the report request: the hermetic key-leak journey failed with
+  `expect(...).not.toContain("Ondulard9d3a")` on the report's own request body.
+
+**Not done here, and why:**
+- **Exit criterion 4** needs the stability recording, and **exit criterion 2** a real 10-minute session compared with OpenAI's
+  usage page. Both need a funded key, which this session did not have. Neither is ticked (rule 6).
+- **Gate J** is deferred by the human.
+- *Next, decided* is rewritten to the two runs, then Gate I.
 
 ### 28 September 2026 — `dougkeefe/next-slice-from-progress-v2` (pre-merge review: 26 fixes)
 

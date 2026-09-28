@@ -149,6 +149,14 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     **never uploaded in this slice, never synced and never exported**; `/settings/data` shows its size and deletes
     it in one action. The hermetic clock is frozen, so hermetic journeys end a session by its end control.
     `container-oral.test.ts` runs a real session through both graphs over MSW.
+  - **The report on a session** (Phase 5 Slice 3, progress.md D126) is `/practice/oral/report?session=…`, reached from a
+    session's end and from the picker's list of past sessions. `components/oral/OralReport.tsx` renders it; its decisions
+    are `features/oral/report-view.ts`. It offers itself on the key with the workshop's pre-flight, then shows the five
+    criteria and pronunciation **not assessed** (Gate J), three fixes each linked to its skill's drill, five words, the
+    transcript with **each error a button** that shows its correction, the fluency, the session's measured cost, and the
+    recording, played or deleted in one tap. The filler list is `@palier/content/oral/fillers.json`, parsed once in the
+    container. The leak guard stubs the report by its prompt (`completionKind`'s `oral-report`) and follows its words
+    as `REPORT_SENTINEL`.
   - **Tier 11, the key-leak test**, is `e2e/key-leak.spec.ts` (hermetic, with real sync and telemetry)
     and `e2e/key-leak-production.spec.ts` (real Dexie), over `e2e/leak-guard.ts`. A new flow that can
     touch the key belongs in the first. A flow that holds user writing passes it to `assertNoLeak` as

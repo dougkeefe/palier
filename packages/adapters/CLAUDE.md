@@ -31,7 +31,13 @@ uploads the clip twice; `speak` reads `/audio/speech`'s binary body as a `Blob`;
 `callValidated`. Each is on its own optional role (`transcribe`, `speech`, `examiner`). Pricing is `@palier/domain`'s
 `costOf` in each model's unit: a transcription bills the response's own `usage.seconds` when it reports duration,
 otherwise the recorder's `durationMs`, and a voice bills the characters sent. `FetchLike` takes a `FormData` body and
-may answer with `headers` and `blob()`. `./bank` →
+may answer with `headers` and `blob()`. **`assessOral`** (Phase 5 Slice 3, D122) shares writing feedback's `assess`
+role: the model names a candidate's turn and quotes its words, and `@palier/domain`'s `assembleOralAssessment` places
+them per turn, so an excerpt not in its turn, an examiner's turn named, or a fix on an oral sub-skill is a malformed
+answer, retried once. The prompt numbers the turns, marks a typed one, and quotes the profile's descriptors from the
+request. **The Dexie oral store re-validates a stored report** against its turns (`checkOralAssessment`), and a
+broken one, or none at all on a pre-Slice-3 row, reads as unassessed with the transcript kept; **the Dexie ledger
+keeps an entry's `sessionId`** when it is an id, unindexed, so no version bump (D125). `./bank` →
 `httpBankRepository` (the `ItemRepository` over the committed bank shards; progress.md D55).
 `./sync` → `httpSyncTransport` (the `SyncTransport` port over the sync routes; progress.md D69–D71).
 `./telemetry` → `httpTelemetrySink` (the `TelemetrySink` port over `POST /api/telemetry`; D92). It sends
