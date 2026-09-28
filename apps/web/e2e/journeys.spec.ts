@@ -193,6 +193,8 @@ test("every page is titled for its purpose, ahead of the product name (WCAG 2.4.
     ["/en/practice/writing", "Written expression · Palier"],
     ["/fr/practice/writing/workshop", "Atelier d’écriture · Palier"],
     ["/fr/practice/writing/generate", "Nouvelles questions d’exercice · Palier"],
+    ["/en/practice/oral", "Spoken practice · Palier"],
+    ["/fr/practice/oral", "Pratique orale · Palier"],
     ["/en/exam", "Mock exam · Palier"],
     ["/fr/exam/results", "Résultats de l’examen · Palier"],
     ["/en", "Palier"],

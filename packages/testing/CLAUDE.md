@@ -62,7 +62,12 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
   `memoryOralStore({ quotaBytes? })`, whose quota lets a test fill the device, `memoryOralTransport(script)`,
   a scripted examiner with `advance`, `hangUp` and `directives`, `oralStoreContract` and
   `oralTransportContract`. `memory/oral-session.test.ts` drives `startOralSessionRun` over the fake transport
-  for every fixture scenario: Phase 5's exit criterion 5. The fixture bank holds one scenario per session type.) (`ExamRunStore` has landed: `memoryExamRunStore`,
+  for every fixture scenario: Phase 5's exit criterion 5. The fixture bank holds one scenario per session type.
+  `AnswerSource` landed with Slice 2, D118: `memoryAnswerSource(script, { released? })`, a scripted candidate
+  with `release`, `idle` and `fail`. `memory/turn-based-transport.test.ts` holds `@palier/app`'s real
+  `turnBasedTransport` to `oralTransportContract`, and `memory/oral-practice.test.ts` runs a whole practice
+  session per session type over it. `fakeAiProvider` transcribes a clip to its own bytes and voices a question
+  as its words, so a test can follow both.) (`ExamRunStore` has landed: `memoryExamRunStore`,
   `examRunStoreContract` and `anExamRun`, progress.md D80. `SessionStore` has landed:
   `memorySessionStore` and `sessionStoreContract` exist, progress.md D45. `IdGenerator`
   likewise: `counterIdGenerator` and `idGeneratorContract`, D48 — the Web Crypto adapter in

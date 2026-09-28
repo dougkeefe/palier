@@ -64,12 +64,15 @@ const NOW = "2026-09-26T12:00:00.000Z";
 const clock = { now: () => NOW };
 
 const providerStub = (verify: () => Promise<void> = () => Promise.resolve()): AiProvider => ({
-  capabilities: () => ({ generatePassage: false, generateItems: false, reviewItem: false, assessWriting: false, generateScenario: false }),
+  capabilities: () => ({ generatePassage: false, generateItems: false, reviewItem: false, assessWriting: false, generateScenario: false, transcribe: false, speak: false, examinerTurn: false }),
   generatePassage: () => Promise.reject(new Error("unused")),
   generateItems: () => Promise.reject(new Error("unused")),
   reviewItem: () => Promise.reject(new Error("unused")),
   assessWriting: () => Promise.reject(new Error("unused")),
   generateScenario: () => Promise.reject(new Error("unused")),
+  transcribe: () => Promise.reject(new Error("unused")),
+  speak: () => Promise.reject(new Error("unused")),
+  examinerTurn: () => Promise.reject(new Error("unused")),
   verifyKey: verify,
   lastUsage: () => null,
 });
@@ -188,12 +191,15 @@ const spendingProvider = (usages: (UsageRecord | null)[], fail = false) => {
     return fail ? Promise.reject(new Error("malformed twice")) : Promise.resolve();
   };
   const provider: AiProvider & { assessOral: () => Promise<string> } = {
-    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true }),
+    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true, transcribe: true, speak: true, examinerTurn: true }),
     generatePassage: () => next().then(() => []),
     generateItems: () => next().then(() => []),
     reviewItem: () => next().then(() => ({}) as never),
     assessWriting: () => next().then(() => ({}) as never),
     generateScenario: () => next().then(() => ({ phases: [] })),
+    transcribe: () => next().then(() => ({ text: "" })),
+    speak: () => next().then(() => new Blob()),
+    examinerTurn: () => next().then(() => ({ text: "q", difficulty: null })),
     // Not on the port yet (Phase 5): stands in for a capability added later. It was
     // `assessWriting` until Slice 3 put that on the port (progress.md D105).
     assessOral: () => next().then(() => "assessed"),

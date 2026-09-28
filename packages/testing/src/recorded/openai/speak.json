@@ -1,0 +1,22 @@
+{
+  "note": "Recorded from the live API by `pnpm --filter @palier/web live-smoke --record` (progress.md D112). Regenerate, never hand-edit.",
+  "recordedAt": "2026-09-28T01:38:58.898Z",
+  "promptVersion": "4",
+  "completions": [
+    {
+      "method": "speak",
+      "model": "tts-1",
+      "request": {
+        "text": "Bonjour. Pouvez-vous me décrire votre poste et vos principales responsabilités ?",
+        "lang": "fr"
+      },
+      "attempt": 1,
+      "content": "{\"contentType\":\"audio/mpeg\",\"bytes\":71040}",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0
+      },
+      "conformant": true
+    }
+  ]
+}

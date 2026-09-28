@@ -31,7 +31,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   in the browser after hydration and imports the container module lazily, so the adapters stay out of
   the shared first-load JS. The layout passes `hermetic` from the environment. Screens are static RSC
   shells around one client island each (`/start`, `/home`, `/diagnostic`, `/practice/{reading,writing}`,
-  `/practice/writing/{workshop,generate}`,
+  `/practice/writing/{workshop,generate}`, `/practice/oral`,
   `/exam`, `/exam/run`, `/exam/results`, `/settings/{data,sync,key}`).
   The islands' decisions live in tested `.ts` beside them (`src/features/**`, `src/lib/study.ts`); a
   `.tsx` holds rendering and effects only.
@@ -138,11 +138,25 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `generated` table in production, **never synced and never exported**, cleared by wipe and
     delete-everywhere. `components/key/NoKeyCard.tsx` is shared with the workshop, by namespace.
     `container-generate.test.ts` runs the real adapter over MSW through both graphs.
+  - **Spoken practice** (Phase 5 Slice 2, progress.md D117–D119) is `/practice/oral`, linked from home's actions
+    card. `components/oral/OralPractice.tsx` renders it; its decisions are in `features/oral/`: the reducer, the
+    microphone rules, the `AnswerSource` bridge, and **`practice-controller.ts`, which owns the microphone, the
+    recorders, the run and its end** and is unit-tested over fakes (D121). The `.tsx` holds none of that. The
+    controller's `attach` pairs with `dispose`, because Strict Mode remounts the screen in development. The recorder and the level check are `lib/oral/`, over a
+    `MediaKit` and a `LevelKit` a test fakes. The session is `startOralPractice`: the app's turn-based transport
+    over the real adapter, metered as `oral-practice`. **Only the current question is shown during a session**,
+    never a running transcript. The session recording (the candidate's answers only) is kept by `saveOralAudio`,
+    **never uploaded in this slice, never synced and never exported**; `/settings/data` shows its size and deletes
+    it in one action. The hermetic clock is frozen, so hermetic journeys end a session by its end control.
+    `container-oral.test.ts` runs a real session through both graphs over MSW.
   - **Tier 11, the key-leak test**, is `e2e/key-leak.spec.ts` (hermetic, with real sync and telemetry)
     and `e2e/key-leak-production.spec.ts` (real Dexie), over `e2e/leak-guard.ts`. A new flow that can
     touch the key belongs in the first. A flow that holds user writing passes it to `assertNoLeak` as
     `deviceOnly` (allowed only on this device's own copy and in requests to OpenAI) or `nowhere` (D106). The guard reads request headers synchronously and response bodies
     on `requestfinished`, because `allHeaders()` never settles for a request a reload aborts.
+    Audio is followed by its bytes (D120): `installFakeAudio` synthesises the microphone and numbers each
+    recorder's bytes, request bodies are read as bytes, and a `Blob` at rest is dumped as its bytes. Chromium's
+    fake capture device never answers on macOS, so never rely on it.
 
 ## Gates this app owns
 
@@ -163,12 +177,13 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
   titles, **journey 5 and step 5** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
   and `sync.spec.ts`: journey 8 (two contexts, two devices), journey 7's sync half,
-  and the sync settings' states, and `exam.spec.ts` (a fixture exam from the picker to its results).
+  and the sync settings' states, and `exam.spec.ts` (a fixture exam from the picker to its results), and `oral.spec.ts` (spoken practice's
+  states, a refused microphone, a refused call and a French pass).
   **`offline`** (production `next start`, port 3100) runs `offline.spec.ts` (shell,
   unvisited route, every shard, journeys 2 and 7 with the network off [R4]), `exam-offline.spec.ts`
   (**journey 3**: a full exam through a reload and a network drop, scored against an independent oracle) and
   `key-leak-production.spec.ts` (the key at rest, both modes, through a reload, with a ledger row in
-  the dump), `spend-production.spec.ts` (the meter and the cap's warnings over real IndexedDB), and
+  the dump), `oral-production.spec.ts` (a phase crossed by time), `spend-production.spec.ts` (the meter and the cap's warnings over real IndexedDB), and
   `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
   whose fake timers stall Dexie and React). Axe on the states, (`e2e/`),
   Lighthouse perf + a11y ≥ 95 (`lighthouserc.json`, on its own port 3200, so a test server left

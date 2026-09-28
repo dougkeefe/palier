@@ -1,3 +1,4 @@
+import { costOf } from "@palier/domain";
 import type { FeatureCall, ModelPrice } from "@palier/domain";
 
 /**
@@ -81,25 +82,28 @@ export const spendTotals = (
 };
 
 /**
- * A feature's typical cost: each call's tokens at its model's price. Null when a
- * role names no model, or the model has no price, rather than a figure that is
- * quietly too low.
+ * A feature's typical cost: each call at its model's price, in the model's unit
+ * (progress.md D117), times `quantity` uses. Oral practice's typical use is one minute,
+ * so a session's estimate is its minutes. Null when a role names no model, the model
+ * has no price, or the call is not in the unit the model is priced in, rather than a
+ * figure that is quietly too low.
  */
 export const estimateFeatureCost = (
   calls: readonly FeatureCall[],
   models: Readonly<Record<string, string>>,
   prices: Readonly<Record<string, ModelPrice>>,
+  quantity = 1,
 ): number | null => {
   let total = 0;
   for (const call of calls) {
     const model = models[call.role];
     const price = model === undefined ? undefined : prices[model];
     if (price === undefined) return null;
-    total +=
-      (call.inputTokens / 1_000_000) * price.inputPerMTok +
-      (call.outputTokens / 1_000_000) * price.outputPerMTok;
+    const cost = costOf(price, call);
+    if (cost === null) return null;
+    total += cost;
   }
-  return total;
+  return total * quantity;
 };
 
 /** Whole micro-dollars, so the 80% and 100% boundaries are exact, not wherever a float lands. */

@@ -96,16 +96,19 @@ export const featureCosts = (deps: Pick<SpendDeps, "pricing">): readonly Feature
   }));
 
 /**
- * What a spending feature asks before it spends (architecture.md §8.6): a typical use's
- * cost, and where the month would stand against the cap once it is spent. The caller
- * warns when `after` is `"near"` or `"over"`; it never blocks, because the cap is soft.
+ * What a spending feature asks before it spends (architecture.md §8.6): the cost of
+ * `quantity` typical uses, and where the month would stand against the cap once it is
+ * spent. Oral practice's typical use is a minute, so it asks for a session's minutes
+ * (progress.md D117). The caller warns when `after` is `"near"` or `"over"`; it never
+ * blocks, because the cap is soft.
  */
-export const preflightSpend = async (feature: AiFeature, deps: SpendDeps): Promise<Preflight> => {
+export const preflightSpend = async (feature: AiFeature, deps: SpendDeps, quantity = 1): Promise<Preflight> => {
   const { totals, capUsd } = await spendSummary(deps);
   const estimateUsd = estimateFeatureCost(
     deps.pricing.features[feature],
     deps.pricing.models,
     deps.pricing.prices,
+    quantity,
   );
   return preflight({ estimateUsd, monthUsd: totals.month, capUsd });
 };

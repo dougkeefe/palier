@@ -3,13 +3,20 @@ import { describe, expect, it } from "vitest";
 import type { AiProvider } from "@palier/app";
 import {
   checkErrorOffsets,
+  examinerTurnSchema,
   itemDraftSchema,
   passageDraftSchema,
   reviewVerdictSchema,
   scenarioDraftSchema,
   writingAssessmentSchema,
 } from "@palier/domain";
-import type { GenerateItemsRequest, GenerateScenarioRequest, ReviewRequest, WritingRequest } from "@palier/domain";
+import type {
+  ExaminerTurnRequest,
+  GenerateItemsRequest,
+  GenerateScenarioRequest,
+  ReviewRequest,
+  WritingRequest,
+} from "@palier/domain";
 
 /**
  * The substitutability contract for an `AiProvider` (implementation-plan.md §6.2
@@ -64,6 +71,26 @@ const aScenarioRequest = (): GenerateScenarioRequest => ({
   minutes: 10,
 });
 
+const anExaminerRequest = (): ExaminerTurnRequest => ({
+  sessionType: "work",
+  targetBand: "C",
+  lang: "fr",
+  topic: "project-management",
+  phase: {
+    name: "Votre travail",
+    minutes: 5,
+    intent: "Faire décrire au candidat un projet récent.",
+    seedQuestions: ["Parlez-moi d'un projet que vous avez mené."],
+    escalation: ["Qu'auriez-vous fait autrement ?"],
+    deescalation: ["Quelles sont vos tâches principales ?"],
+  },
+  register: "baseline",
+  transcript: [
+    { speaker: "examiner", text: "Bonjour. Quel est votre poste ?" },
+    { speaker: "candidate", text: "Je suis analyste des politiques." },
+  ],
+});
+
 export const aiProviderContract = (name: string, make: () => Promise<AiProvider>): void => {
   describe(`AiProvider contract: ${name}`, () => {
     it("reports its capabilities as booleans", async () => {
@@ -73,6 +100,9 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       expect(typeof caps.reviewItem).toBe("boolean");
       expect(typeof caps.assessWriting).toBe("boolean");
       expect(typeof caps.generateScenario).toBe("boolean");
+      expect(typeof caps.transcribe).toBe("boolean");
+      expect(typeof caps.speak).toBe("boolean");
+      expect(typeof caps.examinerTurn).toBe("boolean");
     });
 
     it("has no usage before any call", async () => {
@@ -147,6 +177,32 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       const draft = await provider.generateScenario(request);
       expect(scenarioDraftSchema.safeParse(draft).success).toBe(true);
       expect(draft.phases.reduce((sum, phase) => sum + phase.minutes, 0)).toBe(request.minutes);
+      expect(provider.lastUsage()).not.toBeNull();
+    });
+
+    it("transcribes a clip to text, billing the seconds of audio (D117)", async () => {
+      const provider = await make();
+      const transcript = await provider.transcribe({
+        audio: new Blob(["réponse"], { type: "audio/webm" }),
+        lang: "fr",
+        durationMs: 4_000,
+      });
+      expect(typeof transcript.text).toBe("string");
+      expect(provider.lastUsage()?.audioSeconds).toBeGreaterThan(0);
+    });
+
+    it("voices the examiner's words as audio, billing the characters (D117)", async () => {
+      const provider = await make();
+      const text = "Parlez-moi de votre poste.";
+      const audio = await provider.speak({ text, lang: "fr" });
+      expect(audio.size).toBeGreaterThan(0);
+      expect(provider.lastUsage()?.characters).toBe(text.length);
+    });
+
+    it("writes a schema-valid examiner turn and records usage (D117)", async () => {
+      const provider = await make();
+      const turn = await provider.examinerTurn(anExaminerRequest());
+      expect(examinerTurnSchema.safeParse(turn).success).toBe(true);
       expect(provider.lastUsage()).not.toBeNull();
     });
 

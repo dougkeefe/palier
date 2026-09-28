@@ -1,13 +1,21 @@
-import { scenarioId, sessionId } from "@palier/domain";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 
-import { createContainer } from "./container";
+import type { AnswerSource, CandidateAnswer, ExaminerQuestion } from "@palier/app";
+import { scenarioId, sessionId } from "@palier/domain";
+import { mswServer, openAiHandlers } from "@palier/testing";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+
+import aiModels from "./ai-models.json";
+import { BANK_BASE_PATH, createContainer } from "./container";
 
 /**
- * Spoken sessions through the real wiring (Phase 5 Slice 1, progress.md D115): the oral
- * store in both graphs, kept on this device alone. Its first screen is Slice 2; what has
- * to hold already is that a transcript never leaves the device in an export, and that a
- * wipe and a delete-everywhere take it with everything else [R11, R12].
+ * Spoken sessions through the real wiring (Phase 5 Slices 1–2, progress.md D115, D118): the oral
+ * store in both graphs, kept on this device alone, and a practice session run by the real
+ * turn-based transport over the real OpenAI adapter and MSW, metered into the real ledger. A
+ * transcript never leaves the device in an export, a clip reaches only the transcription
+ * endpoint, and a wipe and a delete-everywhere take it all [R11, R12].
  */
 
 vi.mock("../server/db", () => ({ syncApi: () => Promise.resolve(null) }));
@@ -23,10 +31,62 @@ const aSession = (id: string) => ({
   turns: [{ speaker: "candidate" as const, text: MARKER, phase: 1, startMs: 130_000, endMs: 142_000 }],
 });
 
+// content/profiles/psc-sle.json → content/: the production graph's bank, served from disk.
+const CONTENT_DIR = dirname(dirname(createRequire(import.meta.url).resolve("@palier/content/profiles/psc-sle.json")));
+let network: typeof fetch = fetch;
+
+beforeAll(() => {
+  mswServer.listen({ onUnhandledRequest: "error" });
+  network = globalThis.fetch;
+});
 afterEach(async () => {
+  mswServer.resetHandlers();
+  vi.unstubAllGlobals();
   // Every production container shares the one IndexedDB database, so leave it empty.
   await createContainer({ hermetic: false }).useCases.wipeData();
 });
+afterAll(() => {
+  mswServer.close();
+});
+
+/**
+ * The production bank's URLs are origin-relative, which Node cannot fetch, so they are read from the
+ * committed tree; everything else, OpenAI included, goes to MSW.
+ */
+const serveBankBesideMsw = () => {
+  vi.stubGlobal("fetch", async (url: string, init?: RequestInit) => {
+    if (!url.startsWith(`${BANK_BASE_PATH}/`)) return network(url, init);
+    const body = await readFile(join(CONTENT_DIR, url.slice(BANK_BASE_PATH.length + 1)), "utf8");
+    return { ok: true, status: 200, json: async () => JSON.parse(body) as unknown };
+  });
+};
+
+const KEY = "sk-palier-oral-test-4c1d";
+const CLIP = "ORAL-CLIP-MARKER";
+const HEARD = "ORAL-HEARD-MARKER: je coordonne les consultations avec les provinces.";
+const EXAMINER = { text: "Parlez-moi de votre poste actuel.", difficulty: null };
+
+/** A candidate who answers the first question with a clip and then waits, as the screen would. */
+const oneClip = () => {
+  const questions: ExaminerQuestion[] = [];
+  let asked: () => void = () => undefined;
+  const secondQuestion = new Promise<void>((resolve) => {
+    asked = resolve;
+  });
+  const answers: AnswerSource = {
+    answer: (question, signal) => {
+      questions.push(question);
+      if (questions.length === 1) {
+        return Promise.resolve<CandidateAnswer>({ kind: "audio", audio: new Blob([CLIP], { type: "audio/webm" }), durationMs: 3_000 });
+      }
+      asked();
+      return new Promise<CandidateAnswer>((_, reject) => {
+        signal.addEventListener("abort", () => reject(new Error("aborted")), { once: true });
+      });
+    },
+  };
+  return { answers, questions, secondQuestion };
+};
 
 describe.each([
   ["hermetic", true],
@@ -48,5 +108,95 @@ describe.each([
     await c.oral.put(aSession("oral-2"));
     await c.useCases.deleteEverywhere();
     expect(await c.oral.all()).toEqual([]);
+  });
+});
+
+describe.each([
+  ["hermetic", true],
+  ["production", false],
+] as const)("a practice session through the %s graph (D118)", (_graph, hermetic) => {
+  it("offers a session of every type from the bank the graph reads", async () => {
+    serveBankBesideMsw();
+    const c = createContainer({ hermetic });
+    const choices = await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" });
+    expect(choices.map((choice) => choice.sessionType)).toEqual(["warmup", "work", "opinion", "situation", "full"]);
+  });
+
+  it("asks, voices, transcribes the clip at the transcription endpoint only, keeps the transcript here, and meters it all", async () => {
+    serveBankBesideMsw();
+    const uploads: string[] = [];
+    mswServer.use(
+      ...openAiHandlers({
+        mode: "ok",
+        completions: [{ content: EXAMINER, usage: { prompt_tokens: 1_200, completion_tokens: 40 } }],
+        transcript: HEARD,
+        onUpload: (clip) => void clip.text().then((text) => uploads.push(text)),
+      }),
+    );
+    const c = createContainer({ hermetic });
+    await c.useCases.saveApiKey({ key: KEY, remember: true });
+    const [choice] = (await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" })).filter((x) => x.sessionType === "work");
+    if (choice === undefined) throw new Error("the bank offers a work discussion");
+    const candidate = oneClip();
+
+    const run = await c.useCases.startOralPractice({ sessionId: sessionId(c.ids.ulid()), scenarioId: choice.scenario.id }, candidate.answers);
+    await candidate.secondQuestion;
+    await run.endByUser();
+    const ended = await run.ended;
+
+    expect(ended.endReason).toBe("ended-by-user");
+    expect(ended.turns.map((turn) => [turn.speaker, turn.text])).toEqual([
+      ["examiner", EXAMINER.text],
+      ["candidate", HEARD],
+      ["examiner", EXAMINER.text],
+    ]);
+    expect(await candidate.questions[0]?.audio?.text()).toBe(`ID3:${EXAMINER.text}`);
+    expect(uploads).toEqual([CLIP]);
+    expect(run.failure()).toBeNull();
+
+    const rows = await c.costLedger.since("2000-01-01T00:00:00.000Z");
+    expect(rows.map((row) => row.model)).toEqual([
+      aiModels.examiner,
+      aiModels.speech,
+      aiModels.transcribe,
+      aiModels.examiner,
+      aiModels.speech,
+    ]);
+    expect(new Set(rows.map((row) => row.feature))).toEqual(new Set(["oral-practice"]));
+    expect(rows.every((row) => row.costUsd !== null && row.costUsd > 0)).toBe(true);
+    // 3 seconds at US$0.0045 a minute.
+    expect(rows[2]?.costUsd).toBeCloseTo(0.000225, 12);
+
+    const exported = JSON.stringify(await c.useCases.exportData());
+    expect(exported).not.toContain("ORAL-HEARD-MARKER");
+    expect(exported).not.toContain(CLIP);
+  });
+
+  it("ends the session as a failed transport when OpenAI refuses the key, and names why", async () => {
+    serveBankBesideMsw();
+    mswServer.use(...openAiHandlers({ mode: "invalid-key" }));
+    const c = createContainer({ hermetic });
+    await c.useCases.saveApiKey({ key: KEY, remember: true });
+    const [choice] = await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" });
+    if (choice === undefined) throw new Error("the bank offers a session");
+
+    const run = await c.useCases.startOralPractice({ sessionId: sessionId(c.ids.ulid()), scenarioId: choice.scenario.id }, oneClip().answers);
+    const ended = await run.ended;
+
+    expect(ended.endReason).toBe("transport-failed");
+    expect(run.failure()).toMatchObject({ name: "InvalidApiKeyError" });
+    expect(await c.useCases.oralSession({ sessionId: ended.id })).toEqual(ended);
+  });
+
+  it("keeps a session's recording under the retention policy, reports its size, and cleans it up, transcripts kept", async () => {
+    const c = createContainer({ hermetic });
+    await c.oral.put(aSession("oral-9"));
+
+    expect(await c.useCases.saveOralAudio({ sessionId: sessionId("oral-9"), audio: new Blob(["0123456789"]) })).toEqual({ evicted: [] });
+    expect(await c.useCases.oralStorageEstimate()).toEqual({ bytes: 10, warn: false });
+
+    await c.useCases.cleanUpAudio();
+    expect(await c.useCases.oralStorageEstimate()).toEqual({ bytes: 0, warn: false });
+    expect(await c.useCases.oralSession({ sessionId: sessionId("oral-9") })).not.toBeNull();
   });
 });

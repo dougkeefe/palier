@@ -59,6 +59,15 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   arrives with the machine's phase, and the end is written only when the transport says `closed`, so an answer
   in flight is kept. Its end-to-end test runs in `@palier/testing` (`memory/oral-session.test.ts`), since an
   app test may not import it (D37).
+- **Practice mode is `turnBasedTransport`, here, not in an adapter** (`use-cases/oral-practice.ts`, Phase 5
+  Slice 2, progress.md D118), because it is orchestration over two ports and nothing vendor-specific. Each turn is
+  one `withAiProvider(…, "oral-practice", …)` that writes the question (`examinerTurn`) and then voices it
+  (`speak`), in order, then the **`AnswerSource`** port (`ports/answer-source.ts`), which shows the question and
+  waits for a clip or typed words, then a second metered call that transcribes a clip. **`direct` returns at
+  once**, because the driver awaits it in its own queue; it only sets the phase and register of the next
+  question. `close` aborts the wait, delivers a turn in flight, then `closed`. Any failed call closes it failed
+  and `lastError` keeps the error for the screen. `startOralPracticeRun` composes it with `startOralSessionRun`,
+  and `oralSessionChoices` offers one scenario per session type at the study band (A practises at B).
 - **Ports are transcribed from §3.3, not invented.** Eight live under `src/ports/`:
   `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`,
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the
@@ -69,8 +78,9 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   amended in place with two D-log decisions — `generatePassage` is added (content-factory.md
   §4.2 needs it) and `generateItems`/`generatePassage` return **drafts**, not assembled
   `Item[]`/`Passage[]`, so id-minting and provenance stay the factory's job, not the adapter's.
-  Its DTOs live in `@palier/domain`, not here (ADR 20). `assessOral`/`transcribe`/
-  `openVoiceSession` are still deferred to their slices (`assessWriting`, `SyncTransport`, the
+  Its DTOs live in `@palier/domain`, not here (ADR 20). `assessOral` and
+  `openVoiceSession` are still deferred to their slices (`transcribe`, `speak` and `examinerTurn` landed with
+  Phase 5 Slice 2, D117) (`assessWriting`, `SyncTransport`, the
   telemetry ports and `generateScenario` have since landed; **`OralStore` and `OralTransport`
   landed with Phase 5 Slice 1**, below).
   `IdGenerator` is a *ninth* port §3.3 does not name at all, decided here (progress.md D48):

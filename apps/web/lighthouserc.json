@@ -17,6 +17,7 @@
         "http://localhost:3200/en/settings/key",
         "http://localhost:3200/fr/practice/writing/workshop",
         "http://localhost:3200/fr/practice/writing/generate",
+        "http://localhost:3200/fr/practice/oral",
         "http://localhost:3200/en/exam",
         "http://localhost:3200/fr/exam/run",
         "http://localhost:3200/en/exam/results"

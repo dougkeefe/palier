@@ -1,7 +1,12 @@
-import type { OralScenario } from "@palier/domain";
+import type { ExaminerTurnRequest, OralScenario, UsageRecord } from "@palier/domain";
 import { scenarioId, sessionId } from "@palier/domain";
 
 import type {
+  AiProvider,
+  AnswerSource,
+  CandidateAnswer,
+  ExaminerQuestion,
+  KeyVault,
   Clock,
   ItemRepository,
   OralDirective,
@@ -171,4 +176,133 @@ export const handTransport = (
     directives: () => directives,
     closeCalls: () => closeCalls,
   };
+};
+
+/** A vault stub that holds a key, or none (D37). */
+export const vaultWith = (key: string | null): KeyVault => ({
+  putApiKey: () => Promise.resolve(),
+  withApiKey: (fn) => (key === null ? Promise.reject(new Error("no key")) : fn(key)),
+  hasApiKey: () => Promise.resolve(key !== null),
+  apiKeyStorage: () => Promise.resolve(key === null ? null : "device"),
+  clear: () => Promise.resolve(),
+  deviceSecret: () => Promise.resolve("device-secret"),
+});
+
+type ExaminerOptions = {
+  /** Whether the provider can voice a question; `true` unless said otherwise. */
+  readonly speaks?: boolean;
+  /** The difficulty flag each examiner turn carries, in turn; `null` once they run out. */
+  readonly flags?: readonly ("escalate" | "deescalate" | null)[];
+  /** Make the named method reject with this error. */
+  readonly fail?: { readonly method: "examinerTurn" | "speak" | "transcribe"; readonly error: Error };
+  /** Hold every examiner turn until the test releases it. */
+  readonly holdExaminer?: boolean;
+  /** Hold every transcription until the test releases it. */
+  readonly holdTranscribe?: boolean;
+};
+
+/**
+ * An `AiProvider` for the turn loop (progress.md D118), recording what it was asked. Each
+ * examiner turn is numbered ("Question 1", …), a voice is the question's words as a blob, and a
+ * transcription reads the clip's own bytes. Each call bills something, so metering is visible.
+ */
+export const examinerProvider = (options: ExaminerOptions = {}) => {
+  const examinerRequests: ExaminerTurnRequest[] = [];
+  const spoken: string[] = [];
+  const transcribed: { readonly lang: string; readonly durationMs: number }[] = [];
+  const held: (() => void)[] = [];
+  let usage: UsageRecord | null = null;
+  const hold = (on: boolean | undefined) =>
+    on === true ? new Promise<void>((resolve) => held.push(resolve)) : Promise.resolve();
+  const failing = (method: "examinerTurn" | "speak" | "transcribe") =>
+    options.fail?.method === method ? Promise.reject(options.fail.error) : Promise.resolve();
+  const provider: AiProvider = {
+    capabilities: () => ({
+      generatePassage: false,
+      generateItems: false,
+      reviewItem: false,
+      assessWriting: false,
+      generateScenario: false,
+      transcribe: true,
+      speak: options.speaks ?? true,
+      examinerTurn: true,
+    }),
+    generatePassage: () => Promise.reject(new Error("unused")),
+    generateItems: () => Promise.reject(new Error("unused")),
+    reviewItem: () => Promise.reject(new Error("unused")),
+    assessWriting: () => Promise.reject(new Error("unused")),
+    generateScenario: () => Promise.reject(new Error("unused")),
+    examinerTurn: async (req) => {
+      examinerRequests.push(req);
+      usage = { model: "m-examiner", inputTokens: 100, outputTokens: 10, costUsd: 0.001 };
+      await hold(options.holdExaminer);
+      await failing("examinerTurn");
+      return { text: `Question ${String(examinerRequests.length)}`, difficulty: options.flags?.[examinerRequests.length - 1] ?? null };
+    },
+    speak: async (req) => {
+      spoken.push(req.text);
+      usage = { model: "m-speech", inputTokens: 0, outputTokens: 0, characters: req.text.length, costUsd: 0.0001 };
+      await failing("speak");
+      return new Blob([req.text], { type: "audio/mpeg" });
+    },
+    transcribe: async (req) => {
+      transcribed.push({ lang: req.lang, durationMs: req.durationMs });
+      usage = { model: "m-transcribe", inputTokens: 0, outputTokens: 0, audioSeconds: req.durationMs / 1000, costUsd: 0.0002 };
+      await hold(options.holdTranscribe);
+      await failing("transcribe");
+      return { text: await req.audio.text() };
+    },
+    verifyKey: () => Promise.resolve(),
+    lastUsage: () => usage,
+  };
+  return {
+    provider,
+    examinerRequests,
+    spoken,
+    transcribed,
+    /** Let every held call go on. */
+    release: () => {
+      for (const go of held.splice(0)) go();
+    },
+  };
+};
+
+/**
+ * An `AnswerSource` the test answers by hand (D118): each question waits until `give` or
+ * `refuse`, and rejects when the transport aborts the wait, as the port says.
+ */
+export const handAnswers = () => {
+  const questions: ExaminerQuestion[] = [];
+  const signals: AbortSignal[] = [];
+  let pending: { resolve: (a: CandidateAnswer) => void; reject: (e: unknown) => void } | null = null;
+  const answers: AnswerSource = {
+    answer: (question, signal) =>
+      new Promise<CandidateAnswer>((resolve, reject) => {
+        questions.push(question);
+        signals.push(signal);
+        pending = { resolve, reject };
+        signal.addEventListener("abort", () => reject(new Error("aborted")), { once: true });
+      }),
+  };
+  return {
+    answers,
+    questions,
+    signals,
+    waiting: () => pending !== null,
+    give: (answer: CandidateAnswer) => {
+      const current = pending;
+      pending = null;
+      current?.resolve(answer);
+    },
+    refuse: (error: unknown) => {
+      const current = pending;
+      pending = null;
+      current?.reject(error);
+    },
+  };
+};
+
+/** Let every settled promise and queued task run. */
+export const settled = async (): Promise<void> => {
+  for (let i = 0; i < 5; i++) await new Promise((resolve) => setTimeout(resolve, 0));
 };

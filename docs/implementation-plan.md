@@ -151,6 +151,10 @@ interface OralTransport  { open(req: { scenario: OralScenario }, sink: (e: OralT
 // A port §3.3 did not name, added 27 September 2026 (progress.md D116). One shape for the turn-based
 // (Phase 5) and full-duplex (Phase 6) transports. Push: the transport sends whole turns with their
 // start/end ms, difficulty flags, and exactly one `closed { failed }`, last; the client drives the phases.
+interface AnswerSource   { answer(q: { text: string; audio: Blob | null; phase: number }, signal: AbortSignal):
+                             Promise<{ kind: "audio"; audio: Blob; durationMs: number } | { kind: "typed"; text: string }> }
+// A port §3.3 did not name, added 27 September 2026 (progress.md D118): the candidate's side of practice mode. The
+// turn-based transport (`turnBasedTransport`, in @palier/app) hands it each question and waits; it rejects on abort.
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
 // Amended 24 September 2026: AttemptStore, ScheduleStore, SessionStore and SettingsStore each
 // gained `all()` and `clear()` (SettingsStore's `all()` returns `{ key, value }` entries). The
@@ -173,8 +177,12 @@ interface AiProvider {
                                     // offsets checkErrorOffsets accepts; the model reports excerpts, the adapter places them
   generateScenario(req: GenerateScenarioRequest): Promise<ScenarioDraft>  // Phase 5 Slice 1, ADDED (progress.md D114):
                                     // the factory's scenario stage; a phase plan, assembled by the factory
-  assessOral(req: OralRequest): Promise<OralAssessment>            // deferred to Phase 5
-  transcribe(audio: Blob, lang: Lang): Promise<Transcript>         // deferred to Phase 5
+  assessOral(req: OralRequest): Promise<OralAssessment>            // deferred to Phase 5 Slice 3
+  transcribe(req: TranscribeRequest): Promise<Transcript>          // Phase 5 Slice 2, AMENDED (progress.md D117): was
+                                    // (audio: Blob, lang); the request adds the clip's measured durationMs, which prices it
+  speak(req: SpeechRequest): Promise<Blob>                         // Phase 5 Slice 2, ADDED (D117): the examiner's voice
+  examinerTurn(req: ExaminerTurnRequest): Promise<ExaminerTurn>    // Phase 5 Slice 2, ADDED (D117): the next question and a
+                                    // difficulty flag, from the phase, the register and the transcript so far
   openVoiceSession(cfg: VoiceSessionConfig): Promise<VoiceSession>  // may throw Unsupported; deferred to Phase 6
   verifyKey(): Promise<void>        // Phase 4 Slice 1, ADDED (progress.md D99): one cheap call; resolves or throws the adapter's own error
   lastUsage(): UsageRecord | null   // amended 26 September 2026 (progress.md D102): the WHOLE last method call, retries

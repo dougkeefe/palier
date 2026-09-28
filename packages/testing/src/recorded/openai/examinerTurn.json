@@ -1,0 +1,84 @@
+{
+  "note": "Recorded from the live API by `pnpm --filter @palier/web live-smoke --record` (progress.md D112). Regenerate, never hand-edit.",
+  "recordedAt": "2026-09-28T01:38:58.898Z",
+  "promptVersion": "4",
+  "completions": [
+    {
+      "method": "examinerTurn",
+      "model": "gpt-6-luna",
+      "request": {
+        "sessionType": "work",
+        "targetBand": "C",
+        "lang": "fr",
+        "topic": "project-management",
+        "phase": {
+          "name": "Votre travail",
+          "minutes": 5,
+          "intent": "Have the candidate describe their role and a recent project in detail.",
+          "seedQuestions": [
+            "Parlez-moi de votre poste actuel.",
+            "Décrivez un projet récent dont vous êtes fier."
+          ],
+          "escalation": [
+            "Qu'auriez-vous fait autrement si le budget avait été réduit de moitié ?"
+          ],
+          "deescalation": [
+            "Quelles sont vos tâches d'une journée typique ?"
+          ]
+        },
+        "register": "baseline",
+        "transcript": []
+      },
+      "attempt": 1,
+      "content": "{\"text\":\"Bonjour. Parlez-moi de votre poste actuel.\",\"difficulty\":null}",
+      "usage": {
+        "prompt_tokens": 352,
+        "completion_tokens": 62
+      },
+      "conformant": true
+    },
+    {
+      "method": "examinerTurn",
+      "model": "gpt-6-luna",
+      "request": {
+        "sessionType": "work",
+        "targetBand": "C",
+        "lang": "fr",
+        "topic": "project-management",
+        "phase": {
+          "name": "Votre travail",
+          "minutes": 5,
+          "intent": "Have the candidate describe their role and a recent project in detail.",
+          "seedQuestions": [
+            "Parlez-moi de votre poste actuel.",
+            "Décrivez un projet récent dont vous êtes fier."
+          ],
+          "escalation": [
+            "Qu'auriez-vous fait autrement si le budget avait été réduit de moitié ?"
+          ],
+          "deescalation": [
+            "Quelles sont vos tâches d'une journée typique ?"
+          ]
+        },
+        "register": "escalate",
+        "transcript": [
+          {
+            "speaker": "examiner",
+            "text": "Bonjour. Parlez-moi de votre poste actuel."
+          },
+          {
+            "speaker": "candidate",
+            "text": "Je suis analyste principale des politiques. Je coordonne les consultations avec les provinces et je rédige des notes d'information pour la sous-ministre."
+          }
+        ]
+      },
+      "attempt": 1,
+      "content": "{\"text\":\"Si le budget d’un projet de consultation avait été réduit de moitié, qu’auriez-vous changé et pourquoi ?\",\"difficulty\":\"escalate\"}",
+      "usage": {
+        "prompt_tokens": 400,
+        "completion_tokens": 115
+      },
+      "conformant": true
+    }
+  ]
+}

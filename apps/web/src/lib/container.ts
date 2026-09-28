@@ -70,6 +70,12 @@ import type {
   TelemetryConsent,
   TelemetrySink,
   TelemetryStore,
+  AnswerSource,
+  OralPracticeRun,
+  OralSession,
+  OralSessionChoice,
+  OralStorageEstimate,
+  SaveOralAudioResult,
 } from "@palier/app";
 import {
   apiKeyStatus,
@@ -123,6 +129,11 @@ import {
   generatePracticeSet,
   latestGeneratedSet,
   scoreGeneratedAnswer,
+  cleanUpAudio,
+  oralSessionChoices,
+  oralStorageEstimate,
+  saveOralAudio,
+  startOralPracticeRun,
 } from "@palier/app";
 import { httpBankRepository } from "@palier/adapters/bank";
 import { dexieStores } from "@palier/adapters/dexie";
@@ -132,7 +143,7 @@ import { httpSyncTransport } from "@palier/adapters/sync";
 import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
 import writingPromptLibrary from "@palier/content/writing/prompts.json";
-import type { AiFeature, ExamForm, ExamProfile, WritingPrompt } from "@palier/domain";
+import type { AiFeature, ExamForm, ExamProfile, Lang, ScenarioId, SessionId, TargetBand, WritingPrompt } from "@palier/domain";
 import { parseExamProfileOrThrow, parseWritingPromptsOrThrow } from "@palier/domain";
 import type { DayPlan, ExamResult, Preflight, SkillTrend, TrendEvidence } from "@palier/engine";
 import {
@@ -156,7 +167,7 @@ import {
 } from "@palier/testing/in-memory";
 
 import aiModels from "./ai-models.json";
-import { PRICING } from "./pricing";
+import { EXAMINER_VOICE, PRICING } from "./pricing";
 import { selectionSeedFor, systemClock } from "./system-clock";
 
 /**
@@ -233,8 +244,17 @@ const WRITING_PROMPTS: readonly WritingPrompt[] = parseWritingPromptsOrThrow(wri
 export const openAiFor: AiProviderFactory = (apiKey) =>
   openAiProvider({
     apiKey,
-    models: { passage: aiModels.passage, draft: aiModels.draft, review: aiModels.review, assess: aiModels.assess },
+    models: {
+      passage: aiModels.passage,
+      draft: aiModels.draft,
+      review: aiModels.review,
+      assess: aiModels.assess,
+      transcribe: aiModels.transcribe,
+      speech: aiModels.speech,
+      examiner: aiModels.examiner,
+    },
     pricing: PRICING.prices,
+    voice: EXAMINER_VOICE,
   });
 
 export type Env = {
@@ -297,7 +317,8 @@ export type UseCases = {
   readonly spendCap: () => Promise<number | null>;
   readonly setSpendCap: (request: { readonly capUsd: number | null }) => Promise<void>;
   readonly featureCosts: () => readonly FeatureCost[];
-  readonly preflightSpend: (request: { readonly feature: AiFeature }) => Promise<Preflight>;
+  /** `quantity` typical uses: oral practice's is a minute, so a session asks for its minutes (D117). */
+  readonly preflightSpend: (request: { readonly feature: AiFeature; readonly quantity?: number }) => Promise<Preflight>;
   /** The writing workshop (PRD §8.7, progress.md D105–D108): prompts, save, feedback, history. */
   readonly writingPrompts: () => readonly WritingPrompt[];
   readonly saveWriting: (request: SaveWritingRequest) => Promise<WritingSubmission>;
@@ -310,6 +331,19 @@ export type UseCases = {
   readonly generatePracticeSet: (request: GeneratePracticeSetRequest) => Promise<GeneratePracticeSetResult>;
   readonly latestGeneratedSet: () => Promise<GeneratedSet | null>;
   readonly scoreGeneratedAnswer: (request: ScoreGeneratedAnswerRequest) => Promise<{ readonly correct: boolean }>;
+  /**
+   * Spoken practice (PRD §8.6, progress.md D117–D119): the picker's rows, a session on the user's key answered by
+   * the screen's recorder or text field, the session as stored, and architecture.md §9.1's recordings.
+   */
+  readonly oralSessionChoices: (request: { readonly targetBand: TargetBand; readonly lang: Lang }) => Promise<readonly OralSessionChoice[]>;
+  readonly startOralPractice: (
+    request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId },
+    answers: AnswerSource,
+  ) => Promise<OralPracticeRun>;
+  readonly oralSession: (request: { readonly sessionId: SessionId }) => Promise<OralSession | null>;
+  readonly saveOralAudio: (request: { readonly sessionId: SessionId; readonly audio: Blob }) => Promise<SaveOralAudioResult>;
+  readonly oralStorageEstimate: () => Promise<OralStorageEstimate>;
+  readonly cleanUpAudio: () => Promise<void>;
 };
 
 export type Ports = {
@@ -346,8 +380,9 @@ export type Ports = {
   /** Runtime-generated item sets, device-local: never synced, never exported (D110). */
   readonly generated: GeneratedItemStore;
   /**
-   * Spoken sessions and their recordings, device-local: never synced, never exported (D115).
-   * Wired now so a wipe and a delete-everywhere clear it; its first screen is Phase 5 Slice 2.
+   * Spoken sessions and their recordings, device-local: never synced, never exported (D115). Practice mode
+   * writes it through `startOralPractice` and `saveOralAudio` (Phase 5 Slice 2, D118); a wipe and a
+   * delete-everywhere clear it.
    */
   readonly oral: OralStore;
 };
@@ -519,7 +554,7 @@ function buildUseCases(ports: Ports): UseCases {
     spendCap: () => spendCap(spendDeps),
     setSpendCap: (request) => setSpendCap(request.capUsd, spendDeps),
     featureCosts: () => featureCosts(spendDeps),
-    preflightSpend: (request) => preflightSpend(request.feature, spendDeps),
+    preflightSpend: (request) => preflightSpend(request.feature, spendDeps, request.quantity),
     writingPrompts: () => writingPrompts({ prompts: WRITING_PROMPTS }),
     saveWriting: (request) =>
       saveWriting(request, { prompts: WRITING_PROMPTS, writing: ports.writing, ids: ports.ids, clock: ports.clock }),
@@ -546,6 +581,21 @@ function buildUseCases(ports: Ports): UseCases {
       }),
     latestGeneratedSet: () => latestGeneratedSet({ generated: ports.generated }),
     scoreGeneratedAnswer: (request) => scoreGeneratedAnswer(request, { generated: ports.generated }),
+    oralSessionChoices: (request) => oralSessionChoices(request, { items: ports.items }),
+    startOralPractice: (request, answers) =>
+      startOralPracticeRun(request, {
+        vault: ports.vault,
+        aiProvider: ports.aiProvider,
+        ledger: ports.costLedger,
+        clock: ports.clock,
+        items: ports.items,
+        oral: ports.oral,
+        answers,
+      }),
+    oralSession: (request) => ports.oral.get(request.sessionId),
+    saveOralAudio: (request) => saveOralAudio(request, { oral: ports.oral }),
+    oralStorageEstimate: () => oralStorageEstimate({ oral: ports.oral }),
+    cleanUpAudio: () => cleanUpAudio({ oral: ports.oral }),
   };
 }
 

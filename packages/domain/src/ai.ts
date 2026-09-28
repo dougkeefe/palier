@@ -2,6 +2,7 @@ import type { ItemOption } from "./item.js";
 import type { Localised, LocalisedRich } from "./localised.js";
 import type { Band, TargetBand } from "./bands.js";
 import type { OralPhase, OralSessionType } from "./oral-scenario.js";
+import type { OralDirection, OralRegister, OralSpeaker } from "./oral-session.js";
 import type { DocType } from "./passage.js";
 import type { ItemType, Lang, OptionId } from "./skills.js";
 import type { SubSkill } from "./sub-skills.js";
@@ -18,10 +19,10 @@ import type { PromptSpec } from "./item-types/definition.js";
  * domain's job (architecture.md §8.2).
  *
  * Phase 1 defined what the content factory consumes; Phase 4 Slice 3 adds writing
- * feedback (progress.md D105), and Phase 5 Slice 1 the factory's oral scenarios
- * (D114). The oral assessment, transcription and voice requests and responses land
- * with their slices, the same "the minimum the consumer needs" discipline the
- * ports layer already uses (progress.md D45).
+ * feedback (progress.md D105), Phase 5 Slice 1 the factory's oral scenarios (D114),
+ * and Slice 2 the turn loop's transcription, voice and examiner (D117). The oral
+ * assessment lands with its slice, the same "the minimum the consumer needs"
+ * discipline the ports layer already uses (progress.md D45).
  */
 
 /** Which of the `AiProvider` methods a concrete provider supports. */
@@ -31,6 +32,9 @@ export type AiCapabilities = {
   readonly reviewItem: boolean;
   readonly assessWriting: boolean;
   readonly generateScenario: boolean;
+  readonly transcribe: boolean;
+  readonly speak: boolean;
+  readonly examinerTurn: boolean;
 };
 
 /**
@@ -120,6 +124,54 @@ export type GenerateScenarioRequest = {
  */
 export type ScenarioDraft = {
   readonly phases: readonly OralPhase[];
+};
+
+/**
+ * One answer to transcribe (progress.md D117): the candidate's clip, the language it
+ * is spoken in, and how long it is. `durationMs` is measured by the recorder, and it
+ * is what prices a per-minute model when the response reports no usage of its own.
+ * A `Blob` is a platform type, not a vendor's (D115).
+ */
+export type TranscribeRequest = {
+  readonly audio: Blob;
+  readonly lang: Lang;
+  readonly durationMs: number;
+};
+
+/** What a transcription returns: the words, which may be none for a silent clip. */
+export type Transcript = {
+  readonly text: string;
+};
+
+/** The examiner's words to voice (D117), in the language being practised. */
+export type SpeechRequest = {
+  readonly text: string;
+  readonly lang: Lang;
+};
+
+/**
+ * What the examiner's next turn is written from in practice mode (architecture.md
+ * §8.5, "transcript plus history goes to the text model"; D117): the scenario's
+ * current phase, which of its question lists the client wants (`register`), and the
+ * conversation so far. The client drives the phases (§8.5 step 5).
+ */
+export type ExaminerTurnRequest = {
+  readonly sessionType: OralSessionType;
+  readonly targetBand: "B" | "C";
+  readonly lang: Lang;
+  readonly topic: Topic;
+  readonly phase: OralPhase;
+  readonly register: OralRegister;
+  readonly transcript: readonly { readonly speaker: OralSpeaker; readonly text: string }[];
+};
+
+/**
+ * The examiner's next short question, and whether the candidate's last answer showed
+ * them coping or struggling (§8.5's `flag_difficulty`), so the client can adapt.
+ */
+export type ExaminerTurn = {
+  readonly text: string;
+  readonly difficulty: OralDirection | null;
 };
 
 /** One option as the reviewer sees it: id and text only — no rationale, no key. */
@@ -240,36 +292,49 @@ export type WritingFeedbackDraft = {
 /**
  * Token (and, priced, dollar) usage from the last call, for the cost ledger
  * (architecture.md §8.6). `costUsd` is absent until a `pricing.json` prices it.
+ * An audio call reports what it is billed by instead (D117): the seconds of audio
+ * it transcribed, or the characters it voiced, with its token counts zero unless the
+ * response gave some.
  */
 export type UsageRecord = {
   readonly model: string;
   readonly inputTokens: number;
   readonly outputTokens: number;
+  readonly audioSeconds?: number | undefined;
+  readonly characters?: number | undefined;
   readonly costUsd?: number | undefined;
 };
 
 /**
  * The features that spend the user's key, the names the cost ledger records a
  * call under (architecture.md §8.6, progress.md D101). Writing feedback is Phase 4
- * Slice 3 and item generation Slice 4; the oral features join with Phase 5. A key
- * check spends nothing, so it is not a feature.
+ * Slice 3, item generation Slice 4, and oral practice Phase 5 Slice 2 (D117): a
+ * session's examiner turns, voice and transcriptions. A key check spends nothing, so
+ * it is not a feature.
  */
-export const AI_FEATURES = ["writing-feedback", "item-generation"] as const;
+export const AI_FEATURES = ["writing-feedback", "item-generation", "oral-practice"] as const;
 export type AiFeature = (typeof AI_FEATURES)[number];
 
-/** A model's price in USD per million tokens, from `pricing.json` (§8.6). */
-export type ModelPrice = {
+/**
+ * A model's price from `pricing.json` (§8.6), in the unit OpenAI bills it by
+ * (progress.md D117): USD per million tokens in and out, per minute of audio, or per
+ * million characters voiced. Only a unit the device can measure is priced, so the
+ * meter matches the bill (principle 8, Gate G).
+ */
+export type TokenPrice = {
   readonly inputPerMTok: number;
   readonly outputPerMTok: number;
 };
+export type MinutePrice = { readonly perMinute: number };
+export type CharacterPrice = { readonly perMChars: number };
+export type ModelPrice = TokenPrice | MinutePrice | CharacterPrice;
 
 /**
- * One typical call a feature makes, for the per-feature estimate (D103). `role`
- * names a model in the app's model configuration, so a model change moves the
- * estimate with it.
+ * One typical call a feature makes, for the per-feature estimate (D103), in its
+ * model's unit (D117). `role` names a model in the app's model configuration, so a
+ * model change moves the estimate with it.
  */
-export type FeatureCall = {
-  readonly role: string;
-  readonly inputTokens: number;
-  readonly outputTokens: number;
-};
+export type FeatureCall =
+  | { readonly role: string; readonly inputTokens: number; readonly outputTokens: number }
+  | { readonly role: string; readonly minutes: number }
+  | { readonly role: string; readonly characters: number };

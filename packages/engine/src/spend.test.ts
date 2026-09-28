@@ -124,6 +124,29 @@ describe("estimateFeatureCost", () => {
       estimateFeatureCost([{ role: "draft", inputTokens: 1, outputTokens: 1 }], { draft: "m-new" }, prices),
     ).toBeNull();
   });
+
+  describe("audio, in the unit each model is billed by (D117)", () => {
+    const audioModels = { examiner: "m-small", transcribe: "m-minute", speech: "m-chars" };
+    const audioPrices = { ...prices, "m-minute": { perMinute: 0.006 }, "m-chars": { perMChars: 15 } };
+    const minute = [
+      { role: "examiner", inputTokens: 1_000_000, outputTokens: 0 }, // 1
+      { role: "transcribe", minutes: 0.5 }, // 0.003
+      { role: "speech", characters: 200_000 }, // 3
+    ];
+
+    it("prices minutes of audio and characters voiced beside tokens", () => {
+      expect(estimateFeatureCost(minute, audioModels, audioPrices)).toBeCloseTo(4.003, 10);
+    });
+
+    it("multiplies a typical use by the quantity asked for, such as a session's minutes", () => {
+      expect(estimateFeatureCost(minute, audioModels, audioPrices, 10)).toBeCloseTo(40.03, 10);
+    });
+
+    it("is null when a call is not in the unit its model is priced in", () => {
+      expect(estimateFeatureCost([{ role: "transcribe", inputTokens: 1, outputTokens: 1 }], audioModels, audioPrices)).toBeNull();
+      expect(estimateFeatureCost([{ role: "examiner", minutes: 1 }], audioModels, audioPrices)).toBeNull();
+    });
+  });
 });
 
 describe("capState", () => {

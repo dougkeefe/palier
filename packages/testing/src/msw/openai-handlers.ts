@@ -22,6 +22,11 @@ import { delay, http, HttpResponse } from "msw";
  * depends on what was asked — a draft of the requested type, or a verdict that finds the
  * right option wherever the key was moved (progress.md D110). `onAuthorization` sees each request's
  * `authorization` header, so a test can prove the key reached this origin, and only this one.
+ *
+ * The turn loop's audio (D117): `/audio/transcriptions` answers `{ text }` from `transcript`,
+ * a string or a function of the uploaded clip's text, and `onUpload` sees each clip, so a test
+ * can prove where audio went. `/audio/speech` answers `audio/mpeg` bytes carrying the words it
+ * was asked to voice. In `malformed` mode a transcription has no text and speech is JSON.
  */
 export type OpenAiMode = "ok" | "invalid-key" | "rate-limited" | "server-error" | "malformed" | "slow";
 
@@ -39,6 +44,8 @@ export type OpenAiHandlerOptions = {
   readonly baseUrl?: string;
   readonly completions?: readonly OpenAiCompletion[];
   readonly onAuthorization?: (authorization: string | null) => void;
+  readonly transcript?: string | ((clip: string) => string);
+  readonly onUpload?: (clip: File) => void;
 };
 
 const error = (status: number, code: string) =>
@@ -72,6 +79,8 @@ export const openAiHandlers = ({
   baseUrl = "https://api.openai.com/v1",
   completions = [],
   onAuthorization,
+  transcript = "Je suis analyste des politiques.",
+  onUpload,
 }: OpenAiHandlerOptions) => {
   let answered = 0;
   return [
@@ -93,6 +102,28 @@ export const openAiHandlers = ({
         });
       }
       if (mode === "malformed") return HttpResponse.json({ choices: [{ message: {} }], usage: next.usage });
+      return refusal(mode);
+    }),
+    http.post(`${baseUrl}/audio/transcriptions`, async ({ request }) => {
+      onAuthorization?.(request.headers.get("authorization"));
+      const clip = (await request.formData()).get("file");
+      if (clip instanceof File) onUpload?.(clip);
+      if (mode === "ok") {
+        const words = typeof transcript === "function" ? transcript(clip instanceof File ? await clip.text() : "") : transcript;
+        return HttpResponse.json({ text: words });
+      }
+      if (mode === "malformed") return HttpResponse.json({});
+      return refusal(mode);
+    }),
+    http.post(`${baseUrl}/audio/speech`, async ({ request }) => {
+      onAuthorization?.(request.headers.get("authorization"));
+      const body = (await request.json().catch(() => ({}))) as { input?: unknown };
+      if (mode === "ok") {
+        return new HttpResponse(`ID3:${typeof body.input === "string" ? body.input : ""}`, {
+          headers: { "content-type": "audio/mpeg" },
+        });
+      }
+      if (mode === "malformed") return HttpResponse.json({ error: "not audio" });
       return refusal(mode);
     }),
   ];

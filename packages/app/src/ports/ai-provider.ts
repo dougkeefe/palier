@@ -1,5 +1,7 @@
 import type {
   AiCapabilities,
+  ExaminerTurn,
+  ExaminerTurnRequest,
   GenerateItemsRequest,
   GeneratePassageRequest,
   GenerateScenarioRequest,
@@ -8,6 +10,9 @@ import type {
   ReviewRequest,
   ReviewVerdict,
   ScenarioDraft,
+  SpeechRequest,
+  TranscribeRequest,
+  Transcript,
   UsageRecord,
   WritingAssessment,
   WritingRequest,
@@ -20,9 +25,8 @@ import type {
  * vendor error and payload into our types at the edge (§8.2), and accounts for
  * cost. Nothing above this port knows OpenAI exists.
  *
- * **Not yet the whole of §3.3.** `assessOral`, `transcribe` and `openVoiceSession`
- * and their net-new domain types land with their slices (Phase 5 Slices 2–3 and
- * Phase 6), the same "the minimum the consumer needs" discipline the store ports
+ * **Not yet the whole of §3.3.** `assessOral` and `openVoiceSession` and their
+ * net-new domain types land with their slices (Phase 5 Slice 3 and Phase 6), the same "the minimum the consumer needs" discipline the store ports
  * already use (progress.md D45). Two §3.3 amendments
  * are recorded in the D-log: `generatePassage` is added (the factory's stage 2
  * needs AI passage construction, content-factory.md §4.2), and `generateItems`/
@@ -38,6 +42,10 @@ import type {
  * `generateScenario` is a fourth amendment (progress.md D114, Phase 5 Slice 1): the
  * factory's scenario stage plans an oral scenario's phases through it, and it returns
  * a draft, as `generatePassage` does.
+ *
+ * Phase 5 Slice 2 (progress.md D117) adds the turn loop's three: `transcribe`, §3.3's own
+ * method, amended to take a request that carries the clip's measured duration, which is
+ * what a per-minute model is priced by; and `speak` and `examinerTurn`, two amendments.
  *
  * `verifyKey` is a third §3.3 amendment (progress.md D99, Phase 4 Slice 1): the one cheap
  * call `/settings/key` makes to report whether the user's key works (PRD §8.10).
@@ -64,6 +72,23 @@ export type AiProvider = {
    * add up to `req.minutes`, discarding the plan if not.
    */
   generateScenario: (req: GenerateScenarioRequest) => Promise<ScenarioDraft>;
+  /**
+   * The words in one spoken answer (architecture.md §8.5, practice mode; D117). The clip
+   * goes to the provider's transcription model and nowhere else [R12]. Usage reports the
+   * seconds of audio billed.
+   */
+  transcribe: (req: TranscribeRequest) => Promise<Transcript>;
+  /**
+   * The examiner's words voiced in the language practised (D117), as audio the browser
+   * can play. Usage reports the characters voiced.
+   */
+  speak: (req: SpeechRequest) => Promise<Blob>;
+  /**
+   * The examiner's next short question in practice mode (§8.5: "transcript plus history
+   * goes to the text model"; D117), and whether the candidate's last answer showed them
+   * coping or struggling, so the client can adapt the phase.
+   */
+  examinerTurn: (req: ExaminerTurnRequest) => Promise<ExaminerTurn>;
   /**
    * One cheap call that proves the key this provider holds is accepted. Resolves when it
    * is; otherwise rejects with the provider's own error for the reason (an invalid key, a

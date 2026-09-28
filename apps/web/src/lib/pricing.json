@@ -1,14 +1,21 @@
 {
-  "note": "Pricing as data (architecture.md §8.6, progress.md D103). `models` is USD per million tokens, keyed by model id: the browser's copy of apps/factory/config/pricing.json, held equal to it by pricing.test.ts. Rates confirmed at Gate G, 26 September 2026: the meter matched OpenAI's billing exactly (progress.md session log). `features` is a typical use of each feature as its calls, each naming a role in ai-models.json; one entry may stand for several calls to the same role, their tokens summed, since pricing is linear. Token counts MEASURED by the live smoke on 27 September 2026, on prompt version 4 (progress.md D112): writing feedback is one assess call, the average of two; a generated set is one draft call of five items, the average of three, plus five reviews, each averaged. The nightly live smoke prints the same block on every run. A maintainer CI job refreshing this file is Phase 7.",
+  "note": "Pricing as data (architecture.md §8.6, progress.md D103). `models` is each model's price in the unit it is billed by, keyed by model id: USD per million tokens, per minute of audio or per million characters (D117). For every model the factory also prices it is the factory's own figure, held equal to apps/factory/config/pricing.json by pricing.test.ts; the audio models are the browser's alone. Rates confirmed at Gate G, 26 September 2026: the meter matched OpenAI's billing exactly (progress.md session log). `features` is a typical use of each feature as its calls, each naming a role in ai-models.json; one entry may stand for several calls to the same role, their tokens summed, since pricing is linear. Token counts MEASURED by the live smoke on 27 September 2026, on prompt version 4 (progress.md D112): writing feedback is one assess call, the average of two; a generated set is one draft call of five items, the average of three, plus five reviews, each averaged. The nightly live smoke prints the same block on every run. A maintainer CI job refreshing this file is Phase 7. Phase 5 Slice 2 (D117) adds audio, priced in the unit OpenAI bills it by, from its pricing page on 27 September 2026: gpt-transcribe at US$0.0045 a minute and tts-1 at US$15 per million characters. `oral-practice` is ONE MINUTE of a practice session, so a session's estimate is its minutes times this: about 1.5 examiner turns (each a question written and voiced, about 120 characters) and 0.6 minutes of the candidate's speech transcribed. The examiner's tokens are the recording's measured turn (376 in, 89 out, on prompt version 4) times those 1.5 turns. The turns a minute, the characters and the minutes transcribed are PLACEHOLDERS until Slice 3 measures a whole session's cost (Phase 5 exit criterion 2). The Slice 2 recording (27 September 2026) re-measured the other two features, whose counts above are its figures.",
   "models": {
     "gpt-6-luna": { "inputPerMTok": 2.0, "outputPerMTok": 8.0 },
-    "gpt-6-sol": { "inputPerMTok": 2.0, "outputPerMTok": 8.0 }
+    "gpt-6-sol": { "inputPerMTok": 2.0, "outputPerMTok": 8.0 },
+    "gpt-transcribe": { "perMinute": 0.0045 },
+    "tts-1": { "perMChars": 15 }
   },
   "features": {
-    "writing-feedback": [{ "role": "assess", "inputTokens": 517, "outputTokens": 1733 }],
+    "writing-feedback": [{ "role": "assess", "inputTokens": 517, "outputTokens": 1620 }],
     "item-generation": [
-      { "role": "draft", "inputTokens": 392, "outputTokens": 3915 },
-      { "role": "review", "inputTokens": 1645, "outputTokens": 1725 }
+      { "role": "draft", "inputTokens": 392, "outputTokens": 4631 },
+      { "role": "review", "inputTokens": 1665, "outputTokens": 2400 }
+    ],
+    "oral-practice": [
+      { "role": "examiner", "inputTokens": 564, "outputTokens": 134 },
+      { "role": "speech", "characters": 180 },
+      { "role": "transcribe", "minutes": 0.6 }
     ]
   }
 }

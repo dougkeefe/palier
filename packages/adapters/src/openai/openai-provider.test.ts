@@ -20,7 +20,13 @@ const MODELS = {
   review: "m-review",
   assess: "m-assess",
   scenario: "m-scenario",
+  transcribe: "m-transcribe",
+  speech: "m-speech",
+  examiner: "m-examiner",
 } as const;
+
+/** A JSON request body as text; a multipart one (a transcription) reads as none. */
+const textOf = (body: string | FormData | undefined): string => (typeof body === "string" ? body : "");
 
 const localised = { en: "en", fr: "fr" };
 const option = (id: "a" | "b" | "c" | "d") => ({ id, text: `opt ${id}`, rationale: localised });
@@ -99,14 +105,37 @@ const modelsResponse = (body: unknown = { object: "list", data: [{ id: "m-draft"
   text: () => Promise.resolve(JSON.stringify(body)),
 });
 
+/** A transcription's JSON answer, billed by duration as whisper-style models report it. */
+const transcriptionResponse = (body: unknown = { text: " Je suis analyste. ", usage: { type: "duration", seconds: 3 } }) => ({
+  ok: true,
+  status: 200,
+  json: () => Promise.resolve(body),
+  text: () => Promise.resolve(JSON.stringify(body)),
+});
+
+/** Speech's binary answer: audio bytes under an audio content type. */
+const speechResponse = (type = "audio/mpeg", bytes = "ID3-audio") => ({
+  ok: true,
+  status: 200,
+  headers: { get: (name: string) => (name.toLowerCase() === "content-type" ? type : null) },
+  json: () => Promise.reject(new Error("binary")),
+  text: () => Promise.resolve(bytes),
+  blob: () => Promise.resolve(new Blob([bytes], { type })),
+});
+
+const EXAMINER_TURN = { text: " Parlez-moi d'un projet récent. ", difficulty: null };
+
 /** Routes each call to the right envelope by the model in the request body, or to the model list. */
 const cannedFetch: FetchLike = (url, init) => {
   if (url.endsWith("/models")) return Promise.resolve(modelsResponse());
-  const model = (JSON.parse(init.body ?? "{}") as { model: string }).model;
+  if (url.endsWith("/audio/transcriptions")) return Promise.resolve(transcriptionResponse());
+  if (url.endsWith("/audio/speech")) return Promise.resolve(speechResponse());
+  const model = (JSON.parse(textOf(init.body) || "{}") as { model: string }).model;
   if (model === MODELS.passage) return Promise.resolve(chatResponse(PASSAGE_ENVELOPE));
   if (model === MODELS.draft) return Promise.resolve(chatResponse(ITEM_ENVELOPE));
   if (model === MODELS.assess) return Promise.resolve(chatResponse(FEEDBACK));
   if (model === MODELS.scenario) return Promise.resolve(chatResponse(SCENARIO_PLAN));
+  if (model === MODELS.examiner) return Promise.resolve(chatResponse(EXAMINER_TURN));
   return Promise.resolve(chatResponse(VERDICT));
 };
 
@@ -124,6 +153,9 @@ describe("openAiProvider", () => {
       reviewItem: true,
       assessWriting: true,
       generateScenario: true,
+      transcribe: true,
+      speak: true,
+      examinerTurn: true,
     });
   });
 
@@ -148,7 +180,7 @@ describe("openAiProvider", () => {
     const [url, init] = spy.mock.calls[0]!;
     expect(url).toContain("/chat/completions");
     expect(init.headers.authorization).toBe("Bearer sk-test");
-    expect((JSON.parse(init.body ?? "{}") as { model: string }).model).toBe(MODELS.draft);
+    expect((JSON.parse(textOf(init.body) || "{}") as { model: string }).model).toBe(MODELS.draft);
   });
 
   it("asks the reviewer for a band on the PSC scale, never a CEFR level (prompt version 4, D112)", async () => {
@@ -162,7 +194,7 @@ describe("openAiProvider", () => {
       lang: "fr",
     });
     const [, init] = spy.mock.calls[0]!;
-    const user = (JSON.parse(init.body ?? "{}") as { messages: { content: string }[] }).messages[1]?.content ?? "";
+    const user = (JSON.parse(textOf(init.body) || "{}") as { messages: { content: string }[] }).messages[1]?.content ?? "";
     expect(user).toContain('exactly one of "A", "B", "C", never a CEFR level');
     expect(user).toContain('"estimatedBand": "A" | "B" | "C"');
     expect(PROMPT_VERSION).toBe("4");
@@ -688,7 +720,7 @@ describe("openAiProvider — assessWriting (D105)", () => {
     return {
       sent: () => sent,
       fetchImpl: (_url, init) => {
-        sent.push(init.body ?? "");
+        sent.push(textOf(init.body));
         const body = bodies.length > 1 ? bodies.shift() : bodies[0];
         return Promise.resolve(chatResponse(body));
       },
@@ -811,7 +843,7 @@ describe("openAiProvider — generateScenario (D114)", () => {
     return {
       sent: () => sent,
       fetchImpl: (_url, init) => {
-        sent.push(init.body ?? "");
+        sent.push(textOf(init.body));
         const body = bodies.length > 1 ? bodies.shift() : bodies[0];
         return Promise.resolve(chatResponse(body));
       },
@@ -857,5 +889,282 @@ describe("openAiProvider — generateScenario (D114)", () => {
     await expect(provider.generateScenario(aRequest)).rejects.toThrow(/models\.scenario/u);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(provider.lastUsage()).toBeNull();
+  });
+});
+
+describe("openAiProvider — the turn loop's audio and examiner (D117)", () => {
+  const clip = () => new Blob(["clip-bytes"], { type: "audio/webm;codecs=opus" });
+  const pricing = {
+    [MODELS.transcribe]: { perMinute: 0.006 },
+    [MODELS.speech]: { perMChars: 15 },
+    [MODELS.examiner]: { inputPerMTok: 2, outputPerMTok: 8 },
+  };
+  const anExaminerRequest = {
+    sessionType: "opinion",
+    targetBand: "C",
+    lang: "fr",
+    topic: "environment",
+    phase: {
+      name: "Enjeux",
+      minutes: 4,
+      intent: "Probe a policy trade-off.",
+      seedQuestions: ["Que pensez-vous du télétravail ?"],
+      escalation: ["Et si votre sous-ministre s'y opposait ?"],
+      deescalation: [],
+    },
+    register: "escalate",
+    transcript: [
+      { speaker: "examiner", text: "Bonjour. Quel est votre poste ?" },
+      { speaker: "candidate", text: "Je suis analyste." },
+    ],
+  } as const;
+
+  describe("transcribe", () => {
+    it("uploads the clip once, as multipart, with the model and the language, to the transcription endpoint", async () => {
+      const spy = vi.fn(cannedFetch);
+      const transcript = await makeProvider({ fetchImpl: spy }).transcribe({ audio: clip(), lang: "fr", durationMs: 4_000 });
+
+      expect(transcript).toEqual({ text: "Je suis analyste." });
+      expect(spy).toHaveBeenCalledTimes(1);
+      const [url, init] = spy.mock.calls[0]!;
+      expect(url).toBe("https://api.openai.com/v1/audio/transcriptions");
+      expect(init.headers.authorization).toBe("Bearer sk-test");
+      // The browser sets the multipart boundary itself, so no content type is sent.
+      expect(init.headers["content-type"]).toBeUndefined();
+      const form = init.body as FormData;
+      expect(form).toBeInstanceOf(FormData);
+      expect(form.get("model")).toBe(MODELS.transcribe);
+      expect(form.get("language")).toBe("fr");
+      expect(form.get("response_format")).toBe("json");
+      const file = form.get("file") as File;
+      expect(file.name).toBe("answer.webm");
+      expect(await file.text()).toBe("clip-bytes");
+    });
+
+    it.each([
+      ["audio/mp4", "answer.mp4"],
+      ["audio/mpeg", "answer.mp3"],
+      ["audio/wav", "answer.wav"],
+      ["", "answer.webm"],
+    ])("names a %s clip %s, since OpenAI reads the format from the extension", async (type, name) => {
+      const spy = vi.fn(cannedFetch);
+      await makeProvider({ fetchImpl: spy }).transcribe({ audio: new Blob(["x"], { type }), lang: "fr", durationMs: 1 });
+      expect(((spy.mock.calls[0]![1].body as FormData).get("file") as File).name).toBe(name);
+    });
+
+    it("bills the seconds the response reports by duration, priced by the minute", async () => {
+      const provider = makeProvider({ pricing });
+      await provider.transcribe({ audio: clip(), lang: "fr", durationMs: 9_999 });
+      expect(provider.lastUsage()).toMatchObject({ model: MODELS.transcribe, inputTokens: 0, outputTokens: 0, audioSeconds: 3 });
+      expect(provider.lastUsage()?.costUsd).toBeCloseTo(0.0003, 15);
+    });
+
+    it("bills the recorder's measured length when the response reports tokens, keeping the tokens", async () => {
+      const fetchImpl: FetchLike = () =>
+        Promise.resolve(
+          transcriptionResponse({ text: "Oui.", usage: { type: "tokens", input_tokens: 120, output_tokens: 4 } }),
+        );
+      const provider = makeProvider({ fetchImpl, pricing });
+      await provider.transcribe({ audio: clip(), lang: "fr", durationMs: 30_000 });
+      expect(provider.lastUsage()).toMatchObject({ inputTokens: 120, outputTokens: 4, audioSeconds: 30 });
+      expect(provider.lastUsage()?.costUsd).toBeCloseTo(0.003, 12);
+    });
+
+    it("bills the measured length when the response reports no usage at all, and is unpriced without a price", async () => {
+      const fetchImpl: FetchLike = () => Promise.resolve(transcriptionResponse({ text: "" }));
+      const provider = makeProvider({ fetchImpl });
+      expect(await provider.transcribe({ audio: clip(), lang: "fr", durationMs: 2_500 })).toEqual({ text: "" });
+      expect(provider.lastUsage()).toEqual({ model: MODELS.transcribe, inputTokens: 0, outputTokens: 0, audioSeconds: 2.5 });
+    });
+
+    it("refuses an answer with no text as InvalidResponseError, still billing the audio sent", async () => {
+      const fetchImpl: FetchLike = () => Promise.resolve(transcriptionResponse({ transcript: "Oui." }));
+      const provider = makeProvider({ fetchImpl, pricing });
+      await expect(provider.transcribe({ audio: clip(), lang: "fr", durationMs: 60_000 })).rejects.toBeInstanceOf(
+        InvalidResponseError,
+      );
+      expect(provider.lastUsage()?.costUsd).toBeCloseTo(0.006, 12);
+    });
+
+    it("refuses a 200 that is not JSON as InvalidResponseError, still billing the clip it accepted (D121)", async () => {
+      const fetchImpl: FetchLike = () =>
+        Promise.resolve({ ok: true, status: 200, json: () => Promise.reject(new SyntaxError("x")), text: () => Promise.resolve("<html>") });
+      const provider = makeProvider({ fetchImpl, pricing });
+      await expect(provider.transcribe({ audio: clip(), lang: "fr", durationMs: 60_000 })).rejects.toBeInstanceOf(
+        InvalidResponseError,
+      );
+      expect(provider.lastUsage()).toMatchObject({ model: MODELS.transcribe, audioSeconds: 60 });
+      expect(provider.lastUsage()?.costUsd).toBeCloseTo(0.006, 12);
+    });
+
+    it("reads as unpriced, never free, when a token-priced model reports no tokens (D121)", async () => {
+      const fetchImpl: FetchLike = () => Promise.resolve(transcriptionResponse({ text: "Oui.", usage: { type: "duration", seconds: 2 } }));
+      const provider = makeProvider({ fetchImpl, pricing: { [MODELS.transcribe]: { inputPerMTok: 2.5, outputPerMTok: 10 } } });
+      await provider.transcribe({ audio: clip(), lang: "fr", durationMs: 2_000 });
+      expect(provider.lastUsage()).toEqual({ model: MODELS.transcribe, inputTokens: 0, outputTokens: 0, audioSeconds: 2 });
+    });
+
+    it("translates 401 and 429, and never retries a failed upload", async () => {
+      for (const [status, error] of [
+        [401, InvalidApiKeyError],
+        [429, RateLimitError],
+      ] as const) {
+        const spy = vi.fn<FetchLike>(() => Promise.resolve(modelsResponse({ error: "no" }, status)));
+        await expect(makeProvider({ fetchImpl: spy }).transcribe({ audio: clip(), lang: "fr", durationMs: 1 })).rejects.toBeInstanceOf(
+          error,
+        );
+        expect(spy).toHaveBeenCalledTimes(1);
+      }
+    });
+
+    it("refuses to run with no transcription model, before any request and with no usage", async () => {
+      const { transcribe: _t, ...factoryModels } = MODELS;
+      const spy = vi.fn(cannedFetch);
+      const provider = makeProvider({ models: factoryModels, fetchImpl: spy });
+      await provider.examinerTurn(anExaminerRequest);
+
+      expect(provider.capabilities().transcribe).toBe(false);
+      await expect(provider.transcribe({ audio: clip(), lang: "fr", durationMs: 1 })).rejects.toThrow(/models\.transcribe/u);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(provider.lastUsage()).toBeNull();
+    });
+  });
+
+  describe("speak", () => {
+    it("posts the words, the model, the voice and the format as JSON, and returns the audio", async () => {
+      const spy = vi.fn(cannedFetch);
+      const audio = await makeProvider({ fetchImpl: spy, voice: "sage" }).speak({ text: "Bonjour.", lang: "fr" });
+
+      expect(audio.type).toBe("audio/mpeg");
+      expect(await audio.text()).toBe("ID3-audio");
+      const [url, init] = spy.mock.calls[0]!;
+      expect(url).toBe("https://api.openai.com/v1/audio/speech");
+      expect(init.headers["content-type"]).toBe("application/json");
+      expect(JSON.parse(textOf(init.body))).toEqual({ model: MODELS.speech, input: "Bonjour.", voice: "sage", response_format: "mp3" });
+    });
+
+    it("voices with a default when no voice is configured", async () => {
+      const spy = vi.fn(cannedFetch);
+      await makeProvider({ fetchImpl: spy }).speak({ text: "Bonjour.", lang: "fr" });
+      expect((JSON.parse(textOf(spy.mock.calls[0]![1].body)) as { voice: string }).voice).toBe("alloy");
+    });
+
+    it("bills the characters sent, priced per million, since the answer carries no usage", async () => {
+      const provider = makeProvider({ pricing });
+      const text = "Parlez-moi de votre poste.";
+      await provider.speak({ text, lang: "fr" });
+      expect(provider.lastUsage()).toMatchObject({ model: MODELS.speech, inputTokens: 0, outputTokens: 0, characters: text.length });
+      expect(provider.lastUsage()?.costUsd).toBeCloseTo((text.length / 1_000_000) * 15, 15);
+    });
+
+    it.each([
+      ["a JSON body", () => speechResponse("application/json")],
+      ["no content type", () => ({ ...speechResponse(), headers: { get: () => null } })],
+      [
+        "no way to read a blob",
+        () => {
+          const { blob: _blob, ...rest } = speechResponse();
+          return rest;
+        },
+      ],
+      ["an empty body", () => speechResponse("audio/mpeg", "")],
+    ])("refuses %s as InvalidResponseError, billing the words sent", async (_name, answer) => {
+      const fetchImpl: FetchLike = () => Promise.resolve(answer());
+      const provider = makeProvider({ fetchImpl, pricing });
+      await expect(provider.speak({ text: "Bonjour.", lang: "fr" })).rejects.toBeInstanceOf(InvalidResponseError);
+      expect(provider.lastUsage()?.characters).toBe(8);
+    });
+
+    it("reads a token-priced voice as unpriced, never free, since the answer reports no tokens (D121)", async () => {
+      const provider = makeProvider({ pricing: { [MODELS.speech]: { inputPerMTok: 0.6, outputPerMTok: 12 } } });
+      await provider.speak({ text: "Bonjour.", lang: "fr" });
+      expect(provider.lastUsage()).toEqual({ model: MODELS.speech, inputTokens: 0, outputTokens: 0, characters: 8 });
+    });
+
+    it("translates 401, before billing anything", async () => {
+      const fetchImpl: FetchLike = () => Promise.resolve(modelsResponse({ error: "no" }, 401));
+      const provider = makeProvider({ fetchImpl });
+      await expect(provider.speak({ text: "Bonjour.", lang: "fr" })).rejects.toBeInstanceOf(InvalidApiKeyError);
+      expect(provider.lastUsage()).toBeNull();
+    });
+
+    it("refuses to run with no speech model, before any request and with no usage", async () => {
+      const { speech: _s, ...factoryModels } = MODELS;
+      const spy = vi.fn(cannedFetch);
+      const provider = makeProvider({ models: factoryModels, fetchImpl: spy });
+
+      expect(provider.capabilities().speak).toBe(false);
+      await expect(provider.speak({ text: "Bonjour.", lang: "fr" })).rejects.toThrow(/models\.speech/u);
+      expect(spy).not.toHaveBeenCalled();
+      expect(provider.lastUsage()).toBeNull();
+    });
+  });
+
+  describe("examinerTurn", () => {
+    const answers = (...bodies: unknown[]): { fetchImpl: FetchLike; sent: () => string[] } => {
+      const sent: string[] = [];
+      return {
+        sent: () => sent,
+        fetchImpl: (_url, init) => {
+          sent.push(textOf(init.body));
+          const body = bodies.length > 1 ? bodies.shift() : bodies[0];
+          return Promise.resolve(chatResponse(body));
+        },
+      };
+    };
+
+    it("asks the examiner model with the persona, the phase, the register and the conversation so far", async () => {
+      const { fetchImpl, sent } = answers(EXAMINER_TURN);
+      const turn = await makeProvider({ fetchImpl }).examinerTurn(anExaminerRequest);
+      const body = JSON.parse(sent()[0] ?? "{}") as { model: string; messages: { content: string }[] };
+      const [system, user] = [body.messages[0]?.content ?? "", body.messages[1]?.content ?? ""];
+
+      expect(turn).toEqual({ text: "Parlez-moi d'un projet récent.", difficulty: null });
+      expect(body.model).toBe(MODELS.examiner);
+      expect(system).toContain("conducted entirely in French");
+      expect(system).toContain("never coach, never correct");
+      expect(user).toContain('Current phase: "Enjeux"');
+      expect(user).toContain("Probe a policy trade-off.");
+      expect(user).toContain("Et si votre sous-ministre s'y opposait ?");
+      expect(user).toContain("The candidate is coping: ask a harder follow-up");
+      expect(user).toContain("Candidate: Je suis analyste.");
+    });
+
+    it("opens the session with a greeting when nothing has been said yet", async () => {
+      const { fetchImpl, sent } = answers(EXAMINER_TURN);
+      await makeProvider({ fetchImpl }).examinerTurn({ ...anExaminerRequest, register: "baseline", transcript: [] });
+      const user = (JSON.parse(sent()[0] ?? "{}") as { messages: { content: string }[] }).messages[1]?.content ?? "";
+      expect(user).toContain("The session is just starting");
+      expect(user).toContain("Ask from the phase's seed questions");
+    });
+
+    it("asks for a simpler reframe when the client de-escalates", async () => {
+      const { fetchImpl, sent } = answers(EXAMINER_TURN);
+      await makeProvider({ fetchImpl }).examinerTurn({ ...anExaminerRequest, register: "deescalate" });
+      expect(sent()[0]).toContain("The candidate is struggling: ask a simpler reframe");
+    });
+
+    it("returns the difficulty flag the model gave", async () => {
+      const { fetchImpl } = answers({ text: "Pourquoi ?", difficulty: "escalate" });
+      expect(await makeProvider({ fetchImpl }).examinerTurn(anExaminerRequest)).toEqual({ text: "Pourquoi ?", difficulty: "escalate" });
+    });
+
+    it("retries a malformed turn once, then refuses it as InvalidResponseError, billing both", async () => {
+      const { fetchImpl, sent } = answers({ question: "Pourquoi ?" });
+      const provider = makeProvider({ fetchImpl, pricing });
+      await expect(provider.examinerTurn(anExaminerRequest)).rejects.toBeInstanceOf(InvalidResponseError);
+      expect(sent()).toHaveLength(2);
+      expect(provider.lastUsage()).toMatchObject({ inputTokens: 200, outputTokens: 100 });
+    });
+
+    it("refuses to run with no examiner model, before any request and with no usage", async () => {
+      const { examiner: _e, ...factoryModels } = MODELS;
+      const spy = vi.fn(cannedFetch);
+      const provider = makeProvider({ models: factoryModels, fetchImpl: spy });
+
+      expect(provider.capabilities().examinerTurn).toBe(false);
+      await expect(provider.examinerTurn(anExaminerRequest)).rejects.toThrow(/models\.examiner/u);
+      expect(spy).not.toHaveBeenCalled();
+    });
   });
 });

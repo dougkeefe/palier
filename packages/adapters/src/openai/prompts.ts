@@ -1,4 +1,5 @@
 import type {
+  ExaminerTurnRequest,
   GenerateItemsRequest,
   GeneratePassageRequest,
   GenerateScenarioRequest,
@@ -20,8 +21,9 @@ const QUOTED_BANDS = TARGET_BANDS.map((band) => `"${band}"`);
  * uses `response_format: { type: "json_object" }` and re-validates the body — the
  * schema description here is guidance, the Zod re-validation is the contract.
  *
- * `writing` was added with Phase 4 Slice 3 (progress.md D105), and `scenario` with Phase 5
- * Slice 1 (D114). Adding a prompt does not change the others, so the version stays.
+ * `writing` was added with Phase 4 Slice 3 (progress.md D105), `scenario` with Phase 5
+ * Slice 1 (D114), and `examiner` with Slice 2 (D117). Adding a prompt does not change the
+ * others, so the version stays.
  *
  * **Version 4** (Phase 4 Slice 4, progress.md D112): the review prompt names the band scale.
  * The first recorded live run found three of five reviews answering `estimatedBand` as a CEFR
@@ -201,4 +203,42 @@ const scenario = (req: GenerateScenarioRequest): { system: string; user: string 
   };
 };
 
-export const buildPrompt = { passage, items, review, writing, scenario };
+/** Which of the phase's question lists the client asked for (D117), and what to do when it is empty. */
+const REGISTER_ASK: Readonly<Record<ExaminerTurnRequest["register"], string>> = {
+  baseline: "Ask from the phase's seed questions, or follow on naturally from the candidate's last answer.",
+  escalate:
+    "The candidate is coping: ask a harder follow-up, from the phase's harder follow-ups when there are any, pushing toward abstraction, hypotheticals or justification.",
+  deescalate:
+    "The candidate is struggling: ask a simpler reframe, from the phase's simpler reframes when there are any, concrete and short.",
+};
+
+/**
+ * The practice-mode examiner (architecture.md §8.5, "transcript plus history goes to the
+ * text model"; progress.md D117). The persona is §8.5 step 4's: a PSC-style assessor who
+ * speaks only the target language, never coaches or corrects, and keeps their own turns
+ * short. The client drives the phases (§8.5 step 5), so the phase and the register arrive
+ * in the request; the model only writes the next question and flags the last answer.
+ */
+const examiner = (req: ExaminerTurnRequest): { system: string; user: string } => {
+  const lines = req.transcript.map((turn) => `${turn.speaker === "examiner" ? "Examiner" : "Candidate"}: ${turn.text}`);
+  const { phase } = req;
+  return {
+    system: [
+      REGISTER,
+      `You are the examiner in a rehearsal of the Public Service Commission's oral interview, conducted entirely in ${languageName(req.lang)}.`,
+      "You speak only that language. You never coach, never correct, never praise and never explain;",
+      "you ask one short question at a time so that the candidate does most of the talking.",
+    ].join(" "),
+    user: [
+      `Session: "${req.sessionType}" (${SESSION_PURPOSE[req.sessionType]}), on the topic "${req.topic}", pitched at band "${req.targetBand}".`,
+      `Current phase: "${phase.name}". Its purpose, for you: ${phase.intent}`,
+      `Seed questions: ${JSON.stringify(phase.seedQuestions)}. Harder follow-ups: ${JSON.stringify(phase.escalation)}. Simpler reframes: ${JSON.stringify(phase.deescalation)}.`,
+      REGISTER_ASK[req.register],
+      lines.length === 0 ? "The session is just starting: greet the candidate briefly and ask your first question." : `The conversation so far:\n${lines.join("\n")}`,
+      'Set "difficulty" to "escalate" if the candidate\'s last answer shows them coping easily, "deescalate" if it shows them struggling, and null otherwise or when they have not answered yet.',
+      'Reply with JSON only, in this shape: {"text": "your next question", "difficulty": null}',
+    ].join("\n"),
+  };
+};
+
+export const buildPrompt = { passage, items, review, writing, scenario, examiner };

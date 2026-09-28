@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import { PROMPT_VERSION } from "@palier/adapters/openai";
 
 import { RECORDED_COMPLETIONS_DIR, loadRecordedRuns } from "../io.js";
-import { type RecordedCompletionData, acceptsOnFirstTry, schemaConformance } from "./conformance.js";
+import { type RecordedCompletionData, type StructuredCompletionData, acceptsOnFirstTry, schemaConformance } from "./conformance.js";
 
 const VERDICT = {
   chosenKey: "a",
@@ -32,7 +32,7 @@ const REVIEW_REQUEST = {
   lang: "fr",
 };
 
-const aReview = (verdict: object, attempt = 1): RecordedCompletionData => ({
+const aReview = (verdict: object, attempt = 1): StructuredCompletionData => ({
   method: "reviewItem",
   model: "m-review",
   attempt,
@@ -52,6 +52,39 @@ describe("acceptsOnFirstTry (D112)", () => {
     const feedback = { ...aReview({ modelAnswer: "only" }), method: "assessWriting" as const, request: { task: "t", wordTarget: 100, text: "texte", targetBand: "B", lang: "fr", feedbackLang: "en" } };
     expect(await acceptsOnFirstTry(draft)).toBe(true);
     expect(await acceptsOnFirstTry(feedback)).toBe(false);
+  });
+});
+
+describe("the examiner and the turn loop's audio (D117)", () => {
+  const EXAMINER_REQUEST = {
+    sessionType: "work",
+    targetBand: "C",
+    lang: "fr",
+    topic: "procurement",
+    phase: { name: "p", minutes: 2, intent: "i", seedQuestions: ["q"], escalation: [], deescalation: [] },
+    register: "baseline",
+    transcript: [],
+  };
+  const aTurn = (content: object): StructuredCompletionData => ({
+    ...aReview(content),
+    method: "examinerTurn",
+    request: EXAMINER_REQUEST,
+  });
+
+  it("replays an examiner turn through its own call", async () => {
+    expect(await acceptsOnFirstTry(aTurn({ text: "Bonjour.", difficulty: null }))).toBe(true);
+    expect(await acceptsOnFirstTry(aTurn({ question: "Bonjour." }))).toBe(false);
+  });
+
+  it("rates the examiner's first replies, and leaves a transcription and a voice out of the rate, since no prompt writes them", async () => {
+    const audio = (method: "transcribe" | "speak"): RecordedCompletionData => ({ ...aReview({}), method, request: {}, content: "not json" });
+    const report = await schemaConformance(
+      [{ file: "examinerTurn.json", promptVersion: "4", completions: [aTurn({ text: "Bonjour.", difficulty: null }), audio("transcribe"), audio("speak")] }],
+      "4",
+    );
+    expect(report.byMethod.examinerTurn).toEqual({ total: 1, conformant: 1, rate: 1 });
+    expect(report.rate).toBe(1);
+    expect(Object.keys(report.byMethod)).not.toContain("transcribe");
   });
 });
 
@@ -76,6 +109,7 @@ describe("schemaConformance", () => {
         generateItems: { total: 0, conformant: 0, rate: null },
         reviewItem: { total: 2, conformant: 2, rate: 1 },
         assessWriting: { total: 0, conformant: 0, rate: null },
+        examinerTurn: { total: 0, conformant: 0, rate: null },
       },
       rate: 1,
       earlier: [{ file: "reviewItem-prompt-v3.json", promptVersion: "3", total: 2, conformant: 1, rate: 0.5 }],

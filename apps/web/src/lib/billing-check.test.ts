@@ -55,7 +55,7 @@ const script = [
 
 const priceOf = (model: string, input: number, output: number) => {
   const price = PRICING.prices[model];
-  if (price === undefined) throw new Error(`${model} is priced`);
+  if (price === undefined || !("inputPerMTok" in price)) throw new Error(`${model} is priced by the token`);
   return (input / 1e6) * price.inputPerMTok + (output / 1e6) * price.outputPerMTok;
 };
 

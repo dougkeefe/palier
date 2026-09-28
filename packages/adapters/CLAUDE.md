@@ -25,7 +25,13 @@ Slice 3, on the optional `models.assess`. **The model quotes each error's words 
 retried once, then `InvalidResponseError`; D105). **`PROMPT_VERSION` is 4** since the review prompt named the band
 scale (D112). **`recorded-fixtures.test.ts` replays every completion the live API really sent** (`@palier/testing`'s
 `RECORDED_RUNS`) with no retry and requires the verdict it got when recorded, so a schema or parser change that would
-refuse real output, or accept what was refused, fails the fast lane. `./bank` →
+refuse real output, or accept what was refused, fails the fast lane. **The turn loop's audio** (Phase 5 Slice 2,
+D117): `transcribe` posts one clip as multipart to `/audio/transcriptions` and is **never retried**, since a retry
+uploads the clip twice; `speak` reads `/audio/speech`'s binary body as a `Blob`; `examinerTurn` goes through
+`callValidated`. Each is on its own optional role (`transcribe`, `speech`, `examiner`). Pricing is `@palier/domain`'s
+`costOf` in each model's unit: a transcription bills the response's own `usage.seconds` when it reports duration,
+otherwise the recorder's `durationMs`, and a voice bills the characters sent. `FetchLike` takes a `FormData` body and
+may answer with `headers` and `blob()`. `./bank` →
 `httpBankRepository` (the `ItemRepository` over the committed bank shards; progress.md D55).
 `./sync` → `httpSyncTransport` (the `SyncTransport` port over the sync routes; progress.md D69–D71).
 `./telemetry` → `httpTelemetrySink` (the `TelemetrySink` port over `POST /api/telemetry`; D92). It sends

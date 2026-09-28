@@ -8,7 +8,8 @@ import { runLiveSmoke } from "../src/lib/live-smoke.ts";
 
 /**
  * The nightly live smoke and the fixture recorder (Phase 4 CI gates, progress.md D112): a fixed
- * set of real calls on the key in `OPENAI_API_KEY`, through the adapter and the ledger. It prints
+ * set of real calls on the key in `OPENAI_API_KEY`, through the adapter and the ledger, the oral
+ * turn loop's three included (D117). It prints
  * the measured tokens per method and per feature, and the `features` block that replaces
  * `pricing.json`'s typical figures (D103). The key is read from the environment and handed to the
  * vault; it is never printed.
@@ -45,9 +46,12 @@ export const measuredFeatures = (result) => ({
   ],
 });
 
-/** The fixture files a run records, one per method, as `{ path, content }`. */
+/** Every method the recorder keeps, the oral turn loop's three included (D117). */
+const RECORDED_METHODS = ["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak"];
+
+/** The fixture files a run records, one per method it made a call of, as `{ path, content }`. */
 export const recordings = (result) =>
-  ["generateItems", "reviewItem", "assessWriting"].map((method) => ({
+  RECORDED_METHODS.filter((method) => result.completions.some((c) => c.method === method)).map((method) => ({
     name: `${method}.json`,
     content: `${JSON.stringify(
       {
@@ -90,14 +94,23 @@ export const main = async ({
     log("live-smoke: skipped. OPENAI_API_KEY is not set, so no live call was made (docs/deploy.md, OPENAI_SMOKE_KEY).");
     return 0;
   }
-  const { note: _models, ...roles } = require("../src/lib/ai-models.json");
+  const { note: _models, voice, ...roles } = require("../src/lib/ai-models.json");
   const pricing = require("../src/lib/pricing.json");
   const prompts = require("@palier/content/writing/prompts.json");
   let result;
   try {
     result = await runLiveSmoke({
       apiKey: apiKey.trim(),
-      models: { passage: roles.passage, draft: roles.draft, review: roles.review, assess: roles.assess },
+      models: {
+        passage: roles.passage,
+        draft: roles.draft,
+        review: roles.review,
+        assess: roles.assess,
+        transcribe: roles.transcribe,
+        speech: roles.speech,
+        examiner: roles.examiner,
+      },
+      voice,
       prices: pricing.models,
       prompts,
       ...(fetchImpl === undefined ? {} : { fetchImpl }),
@@ -120,6 +133,7 @@ export const main = async ({
   const conformant = result.completions.filter((c) => c.conformant).length;
   log(`completions: ${String(result.completions.length)}, ${String(conformant)} accepted on the first try`);
   log(`measured features for pricing.json: ${JSON.stringify(measuredFeatures(result))}`);
+  log("oral-practice is priced per minute of a session, which Phase 5 Slice 3 measures; the per-call figures above are its parts (D117).");
   if (argv.includes("--record") || env.LIVE_SMOKE_RECORD === "1") {
     for (const file of recordings(result)) write(file.name, file.content);
     log(`recorded ${String(result.completions.length)} completion(s) to packages/testing/src/recorded/openai/`);

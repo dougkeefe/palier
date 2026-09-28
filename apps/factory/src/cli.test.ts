@@ -244,7 +244,7 @@ describe("runFactory", () => {
     // A provider that drafts valid items but whose reviewer rejects every one:
     // yield collapses to 0, tripping the out-of-band warning.
     const rejectAll: AiProvider = {
-      capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: false, generateScenario: false }),
+      capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: false, generateScenario: false, transcribe: false, speak: false, examinerTurn: false }),
       generatePassage: () => Promise.resolve([]),
       generateItems: (req) =>
         Promise.resolve([
@@ -271,6 +271,9 @@ describe("runFactory", () => {
         }),
       assessWriting: () => Promise.reject(new Error("not used")),
       generateScenario: () => Promise.reject(new Error("not used")),
+      transcribe: () => Promise.reject(new Error("not used")),
+      speak: () => Promise.reject(new Error("not used")),
+      examinerTurn: () => Promise.reject(new Error("not used")),
       verifyKey: () => Promise.resolve(),
       lastUsage: () => ({ model: "stub", inputTokens: 1, outputTokens: 1 }),
     };

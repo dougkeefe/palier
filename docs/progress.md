@@ -18,9 +18,12 @@ user's key (written expression only), device-local generated sets at `/practice/
 CI gates: live-recorded schema-conformance fixtures, which found and fixed a review-prompt defect, the eval's
 conformance rate and the nightly live smoke. **That ticks exit criterion 2, and Phase 4 is complete** (merged, #32).
 Gate H, Phase 5's direction, is resolved (D113), so Phase 5 is planned as three slices. **Slice 1, "the session core,
-no UI", is built** (`dougkeefe/next-progress-slice-v5`; D114–D116): scenarios through the bank (bank v3, with v2's
-forms carried forward), the `OralStore` with §9.1's retention, the engine's session machine, and the `OralTransport`
-port, driven end to end over a fake transport, which ticks exit criterion 5. Slice 2 is next. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+no UI", merged (#34; D114–D116)**: scenarios through the bank (bank v3, with v2's forms carried forward), the
+`OralStore` with §9.1's retention, the engine's session machine, and the `OralTransport` port, driven end to end over a
+fake transport, which ticks exit criterion 5. **Slice 2, "the turn loop on the key", is built** (`dougkeefe/next-slice-from-progress-v2`;
+D117–D120): `transcribe`, `speak` and `examinerTurn` on gpt-transcribe, tts-1 and the text model, the `AnswerSource`
+port and `turnBasedTransport`, `/practice/oral` in practice mode with typed answers, local recording, and the key-leak
+test extended to audio, which ticks exit criterion 3. Slice 3 is next. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
 runs at 1.0.
 
@@ -86,7 +89,7 @@ human for anything expensive.
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
-| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **in progress** (Gate H resolved; three slices, D113; Slice 1 built, D114–D116, exit criterion 5 met; Slice 2 is *Next, decided*) |
+| 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **in progress** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 built, D117–D120, exit criterion 3 met; Slice 3 is *Next, decided*) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
 | 7 Polish and hardening | 1.0 | 2–3 wk | not started |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
@@ -97,9 +100,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v5` | **Phase 5 Slice 1 — the session core, no UI** (D113): scenarios through the bank (a factory scenario stage over `AiProvider.generateScenario`, bank v3 carrying v2's items *and forms* forward, `ItemRepository.scenarios()`), the `OralStore` port over v1's `oralSessions`/`oralAudio` tables with architecture.md §9.1's retention, the pure session machine in the engine, and the `OralTransport` port with a memory fake and contract suite. **Built; pending merge** (D114–D116). | 27 September 2026 |
+| `dougkeefe/next-slice-from-progress-v2` | **Phase 5 Slice 2 — the turn loop on the key** (D113): `transcribe`, `speak` and `examinerTurn` on the `AiProvider` (gpt-transcribe and tts-1, human decision), the `AnswerSource` port and `turnBasedTransport`, `/practice/oral` in practice mode with mic recovery and typed answers, local recording, and the key-leak test extended to audio (exit criterion 3). **Built; pending merge** (D117–D120). | 27 September 2026 |
 
-*(The prior rows — Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 5 Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -198,79 +201,98 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 5 Slice 1 is built** (`dougkeefe/next-progress-slice-v5`; D114–D116), which ticks exit criterion 5. The
-product pilot still runs beside it (Gate E, D97).
+**Phase 5 Slice 2 is built** (`dougkeefe/next-slice-from-progress-v2`; D117–D120), which ticks exit criterion 3. The product pilot
+still runs beside it (Gate E, D97).
 
-**Next: Phase 5 Slice 2, "the turn loop on the key"** (implementation-plan.md §7 Phase 5, D113). It carries exit
-criterion 3. Gate H adopted PRD §8.6's practice mode and §14's states as written, so the screen's open calls are
-recorded as made, as D111's were. **It opens no new gate.** Its groundwork:
-- bank v3's ten scenarios, one per session type at B and C, reached through `ItemRepository.scenarios()`;
-- the `OralStore` and its retention use cases;
-- the engine's machine;
-- `OralTransport` with its contract;
-- `startOralSessionRun`, which already drives a session end to end over a fake transport.
+**Next: Phase 5 Slice 3, "`assessOral` and the report"** (implementation-plan.md §7 Phase 5, D113). It carries exit
+criteria 2 and 4, and ends at **Gate I**, exit criterion 1, a human judgement. Gate H adopted PRD §8.6's report as
+written, so the screen's open calls are recorded as made, as D119's were. **One human decision gates one part of it:
+Gate J, the pronunciation model and its price** (below). Everything else is built without waiting for it. If Gate J
+is not settled when the rest is done, the `pronounce` role ships unconfigured: the opt-in is not offered, the call is
+refused before any request as every unconfigured role is, and pronunciation reads "not assessed".
+
+**Groundwork:**
+- stored sessions with whole turns and their times (`OralStore`, D115);
+- the recording of the candidate's answers on the device (`saveOralAudio`, D119);
+- every call metered as `oral-practice` (D117);
+- the profile's oral level descriptors (`oral.descriptors`, ADR 9);
+- the end screen's transcript (D119).
 
 **Scope:**
-- **Three `AiProvider` capabilities**, their DTOs in domain (ADR 20):
-  - `transcribe(audio: Blob, lang) → Transcript`, §3.3's own method, where `Transcript` is the text, and word
-    timings if the model gives them;
-  - `speak(text, lang) → Blob`, the examiner's voice, a §3.3 amendment;
-  - `examinerTurn(req) → { text, difficulty? }`, a §3.3 amendment. The text model gets the scenario's current
-    phase, its register and the transcript so far, and writes the examiner's next short question (architecture.md
-    §8.5, "transcript plus history goes to the text model").
-  - Each goes on its own optional model role in `ai-models.json` and the adapter, refused before any request
-    without it, as `assess` is. Audio is priced in `pricing.json` (§8.6).
-  - `AI_FEATURES` gains `"oral-practice"`, so a session's spend is metered and shown.
-- **The turn-based transport lives in `@palier/app`** (`turnBasedTransport`), because it is orchestration over
-  ports and nothing vendor-specific. It implements `OralTransport` and passes `oralTransportContract`.
-  - On a directive, one `examinerTurn` produces the question, `speak` voices it, and a `turn` is emitted.
-  - It then waits on a new **`AnswerSource` port** for the candidate's clip or typed answer. A clip goes to
-    `transcribe`, and the answer is emitted as a `turn` with its times.
-  - `difficulty` comes back from `examinerTurn`.
-  - Every call runs inside `withAiProvider(…, "oral-practice", …)` (D101).
-  - The browser's recorder is `AnswerSource`'s adapter in `apps/web`, over `MediaRecorder`, a platform API.
-- **`/practice/oral`**, practice mode only, built to PRD §8.6 and §14:
-  - a picker over the five session types with each length and the cost estimate up front, the full simulation's
-    22 minutes stated;
-  - the session screen: the question as text and audio, record and stop, a phase indicator, the elapsed time, and
-    the end control;
-  - no transcript during the session, as §8.6 has it for studio mode; record the call made for practice mode;
-  - the screen's timer calls `tick`;
-  - the recording is saved with `saveOralAudio` when the session ends, saying what was evicted;
-  - `oralStorageEstimate`'s warning and `cleanUpAudio` in the data settings.
-- **Mic permission and recovery** (§14): a level check before starting (§8.5 step 1); a denied permission shows
-  recovery steps per browser and offers **typed answers**, a text `AnswerSource`. No key shows the no-key card
-  (`NoKeyCard`).
-- **The key-leak test extended to audio** (exit criterion 3, R12):
-  - a sentinel clip reaches only `api.openai.com`'s transcription endpoint;
-  - a sentinel transcript reaches only OpenAI and this device's `oralSessions`, never a push, an export, Web
-    Storage or the paired phone;
-  - no recording is uploaded at all, because pronunciation is Slice 3.
-  - Proven to bite, as D100 and D106 were.
-- **Recorded fixtures for the new methods**, from the live API, never hand-written (D112), and the nightly smoke
-  extended to them.
+- **`AiProvider.assessOral(req: OralRequest) → OralAssessment`**, §3.3's own method, with its DTOs in domain (ADR 20).
+  - The request carries the scenario, the turns, the target band, the profile's descriptors quoted in the prompt
+    (architecture.md §8.5), and `feedbackLang`.
+  - The answer carries:
+    - per-criterion bands with quoted evidence: comprehension, fluency, grammatical accuracy, vocabulary range and
+      task achievement (PRD §8.6);
+    - three fixes ranked by how much they cost the band, each mapped to a profile sub-skill;
+    - five missing words, each with the candidate's own sentence;
+    - the errors in the candidate's own turns.
+  - **The model quotes excerpts; the offsets are placed in domain**, D105's rule, per candidate turn. An excerpt not in
+    its turn fails the parse and is retried once.
+  - On the `assess` model role writing feedback already uses, and refused before any request without it. A new
+    feature, `"oral-assessment"`, so the report's call is metered and shown apart from the session's.
+- **Fluency metrics, pure, in the engine**, from the turns' times, never asked of the model (architecture.md §8.5):
+  - words per minute of the candidate's speech;
+  - filler count, from a per-language filler list that is **content data**, `@palier/content/oral/fillers.json`
+    (ADR 18). Fillers are language, not an exam rule, so they are not profile data;
+  - mean pause: the gap between the examiner's turn and the candidate's answer. Clips only; a typed answer has no
+    pause.
+- **The loop into the scheduler, closing D35.** The three fixes' sub-skills bias tomorrow's plan. It is an additive
+  `DayPlanInput` field, and the Planner's golden fixtures must not move for a plan without one. The latest report's
+  fixes are the input.
+- **Cost per session measured and shown** (exit criterion 2): the report shows the session's cost from its ledger
+  rows, and the pre-flight's `oral-practice` minute takes measured figures from a real 10-minute session.
+- **The pronunciation opt-in.**
+  - Off by default and asked each session at the pre-flight, as architecture.md §8.5 has it. It says in words that
+    the recording is uploaded to OpenAI on the user's key.
+  - When on, the saved recording goes to an audio-capable model for a pronunciation and intelligibility judgement
+    only. Its role is `pronounce`, and **the human confirms its model and price** (below).
+  - Otherwise pronunciation reads "not assessed".
+  - **The key-leak test gains the opt-in**: the recording reaches that model's endpoint only when ticked, and no
+    request when not. Exit criterion 3 stays green.
+- **The report screen**, PRD §8.6, reached from the end of a session and from a list of past sessions:
+  - the criteria, the three fixes each linking to its drill, the five words, the marked-up transcript with
+    corrections on tap, the fillers and words per minute;
+  - the recording's playback, deletable in one tap. **Transcript sync with playback is named, not scheduled**: the
+    turns have times but a clip is not yet cut from the recording.
+  - axe on every state, French at parity. The report route joins the Lighthouse list.
+- **Scoring stability** (exit criterion 4): the same recorded transcript scored five times varies by at most one band
+  per criterion, with per-criterion agreement above a threshold. **The threshold is an eval parameter, not profile
+  data**, set at 0.8 agreement.
+  - It is recorded live (D112's rule): a `live-smoke` step, or its own script under `scripts/`, writes the five
+    assessments as recorded fixtures.
+  - The factory's eval reports the stability beside the conformance rate.
+- **Recorded fixtures for `assessOral`**, from the live API, and the nightly smoke extended to it.
 
-**Ports and functions:** `AiProvider.transcribe`/`speak`/`examinerTurn`, `AnswerSource` (new),
-`turnBasedTransport`, `startOralSessionRun`, `saveOralAudio`, `oralStorageEstimate`, `cleanUpAudio`, and
-`ItemRepository.scenarios`.
+**Ports and functions:** `AiProvider.assessOral`, `withAiProvider`, `OralStore`, `ScheduleStore`, `planDailySession`
+(its new input), `CostLedger.since`, and the profile's `oral.descriptors`.
 
 **Done looks like:**
-- a practice session runs end to end on the hermetic lane, with `page.route` standing in for OpenAI, both spoken
-  and typed, every state axe-clean, and French at parity;
-- the extended key-leak specs green on both lanes, proven to bite: **exit criterion 3 ticked**;
-- `turnBasedTransport` passes `oralTransportContract`;
-- recorded fixtures replayed in the fast lane;
+- a session's report on the hermetic lane, over stubbed OpenAI, every state axe-clean, French at parity;
+- the opt-in's key-leak specs green on both lanes, proven to bite;
+- fluency metrics at 100% branches with properties;
+- the Planner's goldens unchanged without oral findings;
+- the stability eval recorded and passing: **exit criterion 4 ticked**;
+- a measured 10-minute session's cost shown and matching the ledger: **exit criterion 2 ticked**;
 - `pnpm verify` and `verify:medium` green.
 
-**Human, during Slice 2:**
-- a funded key for the fixture recording, run from their own terminal as D112's was (`OPENAI_SMOKE_KEY`'s will
-  do);
-- confirming the transcription and speech model ids and their prices for `ai-models.json` and `pricing.json`.
+Then **Gate I**: the human runs a 10-minute session and judges whether the report is one a user would act on.
+
+**Human, during Slice 3:**
+- a funded key for the stability recording and one real 10-minute session, run from their own terminal and browser;
+- **Gate J: confirm the pronunciation model and its price.** The candidates on OpenAI's pricing page, 27 September 2026, are
+  audio-capable chat models priced per million audio tokens, such as `gpt-audio-mini` at US$10 in. They are
+  meterable only if the response reports audio tokens, which the recording will show;
+- **listen to the examiner's voice** (`tts-1`, "sage") in French, and say whether it will do or another voice should
+  be data in `ai-models.json`.
 
 **Human, still open from Phase 4 Slice 4 (merged, #32):**
 - add the `OPENAI_SMOKE_KEY` Actions secret, a key of its own with a small monthly limit (`docs/deploy.md`, "The
-  nightly live smoke"), and run the nightly workflow once by hand;
-- read the `generate` namespace's French, with the rest of Phase 7's R8 review.
+  nightly live smoke"), and run the nightly workflow once by hand. The smoke now also makes the oral calls, about
+  half a cent more a run;
+- read the `generate` namespace's French, with the rest of Phase 7's R8 review. **The `oral` namespace's French** joins
+  that review.
 
 **Named, not scheduled:**
 - reading-set generation (D110);
@@ -278,7 +300,13 @@ recorded as made, as D111's were. **It opens no new gate.** Its groundwork:
   mid-run keeps spending out of sight, and a wipe made meanwhile is refilled when the run finishes. The workshop
   shares the shape. The fix is an in-flight flag a remount reads, and a wipe counter `putSet` checks before writing;
 - **one `debiasKeyPosition`** (finding 16). The browser's shuffle copies the factory's. Move one pure
-  `debiasKeyPosition(draft, next)` into domain for both, with the factory's golden output unchanged.
+  `debiasKeyPosition(draft, next)` into domain for both, with the factory's golden output unchanged;
+- **the vocabulary queue** (PRD §8.6's "added to the vocabulary queue"). The report shows the five words. A queue
+  needs v1's `vocab` table behind a port and a vocabulary item type in the registry (ADR 17), which is more than
+  Slice 3 needs;
+- **a spoken session that outlives its screen.** Leaving `/practice/oral` mid-session ends it as the page unmounts,
+  but a hard close leaves it to be stamped `interrupted` at the next start (D116), so its transcript is kept and it
+  has no report.
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
@@ -521,19 +549,24 @@ sync.** Gate F (the UI direction) is resolved: PRD §8.1 step 5, §8.7 and §8.1
 sync.** Gate H is resolved: PRD §8.6's practice mode and report are adopted, with all five session types and
 pronunciation offered as a per-session opt-in.
 
-- [x] **Slice 1 — The session core, no UI.** **Built 27 September 2026** (`dougkeefe/next-progress-slice-v5`;
+- [x] **Slice 1 — The session core, no UI.** **Built 27 September 2026, merged (#34)** (`dougkeefe/next-progress-slice-v5`;
   D114–D116; session-log evidence). The scenario stage over `generateScenario` and bank v3, with v2's items and forms
   carried forward and ten scenarios; `ItemRepository.scenarios()`; the `OralStore` on memory and Dexie with §9.1's
   retention in the use cases; the engine's session machine; `OralTransport` with its fake and contract; and
   `startOralSessionRun`, the driver.
-- [ ] **Slice 2 — The turn loop on the key.** *Next, decided*.
-- [ ] **Slice 3 — `assessOral` and the report**, ending at **Gate I** (exit criterion 1, human).
+- [x] **Slice 2 — The turn loop on the key.** **Built 27 September 2026** (`dougkeefe/next-slice-from-progress-v2`; D117–D120;
+  session-log evidence). `transcribe`, `speak` and `examinerTurn` on gpt-transcribe and tts-1 (human decision), priced
+  in the unit each is billed by; the `AnswerSource` port and `turnBasedTransport` in app, held to the transport
+  contract; `/practice/oral` with the level check, per-browser recovery and typed answers; the recording kept on this
+  device and cleaned from the data settings; the key-leak test following audio and transcripts; and recorded fixtures
+  for the three new methods, all accepted first time.
+- [ ] **Slice 3 — `assessOral` and the report**, ending at **Gate I** (exit criterion 1, human). *Next, decided*.
 
 **Exit criteria** (the actual gate)
 
 - [ ] A 10-minute session produces a report a user would act on (Gate I)
 - [ ] Cost per session measured and displayed accurately
-- [ ] Audio reaches nowhere but OpenAI: each answer's clip only its transcription call, and the stored session recording only on an explicit per-session pronunciation opt-in, asserted by the extended key-leak test [R12] (amended in place, D113)
+- [x] Audio reaches nowhere but OpenAI: each answer's clip only its transcription call, and the stored session recording only on an explicit per-session pronunciation opt-in, asserted by the extended key-leak test [R12] (amended in place, D113). **Met** (Slice 2, D120). There is no opt-in yet, so the recording must reach no request at all, and it reaches none. In the hermetic journey each clip's bytes are in exactly one request, to `/v1/audio/transcriptions`. The recording's bytes are in no request; the transcript is only on this device and in the examiner's next request; the paired phone and the export see neither. On real IndexedDB the recording is at rest in `oralAudio` through a reload. Proven to bite three ways (session log, 27 September 2026, `dougkeefe/next-slice-from-progress-v2`). Slice 3's opt-in must keep the recording's check green when the box is left unticked
 - [ ] Scoring stability: same transcript five times, at most one band of variation
 - [x] Session state machine contract-tested against a fake transport. **Met** (Slice 1, D116):
   `packages/testing/src/memory/oral-session.test.ts` drives the real driver, `startOralSessionRun`, over
@@ -580,7 +613,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | R9 | WCAG 2.2 AA | 0, all | not started |
 | R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
 | R11 | Export, import, delete, each in one action | 2, 7 | Phase 2 half verified (24 September 2026): `/settings/data` does each in one action; journey 6 round-trips export → delete → import and finds the same progress. Phase 7's server-side delete waits for sync |
-| R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). **The writing half is satisfied and verified** (26 September 2026, Slice 3): the leak guard follows a submission's text and finds it only in requests to `api.openai.com` and in this device's own copy (the page, the field, `writingSubmissions`), never in a push, a pull, an export, Web Storage or the paired phone; proven to bite three ways (D106). **Runtime-generated items are held the same way** (27 September 2026, Slice 4, D110): a generated stem reaches only OpenAI, in review requests, and this device's `generated` table and page. It never appears in a push, an export, Web Storage or on the paired phone, and no attempt is ever written for it. Audio and transcripts are Phase 5: **the store that holds them is device-local by construction** (27 September 2026, Slice 1, D115). It is never synced and never exported, and a wipe and a delete-everywhere clear it, over both graphs. The audio leak test that verifies it is Slice 2 |
+| R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). **The writing half is satisfied and verified** (26 September 2026, Slice 3): the leak guard follows a submission's text and finds it only in requests to `api.openai.com` and in this device's own copy (the page, the field, `writingSubmissions`), never in a push, a pull, an export, Web Storage or the paired phone; proven to bite three ways (D106). **Runtime-generated items are held the same way** (27 September 2026, Slice 4, D110): a generated stem reaches only OpenAI, in review requests, and this device's `generated` table and page. It never appears in a push, an export, Web Storage or on the paired phone, and no attempt is ever written for it. Audio and transcripts are Phase 5: **the store that holds them is device-local by construction** (27 September 2026, Slice 1, D115). It is never synced and never exported, and a wipe and a delete-everywhere clear it, over both graphs. **The audio half is satisfied and verified** (27 September 2026, Slice 2, D120): each answer's clip reaches only OpenAI's transcription endpoint; the session recording reaches no request at all; and the transcript stays on this device, going back to OpenAI only in the examiner's next question and never to a push, an export, Web Storage or the paired phone. Proven to bite three ways |
 | R13 | Free and open source | 0, 7 | not started |
 | R14 | Progress across devices, with an off switch | 2 | satisfied and verified on the hermetic lane (24 September 2026): journey 8 pairs two devices by code and both show the same progress; the switch is tested off, with server deletion offered, in `sync.spec.ts`. A public deployment with a real database is Slice 3 |
 
@@ -4151,11 +4184,415 @@ signature), as D45 and D106 were
 - **The hermetic graph wires no transport and no oral use cases.** Slice 2 is the first consumer. Only the store
   is wired, so a wipe clears it.
 
+### D117 — the turn loop's three capabilities, and pricing in the unit each model is billed by
+**Date:** 27 September 2026 · **Status:** accepted; §3.3 amended in place (`transcribe` amended, `speak` and
+`examinerTurn` added), as D105 and D114 were
+
+- **The models are a human decision this session: `gpt-transcribe` and `tts-1`.** OpenAI's pricing page, read on 27
+  September 2026, bills gpt-transcribe at US$0.0045 a minute and tts-1 at US$15 per million characters. The speech
+  endpoint reports no usage, so a token-billed voice (`gpt-4o-mini-tts`) could only ever be estimated. Both chosen
+  units are ones the device measures: a clip's length and the characters sent. That keeps Gate G's promise that the
+  meter matches the bill (principle 8).
+- **GPT-Live was weighed against practice mode first, at the human's request.** Practice mode comes to roughly
+  US$0.01–0.02 a minute: transcription about US$0.003, speech about US$0.005, and the examiner's text calls about
+  US$0.007, which grow with the transcript. GPT-Live is US$0.05 a minute. So practice mode is about **3–4× cheaper,
+  not the 10×** the plan assumed. Gate H stands on its other reasons, and Slice 3 measures the real ratio (D113).
+- **The DTOs are in domain** (ADR 20):
+  - `TranscribeRequest { audio: Blob, lang, durationMs }` and `Transcript { text }`. §3.3's `transcribe(audio, lang)`
+    becomes a request, because the recorder's measured `durationMs` is what prices the call when the response reports
+    no usage. That is the amendment.
+  - `SpeechRequest { text, lang }`, which returns a `Blob`, the platform type D115 already admits.
+  - `ExaminerTurnRequest { sessionType, targetBand, lang, topic, phase, register, transcript }` and `ExaminerTurn {
+    text, difficulty }`. The phase and the register come from the client, which drives the phases (architecture.md
+    §8.5 step 5); the model writes one short question and flags the last answer. `examinerTurnSchema` re-validates the
+    reply.
+  - `AiCapabilities` gains all three, and `AI_FEATURES` gains `"oral-practice"`.
+- **The adapter** (`openai-provider.ts`):
+  - `FetchLike` widens: a body may be `FormData`, and a response may offer `headers` and `blob()`.
+  - **`transcribe`** posts the clip once as multipart to `/audio/transcriptions`, with `language` and
+    `response_format: json`. The file name carries the format, since OpenAI reads it from the extension. The seconds
+    billed are the response's own when it reports `usage.type: "duration"`, and otherwise the recorder's `durationMs`.
+    Reported tokens are kept either way. **It is never retried**: that would upload the clip twice.
+  - **`speak`** posts JSON to `/audio/speech` with the model, the words, the voice and `mp3`, and reads the body as a
+    `Blob`. It bills the characters sent. A 2xx answer that is not audio, or is empty, is `InvalidResponseError`, still
+    billed.
+  - **`examinerTurn`** goes through `callValidated`, with the new `buildPrompt.examiner`: architecture.md §8.5 step
+    4's persona, the phase's intent and its three question lists, the register's instruction, the conversation so far,
+    and the reply shape. `PROMPT_VERSION` stays 4, following D105's precedent.
+  - Each call has its own optional role (`transcribe`, `speech`, `examiner`) and is refused before any request without
+    it, as `assess` and `scenario` are. The voice is configuration (`voice`, default `alloy`).
+- **Pricing is a union in the unit OpenAI bills by.**
+  - `ModelPrice` is `TokenPrice | MinutePrice | CharacterPrice`, and `FeatureCall` is the matching union.
+    `UsageRecord` gains optional `audioSeconds` and `characters`.
+  - **One pricing rule, `costOf`, in domain**, serves both the adapter, which prices each call, and the engine's
+    `estimateFeatureCost`. It is `null`, never zero, when the unit the model is priced in was not measured. The
+    adapter may not import the engine, so domain is the place both can reach. No golden moved: the token arithmetic is
+    unchanged.
+  - `estimateFeatureCost` and `preflightSpend` take a quantity. **`oral-practice`'s typical use is one minute**, so a
+    session's estimate is its minutes times that.
+  - `pricing.json` prices `gpt-transcribe` per minute and `tts-1` per million characters. Its `oral-practice` entry
+    is one minute: about 1.5 examiner turns, 180 characters voiced and 0.6 minutes transcribed. The examiner's
+    tokens were a guess (1,500 in, 60 out) until the recording measured a turn; they are now 564 in and 134 out,
+    about US$0.0076 a minute in all. **The rest are placeholders until Slice 3 measures a session** (exit
+    criterion 2).
+  - `ai-models.json` gains `transcribe`, `speech` and `examiner` (gpt-6-luna), and `voice` ("sage"), which
+    `roleModels` leaves out because it is not a model.
+- **The factory:**
+  - `meterProvider` passes each new method through and accounts it.
+  - The scripted provider declares all three false and rejects, billing nothing, as it does for `assessWriting`.
+  - The eval's `CONFORMANCE_METHODS` gains `examinerTurn`. `RECORDED_METHODS` also has `transcribe` and `speak`,
+    which are recorded for the adapter's replay gate but kept out of the rate, since no prompt writes them.
+    `eval-report.json` gains `examinerTurn`, at 2 of 2 on the recording.
+- **Recorded fixtures take audio without keeping it.** A `transcribe` completion keeps the response body and describes
+  the clip by type and size. A `speak` completion keeps `{ contentType, bytes }`. The replay gate rebuilds a blob of
+  that size. The live smoke voices a fixed French question, transcribes that same audio (so nobody's voice is
+  recorded), and asks the examiner twice.
+- **The recording, run by the human from their own terminal** (session log): all 14 completions were accepted on the
+  first try, the three new methods included.
+  - **gpt-transcribe reports its own usage**, `{"type":"duration","seconds":5}`, against the recorder's 5.3-second
+    estimate, so the meter bills OpenAI's figure. That is the adapter's first choice.
+  - The transcription gave the French question back word for word.
+  - The examiner's second turn escalated on a capable answer, as asked.
+  - The other two features' measured counts moved, so `pricing.json` takes them, as the runbook says. The examiner's
+    measured turn (376 in, 89 out) replaces the guess in `oral-practice`'s minute. The rest of that minute stays a
+    placeholder for Slice 3.
+- **Existing tests touched, with no assertion weakened:**
+  - `AI_FEATURES`' exact list and the per-feature lists in `spend.test.ts`, `container-spend.test.ts` and
+    `pricing.test.ts` gained `oral-practice`, and their fixtures gained an entry for it;
+  - the adapter's "reports every capability" gained the three, since its test models configure them;
+  - `eval/conformance.test.ts`'s `byMethod` gained `examinerTurn`;
+  - the live smoke's `byMethod` gained three empty entries, and `--record` now writes six files;
+  - seven `AiProvider` stubs gained the methods, a shape change only;
+  - two web tests narrowed a price to its token form before reading `inputPerMTok`.
+
+### D118 — the `AnswerSource` port, and `turnBasedTransport` in `@palier/app`
+**Date:** 27 September 2026 · **Status:** accepted; §3.3 amended in place (a port it did not name, as D116's
+`OralTransport` was)
+
+- **`AnswerSource { answer(question, signal) }`** is the candidate's side of a turn-based session.
+  - The transport hands over each `ExaminerQuestion { text, audio: Blob | null, phase }` and waits for a
+    `CandidateAnswer`: a clip with its measured `durationMs`, or typed words.
+  - One port both shows the question and collects the reply, so the screen needs no side channel for the
+    examiner's voice. *Next, decided* named a port that only collected answers. That would have left the question
+    and its audio with no way to reach the screen.
+  - `answer` rejects when `signal` aborts, which is how a session ended mid-question stops waiting.
+  - The browser's adapter (a `MediaRecorder` recorder, or a text field) is Slice 2's web half. The memory one is
+    `memoryAnswerSource`.
+- **`turnBasedTransport(deps)` implements `OralTransport`** in `use-cases/oral-practice.ts`. It is orchestration over
+  two ports and nothing vendor-specific, so it lives in app, not in an adapter.
+  - **Each turn:**
+    1. One `withAiProvider(…, "oral-practice", …)` writes the question with `examinerTurn` and voices it with
+       `speak`, sequentially (D101). A provider with no voice gives text only.
+    2. A difficulty flag is emitted, then the examiner's turn.
+    3. The question goes to the `AnswerSource`.
+    4. A clip is transcribed in its own metered call; typed words go straight through.
+    5. The candidate's turn is emitted.
+  - A provider made inside the vault's callback cannot outlive it (D99), so each step is a fresh call rather than
+    one provider held for the session.
+  - **`open` starts at phase 0's baseline**, which is where the machine's first directive puts it.
+  - **`direct` returns at once.** The driver awaits it inside its own queue, so a directive that waited for the
+    examiner would stall ticks and the end control. It only sets the phase and register of the next question, and
+    a phase outside the scenario is clamped to it.
+  - **`close` aborts the wait, delivers a turn already in flight, and then `closed`**, per the port. It waits only on
+    the transport's own step, never on the driver's queue, so it cannot deadlock.
+  - **Any failed call closes it failed**: the examiner, the voice, the transcription, a candidate's side that fails,
+    or no key. `lastError()` keeps the error, so the screen names it with `checkFailure`. The transcript so far is
+    already stored, turn by turn.
+  - **Times:** an examiner's turn is the instant it is shown. A clip ends when it arrived and starts its measured
+    length before, clamped to no earlier than 0 and no earlier than the previous answer's start. A typed answer spans
+    the wait for it. Transcription latency is not speech, so it is never counted.
+- **`startOralPracticeRun`** composes a fresh transport with `startOralSessionRun` and adds `failure()`.
+  **`oralSessionChoices`** gives the picker one scenario per session type, in PRD §8.6's order, in the language
+  practised. It picks the study band, or the other band when the bank has none at it, and a profile aiming at A
+  practises at B. A type the bank lacks is left out rather than offered empty.
+- **What the contract's `directives()` means for a turn-based transport.** `oralTransportContract` asks what "reached
+  the examiner's side". A turn-based examiner speaks only after an answer, so its side is the transport's own state.
+  The harness (`memory/turn-based-transport.test.ts`) records what the transport accepted while open, seen at the
+  port. `hangUp(true)` is the candidate's side failing. How each directive shapes the next question is held by
+  app's unit tests.
+- **Tests:**
+  - app, over local fakes (D37): 29 cases, 100% of branches;
+  - testing: the contract run; `memory/oral-practice.test.ts`, a whole session per fixture session type, each asking in
+    every phase in order and completing at its length; and `memoryAnswerSource`'s own cases.
+
+### D119 — the calls PRD §8.6's practice mode and §14 leave open
+**Date:** 27 September 2026 · **Status:** accepted (Gate H adopted §8.6's practice mode and §14's states as written, so
+these are recorded as made, as D87, D108 and D111 were)
+
+- **The route is `/practice/oral`**, a static island (`components/oral/OralPractice.tsx`). Its decisions are in
+  `features/oral/`: the reducer, the failure words and the estimate in `practice-view.ts`, the microphone rules in
+  `mic.ts`, and the `AnswerSource` bridge in `answer-bridge.ts`. Home's actions card links to it ("Practise
+  speaking"), so the hermetic journeys arrive by links.
+- **The steps: pick, check the microphone, confirm, run, end.** An action from another step is ignored, so a late
+  question after the end cannot move the screen.
+  - **The picker** lists the five session types in PRD §8.6's order, from `oralSessionChoices`. Each shows its purpose
+    and "N minutes · about US$X", which is `oral-practice`'s per-minute estimate times its minutes. The full
+    simulation's 22 minutes are stated there.
+  - **Without a key**, `NoKeyCard` (namespace `oral`, at the per-minute estimate) sits above the list, and the list
+    has no Choose buttons: the user can read what each session covers.
+  - **The microphone step** is architecture.md §8.5 step 1's three-second level check, over an `AnalyserNode`
+    (`lib/oral/level.ts`), with a live `<meter>`. The loudest reading is judged against `QUIET_LEVEL` (0.01 RMS), a
+    product threshold. Nothing is recorded or sent.
+    - **A refusal** (`NotAllowedError`, `SecurityError`) shows the recovery steps for the browser's own menus: Chrome,
+      Edge, Firefox, Safari, or a generic two. It then offers to check again, or to answer by typing.
+    - **No device**, a browser that cannot record, or another fault each get their own sentence and the typed
+      offer.
+    - **"Answer by typing instead" is offered at every point of the check**, not only after a refusal, so a user in
+      an open-plan office can choose it.
+  - **The pre-flight** is the workshop's pattern, at the session's minutes (`preflightSpend`'s quantity, D117). It
+    says where each answer goes: a recorded one to OpenAI to be written down, with the recording staying on this
+    device; a typed one to OpenAI. It never blocks.
+  - **The session screen** shows the part ("Part 2 of 3", from the question's phase), the elapsed time in
+    `@palier/ui`'s `Timer`, the examiner's question in words (`lang="fr"`) with its voice played as it arrives and
+    "Play the question again", then Record, "Stop and send" or a text field, and "End the session". A status toast
+    covers each wait.
+  - **No running transcript during the session.** §8.6 says so for studio mode; practice mode shows the question as
+    text, which it requires, and nothing else, because reading back what one said changes the exercise as much as it
+    does in studio mode.
+  - **The screen's timer ticks the session each second** (`run.tick()`), so a phase boundary is at most a second late,
+    and its elapsed time is `performance.now()`'s, as the exam runner's is.
+  - **The end** says why it ended, names a failure with the key screen's words and says the transcript is kept,
+    reports any recordings evicted to make room (§9.1), says the recording is kept on this device only, and **shows
+    the stored transcript**. It says the report arrives in a coming update (Slice 3) and links to the data settings.
+- **The recordings** (`lib/oral/recorder.ts`, over a `MediaKit` a test fakes):
+  - one `MediaRecorder` per answer, whose measured length goes with the clip;
+  - **one session recorder, resumed while the candidate answers and paused otherwise**, so the recording
+    `saveOralAudio` keeps holds their answers and nothing else. A typed session has no recording.
+  - Formats are tried in order: Opus in WebM, WebM, MP4, which the transcription endpoint all reads.
+- **`/settings/data` gains the recordings** (`components/data/OralStorageSettings.tsx`): their size in megabytes,
+  §9.1's warning at 200 MB, and "Delete all recordings" in one action, which keeps every transcript.
+- **The hermetic clock is frozen**, so on the hermetic lane a session never crosses a phase by time, and every turn is
+  stamped at 0 ms. The hermetic journeys end by the end control. A phase crossed by time is proven on the production
+  build with `page.clock` (D120), and below the browser by D118's tests.
+- **The route joins the Lighthouse list** at `/fr/practice/oral`.
+
+### D120 — the key-leak test follows audio and transcripts, and how E2E gets a microphone
+**Date:** 27 September 2026 · **Status:** accepted; Phase 5 exit criterion 3's instrument
+
+- **What is asserted** (tier 11, R12's audio half, exit criterion 3 as D113 amended it):
+  - **Each answer's clip reaches only OpenAI's transcription endpoint.** In the hermetic journey, the two clips'
+    bytes appear in exactly two OpenAI requests, both to `/v1/audio/transcriptions`, one clip each.
+  - **The session recording reaches no request at all**, OpenAI's included. Its bytes are in no OpenAI body, and
+    `deviceOnly` keeps them out of every other request, storage area and export.
+  - **The transcript stays on this device**: the page, and the `oralSessions` store. It goes back to OpenAI only in
+    the examiner's next request, which is a chat completion. It is never in a push, a pull, an export, Web Storage
+    or on the paired phone (`nowhere`).
+  - **On real IndexedDB** (`key-leak-production.spec.ts`), the transcript is at rest in `oralSessions`. The recording
+    is at rest in `oralAudio`, as the session recorder's bytes (the positive control), and survives a reload. The
+    five calls are in the ledger.
+- **How the guard sees audio** (`e2e/leak-guard.ts`):
+  - **`installFakeAudio`** stands in for the microphone and for `MediaRecorder`. Each recorder hands over one chunk
+    when it stops, `[Ondulard9d3a#n]`, numbered in the order the page makes them. The screen makes the session
+    recorder first, so #1 is the recording and #2, #3… are the clips.
+  - **Request bodies are read as bytes** (`postDataBuffer`, latin1), OpenAI's and every other origin's, so a
+    multipart upload's contents are visible. `openAiRequests()` gives each OpenAI request's path and body.
+  - **A `Blob` in IndexedDB is dumped as its bytes.** Before this, `render` turned a `Blob` into `{}`, so a recording
+    would have passed unseen: a gap in the guard, found by building this.
+  - `oralSessions` and `oralAudio` join the device-only stores.
+  - `stubOpenAi` answers the transcription with `TRANSCRIPT_SENTINEL` and the voice with audio bytes, and tells the
+    examiner's completion from the others by its prompt.
+- **Chromium's fake capture device never answers `getUserMedia` on macOS**, flags and permission granted or not; a
+  probe on a bare page confirmed it, sandboxed and not. So the specs do not rely on it. The microphone is a Web
+  Audio oscillator's stream, so the level check still reads a real signal through a real `AnalyserNode`, and the
+  lane is the same on every OS. A refusal is an init script whose `getUserMedia` rejects with `NotAllowedError`.
+- **What that leaves untested, said plainly:** the browser's real permission prompt, a real `MediaRecorder`'s
+  encoding and chosen format, and real clip sizes. The recorder's logic is unit-tested over a fake (D119), and the
+  real path is exercised only by the human, at Gate I. A Linux-only CI run with `--use-fake-device-for-media-stream`,
+  where that flag works, is named, not scheduled.
+- **Proven to bite three ways, each run and reverted, with `git diff` clean after:**
+  - the session recording uploaded with a transcription: the hermetic journey found a third audio request;
+  - the transcript in a synced setting: caught by the export check;
+  - a clip in `localStorage`: caught by the guard, which named the place.
+- **The specs:**
+  - `oral.spec.ts` (hermetic): no key; a spoken session through every state with axe on each; a refused microphone
+    to typed answers; a refused call named in words with the transcript kept; and a French pass.
+  - `oral-production.spec.ts` (the production build): a phase crossed by time with `page.clock.setFixedTime`, the
+    examiner asking in the new phase.
+  - The titles test gains both locales' `/practice/oral`.
+
+### D121 — the pre-merge review: 26 findings fixed, the screen's session moved into a tested controller
+**Date:** 28 September 2026 · **Status:** accepted; amends D118's timing rule and D119's screen
+
+A candid review of the branch (three parallel reviewers, constructive tone) found 26 issues, none critical. The human
+chose to fix all of them.
+
+- **The screen's session moved out of the `.tsx`** (`features/oral/practice-controller.ts`, 25 tests). It owns the
+  microphone, the level check, the recorders, the run and its end, over deps a test fakes. Fixed there:
+  - **leaving the page mid-session never ended it**, because the unmount cleanup held a stale copy of the session's
+    state; from the second session on it did not let the microphone go either;
+  - **the microphone stayed open** after Back, after a failed level check, and for a check still running when the
+    user moved on, whose verdict could then land on the next session's check;
+  - **End before the run existed** was lost, and left the user stuck for the whole scenario;
+  - **a recorder that cannot be made** left a dead Start button or a leaked clip; the session now turns to typed
+    answers (`recordFailed`);
+  - **a driver that fails** (`ended` rejecting) left the transport open; it is now closed, and named as failed;
+  - a second tap during a pre-flight or a start is ignored;
+  - **`attach` pairs with `dispose`**, found when the hermetic lane failed on the first run of the rewrite: React's
+    Strict Mode mounts, unmounts and remounts a screen in development, and a dispose that could not be undone left
+    the memoized controller deaf. The production build has no Strict Mode, so only the hermetic specs caught it.
+- **Accessibility:**
+  - the question's voice **can be paused while it plays** (WCAG 1.4.2);
+  - record and stop are **one stable button**;
+  - after an answer is sent, focus rests on the question, which is a polite live region, so the next question is
+    read out. When a question starts waiting, focus goes to it, or to the answer field when typing (`turnFocus`,
+    WCAG 2.4.3);
+  - "Answer by typing instead" is offered during the level check too, as D119 said.
+- **The transport** (D118 amended):
+  - a clip starts no earlier than **its own question was shown**, not the previous answer's start, so turns stay in
+    order. That test's expected value moved with the rule: `[15 s, 30 s]` where it was `[0, 30 s]`;
+  - a question is shown in **the phase it was written from**, though the phase moves while it is written. The stored
+    turn keeps the machine's phase, as D116 stamps it;
+  - **a question ended mid-writing is not voiced**, so no speech is bought for it;
+  - each wait for an answer has **its own abort signal**, so a finished wait retains nothing.
+- **Spend:**
+  - an audio call passes `costOf` only what it measured, so a token-priced audio model that reported no tokens reads
+    as **unpriced, not free** (D103);
+  - a transcription accepted but answered with a body that is not JSON **is still billed**.
+- **The leak guard:**
+  - every needle is also looked for **in base64**, at all three alignments (`encodedForms`), because audio put into
+    JSON is base64, and the raw-byte check could never have failed on it;
+  - bodies are read as latin1 and as UTF-8, so an accented needle matches;
+  - the production spec asserts the recording's marker is in no OpenAI body;
+  - `oral-production.spec.ts` waits on the timer's observed tick, not a fixed sleep.
+- **Smaller fixes:**
+  - the recordings' size is shown in the same megabyte the 200 MB warning counts;
+  - the cleanup names a failure, and the size is read again after "Delete everything";
+  - both answer sources refuse a wait whose signal is already aborted;
+  - the level check resumes its `AudioContext` for WebKit;
+  - Chrome's and Safari's French say "Micro".
+- **Docs:** D117's pricing figures and `pricing.json`'s note; the re-recording runbook, which would have deleted
+  `oral-practice`; *Next, decided*, which now names the pronunciation model as Gate J; and D120's account of what the
+  synthesised microphone leaves untested.
+- **Proven to bite, a fourth way:** a clip written to `localStorage` in base64 fails the guard (session log).
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 28 September 2026 — `dougkeefe/next-slice-from-progress-v2` (pre-merge review: 26 fixes)
+
+**A candid review of the whole branch** (three parallel reviewers, constructive tone) found 26 issues, none critical, and
+the human chose to fix all 26. D121 records each.
+
+**The two that mattered most:**
+- leaving `/practice/oral` mid-session neither ended the session nor, from the second session on, let the
+  microphone go;
+- the leak guard could not have failed on audio in base64, which is how audio gets into JSON.
+
+**Found while fixing:** the rewritten screen passed on the production build and failed all four hermetic oral specs.
+React's Strict Mode remounts a screen in development, and the controller's dispose could not be undone. `attach` now
+pairs with it (D121).
+
+**Evidence** (after the fixes):
+
+```
+pnpm verify          → check-types, lint, boundaries (435 + 223 modules, no violations),
+                       test: 198 files, 2939 passed, 8 todo; coverage thresholds met
+pnpm test:integration → 45 passed
+CI=1 pnpm test:e2e    → 57 passed (1.0m), on a fresh production build
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB
+pnpm --filter @palier/web lighthouse  → 16 URLs × 5, every assertion met; lowest median 0.99; /fr/practice/oral 0.99 / 1.0
+```
+
+**Proven to bite, a fourth way, reverted and checked byte for byte after:** a clip written to `localStorage` as base64
+failed the hermetic journey: `"Ondulard9d3a" reached somewhere other than OpenAI and its own copy on this device`.
+
+### 27 September 2026 — `dougkeefe/next-slice-from-progress-v2` (Phase 5 Slice 2: the turn loop on the key)
+
+**Built.** The decisions are recorded in D117–D120. Slice 1 had merged as #34, so its In-flight row was replaced in
+this branch's first commit.
+
+**Human decisions this session:**
+- the models are `gpt-transcribe` (US$0.0045 a minute) and `tts-1` (US$15 per million characters), both metered on
+  units the device measures;
+- after a comparison with GPT-Live, Gate H stands. Practice mode is about 3–4× cheaper, not 10×, and Slice 3
+  measures the real ratio (D117);
+- the human ran the fixture recorder from their own terminal.
+
+**What was built:**
+- **Domain:**
+  - `TranscribeRequest`, `Transcript`, `SpeechRequest`, `ExaminerTurnRequest`, `ExaminerTurn` and
+    `examinerTurnSchema`;
+  - `AI_FEATURES` gains `"oral-practice"`;
+  - pricing as a union of token, minute and character prices, with one `costOf`.
+- **Engine:** `estimateFeatureCost` prices each call in its unit and takes a quantity.
+- **App:**
+  - `AiProvider.transcribe`, `speak` and `examinerTurn`;
+  - the `AnswerSource` port;
+  - `turnBasedTransport`, `startOralPracticeRun` and `oralSessionChoices`;
+  - `preflightSpend`'s quantity;
+  - §3.3 amended in place.
+- **Adapters:** the OpenAI adapter's multipart transcription, binary speech and examiner prompt, each on an optional
+  role.
+- **Testing:**
+  - the three methods on the fake provider and in `aiProviderContract`;
+  - MSW's audio endpoints;
+  - `memoryAnswerSource`;
+  - `turnBasedTransport` held to `oralTransportContract`;
+  - a whole practice session per fixture session type;
+  - the recorded runs for the three new methods.
+- **Factory:** the meter and the scripted provider gain the methods, and the eval rates the examiner.
+- **Web:**
+  - `/practice/oral`, with the level check, per-browser recovery, typed answers, the pre-flight, the session, and the
+    end with the transcript;
+  - the recorder and the level check;
+  - the recordings in `/settings/data`;
+  - the home link;
+  - the `oral` namespace in both languages;
+  - the container's oral use cases;
+  - `container-oral.test.ts` running a real session through both graphs.
+- **E2E:**
+  - `oral.spec.ts` and `oral-production.spec.ts`;
+  - the key-leak guard and both key-leak specs following audio and transcripts.
+
+**The recording** (`LIVE_SMOKE_RECORD=1 node apps/web/scripts/live-smoke.mjs`, run by the human):
+
+```
+examinerTurn: 2 call(s), average in 376  out 89
+transcribe: 1 call(s), average in 0  out 0
+speak: 1 call(s), average in 0  out 0
+oral-practice: 4 call(s), in 752  out 177  US$0.004495
+completions: 14, 14 accepted on the first try
+recorded 14 completion(s) to packages/testing/src/recorded/openai/
+```
+
+gpt-transcribe answered `{"text":"Bonjour, pouvez-vous me décrire votre poste et vos principales responsabilités ?",
+…,"usage":{"type":"duration","seconds":5}}` for tts-1's 71,040-byte MP3 of that question. `palier-factory eval` now
+reports conformance 1.0 on prompt 4 over the six files, the examiner at 2 of 2.
+
+**Found while building, and fixed:**
+- **The leak guard could not see a recording.** It rendered a `Blob` in IndexedDB as `{}`, and read request bodies as
+  text. It now reads both as bytes (D120).
+- **Chromium's fake capture device never answers `getUserMedia` on macOS.** A probe on a bare page confirmed it,
+  sandboxed and not. The specs synthesise the microphone with Web Audio instead (D120).
+- **`AnswerSource` shows the question as well as collecting the answer.** A port that only collected answers would
+  have left the examiner's voice no way to reach the screen (D118).
+
+**Evidence** (run on this branch; `verify` and the E2E suite again after the recording and its `pricing.json` counts,
+the rest on the same code before them):
+
+```
+pnpm verify          → check-types, lint, boundaries (435 + 221 modules, no violations),
+                       test: 197 files, 2903 passed, 8 todo; coverage thresholds met
+pnpm test:integration → 6 files, 45 passed
+CI=1 pnpm test:e2e    → 57 passed (1.1m)
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB
+pnpm --filter @palier/web lighthouse  → 16 URLs × 5, every assertion met; /fr/practice/oral median 0.99 / 1.0
+coverage: app oral-practice.ts 100% branches; testing answer-source.ts 100%
+```
+
+**Proven to bite, each reverted, with `git diff` clean after** (D120):
+- the session recording uploaded with a transcription failed the hermetic journey: a third audio request;
+- the transcript in a synced setting failed the export check (`not.toContain("Grelottard3b8e")`);
+- a clip in `localStorage` failed the guard: `"Ondulard9d3a" reached somewhere other than OpenAI and its own copy on
+  this device`.
+
+**Not done here:**
+- `assessOral`, the report, the fluency metrics, the pronunciation opt-in and the stability eval, which are Slice 3;
+- a measured session's cost, which is Slice 3's (exit criterion 2);
+- **Next, decided** is rewritten to Slice 3.
 
 ### 27 September 2026 — `dougkeefe/next-progress-slice-v5` (Phase 5 Slice 1: the session core, no UI)
 
