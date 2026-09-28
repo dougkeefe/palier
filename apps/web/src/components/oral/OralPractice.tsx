@@ -1,10 +1,11 @@
 "use client";
 
-import type { OralSession, OralSessionChoice } from "@palier/app";
+import type { OralHistoryEntry, OralSession, OralSessionChoice } from "@palier/app";
+import { hasAnswers } from "@palier/app";
 import type { Lang, TargetBand } from "@palier/domain";
 import { sessionId } from "@palier/domain";
 import { Button, Callout, Card, Timer, Toast } from "@palier/ui";
-import { useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { type Ref, useEffect, useId, useMemo, useReducer, useRef, useState } from "react";
 
 import { estimateText } from "../../features/key/spend-view";
@@ -19,12 +20,14 @@ import {
   sessionEstimate,
   turnFocus,
 } from "../../features/oral/practice-view";
+import { historyTag } from "../../features/oral/report-view";
 import { elapsedText, preflightNotice } from "../../features/writing/workshop-view";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { browserLevelKit, measureLevel } from "../../lib/oral/level";
 import { browserMediaKit } from "../../lib/oral/recorder";
 import { readStudyProfile } from "../../lib/study";
+import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
 
@@ -48,6 +51,8 @@ type Setup = {
   readonly choices: readonly OralSessionChoice[];
   /** What a minute of practice is estimated to cost, or none when it is unpriced (D117). */
   readonly perMinuteUsd: number | null;
+  /** This device's past sessions, newest first, each linking to its report (D126). */
+  readonly history: readonly OralHistoryEntry[];
 };
 
 const loadSetup = async (container: Container): Promise<Setup> => {
@@ -57,7 +62,8 @@ const loadSetup = async (container: Container): Promise<Setup> => {
     lang: TARGET_LANG,
   });
   const perMinuteUsd = container.useCases.featureCosts().find((cost) => cost.feature === "oral-practice")?.estimateUsd ?? null;
-  return { keyHeld: status !== null, choices, perMinuteUsd };
+  const history = await container.useCases.oralHistory().catch(() => []);
+  return { keyHeld: status !== null, choices, perMinuteUsd, history };
 };
 
 /**
@@ -207,6 +213,7 @@ export function OralPractice() {
             })}
           </ul>
         </section>
+        <History history={setup.history} />
       </div>
     );
   }
@@ -424,7 +431,18 @@ export function OralPractice() {
           {evicted > 0 ? <Callout tone="info">{t("evicted", { count: evicted })}</Callout> : null}
           {recordingKept === true ? <p className="app-muted">{t("recordingKept")}</p> : null}
           {recordingKept === false ? <Callout tone="info">{t("recordingNotSaved")}</Callout> : null}
-          <p className="app-muted">{t("reportComing")}</p>
+          {session !== null && session.endReason !== null && hasAnswers(session) ? (
+            <div className="app-actions">
+              <Link
+                href={{ pathname: "/practice/oral/report", query: { session: session.id } }}
+                className="pl-btn pl-btn--primary pl-focusable"
+              >
+                {t("reportLink")}
+              </Link>
+            </div>
+          ) : (
+            <p className="app-muted">{t("reportNothing")}</p>
+          )}
         </div>
       </Card>
       <Transcript session={session} lang={choice.scenario.lang} />
@@ -497,7 +515,40 @@ function Question({ text, audio, lang, textRef }: { text: string; audio: Blob | 
   );
 }
 
-/** The stored transcript, shown once the session is over (the report is Phase 5 Slice 3's). */
+/** This device's past sessions (D126), each opening its report, where one can be asked for when it has none. */
+function History({ history }: { history: readonly OralHistoryEntry[] }) {
+  const t = useTranslations("oral");
+  const format = useFormatter();
+  if (history.length === 0) return null;
+  return (
+    <section className="app-stack" aria-labelledby="oral-history-title">
+      <h2 id="oral-history-title">{t("historyTitle")}</h2>
+      <p className="app-muted">{t("historyNote")}</p>
+      <ul className="app-list">
+        {history.map((entry) => (
+          <li key={entry.id} className="app-history">
+            <span id={`oral-history-${entry.id}`}>
+              {t("historyItem", {
+                type: entry.sessionType === null ? t("historyUnknownType") : t(`type_${entry.sessionType}`),
+                date: format.dateTime(new Date(entry.startedAt), { dateStyle: "medium", timeStyle: "short", timeZone: deviceTimeZone() }),
+              })}
+            </span>
+            <span className="app-tag">{t(historyTag(entry))}</span>
+            <Link
+              href={{ pathname: "/practice/oral/report", query: { session: entry.id } }}
+              className="app-link pl-focusable"
+              aria-describedby={`oral-history-${entry.id}`}
+            >
+              {t("historyOpen")}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/** The stored transcript, shown once the session is over; its report is a link away (D126). */
 function Transcript({ session, lang }: { session: OralSession | null; lang: Lang }) {
   const t = useTranslations("oral");
   const turns = session?.turns ?? [];

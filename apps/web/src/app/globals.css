@@ -904,6 +904,31 @@ body {
   gap: 0.5rem;
 }
 
+/*
+ * The oral report's marked-up transcript (progress.md D126): each error is a button, drawn as the
+ * workshop's mark is (a wavy underline as well as a colour, WCAG 1.4.1), that shows its correction
+ * beside it on tap.
+ */
+.app-oral-mark {
+  font: inherit;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--warning) 22%, transparent);
+  color: inherit;
+  text-decoration: underline wavy var(--incorrect);
+  text-underline-offset: 0.2em;
+}
+
+.app-oral-mark sup {
+  margin-left: 0.1em;
+  font-weight: 700;
+}
+
+.app-oral-correction {
+  font-weight: 600;
+}
+
 .app-steps {
   margin: 0;
   padding-left: 1.25rem;
