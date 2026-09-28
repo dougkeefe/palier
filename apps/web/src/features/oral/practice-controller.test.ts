@@ -92,6 +92,7 @@ const session = (over: Partial<OralSession> = {}): OralSession => ({
   endedAt: "2026-09-28T10:05:00.000Z",
   endReason: "ended-by-user",
   turns: [],
+  assessment: null,
   ...over,
 });
 

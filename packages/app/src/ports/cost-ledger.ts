@@ -1,4 +1,4 @@
-import type { AiFeature } from "@palier/domain";
+import type { AiFeature, SessionId } from "@palier/domain";
 
 import type { ISO } from "./time.js";
 
@@ -6,6 +6,9 @@ import type { ISO } from "./time.js";
  * One AI call's cost, as the ledger records it (architecture.md §8.6, progress.md D101):
  * the tokens the provider reported and, when `pricing.json` prices the model, the dollars.
  * `costUsd` is `null` when the model is unpriced, so the meter can say its total is a floor.
+ * `sessionId` names the spoken session a call was made for (progress.md D125), so a session's
+ * cost is its own rows, exactly, rather than a guess from a time window. Absent for a call
+ * that belongs to no session, and on every row written before Phase 5 Slice 3.
  */
 export type CostEntry = {
   readonly ts: ISO;
@@ -14,6 +17,7 @@ export type CostEntry = {
   readonly inputTokens: number;
   readonly outputTokens: number;
   readonly costUsd: number | null;
+  readonly sessionId?: SessionId | undefined;
 };
 
 /**

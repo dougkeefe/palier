@@ -17,6 +17,20 @@ const aSession = {
   endedAt: "2026-09-27T10:10:00.000Z",
   endReason: "completed" as const,
   turns: [{ speaker: "candidate" as const, text: "Je suis analyste.", phase: 0, startMs: 1_000, endMs: 4_000 }],
+  assessment: null,
+};
+
+/** A report over `aSession`'s one turn: "analyste" is at [8, 16). */
+const aReport = () => {
+  const criterion = { band: "C" as const, evidence: "e" };
+  const fix = { criterion: "grammar" as const, subSkill: "agreement" as const, advice: "a", evidence: "e" };
+  const word = { word: "conseillère", turn: 0, excerpt: "analyste", example: "Je suis conseillère." };
+  return {
+    criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+    fixes: [fix, fix, fix],
+    missingWords: [word, word, word, word, word],
+    errors: [{ turn: 0, start: 8, end: 16, correction: "analyste principale", rule: "r" }],
+  };
 };
 
 describe("dexieOralStore", () => {
@@ -51,6 +65,33 @@ describe("dexieOralStore", () => {
 
     expect((await store.all()).map((s) => s.id)).toEqual(["good"]);
     expect(await store.get(sessionId("bad"))).toBeNull();
+  });
+
+  it("reads a session stored before reports existed, with no assessment at all, as unassessed (D126)", async () => {
+    const db = new PalierDb(dbName());
+    const { assessment: _assessment, ...older } = aSession;
+    await db.oralSessions.put(older as never);
+
+    expect(await dexieOralStore(db).get(aSession.id)).toEqual(aSession);
+  });
+
+  it.each([
+    ["a report in the wrong shape", { ...aReport(), fixes: [] }],
+    ["an error that no longer fits its turn", { ...aReport(), errors: [{ turn: 0, start: 8, end: 400, correction: "c", rule: "r" }] }],
+    ["a word quoted from nowhere in the session", { ...aReport(), missingWords: Array(5).fill({ word: "w", turn: 0, excerpt: "budget", example: "x" }) }],
+  ])("keeps the transcript of a session with %s, and reads it as unassessed (D126)", async (_, broken) => {
+    const db = new PalierDb(dbName());
+    await db.oralSessions.put({ ...aSession, assessment: broken } as never);
+
+    expect(await dexieOralStore(db).get(aSession.id)).toEqual(aSession);
+  });
+
+  it("reads a whole report back with its session", async () => {
+    const store = dexieOralStore(new PalierDb(dbName()));
+    const assessed = { ...aSession, assessment: aReport() };
+    await store.put(assessed);
+
+    expect(await store.get(aSession.id)).toEqual(assessed);
   });
 
   it("reads a running session, with no end and no reason, as whole", async () => {

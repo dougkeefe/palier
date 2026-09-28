@@ -1,4 +1,4 @@
-import type { OralDirection, OralRegister, OralScenario, OralSpeaker } from "@palier/domain";
+import type { OralDirection, OralInput, OralRegister, OralScenario, OralSpeaker } from "@palier/domain";
 
 /**
  * What a transport tells the session (progress.md D116), pushed as it happens:
@@ -18,6 +18,8 @@ export type OralTransportEvent =
       readonly text: string;
       readonly startMs: number;
       readonly endMs: number;
+      /** How a candidate's answer arrived (D122), when the transport knows; stored with the turn. */
+      readonly input?: OralInput | undefined;
     }
   | { readonly kind: "difficulty"; readonly direction: OralDirection }
   | { readonly kind: "closed"; readonly failed: boolean };

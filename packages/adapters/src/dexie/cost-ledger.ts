@@ -19,13 +19,19 @@ const isEntry = (row: CostLedgerRow): boolean =>
   isCount(row.outputTokens) &&
   (row.costUsd === null || isCount(row.costUsd));
 
-const entryOf = ({ ts, feature, model, inputTokens, outputTokens, costUsd }: CostLedgerRow): CostEntry => ({
+/**
+ * The six fields every entry has, plus the spoken session it was for when it names one
+ * (progress.md D125). `sessionId` is unindexed, so it needs no version bump, and a row
+ * written before it, or with one that is not an id, reads as belonging to no session.
+ */
+const entryOf = ({ ts, feature, model, inputTokens, outputTokens, costUsd, sessionId }: CostLedgerRow): CostEntry => ({
   ts,
   feature,
   model,
   inputTokens,
   outputTokens,
   costUsd,
+  ...(typeof sessionId === "string" && sessionId.length > 0 ? { sessionId } : {}),
 });
 
 /**

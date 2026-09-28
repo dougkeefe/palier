@@ -5,11 +5,13 @@ import type {
   AttemptStore,
   Clock,
   ItemRepository,
+  OralStore,
   Random,
   ScheduleStore,
   Session,
   SessionStore,
 } from "../ports/index.js";
+import { oralFocusSubSkills } from "./oral-report.js";
 import { type PlanDailySessionRequest, planDailySession } from "./plan-daily-session.js";
 
 /**
@@ -33,6 +35,8 @@ import { type PlanDailySessionRequest, planDailySession } from "./plan-daily-ses
  *   usable standalone with the signal omitted (a diagnostic preview), exactly as D36
  *   built it. This **closes D36**: the dangling optional is now produced by
  *   `completeSession` and consumed here, through the port.
+ * - **It owns `focusSubSkills` the same way** (progress.md D124, closing D35): the latest
+ *   oral report's fixes, read from the `OralStore`, bias the day's new items.
  */
 
 export type StartSessionRequest = {
@@ -43,9 +47,10 @@ export type StartSessionRequest = {
   /**
    * The study parameters the plan needs. `lastDayCompleted` is `Omit`-ted because
    * `StartSession` derives it from `SessionStore.latest()` rather than taking it from
-   * the caller — the whole point of composing the planner here (D36, D46).
+   * the caller — the whole point of composing the planner here (D36, D46). So is
+   * `focusSubSkills`, from the `OralStore` (D124).
    */
-  readonly plan: Omit<PlanDailySessionRequest, "lastDayCompleted">;
+  readonly plan: Omit<PlanDailySessionRequest, "lastDayCompleted" | "focusSubSkills">;
 };
 
 export type StartSessionDeps = {
@@ -56,6 +61,8 @@ export type StartSessionDeps = {
   readonly items: ItemRepository;
   readonly schedule: ScheduleStore;
   readonly attempts: AttemptStore;
+  /** Where the latest oral report is, whose fixes bias the day (D124). */
+  readonly oral: Pick<OralStore, "all">;
 };
 
 export type StartSessionResult = {
@@ -77,12 +84,16 @@ export const startSession = async (
   const lastDayCompleted =
     previous === null ? undefined : previous.completedAt !== null;
 
+  const focusSubSkills = oralFocusSubSkills(await deps.oral.all());
+
   const plan = await planDailySession(
     {
       ...request.plan,
       // exactOptionalPropertyTypes: spread only when present, never pass an explicit
       // `undefined` (progress.md D14). A first-ever session omits the signal entirely.
       ...(lastDayCompleted !== undefined ? { lastDayCompleted } : {}),
+      // No report yet, no focus: the plan is exactly what it was before Slice 3.
+      ...(focusSubSkills.length > 0 ? { focusSubSkills } : {}),
     },
     {
       clock: deps.clock,

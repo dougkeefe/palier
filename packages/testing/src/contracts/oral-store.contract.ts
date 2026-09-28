@@ -10,13 +10,27 @@ const aSession = (id: string, startedAt: string, over: Partial<OralSession> = {}
   endedAt: null,
   endReason: null,
   turns: [],
+  assessment: null,
   ...over,
 });
 
 const aTranscript = (): OralSession["turns"] => [
   { speaker: "examiner", text: "Parlez-moi de votre rôle.", phase: 0, startMs: 0, endMs: 2_400 },
-  { speaker: "candidate", text: "Je suis analyste aux finances.", phase: 0, startMs: 3_100, endMs: 7_800 },
+  { speaker: "candidate", text: "Je suis analyste aux finances.", phase: 0, startMs: 3_100, endMs: 7_800, input: "voice" },
 ];
+
+/** A report placed over `aTranscript()`, whose one error marks "analyste" in the candidate's turn. */
+const aReport = (): NonNullable<OralSession["assessment"]> => {
+  const criterion = { band: "B" as const, evidence: "« Je suis analyste »" };
+  const fix = { criterion: "grammar" as const, subSkill: "agreement" as const, advice: "Accordez.", evidence: "analyste" };
+  const word = { word: "conseillère", turn: 1, excerpt: "analyste", example: "Je suis conseillère aux finances." };
+  return {
+    criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+    fixes: [fix, fix, fix],
+    missingWords: [word, word, word, word, word],
+    errors: [{ turn: 1, start: 8, end: 16, correction: "analyste principale", rule: "précision" }],
+  };
+};
 
 const aRecording = (text: string): Blob => new Blob([text], { type: "audio/webm" });
 
@@ -54,6 +68,20 @@ export const oralStoreContract = (name: string, make: () => Promise<OralStore>):
 
       expect(await store.get(sessionId("a"))).toEqual(running);
       expect(await store.get(sessionId("b"))).toEqual(ended);
+    });
+
+    it("returns an ended session's report exactly as it was put (D126)", async () => {
+      const store = await make();
+      const assessed = aSession("a", "2026-09-27T10:00:00.000Z", {
+        turns: aTranscript(),
+        endedAt: "2026-09-27T10:10:00.000Z",
+        endReason: "completed",
+        assessment: aReport(),
+      });
+      await store.put(assessed);
+
+      expect(await store.get(sessionId("a"))).toEqual(assessed);
+      expect(await store.all()).toEqual([assessed]);
     });
 
     it("replaces a session put again under the same id", async () => {

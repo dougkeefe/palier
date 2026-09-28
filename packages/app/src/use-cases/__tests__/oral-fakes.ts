@@ -50,6 +50,7 @@ export const anOralSession = (over: Partial<OralSession> = {}): OralSession => (
   endedAt: null,
   endReason: null,
   turns: [],
+  assessment: null,
   ...over,
 });
 

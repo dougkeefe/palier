@@ -1,7 +1,7 @@
 import type { OralAudioEntry, OralSession, OralStore } from "@palier/app";
 import { StorageQuotaError } from "@palier/app";
-import type { OralEndReason, SessionId } from "@palier/domain";
-import { ORAL_END_REASONS, oralTurnSchema } from "@palier/domain";
+import type { OralAssessment, OralEndReason, OralTurn, SessionId } from "@palier/domain";
+import { ORAL_END_REASONS, checkOralAssessment, oralAssessmentSchema, oralTurnSchema } from "@palier/domain";
 
 import type { OralAudioRow, PalierDb } from "./db.js";
 
@@ -11,20 +11,38 @@ const isEndReason = (value: unknown): value is OralEndReason =>
   typeof value === "string" && (ORAL_END_REASONS as readonly string[]).includes(value);
 
 /**
+ * A report is usable only if its shape is whole and every error and word fits the turns it
+ * points into (progress.md D126), as a writing assessment must fit its text (D106).
+ */
+const assessmentOf = (turns: readonly OralTurn[], raw: unknown): OralAssessment | null => {
+  if (raw === undefined || raw === null) return null;
+  const parsed = oralAssessmentSchema.safeParse(raw);
+  if (!parsed.success) return null;
+  const assessment = parsed.data as OralAssessment;
+  return checkOralAssessment(turns, assessment) === null ? assessment : null;
+};
+
+/**
  * The structure check at the edge (D55's approach). A session reads only if it is whole:
  * its ids and start, an end and a reason that are both set or both null, and every turn
  * a whole `OralTurn`. Anything else reads as nothing, so a broken row never reaches the
  * report or the assessment.
+ *
+ * A session whose report is broken, or was stored before reports existed, **keeps its
+ * transcript and reads as unassessed** (D126): the words are the user's, and the report can
+ * be asked for again.
  */
 const sessionOf = (raw: unknown): OralSession | null => {
   if (raw === undefined || raw === null) return null;
-  const { id, scenarioId, startedAt, endedAt, endReason, turns } = raw as Partial<Record<keyof OralSession, unknown>>;
+  const { id, scenarioId, startedAt, endedAt, endReason, turns, assessment } = raw as Partial<
+    Record<keyof OralSession, unknown>
+  >;
   if (!isText(id) || !isText(scenarioId) || !isInstant(startedAt)) return null;
   const running = endedAt === null && endReason === null;
   const ended = isInstant(endedAt) && isEndReason(endReason);
   if (!running && !ended) return null;
   if (!Array.isArray(turns) || !turns.every((turn) => oralTurnSchema.safeParse(turn).success)) return null;
-  return raw as OralSession;
+  return { ...(raw as OralSession), assessment: assessmentOf(turns as OralTurn[], assessment) };
 };
 
 const audioOf = (raw: unknown): OralAudioRow | null => {

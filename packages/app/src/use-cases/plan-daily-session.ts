@@ -1,4 +1,4 @@
-import type { ItemId, Lang, ScoredSkill, TargetBand } from "@palier/domain";
+import type { ItemId, Lang, ScoredSkill, SubSkill, TargetBand } from "@palier/domain";
 import { type DayPlan, planDay } from "@palier/engine";
 
 import type {
@@ -48,6 +48,11 @@ export type PlanDailySessionRequest = {
   readonly testDate?: ISO;
   /** `false` shortens today's budget. Its source is the deferred SessionStore (Phase 2). */
   readonly lastDayCompleted?: boolean;
+  /**
+   * The sub-skills the latest oral report's fixes drill (progress.md D124): new items in
+   * them are drawn as the weakest are. `StartSession` derives it from the `OralStore`.
+   */
+  readonly focusSubSkills?: readonly SubSkill[];
 };
 
 export type PlanDailySessionDeps = {
@@ -90,6 +95,7 @@ export const planDailySession = async (
       ...(request.lastDayCompleted !== undefined
         ? { lastDayCompleted: request.lastDayCompleted }
         : {}),
+      ...(request.focusSubSkills !== undefined ? { focusSubSkills: request.focusSubSkills } : {}),
     },
     () => deps.random.next(),
     now,

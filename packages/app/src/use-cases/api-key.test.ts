@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { UsageRecord } from "@palier/domain";
+import { sessionId } from "@palier/domain";
 
 import type { AiProvider, ApiKeyStorage, CostEntry, CostLedger, KeyVault } from "../ports/index.js";
 import {
@@ -241,6 +242,21 @@ describe("withAiProvider — every call is written to the cost ledger (D101)", (
       // Unpriced: the ledger says so with null, rather than a zero that reads as free.
       { ts: NOW, feature: "item-generation", model: "m-review", inputTokens: 10, outputTokens: 5, costUsd: null },
     ]);
+  });
+
+  it("records each call under the spoken session it is for, when tagged, and under none otherwise (D125)", async () => {
+    const { deps, entries } = await setUp(
+      spendingProvider([
+        { model: "m-examiner", inputTokens: 10, outputTokens: 5, costUsd: 0.001 },
+        { model: "m-assess", inputTokens: 20, outputTokens: 10, costUsd: 0.002 },
+      ]),
+    );
+
+    await withAiProvider(deps, "oral-practice", (ai) => ai.examinerTurn({} as never), { sessionId: sessionId("oral-9") });
+    await withAiProvider(deps, "oral-assessment", (ai) => ai.assessOral({} as never));
+
+    expect(entries.map((e) => e.sessionId)).toEqual([sessionId("oral-9"), undefined]);
+    expect("sessionId" in (entries[1] ?? {})).toBe(false);
   });
 
   it("records a call that failed after it was billed, and still rejects with its error", async () => {

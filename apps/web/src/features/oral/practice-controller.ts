@@ -68,6 +68,7 @@ const emptySession = (id: SessionId, choice: OralSessionChoice): OralSession => 
   endedAt: null,
   endReason: null,
   turns: [],
+  assessment: null,
 });
 
 const ignore = (): void => undefined;

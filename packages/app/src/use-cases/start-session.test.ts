@@ -1,11 +1,13 @@
-import type { Item, ItemId } from "@palier/domain";
-import { itemId, sessionId } from "@palier/domain";
+import type { Item, ItemId, OralAssessment } from "@palier/domain";
+import { itemId, scenarioId, sessionId } from "@palier/domain";
 import { describe, expect, it, vi } from "vitest";
 
 import type {
   AttemptStore,
   Clock,
   ItemRepository,
+  OralSession,
+  OralStore,
   Random,
   ScheduleStore,
   Session,
@@ -122,6 +124,34 @@ const aPriorSession = (over: Partial<Session> = {}): Session => ({
   ...over,
 });
 
+/** Spoken sessions, newest first, as `OralStore.all` gives them. */
+const oralOf = (sessions: readonly OralSession[] = []): Pick<OralStore, "all"> => ({
+  all: vi.fn(() => Promise.resolve(sessions)),
+});
+
+/** An ended spoken session, with a report whose three fixes drill `subSkills`, or none. */
+const aSpokenSession = (id: string, startedAt: string, subSkills: OralAssessment["fixes"][number]["subSkill"][] | null): OralSession => {
+  const criterion = { band: "B" as const, evidence: "e" };
+  const word = { word: "w", turn: 0, excerpt: "x", example: "x" };
+  return {
+    id: sessionId(id),
+    scenarioId: scenarioId("scn"),
+    startedAt,
+    endedAt: startedAt,
+    endReason: "completed",
+    turns: [],
+    assessment:
+      subSkills === null
+        ? null
+        : {
+            criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+            fixes: subSkills.map((subSkill) => ({ criterion: "grammar" as const, subSkill, advice: "a", evidence: "e" })),
+            missingWords: [word, word, word, word, word],
+            errors: [],
+          },
+  };
+};
+
 const depsWith = (over: Partial<StartSessionDeps> = {}): StartSessionDeps => ({
   clock: clockOf(),
   sessions: sessionsOf(),
@@ -129,6 +159,7 @@ const depsWith = (over: Partial<StartSessionDeps> = {}): StartSessionDeps => ({
   items: itemsOf(aPool()),
   schedule: scheduleOf(),
   attempts: attemptsOf(),
+  oral: oralOf(),
   ...over,
 });
 
@@ -202,6 +233,44 @@ describe("startSession: deriving lastDayCompleted from the previous session", ()
 
     expect(result.plan.items.length).toBeGreaterThan(0);
     expect(result.plan.tapering).toBe(false);
+  });
+});
+
+describe("startSession: the latest oral report's fixes (D124)", () => {
+  // Every draw at 0.5: a boosted item's key 0.5^(1/3) always beats an unboosted 0.5. The
+  // pool holds five `pronouns` items and a 10-item day draws seven new ones, so all five come.
+  const even = () => randomOf([0.5]);
+  const pool = aPool();
+  const pronouns = (items: readonly Item[]) => items.filter((item) => item.subSkill === "pronouns").length;
+
+  it("draws the day's new items from the sub-skills the latest report's fixes drill", async () => {
+    const oral = oralOf([aSpokenSession("new", "2026-02-28T10:00:00.000Z", ["pronouns", "pronouns", "pronouns"])]);
+    const plain = await startSession(aRequest(), depsWith({ random: even(), items: itemsOf(pool) }));
+    const { plan } = await startSession(aRequest(), depsWith({ random: even(), items: itemsOf(pool), oral }));
+
+    expect(pronouns(plan.newItems)).toBe(5);
+    expect(pronouns(plain.plan.newItems)).toBeLessThan(5);
+  });
+
+  it("takes the newest report, skipping a newer session that has none", async () => {
+    const oral = oralOf([
+      aSpokenSession("unassessed", "2026-02-28T12:00:00.000Z", null),
+      aSpokenSession("assessed", "2026-02-28T10:00:00.000Z", ["pronouns", "pronouns", "pronouns"]),
+      aSpokenSession("older", "2026-02-27T10:00:00.000Z", ["agreement", "agreement", "agreement"]),
+    ]);
+    const { plan } = await startSession(aRequest(), depsWith({ random: even(), items: itemsOf(pool), oral }));
+
+    expect(pronouns(plan.newItems)).toBe(5);
+  });
+
+  it("plans exactly as before Slice 3 with no report, the goldens' case", async () => {
+    const without = await startSession(aRequest(), depsWith({ items: itemsOf(pool), oral: oralOf([]) }));
+    const unassessed = await startSession(
+      aRequest(),
+      depsWith({ items: itemsOf(pool), oral: oralOf([aSpokenSession("u", "2026-02-28T12:00:00.000Z", null)]) }),
+    );
+
+    expect(unassessed.plan).toEqual(without.plan);
   });
 });
 

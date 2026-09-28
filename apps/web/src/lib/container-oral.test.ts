@@ -29,6 +29,7 @@ const aSession = (id: string) => ({
   endedAt: "2026-09-27T10:10:00.000Z",
   endReason: "completed" as const,
   turns: [{ speaker: "candidate" as const, text: MARKER, phase: 1, startMs: 130_000, endMs: 142_000 }],
+  assessment: null,
 });
 
 // content/profiles/psc-sle.json → content/: the production graph's bank, served from disk.
