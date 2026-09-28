@@ -136,6 +136,46 @@ describe("selectItems, weighting (practice)", () => {
   });
 });
 
+describe("selectItems, boosted sub-skills (D124)", () => {
+  const base = { skill: "reading", lang: "fr", targetBand: "C", count: 1, mode: "practice" } as const;
+  // Pool order [boosted(tone-and-intent), normal(main-idea)], neither weakest: no history.
+  const pool = [item("boosted", "tone-and-intent", "C"), item("normal", "main-idea", "C")];
+
+  it("weights a boosted sub-skill as a weakest one: at equal luck it is chosen", () => {
+    const picked = selectItems({ ...base, boost: ["tone-and-intent"] }, pool, [], seq([0.5]), NOW);
+
+    expect(String(picked[0]?.id)).toBe("boosted");
+  });
+
+  it("draws exactly as before with no boost, or an empty one", () => {
+    // Equal weights and equal luck: the stable sort keeps pool order either way, so reverse it.
+    const reversed = [...pool].reverse();
+    const without = selectItems(base, reversed, [], seq([0.5]), NOW);
+    const empty = selectItems({ ...base, boost: [] }, reversed, [], seq([0.5]), NOW);
+
+    expect(String(without[0]?.id)).toBe("normal");
+    expect(empty).toEqual(without);
+  });
+
+  it("gives a boosted sub-skill of another skill nothing to reach", () => {
+    const picked = selectItems({ ...base, boost: ["agreement"] }, [...pool].reverse(), [], seq([0.5]), NOW);
+
+    expect(String(picked[0]?.id)).toBe("normal");
+  });
+
+  it("never boosts in diagnostic mode, which is coverage rather than targeting", () => {
+    const picked = selectItems(
+      { ...base, mode: "diagnostic", boost: ["tone-and-intent"] },
+      [...pool].reverse(),
+      [],
+      seq([0.5]),
+      NOW,
+    );
+
+    expect(String(picked[0]?.id)).toBe("normal");
+  });
+});
+
 describe("selectItems, ordering (practice)", () => {
   const base = { skill: "reading", lang: "fr", targetBand: "C", count: 6, mode: "practice" } as const;
 

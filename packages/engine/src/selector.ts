@@ -6,7 +6,7 @@ import { weakestSubSkills } from "./weakest-sub-skills.js";
 /**
  * Item selection (architecture.md §7.2): "A filter and a weighted shuffle. No
  * information functions, no exposure control mechanism." Practice mode weights
- * the user's weakest sub-skills; diagnostic mode drops the weighting and the
+ * the user's weakest sub-skills, and any it is asked to boost; diagnostic mode drops the weighting and the
  * working-set restriction, because its job is coverage rather than targeting.
  *
  * `random` and `now` are primitives, not the ports (progress.md D32).
@@ -30,6 +30,12 @@ export type SelectionCriteria = {
   readonly count: number;
   /** Defaults to `"practice"`. */
   readonly mode?: SelectionMode;
+  /**
+   * Sub-skills to weight as the weakest are, in practice mode (progress.md D124): the fixes
+   * of the latest oral report. Absent or empty, the draw is exactly as it was before. A
+   * sub-skill of another skill reaches no item, since the skill filter is first.
+   */
+  readonly boost?: readonly SubSkill[];
 };
 
 /** The bands practice draws from: the target band plus the one below it (§7.2). */
@@ -107,7 +113,7 @@ export const selectItems = (
   }
 
   const bands = workingSet(criteria.targetBand);
-  const weakest = new Set<SubSkill>(weakestSubSkills(criteria.skill, attempts, pool));
+  const weakest = new Set<SubSkill>([...weakestSubSkills(criteria.skill, attempts, pool), ...(criteria.boost ?? [])]);
   const entries = pool
     .filter((item) => eligible(item) && bands.includes(item.targetBand))
     .map((item) => ({ item, weight: weakest.has(item.subSkill) ? WEAKEST_WEIGHT : 1 }));

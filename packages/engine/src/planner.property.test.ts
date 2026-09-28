@@ -134,4 +134,26 @@ describe("planDay properties", () => {
       }),
     );
   });
+
+  it("is the same plan with no oral findings as with an empty list of them (D124)", () => {
+    fc.assert(
+      fc.property(scenario, (s) => {
+        const without = planDay(inputOf(s), rng(s.seed), NOW);
+        const empty = planDay({ ...inputOf(s), focusSubSkills: [] }, rng(s.seed), NOW);
+        expect(empty).toEqual(without);
+      }),
+    );
+  });
+
+  it("keeps every invariant with oral findings: the budget, and disjoint buckets", () => {
+    fc.assert(
+      fc.property(scenario, fc.subarray([...READING_SUB_SKILLS]), (s, focus) => {
+        const plan = planDay({ ...inputOf(s), focusSubSkills: focus }, rng(s.seed), NOW);
+        const size = s.lastDayCompleted === false ? Math.floor(s.sessionSize * SHORTEN_FACTOR) : s.sessionSize;
+        const ids = plan.items.map((i) => String(i.id));
+        expect(ids.length).toBeLessThanOrEqual(size);
+        expect(new Set(ids).size).toBe(ids.length);
+      }),
+    );
+  });
 });
