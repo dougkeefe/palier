@@ -168,6 +168,23 @@ describe("assembleOralAssessment, dropping what quotes no word (D127)", () => {
     expect(result.ok && result.assessment.errors.map((e) => e.correction)).toEqual(["arrivent"]);
   });
 
+  it("names a faulty item by its index in the draft as sent, whatever was dropped before it", () => {
+    const errors = [
+      { turn: 3, excerpt: " ?", correction: ".", rule: "ponctuation" },
+      { turn: 0, excerpt: "Parlez", correction: "x", rule: "y" },
+    ];
+    expect(assembleOralAssessment(TURNS, aDraft({ errors }))).toEqual({
+      ok: false,
+      problem: "error 1: turn 0 is the examiner's, not the candidate's",
+    });
+    const [first, ...rest] = aDraft().missingWords;
+    const words = [{ ...first!, excerpt: "…" }, { ...first!, turn: 2, excerpt: "défi" }, ...rest.slice(1)];
+    expect(assembleOralAssessment(TURNS, aDraft({ missingWords: words }))).toEqual({
+      ok: false,
+      problem: "missing word 1: turn 2 is the examiner's, not the candidate's",
+    });
+  });
+
   it("drops a missing word quoting no word, and refuses a report left with none", () => {
     const [first, ...rest] = aDraft().missingWords;
     const kept = assembleOralAssessment(TURNS, aDraft({ missingWords: [{ ...first!, excerpt: "…" }, ...rest] }));

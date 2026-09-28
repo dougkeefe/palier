@@ -356,19 +356,26 @@ describe("practiceController — a session (D121)", () => {
     expect(await second).toMatchObject({ pauseMs: 0 });
   });
 
-  it("forgets a voice event from before the question, timing an unvoiced question from its appearing", async () => {
+  it("never carries the last question's heard time into the next: an unheard new voice is no pause", async () => {
     let clock = 1_000;
     const handles = await spokenSession({ now: () => clock });
     await handles.controller.start(CHOICE, "spoken");
-    clock = 1_500;
-    handles.controller.questionHeard(); // a stray event, before any question
-    clock = 2_000;
-    const { answered } = handles.ask();
-    clock = 2_700;
+    const voiced = { ...QUESTION, audio: new Blob(["voix"]) };
+    const wait = new AbortController();
+    const bridge = handles.useCases.startOralPractice.mock.calls[0]?.[1] as { answer: (q: typeof voiced, s: AbortSignal) => Promise<unknown> };
+    const first = bridge.answer(voiced, wait.signal);
+    clock = 3_000;
+    handles.controller.questionHeard();
     handles.controller.record();
     await handles.controller.stopAndSend();
+    await first;
 
-    expect(await answered).toMatchObject({ kind: "audio", pauseMs: 700 });
+    // The next question's voice has not been heard yet when Record is pressed, well after the first was.
+    const second = bridge.answer(voiced, wait.signal);
+    clock = 9_000;
+    handles.controller.record();
+    await handles.controller.stopAndSend();
+    expect(await second).toMatchObject({ pauseMs: 0 });
   });
 
   it("sends no pause with a typed answer", async () => {

@@ -4636,6 +4636,11 @@ merged, none critical. The human chose to fix all of them.
   - A vacuous controller test was split in two: a stray voice event is forgotten when a question appears, and a typed
     answer carries no pause.
   - Two stale comments were fixed: the live smoke's header, and deploy.md's line on the printed block.
+- **A third pass** found 3 more, and no regression. All are fixed:
+  - a problem sent back on the retry names an item by its index in the draft as the model sent it, whatever was dropped
+    before it;
+  - the controller test that could not fail now proves the last question's heard time never carries into the next;
+  - a container built again, as a change of language builds one, is proven to join a request still out.
 
 ---
 
@@ -4668,6 +4673,8 @@ CI=1 pnpm test:e2e    → 57 passed (1.1m), on a fresh production build
 pnpm test             → 207 files, 3136 passed, 8 todo; coverage thresholds met
 CI=1 pnpm test:e2e    → 58 passed (1.1m), on a fresh production build (the in-flight journey is new)
 ```
+
+**The third pass's 3**, after their fixes: `pnpm verify` green (207 files, 3137 passed, 8 todo); `CI=1 pnpm test:e2e` 58 passed.
 
 ### 28 September 2026 — `dougkeefe/check-last-branch-commit` (Phase 5 Slice 3: `assessOral` and the report)
 

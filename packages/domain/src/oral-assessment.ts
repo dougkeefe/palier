@@ -27,9 +27,16 @@ const candidateTurnProblem = (turns: readonly OralTurn[], turn: number, what: st
   return null;
 };
 
-/** Each missing word names a candidate's turn, and quotes words that are in it, matched as `findExcerpt` matches (D127). */
-const missingWordsProblem = (turns: readonly OralTurn[], words: readonly MissingWord[]): string | null => {
-  for (const [index, word] of words.entries()) {
+/**
+ * Each missing word names a candidate's turn, and quotes words that are in it, matched as `findExcerpt`
+ * matches (D127). Words come with their index in the list the model sent, so a problem names the
+ * item the model wrote, whatever was dropped before it.
+ */
+const missingWordsProblem = (
+  turns: readonly OralTurn[],
+  words: readonly (readonly [number, MissingWord])[],
+): string | null => {
+  for (const [index, word] of words) {
     const what = `missing word ${index}`;
     const problem = candidateTurnProblem(turns, word.turn, what);
     if (problem !== null) return problem;
@@ -66,33 +73,32 @@ const byTurn = <T extends { readonly turn: number }>(items: readonly T[]): Map<n
  */
 export const assembleOralAssessment = (
   turns: readonly OralTurn[],
-  given: OralAssessmentDraft,
+  draft: OralAssessmentDraft,
 ): AssembleOralResult => {
-  const draft = {
-    ...given,
-    errors: given.errors.filter((error) => quotesWords(error.excerpt)),
-    missingWords: given.missingWords.filter((word) => quotesWords(word.excerpt)),
-  };
-  if (draft.missingWords.length === 0) return { ok: false, problem: "no missing word quotes the candidate's words" };
-  for (const [index, error] of draft.errors.entries()) {
+  // Dropped first, but every problem below still names an item by its index in the draft as sent,
+  // since that is what the retry tells the model to mend (D127).
+  const errors = [...draft.errors.entries()].filter(([, error]) => quotesWords(error.excerpt));
+  const words = [...draft.missingWords.entries()].filter(([, word]) => quotesWords(word.excerpt));
+  if (words.length === 0) return { ok: false, problem: "no missing word quotes the candidate's words" };
+  for (const [index, error] of errors) {
     const problem = candidateTurnProblem(turns, error.turn, `error ${index}`);
     if (problem !== null) return { ok: false, problem };
   }
   const placed: OralTurnError[] = [];
-  const groups = [...byTurn<OralTurnErrorDraft>(draft.errors)].sort(([a], [b]) => a - b);
+  const groups = [...byTurn<OralTurnErrorDraft>(errors.map(([, error]) => error))].sort(([a], [b]) => a - b);
   for (const [turn, drafts] of groups) {
     const result = placeErrors((turns[turn] as OralTurn).text, drafts);
     if (!result.ok) return { ok: false, problem: `turn ${turn}, ${result.problem}` };
     placed.push(...result.errors.map((error) => ({ turn, ...error })));
   }
-  const problem = missingWordsProblem(turns, draft.missingWords);
+  const problem = missingWordsProblem(turns, words);
   if (problem !== null) return { ok: false, problem };
   return {
     ok: true,
     assessment: {
       criteria: draft.criteria,
       fixes: draft.fixes,
-      missingWords: draft.missingWords,
+      missingWords: words.map(([, word]) => word),
       errors: placed,
     },
   };
@@ -115,5 +121,5 @@ export const checkOralAssessment = (turns: readonly OralTurn[], assessment: Oral
     const problem = checkErrorOffsets((turns[turn] as OralTurn).text, ranges);
     if (problem !== null) return `turn ${turn}, ${problem}`;
   }
-  return missingWordsProblem(turns, assessment.missingWords);
+  return missingWordsProblem(turns, [...assessment.missingWords.entries()]);
 };

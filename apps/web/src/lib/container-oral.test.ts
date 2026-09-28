@@ -298,6 +298,10 @@ describe.each([
     const second = c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
     expect(second).toBe(first);
     expect(c.useCases.oralReportInFlight({ sessionId: id })).toBe(first);
+    // A container built again, as a change of language builds one, still finds it and joins it.
+    const rebuilt = createContainer({ hermetic });
+    expect(rebuilt.useCases.oralReportInFlight({ sessionId: id })).toBe(first);
+    expect(rebuilt.useCases.requestOralReport({ sessionId: id, feedbackLang: "fr" })).toBe(first);
     answer();
     await first;
 
