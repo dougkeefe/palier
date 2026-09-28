@@ -75,8 +75,9 @@ export const assembleOralAssessment = (
   turns: readonly OralTurn[],
   draft: OralAssessmentDraft,
 ): AssembleOralResult => {
-  // Dropped first, but every problem below still names an item by its index in the draft as sent,
-  // since that is what the retry tells the model to mend (D127).
+  // Dropped first, but a turn check and a missing word still name the item by its index in the draft
+  // as sent, since that is what the retry tells the model to mend (D127). A placement problem numbers
+  // the kept errors within its turn, as `placeErrors` always has, and quotes the excerpt.
   const errors = [...draft.errors.entries()].filter(([, error]) => quotesWords(error.excerpt));
   const words = [...draft.missingWords.entries()].filter(([, word]) => quotesWords(word.excerpt));
   if (words.length === 0) return { ok: false, problem: "no missing word quotes the candidate's words" };
