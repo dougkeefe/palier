@@ -293,7 +293,7 @@ The exception is realtime voice. OpenAI's Realtime API over WebRTC requires an e
 
 Design:
 
-- `POST /api/realtime/secret` on a Vercel Edge Function.
+- `POST /api/realtime/secret` on a Vercel Edge Function. *(After 1.0: studio mode is deferred past it, `progress.md` D131, so this route is not built for 1.0 and the exception stays dormant.)*
 - The user's key arrives in an `Authorization` header, is used once to call OpenAI, and the ephemeral token is returned. The key is never written to disk, never placed in a log line, never attached to an error report, and never held past the request.
 - The function sets `export const runtime = 'edge'`, disables request logging for that route, and returns only the ephemeral token, its expiry, and the session id.
 - A prominent note in settings states plainly that this single call is the one time the key transits our infrastructure, why it is necessary, and that the route's source is short enough for anyone to read in full.
@@ -687,7 +687,7 @@ Small by design.
 
 | Route | Runtime | Auth | Purpose |
 | --- | --- | --- | --- |
-| `POST /api/realtime/secret` | Edge | none, user key in header | Mint an ephemeral realtime token. Stateless, no logging |
+| `POST /api/realtime/secret` | Edge | none, user key in header | Mint an ephemeral realtime token. Stateless, no logging. After 1.0 (D131) |
 | `POST /api/telemetry` | Edge | none | Opt-in anonymous item outcomes, batched, rate limited by IP hash |
 | `GET /api/health` | Edge | none | Build version, bank version |
 | `POST /api/account/device` | Edge | none, creates identity | Register a device, create an anonymous account on first call, return the account id |
@@ -770,7 +770,7 @@ Summary table. The full strategy, including the tier model, tooling, coverage ta
 | Accessibility | axe-core in Playwright on every route and on each session state; keyboard-only traversal tests of the three core flows; contrast validation computed from the token set | Fails the build |
 | i18n | Key parity between `en.json` and `fr.json`; a lint rule banning string literals in JSX; a pseudo-locale render to catch truncation | Fails the build |
 | E2E | Playwright: onboarding to first drill, full mock exam including resume after reload, review queue, key entry and validation, data export and import, oral practice mode with a mocked API | Fails the build |
-| Realtime | Cannot be meaningfully mocked end to end. A manual pre-release checklist covering mic permission, phase transitions, disconnection recovery and cost accounting | Manual, per release |
+| Realtime | Cannot be meaningfully mocked end to end. A manual pre-release checklist covering mic permission, phase transitions, disconnection recovery and cost accounting | Manual, per release once studio mode ships (after 1.0, D131) |
 
 ---
 
@@ -846,7 +846,7 @@ learning value at roughly a tenth of the cost, which is why section 8.5 describe
 
 ## 20. Open questions for you
 
-1. Should studio mode ship at all in v1, or is practice mode plus a very good post-session report the better first bet, given cost and complexity?
+1. Should studio mode ship at all in v1, or is practice mode plus a very good post-session report the better first bet, given cost and complexity? *(Decided 28 September 2026, `progress.md` D131: not in v1. Practice mode and its report ship at 1.0, and studio mode follows it.)*
 2. Do you want a pre-launch pilot with a small group for calibration? With a machine-authored bank this moves from nice to have to close to necessary, since telemetry is the only real evidence the items work. It does raise the question of whether recruiting colleagues creates workplace optics you would rather avoid while the CRA move is in progress.
 3. Will you do the 5 percent sample review yourself, or is the pipeline expected to be fully unattended? If unattended, say so explicitly in the about page and lean harder on the report control and auto-retirement.
 4. Which second model family do you want for the stage 4 review gate? Cross-provider is meaningfully stronger than cross-model within one provider, and it is the difference between a real gate and a model marking its own homework.

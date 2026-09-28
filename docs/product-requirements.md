@@ -309,7 +309,7 @@ never revealed.
 
 ### 8.6 Oral studio (`/practice/oral`)
 
-The hero feature. Two modes, chosen per session, with cost shown up front.
+The hero feature. Two modes, chosen per session, with cost shown up front. *(Decided 28 September 2026, `progress.md` D131: studio mode is deferred past 1.0, so 1.0 ships practice mode only. Studio mode below is the design for after 1.0.)*
 
 **Studio mode (realtime voice).** A live spoken interview. The interface is stripped to a single centred visual: a soft animated form that responds to the examiner's voice and to the user's own input level, a phase indicator, an elapsed timer, and a large end-session control. No transcript during the session, because the real test does not give you one and reading it changes the exercise. An always-available "I did not understand, could you repeat" button that prompts the examiner naturally, because that is a legitimate exam behaviour and users should rehearse it.
 
@@ -586,7 +586,7 @@ No third-party analytics. No cookies that require a banner.
 
 ## 16. Out of scope for v1
 
-Spoken comprehension as a standalone tested skill (it is not separately tested), English as a second language content (data model ready, content later), study groups and social features, a mobile app wrapper, offline oral practice, teacher or manager dashboards, and any paid tier.
+Spoken comprehension as a standalone tested skill (it is not separately tested), English as a second language content (data model ready, content later), study groups and social features, a mobile app wrapper, offline oral practice, teacher or manager dashboards, and any paid tier. *(Added 28 September 2026, `progress.md` D131: studio mode, the realtime half of §8.6, which follows 1.0.)*
 
 ---
 
@@ -595,7 +595,7 @@ Spoken comprehension as a standalone tested skill (it is not separately tested),
 1. Name and domain, to be confirmed against availability and trademark.
 2. Whether to seed the bank with French only at launch or hold until English mirrors exist, given the official languages optics of an EN-first bilingual tool.
 3. How prominently to surface the band estimate, given that an over-confident number is the main way this product could mislead someone about an expensive, career-relevant decision. This gets sharper with a machine-authored bank, since early estimates rest on uncalibrated items.
-4. Whether to offer the oral studio in practice mode only at launch, to keep first-session cost under a dollar.
+4. Whether to offer the oral studio in practice mode only at launch, to keep first-session cost under a dollar. *(Decided 28 September 2026, `progress.md` D131: practice mode only at launch, though for the Live API's missing French voice and browser credential rather than cost.)*
 5. Whether to seek any informal read from the PSC before launch, or simply stay clearly independent and unaffiliated.
 6. Whether to run a small closed pilot before public launch purely to calibrate the bank, given that item quality is the product's main risk and real response data is the only thing that proves it.
 

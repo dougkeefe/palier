@@ -1010,9 +1010,12 @@ practice mode and report, with all five session types and pronunciation as a per
 ---
 
 ### Phase 6: Oral, studio mode
-**2 weeks. Goal: the feature people tell their colleagues about.**
+**2 weeks, after 1.0. Goal: the feature people tell their colleagues about.**
 
-**Decision gate before starting.** If phase 5's reports are landing well and measured cost for realtime is high, the honest answer may be to ship 1.0 without studio mode and add it later. Make that call on evidence. *(Noted 27 September 2026, `progress.md` D113: GPT-Live, `gpt-live-1` on the Live API, is published at US$0.05 a minute. It is the leading candidate for this phase. Using it would supersede ADR 3's mechanism with a new ADR, because the Live API exchanges the browser's connection offer through a server holding the key rather than minting a Realtime client secret.)*
+**Decision gate before starting.** If phase 5's reports are landing well and measured cost for realtime is high, the honest answer may be to ship 1.0 without studio mode and add it later. Make that call on evidence. *(Noted 27 September 2026, `progress.md` D113: GPT-Live, `gpt-live-1` on the Live API, is published at US$0.05 a minute. It is the leading candidate for this phase. Using it would supersede ADR 3's mechanism with a new ADR, because the Live API exchanges the browser's connection offer through a server holding the key rather than minting a Realtime client secret.)* *(Decided 28 September 2026, human, `progress.md` D131: **studio mode is deferred
+past 1.0**, and Phase 7 follows Phase 5 directly. Cost was not the reason. The Live API documents no French voice and no
+short-lived browser credential, and a duration limit whose value it does not publish. ADR 3 stands, dormant. The number is kept
+so cross-references hold; read this phase as the first after 1.0.)*
 
 **Work breakdown**
 
@@ -1034,7 +1037,8 @@ practice mode and report, with all five session types and pronunciation as a per
 ---
 
 ### Phase 7: Polish and hardening
-**2 to 3 weeks. Goal: 1.0.**
+**2 to 3 weeks. Goal: 1.0.** *(From 28 September 2026 it follows Phase 5 directly, since studio mode is after 1.0,
+`progress.md` D131.)*
 
 **Work breakdown**
 
@@ -1045,7 +1049,7 @@ practice mode and report, with all five session types and pronunciation as a per
 - Accessibility audit with VoiceOver and NVDA on all core flows, plus a pass by someone who actually uses a screen reader if you can arrange it.
 - Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to get the key to leak.
 - The library: MDX reference articles on the grammar and register points the sub-skill taxonomy names, linked from item explanations. Deferred this far on purpose, since the explanations carry most of the teaching and the library is only worth writing once the sub-skills have real data behind them.
-- Observability: the client diagnostic bundle, the pre-filled issue path, the decision to run no error reporting service, and the realtime route excluded from Vercel logging. Verify that exclusion rather than assume it.
+- Observability: the client diagnostic bundle, the pre-filled issue path, the decision to run no error reporting service, and the realtime route excluded from Vercel logging. Verify that exclusion rather than assume it. *(The realtime route's exclusion moves with studio mode to after 1.0, D131.)*
 - Content: the about page, the non-affiliation statement in both languages, the privacy notice, the contribution guide with the originality attestation, the PR template.
 - Full French review of every interface string by a fluent speaker. An English-first bilingual tool for this audience gets one chance at this.
 
@@ -1053,6 +1057,33 @@ practice mode and report, with all five session types and pronunciation as a per
 
 - Every gate green, no known accessibility defects, no known security defects, both languages reviewed by a human.
 - Repo public, licences in place, contribution path documented and tested by having someone else submit an item.
+
+**Completion slices** (planned 28 September 2026, `progress.md` D132; keep the two in sync). Built work first, then the human's
+direction, then the human's reviews.
+- **Slice 1 — Security hardening, no new UI.** architecture.md §6.4 and §12: the strict CSP with no inline script,
+  `connect-src` limited to self and `api.openai.com`, Trusted Types where supported, and SRI on anything not same-origin, all
+  checked on the built output; the lockfile audit gate in CI and Dependabot; `SECURITY.md` with the 90-day disclosure
+  commitment; a missing `RATE_LIMIT_SALT` failing the production deploy (D78); and the deliberate attempt to get the key to
+  leak, written as tests the CSP must stop. *Done:* the evidence for exit criterion 1's "no known security defects", which
+  Gate L's red-team read confirms.
+- **Slice 2 — Server lifecycle and observability.** The retention job, deleting accounts inactive for 180 days and hard-deleting
+  90-day-old tombstones (architecture.md §9.4), with the storage alert at 60% and 80% on the same scheduled run; `GET
+  /api/health`; the error states with the client diagnostic bundle and a prefilled issue (architecture.md §16); and the two
+  "outlives its screen" defects `progress.md` names. *Done:* the job retires exactly the rows past each boundary on PGlite, and
+  the error states are tested and axe-clean.
+- **Gate K — Phase 7's UI and content direction (human).** Adopt the PRD as written or revise it first, as Gates A, D and F
+  did: the privacy notice and about page, where the non-affiliation statement appears, whether §9's streak, XP and milestones
+  are in 1.0, the library's 1.0 scope, and the PDF summary's shape. Gates Slices 3 and 4.
+- **Slice 3 — Content, the contribution path and data rights.** The about page and privacy notice, the statement in onboarding
+  and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR template, the device-removal confirmation and
+  pairing polish, the one-page PDF summary, and PRD §11's shortcut sheet. *Done:* each surface in both locales, axe-clean on its
+  states, with the contribution path documented end to end.
+- **Slice 4 — Motion, engagement and the library**, as Gate K decides: the motion and illustration pass, self-hosted fonts, the
+  §9 mechanics if they are in, and the MDX library linked from item explanations.
+- **Gate L — the human reviews.** The French review of every string, the workshop prompts and the bank's register [R8]; the
+  VoiceOver and NVDA pass [R9]; the red-team read. *Done:* exit criterion 1's accessibility and security halves and the R8 half.
+- **Gate M — public.** The repo made public and an outside item submission [R13], the domain, the trademark check, and the
+  full-volume bank (D54), sequenced to the end (D56). *Done:* exit criterion 2, and 1.0.
 
 ---
 
@@ -1069,7 +1100,7 @@ Which phase satisfies which requirement from `product-requirements.md` section 0
 
 | # | Requirement | Satisfied by | Verified by |
 | --- | --- | --- | --- |
-| R1 | Practises all three tested skills | 2 (reading, writing), 5 and 6 (oral) | E2E journeys 1, 2; manual oral checklist |
+| R1 | Practises all three tested skills | 2 (reading, writing), 5 (oral, practice mode); 6 (studio mode) after 1.0, D131 | E2E journeys 1, 2; the oral journey and Gate I (D129); the manual realtime checklist once studio mode ships |
 | R2 | Format and register match the real tests | 1 | Register read by fluent speakers; item report rate |
 | R3 | Mock exams mirror published structure and cuts | 3 | Golden fixture per variant at every cut boundary |
 | R4 | Works with no key and offline after first load | 2 | E2E journey 7 with the network disabled; hermetic build has no key |
@@ -1098,8 +1129,8 @@ Two observations worth keeping in view. Every requirement is covered by phase 7,
 | 3 Exams and item statistics | 2 | 13 | **Closed pilot** |
 | 4 BYOK and generation | 2 | 15 | Key features live |
 | 5 Oral practice mode | 2 to 3 | 18 | Oral rehearsal usable |
-| 6 Oral studio mode | 2 | 20 | **Decision gate before starting** |
-| 7 Polish and hardening | 2 | 22 | **1.0 public** |
+| 7 Polish and hardening | 2 | 20 | **1.0 public** |
+| 6 Oral studio mode | 2 | 22 | After 1.0 (decision gate resolved 28 September 2026, D131) |
 | 8 English mirror | 2 | 24 | Architecture validated |
 
 Roughly five months part-time on these assumptions, with something public around week 11 and the largest risk tested in week 1 of phase 1. Treat the numbers as relative sizing rather than a schedule: this is evening and weekend work with a full-time job and a department change in the middle of it, and the phase order is designed so that stopping early still leaves a finished thing.
@@ -1134,7 +1165,7 @@ Applies to every PR, not just phase ends:
 | Phase 1 exit criteria fail | Work down the descoping list in `content-factory.md` section 9, in order. Do not improvise a rescue |
 | Nobody uses the public alpha | The bank is fine but the product is not the problem either. Check whether people know it exists before changing the product |
 | Item statistics never accumulate | Lower stakes than it was, because nothing the user sees depends on them (ADR 7). The consequence is slower retirement of bad items, so lean harder on the in-app report control and check the reports weekly |
-| Realtime cost is worse than modelled | Ship 1.0 without studio mode. Phase 5 already delivers the value |
+| Realtime cost is worse than modelled | Ship 1.0 without studio mode. Phase 5 already delivers the value. *(Taken 28 September 2026, `progress.md` D131, though on the Live API's missing French voice and browser credential rather than on cost)* |
 | The factory's output degrades when a model changes | The batch report and the yield metric are the early warning. Pin model versions in the factory config and treat a model upgrade as a change requiring a fresh sample review |
 | You lose interest in month four | The phase order means a useful public tool already shipped at week 11. Keep the repo in a state where that is a complete artefact rather than an abandoned half-product, which mostly means not leaving a half-built phase on main |
 | An assumption in `product-requirements.md` section 18 turns out false | Each one names how it would be falsified. Check P2 (key setup completion) and P3 (users wanting a band letter) against real behaviour after the public alpha, because both would change the product rather than the plan |
