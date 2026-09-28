@@ -1,12 +1,17 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { generateAndPractise, onboard, waitForOfflineReady, writeAndGetFeedback } from "./helpers";
+import { generateAndPractise, onboard, practiseSpeaking, waitForOfflineReady, writeAndGetFeedback } from "./helpers";
 import {
+  AUDIO_SENTINEL,
   GENERATED_SENTINEL,
   SENTINEL,
   SUBMISSION_SENTINEL,
+  TRANSCRIPT_SENTINEL,
   downloadedText,
   idsAtRest,
+  installFakeAudio,
+  recorderMarker,
+  recordingsAtRest,
   stubOpenAi,
   watchForLeaks,
 } from "./leak-guard";
@@ -23,7 +28,9 @@ import {
  * nothing but OpenAI. The submission is at rest in `writingSubmissions` and its call in the
  * cost ledger, both real rows the dump walks (D104's seeded row is gone, D106). A generated set
  * is at rest in v1's `generated` table, one row per item, survives a reload, and its six calls
- * are in the ledger (D110).
+ * are in the ledger (D110). A spoken practice session (D120) keeps its transcript in `oralSessions` and
+ * the recording of the candidate's answers in `oralAudio`, both real rows the dump walks, the
+ * recording read as its bytes; the clip went to the transcription endpoint and the recording nowhere.
  *
  * This server has no database, so telemetry is stood in for, as journey 9 does.
  */
@@ -39,6 +46,7 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   test.setTimeout(120_000);
   const watch = watchForLeaks(context);
   await stubOpenAi(context);
+  await installFakeAudio(context);
   await context.route("**/api/telemetry", (route) => route.fulfill({ status: 202, body: "" }));
 
   // 1. The skip path: step 5 is the wizard's last step, and "Add a key now" goes to the key screen.
@@ -79,6 +87,20 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   await expect(page.getByText(/^5 items, generated/)).toBeVisible();
   await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL] });
 
+  // 2c. Spoken practice with one recorded answer: the transcript at rest in `oralSessions`, the
+  // session recording (recorder #1) in `oralAudio`, the clip (#2) sent to the transcription
+  // endpoint only, and five calls in the ledger: two questions written and voiced, one clip.
+  await page.goto("/en/practice/oral");
+  await practiseSpeaking(page, { answers: 1 });
+  expect(await idsAtRest(page, "palier", "oralSessions")).toHaveLength(1);
+  expect(await recordingsAtRest(page)).toEqual([recorderMarker(1)]);
+  expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(1 + 6 + 5);
+  const audio = watch.openAiRequests().filter((request) => request.body.includes(AUDIO_SENTINEL));
+  expect(audio.map((request) => [request.path, request.body.includes(recorderMarker(2))])).toEqual([["/v1/audio/transcriptions", true]]);
+  await page.reload();
+  expect(await recordingsAtRest(page)).toEqual([recorderMarker(1)]);
+  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL] });
+
   // 3. A mock exam, submitted, with its answers shared.
   await page.goto("/en/exam");
   await page.getByRole("radio", { name: /Unsupervised/ }).check();
@@ -107,6 +129,8 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   expect(exported).not.toContain(SENTINEL);
   expect(exported).not.toContain(SUBMISSION_SENTINEL);
   expect(exported).not.toContain(GENERATED_SENTINEL);
+  expect(exported).not.toContain(TRANSCRIPT_SENTINEL);
+  expect(exported).not.toContain(AUDIO_SENTINEL);
 
   // 5. Replace it with a key for this tab only: the stored row goes, and nothing replaces it.
   await page.goto("/en/settings/key");
@@ -119,12 +143,12 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   await page.getByRole("button", { name: "Check the key" }).click();
   await expect(page.getByRole("status").filter({ hasText: "This key works." })).toBeVisible();
   expect(await vaultIds(page)).not.toContain("api-key");
-  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL] });
+  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL] });
 
   // 6. A reload forgets it.
   await page.reload();
   await expect(page.getByLabel("OpenAI API key")).toBeVisible();
   await expect(page.getByText(MASKED)).toHaveCount(0);
   expect(await vaultIds(page)).not.toContain("api-key");
-  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL] });
+  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL] });
 });

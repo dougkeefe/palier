@@ -152,6 +152,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     touch the key belongs in the first. A flow that holds user writing passes it to `assertNoLeak` as
     `deviceOnly` (allowed only on this device's own copy and in requests to OpenAI) or `nowhere` (D106). The guard reads request headers synchronously and response bodies
     on `requestfinished`, because `allHeaders()` never settles for a request a reload aborts.
+    Audio is followed by its bytes (D120): `installFakeAudio` synthesises the microphone and numbers each
+    recorder's bytes, request bodies are read as bytes, and a `Blob` at rest is dumped as its bytes. Chromium's
+    fake capture device never answers on macOS, so never rely on it.
 
 ## Gates this app owns
 
@@ -172,12 +175,13 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
   titles, **journey 5 and step 5** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
   and `sync.spec.ts`: journey 8 (two contexts, two devices), journey 7's sync half,
-  and the sync settings' states, and `exam.spec.ts` (a fixture exam from the picker to its results).
+  and the sync settings' states, and `exam.spec.ts` (a fixture exam from the picker to its results), and `oral.spec.ts` (spoken practice's
+  states, a refused microphone, a refused call and a French pass).
   **`offline`** (production `next start`, port 3100) runs `offline.spec.ts` (shell,
   unvisited route, every shard, journeys 2 and 7 with the network off [R4]), `exam-offline.spec.ts`
   (**journey 3**: a full exam through a reload and a network drop, scored against an independent oracle) and
   `key-leak-production.spec.ts` (the key at rest, both modes, through a reload, with a ledger row in
-  the dump), `spend-production.spec.ts` (the meter and the cap's warnings over real IndexedDB), and
+  the dump), `oral-production.spec.ts` (a phase crossed by time), `spend-production.spec.ts` (the meter and the cap's warnings over real IndexedDB), and
   `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
   whose fake timers stall Dexie and React). Axe on the states, (`e2e/`),
   Lighthouse perf + a11y ≥ 95 (`lighthouserc.json`, on its own port 3200, so a test server left

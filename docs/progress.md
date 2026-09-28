@@ -4322,6 +4322,46 @@ these are recorded as made, as D87, D108 and D111 were)
   build with `page.clock` (D120), and below the browser by D118's tests.
 - **The route joins the Lighthouse list** at `/fr/practice/oral`.
 
+### D120 — the key-leak test follows audio and transcripts, and how E2E gets a microphone
+**Date:** 27 September 2026 · **Status:** accepted; Phase 5 exit criterion 3's instrument
+
+- **What is asserted** (tier 11, R12's audio half, exit criterion 3 as D113 amended it):
+  - **Each answer's clip reaches only OpenAI's transcription endpoint.** In the hermetic journey, the two clips'
+    bytes appear in exactly two OpenAI requests, both to `/v1/audio/transcriptions`, one clip each.
+  - **The session recording reaches no request at all**, OpenAI's included. Its bytes are in no OpenAI body, and
+    `deviceOnly` keeps them out of every other request, storage area and export.
+  - **The transcript stays on this device**: the page, and the `oralSessions` store. It goes back to OpenAI only in
+    the examiner's next request, which is a chat completion. It is never in a push, a pull, an export, Web Storage
+    or on the paired phone (`nowhere`).
+  - **On real IndexedDB** (`key-leak-production.spec.ts`), the transcript is at rest in `oralSessions`. The recording
+    is at rest in `oralAudio`, as the session recorder's bytes (the positive control), and survives a reload. The
+    five calls are in the ledger.
+- **How the guard sees audio** (`e2e/leak-guard.ts`):
+  - **`installFakeAudio`** stands in for the microphone and for `MediaRecorder`. Each recorder hands over one chunk
+    when it stops, `[Ondulard9d3a#n]`, numbered in the order the page makes them. The screen makes the session
+    recorder first, so #1 is the recording and #2, #3… are the clips.
+  - **Request bodies are read as bytes** (`postDataBuffer`, latin1), OpenAI's and every other origin's, so a
+    multipart upload's contents are visible. `openAiRequests()` gives each OpenAI request's path and body.
+  - **A `Blob` in IndexedDB is dumped as its bytes.** Before this, `render` turned a `Blob` into `{}`, so a recording
+    would have passed unseen: a gap in the guard, found by building this.
+  - `oralSessions` and `oralAudio` join the device-only stores.
+  - `stubOpenAi` answers the transcription with `TRANSCRIPT_SENTINEL` and the voice with audio bytes, and tells the
+    examiner's completion from the others by its prompt.
+- **Chromium's fake capture device never answers `getUserMedia` on macOS**, flags and permission granted or not; a
+  probe on a bare page confirmed it, sandboxed and not. So the specs do not rely on it. The microphone is a Web
+  Audio oscillator's stream, so the level check still reads a real signal through a real `AnalyserNode`, and the
+  lane is the same on every OS. A refusal is an init script whose `getUserMedia` rejects with `NotAllowedError`.
+- **Proven to bite three ways, each run and reverted, with `git diff` clean after:**
+  - the session recording uploaded with a transcription: the hermetic journey found a third audio request;
+  - the transcript in a synced setting: caught by the export check;
+  - a clip in `localStorage`: caught by the guard, which named the place.
+- **The specs:**
+  - `oral.spec.ts` (hermetic): no key; a spoken session through every state with axe on each; a refused microphone
+    to typed answers; a refused call named in words with the transcript kept; and a French pass.
+  - `oral-production.spec.ts` (the production build): a phase crossed by time with `page.clock.setFixedTime`, the
+    examiner asking in the new phase.
+  - The titles test gains both locales' `/practice/oral`.
+
 ---
 
 ## Session log

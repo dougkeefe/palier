@@ -125,3 +125,63 @@ export const generateAndPractise = async (page: Page) => {
   await expect(page.getByRole("heading", { name: "Your last generated set" })).toBeVisible();
   return total;
 };
+
+/**
+ * Spoken practice's one spending path (progress.md D117–D119), from the spoken-practice screen:
+ * choose `session`, check the microphone (the browser's fake device) or choose to type, start past
+ * the pre-flight, answer `answers` questions, then end the session and wait for its end, whose
+ * heading takes focus. `onState` runs at each state a user rests on, for axe. Returns nothing; the
+ * transcript is on the page.
+ */
+export const practiseSpeaking = async (
+  page: Page,
+  {
+    session = "Warm-up",
+    mode = "spoken",
+    answers = 1,
+    onState = async () => undefined,
+  }: {
+    session?: string;
+    mode?: "spoken" | "typed";
+    answers?: number;
+    onState?: (state: string) => Promise<void>;
+  } = {},
+) => {
+  await expect(page.getByRole("heading", { name: "Choose a session" })).toBeVisible();
+  await onState("picker");
+  await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: session, exact: true }) }).getByRole("button", { name: "Choose" }).click();
+  await expect(page.getByRole("heading", { name: "Check your microphone" })).toBeFocused();
+  await onState("microphone");
+  if (mode === "spoken") {
+    await page.getByRole("button", { name: "Check my microphone" }).click();
+    const heard = page.getByText("Palier can hear you.");
+    const quiet = page.getByText("Palier heard very little.", { exact: false });
+    await expect(heard.or(quiet)).toBeVisible({ timeout: 10_000 });
+    await onState("microphone checked");
+    await page.getByRole("button", { name: (await heard.isVisible()) ? "Continue" : "Continue anyway", exact: true }).click();
+  } else {
+    await page.getByRole("button", { name: "Answer by typing instead" }).click();
+  }
+  await expect(page.getByRole("heading", { name: "Before you start" })).toBeFocused();
+  await onState("pre-flight");
+  await page.getByRole("button", { name: "Start the session" }).click();
+  await expect(page.getByRole("heading", { name: "The examiner asks" })).toBeFocused();
+  for (let i = 0; i < answers; i++) {
+    if (mode === "spoken") {
+      await page.getByRole("button", { name: "Record your answer" }).click();
+      if (i === 0) await onState("recording");
+      await page.getByRole("button", { name: "Stop and send" }).click();
+      await expect(page.getByRole("button", { name: "Record your answer" })).toBeVisible();
+    } else {
+      const field = page.getByRole("textbox", { name: "Your answer" });
+      await field.fill(`Réponse écrite numéro ${String(i + 1)}.`);
+      await page.getByRole("button", { name: "Send answer" }).click();
+      await expect(field).toHaveValue("");
+      await expect(page.getByRole("button", { name: "Send answer" })).toBeVisible();
+    }
+    if (i === 0) await onState("answered");
+  }
+  await page.getByRole("button", { name: "End the session" }).click();
+  await expect(page.getByRole("heading", { name: "Session over" })).toBeFocused();
+  await onState("ended");
+};
