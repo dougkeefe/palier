@@ -8,9 +8,12 @@ import type {
 } from "@palier/domain";
 
 import assessWriting from "./openai/assessWriting.json" with { type: "json" };
+import examinerTurn from "./openai/examinerTurn.json" with { type: "json" };
 import generateItems from "./openai/generateItems.json" with { type: "json" };
 import reviewItemPromptV3 from "./openai/reviewItem-prompt-v3.json" with { type: "json" };
 import reviewItem from "./openai/reviewItem.json" with { type: "json" };
+import speak from "./openai/speak.json" with { type: "json" };
+import transcribe from "./openai/transcribe.json" with { type: "json" };
 
 /**
  * The AI schema-conformance fixtures (Phase 4 CI gates, progress.md D112): completions recorded
@@ -102,6 +105,9 @@ export const RECORDED_RUNS: readonly RecordedRun[] = [
   runOf("reviewItem.json", reviewItem),
   runOf("reviewItem-prompt-v3.json", reviewItemPromptV3),
   runOf("assessWriting.json", assessWriting),
+  runOf("examinerTurn.json", examinerTurn),
+  runOf("transcribe.json", transcribe),
+  runOf("speak.json", speak),
 ];
 
 /** Every recorded completion, across the runs. */

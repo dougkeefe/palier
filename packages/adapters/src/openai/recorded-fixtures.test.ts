@@ -86,9 +86,9 @@ const replay = (completion: RecordedCompletion): Promise<unknown> => {
 };
 
 describe("the recorded completions (D112)", () => {
-  it("cover every method runtime generation and the workshop call, from a real run", () => {
+  it("cover every method runtime generation, the workshop and spoken practice call, from a real run", () => {
     const methods = new Set(recordedCompletions().map((c) => c.method));
-    expect(methods).toEqual(new Set(["generateItems", "reviewItem", "assessWriting"]));
+    expect(methods).toEqual(new Set(["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak"]));
     for (const run of RECORDED_RUNS) expect(Number.isNaN(Date.parse(run.recordedAt)), run.file).toBe(false);
   });
 

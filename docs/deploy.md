@@ -136,8 +136,9 @@ test account (`progress.md` D97, D103). It is a human step, because it spends re
 ## The nightly live smoke, and re-recording the conformance fixtures
 
 The `live-smoke` job in `.github/workflows/nightly.yml` runs `pnpm --filter @palier/web live-smoke` on the
-`OPENAI_SMOKE_KEY` secret (`progress.md` D112). It makes one key check, three set drafts, five reviews and
-two writing assessments through the real adapter. It writes the measured tokens and the `pricing.json`
+`OPENAI_SMOKE_KEY` secret (`progress.md` D112). It makes one key check, three set drafts, five reviews,
+two writing assessments, and the oral turn loop's calls (D117): one question voiced by `tts-1`, that same
+audio transcribed by `gpt-transcribe`, and two examiner turns, through the real adapter. It writes the measured tokens and the `pricing.json`
 `features` block to the run's summary. A failed call, or a model in `apps/web/src/lib/ai-models.json` that
 OpenAI no longer lists, fails the job and opens an issue. It never prints the key.
 
@@ -158,7 +159,9 @@ unset OPENAI_API_KEY
 node apps/factory/dist/index.js eval                 # the eval report carries the new conformance rate
 ```
 
-It overwrites `packages/testing/src/recorded/openai/{generateItems,reviewItem,assessWriting}.json`. To keep an
+It overwrites `packages/testing/src/recorded/openai/{generateItems,reviewItem,assessWriting,examinerTurn,transcribe,speak}.json`.
+No audio is ever written: a transcription is recorded with its clip described by type and size, and a voice by
+its content type and size (D117). To keep an
 old run as a before-and-after, rename it first, as `reviewItem-prompt-v3.json` was, and add it to
 `packages/testing/src/recorded/index.ts`. Commit the fixtures with the regenerated
 `content/factory/eval-report.json`, which `committed-eval.test.ts` holds equal to a fresh run. Copy the printed

@@ -36,9 +36,9 @@
         "total": 2
       },
       "examinerTurn": {
-        "conformant": 0,
-        "rate": null,
-        "total": 0
+        "conformant": 2,
+        "rate": 1,
+        "total": 2
       },
       "generateItems": {
         "conformant": 3,
@@ -62,8 +62,11 @@
     ],
     "measuredOn": [
       "assessWriting.json",
+      "examinerTurn.json",
       "generateItems.json",
-      "reviewItem.json"
+      "reviewItem.json",
+      "speak.json",
+      "transcribe.json"
     ],
     "promptVersion": "4",
     "rate": 1
