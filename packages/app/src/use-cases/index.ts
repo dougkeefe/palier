@@ -133,7 +133,7 @@ export type {
 export { flushTelemetry, recordExamTelemetry, setTelemetryConsent, telemetryConsent } from "./telemetry.js";
 export { examTelemetryEvents } from "./exam-telemetry-events.js";
 
-export type { AiDeps, ApiKeyDeps, ApiKeyStatus, MeteredAiDeps, SaveApiKeyRequest } from "./api-key.js";
+export type { AiDeps, ApiKeyDeps, ApiKeyStatus, MeteredAiDeps, MeterTag, SaveApiKeyRequest } from "./api-key.js";
 export {
   EmptyApiKeyError,
   NoApiKeyError,
@@ -215,3 +215,23 @@ export type {
   TurnBasedTransportDeps,
 } from "./oral-practice.js";
 export { oralSessionChoices, startOralPracticeRun, turnBasedTransport } from "./oral-practice.js";
+export type {
+  OralCostLine,
+  OralHistoryEntry,
+  OralReport,
+  OralReportBlock,
+  OralReportDeps,
+  OralReportRequest,
+  OralReportViewDeps,
+  OralSessionCost,
+} from "./oral-report.js";
+export {
+  NothingToAssessError,
+  OralSessionRunningError,
+  UnknownOralSessionError,
+  hasAnswers,
+  oralFocusSubSkills,
+  oralHistory,
+  oralReport,
+  requestOralReport,
+} from "./oral-report.js";

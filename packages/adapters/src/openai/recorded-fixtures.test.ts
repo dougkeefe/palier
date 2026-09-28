@@ -5,7 +5,14 @@ import {
   type RecordedTranscribeRequest,
   recordedCompletions,
 } from "@palier/testing";
-import type { ExaminerTurnRequest, GenerateItemsRequest, ReviewRequest, SpeechRequest, WritingRequest } from "@palier/domain";
+import type {
+  ExaminerTurnRequest,
+  GenerateItemsRequest,
+  OralRequest,
+  ReviewRequest,
+  SpeechRequest,
+  WritingRequest,
+} from "@palier/domain";
 import { describe, expect, it } from "vitest";
 
 import { openAiProvider } from "./openai-provider.js";
@@ -82,12 +89,15 @@ const replay = (completion: RecordedCompletion): Promise<unknown> => {
       return provider.transcribe(clipOf(completion.request as RecordedTranscribeRequest));
     case "speak":
       return provider.speak(completion.request as SpeechRequest);
+    case "assessOral":
+      return provider.assessOral(completion.request as OralRequest);
   }
 };
 
 describe("the recorded completions (D112)", () => {
   it("cover every method runtime generation, the workshop and spoken practice call, from a real run", () => {
     const methods = new Set(recordedCompletions().map((c) => c.method));
+    // `assessOral` joins this set when the human first records it on a funded key (progress.md D122).
     expect(methods).toEqual(new Set(["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak"]));
     for (const run of RECORDED_RUNS) expect(Number.isNaN(Date.parse(run.recordedAt)), run.file).toBe(false);
   });

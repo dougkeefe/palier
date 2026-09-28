@@ -13,7 +13,11 @@ chat completions, answering a scripted `completions` list in turn (the last repe
 block, so a retry and the ledger can be driven through the real adapter (D101). `memoryCostLedger` and
 `costLedgerContract` follow the `CostLedger` port, and `memoryWritingStore` and `writingStoreContract` the
 `WritingStore` port (D106). `fakeAiProvider.assessWriting` marks the text's first word, so its offsets always fit,
-and `aiProviderContract` holds every provider's assessment schema-valid with offsets `checkErrorOffsets` accepts. The
+and `aiProviderContract` holds every provider's assessment schema-valid with offsets `checkErrorOffsets` accepts.
+`fakeAiProvider.assessOral` (D122) marks and quotes the candidate's first spoken word, and refuses a session with
+no answer, billing nothing; the contract holds every provider's report to `checkOralAssessment`. `oralStoreContract`
+round-trips a report, and `costLedgerContract` an entry's `sessionId` (D125). `assessOral` is in `RECORDED_METHODS`
+but has **no recording yet**: `assessOral.json` and `assessOral-stability.json` are the human's first funded runs. The
 in-memory `KeyVault` keeps D98's two modes apart as the Dexie vault does. `memoryGeneratedItemStore` and
 `generatedItemStoreContract` follow the `GeneratedItemStore` port (D110). A scripted completion's `content` may be a
 function of the prompt, and `generationCompletions`, `draftsFor` and `verdictFor` use it: a draft of exactly what was asked

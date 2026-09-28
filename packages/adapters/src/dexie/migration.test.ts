@@ -86,6 +86,7 @@ describe("schema migration v1 → current", () => {
       endedAt: null,
       endReason: null,
       turns: [{ speaker: "examiner", text: "Bonjour.", phase: 0, startMs: 0, endMs: 900 }],
+      assessment: null,
     } as const;
     await stores.oral.put(session);
     await stores.oral.putAudio(session.id, new Blob(["son"]));

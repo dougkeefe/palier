@@ -37,7 +37,12 @@ content *schemas* with the app, never runtime. The `AiProvider` port type is imp
   the headline is over the runs on the shipping `PROMPT_VERSION` (null when there are none). **The fixtures are
   read by path** (`RECORDED_COMPLETIONS_DIR`, `packages/testing/src/recorded/openai/`), because the factory may
   not import `@palier/testing`. dependency-cruiser cannot see that edge, so moving those files breaks `eval` and
-  `committed-eval.test.ts`. A re-recording is committed with its regenerated report.
+  `committed-eval.test.ts`. A re-recording is committed with its regenerated report. **Beside it, the oral scorer's
+  stability** (`eval/oral-stability.ts`, progress.md D126): the reports in `assessOral-stability.json`, replayed through
+  the adapter, pass when they were recorded on the shipping `PROMPT_VERSION`, every one of at least five **calls** (an
+  `attempt` 1 opens one; a call with no accepted reply is a failed run) gave a report, and every criterion's band moves
+  at most one level with agreement at or above 0.8, both eval parameters, not profile data (D127). `oralStability` is
+  `null` until that file is recorded; `describeOralStability` is the CLI's line.
 - **Forms are assembled, never hand-written** (`pipeline/forms.ts`, progress.md D82). One per profile
   variant, from `Object.entries(profile.variants)`: its item count, `items − scored` pilots at evenly
   spaced positions, its minutes and `orderedCuts(variant)`. The draw is stratified over sub-skills and

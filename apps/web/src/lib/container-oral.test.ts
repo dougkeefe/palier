@@ -29,6 +29,7 @@ const aSession = (id: string) => ({
   endedAt: "2026-09-27T10:10:00.000Z",
   endReason: "completed" as const,
   turns: [{ speaker: "candidate" as const, text: MARKER, phase: 1, startMs: 130_000, endMs: 142_000 }],
+  assessment: null,
 });
 
 // content/profiles/psc-sle.json → content/: the production graph's bank, served from disk.
@@ -186,6 +187,155 @@ describe.each([
     expect(ended.endReason).toBe("transport-failed");
     expect(run.failure()).toMatchObject({ name: "InvalidApiKeyError" });
     expect(await c.useCases.oralSession({ sessionId: ended.id })).toEqual(ended);
+  });
+
+  it("asks for a session's report once, on the assess model, metered under the session, and keeps it here (D126)", async () => {
+    serveBankBesideMsw();
+    const criterion = { band: "B", evidence: "« je dirige la migration »" };
+    const word = { word: "piloter", turn: 0, excerpt: "je dirige", example: "Je pilote la migration." };
+    const REPORT = {
+      criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+      fixes: [
+        { criterion: "vocabulary", subSkill: "word-choice-precision", advice: "a", evidence: "e" },
+        { criterion: "grammar", subSkill: "agreement", advice: "a", evidence: "e" },
+        { criterion: "task", subSkill: "connectors-and-discourse-markers", advice: "a", evidence: "e" },
+      ],
+      missingWords: [word, word, word, word, word],
+      errors: [{ turn: 0, excerpt: "système de paie", correction: "système de rémunération", rule: "précision" }],
+    };
+    const prompts: string[] = [];
+    mswServer.use(
+      ...openAiHandlers({
+        mode: "ok",
+        completions: [
+          {
+            content: (prompt: string) => {
+              prompts.push(prompt);
+              return REPORT;
+            },
+            usage: { prompt_tokens: 3_000, completion_tokens: 1_200 },
+          },
+        ],
+      }),
+    );
+    const c = createContainer({ hermetic });
+    await c.useCases.saveApiKey({ key: KEY, remember: true });
+    const [choice] = (await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" })).filter((x) => x.sessionType === "work");
+    if (choice === undefined) throw new Error("the bank offers a work discussion");
+    const id = sessionId("oral-report-1");
+    // Before either graph's clock, as a session is before the calls made for it.
+    const at = { startedAt: "2020-01-01T10:00:00.000Z", endedAt: "2020-01-01T10:10:00.000Z" };
+    await c.oral.put({ ...aSession("oral-report-1"), ...at, scenarioId: choice.scenario.id });
+
+    const report = await c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
+    expect(report.errors).toEqual([
+      { turn: 0, start: MARKER.indexOf("système"), end: MARKER.indexOf("système") + "système de paie".length, correction: "système de rémunération", rule: "précision" },
+    ]);
+    expect(prompts).toHaveLength(1);
+    expect(prompts[0]).toContain(MARKER);
+    expect(prompts[0]).toContain(c.profile.oral.descriptors.C.en);
+
+    // Asked again, it spends nothing.
+    await c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
+    const rows = await c.costLedger.since("2000-01-01T00:00:00.000Z");
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({ feature: "oral-assessment", model: aiModels.assess, sessionId: id });
+    expect(rows[0]?.costUsd).toBeGreaterThan(0);
+
+    const shown = await c.useCases.oralReport({ sessionId: id });
+    expect(shown?.session.assessment).toEqual(report);
+    expect(shown?.cost.report.usd).toBeCloseTo(rows[0]?.costUsd ?? 0, 12);
+    expect(shown?.cost.report.calls).toBe(1);
+    expect(shown?.blocked).toBe("assessed");
+    expect(await c.useCases.oralHistory()).toEqual([expect.objectContaining({ id, assessed: true, sessionType: "work" })]);
+
+    const exported = JSON.stringify(await c.useCases.exportData());
+    expect(exported).not.toContain("système de rémunération");
+  });
+
+  it("joins a report request still out rather than making a second, and forgets it once settled (D127)", async () => {
+    serveBankBesideMsw();
+    let answer: () => void = () => undefined;
+    const held = new Promise<void>((resolve) => {
+      answer = resolve;
+    });
+    const criterion = { band: "B", evidence: "e" };
+    const word = { word: "piloter", turn: 0, excerpt: "je dirige", example: "x" };
+    let asked = 0;
+    mswServer.use(
+      ...openAiHandlers({
+        mode: "ok",
+        completions: [
+          {
+            content: () => {
+              asked += 1;
+              return {
+                criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+                fixes: [{ criterion: "grammar", subSkill: "agreement", advice: "a", evidence: "e" }],
+                missingWords: [word],
+                errors: [],
+              };
+            },
+            usage: { prompt_tokens: 100, completion_tokens: 100 },
+          },
+        ],
+      }),
+    );
+    const c = createContainer({ hermetic });
+    await c.useCases.saveApiKey({ key: KEY, remember: true });
+    const [choice] = await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" });
+    if (choice === undefined) throw new Error("the bank offers a session");
+    const id = sessionId("oral-report-2");
+    await c.oral.put({ ...aSession("oral-report-2"), startedAt: "2020-01-01T10:00:00.000Z", endedAt: "2020-01-01T10:10:00.000Z", scenarioId: choice.scenario.id });
+    // Hold the store's write, so the first request is still out when the second is made.
+    const put = c.oral.put.bind(c.oral);
+    c.oral.put = async (session) => {
+      await held;
+      return put(session);
+    };
+
+    const first = c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
+    const second = c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
+    expect(second).toBe(first);
+    expect(c.useCases.oralReportInFlight({ sessionId: id })).toBe(first);
+    // A container built again, as a change of language builds one, still finds it and joins it.
+    const rebuilt = createContainer({ hermetic });
+    expect(rebuilt.useCases.oralReportInFlight({ sessionId: id })).toBe(first);
+    expect(rebuilt.useCases.requestOralReport({ sessionId: id, feedbackLang: "fr" })).toBe(first);
+    answer();
+    await first;
+
+    expect(asked).toBe(1);
+    expect(c.useCases.oralReportInFlight({ sessionId: id })).toBeNull();
+  });
+
+  it("forgets a report request that failed, so asking again makes a new call (D127)", async () => {
+    serveBankBesideMsw();
+    mswServer.use(...openAiHandlers({ mode: "invalid-key" }));
+    const c = createContainer({ hermetic });
+    await c.useCases.saveApiKey({ key: KEY, remember: true });
+    const [choice] = await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" });
+    if (choice === undefined) throw new Error("the bank offers a session");
+    const id = sessionId("oral-report-3");
+    await c.oral.put({ ...aSession("oral-report-3"), startedAt: "2020-01-01T10:00:00.000Z", endedAt: "2020-01-01T10:10:00.000Z", scenarioId: choice.scenario.id });
+
+    const first = c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
+    await expect(first).rejects.toMatchObject({ name: "InvalidApiKeyError" });
+    expect(c.useCases.oralReportInFlight({ sessionId: id })).toBeNull();
+    const second = c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
+    expect(second).not.toBe(first);
+    await expect(second).rejects.toMatchObject({ name: "InvalidApiKeyError" });
+  });
+
+  it("plays back and deletes one session's recording, keeping its transcript (D126)", async () => {
+    const c = createContainer({ hermetic });
+    await c.oral.put(aSession("oral-8"));
+    await c.oral.putAudio(sessionId("oral-8"), new Blob(["son"], { type: "audio/webm" }));
+
+    expect(await (await c.useCases.oralRecording({ sessionId: sessionId("oral-8") }))?.text()).toBe("son");
+    await c.useCases.deleteOralRecording({ sessionId: sessionId("oral-8") });
+    expect(await c.useCases.oralRecording({ sessionId: sessionId("oral-8") })).toBeNull();
+    expect(await c.useCases.oralSession({ sessionId: sessionId("oral-8") })).not.toBeNull();
   });
 
   it("keeps a session's recording under the retention policy, reports its size, and cleans it up, transcripts kept", async () => {

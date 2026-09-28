@@ -1,4 +1,4 @@
-import type { OralEndReason, OralTurn, ScenarioId, SessionId } from "@palier/domain";
+import type { OralAssessment, OralEndReason, OralTurn, ScenarioId, SessionId } from "@palier/domain";
 
 import type { ISO } from "./time.js";
 
@@ -14,6 +14,9 @@ import type { ISO } from "./time.js";
  *   set, both are set, and every end carries its reason (Phase 5 exit criterion 5).
  * - **`turns` only grows.** Each is written as it arrives, so a disconnect keeps the
  *   transcript (architecture.md §14, Phase 6's criterion 2).
+ * - **`assessment` is the report on it**, `null` until one is asked for and returned
+ *   (progress.md D126), as a `WritingSubmission`'s is. Its offsets point into `turns`, which
+ *   no longer change once the session has ended, and only an ended session is assessed.
  */
 export type OralSession = {
   readonly id: SessionId;
@@ -22,6 +25,7 @@ export type OralSession = {
   readonly endedAt: ISO | null;
   readonly endReason: OralEndReason | null;
   readonly turns: readonly OralTurn[];
+  readonly assessment: OralAssessment | null;
 };
 
 /** A stored recording, as the retention policy sees it: whose, how big, how old. */

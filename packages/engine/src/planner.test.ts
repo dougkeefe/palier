@@ -8,7 +8,7 @@ import { anAttempt, anItem } from "./__tests__/fixtures.js";
 
 /**
  * Daily plan generation (architecture.md §7.4). Budget is item counts, not
- * minutes (D34); oral-session findings are deferred to Phase 5 (D35). The planner
+ * minutes (D34); an oral report's fixes bias the new items (D35, D124). The planner
  * composes the selector and weakest-sub-skills, so these examples check the
  * composition — the split, the roll-over, the taper, the shortening and the
  * non-overlap — rather than re-checking the selector's own weighting and spacing.
@@ -268,5 +268,32 @@ describe("planDay, test-date boundaries", () => {
     const plan = planDay({ ...base, sessionSize: 10, dueReviews, testDate: ahead(24 * HOUR) }, seq([0.3]), NOW);
 
     expect(plan.mockExamAdvised).toBe(true);
+  });
+});
+
+describe("planDay, the latest oral report's fixes (D124)", () => {
+  it("draws new items from a focused sub-skill as it does from the weakest", () => {
+    // Equal luck: a weight of 3 always outranks 1, so every new item is on the focused sub-skill.
+    const plan = planDay({ ...base, sessionSize: 9, dueReviews: [], focusSubSkills: ["tone-and-intent"] }, seq([0.5]), NOW);
+
+    expect(plan.newItems.length).toBeGreaterThan(0);
+    expect(plan.newItems.every((i) => i.subSkill === "tone-and-intent")).toBe(true);
+  });
+
+  it("leaves reviews as they were, and each bucket its size: maintenance's rule is unchanged, though its items can differ", () => {
+    const dueReviews = ["r0", "r1"].map(review);
+    const focused = planDay({ ...base, sessionSize: 9, dueReviews, focusSubSkills: ["tone-and-intent"] }, seq([0.5]), NOW);
+    const plain = planDay({ ...base, sessionSize: 9, dueReviews }, seq([0.5]), NOW);
+
+    expect(focused.reviews).toEqual(plain.reviews);
+    expect(focused.newItems.length).toBe(plain.newItems.length);
+    expect(focused.maintenance.length).toBe(plain.maintenance.length);
+  });
+
+  it("changes nothing when every fix is on another skill's sub-skill", () => {
+    const focused = planDay({ ...base, sessionSize: 9, dueReviews: [], focusSubSkills: ["agreement"] }, seq([0.4, 0.7, 0.2]), NOW);
+    const plain = planDay({ ...base, sessionSize: 9, dueReviews: [] }, seq([0.4, 0.7, 0.2]), NOW);
+
+    expect(focused).toEqual(plain);
   });
 });

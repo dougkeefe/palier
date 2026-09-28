@@ -9,7 +9,7 @@ import { runLiveSmoke } from "../src/lib/live-smoke.ts";
 /**
  * The nightly live smoke and the fixture recorder (Phase 4 CI gates, progress.md D112): a fixed
  * set of real calls on the key in `OPENAI_API_KEY`, through the adapter and the ledger, the oral
- * turn loop's three included (D117). It prints
+ * turn loop's three (D117) and one session's report (D122) included. It prints
  * the measured tokens per method and per feature, and the `features` block that replaces
  * `pricing.json`'s typical figures (D103). The key is read from the environment and handed to the
  * vault; it is never printed.
@@ -31,7 +31,11 @@ export const RECORDED_DIR = new URL("../../../packages/testing/src/recorded/open
 
 const usd = (amount) => `US$${amount.toFixed(6)}`;
 
-/** The `pricing.json` `features` block a run measured: a typical use of each feature, as its calls. */
+/**
+ * The `pricing.json` `features` block a run measured: a typical use of each feature, as its calls.
+ * `oral-assessment` is left out: the smoke's session is short, so its report is no typical one, and
+ * pricing takes a real session's (docs/deploy.md; progress.md D127).
+ */
 export const measuredFeatures = (result) => ({
   "writing-feedback": [
     { role: "assess", inputTokens: result.byMethod.assessWriting.inputTokens, outputTokens: result.byMethod.assessWriting.outputTokens },
@@ -46,8 +50,12 @@ export const measuredFeatures = (result) => ({
   ],
 });
 
-/** Every method the recorder keeps, the oral turn loop's three included (D117). */
-const RECORDED_METHODS = ["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak"];
+/** Every method the recorder keeps, the oral turn loop's three (D117) and the report (D122) included. */
+const RECORDED_METHODS = ["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak", "assessOral"];
+
+/** The profile's oral level descriptors in English, which the report's prompt quotes (ADR 9). */
+export const englishDescriptors = (profile) =>
+  Object.fromEntries(Object.entries(profile.oral.descriptors).map(([band, text]) => [band, text.en]));
 
 /** The fixture files a run records, one per method it made a call of, as `{ path, content }`. */
 export const recordings = (result) =>
@@ -97,6 +105,7 @@ export const main = async ({
   const { note: _models, voice, ...roles } = require("../src/lib/ai-models.json");
   const pricing = require("../src/lib/pricing.json");
   const prompts = require("@palier/content/writing/prompts.json");
+  const profile = require("@palier/content/profiles/psc-sle.json");
   let result;
   try {
     result = await runLiveSmoke({
@@ -112,6 +121,7 @@ export const main = async ({
       },
       voice,
       prices: pricing.models,
+      descriptors: englishDescriptors(profile),
       prompts,
       ...(fetchImpl === undefined ? {} : { fetchImpl }),
     });
@@ -133,6 +143,9 @@ export const main = async ({
   const conformant = result.completions.filter((c) => c.conformant).length;
   log(`completions: ${String(result.completions.length)}, ${String(conformant)} accepted on the first try`);
   log(`measured features for pricing.json: ${JSON.stringify(measuredFeatures(result))}`);
+  log(
+    `oral-assessment, on the smoke's short fixed session, NOT a typical report, do not copy into pricing.json: in ${String(result.byMethod.assessOral.inputTokens)}  out ${String(result.byMethod.assessOral.outputTokens)}`,
+  );
   log("oral-practice is priced per minute of a session, which Phase 5 Slice 3 measures; the per-call figures above are its parts (D117).");
   if (argv.includes("--record") || env.LIVE_SMOKE_RECORD === "1") {
     for (const file of recordings(result)) write(file.name, file.content);

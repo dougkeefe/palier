@@ -1,4 +1,4 @@
-import type { OralScenario, OralSessionType, OralSpeaker, TargetBand } from "@palier/domain";
+import type { OralInput, OralScenario, OralSessionType, OralSpeaker, SessionId, TargetBand } from "@palier/domain";
 import { ORAL_SESSION_TYPES } from "@palier/domain";
 
 import type {
@@ -22,6 +22,8 @@ import { type OralSessionRun, type StartOralSessionRequest, startOralSessionRun 
 
 export type TurnBasedTransportDeps = MeteredAiDeps & {
   readonly answers: AnswerSource;
+  /** The session the transport's calls spend on, which the ledger records them under (D125). */
+  readonly sessionId?: SessionId;
 };
 
 /** A turn-based transport, and why it closed failed, for the screen to name (`checkFailure`). */
@@ -57,6 +59,10 @@ type Asked = {
  * - **Any failed call closes it failed**, and `lastError` keeps the error. The turns so far are
  *   already the driver's, stored as they arrived.
  *
+ * Each candidate's turn says how it arrived, `voice` or `typed` (D122), a clip's with the pause the
+ * screen measured before it (D127), and every call is recorded under the session it spends on, when
+ * the deps name one (D125).
+ *
  * Times are milliseconds since `open`, by the `Clock`. The examiner's turn is the instant it is
  * shown; a clip's ends when it arrived and starts its measured length before, never before its
  * own question was shown (progress.md D121). A typed answer spans the wait for it.
@@ -79,6 +85,7 @@ export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTrans
   let waiting: AbortController | null = null;
 
   const nowMs = (): number => Math.max(0, Date.parse(deps.clock.now()) - openedAt);
+  const tag = deps.sessionId === undefined ? {} : { sessionId: deps.sessionId };
 
   const finish = (failed: boolean): void => {
     if (state === "closed") return;
@@ -86,11 +93,17 @@ export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTrans
     sink({ kind: "closed", failed });
   };
 
-  const say = (speaker: OralSpeaker, text: string, startMs: number, endMs: number): void => {
+  const say = (
+    speaker: OralSpeaker,
+    text: string,
+    startMs: number,
+    endMs: number,
+    how: { readonly input?: OralInput; readonly pauseMs?: number } = {},
+  ): void => {
     const start = Math.max(startMs, lastStart[speaker]);
     lastStart[speaker] = start;
     transcript.push({ speaker, text });
-    sink({ kind: "turn", speaker, text, startMs: start, endMs: Math.max(start, endMs) });
+    sink({ kind: "turn", speaker, text, startMs: start, endMs: Math.max(start, endMs), ...how });
   };
 
   const ask = (current: OralScenario): Promise<Asked> => {
@@ -106,19 +119,27 @@ export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTrans
       register: directive.register,
       transcript: [...transcript],
     };
-    return withAiProvider(deps, "oral-practice", async (ai) => {
-      const turn = await ai.examinerTurn(request);
-      const voiced = state === "open" && ai.capabilities().speak;
-      const audio = voiced ? await ai.speak({ text: turn.text, lang: current.lang }) : null;
-      return { text: turn.text, audio, difficulty: turn.difficulty, phase: phaseIndex };
-    });
+    return withAiProvider(
+      deps,
+      "oral-practice",
+      async (ai) => {
+        const turn = await ai.examinerTurn(request);
+        const voiced = state === "open" && ai.capabilities().speak;
+        const audio = voiced ? await ai.speak({ text: turn.text, lang: current.lang }) : null;
+        return { text: turn.text, audio, difficulty: turn.difficulty, phase: phaseIndex };
+      },
+      tag,
+    );
   };
 
   const hear = async (current: OralScenario, answer: CandidateAnswer): Promise<string> => {
     if (answer.kind === "typed") return answer.text;
     const { audio, durationMs } = answer;
-    const transcribed = await withAiProvider(deps, "oral-practice", (ai) =>
-      ai.transcribe({ audio, lang: current.lang, durationMs }),
+    const transcribed = await withAiProvider(
+      deps,
+      "oral-practice",
+      (ai) => ai.transcribe({ audio, lang: current.lang, durationMs }),
+      tag,
     );
     return transcribed.text;
   };
@@ -146,7 +167,11 @@ export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTrans
         const answeredAt = nowMs();
         const text = await hear(current, answer);
         const startMs = answer.kind === "typed" ? shownAt : Math.max(shownAt, answeredAt - answer.durationMs);
-        say("candidate", text, startMs, answeredAt);
+        const how =
+          answer.kind === "typed"
+            ? { input: "typed" as const }
+            : { input: "voice" as const, ...(answer.pauseMs === undefined ? {} : { pauseMs: Math.max(0, Math.round(answer.pauseMs)) }) };
+        say("candidate", text, startMs, answeredAt, how);
       }
     } catch (failure) {
       error = failure;
@@ -211,7 +236,7 @@ export const startOralPracticeRun = async (
   request: StartOralSessionRequest,
   deps: OralPracticeDeps,
 ): Promise<OralPracticeRun> => {
-  const transport = turnBasedTransport(deps);
+  const transport = turnBasedTransport({ ...deps, sessionId: request.sessionId });
   const run = await startOralSessionRun(request, { clock: deps.clock, items: deps.items, oral: deps.oral, transport });
   return { ...run, failure: transport.lastError };
 };

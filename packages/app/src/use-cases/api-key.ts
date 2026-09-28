@@ -1,4 +1,4 @@
-import type { AiFeature, UsageRecord } from "@palier/domain";
+import type { AiFeature, SessionId, UsageRecord } from "@palier/domain";
 
 import type {
   AiProvider,
@@ -112,16 +112,20 @@ const metered = (ai: AiProvider, record: (usage: UsageRecord) => Promise<void>):
   return wrapped as AiProvider;
 };
 
+/** What a metered call is for, beyond its feature: the spoken session it spends on (D125). */
+export type MeterTag = { readonly sessionId?: SessionId };
+
 /**
  * Run `fn` with a provider made from the held key, inside the vault's callback, with every
- * call it makes recorded in the cost ledger as `feature` (D101). This is the one path from
- * the key to a spending provider; every AI use case goes through it, so none can skip the
- * ledger.
+ * call it makes recorded in the cost ledger as `feature` (D101), and under `tag.sessionId`
+ * when it is for a spoken session (D125). This is the one path from the key to a spending
+ * provider; every AI use case goes through it, so none can skip the ledger.
  */
 export const withAiProvider = <T>(
   deps: MeteredAiDeps,
   feature: AiFeature,
   fn: (ai: AiProvider) => Promise<T>,
+  tag: MeterTag = {},
 ): Promise<T> =>
   withProvider(deps, (ai) =>
     fn(
@@ -133,6 +137,7 @@ export const withAiProvider = <T>(
           inputTokens: usage.inputTokens,
           outputTokens: usage.outputTokens,
           costUsd: usage.costUsd ?? null,
+          ...(tag.sessionId === undefined ? {} : { sessionId: tag.sessionId }),
         }),
       ),
     ),

@@ -76,12 +76,35 @@ describe("turnBasedTransport — the turn loop (D118)", () => {
     await settled();
 
     expect(ai.transcribed).toEqual([{ lang: "fr", durationMs: 20 * SEC }]);
-    expect(turns(events)[1]).toEqual({ kind: "turn", speaker: "candidate", text: "Je gère un projet.", startMs: 10 * SEC, endMs: 30 * SEC });
+    expect(turns(events)[1]).toEqual({
+      kind: "turn",
+      speaker: "candidate",
+      text: "Je gère un projet.",
+      startMs: 10 * SEC,
+      endMs: 30 * SEC,
+      input: "voice",
+    });
     expect(ai.examinerRequests[1]?.transcript).toEqual([
       { speaker: "examiner", text: "Question 1" },
       { speaker: "candidate", text: "Je gère un projet." },
     ]);
     expect(turns(events)[2]).toMatchObject({ speaker: "examiner", text: "Question 2", startMs: 30 * SEC });
+  });
+
+  it("keeps the pause the screen measured before a clip, whole and never below zero, and none for typed words (D127)", async () => {
+    const { hand, events, open } = setUp();
+    await open();
+    await settled();
+    hand.give({ ...clip("Oui.", 2 * SEC), pauseMs: 1_234.6 });
+    await settled();
+    hand.give({ ...clip("Non.", 2 * SEC), pauseMs: -40 });
+    await settled();
+    hand.give({ kind: "typed", text: "Peut-être." });
+    await settled();
+
+    const answers = turns(events).filter((turn) => turn.speaker === "candidate");
+    expect(answers.map((turn) => turn.pauseMs)).toEqual([1_235, 0, undefined]);
+    expect("pauseMs" in (answers[2] ?? {})).toBe(false);
   });
 
   it("takes typed words as they are, with no transcription, spanning the wait for them", async () => {
@@ -93,7 +116,14 @@ describe("turnBasedTransport — the turn loop (D118)", () => {
     await settled();
 
     expect(ai.transcribed).toEqual([]);
-    expect(turns(events)[1]).toEqual({ kind: "turn", speaker: "candidate", text: "Je suis analyste.", startMs: 0, endMs: 60 * SEC });
+    expect(turns(events)[1]).toEqual({
+      kind: "turn",
+      speaker: "candidate",
+      text: "Je suis analyste.",
+      startMs: 0,
+      endMs: 60 * SEC,
+      input: "typed",
+    });
   });
 
   it("never starts a clip before its own question was shown, whatever length it claims (D121)", async () => {
@@ -144,6 +174,30 @@ describe("turnBasedTransport — the turn loop (D118)", () => {
     const rows = ledger.entries();
     expect(rows.map((r) => r.model)).toEqual(["m-examiner", "m-speech", "m-transcribe", "m-examiner", "m-speech"]);
     expect(new Set(rows.map((r) => r.feature))).toEqual(new Set(["oral-practice"]));
+    // No session named in the deps, so the rows name none (D125).
+    expect(rows.every((r) => !("sessionId" in r))).toBe(true);
+  });
+
+  it("records every call under the session it spends on, when the deps name one (D125)", async () => {
+    const ai = examinerProvider();
+    const hand = handAnswers();
+    const ledger = costLedger();
+    const transport = turnBasedTransport({
+      vault: vaultWith("sk-test"),
+      aiProvider: () => ai.provider,
+      ledger,
+      clock: settableClock(),
+      answers: hand.answers,
+      sessionId: SESSION_ID,
+    });
+    await transport.open({ scenario: SCENARIO }, () => undefined);
+    await settled();
+    hand.give(clip("Oui.", 2 * SEC));
+    await settled();
+
+    const rows = ledger.entries();
+    expect(rows).toHaveLength(5);
+    expect(rows.every((r) => r.sessionId === SESSION_ID)).toBe(true);
   });
 });
 
@@ -221,7 +275,7 @@ describe("turnBasedTransport — closing (D118)", () => {
     await closing;
 
     expect(events.slice(-2)).toEqual([
-      { kind: "turn", speaker: "candidate", text: "Presque fini.", startMs: 0, endMs: 0 },
+      { kind: "turn", speaker: "candidate", text: "Presque fini.", startMs: 0, endMs: 0, input: "voice" },
       { kind: "closed", failed: false },
     ]);
     expect(ai.examinerRequests).toHaveLength(1);
@@ -341,17 +395,36 @@ describe("startOralPracticeRun (D118)", () => {
     const hand = handAnswers();
     const clock = settableClock();
     const oral = oralStore();
+    const ledger = costLedger();
     const deps = {
       vault: vaultWith("sk-test"),
       aiProvider: () => ai.provider,
-      ledger: costLedger(),
+      ledger,
       clock,
       items: scenarioBank(),
       oral,
       answers: hand.answers,
     };
-    return { ai, hand, clock, oral, run: startOralPracticeRun({ sessionId: SESSION_ID, scenarioId: SCENARIO.id }, deps) };
+    return { ai, hand, clock, oral, ledger, run: startOralPracticeRun({ sessionId: SESSION_ID, scenarioId: SCENARIO.id }, deps) };
   };
+
+  it("stores how each answer arrived and its measured pause, records the session's calls under it, and leaves it unassessed (D122, D125, D127)", async () => {
+    const { hand, ledger, run } = start();
+    const running = await run;
+    await settled();
+    hand.give({ ...clip("Je gère un projet.", 2 * SEC), pauseMs: 900 });
+    await settled();
+    hand.give({ kind: "typed", text: "Oui." });
+    await settled();
+    await running.endByUser();
+    const ended = await running.ended;
+
+    expect(ended.turns.filter((t) => t.speaker === "candidate").map((t) => t.input)).toEqual(["voice", "typed"]);
+    expect(ended.turns.filter((t) => t.speaker === "candidate").map((t) => t.pauseMs)).toEqual([900, undefined]);
+    expect(ended.turns.filter((t) => t.speaker === "examiner").every((t) => t.input === undefined)).toBe(true);
+    expect(ended.assessment).toBeNull();
+    expect(ledger.entries().every((r) => r.sessionId === SESSION_ID)).toBe(true);
+  });
 
   it("runs the session driver over a turn-based transport, keeping each turn as it arrives", async () => {
     const { hand, oral, run } = start();

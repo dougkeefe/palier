@@ -18,9 +18,9 @@ import { weakestSubSkills } from "./weakest-sub-skills.js";
  *  - **Budget is item counts, not minutes (D34).** No per-item duration lives in
  *    the profile or domain, and a duration constant here would break ADR 9. The
  *    caller passes a total item budget; the plan splits it.
- *  - **Oral-session-findings injection is deferred to Phase 5 (D35)** — its types
- *    do not exist yet, so building against them would invent a type ahead of its
- *    consumer (D19/D28/D29's discipline).
+ *  - **Oral-session findings bias the new items (D35, closed by D124).** The latest
+ *    oral report's fixes arrive as `focusSubSkills`, favoured at `FOCUS_WEIGHT` (D127).
+ *    Additive: without them the plan is exactly what it was, goldens included.
  *
  * `random` and `now` are primitives, not the ports (D32). Due reviews arrive
  * already resolved to items (the `@palier/app` use case reads them from the
@@ -55,6 +55,13 @@ export type DayPlanInput = {
   readonly testDate?: string;
   /** `false` shortens today's budget; `true` or absent leaves it unchanged (§7.4). */
   readonly lastDayCompleted?: boolean;
+  /**
+   * The sub-skills the latest oral report's fixes drill (§7.4, "recent oral session
+   * findings"; D124). New items in them are favoured at `FOCUS_WEIGHT` (D127). Maintenance's
+   * rule is unchanged, though its items can differ, because the new items took others. Absent
+   * or empty changes nothing.
+   */
+  readonly focusSubSkills?: readonly SubSkill[];
 };
 
 export type DayPlan = {
@@ -106,12 +113,20 @@ export const planDay = (input: DayPlanInput, random: () => number, now: string):
     : Math.round((remaining * NEW_SHARE) / (NEW_SHARE + MAINTENANCE_SHARE));
   const maintCount = tapering ? maintBudget : remaining - newCount;
 
-  // New items: practice mode already weights the three weakest sub-skills (§7.2).
-  // Reviews are excluded from the pool so the buckets cannot overlap.
+  // New items: practice mode already weights the three weakest sub-skills (§7.2), and
+  // the oral report's, when there is one (D124). Reviews are excluded from the pool so
+  // the buckets cannot overlap.
   const newItems = tapering
     ? []
     : selectItems(
-        { skill, lang, targetBand, count: newCount, mode: "practice" },
+        {
+          skill,
+          lang,
+          targetBand,
+          count: newCount,
+          mode: "practice",
+          ...(input.focusSubSkills === undefined ? {} : { boost: input.focusSubSkills }),
+        },
         pool.filter((item) => !reviewIds.has(item.id)),
         attempts,
         random,

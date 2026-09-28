@@ -1,6 +1,8 @@
 import * as z from "zod";
 
+import { ORAL_CRITERIA } from "../ai.js";
 import { DOC_TYPES } from "../passage.js";
+import { READING_SUB_SKILLS, WRITING_SUB_SKILLS } from "../sub-skills.js";
 import {
   bandSchema,
   itemTypeSchema,
@@ -121,6 +123,85 @@ export const examinerTurnShape = z.strictObject({
   difficulty: z.enum(["escalate", "deescalate"]).nullable(),
 });
 
+/** Exactly the five criteria of `ORAL_CRITERIA` (progress.md D122). */
+const oralCriteriaShape = z.strictObject({
+  comprehension: criterionShape,
+  fluency: criterionShape,
+  grammar: criterionShape,
+  vocabulary: criterionShape,
+  task: criterionShape,
+});
+
+const turnIndexShape = z.number().int().nonnegative();
+
+
+/**
+ * Up to three fixes, most costly first, each on a sub-skill the bank can drill (D122):
+ * reading or writing, never oral, since the bank has no oral items. At least one; fewer than
+ * three when a short session gives too little evidence (D127).
+ */
+const oralFixesShape = z
+  .array(
+    z.strictObject({
+      criterion: z.enum(ORAL_CRITERIA),
+      subSkill: z.enum([...READING_SUB_SKILLS, ...WRITING_SUB_SKILLS]),
+      advice: z.string().min(1),
+      evidence: z.string().min(1),
+    }),
+  )
+  .min(1)
+  .max(3);
+
+const missingWordsShape = z
+  .array(
+    z.strictObject({
+      word: z.string().trim().min(1),
+      turn: turnIndexShape,
+      excerpt: z.string().min(1),
+      example: z.string().min(1),
+    }),
+  )
+  .min(1)
+  .max(5);
+
+/**
+ * What the model returns for a session's report: errors as a turn and an excerpt,
+ * not offsets (D105, D122). `assembleOralAssessment` places them.
+ */
+export const oralAssessmentDraftShape = z.strictObject({
+  criteria: oralCriteriaShape,
+  fixes: oralFixesShape,
+  missingWords: missingWordsShape,
+  errors: z.array(
+    z.strictObject({
+      turn: turnIndexShape,
+      excerpt: z.string().min(1),
+      correction: z.string().min(1),
+      rule: z.string().min(1),
+    }),
+  ),
+});
+
+/**
+ * A placed report's shape. Whether each turn index names a candidate's turn, and
+ * each range fits it, is `checkOralAssessment`'s, since a schema does not see the
+ * turns.
+ */
+export const oralAssessmentShape = z.strictObject({
+  criteria: oralCriteriaShape,
+  fixes: oralFixesShape,
+  missingWords: missingWordsShape,
+  errors: z.array(
+    z.strictObject({
+      turn: turnIndexShape,
+      start: z.number().int().nonnegative(),
+      end: z.number().int().positive(),
+      correction: z.string().min(1),
+      rule: z.string().min(1),
+    }),
+  ),
+});
+
 export const passageDraftSchema = passageDraftShape.readonly();
 export const itemDraftSchema = itemDraftShape.readonly();
 export const reviewVerdictSchema = reviewVerdictShape.readonly();
@@ -128,3 +209,5 @@ export const writingFeedbackDraftSchema = writingFeedbackDraftShape.readonly();
 export const writingAssessmentSchema = writingAssessmentShape.readonly();
 export const scenarioDraftSchema = scenarioDraftShape.readonly();
 export const examinerTurnSchema = examinerTurnShape.readonly();
+export const oralAssessmentDraftSchema = oralAssessmentDraftShape.readonly();
+export const oralAssessmentSchema = oralAssessmentShape.readonly();

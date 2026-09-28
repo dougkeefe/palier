@@ -24,6 +24,7 @@ import { applyStatistics } from "./pipeline/carry.js";
 import { DEFAULT_PER_SOURCE, runPipeline } from "./pipeline/run.js";
 import type { RunInput } from "./pipeline/run.js";
 import { discardReasonCounts } from "./pipeline/metrics.js";
+import { describeOralStability } from "./eval/oral-stability.js";
 import { runEval } from "./eval/report.js";
 
 /**
@@ -207,6 +208,7 @@ export const runFactory = async (argv: readonly string[], deps: CliDeps): Promis
         ? `schema conformance: no recorded run on prompt v${promptVersion}; re-record (docs/deploy.md)`
         : `schema conformance on prompt v${promptVersion}: ${rate.toFixed(3)} over ${measuredOn.join(", ")}`,
     );
+    deps.log(describeOralStability(report.oralStability));
     return report.minClassRate >= DETECTION_BAR ? 0 : 1;
   }
 

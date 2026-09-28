@@ -77,3 +77,17 @@ describe("message files", () => {
     }
   });
 });
+
+describe("the oral report's figures, in each locale's own format (D127)", () => {
+  it("writes a pause with the locale's decimal mark: 1.5 s in English, 1,5 s in French", async () => {
+    const { createTranslator } = await import("next-intl");
+    const say = (locale: "en" | "fr") =>
+      createTranslator({ locale, messages: load(locale) as never, namespace: "oralReport" as never }) as unknown as (
+        key: string,
+        values: Record<string, number>,
+      ) => string;
+    expect(say("en")("pauseValue", { seconds: 1.5 })).toBe("1.5 s");
+    expect(say("fr")("pauseValue", { seconds: 1.5 })).toBe("1,5 s");
+    expect(say("fr")("wordsPerMinuteValue", { count: 1234 })).toBe("1 234");
+  });
+});

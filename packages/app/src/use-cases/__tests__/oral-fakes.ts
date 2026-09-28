@@ -50,6 +50,7 @@ export const anOralSession = (over: Partial<OralSession> = {}): OralSession => (
   endedAt: null,
   endReason: null,
   turns: [],
+  assessment: null,
   ...over,
 });
 
@@ -226,12 +227,14 @@ export const examinerProvider = (options: ExaminerOptions = {}) => {
       transcribe: true,
       speak: options.speaks ?? true,
       examinerTurn: true,
+      assessOral: false,
     }),
     generatePassage: () => Promise.reject(new Error("unused")),
     generateItems: () => Promise.reject(new Error("unused")),
     reviewItem: () => Promise.reject(new Error("unused")),
     assessWriting: () => Promise.reject(new Error("unused")),
     generateScenario: () => Promise.reject(new Error("unused")),
+    assessOral: () => Promise.reject(new Error("unused")),
     examinerTurn: async (req) => {
       examinerRequests.push(req);
       usage = { model: "m-examiner", inputTokens: 100, outputTokens: 10, costUsd: 0.001 };

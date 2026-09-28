@@ -136,6 +136,76 @@ describe("selectItems, weighting (practice)", () => {
   });
 });
 
+describe("selectItems, boosted sub-skills (D124)", () => {
+  const base = { skill: "reading", lang: "fr", targetBand: "C", count: 1, mode: "practice" } as const;
+  // Pool order [boosted(tone-and-intent), normal(main-idea)], neither weakest: no history.
+  const pool = [item("boosted", "tone-and-intent", "C"), item("normal", "main-idea", "C")];
+
+  it("favours a boosted sub-skill: at equal luck it is chosen over an unweighted one", () => {
+    const picked = selectItems({ ...base, boost: ["tone-and-intent"] }, pool, [], seq([0.5]), NOW);
+
+    expect(String(picked[0]?.id)).toBe("boosted");
+  });
+
+  // `inference` weakest by history, as the weighting suite sets it up; `tone-and-intent` boosted.
+  const history: Attempt[] = Array.from({ length: 8 }, (_, i) =>
+    anAttempt({ itemId: itemId(`h${i}`), skill: "reading", correct: false, ts: daysAgo(30 + i) }),
+  );
+  const historyItems: Item[] = Array.from({ length: 8 }, (_, i) => item(`h${i}`, "inference", "A"));
+
+  it("keeps a weakest sub-skill ahead of a boosted one, so a report never levels the weakest down (D127)", () => {
+    // Keys at 0.5: weakest 0.5^(1/3) ≈ 0.794 against boosted 0.5^(1/2) ≈ 0.707.
+    const both = [item("boosted", "tone-and-intent", "C"), item("weak", "inference", "C"), ...historyItems];
+    const picked = selectItems({ ...base, boost: ["tone-and-intent"] }, both, history, seq([0.5]), NOW);
+
+    expect(String(picked[0]?.id)).toBe("weak");
+  });
+
+  it("multiplies the two weights for a sub-skill both weakest and boosted", () => {
+    // `inference` and `main-idea` both weakest; only `inference` boosted. Keys: inference 0.3^(1/6) ≈ 0.818
+    // against main-idea 0.5^(1/3) ≈ 0.794; without the boost inference is 0.3^(1/3) ≈ 0.669 and loses.
+    const moreHistory: Attempt[] = Array.from({ length: 8 }, (_, i) =>
+      anAttempt({ itemId: itemId(`m${i}`), skill: "reading", correct: false, ts: daysAgo(30 + i) }),
+    );
+    const moreItems: Item[] = Array.from({ length: 8 }, (_, i) => item(`m${i}`, "main-idea", "A"));
+    const pool = [item("inference", "inference", "C"), item("main-idea", "main-idea", "C"), ...historyItems, ...moreItems];
+    const attempts = [...history, ...moreHistory];
+    const alone = selectItems(base, pool, attempts, seq([0.3, 0.5]), NOW);
+    const boosted = selectItems({ ...base, boost: ["inference"] }, pool, attempts, seq([0.3, 0.5]), NOW);
+
+    expect(String(alone[0]?.id)).toBe("main-idea");
+    expect(String(boosted[0]?.id)).toBe("inference");
+  });
+
+  it("draws exactly as before with no boost, or an empty one", () => {
+    // Equal weights and equal luck: the stable sort keeps pool order either way, so reverse it.
+    const reversed = [...pool].reverse();
+    const without = selectItems(base, reversed, [], seq([0.5]), NOW);
+    const empty = selectItems({ ...base, boost: [] }, reversed, [], seq([0.5]), NOW);
+
+    expect(String(without[0]?.id)).toBe("normal");
+    expect(empty).toEqual(without);
+  });
+
+  it("gives a boosted sub-skill of another skill nothing to reach", () => {
+    const picked = selectItems({ ...base, boost: ["agreement"] }, [...pool].reverse(), [], seq([0.5]), NOW);
+
+    expect(String(picked[0]?.id)).toBe("normal");
+  });
+
+  it("never boosts in diagnostic mode, which is coverage rather than targeting", () => {
+    const picked = selectItems(
+      { ...base, mode: "diagnostic", boost: ["tone-and-intent"] },
+      [...pool].reverse(),
+      [],
+      seq([0.5]),
+      NOW,
+    );
+
+    expect(String(picked[0]?.id)).toBe("normal");
+  });
+});
+
 describe("selectItems, ordering (practice)", () => {
   const base = { skill: "reading", lang: "fr", targetBand: "C", count: 6, mode: "practice" } as const;
 

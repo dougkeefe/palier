@@ -5,9 +5,11 @@
   "type": "module",
   "exports": {
     "./profiles/psc-sle.json": "./profiles/psc-sle.json",
-    "./writing/prompts.json": "./writing/prompts.json"
+    "./writing/prompts.json": "./writing/prompts.json",
+    "./oral/fillers.json": "./oral/fillers.json"
   },
   "files": [
+    "oral",
     "profiles",
     "writing"
   ]

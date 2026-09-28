@@ -1,10 +1,10 @@
 "use client";
 
-import type { OralSession, OralSessionChoice } from "@palier/app";
+import type { OralHistoryEntry, OralSession, OralSessionChoice } from "@palier/app";
 import type { Lang, TargetBand } from "@palier/domain";
 import { sessionId } from "@palier/domain";
 import { Button, Callout, Card, Timer, Toast } from "@palier/ui";
-import { useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { type Ref, useEffect, useId, useMemo, useReducer, useRef, useState } from "react";
 
 import { estimateText } from "../../features/key/spend-view";
@@ -19,12 +19,14 @@ import {
   sessionEstimate,
   turnFocus,
 } from "../../features/oral/practice-view";
+import { endReportLink, historyTag } from "../../features/oral/report-view";
 import { elapsedText, preflightNotice } from "../../features/writing/workshop-view";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { browserLevelKit, measureLevel } from "../../lib/oral/level";
 import { browserMediaKit } from "../../lib/oral/recorder";
 import { readStudyProfile } from "../../lib/study";
+import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
 
@@ -48,6 +50,8 @@ type Setup = {
   readonly choices: readonly OralSessionChoice[];
   /** What a minute of practice is estimated to cost, or none when it is unpriced (D117). */
   readonly perMinuteUsd: number | null;
+  /** This device's past sessions, newest first, each linking to its report (D126). */
+  readonly history: readonly OralHistoryEntry[];
 };
 
 const loadSetup = async (container: Container): Promise<Setup> => {
@@ -57,7 +61,8 @@ const loadSetup = async (container: Container): Promise<Setup> => {
     lang: TARGET_LANG,
   });
   const perMinuteUsd = container.useCases.featureCosts().find((cost) => cost.feature === "oral-practice")?.estimateUsd ?? null;
-  return { keyHeld: status !== null, choices, perMinuteUsd };
+  const history = await container.useCases.oralHistory().catch(() => []);
+  return { keyHeld: status !== null, choices, perMinuteUsd, history };
 };
 
 /**
@@ -111,14 +116,17 @@ export function OralPractice() {
     return () => control?.dispose();
   }, [control]);
 
+  // The picker reads its sessions again each time it is shown, so "Practise again" lists the one just
+  // finished, and its report once it has one (D127).
+  const picking = state.phase === "picking";
   useEffect(() => {
-    if (container.status !== "ready") return;
+    if (container.status !== "ready" || !picking) return;
     let alive = true;
     void loadSetup(container.container).then((loaded) => alive && setSetup(loaded));
     return () => {
       alive = false;
     };
-  }, [container]);
+  }, [container, picking]);
 
   // The screen's timer: the elapsed time shown, and a tick so the session moves on at a phase boundary.
   const running = state.phase === "running";
@@ -207,6 +215,7 @@ export function OralPractice() {
             })}
           </ul>
         </section>
+        <History history={setup.history} />
       </div>
     );
   }
@@ -347,7 +356,14 @@ export function OralPractice() {
           {question === null ? (
             <Toast tone="info">{t("preparing")}</Toast>
           ) : (
-            <Question text={question.text} audio={question.audio} lang={choice.scenario.lang} textRef={questionRef} />
+            <Question
+              text={question.text}
+              audio={question.audio}
+              lang={choice.scenario.lang}
+              textRef={questionRef}
+              onPlaying={control.questionPlaying}
+              onHeard={control.questionHeard}
+            />
           )}
         </Card>
         {waiting && !ending ? (
@@ -424,7 +440,18 @@ export function OralPractice() {
           {evicted > 0 ? <Callout tone="info">{t("evicted", { count: evicted })}</Callout> : null}
           {recordingKept === true ? <p className="app-muted">{t("recordingKept")}</p> : null}
           {recordingKept === false ? <Callout tone="info">{t("recordingNotSaved")}</Callout> : null}
-          <p className="app-muted">{t("reportComing")}</p>
+          {endReportLink(session) && session !== null ? (
+            <div className="app-actions">
+              <Link
+                href={{ pathname: "/practice/oral/report", query: { session: session.id } }}
+                className="pl-btn pl-btn--primary pl-focusable"
+              >
+                {t("reportLink")}
+              </Link>
+            </div>
+          ) : (
+            <p className="app-muted">{t("reportNothing")}</p>
+          )}
         </div>
       </Card>
       <Transcript session={session} lang={choice.scenario.lang} />
@@ -443,36 +470,64 @@ export function OralPractice() {
  * be paused, and once it has stopped it can be heard again from the start (WCAG 1.4.2, D121). The words
  * are a polite live region, so a new question is read out wherever focus is.
  */
-function Question({ text, audio, lang, textRef }: { text: string; audio: Blob | null; lang: Lang; textRef: Ref<HTMLParagraphElement> }) {
+function Question({
+  text,
+  audio,
+  lang,
+  textRef,
+  onPlaying,
+  onHeard,
+}: {
+  text: string;
+  audio: Blob | null;
+  lang: Lang;
+  textRef: Ref<HTMLParagraphElement>;
+  /** The voice began, or began again: the candidate is listening (D127). */
+  onPlaying: () => void;
+  /** The voice stopped, or could not play: the question has been heard (D127). */
+  onHeard: () => void;
+}) {
   const t = useTranslations("oral");
   const player = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
-  const url = useMemo(() => (audio === null ? null : URL.createObjectURL(audio)), [audio]);
 
+  // The address is made, given to the player and revoked by one effect, so a remount (Strict Mode)
+  // never plays a revoked one (D127). Playing may be refused (autoplay rules, or audio the browser
+  // cannot decode); the words are on screen, and the question counts as heard now.
   useEffect(() => {
-    if (url === null) return;
-    return () => URL.revokeObjectURL(url);
-  }, [url]);
-
-  useEffect(() => {
-    if (url === null) return;
-    // Playing may be refused (autoplay rules, or audio the browser cannot decode); the words are on screen.
-    void player.current?.play().catch(() => undefined);
-  }, [url]);
+    const element = player.current;
+    if (audio === null || element === null) return;
+    const made = URL.createObjectURL(audio);
+    element.src = made;
+    void element.play().catch(onHeard);
+    return () => URL.revokeObjectURL(made);
+  }, [audio, onHeard]);
 
   return (
     <div className="app-stack">
       <p ref={textRef} tabIndex={-1} className="app-oral-question app-step-heading" lang={lang} aria-live="polite">
         {text}
       </p>
-      {url === null ? null : (
+      {audio === null ? null : (
         <>
           <audio
             ref={player}
-            src={url}
-            onPlay={() => setPlaying(true)}
-            onPause={() => setPlaying(false)}
-            onEnded={() => setPlaying(false)}
+            onPlay={() => {
+              setPlaying(true);
+              onPlaying();
+            }}
+            onPause={() => {
+              setPlaying(false);
+              onHeard();
+            }}
+            onEnded={() => {
+              setPlaying(false);
+              onHeard();
+            }}
+            onError={() => {
+              setPlaying(false);
+              onHeard();
+            }}
           />
           <div className="app-actions">
             <Button
@@ -485,7 +540,7 @@ function Question({ text, audio, lang, textRef }: { text: string; audio: Blob | 
                   return;
                 }
                 audioElement.currentTime = 0;
-                void audioElement.play().catch(() => undefined);
+                void audioElement.play().catch(onHeard);
               }}
             >
               {t(playing ? "pauseQuestion" : "playAgain")}
@@ -497,7 +552,40 @@ function Question({ text, audio, lang, textRef }: { text: string; audio: Blob | 
   );
 }
 
-/** The stored transcript, shown once the session is over (the report is Phase 5 Slice 3's). */
+/** This device's past sessions (D126), each opening its report, where one can be asked for when it has none. */
+function History({ history }: { history: readonly OralHistoryEntry[] }) {
+  const t = useTranslations("oral");
+  const format = useFormatter();
+  if (history.length === 0) return null;
+  return (
+    <section className="app-stack" aria-labelledby="oral-history-title">
+      <h2 id="oral-history-title">{t("historyTitle")}</h2>
+      <p className="app-muted">{t("historyNote")}</p>
+      <ul className="app-list">
+        {history.map((entry) => (
+          <li key={entry.id} className="app-history">
+            <span id={`oral-history-${entry.id}`}>
+              {t("historyItem", {
+                type: entry.sessionType === null ? t("historyUnknownType") : t(`type_${entry.sessionType}`),
+                date: format.dateTime(new Date(entry.startedAt), { dateStyle: "medium", timeStyle: "short", timeZone: deviceTimeZone() }),
+              })}
+            </span>
+            <span className="app-tag">{t(historyTag(entry))}</span>
+            <Link
+              href={{ pathname: "/practice/oral/report", query: { session: entry.id } }}
+              className="app-link pl-focusable"
+              aria-describedby={`oral-history-${entry.id}`}
+            >
+              {t("historyOpen")}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/** The stored transcript, shown once the session is over; its report is a link away (D126). */
 function Transcript({ session, lang }: { session: OralSession | null; lang: Lang }) {
   const t = useTranslations("oral");
   const turns = session?.turns ?? [];

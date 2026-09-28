@@ -12,6 +12,7 @@ import {
   phaseProgress,
   practice,
   recordingsMegabytes,
+  answerPause,
   sessionEstimate,
   turnFocus,
 } from "./practice-view";
@@ -172,5 +173,20 @@ describe("turnFocus (D121)", () => {
   it("stays put while the same question waits, and while none does", () => {
     expect(turnFocus({ waiting: true }, { waiting: true, mode: "spoken" })).toBeNull();
     expect(turnFocus({ waiting: true }, { waiting: false, mode: "spoken" })).toBeNull();
+  });
+});
+
+describe("answerPause (D127)", () => {
+  it("runs from the question's appearing when it had no voice", () => {
+    expect(answerPause({ shownAtMs: 1_000, voiced: false, heardAtMs: null }, 3_500.4)).toBe(2_500);
+  });
+
+  it("runs from when the voice stopped, and is none when Record is pressed over it", () => {
+    expect(answerPause({ shownAtMs: 1_000, voiced: true, heardAtMs: 6_000 }, 7_200)).toBe(1_200);
+    expect(answerPause({ shownAtMs: 1_000, voiced: true, heardAtMs: null }, 7_200)).toBe(0);
+  });
+
+  it("is never below zero", () => {
+    expect(answerPause({ shownAtMs: 5_000, voiced: false, heardAtMs: null }, 4_000)).toBe(0);
   });
 });

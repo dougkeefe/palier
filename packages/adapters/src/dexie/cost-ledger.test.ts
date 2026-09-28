@@ -52,6 +52,14 @@ describe("dexieCostLedger", () => {
     );
   });
 
+  it("reads a session that is not an id as belonging to no session, and keeps the spend (D125)", async () => {
+    const db = new PalierDb(dbName());
+    await db.costLedger.add({ ...anEntry, sessionId: 7 } as never);
+    await db.costLedger.add({ ...anEntry, sessionId: "" } as never);
+
+    expect(await dexieCostLedger(db).since("2026-09-01T00:00:00.000Z")).toEqual([anEntry, anEntry]);
+  });
+
   it("keeps its rows apart from the synced settings", async () => {
     const db = new PalierDb(dbName());
     await dexieCostLedger(db).append(anEntry);

@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-import { ORAL_SPEAKERS } from "../oral-session.js";
+import { ORAL_INPUTS, ORAL_SPEAKERS } from "../oral-session.js";
 
 /**
  * A stored turn's shape (progress.md D116). Read back from the device's own
@@ -15,6 +15,8 @@ export const oralTurnShape = z
     phase: z.number().int().nonnegative(),
     startMs: z.number().int().nonnegative(),
     endMs: z.number().int().nonnegative(),
+    input: z.enum(ORAL_INPUTS).optional(),
+    pauseMs: z.number().int().nonnegative().optional(),
   })
   .refine((turn) => turn.startMs <= turn.endMs, { message: "a turn cannot end before it starts", path: ["endMs"] });
 

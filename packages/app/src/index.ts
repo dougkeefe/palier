@@ -161,6 +161,15 @@ export type {
   OralSessionChoice,
   TurnBasedTransport,
   TurnBasedTransportDeps,
+  OralCostLine,
+  OralHistoryEntry,
+  OralReport,
+  OralReportBlock,
+  OralReportDeps,
+  OralReportRequest,
+  OralReportViewDeps,
+  OralSessionCost,
+  MeterTag,
 } from "./use-cases/index.js";
 export {
   EmptyApiKeyError,
@@ -255,6 +264,14 @@ export {
   oralSessionChoices,
   startOralPracticeRun,
   turnBasedTransport,
+  NothingToAssessError,
+  OralSessionRunningError,
+  UnknownOralSessionError,
+  hasAnswers,
+  oralFocusSubSkills,
+  oralHistory,
+  oralReport,
+  requestOralReport,
 } from "./use-cases/index.js";
 
 export type { ProgressStores, SyncRecord } from "./sync/records.js";

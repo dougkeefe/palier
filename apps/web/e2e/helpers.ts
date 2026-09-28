@@ -185,3 +185,23 @@ export const practiseSpeaking = async (
   await expect(page.getByRole("heading", { name: "Session over" })).toBeFocused();
   await onState("ended");
 };
+
+/**
+ * The report on the session just ended (progress.md D126), from its end screen: follow the link,
+ * ask for the report past its pre-flight, and wait for it. `onState` runs at each state a user
+ * rests on, for axe.
+ */
+export const getOralReport = async (page: Page, { onState = async () => undefined }: { onState?: (state: string) => Promise<void> } = {}) => {
+  await page.getByRole("link", { name: "See the report on this session" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Report on a spoken session" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Get the report" })).toBeVisible();
+  await onState("offer");
+  await page.getByRole("button", { name: "Get the report" }).click();
+  await expect(page.getByRole("heading", { name: "Before you ask" })).toBeFocused();
+  await onState("pre-flight");
+  await page.getByRole("button", { name: "Send for the report" }).click();
+  await expect(page.getByRole("region", { name: "Your report" })).toBeVisible();
+  // Focus lands on the report that just arrived (WCAG 2.4.3, D127).
+  await expect(page.getByRole("heading", { level: 2, name: "Your report" })).toBeFocused();
+  await onState("report");
+};

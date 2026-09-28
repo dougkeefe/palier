@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { UsageRecord } from "@palier/domain";
+import { sessionId } from "@palier/domain";
 
 import type { AiProvider, ApiKeyStorage, CostEntry, CostLedger, KeyVault } from "../ports/index.js";
 import {
@@ -64,7 +65,7 @@ const NOW = "2026-09-26T12:00:00.000Z";
 const clock = { now: () => NOW };
 
 const providerStub = (verify: () => Promise<void> = () => Promise.resolve()): AiProvider => ({
-  capabilities: () => ({ generatePassage: false, generateItems: false, reviewItem: false, assessWriting: false, generateScenario: false, transcribe: false, speak: false, examinerTurn: false }),
+  capabilities: () => ({ generatePassage: false, generateItems: false, reviewItem: false, assessWriting: false, generateScenario: false, transcribe: false, speak: false, examinerTurn: false, assessOral: false }),
   generatePassage: () => Promise.reject(new Error("unused")),
   generateItems: () => Promise.reject(new Error("unused")),
   reviewItem: () => Promise.reject(new Error("unused")),
@@ -73,6 +74,7 @@ const providerStub = (verify: () => Promise<void> = () => Promise.resolve()): Ai
   transcribe: () => Promise.reject(new Error("unused")),
   speak: () => Promise.reject(new Error("unused")),
   examinerTurn: () => Promise.reject(new Error("unused")),
+  assessOral: () => Promise.reject(new Error("unused")),
   verifyKey: verify,
   lastUsage: () => null,
 });
@@ -190,8 +192,8 @@ const spendingProvider = (usages: (UsageRecord | null)[], fail = false) => {
     usage = usages.shift() ?? null;
     return fail ? Promise.reject(new Error("malformed twice")) : Promise.resolve();
   };
-  const provider: AiProvider & { assessOral: () => Promise<string> } = {
-    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true, transcribe: true, speak: true, examinerTurn: true }),
+  const provider: AiProvider & { openVoiceSession: () => Promise<string> } = {
+    capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true, transcribe: true, speak: true, examinerTurn: true, assessOral: true }),
     generatePassage: () => next().then(() => []),
     generateItems: () => next().then(() => []),
     reviewItem: () => next().then(() => ({}) as never),
@@ -200,9 +202,11 @@ const spendingProvider = (usages: (UsageRecord | null)[], fail = false) => {
     transcribe: () => next().then(() => ({ text: "" })),
     speak: () => next().then(() => new Blob()),
     examinerTurn: () => next().then(() => ({ text: "q", difficulty: null })),
-    // Not on the port yet (Phase 5): stands in for a capability added later. It was
-    // `assessWriting` until Slice 3 put that on the port (progress.md D105).
-    assessOral: () => next().then(() => "assessed"),
+    assessOral: () => next().then(() => ({}) as never),
+    // Not on the port yet (Phase 6): stands in for a capability added later. It was
+    // `assessWriting` until Phase 4 Slice 3 put that on the port (progress.md D105), and
+    // `assessOral` until Phase 5 Slice 3 did (D122).
+    openVoiceSession: () => next().then(() => "assessed"),
     verifyKey: () => {
       usage = { model: "never-billed", inputTokens: 1, outputTokens: 1, costUsd: 1 };
       return Promise.resolve();
@@ -240,6 +244,21 @@ describe("withAiProvider — every call is written to the cost ledger (D101)", (
     ]);
   });
 
+  it("records each call under the spoken session it is for, when tagged, and under none otherwise (D125)", async () => {
+    const { deps, entries } = await setUp(
+      spendingProvider([
+        { model: "m-examiner", inputTokens: 10, outputTokens: 5, costUsd: 0.001 },
+        { model: "m-assess", inputTokens: 20, outputTokens: 10, costUsd: 0.002 },
+      ]),
+    );
+
+    await withAiProvider(deps, "oral-practice", (ai) => ai.examinerTurn({} as never), { sessionId: sessionId("oral-9") });
+    await withAiProvider(deps, "oral-assessment", (ai) => ai.assessOral({} as never));
+
+    expect(entries.map((e) => e.sessionId)).toEqual([sessionId("oral-9"), undefined]);
+    expect("sessionId" in (entries[1] ?? {})).toBe(false);
+  });
+
   it("records a call that failed after it was billed, and still rejects with its error", async () => {
     const { deps, entries } = await setUp(
       spendingProvider([{ model: "m", inputTokens: 40, outputTokens: 40, costUsd: 0.1 }], true),
@@ -261,7 +280,7 @@ describe("withAiProvider — every call is written to the cost ledger (D101)", (
   it("meters a capability the port gains later, without an edit to the wrapper", async () => {
     const { deps, entries } = await setUp(spendingProvider([{ model: "m", inputTokens: 1, outputTokens: 2 }]));
     const result = await withAiProvider(deps, "writing-feedback", (ai) =>
-      (ai as unknown as { assessOral: () => Promise<string> }).assessOral(),
+      (ai as unknown as { openVoiceSession: () => Promise<string> }).openVoiceSession(),
     );
     expect(result).toBe("assessed");
     expect(entries.map((e) => e.feature)).toEqual(["writing-feedback"]);

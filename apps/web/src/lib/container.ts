@@ -71,7 +71,9 @@ import type {
   TelemetrySink,
   TelemetryStore,
   AnswerSource,
+  OralHistoryEntry,
   OralPracticeRun,
+  OralReport,
   OralSession,
   OralSessionChoice,
   OralStorageEstimate,
@@ -130,8 +132,11 @@ import {
   latestGeneratedSet,
   scoreGeneratedAnswer,
   cleanUpAudio,
+  oralHistory,
+  oralReport,
   oralSessionChoices,
   oralStorageEstimate,
+  requestOralReport,
   saveOralAudio,
   startOralPracticeRun,
 } from "@palier/app";
@@ -142,9 +147,21 @@ import { PROMPT_VERSION, openAiProvider } from "@palier/adapters/openai";
 import { httpSyncTransport } from "@palier/adapters/sync";
 import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
+import oralFillerLists from "@palier/content/oral/fillers.json";
 import writingPromptLibrary from "@palier/content/writing/prompts.json";
-import type { AiFeature, ExamForm, ExamProfile, Lang, ScenarioId, SessionId, TargetBand, WritingPrompt } from "@palier/domain";
-import { parseExamProfileOrThrow, parseWritingPromptsOrThrow } from "@palier/domain";
+import type {
+  AiFeature,
+  ExamForm,
+  ExamProfile,
+  Lang,
+  OralAssessment,
+  OralFillers,
+  ScenarioId,
+  SessionId,
+  TargetBand,
+  WritingPrompt,
+} from "@palier/domain";
+import { parseExamProfileOrThrow, parseOralFillersOrThrow, parseWritingPromptsOrThrow } from "@palier/domain";
 import type { DayPlan, ExamResult, Preflight, SkillTrend, TrendEvidence } from "@palier/engine";
 import {
   counterIdGenerator,
@@ -230,6 +247,19 @@ const PROFILE: ExamProfile = parseExamProfileOrThrow(pscSleProfile);
  * bundled the same way: it is small and the workshop needs it at once (progress.md D107).
  */
 const WRITING_PROMPTS: readonly WritingPrompt[] = parseWritingPromptsOrThrow(writingPromptLibrary);
+
+/**
+ * The words a candidate fills a pause with, per language, which the oral report counts
+ * (progress.md D123). Content data, parsed once here as the prompt library is.
+ */
+const ORAL_FILLERS: OralFillers = parseOralFillersOrThrow(oralFillerLists);
+
+/**
+ * Report requests still out, one per session (progress.md D127). At module scope rather than in a
+ * container, so a container built again (a change of language remounts the layout) still finds a
+ * request the last one made, and never pays for a second.
+ */
+const reportsInFlight = new Map<SessionId, Promise<OralAssessment>>();
 
 /**
  * How the browser makes an `AiProvider`: from the key, inside `KeyVault.withApiKey`, once
@@ -344,6 +374,21 @@ export type UseCases = {
   readonly saveOralAudio: (request: { readonly sessionId: SessionId; readonly audio: Blob }) => Promise<SaveOralAudioResult>;
   readonly oralStorageEstimate: () => Promise<OralStorageEstimate>;
   readonly cleanUpAudio: () => Promise<void>;
+  /**
+   * The report on a spoken session (PRD §8.6, progress.md D126): asked for on the user's key
+   * and kept on the session; the session as its report screen shows it, with its fluency and
+   * its cost; the list of past sessions; and one session's recording, played back or deleted.
+   */
+  readonly requestOralReport: (request: { readonly sessionId: SessionId; readonly feedbackLang: Lang }) => Promise<OralAssessment>;
+  /**
+   * The report request still out for a session, or `null` (progress.md D127). A second request while
+   * one is out joins it, so leaving the report screen mid-call and coming back never pays twice.
+   */
+  readonly oralReportInFlight: (request: { readonly sessionId: SessionId }) => Promise<OralAssessment> | null;
+  readonly oralReport: (request: { readonly sessionId: SessionId }) => Promise<OralReport | null>;
+  readonly oralHistory: () => Promise<readonly OralHistoryEntry[]>;
+  readonly oralRecording: (request: { readonly sessionId: SessionId }) => Promise<Blob | null>;
+  readonly deleteOralRecording: (request: { readonly sessionId: SessionId }) => Promise<void>;
 };
 
 export type Ports = {
@@ -420,6 +465,7 @@ function buildUseCases(ports: Ports): UseCases {
         items: ports.items,
         schedule: ports.schedule,
         attempts: ports.attempts,
+        oral: ports.oral,
       }),
     answerItem: (request) =>
       answerItem(request, {
@@ -596,6 +642,27 @@ function buildUseCases(ports: Ports): UseCases {
     saveOralAudio: (request) => saveOralAudio(request, { oral: ports.oral }),
     oralStorageEstimate: () => oralStorageEstimate({ oral: ports.oral }),
     cleanUpAudio: () => cleanUpAudio({ oral: ports.oral }),
+    requestOralReport: (request) => {
+      const held = reportsInFlight.get(request.sessionId);
+      if (held !== undefined) return held;
+      const asked = requestOralReport(request, {
+        vault: ports.vault,
+        aiProvider: ports.aiProvider,
+        ledger: ports.costLedger,
+        clock: ports.clock,
+        oral: ports.oral,
+        items: ports.items,
+        profile: PROFILE,
+      }).finally(() => reportsInFlight.delete(request.sessionId));
+      reportsInFlight.set(request.sessionId, asked);
+      return asked;
+    },
+    oralReportInFlight: (request) => reportsInFlight.get(request.sessionId) ?? null,
+    oralReport: (request) =>
+      oralReport(request.sessionId, { oral: ports.oral, items: ports.items, ledger: ports.costLedger, fillers: ORAL_FILLERS }),
+    oralHistory: () => oralHistory({ oral: ports.oral, items: ports.items }),
+    oralRecording: (request) => ports.oral.audio(request.sessionId),
+    deleteOralRecording: (request) => ports.oral.deleteAudio([request.sessionId]),
   };
 }
 

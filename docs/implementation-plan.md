@@ -146,6 +146,10 @@ interface OralStore      { put(s: OralSession): Promise<void>; get(id: SessionId
 // text, phase, startMs, endMs }, domain's. `all` is newest first, `audioIndex` oldest first with each
 // recording's size; `putAudio` rejects for an unknown session, and with StorageQuotaError when the
 // device is full. The retention policy (architecture.md §9.1) is in the use cases, not the store.
+// Amended 28 September 2026 (Phase 5 Slice 3, progress.md D122, D126): OralSession gains
+// `assessment: OralAssessment | null`, the report on it, and OralTurn an optional `input: "voice" | "typed"`,
+// which the fluency metrics need, and `pauseMs`, the pause the screen measured before a spoken answer (D127).
+// A stored report whose offsets no longer fit its turns reads as unassessed.
 interface OralTransport  { open(req: { scenario: OralScenario }, sink: (e: OralTransportEvent) => void): Promise<void>;
                            direct(d: { phase: number; register: OralRegister }): Promise<void>; close(): Promise<void> }
 // A port §3.3 did not name, added 27 September 2026 (progress.md D116). One shape for the turn-based
@@ -165,8 +169,9 @@ interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string,
 // External services
 interface AiProvider {
   // Amended in place 23 September 2026 (progress.md D52, ADR 20). Phase 1 built the
-  // factory-facing subset only; the writing/oral/transcribe/voice methods land with
-  // their phases (4–5). `generatePassage` was ADDED (§4.2 needs it), and generate*
+  // factory-facing subset only; the writing/oral/transcribe/voice methods landed with
+  // their phases (4–5); still to come are Gate J's pronunciation method (progress.md D122) and
+  // openVoiceSession (Phase 6). `generatePassage` was ADDED (§4.2 needs it), and generate*
   // return DRAFTS (the factory assembles the full artefact), not Item[]/Passage[].
   // The request/response DTOs live in @palier/domain, not here (ADR 20).
   capabilities(): AiCapabilities                                   // which of the below are supported
@@ -177,7 +182,9 @@ interface AiProvider {
                                     // offsets checkErrorOffsets accepts; the model reports excerpts, the adapter places them
   generateScenario(req: GenerateScenarioRequest): Promise<ScenarioDraft>  // Phase 5 Slice 1, ADDED (progress.md D114):
                                     // the factory's scenario stage; a phase plan, assembled by the factory
-  assessOral(req: OralRequest): Promise<OralAssessment>            // deferred to Phase 5 Slice 3
+  assessOral(req: OralRequest): Promise<OralAssessment>            // Phase 5 Slice 3 (progress.md D122): per-criterion
+                                    // bands with quoted evidence, three fixes on drillable sub-skills, five missing words,
+                                    // and the errors placed per candidate turn; the model quotes, the adapter places
   transcribe(req: TranscribeRequest): Promise<Transcript>          // Phase 5 Slice 2, AMENDED (progress.md D117): was
                                     // (audio: Blob, lang); the request adds the clip's measured durationMs, which prices it
   speak(req: SpeechRequest): Promise<Blob>                         // Phase 5 Slice 2, ADDED (D117): the examiner's voice
@@ -233,6 +240,9 @@ interface KeyVault {
 // deleteEverywhere clear it. No all(), because nothing exports it. withAiProvider(deps, feature, fn)
 // appends every spending call's lastUsage() to it, so no AI use case can skip it; the key check is not
 // metered. CostEntry = { ts, feature: AiFeature, model, inputTokens, outputTokens, costUsd: number | null }.
+// Amended 28 September 2026 (Phase 5 Slice 3, progress.md D125): CostEntry gains an optional `sessionId`,
+// the spoken session a call was for, which withAiProvider(deps, feature, fn, { sessionId }) stamps, so a
+// session's cost is its own rows exactly.
 interface CostLedger {
   append(entry: CostEntry): Promise<void>
   since(from: ISO): Promise<CostEntry[]>                        // at or after `from`, oldest first
@@ -975,7 +985,7 @@ Practice mode first, deliberately. It delivers most of the learning value, it is
 - A 10 minute session produces a report a user would act on.
 - Cost per session measured and displayed accurately.
 - Audio reaches nowhere but OpenAI: each answer's clip only its transcription call, and the stored session recording only when the user opts into the pronunciation criterion, an opt-in that is explicit each time. Asserted by extending the key-leak test's instrumentation to audio blobs. *(Amended in place 27 September 2026, `progress.md` D113: the earlier wording, "audio never leaves the device unless the user opts into the pronunciation criterion", contradicted R12 and architecture.md §8.5, since practice mode transcribes every answer.)*
-- **Scoring stability eval passes:** the same transcript scored five times varies by at most one band, with per-criterion agreement above the threshold. An unstable scorer undermines the whole feature, because users compare one session to the next.
+- **Scoring stability eval passes:** the same transcript scored five times varies by at most one band, with per-criterion agreement at or above the threshold (0.8, four in five; *amended in place 28 September 2026, `progress.md` D127: it said "above"*). An unstable scorer undermines the whole feature, because users compare one session to the next.
 - The session state machine is contract-tested against a fake transport, so phase 6 inherits a tested machine and only has to add real WebRTC underneath it.
 
 **Not built:** realtime voice.
@@ -991,8 +1001,9 @@ practice mode and report, with all five session types and pronunciation as a per
   transport, `/practice/oral` in practice mode, mic permission and recovery with a typed-answer fallback, local
   recording, and the key-leak test extended to audio. *Done:* exit criterion 3.
 - **Slice 3 — `assessOral` and the report.** Per-criterion bands with quoted evidence, three ranked fixes into the
-  scheduler, missing vocabulary, the marked-up transcript, device-side fluency metrics, the pronunciation opt-in, cost
-  per session measured and shown, and the scoring-stability eval recorded live. *Done:* exit criteria 2 and 4, then
+  scheduler, missing vocabulary, the marked-up transcript, device-side fluency metrics, the pronunciation opt-in
+  (**deferred to Gate J** by the human, `progress.md` D122: the `pronounce` role ships unconfigured), cost per session
+  measured and shown, and the scoring-stability eval recorded live. *Done:* exit criteria 2 and 4, then
   **Gate I** (exit criterion 1, human).
 
 ---

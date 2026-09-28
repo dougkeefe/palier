@@ -11,7 +11,7 @@ import {
 } from "../../lib/oral/recorder";
 import { type AnswerBridge, answerBridge } from "./answer-bridge";
 import { levelVerdict, micFailure } from "./mic";
-import { type AnswerMode, type OralFailure, type PracticeAction, oralFailure } from "./practice-view";
+import { type AnswerMode, type OralFailure, type PracticeAction, type QuestionHeard, answerPause, oralFailure } from "./practice-view";
 
 /** The use cases the screen's session needs, as the container binds them. */
 export type PracticeUseCases = {
@@ -48,6 +48,10 @@ export type PracticeController = {
   readonly record: () => void;
   readonly stopAndSend: () => Promise<void>;
   readonly sendTyped: (text: string) => boolean;
+  /** The question's voice began playing, or played again: the candidate is listening (D127). */
+  readonly questionPlaying: () => void;
+  /** The question's voice stopped, ended or paused, or could not play: it has been heard (D127). */
+  readonly questionHeard: () => void;
   /** The screen's timer: let the session look at the clock (a phase boundary, or its end). */
   readonly tick: () => Promise<void>;
   readonly end: () => Promise<void>;
@@ -68,6 +72,7 @@ const emptySession = (id: SessionId, choice: OralSessionChoice): OralSession => 
   endedAt: null,
   endReason: null,
   turns: [],
+  assessment: null,
 });
 
 const ignore = (): void => undefined;
@@ -97,6 +102,8 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
   let id: SessionId | null = null;
   let endRequested = false;
   let finished = true;
+  let question: QuestionHeard | null = null;
+  let pauseMs: number | undefined;
 
   const stopStream = (): void => {
     for (const track of stream?.getTracks() ?? []) track.stop();
@@ -188,7 +195,10 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
       const sessionId = deps.newSessionId();
       id = sessionId;
       bridge = answerBridge();
-      bridge.subscribe((waiting) => deps.dispatch({ type: "question", waiting }));
+      bridge.subscribe((waiting) => {
+        if (waiting !== null) question = { shownAtMs: deps.now(), voiced: waiting.audio !== null, heardAtMs: null };
+        deps.dispatch({ type: "question", waiting });
+      });
       let mode: AnswerMode = requested;
       recording = null;
       if (requested === "spoken" && stream !== null) {
@@ -221,6 +231,7 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
     record: () => {
       if (stream === null || clip !== null) return;
       try {
+        pauseMs = question === null ? undefined : answerPause(question, deps.now());
         recording?.resume();
         clip = recordClip(stream, deps.media);
         deps.dispatch({ type: "recording" });
@@ -238,7 +249,22 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
       deps.dispatch({ type: "sent" });
       const answer = await current.stop();
       recording?.pause();
-      bridge?.submit({ kind: "audio", audio: answer.audio, durationMs: answer.durationMs });
+      const measured = pauseMs;
+      pauseMs = undefined;
+      bridge?.submit({
+        kind: "audio",
+        audio: answer.audio,
+        durationMs: answer.durationMs,
+        ...(measured === undefined ? {} : { pauseMs: measured }),
+      });
+    },
+
+    questionPlaying: () => {
+      if (question !== null) question = { ...question, heardAtMs: null };
+    },
+
+    questionHeard: () => {
+      if (question !== null) question = { ...question, heardAtMs: deps.now() };
     },
 
     sendTyped: (text) => {

@@ -12,6 +12,7 @@ const aSession = (id: string) => ({
   endedAt: null,
   endReason: null,
   turns: [],
+  assessment: null,
 });
 
 /** The quota the shared contract cannot set: a full device refuses a recording and stores nothing. */

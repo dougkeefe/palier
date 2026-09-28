@@ -1,6 +1,6 @@
 import { openAiProvider, PROMPT_VERSION } from "@palier/adapters/openai";
 import type { FetchLike } from "@palier/adapters/openai";
-import type { ExaminerTurnRequest, GenerateItemsRequest, ReviewRequest, WritingRequest } from "@palier/domain";
+import type { ExaminerTurnRequest, GenerateItemsRequest, OralRequest, ReviewRequest, WritingRequest } from "@palier/domain";
 
 /**
  * The eval harness's schema-conformance rate (Phase 4 CI gate, progress.md D112): of the calls
@@ -15,9 +15,10 @@ import type { ExaminerTurnRequest, GenerateItemsRequest, ReviewRequest, WritingR
 
 /**
  * The methods whose replies are a prompt's structured output, and so have a conformance rate.
- * The examiner joined with Phase 5 Slice 2 (progress.md D117).
+ * The examiner joined with Phase 5 Slice 2 (progress.md D117), and the oral report with Slice 3
+ * (D122), which has no recording until the human first runs one on a funded key.
  */
-export const CONFORMANCE_METHODS = ["generateItems", "reviewItem", "assessWriting", "examinerTurn"] as const;
+export const CONFORMANCE_METHODS = ["generateItems", "reviewItem", "assessWriting", "examinerTurn", "assessOral"] as const;
 export type ConformanceMethod = (typeof CONFORMANCE_METHODS)[number];
 
 /**
@@ -84,6 +85,7 @@ export const acceptsOnFirstTry = async (completion: StructuredCompletionData): P
     reviewItem: () => provider.reviewItem(completion.request as ReviewRequest),
     assessWriting: () => provider.assessWriting(completion.request as WritingRequest),
     examinerTurn: () => provider.examinerTurn(completion.request as ExaminerTurnRequest),
+    assessOral: () => provider.assessOral(completion.request as OralRequest),
   };
   const call = calls[completion.method];
   return call().then(

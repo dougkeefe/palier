@@ -14,7 +14,7 @@ const factoryPricing = JSON.parse(
 const models = { draft: "m" };
 const good = {
   models: { m: { inputPerMTok: 1, outputPerMTok: 2 } },
-  features: { "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }], "item-generation": [], "oral-practice": [] },
+  features: { "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }], "item-generation": [], "oral-practice": [], "oral-assessment": [] },
 };
 
 describe("PRICING, this build's pricing.json", () => {
@@ -52,7 +52,12 @@ describe("parsePricing", () => {
     expect(parsePricing(good, models)).toEqual({
       models,
       prices: { m: { inputPerMTok: 1, outputPerMTok: 2 } },
-      features: { "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }], "item-generation": [], "oral-practice": [] },
+      features: {
+        "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }],
+        "item-generation": [],
+        "oral-practice": [],
+        "oral-assessment": [],
+      },
     });
   });
 

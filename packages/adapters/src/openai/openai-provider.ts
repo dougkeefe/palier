@@ -1,9 +1,11 @@
 import type { AiProvider } from "@palier/app";
 import {
   assembleAssessment,
+  assembleOralAssessment,
   costOf,
   examinerTurnSchema,
   itemDraftSchema,
+  oralAssessmentDraftSchema,
   passageDraftSchema,
   reviewVerdictSchema,
   scenarioDraftSchema,
@@ -17,6 +19,9 @@ import type {
   GenerateScenarioRequest,
   ItemDraft,
   ModelPrice,
+  OralAssessment,
+  OralAssessmentDraft,
+  OralRequest,
   PassageDraft,
   ReviewRequest,
   ReviewVerdict,
@@ -334,6 +339,7 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
       transcribe: config.models.transcribe !== undefined,
       speak: config.models.speech !== undefined,
       examinerTurn: config.models.examiner !== undefined,
+      assessOral: config.models.assess !== undefined,
     }),
 
     generatePassage: (req: GeneratePassageRequest) => {
@@ -383,6 +389,25 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
         const result = writingFeedbackDraftSchema.safeParse(raw);
         if (!result.success) throw new Error(result.error.message);
         const assembled = assembleAssessment(req.text, result.data as WritingFeedbackDraft);
+        if (!assembled.ok) throw new Error(assembled.problem);
+        return assembled.assessment;
+      });
+    },
+
+    /**
+     * The report on a session, on writing feedback's `assess` model (D122). The model names a
+     * candidate's turn and quotes its words, and `assembleOralAssessment` places them, so an
+     * excerpt not in its turn, a turn that is the examiner's, or two errors on the same words
+     * fails the parse and is retried once, then becomes `InvalidResponseError` (D105's rule).
+     */
+    assessOral: (req: OralRequest) => {
+      const model = config.models.assess;
+      if (model === undefined) return refuseUnconfigured("the oral report", "assess");
+      const { system, user } = buildPrompt.oral(req);
+      return callValidated(model, system, user, (raw): OralAssessment => {
+        const result = oralAssessmentDraftSchema.safeParse(raw);
+        if (!result.success) throw new Error(result.error.message);
+        const assembled = assembleOralAssessment(req.turns, result.data as OralAssessmentDraft);
         if (!assembled.ok) throw new Error(assembled.problem);
         return assembled.assessment;
       });

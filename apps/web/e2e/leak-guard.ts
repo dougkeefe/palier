@@ -63,6 +63,13 @@ export const recorderMarker = (n: number): string => `[${AUDIO_SENTINEL}#${Strin
 /** A word the stubbed transcription writes into every answer (D120), so the guard can follow the transcript. */
 export const TRANSCRIPT_SENTINEL = "Grelottard3b8e";
 
+/**
+ * A word the stubbed oral report writes into its correction (D126), so the guard can follow the
+ * report: it arrives from OpenAI, is kept on this device (the page, the `oralSessions` store) and
+ * goes nowhere else.
+ */
+export const REPORT_SENTINEL = "Pimprenellard6f21";
+
 /** The question the stubbed examiner asks. */
 export const EXAMINER_QUESTION = "Pouvez-vous me décrire votre poste actuel ?";
 
@@ -211,12 +218,41 @@ export const transcriptionAnswer = (): OpenAiAnswer => ({
 /** A voice (D120): bytes under an audio type. No browser needs to play them for the words to be on screen. */
 export const speechAnswer = (): OpenAiAnswer => ({ status: 200, contentType: "audio/mpeg", body: "ID3-stub-voice" });
 
-/** Which completion a request is: a generation draft, a review, the examiner, or (otherwise) writing feedback. */
-export const completionKind = (body: string): "draft" | "review" | "examiner" | "feedback" => {
+/**
+ * A report on a spoken session (D126), fitted to the transcript in the request: the candidate's
+ * first turn with words carries its error and every missing word, quoted from it, so the adapter
+ * places them. The correction carries {@link REPORT_SENTINEL}.
+ */
+export const oralReportAnswer = (body: string): OpenAiAnswer => {
+  // Each turn's words arrive as a JSON string (D127), so the first word follows the opening quotation mark.
+  const said = /\[(\d+)\] Candidate(?: \(typed\))?: "([^\s"\\]+)/u.exec(promptOf(body));
+  const turn = Number(said?.[1] ?? 0);
+  const excerpt = said?.[2] ?? "";
+  const word = { word: "piloter", turn, excerpt, example: "Je pilote les consultations avec les provinces." };
+  const fix = (subSkill: string, advice: string) => ({ criterion: "grammar", subSkill, advice, evidence: excerpt });
+  return completion(
+    {
+      criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+      fixes: [
+        fix("agreement", "Accordez le verbe avec son sujet."),
+        fix("word-choice-precision", "Choisissez le mot le plus précis."),
+        fix("inference", "Répondez à ce qui est sous-entendu."),
+      ],
+      missingWords: [word, word, word, word, word],
+      errors: [{ turn, excerpt, correction: `${excerpt} ${REPORT_SENTINEL}`, rule: "précision" }],
+    },
+    3_050,
+    1_240,
+  );
+};
+
+/** Which completion a request is: a generation draft, a review, the examiner, an oral report, or (otherwise) writing feedback. */
+export const completionKind = (body: string): "draft" | "review" | "examiner" | "oral-report" | "feedback" => {
   const prompt = promptOf(body);
   if (/Produce \d+ item\(s\)/.test(prompt)) return "draft";
   if (prompt.includes("adversarial reviewer")) return "review";
   if (prompt.includes("You are the examiner")) return "examiner";
+  if (prompt.includes("assessing a rehearsal")) return "oral-report";
   return "feedback";
 };
 
@@ -226,6 +262,7 @@ export const defaultCompletion = (body: string): OpenAiAnswer => {
   if (kind === "draft") return generatedItemsAnswer(body);
   if (kind === "review") return reviewAnswer(body);
   if (kind === "examiner") return examinerAnswer();
+  if (kind === "oral-report") return oralReportAnswer(body);
   return feedbackAnswer();
 };
 
@@ -547,3 +584,23 @@ export const recordingsAtRest = (page: Page): Promise<string[]> =>
     }
     return texts;
   });
+
+/** Every row of an IndexedDB store, as JSON text, so a spec can say what is at rest there (D127). */
+export const textAtRest = (page: Page, database: string, store: string): Promise<string> =>
+  page.evaluate(
+    async ({ database, store }) => {
+      const db = await new Promise<IDBDatabase>((resolve, reject) => {
+        const open = indexedDB.open(database);
+        open.onsuccess = () => resolve(open.result);
+        open.onerror = () => reject(open.error);
+      });
+      const rows = await new Promise<unknown[]>((resolve, reject) => {
+        const request = db.transaction(store, "readonly").objectStore(store).getAll();
+        request.onsuccess = () => resolve(request.result as unknown[]);
+        request.onerror = () => reject(request.error);
+      });
+      db.close();
+      return JSON.stringify(rows);
+    },
+    { database, store },
+  );

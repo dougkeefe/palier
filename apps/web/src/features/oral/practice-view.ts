@@ -192,3 +192,23 @@ export const turnFocus = (
   if (!after.waiting || before?.waiting === true) return null;
   return after.mode === "typed" ? "answer" : "question";
 };
+
+/** Where the question being answered stands, as the screen saw it, for the pause before an answer. */
+export type QuestionHeard = {
+  /** When the question appeared, on the screen's monotonic clock. */
+  readonly shownAtMs: number;
+  /** Whether it came with the examiner's voice. */
+  readonly voiced: boolean;
+  /** When its voice last stopped (ended or paused), or `null` while it plays or before it has. */
+  readonly heardAtMs: number | null;
+};
+
+/**
+ * The candidate's pause before a spoken answer (progress.md D127): from the moment the question had
+ * been heard, when its voice stopped, or its appearing when it had none, to the press of Record,
+ * whole milliseconds and never below zero. Pressing Record over the voice is no pause at all.
+ */
+export const answerPause = (question: QuestionHeard, recordAtMs: number): number => {
+  if (question.voiced && question.heardAtMs === null) return 0;
+  return Math.max(0, Math.round(recordAtMs - (question.heardAtMs ?? question.shownAtMs)));
+};

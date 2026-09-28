@@ -38,6 +38,19 @@ framework. `.dependency-cruiser.cjs` enforces all three.
   overlapping) and `placeErrors`, which turns a model's excerpts into offsets. **A model reports excerpts,
   never offsets**; the offsets are computed here. The prompt library's `WritingPrompt` is a content artefact,
   so it *is* in `CONTENT_SCHEMAS` (`writing-prompt`), parsed by `parseWritingPrompts` (D107).
+- **The oral report's DTOs and its placement rule live here too** (progress.md D122). `OralRequest`,
+  `OralAssessment` and the model-facing `OralAssessmentDraft` (`ai.ts`, `schemas/ai.ts`): exactly the five
+  `ORAL_CRITERIA` (pronunciation is not one: a transcript cannot show it), **exactly three fixes, each on a
+  `ScoredSubSkill`** (reading or writing, never oral, since the bank drills only those), exactly five missing words,
+  and errors per turn; one to three fixes and one to five words, so a short session can have a report (D127).
+  `oral-assessment.ts` holds `assembleOralAssessment`, which runs `placeErrors` once per candidate turn, and
+  `checkOralAssessment` for a report read back. **Quotations are matched by `findExcerpt`** (`writing.ts`), which takes
+  curly and straight apostrophes, and any run of whitespace, as one and returns the text's own offsets; an excerpt must
+  quote a letter or a digit (D127). An error or word naming an examiner's turn is a
+  problem. `OralTurn.input` (`"voice" | "typed"`) and `OralTurn.pauseMs` (the screen's measured pause, D127) are
+  optional, because rows stored before them have none. **The filler list is a content artefact** (`oral-fillers` in
+  `CONTENT_SCHEMAS`, `parseOralFillers`, D123): language, not an exam rule, so not profile data. It lists only clear
+  hesitations, and `spokenWords` is the one tokeniser the parser and the engine share (D127).
 - **The adversarial-review gate lives here** (`review-gate.ts`, progress.md D109): `gateReasons`,
   `CONFIDENCE_THRESHOLD` and the key-blind `reviewRequestFor`, pure over an `Item` and a `ReviewVerdict`.
   The factory's stage 4 and the browser's `generatePracticeSet` share it, and domain is the one package both

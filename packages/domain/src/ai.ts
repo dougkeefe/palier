@@ -2,10 +2,10 @@ import type { ItemOption } from "./item.js";
 import type { Localised, LocalisedRich } from "./localised.js";
 import type { Band, TargetBand } from "./bands.js";
 import type { OralPhase, OralSessionType } from "./oral-scenario.js";
-import type { OralDirection, OralRegister, OralSpeaker } from "./oral-session.js";
+import type { OralDirection, OralRegister, OralSpeaker, OralTurn } from "./oral-session.js";
 import type { DocType } from "./passage.js";
 import type { ItemType, Lang, OptionId } from "./skills.js";
-import type { SubSkill } from "./sub-skills.js";
+import type { ReadingSubSkill, SubSkill, WritingSubSkill } from "./sub-skills.js";
 import type { Topic } from "./topics.js";
 import type { PromptSpec } from "./item-types/definition.js";
 
@@ -20,9 +20,9 @@ import type { PromptSpec } from "./item-types/definition.js";
  *
  * Phase 1 defined what the content factory consumes; Phase 4 Slice 3 adds writing
  * feedback (progress.md D105), Phase 5 Slice 1 the factory's oral scenarios (D114),
- * and Slice 2 the turn loop's transcription, voice and examiner (D117). The oral
- * assessment lands with its slice, the same "the minimum the consumer needs"
- * discipline the ports layer already uses (progress.md D45).
+ * Slice 2 the turn loop's transcription, voice and examiner (D117), and Slice 3 the
+ * oral assessment (D122), each landing with its consumer, the same "the minimum the
+ * consumer needs" discipline the ports layer already uses (progress.md D45).
  */
 
 /** Which of the `AiProvider` methods a concrete provider supports. */
@@ -35,6 +35,7 @@ export type AiCapabilities = {
   readonly transcribe: boolean;
   readonly speak: boolean;
   readonly examinerTurn: boolean;
+  readonly assessOral: boolean;
 };
 
 /**
@@ -290,6 +291,102 @@ export type WritingFeedbackDraft = {
 };
 
 /**
+ * The five criteria a spoken session is reported by (product-requirements.md §8.6),
+ * in the order the report shows them. Pronunciation is the sixth, and is not among
+ * them: it cannot be judged from a transcript (architecture.md §8.5), so it is "not
+ * assessed" unless the user opts to upload the recording (Gate J, progress.md D122).
+ */
+export const ORAL_CRITERIA = ["comprehension", "fluency", "grammar", "vocabulary", "task"] as const;
+export type OralCriterion = (typeof ORAL_CRITERIA)[number];
+
+/**
+ * A sub-skill the bank has items for, so a fix can be drilled and can bias the plan
+ * (progress.md D122). The bank has no oral items, so an oral sub-skill would reach
+ * nothing: an oral fix names the oral criterion it hurt and a reading or writing
+ * sub-skill that practises it.
+ */
+export type ScoredSubSkill = ReadingSubSkill | WritingSubSkill;
+
+/**
+ * What `assessOral` is sent (architecture.md §8.5, "post-session scoring"): the whole
+ * session, the scenario it followed, and the published level descriptors, quoted in
+ * the prompt, in `feedbackLang`. The use case takes the descriptors from the profile,
+ * so the adapter never reads content (ADR 9). `lang` is the language spoken, and
+ * `feedbackLang` the interface language, as `WritingRequest`'s are.
+ */
+export type OralRequest = {
+  readonly sessionType: OralSessionType;
+  readonly targetBand: "B" | "C";
+  readonly lang: Lang;
+  readonly feedbackLang: Lang;
+  readonly topic: Topic;
+  readonly phases: readonly { readonly name: string; readonly intent: string }[];
+  readonly turns: readonly OralTurn[];
+  readonly descriptors: Readonly<Record<"A" | "B" | "C", string>>;
+};
+
+/**
+ * One of up to three highest-leverage fixes, most costly first (§8.6; fewer from a short session,
+ * progress.md D127): the criterion
+ * it cost, the sub-skill that drills it, what to do, and the evidence for it.
+ */
+export type OralFix = {
+  readonly criterion: OralCriterion;
+  readonly subSkill: ScoredSubSkill;
+  readonly advice: string;
+  readonly evidence: string;
+};
+
+/**
+ * A word the candidate lacked (§8.6, "your five most useful missing words"): the
+ * word, the candidate's own words where it would have served, found in `turn`, and
+ * that sentence said again with it.
+ */
+export type MissingWord = {
+  readonly word: string;
+  readonly turn: number;
+  readonly excerpt: string;
+  readonly example: string;
+};
+
+/**
+ * One error in a candidate's turn, as `[start, end)` offsets into that turn's text,
+ * so the transcript is marked up over what they said. `turn` indexes the session's
+ * turns and names a candidate's.
+ */
+export type OralTurnError = {
+  readonly turn: number;
+  readonly start: number;
+  readonly end: number;
+  readonly correction: string;
+  readonly rule: string;
+};
+
+/** What `assessOral` returns, placed and checked (progress.md D122). */
+export type OralAssessment = {
+  readonly criteria: Readonly<Record<OralCriterion, CriterionAssessment>>;
+  readonly fixes: readonly OralFix[];
+  readonly missingWords: readonly MissingWord[];
+  readonly errors: readonly OralTurnError[];
+};
+
+/** One error as a model reports it: the turn and the exact words, never offsets (D105). */
+export type OralTurnErrorDraft = {
+  readonly turn: number;
+  readonly excerpt: string;
+  readonly correction: string;
+  readonly rule: string;
+};
+
+/** The model's output, before its errors are placed in their turns. */
+export type OralAssessmentDraft = {
+  readonly criteria: Readonly<Record<OralCriterion, CriterionAssessment>>;
+  readonly fixes: readonly OralFix[];
+  readonly missingWords: readonly MissingWord[];
+  readonly errors: readonly OralTurnErrorDraft[];
+};
+
+/**
  * Token (and, priced, dollar) usage from the last call, for the cost ledger
  * (architecture.md §8.6). `costUsd` is absent until a `pricing.json` prices it.
  * An audio call reports what it is billed by instead (D117): the seconds of audio
@@ -309,10 +406,11 @@ export type UsageRecord = {
  * The features that spend the user's key, the names the cost ledger records a
  * call under (architecture.md §8.6, progress.md D101). Writing feedback is Phase 4
  * Slice 3, item generation Slice 4, and oral practice Phase 5 Slice 2 (D117): a
- * session's examiner turns, voice and transcriptions. A key check spends nothing, so
- * it is not a feature.
+ * session's examiner turns, voice and transcriptions. The report on a session is
+ * Slice 3's `oral-assessment` (D122), apart from the session, so each is shown at
+ * its own cost. A key check spends nothing, so it is not a feature.
  */
-export const AI_FEATURES = ["writing-feedback", "item-generation", "oral-practice"] as const;
+export const AI_FEATURES = ["writing-feedback", "item-generation", "oral-practice", "oral-assessment"] as const;
 export type AiFeature = (typeof AI_FEATURES)[number];
 
 /**

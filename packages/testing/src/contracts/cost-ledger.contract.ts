@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { CostEntry, CostLedger } from "@palier/app";
+import { sessionId } from "@palier/domain";
 
 const anEntry = (ts: string, over: Partial<CostEntry> = {}): CostEntry => ({
   ts,
@@ -33,6 +34,19 @@ export const costLedgerContract = (name: string, make: () => Promise<CostLedger>
       await ledger.append(unpriced);
 
       expect(await ledger.since("2026-09-26T00:00:00.000Z")).toEqual([priced, unpriced]);
+    });
+
+    it("returns an entry's spoken session with it, and none for an entry that names none (D125)", async () => {
+      const ledger = await make();
+      const forSession = anEntry("2026-09-27T10:00:00.000Z", { feature: "oral-practice", sessionId: sessionId("oral-1") });
+      const forNone = anEntry("2026-09-27T10:01:00.000Z");
+      await ledger.append(forSession);
+      await ledger.append(forNone);
+
+      const [first, second] = await ledger.since("2026-09-27T00:00:00.000Z");
+      expect(first).toEqual(forSession);
+      expect(second).toEqual(forNone);
+      expect(second !== undefined && "sessionId" in second).toBe(false);
     });
 
     it("returns entries at or after the instant, not before", async () => {

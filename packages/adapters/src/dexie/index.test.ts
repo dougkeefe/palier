@@ -46,6 +46,7 @@ describe("dexieStores", () => {
       endedAt: null,
       endReason: null,
       turns: [],
+      assessment: null,
     });
 
     expect(await stores.attempts.recent("reading", 10)).toHaveLength(1);
