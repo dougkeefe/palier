@@ -3,7 +3,7 @@
 **Last updated:** 28 September 2026
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
-slices and three gates (D132), and **Slice 1, security hardening, is in flight** on `dougkeefe/port-au-prince`. Phase 3's
+slices and three gates (D132), and **Slice 1, security hardening, is in flight** on `dougkeefe/next-progress-slice-v7`. Phase 3's
 product pilot still runs beside it (Gate E). The history, oldest first: **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
@@ -109,7 +109,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/port-au-prince` | **Phase 6's gate resolved (D131), Phase 7 planned (D132), and Phase 7 Slice 1, security hardening**: the strict CSP and Trusted Types on the built output, the dependency audit gate and Dependabot, `SECURITY.md`, `RATE_LIMIT_SALT` failing the deploy, and the deliberate attempt to leak the key. | 28 September 2026 |
+| `dougkeefe/next-progress-slice-v7` | **Phase 6's gate resolved (D131), Phase 7 planned (D132), and Phase 7 Slice 1, security hardening**: the strict CSP and Trusted Types on the built output, the dependency audit gate and Dependabot, `SECURITY.md`, `RATE_LIMIT_SALT` failing the deploy, and the deliberate attempt to leak the key. | 28 September 2026 |
 
 *(The prior rows — Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -212,7 +212,7 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 **Phase 6's decision gate is resolved: studio mode is deferred past 1.0** (28 September 2026, human, D131). Phase 7 follows
 Phase 5 directly and is planned as four slices and three gates (D132), mirrored in `implementation-plan.md` §7. **Slice 1,
-security hardening, is built** on `dougkeefe/port-au-prince` (D133–D137). Phase 5's deferred cost check (D130) and the product
+security hardening, is built** on `dougkeefe/next-progress-slice-v7` (D133–D137). Phase 5's deferred cost check (D130) and the product
 pilot (Gate E, D97) still run beside it, both the human's.
 
 **Next: Phase 7 Slice 2 — server lifecycle and observability.** No new product surface beyond the error states, so no gate
@@ -551,7 +551,7 @@ pronunciation offered as a per-session opt-in.
 
 ### Phase 7: Polish and hardening — 1.0
 
-**Opened 28 September 2026** (`dougkeefe/port-au-prince`), directly after Phase 5, because studio mode is deferred past 1.0
+**Opened 28 September 2026** (`dougkeefe/next-progress-slice-v7`), directly after Phase 5, because studio mode is deferred past 1.0
 (D131). The `implementation-plan.md` §7 work breakdown, expanded on start, with what already exists ticked and pointed at.
 Nothing is ticked without session-log evidence.
 
@@ -4966,7 +4966,7 @@ merged, none critical. The human chose to fix all of them.
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 28 September 2026 — `dougkeefe/port-au-prince` (Phase 6's gate resolved; Phase 7 planned; Phase 7 Slice 1, security hardening)
+### 28 September 2026 — `dougkeefe/next-progress-slice-v7` (Phase 6's gate resolved; Phase 7 planned; Phase 7 Slice 1, security hardening)
 
 **Phase 5 closed had merged as #38**, so its In-flight row was replaced by this branch's in the first commit.
 
