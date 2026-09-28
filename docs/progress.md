@@ -20,7 +20,7 @@ conformance rate and the nightly live smoke. **That ticks exit criterion 2, and 
 Gate H, Phase 5's direction, is resolved (D113), so Phase 5 is planned as three slices. **Slice 1, "the session core,
 no UI", merged (#34; D114–D116)**: scenarios through the bank (bank v3, with v2's forms carried forward), the
 `OralStore` with §9.1's retention, the engine's session machine, and the `OralTransport` port, driven end to end over a
-fake transport, which ticks exit criterion 5. **Slice 2, "the turn loop on the key", is built** (`dougkeefe/abu-dhabi-v3`;
+fake transport, which ticks exit criterion 5. **Slice 2, "the turn loop on the key", is built** (`dougkeefe/next-slice-from-progress-v2`;
 D117–D120): `transcribe`, `speak` and `examinerTurn` on gpt-transcribe, tts-1 and the text model, the `AnswerSource`
 port and `turnBasedTransport`, `/practice/oral` in practice mode with typed answers, local recording, and the key-leak
 test extended to audio, which ticks exit criterion 3. Slice 3 is next. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
@@ -100,7 +100,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/abu-dhabi-v3` | **Phase 5 Slice 2 — the turn loop on the key** (D113): `transcribe`, `speak` and `examinerTurn` on the `AiProvider` (gpt-transcribe and tts-1, human decision), the `AnswerSource` port and `turnBasedTransport`, `/practice/oral` in practice mode with mic recovery and typed answers, local recording, and the key-leak test extended to audio (exit criterion 3). **Built; pending merge** (D117–D120). | 27 September 2026 |
+| `dougkeefe/next-slice-from-progress-v2` | **Phase 5 Slice 2 — the turn loop on the key** (D113): `transcribe`, `speak` and `examinerTurn` on the `AiProvider` (gpt-transcribe and tts-1, human decision), the `AnswerSource` port and `turnBasedTransport`, `/practice/oral` in practice mode with mic recovery and typed answers, local recording, and the key-leak test extended to audio (exit criterion 3). **Built; pending merge** (D117–D120). | 27 September 2026 |
 
 *(The prior rows — Phase 5 Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -201,7 +201,7 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 5 Slice 2 is built** (`dougkeefe/abu-dhabi-v3`; D117–D120), which ticks exit criterion 3. The product pilot
+**Phase 5 Slice 2 is built** (`dougkeefe/next-slice-from-progress-v2`; D117–D120), which ticks exit criterion 3. The product pilot
 still runs beside it (Gate E, D97).
 
 **Next: Phase 5 Slice 3, "`assessOral` and the report"** (implementation-plan.md §7 Phase 5, D113). It carries exit
@@ -554,7 +554,7 @@ pronunciation offered as a per-session opt-in.
   carried forward and ten scenarios; `ItemRepository.scenarios()`; the `OralStore` on memory and Dexie with §9.1's
   retention in the use cases; the engine's session machine; `OralTransport` with its fake and contract; and
   `startOralSessionRun`, the driver.
-- [x] **Slice 2 — The turn loop on the key.** **Built 27 September 2026** (`dougkeefe/abu-dhabi-v3`; D117–D120;
+- [x] **Slice 2 — The turn loop on the key.** **Built 27 September 2026** (`dougkeefe/next-slice-from-progress-v2`; D117–D120;
   session-log evidence). `transcribe`, `speak` and `examinerTurn` on gpt-transcribe and tts-1 (human decision), priced
   in the unit each is billed by; the `AnswerSource` port and `turnBasedTransport` in app, held to the transport
   contract; `/practice/oral` with the level check, per-browser recovery and typed answers; the recording kept on this
@@ -566,7 +566,7 @@ pronunciation offered as a per-session opt-in.
 
 - [ ] A 10-minute session produces a report a user would act on (Gate I)
 - [ ] Cost per session measured and displayed accurately
-- [x] Audio reaches nowhere but OpenAI: each answer's clip only its transcription call, and the stored session recording only on an explicit per-session pronunciation opt-in, asserted by the extended key-leak test [R12] (amended in place, D113). **Met** (Slice 2, D120). There is no opt-in yet, so the recording must reach no request at all, and it reaches none. In the hermetic journey each clip's bytes are in exactly one request, to `/v1/audio/transcriptions`. The recording's bytes are in no request; the transcript is only on this device and in the examiner's next request; the paired phone and the export see neither. On real IndexedDB the recording is at rest in `oralAudio` through a reload. Proven to bite three ways (session log, 27 September 2026, `dougkeefe/abu-dhabi-v3`). Slice 3's opt-in must keep the recording's check green when the box is left unticked
+- [x] Audio reaches nowhere but OpenAI: each answer's clip only its transcription call, and the stored session recording only on an explicit per-session pronunciation opt-in, asserted by the extended key-leak test [R12] (amended in place, D113). **Met** (Slice 2, D120). There is no opt-in yet, so the recording must reach no request at all, and it reaches none. In the hermetic journey each clip's bytes are in exactly one request, to `/v1/audio/transcriptions`. The recording's bytes are in no request; the transcript is only on this device and in the examiner's next request; the paired phone and the export see neither. On real IndexedDB the recording is at rest in `oralAudio` through a reload. Proven to bite three ways (session log, 27 September 2026, `dougkeefe/next-slice-from-progress-v2`). Slice 3's opt-in must keep the recording's check green when the box is left unticked
 - [ ] Scoring stability: same transcript five times, at most one band of variation
 - [x] Session state machine contract-tested against a fake transport. **Met** (Slice 1, D116):
   `packages/testing/src/memory/oral-session.test.ts` drives the real driver, `startOralSessionRun`, over
@@ -4471,7 +4471,7 @@ chose to fix all of them.
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 28 September 2026 — `dougkeefe/abu-dhabi-v3` (pre-merge review: 26 fixes)
+### 28 September 2026 — `dougkeefe/next-slice-from-progress-v2` (pre-merge review: 26 fixes)
 
 **A candid review of the whole branch** (three parallel reviewers, constructive tone) found 26 issues, none critical, and
 the human chose to fix all 26. D121 records each.
@@ -4499,7 +4499,7 @@ pnpm --filter @palier/web lighthouse  → 16 URLs × 5, every assertion met; low
 **Proven to bite, a fourth way, reverted and checked byte for byte after:** a clip written to `localStorage` as base64
 failed the hermetic journey: `"Ondulard9d3a" reached somewhere other than OpenAI and its own copy on this device`.
 
-### 27 September 2026 — `dougkeefe/abu-dhabi-v3` (Phase 5 Slice 2: the turn loop on the key)
+### 27 September 2026 — `dougkeefe/next-slice-from-progress-v2` (Phase 5 Slice 2: the turn loop on the key)
 
 **Built.** The decisions are recorded in D117–D120. Slice 1 had merged as #34, so its In-flight row was replaced in
 this branch's first commit.
