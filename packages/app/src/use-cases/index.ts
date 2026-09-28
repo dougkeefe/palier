@@ -206,3 +206,12 @@ export {
   saveOralAudio,
   startOralSessionRun,
 } from "./oral.js";
+
+export type {
+  OralPracticeDeps,
+  OralPracticeRun,
+  OralSessionChoice,
+  TurnBasedTransport,
+  TurnBasedTransportDeps,
+} from "./oral-practice.js";
+export { oralSessionChoices, startOralPracticeRun, turnBasedTransport } from "./oral-practice.js";

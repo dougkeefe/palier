@@ -151,6 +151,10 @@ interface OralTransport  { open(req: { scenario: OralScenario }, sink: (e: OralT
 // A port §3.3 did not name, added 27 September 2026 (progress.md D116). One shape for the turn-based
 // (Phase 5) and full-duplex (Phase 6) transports. Push: the transport sends whole turns with their
 // start/end ms, difficulty flags, and exactly one `closed { failed }`, last; the client drives the phases.
+interface AnswerSource   { answer(q: { text: string; audio: Blob | null; phase: number }, signal: AbortSignal):
+                             Promise<{ kind: "audio"; audio: Blob; durationMs: number } | { kind: "typed"; text: string }> }
+// A port §3.3 did not name, added 27 September 2026 (progress.md D118): the candidate's side of practice mode. The
+// turn-based transport (`turnBasedTransport`, in @palier/app) hands it each question and waits; it rejects on abort.
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
 // Amended 24 September 2026: AttemptStore, ScheduleStore, SessionStore and SettingsStore each
 // gained `all()` and `clear()` (SettingsStore's `all()` returns `{ key, value }` entries). The

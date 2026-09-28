@@ -156,6 +156,11 @@ export type {
   OralStorageEstimate,
   SaveOralAudioResult,
   StartOralSessionRequest,
+  OralPracticeDeps,
+  OralPracticeRun,
+  OralSessionChoice,
+  TurnBasedTransport,
+  TurnBasedTransportDeps,
 } from "./use-cases/index.js";
 export {
   EmptyApiKeyError,
@@ -247,6 +252,9 @@ export {
   oralStorageEstimate,
   saveOralAudio,
   startOralSessionRun,
+  oralSessionChoices,
+  startOralPracticeRun,
+  turnBasedTransport,
 } from "./use-cases/index.js";
 
 export type { ProgressStores, SyncRecord } from "./sync/records.js";

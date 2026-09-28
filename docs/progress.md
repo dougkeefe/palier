@@ -4221,6 +4221,56 @@ signature), as D45 and D106 were
   - seven `AiProvider` stubs gained the methods, a shape change only;
   - two web tests narrowed a price to its token form before reading `inputPerMTok`.
 
+### D118 — the `AnswerSource` port, and `turnBasedTransport` in `@palier/app`
+**Date:** 27 September 2026 · **Status:** accepted; §3.3 amended in place (a port it did not name, as D116's
+`OralTransport` was)
+
+- **`AnswerSource { answer(question, signal) }`** is the candidate's side of a turn-based session.
+  - The transport hands over each `ExaminerQuestion { text, audio: Blob | null, phase }` and waits for a
+    `CandidateAnswer`: a clip with its measured `durationMs`, or typed words.
+  - One port both shows the question and collects the reply, so the screen needs no side channel for the
+    examiner's voice. *Next, decided* named a port that only collected answers. That would have left the question
+    and its audio with no way to reach the screen.
+  - `answer` rejects when `signal` aborts, which is how a session ended mid-question stops waiting.
+  - The browser's adapter (a `MediaRecorder` recorder, or a text field) is Slice 2's web half. The memory one is
+    `memoryAnswerSource`.
+- **`turnBasedTransport(deps)` implements `OralTransport`** in `use-cases/oral-practice.ts`. It is orchestration over
+  two ports and nothing vendor-specific, so it lives in app, not in an adapter.
+  - **Each turn:**
+    1. One `withAiProvider(…, "oral-practice", …)` writes the question with `examinerTurn` and voices it with
+       `speak`, sequentially (D101). A provider with no voice gives text only.
+    2. A difficulty flag is emitted, then the examiner's turn.
+    3. The question goes to the `AnswerSource`.
+    4. A clip is transcribed in its own metered call; typed words go straight through.
+    5. The candidate's turn is emitted.
+  - A provider made inside the vault's callback cannot outlive it (D99), so each step is a fresh call rather than
+    one provider held for the session.
+  - **`open` starts at phase 0's baseline**, which is where the machine's first directive puts it.
+  - **`direct` returns at once.** The driver awaits it inside its own queue, so a directive that waited for the
+    examiner would stall ticks and the end control. It only sets the phase and register of the next question, and
+    a phase outside the scenario is clamped to it.
+  - **`close` aborts the wait, delivers a turn already in flight, and then `closed`**, per the port. It waits only on
+    the transport's own step, never on the driver's queue, so it cannot deadlock.
+  - **Any failed call closes it failed**: the examiner, the voice, the transcription, a candidate's side that fails,
+    or no key. `lastError()` keeps the error, so the screen names it with `checkFailure`. The transcript so far is
+    already stored, turn by turn.
+  - **Times:** an examiner's turn is the instant it is shown. A clip ends when it arrived and starts its measured
+    length before, clamped to no earlier than 0 and no earlier than the previous answer's start. A typed answer spans
+    the wait for it. Transcription latency is not speech, so it is never counted.
+- **`startOralPracticeRun`** composes a fresh transport with `startOralSessionRun` and adds `failure()`.
+  **`oralSessionChoices`** gives the picker one scenario per session type, in PRD §8.6's order, in the language
+  practised. It picks the study band, or the other band when the bank has none at it, and a profile aiming at A
+  practises at B. A type the bank lacks is left out rather than offered empty.
+- **What the contract's `directives()` means for a turn-based transport.** `oralTransportContract` asks what "reached
+  the examiner's side". A turn-based examiner speaks only after an answer, so its side is the transport's own state.
+  The harness (`memory/turn-based-transport.test.ts`) records what the transport accepted while open, seen at the
+  port. `hangUp(true)` is the candidate's side failing. How each directive shapes the next question is held by
+  app's unit tests.
+- **Tests:**
+  - app, over local fakes (D37): 29 cases, 100% of branches;
+  - testing: the contract run; `memory/oral-practice.test.ts`, a whole session per fixture session type, each asking in
+    every phase in order and completing at its length; and `memoryAnswerSource`'s own cases.
+
 ---
 
 ## Session log
