@@ -11,10 +11,12 @@ export type ExaminerQuestion = {
 /**
  * The candidate's answer: a recorded clip with its measured length, or typed words
  * when the microphone is refused or absent (product-requirements.md §14, "Mic
- * permission denied").
+ * permission denied"). A clip may carry `pauseMs`, how long the candidate waited after the
+ * question had been heard before they pressed Record, which only the screen can measure,
+ * because only it knows when the question's voice stopped (progress.md D127).
  */
 export type CandidateAnswer =
-  | { readonly kind: "audio"; readonly audio: Blob; readonly durationMs: number }
+  | { readonly kind: "audio"; readonly audio: Blob; readonly durationMs: number; readonly pauseMs?: number }
   | { readonly kind: "typed"; readonly text: string };
 
 /**

@@ -134,9 +134,15 @@ const oralCriteriaShape = z.strictObject({
 
 const turnIndexShape = z.number().int().nonnegative();
 
+/** An excerpt must quote words: one of spaces or punctuation would mark a comma (progress.md D127). */
+const quotedWordsShape = z.string().refine((excerpt) => /[\p{L}\p{N}]/u.test(excerpt), {
+  message: "an excerpt must quote words",
+});
+
 /**
- * Three fixes, most costly first, each on a sub-skill the bank can drill (D122):
- * reading or writing, never oral, since the bank has no oral items.
+ * Up to three fixes, most costly first, each on a sub-skill the bank can drill (D122):
+ * reading or writing, never oral, since the bank has no oral items. At least one; fewer than
+ * three when a short session gives too little evidence (D127).
  */
 const oralFixesShape = z
   .array(
@@ -147,18 +153,20 @@ const oralFixesShape = z
       evidence: z.string().min(1),
     }),
   )
-  .length(3);
+  .min(1)
+  .max(3);
 
 const missingWordsShape = z
   .array(
     z.strictObject({
       word: z.string().trim().min(1),
       turn: turnIndexShape,
-      excerpt: z.string().min(1),
+      excerpt: quotedWordsShape,
       example: z.string().min(1),
     }),
   )
-  .length(5);
+  .min(1)
+  .max(5);
 
 /**
  * What the model returns for a session's report: errors as a turn and an excerpt,
@@ -171,7 +179,7 @@ export const oralAssessmentDraftShape = z.strictObject({
   errors: z.array(
     z.strictObject({
       turn: turnIndexShape,
-      excerpt: z.string().min(1),
+      excerpt: quotedWordsShape,
       correction: z.string().min(1),
       rule: z.string().min(1),
     }),

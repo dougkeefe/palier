@@ -24,7 +24,7 @@ const FILLERS = { en: ["um"], fr: ["euh", "tu sais"] };
 
 const TURNS: OralSession["turns"] = [
   { speaker: "examiner", text: "Parlez-moi de votre projet.", phase: 0, startMs: 0, endMs: 2_000 },
-  { speaker: "candidate", text: "Euh, je gère un projet, euh, tu sais.", phase: 0, startMs: 3_000, endMs: 9_000, input: "voice" },
+  { speaker: "candidate", text: "Euh, je gère un projet, euh, tu sais.", phase: 0, startMs: 3_000, endMs: 9_000, input: "voice", pauseMs: 1_000 },
   { speaker: "examiner", text: "Qu'auriez-vous fait autrement ?", phase: 1, startMs: 10_000, endMs: 12_000 },
   { speaker: "candidate", text: "Rien.", phase: 1, startMs: 12_000, endMs: 30_000, input: "typed" },
 ];
@@ -209,7 +209,7 @@ describe("oralReport (D126)", () => {
 
     expect(report?.scenario).toBe(SCENARIO);
     expect(report?.session.turns).toBe(TURNS);
-    // One spoken answer: 8 words in 6 s, three fillers, and a 1 s pause after its question.
+    // One spoken answer: 8 words in 6 s, three fillers, and the 1 s pause the screen measured before it.
     expect(report?.fluency).toEqual({ spokenTurns: 1, wordsPerMinute: 80, fillerCount: 3, meanPauseMs: 1_000 });
   });
 
@@ -221,7 +221,7 @@ describe("oralReport (D126)", () => {
     expect(report?.fluency.wordsPerMinute).toBe(80);
   });
 
-  it("costs the session from its own rows only, the practice and the report apart, and counts an unpriced one", async () => {
+  it("costs the session from its own rows only, the practice and the report apart, each with its unpriced calls (D127)", async () => {
     const mine = { sessionId: SESSION_ID, ts: "2026-09-27T10:01:00.000Z" };
     const rows = [
       aCostEntry({ ...mine, feature: "oral-practice", costUsd: 0.01 }),
@@ -235,18 +235,27 @@ describe("oralReport (D126)", () => {
     ];
     const report = await oralReport(SESSION_ID, view([anEnded()], rows));
 
-    expect(report?.cost.practiceUsd).toBeCloseTo(0.015, 10);
-    expect(report?.cost.reportUsd).toBeCloseTo(0.02, 10);
-    expect(report?.cost.unpriced).toBe(1);
+    expect(report?.cost.practice.usd).toBeCloseTo(0.015, 10);
+    expect(report?.cost.practice).toMatchObject({ calls: 3, unpriced: 1 });
+    expect(report?.cost.report).toEqual({ usd: 0.02, calls: 1, unpriced: 0 });
   });
 
-  it("offers a report only for an ended, unassessed session with an answer", async () => {
-    const ask = async (session: OralSession) => (await oralReport(SESSION_ID, view([session])))?.canAssess;
+  it("counts a report call OpenAI billed though it failed, while the session has no report (D127)", async () => {
+    const rows = [aCostEntry({ sessionId: SESSION_ID, ts: "2026-09-27T10:12:00.000Z", feature: "oral-assessment", costUsd: 0.03 })];
+    const report = await oralReport(SESSION_ID, view([anEnded()], rows));
 
-    expect(await ask(anEnded())).toBe(true);
-    expect(await ask(anEnded({ assessment: REPORT }))).toBe(false);
-    expect(await ask(anOralSession({ turns: TURNS }))).toBe(false);
-    expect(await ask(anEnded({ turns: [TURNS[0]!] }))).toBe(false);
+    expect(report?.session.assessment).toBeNull();
+    expect(report?.cost.report).toEqual({ usd: 0.03, calls: 1, unpriced: 0 });
+  });
+
+  it("says why a report cannot be asked for, in the order a request is refused (D127)", async () => {
+    const blockOf = async (session: OralSession) => (await oralReport(SESSION_ID, view([session])))?.blocked;
+
+    expect(await blockOf(anEnded())).toBeNull();
+    expect(await blockOf(anOralSession({ turns: TURNS }))).toBe("running");
+    expect(await blockOf(anEnded({ assessment: REPORT }))).toBe("assessed");
+    expect(await blockOf(anEnded({ turns: [TURNS[0]!] }))).toBe("no-answer");
+    expect(await blockOf(anEnded({ scenarioId: scenarioId("gone") }))).toBe("scenario-gone");
   });
 });
 
@@ -268,18 +277,30 @@ describe("oralHistory (D126)", () => {
   });
 });
 
-describe("oralFocusSubSkills (D124)", () => {
+describe("oralFocusSubSkills (D124, D127)", () => {
+  const french = () => "fr" as const;
+
   it("is the newest report's fixes' sub-skills, in rank order, or none", () => {
     const older = anEnded({ id: sessionId("older"), assessment: { ...REPORT, fixes: [REPORT.fixes[1]!, REPORT.fixes[1]!, REPORT.fixes[1]!] } });
     const newer = anEnded({ id: sessionId("newer"), assessment: REPORT });
     const unassessed = anEnded({ id: sessionId("none") });
 
-    expect(oralFocusSubSkills([unassessed, newer, older])).toEqual([
+    expect(oralFocusSubSkills([unassessed, newer, older], "fr", french)).toEqual([
       "word-choice-precision",
       "agreement",
       "connectors-and-discourse-markers",
     ]);
-    expect(oralFocusSubSkills([unassessed])).toEqual([]);
-    expect(oralFocusSubSkills([])).toEqual([]);
+    expect(oralFocusSubSkills([unassessed], "fr", french)).toEqual([]);
+    expect(oralFocusSubSkills([], "fr", french)).toEqual([]);
+  });
+
+  it("takes only a report in the language the plan practises, and passes over one whose scenario is gone", () => {
+    const english = anEnded({ id: sessionId("en"), scenarioId: scenarioId("scn-en"), assessment: REPORT });
+    const gone = anEnded({ id: sessionId("gone"), scenarioId: scenarioId("gone"), assessment: REPORT });
+    const french = anEnded({ id: sessionId("fr"), assessment: { ...REPORT, fixes: [REPORT.fixes[1]!] } });
+    const langOf = (id: string) => (id === "scn-en" ? "en" : id === "gone" ? null : "fr") as "en" | "fr" | null;
+
+    expect(oralFocusSubSkills([english, gone, french], "fr", langOf)).toEqual(["agreement"]);
+    expect(oralFocusSubSkills([english, gone, french], "en", langOf)).toEqual(REPORT.fixes.map((fix) => fix.subSkill));
   });
 });

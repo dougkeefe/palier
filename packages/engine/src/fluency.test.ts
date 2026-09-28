@@ -14,13 +14,14 @@ const examiner = (endMs: number, text = "Une question ?"): OralTurn => ({
   endMs,
 });
 
-const spoken = (startMs: number, endMs: number, text: string): OralTurn => ({
+const spoken = (startMs: number, endMs: number, text: string, pauseMs?: number): OralTurn => ({
   speaker: "candidate",
   text,
   phase: 0,
   startMs,
   endMs,
   input: "voice",
+  ...(pauseMs === undefined ? {} : { pauseMs }),
 });
 
 const typed = (startMs: number, endMs: number, text: string): OralTurn => ({
@@ -81,24 +82,31 @@ describe("fluencyMetrics (D123)", () => {
     expect(metrics.fillerCount).toBe(0);
   });
 
-  it("gives the mean pause from each question's end to the spoken answer after it", () => {
+  it("gives the mean of the pauses the screen measured before each spoken answer (D127)", () => {
     const metrics = fluencyMetrics(
-      [examiner(1_000), spoken(2_000, 5_000, "Oui."), examiner(6_000), spoken(9_000, 12_000, "Non.")],
+      [examiner(1_000), spoken(2_000, 5_000, "Oui.", 1_200), examiner(6_000), spoken(9_000, 12_000, "Non.", 2_800)],
       FILLERS,
     );
-    expect(metrics.meanPauseMs).toBe(2_000); // (1 000 + 3 000) / 2
+    expect(metrics.meanPauseMs).toBe(2_000);
   });
 
-  it("clamps an answer that overlaps its question to no pause", () => {
-    expect(fluencyMetrics([examiner(5_000), spoken(4_000, 8_000, "Oui.")], FILLERS).meanPauseMs).toBe(0);
+  it("never reads a pause from the gap between turns, which counts the time the question was heard", () => {
+    // Nine seconds between the question appearing and the answer, of which 0.5 s was the candidate's own.
+    expect(fluencyMetrics([examiner(1_000), spoken(10_000, 12_000, "Oui.", 500)], FILLERS).meanPauseMs).toBe(500);
   });
 
-  it("times no pause for a typed answer, nor for a spoken one with no question before it", () => {
+  it("times no pause for a typed answer, nor for a spoken turn stored before the pause was measured", () => {
     const metrics = fluencyMetrics(
-      [spoken(0, 1_000, "Bonjour."), examiner(2_000), typed(9_000, 9_000, "Je suis là."), spoken(12_000, 13_000, "Voilà.")],
+      [examiner(0), typed(9_000, 9_000, "Je suis là."), examiner(10_000), spoken(12_000, 13_000, "Voilà.")],
       FILLERS,
     );
-    expect(metrics.spokenTurns).toBe(2);
+    expect(metrics.spokenTurns).toBe(1);
     expect(metrics.meanPauseMs).toBeNull();
+  });
+
+  it("reads an accent written in two code points as one letter, and a curly apostrophe as a straight one (D127)", () => {
+    // "bénéficie" in NFD, and "j’ai" with a curly apostrophe: two words in 1.2 s, 100 a minute.
+    expect(fluencyMetrics([spoken(0, 1_200, "be\u0301ne\u0301ficie j’ai")], FILLERS).wordsPerMinute).toBe(100);
+    expect(fluencyMetrics([spoken(0, 1_000, "Euh, j’veux dire")], ["j'veux dire"]).fillerCount).toBe(1);
   });
 });

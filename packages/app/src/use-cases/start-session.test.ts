@@ -94,7 +94,13 @@ const itemsOf = (bank: readonly Item[]): ItemRepository => ({
   form: vi.fn(() => Promise.resolve(null)),
   forms: vi.fn(() => Promise.resolve([])),
   scenario: vi.fn(() => Promise.resolve(null)),
-  scenarios: vi.fn(() => Promise.resolve([])),
+  // One French scenario, `scn`, which every spoken session below ran (D127's language check).
+  scenarios: vi.fn(() =>
+    Promise.resolve([
+      { id: scenarioId("scn"), lang: "fr", sessionType: "work", targetBand: "B", topic: "human-resources", phases: [] },
+      { id: scenarioId("scn-en"), lang: "en", sessionType: "work", targetBand: "B", topic: "human-resources", phases: [] },
+    ] as const),
+  ),
   bankVersion: vi.fn(() => Promise.resolve(1)),
 });
 
@@ -130,12 +136,17 @@ const oralOf = (sessions: readonly OralSession[] = []): Pick<OralStore, "all"> =
 });
 
 /** An ended spoken session, with a report whose three fixes drill `subSkills`, or none. */
-const aSpokenSession = (id: string, startedAt: string, subSkills: OralAssessment["fixes"][number]["subSkill"][] | null): OralSession => {
+const aSpokenSession = (
+  id: string,
+  startedAt: string,
+  subSkills: OralAssessment["fixes"][number]["subSkill"][] | null,
+  scenario = "scn",
+): OralSession => {
   const criterion = { band: "B" as const, evidence: "e" };
   const word = { word: "w", turn: 0, excerpt: "x", example: "x" };
   return {
     id: sessionId(id),
-    scenarioId: scenarioId("scn"),
+    scenarioId: scenarioId(scenario),
     startedAt,
     endedAt: startedAt,
     endReason: "completed",
@@ -257,6 +268,16 @@ describe("startSession: the latest oral report's fixes (D124)", () => {
       aSpokenSession("unassessed", "2026-02-28T12:00:00.000Z", null),
       aSpokenSession("assessed", "2026-02-28T10:00:00.000Z", ["pronouns", "pronouns", "pronouns"]),
       aSpokenSession("older", "2026-02-27T10:00:00.000Z", ["agreement", "agreement", "agreement"]),
+    ]);
+    const { plan } = await startSession(aRequest(), depsWith({ random: even(), items: itemsOf(pool), oral }));
+
+    expect(pronouns(plan.newItems)).toBe(5);
+  });
+
+  it("ignores a newer report on a session in another language than the plan's (D127)", async () => {
+    const oral = oralOf([
+      aSpokenSession("english", "2026-02-28T12:00:00.000Z", ["agreement", "agreement", "agreement"], "scn-en"),
+      aSpokenSession("french", "2026-02-28T10:00:00.000Z", ["pronouns", "pronouns", "pronouns"]),
     ]);
     const { plan } = await startSession(aRequest(), depsWith({ random: even(), items: itemsOf(pool), oral }));
 

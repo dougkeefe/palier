@@ -31,6 +31,10 @@ describe("oralTurnSchema", () => {
     expect(oralTurnSchema.safeParse(aTurn()).success).toBe(true);
   });
 
+  it("accepts a spoken turn with its measured pause (D127)", () => {
+    expect(oralTurnSchema.safeParse(aTurn({ input: "voice", pauseMs: 1_800 })).success).toBe(true);
+  });
+
   it("accepts an instant turn and an empty transcription", () => {
     expect(oralTurnSchema.safeParse(aTurn({ text: "", startMs: 10, endMs: 10 })).success).toBe(true);
   });
@@ -56,6 +60,8 @@ describe("oralTurnSchema", () => {
     ["text that is not a string", { text: 3 }],
     ["an extra field", { confidence: 0.9 }],
     ["an unknown input", { input: "signed" }],
+    ["a negative pause", { pauseMs: -1 }],
+    ["a fractional pause", { pauseMs: 1.5 }],
   ])("rejects %s", (_name, over) => {
     expect(oralTurnSchema.safeParse(aTurn(over)).success).toBe(false);
   });

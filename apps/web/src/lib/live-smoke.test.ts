@@ -30,7 +30,7 @@ const FEEDBACK = {
 
 const DESCRIPTORS = { A: "Descriptor A.", B: "Descriptor B.", C: "Descriptor C." };
 
-/** A report whose every excerpt is in the fixed session's first answer (D122). */
+/** A report whose every excerpt is in the first answer of both fixed sessions, the smoke's and the stability's (D122, D127). */
 const ORAL_REPORT = {
   criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
   fixes: [
@@ -38,11 +38,18 @@ const ORAL_REPORT = {
     { criterion: "grammar", subSkill: "verb-tense-and-mood", advice: "a", evidence: "e" },
     { criterion: "vocabulary", subSkill: "word-choice-precision", advice: "a", evidence: "e" },
   ],
-  missingWords: ["Euh", "analyste", "provinces", "notes", "urgents"].map((excerpt) => ({ word: "w", turn: 1, excerpt, example: "x" })),
-  errors: [{ turn: 1, excerpt: "devient", correction: "deviennent", rule: "accord" }],
+  missingWords: ["Euh", "analyste", "provinces", "notes", "sous-ministre"].map((excerpt) => ({ word: "w", turn: 1, excerpt, example: "x" })),
+  errors: [{ turn: 1, excerpt: "principale des politiques", correction: "principale en politiques", rule: "préposition" }],
 };
 
-type Options = { listed?: readonly string[]; malformedFirstReview?: boolean; status?: number; htmlError?: boolean };
+type Options = {
+  listed?: readonly string[];
+  malformedFirstReview?: boolean;
+  status?: number;
+  htmlError?: boolean;
+  /** How many report calls, from the first, answer with a report the adapter refuses (D127). */
+  refusedReports?: number;
+};
 
 /** A network that answers like OpenAI, recording each request's headers and body. */
 const network = ({
@@ -50,9 +57,11 @@ const network = ({
   malformedFirstReview = false,
   status = 200,
   htmlError = false,
+  refusedReports = 0,
 }: Options = {}) => {
   const requests: { url: string; headers: Record<string, string>; body: string | FormData }[] = [];
   let reviews = 0;
+  let reports = 0;
   const reply = (s: number, body: unknown) => ({
     ok: s >= 200 && s < 300,
     status: s,
@@ -94,7 +103,9 @@ const network = ({
         : prompt.includes("You are the examiner")
           ? { text: "Parlez-moi de votre poste.", difficulty: null }
           : prompt.includes("assessing a rehearsal")
-            ? ORAL_REPORT
+            ? (reports += 1) <= refusedReports * 2
+              ? { ...ORAL_REPORT, fixes: [] }
+              : ORAL_REPORT
             : FEEDBACK;
     return Promise.resolve(reply(200, { id: "chatcmpl-x", choices: [{ message: { content: JSON.stringify(content) } }], usage: { prompt_tokens: 300, completion_tokens: 500 } }));
   };
@@ -231,7 +242,7 @@ describe("runLiveSmoke — the report on a session (D122)", () => {
   });
 });
 
-describe("runOralStability (D126)", () => {
+describe("runOralStability (D126, D127)", () => {
   it("scores the same session five times and makes no other call", async () => {
     const { fetchImpl, requests } = network();
     const result = await runOralStability({ apiKey: KEY, models: MODELS, prices: PRICING.prices, descriptors: DESCRIPTORS, fetchImpl });
@@ -241,6 +252,42 @@ describe("runOralStability (D126)", () => {
     expect(result.completions.map((c) => c.method)).toEqual(Array(5).fill("assessOral"));
     expect(new Set(result.completions.map((c) => JSON.stringify(c.request))).size).toBe(1);
     expect(result.calls.map((c) => c.feature)).toEqual(Array(5).fill("oral-assessment"));
+    expect(result.failedCalls).toBe(0);
+  });
+
+  it("scores the longer stability session, not the smoke's short one: eight spoken answers, each with its pause", async () => {
+    const { fetchImpl, requests } = network();
+    const result = await runOralStability({ apiKey: KEY, models: MODELS, prices: PRICING.prices, descriptors: DESCRIPTORS, fetchImpl });
+
+    const turns = (result.completions[0]?.request as unknown as { turns: { speaker: string; input?: string; pauseMs?: number }[] }).turns;
+    const answers = turns.filter((turn) => turn.speaker === "candidate");
+    expect(answers).toHaveLength(8);
+    expect(answers.every((turn) => turn.input === "voice" && typeof turn.pauseMs === "number")).toBe(true);
+    expect(requests[0]?.body).toContain("[15] Candidate:");
+  });
+
+  it("keeps a report the adapter refused twice, counts it, and goes on to the rest", async () => {
+    const result = await runOralStability({
+      apiKey: KEY,
+      models: MODELS,
+      prices: PRICING.prices,
+      descriptors: DESCRIPTORS,
+      fetchImpl: network({ refusedReports: 1 }).fetchImpl,
+    });
+
+    expect(result.failedCalls).toBe(1);
+    expect(result.completions).toHaveLength(2 + 4);
+    expect(result.completions.slice(0, 2).map((c) => c.conformant)).toEqual([false, false]);
+  });
+
+  it("stops on a failure that says nothing about the scorer, such as a refused key", async () => {
+    await expect(
+      runOralStability({ apiKey: KEY, models: MODELS, prices: PRICING.prices, descriptors: DESCRIPTORS, fetchImpl: network({ status: 401 }).fetchImpl }),
+    ).rejects.toMatchObject({ name: "InvalidApiKeyError" });
+  });
+
+  it("records the number of runs the factory's eval requires, as a literal both sides hold", () => {
+    expect(ORAL_STABILITY_RUNS).toBe(5);
   });
 });
 
@@ -271,7 +318,15 @@ describe("oral-stability.mjs", () => {
     const file = c.files.get("assessOral-stability.json") ?? "";
     expect((JSON.parse(file) as { completions: unknown[] }).completions).toHaveLength(5);
     expect(file).not.toContain(KEY);
-    expect(c.out.join("\n")).toContain("recorded 5 report(s)");
+    expect(c.out.join("\n")).toContain("recorded 5 report(s) of 5");
+  });
+
+  it("records a report the adapter refused twice, and says so", async () => {
+    const c = capture();
+    expect(await stabilityMain({ env: { OPENAI_API_KEY: KEY }, fetchImpl: network({ refusedReports: 1 }).fetchImpl, ...c.io })).toBe(0);
+    expect(c.files.size).toBe(1);
+    expect(c.out.join("\n")).toContain("recorded 4 report(s) of 5");
+    expect(c.out.join("\n")).toContain("1 call(s) gave no report after the adapter's retry");
   });
 
   it("exits 1 and records nothing when a call fails, naming the adapter's error", async () => {
@@ -307,6 +362,7 @@ describe("live-smoke.mjs", () => {
     const printed = c.out.join("\n");
     expect(printed).toContain("generateItems: 3 call(s), average in 300  out 500");
     expect(printed).toContain("measured features for pricing.json:");
+    expect(printed).toContain("oral-assessment, on the smoke's short fixed session, NOT a typical report, do not copy into pricing.json");
     expect(printed).not.toContain(KEY);
     expect(c.files.size).toBe(0);
   });
@@ -359,16 +415,16 @@ describe("live-smoke.mjs", () => {
 });
 
 describe("measuredFeatures", () => {
-  it("prices a set as one draft call and one set's worth of reviews, and feedback and a report as one call each", () => {
+  it("prices a set as one draft call and one set's worth of reviews, and feedback as one call, and never the short session's report", () => {
     const byMethod = {
       generateItems: { calls: 3, inputTokens: 400, outputTokens: 1_200 },
       reviewItem: { calls: 5, inputTokens: 300, outputTokens: 600 },
       assessWriting: { calls: 2, inputTokens: 900, outputTokens: 800 },
       assessOral: { calls: 1, inputTokens: 2_000, outputTokens: 1_100 },
     };
+    // The report is left out: the smoke's session is short, so its report is no typical one (D127).
     expect(measuredFeatures({ byMethod })).toEqual({
       "writing-feedback": [{ role: "assess", inputTokens: 900, outputTokens: 800 }],
-      "oral-assessment": [{ role: "assess", inputTokens: 2_000, outputTokens: 1_100 }],
       "item-generation": [
         { role: "draft", inputTokens: 400, outputTokens: 1_200 },
         { role: "review", inputTokens: 1_500, outputTokens: 3_000 },

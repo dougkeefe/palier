@@ -35,7 +35,7 @@ may answer with `headers` and `blob()`. **`assessOral`** (Phase 5 Slice 3, D122)
 role: the model names a candidate's turn and quotes its words, and `@palier/domain`'s `assembleOralAssessment` places
 them per turn, so an excerpt not in its turn, an examiner's turn named, or a fix on an oral sub-skill is a malformed
 answer, retried once. The prompt numbers the turns, marks a typed one, and quotes the profile's descriptors from the
-request. **The Dexie oral store re-validates a stored report** against its turns (`checkOralAssessment`), and a
+request, each turn's words **as a JSON string**, so a typed answer cannot fake a turn (D127). **The Dexie oral store re-validates a stored report** against its turns (`checkOralAssessment`), and a
 broken one, or none at all on a pre-Slice-3 row, reads as unassessed with the transcript kept; **the Dexie ledger
 keeps an entry's `sessionId`** when it is an id, unindexed, so no version bump (D125). `./bank` →
 `httpBankRepository` (the `ItemRepository` over the committed bank shards; progress.md D55).

@@ -18,6 +18,13 @@ export const RECENT_DAYS = 14;
 /** How much more often an item in a weakest sub-skill is drawn (§7.2). */
 export const WEAKEST_WEIGHT = 3;
 
+/**
+ * How much more often an item in a boosted sub-skill is drawn (progress.md D127): less than a
+ * weakest sub-skill's, and multiplied with it, so an oral report's fixes favour their sub-skills
+ * without levelling the weakest ones down to them. A product weight, as `WEAKEST_WEIGHT` is.
+ */
+export const FOCUS_WEIGHT = 2;
+
 const DAY_MS = 86_400_000;
 
 export type SelectionMode = "practice" | "diagnostic";
@@ -31,9 +38,10 @@ export type SelectionCriteria = {
   /** Defaults to `"practice"`. */
   readonly mode?: SelectionMode;
   /**
-   * Sub-skills to weight as the weakest are, in practice mode (progress.md D124): the fixes
-   * of the latest oral report. Absent or empty, the draw is exactly as it was before. A
-   * sub-skill of another skill reaches no item, since the skill filter is first.
+   * Sub-skills to favour, in practice mode (progress.md D124): the fixes of the latest oral
+   * report, at `FOCUS_WEIGHT`, times `WEAKEST_WEIGHT` for one that is also a weakest (D127).
+   * Absent or empty, the draw is exactly as it was before. A sub-skill of another skill reaches
+   * no item, since the skill filter is first.
    */
   readonly boost?: readonly SubSkill[];
 };
@@ -113,9 +121,13 @@ export const selectItems = (
   }
 
   const bands = workingSet(criteria.targetBand);
-  const weakest = new Set<SubSkill>([...weakestSubSkills(criteria.skill, attempts, pool), ...(criteria.boost ?? [])]);
+  const weakest = new Set<SubSkill>(weakestSubSkills(criteria.skill, attempts, pool));
+  const boosted = new Set<SubSkill>(criteria.boost ?? []);
   const entries = pool
     .filter((item) => eligible(item) && bands.includes(item.targetBand))
-    .map((item) => ({ item, weight: weakest.has(item.subSkill) ? WEAKEST_WEIGHT : 1 }));
+    .map((item) => ({
+      item,
+      weight: (weakest.has(item.subSkill) ? WEAKEST_WEIGHT : 1) * (boosted.has(item.subSkill) ? FOCUS_WEIGHT : 1),
+    }));
   return spaceBySubSkill(sampleWeighted(entries, criteria.count, random));
 };

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { WritingError, WritingFeedbackDraft } from "./ai.js";
 import { WRITING_CRITERIA } from "./ai.js";
-import { assembleAssessment, checkErrorOffsets, placeErrors } from "./writing.js";
+import { assembleAssessment, checkErrorOffsets, findExcerpt, placeErrors } from "./writing.js";
 
 const anError = (start: number, end: number): WritingError => ({
   start,
@@ -148,6 +148,53 @@ describe("assembleAssessment", () => {
     expect(assembleAssessment("abc", aDraft("z"))).toEqual({
       ok: false,
       problem: 'error 0: "z" is not in the text',
+    });
+  });
+});
+
+describe("findExcerpt (D127)", () => {
+  it("finds words as written, and gives the text's own offsets", () => {
+    expect(findExcerpt("La réunion est reporter.", "est reporter")).toEqual({ start: 11, end: 23 });
+  });
+
+  it("takes a curly apostrophe for a straight one, both ways", () => {
+    const said = "Je n’ai pas reçu l’avis.";
+    const found = findExcerpt(said, "n'ai pas");
+    expect(found !== null && said.slice(found.start, found.end)).toBe("n’ai pas");
+    expect(findExcerpt("C'est prêt.", "C’est")).toEqual({ start: 0, end: 5 });
+  });
+
+  it("takes a non-breaking space, a run of spaces or a line break for one space", () => {
+    const said = "Pourquoi\u202F? Parce que\n\nles  délais";
+    const question = findExcerpt(said, "Pourquoi ?");
+    expect(question !== null && said.slice(question.start, question.end)).toBe("Pourquoi\u202F?");
+    const delays = findExcerpt(said, "que les délais");
+    expect(delays !== null && said.slice(delays.start, delays.end)).toBe("que\n\nles  délais");
+  });
+
+  it("trims the excerpt's edges, and finds nothing for an excerpt of only spaces", () => {
+    expect(findExcerpt("abc def", "  def ")).toEqual({ start: 4, end: 7 });
+    expect(findExcerpt("abc def", "   ")).toBeNull();
+  });
+
+  it("searches from the offset given, and finds nothing past the end", () => {
+    expect(findExcerpt("oui oui", "oui", 1)).toEqual({ start: 4, end: 7 });
+    expect(findExcerpt("oui", "oui", 3)).toBeNull();
+    expect(findExcerpt("oui", "non")).toBeNull();
+  });
+});
+
+describe("placeErrors, loosely (D127)", () => {
+  it("places an excerpt a model copied with a straight apostrophe over the text's curly one", () => {
+    const text = "Je n’ai pas reçu l’avis.";
+    const placed = placeErrors(text, [{ excerpt: "l'avis", correction: "le préavis", rule: "précision" }]);
+    expect(placed.ok && text.slice(placed.errors[0]?.start, placed.errors[0]?.end)).toBe("l’avis");
+  });
+
+  it("refuses an excerpt of only whitespace as empty", () => {
+    expect(placeErrors("abc", [{ excerpt: "  ", correction: "x", rule: "y" }])).toEqual({
+      ok: false,
+      problem: "error 0: the excerpt is empty",
     });
   });
 });

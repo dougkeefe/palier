@@ -20,6 +20,8 @@ export type OralTransportEvent =
       readonly endMs: number;
       /** How a candidate's answer arrived (D122), when the transport knows; stored with the turn. */
       readonly input?: OralInput | undefined;
+      /** The candidate's measured wait before a spoken answer (D127), when the transport has it. */
+      readonly pauseMs?: number | undefined;
     }
   | { readonly kind: "difficulty"; readonly direction: OralDirection }
   | { readonly kind: "closed"; readonly failed: boolean };

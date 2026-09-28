@@ -23,7 +23,7 @@ export type { Review, ReviewGrade } from "./scheduler.js";
 export { retirementBox, scheduleReview } from "./scheduler.js";
 
 export type { SelectionCriteria, SelectionMode } from "./selector.js";
-export { RECENT_DAYS, WEAKEST_WEIGHT, selectItems, workingSet } from "./selector.js";
+export { FOCUS_WEIGHT, RECENT_DAYS, WEAKEST_WEIGHT, selectItems, workingSet } from "./selector.js";
 
 export type { DayPlan, DayPlanInput } from "./planner.js";
 export {

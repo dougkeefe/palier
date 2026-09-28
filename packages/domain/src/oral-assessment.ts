@@ -7,7 +7,7 @@ import type {
   WritingError,
 } from "./ai.js";
 import type { OralTurn } from "./oral-session.js";
-import { checkErrorOffsets, placeErrors } from "./writing.js";
+import { checkErrorOffsets, findExcerpt, placeErrors } from "./writing.js";
 
 /**
  * The oral report's invariants (progress.md D122), D105's rule per turn: a model
@@ -27,13 +27,13 @@ const candidateTurnProblem = (turns: readonly OralTurn[], turn: number, what: st
   return null;
 };
 
-/** Each missing word names a candidate's turn, and quotes words that are in it. */
+/** Each missing word names a candidate's turn, and quotes words that are in it, matched as `findExcerpt` matches (D127). */
 const missingWordsProblem = (turns: readonly OralTurn[], words: readonly MissingWord[]): string | null => {
   for (const [index, word] of words.entries()) {
     const what = `missing word ${index}`;
     const problem = candidateTurnProblem(turns, word.turn, what);
     if (problem !== null) return problem;
-    if (!(turns[word.turn] as OralTurn).text.includes(word.excerpt)) {
+    if (findExcerpt((turns[word.turn] as OralTurn).text, word.excerpt) === null) {
       return `${what}: "${word.excerpt}" is not in turn ${word.turn}`;
     }
   }

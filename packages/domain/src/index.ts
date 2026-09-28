@@ -152,7 +152,7 @@ export { assembleOralAssessment, checkOralAssessment } from "./oral-assessment.j
 // The adversarial-review gate, shared by the factory and runtime generation (progress.md D109).
 export { CONFIDENCE_THRESHOLD, gateReasons, reviewRequestFor } from "./review-gate.js";
 export type { AssembleResult, PlaceErrorsResult } from "./writing.js";
-export { assembleAssessment, checkErrorOffsets, placeErrors } from "./writing.js";
+export { assembleAssessment, checkErrorOffsets, findExcerpt, placeErrors } from "./writing.js";
 
 // The writing workshop's prompt library, a content artefact (progress.md D107).
 export type { WritingPrompt, WritingRegister } from "./writing-prompt.js";
@@ -162,7 +162,7 @@ export { parseWritingPrompts, parseWritingPromptsOrThrow } from "./writing-promp
 
 // The oral filler list, a content artefact the fluency metrics read (progress.md D123).
 export type { OralFillers, OralFillersParseResult } from "./oral-fillers.js";
-export { parseOralFillers, parseOralFillersOrThrow } from "./oral-fillers.js";
+export { parseOralFillers, parseOralFillersOrThrow, spokenWords } from "./oral-fillers.js";
 
 // Opt-in anonymous item telemetry and the statistics job's report (architecture.md
 // 7.6, 9.2). DTOs like the AI ones: no JSON Schema is published for them.

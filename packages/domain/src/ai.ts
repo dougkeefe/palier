@@ -326,7 +326,8 @@ export type OralRequest = {
 };
 
 /**
- * One of the three highest-leverage fixes, most costly first (§8.6): the criterion
+ * One of up to three highest-leverage fixes, most costly first (§8.6; fewer from a short session,
+ * progress.md D127): the criterion
  * it cost, the sub-skill that drills it, what to do, and the evidence for it.
  */
 export type OralFix = {

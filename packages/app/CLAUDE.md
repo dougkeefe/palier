@@ -74,10 +74,12 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   spending; otherwise makes one `withAiProvider(…, "oral-assessment", …)` call, quoting the profile's descriptors in the
   interface language, and keeps the result on the session. **A call is recorded under the session it is for**:
   `CostEntry.sessionId`, stamped by `withAiProvider`'s optional fourth argument, which the turn-based transport and the
-  report both pass (D125), so `oralReport` costs a session from its own rows, never a time window. `oralReport` also
-  computes the fluency (the engine's, D123) and `oralHistory` lists ended sessions. **`StartSession` derives
-  `focusSubSkills`** from the newest assessed session's fixes, through `oral: Pick<OralStore, "all">`, as it derives
-  `lastDayCompleted` (D124, closing D35). Each candidate's turn says how it arrived (`input`).
+  report both pass (D125), so `oralReport` costs a session from its own rows, never a time window, per line
+  (`{ practice, report }`, each `{ usd, calls, unpriced }`, D127). `oralReport` also computes the fluency (the engine's,
+  D123), and says in `blocked` why a report cannot be asked for; `oralHistory` lists ended sessions. **`StartSession`
+  derives `focusSubSkills`** from the newest assessed session **in the plan's language**, through `oral: Pick<OralStore,
+  "all">` and the bank's scenarios, as it derives `lastDayCompleted` (D124, D127). Each candidate's turn says how it
+  arrived (`input`) and, for a clip, the pause the screen measured (`CandidateAnswer.pauseMs` → `OralTurn.pauseMs`, D127).
 - **Ports are transcribed from §3.3, not invented.** Eight live under `src/ports/`:
   `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`,
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the

@@ -59,8 +59,9 @@ type Asked = {
  * - **Any failed call closes it failed**, and `lastError` keeps the error. The turns so far are
  *   already the driver's, stored as they arrived.
  *
- * Each candidate's turn says how it arrived, `voice` or `typed` (D122), and every call is
- * recorded under the session it spends on, when the deps name one (D125).
+ * Each candidate's turn says how it arrived, `voice` or `typed` (D122), a clip's with the pause the
+ * screen measured before it (D127), and every call is recorded under the session it spends on, when
+ * the deps name one (D125).
  *
  * Times are milliseconds since `open`, by the `Clock`. The examiner's turn is the instant it is
  * shown; a clip's ends when it arrived and starts its measured length before, never before its
@@ -92,11 +93,16 @@ export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTrans
     sink({ kind: "closed", failed });
   };
 
-  const say = (speaker: OralSpeaker, text: string, startMs: number, endMs: number, input?: OralInput): void => {
+  const say = (
+    speaker: OralSpeaker,
+    text: string,
+    startMs: number,
+    endMs: number,
+    how: { readonly input?: OralInput; readonly pauseMs?: number } = {},
+  ): void => {
     const start = Math.max(startMs, lastStart[speaker]);
     lastStart[speaker] = start;
     transcript.push({ speaker, text });
-    const how = input === undefined ? {} : { input };
     sink({ kind: "turn", speaker, text, startMs: start, endMs: Math.max(start, endMs), ...how });
   };
 
@@ -161,7 +167,11 @@ export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTrans
         const answeredAt = nowMs();
         const text = await hear(current, answer);
         const startMs = answer.kind === "typed" ? shownAt : Math.max(shownAt, answeredAt - answer.durationMs);
-        say("candidate", text, startMs, answeredAt, answer.kind === "typed" ? "typed" : "voice");
+        const how =
+          answer.kind === "typed"
+            ? { input: "typed" as const }
+            : { input: "voice" as const, ...(answer.pauseMs === undefined ? {} : { pauseMs: Math.max(0, Math.round(answer.pauseMs)) }) };
+        say("candidate", text, startMs, answeredAt, how);
       }
     } catch (failure) {
       error = failure;

@@ -319,6 +319,54 @@ describe("practiceController — a session (D121)", () => {
     expect(handles.actions.at(-1)).toEqual({ type: "recordFailed" });
   });
 
+  it("sends the pause before a spoken answer, measured from the question's appearing when it has no voice (D127)", async () => {
+    let clock = 1_000;
+    const handles = await spokenSession({ now: () => clock });
+    await handles.controller.start(CHOICE, "spoken");
+    const { answered } = handles.ask();
+    clock = 3_400;
+    handles.controller.record();
+    clock = 9_000;
+    await handles.controller.stopAndSend();
+
+    expect(await answered).toMatchObject({ kind: "audio", pauseMs: 2_400 });
+  });
+
+  it("measures a voiced question's pause from when its voice stopped, and none when Record interrupts it (D127)", async () => {
+    let clock = 1_000;
+    const handles = await spokenSession({ now: () => clock });
+    await handles.controller.start(CHOICE, "spoken");
+    const voiced = { ...QUESTION, audio: new Blob(["voix"]) };
+    const wait = new AbortController();
+    const bridge = handles.useCases.startOralPractice.mock.calls[0]?.[1] as { answer: (q: typeof voiced, s: AbortSignal) => Promise<unknown> };
+    const first = bridge.answer(voiced, wait.signal);
+    clock = 5_000;
+    handles.controller.questionHeard();
+    clock = 6_500;
+    handles.controller.record();
+    await handles.controller.stopAndSend();
+    expect(await first).toMatchObject({ pauseMs: 1_500 });
+
+    const second = bridge.answer(voiced, wait.signal);
+    handles.controller.questionHeard();
+    handles.controller.questionPlaying(); // played again, and Record pressed over it
+    clock = 7_000;
+    handles.controller.record();
+    await handles.controller.stopAndSend();
+    expect(await second).toMatchObject({ pauseMs: 0 });
+  });
+
+  it("ignores the question's voice events before any question, and sends no pause for a typed answer", async () => {
+    const handles = setUp();
+    handles.controller.questionPlaying();
+    handles.controller.questionHeard();
+    await handles.controller.continueWith(CHOICE, "typed");
+    await handles.controller.start(CHOICE, "typed");
+    const { answered } = handles.ask();
+    handles.controller.sendTyped("Oui.");
+    expect(await answered).toEqual({ kind: "typed", text: "Oui." });
+  });
+
   it("records nothing more while an answer is already being recorded", async () => {
     const media = mediaKit();
     const handles = await spokenSession({ media: media.kit });

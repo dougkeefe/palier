@@ -16,6 +16,7 @@ export const oralTurnShape = z
     startMs: z.number().int().nonnegative(),
     endMs: z.number().int().nonnegative(),
     input: z.enum(ORAL_INPUTS).optional(),
+    pauseMs: z.number().int().nonnegative().optional(),
   })
   .refine((turn) => turn.startMs <= turn.endMs, { message: "a turn cannot end before it starts", path: ["endMs"] });
 

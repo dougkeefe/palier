@@ -195,12 +195,29 @@ describe("oralAssessmentDraftSchema", () => {
     expect(oralAssessmentDraftSchema.safeParse({ ...aDraft(), fixes }).success).toBe(false);
   });
 
-  it("refuses anything but three fixes and five words", () => {
+  it("takes fewer fixes and words from a short session, but at least one of each, and no more than three and five (D127)", () => {
     const draft = aDraft();
-    expect(oralAssessmentDraftSchema.safeParse({ ...draft, fixes: draft.fixes.slice(0, 2) }).success).toBe(false);
-    expect(oralAssessmentDraftSchema.safeParse({ ...draft, missingWords: draft.missingWords.slice(0, 4) }).success).toBe(
-      false,
-    );
+    expect(oralAssessmentDraftSchema.safeParse({ ...draft, fixes: draft.fixes.slice(0, 1), missingWords: draft.missingWords.slice(0, 1) }).success).toBe(true);
+    expect(oralAssessmentDraftSchema.safeParse({ ...draft, fixes: [] }).success).toBe(false);
+    expect(oralAssessmentDraftSchema.safeParse({ ...draft, missingWords: [] }).success).toBe(false);
+    expect(oralAssessmentDraftSchema.safeParse({ ...draft, fixes: [...draft.fixes, aFix("agreement")] }).success).toBe(false);
+    expect(
+      oralAssessmentDraftSchema.safeParse({ ...draft, missingWords: [...draft.missingWords, aWord(1, "budget")] }).success,
+    ).toBe(false);
+  });
+
+  it("refuses an excerpt of only spaces or punctuation, which would mark a comma (D127)", () => {
+    const draft = aDraft();
+    const error = { turn: 1, excerpt: " , ", correction: "x", rule: "y" };
+    expect(oralAssessmentDraftSchema.safeParse({ ...draft, errors: [error] }).success).toBe(false);
+    const words = [{ ...aWord(1, "x"), excerpt: "  " }, ...draft.missingWords.slice(1)];
+    expect(oralAssessmentDraftSchema.safeParse({ ...draft, missingWords: words }).success).toBe(false);
+  });
+
+  it("finds a missing word's sentence though the model straightened its apostrophe (D127)", () => {
+    const turns = [...TURNS, turn("candidate", "J’ai vu que l’équipe était prête.")];
+    const words = [aWord(4, "J'ai vu"), ...aDraft().missingWords.slice(1)];
+    expect(assembleOralAssessment(turns, aDraft({ errors: [], missingWords: words })).ok).toBe(true);
   });
 
   it("refuses a missing criterion, a pronunciation criterion, and an error given as offsets", () => {

@@ -3,20 +3,23 @@
 import type { OralReport as Report } from "@palier/app";
 import type { Lang, OralAssessment } from "@palier/domain";
 import { sessionId } from "@palier/domain";
-import { Button, Callout, Card, EmptyState, Toast } from "@palier/ui";
+import { Button, Callout, Card, EmptyState } from "@palier/ui";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { type Ref, useCallback, useEffect, useId, useMemo, useReducer, useRef, useState } from "react";
 
-import { estimateText, moneyText } from "../../features/key/spend-view";
+import { estimateText } from "../../features/key/spend-view";
 import {
   type AskState,
   INITIAL_REPORT,
   ORAL_CRITERION_ROWS,
   type TranscriptRow,
   askFailureMessage,
-  costLines,
+  blockMessage,
+  canRetry,
+  costRows,
   drillHref,
-  drillSkill,
+  drillMessage,
+  feedbackLangFor,
   fluencyWords,
   reportScreen,
   transcriptRows,
@@ -64,35 +67,87 @@ export function OralReport() {
   const [extras, setExtras] = useState<Extras | null>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const askRef = useRef<HTMLHeadingElement>(null);
+  const reportRef = useRef<HTMLHeadingElement>(null);
+  const shownAsk = useRef<AskState["kind"] | null>(null);
+  const justAssessed = useRef(false);
 
-  const reload = useCallback(async (ready: Container) => {
+  // A storage failure is not a missing session (D127): it says so, and offers to read again.
+  const reload = useCallback(async (ready: Container, keepAsk = false) => {
     const id = sessionInUrl();
-    const report = id === null ? null : await ready.useCases.oralReport({ sessionId: id }).catch(() => null);
-    dispatch({ type: "loaded", report });
+    try {
+      const report = id === null ? null : await ready.useCases.oralReport({ sessionId: id });
+      dispatch(keepAsk && report !== null ? { type: "refreshed", report } : { type: "loaded", report });
+    } catch {
+      dispatch({ type: "loadFailed" });
+    }
   }, []);
+
+  // One request at a time, whatever the screen does meanwhile: a request still out when the screen
+  // was left is waited for, not made again (D127).
+  const follow = useCallback(
+    async (ready: Container, request: Promise<unknown>) => {
+      dispatch({ type: "asking" });
+      try {
+        await request;
+        justAssessed.current = true;
+        await reload(ready);
+      } catch (error) {
+        dispatch({ type: "failed", error });
+        await reload(ready, true);
+      }
+    },
+    [reload],
+  );
 
   useEffect(() => {
     if (container.status !== "ready") return;
     let alive = true;
-    void Promise.all([reload(container.container), loadExtras(container.container)]).then(([, loaded]) => {
-      if (alive) setExtras(loaded);
+    const ready = container.container;
+    void Promise.all([reload(ready), loadExtras(ready)]).then(([, loaded]) => {
+      if (!alive) return;
+      setExtras(loaded);
+      const id = sessionInUrl();
+      const pending = id === null ? null : ready.useCases.oralReportInFlight({ sessionId: id });
+      if (pending !== null) void follow(ready, pending);
     });
     return () => {
       alive = false;
     };
-  }, [container, reload]);
+  }, [container, reload, follow]);
 
-  // A pre-flight or a failure takes focus to its heading, as the workshop's does.
+  // Focus follows asking for the report to its card's heading (WCAG 2.4.3), but not on the first render.
   const askKind = state.phase === "ready" ? state.ask.kind : null;
   useEffect(() => {
-    if (askKind === "confirming" || askKind === "failed") askRef.current?.focus();
+    const before = shownAsk.current;
+    shownAsk.current = askKind;
+    if (before === null || askKind === null || before === askKind) return;
+    askRef.current?.focus();
   }, [askKind]);
+
+  // And a report just arrived takes it to the report.
+  const assessed = state.phase === "ready" && state.report.session.assessment !== null;
+  useEffect(() => {
+    if (!assessed || !justAssessed.current) return;
+    justAssessed.current = false;
+    reportRef.current?.focus();
+  }, [assessed]);
 
   if (container.status === "failed") return <Callout tone="incorrect">{tCommon("loadFailed")}</Callout>;
   if (container.status !== "ready" || extras === null || state.phase === "loading") {
     return <p role="status">{tCommon("loading")}</p>;
   }
   const { useCases } = container.container;
+
+  if (state.phase === "load-failed") {
+    return (
+      <Card>
+        <Callout tone="incorrect">{t("loadFailed")}</Callout>
+        <div className="app-actions">
+          <Button onClick={() => void reload(container.container)}>{t("retryLoad")}</Button>
+        </div>
+      </Card>
+    );
+  }
 
   if (state.phase === "not-found") {
     return (
@@ -116,16 +171,8 @@ export function OralReport() {
   const offer = async () => {
     dispatch({ type: "preflighted", preflight: await useCases.preflightSpend({ feature: "oral-assessment" }) });
   };
-  const send = async () => {
-    dispatch({ type: "asking" });
-    try {
-      await useCases.requestOralReport({ sessionId: session.id, feedbackLang: locale === "fr" ? "fr" : "en" });
-      await reload(container.container);
-      headingRef.current?.focus();
-    } catch (error) {
-      dispatch({ type: "failed", error });
-    }
-  };
+  const send = () =>
+    follow(container.container, useCases.requestOralReport({ sessionId: session.id, feedbackLang: feedbackLangFor(locale) }));
 
   return (
     <div className="app-stack">
@@ -142,7 +189,7 @@ export function OralReport() {
           onCancel={() => dispatch({ type: "cancel" })}
         />
       ) : (
-        <Assessment assessment={session.assessment} report={report} lang={lang} />
+        <Assessment assessment={session.assessment} report={report} lang={lang} headingRef={reportRef} />
       )}
 
       <Fluency report={report} />
@@ -163,11 +210,7 @@ function Summary({ report, headingRef }: { report: Report; headingRef: Ref<HTMLH
   const format = useFormatter();
   const locale = useLocale();
   const { session, scenario } = report;
-  const cost = costLines(report.cost);
-  const amount = (usd: number) => {
-    const shown = moneyText(usd, locale);
-    return shown.underCent ? t("costUnderCent", { amount: shown.text }) : shown.text;
-  };
+  const rows = costRows(report.cost, locale);
   return (
     <Card>
       <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
@@ -182,18 +225,12 @@ function Summary({ report, headingRef }: { report: Report; headingRef: Ref<HTMLH
         </p>
         <h3>{t("costTitle")}</h3>
         <dl className="app-criteria">
-          <div className="app-criteria__row">
-            <dt>{t("costPractice")}</dt>
-            <dd>{amount(cost.practiceUsd)}</dd>
-          </div>
-          <div className="app-criteria__row">
-            <dt>{t("costReport")}</dt>
-            <dd>{session.assessment === null ? t("costNoReport") : amount(cost.reportUsd)}</dd>
-          </div>
-          <div className="app-criteria__row">
-            <dt>{t("costTotal")}</dt>
-            <dd>{cost.floor ? t("costFloor", { amount: amount(cost.totalUsd) }) : amount(cost.totalUsd)}</dd>
-          </div>
+          {rows.map((row) => (
+            <div key={row.label} className="app-criteria__row">
+              <dt>{t(row.label)}</dt>
+              <dd>{t(row.words.key, row.words.values)}</dd>
+            </div>
+          ))}
         </dl>
         <p className="app-muted">{t("costNote")}</p>
       </div>
@@ -201,7 +238,11 @@ function Summary({ report, headingRef }: { report: Report; headingRef: Ref<HTMLH
   );
 }
 
-/** Asking for the report: the offer, the pre-flight, the wait, a failure, or why there is none to ask for. */
+/**
+ * Asking for the report: the offer, the pre-flight, the wait, a failure, or why there is none to ask
+ * for. One card throughout, whose heading takes focus at each step and whose status line is always
+ * there, so the wait is announced when it starts (D127).
+ */
 function Ask({
   report,
   ask,
@@ -221,80 +262,91 @@ function Ask({
 }) {
   const t = useTranslations("oralReport");
   const locale = useLocale();
-  if (!report.canAssess) {
+  const blocked = blockMessage(report.blocked);
+  if (blocked !== null) {
     return (
       <Card>
         <h2>{t("reportTitle")}</h2>
-        <p>{report.session.endedAt === null ? t("stillRunning") : t("nothingToAssess")}</p>
+        <p>{t(blocked)}</p>
       </Card>
     );
   }
   if (!extras.keyHeld) return <NoKeyCard namespace="oralReport" estimateUsd={extras.estimateUsd} />;
-  if (ask.kind === "asking") {
-    return (
-      <Card>
-        <h2>{t("reportTitle")}</h2>
-        <Toast tone="info">{t("asking")}</Toast>
-      </Card>
-    );
-  }
-  if (ask.kind === "confirming") {
-    const notice = preflightNotice(ask.preflight);
-    return (
-      <Card>
-        <h2 ref={askRef} tabIndex={-1} className="app-step-heading">
-          {t("preflightTitle")}
-        </h2>
-        <div className="app-stack">
-          <p>
-            {ask.preflight.estimateUsd === null
-              ? t("preflightUnpriced")
-              : t("preflightEstimate", { amount: estimateText(ask.preflight.estimateUsd, locale) })}
-          </p>
-          {notice === null ? null : <Callout tone={notice.tone}>{t(notice.key)}</Callout>}
-          <p className="app-muted">{t("sendsTo")}</p>
-          <div className="app-actions">
-            <Button onClick={onSend}>{t("send")}</Button>
-            <Button variant="ghost" onClick={onCancel}>
-              {t("cancel")}
-            </Button>
-          </div>
-        </div>
-      </Card>
-    );
-  }
+  const notice = ask.kind === "confirming" ? preflightNotice(ask.preflight) : null;
   return (
     <Card>
-      <h2 ref={ask.kind === "failed" ? askRef : undefined} tabIndex={-1} className="app-step-heading">
-        {t("reportTitle")}
+      <h2 ref={askRef} tabIndex={-1} className="app-step-heading">
+        {t(ask.kind === "confirming" ? "preflightTitle" : "reportTitle")}
       </h2>
       <div className="app-stack">
-        {ask.kind === "failed" ? (
-          <Callout tone="incorrect">
-            {t(askFailureMessage(ask.failure))} {t("transcriptKept")}
-          </Callout>
-        ) : (
-          <p>{t("offer")}</p>
-        )}
-        <p className="app-muted">
-          {extras.estimateUsd === null ? t("offerUnpriced") : t("offerCost", { amount: estimateText(extras.estimateUsd, locale) })}
+        <p role="status" aria-live="polite" className="app-muted">
+          {ask.kind === "asking" ? t("asking") : ""}
         </p>
-        <div className="app-actions">
-          <Button onClick={onOffer}>{t(ask.kind === "failed" ? "tryAgain" : "getReport")}</Button>
-        </div>
+        {ask.kind === "confirming" ? (
+          <>
+            <p>
+              {ask.preflight.estimateUsd === null
+                ? t("preflightUnpriced")
+                : t("preflightEstimate", { amount: estimateText(ask.preflight.estimateUsd, locale) })}
+            </p>
+            {notice === null ? null : <Callout tone={notice.tone}>{t(notice.key)}</Callout>}
+            <p className="app-muted">{t("sendsTo")}</p>
+            <div className="app-actions">
+              <Button onClick={onSend}>{t("send")}</Button>
+              <Button variant="ghost" onClick={onCancel}>
+                {t("cancel")}
+              </Button>
+            </div>
+          </>
+        ) : null}
+        {ask.kind === "idle" || ask.kind === "failed" ? (
+          <>
+            {ask.kind === "failed" ? (
+              <Callout tone="incorrect">
+                {t(askFailureMessage(ask.failure))} {t("transcriptKept")}
+              </Callout>
+            ) : (
+              <p>{t("offer")}</p>
+            )}
+            {ask.kind === "failed" && !canRetry(ask.failure) ? null : (
+              <>
+                <p className="app-muted">
+                  {extras.estimateUsd === null
+                    ? t("offerUnpriced")
+                    : t("offerCost", { amount: estimateText(extras.estimateUsd, locale) })}
+                </p>
+                <div className="app-actions">
+                  <Button onClick={onOffer}>{t(ask.kind === "failed" ? "tryAgain" : "getReport")}</Button>
+                </div>
+              </>
+            )}
+          </>
+        ) : null}
       </div>
     </Card>
   );
 }
 
 /** The report itself: the criteria, the fixes, the words and the marked-up transcript. */
-function Assessment({ assessment, report, lang }: { assessment: OralAssessment; report: Report; lang: Lang }) {
+function Assessment({
+  assessment,
+  report,
+  lang,
+  headingRef,
+}: {
+  assessment: OralAssessment;
+  report: Report;
+  lang: Lang;
+  headingRef: Ref<HTMLHeadingElement>;
+}) {
   const t = useTranslations("oralReport");
   const tSkills = useTranslations("subSkills");
   const rows = useMemo(() => transcriptRows(report.session.turns, assessment.errors), [report.session.turns, assessment.errors]);
   return (
     <section className="app-stack" aria-labelledby="oral-report-title">
-      <h2 id="oral-report-title">{t("reportTitle")}</h2>
+      <h2 id="oral-report-title" ref={headingRef} tabIndex={-1} className="app-step-heading">
+        {t("reportTitle")}
+      </h2>
 
       <h3>{t("criteriaTitle")}</h3>
       <dl className="app-criteria">
@@ -329,7 +381,7 @@ function Assessment({ assessment, report, lang }: { assessment: OralAssessment; 
             </p>
             <p className="app-muted">{t("fixEvidence", { evidence: fix.evidence })}</p>
             <Link href={drillHref(fix.subSkill)} className="app-link pl-focusable">
-              {t(drillSkill(fix.subSkill) === "reading" ? "drillReading" : "drillWriting", { subSkill: tSkills(fix.subSkill) })}
+              {t(drillMessage(fix.subSkill), { subSkill: tSkills(fix.subSkill) })}
             </Link>
           </li>
         ))}
@@ -371,15 +423,17 @@ function TranscriptLine({ row, lang }: { row: TranscriptRow; lang: Lang }) {
       </li>
     );
   }
+  // The answer is a block of its own, in the language spoken; the interface's words inside it (an
+  // error's number, a rule) carry the interface's language (WCAG 3.1.2, D127).
   return (
     <li>
       <strong>{tOral("speakerYou")}</strong>
-      {row.typed ? <span className="app-muted"> {t("typed")}</span> : null}{" "}
-      <span lang={lang} className="app-writing-text">
+      {row.typed ? <span className="app-muted"> {t("typed")}</span> : null}
+      <p lang={lang} className="app-writing-text">
         {row.segments.map((segment, index) =>
           segment.kind === "plain" ? <span key={index}>{segment.text}</span> : <Correction key={index} segment={segment} lang={lang} />,
         )}
-      </span>
+      </p>
     </li>
   );
 }
@@ -392,6 +446,7 @@ function Correction({
   lang: Lang;
 }) {
   const t = useTranslations("oralReport");
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const id = useId();
   return (
@@ -405,14 +460,18 @@ function Correction({
       >
         {segment.text}
         <sup>
-          <span className="pl-visually-hidden">{t("errorNumber", { number: segment.number })}</span>
+          <span className="pl-visually-hidden" lang={locale}>
+            {t("errorNumber", { number: segment.number })}
+          </span>
           <span aria-hidden="true">{segment.number}</span>
         </sup>
       </button>
       <span id={id} className="app-oral-correction" hidden={!open}>
         {" "}
         {t.rich("correctionLine", { correction: segment.error.correction, w: (chunks) => <span lang={lang}>{chunks}</span> })}{" "}
-        <span className="app-muted">{t("ruleLine", { rule: segment.error.rule })}</span>
+        <span className="app-muted" lang={locale}>
+          {t("ruleLine", { rule: segment.error.rule })}
+        </span>
       </span>
     </>
   );
@@ -456,7 +515,8 @@ function Recording({ report }: { report: Report }) {
   const container = useContainer();
   const [audio, setAudio] = useState<Blob | null | "loading">("loading");
   const [deleteFailed, setDeleteFailed] = useState(false);
-  const url = useMemo(() => (audio instanceof Blob ? URL.createObjectURL(audio) : null), [audio]);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const player = useRef<HTMLAudioElement>(null);
   const id = report.session.id;
 
   useEffect(() => {
@@ -471,10 +531,15 @@ function Recording({ report }: { report: Report }) {
     };
   }, [container, id]);
 
+  // The address is made, given to the player and revoked by one effect, so a remount (Strict Mode)
+  // never plays a revoked one (D127).
   useEffect(() => {
-    if (url === null) return;
-    return () => URL.revokeObjectURL(url);
-  }, [url]);
+    const element = player.current;
+    if (!(audio instanceof Blob) || element === null) return;
+    const made = URL.createObjectURL(audio);
+    element.src = made;
+    return () => URL.revokeObjectURL(made);
+  }, [audio]);
 
   if (audio === "loading") return null;
   const remove = async () => {
@@ -486,15 +551,18 @@ function Recording({ report }: { report: Report }) {
     } catch {
       setDeleteFailed(true);
     }
+    headingRef.current?.focus();
   };
   return (
     <Card>
-      <h2>{t("recordingTitle")}</h2>
-      {url === null ? (
+      <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
+        {t("recordingTitle")}
+      </h2>
+      {!(audio instanceof Blob) ? (
         <p>{t("recordingNone")}</p>
       ) : (
         <div className="app-stack">
-          <audio controls src={url} aria-label={t("recordingLabel")} />
+          <audio ref={player} controls aria-label={t("recordingLabel")} />
           <p className="app-muted">{t("recordingLocal")}</p>
           {deleteFailed ? <Callout tone="incorrect">{t("recordingDeleteFailed")}</Callout> : null}
           <div className="app-actions">

@@ -19,7 +19,7 @@ import { weakestSubSkills } from "./weakest-sub-skills.js";
  *    the profile or domain, and a duration constant here would break ADR 9. The
  *    caller passes a total item budget; the plan splits it.
  *  - **Oral-session findings bias the new items (D35, closed by D124).** The latest
- *    oral report's fixes arrive as `focusSubSkills`, weighted as the weakest are.
+ *    oral report's fixes arrive as `focusSubSkills`, favoured at `FOCUS_WEIGHT` (D127).
  *    Additive: without them the plan is exactly what it was, goldens included.
  *
  * `random` and `now` are primitives, not the ports (D32). Due reviews arrive
@@ -57,8 +57,9 @@ export type DayPlanInput = {
   readonly lastDayCompleted?: boolean;
   /**
    * The sub-skills the latest oral report's fixes drill (§7.4, "recent oral session
-   * findings"; D124). New items in them are drawn as the weakest are. Maintenance is
-   * unchanged. Absent or empty changes nothing.
+   * findings"; D124). New items in them are favoured at `FOCUS_WEIGHT` (D127). Maintenance's
+   * rule is unchanged, though its items can differ, because the new items took others. Absent
+   * or empty changes nothing.
    */
   readonly focusSubSkills?: readonly SubSkill[];
 };

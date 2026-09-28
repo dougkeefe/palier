@@ -17,7 +17,10 @@ import { RECORDED_DIR, englishDescriptors } from "./live-smoke.mjs";
  *   OPENAI_API_KEY=… pnpm --filter @palier/web oral-stability
  *
  * - **No key: it says so and exits 0.**
- * - **A failed call exits 1 and writes nothing**, so a half run never becomes the fixture.
+ * - **A report the adapter refuses twice is recorded and counted**, so the eval sees a scorer that
+ *   fails one report in five rather than a re-run that hides it (progress.md D127).
+ * - **Any other failed call exits 1 and writes nothing** (a refused key, an unreachable service), so a
+ *   half run never becomes the fixture.
  *
  * Runs under Node's type stripping, as `live-smoke.mjs` does; build the packages first.
  */
@@ -79,7 +82,11 @@ export const main = async ({
       2,
     )}\n`,
   );
-  log(`recorded ${String(ORAL_STABILITY_RUNS)} report(s), ${String(result.completions.length)} completion(s), US$${cost.toFixed(6)}`);
+  const given = ORAL_STABILITY_RUNS - result.failedCalls;
+  log(`recorded ${String(given)} report(s) of ${String(ORAL_STABILITY_RUNS)}, ${String(result.completions.length)} completion(s), US$${cost.toFixed(6)}`);
+  if (result.failedCalls > 0) {
+    log(`${String(result.failedCalls)} call(s) gave no report after the adapter's retry; they are recorded, and the eval counts them as failed runs.`);
+  }
   log("now run `pnpm --filter @palier/factory exec palier-factory eval` to read the stability.");
   return 0;
 };

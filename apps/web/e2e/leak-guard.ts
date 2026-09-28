@@ -224,7 +224,8 @@ export const speechAnswer = (): OpenAiAnswer => ({ status: 200, contentType: "au
  * places them. The correction carries {@link REPORT_SENTINEL}.
  */
 export const oralReportAnswer = (body: string): OpenAiAnswer => {
-  const said = /\[(\d+)\] Candidate(?: \(typed\))?: (\S+)/u.exec(promptOf(body));
+  // Each turn's words arrive as a JSON string (D127), so the first word follows the opening quotation mark.
+  const said = /\[(\d+)\] Candidate(?: \(typed\))?: "([^\s"\\]+)/u.exec(promptOf(body));
   const turn = Number(said?.[1] ?? 0);
   const excerpt = said?.[2] ?? "";
   const word = { word: "piloter", turn, excerpt, example: "Je pilote les consultations avec les provinces." };
@@ -583,3 +584,23 @@ export const recordingsAtRest = (page: Page): Promise<string[]> =>
     }
     return texts;
   });
+
+/** Every row of an IndexedDB store, as JSON text, so a spec can say what is at rest there (D127). */
+export const textAtRest = (page: Page, database: string, store: string): Promise<string> =>
+  page.evaluate(
+    async ({ database, store }) => {
+      const db = await new Promise<IDBDatabase>((resolve, reject) => {
+        const open = indexedDB.open(database);
+        open.onsuccess = () => resolve(open.result);
+        open.onerror = () => reject(open.error);
+      });
+      const rows = await new Promise<unknown[]>((resolve, reject) => {
+        const request = db.transaction(store, "readonly").objectStore(store).getAll();
+        request.onsuccess = () => resolve(request.result as unknown[]);
+        request.onerror = () => reject(request.error);
+      });
+      db.close();
+      return JSON.stringify(rows);
+    },
+    { database, store },
+  );

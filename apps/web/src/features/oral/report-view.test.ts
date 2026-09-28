@@ -1,5 +1,10 @@
-import type { OralReport } from "@palier/app";
-import { NothingToAssessError } from "@palier/app";
+import type { OralReport, OralSession } from "@palier/app";
+import {
+  NothingToAssessError,
+  OralSessionRunningError,
+  UnknownOralSessionError,
+  UnknownScenarioError,
+} from "@palier/app";
 import type { OralTurn } from "@palier/domain";
 import { scenarioId, sessionId } from "@palier/domain";
 import type { Preflight } from "@palier/engine";
@@ -10,9 +15,14 @@ import {
   ORAL_CRITERION_ROWS,
   type ReportState,
   askFailureMessage,
-  costLines,
+  blockMessage,
+  canRetry,
+  costRows,
   drillHref,
+  drillMessage,
   drillSkill,
+  endReportLink,
+  feedbackLangFor,
   fluencyWords,
   historyTag,
   reportScreen,
@@ -34,8 +44,8 @@ const REPORT: OralReport = {
   },
   scenario: null,
   fluency: { spokenTurns: 0, wordsPerMinute: null, fillerCount: null, meanPauseMs: null },
-  cost: { practiceUsd: 0, reportUsd: 0, unpriced: 0 },
-  canAssess: true,
+  cost: { practice: { usd: 0, calls: 0, unpriced: 0 }, report: { usd: 0, calls: 0, unpriced: 0 } },
+  blocked: null,
 };
 
 const run = (...actions: Parameters<typeof reportScreen>[1][]): ReportState => actions.reduce(reportScreen, INITIAL_REPORT);
@@ -74,7 +84,7 @@ describe("reportScreen, the steps (D126)", () => {
   });
 
   it("replaces the whole view when the report arrives", () => {
-    const assessed = { ...REPORT, canAssess: false };
+    const assessed = { ...REPORT, blocked: "assessed" as const };
     expect(reportScreen(reportScreen(ready(), { type: "asking" }), { type: "loaded", report: assessed })).toEqual({
       phase: "ready",
       report: assessed,
@@ -175,15 +185,85 @@ describe("fluencyWords", () => {
   });
 });
 
-describe("costLines (D125)", () => {
-  it("adds the practice and the report, and says the total is a floor when a call was unpriced", () => {
-    expect(costLines({ practiceUsd: 0.08, reportUsd: 0.02, unpriced: 0 })).toEqual({
-      practiceUsd: 0.08,
-      reportUsd: 0.02,
-      totalUsd: 0.1,
-      floor: false,
-    });
-    expect(costLines({ practiceUsd: 0.08, reportUsd: 0, unpriced: 2 }).floor).toBe(true);
+describe("costRows (D125, D127)", () => {
+  const line = (usd: number, calls: number, unpriced = 0) => ({ usd, calls, unpriced });
+  const words = (practice: ReturnType<typeof line>, report: ReturnType<typeof line>) =>
+    costRows({ practice, report }, "en").map((row) => [row.label, row.words.key, row.words.values?.amount]);
+
+  it("gives each line its amount, and the report's as not asked for when no report call was made", () => {
+    expect(words(line(0.08, 5), line(0, 0))).toEqual([
+      ["costPractice", "costExact", "US$0.08"],
+      ["costReport", "costNoReport", undefined],
+      ["costTotal", "costExact", "US$0.08"],
+    ]);
+  });
+
+  it("shows a report call OpenAI billed though it failed, rather than 'not asked for'", () => {
+    expect(words(line(0.08, 5), line(0.03, 1))[1]).toEqual(["costReport", "costExact", "US$0.03"]);
+  });
+
+  it("says under a cent for a figure under half a cent, and never 'at least under'", () => {
+    expect(words(line(0.003, 1), line(0, 0))[0]).toEqual(["costPractice", "costUnderCent", "US$0.01"]);
+    expect(words(line(0.003, 2, 1), line(0, 0))[0]).toEqual(["costPractice", "costFloorFraction", undefined]);
+    expect(words(line(0, 1, 1), line(0, 0))[0]).toEqual(["costPractice", "costFloorFraction", undefined]);
+  });
+
+  it("marks each line with an unpriced call as a floor, and the total when any line is", () => {
+    expect(words(line(0.08, 5, 1), line(0.02, 1))).toEqual([
+      ["costPractice", "costFloor", "US$0.08"],
+      ["costReport", "costExact", "US$0.02"],
+      ["costTotal", "costFloor", "US$0.10"],
+    ]);
+  });
+});
+
+describe("the refusals and small choices, out of the .tsx (D127)", () => {
+  it("maps a refusal before any call to its own words, and says it cannot be mended by asking again", () => {
+    const asking = reportScreen(ready(), { type: "asking" });
+    const failure = (error: unknown) => {
+      const next = reportScreen(asking, { type: "failed", error });
+      return next.phase === "ready" && next.ask.kind === "failed" ? next.ask.failure : null;
+    };
+    expect(failure(new OralSessionRunningError(sessionId("s")))).toBe("running");
+    expect(failure(new UnknownScenarioError(scenarioId("gone")))).toBe("scenario-gone");
+    expect(failure(new UnknownOralSessionError(sessionId("s")))).toBe("gone");
+    expect(askFailureMessage("scenario-gone")).toBe("fail_scenario-gone");
+    expect(["nothing", "running", "scenario-gone", "gone"].map((f) => canRetry(f as never))).toEqual([false, false, false, false]);
+    expect(canRetry("timeout")).toBe(true);
+  });
+
+  it("names why a report cannot be asked for, and nothing when it can or already was", () => {
+    expect(blockMessage("running")).toBe("stillRunning");
+    expect(blockMessage("no-answer")).toBe("nothingToAssess");
+    expect(blockMessage("scenario-gone")).toBe("scenarioGone");
+    expect(blockMessage("assessed")).toBeNull();
+    expect(blockMessage(null)).toBeNull();
+  });
+
+  it("links a session's end to its report only when it was stored, ended, with an answer", () => {
+    const answered: OralSession = {
+      ...REPORT.session,
+      turns: [{ speaker: "candidate", text: "Oui.", phase: 0, startMs: 0, endMs: 0 }],
+    };
+    expect(endReportLink(answered)).toBe(true);
+    expect(endReportLink({ ...answered, endReason: null })).toBe(false);
+    expect(endReportLink({ ...answered, turns: [] })).toBe(false);
+    expect(endReportLink(null)).toBe(false);
+  });
+
+  it("writes the report in the interface's language, and names each fix's drill", () => {
+    expect(feedbackLangFor("fr")).toBe("fr");
+    expect(feedbackLangFor("en")).toBe("en");
+    expect(drillMessage("inference")).toBe("drillReading");
+    expect(drillMessage("agreement")).toBe("drillWriting");
+  });
+
+  it("refreshes the session while keeping a failure on screen, and says a read failure is not a missing session", () => {
+    const failed = reportScreen(reportScreen(ready(), { type: "asking" }), { type: "failed", error: named("TimeoutError") });
+    const billed = { ...REPORT, cost: { ...REPORT.cost, report: { usd: 0.03, calls: 1, unpriced: 0 } } };
+    expect(reportScreen(failed, { type: "refreshed", report: billed })).toMatchObject({ report: billed, ask: { kind: "failed" } });
+    expect(reportScreen(ready(), { type: "loadFailed" })).toEqual({ phase: "load-failed" });
+    expect(reportScreen(INITIAL_REPORT, { type: "refreshed", report: billed })).toBe(INITIAL_REPORT);
   });
 });
 

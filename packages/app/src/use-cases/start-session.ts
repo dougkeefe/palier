@@ -36,7 +36,8 @@ import { type PlanDailySessionRequest, planDailySession } from "./plan-daily-ses
  *   built it. This **closes D36**: the dangling optional is now produced by
  *   `completeSession` and consumed here, through the port.
  * - **It owns `focusSubSkills` the same way** (progress.md D124, closing D35): the latest
- *   oral report's fixes, read from the `OralStore`, bias the day's new items.
+ *   oral report's fixes in the language the day practises (D127), read from the `OralStore`,
+ *   bias the day's new items.
  */
 
 export type StartSessionRequest = {
@@ -84,7 +85,8 @@ export const startSession = async (
   const lastDayCompleted =
     previous === null ? undefined : previous.completedAt !== null;
 
-  const focusSubSkills = oralFocusSubSkills(await deps.oral.all());
+  const scenarioLang = new Map((await deps.items.scenarios()).map((scenario) => [scenario.id, scenario.lang]));
+  const focusSubSkills = oralFocusSubSkills(await deps.oral.all(), request.plan.lang, (id) => scenarioLang.get(id) ?? null);
 
   const plan = await planDailySession(
     {

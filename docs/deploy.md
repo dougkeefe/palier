@@ -178,7 +178,10 @@ moved, copy the printed `writing-feedback` and `item-generation` entries into `a
 Phase 5's exit criteria 2 and 4 (`progress.md` D125, D126). Both are run by you, on a funded key, from your own
 terminal and browser.
 
-**The stability recording** scores one fixed session five times, about five report calls, a few cents:
+**The stability recording** scores one fixed session five times, about five report calls, a few cents. The session is
+`STABILITY_SESSION` in `apps/web/src/lib/live-smoke.ts`: about five minutes, eight spoken answers, synthetic
+(`progress.md` D127). A report the adapter refuses twice is recorded and counted as a failed run rather than stopping the
+recording; any other failure (a refused key, no connection) writes nothing:
 
 ```
 pnpm exec turbo run build --filter=@palier/web^... --filter=@palier/factory

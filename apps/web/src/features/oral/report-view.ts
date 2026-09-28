@@ -1,9 +1,16 @@
-import type { OralReport, OralSessionCost } from "@palier/app";
-import { NothingToAssessError } from "@palier/app";
-import type { OralCriterion, OralTurn, OralTurnError, ScoredSubSkill } from "@palier/domain";
+import type { OralCostLine, OralReport, OralReportBlock, OralSession, OralSessionCost } from "@palier/app";
+import {
+  NothingToAssessError,
+  OralSessionRunningError,
+  UnknownOralSessionError,
+  UnknownScenarioError,
+  hasAnswers,
+} from "@palier/app";
+import type { Lang, OralCriterion, OralTurn, OralTurnError, ScoredSubSkill } from "@palier/domain";
 import { ORAL_CRITERIA, READING_SUB_SKILLS } from "@palier/domain";
 import type { FluencyMetrics, Preflight } from "@palier/engine";
 
+import { moneyText } from "../key/spend-view";
 import { type TextSegment, segmentText } from "../writing/inline-errors";
 import { type OralFailure, oralFailure } from "./practice-view";
 
@@ -12,20 +19,31 @@ import { type OralFailure, oralFailure } from "./practice-view";
  * progress.md D126), kept out of the `.tsx` so each is tested.
  */
 
+/**
+ * Why a report could not be had: the key screen's names for a call that failed, or, for a request
+ * refused before any call, why (D127), so a refusal that no retry can mend never blames OpenAI.
+ */
+export type AskFailure = OralFailure | "nothing" | "running" | "scenario-gone" | "gone";
+
 /** Where asking for the report stands, when the session has none yet. */
 export type AskState =
   | { readonly kind: "idle" }
   | { readonly kind: "confirming"; readonly preflight: Preflight }
   | { readonly kind: "asking" }
-  | { readonly kind: "failed"; readonly failure: OralFailure | "nothing" };
+  | { readonly kind: "failed"; readonly failure: AskFailure };
 
 export type ReportState =
   | { readonly phase: "loading" }
   | { readonly phase: "not-found" }
+  /** The session could not be read: the device's storage failed, which is not a missing session (D127). */
+  | { readonly phase: "load-failed" }
   | { readonly phase: "ready"; readonly report: OralReport; readonly ask: AskState };
 
 export type ReportAction =
   | { readonly type: "loaded"; readonly report: OralReport | null }
+  /** The session read again, keeping where asking stands: its cost after a failed call (D127). */
+  | { readonly type: "refreshed"; readonly report: OralReport }
+  | { readonly type: "loadFailed" }
   | { readonly type: "preflighted"; readonly preflight: Preflight }
   | { readonly type: "cancel" }
   | { readonly type: "asking" }
@@ -33,9 +51,13 @@ export type ReportAction =
 
 export const INITIAL_REPORT: ReportState = { phase: "loading" };
 
-/** A failure in words: the key screen's names, or that the session had nothing to assess. */
-const askFailure = (error: unknown): OralFailure | "nothing" =>
-  error instanceof NothingToAssessError ? "nothing" : oralFailure(error);
+const askFailure = (error: unknown): AskFailure => {
+  if (error instanceof NothingToAssessError) return "nothing";
+  if (error instanceof OralSessionRunningError) return "running";
+  if (error instanceof UnknownScenarioError) return "scenario-gone";
+  if (error instanceof UnknownOralSessionError) return "gone";
+  return oralFailure(error);
+};
 
 /**
  * The steps: loading, then the session, and for one with no report yet, asking for it: the
@@ -47,8 +69,11 @@ export const reportScreen = (state: ReportState, action: ReportAction): ReportSt
   if (action.type === "loaded") {
     return action.report === null ? { phase: "not-found" } : { phase: "ready", report: action.report, ask: { kind: "idle" } };
   }
+  if (action.type === "loadFailed") return { phase: "load-failed" };
   if (state.phase !== "ready") return state;
   switch (action.type) {
+    case "refreshed":
+      return { ...state, report: action.report };
     case "preflighted":
       return state.ask.kind === "asking" ? state : { ...state, ask: { kind: "confirming", preflight: action.preflight } };
     case "cancel":
@@ -61,8 +86,37 @@ export const reportScreen = (state: ReportState, action: ReportAction): ReportSt
 };
 
 /** The message key for a report that could not be had, in the `oralReport` namespace. */
-export const askFailureMessage = (failure: OralFailure | "nothing"): string =>
+export const askFailureMessage = (failure: AskFailure): string =>
   failure === "nothing" ? "failNothing" : `fail_${failure}`;
+
+/** Whether a failure can be mended by asking again: a refusal before any call cannot (D127). */
+export const canRetry = (failure: AskFailure): boolean =>
+  !(["nothing", "running", "scenario-gone", "gone"] as readonly AskFailure[]).includes(failure);
+
+/** The sentence for why a report cannot be asked for, or `null` when one can, or already was. */
+export const blockMessage = (blocked: OralReportBlock | null): string | null => {
+  switch (blocked) {
+    case "running":
+      return "stillRunning";
+    case "no-answer":
+      return "nothingToAssess";
+    case "scenario-gone":
+      return "scenarioGone";
+    default:
+      return null;
+  }
+};
+
+/** Whether a session's end screen links to its report: it was stored, it ended, and it has an answer (D126). */
+export const endReportLink = (session: OralSession | null): boolean =>
+  session !== null && session.endReason !== null && hasAnswers(session);
+
+/** The report's feedback language: the interface's, French or English. */
+export const feedbackLangFor = (locale: string): Lang => (locale === "fr" ? "fr" : "en");
+
+/** The message key for a fix's drill link. */
+export const drillMessage = (subSkill: ScoredSubSkill): "drillReading" | "drillWriting" =>
+  drillSkill(subSkill) === "reading" ? "drillReading" : "drillWriting";
 
 /** The criteria in the order the report shows them, each with its message key. */
 export const ORAL_CRITERION_ROWS: readonly { readonly criterion: OralCriterion; readonly key: string }[] =
@@ -77,7 +131,7 @@ const READING: ReadonlySet<string> = new Set(READING_SUB_SKILLS);
 export const drillHref = (subSkill: ScoredSubSkill): "/practice/reading" | "/practice/writing" =>
   READING.has(subSkill) ? "/practice/reading" : "/practice/writing";
 
-/** Which skill a fix drills, for the words beside its link. */
+/** Which skill a fix drills. */
 export const drillSkill = (subSkill: ScoredSubSkill): "reading" | "writing" =>
   READING.has(subSkill) ? "reading" : "writing";
 
@@ -130,17 +184,40 @@ export const fluencyWords = (fluency: FluencyMetrics): FluencyWords => ({
   spokenTurns: fluency.spokenTurns,
 });
 
+/** One cost line in words: a message key in the `oralReport` namespace and its values. */
+export type CostWords = { readonly key: string; readonly values?: { readonly amount: string } };
+
 /**
- * What the session cost, measured (Phase 5 exit criterion 2, D125): the practice, the report and
- * the two together, from the rows the ledger made for it. `floor` is set when a call could not be
- * priced, so the screen says "at least" rather than show an unpriced call as free (D103).
+ * One amount in words (D127): a line with an unpriced call is "at least" its priced part, so an
+ * unpriced call never reads as free (D103), and a figure under half a cent reads as "under a cent",
+ * never both at once.
  */
-export const costLines = (cost: OralSessionCost) => ({
-  practiceUsd: cost.practiceUsd,
-  reportUsd: cost.reportUsd,
-  totalUsd: cost.practiceUsd + cost.reportUsd,
-  floor: cost.unpriced > 0,
-});
+const amountWords = (usd: number, unpriced: number, locale: string): CostWords => {
+  const shown = moneyText(usd, locale);
+  if (unpriced > 0) return shown.underCent || usd === 0 ? { key: "costFloorFraction" } : { key: "costFloor", values: { amount: shown.text } };
+  return shown.underCent ? { key: "costUnderCent", values: { amount: shown.text } } : { key: "costExact", values: { amount: shown.text } };
+};
+
+/**
+ * What the session cost, measured (Phase 5 exit criterion 2, D125, D127): the practice, the report and
+ * the two together, from the rows the ledger made for it. The report line says "not asked for yet"
+ * only when no report call was made, since a call OpenAI billed and the adapter refused is spend too.
+ */
+export const costRows = (cost: OralSessionCost, locale: string): readonly { readonly label: string; readonly words: CostWords }[] => {
+  const total: OralCostLine = {
+    usd: cost.practice.usd + cost.report.usd,
+    calls: cost.practice.calls + cost.report.calls,
+    unpriced: cost.practice.unpriced + cost.report.unpriced,
+  };
+  return [
+    { label: "costPractice", words: amountWords(cost.practice.usd, cost.practice.unpriced, locale) },
+    {
+      label: "costReport",
+      words: cost.report.calls === 0 ? { key: "costNoReport" } : amountWords(cost.report.usd, cost.report.unpriced, locale),
+    },
+    { label: "costTotal", words: amountWords(total.usd, total.unpriced, locale) },
+  ];
+};
 
 /** The words for a past session's state in the list of them. */
 export const historyTag = (entry: { readonly assessed: boolean; readonly answered: boolean }): string =>

@@ -137,8 +137,16 @@ export const startOralSessionRun = async (
     if (event.kind === "difficulty") return step({ kind: "difficulty", direction: event.direction, atMs });
     if (event.kind === "turn") {
       await step({ kind: "tick", atMs });
-      const { speaker, text, startMs, endMs, input } = event;
-      const turn = { speaker, text, phase: machine.phase, startMs, endMs, ...(input === undefined ? {} : { input }) };
+      const { speaker, text, startMs, endMs, input, pauseMs } = event;
+      const turn = {
+        speaker,
+        text,
+        phase: machine.phase,
+        startMs,
+        endMs,
+        ...(input === undefined ? {} : { input }),
+        ...(pauseMs === undefined ? {} : { pauseMs }),
+      };
       session = { ...session, turns: [...session.turns, turn] };
       return deps.oral.put(session);
     }

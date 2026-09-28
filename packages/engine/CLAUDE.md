@@ -29,9 +29,12 @@ with every phase entered; **every close carries a reason**, exactly once, and an
 more; an earlier `atMs` than one already seen counts as the later. Property-tested, nine invariants. **Fluency**
 (`fluency.ts`, progress.md D123): `fluencyMetrics(turns, fillers)` gives words a minute, the filler count and the mean
 pause **over spoken answers only** (`input: "voice"`), each `null` rather than zero when nothing spoken measures it;
-the filler list is handed in, since it is content data. **An oral report's fixes bias the plan** (D124, closing D35):
-`SelectionCriteria.boost` weights its sub-skills as the weakest are, in practice mode only, and `DayPlanInput.focusSubSkills`
-passes them to new items, never maintenance. Absent or empty changes nothing, so the goldens did not move. Everything is
+the filler list is handed in, since it is content data, and words are domain's `spokenWords`. **The pause is each spoken
+turn's `pauseMs`, which the screen measures; never the gap between turns**, which counts the time the question was heard
+(D127). **An oral report's fixes bias the plan** (D124, closing D35): `SelectionCriteria.boost` favours its sub-skills at
+`FOCUS_WEIGHT` (2), **multiplied** with `WEAKEST_WEIGHT` rather than joining the weakest set, so a weakest sub-skill stays
+ahead (D127), in practice mode only; `DayPlanInput.focusSubSkills` passes them to new items, never maintenance's rule.
+Absent or empty changes nothing, so the goldens did not move. Everything is
 re-exported from `src/index.ts` — the package's public surface is the barrel, not a relative
 path, so a new algorithm is not done until it is exported there.
 

@@ -164,6 +164,9 @@ test("a refused microphone: recovery steps for this browser, and typed answers i
   await expect(page.getByRole("region", { name: "Transcript" }).getByText("Réponse écrite numéro 1.")).toBeVisible();
   // A typed session records nothing, so there is no recording to keep.
   await expect(page.getByText("The recording of your answers is kept", { exact: false })).toHaveCount(0);
+  // "Practise again" lists the session just finished, without a reload (D127).
+  await page.getByRole("button", { name: "Practise again" }).click();
+  await expect(page.getByRole("region", { name: "Your earlier sessions" }).getByText("No report yet")).toBeVisible();
 });
 
 test("a call OpenAI refuses ends the session, names why in words, and keeps the transcript", async ({ page, context }) => {

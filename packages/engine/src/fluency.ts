@@ -1,4 +1,5 @@
 import type { OralTurn } from "@palier/domain";
+import { spokenWords } from "@palier/domain";
 
 /**
  * Fluency metrics for a spoken session (architecture.md §8.5, "computed client-side from
@@ -14,8 +15,14 @@ import type { OralTurn } from "@palier/domain";
  *   regard to case. The list is content data (`@palier/content/oral/fillers.json`), so the
  *   caller hands in the practised language's. A transcription model may drop some hesitations,
  *   so the count is what the transcript kept.
- * - **Mean pause**: from the end of the examiner's question to the start of the spoken answer
- *   after it, clamped at zero, over every spoken answer that follows a question.
+ * - **Mean pause**: how long the candidate waited, once the question had been heard, before they
+ *   began a spoken answer: each spoken turn's `pauseMs`, which the screen measures from the end of
+ *   the question's voice to the press of Record (progress.md D127). A turn's `startMs` cannot say
+ *   it: the examiner's turn is stamped when its words appear, before its voice has played, so the
+ *   gap between the two turns counts the listening too.
+ *
+ * Words are `@palier/domain`'s `spokenWords`, the tokenising the filler list is checked with, so a
+ * curly apostrophe or an accent written in two code points counts as it reads (D127).
  */
 
 export type FluencyMetrics = {
@@ -28,10 +35,7 @@ export type FluencyMetrics = {
 
 const MINUTE_MS = 60_000;
 
-/** A word: letters or digits, joined by an apostrophe or a hyphen inside it ("j'ai", "sous-ministre"). */
-const WORD = /[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu;
-
-const wordsOf = (text: string): readonly string[] => text.toLowerCase().match(WORD) ?? [];
+const wordsOf = spokenWords;
 
 /** How many times `phrase` occurs as whole words, in order, in `words`. */
 const occurrences = (words: readonly string[], phrase: readonly string[]): number => {
@@ -60,17 +64,7 @@ export const fluencyMetrics = (turns: readonly OralTurn[], fillers: readonly str
     0,
   );
 
-  const pauses: number[] = [];
-  let questionEndMs: number | null = null;
-  for (const turn of turns) {
-    if (turn.speaker === "examiner") {
-      questionEndMs = turn.endMs;
-      continue;
-    }
-    // Any answer, typed or spoken, answers the question; only a spoken one is timed.
-    if (isSpoken(turn) && questionEndMs !== null) pauses.push(Math.max(0, turn.startMs - questionEndMs));
-    questionEndMs = null;
-  }
+  const pauses = spoken.flatMap((turn) => (turn.pauseMs === undefined ? [] : [turn.pauseMs]));
 
   return {
     spokenTurns: spoken.length,

@@ -104,7 +104,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/check-last-branch-commit` | **Phase 5 Slice 3 — `assessOral` and the report** (D113): `AiProvider.assessOral` on the `assess` role, fluency metrics in the engine, the report at `/practice/oral/report`, the fixes into tomorrow's plan (closing D35), a session's cost from its own ledger rows, and the stability eval's plumbing. Gate J deferred by the human: the `pronounce` role ships unconfigured. **Built; pending merge** (D122–D126). | 28 September 2026 |
+| `dougkeefe/check-last-branch-commit` | **Phase 5 Slice 3 — `assessOral` and the report** (D113): `AiProvider.assessOral` on the `assess` role, fluency metrics in the engine, the report at `/practice/oral/report`, the fixes into tomorrow's plan (closing D35), a session's cost from its own ledger rows, and the stability eval's plumbing. Gate J deferred by the human: the `pronounce` role ships unconfigured. **Built, reviewed (32 fixes, D127); pending merge** (D122–D127). | 28 September 2026 |
 
 *(The prior rows — Phase 5 Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -213,8 +213,9 @@ else is to be built first. There is no agent slice ahead of them: Phase 6 is gat
 and the evidence is these runs.
 
 1. **The stability recording** (exit criterion 4), from your own terminal, `docs/deploy.md` "The oral scorer's stability":
-   - `pnpm --filter @palier/web oral-stability` on a funded key. It scores `ORAL_SESSION` five times, a few cents, and writes
-     `packages/testing/src/recorded/openai/assessOral-stability.json`.
+   - `pnpm --filter @palier/web oral-stability` on a funded key. It scores `STABILITY_SESSION` (about five minutes, eight
+     spoken answers; synthetic, D127) five times, a few cents, and writes
+     `packages/testing/src/recorded/openai/assessOral-stability.json`, a report refused twice included.
    - The agent session that follows then imports it into `RECORDED_RUNS`, adds `"assessOral"` to the replay test's method set,
      regenerates `eval-report.json`, and reads `oralStability`. **Passed ticks criterion 4.** Failed is a prompt to fix, with a
      `PROMPT_VERSION` bump and a re-recording, never a threshold to move (D126).
@@ -4539,11 +4540,108 @@ chose to fix all of them.
   exit criterion 3 stays green with no opt-in. **Proven to bite:** the recording's bytes added to the report request failed the
   hermetic journey (session log).
 
+### D127 — the pre-merge review: 32 findings fixed, the pause measured by the screen, and D123–D126 amended
+**Date:** 28 September 2026 · **Status:** accepted; amends D123, D124, D125 and D126; §3.3 and §7 amended in place
+
+A candid review of the branch (three parallel reviewers, constructive tone) found 32 issues after one duplicate was
+merged, none critical. The human chose to fix all of them.
+
+- **The mean pause was wrong for every spoken session** (D123 amended). The examiner's turn is stamped when its words
+  appear, before its voice plays, so the gap between the two turns counted the listening too, and the stored turns
+  could not correct it afterwards.
+  - The screen measures it instead. `practice-controller.ts` notes when a question appears and when its voice stops
+    (ended, paused, or refused by autoplay), and `answerPause` gives the wait until Record, which is none when Record
+    interrupts the voice.
+  - The clip carries it as `CandidateAnswer.pauseMs`. The transport stores it on the turn as `OralTurn.pauseMs`, whole and
+    never below zero, and the engine averages those.
+  - A turn without one is not timed. §3.3 is amended in place.
+- **Fluency, more carefully:**
+  - words are domain's `spokenWords` (NFC, apostrophes straightened, lower case), shared by the engine and the filler
+    parser, which now keys each filler as the metric reads it and refuses an entry with no word;
+  - **the filler list keeps only clear hesitations** (euh, heu, hum, ben, bah; um, uh, er, erm, hmm). "Genre", "en fait",
+    "du coup", "like" and "kind of" are ordinary words in the formal register the test rewards, and counting them
+    penalised correct speech.
+- **Matching a model's quotation** (`findExcerpt`, in `writing.ts`, so the writing workshop gains it too):
+  - curly and straight apostrophes are one, and so is any run of whitespace, a non-breaking space before "?" included;
+  - the offsets returned are the text's own.
+  - Before, one straightened apostrophe failed the parse, and a report paid for twice was lost.
+  - An excerpt must quote a letter or a digit, so a space or a comma is never marked.
+- **A short session can have a report** (D122 amended): one to three fixes and one to five missing words, fewer "only when
+  the answers are too short", and the missing word's excerpt is "the fewest words that show where it fits". **An existing
+  test changed with the rule:** `oral-assessment.test.ts`'s "refuses anything but three fixes and five words", this
+  branch's own, became "takes fewer … but at least one of each, and no more than three and five".
+- **The prompt quotes each turn as a JSON string**, so a typed answer's line breaks, quotation marks or a pasted
+  "[9] Examiner:" cannot fake a turn or close the fence. The adapter test's expected turn lines moved to the quoted form.
+- **The plan's focus** (D124 amended):
+  - only a report **in the language the plan practises** biases it (`oralFocusSubSkills(sessions, lang, langOf)`, with
+    `StartSession` reading each scenario's language);
+  - boosted sub-skills get **`FOCUS_WEIGHT` 2**, multiplied with `WEAKEST_WEIGHT` 3, rather than joining the weakest set,
+    which with three fixes could weight six of eight sub-skills alike and level the targeting. A weakest sub-skill stays
+    ahead of a boosted one, and one both is weighted 6. The goldens did not move.
+  - D124's "maintenance is unchanged" meant its rule. Its items can differ, because the new items took others, and the
+    test's name now says so.
+- **The cost, line by line** (D125 amended). `OralSessionCost` is `{ practice, report }`, each `{ usd, calls, unpriced }`:
+  - a report call OpenAI billed though the adapter refused it shows as spend, not "not asked for yet";
+  - a line with an unpriced call reads "at least", and one under half a cent "under a cent", never both;
+  - the card is read again after a failed call.
+- **The report screen** (D126 amended):
+  - `OralReport.blocked` names why a report cannot be asked for (running, no answer, scenario gone, already made);
+  - a refusal before any call has its own sentence and no "Try again";
+  - a storage failure says so, with a retry, rather than "no report here";
+  - **a request still out is joined, never repeated** (`oralReportInFlight`, per session, in the container), so leaving
+    mid-call and coming back cannot pay twice;
+  - focus: one card throughout, whose heading takes focus at each step, with a status line always present, so the wait
+    is announced; the report's heading when it arrives; the recording's heading after a delete (WCAG 2.4.3);
+  - an answer is a block in the language spoken, and the interface's words in it (an error's number, a rule) carry the
+    interface's language (WCAG 3.1.2);
+  - figures are locale-formatted (`{seconds, number}`), so French reads "1,5 s";
+  - object URLs are made, given to the `<audio>` and revoked by one effect, the question's player too;
+  - the list of past sessions is read again whenever the picker is shown;
+  - every decision the review found in the `.tsx` moved into `features/oral/report-view.ts`, tested: `costRows`,
+    `blockMessage`, `canRetry`, `endReportLink`, `drillMessage`, `feedbackLangFor`.
+- **The stability evidence** (D126 amended):
+  - **a run is a call, not a reply.** An `attempt` 1 opens one, the call's report is its last accepted reply, and a call
+    with none is a failed run that fails the eval;
+  - a recording on another `PROMPT_VERSION` is reported as `current: false` and never passes;
+  - the recorder keeps a report the adapter refused twice, and counts it, rather than exiting so that a re-run hides it;
+  - the CLI's line is a tested `describeOralStability`;
+  - both sides assert the file name and the five runs as literals.
+  - **The stability session is its own** (`STABILITY_SESSION`): about five minutes, eight spoken answers of about 60 words
+    each, with measured pauses and the errors and hesitations of a B or C candidate. The smoke keeps its short session.
+    **Said plainly: it is still synthetic.** Criterion 4 ticks on it, and a real session scored the same way is the
+    stronger evidence, named, not scheduled.
+- **The smoke's report figure is no longer printed as "for pricing.json"**: it is on its own line, labelled a short fixed
+  session, not a typical report.
+- **Tests that asserted too little:** the production key-leak spec now reads `oralSessions` and finds the report's words
+  there (the positive control), and no longer passes `REPORT_SENTINEL` at a step before any report exists. The hermetic
+  spec presses "Practise again" and finds the session listed.
+- **Docs:** §7's Slice 3 names Gate J's deferral, §3.3's `AiProvider` comment names the pronunciation method still to
+  come, and the exit criterion says "at or above" 0.8, as the code does.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 28 September 2026 — `dougkeefe/check-last-branch-commit` (pre-merge review: 32 fixes)
+
+**A candid review of the whole branch** (three parallel reviewers, constructive tone) found 32 issues, none critical, and
+the human chose to fix all 32. D127 records each.
+
+**The ones that mattered most:**
+- the mean pause counted the time spent listening to each question. The screen now measures the pause itself;
+- one straightened apostrophe in a model's quotation lost a report that had been paid for twice;
+- a French report's figures on the other language's plan, and a boost that could level the weakest sub-skills;
+- leaving the report screen mid-call and coming back could pay for a second report.
+
+**Evidence** (after the fixes):
+
+```
+pnpm verify          → check-types, lint, boundaries (449 + 229 modules, no violations),
+                       test: 207 files, 3130 passed, 8 todo; coverage thresholds met
+CI=1 pnpm test:e2e    → 57 passed (1.1m), on a fresh production build
+```
 
 ### 28 September 2026 — `dougkeefe/check-last-branch-commit` (Phase 5 Slice 3: `assessOral` and the report)
 

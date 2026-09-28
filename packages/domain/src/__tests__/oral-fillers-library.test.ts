@@ -15,10 +15,15 @@ describe("the committed filler list", () => {
     expect(parseOralFillers(committed).ok).toBe(true);
   });
 
-  it("lists the French hesitation every candidate uses, and a phrase of two words", () => {
+  it("lists only hesitations, never a word a formal speaker uses for its meaning (D127)", () => {
     const result = parseOralFillers(committed);
     if (!result.ok) throw new Error(result.errors.join("\n"));
     expect(result.fillers.fr).toContain("euh");
-    expect(result.fillers.fr.some((filler) => filler.includes(" "))).toBe(true);
+    for (const word of ["genre", "en fait", "du coup", "bon", "voilà", "disons", "vous savez"]) {
+      expect(result.fillers.fr).not.toContain(word);
+    }
+    for (const word of ["like", "kind of", "sort of", "you know", "i mean"]) {
+      expect(result.fillers.en.map((f) => f.toLowerCase())).not.toContain(word);
+    }
   });
 });

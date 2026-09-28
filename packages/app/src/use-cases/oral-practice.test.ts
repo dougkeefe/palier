@@ -91,6 +91,22 @@ describe("turnBasedTransport — the turn loop (D118)", () => {
     expect(turns(events)[2]).toMatchObject({ speaker: "examiner", text: "Question 2", startMs: 30 * SEC });
   });
 
+  it("keeps the pause the screen measured before a clip, whole and never below zero, and none for typed words (D127)", async () => {
+    const { hand, events, open } = setUp();
+    await open();
+    await settled();
+    hand.give({ ...clip("Oui.", 2 * SEC), pauseMs: 1_234.6 });
+    await settled();
+    hand.give({ ...clip("Non.", 2 * SEC), pauseMs: -40 });
+    await settled();
+    hand.give({ kind: "typed", text: "Peut-être." });
+    await settled();
+
+    const answers = turns(events).filter((turn) => turn.speaker === "candidate");
+    expect(answers.map((turn) => turn.pauseMs)).toEqual([1_235, 0, undefined]);
+    expect("pauseMs" in (answers[2] ?? {})).toBe(false);
+  });
+
   it("takes typed words as they are, with no transcription, spanning the wait for them", async () => {
     const { ai, hand, clock, events, open } = setUp();
     await open();
@@ -392,11 +408,11 @@ describe("startOralPracticeRun (D118)", () => {
     return { ai, hand, clock, oral, ledger, run: startOralPracticeRun({ sessionId: SESSION_ID, scenarioId: SCENARIO.id }, deps) };
   };
 
-  it("stores how each answer arrived, records the session's calls under it, and leaves it unassessed (D122, D125)", async () => {
+  it("stores how each answer arrived and its measured pause, records the session's calls under it, and leaves it unassessed (D122, D125, D127)", async () => {
     const { hand, ledger, run } = start();
     const running = await run;
     await settled();
-    hand.give(clip("Je gère un projet.", 2 * SEC));
+    hand.give({ ...clip("Je gère un projet.", 2 * SEC), pauseMs: 900 });
     await settled();
     hand.give({ kind: "typed", text: "Oui." });
     await settled();
@@ -404,6 +420,7 @@ describe("startOralPracticeRun (D118)", () => {
     const ended = await running.ended;
 
     expect(ended.turns.filter((t) => t.speaker === "candidate").map((t) => t.input)).toEqual(["voice", "typed"]);
+    expect(ended.turns.filter((t) => t.speaker === "candidate").map((t) => t.pauseMs)).toEqual([900, undefined]);
     expect(ended.turns.filter((t) => t.speaker === "examiner").every((t) => t.input === undefined)).toBe(true);
     expect(ended.assessment).toBeNull();
     expect(ledger.entries().every((r) => r.sessionId === SESSION_ID)).toBe(true);

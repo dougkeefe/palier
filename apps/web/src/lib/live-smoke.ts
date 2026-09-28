@@ -158,9 +158,10 @@ const EXAMINER_REQUESTS: readonly ExaminerTurnRequest[] = [
 ];
 
 /**
- * The session the report is asked for (D122), fixed so the nightly smoke and the stability
- * recording score the same words. A work discussion at C: two spoken answers with errors worth
- * marking and a filler, and one typed. The level descriptors are the profile's, handed in (ADR 9).
+ * The short session the nightly smoke asks a report of (D122): a work discussion at C, two spoken
+ * answers with errors worth marking and a filler, and one typed. It proves the call and its shape;
+ * it is too short to say anything about a report's stability, which `STABILITY_SESSION` is for
+ * (D127). The level descriptors are the profile's, handed in (ADR 9).
  */
 const ORAL_SESSION: Omit<OralRequest, "descriptors"> = {
   sessionType: "work",
@@ -199,6 +200,108 @@ const ORAL_SESSION: Omit<OralRequest, "descriptors"> = {
       startMs: 45_000,
       endMs: 70_000,
       input: "typed",
+    },
+  ],
+};
+
+/**
+ * The session the stability recording scores five times (Phase 5 exit criterion 4, D127): a
+ * work discussion at C of about five minutes, eight spoken answers of about 60 words each, from a
+ * role and a project through a hypothetical to a policy question, with the errors and hesitations
+ * a real B or C candidate makes, so the criteria are judgement calls rather than obvious. Original,
+ * with no PSC material (R6), and synthetic, which D127 records plainly: a real session scored the
+ * same way is the stronger evidence.
+ */
+const STABILITY_SESSION: Omit<OralRequest, "descriptors"> = {
+  sessionType: "work",
+  targetBand: "C",
+  lang: "fr",
+  feedbackLang: "en",
+  topic: "project-management",
+  phases: [
+    { name: "Votre travail", intent: "Have the candidate describe their role and a recent project in detail." },
+    { name: "Recul et opinion", intent: "Push for hypotheticals, trade-offs and a reasoned opinion." },
+  ],
+  turns: [
+    { speaker: "examiner", text: "Bonjour. Pour commencer, parlez-moi de votre poste actuel.", phase: 0, startMs: 0, endMs: 0 },
+    {
+      speaker: "candidate",
+      text: "Euh, je suis analyste principale des politiques au ministère. Je coordonne les consultations avec les provinces et les territoires, et je rédige des notes d'information pour la sous-ministre. Depuis deux ans, je travaille surtout sur le financement des programmes de formation, ce qui veut dire que je dois comprendre à la fois les chiffres et les enjeux politique.",
+      phase: 0,
+      startMs: 5900,
+      endMs: 33519,
+      input: "voice",
+      pauseMs: 1900,
+    },
+    { speaker: "examiner", text: "Qu'est-ce qui vous plaît le plus dans ce travail ?", phase: 0, startMs: 35019, endMs: 35019 },
+    {
+      speaker: "candidate",
+      text: "Ce que j'aime le plus, c'est quand une note que j'ai écrit aide vraiment à prendre une décision. Par exemple, l'automne dernier, on a préparé une analyse des options pour les stages rémunérés, et la sous-ministre a retenu la deuxième option presque sans changement. C'était satisfaisant de voir que le travail d'équipe avait porté fruit.",
+      phase: 0,
+      startMs: 40419,
+      endMs: 66609,
+      input: "voice",
+      pauseMs: 1400,
+    },
+    { speaker: "examiner", text: "Décrivez un projet récent dont vous êtes fière.", phase: 0, startMs: 68109, endMs: 68109 },
+    {
+      speaker: "candidate",
+      text: "L'année passée, on a modernisé le processus de demande de subventions. Le défi, c'était que chaque région voulait garder ses propres formulaires, et les délais de traitement était très longs, parfois six mois. J'ai organisé des ateliers avec les régions pour comprendre leurs besoins, puis on a conçu un formulaire commun avec quelques sections adaptables. Au bout d'un an, le délai moyen est passé à trois mois.",
+      phase: 0,
+      startMs: 74709,
+      endMs: 106613,
+      input: "voice",
+      pauseMs: 2600,
+    },
+    { speaker: "examiner", text: "Comment avez-vous convaincu les régions qui résistaient ?", phase: 0, startMs: 108113, endMs: 108113 },
+    {
+      speaker: "candidate",
+      text: "Euh, il y avait surtout une région qui craignait de perdre sa souplesse. Je les ai rencontrés plusieurs fois, et on a fait un projet pilote chez eux d'abord. Quand ils ont vu que leurs demandeurs remplissait le nouveau formulaire plus vite, ils ont accepté. Je pense que c'est important d'écouter avant de proposer une solution.",
+      phase: 0,
+      startMs: 114313,
+      endMs: 140979,
+      input: "voice",
+      pauseMs: 2200,
+    },
+    { speaker: "examiner", text: "Qu'auriez-vous fait autrement si le budget du projet avait été réduit de moitié ?", phase: 1, startMs: 142479, endMs: 142479 },
+    {
+      speaker: "candidate",
+      text: "Si le budget aurait été réduit de moitié, j'aurais priorisé les deux régions qui recevaient le plus de demandes, et j'aurais reporté les autres à l'année suivante. J'aurais aussi réutilisé les outils numériques qu'on avait déjà au lieu d'en acheter de nouveaux. Ce serait moins ambitieux, mais on aurait quand même des résultats mesurables.",
+      phase: 1,
+      startMs: 149579,
+      endMs: 175293,
+      input: "voice",
+      pauseMs: 3100,
+    },
+    { speaker: "examiner", text: "Selon vous, faut-il toujours consulter les parties prenantes avant une décision, même quand le temps presse ?", phase: 1, startMs: 176793, endMs: 176793 },
+    {
+      speaker: "candidate",
+      text: "C'est une bonne question. Je crois qu'il faut consulter, mais la forme peut changer selon l'urgence. Quand le temps presse, on peut faire une consultation ciblée avec les groupes les plus touchés, plutôt qu'une grande consultation publique. Le risque, sinon, c'est de prendre une décision qui sera contestée plus tard, et on perd encore plus de temps à la corriger.",
+      phase: 1,
+      startMs: 184193,
+      endMs: 212764,
+      input: "voice",
+      pauseMs: 3400,
+    },
+    { speaker: "examiner", text: "Et si deux groupes consultés ont des positions opposées ?", phase: 1, startMs: 214264, endMs: 214264 },
+    {
+      speaker: "candidate",
+      text: "Dans ce cas, euh, je présenterais les deux positions de façon neutre dans la note, avec les conséquences de chaque option. Ce n'est pas à moi de trancher, c'est la décision de la haute direction. Mais je peux proposer des mesures d'atténuation pour le groupe qui serait moins favorisé, pour que la décision soit plus facile à accepter.",
+      phase: 1,
+      startMs: 220764,
+      endMs: 248383,
+      input: "voice",
+      pauseMs: 2500,
+    },
+    { speaker: "examiner", text: "Pour terminer, comment vous voyez-vous dans cinq ans ?", phase: 1, startMs: 249883, endMs: 249883 },
+    {
+      speaker: "candidate",
+      text: "Dans cinq ans, j'aimerais gérer une petite équipe d'analystes. J'ai déjà encadré deux étudiants cet été, et j'ai trouvé ça très enrichissant. Je voudrais aussi améliorer mon français à l'oral, surtout pour les réunions avec les partenaires francophones, parce que je me sens encore moins à l'aise quand la discussion devient très technique.",
+      phase: 1,
+      startMs: 255683,
+      endMs: 280921,
+      input: "voice",
+      pauseMs: 1800,
     },
   ],
 };
@@ -485,21 +588,32 @@ export type OralStabilityResult = {
   readonly startedAt: string;
   readonly calls: readonly CostEntry[];
   readonly completions: readonly RecordedCompletion[];
+  /** Calls whose every reply the adapter refused; their completions are kept, marked refused (D127). */
+  readonly failedCalls: number;
 };
 
 /**
  * The scoring-stability recording (Phase 5 exit criterion 4, progress.md D126): the same fixed
- * session, `ORAL_SESSION`, scored `ORAL_STABILITY_RUNS` times through the path the browser takes,
- * one call after another, its completions kept. The factory's eval reads the file it becomes and
- * reports how far the bands moved. It makes no other call.
+ * session, `STABILITY_SESSION`, scored `ORAL_STABILITY_RUNS` times through the path the browser takes,
+ * one call after another, its completions kept. A call the adapter refuses twice is kept and
+ * counted, not a reason to stop, so the eval sees it as a failed run (D127). The factory's eval reads
+ * the file it becomes and reports how far the bands moved. It makes no other call.
  */
 export const runOralStability = async (
   deps: Pick<LiveSmokeDeps, "apiKey" | "models" | "prices" | "descriptors" | "now" | "fetchImpl">,
 ): Promise<OralStabilityResult> => {
   const { ledger, completions, call, startedAt } = await recorder(deps);
-  const session: OralRequest = { ...ORAL_SESSION, descriptors: deps.descriptors };
+  const session: OralRequest = { ...STABILITY_SESSION, descriptors: deps.descriptors };
+  let failedCalls = 0;
   for (let run = 0; run < ORAL_STABILITY_RUNS; run += 1) {
-    await call("oral-assessment", "assessOral", session, (p) => p.assessOral(session));
+    try {
+      await call("oral-assessment", "assessOral", session, (p) => p.assessOral(session));
+    } catch (error) {
+      // A report the adapter refused twice is evidence about the scorer, kept for the eval (D127).
+      // Anything else, a refused key or an unreachable service, says nothing about it: stop.
+      if (!(error instanceof Error) || error.name !== "InvalidResponseError") throw error;
+      failedCalls += 1;
+    }
   }
-  return { startedAt, calls: await ledger.since(startedAt), completions };
+  return { startedAt, calls: await ledger.since(startedAt), completions, failedCalls };
 };

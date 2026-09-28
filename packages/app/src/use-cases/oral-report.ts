@@ -106,15 +106,31 @@ export const requestOralReport = async (request: OralReportRequest, deps: OralRe
 };
 
 /**
- * What a session cost, from the ledger rows made for it (D125): the session's own calls and
- * its report's, apart. A row the pricing could not price is counted in `unpriced`, so the
- * screen says its total is a floor rather than show an unpriced call as free (D103).
+ * One line of a session's cost: the priced calls' dollars, how many calls were made, and how
+ * many of them the pricing could not price, so the screen says a line is a floor rather than
+ * show an unpriced call as free (D103, D127).
  */
-export type OralSessionCost = {
-  readonly practiceUsd: number;
-  readonly reportUsd: number;
+export type OralCostLine = {
+  readonly usd: number;
+  readonly calls: number;
   readonly unpriced: number;
 };
+
+/**
+ * What a session cost, from the ledger rows made for it (D125): the session's own calls and its
+ * report's, apart. A report call that failed after OpenAI billed it is a row too, so `report.calls`
+ * can be above zero while the session has no report (D127).
+ */
+export type OralSessionCost = {
+  readonly practice: OralCostLine;
+  readonly report: OralCostLine;
+};
+
+/**
+ * Why a report cannot be asked for, or `null` when it can (D127): the session is still running,
+ * has no answer to judge, runs on a scenario the bank no longer holds, or has its report already.
+ */
+export type OralReportBlock = "running" | "no-answer" | "scenario-gone" | "assessed";
 
 /** A session as its report screen reads it (D126). */
 export type OralReport = {
@@ -123,8 +139,8 @@ export type OralReport = {
   readonly scenario: OralScenario | null;
   readonly fluency: FluencyMetrics;
   readonly cost: OralSessionCost;
-  /** Whether a report can be asked for: the session has ended with an answer and has none yet. */
-  readonly canAssess: boolean;
+  /** Why a report cannot be asked for, or `null` when it can. */
+  readonly blocked: OralReportBlock | null;
 };
 
 export type OralReportViewDeps = {
@@ -148,16 +164,26 @@ export const oralReport = async (sessionId: SessionId, deps: OralReportViewDeps)
   const fluency = scenario === null ? { ...measured, fillerCount: null } : measured;
 
   const rows = (await deps.ledger.since(session.startedAt)).filter((row) => row.sessionId === session.id);
-  const sum = (feature: "oral-practice" | "oral-assessment"): number =>
-    rows.filter((row) => row.feature === feature).reduce((total, row) => total + (row.costUsd ?? 0), 0);
-  const cost = {
-    practiceUsd: sum("oral-practice"),
-    reportUsd: sum("oral-assessment"),
-    unpriced: rows.filter((row) => row.costUsd === null).length,
+  const line = (feature: "oral-practice" | "oral-assessment"): OralCostLine => {
+    const mine = rows.filter((row) => row.feature === feature);
+    return {
+      usd: mine.reduce((total, row) => total + (row.costUsd ?? 0), 0),
+      calls: mine.length,
+      unpriced: mine.filter((row) => row.costUsd === null).length,
+    };
   };
+  const cost = { practice: line("oral-practice"), report: line("oral-assessment") };
 
-  const canAssess = session.endedAt !== null && session.assessment === null && hasAnswers(session);
-  return { session, scenario, fluency, cost, canAssess };
+  return { session, scenario, fluency, cost, blocked: reportBlock(session, scenario) };
+};
+
+/** Why `session` cannot have a report asked for, the order `requestOralReport` refuses in. */
+const reportBlock = (session: OralSession, scenario: OralScenario | null): OralReportBlock | null => {
+  if (session.endedAt === null) return "running";
+  if (session.assessment !== null) return "assessed";
+  if (!hasAnswers(session)) return "no-answer";
+  if (scenario === null) return "scenario-gone";
+  return null;
 };
 
 /** One past session, as the list of them shows it (D126). */
@@ -197,9 +223,17 @@ export const oralHistory = async (deps: {
 };
 
 /**
- * The sub-skills the latest report's fixes drill, for tomorrow's plan (D124, closing D35):
- * the newest assessed session's, in their rank order, or none. `sessions` is newest first,
- * as `OralStore.all` gives them.
+ * The sub-skills the latest report's fixes drill, for tomorrow's plan (D124, closing D35): the
+ * newest assessed session's **in the language the plan practises** (D127), in their rank order,
+ * or none. A French session's weaknesses say nothing about an English plan. `sessions` is newest
+ * first, as `OralStore.all` gives them; `langOf` gives a session's scenario's language, or `null`
+ * when the bank no longer holds it, and such a session is passed over.
  */
-export const oralFocusSubSkills = (sessions: readonly OralSession[]): readonly SubSkill[] =>
-  sessions.find((session) => session.assessment !== null)?.assessment?.fixes.map((fix) => fix.subSkill) ?? [];
+export const oralFocusSubSkills = (
+  sessions: readonly OralSession[],
+  lang: Lang,
+  langOf: (scenarioId: ScenarioId) => Lang | null,
+): readonly SubSkill[] =>
+  sessions
+    .find((session) => session.assessment !== null && langOf(session.scenarioId) === lang)
+    ?.assessment?.fixes.map((fix) => fix.subSkill) ?? [];

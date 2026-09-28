@@ -216,8 +216,10 @@ export type {
 } from "./oral-practice.js";
 export { oralSessionChoices, startOralPracticeRun, turnBasedTransport } from "./oral-practice.js";
 export type {
+  OralCostLine,
   OralHistoryEntry,
   OralReport,
+  OralReportBlock,
   OralReportDeps,
   OralReportRequest,
   OralReportViewDeps,

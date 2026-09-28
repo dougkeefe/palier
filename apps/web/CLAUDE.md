@@ -156,7 +156,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     transcript with **each error a button** that shows its correction, the fluency, the session's measured cost, and the
     recording, played or deleted in one tap. The filler list is `@palier/content/oral/fillers.json`, parsed once in the
     container. The leak guard stubs the report by its prompt (`completionKind`'s `oral-report`) and follows its words
-    as `REPORT_SENTINEL`.
+    as `REPORT_SENTINEL`. **A report request still out is joined, never repeated** (`oralReportInFlight`, D127), and
+    the screen's pause before each spoken answer is measured by the practice controller from the question's voice.
   - **Tier 11, the key-leak test**, is `e2e/key-leak.spec.ts` (hermetic, with real sync and telemetry)
     and `e2e/key-leak-production.spec.ts` (real Dexie), over `e2e/leak-guard.ts`. A new flow that can
     touch the key belongs in the first. A flow that holds user writing passes it to `assertNoLeak` as

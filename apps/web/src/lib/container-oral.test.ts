@@ -244,12 +244,65 @@ describe.each([
 
     const shown = await c.useCases.oralReport({ sessionId: id });
     expect(shown?.session.assessment).toEqual(report);
-    expect(shown?.cost.reportUsd).toBeCloseTo(rows[0]?.costUsd ?? 0, 12);
-    expect(shown?.canAssess).toBe(false);
+    expect(shown?.cost.report.usd).toBeCloseTo(rows[0]?.costUsd ?? 0, 12);
+    expect(shown?.cost.report.calls).toBe(1);
+    expect(shown?.blocked).toBe("assessed");
     expect(await c.useCases.oralHistory()).toEqual([expect.objectContaining({ id, assessed: true, sessionType: "work" })]);
 
     const exported = JSON.stringify(await c.useCases.exportData());
     expect(exported).not.toContain("système de rémunération");
+  });
+
+  it("joins a report request still out rather than making a second, and forgets it once settled (D127)", async () => {
+    serveBankBesideMsw();
+    let answer: () => void = () => undefined;
+    const held = new Promise<void>((resolve) => {
+      answer = resolve;
+    });
+    const criterion = { band: "B", evidence: "e" };
+    const word = { word: "piloter", turn: 0, excerpt: "je dirige", example: "x" };
+    let asked = 0;
+    mswServer.use(
+      ...openAiHandlers({
+        mode: "ok",
+        completions: [
+          {
+            content: () => {
+              asked += 1;
+              return {
+                criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+                fixes: [{ criterion: "grammar", subSkill: "agreement", advice: "a", evidence: "e" }],
+                missingWords: [word],
+                errors: [],
+              };
+            },
+            usage: { prompt_tokens: 100, completion_tokens: 100 },
+          },
+        ],
+      }),
+    );
+    const c = createContainer({ hermetic });
+    await c.useCases.saveApiKey({ key: KEY, remember: true });
+    const [choice] = await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" });
+    if (choice === undefined) throw new Error("the bank offers a session");
+    const id = sessionId("oral-report-2");
+    await c.oral.put({ ...aSession("oral-report-2"), startedAt: "2020-01-01T10:00:00.000Z", endedAt: "2020-01-01T10:10:00.000Z", scenarioId: choice.scenario.id });
+    // Hold the store's write, so the first request is still out when the second is made.
+    const put = c.oral.put.bind(c.oral);
+    c.oral.put = async (session) => {
+      await held;
+      return put(session);
+    };
+
+    const first = c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
+    const second = c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
+    expect(second).toBe(first);
+    expect(c.useCases.oralReportInFlight({ sessionId: id })).toBe(first);
+    answer();
+    await first;
+
+    expect(asked).toBe(1);
+    expect(c.useCases.oralReportInFlight({ sessionId: id })).toBeNull();
   });
 
   it("plays back and deletes one session's recording, keeping its transcript (D126)", async () => {

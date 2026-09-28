@@ -31,13 +31,14 @@ export const RECORDED_DIR = new URL("../../../packages/testing/src/recorded/open
 
 const usd = (amount) => `US$${amount.toFixed(6)}`;
 
-/** The `pricing.json` `features` block a run measured: a typical use of each feature, as its calls. */
+/**
+ * The `pricing.json` `features` block a run measured: a typical use of each feature, as its calls.
+ * `oral-assessment` is left out: the smoke's session is short, so its report is no typical one, and
+ * pricing takes a real session's (docs/deploy.md; progress.md D127).
+ */
 export const measuredFeatures = (result) => ({
   "writing-feedback": [
     { role: "assess", inputTokens: result.byMethod.assessWriting.inputTokens, outputTokens: result.byMethod.assessWriting.outputTokens },
-  ],
-  "oral-assessment": [
-    { role: "assess", inputTokens: result.byMethod.assessOral.inputTokens, outputTokens: result.byMethod.assessOral.outputTokens },
   ],
   "item-generation": [
     { role: "draft", inputTokens: result.byMethod.generateItems.inputTokens, outputTokens: result.byMethod.generateItems.outputTokens },
@@ -142,6 +143,9 @@ export const main = async ({
   const conformant = result.completions.filter((c) => c.conformant).length;
   log(`completions: ${String(result.completions.length)}, ${String(conformant)} accepted on the first try`);
   log(`measured features for pricing.json: ${JSON.stringify(measuredFeatures(result))}`);
+  log(
+    `oral-assessment, on the smoke's short fixed session, NOT a typical report, do not copy into pricing.json: in ${String(result.byMethod.assessOral.inputTokens)}  out ${String(result.byMethod.assessOral.outputTokens)}`,
+  );
   log("oral-practice is priced per minute of a session, which Phase 5 Slice 3 measures; the per-call figures above are its parts (D117).");
   if (argv.includes("--record") || env.LIVE_SMOKE_RECORD === "1") {
     for (const file of recordings(result)) write(file.name, file.content);

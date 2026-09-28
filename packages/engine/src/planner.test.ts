@@ -280,7 +280,7 @@ describe("planDay, the latest oral report's fixes (D124)", () => {
     expect(plan.newItems.every((i) => i.subSkill === "tone-and-intent")).toBe(true);
   });
 
-  it("leaves maintenance and reviews as they would be without it", () => {
+  it("leaves reviews as they were, and each bucket its size: maintenance's rule is unchanged, though its items can differ", () => {
     const dueReviews = ["r0", "r1"].map(review);
     const focused = planDay({ ...base, sessionSize: 9, dueReviews, focusSubSkills: ["tone-and-intent"] }, seq([0.5]), NOW);
     const plain = planDay({ ...base, sessionSize: 9, dueReviews }, seq([0.5]), NOW);

@@ -4,7 +4,13 @@ import type { Band, OralRequest } from "@palier/domain";
 
 import type { RecordedCompletionData, RecordedRunData } from "./conformance.js";
 import { schemaConformance } from "./conformance.js";
-import { ORAL_STABILITY_AGREEMENT, ORAL_STABILITY_FILE, ORAL_STABILITY_MIN_RUNS, oralStability } from "./oral-stability.js";
+import {
+  ORAL_STABILITY_AGREEMENT,
+  ORAL_STABILITY_FILE,
+  ORAL_STABILITY_MIN_RUNS,
+  describeOralStability,
+  oralStability,
+} from "./oral-stability.js";
 
 const SAID = "Je coordonne les consultations et les dossiers devient urgents.";
 
@@ -44,9 +50,9 @@ const aCompletion = (content: unknown, attempt = 1): RecordedCompletionData => (
   usage: { prompt_tokens: 3_000, completion_tokens: 1_200 },
 });
 
-const aRun = (completions: readonly RecordedCompletionData[], file = ORAL_STABILITY_FILE): RecordedRunData => ({
+const aRun = (completions: readonly RecordedCompletionData[], file = ORAL_STABILITY_FILE, promptVersion = "4"): RecordedRunData => ({
   file,
-  promptVersion: "4",
+  promptVersion,
   completions,
 });
 
@@ -58,9 +64,9 @@ describe("oralStability (D126)", () => {
   });
 
   it("passes five reports that agree, naming the parameters it holds them to", async () => {
-    const report = await oralStability([aRun(five("B"))]);
+    const report = await oralStability([aRun(five("B"))], "4");
 
-    expect(report).toMatchObject({ file: ORAL_STABILITY_FILE, promptVersion: "4", runs: 5, passed: true });
+    expect(report).toMatchObject({ file: ORAL_STABILITY_FILE, promptVersion: "4", current: true, runs: 5, failedRuns: 0, passed: true });
     expect(report?.agreementThreshold).toBe(ORAL_STABILITY_AGREEMENT);
     expect(report?.byCriterion.grammar).toEqual({ bands: ["B", "B", "B", "B", "B"], spread: 0, agreement: 1 });
     expect(ORAL_STABILITY_MIN_RUNS).toBe(5);
@@ -90,13 +96,37 @@ describe("oralStability (D126)", () => {
     expect(report?.passed).toBe(false);
   });
 
-  it("counts a retried call's accepted reply and not its refused one, and fails fewer than five reports", async () => {
+  it("counts a retried call once, by its accepted reply, and fails fewer than five calls", async () => {
     const refused = aCompletion({ ...aReport("B"), errors: [{ turn: 0, excerpt: "Parlez", correction: "x", rule: "r" }] });
     const retried = [refused, aCompletion(aReport("B"), 2)];
     const report = await oralStability([aRun([...five("B").slice(0, 3), ...retried])]);
 
-    expect(report?.runs).toBe(4);
-    expect(report?.passed).toBe(false);
+    expect(report).toMatchObject({ runs: 4, failedRuns: 0, passed: false });
+  });
+
+  it("counts a call once though both its replies would be accepted, taking the last (D127)", async () => {
+    const both = [aCompletion(aReport("C")), aCompletion(aReport("B"), 2)];
+    const report = await oralStability([aRun([...five("B").slice(0, 4), ...both])]);
+
+    expect(report).toMatchObject({ runs: 5, failedRuns: 0, passed: true });
+    expect(report?.byCriterion.task.bands).toEqual(["B", "B", "B", "B", "B"]);
+  });
+
+  it("fails a recording in which a call gave no report, even when the rest agree (D127)", async () => {
+    const refused = aCompletion({ ...aReport("B"), fixes: [] });
+    const report = await oralStability([aRun([...five("B"), refused, aCompletion({ ...aReport("B"), fixes: [] }, 2)])]);
+
+    expect(report).toMatchObject({ runs: 6, failedRuns: 1, passed: false });
+  });
+
+  it("never passes a recording made on an older prompt, and says so (D127)", async () => {
+    const report = await oralStability([aRun(five("B"), ORAL_STABILITY_FILE, "3")], "4");
+
+    expect(report).toMatchObject({ promptVersion: "3", current: false, passed: false });
+  });
+
+  it("reads the file the recorder writes, by its literal name", () => {
+    expect(ORAL_STABILITY_FILE).toBe("assessOral-stability.json");
   });
 
   it("reports an empty recording as no reports, spread 0 and agreement 0, and failed", async () => {
@@ -104,6 +134,23 @@ describe("oralStability (D126)", () => {
 
     expect(report?.byCriterion.task).toEqual({ bands: [], spread: 0, agreement: 0 });
     expect(report?.passed).toBe(false);
+  });
+});
+
+describe("describeOralStability (D127)", () => {
+  it("says how to record it when there is no recording", () => {
+    expect(describeOralStability(null)).toMatch(/^oral stability: not recorded yet; run `pnpm --filter @palier\/web oral-stability`/u);
+  });
+
+  it("says passed, with each criterion's spread and agreement", async () => {
+    const line = describeOralStability(await oralStability([aRun(five("B"))], "4"), "4");
+    expect(line).toMatch(/^oral stability over 5 call\(s\): passed \(comprehension spread 0, agreement 1\.00; /u);
+  });
+
+  it("says FAILED, and why: a stale prompt, and calls that gave no report", async () => {
+    const refused = aCompletion({ ...aReport("B"), fixes: [] });
+    const line = describeOralStability(await oralStability([aRun([...five("B"), refused], ORAL_STABILITY_FILE, "3")], "4"), "4");
+    expect(line).toContain("FAILED, recorded on prompt v3, not v4: re-record, 1 call(s) gave no report");
   });
 });
 

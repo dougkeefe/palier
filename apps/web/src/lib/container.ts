@@ -373,6 +373,11 @@ export type UseCases = {
    * its cost; the list of past sessions; and one session's recording, played back or deleted.
    */
   readonly requestOralReport: (request: { readonly sessionId: SessionId; readonly feedbackLang: Lang }) => Promise<OralAssessment>;
+  /**
+   * The report request still out for a session, or `null` (progress.md D127). A second request while
+   * one is out joins it, so leaving the report screen mid-call and coming back never pays twice.
+   */
+  readonly oralReportInFlight: (request: { readonly sessionId: SessionId }) => Promise<OralAssessment> | null;
   readonly oralReport: (request: { readonly sessionId: SessionId }) => Promise<OralReport | null>;
   readonly oralHistory: () => Promise<readonly OralHistoryEntry[]>;
   readonly oralRecording: (request: { readonly sessionId: SessionId }) => Promise<Blob | null>;
@@ -436,6 +441,8 @@ export type Container = Ports & {
 function buildUseCases(ports: Ports): UseCases {
   // "This session" on the meter: since this tab's container was built (D103).
   const spendDeps = { ...ports, ledger: ports.costLedger, sessionStart: ports.clock.now(), pricing: PRICING };
+  // Report requests still out, one per session, for as long as this tab's container lives (D127).
+  const reportsInFlight = new Map<SessionId, Promise<OralAssessment>>();
   return {
     planDailySession: (request) =>
       planDailySession(request, {
@@ -630,8 +637,10 @@ function buildUseCases(ports: Ports): UseCases {
     saveOralAudio: (request) => saveOralAudio(request, { oral: ports.oral }),
     oralStorageEstimate: () => oralStorageEstimate({ oral: ports.oral }),
     cleanUpAudio: () => cleanUpAudio({ oral: ports.oral }),
-    requestOralReport: (request) =>
-      requestOralReport(request, {
+    requestOralReport: (request) => {
+      const held = reportsInFlight.get(request.sessionId);
+      if (held !== undefined) return held;
+      const asked = requestOralReport(request, {
         vault: ports.vault,
         aiProvider: ports.aiProvider,
         ledger: ports.costLedger,
@@ -639,7 +648,11 @@ function buildUseCases(ports: Ports): UseCases {
         oral: ports.oral,
         items: ports.items,
         profile: PROFILE,
-      }),
+      }).finally(() => reportsInFlight.delete(request.sessionId));
+      reportsInFlight.set(request.sessionId, asked);
+      return asked;
+    },
+    oralReportInFlight: (request) => reportsInFlight.get(request.sessionId) ?? null,
     oralReport: (request) =>
       oralReport(request.sessionId, { oral: ports.oral, items: ports.items, ledger: ports.costLedger, fillers: ORAL_FILLERS }),
     oralHistory: () => oralHistory({ oral: ports.oral, items: ports.items }),

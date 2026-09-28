@@ -62,4 +62,11 @@ export type OralTurn = {
   readonly startMs: number;
   readonly endMs: number;
   readonly input?: OralInput | undefined;
+  /**
+   * How long the candidate waited, after the question had been heard, before they began a
+   * spoken answer (progress.md D127): measured by the screen, from the end of the question's
+   * voice, or its appearing when it had none, to the press of Record. Absent on a typed answer
+   * and on every turn stored before it was measured.
+   */
+  readonly pauseMs?: number | undefined;
 };

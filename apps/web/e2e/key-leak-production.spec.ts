@@ -13,6 +13,7 @@ import {
   installFakeAudio,
   recorderMarker,
   recordingsAtRest,
+  textAtRest,
   stubOpenAi,
   watchForLeaks,
 } from "./leak-guard";
@@ -101,9 +102,7 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   expect(watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
   await page.reload();
   expect(await recordingsAtRest(page)).toEqual([recorderMarker(1)]);
-  await watch.assertNoLeak([page], {
-    deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL, REPORT_SENTINEL],
-  });
+  await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL] });
 
   // 2d. Its report (D126), from the list of past sessions: one more ledger row, the report at rest
   // with its session in `oralSessions`, still there after a reload, and the recording still uploaded nowhere.
@@ -115,6 +114,8 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   expect(watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
   await page.reload();
   await expect(page.getByRole("region", { name: "Your report" })).toBeVisible();
+  // The positive control: the report's words really are at rest with their session (D127).
+  expect(await textAtRest(page, "palier", "oralSessions")).toContain(REPORT_SENTINEL);
   await watch.assertNoLeak([page], {
     deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL, REPORT_SENTINEL],
   });

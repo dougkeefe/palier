@@ -1,7 +1,6 @@
 "use client";
 
 import type { OralHistoryEntry, OralSession, OralSessionChoice } from "@palier/app";
-import { hasAnswers } from "@palier/app";
 import type { Lang, TargetBand } from "@palier/domain";
 import { sessionId } from "@palier/domain";
 import { Button, Callout, Card, Timer, Toast } from "@palier/ui";
@@ -20,7 +19,7 @@ import {
   sessionEstimate,
   turnFocus,
 } from "../../features/oral/practice-view";
-import { historyTag } from "../../features/oral/report-view";
+import { endReportLink, historyTag } from "../../features/oral/report-view";
 import { elapsedText, preflightNotice } from "../../features/writing/workshop-view";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
@@ -117,14 +116,17 @@ export function OralPractice() {
     return () => control?.dispose();
   }, [control]);
 
+  // The picker reads its sessions again each time it is shown, so "Practise again" lists the one just
+  // finished, and its report once it has one (D127).
+  const picking = state.phase === "picking";
   useEffect(() => {
-    if (container.status !== "ready") return;
+    if (container.status !== "ready" || !picking) return;
     let alive = true;
     void loadSetup(container.container).then((loaded) => alive && setSetup(loaded));
     return () => {
       alive = false;
     };
-  }, [container]);
+  }, [container, picking]);
 
   // The screen's timer: the elapsed time shown, and a tick so the session moves on at a phase boundary.
   const running = state.phase === "running";
@@ -354,7 +356,14 @@ export function OralPractice() {
           {question === null ? (
             <Toast tone="info">{t("preparing")}</Toast>
           ) : (
-            <Question text={question.text} audio={question.audio} lang={choice.scenario.lang} textRef={questionRef} />
+            <Question
+              text={question.text}
+              audio={question.audio}
+              lang={choice.scenario.lang}
+              textRef={questionRef}
+              onPlaying={control.questionPlaying}
+              onHeard={control.questionHeard}
+            />
           )}
         </Card>
         {waiting && !ending ? (
@@ -431,7 +440,7 @@ export function OralPractice() {
           {evicted > 0 ? <Callout tone="info">{t("evicted", { count: evicted })}</Callout> : null}
           {recordingKept === true ? <p className="app-muted">{t("recordingKept")}</p> : null}
           {recordingKept === false ? <Callout tone="info">{t("recordingNotSaved")}</Callout> : null}
-          {session !== null && session.endReason !== null && hasAnswers(session) ? (
+          {endReportLink(session) && session !== null ? (
             <div className="app-actions">
               <Link
                 href={{ pathname: "/practice/oral/report", query: { session: session.id } }}
@@ -461,36 +470,60 @@ export function OralPractice() {
  * be paused, and once it has stopped it can be heard again from the start (WCAG 1.4.2, D121). The words
  * are a polite live region, so a new question is read out wherever focus is.
  */
-function Question({ text, audio, lang, textRef }: { text: string; audio: Blob | null; lang: Lang; textRef: Ref<HTMLParagraphElement> }) {
+function Question({
+  text,
+  audio,
+  lang,
+  textRef,
+  onPlaying,
+  onHeard,
+}: {
+  text: string;
+  audio: Blob | null;
+  lang: Lang;
+  textRef: Ref<HTMLParagraphElement>;
+  /** The voice began, or began again: the candidate is listening (D127). */
+  onPlaying: () => void;
+  /** The voice stopped, or could not play: the question has been heard (D127). */
+  onHeard: () => void;
+}) {
   const t = useTranslations("oral");
   const player = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
-  const url = useMemo(() => (audio === null ? null : URL.createObjectURL(audio)), [audio]);
 
+  // The address is made, given to the player and revoked by one effect, so a remount (Strict Mode)
+  // never plays a revoked one (D127). Playing may be refused (autoplay rules, or audio the browser
+  // cannot decode); the words are on screen, and the question counts as heard now.
   useEffect(() => {
-    if (url === null) return;
-    return () => URL.revokeObjectURL(url);
-  }, [url]);
-
-  useEffect(() => {
-    if (url === null) return;
-    // Playing may be refused (autoplay rules, or audio the browser cannot decode); the words are on screen.
-    void player.current?.play().catch(() => undefined);
-  }, [url]);
+    const element = player.current;
+    if (audio === null || element === null) return;
+    const made = URL.createObjectURL(audio);
+    element.src = made;
+    void element.play().catch(onHeard);
+    return () => URL.revokeObjectURL(made);
+  }, [audio, onHeard]);
 
   return (
     <div className="app-stack">
       <p ref={textRef} tabIndex={-1} className="app-oral-question app-step-heading" lang={lang} aria-live="polite">
         {text}
       </p>
-      {url === null ? null : (
+      {audio === null ? null : (
         <>
           <audio
             ref={player}
-            src={url}
-            onPlay={() => setPlaying(true)}
-            onPause={() => setPlaying(false)}
-            onEnded={() => setPlaying(false)}
+            onPlay={() => {
+              setPlaying(true);
+              onPlaying();
+            }}
+            onPause={() => {
+              setPlaying(false);
+              onHeard();
+            }}
+            onEnded={() => {
+              setPlaying(false);
+              onHeard();
+            }}
           />
           <div className="app-actions">
             <Button
