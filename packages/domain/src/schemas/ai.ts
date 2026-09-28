@@ -134,10 +134,6 @@ const oralCriteriaShape = z.strictObject({
 
 const turnIndexShape = z.number().int().nonnegative();
 
-/** An excerpt must quote words: one of spaces or punctuation would mark a comma (progress.md D127). */
-const quotedWordsShape = z.string().refine((excerpt) => /[\p{L}\p{N}]/u.test(excerpt), {
-  message: "an excerpt must quote words",
-});
 
 /**
  * Up to three fixes, most costly first, each on a sub-skill the bank can drill (D122):
@@ -161,7 +157,7 @@ const missingWordsShape = z
     z.strictObject({
       word: z.string().trim().min(1),
       turn: turnIndexShape,
-      excerpt: quotedWordsShape,
+      excerpt: z.string().min(1),
       example: z.string().min(1),
     }),
   )
@@ -179,7 +175,7 @@ export const oralAssessmentDraftShape = z.strictObject({
   errors: z.array(
     z.strictObject({
       turn: turnIndexShape,
-      excerpt: quotedWordsShape,
+      excerpt: z.string().min(1),
       correction: z.string().min(1),
       rule: z.string().min(1),
     }),

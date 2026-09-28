@@ -8,6 +8,7 @@ import {
   REPORT_SENTINEL,
   SENTINEL,
   TRANSCRIPT_SENTINEL,
+  completionKind,
   defaultAnswer,
   installFakeAudio,
   stubOpenAi,
@@ -201,6 +202,42 @@ test("a call OpenAI refuses ends the session, names why in words, and keeps the 
   await expect(page.getByText("OpenAI did not accept your key.", { exact: false })).toBeVisible();
   await expect(page.getByText("Your transcript is kept on this device, and you can ask again.", { exact: false })).toBeVisible();
   await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
+  await axeClean(page);
+});
+
+test("a report still being made is waited for when you come back, and never asked for twice (D127)", async ({ page, context }) => {
+  test.setTimeout(90_000);
+  await stubOpenAi(context);
+  let reports = 0;
+  let release: () => void = () => undefined;
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  // Registered after the stub, so it is asked first: it holds the report's answer, and passes every other call on.
+  await context.route("https://api.openai.com/v1/chat/completions", async (route) => {
+    if (completionKind(route.request().postData() ?? "") === "oral-report") {
+      reports += 1;
+      await held;
+    }
+    await route.fallback();
+  });
+  await openOral(page);
+  await addKeyFromCard(page);
+  await practiseSpeaking(page, { mode: "typed", answers: 1 });
+  await page.getByRole("link", { name: "See the report on this session" }).click();
+  await page.getByRole("button", { name: "Get the report" }).click();
+  await page.getByRole("button", { name: "Send for the report" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Assessing your answers…" })).toBeVisible();
+
+  // Leave while it is being made, and come back to the same session from the list.
+  await page.getByRole("link", { name: "Back to spoken practice" }).first().click();
+  await page.getByRole("region", { name: "Your earlier sessions" }).getByRole("link", { name: "Open" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Assessing your answers…" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Get the report" })).toHaveCount(0);
+
+  release();
+  await expect(page.getByRole("region", { name: "Your report" })).toBeVisible();
+  expect(reports).toBe(1);
   await axeClean(page);
 });
 

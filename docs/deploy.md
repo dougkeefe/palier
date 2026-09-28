@@ -170,8 +170,9 @@ old run as a before-and-after, rename it first, as `reviewItem-prompt-v3.json` w
 `packages/testing/src/recorded/index.ts`. Commit the fixtures with the regenerated
 `content/factory/eval-report.json`, which `committed-eval.test.ts` holds equal to a fresh run. If the counts
 moved, copy the printed `writing-feedback` and `item-generation` entries into `apps/web/src/lib/pricing.json`.
-**Replace only those two**: the printed block's `oral-assessment` is a short fixed session's report, and
-`oral-practice` is not printed at all. Both are priced from a real 10-minute session instead (below).
+**Replace only those two**: the block carries neither `oral-practice` nor `oral-assessment`. The smoke prints its
+report's tokens on a line of their own, labelled not to copy, because its session is short. Both are priced from a real
+10-minute session instead (below).
 
 ## The oral scorer's stability, and a measured session's cost
 

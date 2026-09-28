@@ -222,3 +222,11 @@ export const costRows = (cost: OralSessionCost, locale: string): readonly { read
 /** The words for a past session's state in the list of them. */
 export const historyTag = (entry: { readonly assessed: boolean; readonly answered: boolean }): string =>
   entry.assessed ? "historyAssessed" : entry.answered ? "historyUnassessed" : "historyNothing";
+
+/**
+ * Whether asking for the report moved to another step, so its card's heading should take focus
+ * (WCAG 2.4.3, D127): at every change of step, but never on the first render, and never when the
+ * screen is not showing a session.
+ */
+export const askFocusMoves = (before: AskState["kind"] | null, after: AskState["kind"] | null): boolean =>
+  before !== null && after !== null && before !== after;

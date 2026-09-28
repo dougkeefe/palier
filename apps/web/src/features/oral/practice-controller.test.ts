@@ -356,10 +356,23 @@ describe("practiceController — a session (D121)", () => {
     expect(await second).toMatchObject({ pauseMs: 0 });
   });
 
-  it("ignores the question's voice events before any question, and sends no pause for a typed answer", async () => {
+  it("forgets a voice event from before the question, timing an unvoiced question from its appearing", async () => {
+    let clock = 1_000;
+    const handles = await spokenSession({ now: () => clock });
+    await handles.controller.start(CHOICE, "spoken");
+    clock = 1_500;
+    handles.controller.questionHeard(); // a stray event, before any question
+    clock = 2_000;
+    const { answered } = handles.ask();
+    clock = 2_700;
+    handles.controller.record();
+    await handles.controller.stopAndSend();
+
+    expect(await answered).toMatchObject({ kind: "audio", pauseMs: 700 });
+  });
+
+  it("sends no pause with a typed answer", async () => {
     const handles = setUp();
-    handles.controller.questionPlaying();
-    handles.controller.questionHeard();
     await handles.controller.continueWith(CHOICE, "typed");
     await handles.controller.start(CHOICE, "typed");
     const { answered } = handles.ask();

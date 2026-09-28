@@ -75,7 +75,7 @@ describe("assembleOralAssessment", () => {
     if (!result.ok) throw new Error(result.problem);
     expect(result.assessment.criteria).toBe(draft.criteria);
     expect(result.assessment.fixes.map((fix) => fix.subSkill)).toEqual(["agreement", "verb-tense-and-mood", "inference"]);
-    expect(result.assessment.missingWords).toBe(draft.missingWords);
+    expect(result.assessment.missingWords).toEqual(draft.missingWords);
   });
 
   it("orders errors by turn, then by where they fall in it, whatever order they arrive in", () => {
@@ -154,6 +154,31 @@ describe("assembleOralAssessment", () => {
   });
 });
 
+describe("assembleOralAssessment, dropping what quotes no word (D127)", () => {
+  it("drops an error of only punctuation and keeps the rest of the report", () => {
+    const result = assembleOralAssessment(
+      TURNS,
+      aDraft({
+        errors: [
+          { turn: 3, excerpt: " ?", correction: ".", rule: "ponctuation" },
+          { turn: 3, excerpt: "arrive", correction: "arrivent", rule: "accord" },
+        ],
+      }),
+    );
+    expect(result.ok && result.assessment.errors.map((e) => e.correction)).toEqual(["arrivent"]);
+  });
+
+  it("drops a missing word quoting no word, and refuses a report left with none", () => {
+    const [first, ...rest] = aDraft().missingWords;
+    const kept = assembleOralAssessment(TURNS, aDraft({ missingWords: [{ ...first!, excerpt: "…" }, ...rest] }));
+    expect(kept.ok && kept.assessment.missingWords).toHaveLength(4);
+    expect(assembleOralAssessment(TURNS, aDraft({ missingWords: [{ ...first!, excerpt: " , " }] }))).toEqual({
+      ok: false,
+      problem: "no missing word quotes the candidate's words",
+    });
+  });
+});
+
 describe("checkOralAssessment", () => {
   const placed = (): OralAssessment => {
     const result = assembleOralAssessment(TURNS, aDraft());
@@ -206,12 +231,9 @@ describe("oralAssessmentDraftSchema", () => {
     ).toBe(false);
   });
 
-  it("refuses an excerpt of only spaces or punctuation, which would mark a comma (D127)", () => {
-    const draft = aDraft();
+  it("accepts an excerpt of only spaces or punctuation in the draft, for the assembly to drop (D127)", () => {
     const error = { turn: 1, excerpt: " , ", correction: "x", rule: "y" };
-    expect(oralAssessmentDraftSchema.safeParse({ ...draft, errors: [error] }).success).toBe(false);
-    const words = [{ ...aWord(1, "x"), excerpt: "  " }, ...draft.missingWords.slice(1)];
-    expect(oralAssessmentDraftSchema.safeParse({ ...draft, missingWords: words }).success).toBe(false);
+    expect(oralAssessmentDraftSchema.safeParse({ ...aDraft(), errors: [error] }).success).toBe(true);
   });
 
   it("finds a missing word's sentence though the model straightened its apostrophe (D127)", () => {

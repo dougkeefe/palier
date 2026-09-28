@@ -15,6 +15,7 @@ import {
   ORAL_CRITERION_ROWS,
   type ReportState,
   askFailureMessage,
+  askFocusMoves,
   blockMessage,
   canRetry,
   costRows,
@@ -272,5 +273,17 @@ describe("historyTag", () => {
     expect(historyTag({ assessed: true, answered: true })).toBe("historyAssessed");
     expect(historyTag({ assessed: false, answered: true })).toBe("historyUnassessed");
     expect(historyTag({ assessed: false, answered: false })).toBe("historyNothing");
+  });
+});
+
+describe("askFocusMoves (D127)", () => {
+  it("moves focus at every change of step, never on the first render or away from a session", () => {
+    expect(askFocusMoves("idle", "confirming")).toBe(true);
+    expect(askFocusMoves("confirming", "idle")).toBe(true);
+    expect(askFocusMoves("confirming", "asking")).toBe(true);
+    expect(askFocusMoves("asking", "failed")).toBe(true);
+    expect(askFocusMoves(null, "idle")).toBe(false);
+    expect(askFocusMoves("idle", "idle")).toBe(false);
+    expect(askFocusMoves("asking", null)).toBe(false);
   });
 });

@@ -14,6 +14,7 @@ import {
   ORAL_CRITERION_ROWS,
   type TranscriptRow,
   askFailureMessage,
+  askFocusMoves,
   blockMessage,
   canRetry,
   costRows,
@@ -120,8 +121,7 @@ export function OralReport() {
   useEffect(() => {
     const before = shownAsk.current;
     shownAsk.current = askKind;
-    if (before === null || askKind === null || before === askKind) return;
-    askRef.current?.focus();
+    if (askFocusMoves(before, askKind)) askRef.current?.focus();
   }, [askKind]);
 
   // And a report just arrived takes it to the report.

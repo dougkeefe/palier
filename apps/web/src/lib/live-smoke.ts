@@ -36,8 +36,8 @@ import { memoryCostLedger, memoryKeyVault } from "@palier/testing/in-memory";
  * - the oral turn loop's three (Phase 5 Slice 2, D117): `speak` on a fixed French question, then
  *   `transcribe` that same audio, so no recording of anyone's voice is needed, then two
  *   `examinerTurn`s, an opening and a follow-up;
- * - `assessOral` on one fixed session, `ORAL_SESSION` (Phase 5 Slice 3, D122). `runOralStability`
- *   scores that same session five times, for the stability eval.
+ * - `assessOral` on one short fixed session, `ORAL_SESSION` (Phase 5 Slice 3, D122). `runOralStability`
+ *   scores a longer one, `STABILITY_SESSION`, five times, for the stability eval (D127).
  *
  * Audio is never kept: a transcription is recorded with its clip described (type and size), and
  * a voice as its content type and size.

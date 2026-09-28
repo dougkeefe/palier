@@ -4617,6 +4617,25 @@ merged, none critical. The human chose to fix all of them.
   spec presses "Practise again" and finds the session listed.
 - **Docs:** §7's Slice 3 names Gate J's deferral, §3.3's `AiProvider` comment names the pronunciation method still to
   come, and the exit criterion says "at or above" 0.8, as the code does.
+- **A second pass over the fixes** (one reviewer) found 7 more, and no regression in the 32. All 7 are fixed:
+  - **An excerpt quoting no word is dropped, not refused.** The first pass had made the schema refuse one, which would
+    have lost a paid report to a lone "?", the very failure D127 set out to remove. `assembleOralAssessment` now drops
+    such an error or missing word and keeps the rest; only a report left with no missing word at all is refused. The
+    prompt asks for at least one word in every excerpt.
+    - **Existing tests changed with the rule:** this branch's "refuses an excerpt of only spaces or punctuation" became
+      "accepts … for the assembly to drop"; and "keeps the … words" now compares the words by value, since the kept list
+      is a new, filtered array.
+  - **The in-flight map is at module scope in `container.ts`**, so a container built again when the language changes
+    still finds a request the last one made. A test proves a failed request is forgotten, and that asking again makes a
+    new call.
+  - **The focus decision is a tested pure function** (`askFocusMoves`). Journeys assert focus on the report when it
+    arrives, and a new hermetic journey leaves mid-call, comes back from the list, finds the wait, and sees exactly one
+    report request.
+  - A replay of the question that fails, or audio the browser cannot decode (`onError`), counts as heard, so the next
+    pause is not recorded as zero.
+  - A vacuous controller test was split in two: a stray voice event is forgotten when a question appears, and a typed
+    answer carries no pause.
+  - Two stale comments were fixed: the live smoke's header, and deploy.md's line on the printed block.
 
 ---
 
@@ -4641,6 +4660,13 @@ the human chose to fix all 32. D127 records each.
 pnpm verify          → check-types, lint, boundaries (449 + 229 modules, no violations),
                        test: 207 files, 3130 passed, 8 todo; coverage thresholds met
 CI=1 pnpm test:e2e    → 57 passed (1.1m), on a fresh production build
+```
+
+**The second pass's 7** (D127), after their fixes:
+
+```
+pnpm test             → 207 files, 3136 passed, 8 todo; coverage thresholds met
+CI=1 pnpm test:e2e    → 58 passed (1.1m), on a fresh production build (the in-flight journey is new)
 ```
 
 ### 28 September 2026 — `dougkeefe/check-last-branch-commit` (Phase 5 Slice 3: `assessOral` and the report)

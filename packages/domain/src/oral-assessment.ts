@@ -40,6 +40,12 @@ const missingWordsProblem = (turns: readonly OralTurn[], words: readonly Missing
   return null;
 };
 
+/**
+ * Whether an excerpt quotes words. One of only spaces or punctuation would mark a comma, so it is
+ * dropped rather than placed, and never costs the rest of the report (progress.md D127).
+ */
+const quotesWords = (excerpt: string): boolean => /[\p{L}\p{N}]/u.test(excerpt);
+
 /** Groups items by their `turn`, keeping each turn's items in the order given. */
 const byTurn = <T extends { readonly turn: number }>(items: readonly T[]): Map<number, T[]> => {
   const groups = new Map<number, T[]>();
@@ -53,14 +59,21 @@ const byTurn = <T extends { readonly turn: number }>(items: readonly T[]): Map<n
 
 /**
  * A draft made whole: each error placed over its own turn by `placeErrors`, in turn
- * order and then reading order, or the reason it cannot be. A problem is an error or
+ * order and then reading order, or the reason it cannot be. An error or a missing word whose
+ * excerpt quotes no word is dropped first (D127). A problem is an error or
  * a missing word naming a turn that does not exist or is the examiner's, or an
  * excerpt that is not in its turn, or two errors on the same words.
  */
 export const assembleOralAssessment = (
   turns: readonly OralTurn[],
-  draft: OralAssessmentDraft,
+  given: OralAssessmentDraft,
 ): AssembleOralResult => {
+  const draft = {
+    ...given,
+    errors: given.errors.filter((error) => quotesWords(error.excerpt)),
+    missingWords: given.missingWords.filter((word) => quotesWords(word.excerpt)),
+  };
+  if (draft.missingWords.length === 0) return { ok: false, problem: "no missing word quotes the candidate's words" };
   for (const [index, error] of draft.errors.entries()) {
     const problem = candidateTurnProblem(turns, error.turn, `error ${index}`);
     if (problem !== null) return { ok: false, problem };

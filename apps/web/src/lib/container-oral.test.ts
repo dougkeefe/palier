@@ -305,6 +305,24 @@ describe.each([
     expect(c.useCases.oralReportInFlight({ sessionId: id })).toBeNull();
   });
 
+  it("forgets a report request that failed, so asking again makes a new call (D127)", async () => {
+    serveBankBesideMsw();
+    mswServer.use(...openAiHandlers({ mode: "invalid-key" }));
+    const c = createContainer({ hermetic });
+    await c.useCases.saveApiKey({ key: KEY, remember: true });
+    const [choice] = await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" });
+    if (choice === undefined) throw new Error("the bank offers a session");
+    const id = sessionId("oral-report-3");
+    await c.oral.put({ ...aSession("oral-report-3"), startedAt: "2020-01-01T10:00:00.000Z", endedAt: "2020-01-01T10:10:00.000Z", scenarioId: choice.scenario.id });
+
+    const first = c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
+    await expect(first).rejects.toMatchObject({ name: "InvalidApiKeyError" });
+    expect(c.useCases.oralReportInFlight({ sessionId: id })).toBeNull();
+    const second = c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
+    expect(second).not.toBe(first);
+    await expect(second).rejects.toMatchObject({ name: "InvalidApiKeyError" });
+  });
+
   it("plays back and deletes one session's recording, keeping its transcript (D126)", async () => {
     const c = createContainer({ hermetic });
     await c.oral.put(aSession("oral-8"));

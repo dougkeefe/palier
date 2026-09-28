@@ -255,6 +255,13 @@ const WRITING_PROMPTS: readonly WritingPrompt[] = parseWritingPromptsOrThrow(wri
 const ORAL_FILLERS: OralFillers = parseOralFillersOrThrow(oralFillerLists);
 
 /**
+ * Report requests still out, one per session (progress.md D127). At module scope rather than in a
+ * container, so a container built again (a change of language remounts the layout) still finds a
+ * request the last one made, and never pays for a second.
+ */
+const reportsInFlight = new Map<SessionId, Promise<OralAssessment>>();
+
+/**
  * How the browser makes an `AiProvider`: from the key, inside `KeyVault.withApiKey`, once
  * per call (only `@palier/app`'s key use cases call it: `withAiProvider`, which meters every
  * spending call into the cost ledger, and `checkApiKey`; D101), so no provider holding
@@ -441,8 +448,6 @@ export type Container = Ports & {
 function buildUseCases(ports: Ports): UseCases {
   // "This session" on the meter: since this tab's container was built (D103).
   const spendDeps = { ...ports, ledger: ports.costLedger, sessionStart: ports.clock.now(), pricing: PRICING };
-  // Report requests still out, one per session, for as long as this tab's container lives (D127).
-  const reportsInFlight = new Map<SessionId, Promise<OralAssessment>>();
   return {
     planDailySession: (request) =>
       planDailySession(request, {

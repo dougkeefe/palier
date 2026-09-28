@@ -201,5 +201,7 @@ export const getOralReport = async (page: Page, { onState = async () => undefine
   await onState("pre-flight");
   await page.getByRole("button", { name: "Send for the report" }).click();
   await expect(page.getByRole("region", { name: "Your report" })).toBeVisible();
+  // Focus lands on the report that just arrived (WCAG 2.4.3, D127).
+  await expect(page.getByRole("heading", { level: 2, name: "Your report" })).toBeFocused();
   await onState("report");
 };

@@ -524,6 +524,10 @@ function Question({
               setPlaying(false);
               onHeard();
             }}
+            onError={() => {
+              setPlaying(false);
+              onHeard();
+            }}
           />
           <div className="app-actions">
             <Button
@@ -536,7 +540,7 @@ function Question({
                   return;
                 }
                 audioElement.currentTime = 0;
-                void audioElement.play().catch(() => undefined);
+                void audioElement.play().catch(onHeard);
               }}
             >
               {t(playing ? "pauseQuestion" : "playAgain")}
