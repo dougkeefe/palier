@@ -13,27 +13,35 @@ import { useContainer } from "../ContainerProvider";
  * D119): how much room they take, a warning at 200 MB, and the one-tap cleanup, which deletes every
  * recording and never a transcript. Device-local: never synced and never exported.
  */
-export function OralStorageSettings() {
+export function OralStorageSettings({ refresh = 0 }: { refresh?: number }) {
   const t = useTranslations("data");
   const format = useFormatter();
   const container = useContainer();
   const [estimate, setEstimate] = useState<OralStorageEstimate | null>(null);
-  const [cleaned, setCleaned] = useState(false);
+  const [cleaned, setCleaned] = useState<"no" | "yes" | "failed">("no");
 
   useEffect(() => {
     if (container.status !== "ready") return;
     let live = true;
-    void container.container.useCases.oralStorageEstimate().then((e) => live && setEstimate(e));
+    void container.container.useCases.oralStorageEstimate().then(
+      (e) => live && setEstimate(e),
+      () => undefined,
+    );
     return () => {
       live = false;
     };
-  }, [container]);
+    // `refresh` changes when the page deletes everything, so the size is read again (D121).
+  }, [container, refresh]);
 
   const onClean = async () => {
     if (container.status !== "ready") return;
-    await container.container.useCases.cleanUpAudio();
-    setEstimate(await container.container.useCases.oralStorageEstimate());
-    setCleaned(true);
+    try {
+      await container.container.useCases.cleanUpAudio();
+      setEstimate(await container.container.useCases.oralStorageEstimate());
+      setCleaned("yes");
+    } catch {
+      setCleaned("failed");
+    }
   };
 
   return (
@@ -58,7 +66,8 @@ export function OralStorageSettings() {
             </div>
           </>
         )}
-        {cleaned ? <Toast tone="correct">{t("oralCleaned")}</Toast> : null}
+        {cleaned === "yes" ? <Toast tone="correct">{t("oralCleaned")}</Toast> : null}
+        {cleaned === "failed" ? <Toast tone="incorrect">{t("oralCleanFailed")}</Toast> : null}
       </div>
     </Card>
   );

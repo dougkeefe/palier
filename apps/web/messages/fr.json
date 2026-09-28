@@ -216,7 +216,8 @@
     "oralNone": "Aucun enregistrement n’est conservé sur cet appareil.",
     "oralWarn": "Vos enregistrements occupent beaucoup d’espace. Les supprimer libère cet espace; vos transcriptions sont conservées.",
     "oralClean": "Supprimer tous les enregistrements",
-    "oralCleaned": "Tous les enregistrements ont été supprimés. Vos transcriptions sont conservées."
+    "oralCleaned": "Tous les enregistrements ont été supprimés. Vos transcriptions sont conservées.",
+    "oralCleanFailed": "Les enregistrements n’ont pas pu être supprimés. Réessayez."
   },
   "report": {
     "open": "Signaler un problème avec cet item",
@@ -655,7 +656,7 @@
     "micDeniedTitle": "Le microphone est bloqué",
     "micDenied": "Palier n’a pas été autorisé à utiliser votre microphone. Pour l’autoriser :",
     "micSteps_chrome_1": "Sélectionnez l’icône des paramètres du site, à gauche de la barre d’adresse.",
-    "micSteps_chrome_2": "Réglez Microphone sur Autoriser.",
+    "micSteps_chrome_2": "Réglez Micro sur Autoriser.",
     "micSteps_chrome_3": "Rechargez la page, puis vérifiez de nouveau.",
     "micSteps_edge_1": "Sélectionnez l’icône du cadenas, à gauche de la barre d’adresse.",
     "micSteps_edge_2": "Sous Autorisations pour ce site, réglez Microphone sur Autoriser.",
@@ -664,7 +665,7 @@
     "micSteps_firefox_2": "Retirez le réglage Bloqué pour le microphone.",
     "micSteps_firefox_3": "Rechargez la page, puis vérifiez de nouveau.",
     "micSteps_safari_1": "Dans le menu Safari, choisissez Réglages pour ce site web.",
-    "micSteps_safari_2": "Réglez Microphone sur Autoriser.",
+    "micSteps_safari_2": "Réglez Micro sur Autoriser.",
     "micSteps_safari_3": "Rechargez la page, puis vérifiez de nouveau.",
     "micSteps_other_1": "Ouvrez les paramètres de ce site dans votre navigateur et autorisez le microphone.",
     "micSteps_other_2": "Rechargez la page, puis vérifiez de nouveau.",
@@ -688,6 +689,7 @@
     "preparing": "L’examinateur prépare une question…",
     "audioLabel": "La question, à voix haute",
     "playAgain": "Réécouter la question",
+    "pauseQuestion": "Mettre la question en pause",
     "record": "Enregistrer votre réponse",
     "stopAndSend": "Arrêter et envoyer",
     "recording": "Enregistrement de votre réponse…",

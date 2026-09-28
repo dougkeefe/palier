@@ -216,7 +216,8 @@
     "oralNone": "No recordings are kept on this device.",
     "oralWarn": "Your recordings are taking a lot of space. Deleting them frees it; your transcripts are kept.",
     "oralClean": "Delete all recordings",
-    "oralCleaned": "Every recording was deleted. Your transcripts are kept."
+    "oralCleaned": "Every recording was deleted. Your transcripts are kept.",
+    "oralCleanFailed": "The recordings could not be deleted. Try again."
   },
   "report": {
     "open": "Report a problem with this item",
@@ -688,6 +689,7 @@
     "preparing": "The examiner is preparing a question…",
     "audioLabel": "The question, spoken",
     "playAgain": "Play the question again",
+    "pauseQuestion": "Pause the question",
     "record": "Record your answer",
     "stopAndSend": "Stop and send",
     "recording": "Recording your answer…",

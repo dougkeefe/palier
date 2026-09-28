@@ -107,7 +107,7 @@ export function DataSettings() {
 
       <TelemetrySettings />
 
-      <OralStorageSettings />
+      <OralStorageSettings refresh={deleteStep === "deleted" ? 1 : 0} />
 
       <Card>
         <h2>{t("deleteTitle")}</h2>

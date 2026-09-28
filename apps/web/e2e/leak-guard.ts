@@ -237,8 +237,31 @@ export const defaultAnswer = (path: string, body: string): OpenAiAnswer => {
   return MODELS_ANSWER;
 };
 
-/** A request body as text, its bytes read as latin1, so a multipart upload's bytes show as the ASCII they carry. */
-const bodyOf = (request: { postDataBuffer: () => Buffer | null }): string => request.postDataBuffer()?.toString("latin1") ?? "";
+/**
+ * A request body as text, twice over: its bytes read as latin1, so a multipart upload's bytes show as the
+ * ASCII they carry, and as UTF-8, so accented text matches as written (D121).
+ */
+const bodyOf = (request: { postDataBuffer: () => Buffer | null }): string => {
+  const bytes = request.postDataBuffer();
+  return bytes === null ? "" : `${bytes.toString("latin1")}\n${bytes.toString("utf8")}`;
+};
+
+/** A request body as UTF-8 text, for a stub that reads its JSON. */
+const utf8Of = (request: { postDataBuffer: () => Buffer | null }): string => request.postDataBuffer()?.toString("utf8") ?? "";
+
+/**
+ * A needle and its base64 forms (D121). Audio put in JSON (a push, an export, Web Storage) is
+ * base64, and a needle's bytes land at any of three alignments against base64's 3-byte groups,
+ * so each alignment's whole groups are a substring any encoding of the needle contains.
+ */
+export const encodedForms = (needle: string): string[] => {
+  const bytes = Buffer.from(needle, "utf8");
+  const forms = [0, 1, 2].map((skip) => {
+    const rest = bytes.subarray(skip);
+    return rest.subarray(0, rest.length - (rest.length % 3)).toString("base64");
+  });
+  return [needle, ...forms.filter((form) => form.length >= 8)];
+};
 
 /**
  * Stub OpenAI: the models endpoint `/settings/key` checks, the completions the workshop, the
@@ -258,7 +281,7 @@ export const stubOpenAi = async (
       "access-control-allow-methods": "GET, POST, OPTIONS",
     };
     if (route.request().method() === "OPTIONS") return route.fulfill({ status: 204, headers: cors });
-    const { status, body, contentType } = answer(new URL(route.request().url()).pathname, bodyOf(route.request()));
+    const { status, body, contentType } = answer(new URL(route.request().url()).pathname, utf8Of(route.request()));
     if (contentType !== undefined) {
       return route.fulfill({ status, headers: { ...cors, "content-type": contentType }, body: String(body) });
     }
@@ -381,8 +404,11 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
       // This call's own dump, so an earlier check's page does not answer for this one.
       const places = [...seen];
       for (const page of pages) places.push(...(await atRest(page)));
-      const found = (needle: string, where: readonly Seen[]) =>
-        where.filter((s) => s.text.includes(needle)).map((s) => s.where);
+      // Each needle is looked for as written and in base64, as audio in JSON would be (D121).
+      const found = (needle: string, where: readonly Seen[]) => {
+        const forms = encodedForms(needle);
+        return where.filter((s) => forms.some((form) => s.text.includes(form))).map((s) => s.where);
+      };
       expect(found(SENTINEL, places), "the sentinel key reached somewhere other than OpenAI").toEqual([]);
       for (const needle of deviceOnly) {
         const offDevice = places.filter((s) => s.onDevice !== true);

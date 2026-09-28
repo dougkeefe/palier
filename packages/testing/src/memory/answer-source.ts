@@ -61,6 +61,10 @@ export const memoryAnswerSource = (
     answers: {
       answer: (question, signal) =>
         new Promise<CandidateAnswer>((resolve, reject) => {
+          if (signal.aborted) {
+            reject(new Error("The session stopped waiting for an answer."));
+            return;
+          }
           questions.push(question);
           waiting = { resolve, reject };
           signal.addEventListener(

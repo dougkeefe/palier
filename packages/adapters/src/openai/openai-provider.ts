@@ -216,7 +216,7 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
   /** The price of what a call measured, in its model's unit (D117); `undefined` when unpriced. */
   const priceOf = (
     model: string,
-    amounts: { inputTokens: number; outputTokens: number; audioSeconds?: number; characters?: number },
+    amounts: { inputTokens?: number; outputTokens?: number; audioSeconds?: number; characters?: number },
   ): number | undefined => {
     const p = config.pricing?.[model];
     if (p === undefined) return undefined;
@@ -237,13 +237,24 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
     usage = { model, inputTokens, outputTokens, ...(costUsd === undefined ? {} : { costUsd }) };
   };
 
-  /** One audio call's usage (D117): what it is billed by, and any tokens it reported. */
+  /**
+   * One audio call's usage (D117): what it is billed by, and any tokens it reported. Only what was
+   * measured is priced, so a token-priced audio model that reported no tokens reads as unpriced,
+   * never as free (D103, D121). The ledger's token columns read 0 when none were reported.
+   */
   const audioUsage = (
     model: string,
-    measured: { inputTokens: number; outputTokens: number; audioSeconds?: number; characters?: number },
+    measured: { inputTokens?: number; outputTokens?: number; audioSeconds?: number; characters?: number },
   ): void => {
     const costUsd = priceOf(model, measured);
-    usage = { model, ...measured, ...(costUsd === undefined ? {} : { costUsd }) };
+    usage = {
+      model,
+      inputTokens: measured.inputTokens ?? 0,
+      outputTokens: measured.outputTokens ?? 0,
+      ...(measured.audioSeconds === undefined ? {} : { audioSeconds: measured.audioSeconds }),
+      ...(measured.characters === undefined ? {} : { characters: measured.characters }),
+      ...(costUsd === undefined ? {} : { costUsd }),
+    };
   };
 
   const refuseUnconfigured = (what: string, role: string): Promise<never> => {
@@ -420,12 +431,16 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
         timeoutMs,
         async (res) => {
           if (!res.ok) return refuse(res);
+          // Accepted is billed, before the body is read: an answer that is not JSON still cost the clip (D121).
+          audioUsage(model, { audioSeconds: req.durationMs / 1000 });
           const body = (await readJson(res)) as TranscriptionResponse | null;
           const reported = body?.usage;
           const seconds = reported?.type === "duration" ? count(reported.seconds) : undefined;
+          const inputTokens = count(reported?.input_tokens);
+          const outputTokens = count(reported?.output_tokens);
           audioUsage(model, {
-            inputTokens: count(reported?.input_tokens) ?? 0,
-            outputTokens: count(reported?.output_tokens) ?? 0,
+            ...(inputTokens === undefined ? {} : { inputTokens }),
+            ...(outputTokens === undefined ? {} : { outputTokens }),
             audioSeconds: seconds ?? req.durationMs / 1000,
           });
           if (typeof body?.text !== "string") {
@@ -455,7 +470,7 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
         timeoutMs,
         async (res) => {
           if (!res.ok) return refuse(res);
-          audioUsage(model, { inputTokens: 0, outputTokens: 0, characters: req.text.length });
+          audioUsage(model, { characters: req.text.length });
           const type = res.headers?.get("content-type") ?? "";
           if (!type.startsWith("audio/") || res.blob === undefined) {
             throw new InvalidResponseError("OpenAI's speech answer was not audio.");

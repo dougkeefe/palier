@@ -97,6 +97,7 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(1 + 6 + 5);
   const audio = watch.openAiRequests().filter((request) => request.body.includes(AUDIO_SENTINEL));
   expect(audio.map((request) => [request.path, request.body.includes(recorderMarker(2))])).toEqual([["/v1/audio/transcriptions", true]]);
+  expect(watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
   await page.reload();
   expect(await recordingsAtRest(page)).toEqual([recorderMarker(1)]);
   await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL] });

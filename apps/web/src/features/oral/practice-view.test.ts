@@ -13,6 +13,7 @@ import {
   practice,
   recordingsMegabytes,
   sessionEstimate,
+  turnFocus,
 } from "./practice-view";
 
 const phase = (minutes: number) => ({ name: "P", minutes, intent: "i", seedQuestions: ["q"], escalation: [], deescalation: [] });
@@ -69,6 +70,16 @@ describe("practice, the screen's steps (D119)", () => {
     expect(practice(sent, { type: "question", waiting: { ...QUESTION, text: "Et ensuite ?" } })).toMatchObject({ turn: "idle", waiting: true });
   });
 
+  it("starts in the mode the controller says, when the recorder could not be made (D121)", () => {
+    const typed = run({ type: "choose", choice: CHOICE }, { type: "preflighted", mode: "spoken", preflight: PREFLIGHT }, { type: "started", nowMs: 1, mode: "typed" });
+    expect(typed).toMatchObject({ phase: "running", mode: "typed" });
+  });
+
+  it("answers by typing for the rest of the session once the recorder fails (D121)", () => {
+    const recording = practice(practice(running(), { type: "question", waiting: QUESTION }), { type: "recording" });
+    expect(practice(recording, { type: "recordFailed" })).toMatchObject({ mode: "typed", turn: "idle", waiting: true });
+  });
+
   it("does not start recording when no question waits", () => {
     expect(practice(running(), { type: "recording" })).toMatchObject({ turn: "idle" });
   });
@@ -76,12 +87,13 @@ describe("practice, the screen's steps (D119)", () => {
   it("marks the session ending, then ends it with what was kept", () => {
     const ending = practice(running(), { type: "ending" });
     expect(ending).toMatchObject({ ending: true });
-    expect(practice(ending, { type: "ended", session: null, evicted: 2, failure: "timeout" })).toEqual({
+    expect(practice(ending, { type: "ended", session: null, evicted: 2, failure: "timeout", recordingKept: true })).toEqual({
       phase: "ended",
       choice: CHOICE,
       session: null,
       evicted: 2,
       failure: "timeout",
+      recordingKept: true,
     });
   });
 
@@ -93,7 +105,7 @@ describe("practice, the screen's steps (D119)", () => {
     expect(practice(confirming, { type: "question", waiting: QUESTION })).toBe(confirming);
     const live = running();
     expect(practice(live, { type: "choose", choice: CHOICE })).toBe(live);
-    const ended = practice(live, { type: "ended", session: null, evicted: 0, failure: null });
+    const ended = practice(live, { type: "ended", session: null, evicted: 0, failure: null, recordingKept: null });
     expect(practice(ended, { type: "question", waiting: QUESTION })).toBe(ended);
   });
 });
@@ -143,6 +155,22 @@ describe("recordingsMegabytes (D119)", () => {
   it("is nothing for no recordings, at least a tenth for any, and megabytes otherwise", () => {
     expect(recordingsMegabytes(0)).toBe(0);
     expect(recordingsMegabytes(20_000)).toBe(0.1);
-    expect(recordingsMegabytes(250_000_000)).toBe(250);
+    expect(recordingsMegabytes(250 * 1_048_576)).toBe(250);
+  });
+
+  it("reads the warning threshold, 200 × 1,024 × 1,024 bytes, as exactly 200 megabytes (D121)", () => {
+    expect(recordingsMegabytes(200 * 1024 * 1024)).toBe(200);
+  });
+});
+
+describe("turnFocus (D121)", () => {
+  it("goes to the question when one starts waiting to be answered aloud, and to the field when it is to be typed", () => {
+    expect(turnFocus({ waiting: false }, { waiting: true, mode: "spoken" })).toBe("question");
+    expect(turnFocus(null, { waiting: true, mode: "typed" })).toBe("answer");
+  });
+
+  it("stays put while the same question waits, and while none does", () => {
+    expect(turnFocus({ waiting: true }, { waiting: true, mode: "spoken" })).toBeNull();
+    expect(turnFocus({ waiting: true }, { waiting: false, mode: "spoken" })).toBeNull();
   });
 });

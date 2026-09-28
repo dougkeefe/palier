@@ -164,8 +164,10 @@ No audio is ever written: a transcription is recorded with its clip described by
 its content type and size (D117). To keep an
 old run as a before-and-after, rename it first, as `reviewItem-prompt-v3.json` was, and add it to
 `packages/testing/src/recorded/index.ts`. Commit the fixtures with the regenerated
-`content/factory/eval-report.json`, which `committed-eval.test.ts` holds equal to a fresh run. Copy the printed
-`features` block into `apps/web/src/lib/pricing.json` if the counts moved.
+`content/factory/eval-report.json`, which `committed-eval.test.ts` holds equal to a fresh run. If the counts
+moved, copy the printed `writing-feedback` and `item-generation` entries into `apps/web/src/lib/pricing.json`.
+**Replace only those two**: the printed block has no `oral-practice`, which is priced per minute of a session
+until Phase 5 Slice 3 measures one (`progress.md` D117, D121).
 
 ## Rolling back
 

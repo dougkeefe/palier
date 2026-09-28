@@ -96,21 +96,21 @@ describe("turnBasedTransport — the turn loop (D118)", () => {
     expect(turns(events)[1]).toEqual({ kind: "turn", speaker: "candidate", text: "Je suis analyste.", startMs: 0, endMs: 60 * SEC });
   });
 
-  it("never starts a clip before the session opened, nor before the previous answer began", async () => {
+  it("never starts a clip before its own question was shown, whatever length it claims (D121)", async () => {
     const { hand, clock, events, open } = setUp();
     await open();
     await settled();
-    clock.at(0.25); // 15 s in, a clip that claims 40 s
+    clock.at(0.25); // 15 s in, a clip that claims 40 s, answering the question shown at 0
     hand.give(clip("Un.", 40 * SEC));
     await settled();
-    clock.at(0.5); // 30 s in, a clip that claims 60 s
+    clock.at(0.5); // 30 s in, a clip that claims 60 s, answering the question shown at 15 s
     hand.give(clip("Deux.", 60 * SEC));
     await settled();
 
     const candidate = turns(events).filter((t) => t.speaker === "candidate");
     expect(candidate.map((t) => [t.startMs, t.endMs])).toEqual([
       [0, 15 * SEC],
-      [0, 30 * SEC],
+      [15 * SEC, 30 * SEC],
     ]);
   });
 
@@ -227,7 +227,7 @@ describe("turnBasedTransport — closing (D118)", () => {
     expect(ai.examinerRequests).toHaveLength(1);
   });
 
-  it("delivers a question still being written before it says closed, and asks for no answer to it", async () => {
+  it("delivers a question still being written before it says closed, voices none of it, and asks for no answer (D121)", async () => {
     const { ai, hand, transport, events, open } = setUp({ holdExaminer: true });
     await open();
     const closing = transport.close();
@@ -236,6 +236,32 @@ describe("turnBasedTransport — closing (D118)", () => {
 
     expect(events.map((e) => e.kind)).toEqual(["turn", "closed"]);
     expect(hand.questions).toEqual([]);
+    expect(ai.spoken).toEqual([]);
+  });
+
+  it("shows and stores a question in the phase it was written from, though the phase moves while it is written (D121)", async () => {
+    const { ai, hand, transport, open } = setUp({ holdExaminer: true });
+    await open();
+    await settled();
+    await transport.direct({ phase: 1, register: "baseline" });
+    ai.release();
+    await settled();
+
+    expect(ai.examinerRequests[0]?.phase).toBe(SCENARIO.phases[0]);
+    expect(hand.questions[0]?.phase).toBe(0);
+  });
+
+  it("gives each wait for an answer its own signal, aborting only the one in progress on close (D121)", async () => {
+    const { hand, transport, open } = setUp();
+    await open();
+    await settled();
+    hand.give({ kind: "typed", text: "Oui." });
+    await settled();
+    await transport.close();
+
+    expect(hand.signals).toHaveLength(2);
+    expect(hand.signals[0]).not.toBe(hand.signals[1]);
+    expect(hand.signals.map((signal) => signal.aborted)).toEqual([false, true]);
   });
 
   it("closes with nothing to say when it was never opened, and cannot be opened after", async () => {

@@ -128,7 +128,7 @@ export const generateAndPractise = async (page: Page) => {
 
 /**
  * Spoken practice's one spending path (progress.md D117–D119), from the spoken-practice screen:
- * choose `session`, check the microphone (the browser's fake device) or choose to type, start past
+ * choose `session`, check the microphone (the synthesised one `installFakeAudio` gives) or choose to type, start past
  * the pre-flight, answer `answers` questions, then end the session and wait for its end, whose
  * heading takes focus. `onState` runs at each state a user rests on, for axe. Returns nothing; the
  * transcript is on the page.

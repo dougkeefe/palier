@@ -53,6 +53,14 @@ describe("memoryAnswerSource (D118)", () => {
     await expect(answered).rejects.toThrow(/stopped waiting/);
   });
 
+  it("refuses at once a wait whose signal is already aborted (D121)", async () => {
+    const source = memoryAnswerSource([typed("Un.")]);
+    const controller = new AbortController();
+    controller.abort();
+    await expect(source.answers.answer(question("Q1"), controller.signal)).rejects.toThrow(/stopped waiting/);
+    expect(source.questions()).toEqual([]);
+  });
+
   it("refuses the answer being waited for, and every later one, once it fails", async () => {
     const source = memoryAnswerSource([typed("Un.")], { released: 0 });
     const signal = new AbortController().signal;

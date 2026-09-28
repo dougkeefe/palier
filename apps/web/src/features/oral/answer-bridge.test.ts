@@ -53,6 +53,17 @@ describe("answerBridge (D119)", () => {
     expect(bridge.submit({ kind: "typed", text: "Deux." })).toBe(true);
   });
 
+  it("refuses at once, and shows nothing, a wait whose signal is already aborted (D121)", async () => {
+    const bridge = answerBridge();
+    const seen: Waiting[] = [];
+    bridge.subscribe((waiting) => seen.push(waiting));
+    const controller = new AbortController();
+    controller.abort();
+
+    await expect(bridge.source.answer(question, controller.signal)).rejects.toThrow(/stopped waiting/);
+    expect(seen).toEqual([]);
+  });
+
   it("stops telling a listener that unsubscribed", () => {
     const bridge = answerBridge();
     const seen: Waiting[] = [];

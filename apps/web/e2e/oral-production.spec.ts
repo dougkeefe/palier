@@ -41,9 +41,16 @@ test("the screen's timer moves the session into its next phase, and the examiner
   await expect(page.getByText(EXAMINER_QUESTION)).toBeVisible();
   await expect(page.getByText("Part 1 of 2")).toBeVisible();
 
-  // Three and a half minutes on: the next tick crosses into the second phase.
+  // Three and a half minutes on: the next tick crosses into the second phase. The screen's timer
+  // updates the elapsed time and ticks the session in one callback, so once the time shown has moved,
+  // a tick has seen the new clock (D121).
   await page.clock.setFixedTime(new Date(START.getTime() + 3.5 * MIN));
-  await page.waitForTimeout(2_500);
+  // Two moves, so the second comes from a callback that began after the clock was set.
+  const timer = page.getByRole("group", { name: "Elapsed time" });
+  for (let move = 0; move < 2; move++) {
+    const shown = (await timer.textContent()) ?? "";
+    await expect(timer).not.toHaveText(shown);
+  }
   await page.getByRole("textbox", { name: "Your answer" }).fill("Je travaille à la direction des finances.");
   await page.getByRole("button", { name: "Send answer" }).click();
   await expect(page.getByText("Part 2 of 2")).toBeVisible();

@@ -206,7 +206,10 @@ still runs beside it (Gate E, D97).
 
 **Next: Phase 5 Slice 3, "`assessOral` and the report"** (implementation-plan.md §7 Phase 5, D113). It carries exit
 criteria 2 and 4, and ends at **Gate I**, exit criterion 1, a human judgement. Gate H adopted PRD §8.6's report as
-written, so the screen's open calls are recorded as made, as D119's were. **It opens no new gate before Gate I.**
+written, so the screen's open calls are recorded as made, as D119's were. **One human decision gates one part of it:
+Gate J, the pronunciation model and its price** (below). Everything else is built without waiting for it. If Gate J
+is not settled when the rest is done, the `pronounce` role ships unconfigured: the opt-in is not offered, the call is
+refused before any request as every unconfigured role is, and pronunciation reads "not assessed".
 
 **Groundwork:**
 - stored sessions with whole turns and their times (`OralStore`, D115);
@@ -278,7 +281,7 @@ Then **Gate I**: the human runs a 10-minute session and judges whether the repor
 
 **Human, during Slice 3:**
 - a funded key for the stability recording and one real 10-minute session, run from their own terminal and browser;
-- **confirm the pronunciation model and its price.** The candidates on OpenAI's pricing page, 27 September 2026, are
+- **Gate J: confirm the pronunciation model and its price.** The candidates on OpenAI's pricing page, 27 September 2026, are
   audio-capable chat models priced per million audio tokens, such as `gpt-audio-mini` at US$10 in. They are
   meterable only if the response reports audio tokens, which the recording will show;
 - **listen to the examiner's voice** (`tts-1`, "sage") in French, and say whether it will do or another voice should
@@ -4228,8 +4231,10 @@ signature), as D45 and D106 were
   - `estimateFeatureCost` and `preflightSpend` take a quantity. **`oral-practice`'s typical use is one minute**, so a
     session's estimate is its minutes times that.
   - `pricing.json` prices `gpt-transcribe` per minute and `tts-1` per million characters. Its `oral-practice` entry
-    is one minute: about 1.5 examiner turns (1,500 input and 60 output tokens), 180 characters voiced and 0.6 minutes
-    transcribed, about US$0.009. **These are placeholders until Slice 3 measures a session** (exit criterion 2).
+    is one minute: about 1.5 examiner turns, 180 characters voiced and 0.6 minutes transcribed. The examiner's
+    tokens were a guess (1,500 in, 60 out) until the recording measured a turn; they are now 564 in and 134 out,
+    about US$0.0076 a minute in all. **The rest are placeholders until Slice 3 measures a session** (exit
+    criterion 2).
   - `ai-models.json` gains `transcribe`, `speech` and `examiner` (gpt-6-luna), and `voice` ("sage"), which
     `roleModels` leaves out because it is not a model.
 - **The factory:**
@@ -4390,6 +4395,10 @@ these are recorded as made, as D87, D108 and D111 were)
   probe on a bare page confirmed it, sandboxed and not. So the specs do not rely on it. The microphone is a Web
   Audio oscillator's stream, so the level check still reads a real signal through a real `AnalyserNode`, and the
   lane is the same on every OS. A refusal is an init script whose `getUserMedia` rejects with `NotAllowedError`.
+- **What that leaves untested, said plainly:** the browser's real permission prompt, a real `MediaRecorder`'s
+  encoding and chosen format, and real clip sizes. The recorder's logic is unit-tested over a fake (D119), and the
+  real path is exercised only by the human, at Gate I. A Linux-only CI run with `--use-fake-device-for-media-stream`,
+  where that flag works, is named, not scheduled.
 - **Proven to bite three ways, each run and reverted, with `git diff` clean after:**
   - the session recording uploaded with a transcription: the hermetic journey found a third audio request;
   - the transcript in a synced setting: caught by the export check;
@@ -4401,11 +4410,94 @@ these are recorded as made, as D87, D108 and D111 were)
     examiner asking in the new phase.
   - The titles test gains both locales' `/practice/oral`.
 
+### D121 — the pre-merge review: 26 findings fixed, the screen's session moved into a tested controller
+**Date:** 28 September 2026 · **Status:** accepted; amends D118's timing rule and D119's screen
+
+A candid review of the branch (three parallel reviewers, constructive tone) found 26 issues, none critical. The human
+chose to fix all of them.
+
+- **The screen's session moved out of the `.tsx`** (`features/oral/practice-controller.ts`, 25 tests). It owns the
+  microphone, the level check, the recorders, the run and its end, over deps a test fakes. Fixed there:
+  - **leaving the page mid-session never ended it**, because the unmount cleanup held a stale copy of the session's
+    state; from the second session on it did not let the microphone go either;
+  - **the microphone stayed open** after Back, after a failed level check, and for a check still running when the
+    user moved on, whose verdict could then land on the next session's check;
+  - **End before the run existed** was lost, and left the user stuck for the whole scenario;
+  - **a recorder that cannot be made** left a dead Start button or a leaked clip; the session now turns to typed
+    answers (`recordFailed`);
+  - **a driver that fails** (`ended` rejecting) left the transport open; it is now closed, and named as failed;
+  - a second tap during a pre-flight or a start is ignored;
+  - **`attach` pairs with `dispose`**, found when the hermetic lane failed on the first run of the rewrite: React's
+    Strict Mode mounts, unmounts and remounts a screen in development, and a dispose that could not be undone left
+    the memoized controller deaf. The production build has no Strict Mode, so only the hermetic specs caught it.
+- **Accessibility:**
+  - the question's voice **can be paused while it plays** (WCAG 1.4.2);
+  - record and stop are **one stable button**;
+  - after an answer is sent, focus rests on the question, which is a polite live region, so the next question is
+    read out. When a question starts waiting, focus goes to it, or to the answer field when typing (`turnFocus`,
+    WCAG 2.4.3);
+  - "Answer by typing instead" is offered during the level check too, as D119 said.
+- **The transport** (D118 amended):
+  - a clip starts no earlier than **its own question was shown**, not the previous answer's start, so turns stay in
+    order. That test's expected value moved with the rule: `[15 s, 30 s]` where it was `[0, 30 s]`;
+  - a question is shown in **the phase it was written from**, though the phase moves while it is written. The stored
+    turn keeps the machine's phase, as D116 stamps it;
+  - **a question ended mid-writing is not voiced**, so no speech is bought for it;
+  - each wait for an answer has **its own abort signal**, so a finished wait retains nothing.
+- **Spend:**
+  - an audio call passes `costOf` only what it measured, so a token-priced audio model that reported no tokens reads
+    as **unpriced, not free** (D103);
+  - a transcription accepted but answered with a body that is not JSON **is still billed**.
+- **The leak guard:**
+  - every needle is also looked for **in base64**, at all three alignments (`encodedForms`), because audio put into
+    JSON is base64, and the raw-byte check could never have failed on it;
+  - bodies are read as latin1 and as UTF-8, so an accented needle matches;
+  - the production spec asserts the recording's marker is in no OpenAI body;
+  - `oral-production.spec.ts` waits on the timer's observed tick, not a fixed sleep.
+- **Smaller fixes:**
+  - the recordings' size is shown in the same megabyte the 200 MB warning counts;
+  - the cleanup names a failure, and the size is read again after "Delete everything";
+  - both answer sources refuse a wait whose signal is already aborted;
+  - the level check resumes its `AudioContext` for WebKit;
+  - Chrome's and Safari's French say "Micro".
+- **Docs:** D117's pricing figures and `pricing.json`'s note; the re-recording runbook, which would have deleted
+  `oral-practice`; *Next, decided*, which now names the pronunciation model as Gate J; and D120's account of what the
+  synthesised microphone leaves untested.
+- **Proven to bite, a fourth way:** a clip written to `localStorage` in base64 fails the guard (session log).
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 28 September 2026 — `dougkeefe/abu-dhabi-v3` (pre-merge review: 26 fixes)
+
+**A candid review of the whole branch** (three parallel reviewers, constructive tone) found 26 issues, none critical, and
+the human chose to fix all 26. D121 records each.
+
+**The two that mattered most:**
+- leaving `/practice/oral` mid-session neither ended the session nor, from the second session on, let the
+  microphone go;
+- the leak guard could not have failed on audio in base64, which is how audio gets into JSON.
+
+**Found while fixing:** the rewritten screen passed on the production build and failed all four hermetic oral specs.
+React's Strict Mode remounts a screen in development, and the controller's dispose could not be undone. `attach` now
+pairs with it (D121).
+
+**Evidence** (after the fixes):
+
+```
+pnpm verify          → check-types, lint, boundaries (435 + 223 modules, no violations),
+                       test: 198 files, 2939 passed, 8 todo; coverage thresholds met
+pnpm test:integration → 45 passed
+CI=1 pnpm test:e2e    → 57 passed (1.0m), on a fresh production build
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.7 KB of 180.0 KB
+pnpm --filter @palier/web lighthouse  → 16 URLs × 5, every assertion met; lowest median 0.99; /fr/practice/oral 0.99 / 1.0
+```
+
+**Proven to bite, a fourth way, reverted and checked byte for byte after:** a clip written to `localStorage` as base64
+failed the hermetic journey: `"Ondulard9d3a" reached somewhere other than OpenAI and its own copy on this device`.
 
 ### 27 September 2026 — `dougkeefe/abu-dhabi-v3` (Phase 5 Slice 2: the turn loop on the key)
 

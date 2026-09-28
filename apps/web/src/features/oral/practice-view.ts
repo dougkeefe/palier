@@ -41,6 +41,8 @@ export type PracticeState =
       readonly session: OralSession | null;
       readonly evicted: number;
       readonly failure: OralFailure | null;
+      /** Whether the recording of the answers was kept on this device; `null` when there was none to keep. */
+      readonly recordingKept: boolean | null;
     };
 
 export type PracticeAction =
@@ -48,9 +50,11 @@ export type PracticeAction =
   | { readonly type: "mic"; readonly mic: MicState }
   | { readonly type: "preflighted"; readonly mode: AnswerMode; readonly preflight: Preflight }
   | { readonly type: "back" }
-  | { readonly type: "started"; readonly nowMs: number }
+  | { readonly type: "started"; readonly nowMs: number; readonly mode?: AnswerMode }
   | { readonly type: "question"; readonly waiting: ExaminerQuestion | null }
   | { readonly type: "recording" }
+  /** The recorder could not start: the rest of the session is answered by typing (D121). */
+  | { readonly type: "recordFailed" }
   | { readonly type: "sent" }
   | { readonly type: "ending" }
   | {
@@ -58,6 +62,7 @@ export type PracticeAction =
       readonly session: OralSession | null;
       readonly evicted: number;
       readonly failure: OralFailure | null;
+      readonly recordingKept: boolean | null;
     };
 
 export const INITIAL_PRACTICE: PracticeState = { phase: "picking" };
@@ -83,7 +88,7 @@ export const practice = (state: PracticeState, action: PracticeAction): Practice
       return {
         phase: "running",
         choice: state.choice,
-        mode: state.mode,
+        mode: action.mode ?? state.mode,
         question: null,
         waiting: false,
         turn: "idle",
@@ -98,12 +103,21 @@ export const practice = (state: PracticeState, action: PracticeAction): Practice
             : { ...state, question: action.waiting, waiting: true, turn: "idle" };
         case "recording":
           return state.waiting ? { ...state, turn: "recording" } : state;
+        case "recordFailed":
+          return { ...state, mode: "typed", turn: "idle" };
         case "sent":
           return { ...state, turn: "sending" };
         case "ending":
           return { ...state, ending: true };
         case "ended":
-          return { phase: "ended", choice: state.choice, session: action.session, evicted: action.evicted, failure: action.failure };
+          return {
+            phase: "ended",
+            choice: state.choice,
+            session: action.session,
+            evicted: action.evicted,
+            failure: action.failure,
+            recordingKept: action.recordingKept,
+          };
         default:
           return state;
       }
@@ -157,8 +171,24 @@ export const phaseProgress = (question: ExaminerQuestion | null, choice: OralSes
   of: choice.scenario.phases.length,
 });
 
+/** A megabyte as `AUDIO_WARNING_BYTES` counts one (200 × 1,024 × 1,024), so the warning shows at "200 MB" (D121). */
+const MEGABYTE = 1_048_576;
+
 /**
  * The recordings' size in megabytes for the data settings, at least a tenth so a single short
  * recording never reads as nothing (the estimate is Palier's own audio, D115).
  */
-export const recordingsMegabytes = (bytes: number): number => (bytes <= 0 ? 0 : Math.max(0.1, bytes / 1_000_000));
+export const recordingsMegabytes = (bytes: number): number => (bytes <= 0 ? 0 : Math.max(0.1, bytes / MEGABYTE));
+
+/**
+ * Where focus goes as a turn moves on (WCAG 2.4.3, D121): to the question when it starts waiting
+ * to be answered aloud, to the answer field when it is to be typed, and nowhere otherwise, so
+ * sending an answer never drops focus to the page and a new question is announced by landing on it.
+ */
+export const turnFocus = (
+  before: { readonly waiting: boolean } | null,
+  after: { readonly waiting: boolean; readonly mode: AnswerMode },
+): "question" | "answer" | null => {
+  if (!after.waiting || before?.waiting === true) return null;
+  return after.mode === "typed" ? "answer" : "question";
+};

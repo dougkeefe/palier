@@ -52,6 +52,8 @@ export const measureLevel = async (
 export const browserLevelKit = (): LevelKit => ({
   open: (stream) => {
     const context = new AudioContext();
+    // WebKit may make a context suspended when it is created after an await; a suspended one reads silence (D121).
+    void context.resume().catch(() => undefined);
     const analyser = context.createAnalyser();
     analyser.fftSize = 2048;
     context.createMediaStreamSource(stream).connect(analyser);

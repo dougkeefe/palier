@@ -30,7 +30,13 @@ export type TurnBasedTransport = OralTransport & {
   readonly lastError: () => unknown;
 };
 
-type Asked = { readonly text: string; readonly audio: Blob | null; readonly difficulty: "escalate" | "deescalate" | null };
+type Asked = {
+  readonly text: string;
+  readonly audio: Blob | null;
+  readonly difficulty: "escalate" | "deescalate" | null;
+  /** The phase the question was written from, which is the one it is shown and stored in. */
+  readonly phase: number;
+};
 
 /**
  * An `OralTransport` that takes turns (progress.md D118):
@@ -52,8 +58,13 @@ type Asked = { readonly text: string; readonly audio: Blob | null; readonly diff
  *   already the driver's, stored as they arrived.
  *
  * Times are milliseconds since `open`, by the `Clock`. The examiner's turn is the instant it is
- * shown; a clip's ends when it arrived and starts its measured length before, never before the
- * previous answer began. A typed answer spans the wait for it.
+ * shown; a clip's ends when it arrived and starts its measured length before, never before its
+ * own question was shown (progress.md D121). A typed answer spans the wait for it.
+ *
+ * - **A question ended mid-writing is not voiced**: once closing, the examiner's words are kept
+ *   but no speech is bought for a question nobody will hear (D121).
+ * - **Each wait for an answer has its own abort signal**, so nothing a finished wait registered
+ *   outlives it (D121).
  */
 export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTransport => {
   let state: "idle" | "open" | "closing" | "closed" = "idle";
@@ -65,7 +76,7 @@ export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTrans
   let loop: Promise<void> = Promise.resolve();
   const lastStart: Record<OralSpeaker, number> = { examiner: 0, candidate: 0 };
   const transcript: { readonly speaker: OralSpeaker; readonly text: string }[] = [];
-  const waiting = new AbortController();
+  let waiting: AbortController | null = null;
 
   const nowMs = (): number => Math.max(0, Date.parse(deps.clock.now()) - openedAt);
 
@@ -83,7 +94,8 @@ export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTrans
   };
 
   const ask = (current: OralScenario): Promise<Asked> => {
-    const phase = current.phases[directive.phase];
+    const phaseIndex = directive.phase;
+    const phase = current.phases[phaseIndex];
     if (phase === undefined) throw new Error(`Scenario ${current.id} has no phases.`);
     const request = {
       sessionType: current.sessionType,
@@ -96,8 +108,9 @@ export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTrans
     };
     return withAiProvider(deps, "oral-practice", async (ai) => {
       const turn = await ai.examinerTurn(request);
-      const audio = ai.capabilities().speak ? await ai.speak({ text: turn.text, lang: current.lang }) : null;
-      return { text: turn.text, audio, difficulty: turn.difficulty };
+      const voiced = state === "open" && ai.capabilities().speak;
+      const audio = voiced ? await ai.speak({ text: turn.text, lang: current.lang }) : null;
+      return { text: turn.text, audio, difficulty: turn.difficulty, phase: phaseIndex };
     });
   };
 
@@ -119,17 +132,21 @@ export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTrans
         say("examiner", asked.text, shownAt, shownAt);
         if (state !== "open") return;
 
+        const wait = new AbortController();
+        waiting = wait;
         let answer: CandidateAnswer;
         try {
-          answer = await deps.answers.answer({ text: asked.text, audio: asked.audio, phase: directive.phase }, waiting.signal);
+          answer = await deps.answers.answer({ text: asked.text, audio: asked.audio, phase: asked.phase }, wait.signal);
         } catch (refused) {
-          if (waiting.signal.aborted) return;
+          if (wait.signal.aborted) return;
           throw refused;
+        } finally {
+          waiting = null;
         }
         const answeredAt = nowMs();
         const text = await hear(current, answer);
-        const startMs = answer.kind === "typed" ? shownAt : answeredAt - answer.durationMs;
-        say("candidate", text, Math.max(0, startMs), answeredAt);
+        const startMs = answer.kind === "typed" ? shownAt : Math.max(shownAt, answeredAt - answer.durationMs);
+        say("candidate", text, startMs, answeredAt);
       }
     } catch (failure) {
       error = failure;
@@ -163,7 +180,7 @@ export const turnBasedTransport = (deps: TurnBasedTransportDeps): TurnBasedTrans
       }
       if (state === "open") {
         state = "closing";
-        waiting.abort();
+        waiting?.abort();
       }
       await loop;
       finish(false);

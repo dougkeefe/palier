@@ -28,6 +28,11 @@ export const answerBridge = (): AnswerBridge => {
     source: {
       answer: (question, signal) =>
         new Promise<CandidateAnswer>((resolve, reject) => {
+          // A wait already abandoned is refused at once, as the port says, and never shown.
+          if (signal.aborted) {
+            reject(new Error("The session stopped waiting for an answer."));
+            return;
+          }
           const mine = { resolve };
           pending = mine;
           signal.addEventListener(

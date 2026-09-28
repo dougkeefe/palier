@@ -986,12 +986,22 @@ describe("openAiProvider — the turn loop's audio and examiner (D117)", () => {
       expect(provider.lastUsage()?.costUsd).toBeCloseTo(0.006, 12);
     });
 
-    it("refuses a 200 that is not JSON as InvalidResponseError", async () => {
+    it("refuses a 200 that is not JSON as InvalidResponseError, still billing the clip it accepted (D121)", async () => {
       const fetchImpl: FetchLike = () =>
         Promise.resolve({ ok: true, status: 200, json: () => Promise.reject(new SyntaxError("x")), text: () => Promise.resolve("<html>") });
-      await expect(makeProvider({ fetchImpl }).transcribe({ audio: clip(), lang: "fr", durationMs: 1 })).rejects.toBeInstanceOf(
+      const provider = makeProvider({ fetchImpl, pricing });
+      await expect(provider.transcribe({ audio: clip(), lang: "fr", durationMs: 60_000 })).rejects.toBeInstanceOf(
         InvalidResponseError,
       );
+      expect(provider.lastUsage()).toMatchObject({ model: MODELS.transcribe, audioSeconds: 60 });
+      expect(provider.lastUsage()?.costUsd).toBeCloseTo(0.006, 12);
+    });
+
+    it("reads as unpriced, never free, when a token-priced model reports no tokens (D121)", async () => {
+      const fetchImpl: FetchLike = () => Promise.resolve(transcriptionResponse({ text: "Oui.", usage: { type: "duration", seconds: 2 } }));
+      const provider = makeProvider({ fetchImpl, pricing: { [MODELS.transcribe]: { inputPerMTok: 2.5, outputPerMTok: 10 } } });
+      await provider.transcribe({ audio: clip(), lang: "fr", durationMs: 2_000 });
+      expect(provider.lastUsage()).toEqual({ model: MODELS.transcribe, inputTokens: 0, outputTokens: 0, audioSeconds: 2 });
     });
 
     it("translates 401 and 429, and never retries a failed upload", async () => {
@@ -1063,6 +1073,12 @@ describe("openAiProvider — the turn loop's audio and examiner (D117)", () => {
       const provider = makeProvider({ fetchImpl, pricing });
       await expect(provider.speak({ text: "Bonjour.", lang: "fr" })).rejects.toBeInstanceOf(InvalidResponseError);
       expect(provider.lastUsage()?.characters).toBe(8);
+    });
+
+    it("reads a token-priced voice as unpriced, never free, since the answer reports no tokens (D121)", async () => {
+      const provider = makeProvider({ pricing: { [MODELS.speech]: { inputPerMTok: 0.6, outputPerMTok: 12 } } });
+      await provider.speak({ text: "Bonjour.", lang: "fr" });
+      expect(provider.lastUsage()).toEqual({ model: MODELS.speech, inputTokens: 0, outputTokens: 0, characters: 8 });
     });
 
     it("translates 401, before billing anything", async () => {
