@@ -97,9 +97,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v5` | **Phase 5 Slice 1 — the session core, no UI** (D113): scenarios through the bank (a factory scenario stage over `AiProvider.generateScenario`, bank v3 carrying v2's items *and forms* forward, `ItemRepository.scenarios()`), the `OralStore` port over v1's `oralSessions`/`oralAudio` tables with architecture.md §9.1's retention, the pure session machine in the engine, and the `OralTransport` port with a memory fake and contract suite. **Built; pending merge** (D114–D116). | 27 September 2026 |
+| `dougkeefe/abu-dhabi-v3` | **Phase 5 Slice 2 — the turn loop on the key** (D113): `transcribe`, `speak` and `examinerTurn` on the `AiProvider` (gpt-transcribe and tts-1, human decision), the `AnswerSource` port and `turnBasedTransport`, `/practice/oral` in practice mode with mic recovery and typed answers, local recording, and the key-leak test extended to audio (exit criterion 3). | 27 September 2026 |
 
-*(The prior rows — Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 5 Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
