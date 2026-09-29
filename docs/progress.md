@@ -5514,7 +5514,8 @@ Newest first. One entry per session that changed something. Never edit an older 
   - #41 (the minor-and-patch group) and #40 (`github-script` v9) merged;
   - #42 (`@types/node` 26) closed;
   - #44 (TypeScript 6) closed and superseded here (D154);
-  - #43 (`jsdom` 30) merges once its CI is green, and `.nvmrc` moved to 22.23.3 for it.
+  - #43 (`jsdom` 30) merged green, and `.nvmrc` moved to 22.23.3 for it. `pnpm verify` passed again after merging it in:
+    220 files, 3369 passed.
 - **Dependabot alerts:** five fixed by scoped `pnpm` overrides, and the two `extract-zip` alerts dismissed as tolerable risk.
   They close on GitHub when this merges.
 - **The nightly lane's two causes are fixed:**
