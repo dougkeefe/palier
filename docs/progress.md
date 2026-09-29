@@ -315,8 +315,9 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
   (D148);
 - **a rendered preview on a `content/` pull request** (architecture.md §17, D152);
 - **home's exam half's statement end to end**: no hermetic spec builds an onboarded user who has sat an exam (D146);
-- **journey 4's flake**: after `setFixedTime` moves two days on, the review screen sometimes reads "Nothing due". It fails 3 in
-  6 on `origin/main` (session log, 29 September 2026).
+- **a mounted review screen re-reading the queue when the day changes**: left open overnight, or clicked while already on it,
+  `/review` still shows yesterday's queue. It is ordinary Next behaviour, and it was found while fixing journey 4's flake,
+  which was the test's fault (session log, 29 September 2026, cleanup slice).
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
