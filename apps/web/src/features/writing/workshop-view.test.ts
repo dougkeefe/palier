@@ -181,6 +181,24 @@ describe("workshop", () => {
     });
   });
 
+  it("resumes feedback asked for before the screen opened as sending, so it is followed and not asked again (D143)", () => {
+    const unassessed = aSubmission({ assessment: null });
+    const resumed = workshop(INITIAL_WORKSHOP, { type: "resume", submission: unassessed, nowMs: 5 });
+
+    expect(resumed).toEqual({
+      phase: "writing",
+      draft: { promptId: "wp-reply-01", text: "Madame, merci.", startedAtMs: 5, saved: { id: "sub-1", text: "Madame, merci." } },
+      request: { kind: "sending" },
+    });
+    expect(workshop(resumed, { type: "assessed", submission: aSubmission() })).toMatchObject({ phase: "feedback" });
+  });
+
+  it("keeps the text fixed while its feedback is being made, so Get feedback cannot come back mid-call (D143)", () => {
+    const sending = workshop(writingState(), { type: "sending" });
+
+    expect(workshop(sending, { type: "edit", text: "autre chose" })).toBe(sending);
+  });
+
   it("ignores an action that does not belong to the phase it arrives in", () => {
     expect(workshop(INITIAL_WORKSHOP, { type: "edit", text: "x" })).toEqual(INITIAL_WORKSHOP);
     expect(workshop(INITIAL_WORKSHOP, { type: "revise" })).toEqual(INITIAL_WORKSHOP);

@@ -4,7 +4,7 @@ import type { WritingSubmission } from "@palier/app";
 import type { Lang, TargetBand, WritingPrompt } from "@palier/domain";
 import { Button, Callout, Card, Timer, Toast } from "@palier/ui";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
-import { type Ref, useEffect, useId, useReducer, useRef, useState } from "react";
+import { type Ref, useCallback, useEffect, useId, useReducer, useRef, useState } from "react";
 
 import { estimateText } from "../../features/key/spend-view";
 import {
@@ -36,13 +36,20 @@ type Setup = {
   readonly history: readonly WritingSubmission[];
 };
 
-const loadSetup = async (container: Container): Promise<Setup> => {
+/** A submission whose feedback was asked for before this screen opened, and is still being made (D143). */
+type Pending = { readonly submission: WritingSubmission; readonly result: Promise<WritingSubmission> };
+
+const loadSetup = async (container: Container): Promise<{ readonly setup: Setup; readonly pending: Pending | null }> => {
   const [status, profile, history] = await Promise.all([
     container.useCases.apiKeyStatus(),
     readStudyProfile(container.settings),
     container.useCases.writingHistory(),
   ]);
-  return { keyHeld: status !== null, targetBand: profile?.targetBand ?? DEFAULT_TARGET, history };
+  const pending =
+    history
+      .map((submission) => ({ submission, result: container.useCases.writingFeedbackInFlight({ submissionId: submission.id }) }))
+      .find((entry): entry is Pending => entry.result !== null) ?? null;
+  return { setup: { keyHeld: status !== null, targetBand: profile?.targetBand ?? DEFAULT_TARGET, history }, pending };
 };
 
 /**
@@ -66,14 +73,39 @@ export function WritingWorkshop() {
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const moved = useRef(false);
 
+  // Follows a feedback request to its end: the feedback, or the failure in plain words, and the
+  // history brought up to date either way. Stable, so loading can follow one already out (D143).
+  const follow = useCallback(async (useCases: Container["useCases"], pending: Promise<WritingSubmission>) => {
+    try {
+      const assessed = await pending;
+      moved.current = true;
+      dispatch({ type: "assessed", submission: assessed });
+    } catch (error) {
+      const failure = feedbackFailure(error);
+      if (failure === "no-key") setSetup((current) => (current === null ? current : { ...current, keyHeld: false }));
+      dispatch({ type: "failed", failure });
+    } finally {
+      const history = await useCases.writingHistory();
+      setSetup((current) => (current === null ? current : { ...current, history }));
+    }
+  }, []);
+
   useEffect(() => {
     if (container.status !== "ready") return;
     let live = true;
-    void loadSetup(container.container).then((loaded) => live && setSetup(loaded));
+    void loadSetup(container.container).then(({ setup: loaded, pending }) => {
+      if (!live) return;
+      setSetup(loaded);
+      // Feedback asked for before the screen was left is still being made: show it, and wait for it.
+      if (pending !== null) {
+        dispatch({ type: "resume", submission: pending.submission, nowMs: Date.now() });
+        void follow(container.container.useCases, pending.result);
+      }
+    });
     return () => {
       live = false;
     };
-  }, [container]);
+  }, [container, follow]);
 
   // The elapsed-time display ticks while writing; it is a guide, so nothing acts on it.
   useEffect(() => {
@@ -113,7 +145,14 @@ export function WritingWorkshop() {
     moved.current = true;
     const now = Date.now();
     setNowMs(now);
-    dispatch({ type: "reopen", submission, nowMs: now });
+    const pending = useCases.writingFeedbackInFlight({ submissionId: submission.id });
+    if (pending === null) {
+      dispatch({ type: "reopen", submission, nowMs: now });
+      return;
+    }
+    // Its feedback is still being made: wait for that rather than offer to pay for it again.
+    dispatch({ type: "resume", submission, nowMs: now });
+    void follow(useCases, pending);
   };
 
   const onGetFeedback = async () => {
@@ -129,18 +168,13 @@ export function WritingWorkshop() {
         submissionId = saved.id;
         dispatch({ type: "saved", id: saved.id, text: saved.text });
       }
-      const assessed = await useCases.requestWritingFeedback({
-        submissionId,
-        targetBand: setup.targetBand,
-        feedbackLang: locale === "fr" ? "fr" : "en",
-      });
-      moved.current = true;
-      dispatch({ type: "assessed", submission: assessed });
+      await follow(
+        useCases,
+        useCases.requestWritingFeedback({ submissionId, targetBand: setup.targetBand, feedbackLang: locale === "fr" ? "fr" : "en" }),
+      );
     } catch (error) {
-      const failure = feedbackFailure(error);
-      if (failure === "no-key") setSetup((current) => (current === null ? current : { ...current, keyHeld: false }));
-      dispatch({ type: "failed", failure });
-    } finally {
+      // Saving failed, before any call was made.
+      dispatch({ type: "failed", failure: feedbackFailure(error) });
       await refreshHistory();
     }
   };
@@ -217,6 +251,7 @@ export function WritingWorkshop() {
         draft={draft}
         elapsedMs={nowMs - draft.startedAtMs}
         editorRef={editorRef}
+        readOnly={request.kind === "sending"}
         onEdit={(text) => dispatch({ type: "edit", text })}
       />
       {!setup.keyHeld ? (
@@ -296,12 +331,15 @@ function Editor({
   draft,
   elapsedMs,
   editorRef,
+  readOnly,
   onEdit,
 }: {
   prompt: WritingPrompt;
   draft: Draft;
   elapsedMs: number;
   editorRef: Ref<HTMLTextAreaElement>;
+  /** While its feedback is being made, the text is fixed (D143). */
+  readOnly: boolean;
   onEdit: (text: string) => void;
 }) {
   const t = useTranslations("writing");
@@ -328,6 +366,7 @@ function Editor({
             spellCheck={false}
             aria-describedby={`${id}-hint ${id}-count`}
             value={draft.text}
+            readOnly={readOnly}
             onChange={(event) => onEdit(event.target.value)}
           />
           <span id={`${id}-hint`} className="app-muted">

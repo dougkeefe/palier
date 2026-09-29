@@ -1,7 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
 import { axeClean } from "./helpers";
-import { MODELS_ANSWER, type OpenAiAnswer, SENTINEL, feedbackAnswer, stubOpenAi } from "./leak-guard";
+import { MODELS_ANSWER, type OpenAiAnswer, SENTINEL, completionKind, feedbackAnswer, stubOpenAi } from "./leak-guard";
 
 /**
  * The writing workshop (product-requirements.md §8.7, §14; progress.md D105–D108), on the
@@ -125,4 +125,53 @@ test("the workshop in French, at parity", async ({ page, context }) => {
   await page.getByRole("textbox", { name: "Votre texte" }).fill(WRITTEN);
   await expect(page.getByRole("heading", { name: "La rétroaction exige une clé OpenAI" })).toBeVisible();
   await axeClean(page);
+});
+
+test("feedback still being made is waited for when you come back, and never asked for twice (D143)", async ({ page, context }) => {
+  test.setTimeout(90_000);
+  await stubOpenAi(context);
+  let asked = 0;
+  let release: () => void = () => undefined;
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  // Registered after the stub, so it is asked first: it holds the feedback's answer, and passes every other call on.
+  await context.route("https://api.openai.com/v1/chat/completions", async (route) => {
+    if (completionKind(route.request().postData() ?? "") === "feedback") {
+      asked += 1;
+      await held;
+    }
+    await route.fallback();
+  });
+  await openWorkshop(page);
+  await page.getByRole("button", { name: "Write this" }).first().click();
+  await page.getByRole("link", { name: "Add a key" }).click();
+  await page.getByLabel("OpenAI API key").fill(SENTINEL);
+  await page.getByRole("button", { name: "Save the key" }).click();
+  await expect(page.getByText(/^Saved on this device/)).toBeVisible();
+  await page.goBack();
+
+  await page.getByRole("button", { name: "Write this" }).first().click();
+  const editor = page.getByRole("textbox", { name: "Your text" });
+  await editor.fill(WRITTEN);
+  await page.getByRole("button", { name: "Get feedback" }).click();
+  await page.getByRole("button", { name: "Send for feedback" }).click();
+  const sending = page.getByRole("status").filter({ hasText: "Getting feedback." });
+  await expect(sending).toBeVisible();
+  // The text being assessed is fixed until its feedback arrives.
+  await expect(editor).toHaveAttribute("readonly", "");
+
+  // Leave while it is being made, and come back the browser's way.
+  await page.getByRole("link", { name: "About" }).first().click();
+  await expect(page.getByRole("heading", { level: 1, name: "What Palier is, and what it is not" })).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole("heading", { level: 1, name: "Writing workshop" })).toBeVisible();
+  await expect(sending).toBeVisible();
+  await expect(editor).toHaveValue(WRITTEN);
+  await expect(page.getByRole("button", { name: "Get feedback" })).toBeDisabled();
+  await axeClean(page);
+
+  release();
+  await expect(page.getByRole("heading", { name: "Feedback", exact: true })).toBeVisible();
+  expect(asked).toBe(1);
 });

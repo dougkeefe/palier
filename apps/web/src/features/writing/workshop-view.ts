@@ -101,7 +101,8 @@ export type WorkshopAction =
   | { readonly type: "failed"; readonly failure: FeedbackFailure }
   | { readonly type: "revise" }
   | { readonly type: "choose" }
-  | { readonly type: "reopen"; readonly submission: WritingSubmission; readonly nowMs: number };
+  | { readonly type: "reopen"; readonly submission: WritingSubmission; readonly nowMs: number }
+  | { readonly type: "resume"; readonly submission: WritingSubmission; readonly nowMs: number };
 
 export const INITIAL_WORKSHOP: WorkshopState = { phase: "choosing" };
 
@@ -123,16 +124,15 @@ export const workshop = (state: WorkshopState, action: WorkshopAction): Workshop
       return INITIAL_WORKSHOP;
     case "reopen": {
       const { submission } = action;
-      const draft: Draft = {
-        promptId: submission.promptId,
-        text: submission.text,
-        startedAtMs: action.nowMs,
-        saved: { id: submission.id, text: submission.text },
-      };
+      const draft = draftOf(submission, action.nowMs);
       return submission.assessment === null
         ? { phase: "writing", draft, request: IDLE }
         : { phase: "feedback", draft, submission };
     }
+    case "resume":
+      // Feedback asked for before this screen opened, and still being made (D143): shown as
+      // sending, so it is followed rather than asked for, and paid for, again.
+      return { phase: "writing", draft: draftOf(action.submission, action.nowMs), request: { kind: "sending" } };
     case "revise":
       return state.phase === "feedback" ? { phase: "writing", draft: state.draft, request: IDLE } : state;
     case "assessed":
@@ -142,6 +142,14 @@ export const workshop = (state: WorkshopState, action: WorkshopAction): Workshop
   }
 };
 
+/** A saved submission as the draft it was written from. */
+const draftOf = (submission: WritingSubmission, nowMs: number): Draft => ({
+  promptId: submission.promptId,
+  text: submission.text,
+  startedAtMs: nowMs,
+  saved: { id: submission.id, text: submission.text },
+});
+
 /** The actions that only mean something while writing. */
 const writing = (
   state: Extract<WorkshopState, { phase: "writing" }>,
@@ -149,6 +157,9 @@ const writing = (
 ): WorkshopState => {
   switch (action.type) {
     case "edit":
+      // The text being assessed is fixed until its feedback arrives: an edit now would bring
+      // "Get feedback" back mid-call, and a second paid request with it (D143).
+      if (state.request.kind === "sending") return state;
       // Editing clears a pending confirmation or a failure: the estimate was for the old text.
       return { ...state, draft: { ...state.draft, text: action.text }, request: IDLE };
     case "preflighted":

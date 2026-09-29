@@ -185,6 +185,7 @@ import {
 
 import aiModels from "./ai-models.json";
 import { BANK_BASE_PATH, BANK_VERSION } from "./bank-version";
+import { type Held, inFlight, wipeCount, writesUntilWiped } from "./in-flight";
 import { EXAMINER_VOICE, PRICING } from "./pricing";
 import { selectionSeedFor, systemClock } from "./system-clock";
 
@@ -247,11 +248,23 @@ const WRITING_PROMPTS: readonly WritingPrompt[] = parseWritingPromptsOrThrow(wri
 const ORAL_FILLERS: OralFillers = parseOralFillersOrThrow(oralFillerLists);
 
 /**
- * Report requests still out, one per session (progress.md D127). At module scope rather than in a
- * container, so a container built again (a change of language remounts the layout) still finds a
- * request the last one made, and never pays for a second.
+ * Spending requests still out, and the page's wipes (progress.md D127, D143; `lib/in-flight.ts`).
+ * At module scope rather than in a container, so a container built again (a change of language
+ * remounts the layout) still finds a request the last one made, and never pays for a second:
+ * a report per session, feedback per submission, and one fresh set at a time on this device.
  */
-const reportsInFlight = new Map<SessionId, Promise<OralAssessment>>();
+const reportsInFlight = inFlight<SessionId, SessionId, OralAssessment>();
+const feedbackInFlight = inFlight<string, WritingFeedbackRequest, WritingSubmission>();
+const generationInFlight = inFlight<"set", GeneratePracticeSetRequest, GeneratePracticeSetResult>();
+const wipes = wipeCount();
+
+/** A wipe forgets every request still out, and drops what each would write when it settles (D143). */
+const forgetInFlight = (): void => {
+  wipes.bump();
+  reportsInFlight.clear();
+  feedbackInFlight.clear();
+  generationInFlight.clear();
+};
 
 /**
  * How the browser makes an `AiProvider`: from the key, inside `KeyVault.withApiKey`, once
@@ -345,12 +358,22 @@ export type UseCases = {
   readonly writingPrompts: () => readonly WritingPrompt[];
   readonly saveWriting: (request: SaveWritingRequest) => Promise<WritingSubmission>;
   readonly requestWritingFeedback: (request: WritingFeedbackRequest) => Promise<WritingSubmission>;
+  /**
+   * The feedback request still out for a submission, or `null` (D143). Asking again while one is
+   * out joins it, so leaving the workshop mid-call and coming back never pays twice.
+   */
+  readonly writingFeedbackInFlight: (request: { readonly submissionId: string }) => Promise<WritingSubmission> | null;
   readonly writingHistory: () => Promise<readonly WritingSubmission[]>;
   /**
    * Runtime item generation (architecture.md §8.3, progress.md D110–D111): a fresh set on the user's key,
    * the last one kept on this device, and answers scored without writing an attempt.
    */
   readonly generatePracticeSet: (request: GeneratePracticeSetRequest) => Promise<GeneratePracticeSetResult>;
+  /**
+   * The fresh set still being made on this device, with what was asked for, or `null` (D143). One
+   * at a time: asking again while one is out joins it, whatever was asked.
+   */
+  readonly generationInFlight: () => Held<GeneratePracticeSetRequest, GeneratePracticeSetResult> | null;
   readonly latestGeneratedSet: () => Promise<GeneratedSet | null>;
   readonly scoreGeneratedAnswer: (request: ScoreGeneratedAnswerRequest) => Promise<{ readonly correct: boolean }>;
   /**
@@ -523,8 +546,9 @@ function buildUseCases(ports: Ports): UseCases {
         examRuns: ports.examRuns,
         settings: ports.settings,
       }),
-    wipeData: () =>
-      wipeData({
+    wipeData: () => {
+      forgetInFlight();
+      return wipeData({
         attempts: ports.attempts,
         schedule: ports.schedule,
         sessions: ports.sessions,
@@ -536,7 +560,8 @@ function buildUseCases(ports: Ports): UseCases {
         writing: ports.writing,
         generated: ports.generated,
         oral: ports.oral,
-      }),
+      });
+    },
     syncNow: (request) => syncNow(request, syncDeps(ports)),
     syncState: () => ports.syncState.state(),
     requestPairCode: (request) => requestPairCode(request, { transport: ports.sync, syncState: ports.syncState }),
@@ -544,8 +569,9 @@ function buildUseCases(ports: Ports): UseCases {
     listDevices: () => listDevices({ transport: ports.sync, syncState: ports.syncState }),
     removeDevice: (request) => removeDevice(request, { transport: ports.sync, syncState: ports.syncState }),
     setSyncEnabled: (request) => setSyncEnabled(request, { transport: ports.sync, syncState: ports.syncState }),
-    deleteEverywhere: () =>
-      deleteEverywhere({
+    deleteEverywhere: () => {
+      forgetInFlight();
+      return deleteEverywhere({
         ...syncDeps(ports),
         vault: ports.vault,
         telemetry: ports.telemetry,
@@ -553,7 +579,8 @@ function buildUseCases(ports: Ports): UseCases {
         writing: ports.writing,
         generated: ports.generated,
         oral: ports.oral,
-      }),
+      });
+    },
     examForms: () => examForms({ items: ports.items }),
     examInProgress: () => examInProgress({ items: ports.items, examRuns: ports.examRuns }),
     startExam: (request) => startExam(request, examDeps(ports)),
@@ -597,26 +624,32 @@ function buildUseCases(ports: Ports): UseCases {
     saveWriting: (request) =>
       saveWriting(request, { prompts: WRITING_PROMPTS, writing: ports.writing, ids: ports.ids, clock: ports.clock }),
     requestWritingFeedback: (request) =>
-      requestWritingFeedback(request, {
-        prompts: WRITING_PROMPTS,
-        writing: ports.writing,
-        vault: ports.vault,
-        aiProvider: ports.aiProvider,
-        ledger: ports.costLedger,
-        clock: ports.clock,
-      }),
+      feedbackInFlight.join(request.submissionId, request, () =>
+        requestWritingFeedback(request, {
+          prompts: WRITING_PROMPTS,
+          writing: writesUntilWiped(ports.writing, "put", wipes, wipes.now()),
+          vault: ports.vault,
+          aiProvider: ports.aiProvider,
+          ledger: ports.costLedger,
+          clock: ports.clock,
+        }),
+      ),
+    writingFeedbackInFlight: (request) => feedbackInFlight.get(request.submissionId)?.result ?? null,
     writingHistory: () => writingHistory({ writing: ports.writing }),
     generatePracticeSet: (request) =>
-      generatePracticeSet(request, {
-        vault: ports.vault,
-        aiProvider: ports.aiProvider,
-        ledger: ports.costLedger,
-        clock: ports.clock,
-        generated: ports.generated,
-        ids: ports.ids,
-        random: ports.random,
-        promptVersion: PROMPT_VERSION,
-      }),
+      generationInFlight.join("set", request, () =>
+        generatePracticeSet(request, {
+          vault: ports.vault,
+          aiProvider: ports.aiProvider,
+          ledger: ports.costLedger,
+          clock: ports.clock,
+          generated: writesUntilWiped(ports.generated, "putSet", wipes, wipes.now()),
+          ids: ports.ids,
+          random: ports.random,
+          promptVersion: PROMPT_VERSION,
+        }),
+      ),
+    generationInFlight: () => generationInFlight.get("set"),
     latestGeneratedSet: () => latestGeneratedSet({ generated: ports.generated }),
     scoreGeneratedAnswer: (request) => scoreGeneratedAnswer(request, { generated: ports.generated }),
     oralSessionChoices: (request) => oralSessionChoices(request, { items: ports.items }),
@@ -634,22 +667,19 @@ function buildUseCases(ports: Ports): UseCases {
     saveOralAudio: (request) => saveOralAudio(request, { oral: ports.oral }),
     oralStorageEstimate: () => oralStorageEstimate({ oral: ports.oral }),
     cleanUpAudio: () => cleanUpAudio({ oral: ports.oral }),
-    requestOralReport: (request) => {
-      const held = reportsInFlight.get(request.sessionId);
-      if (held !== undefined) return held;
-      const asked = requestOralReport(request, {
-        vault: ports.vault,
-        aiProvider: ports.aiProvider,
-        ledger: ports.costLedger,
-        clock: ports.clock,
-        oral: ports.oral,
-        items: ports.items,
-        profile: PROFILE,
-      }).finally(() => reportsInFlight.delete(request.sessionId));
-      reportsInFlight.set(request.sessionId, asked);
-      return asked;
-    },
-    oralReportInFlight: (request) => reportsInFlight.get(request.sessionId) ?? null,
+    requestOralReport: (request) =>
+      reportsInFlight.join(request.sessionId, request.sessionId, () =>
+        requestOralReport(request, {
+          vault: ports.vault,
+          aiProvider: ports.aiProvider,
+          ledger: ports.costLedger,
+          clock: ports.clock,
+          oral: writesUntilWiped(ports.oral, "put", wipes, wipes.now()),
+          items: ports.items,
+          profile: PROFILE,
+        }),
+      ),
+    oralReportInFlight: (request) => reportsInFlight.get(request.sessionId)?.result ?? null,
     oralReport: (request) =>
       oralReport(request.sessionId, { oral: ports.oral, items: ports.items, ledger: ports.costLedger, fillers: ORAL_FILLERS }),
     oralHistory: () => oralHistory({ oral: ports.oral, items: ports.items }),

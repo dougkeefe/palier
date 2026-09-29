@@ -1,10 +1,10 @@
 "use client";
 
-import type { GeneratedSet } from "@palier/app";
+import type { GeneratePracticeSetResult, GeneratedSet } from "@palier/app";
 import type { SubSkill, TargetBand } from "@palier/domain";
 import { Button, Callout, Card, Toast } from "@palier/ui";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
-import { useEffect, useId, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useReducer, useRef, useState } from "react";
 
 import {
   failureMessage,
@@ -12,6 +12,7 @@ import {
   generator,
   initialGenerator,
   resultSummary,
+  resumedGenerator,
 } from "../../features/generate/generate-view";
 import { estimateText } from "../../features/key/spend-view";
 import { preflightNotice } from "../../features/writing/workshop-view";
@@ -32,6 +33,8 @@ type Setup = {
   readonly keyHeld: boolean;
   readonly targetBand: TargetBand;
   readonly latest: GeneratedSet | null;
+  /** A set this device asked for and is still making, from before this screen opened (D143). */
+  readonly inFlight: { readonly subSkill: SubSkill; readonly result: Promise<GeneratePracticeSetResult> } | null;
 };
 
 const loadSetup = async (container: Container): Promise<Setup> => {
@@ -40,7 +43,13 @@ const loadSetup = async (container: Container): Promise<Setup> => {
     readStudyProfile(container.settings),
     container.useCases.latestGeneratedSet(),
   ]);
-  return { keyHeld: status !== null, targetBand: profile?.targetBand ?? DEFAULT_TARGET, latest };
+  const held = container.useCases.generationInFlight();
+  return {
+    keyHeld: status !== null,
+    targetBand: profile?.targetBand ?? DEFAULT_TARGET,
+    latest,
+    inFlight: held === null ? null : { subSkill: held.request.subSkill, result: held.result },
+  };
 };
 
 /**
@@ -98,7 +107,9 @@ function Generator({
   const t = useTranslations("generate");
   const tSub = useTranslations("subSkills");
   const id = useId();
-  const [state, dispatch] = useReducer(generator, initialSubSkill, initialGenerator);
+  const [state, dispatch] = useReducer(generator, setup.inFlight?.subSkill ?? initialSubSkill, (subSkill) =>
+    setup.inFlight === null ? initialGenerator(subSkill) : resumedGenerator(subSkill),
+  );
   const resultRef = useRef<HTMLHeadingElement>(null);
   const subSkillRef = useRef<HTMLSelectElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
@@ -131,20 +142,35 @@ function Generator({
     dispatch({ type: "preflighted", preflight: await useCases.preflightSpend({ feature: "item-generation" }) });
   };
 
+  // Settles a run into the screen: the result, or the failure in plain words. Stable, so the
+  // effect below follows a run from before this screen opened exactly once (D143).
+  const settle = useCallback(
+    async (pending: Promise<GeneratePracticeSetResult>) => {
+      try {
+        const result = await pending;
+        moved.current = true;
+        dispatch({ type: "generated", result });
+        if (result.set !== null) onSetup((current) => current && { ...current, latest: result.set });
+      } catch (error) {
+        const failure = generateFailure(error);
+        if (failure === "no-key") onSetup((current) => current && { ...current, keyHeld: false });
+        moved.current = true;
+        dispatch({ type: "failed", failure });
+      }
+    },
+    [onSetup],
+  );
+
+  // A run from before this screen opened is followed, never asked for again.
+  const resumed = setup.inFlight?.result;
+  useEffect(() => {
+    if (resumed !== undefined) void settle(resumed);
+  }, [resumed, settle]);
+
   const onSend = async (subSkill: SubSkill) => {
     moved.current = true;
     dispatch({ type: "sending" });
-    try {
-      const result = await useCases.generatePracticeSet({ subSkill, targetBand: setup.targetBand, lang: TARGET_LANG });
-      moved.current = true;
-      dispatch({ type: "generated", result });
-      if (result.set !== null) onSetup((current) => current && { ...current, latest: result.set });
-    } catch (error) {
-      const failure = generateFailure(error);
-      if (failure === "no-key") onSetup((current) => current && { ...current, keyHeld: false });
-      moved.current = true;
-      dispatch({ type: "failed", failure });
-    }
+    await settle(useCases.generatePracticeSet({ subSkill, targetBand: setup.targetBand, lang: TARGET_LANG }));
   };
 
   if (state.phase === "practising") {
