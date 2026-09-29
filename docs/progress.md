@@ -5452,6 +5452,53 @@ amended in place
   they comment the run on it; otherwise they open one. A red week is one thread. The scripts were syntax-checked from the
   parsed YAML. A real failing run will be the first to exercise the comment path.
 
+### D157 — a registration answer never overwrites an identity the device gained while it was in flight
+**Date:** 29 September 2026 · **Status:** accepted. **Found by the sync simulator** (seeds 54693 and 72951, 3 devices; 91998, 2
+devices; nightly lane, 100,000 seeds)
+
+- **The defect.** `requestPairCode` read `identity === null`, awaited `registerDevice`, and wrote the answer without looking
+  again. If the device's account changed during that round trip, the stale answer overwrote it.
+- **All three seeds follow the same sequence:**
+  1. Another device asks the victim for a code before the victim's first registration is answered.
+  2. The victim registers by syncing and pushes its work.
+  3. It redeems a code, and the response is lost after the server applied it. The server has moved the device and dropped
+     the old account, which is now orphaned, along with everything the device pushed there. D74's flag is set.
+  4. The held registration lands and writes the new account's identity, but keeps the old ledger.
+  5. The next sync asks the server, gets that same account back, and sees no change, so the ledger stays. Every record
+     pushed to the dropped account stays "clean" and never reaches the new one.
+
+  **The result is permanent, silent loss of a device's early history.**
+- **Why the attempt ids repeat across seeds.** Each device's counter starts at `(i+1)·2^20` whatever the seed, so these are
+  the victim's first session, not a collision.
+- **It is reachable in the app, rarely.** "Add a device" and "Join" sit on one screen (`SyncSettings.tsx`), and neither is
+  serialised against the other or against the background runner.
+- **The fix.** `requestPairCode` re-reads the state when the answer arrives.
+  - It writes the identity only if the device still has none.
+  - An answer naming another account is trusted neither way: it sets `accountUnconfirmed`, and the next sync settles it by
+    D74's rule.
+  - The same account changes nothing.
+- **Alternatives rejected:**
+  - *Reset the ledger in `requestPairCode`.* It cannot know whether the other writer already handled the ledger. D74's flag
+    is the one path that asks the server and resets only on a real move.
+  - *Serialise sync-state writes in `apps/web`.* That would leave the use case, and the simulator, with the race.
+  - *Compare-and-set on `SyncStateStore`.* That is a port change for one call site, and the re-read has the same
+    one-store-read window D75 accepted.
+- **Residual, recorded rather than closed.** `syncNow`'s first-registration branch has the same shape. A pairing that
+  succeeds while a first sync's `registerDevice` is in flight could leave a wrong local account id. It loses no data, since
+  pairing resets the ledger, and the simulator cannot reach it: a device waits for its own sync before pairing. **Revisit
+  when** a store port gains transactions, or the device list is seen showing the wrong account.
+- **Tests** (`sync-account.test.ts`):
+  - "does not overwrite an account the device joined while its registration was in flight, so its history still reaches
+    the account (D157)", which failed first;
+  - "marks its account unconfirmed when a late registration answer names another account, and its next sync settles
+    which", which failed first;
+  - "leaves alone the identity a sync gave the device while its registration was in flight, when both name one account",
+    which guards the third branch.
+
+  The three seeds are in `REGRESSION_SEEDS`, and `packages/app/CLAUDE.md` gains the rule.
+- **Proven to bite.** With the fix reverted, the three regression seeds (3 failed in `run.test.ts`) and the first two new
+  tests fail. With it in place, 2,000 seeds on the integration project pass.
+
 ---
 
 ## Session log
