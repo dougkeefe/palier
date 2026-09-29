@@ -41,7 +41,7 @@
     "@lhci/cli": "0.15.1",
     "@palier/testing": "workspace:*",
     "@playwright/test": "1.63.0",
-    "@types/node": "^22",
+    "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "0.31.11",
