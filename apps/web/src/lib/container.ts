@@ -47,6 +47,7 @@ import type {
   WritingSubmission,
   GeneratedItemStore,
   GeneratedSet,
+  OralLiveness,
   OralStore,
   GeneratePracticeSetRequest,
   GeneratePracticeSetResult,
@@ -133,6 +134,7 @@ import {
   scoreGeneratedAnswer,
   cleanUpAudio,
   oralHistory,
+  closeAbandonedSessions,
   oralReport,
   oralSessionChoices,
   oralStorageEstimate,
@@ -186,6 +188,7 @@ import {
 import aiModels from "./ai-models.json";
 import { BANK_BASE_PATH, BANK_VERSION } from "./bank-version";
 import { type Held, inFlight, wipeCount, writesUntilWiped } from "./in-flight";
+import { webLocksLiveness } from "./oral/liveness";
 import { EXAMINER_VOICE, PRICING } from "./pricing";
 import { selectionSeedFor, systemClock } from "./system-clock";
 
@@ -386,6 +389,12 @@ export type UseCases = {
     answers: AnswerSource,
   ) => Promise<OralPracticeRun>;
   readonly oralSession: (request: { readonly sessionId: SessionId }) => Promise<OralSession | null>;
+  /**
+   * Close the spoken sessions left running that no page on this device is running now, and name them
+   * (D144): a tab closed mid-session leaves its session open, and it is over. The oral screens call it
+   * as they load, so such a session is listed and can be reported on without waiting for the next start.
+   */
+  readonly closeAbandonedSessions: () => Promise<readonly SessionId[]>;
   readonly saveOralAudio: (request: { readonly sessionId: SessionId; readonly audio: Blob }) => Promise<SaveOralAudioResult>;
   readonly oralStorageEstimate: () => Promise<OralStorageEstimate>;
   readonly cleanUpAudio: () => Promise<void>;
@@ -445,6 +454,11 @@ export type Ports = {
    * delete-everywhere clear it.
    */
   readonly oral: OralStore;
+  /**
+   * Which spoken sessions a page on this device is running (D144): Web Locks in both graphs, since
+   * a lock is the browser's own and needs no network. The practice controller holds its session's.
+   */
+  readonly oralLiveness: OralLiveness;
 };
 
 export type Container = Ports & {
@@ -662,8 +676,10 @@ function buildUseCases(ports: Ports): UseCases {
         items: ports.items,
         oral: ports.oral,
         answers,
+        liveness: ports.oralLiveness,
       }),
     oralSession: (request) => ports.oral.get(request.sessionId),
+    closeAbandonedSessions: () => closeAbandonedSessions({ clock: ports.clock, oral: ports.oral, liveness: ports.oralLiveness }),
     saveOralAudio: (request) => saveOralAudio(request, { oral: ports.oral }),
     oralStorageEstimate: () => oralStorageEstimate({ oral: ports.oral }),
     cleanUpAudio: () => cleanUpAudio({ oral: ports.oral }),
@@ -754,6 +770,7 @@ function productionPorts(): Ports {
     writing: stores.writing,
     generated: stores.generated,
     oral: stores.oral,
+    oralLiveness: webLocksLiveness(globalThis.navigator?.locks),
   };
 }
 
@@ -794,6 +811,7 @@ function hermeticPorts(): Ports {
     writing: memoryWritingStore(),
     generated: memoryGeneratedItemStore(),
     oral: memoryOralStore(),
+    oralLiveness: webLocksLiveness(globalThis.navigator?.locks),
   };
 }
 

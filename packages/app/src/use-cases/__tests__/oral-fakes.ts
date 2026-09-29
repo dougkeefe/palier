@@ -10,6 +10,7 @@ import type {
   Clock,
   ItemRepository,
   OralDirective,
+  OralLiveness,
   OralSession,
   OralStore,
   OralTransport,
@@ -23,6 +24,19 @@ import { StorageQuotaError } from "../../ports/index.js";
  */
 
 export const SESSION_ID = sessionId("oral-1");
+
+/** Sessions some page is running, fixed at `ids`, counting how often it is asked (D144). */
+export const liveSessions = (ids: readonly string[] = []): OralLiveness & { readonly asked: () => number } => {
+  let asked = 0;
+  return {
+    hold: () => () => undefined,
+    live: () => {
+      asked += 1;
+      return Promise.resolve(new Set(ids.map((id) => sessionId(id))));
+    },
+    asked: () => asked,
+  };
+};
 export const START = "2026-09-27T10:00:00.000Z";
 const MIN = 60_000;
 

@@ -63,3 +63,51 @@ test("the screen's timer moves the session into its next phase, and the examiner
   expect(await idsAtRest(page, "palier", "oralSessions")).toHaveLength(1);
   expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(4);
 });
+
+/**
+ * A session whose tab is closed hard runs no code on the way out, so it is still open in the store
+ * (D116). The next oral screen closes it as over, but only once no tab holds it, since a session
+ * another tab is running is not abandoned (D144). Real IndexedDB and real Web Locks, shared by the
+ * context's pages as a browser's tabs share them.
+ */
+test("a session whose tab was closed is listed as over and can be reported on, and one still running elsewhere is not (D144)", async ({
+  page,
+  context,
+}) => {
+  test.setTimeout(90_000);
+  await stubOpenAi(context, (path) =>
+    path.endsWith("/chat/completions")
+      ? { status: 200, body: { choices: [{ message: { content: JSON.stringify({ text: EXAMINER_QUESTION, difficulty: null }) } }], usage: { prompt_tokens: 900, completion_tokens: 30 } } }
+      : path.endsWith("/audio/speech")
+        ? { status: 200, contentType: "audio/mpeg", body: "ID3-stub-voice" }
+        : { status: 200, body: { object: "list", data: [] } },
+  );
+  await onboard(page, "skip", { addKey: true });
+  await page.getByLabel("OpenAI API key").fill(SENTINEL);
+  await page.getByRole("button", { name: "Save the key" }).click();
+  await expect(page.getByText(/^Saved on this device/)).toBeVisible();
+
+  await page.goto("/en/practice/oral");
+  await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Warm-up", exact: true }) }).getByRole("button", { name: "Choose" }).click();
+  await page.getByRole("button", { name: "Answer by typing instead" }).click();
+  await page.getByRole("button", { name: "Start the session" }).click();
+  await expect(page.getByText(EXAMINER_QUESTION)).toBeVisible();
+  await page.getByRole("textbox", { name: "Your answer" }).fill("Je travaille à la direction des finances.");
+  await page.getByRole("button", { name: "Send answer" }).click();
+  await expect(page.getByRole("textbox", { name: "Your answer" })).toBeEnabled();
+
+  // Another tab, while the session runs: the session is not over, so it is not listed.
+  const other = await context.newPage();
+  await other.goto("/en/practice/oral");
+  await expect(other.getByRole("heading", { name: "Choose a session" })).toBeVisible();
+  await expect(other.getByRole("region", { name: "Your earlier sessions" })).toHaveCount(0);
+  await expect(page.getByText(EXAMINER_QUESTION)).toBeVisible();
+
+  // The session's tab is closed, with no chance to end it; the other tab looks again.
+  await page.close();
+  await other.reload();
+  const earlier = other.getByRole("region", { name: "Your earlier sessions" });
+  await expect(earlier.getByRole("link", { name: "Open" })).toBeVisible();
+  await earlier.getByRole("link", { name: "Open" }).click();
+  await expect(other.getByRole("button", { name: "Get the report" })).toBeVisible();
+});

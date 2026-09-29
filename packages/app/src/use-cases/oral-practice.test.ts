@@ -11,6 +11,7 @@ import {
   SESSION_ID,
   examinerProvider,
   handAnswers,
+  liveSessions,
   oralStore,
   scenarioBank,
   settableClock,
@@ -404,6 +405,7 @@ describe("startOralPracticeRun (D118)", () => {
       items: scenarioBank(),
       oral,
       answers: hand.answers,
+      liveness: liveSessions(),
     };
     return { ai, hand, clock, oral, ledger, run: startOralPracticeRun({ sessionId: SESSION_ID, scenarioId: SCENARIO.id }, deps) };
   };

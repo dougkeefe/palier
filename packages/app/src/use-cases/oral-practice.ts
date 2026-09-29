@@ -6,6 +6,7 @@ import type {
   CandidateAnswer,
   ItemRepository,
   OralDirective,
+  OralLiveness,
   OralStore,
   OralTransport,
   OralTransportEvent,
@@ -219,6 +220,7 @@ export type OralPracticeDeps = MeteredAiDeps & {
   readonly items: ItemRepository;
   readonly oral: OralStore;
   readonly answers: AnswerSource;
+  readonly liveness: OralLiveness;
 };
 
 /** A practice session running: the session driver's run, and why it failed when it did. */
@@ -237,7 +239,7 @@ export const startOralPracticeRun = async (
   deps: OralPracticeDeps,
 ): Promise<OralPracticeRun> => {
   const transport = turnBasedTransport({ ...deps, sessionId: request.sessionId });
-  const run = await startOralSessionRun(request, { clock: deps.clock, items: deps.items, oral: deps.oral, transport });
+  const run = await startOralSessionRun(request, { clock: deps.clock, items: deps.items, oral: deps.oral, transport, liveness: deps.liveness });
   return { ...run, failure: transport.lastError };
 };
 

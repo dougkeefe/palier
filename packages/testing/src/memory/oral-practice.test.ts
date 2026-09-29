@@ -10,6 +10,7 @@ import { memoryAnswerSource } from "./answer-source.js";
 import { fakeAiProvider } from "./ai-provider.js";
 import { memoryCostLedger } from "./cost-ledger.js";
 import { memoryKeyVault } from "./key-vault.js";
+import { memoryOralLiveness } from "./oral-liveness.js";
 import { memoryOralStore } from "./oral-store.js";
 
 /**
@@ -53,7 +54,7 @@ const setUp = async (scenario: OralScenario) => {
   const source = memoryAnswerSource(script, { released: 0 });
   const run = await startOralPracticeRun(
     { sessionId: sessionId(`practice-${scenario.sessionType}`), scenarioId: scenario.id },
-    { vault, aiProvider: provider, ledger, clock, items: fixtureBankRepository(), oral, answers: source.answers },
+    { vault, aiProvider: provider, ledger, clock, items: fixtureBankRepository(), oral, answers: source.answers, liveness: memoryOralLiveness() },
   );
   return { clock, ledger, oral, examiner, source, run };
 };

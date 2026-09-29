@@ -14,6 +14,7 @@ export type { GeneratedItemStore, GeneratedSet } from "./generated-item-store.js
 export type { OralAudioEntry, OralSession, OralStore } from "./oral-store.js";
 export { StorageQuotaError } from "./oral-store.js";
 export type { OralDirective, OralTransport, OralTransportEvent } from "./oral-transport.js";
+export type { OralLiveness } from "./oral-liveness.js";
 export type { AnswerSource, CandidateAnswer, ExaminerQuestion } from "./answer-source.js";
 export type {
   DeviceId,

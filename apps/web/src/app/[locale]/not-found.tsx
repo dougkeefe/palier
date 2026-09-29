@@ -1,6 +1,7 @@
 import { NotFoundView } from "../../components/errors/NotFoundView";
 
-// Every unknown path under a locale (progress.md D141).
+// A `notFound()` under a locale (progress.md D141). Unknown paths render the same view through
+// `[...rest]`, which Next serves inside the layout.
 export default function NotFound() {
-  return <NotFoundView />;
+  return <NotFoundView titled />;
 }

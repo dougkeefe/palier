@@ -26,10 +26,12 @@ const copy = (locale: "en" | "fr") => {
 for (const locale of ["en", "fr"] as const) {
   const t = copy(locale);
 
-  test(`${locale}: an unknown path is the localised 404, titled, axe-clean, with the way home`, async ({ page }) => {
+  test(`${locale}: an unknown path is the localised 404, titled, unindexed, axe-clean, with the way home`, async ({ page }) => {
+    // A 200, with noindex: a 404 status would need `notFound()`, which Next serves blank here (D141).
     const response = await page.goto(`/${locale}/no-such-page/at-all`);
 
-    expect(response?.status()).toBe(404);
+    expect(response?.status()).toBe(200);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
     await expect(page.locator("html")).toHaveAttribute("lang", locale);
     await expect(page.getByRole("heading", { level: 1, name: t("notFoundTitle") })).toBeVisible();
     await expect(page).toHaveTitle(`${t("notFoundTitle")} · Palier`);
@@ -88,6 +90,7 @@ for (const locale of ["en", "fr"] as const) {
   });
 }
 
-test("the hook is a 404 for any view it does not know", async ({ page }) => {
-  expect((await page.goto("/en/hermetic/nothing"))?.status()).toBe(404);
+test("the hook is the 404 for any view it does not know", async ({ page }) => {
+  await page.goto("/en/hermetic/nothing");
+  await expect(page.getByRole("heading", { level: 1, name: copy("en")("notFoundTitle") })).toBeVisible();
 });

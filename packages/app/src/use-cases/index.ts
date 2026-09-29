@@ -205,6 +205,7 @@ export {
   oralStorageEstimate,
   saveOralAudio,
   startOralSessionRun,
+  closeAbandonedSessions,
 } from "./oral.js";
 
 export type {

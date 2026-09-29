@@ -1,5 +1,5 @@
 import type { OralPracticeRun, OralSession, OralSessionChoice } from "@palier/app";
-import { scenarioId, sessionId } from "@palier/domain";
+import { type SessionId, scenarioId, sessionId } from "@palier/domain";
 import { describe, expect, it, vi } from "vitest";
 
 import type { MediaKit, RecorderLike } from "../../lib/oral/recorder";
@@ -123,9 +123,18 @@ const setUp = (over: Partial<PracticeControllerDeps> & { started?: Promise<OralP
   };
   let bridgeSource: { answer: (q: typeof QUESTION, s: AbortSignal) => Promise<unknown> } | null = null;
   const onNoKey = vi.fn();
+  /** Each session the controller held as running, and whether it has let go (D144). */
+  const holds: { readonly id: SessionId; released: boolean }[] = [];
   const controller = practiceController({
     useCases,
     newSessionId: () => ID,
+    holdSession: (id) => {
+      const hold = { id, released: false };
+      holds.push(hold);
+      return () => {
+        hold.released = true;
+      };
+    },
     openMic: () => Promise.resolve(mic.stream),
     measureLevel: () => Promise.resolve(0.2),
     media: media.kit,
@@ -141,7 +150,7 @@ const setUp = (over: Partial<PracticeControllerDeps> & { started?: Promise<OralP
     const answered = bridgeSource?.answer(QUESTION, wait.signal);
     return { answered, wait };
   };
-  return { controller, actions, mic, media, current, useCases, onNoKey, ask };
+  return { controller, actions, mic, media, current, useCases, onNoKey, ask, holds };
 };
 
 const types = (actions: readonly PracticeAction[]) => actions.map((action) => action.type);
@@ -498,6 +507,36 @@ describe("practiceController — a session (D121)", () => {
     handles.controller.attach();
     await handles.controller.checkMic();
     expect(handles.actions.at(-1)).toEqual({ type: "mic", mic: "ok" });
+  });
+
+  it("holds the session as running in this page before it is stored, and lets go once it has ended (D144)", async () => {
+    const handles = setUp();
+    handles.useCases.startOralPractice.mockImplementationOnce(() => {
+      expect(handles.holds).toEqual([{ id: ID, released: false }]);
+      return Promise.resolve(handles.current.run);
+    });
+    await handles.controller.continueWith(CHOICE, "typed");
+    await handles.controller.start(CHOICE, "typed");
+    expect(handles.holds).toEqual([{ id: ID, released: false }]);
+
+    await handles.controller.end();
+    await settled();
+    expect(handles.holds).toEqual([{ id: ID, released: true }]);
+  });
+
+  it("lets go of the session when the screen goes away and the run ends, and when the run never starts (D144)", async () => {
+    const leaving = setUp();
+    await leaving.controller.continueWith(CHOICE, "typed");
+    await leaving.controller.start(CHOICE, "typed");
+    leaving.controller.dispose();
+    await settled();
+    expect(leaving.holds.map((hold) => hold.released)).toEqual([true]);
+
+    const refused = setUp({ started: Promise.reject(new Error("refused")) });
+    await refused.controller.continueWith(CHOICE, "typed");
+    await refused.controller.start(CHOICE, "typed");
+    await settled();
+    expect(refused.holds.map((hold) => hold.released)).toEqual([true]);
   });
 
   it("ends a run that starts after the screen went away", async () => {
