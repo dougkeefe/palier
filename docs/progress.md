@@ -100,7 +100,7 @@ human for anything expensive.
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **deferred past 1.0** (decision gate resolved 28 September 2026, human, D131); built after Phase 7 if at all |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 in flight) |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 in flight) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -109,9 +109,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v7` | **Phase 6's gate resolved (D131), Phase 7 planned (D132), and Phase 7 Slice 1, security hardening**: the strict CSP and Trusted Types on the built output, the dependency audit gate and Dependabot, `SECURITY.md`, `RATE_LIMIT_SALT` failing the deploy, and the deliberate attempt to leak the key. | 28 September 2026 |
+| `dougkeefe/next-slice-from-progress-v3` | **Phase 7 Slice 2, server lifecycle and observability**: the retention job and the storage alert, `GET /api/health`, the error states with the client diagnostic bundle, and the two "outlives its screen" defects, with finding 13's wipe half. | 28 September 2026 |
 
-*(The prior rows — Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 7 Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -569,8 +569,8 @@ Nothing is ticked without session-log evidence.
   (D65). Slice 4, as Gate K decides
 - [ ] Accessibility audit with VoiceOver and NVDA on the core flows, and a screen-reader user's pass if one can be arranged.
   Human (Gate L). An agent builds PRD §11's shortcut sheet and audits the `lang` attributes beforehand, in Slice 3
-- [~] Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to leak the key.
-  **Slice 1, built on this branch** (D133–D137)
+- [x] Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to leak the key.
+  **Slice 1, merged (#39)** (D133–D137). Gate L's red-team read is still the human's (D132)
 - [ ] The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
   Slice 4, scoped by Gate K; the articles' French is part of Gate L
 - [~] Observability: the client diagnostic bundle, the prefilled issue path, no error reporting service (ADR 15). **The
@@ -585,9 +585,10 @@ Nothing is ticked without session-log evidence.
 **Completion slices (D132).** Four slices and three gates, mirroring `implementation-plan.md` §7 Phase 7 "Completion slices".
 **Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
 
-- [~] **Slice 1 — Security hardening, no new UI.** The strict CSP and Trusted Types on the built output, the dependency audit
+- [x] **Slice 1 — Security hardening, no new UI.** **Built 28 September 2026, merged (#39)** (`dougkeefe/next-progress-slice-v7`;
+  D133–D137; session-log evidence). The strict CSP and Trusted Types on the built output, the dependency audit
   gate and Dependabot, `SECURITY.md`, `RATE_LIMIT_SALT` failing the deploy, and the deliberate attempt to leak the key.
-- [ ] **Slice 2 — Server lifecycle and observability.** The retention job and the storage alert, `/api/health`, the error
+- [~] **Slice 2 — Server lifecycle and observability.** In flight on `dougkeefe/next-slice-from-progress-v3`. The retention job and the storage alert, `/api/health`, the error
   states with the diagnostic bundle, and the two "outlives its screen" defects.
 - [ ] **Gate K — Phase 7's UI and content direction (human).** The privacy notice's and about page's wording, where the
   non-affiliation statement appears, whether PRD §9's streak, XP and milestones are in 1.0, the library's 1.0 scope, and the
