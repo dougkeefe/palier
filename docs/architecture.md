@@ -295,11 +295,11 @@ The exception is realtime voice. OpenAI's Realtime API over WebRTC requires an e
 
 Design:
 
-- `POST /api/realtime/secret` on a Vercel Edge Function. *(After 1.0: studio mode is deferred past it, `progress.md` D131, so this route is not built for 1.0 and the exception stays dormant.)*
+- `POST /api/realtime/secret` on a Vercel Edge Function. *(After 1.0: studio mode is deferred past it, `progress.md` D131, so this route is not built for 1.0 and the exception stays dormant.)* *(Superseded 29 September 2026, `progress.md` D165: studio mode is in 1.0, and this route is built in Phase 6 Slice 1. It runs on **Node**, like every route since ADR 21, because Next 16 deprecates Edge. ADR 3's substance, stateless, holding nothing and logging nothing, is unchanged.)*
 - The user's key arrives in an `Authorization` header, is used once to call OpenAI, and the ephemeral token is returned. The key is never written to disk, never placed in a log line, never attached to an error report, and never held past the request.
-- The function sets `export const runtime = 'edge'`, disables request logging for that route, and returns only the ephemeral token, its expiry, and the session id.
+- The function sets `export const runtime = 'edge'`, disables request logging for that route, and returns only the ephemeral token, its expiry, and the session id. *(D165: Node, not Edge. It returns `{ value, expiresAt }`, and the secret is minted with a 60-second `expires_after`, since the browser connects at once.)*
 - A prominent note in settings states plainly that this single call is the one time the key transits our infrastructure, why it is necessary, and that the route's source is short enough for anyone to read in full.
-- Escape hatch for the paranoid: a `selfHostedTokenEndpoint` setting lets a user point this call at their own deployment. The repo ships a one-file Cloudflare Worker and a Vercel function for that purpose.
+- Escape hatch for the paranoid: a `selfHostedTokenEndpoint` setting lets a user point this call at their own deployment. The repo ships a one-file Cloudflare Worker and a Vercel function for that purpose. *(Mechanism decided 29 September 2026, `progress.md` D165. `connect-src` is the same for every user (§6.4), so the page cannot `fetch` a user's own origin. Instead it opens the endpoint in a popup and passes the key by `postMessage`, to that origin only. The endpoint's page mints the secret on its own origin and posts it back, with `event.origin` checked both ways. Built in Phase 6 Slice 3.)*
 
 Rejected alternatives, recorded so the decision is not relitigated: WebSocket from the browser with the key in a subprotocol string works but puts the raw key in a URL-adjacent position and is fragile across proxies. Turn-based practice mode with no realtime avoids the problem entirely, which is why it exists, but it is not the product people want for exam rehearsal.
 
@@ -477,7 +477,7 @@ Offsets rather than a rewritten string, so the UI can render corrections inline 
 3. Client establishes WebRTC with the realtime model, attaching the local audio track and a data channel.
 4. Session instructions configure the examiner persona: a PSC-style assessor, speaks only the target language, never coaches, never corrects during the session, keeps its own turns short so the candidate does most of the talking, follows the scenario's phase plan, escalates when the candidate copes and reframes when they struggle, and manages time.
 5. Phase transitions are driven by the client, not left to the model. The client sends a data channel event at each phase boundary with the next phase's intent and seed questions. This keeps sessions predictable and reproducible, which matters for a practice tool.
-6. The model is given two tools: `note_observation(criterion, evidence, severity)` so it records assessment notes during the session, and `flag_difficulty(direction)` so the client can adapt. Notes never surface during the session.
+6. The model is given two tools: `note_observation(criterion, evidence, severity)` so it records assessment notes during the session, and `flag_difficulty(direction)` so the client can adapt. Notes never surface during the session. *(D165: they reach the session as the transport's `note` events, are kept on the `OralSession`, and go to `assessOral` as `OralRequest.notes`.)*
 7. Input transcription is enabled on the session so a transcript accrues without a separate pass.
 8. The client records the local audio track with MediaRecorder in parallel, stored as a blob in IndexedDB.
 
@@ -497,7 +497,7 @@ Every call records token and audio usage from the API response into a local ledg
 
 Order of magnitude, to be replaced with measured figures before launch: realtime voice is the dominant cost by a wide margin and a full 22 minute simulation is likely to be the most expensive single action in the product. Practice mode, writing feedback and item generation are all small by comparison. The design consequence, already reflected in the requirements document, is that practice mode is the daily default and studio mode is positioned as the weekly dress rehearsal.
 
-Guards: a pre-flight cost estimate on any action expected to exceed a user-set threshold, a hard client-side session length cap in studio mode, and an automatic disconnect on 25 minutes.
+Guards: a pre-flight cost estimate on any action expected to exceed a user-set threshold, a hard client-side session length cap in studio mode, and an automatic disconnect on 25 minutes. *(D165: the 25 minutes is `studioMaxMinutes` in `pricing.json`, a spend guard beside the realtime price, not an exam rule. The session machine ends on it with a `time-cap` reason.)*
 
 ---
 
@@ -689,7 +689,7 @@ Small by design.
 
 | Route | Runtime | Auth | Purpose |
 | --- | --- | --- | --- |
-| `POST /api/realtime/secret` | Edge | none, user key in header | Mint an ephemeral realtime token. Stateless, no logging. After 1.0 (D131) |
+| `POST /api/realtime/secret` | Node (ADR 21) | none, user key in header | Mint an ephemeral realtime token. Stateless, no logging. Phase 6 Slice 1, in 1.0 (D165; D131 had deferred it) |
 | `POST /api/telemetry` | Edge | none | Opt-in anonymous item outcomes, batched, rate limited by IP hash |
 | `GET /api/health` | Edge | none | Build version, bank version. *(Amended 28 September 2026, `progress.md` D140: on Node, as every route is since ADR 21; it also says whether the database answers, and answers 503 only when a configured one does not.)* |
 | `POST /api/account/device` | Edge | none, creates identity | Register a device, create an anonymous account on first call, return the account id |
@@ -772,7 +772,7 @@ Summary table. The full strategy, including the tier model, tooling, coverage ta
 | Accessibility | axe-core in Playwright on every route and on each session state; keyboard-only traversal tests of the three core flows; contrast validation computed from the token set | Fails the build |
 | i18n | Key parity between `en.json` and `fr.json`; a lint rule banning string literals in JSX; a pseudo-locale render to catch truncation | Fails the build |
 | E2E | Playwright: onboarding to first drill, full mock exam including resume after reload, review queue, key entry and validation, data export and import, oral practice mode with a mocked API | Fails the build |
-| Realtime | Cannot be meaningfully mocked end to end. A manual pre-release checklist covering mic permission, phase transitions, disconnection recovery and cost accounting | Manual, per release once studio mode ships (after 1.0, D131) |
+| Realtime | Cannot be meaningfully mocked end to end. A manual pre-release checklist covering mic permission, phase transitions, disconnection recovery and cost accounting | Manual, per release once studio mode ships (in 1.0, D165). Written out as `docs/realtime-checklist.md` in Phase 6 Slice 3, and run at Gate O |
 
 ---
 
@@ -848,7 +848,7 @@ learning value at roughly a tenth of the cost, which is why section 8.5 describe
 
 ## 20. Open questions for you
 
-1. Should studio mode ship at all in v1, or is practice mode plus a very good post-session report the better first bet, given cost and complexity? *(Decided 28 September 2026, `progress.md` D131: not in v1. Practice mode and its report ship at 1.0, and studio mode follows it.)*
+1. Should studio mode ship at all in v1, or is practice mode plus a very good post-session report the better first bet, given cost and complexity? *(Decided 28 September 2026, `progress.md` D131: not in v1. Practice mode and its report ship at 1.0, and studio mode follows it.)* *(Reversed 29 September 2026, human, D165: studio mode is in 1.0, on the Realtime API that ADR 3 names. D131's blockers were the Live API's.)*
 2. Do you want a pre-launch pilot with a small group for calibration? With a machine-authored bank this moves from nice to have to close to necessary, since telemetry is the only real evidence the items work. It does raise the question of whether recruiting colleagues creates workplace optics you would rather avoid while the CRA move is in progress.
 3. Will you do the 5 percent sample review yourself, or is the pipeline expected to be fully unattended? If unattended, say so explicitly in the about page and lean harder on the report control and auto-retirement.
 4. Which second model family do you want for the stage 4 review gate? Cross-provider is meaningfully stronger than cross-model within one provider, and it is the difference between a real gate and a model marking its own homework.
