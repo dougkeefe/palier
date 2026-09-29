@@ -43,7 +43,7 @@ jobs:
 
       - name: Open an issue on failure
         if: failure()
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             await github.rest.issues.create({
@@ -100,7 +100,7 @@ jobs:
           exit $status
       - name: Open an issue on failure
         if: failure()
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           SMOKE_OUTCOME: ${{ steps.smoke.outcome }}
         with:
