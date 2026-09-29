@@ -4,7 +4,8 @@
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
-resolved** (D145, human, 29 September 2026), and **Slice 3 is built** (D146–D152; below). Phase 3's
+resolved** (D145, human, 29 September 2026), **Slice 3 merged (#47**; D146–D152), the relicense merged (#48, D153), and a
+**cleanup slice** is in flight (D154–D157; below). Phase 3's
 product pilot still runs beside it (Gate E). The history, oldest first: **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
@@ -38,8 +39,9 @@ phase before 1.0 (2–5) is built against the baseline committed bank, now `cont
 runs at 1.0. **Phase 7 Slice 1 merged (#39)**, and **Slice 2, server lifecycle and observability, merged (#45)**
 (D138–D144): the retention job and storage alert, `GET /api/health`, the error states with the diagnostic bundle, and both
 "outlives its screen" defects. **Gate K is resolved** (D145): the human took the recommendation on all five questions and chose
-to build the authored-item intake. **Slice 3, content, the contribution path and data rights, is in flight** on
-`dougkeefe/next-slice-from-progress-v2`, and **built** (D146–D152). **Slice 4, motion, engagement and the library, is next.**
+to build the authored-item intake. **Slice 3, content, the contribution path and data rights, merged (#47**; D146–D152).
+A **cleanup slice** asked for by the human comes before Slice 4 (`dougkeefe/dependabot-cleanup-slice`; D154–D157): the
+Dependabot queue and alerts, TypeScript 6, and the red nightly. **Slice 4, motion, engagement and the library, is next.**
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -105,7 +107,7 @@ human for anything expensive.
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **deferred past 1.0** (decision gate resolved 28 September 2026, human, D131); built after Phase 7 if at all |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 built, D146–D152; Slice 4 next) |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; a cleanup slice, D154–D157; Slice 4 next) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -132,7 +134,7 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 - [x] Eight workspaces created (`apps/web`, `apps/factory`, six `packages/*`), each with an explicit `exports` map
 - [x] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current) — all six written, plus the root router `CLAUDE.md`; D4 resolved, D15 recorded
 - [~] Name decided and domain registered (§12.1) — **name decided: Palier** (D96). The domain will be `palier.dougkeefe.com`, not yet pointed at the deployment
-- [x] `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0), `README` non-affiliation statement [R5, R13]
+- [x] `LICENSE` (PolyForm Noncommercial 1.0.0), `LICENSE-CONTENT` (CC BY-NC-SA 4.0), `README` non-affiliation statement [R5, R13] — relicensed by ADR 23 (D153); MIT and CC BY until then
 - [x] `adr/README.md` covering the format, the never-edit-only-supersede rule, and numbers-on-acceptance (D16)
 
 ### Domain and contracts
@@ -215,9 +217,10 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132): **Slice 1 merged (#39)**, **Slice 2 merged (#45)**, **Gate K resolved** (D145), and **Slice 3 built** on
-`dougkeefe/next-slice-from-progress-v2` (D146–D152): the about page and privacy notice, the statement beside every band, the
-one-page PDF, device removal and the code's countdown, the shortcut sheet and the `lang` audit, and the authored-item intake.
+Phase 7 (D132): **Slice 1 merged (#39)**, **Slice 2 merged (#45)**, **Gate K resolved** (D145), and **Slice 3 merged** (#47;
+D146–D152): the about page and privacy notice, the statement beside every band, the one-page PDF, device removal and the
+code's countdown, the shortcut sheet and the `lang` audit, and the authored-item intake. **The cleanup slice** (D154–D157)
+emptied the Dependabot queue, took TypeScript 6, and turned the nightly lane green. It is done, so the plan resumes here.
 
 Phase 5's deferred cost check (D130) and the product pilot (Gate E, D97) still run beside it, both the human's.
 
@@ -277,10 +280,9 @@ Phase 5's deferred cost check (D130) and the product pilot (Gate E, D97) still r
   yet run against a real Postgres.
 
 **For the human, from Slice 1:**
-- **enable GitHub's private vulnerability reporting** on the repository (Settings → Security), which `SECURITY.md` names as
-  the reporting route (D135);
-- **read the red-team result** (D136) and say whether any path it did not try should be tried;
-- watch the first **Dependabot** pull requests and the audit step on `main` (D135).
+- **read the red-team result** (D136) and say whether any path it did not try should be tried.
+- *(Done: private vulnerability reporting is enabled, confirmed through the API on 29 September 2026; the first Dependabot
+  pull requests were handled by the cleanup slice, D155.)*
 
 **Gate J, still open (human):** confirm the pronunciation model and its price. OpenAI's pricing page listed, on 27 September
 2026, audio-capable chat models priced per million audio tokens, such as `gpt-audio-mini` at US$10 in. Chat-completions audio
@@ -291,8 +293,6 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
 **Also for the human:**
 - **listen to the examiner's voice** (`tts-1`, "sage") in French, and say whether it will do or another voice should be data in
   `ai-models.json`;
-- add the `OPENAI_SMOKE_KEY` Actions secret (`docs/deploy.md`) and run the nightly workflow once by hand. The smoke now also
-  asks for one report, about two cents more a run;
 - read the `generate`, `oral` and **`oralReport`** namespaces' French, with the rest of Phase 7's R8 review.
 
 **Named, not scheduled:**
