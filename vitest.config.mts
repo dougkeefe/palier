@@ -41,6 +41,13 @@ const workspaceProject = (name: string, root: string, environment: "node" | "jsd
 
 export default defineConfig({
   test: {
+    /**
+     * Nightly runs every property 10,000 times (`vitest.setup.mts`), and the lane is unbounded in
+     * time (implementation-plan.md 6.5), so Vitest's 5-second default only measured the runner's
+     * speed there: two tie-order properties failed at 5.4–7.6 s (progress.md D156). Fast and
+     * medium keep the default, where a slow test is a bug.
+     */
+    ...(process.env.CI_LANE === "nightly" ? { testTimeout: 300_000 } : {}),
     projects: [
       workspaceProject("domain", "./packages/domain"),
       workspaceProject("engine", "./packages/engine"),

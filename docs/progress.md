@@ -4,7 +4,8 @@
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
-resolved** (D145, human, 29 September 2026), and **Slice 3 is built** (D146–D152; below). Phase 3's
+resolved** (D145, human, 29 September 2026), **Slice 3 merged (#47**; D146–D152), the relicense merged (#48, D153), and a
+**cleanup slice** is in flight (D154–D157; below). Phase 3's
 product pilot still runs beside it (Gate E). The history, oldest first: **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
@@ -38,8 +39,9 @@ phase before 1.0 (2–5) is built against the baseline committed bank, now `cont
 runs at 1.0. **Phase 7 Slice 1 merged (#39)**, and **Slice 2, server lifecycle and observability, merged (#45)**
 (D138–D144): the retention job and storage alert, `GET /api/health`, the error states with the diagnostic bundle, and both
 "outlives its screen" defects. **Gate K is resolved** (D145): the human took the recommendation on all five questions and chose
-to build the authored-item intake. **Slice 3, content, the contribution path and data rights, is in flight** on
-`dougkeefe/next-slice-from-progress-v2`, and **built** (D146–D152). **Slice 4, motion, engagement and the library, is next.**
+to build the authored-item intake. **Slice 3, content, the contribution path and data rights, merged (#47**; D146–D152).
+A **cleanup slice** asked for by the human comes before Slice 4 (`dougkeefe/dependabot-cleanup-slice`; D154–D157): the
+Dependabot queue and alerts, TypeScript 6, and the red nightly. **Slice 4, motion, engagement and the library, is next.**
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -105,7 +107,7 @@ human for anything expensive.
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **deferred past 1.0** (decision gate resolved 28 September 2026, human, D131); built after Phase 7 if at all |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 built, D146–D152; Slice 4 next) |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; a cleanup slice, D154–D157; Slice 4 next) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -114,10 +116,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/noncommercial-license` | **Relicense non-commercial** (D153, ADR 23 supersedes ADR 12): PolyForm Noncommercial 1.0.0 for code, CC BY-NC-SA 4.0 for content, "source-available" wording, R13 amended. | 29 September 2026 |
-| `dougkeefe/next-slice-from-progress-v2` | **Phase 7 Slice 3, content, the contribution path and data rights** (D145): the about page and privacy notice, the statement in onboarding and beside every band, the one-page PDF by print stylesheet, the device-removal confirmation and pair-code expiry, the shortcut sheet and the `lang` audit, and the authored-item intake with `CONTRIBUTING.md` and the PR template. | 29 September 2026 |
+| `dougkeefe/yaounde` | **Cleanup slice** (human, 29 September 2026): the Dependabot queue and alerts, TypeScript 6, the red nightly (property timeouts, three sync-simulator seeds, duplicate issues), journey 4's flake, and stale bookkeeping here. | 29 September 2026 |
 
-*(The prior rows — Phase 7 Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -133,7 +134,7 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 - [x] Eight workspaces created (`apps/web`, `apps/factory`, six `packages/*`), each with an explicit `exports` map
 - [x] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current) — all six written, plus the root router `CLAUDE.md`; D4 resolved, D15 recorded
 - [~] Name decided and domain registered (§12.1) — **name decided: Palier** (D96). The domain will be `palier.dougkeefe.com`, not yet pointed at the deployment
-- [x] `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0), `README` non-affiliation statement [R5, R13]
+- [x] `LICENSE` (PolyForm Noncommercial 1.0.0), `LICENSE-CONTENT` (CC BY-NC-SA 4.0), `README` non-affiliation statement [R5, R13] — relicensed by ADR 23 (D153); MIT and CC BY until then
 - [x] `adr/README.md` covering the format, the never-edit-only-supersede rule, and numbers-on-acceptance (D16)
 
 ### Domain and contracts
@@ -216,9 +217,10 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132): **Slice 1 merged (#39)**, **Slice 2 merged (#45)**, **Gate K resolved** (D145), and **Slice 3 built** on
-`dougkeefe/next-slice-from-progress-v2` (D146–D152): the about page and privacy notice, the statement beside every band, the
-one-page PDF, device removal and the code's countdown, the shortcut sheet and the `lang` audit, and the authored-item intake.
+Phase 7 (D132): **Slice 1 merged (#39)**, **Slice 2 merged (#45)**, **Gate K resolved** (D145), and **Slice 3 merged** (#47;
+D146–D152): the about page and privacy notice, the statement beside every band, the one-page PDF, device removal and the
+code's countdown, the shortcut sheet and the `lang` audit, and the authored-item intake. **The cleanup slice** (D154–D157)
+emptied the Dependabot queue, took TypeScript 6, and turned the nightly lane green. It is done, so the plan resumes here.
 
 Phase 5's deferred cost check (D130) and the product pilot (Gate E, D97) still run beside it, both the human's.
 
@@ -278,10 +280,9 @@ Phase 5's deferred cost check (D130) and the product pilot (Gate E, D97) still r
   yet run against a real Postgres.
 
 **For the human, from Slice 1:**
-- **enable GitHub's private vulnerability reporting** on the repository (Settings → Security), which `SECURITY.md` names as
-  the reporting route (D135);
-- **read the red-team result** (D136) and say whether any path it did not try should be tried;
-- watch the first **Dependabot** pull requests and the audit step on `main` (D135).
+- **read the red-team result** (D136) and say whether any path it did not try should be tried.
+- *(Done: private vulnerability reporting is enabled, confirmed through the API on 29 September 2026; the first Dependabot
+  pull requests were handled by the cleanup slice, D155.)*
 
 **Gate J, still open (human):** confirm the pronunciation model and its price. OpenAI's pricing page listed, on 27 September
 2026, audio-capable chat models priced per million audio tokens, such as `gpt-audio-mini` at US$10 in. Chat-completions audio
@@ -293,7 +294,9 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
 - **listen to the examiner's voice** (`tts-1`, "sage") in French, and say whether it will do or another voice should be data in
   `ai-models.json`;
 - add the `OPENAI_SMOKE_KEY` Actions secret (`docs/deploy.md`) and run the nightly workflow once by hand. The smoke now also
-  asks for one report, about two cents more a run;
+  asks for one report, about two cents more a run. **Still not set** (29 September 2026): the only Actions secrets are
+  `RETENTION_DATABASE_URL` and `TELEMETRY_DATABASE_URL`, and every nightly so far has skipped the smoke, a skip reporting
+  success;
 - read the `generate`, `oral` and **`oralReport`** namespaces' French, with the rest of Phase 7's R8 review.
 
 **Named, not scheduled:**
@@ -316,8 +319,9 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
   (D148);
 - **a rendered preview on a `content/` pull request** (architecture.md §17, D152);
 - **home's exam half's statement end to end**: no hermetic spec builds an onboarded user who has sat an exam (D146);
-- **journey 4's flake**: after `setFixedTime` moves two days on, the review screen sometimes reads "Nothing due". It fails 3 in
-  6 on `origin/main` (session log, 29 September 2026).
+- **a mounted review screen re-reading the queue when the day changes**: left open overnight, or clicked while already on it,
+  `/review` still shows yesterday's queue. It is ordinary Next behaviour, and it was found while fixing journey 4's flake,
+  which was the test's fault (session log, 29 September 2026, cleanup slice).
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
@@ -5377,11 +5381,226 @@ amended in place
   unchanged, since every permitted source licence is compatible with CC BY-NC-SA. Making the repo public stays with the
   human.
 
+### D154 — TypeScript 6, and every build states its ambient `types`
+**Date:** 29 September 2026 · **Status:** accepted (cleanup slice, human chose to take the major)
+
+- **What broke.** TypeScript 6.0 no longer loads every `@types/*` package it can find. Dependabot's PR (#44) failed at
+  `packages/testing/src/simulator/network.ts`: it could not find `setImmediate`.
+- **The fix.**
+  - `tsconfig.base.json` now sets `"types": []`, TS 6's own recommended default. A package that really runs on Node opts
+    in with `"types": ["node"]`.
+  - Two builds opt in: `packages/testing` and `apps/factory`.
+  - All five other packages' `tsconfig.vitest.json` opt in too, because their tests read fixtures and goldens from disk.
+    Their `tsconfig.json` builds do not.
+  - `apps/web` needed no change, because Next's own types bring Node's in.
+  - The #44 branch was closed, and this branch carries the bump in every `package.json`.
+- **What it buys.** "No `node:*`" in `@palier/domain` and "zero Node core" in `@palier/engine` were lint and
+  dependency-cruiser rules. Now the compiler enforces them as well.
+  - **Proven to bite:** `process.env` appended to `engine/src/index.ts`, and a `node:fs` import appended to
+    `domain/src/index.ts`, each failed `tsc -b` with TS2591. Both were reverted.
+  - Both packages' `CLAUDE.md` say so.
+- **`@types/node` stays a root devDependency.** It resolves from the root's `node_modules` for every package, as it did
+  before. A `types` entry is not an import, so the strict-isolation rule is unchanged.
+- **Nothing else in TS 6 fired.** `strict`, `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes` are unchanged.
+  The tooling's peer ranges already accept 6.0: typescript-eslint `<6.1.0` and dependency-cruiser `>=3.6`.
+
+### D155 — the dev-only advisories are overridden, not waited on; Dependabot ignores two majors
+**Date:** 29 September 2026 · **Status:** accepted. Supersedes D135's "Dependabot will propose the updates"
+
+- **Why D135's expectation failed.** Seven alerts were open, all dev-only and transitive:
+  - `tmp` twice, `uuid` and `extract-zip` twice under `@lhci/cli` 0.15.1;
+  - `qs` under Stryker's `typed-rest-client`;
+  - `esbuild` 0.18 under `drizzle-kit`'s deprecated `@esbuild-kit` loader.
+
+  Every parent is on its latest release and pins the vulnerable version, so Dependabot had nothing to propose.
+- **The fix is scoped `overrides` in `pnpm-workspace.yaml`**, each commented with its GHSA:
+  - `@lhci/cli>tmp` and `external-editor>tmp` go to `^0.2.6`;
+  - `@lhci/cli>uuid` goes to `^11.1.1`;
+  - `typed-rest-client>qs` goes to `^6.15.2`;
+  - `@esbuild-kit/core-utils>esbuild` goes to `^0.25.0`.
+
+  No package is added. Each was checked against the API its parent calls: lhci uses only `uuid.v4()` and
+  `tmp.fileSync`, and external-editor uses `tmp.tmpNameSync`.
+
+  Smoke checks: `lhci --version` answers; `drizzle-kit generate --dialect=postgresql` wrote both tables into a temporary
+  directory; the Lighthouse step runs in the medium lane.
+- **`extract-zip` ≤ 2.0.1 has no patched release** (GHSA-7pqw-9j4j-h8q3, GHSA-jmr9-qjv8-65gv). Both alerts are dismissed
+  on GitHub as tolerable risk. It unpacks only the Chrome download on CI's Lighthouse step, and never touches user input.
+  **Revisit when** `@puppeteer/browsers` drops it or a fix ships.
+- **`pnpm audit` over the whole tree**, dev included, went from those seven to the two `extract-zip` entries only. The
+  fast lane's `--prod` gate is unchanged.
+- **The Dependabot queue.**
+  - #41 (the minor-and-patch group) and #40 (`github-script` v9) merged green. v9's breaking change is
+    `require('@actions/github')`, which our scripts never call.
+  - #43 (`jsdom` 30) asks for Node `^22.22.2`, so `.nvmrc` moved from 22.19.0 to 22.23.3, the latest 22.
+  - #42 (`@types/node` 26) was closed, because the types track the runtime's major.
+  - `.github/dependabot.yml` now ignores semver-majors of `@types/node` (it moves with the runtime) and of
+    `eslint`/`@eslint/js` (D8).
+
+### D156 — the nightly lane: a lane-wide timeout, and one issue per failing job
+**Date:** 29 September 2026 · **Status:** accepted
+
+- **Why it was red.** The nightly lane failed every night from 25 to 29 September and opened five identical issues (#24,
+  #29, #33, #36, #46).
+  - On four of those nights, two tie-order properties timed out at Vitest's 5-second default under 10,000 runs, at 5.4 to
+    7.6 s: `calculateTrend` and `weakestSubSkills`, "…in any order, even when their times tie". Integration and E2E never
+    ran after them.
+  - On the fifth night they happened to pass, and Integration found three sync-simulator seeds (D157).
+- **The fix is `testTimeout: 300_000` in `vitest.config.mts`, only when `CI_LANE=nightly`.** It keys off the same variable
+  as `vitest.setup.mts`'s `numRuns`. The lane is "unbounded in time" (§6.5), so the default was measuring the runner's
+  speed. Fast and medium keep 5 s, where a slow test is a bug. It is one root setting rather than a timeout per test, so a
+  new property does not have to remember it.
+  - **Proven to reach the projects:** with the value set to 1 ms, the nightly run of the trend file failed "Test timed out
+    in 1ms".
+- **Both failure steps in `nightly.yml`** now look for an open `nightly` issue with the same title prefix. If one exists,
+  they comment the run on it; otherwise they open one. A red week is one thread. The scripts were syntax-checked from the
+  parsed YAML. A real failing run will be the first to exercise the comment path.
+
+### D157 — a registration answer never overwrites an identity the device gained while it was in flight
+**Date:** 29 September 2026 · **Status:** accepted. **Found by the sync simulator** (seeds 54693 and 72951, 3 devices; 91998, 2
+devices; nightly lane, 100,000 seeds)
+
+- **The defect.** `requestPairCode` read `identity === null`, awaited `registerDevice`, and wrote the answer without looking
+  again. If the device's account changed during that round trip, the stale answer overwrote it.
+- **All three seeds follow the same sequence:**
+  1. Another device asks the victim for a code before the victim's first registration is answered.
+  2. The victim registers by syncing and pushes its work.
+  3. It redeems a code, and the response is lost after the server applied it. The server has moved the device and dropped
+     the old account, which is now orphaned, along with everything the device pushed there. D74's flag is set.
+  4. The held registration lands and writes the new account's identity, but keeps the old ledger.
+  5. The next sync asks the server, gets that same account back, and sees no change, so the ledger stays. Every record
+     pushed to the dropped account stays "clean" and never reaches the new one.
+
+  **The result is permanent, silent loss of a device's early history.**
+- **Why the attempt ids repeat across seeds.** Each device's counter starts at `(i+1)·2^20` whatever the seed, so these are
+  the victim's first session, not a collision.
+- **It is reachable in the app, rarely.** "Add a device" and "Join" sit on one screen (`SyncSettings.tsx`), and neither is
+  serialised against the other or against the background runner.
+- **The fix.** `requestPairCode` re-reads the state when the answer arrives.
+  - It writes the identity only if the device still has none.
+  - An answer naming another account is trusted neither way: it sets `accountUnconfirmed`, and the next sync settles it by
+    D74's rule.
+  - The same account changes nothing.
+- **Alternatives rejected:**
+  - *Reset the ledger in `requestPairCode`.* It cannot know whether the other writer already handled the ledger. D74's flag
+    is the one path that asks the server and resets only on a real move.
+  - *Serialise sync-state writes in `apps/web`.* That would leave the use case, and the simulator, with the race.
+  - *Compare-and-set on `SyncStateStore`.* That is a port change for one call site, and the re-read has the same
+    one-store-read window D75 accepted.
+- **Residual, recorded rather than closed.** `syncNow`'s first-registration branch has the same shape. A pairing that
+  succeeds while a first sync's `registerDevice` is in flight could leave a wrong local account id. It loses no data, since
+  pairing resets the ledger, and the simulator cannot reach it: a device waits for its own sync before pairing. **Revisit
+  when** a store port gains transactions, or the device list is seen showing the wrong account.
+- **Tests** (`sync-account.test.ts`):
+  - "does not overwrite an account the device joined while its registration was in flight, so its history still reaches
+    the account (D157)", which failed first;
+  - "marks its account unconfirmed when a late registration answer names another account, and its next sync settles
+    which", which failed first;
+  - "leaves alone the identity a sync gave the device while its registration was in flight, when both name one account",
+    which guards the third branch.
+
+  The three seeds are in `REGRESSION_SEEDS`, and `packages/app/CLAUDE.md` gains the rule.
+- **Proven to bite.** With the fix reverted, the three regression seeds (3 failed in `run.test.ts`) and the first two new
+  tests fail. With it in place, 2,000 seeds on the integration project pass.
+
+### D158 — the adapters' errors name themselves with literals: a fix that never merged, recovered
+**Date:** 29 September 2026 · **Status:** accepted. **Found by the branch cleanup**, and first written on 26 September as
+"D101" on `dougkeefe/next-progress-slice-v1`
+
+- **The defect, live on `main`.** `OpenAiError` and `BankLoadError` set `this.name = new.target.name`. A production build
+  minifies class names, so the name read as a mangled letter.
+  - `features/key/key-view.ts` tells key-check results apart by `error.name` (`"InvalidApiKeyError"`, `"RateLimitError"`),
+    because the error crosses the lazily loaded container's chunk.
+  - So on the deployed site, a rejected key or a rate limit read as the generic failure, and never as "OpenAI did not
+    accept this key".
+- **How it was lost.** A live key found it on 26 September. The fix was committed to Phase 4 Slice 1's branch *after* that
+  branch's PR (#28) had merged, so it never reached `main`. The number D101 then went to the cost ledger. Before deleting
+  the merged branches, the cleanup checked each branch's tip against its PR's merged head. This one branch had one commit
+  more.
+- **Recovered as it was written.**
+  - Every class in `adapters/openai/errors.ts` and `adapters/bank/errors.ts` gets `override name = "…"`.
+  - A unit test pins each name.
+  - `key-states-production.spec.ts` drives each key-check result on the minified build.
+  - A note goes in both `CLAUDE.md`s.
+
+  Only the number changed. A scan of every `extends …Error` class in `packages/*/src` and `apps/*/src` finds none left
+  without a literal name.
+- **Proven to bite:** with `main`'s `openai/errors.ts` built, the spec fails: the status "OpenAI did not accept this key."
+  never appears. With the fix, it passes.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 29 September 2026 — `dougkeefe/dependabot-cleanup-slice` (cleanup slice, D154–D158)
+
+**Asked for by the human** before Phase 7 Slice 4: clear what was lingering.
+
+**Changed:**
+- **The Dependabot queue is empty** (D155):
+  - #41 (the minor-and-patch group) and #40 (`github-script` v9) merged;
+  - #42 (`@types/node` 26) closed;
+  - #44 (TypeScript 6) closed and superseded here (D154);
+  - #43 (`jsdom` 30) merged green, and `.nvmrc` moved to 22.23.3 for it. `pnpm verify` passed again after merging it in:
+    220 files, 3369 passed.
+- **Dependabot alerts:** five fixed by scoped `pnpm` overrides, and the two `extract-zip` alerts dismissed as tolerable risk.
+  They close on GitHub when this merges.
+- **The nightly lane's two causes are fixed:**
+  - the lane-wide timeout (D156);
+  - a real sync data-loss bug in `requestPairCode`, which three simulator seeds found (D157, now regression seeds).
+
+  Its five duplicate issues (#24, #29, #33, #36, #46) close with this PR, and a later failure comments instead of opening
+  another.
+- **Journey 4's flake was the test.** A client-side `Link` click resolves when the click is sent, not when the navigation
+  commits. Under parallel load, the "Review" click overtook the pending navigation to "Today", which made it a navigation to
+  the page already on screen. The review screen never remounted and kept the "Nothing due" it read two days earlier.
+
+  An instrumented copy showed it in every failure: no `pushState` to `/en/home`, the original heading node still mounted,
+  and IndexedDB holding six rows due 25 September under a page clock of 26 September. The data and the clock were right
+  every time. The test now waits for Today's "Review queue" heading.
+
+  That a mounted review screen doesn't re-read the queue when the day changes is named, not built.
+- **Bookkeeping:**
+  - the header and status row say Slice 3 (#47) and the relicense (#48) merged;
+  - the scaffolding checklist names ADR 23's licences;
+  - the done human items are struck: private vulnerability reporting enabled (confirmed through the API), and Dependabot
+    watched.
+  - This entry's first draft also struck the smoke key as set, because the 28 and 29 September live-smoke jobs read
+    "success". They had skipped: a skip reports success. The key is not set, and the item is back under *Also for the
+    human*.
+- **Branches (human: "clean up merged branches, yes").**
+  - 35 merged `dougkeefe/*` branches were deleted from origin. Each one's tip was first checked to equal its PR's merged
+    head.
+  - "Automatically delete head branches" is now on.
+  - `dougkeefe/next-progress-slice-v1` failed the check: its tip was one commit past #28's head. That commit is a
+    production fix that never merged, now recovered as D158. The branch is kept until this PR merges.
+
+*Next, decided* is unchanged: Phase 7 Slice 4.
+
+**Evidence:**
+
+```
+pnpm verify                → check-types, lint, boundaries (456 + 274 modules, no violations),
+                             test: 220 files, 3369 passed, 8 todo; coverage thresholds met; exit 0
+CI=1 pnpm verify:medium    → integration 7 files, 51 passed; Playwright 84 passed (1.4m); exit 0
+pnpm --filter @palier/web bundle-size  → shared first-load JS 166.1 KB of 180.0 KB
+pnpm --filter @palier/web lighthouse   → 17 URLs, 85 runs, assertions pass; exit 0
+pnpm audit (whole tree)    → 4 high (2 ignored: the `content` false positives, D135) = extract-zip ×2 only
+PALIER_INTEGRATION=1 PALIER_SIM_SEEDS=5000 vitest run --project integration-testing → 1 passed (138 s)
+CI_LANE=nightly vitest run trend-calculator.property + weakest-sub-skills.property   → 4 passed
+  … with testTimeout set to 1 ms                     → "Test timed out in 1ms" (the setting reaches the projects)
+journey 4, --repeat-each=10 before                   → 6 failed, 4 passed
+journey 4, --repeat-each=20; --repeat-each=30 --workers=8 after → 20 passed; 30 passed
+D157 fix reverted → regression seeds 54693, 72951, 91998 fail (run.test.ts: 3 failed, 39 passed)
+pnpm verify (with D158)    → 221 files, 3377 passed, 8 todo; exit 0
+key-states-production.spec.ts --project=offline → 1 passed; with main's openai/errors.ts built → 1 failed
+  ("OpenAI did not accept this key." never shown)
+gh workflow run nightly.yml --ref dougkeefe/dependabot-cleanup-slice (run 36614291646, before D158)
+  → success: full property runs, Integration (100,000 simulator seeds), E2E every browser; the live smoke skipped
+    (no OPENAI_SMOKE_KEY)
+```
 
 ### 29 September 2026 — `dougkeefe/noncommercial-license` (relicensed non-commercial, D153)
 

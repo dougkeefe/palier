@@ -102,6 +102,111 @@ describe("requestPairCode", () => {
 
     expect(register).not.toHaveBeenCalled();
   });
+
+  it("does not overwrite an account the device joined while its registration was in flight, so its history still reaches the account (D157)", async () => {
+    const server = fakeServer();
+    const a = await aRegisteredDevice(server.transport("secret-a"));
+    await a.attempts.append(anAttempt("from-a"));
+    await syncNow({ label: "Laptop" }, a);
+    const { code } = await requestPairCode({ label: "Laptop" }, a);
+    const b = aDevice(server.transport("secret-b"));
+    const real = b.transport;
+    // The registration reaches the server only when released, as a slow network delivers it.
+    let release = (): void => undefined;
+    const slow: SyncTransport = {
+      ...real,
+      registerDevice: (label) =>
+        new Promise((resolve, reject) => {
+          release = () => {
+            real.registerDevice(label).then(resolve, reject);
+          };
+        }),
+    };
+    const lostAnswer: SyncTransport = {
+      ...real,
+      redeemPairCode: async (c, label) => {
+        await real.redeemPairCode(c, label);
+        throw new SyncUnavailableError("response lost");
+      },
+    };
+    // Asked for a code before its first sync: the registration is still on its way…
+    const asking = requestPairCode({ label: "Phone" }, { ...b, transport: slow });
+    // …while the device registers by syncing, pushes its own work, and joins `a`'s
+    // account by a redeem whose answer is lost.
+    await b.sessions.create(done);
+    await b.attempts.append(anAttempt("from-b"));
+    await syncNow({ label: "Phone" }, b);
+    await expect(pairDevice({ code, label: "Phone" }, { ...b, transport: lostAnswer })).rejects.toThrow(SyncUnavailableError);
+    release();
+    await asking;
+    await syncNow({ label: "Phone" }, b);
+    await syncNow({ label: "Laptop" }, a);
+
+    expect((await b.syncState.state()).identity?.accountId).toBe(server.accountOf("secret-a"));
+    expect((await a.attempts.all()).map((x) => x.id).sort()).toEqual(["from-a", "from-b"]);
+  });
+
+  it("leaves alone the identity a sync gave the device while its registration was in flight, when both name one account", async () => {
+    const b = aDevice(fakeServer().transport("secret-b"));
+    const real = b.transport;
+    let release = (): void => undefined;
+    const slow: SyncTransport = {
+      ...real,
+      registerDevice: (label) =>
+        new Promise((resolve, reject) => {
+          release = () => {
+            real.registerDevice(label).then(resolve, reject);
+          };
+        }),
+    };
+    const asking = requestPairCode({ label: "Phone" }, { ...b, transport: slow });
+    await b.sessions.create(done);
+    await syncNow({ label: "Phone" }, b);
+    const synced = await b.syncState.state();
+    release();
+    await asking;
+
+    expect(await b.syncState.state()).toEqual(synced);
+  });
+
+  it("marks its account unconfirmed when a late registration answer names another account, and its next sync settles which", async () => {
+    const server = fakeServer();
+    const a = await aRegisteredDevice(server.transport("secret-a"));
+    const { code } = await requestPairCode({ label: "Laptop" }, a);
+    const b = aDevice(server.transport("secret-b"));
+    const real = b.transport;
+    // This registration reaches the server first, into an account of its own, but its
+    // answer comes back only after the device has paired into `a`'s.
+    let release = (): void => undefined;
+    let reached = (): void => undefined;
+    const atServer = new Promise<void>((resolve) => {
+      reached = resolve;
+    });
+    const lateAnswer: SyncTransport = {
+      ...real,
+      registerDevice: async (label) => {
+        const identity = await real.registerDevice(label);
+        reached();
+        return new Promise((resolve) => {
+          release = () => resolve(identity);
+        });
+      },
+    };
+    const asking = requestPairCode({ label: "Phone" }, { ...b, transport: lateAnswer });
+    await atServer;
+    await pairDevice({ code, label: "Phone" }, b);
+    release();
+    await asking;
+    const answered = await b.syncState.state();
+    await syncNow({ label: "Phone" }, b);
+
+    expect({ account: answered.identity?.accountId, unconfirmed: answered.accountUnconfirmed }).toEqual({
+      account: server.accountOf("secret-a"),
+      unconfirmed: true,
+    });
+    expect((await b.syncState.state()).accountUnconfirmed).toBe(false);
+    expect((await b.syncState.state()).identity?.accountId).toBe(server.accountOf("secret-a"));
+  });
 });
 
 describe("pairDevice", () => {

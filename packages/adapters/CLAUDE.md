@@ -91,6 +91,9 @@ completion adds to it, a retry included, and a 2xx answer is billed before its c
 failed-but-billed call still reports its tokens, and no call inherits an earlier one's. With `pricing`, the
 summed tokens are priced into `costUsd`.
 
+**Every error class names itself with a string literal** (`override name = "…"`), never
+`new.target.name`: the UI matches errors by name, and a production build minifies class names (D158).
+
 **The Dexie `KeyVault` holds a tab-only key in its closure** (D98): never written, and a put deletes any
 stored ciphertext first. The closure is the tab's because the composition root builds one vault per
 page load.

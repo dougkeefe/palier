@@ -4,7 +4,10 @@ Types, invariants, content schemas and the exam profile. The bottom of the depen
 graph (`implementation-plan.md` §3.1).
 
 **May import** `zod`, and nothing else — no workspace package, no `node:*` core module, no
-framework. `.dependency-cruiser.cjs` enforces all three.
+framework. `.dependency-cruiser.cjs` enforces all three, and the compiler backs the second: the
+build loads no ambient types (`"types": []` from `tsconfig.base.json`), so `process`, `Buffer` or a
+`node:` import fails `tsc -b`. Only `tsconfig.vitest.json` adds `node`, because tests read fixtures
+from disk (progress.md D154).
 
 ## Invariants
 

@@ -41,8 +41,10 @@ re-exported from `src/index.ts` — the package's public surface is the barrel, 
 path, so a new algorithm is not done until it is exported there.
 
 **May import** `@palier/domain`, and nothing else. **Zero npm dependencies and zero Node
-core modules, by design and by lint rule.** If you need a library here, the code probably
-belongs in `@palier/app`.
+core modules, by design, by lint rule and by the compiler:** the build loads no ambient types
+(`"types": []`), so a Node global fails `tsc -b`, and only `tsconfig.vitest.json` adds `node` for the
+tests' fixture reads (progress.md D154). If you need a library here, the code probably belongs in
+`@palier/app`.
 
 ## Invariants
 

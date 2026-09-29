@@ -166,8 +166,11 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   transit sets `accountUnconfirmed` and nothing else**, because the server may or may not have moved
   the device. The next sync asks, through idempotent registration, and resets the ledger only if the
   account really changed (D74). Never reset on a failure that might not have reached the server: every
-  record would merge as concurrent, and other devices' newer work would roll back. Both were found by the sync simulator in
-  `@palier/testing` (D76). `AttemptStore.recent` returns the highest ids, oldest first, compared by
+  record would merge as concurrent, and other devices' newer work would roll back. **An identity is
+  never written from a registration answer if the device gained one while that call was in flight**
+  (`requestPairCode`): an identity written without its ledger reset hides a lost redeem from D74's
+  check. An answer naming another account sets `accountUnconfirmed` instead (D157). All three were
+  found by the sync simulator in `@palier/testing` (D76). `AttemptStore.recent` returns the highest ids, oldest first, compared by
   code unit, in every implementation (D73). Sync failure is an outcome (`unavailable`, `removed`),
   never a throw into study (§11). Registration waits for the first completed session or submitted mock
   exam (§9.3).

@@ -41,18 +41,33 @@ jobs:
       - name: E2E, every browser
         run: pnpm run test:e2e
 
+      # One open issue per failing job, not one a night: a later failure comments on the issue
+      # that is still open, so five red nights read as one thread (progress.md D156).
       - name: Open an issue on failure
         if: failure()
         uses: actions/github-script@v9
         with:
           script: |
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `Nightly lane failed on ${context.sha.slice(0, 7)}`,
-              body: `The nightly lane failed. Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
-              labels: ['nightly'],
+            const prefix = 'Nightly lane failed';
+            const sha = context.sha.slice(0, 7);
+            const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const open = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner, repo: context.repo.repo, state: 'open', labels: 'nightly',
             });
+            const existing = open.find((issue) => issue.title.startsWith(prefix));
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo, issue_number: existing.number,
+                body: `Failed again on ${sha}. Run: ${run}`,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title: `${prefix} on ${sha}`,
+                body: `The nightly lane failed. Run: ${run}`,
+                labels: ['nightly'],
+              });
+            }
 
   live-smoke:
     # The nightly live smoke (Phase 4 CI gate, progress.md D112): one real key check, three set
@@ -108,10 +123,23 @@ jobs:
             const cause = process.env.SMOKE_OUTCOME === 'failure'
               ? 'A live OpenAI call failed, or a configured model is no longer listed.'
               : 'The job failed before the smoke ran (checkout, install or build).';
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `Nightly live smoke failed on ${context.sha.slice(0, 7)}`,
-              body: `${cause} Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
-              labels: ['nightly'],
+            const prefix = 'Nightly live smoke failed';
+            const sha = context.sha.slice(0, 7);
+            const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const open = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner, repo: context.repo.repo, state: 'open', labels: 'nightly',
             });
+            const existing = open.find((issue) => issue.title.startsWith(prefix));
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo, issue_number: existing.number,
+                body: `Failed again on ${sha}. ${cause} Run: ${run}`,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title: `${prefix} on ${sha}`,
+                body: `${cause} Run: ${run}`,
+                labels: ['nightly'],
+              });
+            }

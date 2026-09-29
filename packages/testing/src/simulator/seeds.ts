@@ -42,4 +42,25 @@ export const REGRESSION_SEEDS: readonly RegressionSeed[] = [
       "D75 — an answer made while the device's own sync was in flight was overwritten by the pull. " +
       "runSyncSimulation({ seed: 7, devices: 2, profile, server: memorySimulatedServer() })",
   },
+  {
+    seed: 54693,
+    devices: 3,
+    found:
+      "D157 — a code requested before the device's first registration was answered overwrote the account a lost redeem had moved it to, so its ledger never reset. " +
+      "runSyncSimulation({ seed: 54693, devices: 3, profile, server: memorySimulatedServer() })",
+  },
+  {
+    seed: 72951,
+    devices: 3,
+    found:
+      "D157 — a code requested before the device's first registration was answered overwrote the account a lost redeem had moved it to, so its ledger never reset. " +
+      "runSyncSimulation({ seed: 72951, devices: 3, profile, server: memorySimulatedServer() })",
+  },
+  {
+    seed: 91998,
+    devices: 2,
+    found:
+      "D157 — a code requested before the device's first registration was answered overwrote the account a lost redeem had moved it to, so its ledger never reset. " +
+      "runSyncSimulation({ seed: 91998, devices: 2, profile, server: memorySimulatedServer() })",
+  },
 ];
