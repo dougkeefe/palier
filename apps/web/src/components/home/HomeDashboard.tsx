@@ -14,6 +14,7 @@ import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { type StudyProfile, daysUntil, minutesFor, planRows, readStudyProfile, sessionSizeFor } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
+import { MilestoneMoment, StreakLine, useEngagement } from "../engagement/Engagement";
 import { NonAffiliation } from "../NonAffiliation";
 import { TrendMeters } from "../practice/TrendMeters";
 
@@ -79,6 +80,7 @@ export function HomeDashboard() {
   const tCommon = useTranslations("common");
   const tSkills = useTranslations("skills");
   const container = useContainer();
+  const engagement = useEngagement(container);
   const [skill, setSkill] = useState<ScoredSkill>("reading");
   // Keyed by the skill it was loaded for, so switching skill reads as loading until
   // the new skill's data arrives, with no reset inside the effect.
@@ -170,6 +172,9 @@ export function HomeDashboard() {
 
           <Card className="app-home__plan">
             <h2>{t("planTitle")}</h2>
+            {engagement === null || container.status !== "ready" ? null : (
+              <StreakLine streak={engagement.streak} container={container.container} />
+            )}
             {dashboard.plan.items.length === 0 ? (
               <div>
                 <p>
@@ -211,6 +216,9 @@ export function HomeDashboard() {
             </Link>
           </Card>
         </div>
+      )}
+      {engagement === null || container.status !== "ready" ? null : (
+        <MilestoneMoment milestones={engagement.milestones} container={container.container} />
       )}
     </div>
   );

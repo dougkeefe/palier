@@ -390,6 +390,24 @@ body {
   }
 }
 
+/* The streak on today's plan (PRD §9): a flame and a count, then a freeze's one-time note. */
+.app-streak {
+  margin: 0 0 0.75rem;
+}
+
+/* A milestone's moment (PRD §9): Coco, then a line, centred in the full-screen dialog. */
+.app-moment {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  max-width: 36rem;
+}
+
+.app-moment .pl-mascot {
+  width: 160px;
+  height: 160px;
+}
+
 .app-countdown {
   font-weight: 600;
   color: var(--primary);

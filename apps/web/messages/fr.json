@@ -929,5 +929,37 @@
     "openIssue": "Ouvrir un signalement sur GitHub",
     "notFoundTitle": "Page introuvable",
     "notFoundBody": "Il n’y a rien à cette adresse. La page a peut-être été déplacée ou le lien contient une erreur."
+  },
+  "engagement": {
+    "streak": "{count, plural, one {Série de # jour} other {Série de # jours}}",
+    "freezeTitle": "Nous avons gardé votre série",
+    "freezeBody": "Vous avez manqué une journée, et votre série a continué. Jusqu’à deux journées manquées par mois ne l’interrompent jamais.",
+    "share": "Partager",
+    "copy": "Copier pour partager",
+    "copied": "Copié. Collez-le où vous voulez.",
+    "shareFailed": "Ça n’a pas fonctionné, mais l’étape franchie reste la vôtre.",
+    "close": "Continuer",
+    "milestones": {
+      "first-exam": {
+        "title": "Votre premier examen simulé",
+        "body": "Un test d’entraînement complet, chronométré et noté selon les seuils publiés. Le premier est le plus difficile à commencer.",
+        "share": "Je viens de faire mon premier examen simulé complet sur Palier, une application d’entraînement gratuite et non officielle pour l’Évaluation de langue seconde fédérale."
+      },
+      "first-oral": {
+        "title": "Votre première séance orale",
+        "body": "Vous avez répondu à voix haute à un examinateur. C’est la partie que la plupart des gens remettent à plus tard, et pas vous.",
+        "share": "Je viens de faire ma première séance d’entraînement oral sur Palier, une application d’entraînement gratuite et non officielle pour l’Évaluation de langue seconde fédérale."
+      },
+      "items-answered": {
+        "title": "{count, number} questions répondues",
+        "body": "Chacune a nourri votre file de révision et votre tendance. Ça fait beaucoup de français.",
+        "share": "J’ai répondu à {count, number} questions d’entraînement sur Palier, une application d’entraînement gratuite et non officielle pour l’Évaluation de langue seconde fédérale."
+      },
+      "first-exam-at-c": {
+        "title": "Un examen simulé au niveau C",
+        "body": "Votre premier test d’entraînement noté au niveau C. C’est un résultat d’entraînement, pas un résultat officiel, mais c’est une preuve réelle.",
+        "share": "Je viens d’obtenir le niveau C à un examen simulé sur Palier, une application d’entraînement gratuite et non officielle pour l’Évaluation de langue seconde fédérale."
+      }
+    }
   }
 }
