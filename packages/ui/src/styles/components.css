@@ -465,6 +465,10 @@
   gap: 16px;
 }
 
+.pl-dialog--full .pl-dialog__heading {
+  font-size: 30px; /* §10.3's scale: a moment, not a confirmation */
+}
+
 .pl-dialog--full .pl-dialog__actions {
   justify-content: center;
 }

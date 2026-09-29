@@ -30,10 +30,11 @@ export const Mascot = ({ pose = "asleep" }: MascotProps): JSX.Element => (
     <path d="M60 34 q14 2 12 14 q-8 -6 -14 -6 z" fill="var(--accent)" />
     {pose === "cheer" ? (
       <>
-        {/* Eyes open, and a wide smile on the chest. */}
+        {/* Eyes open, a blush, and a belly patch where the sleeping pose curls. */}
         <circle cx="42" cy="30" r="4" fill="var(--surface)" />
         <circle cx="43" cy="30" r="2" fill="var(--ink)" />
-        <path d="M32 60 q16 16 32 0" stroke="var(--surface)" strokeWidth="3" fill="none" strokeLinecap="round" />
+        <circle cx="38" cy="40" r="3" fill="var(--accent)" />
+        <ellipse cx="48" cy="66" rx="14" ry="12" fill="var(--surface)" fillOpacity="0.3" />
       </>
     ) : (
       <>

@@ -149,7 +149,12 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(reportRequest?.body).not.toContain(AUDIO_SENTINEL);
   expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
 
+  // The first return home after a spoken session shows its milestone moment once (D159); it is closed as a user would.
   await page.getByRole("link", { name: "Today", exact: true }).click();
+  const moment = page.getByRole("dialog", { name: "Your first spoken session" });
+  await expect(moment).toBeVisible();
+  await moment.getByRole("button", { name: "Keep going" }).click();
+  await expect(moment).toBeHidden();
   await page.getByRole("link", { name: "Review", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 

@@ -5552,6 +5552,10 @@ devices; nightly lane, 100,000 seeds)
 - **The share is text and the app's address**: the Web Share API where `canShare` allows it, else the clipboard with a status,
   else no button. The text names the milestone, "free, unofficial" and the SLE, and nothing about the person. No image, so
   no new dependency.
+- **One journey changed, and why.** The key-leak journey (`key-leak.spec.ts`) returns home after its spoken session, and
+  home now opens the first-oral moment, a modal, a beat after the page renders. Its next click was covered, and the medium
+  lane failed there. The moment was doing what §9 asks, so the journey now expects it and closes it as a user would. No
+  assertion about the key changed.
 
 ### D160 — motion: three duration tokens, one switch for reduced motion and exam mode, and transform only
 **Date:** 29 September 2026 · **Status:** accepted; Phase 7 Slice 4
@@ -5621,6 +5625,52 @@ table and §5's tree amended in place
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 29 September 2026 — `dougkeefe/smoke-key-next-slice` (Phase 7 Slice 4, D159–D162; the smoke key's first run)
+
+**The smoke key.** The human set `OPENAI_SMOKE_KEY` (`gh secret list`: set 2026-09-29T21:00Z). The nightly was dispatched on
+`main` by hand (run 36631552668), and **the live smoke ran on a real key for the first time and passed**:
+15 completions, all accepted on the first try; writing feedback US$0.029, item generation US$0.140, oral practice US$0.004,
+oral assessment US$0.021, about US$0.19 in all. Every configured model id is still listed. The item is struck under *Also
+for the human*.
+
+**Built** (Gate K's Slice 4, D145):
+- **The streak with its silent freeze** (D159):
+  - `localDay`, `streak` and `milestonesReached` in the engine;
+  - `streakReport`, `noteStreakFreeze`, `milestones` and `markMilestoneShown` in the app;
+  - the streak on today's plan, with "We kept your streak" said once, through a synced setting.
+- **The four milestone moments** (D159): full screen on home only, with Coco cheering, and a text-only share (Web Share, else
+  the clipboard).
+- **Motion** (D160): three duration tokens, the band meter's entrance fill, one switch for reduced motion and exam mode,
+  `StreakFlame`, `Mascot`'s `cheer` pose and `Dialog`'s `full` placement.
+- **Self-hosted fonts** (D161): Inter, Figtree and Source Serif 4, committed with their hashes and licences, and the service
+  worker follows stylesheets to them.
+- **The library** (D162): ten written-expression articles as structured JSON, not MDX, at `/library` and
+  `/library/[subSkill]`, with cited French marked for its `lang`, linked from every writing explanation, precached by name.
+- `/privacy` now says the server holds which milestones and streak notes were shown.
+- One journey changed (`key-leak.spec.ts`): it now closes the first-oral moment its spoken session earns (D159).
+
+Nothing is ticked `[x]`: Slice 4 is `[~]` until this merges. *Next, decided* is **Gate L**, the human's three reviews.
+
+**Evidence:**
+
+```
+pnpm verify                → check-types, lint, boundaries (467 + 304 modules, no violations),
+                             test: 234 files, 3485 passed, 8 todo; coverage thresholds met; exit 0
+CI=1 pnpm verify:medium    → integration 7 files, 51 passed; Playwright 93 passed (1.4m); exit 0
+  (first run: 1 failed, key-leak.spec.ts, the milestone moment covering the next click; the journey now closes it)
+pnpm --filter @palier/web bundle-size  → shared first-load JS 166.1 KB of 180.0 KB
+pnpm --filter @palier/web lighthouse   → 19 URLs, 95 runs, assertions pass; lowest medians perf 0.99, a11y 1.0;
+                                         /en/library and /fr/library/agreement 1.0 and 1.0
+gh workflow run nightly.yml --ref main (run 36631552668) → live smoke: success, 15 completions, 15 accepted first try
+engine engagement.ts                   → 100% statements, branches, functions and lines
+app use-cases/engagement.ts            → 100% branches; domain library*.ts → 100% branches
+proven to bite:
+  streak `spent > freezesPerMonth`     → "never freezes more than the allowance…" failed after 5 runs
+  a 300ms transition and an opacity keyframe in components.css → motion.test.ts: 2 failed
+  worker without staticAssetsInCss     → offline spec: no Source Serif woff2 in the cache (1 failed)
+  content/library/pronouns.json removed → library-content.test.ts: 4 failed
+```
 
 ### 29 September 2026 — `dougkeefe/dependabot-cleanup-slice` (cleanup slice, D154–D158)
 
