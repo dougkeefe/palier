@@ -87,3 +87,17 @@ test("sends the baseline security headers with a bank file", async ({ request })
 
   expect(response.headers()).toMatchObject(SECURITY_HEADERS);
 });
+
+/**
+ * `GET /api/health` on the built server (architecture.md §10, progress.md D140): the build and
+ * the bank it serves, uncached. This server has no `DATABASE_URL`, which is a working
+ * deployment (ADR 21), so it answers 200 and says so.
+ */
+test("GET /api/health names the build and the bank, and that no database is configured", async ({ request }) => {
+  const response = await request.get("/api/health");
+
+  expect(response.status()).toBe(200);
+  expect(response.headers()["cache-control"]).toBe("no-store");
+  const body = (await response.json()) as { build: string; bank: number; database: string };
+  expect(body).toEqual({ build: expect.stringMatching(/^(local|[0-9a-f]{7})$/) as unknown, bank: Number(/v(\d+)/.exec(BANK_MANIFEST)?.[1]), database: "not-configured" });
+});

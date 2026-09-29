@@ -41,6 +41,19 @@ export const reportIssueUrl = (report: ItemReport): string => {
 };
 
 /**
+ * A prefilled issue for an error screen (architecture.md §16, progress.md D141). It carries
+ * the diagnostic bundle exactly as the screen showed it, which holds no free text by
+ * construction (`lib/diagnostic.ts`), and asks the user what they were doing, which they
+ * write themselves on GitHub. Nothing leaves the device until they submit it.
+ */
+export const errorIssueUrl = (report: { readonly errorName: string; readonly bundle: string }): string => {
+  const title = `Error report: ${report.errorName}`;
+  const body = ["```", report.bundle, "```", "", "**What were you doing when it happened (optional):**", ""].join("\n");
+  const params = new URLSearchParams({ title, body, labels: "error-report" });
+  return `${REPOSITORY_URL}/issues/new?${params.toString()}`;
+};
+
+/**
  * The one-tap contribution for a runtime-generated item (architecture.md §8.3, progress.md
  * D111): a prefilled GitHub issue carrying the whole item, so a maintainer can put it through
  * the factory's gates. It has no bank version, because it never came from the bank, and it says

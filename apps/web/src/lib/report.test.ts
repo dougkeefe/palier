@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { Item } from "@palier/domain";
 import { itemId } from "@palier/domain";
 
-import { REPORT_REASONS, REPOSITORY_URL, contributeIssueUrl, exportFileName, reportIssueUrl } from "./report";
+import { REPORT_REASONS, REPOSITORY_URL, contributeIssueUrl, errorIssueUrl, exportFileName, reportIssueUrl } from "./report";
 
 describe("reportIssueUrl", () => {
   const url = new URL(
@@ -112,5 +112,25 @@ describe("contributeIssueUrl (D111)", () => {
 describe("exportFileName", () => {
   it("dates the file by the export's own timestamp", () => {
     expect(exportFileName("2026-09-24T18:30:00.000Z")).toBe("palier-export-2026-09-24.json");
+  });
+});
+
+describe("errorIssueUrl", () => {
+  const bundle = "Palier diagnostic bundle\nBuild: d9fbed6\nError: TypeError";
+  const url = new URL(errorIssueUrl({ errorName: "TypeError", bundle }));
+
+  it("opens a new issue on the project's repository, titled by the error's name", () => {
+    expect(`${url.origin}${url.pathname}`).toBe(`${REPOSITORY_URL}/issues/new`);
+    expect(url.searchParams.get("title")).toBe("Error report: TypeError");
+  });
+
+  it("carries the bundle exactly as shown, fenced, and asks what the user was doing", () => {
+    const body = url.searchParams.get("body") ?? "";
+    expect(body).toContain(`\`\`\`\n${bundle}\n\`\`\``);
+    expect(body).toContain("**What were you doing when it happened (optional):**");
+  });
+
+  it("labels the issue as an error report", () => {
+    expect(url.searchParams.get("labels")).toBe("error-report");
   });
 });

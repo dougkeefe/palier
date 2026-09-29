@@ -50,6 +50,26 @@ export const localesFrom = (source) => {
 };
 
 /**
+ * The copy `global-error.tsx` shows, per locale: the `errors` namespace of each message file
+ * and nothing else (progress.md D141). `global-error` replaces the root layout, so it has no
+ * next-intl provider, and it loads with every page, so importing whole message files would
+ * put about 32 KB gzipped into every page for a screen almost nobody sees. The messages stay
+ * the one source; this file is written from them before `dev` and `build`, committed, and
+ * held equal to them by `src/components/errors/global-error-copy.test.ts`.
+ * @param {Record<string, { errors?: unknown }>} messagesByLocale
+ * @returns {string}
+ */
+export const globalErrorCopyOf = (messagesByLocale) => {
+  /** @type {Record<string, unknown>} */
+  const copy = {};
+  for (const [locale, messages] of Object.entries(messagesByLocale)) {
+    if (messages.errors === undefined) throw new Error(`prepare-public: messages/${locale}.json has no errors namespace`);
+    copy[locale] = messages.errors;
+  }
+  return `${JSON.stringify(copy, null, 2)}\n`;
+};
+
+/**
  * `BANK_BASE_PATH` from `src/lib/bank-version.ts`, so the served location has one source.
  * @param {string} source
  * @returns {string}
@@ -176,6 +196,13 @@ const main = async () => {
   for (const manifest of bankManifests) {
     stampInputs.push(await readFile(join(publicDir, ...manifest.split("/").filter(Boolean)), "utf8"));
   }
+
+  // 3. The copy global-error.tsx shows.
+  const messagesByLocale = {};
+  for (const locale of locales) messagesByLocale[locale] = JSON.parse(await readFile(join(WEB_ROOT, "messages", `${locale}.json`), "utf8"));
+  const copyPath = join(WEB_ROOT, "src/components/errors/global-error-copy.json");
+  const copy = globalErrorCopyOf(messagesByLocale);
+  if ((await readFile(copyPath, "utf8").catch(() => "")) !== copy) await writeFile(copyPath, copy);
 
   const compiled = ts.transpileModule(workerSource, {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
