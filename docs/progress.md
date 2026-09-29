@@ -118,9 +118,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/smoke-key-next-slice` | **Phase 7 Slice 4 — motion, engagement and the library** (D145): the streak with its silent freeze, the milestone moments, the motion pass, self-hosted fonts, ten written-expression library articles; and the smoke key's first nightly run. | 29 September 2026 |
+| `dougkeefe/fix-language-toggle-crash` | **Defect: the language toggle lands on the global error page** in production (D163). | 29 September 2026 |
 
-*(The prior rows — the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -226,7 +226,8 @@ done.** What remains of 1.0 is the human's: Gate L, then Gate M.
 
 Phase 5's deferred cost check (D130) and the product pilot (Gate E, D97) still run beside it, both the human's.
 
-**Next: Gate L — the human reviews (human).** No agent slice is queued ahead of it. It is three reads:
+**Next: Gate L — the human reviews (human).** No agent slice is queued ahead of it; the language-toggle defect the human
+found (D163) is fixed on `dougkeefe/fix-language-toggle-crash` and merges first. It is three reads:
 1. **R8's French review** by a fluent speaker, of every interface string (`apps/web/messages/fr.json`), with:
    - the six workshop prompts (D107) and the bank's register (ADR 19);
    - the about page and the privacy notice (D147);
@@ -5620,11 +5621,58 @@ table and §5's tree amended in place
 - **The route lists** gained the library: Lighthouse (19 URLs), `csp-production.spec.ts`'s pages, and the titles journey.
 - **The articles are the agent's drafts**, French included, and are Gate L's to read. Reading's articles come after 1.0.
 
+### D163 — a change of locale is a document load, never a soft navigation
+**Date:** 29 September 2026 · **Status:** accepted; a defect the human found in production. Amends D134's reach, not its policy
+
+- **The defect.** On the production build, every click on "Français" or "English" rendered `global-error`: "Palier stopped
+  working". A reload showed the right page. `LanguageToggle` was next-intl's `Link` with `locale`, a client-side navigation.
+  - The locale is the root layout's segment. Next keeps it a soft navigation, since `/en` and `/fr` are the same
+    `[locale]/layout.tsx`, but the segment's key changes, so React **remounts the whole root layout**.
+  - React builds any `<script>` it renders on the client by writing `innerHTML` (`<script></script>`) on a wrapper. The
+    remounted layout's Trusted Types `<script>` therefore hit the HTML sink. D134's `default` policy has no `createHTML`,
+    so it threw: `Failed to set the 'innerHTML' property on 'Element': This document requires 'TrustedHTML' assignment`.
+  - **Unseen until now** because the toggle's only test (`smoke.spec.ts`) runs on `next dev`, where Trusted Types is off,
+    and `csp-production.spec.ts` only ever loaded pages with `goto`.
+- **The fix: `onNavigate` cancels the router's navigation and `location.assign` loads the page.** A locale is a new
+  document anyway (its `lang`, its head, a fresh nonce). The href, right-click, middle-click and no-JavaScript behaviour
+  are unchanged.
+  - **The policy is not loosened.** A `createHTML` that let React's wrapper through would reopen the sink D134 closed, for
+    one component's convenience.
+  - **It stays next-intl's `Link`, not a plain `<a>`,** because its click handler writes the locale cookie. The proxy
+    cannot: once the service worker controls the page, a navigation reaches it as the worker's `fetch`, not as a document
+    request, and next-intl's `syncCookie` leaves the cookie alone for those. **Proven to bite:** with a plain `<a>`, the
+    cookie assertion failed (`Received: undefined`).
+- **The test** is in `csp-production.spec.ts`, with the worker in control. It clicks EN→FR→EN on `/about` and checks, both
+  ways, the URL, `lang`, the page's heading, no global-error copy, the cookie, and zero violations. **Red before the fix**:
+  the global-error title was on the page.
+- **The rule** is in `apps/web/CLAUDE.md`: any link that changes the locale is a document load.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 29 September 2026 — `dougkeefe/fix-language-toggle-crash` (a defect: the language toggle, D163)
+
+**The defect**, reported by the human: every click on "Français" / "English" rendered the global error page, and a reload
+recovered. It was reproduced on `next start` and traced to a Trusted Types refusal when the root layout remounts
+(D163). **Fixed** in `LanguageToggle`: `onNavigate` cancels the router's navigation, and `location.assign` loads the
+page. It is still next-intl's `Link`, so the locale cookie is still written. The policy is unchanged.
+
+- A new production-lane test in `csp-production.spec.ts`: red before the fix (the global-error title on the page), green
+  after, 3/3 with `--repeat-each 3`. Its cookie assertion failed against a plain-`<a>` variant, with the worker in control.
+- The rule is in `apps/web/CLAUDE.md`. The merged Slice 4 row (#51) is retired from *In flight*.
+
+*Next, decided* is still **Gate L**, and this merges ahead of it.
+
+**Evidence:**
+
+```
+pnpm verify                → check-types, lint, boundaries (467 + 304 modules, no violations),
+                             test: 234 files, 3485 passed, 8 todo; coverage thresholds met; exit 0
+CI=1 pnpm verify:medium    → integration 7 files, 51 passed; Playwright 94 passed (1.7m); exit 0
+```
 
 ### 29 September 2026 — `dougkeefe/smoke-key-next-slice` (Phase 7 Slice 4, D159–D162; the smoke key's first run)
 
