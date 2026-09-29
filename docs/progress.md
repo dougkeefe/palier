@@ -114,10 +114,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/noncommercial-license` | **Relicense non-commercial** (D153, ADR 23 supersedes ADR 12): PolyForm Noncommercial 1.0.0 for code, CC BY-NC-SA 4.0 for content, "source-available" wording, R13 amended. | 29 September 2026 |
-| `dougkeefe/next-slice-from-progress-v2` | **Phase 7 Slice 3, content, the contribution path and data rights** (D145): the about page and privacy notice, the statement in onboarding and beside every band, the one-page PDF by print stylesheet, the device-removal confirmation and pair-code expiry, the shortcut sheet and the `lang` audit, and the authored-item intake with `CONTRIBUTING.md` and the PR template. | 29 September 2026 |
+| `dougkeefe/yaounde` | **Cleanup slice** (human, 29 September 2026): the Dependabot queue and alerts, TypeScript 6, the red nightly (property timeouts, three sync-simulator seeds, duplicate issues), journey 4's flake, and stale bookkeeping here. | 29 September 2026 |
 
-*(The prior rows — Phase 7 Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
