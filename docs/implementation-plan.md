@@ -666,7 +666,7 @@ The sequencing is risk-driven rather than value-driven. The two things that can 
 - The three CI lanes from 6.5 wired with their time budgets, and the budgets enforced so a slow test is a build failure rather than a slow creep.
 - CI gates: typecheck, lint, dependency-cruiser, unit tests, contrast validation on the token set, i18n key parity, axe on the shell, Lighthouse budget, bundle size.
 - `adr/` committed as written, with a short `adr/README.md` covering the format and the never-edit-only-supersede rule.
-- `LICENSE` (MIT), `LICENSE-CONTENT` (CC BY 4.0) and a `README` that states the non-affiliation position from day one, since the repository is public from the first commit and R5 applies to it too.
+- `LICENSE` and `LICENSE-CONTENT` (MIT and CC BY 4.0 under ADR 12; PolyForm Noncommercial 1.0.0 and CC BY-NC-SA 4.0 since ADR 23) and a `README` that states the non-affiliation position from day one, since the repository is public from the first commit and R5 applies to it too.
 
 **Exit criteria**
 
@@ -1122,7 +1122,7 @@ Which phase satisfies which requirement from `product-requirements.md` section 0
 | R10 | No estimate without evidence and uncertainty | 2 | Unit tests on the minimum-evidence threshold; design review of the readiness card |
 | R11 | Export, import, delete, each in one action | 2 (export and import), 7 (delete everywhere) | E2E journey 6 round-trip |
 | R12 | Key, audio, transcripts and submissions stay local | 4 (key), 5 (audio) | The key-leak test, extended to audio blobs in phase 5 |
-| R13 | Free and open source | 0 (licences committed), 7 (repo public) | Licence files present from the first commit |
+| R13 | Free and source-available, non-commercial | 0 (licences committed), 7 (repo public) | Licence files present from the first commit |
 | R14 | Progress across devices, with an off switch | 2 | E2E journey 8; sync simulator; the settings switch tested |
 
 Two observations worth keeping in view. Every requirement is covered by phase 7, and eleven of the fourteen are covered by the end of phase 3, which is the evidence behind the claim that stopping after phase 3 leaves a complete product rather than a fragment. The three that are not, R1 in full, R12 and part of R11, are all in the AI and oral half of the product.

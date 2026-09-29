@@ -114,6 +114,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/nashville` | **Relicense non-commercial** (D153, ADR 23 supersedes ADR 12): PolyForm Noncommercial 1.0.0 for code, CC BY-NC-SA 4.0 for content, "source-available" wording, R13 amended. | 29 September 2026 |
 | `dougkeefe/next-slice-from-progress-v2` | **Phase 7 Slice 3, content, the contribution path and data rights** (D145): the about page and privacy notice, the statement in onboarding and beside every band, the one-page PDF by print stylesheet, the device-removal confirmation and pair-code expiry, the shortcut sheet and the `lang` audit, and the authored-item intake with `CONTRIBUTING.md` and the PR template. | 29 September 2026 |
 
 *(The prior rows — Phase 7 Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
@@ -713,7 +714,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
 | R11 | Export, import, delete, each in one action | 2, 7 | Phase 2 half verified (24 September 2026): `/settings/data` does each in one action; journey 6 round-trips export → delete → import and finds the same progress. Phase 7's server-side delete waits for sync |
 | R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). **The writing half is satisfied and verified** (26 September 2026, Slice 3): the leak guard follows a submission's text and finds it only in requests to `api.openai.com` and in this device's own copy (the page, the field, `writingSubmissions`), never in a push, a pull, an export, Web Storage or the paired phone; proven to bite three ways (D106). **Runtime-generated items are held the same way** (27 September 2026, Slice 4, D110): a generated stem reaches only OpenAI, in review requests, and this device's `generated` table and page. It never appears in a push, an export, Web Storage or on the paired phone, and no attempt is ever written for it. Audio and transcripts are Phase 5: **the store that holds them is device-local by construction** (27 September 2026, Slice 1, D115). It is never synced and never exported, and a wipe and a delete-everywhere clear it, over both graphs. **The audio half is satisfied and verified** (27 September 2026, Slice 2, D120): each answer's clip reaches only OpenAI's transcription endpoint; the session recording reaches no request at all; and the transcript stays on this device, going back to OpenAI only in the examiner's next question and never to a push, an export, Web Storage or the paired phone. Proven to bite three ways |
-| R13 | Free and open source | 0, 7 | not started |
+| R13 | Free and source-available, non-commercial (amended by the human, 29 September 2026, D153) | 0, 7 | licences committed (PolyForm Noncommercial 1.0.0 and CC BY-NC-SA 4.0, ADR 23); the repo is still private, so the Phase 7 half waits for it going public |
 | R14 | Progress across devices, with an off switch | 2 | satisfied and verified on the hermetic lane (24 September 2026): journey 8 pairs two devices by code and both show the same progress; the switch is tested off, with server deletion offered, in `sync.spec.ts`. A public deployment with a real database is Slice 3 |
 
 Eleven of fourteen are covered by the end of phase 3. That is the evidence behind
@@ -5355,11 +5356,49 @@ amended in place
 - **Named, not scheduled:** architecture.md §17's rendered preview posted on a `content/` pull request. The model review
   of an outside item runs on the next funded bank build (D54), so Gate M's outside submission is ready to take one.
 
+### D153 — Relicensed non-commercial: PolyForm Noncommercial for code, CC BY-NC-SA 4.0 for content
+**Date:** 29 September 2026 · **Status:** accepted (human decision); ADR 23 supersedes ADR 12; R13 amended in
+`product-requirements.md` §0.1
+
+- **Why:** the owner does not want Palier used commercially. MIT and CC BY both allow that. ADR 12's *revisit when* (a
+  source licence incompatible with CC BY) has not happened. The owner's new requirement is the reason, and ADR 23 says so.
+- **What changed:** `LICENSE` is the verbatim PolyForm Noncommercial License 1.0.0 with a `Required Notice:` line, and
+  `LICENSE-CONTENT` is the verbatim CC BY-NC-SA 4.0 legal code. Each file keeps a short preamble on its scope. The root
+  `package.json` carries `"license": "PolyForm-Noncommercial-1.0.0"`.
+- **R13 changed wording:** "free to use and open source" now reads "free to use, and its source publicly available under a
+  non-commercial licence". A non-commercial licence is not OSI open source, so "open-source" becomes "source-available"
+  in the README, `CLAUDE.md`, the docs and the app's `en`/`fr` copy (`site.description`, the non-affiliation statement,
+  the about page's `what` and `licence`). PRD §2's quoted statement is amended to match the component.
+- **Contributions are inbound = outbound** (human choice): no CLA and no grant letting the maintainer relicense.
+  `CONTRIBUTING.md` and the PR template's third checkbox name the new licences.
+- **Clean to do now:** the repo is private and every commit has one author, so no earlier MIT grant has reached anyone.
+  The ten `canada.ca-non-commercial` passages now sit under a content licence that is compatible with their source.
+- **Not changed:** older session-log entries that say MIT (append-only). The factory's licence gate (`harvest.ts`) is
+  unchanged, since every permitted source licence is compatible with CC BY-NC-SA. Making the repo public stays with the
+  human.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 29 September 2026 — `dougkeefe/nashville` (relicensed non-commercial, D153)
+
+**Changed:** `LICENSE` is now the verbatim PolyForm Noncommercial License 1.0.0 and `LICENSE-CONTENT` the verbatim CC BY-NC-SA
+4.0 legal code, each fetched from its publisher and diffed against it. ADR 23 supersedes ADR 12 (only ADR 12's status line
+changed). R13 and the "open-source" wording become "source-available" across the README, `CLAUDE.md`, the docs and the `en`/`fr`
+messages. `CONTRIBUTING.md` and the PR template now name the new licences (inbound = outbound). No test pinned the old copy, so
+no test changed. *Next, decided* is unchanged: Phase 7 Slice 4.
+
+**Evidence:**
+
+```
+tail -n +14 LICENSE | diff - <PolyForm-Noncommercial-1.0.0.md>     → identical
+tail -n +16 LICENSE-CONTENT | diff - <by-nc-sa/4.0/legalcode.txt>  → identical
+pnpm verify  → check-types, lint, boundaries (456 + 274 modules, no violations),
+               test: 220 files, 3363 passed, 8 todo; coverage thresholds met; exit 0
+```
 
 ### 29 September 2026 — `dougkeefe/next-slice-from-progress-v2` (Phase 7 Slice 3: content, the contribution path and data rights)
 

@@ -38,7 +38,7 @@ Section 0.1 lists the requirements. Everything else in this document is design w
 | R10 | The product must never show a proficiency estimate without the evidence and uncertainty behind it. |
 | R11 | A user must be able to export all of their data, import it back, and delete it everywhere, each in one action. |
 | R12 | The user's API key, session audio, oral transcripts and written submissions must never leave the user's device, except to the AI provider the user configured and, for the key only, the single ephemeral-token mint described in ADR 3.\* |
-| R13 | The product must be free to use and open source. |
+| R13 | The product must be free to use, and its source publicly available under a non-commercial licence (ADR 23). |
 | R14 | Progress must be available across a user's devices, and a user must be able to turn that off. |
 
 \* **Amendment, 19 September 2026.** R12 previously read "except to the AI provider they
@@ -57,7 +57,7 @@ Everything below serves these. Where the document says how something looks or be
 
 ## 1. What this is
 
-A free, open-source web app for practising the Public Service Commission's Second Language Evaluation (SLE). It covers the three tested skills (reading comprehension, written expression, oral proficiency), it targets level C in French as a second language first, and it aims for the production polish of a consumer language app while staying faithful to the actual format and register of the real tests.
+A free, source-available web app for practising the Public Service Commission's Second Language Evaluation (SLE). It covers the three tested skills (reading comprehension, written expression, oral proficiency), it targets level C in French as a second language first, and it aims for the production polish of a consumer language app while staying faithful to the actual format and register of the real tests.
 
 Users bring their own OpenAI API key. Everything that costs money runs on their key, in their browser. Progress syncs across a user's devices by default, with no sign-in required and a single switch to turn it off. The project has no server-side AI spend and no revenue model.
 
@@ -94,7 +94,7 @@ This shapes the design, so it comes before the product.
 
 Copy for the standing disclaimer, EN:
 
-> Palier is an independent, open-source study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official.
+> Palier is an independent, source-available study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official.
 
 ---
 
