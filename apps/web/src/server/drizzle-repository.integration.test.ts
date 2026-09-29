@@ -1,3 +1,4 @@
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -43,6 +44,22 @@ describe("drizzleSyncRepository on PGlite", () => {
 
     const revisions = [...a.accepted, ...b.accepted].map((x) => x.revision).sort((x, y) => x - y);
     expect(revisions).toEqual(Array.from({ length: 40 }, (_, i) => i + 1));
+  });
+});
+
+describe("databaseAnswers, hermetic (D140)", () => {
+  it("answers false when the database cannot be built, and tries again on the next request", async () => {
+    const previous = process.cwd();
+    try {
+      // No migrations folder here, so building the PGlite fails.
+      process.chdir(tmpdir());
+      expect(await databaseAnswers({ PALIER_HERMETIC: "1" })).toBe(false);
+      process.chdir(fileURLToPath(new URL("../..", import.meta.url)));
+      expect(await databaseAnswers({ PALIER_HERMETIC: "1" })).toBe(true);
+    } finally {
+      process.chdir(previous);
+      resetSyncApi();
+    }
   });
 });
 

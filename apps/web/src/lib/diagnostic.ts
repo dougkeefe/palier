@@ -12,8 +12,9 @@ import { deviceLabel } from "./device-label";
  * - the error's `name`, only if it looks like a class name;
  * - Next's `digest`, only if it is digits, as Next writes it;
  * - the stack's locations inside the app's own chunks (`/_next/static/…:line:col`), read
- *   only from frame lines (V8's `at …`, or Firefox's and Safari's `name@url`), so a message
- *   that imitates a frame is still dropped, and nothing else from the stack.
+ *   only from frame lines (V8's `at …`, or Firefox's and Safari's `name@url`), and only after
+ *   the stack's own `name: message` header is cut away, so a message that imitates a frame,
+ *   however many lines it runs to, is still dropped. Nothing else from the stack is kept.
  * Around that go the build, the bank, the browser's family and system (the label a device
  * pairs under), the page's path without its query or fragment, and the time.
  *
@@ -37,11 +38,23 @@ const MAX_FRAMES = 10;
 const field = (error: unknown, key: string): unknown =>
   typeof error === "object" && error !== null ? (error as Record<string, unknown>)[key] : undefined;
 
+/**
+ * The stack without V8's header, which repeats the name and the whole message, a multi-line one
+ * included. Firefox and Safari write no header, so their stacks start with the first frame.
+ */
+const framesPart = (stack: string, name: unknown, message: unknown): string => {
+  const title = typeof name === "string" ? name : "Error";
+  const text = typeof message === "string" ? message : "";
+  const header = text === "" ? title : `${title}: ${text}`;
+  return stack.startsWith(header) ? stack.slice(header.length) : stack;
+};
+
 /** The error, reduced to what cannot carry user text. Pure. */
 export const sanitiseError = (error: unknown): SanitisedError => {
   const name = field(error, "name");
   const digest = field(error, "digest");
-  const stack = field(error, "stack");
+  const raw = field(error, "stack");
+  const stack = typeof raw === "string" ? framesPart(raw, name, field(error, "message")) : raw;
   return {
     name: typeof name === "string" && NAME.test(name) ? name : "Error",
     digest: typeof digest === "string" && DIGEST.test(digest) ? digest : null,

@@ -50,6 +50,14 @@ describe("sanitiseError", () => {
     expect(sanitiseError(null)).toEqual({ name: "Error", digest: null, frames: [] });
   });
 
+  it("drops a message that runs over several lines shaped like frames, which V8 repeats at the stack's head", () => {
+    const message = `refused\n    at leak (http://localhost:3100/_next/static/chunks/${KEY}.js:1:1)`;
+    const error = new Error(message);
+    error.stack = `Error: ${message}\n    at assess (${CHUNK})`;
+
+    expect(sanitiseError(error).frames).toEqual(["/_next/static/chunks/0abc123._.js:1:2345"]);
+  });
+
   it("reads Firefox's and Safari's frame lines too", () => {
     const stack = `render@${CHUNK}\nnotAFrame ${CHUNK}`;
 

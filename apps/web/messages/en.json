@@ -839,7 +839,7 @@
     "retry": "Try again",
     "home": "Go to today’s plan",
     "reportHeading": "Tell us about it",
-    "reportBody": "If it keeps happening, you can send us a report. It holds only what is shown below: this build, the item bank, your browser and the page. Never anything you wrote or said, and never your key.",
+    "reportBody": "If it keeps happening, you can send us a report. It holds only what is shown below: this build, the item bank, your browser and the page. It never holds anything you wrote or said, or your key.",
     "details": "See what the report holds",
     "copy": "Copy the report",
     "copied": "Copied.",

@@ -79,6 +79,8 @@ for (const locale of ["en", "fr"] as const) {
     });
     await page.getByRole("button", { name: t("retry") }).click();
     await expect(page.getByTestId("recovered")).toBeVisible();
+    // …and gives the page its title back.
+    await expect(page).toHaveTitle("Palier");
   });
 
   test(`${locale}: the global error screen's view is axe-clean, and says it in the page's language`, async ({ page }) => {

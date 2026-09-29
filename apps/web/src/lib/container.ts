@@ -187,7 +187,7 @@ import {
 
 import aiModels from "./ai-models.json";
 import { BANK_BASE_PATH, BANK_VERSION } from "./bank-version";
-import { type Held, inFlight, wipeCount, writesUntilWiped } from "./in-flight";
+import { type Held, beforeClear, inFlight, wipeCount, writesUntilWiped } from "./in-flight";
 import { webLocksLiveness } from "./oral/liveness";
 import { EXAMINER_VOICE, PRICING } from "./pricing";
 import { selectionSeedFor, systemClock } from "./system-clock";
@@ -583,18 +583,18 @@ function buildUseCases(ports: Ports): UseCases {
     listDevices: () => listDevices({ transport: ports.sync, syncState: ports.syncState }),
     removeDevice: (request) => removeDevice(request, { transport: ports.sync, syncState: ports.syncState }),
     setSyncEnabled: (request) => setSyncEnabled(request, { transport: ports.sync, syncState: ports.syncState }),
-    deleteEverywhere: () => {
-      forgetInFlight();
-      return deleteEverywhere({
+    // The server is deleted first, and a failure there throws before anything here is touched, so the
+    // requests still out are forgotten only as the local wipe begins (D143).
+    deleteEverywhere: () =>
+      deleteEverywhere({
         ...syncDeps(ports),
         vault: ports.vault,
         telemetry: ports.telemetry,
         ledger: ports.costLedger,
-        writing: ports.writing,
-        generated: ports.generated,
-        oral: ports.oral,
-      });
-    },
+        writing: beforeClear(ports.writing, forgetInFlight),
+        generated: beforeClear(ports.generated, forgetInFlight),
+        oral: beforeClear(ports.oral, forgetInFlight),
+      }),
     examForms: () => examForms({ items: ports.items }),
     examInProgress: () => examInProgress({ items: ports.items, examRuns: ports.examRuns }),
     startExam: (request) => startExam(request, examDeps(ports)),

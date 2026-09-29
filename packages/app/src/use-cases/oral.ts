@@ -68,7 +68,11 @@ export const closeAbandonedSessions = async (deps: CloseAbandonedSessionsDeps): 
   const closed: SessionId[] = [];
   for (const session of open) {
     if (live.has(session.id)) continue;
-    await deps.oral.put({ ...session, endedAt, endReason: "interrupted" });
+    // Read again: its page may have ended it, and let go, since the list was read. Stamping the old
+    // copy would lose its last turns and call a completed session interrupted.
+    const current = await deps.oral.get(session.id);
+    if (current === null || current.endedAt !== null) continue;
+    await deps.oral.put({ ...current, endedAt, endReason: "interrupted" });
     closed.push(session.id);
   }
   return closed;

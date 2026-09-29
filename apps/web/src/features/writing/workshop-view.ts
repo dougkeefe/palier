@@ -98,7 +98,8 @@ export type WorkshopAction =
   | { readonly type: "sending" }
   | { readonly type: "saved"; readonly id: string; readonly text: string }
   | { readonly type: "assessed"; readonly submission: WritingSubmission }
-  | { readonly type: "failed"; readonly failure: FeedbackFailure }
+  /** `submissionId` names the request that failed; absent when the save itself failed, before any request. */
+  | { readonly type: "failed"; readonly failure: FeedbackFailure; readonly submissionId?: string }
   | { readonly type: "revise" }
   | { readonly type: "choose" }
   | { readonly type: "reopen"; readonly submission: WritingSubmission; readonly nowMs: number }
@@ -136,7 +137,11 @@ export const workshop = (state: WorkshopState, action: WorkshopAction): Workshop
     case "revise":
       return state.phase === "feedback" ? { phase: "writing", draft: state.draft, request: IDLE } : state;
     case "assessed":
-      return state.phase === "writing" ? { phase: "feedback", draft: state.draft, submission: action.submission } : state;
+      // Only onto the draft it was asked for: a request still out when another prompt was chosen or
+      // another submission reopened must not land its feedback there (D143).
+      return state.phase === "writing" && state.draft.saved?.id === action.submission.id
+        ? { phase: "feedback", draft: state.draft, submission: action.submission }
+        : state;
     default:
       return state.phase === "writing" ? writing(state, action) : state;
   }
@@ -171,6 +176,8 @@ const writing = (
     case "saved":
       return { ...state, draft: { ...state.draft, saved: { id: action.id, text: action.text } } };
     case "failed":
+      // As `assessed`: another submission's failure is not this draft's, and its Try again would pay for this one.
+      if (action.submissionId !== undefined && state.draft.saved?.id !== action.submissionId) return state;
       return { ...state, request: { kind: "failed", failure: action.failure } };
   }
 };

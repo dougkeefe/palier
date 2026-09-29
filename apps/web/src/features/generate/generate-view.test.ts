@@ -120,6 +120,16 @@ describe("resumedGenerator (D143)", () => {
   });
 });
 
+describe("generator — a late set (D143)", () => {
+  it("is ignored unless a set is being made, so it never pulls the user out of practising", () => {
+    const result = { set: SET, drafted: 5, discarded: 0 };
+    const practising = generator(initialGenerator("agreement"), { type: "practise", set: SET });
+
+    expect(generator(practising, { type: "generated", result })).toBe(practising);
+    expect(generator(initialGenerator("agreement"), { type: "generated", result })).toEqual(initialGenerator("agreement"));
+  });
+});
+
 describe("resultSummary", () => {
   it("says how many drafts passed the check", () => {
     const set = { ...SET, items: [{}, {}, {}] as unknown as GeneratedSet["items"] };

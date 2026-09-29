@@ -84,7 +84,11 @@ const cache = globalThis as {
 };
 
 const database = (env: ServerEnv): Promise<Repositories | null> => {
-  cache.__palierDatabase ??= connect(env);
+  // A connection that failed is forgotten, so the next request tries again rather than fail for the instance's life.
+  cache.__palierDatabase ??= connect(env).catch((error: unknown) => {
+    delete cache.__palierDatabase;
+    throw error;
+  });
   return cache.__palierDatabase;
 };
 

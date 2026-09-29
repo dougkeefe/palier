@@ -81,6 +81,10 @@ DATABASE_URL='postgres://…' pnpm --filter @palier/web db:migrate
 
 ## Smoke checks
 
+**`/api/health` asks the database on every request.** Do not point an interval uptime monitor at it on Neon's free tier:
+polling every few minutes keeps the compute from ever suspending, and uses up the free compute allowance.
+
+
 Run these after every production deploy that touches the server or the schema:
 
 | Check | Expect | If not |
@@ -91,7 +95,7 @@ Run these after every production deploy that touches the server or the schema:
 | `curl -sI https://<host>/sw.js` | `200`, `cache-control: no-cache, no-store, must-revalidate` | `next.config.ts` |
 | Two browsers: onboard on one, finish a session, then Settings → Sync → add a device, and enter the code on the other | Both show the same progress | The session log's journey-8 notes |
 | Delete everything everywhere on the test account (Settings → Sync → danger zone) | Leaves nothing on the server | — |
-| `curl -s https://<host>/api/health` | **`200`** with `{"build":"<7 hex>","bank":3,"database":"ok"}`, and `cache-control: no-store` (D140) | **`"not-configured"`** means no `DATABASE_URL`; **`503`** with `"unreachable"` means the database did not answer; a `"build"` of `"local"` means the build did not see `VERCEL_GIT_COMMIT_SHA` |
+| `curl -s https://<host>/api/health` | **`200`** with `{"build":"<7 hex>","bank":<BANK_VERSION in src/lib/bank-version.ts>,"database":"ok"}`, and `cache-control: no-store` (D140) | **`"not-configured"`** means no `DATABASE_URL`; **`503`** with `"unreachable"` means the database did not answer within two seconds, which a single request can do while Neon wakes from idle, so ask twice; a `"build"` of `"local"` means the build did not see `VERCEL_GIT_COMMIT_SHA` |
 
 ## The monthly item-statistics job
 
@@ -140,7 +144,10 @@ By hand from a terminal: `DATABASE_URL='postgres://…' PLAN_STORAGE_MB=512 pnpm
    aggregates. A device keeps its own full history regardless (§9.4). A device paired afterwards would pull only
    the aggregates, so first decide how the trend reads them. Write the aggregation as a script with a PGlite test,
    and record it as a deviation.
-3. Rerun the job and confirm the size fell.
+3. Reclaim the space. A `DELETE` leaves the table's files the same size, so `pg_database_size` does not fall until
+   `VACUUM (FULL, ANALYZE) sync_documents;` rewrites the table. It locks the table while it runs, so do it in a quiet
+   window. Neon's own storage figure, in its dashboard, is the one the plan counts, and it spans the project's branches.
+4. Rerun the job and confirm the size fell.
 
 **At 80%: move to a paid tier** (about US$20 a month, §9.4), and raise `PLAN_STORAGE_MB` to match.
 

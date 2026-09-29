@@ -1,4 +1,4 @@
-import { planBytesFrom, queryWithPostgres, reportText, runRetention } from "../src/server/retention-job.ts";
+import { alertOf, planBytesFrom, queryWithPostgres, reportText, runRetention } from "../src/server/retention-job.ts";
 
 /**
  * The daily retention job (architecture.md §9.4, progress.md D138–D139): delete accounts
@@ -27,7 +27,8 @@ try {
 }
 
 console.log(reportText(report));
-if (report.verdict === "aggregate" || report.verdict === "upgrade") {
-  console.error(`::error::Database storage needs attention (${report.verdict}); see docs/deploy.md, "The retention job".`);
-  process.exit(1);
+if (alertOf(report)) {
+  console.error(`::error::Database storage needs attention (${String(report.verdict)}); see docs/deploy.md, "The retention job".`);
+  // exitCode, not exit(): the report above is flushed before the process ends.
+  process.exitCode = 1;
 }

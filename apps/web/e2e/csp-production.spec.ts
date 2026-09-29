@@ -44,6 +44,8 @@ const PAGES = [
   "/start",
   // The localised 404 (D141): an unknown path renders inside the layout, so it is held to the policy too.
   "/no-such-page",
+  // …and one with a dot, which the proxy's first matcher would skip, leaving it with no CSP at all.
+  "/no-such.page",
 ];
 
 const ATTACKER = "https://attacker.example";

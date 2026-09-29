@@ -55,7 +55,7 @@ export const localesFrom = (source) => {
  * next-intl provider, and it loads with every page, so importing whole message files would
  * put about 32 KB gzipped into every page for a screen almost nobody sees. The messages stay
  * the one source; this file is written from them before `dev` and `build`, committed, and
- * held equal to them by `src/components/errors/global-error-copy.test.ts`.
+ * held equal to them by `src/components/errors/copy.test.ts`.
  * @param {Record<string, { errors?: unknown }>} messagesByLocale
  * @returns {string}
  */

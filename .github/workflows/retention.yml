@@ -27,10 +27,17 @@ env:
 permissions:
   contents: read
 
+# A run by hand and the scheduled one never overlap; a second waits for the first.
+concurrency:
+  group: retention
+  cancel-in-progress: false
+
 jobs:
   retention:
     name: Retention and the storage alert
     runs-on: ubuntu-latest
+    # A delete stuck behind a lock fails the run, which notifies, rather than hold a runner for six hours.
+    timeout-minutes: 15
     steps:
       # RETENTION_DATABASE_URL holds the same connection string as Production's DATABASE_URL (progress.md D138).
       - name: Skip without a retention database
@@ -65,10 +72,15 @@ jobs:
           PLAN_STORAGE_MB: ${{ inputs.plan_storage_mb || vars.PLAN_STORAGE_MB }}
           # A scheduled run has no inputs, so it deletes; a run by hand is a dry run unless unticked.
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        # The report is fenced, so the step summary keeps its lines; pipefail carries the job's exit through tee.
         run: |
           set -o pipefail
-          if [ "$DRY_RUN" = "true" ]; then
-            pnpm --filter @palier/web retention --dry-run | tee -a "$GITHUB_STEP_SUMMARY"
-          else
-            pnpm --filter @palier/web retention | tee -a "$GITHUB_STEP_SUMMARY"
-          fi
+          flag=""
+          if [ "$DRY_RUN" = "true" ]; then flag="--dry-run"; fi
+          {
+            echo '```'
+            status=0
+            pnpm --silent --filter @palier/web retention $flag || status=$?
+            echo '```'
+            exit $status
+          } | tee -a "$GITHUB_STEP_SUMMARY"

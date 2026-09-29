@@ -1,3 +1,6 @@
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+
 import { isHermetic } from "@palier/testing/in-memory";
 
 import { HermeticThrower } from "../../../../components/errors/HermeticThrower";
@@ -11,8 +14,17 @@ import { NotFoundView } from "../../../../components/errors/NotFoundView";
  * be reached while the root layout works. A dynamic segment, so the service worker's route
  * list never precaches it (`routesFrom`).
  */
+/** Outside the hermetic lane, titled and unindexed as every unknown path is (D141). */
+export async function generateMetadata({ params }: PageProps<"/[locale]/hermetic/[view]">): Promise<Metadata> {
+  if (isHermetic(process.env)) return {};
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "errors" });
+  return { title: t("notFoundTitle"), robots: { index: false } };
+}
+
 export default async function HermeticErrorPage({ params }: PageProps<"/[locale]/hermetic/[view]">) {
   const { view } = await params;
-  if (!isHermetic(process.env) || (view !== "route" && view !== "global")) return <NotFoundView titled />;
+  if (!isHermetic(process.env)) return <NotFoundView />;
+  if (view !== "route" && view !== "global") return <NotFoundView titled />;
   return <HermeticThrower view={view} />;
 }

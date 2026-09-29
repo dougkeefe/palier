@@ -945,11 +945,11 @@ body {
   max-width: 40rem;
 }
 
+/* A list item, so the summary keeps its disclosure marker; the padding gives the 44px target. */
 .app-diagnostic > summary {
   cursor: pointer;
-  min-height: 2.75rem;
-  display: flex;
-  align-items: center;
+  display: list-item;
+  padding-block: 0.625rem;
   color: var(--primary);
   font-weight: 600;
 }

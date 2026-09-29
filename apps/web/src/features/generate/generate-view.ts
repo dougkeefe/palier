@@ -84,7 +84,10 @@ export const generator = (state: GeneratorState, action: GeneratorAction): Gener
     case "failed":
       return state.phase === "choosing" ? { ...state, request: { kind: "failed", failure: action.failure } } : state;
     case "generated":
-      return { phase: "result", subSkill: state.subSkill, result: action.result };
+      // Only while a set is being made: a late one must not pull the user out of practising (D143).
+      return state.phase === "choosing" && state.request.kind === "sending"
+        ? { phase: "result", subSkill: state.subSkill, result: action.result }
+        : state;
     case "practise":
       return { phase: "practising", subSkill: state.subSkill, set: action.set };
     case "back":

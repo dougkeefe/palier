@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { inFlight, wipeCount, writesUntilWiped } from "./in-flight";
+import { beforeClear, inFlight, wipeCount, writesUntilWiped } from "./in-flight";
 
 const deferred = <T>() => {
   let resolve!: (value: T) => void;
@@ -106,5 +106,18 @@ describe("writesUntilWiped", () => {
     wipes.bump();
 
     expect(await guarded.get()).toBe("there");
+  });
+});
+
+describe("beforeClear", () => {
+  it("runs its step just as the store's clear begins, and not before", async () => {
+    const order: string[] = [];
+    const store = { clear: () => Promise.resolve(void order.push("clear")), get: () => Promise.resolve(1) };
+    const wrapped = beforeClear(store, () => order.push("forget"));
+
+    expect(await wrapped.get()).toBe(1);
+    expect(order).toEqual([]);
+    await wrapped.clear();
+    expect(order).toEqual(["forget", "clear"]);
   });
 });

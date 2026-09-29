@@ -32,7 +32,8 @@ export function RouteError({ error, retry }: { error: Error & { digest?: string 
     observer.observe(document.head, { subtree: true, childList: true, characterData: true });
     return () => {
       observer.disconnect();
-      document.title = pageTitle;
+      // Only while the title is still the error's: a navigation may already have written its own.
+      if (document.title === title) document.title = pageTitle;
     };
   }, [title]);
 

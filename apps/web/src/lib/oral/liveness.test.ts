@@ -50,6 +50,21 @@ describe("webLocksLiveness (D144)", () => {
     expect(await liveness.live()).toEqual(new Set());
   });
 
+  it("counts a lock still waiting to be granted as live", async () => {
+    const locks = {
+      request: () => Promise.resolve(),
+      query: () => Promise.resolve({ held: [], pending: [{ name: `${ORAL_LOCK_PREFIX}asking`, mode: "exclusive" }] }),
+    } as unknown as LockKit;
+
+    expect(await webLocksLiveness(locks).live()).toEqual(new Set([sessionId("asking")]));
+  });
+
+  it("finds nothing live when the browser refuses to say, so a session can still start", async () => {
+    const locks = { request: () => Promise.resolve(), query: () => Promise.reject(new Error("SecurityError")) } as unknown as LockKit;
+
+    expect(await webLocksLiveness(locks).live()).toEqual(new Set());
+  });
+
   it("never lets a refused lock request escape", async () => {
     const locks = { request: () => Promise.reject(new Error("SecurityError")), query: () => Promise.resolve({}) } as unknown as LockKit;
     const liveness = webLocksLiveness(locks);

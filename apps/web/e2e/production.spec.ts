@@ -101,3 +101,15 @@ test("GET /api/health names the build and the bank, and that no database is conf
   const body = (await response.json()) as { build: string; bank: number; database: string };
   expect(body).toEqual({ build: expect.stringMatching(/^(local|[0-9a-f]{7})$/) as unknown, bank: Number(/v(\d+)/.exec(BANK_MANIFEST)?.[1]), database: "not-configured" });
 });
+
+/** The error states' E2E hook is inert on a real build: the 404, unindexed, and nothing thrown (D142). */
+test("the hermetic error hook is only the 404 on a production build", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/en/hermetic/route?leak=x");
+
+  await expect(page.getByRole("heading", { level: 1, name: "Page not found" })).toBeVisible();
+  await expect(page).toHaveTitle("Page not found · Palier");
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  expect(errors).toEqual([]);
+});

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   DATABASE_SIZE_SQL,
+  alertOf,
   RETENTION_RULES,
   type Query,
   planBytesFrom,
@@ -173,5 +174,18 @@ describe("reportText", () => {
     const low = recording([0, 0, 0, 0], 0.1 * plan);
     expect(reportText(await runRetention({ query: high.query, now: NOW, planBytes: plan, dryRun: false }))).toContain("move to a paid tier");
     expect(reportText(await runRetention({ query: low.query, now: NOW, planBytes: plan, dryRun: false }))).toContain("within the plan");
+  });
+});
+
+describe("alertOf", () => {
+  it("fails the run at 60% and at 80% of the plan, and not within it or with no plan size", async () => {
+    const plan = 512 * MIB;
+    const at = async (bytes: number, planBytes: number | null) =>
+      alertOf(await runRetention({ query: recording([0, 0, 0, 0], bytes).query, now: NOW, planBytes, dryRun: true }));
+
+    expect(await at(0.1 * plan, plan)).toBe(false);
+    expect(await at(0.6 * plan, plan)).toBe(true);
+    expect(await at(0.9 * plan, plan)).toBe(true);
+    expect(await at(0.9 * plan, null)).toBe(false);
   });
 });

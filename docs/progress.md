@@ -281,7 +281,10 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
   as an error shell that cannot run under the strict CSP (D141). Next's experimental `global-not-found.tsx` is the likely fix;
 - **the first single-record delete**, which will write the tombstones the retention job already purges (D138);
 - **the 60% aggregation** as code, written when the storage alert first fires (`docs/deploy.md`, D139);
-- **`global-error.tsx` reached end to end**: only its view is checked, since the root layout works (D142).
+- **`global-error.tsx` reached end to end**: only its view is checked, since the root layout works (D142);
+- **the wipe guard across tabs**: a `BroadcastChannel` so a wipe in one tab forgets the requests out in every tab (D143);
+- **an abandoned session's end at its last turn**, not when it was noticed, so its length reads true (D144; the pinned
+  tests move with it).
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
@@ -4988,6 +4991,10 @@ merged, none critical. The human chose to fix all of them.
 - **Nothing writes a tombstone yet** (D69, `schema.ts`). The purge is `deleted and updated_at < cutoff`, since `updated_at`
   is stamped on every accepted write, and it removes nothing in production today. It is built and tested now, so the first
   feature that deletes a single record inherits it.
+- **A precondition for that first single-record delete** (pre-merge review): a device offline for 90 to 179 days would
+  pull past a purged tombstone, keep its copy and push it back. So before any tombstone is written, pull must refuse a
+  watermark older than the purge horizon (a device last seen over `TOMBSTONE_DAYS` ago), and the client must replace its
+  set in full rather than merge.
 - **The job is self-contained raw SQL** (`src/server/retention-job.ts`), like the item-statistics job: no relative import,
   `postgres` imported dynamically, and one statement per rule that counts in a dry run and deletes otherwise. The script
   on postgres.js and the integration test on PGlite run the same text.
@@ -5050,8 +5057,12 @@ merged, none critical. The human chose to fix all of them.
   - Next serves any `notFound()` under this app's dynamic root layout as its error shell (`<html id="__next_error__">`), in
     development too. The layout arrives only in the RSC payload, so its Trusted Types script never runs, and every chunk
     load is refused. The 404 rendered blank.
-  - So `[locale]/[...rest]` renders the localised 404 itself, inside the layout. `[locale]/not-found.tsx` stays for a
-    `notFound()`, which only the layout's invalid-locale check can now reach, and the proxy redirects those first.
+  - So `[locale]/[...rest]` renders the localised 404 itself, inside the layout. `[locale]/not-found.tsx` stays as the
+    boundary for a future page's `notFound()`. Nothing reaches it today: the layout's own invalid-locale `notFound()` is
+    outside its segment's boundary, and the proxy redirects an unknown locale first. *(Corrected at the pre-merge review.)*
+  - **Every path under a locale goes through the proxy**, a dot in it or not (`/(en|fr)/:path*`, pre-merge review).
+    The first matcher skips any path with a dot, and the CSP is set only there, so `/en/x.php` reached the catch-all and
+    rendered the whole app with no CSP. `csp-production.spec.ts` holds `/no-such.page` to the policy.
   - Next's own answer, `global-not-found.tsx`, is experimental, and would grow the default-export exemption list. It is
     named, not scheduled.
 - **The not-found page offers no bundle.** It is not an error the app made.
@@ -5096,6 +5107,17 @@ merged, none critical. The human chose to fix all of them.
   - A call already past its write is not affected: IndexedDB orders it before the wipe's clear.
 - **Proven to bite:** without the guard, each wipe test fails; with a join keyed apart, the join test fails; and with the
   workshop's resume removed, the leave-and-return E2E fails.
+- **Added at the pre-merge review:**
+  - a result lands only on the draft it was asked for. `assessed` must match the draft's saved submission, and `failed`
+    carries its submission id. Before, sending A and then opening B showed A's feedback under B's prompt, and a failure's
+    Try again paid for B. A late fresh set is taken only while one is being made;
+  - delete-everywhere forgets the requests only as its local wipe begins (`beforeClear`), so a server delete that fails,
+    and so wipes nothing, keeps what they bring.
+- **Limits, recorded:**
+  - the counter is this tab's. A call still out in another tab when this one wipes can still write back. A
+    `BroadcastChannel` to every tab is the fix, named, not scheduled;
+  - feedback is joined by submission alone, so feedback asked in one language and rejoined after a language change
+    arrives in the first.
 
 ### D144 — a spoken session after a hard close: an `OralLiveness` port over Web Locks, and `closeAbandonedSessions`
 **Date:** 28 September 2026 · **Status:** accepted; `implementation-plan.md` §3.3 amended in place; closes D116's named defect
@@ -5114,6 +5136,10 @@ merged, none critical. The human chose to fix all of them.
   - It stamps at the clock's now, as before, which the existing tests pin.
   - `startOralSessionRun` calls it, and so do the oral picker and the report as they load. So a closed tab's session is
     listed and reportable at once, and another tab's never.
+- **Hardened at the pre-merge review:**
+  - each session is read again before it is stamped, since its page may have ended it and let go after the list was read;
+  - a lock still waiting to be granted counts as live;
+  - a browser that refuses `locks.query()`, as a sandboxed origin does, finds nothing live, so a session can still start.
 - **E2E on the production build:** a second tab does not list a session the first is running; once the first is closed,
   it does, and its report is offered. Proven to bite: with the controller holding nothing, the second tab closes the
   running session and the spec fails.
@@ -5123,6 +5149,70 @@ merged, none critical. The human chose to fix all of them.
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 29 September 2026 — `dougkeefe/next-slice-from-progress-v3` (pre-merge review of Phase 7 Slice 2)
+
+**A candid review of the whole branch** (three parallel reviewers, constructive tone) found no critical issue, four major
+and thirteen smaller. The human chose to apply all of them. The human also decided that the retention job uses the app's
+own connection (D138).
+
+**Major:**
+- **An unknown path with a dot rendered the whole app with no CSP.** The proxy's matcher skips dotted paths, and the
+  policy is set only there. Every locale path now runs the proxy, and the CSP spec holds `/no-such.page` (D141).
+- **Workshop feedback could land on the wrong draft**, and its failure's Try again could pay for another submission. A
+  result is now tied to its submission (D143).
+- **The runbook's aggregation step** now reclaims the space with `VACUUM FULL` before checking the size (D139).
+- **The tombstone purge's precondition** for the first single-record delete is recorded (D138).
+
+**Smaller:**
+- **Oral liveness:**
+  - a session is read again before it is stamped;
+  - a pending lock counts as live;
+  - a refused `locks.query()` no longer stops a session starting (D144).
+- **Delete-everywhere** forgets requests only as its local wipe begins, and the per-tab limit is recorded (D143).
+- **The diagnostic bundle** cuts V8's `name: message` header before reading frames, so a multi-line message shaped like
+  frames is dropped (D141).
+- **Error screens:**
+  - the error's title is given back only while it is still the error's;
+  - a failed Copy opens the text it asks the user to select;
+  - a repeated result is re-announced;
+  - the summary keeps its disclosure marker.
+- **The hook's production 404** has its title and `noindex`, and a production spec proves it inert.
+- **The retention workflow:**
+  - it has a timeout and a concurrency group;
+  - its report is fenced in the step summary;
+  - a two-minute statement timeout;
+  - `process.exitCode` in place of `process.exit`;
+  - a tested `alertOf`.
+- **Health:** a failed connection is retried rather than cached, and the runbook warns against an interval monitor on
+  Neon's free tier.
+- **Corrections:**
+  - D141's claim about `not-found.tsx` is corrected;
+  - a comment's test path is fixed;
+  - the runbook no longer hard-codes the bank version;
+  - a late fresh set is ignored outside generating;
+  - three French phrasings are improved in `errors`.
+
+**One existing test's setup changed**, and its assertions did not: the reducer test "revises from the feedback…" reached
+feedback without the `saved` step the screen always dispatches first. That shortcut is exactly the state the fix now
+refuses, so the step was added.
+
+**Not taken, and why:**
+- scheduled retention runs kept dry until a variable is set: the human chose delete-on-schedule (D138);
+- an abandoned session's end at its last turn: it moves pinned tests, so it is named, not scheduled (D144).
+
+**Evidence** (after the fixes, on a fresh production build):
+
+```
+pnpm verify           → check-types, lint, boundaries (454 + 267 modules, no violations),
+                        test: 217 files, 3284 passed, 8 todo; coverage thresholds met
+pnpm test:integration → 7 files, 51 passed
+CI=1 pnpm test:e2e     → 75 passed (1.3m), with csp-production's /no-such.page and the hook's production 404
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.9 KB of 180.0 KB
+```
+
+Proven to bite: with the failed connection cached again, the retry test fails. The new reducer, liveness and diagnostic
+tests each fail on the code before their fix, by construction.
 
 ### 28 September 2026 — `dougkeefe/next-slice-from-progress-v3` (Phase 7 Slice 2: server lifecycle and observability)
 

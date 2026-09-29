@@ -13,8 +13,10 @@ export type LockKit = Pick<LockManager, "request" | "query">;
  * releases the lock itself when the page goes, closed, crashed or reloaded. So a session whose
  * lock nobody holds was abandoned, and one another tab holds is still running.
  *
- * Without Web Locks (an old browser, or the Node of a unit test), nothing is held and nothing
- * is live, which is what the app did before: a session left open is closed by the next start.
+ * Without Web Locks (an old browser, or the Node of a unit test), or where the browser refuses
+ * them (a sandboxed origin rejects with `SecurityError`), nothing is held and nothing is live,
+ * which is what the app did before: a session left open is closed by the next start. A lock
+ * still waiting to be granted counts as live, since the page asking for it is running.
  */
 export const webLocksLiveness = (locks: LockKit | undefined): OralLiveness => ({
   hold: (id) => {
@@ -29,9 +31,10 @@ export const webLocksLiveness = (locks: LockKit | undefined): OralLiveness => ({
   },
   live: async () => {
     if (locks === undefined) return new Set<SessionId>();
-    const { held = [] } = await locks.query();
+    const snapshot = await locks.query().catch(() => ({ held: [], pending: [] }));
+    const names = [...(snapshot.held ?? []), ...(snapshot.pending ?? [])].map(({ name }) => name);
     return new Set(
-      held.flatMap(({ name }) => (name?.startsWith(ORAL_LOCK_PREFIX) ? [sessionId(name.slice(ORAL_LOCK_PREFIX.length))] : [])),
+      names.flatMap((name) => (name?.startsWith(ORAL_LOCK_PREFIX) ? [sessionId(name.slice(ORAL_LOCK_PREFIX.length))] : [])),
     );
   },
 });

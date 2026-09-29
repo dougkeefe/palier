@@ -124,7 +124,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   this origin only. They are asserted on the production server in `e2e/production.spec.ts`.
 - **The strict CSP on every page** (Phase 7 Slice 1; ADR 22, progress.md D133–D136).
   - `src/proxy.ts` mints a nonce per request and sets the policy from `lib/csp.ts` on the request, where
-    Next reads the nonce, and on the response.
+    Next reads the nonce, and on the response. **Every path under a locale runs it**, a dot in the path or not
+    (`/(en|fr)/:path*`), because the policy is set nowhere else (D141).
   - Production has `script-src 'self' 'nonce-…'`, `connect-src 'self' https://api.openai.com`, and Trusted
     Types enforced. `next dev` gets a relaxed policy.
   - **A new origin the browser must reach is a `csp.ts` change with its test**, never a loosening

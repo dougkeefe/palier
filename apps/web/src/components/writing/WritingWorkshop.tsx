@@ -75,7 +75,7 @@ export function WritingWorkshop() {
 
   // Follows a feedback request to its end: the feedback, or the failure in plain words, and the
   // history brought up to date either way. Stable, so loading can follow one already out (D143).
-  const follow = useCallback(async (useCases: Container["useCases"], pending: Promise<WritingSubmission>) => {
+  const follow = useCallback(async (useCases: Container["useCases"], submissionId: string, pending: Promise<WritingSubmission>) => {
     try {
       const assessed = await pending;
       moved.current = true;
@@ -83,7 +83,7 @@ export function WritingWorkshop() {
     } catch (error) {
       const failure = feedbackFailure(error);
       if (failure === "no-key") setSetup((current) => (current === null ? current : { ...current, keyHeld: false }));
-      dispatch({ type: "failed", failure });
+      dispatch({ type: "failed", failure, submissionId });
     } finally {
       const history = await useCases.writingHistory();
       setSetup((current) => (current === null ? current : { ...current, history }));
@@ -99,7 +99,7 @@ export function WritingWorkshop() {
       // Feedback asked for before the screen was left is still being made: show it, and wait for it.
       if (pending !== null) {
         dispatch({ type: "resume", submission: pending.submission, nowMs: Date.now() });
-        void follow(container.container.useCases, pending.result);
+        void follow(container.container.useCases, pending.submission.id, pending.result);
       }
     });
     return () => {
@@ -152,7 +152,7 @@ export function WritingWorkshop() {
     }
     // Its feedback is still being made: wait for that rather than offer to pay for it again.
     dispatch({ type: "resume", submission, nowMs: now });
-    void follow(useCases, pending);
+    void follow(useCases, submission.id, pending);
   };
 
   const onGetFeedback = async () => {
@@ -170,6 +170,7 @@ export function WritingWorkshop() {
       }
       await follow(
         useCases,
+        submissionId,
         useCases.requestWritingFeedback({ submissionId, targetBand: setup.targetBand, feedbackLang: locale === "fr" ? "fr" : "en" }),
       );
     } catch (error) {

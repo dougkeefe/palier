@@ -333,6 +333,22 @@ describe("closeAbandonedSessions (D144)", () => {
     expect(await oral.get(done.id)).toEqual(done);
   });
 
+  it("leaves a session its page ended, and let go of, after the list was read", async () => {
+    const { oral, deps } = setUp({}, [abandoned]);
+    const ended = { ...abandoned, endedAt: "2026-09-27T09:59:00.000Z", endReason: "completed" as const };
+    // The other tab's last write and its release land between reading the list and asking who is live.
+    const liveness = {
+      hold: () => () => undefined,
+      live: async () => {
+        await oral.put(ended);
+        return new Set<ReturnType<typeof sessionId>>();
+      },
+    };
+
+    expect(await closeAbandonedSessions({ ...deps, liveness })).toEqual([]);
+    expect(await oral.get(abandoned.id)).toEqual(ended);
+  });
+
   it("asks nothing of the pages when no session is open", async () => {
     const { liveness, deps } = setUp({}, [done]);
 

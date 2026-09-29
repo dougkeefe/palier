@@ -76,3 +76,16 @@ export const writesUntilWiped = <S extends { readonly [M in K]: Write }, K exten
   const write = store[method] as unknown as (...args: unknown[]) => Promise<void>;
   return { ...store, [method]: (...args: unknown[]) => (wipes.now() === since ? write(...args) : Promise.resolve()) };
 };
+
+/**
+ * `store`, running `before` just as its `clear` begins. Delete-everywhere deletes on the server
+ * first and throws before touching anything here if it cannot (D143), so the requests still out
+ * are forgotten only once the local wipe really starts, and a failed delete keeps what they bring.
+ */
+export const beforeClear = <S extends { readonly clear: () => Promise<void> }>(store: S, before: () => void): S => ({
+  ...store,
+  clear: () => {
+    before();
+    return store.clear();
+  },
+});

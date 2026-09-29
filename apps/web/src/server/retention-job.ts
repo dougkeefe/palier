@@ -153,6 +153,9 @@ export const runRetention = async (input: RetentionInput): Promise<RetentionRepo
   };
 };
 
+/** Whether the run should fail, which is how it notifies: at 60% of the plan's storage or over. */
+export const alertOf = (report: RetentionReport): boolean => report.verdict === "aggregate" || report.verdict === "upgrade";
+
 const VERDICT_TEXT: Readonly<Record<StorageVerdict, string>> = {
   ok: "within the plan",
   aggregate: "at or over 60% of the plan: run the aggregation step (docs/deploy.md)",
@@ -180,7 +183,8 @@ export const reportText = (report: RetentionReport): string => {
 /** The script's query, over postgres.js. The caller ends it. */
 export const queryWithPostgres = async (url: string): Promise<{ readonly query: Query; readonly end: () => Promise<void> }> => {
   const { default: postgres } = await import("postgres");
-  const sql = postgres(url, { max: 1, prepare: false });
+  // A statement stuck behind a lock gives up after two minutes rather than hold the run.
+  const sql = postgres(url, { max: 1, prepare: false, connection: { statement_timeout: 120_000 } });
   return {
     query: async (text, params) => (await sql.unsafe(text, [...params])) as unknown as Record<string, unknown>[],
     end: () => sql.end(),
