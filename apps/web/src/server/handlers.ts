@@ -25,6 +25,26 @@ import { isDeviceSecret, pairCodeFrom, rateLimitKey, sha256 } from "./secrets";
  * - **Registration, pairing codes and redeeming are rate-limited per IP hash** (§11).
  */
 
+/**
+ * What `GET /api/health` reports (architecture.md §10, D140): the build and the bank this
+ * deployment serves, and whether its database answers. `database` is `null` when none is
+ * configured. Nothing here identifies a person, a device or the request.
+ */
+export type Health = { readonly build: string; readonly bank: number; readonly database: boolean | null };
+
+/**
+ * The health response. 200 when the service is as configured (a deployment with no
+ * database is working as intended, ADR 21), and 503 only when a configured database does
+ * not answer. Never cached, since a cached "ok" would hide an outage.
+ */
+export const healthResponse = (health: Health): Response => {
+  const database = health.database === null ? "not-configured" : health.database ? "ok" : "unreachable";
+  return Response.json(
+    { build: health.build, bank: health.bank, database },
+    { status: database === "unreachable" ? 503 : 200, headers: { "cache-control": "no-store" } },
+  );
+};
+
 export const MAX_PUSH_ITEMS = 500;
 export const PULL_PAGE = 500;
 const MAX_BODY_BYTES = 1_000_000;

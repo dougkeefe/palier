@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { BANK_VERSION } from "../../lib/bank-version";
 import { memorySyncRepository } from "../../server/__tests__/memory-repository";
 import { memoryTelemetryRepository } from "../../server/__tests__/memory-telemetry-repository";
 import { type SyncApi, createSyncApi } from "../../server/handlers";
@@ -11,10 +12,15 @@ import { type TelemetryApi, createTelemetryApi } from "../../server/telemetry-ha
  * this holds the binding, which is all a route file is.
  */
 
-const state = vi.hoisted(() => ({ api: null as SyncApi | null, telemetry: null as TelemetryApi | null }));
+const state = vi.hoisted(() => ({
+  api: null as SyncApi | null,
+  telemetry: null as TelemetryApi | null,
+  database: null as boolean | null,
+}));
 vi.mock("../../server/db", () => ({
   syncApi: () => Promise.resolve(state.api),
   telemetryApi: () => Promise.resolve(state.telemetry),
+  databaseAnswers: () => Promise.resolve(state.database),
 }));
 
 const { POST: register } = await import("./account/device/route");
@@ -25,6 +31,7 @@ const { GET: devices } = await import("./account/devices/route");
 const { DELETE: deleteAccount } = await import("./account/route");
 const { GET: pull, POST: push } = await import("./sync/route");
 const { POST: telemetry } = await import("./telemetry/route");
+const { GET: health } = await import("./health/route");
 
 const secret = (n: number) => n.toString(16).padStart(64, "0");
 const req = (method: string, path: string, body?: unknown, n = 1) =>
@@ -101,5 +108,22 @@ describe("the telemetry route", () => {
 
     expect(response.status).toBe(503);
     expect(await response.json()).toEqual({ error: "telemetry-unavailable" });
+  });
+});
+
+describe("the health route (D140)", () => {
+  it("binds to the health response, naming this build and bank and whether the database answers", async () => {
+    state.database = true;
+
+    const response = await health();
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ build: "dev", bank: BANK_VERSION, database: "ok" });
+  });
+
+  it("answers 503 when the configured database does not answer", async () => {
+    state.database = false;
+
+    expect((await health()).status).toBe(503);
   });
 });

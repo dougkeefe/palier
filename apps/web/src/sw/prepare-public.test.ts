@@ -14,7 +14,7 @@ import {
   routesFrom,
   serviceWorkerSource,
 } from "../../scripts/prepare-public.mjs";
-import { BANK_BASE_PATH, BANK_VERSION } from "../lib/container";
+import { BANK_BASE_PATH, BANK_VERSION } from "../lib/bank-version";
 
 const WEB_ROOT = join(dirname(fileURLToPath(import.meta.url)), "../..");
 const read = (path: string) => readFileSync(join(WEB_ROOT, path), "utf8");
@@ -35,12 +35,12 @@ describe("prepare-public", () => {
   });
 
   it("serves the bank where the composition root expects it, and refuses a root without the constant", () => {
-    expect(bankBasePathFrom(read("src/lib/container.ts"))).toBe(BANK_BASE_PATH);
+    expect(bankBasePathFrom(read("src/lib/bank-version.ts"))).toBe(BANK_BASE_PATH);
     expect(() => bankBasePathFrom("export const OTHER = 1;")).toThrow(/BANK_BASE_PATH/);
   });
 
   it("reads the bank version the composition root reads, and refuses a root without the constant", () => {
-    expect(bankVersionFrom(read("src/lib/container.ts"))).toBe(BANK_VERSION);
+    expect(bankVersionFrom(read("src/lib/bank-version.ts"))).toBe(BANK_VERSION);
     expect(() => bankVersionFrom("export const OTHER = 1;")).toThrow(/BANK_VERSION/);
   });
 

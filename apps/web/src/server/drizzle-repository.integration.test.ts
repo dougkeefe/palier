@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { syncRepositoryContract } from "./__tests__/repository.contract";
 import { resetDatabase } from "./__tests__/reset";
-import { pgliteDatabase, resetSyncApi, syncApi } from "./db";
+import { databaseAnswers, pgliteDatabase, resetSyncApi, syncApi } from "./db";
 import { drizzleSyncRepository } from "./drizzle-repository";
 
 /**
@@ -61,6 +61,8 @@ describe("syncApi, hermetic", () => {
       );
 
       expect(res?.status).toBe(200);
+      // The health route's check, on the same PGlite (D140).
+      expect(await databaseAnswers({ PALIER_HERMETIC: "1" })).toBe(true);
     } finally {
       process.chdir(previous);
       resetSyncApi();

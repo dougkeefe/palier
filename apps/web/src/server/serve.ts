@@ -1,5 +1,7 @@
-import { syncApi, telemetryApi } from "./db";
-import type { SyncApi } from "./handlers";
+import { BANK_VERSION } from "../lib/bank-version";
+import { BUILD_VERSION } from "../lib/build-info";
+import { databaseAnswers, syncApi, telemetryApi } from "./db";
+import { type SyncApi, healthResponse } from "./handlers";
 import type { TelemetryApi } from "./telemetry-handlers";
 
 /**
@@ -26,3 +28,7 @@ export const serveTelemetry =
     if (api === null) return Response.json({ error: "telemetry-unavailable" }, { status: 503 });
     return run(api, request);
   };
+
+/** `GET /api/health`: the build, the bank, and whether the database answers (D140). */
+export const serveHealth = async (): Promise<Response> =>
+  healthResponse({ build: BUILD_VERSION, bank: BANK_VERSION, database: await databaseAnswers() });

@@ -184,6 +184,7 @@ import {
 } from "@palier/testing/in-memory";
 
 import aiModels from "./ai-models.json";
+import { BANK_BASE_PATH, BANK_VERSION } from "./bank-version";
 import { EXAMINER_VOICE, PRICING } from "./pricing";
 import { selectionSeedFor, systemClock } from "./system-clock";
 
@@ -212,17 +213,8 @@ import { selectionSeedFor, systemClock } from "./system-clock";
  * §3.5 wires in production on purpose.
  */
 
-/**
- * Where the committed bank is served and which version this build reads. The
- * `content/bank/` tree is copied under `public/content/` at build (scripts/
- * prepare-public.mjs), and every manifest `path` already starts `bank/v{n}/`, so
- * the adapter's base is the directory that *contains* `bank/`. Bank versions are
- * additive (architecture.md §5.5): a new one is a new path, so moving this number
- * is the whole of a bank migration on the client. The service worker precaches
- * this version only (progress.md D82).
- */
-export const BANK_BASE_PATH = "/content";
-export const BANK_VERSION = 3;
+// The bank's location and version are `bank-version.ts`'s (D140), re-exported for the tests that name them here.
+export { BANK_BASE_PATH, BANK_VERSION };
 
 /**
  * The exam profile, parsed once here. Parsing at the composition root is the same

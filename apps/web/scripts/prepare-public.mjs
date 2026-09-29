@@ -50,24 +50,24 @@ export const localesFrom = (source) => {
 };
 
 /**
- * `BANK_BASE_PATH` from the composition root, so the served location has one source.
+ * `BANK_BASE_PATH` from `src/lib/bank-version.ts`, so the served location has one source.
  * @param {string} source
  * @returns {string}
  */
 export const bankBasePathFrom = (source) => {
   const base = /export const BANK_BASE_PATH = "([^"]+)"/.exec(source)?.[1];
-  if (base === undefined) throw new Error("prepare-public: no BANK_BASE_PATH in src/lib/container.ts");
+  if (base === undefined) throw new Error("prepare-public: no BANK_BASE_PATH in src/lib/bank-version.ts");
   return base;
 };
 
 /**
- * `BANK_VERSION` from the composition root: the one version this build reads.
+ * `BANK_VERSION` from `src/lib/bank-version.ts`: the one version this build reads.
  * @param {string} source
  * @returns {number}
  */
 export const bankVersionFrom = (source) => {
   const version = /export const BANK_VERSION = (\d+);/.exec(source)?.[1];
-  if (version === undefined) throw new Error("prepare-public: no BANK_VERSION in src/lib/container.ts");
+  if (version === undefined) throw new Error("prepare-public: no BANK_VERSION in src/lib/bank-version.ts");
   return Number(version);
 };
 
@@ -140,9 +140,9 @@ const main = async () => {
   const contentDir = dirname(dirname(require.resolve("@palier/content/profiles/psc-sle.json")));
   const bankSrc = join(contentDir, "bank");
   const publicDir = join(WEB_ROOT, "public");
-  const containerSource = await readFile(join(WEB_ROOT, "src/lib/container.ts"), "utf8");
-  const bankBasePath = bankBasePathFrom(containerSource);
-  const bankVersion = bankVersionFrom(containerSource);
+  const bankSource = await readFile(join(WEB_ROOT, "src/lib/bank-version.ts"), "utf8");
+  const bankBasePath = bankBasePathFrom(bankSource);
+  const bankVersion = bankVersionFrom(bankSource);
   const bankDest = join(publicDir, ...bankBasePath.split("/").filter(Boolean), "bank");
 
   // 1. The bank.
