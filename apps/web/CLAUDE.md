@@ -259,7 +259,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   unvisited route, every shard, journeys 2 and 7 with the network off [R4]), `exam-offline.spec.ts`
   (**journey 3**: a full exam through a reload and a network drop, scored against an independent oracle) and
   `key-leak-production.spec.ts` (the key at rest, both modes, through a reload, with a ledger row in
-  the dump), `oral-production.spec.ts` (a phase crossed by time), `spend-production.spec.ts` (the meter and the cap's warnings over real IndexedDB), and
+  the dump), `oral-production.spec.ts` (a phase crossed by time), `spend-production.spec.ts` (the meter and the cap's warnings over real IndexedDB),
+  `key-states-production.spec.ts` (each key-check result on the minified build, D158), and
   `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
   whose fake timers stall Dexie and React), and `csp-production.spec.ts` (every page's nonce and zero
   violations, and the red team, D136). Axe on the states, (`e2e/`),

@@ -5503,13 +5503,38 @@ devices; nightly lane, 100,000 seeds)
 - **Proven to bite.** With the fix reverted, the three regression seeds (3 failed in `run.test.ts`) and the first two new
   tests fail. With it in place, 2,000 seeds on the integration project pass.
 
+### D158 — the adapters' errors name themselves with literals: a fix that never merged, recovered
+**Date:** 29 September 2026 · **Status:** accepted. **Found by the branch cleanup**, and first written on 26 September as
+"D101" on `dougkeefe/next-progress-slice-v1`
+
+- **The defect, live on `main`.** `OpenAiError` and `BankLoadError` set `this.name = new.target.name`. A production build
+  minifies class names, so the name read as a mangled letter.
+  - `features/key/key-view.ts` tells key-check results apart by `error.name` (`"InvalidApiKeyError"`, `"RateLimitError"`),
+    because the error crosses the lazily loaded container's chunk.
+  - So on the deployed site, a rejected key or a rate limit read as the generic failure, and never as "OpenAI did not
+    accept this key".
+- **How it was lost.** A live key found it on 26 September. The fix was committed to Phase 4 Slice 1's branch *after* that
+  branch's PR (#28) had merged, so it never reached `main`. The number D101 then went to the cost ledger. Before deleting
+  the merged branches, the cleanup checked each branch's tip against its PR's merged head. This one branch had one commit
+  more.
+- **Recovered as it was written.**
+  - Every class in `adapters/openai/errors.ts` and `adapters/bank/errors.ts` gets `override name = "…"`.
+  - A unit test pins each name.
+  - `key-states-production.spec.ts` drives each key-check result on the minified build.
+  - A note goes in both `CLAUDE.md`s.
+
+  Only the number changed. A scan of every `extends …Error` class in `packages/*/src` and `apps/*/src` finds none left
+  without a literal name.
+- **Proven to bite:** with `main`'s `openai/errors.ts` built, the spec fails: the status "OpenAI did not accept this key."
+  never appears. With the fix, it passes.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 29 September 2026 — `dougkeefe/dependabot-cleanup-slice` (cleanup slice, D154–D157)
+### 29 September 2026 — `dougkeefe/dependabot-cleanup-slice` (cleanup slice, D154–D158)
 
 **Asked for by the human** before Phase 7 Slice 4: clear what was lingering.
 
@@ -5545,8 +5570,12 @@ Newest first. One entry per session that changed something. Never edit an older 
   - This entry's first draft also struck the smoke key as set, because the 28 and 29 September live-smoke jobs read
     "success". They had skipped: a skip reports success. The key is not set, and the item is back under *Also for the
     human*.
-- **Not done:** the 36 merged `dougkeefe/*` branches on origin, and the "delete head branches" setting, which was left to the
-  human.
+- **Branches (human: "clean up merged branches, yes").**
+  - 35 merged `dougkeefe/*` branches were deleted from origin. Each one's tip was first checked to equal its PR's merged
+    head.
+  - "Automatically delete head branches" is now on.
+  - `dougkeefe/next-progress-slice-v1` failed the check: its tip was one commit past #28's head. That commit is a
+    production fix that never merged, now recovered as D158. The branch is kept until this PR merges.
 
 *Next, decided* is unchanged: Phase 7 Slice 4.
 
@@ -5565,6 +5594,9 @@ CI_LANE=nightly vitest run trend-calculator.property + weakest-sub-skills.proper
 journey 4, --repeat-each=10 before                   → 6 failed, 4 passed
 journey 4, --repeat-each=20; --repeat-each=30 --workers=8 after → 20 passed; 30 passed
 D157 fix reverted → regression seeds 54693, 72951, 91998 fail (run.test.ts: 3 failed, 39 passed)
+pnpm verify (with D158)    → 221 files, 3377 passed, 8 todo; exit 0
+key-states-production.spec.ts --project=offline → 1 passed; with main's openai/errors.ts built → 1 failed
+  ("OpenAI did not accept this key." never shown)
 ```
 
 ### 29 September 2026 — `dougkeefe/noncommercial-license` (relicensed non-commercial, D153)
