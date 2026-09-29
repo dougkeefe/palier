@@ -1,0 +1,92 @@
+{
+  "subSkill": "connectors-and-discourse-markers",
+  "lang": "fr",
+  "title": {
+    "en": "Connectors and discourse markers",
+    "fr": "Les connecteurs et les marqueurs de discours"
+  },
+  "summary": {
+    "en": "Linking ideas with the word that states their real relation (cause, consequence, contrast, addition), and building each connector correctly.",
+    "fr": "Relier les idées par le mot qui exprime leur vrai rapport (cause, conséquence, opposition, ajout) et construire chaque connecteur correctement."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Say the relation you mean",
+        "fr": "Exprimez le rapport voulu"
+      },
+      "paragraphs": [
+        {
+          "en": "Cause: _parce que_, _puisque_, _étant donné que_, _en raison de_. Consequence: _donc_, _par conséquent_, _c’est pourquoi_. Contrast: _cependant_, _toutefois_, _en revanche_, _alors que_. Addition: _de plus_, _en outre_, _par ailleurs_.",
+          "fr": "Cause : _parce que_, _puisque_, _étant donné que_, _en raison de_. Conséquence : _donc_, _par conséquent_, _c’est pourquoi_. Opposition : _cependant_, _toutefois_, _en revanche_, _alors que_. Ajout : _de plus_, _en outre_, _par ailleurs_."
+        },
+        {
+          "en": "_Par contre_ is common in speech; in a briefing note, _en revanche_ or _toutefois_ reads better. _En effet_ confirms or explains what came before. It never marks a contrast.",
+          "fr": "_Par contre_ est courant à l’oral; dans une note d’information, _en revanche_ ou _toutefois_ conviennent mieux. _En effet_ confirme ou explique ce qui précède. Il ne marque jamais une opposition."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Build them correctly",
+        "fr": "Construisez-les correctement"
+      },
+      "paragraphs": [
+        {
+          "en": "Some connectors take the subjunctive (_bien que_, _pour que_, _afin que_, _à condition que_), others the indicative (_parce que_, _alors que_, _tandis que_). In careful writing, prefer _bien que_ to _malgré que_.",
+          "fr": "Certains connecteurs appellent le subjonctif (_bien que_, _pour que_, _afin que_, _à condition que_), d’autres l’indicatif (_parce que_, _alors que_, _tandis que_). À l’écrit soigné, préférez _bien que_ à _malgré que_."
+        },
+        {
+          "en": "An adverb such as _cependant_ or _par conséquent_ opens a new sentence or follows a semicolon. It does not join two clauses with only a comma.",
+          "fr": "Un adverbe comme _cependant_ ou _par conséquent_ ouvre une nouvelle phrase ou suit un point-virgule. Il ne relie pas deux propositions par une simple virgule."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "avoid": "Malgré que le budget soit réduit, le projet se poursuit.",
+      "write": "Bien que le budget soit réduit, le projet se poursuit.",
+      "why": {
+        "en": "In careful writing, _bien que_ rather than _malgré que_.",
+        "fr": "À l’écrit soigné, _bien que_ plutôt que _malgré que_."
+      }
+    },
+    {
+      "avoid": "Le délai est court, cependant nous respecterons l’échéance.",
+      "write": "Le délai est court; cependant, nous respecterons l’échéance.",
+      "why": {
+        "en": "_Cependant_ needs a semicolon or a new sentence before it.",
+        "fr": "_Cependant_ demande un point-virgule ou une nouvelle phrase."
+      }
+    },
+    {
+      "avoid": "La demande est incomplète. En effet, nous l’approuvons.",
+      "write": "La demande est incomplète. Toutefois, nous l’approuvons.",
+      "why": {
+        "en": "_En effet_ explains; a contrast needs _toutefois_.",
+        "fr": "_En effet_ explique; l’opposition demande _toutefois_."
+      }
+    },
+    {
+      "avoid": "Dû à la tempête, la séance est annulée.",
+      "write": "En raison de la tempête, la séance est annulée.",
+      "why": {
+        "en": "_Dû à_ copies “due to”; write _en raison de_ or _à cause de_.",
+        "fr": "_Dû à_ calque « due to »; écrivez _en raison de_ ou _à cause de_."
+      }
+    },
+    {
+      "avoid": "Nous avons prolongé le délai afin que les régions peuvent répondre.",
+      "write": "Nous avons prolongé le délai afin que les régions puissent répondre.",
+      "why": {
+        "en": "_Afin que_ takes the subjunctive.",
+        "fr": "_Afin que_ appelle le subjonctif."
+      }
+    }
+  ],
+  "related": [
+    "punctuation-and-mechanics",
+    "verb-tense-and-mood"
+  ]
+}

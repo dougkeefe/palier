@@ -10,6 +10,7 @@ import { type ReactNode, type Ref, useEffect, useReducer, useRef, useState } fro
 
 import { currentItem, drillReducer, pendingAnswer, startDrill, summaryOf } from "../../features/drill/drill";
 import { Link } from "../../i18n/navigation";
+import { ArticleLink } from "../library/ArticleLink";
 import type { Container } from "../../lib/container";
 import { isPageKey } from "../../lib/keyboard";
 import { DIAGNOSTIC_SIZE, REVIEW_SET_LIMIT, readStudyProfile, sessionSizeFor } from "../../lib/study";
@@ -437,6 +438,7 @@ function Feedback({
       <p className="app-feedback__matters">
         {t("whyMatters", { band: item.targetBand, subSkill: tSub(item.subSkill) })}
       </p>
+      <ArticleLink subSkill={item.subSkill} newTab />
       {generated ? (
         <GeneratedProvenance item={item} />
       ) : (

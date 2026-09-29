@@ -201,6 +201,8 @@ test("every page is titled for its purpose, ahead of the product name (WCAG 2.4.
     ["/fr/practice/oral/report", "Bilan d’une séance orale · Palier"],
     ["/en/exam", "Mock exam · Palier"],
     ["/en/privacy", "Privacy · Palier"],
+    ["/en/library", "Library · Palier"],
+    ["/fr/library/pronouns", "Les pronoms · Palier"],
     ["/fr/about", "Ce qu'est Palier, et ce qu'il n'est pas · Palier"],
     ["/fr/exam/results", "Résultats de l’examen · Palier"],
     ["/en", "Palier"],

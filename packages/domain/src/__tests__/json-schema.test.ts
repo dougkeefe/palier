@@ -36,6 +36,7 @@ describe("the published JSON Schemas", () => {
       "exam-form",
       "exam-profile",
       "item",
+      "library-article",
       "oral-fillers",
       "oral-scenario",
       "passage",

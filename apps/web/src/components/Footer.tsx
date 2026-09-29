@@ -8,7 +8,7 @@ import { ShortcutSheet } from "./ShortcutSheet";
  * The site footer, on every page. It carries the persistent, unmissable
  * non-affiliation statement required from day one (R5, product-requirements.md
  * §2: "in the footer of every page"), and the links to the data pane, the sync settings and
- * the key settings, then the about page and the privacy notice (progress.md D145), so export, delete, the sync switch and the key are one step from anywhere
+ * the key settings, then the library (D159), the about page and the privacy notice (progress.md D145), so export, delete, the sync switch and the key are one step from anywhere
  * [R11, R12, R14] and always in the same place (WCAG 3.2.6).
  */
 export function Footer() {
@@ -28,6 +28,9 @@ export function Footer() {
           </Link>
           <Link href="/settings/key" className="app-link pl-focusable">
             {t("key")}
+          </Link>
+          <Link href="/library" className="app-link pl-focusable">
+            {t("library")}
           </Link>
           <Link href="/about" className="app-link pl-focusable">
             {t("about")}

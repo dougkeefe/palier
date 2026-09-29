@@ -27,6 +27,7 @@
     "yourData": "Vos données",
     "sync": "Synchronisation",
     "key": "Votre clé d’API",
+    "library": "Bibliothèque",
     "about": "À propos",
     "privacy": "Confidentialité"
   },
@@ -961,5 +962,19 @@
         "share": "Je viens d’obtenir le niveau C à un examen simulé sur Palier, une application d’entraînement gratuite et non officielle pour l’Évaluation de langue seconde fédérale."
       }
     }
+  },
+  "library": {
+    "title": "Bibliothèque",
+    "intro": "De courts articles de référence sur les dix points d’expression écrite que Palier suit. Chacun présente la règle, les pièges que rencontre un rédacteur anglophone et des exemples.",
+    "skillHeading": "Expression écrite",
+    "readingLater": "Les articles sur la compréhension de l’écrit viendront après la version 1.0.",
+    "back": "Tous les articles",
+    "examples": "Exemples",
+    "insteadOf": "Au lieu de",
+    "write": "Écrivez",
+    "related": "À lire ensuite",
+    "practise": "S’exercer à l’expression écrite",
+    "readAbout": "Lire l’article « {subSkill} » dans la bibliothèque",
+    "newTab": "(s’ouvre dans un nouvel onglet)"
   }
 }

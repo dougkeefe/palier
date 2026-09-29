@@ -1,0 +1,92 @@
+{
+  "subSkill": "prepositions-and-government",
+  "lang": "fr",
+  "title": {
+    "en": "Prepositions and government",
+    "fr": "Les prépositions et le régime"
+  },
+  "summary": {
+    "en": "Using the preposition a verb, noun or adjective governs. English habits pull toward the wrong one, and some French verbs take none at all.",
+    "fr": "Employer la préposition que commande le verbe, le nom ou l’adjectif. Les habitudes de l’anglais entraînent vers la mauvaise, et certains verbes n’en prennent aucune."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Verbs and their prepositions",
+        "fr": "Les verbes et leur préposition"
+      },
+      "paragraphs": [
+        {
+          "en": "Some verbs take a direct object where English uses a preposition: _attendre quelqu’un_ (wait for), _chercher un dossier_ (look for), _demander un avis_ (ask for), _écouter la présentation_ (listen to).",
+          "fr": "Certains verbes se construisent directement là où l’anglais emploie une préposition : _attendre quelqu’un_, _chercher un dossier_, _demander un avis_, _écouter la présentation_."
+        },
+        {
+          "en": "Others need one where English has none: _se souvenir de_, _profiter de_, _répondre à_, _assister à une réunion_ (attend a meeting).",
+          "fr": "D’autres en exigent une là où l’anglais n’en a pas : _se souvenir de_, _profiter de_, _répondre à_, _assister à une réunion_."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Common traps at work",
+        "fr": "Les pièges fréquents au bureau"
+      },
+      "paragraphs": [
+        {
+          "en": "Write _sur le site Web_, not _dans_; _dans le cadre de_, not _sous_; _au cours de la réunion_ or _pendant la réunion_; _en fonction de_, not _dépendamment de_.",
+          "fr": "On écrit _sur le site Web_, et non _dans_; _dans le cadre de_, et non _sous_; _au cours de la réunion_ ou _pendant la réunion_; _en fonction de_, et non _dépendamment de_."
+        },
+        {
+          "en": "Two verbs sharing one object must share its construction. _Consulter et répondre aux demandes_ joins a direct verb and an indirect one: write _consulter les demandes et y répondre_.",
+          "fr": "Deux verbes qui partagent un complément doivent avoir la même construction. _Consulter et répondre aux demandes_ réunit un verbe direct et un verbe indirect : écrivez _consulter les demandes et y répondre_."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "avoid": "Nous attendons pour la réponse du ministère.",
+      "write": "Nous attendons la réponse du ministère.",
+      "why": {
+        "en": "_Attendre_ takes a direct object.",
+        "fr": "_Attendre_ se construit directement."
+      }
+    },
+    {
+      "avoid": "Elle a participé dans le comité de sélection.",
+      "write": "Elle a participé au comité de sélection.",
+      "why": {
+        "en": "_Participer à_, not _dans_, which copies “participate in”.",
+        "fr": "_Participer à_, et non _dans_, qui calque « participate in »."
+      }
+    },
+    {
+      "avoid": "Les renseignements sont disponibles dans notre site Web.",
+      "write": "Les renseignements sont disponibles sur notre site Web.",
+      "why": {
+        "en": "One is _sur_ a website.",
+        "fr": "On est _sur_ un site Web."
+      }
+    },
+    {
+      "avoid": "Nous devons nous rappeler de cette décision.",
+      "write": "Nous devons nous rappeler cette décision.",
+      "why": {
+        "en": "_Se rappeler_ takes a direct object; _se souvenir_ takes _de_.",
+        "fr": "_Se rappeler_ se construit directement; _se souvenir_, avec _de_."
+      }
+    },
+    {
+      "avoid": "Il faut lire et donner suite aux courriels.",
+      "write": "Il faut lire les courriels et y donner suite.",
+      "why": {
+        "en": "_Lire_ is direct and _donner suite à_ is indirect, so each needs its own object.",
+        "fr": "_Lire_ est direct et _donner suite à_ est indirect : chacun a besoin de son complément."
+      }
+    }
+  ],
+  "related": [
+    "false-friends-and-anglicisms",
+    "pronouns"
+  ]
+}

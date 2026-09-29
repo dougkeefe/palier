@@ -7,6 +7,7 @@ import {
   oralScenarioSchema,
   passageSchema,
   writingPromptSchema,
+  libraryArticleSchema,
 } from "../index.js";
 import {
   aValidAttempt,
@@ -389,5 +390,67 @@ describe("writingPromptSchema", () => {
 
   it("rejects a field it does not know", () => {
     expect(writingPromptSchema.safeParse(aValidPrompt({ targetBand: "C" })).success).toBe(false);
+  });
+});
+
+describe("libraryArticleSchema", () => {
+  const anArticle = (over: Record<string, unknown> = {}) => ({
+    subSkill: "agreement",
+    lang: "fr",
+    title: { en: "Agreement", fr: "L'accord" },
+    summary: { en: "Make the words agree.", fr: "Faites accorder les mots." },
+    sections: [{ heading: { en: "The rule", fr: "La règle" }, paragraphs: [{ en: "One.", fr: "Un." }] }],
+    examples: [{ avoid: "Les dossiers est prêt.", write: "Les dossiers sont prêts.", why: { en: "Plural.", fr: "Pluriel." } }],
+    related: ["pronouns"],
+    ...over,
+  });
+
+  it("accepts a valid article, with or without a sentence to avoid or related articles", () => {
+    expect(libraryArticleSchema.safeParse(anArticle()).success).toBe(true);
+    const { related: _, ...unrelated } = anArticle();
+    expect(libraryArticleSchema.safeParse(unrelated).success).toBe(true);
+    expect(
+      libraryArticleSchema.safeParse(anArticle({ examples: [{ write: "Elles sont venues.", why: { en: "x", fr: "x" } }] }))
+        .success,
+    ).toBe(true);
+  });
+
+  it("rejects a reading sub-skill, since the library is written expression's", () => {
+    expect(libraryArticleSchema.safeParse(anArticle({ subSkill: "main-idea" })).success).toBe(false);
+  });
+
+  it("rejects a title or a summary missing a locale", () => {
+    expect(libraryArticleSchema.safeParse(anArticle({ title: { en: "Only" } })).success).toBe(false);
+    expect(libraryArticleSchema.safeParse(anArticle({ summary: { fr: "Seul" } })).success).toBe(false);
+  });
+
+  it("rejects an article with no section, or a section with no paragraph", () => {
+    expect(libraryArticleSchema.safeParse(anArticle({ sections: [] })).success).toBe(false);
+    expect(
+      libraryArticleSchema.safeParse(anArticle({ sections: [{ heading: { en: "h", fr: "h" }, paragraphs: [] }] })).success,
+    ).toBe(false);
+  });
+
+  it("rejects an article with no example, or an example with nothing to write", () => {
+    expect(libraryArticleSchema.safeParse(anArticle({ examples: [] })).success).toBe(false);
+    expect(
+      libraryArticleSchema.safeParse(anArticle({ examples: [{ write: "  ", why: { en: "x", fr: "x" } }] })).success,
+    ).toBe(false);
+  });
+
+  it("rejects a blank sentence to avoid, which should be absent instead", () => {
+    expect(
+      libraryArticleSchema.safeParse(anArticle({ examples: [{ avoid: "", write: "Oui.", why: { en: "x", fr: "x" } }] }))
+        .success,
+    ).toBe(false);
+  });
+
+  it("rejects an empty related list, which should be absent instead, and an unknown related id", () => {
+    expect(libraryArticleSchema.safeParse(anArticle({ related: [] })).success).toBe(false);
+    expect(libraryArticleSchema.safeParse(anArticle({ related: ["spelling"] })).success).toBe(false);
+  });
+
+  it("rejects a field it does not know", () => {
+    expect(libraryArticleSchema.safeParse(anArticle({ body: "MDX" })).success).toBe(false);
   });
 });

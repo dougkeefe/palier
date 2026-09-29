@@ -1,0 +1,92 @@
+{
+  "subSkill": "sentence-structure",
+  "lang": "fr",
+  "title": {
+    "en": "Sentence structure",
+    "fr": "La structure de la phrase"
+  },
+  "summary": {
+    "en": "Building sentences whose parts fit together: a clear subject and verb, parallel elements, and no clause left hanging. Length is fine; confusion is not.",
+    "fr": "Construire des phrases dont les parties s’emboîtent : un sujet et un verbe clairs, des éléments parallèles et aucune proposition en suspens. La longueur n’est pas un défaut; la confusion, oui."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Keep it parallel",
+        "fr": "Assurez le parallélisme"
+      },
+      "paragraphs": [
+        {
+          "en": "Elements joined by _et_, by _ou_ or in a list take the same form: all nouns, all infinitives or all clauses. Write _analyser les données, rédiger le rapport et présenter les résultats_, not _analyser les données, la rédaction du rapport et présenter_.",
+          "fr": "Les éléments reliés par _et_, par _ou_ ou dans une énumération prennent la même forme : tous des noms, tous des infinitifs ou toutes des propositions. Écrivez _analyser les données, rédiger le rapport et présenter les résultats_, et non _analyser les données, la rédaction du rapport et présenter_."
+        },
+        {
+          "en": "A participle or a gerund at the head of a sentence must share the main clause’s subject. _En examinant le dossier, des erreurs ont été relevées_ says that the errors examined the file.",
+          "fr": "Le participe ou le gérondif placé en tête de phrase doit avoir le même sujet que la principale. _En examinant le dossier, des erreurs ont été relevées_ laisse entendre que les erreurs ont examiné le dossier."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Negation, questions and word order",
+        "fr": "La négation, l’interrogation et l’ordre des mots"
+      },
+      "paragraphs": [
+        {
+          "en": "In writing, a negation has both its parts: _ne… pas_, _ne… jamais_, _ne… que_. With _personne_ or _rien_ as the subject, keep _ne_: _Personne n’a répondu_.",
+          "fr": "À l’écrit, la négation a ses deux éléments : _ne… pas_, _ne… jamais_, _ne… que_. Avec _personne_ ou _rien_ sujet, gardez le _ne_ : _Personne n’a répondu_."
+        },
+        {
+          "en": "An indirect question keeps statement word order: _Je me demande quand la décision sera prise_, not _quand sera-t-elle prise_.",
+          "fr": "L’interrogation indirecte garde l’ordre de la phrase déclarative : _Je me demande quand la décision sera prise_, et non _quand sera-t-elle prise_."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "avoid": "Le rôle du conseiller consiste à analyser les dossiers, la rédaction des notes et conseiller la direction.",
+      "write": "Le rôle du conseiller consiste à analyser les dossiers, à rédiger des notes et à conseiller la direction.",
+      "why": {
+        "en": "Three parallel infinitives, each with its _à_.",
+        "fr": "Trois infinitifs parallèles, chacun avec son _à_."
+      }
+    },
+    {
+      "avoid": "En révisant le document, plusieurs erreurs sont apparues.",
+      "write": "En révisant le document, j’ai relevé plusieurs erreurs.",
+      "why": {
+        "en": "The gerund’s subject must be the main clause’s.",
+        "fr": "Le sujet du gérondif doit être celui de la principale."
+      }
+    },
+    {
+      "avoid": "Je me demande quand est-ce que le rapport sera publié.",
+      "write": "Je me demande quand le rapport sera publié.",
+      "why": {
+        "en": "An indirect question takes statement order, without _est-ce que_.",
+        "fr": "L’interrogation indirecte suit l’ordre déclaratif, sans _est-ce que_."
+      }
+    },
+    {
+      "avoid": "Personne a répondu à l’invitation.",
+      "write": "Personne n’a répondu à l’invitation.",
+      "why": {
+        "en": "Keep _ne_ in writing.",
+        "fr": "À l’écrit, on garde le _ne_."
+      }
+    },
+    {
+      "avoid": "Le rapport qui a été préparé par l’équipe et qui a été approuvé par la directrice et qui sera publié en mai.",
+      "write": "Le rapport, préparé par l’équipe et approuvé par la directrice, sera publié en mai.",
+      "why": {
+        "en": "The first has no main verb. The second has one, and trims the chain of _qui_.",
+        "fr": "La première n’a pas de verbe principal. La seconde en a un et allège la suite de _qui_."
+      }
+    }
+  ],
+  "related": [
+    "connectors-and-discourse-markers",
+    "verb-tense-and-mood"
+  ]
+}

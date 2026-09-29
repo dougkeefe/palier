@@ -1,0 +1,92 @@
+{
+  "subSkill": "pronouns",
+  "lang": "fr",
+  "title": {
+    "en": "Pronouns",
+    "fr": "Les pronoms"
+  },
+  "summary": {
+    "en": "Choosing the pronoun that matches the construction it replaces: _le_ or _lui_, _en_ or _y_, and the right relative pronoun, _dont_ above all.",
+    "fr": "Choisir le pronom qui correspond à la construction remplacée : _le_ ou _lui_, _en_ ou _y_, et le bon pronom relatif, _dont_ surtout."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "A personal pronoun follows the verb’s construction",
+        "fr": "Le pronom personnel suit la construction du verbe"
+      },
+      "paragraphs": [
+        {
+          "en": "A direct object becomes _le_, _la_ or _les_. An object introduced by _à_ becomes _lui_ or _leur_ for a person, and _y_ for a thing. An object introduced by _de_ becomes _en_.",
+          "fr": "Un complément direct devient _le_, _la_ ou _les_. Un complément introduit par _à_ devient _lui_ ou _leur_ s’il s’agit d’une personne, et _y_ s’il s’agit d’une chose. Un complément introduit par _de_ devient _en_."
+        },
+        {
+          "en": "So _J’ai informé la gestionnaire_ becomes _Je l’ai informée_; _J’ai écrit à la gestionnaire_ becomes _Je lui ai écrit_; _Nous parlerons du budget_ becomes _Nous en parlerons_; _Je réfléchis à la question_ becomes _J’y réfléchis_.",
+          "fr": "Ainsi, _J’ai informé la gestionnaire_ devient _Je l’ai informée_; _J’ai écrit à la gestionnaire_ devient _Je lui ai écrit_; _Nous parlerons du budget_ devient _Nous en parlerons_; _Je réfléchis à la question_ devient _J’y réfléchis_."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Relative pronouns",
+        "fr": "Les pronoms relatifs"
+      },
+      "paragraphs": [
+        {
+          "en": "_Dont_ replaces a complement introduced by _de_: _le projet dont je vous ai parlé_ (_parler de_), _le dossier dont nous avons besoin_ (_avoir besoin de_). _Que_ replaces a direct object.",
+          "fr": "_Dont_ remplace un complément introduit par _de_ : _le projet dont je vous ai parlé_ (_parler de_), _le dossier dont nous avons besoin_ (_avoir besoin de_). _Que_ remplace un complément direct."
+        },
+        {
+          "en": "After a preposition, use _lequel_ and its forms for things (_la raison pour laquelle_, _le comité auquel je siège_) and _qui_ for people (_la personne à qui j’ai écrit_).",
+          "fr": "Après une préposition, employez _lequel_ et ses formes pour les choses (_la raison pour laquelle_, _le comité auquel je siège_) et _qui_ pour les personnes (_la personne à qui j’ai écrit_)."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "avoid": "C’est le rapport que je vous ai parlé.",
+      "write": "C’est le rapport dont je vous ai parlé.",
+      "why": {
+        "en": "_Parler de_, so the relative is _dont_.",
+        "fr": "_Parler de_ : le relatif est _dont_."
+      }
+    },
+    {
+      "avoid": "J’ai appelé le directeur et je lui ai informé de la décision.",
+      "write": "J’ai appelé le directeur et je l’ai informé de la décision.",
+      "why": {
+        "en": "_Informer quelqu’un_ is direct: _le_, not _lui_.",
+        "fr": "_Informer quelqu’un_ est direct : _le_, et non _lui_."
+      }
+    },
+    {
+      "avoid": "Voici les ressources que vous aurez besoin.",
+      "write": "Voici les ressources dont vous aurez besoin.",
+      "why": {
+        "en": "_Avoir besoin de_, so _dont_.",
+        "fr": "_Avoir besoin de_ : _dont_."
+      }
+    },
+    {
+      "avoid": "C’est la raison pourquoi nous reportons la séance.",
+      "write": "C’est la raison pour laquelle nous reportons la séance.",
+      "why": {
+        "en": "After _raison_, the relative is _pour laquelle_.",
+        "fr": "Après _raison_, le relatif est _pour laquelle_."
+      }
+    },
+    {
+      "avoid": "Le formulaire? Je vais lui remplir ce soir.",
+      "write": "Le formulaire? Je vais le remplir ce soir.",
+      "why": {
+        "en": "_Remplir_ is direct: _le_.",
+        "fr": "_Remplir_ est direct : _le_."
+      }
+    }
+  ],
+  "related": [
+    "prepositions-and-government",
+    "agreement"
+  ]
+}

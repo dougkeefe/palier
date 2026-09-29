@@ -399,6 +399,55 @@ h3,
   }
 }
 
+/* The library (PRD §13.2, D159): an index of articles, then each article's examples. A cited
+   run is italic by its <i>; an example to write stands out by weight, never by colour alone. */
+.app-library__index {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.app-library__index p {
+  margin: 0.25rem 0 0;
+}
+
+.app-library__entry {
+  font-weight: 600;
+}
+
+.app-library__summary {
+  font-size: 1.1875rem;
+}
+
+.app-library__examples {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.app-library__example {
+  padding: 0.75rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.app-library__example p {
+  margin: 0.25rem 0;
+}
+
+.app-library__tag {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.app-library__write {
+  font-weight: 600;
+}
+
 /* The streak on today's plan (PRD §9): a flame and a count, then a freeze's one-time note. */
 .app-streak {
   margin: 0 0 0.75rem;

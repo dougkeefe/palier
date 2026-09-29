@@ -27,6 +27,7 @@
     "yourData": "Your data",
     "sync": "Sync",
     "key": "Your API key",
+    "library": "Library",
     "about": "About",
     "privacy": "Privacy"
   },
@@ -961,5 +962,19 @@
         "share": "I just scored at level C on a mock exam on Palier, a free, unofficial practice app for the federal Second Language Evaluation."
       }
     }
+  },
+  "library": {
+    "title": "Library",
+    "intro": "Short reference articles on the ten points of written expression Palier tracks. Each sets out the rule, the traps an anglophone writer meets, and examples.",
+    "skillHeading": "Written expression",
+    "readingLater": "Articles on reading comprehension come after 1.0.",
+    "back": "All articles",
+    "examples": "Examples",
+    "insteadOf": "Instead of",
+    "write": "Write",
+    "related": "Read next",
+    "practise": "Practise written expression",
+    "readAbout": "Read about {subSkill} in the library",
+    "newTab": "(opens in a new tab)"
   }
 }

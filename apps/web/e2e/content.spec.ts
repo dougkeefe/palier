@@ -138,3 +138,53 @@ test("progress prints as a one-page summary of both skills, with the statement (
   // Still both skills after an export: Chromium's PDF fires `afterprint` while print still applies.
   await expect(page.getByRole("heading", { name: "Practice trend — Written expression" })).toBeVisible();
 });
+
+test("the library lists ten articles, and an article reads its examples in French, in both languages (D159)", async ({ page }) => {
+  await page.goto("/en/library");
+  await expect(page.getByRole("heading", { level: 1, name: "Library" })).toBeVisible();
+  await expect(page.locator(".app-library__entry")).toHaveCount(10);
+  await axeClean(page);
+
+  await page.getByRole("link", { name: "Agreement", exact: true }).click();
+  await expect(page).toHaveURL(/\/en\/library\/agreement$/);
+  await expect(page).toHaveTitle("Agreement · Palier");
+  await expect(page.getByRole("heading", { level: 2, name: "The past participle" })).toBeVisible();
+  // The examples, and each French phrase cited in the English prose, carry French's lang.
+  await expect(page.getByText("Les documents que j’ai reçus hier sont incomplets.")).toHaveAttribute("lang", "fr");
+  await expect(page.locator("main i[lang='fr']").first()).toBeVisible();
+  expect(await page.locator("main i:not([lang='fr'])").count()).toBe(0);
+  await axeClean(page);
+
+  await page.getByRole("link", { name: "Pronouns" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Pronouns" })).toBeVisible();
+
+  await page.goto("/fr/library/agreement");
+  await expect(page.getByRole("heading", { level: 1, name: "Les accords" })).toBeVisible();
+  await expect(page.getByText("Au lieu de").first()).toBeVisible();
+  await axeClean(page);
+
+  // A segment that is not a written-expression sub-skill is the 404, in place.
+  await page.goto("/en/library/main-idea");
+  await expect(page.getByRole("heading", { level: 1, name: "Page not found" })).toBeVisible();
+});
+
+test("a written-expression item's feedback reaches its library article, in a new tab (D159)", async ({ page, context }) => {
+  await onboard(page, "skip");
+  await expect(page).toHaveURL(/\/en\/home$/);
+  await page.getByRole("radio", { name: "Written expression" }).check();
+  await page.getByRole("link", { name: /^Start/ }).click();
+  await expect(page.locator(".app-session__count")).toBeVisible();
+  await page.keyboard.press("1");
+  await page.keyboard.press("Enter");
+  const feedback = page.getByRole("region", { name: /Correct|Not quite/ });
+  await expect(feedback).toBeVisible();
+
+  const link = feedback.getByRole("link", { name: /Read about .+ in the library/ });
+  await expect(link).toHaveAttribute("target", "_blank");
+  await axeClean(page);
+  const [article] = await Promise.all([context.waitForEvent("page"), link.click()]);
+  await expect(article).toHaveURL(/\/en\/library\/[a-z-]+$/);
+  await expect(article.getByRole("heading", { level: 1 })).toBeVisible();
+  // The drill is still where it was.
+  await expect(feedback).toBeVisible();
+});

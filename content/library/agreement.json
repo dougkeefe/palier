@@ -1,0 +1,92 @@
+{
+  "subSkill": "agreement",
+  "lang": "fr",
+  "title": {
+    "en": "Agreement",
+    "fr": "Les accords"
+  },
+  "summary": {
+    "en": "Making adjectives, past participles and verbs agree with what they refer to. Most errors come from a subject far from its verb, or a past participle with _avoir_.",
+    "fr": "Accorder l’adjectif, le participe passé et le verbe avec ce à quoi ils se rapportent. La plupart des erreurs viennent d’un sujet éloigné du verbe ou d’un participe passé employé avec _avoir_."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "The past participle",
+        "fr": "Le participe passé"
+      },
+      "paragraphs": [
+        {
+          "en": "With _être_, the past participle agrees with the subject: _Les demandes sont arrivées_. With _avoir_, it agrees with the direct object only when that object comes before the verb: _les demandes que nous avons reçues_.",
+          "fr": "Avec _être_, le participe passé s’accorde avec le sujet : _Les demandes sont arrivées_. Avec _avoir_, il s’accorde avec le complément d’objet direct seulement si celui-ci précède le verbe : _les demandes que nous avons reçues_."
+        },
+        {
+          "en": "With a pronominal verb, look for the direct object. _Elles se sont présentées_ agrees, because _se_ is the object. _Elles se sont posé des questions_ does not, because the object, _des questions_, comes after.",
+          "fr": "Avec un verbe pronominal, cherchez le complément direct. _Elles se sont présentées_ s’accorde, car _se_ est complément direct. _Elles se sont posé des questions_ ne s’accorde pas, car le complément, _des questions_, est placé après."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Subject and verb",
+        "fr": "Le sujet et le verbe"
+      },
+      "paragraphs": [
+        {
+          "en": "Find the real subject, however far it sits from the verb. In _La liste des participants aux trois séances est jointe_, the subject is _liste_.",
+          "fr": "Trouvez le vrai sujet, même éloigné du verbe. Dans _La liste des participants aux trois séances est jointe_, le sujet est _liste_."
+        },
+        {
+          "en": "After _la plupart_, the verb is plural; after _chacun_, it is singular. Several subjects joined by _et_ take a plural verb.",
+          "fr": "Après _la plupart_, le verbe se met au pluriel; après _chacun_, au singulier. Plusieurs sujets coordonnés par _et_ commandent le pluriel."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "avoid": "Les documents que j’ai reçu hier sont incomplets.",
+      "write": "Les documents que j’ai reçus hier sont incomplets.",
+      "why": {
+        "en": "The direct object, _que_ (_les documents_), comes before _avoir_.",
+        "fr": "Le complément direct, _que_ (_les documents_), précède l’auxiliaire _avoir_."
+      }
+    },
+    {
+      "avoid": "La liste des candidats retenus sont affichée.",
+      "write": "La liste des candidats retenus est affichée.",
+      "why": {
+        "en": "The subject is _liste_, which is singular.",
+        "fr": "Le sujet est _liste_, au singulier."
+      }
+    },
+    {
+      "avoid": "Les gestionnaires se sont parlés avant la réunion.",
+      "write": "Les gestionnaires se sont parlé avant la réunion.",
+      "why": {
+        "en": "One speaks to someone: _se_ is an indirect object, so the participle does not agree.",
+        "fr": "On parle à quelqu’un : _se_ est complément indirect, donc le participe ne s’accorde pas."
+      }
+    },
+    {
+      "avoid": "La plupart des employés a répondu au sondage.",
+      "write": "La plupart des employés ont répondu au sondage.",
+      "why": {
+        "en": "After _la plupart_, the verb is plural.",
+        "fr": "Après _la plupart_, le verbe est au pluriel."
+      }
+    },
+    {
+      "avoid": "Les conseillères sont arrivé à l’heure.",
+      "write": "Les conseillères sont arrivées à l’heure.",
+      "why": {
+        "en": "With _être_, the participle agrees with the subject.",
+        "fr": "Avec _être_, le participe s’accorde avec le sujet."
+      }
+    }
+  ],
+  "related": [
+    "pronouns",
+    "sentence-structure"
+  ]
+}

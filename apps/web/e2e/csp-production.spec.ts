@@ -29,6 +29,8 @@ const PAGES = [
   "/exam/results",
   "/exam/run",
   "/home",
+  "/library",
+  "/library/agreement",
   "/practice/oral",
   "/practice/oral/report",
   "/practice/reading",
