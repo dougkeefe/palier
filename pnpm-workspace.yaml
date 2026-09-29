@@ -17,3 +17,19 @@ auditConfig:
   ignoreGhsas:
     - GHSA-x6wp-rfwh-hcx7
     - GHSA-5854-jvxx-2cg9
+
+# Patched versions forced under dev-only parents that pin a vulnerable one (progress.md D155).
+# None of these parents has a release that fixes it, so Dependabot cannot propose one. Each
+# override is scoped to its parent, adds no package, and was checked against the API the
+# parent calls. `extract-zip` (under `@lhci/cli`) has no patched release at all; its two
+# alerts are dismissed as tolerable risk, since it runs only on CI's Lighthouse step.
+overrides:
+  # GHSA-ph9p-34f9-6g65, GHSA-52f5-9888-hmc6: `@lhci/cli` calls `tmp.fileSync`, `external-editor` `tmp.tmpNameSync`.
+  "@lhci/cli>tmp": ^0.2.6
+  "external-editor>tmp": ^0.2.6
+  # GHSA-w5hq-g745-h8pq: `@lhci/cli` calls only `uuid.v4()`, unchanged in 11.
+  "@lhci/cli>uuid": ^11.1.1
+  # GHSA-q8mj-m7cp-5q26: through Stryker's `typed-rest-client`, a patch release.
+  "typed-rest-client>qs": ^6.15.2
+  # GHSA-67mh-4wv8-2f99: `drizzle-kit`'s deprecated `@esbuild-kit` loader pins 0.18; drizzle-kit itself uses 0.25.
+  "@esbuild-kit/core-utils>esbuild": ^0.25.0

@@ -15,6 +15,16 @@ updates:
       minor-and-patch:
         update-types: [minor, patch]
     # …and a pull request each for a major, which is read, not merged on green.
+    ignore:
+      # The Node types track the runtime's major, Node 22 (`.nvmrc`, `apps/web` engines),
+      # not the newest Node; a new major comes with the runtime move (progress.md D155).
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # ESLint is held at 9 until `eslint-config-next`'s plugins accept 10 (progress.md D8).
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@eslint/js"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:

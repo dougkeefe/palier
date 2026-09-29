@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@palier/testing": "workspace:*",
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   },
   "dependencies": {
     "@palier/app": "workspace:*",

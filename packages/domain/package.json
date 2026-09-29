@@ -18,7 +18,7 @@
     "check-types": "tsc -p tsconfig.vitest.json --noEmit"
   },
   "devDependencies": {
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   },
   "dependencies": {
     "zod": "4.6.5"

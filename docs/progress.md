@@ -5376,6 +5376,81 @@ amended in place
   unchanged, since every permitted source licence is compatible with CC BY-NC-SA. Making the repo public stays with the
   human.
 
+### D154 — TypeScript 6, and every build states its ambient `types`
+**Date:** 29 September 2026 · **Status:** accepted (cleanup slice, human chose to take the major)
+
+- **What broke.** TypeScript 6.0 no longer loads every `@types/*` package it can find. Dependabot's PR (#44) failed at
+  `packages/testing/src/simulator/network.ts`: it could not find `setImmediate`.
+- **The fix.**
+  - `tsconfig.base.json` now sets `"types": []`, TS 6's own recommended default. A package that really runs on Node opts
+    in with `"types": ["node"]`.
+  - Two builds opt in: `packages/testing` and `apps/factory`.
+  - All five other packages' `tsconfig.vitest.json` opt in too, because their tests read fixtures and goldens from disk.
+    Their `tsconfig.json` builds do not.
+  - `apps/web` needed no change, because Next's own types bring Node's in.
+  - The #44 branch was closed, and this branch carries the bump in every `package.json`.
+- **What it buys.** "No `node:*`" in `@palier/domain` and "zero Node core" in `@palier/engine` were lint and
+  dependency-cruiser rules. Now the compiler enforces them as well.
+  - **Proven to bite:** `process.env` appended to `engine/src/index.ts`, and a `node:fs` import appended to
+    `domain/src/index.ts`, each failed `tsc -b` with TS2591. Both were reverted.
+  - Both packages' `CLAUDE.md` say so.
+- **`@types/node` stays a root devDependency.** It resolves from the root's `node_modules` for every package, as it did
+  before. A `types` entry is not an import, so the strict-isolation rule is unchanged.
+- **Nothing else in TS 6 fired.** `strict`, `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes` are unchanged.
+  The tooling's peer ranges already accept 6.0: typescript-eslint `<6.1.0` and dependency-cruiser `>=3.6`.
+
+### D155 — the dev-only advisories are overridden, not waited on; Dependabot ignores two majors
+**Date:** 29 September 2026 · **Status:** accepted. Supersedes D135's "Dependabot will propose the updates"
+
+- **Why D135's expectation failed.** Seven alerts were open, all dev-only and transitive:
+  - `tmp` twice, `uuid` and `extract-zip` twice under `@lhci/cli` 0.15.1;
+  - `qs` under Stryker's `typed-rest-client`;
+  - `esbuild` 0.18 under `drizzle-kit`'s deprecated `@esbuild-kit` loader.
+
+  Every parent is on its latest release and pins the vulnerable version, so Dependabot had nothing to propose.
+- **The fix is scoped `overrides` in `pnpm-workspace.yaml`**, each commented with its GHSA:
+  - `@lhci/cli>tmp` and `external-editor>tmp` go to `^0.2.6`;
+  - `@lhci/cli>uuid` goes to `^11.1.1`;
+  - `typed-rest-client>qs` goes to `^6.15.2`;
+  - `@esbuild-kit/core-utils>esbuild` goes to `^0.25.0`.
+
+  No package is added. Each was checked against the API its parent calls: lhci uses only `uuid.v4()` and
+  `tmp.fileSync`, and external-editor uses `tmp.tmpNameSync`.
+
+  Smoke checks: `lhci --version` answers; `drizzle-kit generate --dialect=postgresql` wrote both tables into a temporary
+  directory; the Lighthouse step runs in the medium lane.
+- **`extract-zip` ≤ 2.0.1 has no patched release** (GHSA-7pqw-9j4j-h8q3, GHSA-jmr9-qjv8-65gv). Both alerts are dismissed
+  on GitHub as tolerable risk. It unpacks only the Chrome download on CI's Lighthouse step, and never touches user input.
+  **Revisit when** `@puppeteer/browsers` drops it or a fix ships.
+- **`pnpm audit` over the whole tree**, dev included, went from those seven to the two `extract-zip` entries only. The
+  fast lane's `--prod` gate is unchanged.
+- **The Dependabot queue.**
+  - #41 (the minor-and-patch group) and #40 (`github-script` v9) merged green. v9's breaking change is
+    `require('@actions/github')`, which our scripts never call.
+  - #43 (`jsdom` 30) asks for Node `^22.22.2`, so `.nvmrc` moved from 22.19.0 to 22.23.3, the latest 22.
+  - #42 (`@types/node` 26) was closed, because the types track the runtime's major.
+  - `.github/dependabot.yml` now ignores semver-majors of `@types/node` (it moves with the runtime) and of
+    `eslint`/`@eslint/js` (D8).
+
+### D156 — the nightly lane: a lane-wide timeout, and one issue per failing job
+**Date:** 29 September 2026 · **Status:** accepted
+
+- **Why it was red.** The nightly lane failed every night from 25 to 29 September and opened five identical issues (#24,
+  #29, #33, #36, #46).
+  - On four of those nights, two tie-order properties timed out at Vitest's 5-second default under 10,000 runs, at 5.4 to
+    7.6 s: `calculateTrend` and `weakestSubSkills`, "…in any order, even when their times tie". Integration and E2E never
+    ran after them.
+  - On the fifth night they happened to pass, and Integration found three sync-simulator seeds (D157).
+- **The fix is `testTimeout: 300_000` in `vitest.config.mts`, only when `CI_LANE=nightly`.** It keys off the same variable
+  as `vitest.setup.mts`'s `numRuns`. The lane is "unbounded in time" (§6.5), so the default was measuring the runner's
+  speed. Fast and medium keep 5 s, where a slow test is a bug. It is one root setting rather than a timeout per test, so a
+  new property does not have to remember it.
+  - **Proven to reach the projects:** with the value set to 1 ms, the nightly run of the trend file failed "Test timed out
+    in 1ms".
+- **Both failure steps in `nightly.yml`** now look for an open `nightly` issue with the same title prefix. If one exists,
+  they comment the run on it; otherwise they open one. A red week is one thread. The scripts were syntax-checked from the
+  parsed YAML. A real failing run will be the first to exercise the comment path.
+
 ---
 
 ## Session log
