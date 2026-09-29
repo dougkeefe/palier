@@ -32,14 +32,23 @@ export type SyncAccountDeps = {
  * Show a pairing code on this device (§9.3: six characters, ten minutes, single use).
  * Asking for one is an explicit request to sync, so a device that has not yet
  * registered — deferred until its first completed session — registers now.
+ *
+ * **The registration is a round trip, and the device may gain an identity meanwhile**
+ * (progress.md D157, found by the sync simulator): a sync registers it, or a pairing
+ * moves it. So the answer is written only if the device still has none. An identity
+ * written without its ledger reset is how a device ends up in one account holding
+ * another's ledger. If it names another account, it is not trusted either way:
+ * the device marks its account unconfirmed, and its next sync asks (D74).
  */
 export const requestPairCode = async (
   request: { readonly label: string },
   deps: SyncAccountDeps,
 ): Promise<{ readonly code: string; readonly expiresAt: string }> => {
-  const state = await deps.syncState.state();
-  if (state.identity === null) {
-    await deps.syncState.update({ identity: await deps.transport.registerDevice(request.label) });
+  if ((await deps.syncState.state()).identity === null) {
+    const registered = await deps.transport.registerDevice(request.label);
+    const held = (await deps.syncState.state()).identity;
+    if (held === null) await deps.syncState.update({ identity: registered });
+    else if (held.accountId !== registered.accountId) await deps.syncState.update({ accountUnconfirmed: true });
   }
   return deps.transport.requestPairCode();
 };
