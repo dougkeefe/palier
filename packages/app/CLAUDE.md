@@ -55,10 +55,16 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   close }` is **push**, one shape for the turn-based and the full-duplex transports: whole turns with their
   `startMs`/`endMs`, difficulty flags, and exactly one `closed { failed }`, last. `startOralSessionRun` drives the
   engine's machine over it: the session id comes in the request (D39), earlier sessions left running are
-  stamped `interrupted`, one queue serialises events, ticks and the end control, each turn is saved as it
+  stamped `interrupted` unless a page still runs them (below), one queue serialises events, ticks and the end control, each turn is saved as it
   arrives with the machine's phase, and the end is written only when the transport says `closed`, so an answer
   in flight is kept. Its end-to-end test runs in `@palier/testing` (`memory/oral-session.test.ts`), since an
   app test may not import it (D37).
+- **A session left running is closed only when no page holds it** (Phase 7 Slice 2, progress.md D144). The
+  `OralLiveness { hold(id) → release, live() }` port says which sessions a page on this device is running now;
+  the page running one holds it for the session's life, and the browser's implementation is a Web Lock the
+  browser lets go when the tab does. `closeAbandonedSessions` stamps `interrupted`, at the clock's now, every open
+  session nobody holds, and answers which; `startOralSessionRun` calls it, and so do the oral screens as they load,
+  so a session whose tab was closed is listed and reportable at once, and another tab's live session is never closed.
 - **Practice mode is `turnBasedTransport`, here, not in an adapter** (`use-cases/oral-practice.ts`, Phase 5
   Slice 2, progress.md D118), because it is orchestration over two ports and nothing vendor-specific. Each turn is
   one `withAiProvider(…, "oral-practice", …)` that writes the question (`examinerTurn`) and then voices it

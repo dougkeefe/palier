@@ -68,6 +68,8 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
   a scripted examiner with `advance`, `hangUp` and `directives`, `oralStoreContract` and
   `oralTransportContract`. `memory/oral-session.test.ts` drives `startOralSessionRun` over the fake transport
   for every fixture scenario: Phase 5's exit criterion 5. The fixture bank holds one scenario per session type.
+  `OralLiveness` landed with Phase 7 Slice 2, D144: `memoryOralLiveness()`, with `abandon(id)` to drop a hold the way
+  a tab closed hard does.
   `AnswerSource` landed with Slice 2, D118: `memoryAnswerSource(script, { released? })`, a scripted candidate
   with `release`, `idle` and `fail`. `memory/turn-based-transport.test.ts` holds `@palier/app`'s real
   `turnBasedTransport` to `oralTransportContract`, and `memory/oral-practice.test.ts` runs a whole practice

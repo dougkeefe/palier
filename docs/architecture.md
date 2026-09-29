@@ -689,7 +689,7 @@ Small by design.
 | --- | --- | --- | --- |
 | `POST /api/realtime/secret` | Edge | none, user key in header | Mint an ephemeral realtime token. Stateless, no logging. After 1.0 (D131) |
 | `POST /api/telemetry` | Edge | none | Opt-in anonymous item outcomes, batched, rate limited by IP hash |
-| `GET /api/health` | Edge | none | Build version, bank version |
+| `GET /api/health` | Edge | none | Build version, bank version. *(Amended 28 September 2026, `progress.md` D140: on Node, as every route is since ADR 21; it also says whether the database answers, and answers 503 only when a configured one does not.)* |
 | `POST /api/account/device` | Edge | none, creates identity | Register a device, create an anonymous account on first call, return the account id |
 | `POST /api/account/pair-code` | Edge | device secret | Issue a single-use pairing code, ten minute expiry |
 | `POST /api/account/pair` | Edge | pairing code | Join an existing account, return a new device secret |

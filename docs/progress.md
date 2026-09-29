@@ -3,7 +3,7 @@
 **Last updated:** 28 September 2026
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
-slices and three gates (D132), and **Slice 1, security hardening, is in flight** on `dougkeefe/next-progress-slice-v7`. Phase 3's
+slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, and **Slice 2 is built** (below). Phase 3's
 product pilot still runs beside it (Gate E). The history, oldest first: **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
@@ -34,7 +34,9 @@ gave the same band on every criterion in all five live reports. **Gate I passed*
 check, is deferred by the human (D130). Phase 6's decision gate was then resolved the same day: **studio mode waits until
 after 1.0** (D131). See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase before 1.0 (2–5) is built against the baseline committed bank, now `content/bank/v3`, and the content gate
-runs at 1.0.
+runs at 1.0. **Phase 7 Slice 1 merged (#39)**, and **Slice 2, server lifecycle and observability, is built**
+(`dougkeefe/next-slice-from-progress-v3`; D138–D144): the retention job and storage alert, `GET /api/health`, the error states with
+the diagnostic bundle, and both "outlives its screen" defects. **Gate K** (Phase 7's UI and content direction, human) is next.
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -100,7 +102,7 @@ human for anything expensive.
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **deferred past 1.0** (decision gate resolved 28 September 2026, human, D131); built after Phase 7 if at all |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 in flight) |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 built, D138–D144; Gate K next, human) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -210,35 +212,43 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 6's decision gate is resolved: studio mode is deferred past 1.0** (28 September 2026, human, D131). Phase 7 follows
-Phase 5 directly and is planned as four slices and three gates (D132), mirrored in `implementation-plan.md` §7. **Slice 1,
-security hardening, is built** on `dougkeefe/next-progress-slice-v7` (D133–D137). Phase 5's deferred cost check (D130) and the product
-pilot (Gate E, D97) still run beside it, both the human's.
+Phase 7 (D132) has two slices built. **Slice 1, security hardening, merged (#39; D133–D137).** **Slice 2, server lifecycle and
+observability, is built** on `dougkeefe/next-slice-from-progress-v3` (D138–D144):
+- the retention job and the storage alert;
+- `GET /api/health`;
+- the error states with the diagnostic bundle;
+- both "outlives its screen" defects, with finding 13's wipe half.
 
-**Next: Phase 7 Slice 2 — server lifecycle and observability.** No new product surface beyond the error states, so no gate
-before it. Scope:
-- **The retention job** (architecture.md §9.4, §12; D78 moved it here): accounts whose `lastActiveAt` is over 180 days old
-  are deleted with their devices and documents, and tombstones (`sync_documents.deleted`) over 90 days old are hard-deleted.
-  The decision (which rows, as of which instant) is a pure function under `apps/web/src/server/`, unit-tested at each
-  boundary; the run is a script beside `scripts/item-statistics.mjs` and a scheduled workflow on the
-  `item-statistics.yml` pattern: it skips when its secret is missing and needs a role that can delete. Integration-tested
-  on PGlite.
-- **The storage alert:** the same job reads the database size and fails its run, which notifies, at 60% and at 80% of the
-  plan's storage (§9.4). The plan's storage is a workflow input, not a number in code.
-- **`GET /api/health`** (architecture.md §10): the build and bank versions, and whether the database answers, with no
-  identifiers. Its handler joins `handlers.ts` with a test per branch.
-- **Error states:** `error.tsx`, `global-error.tsx` and `not-found.tsx` under `apps/web/src/app/` (framework file
-  conventions, already on the root `eslint.config.mjs` default-export exemption list, so it does not grow). Each offers the
-  **client diagnostic bundle** (architecture.md §16: build version, bank version, browser, the sanitised error, never the
-  key or any user text) copied to the clipboard, and a prefilled issue built beside `reportIssueUrl` in
-  `apps/web/src/lib/report.ts`. The sanitiser is pure and tested against the key-leak sentinel. Both locales; axe on each
-  state.
-- **The two "outlives its screen" defects** (Named below): an in-flight flag a remount reads, for a generation or a report
-  (finding 13) and for a spoken session (D116).
+Phase 5's deferred cost check (D130) and the product pilot (Gate E, D97) still run beside it, both the human's.
 
-*Done:* the job retires exactly the rows past each boundary and none before it, on PGlite; the health route and the error
-states are tested and axe-clean; `pnpm verify` and `CI=1 pnpm test:e2e` green. Then **Gate K** (Phase 7's UI and content
-direction, human, D132) opens before Slices 3 and 4.
+**Next: Gate K — Phase 7's UI and content direction (human, D132).** Slices 3 and 4 wait on it, and nothing buildable is left
+before it. It asks what Gates A, D and F asked: adopt the PRD as written, or revise it first. The five questions, each with the
+agent's recommendation:
+1. **The privacy notice and the about page.** Neither has wording in the PRD. *Recommended:* the agent drafts both in Slice 3,
+   from architecture.md §12 as it stands:
+   - what is held, what is never held, what is deleted on a schedule (180 days, now built, D138), and the third parties;
+   - for the about page, PRD §7's "what this is, what it is not".
+   The human reads both in Gate L's French review.
+2. **Where the non-affiliation statement appears** beyond the footer. *Recommended:* as the PRD and Slice 3's scope say, in
+   onboarding and beside every band.
+3. **PRD §9's engagement mechanics in 1.0.** The readiness meter exists. *Recommended:* the streak (with its silent freeze) and
+   the milestone moments are in, in Slice 4. XP and levels, whose names need the French review, and the countdown come after
+   1.0.
+4. **The library's 1.0 scope** (PRD §7's `/library`, `implementation-plan.md` §7). *Recommended:* one short reference article per
+   written-expression sub-skill (ten), in both languages, linked from item explanations; reading's after 1.0.
+5. **The one-page PDF summary's shape** (PRD §8.9). *Recommended:* a print stylesheet over `/progress`, with no new dependency.
+   It carries the band trend per skill with its interval, accuracy by sub-skill, time invested, oral minutes, the "what this
+   does and does not tell you" panel, and the non-affiliation statement.
+
+*Done:* the human's ruling on each is recorded as a deviation, and *Next, decided* names Slice 3.
+
+**For the human, from Slice 2:**
+- after merging, **`curl -s https://palier-virid.vercel.app/api/health`** should answer `{"build":"<7 hex>","bank":3,"database":"ok"}`
+  (`docs/deploy.md`'s smoke checks);
+- add the **`RETENTION_DATABASE_URL`** Actions secret (a role that can delete, `docs/deploy.md`, "The retention job") and the
+  **`PLAN_STORAGE_MB`** variable (`512` on Neon's free tier);
+- then **run the retention workflow by hand as a dry run** before its first scheduled run deletes (D138). The script has not
+  yet run against a real Postgres.
 
 **For the human, from Slice 1:**
 - **enable GitHub's private vulnerability reporting** on the repository (Settings → Security), which `SECURITY.md` names as
@@ -261,16 +271,17 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
 
 **Named, not scheduled:**
 - reading-set generation (D110);
-- **a generation that outlives its screen** (pre-merge review of Phase 4 Slice 4, finding 13). The workshop and the report share
-  the shape: leaving mid-call keeps spending out of sight. The fix is an in-flight flag a remount reads;
 - **one `debiasKeyPosition`** in domain for the factory and the browser (finding 16);
 - **the vocabulary queue** (PRD §8.6's "added to the vocabulary queue"): v1's `vocab` table behind a port and a vocabulary item
   type in the registry (ADR 17);
 - **transcript sync with playback** (PRD §8.6): the turns have times, but no clip is cut from the recording;
 - **a drill filtered to one sub-skill**, so a fix's link lands on that sub-skill today rather than biasing the next plan (D124);
 - **fillers the transcription drops**: asking the transcription to keep hesitations (its `prompt` parameter) (D123);
-- **a spoken session that outlives its screen**: a hard close leaves it to be stamped `interrupted` at the next start (D116). It
-  keeps its transcript, and now has a report to ask for, since it has ended.
+- **a 404 status for an unknown path**: it answers 200 with `noindex`, because Next serves `notFound()` under this root layout
+  as an error shell that cannot run under the strict CSP (D141). Next's experimental `global-not-found.tsx` is the likely fix;
+- **the first single-record delete**, which will write the tombstones the retention job already purges (D138);
+- **the 60% aggregation** as code, written when the storage alert first fires (`docs/deploy.md`, D139);
+- **`global-error.tsx` reached end to end**: only its view is checked, since the root layout works (D142).
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
@@ -560,9 +571,10 @@ Nothing is ticked without session-log evidence.
 - [~] Device list and revocation UI, pairing polished. **The list, remove and pairing by code exist** (Phase 2 Slice 2, D72:
   `SyncSettings.tsx`, `removeDevice`, journey 8). Missing: a confirmation before a device is removed, the pair code's
   countdown and copy, and this device noticing it was removed elsewhere. Slice 3
-- [ ] Retention job for inactive accounts (180 days) and the 90-day tombstone purge, the storage alerts, the aggregation
-  path (architecture.md §9.4; D78 moved both jobs here). Slice 2. The aggregation path is the 60% response and is written
-  as a runbook step, not built, until the alert first fires
+- [~] Retention job for inactive accounts (180 days) and the 90-day tombstone purge, the storage alerts, the aggregation
+  path (architecture.md §9.4; D78 moved both jobs here). **Slice 2, built on this branch** (D138, D139): the job, its daily
+  workflow and the alert at 60% and 80%. The aggregation path is the 60% response, written as a runbook step in
+  `docs/deploy.md`, not built, until the alert first fires
 - [~] PDF progress summary; JSON export and import round trip. **The round trip exists** (D61, D62; `data-rights.test.ts`,
   journey 6). Missing: the one-page PDF (PRD §8.9), by print stylesheet. Slice 3
 - [ ] The motion and illustration pass: Coco, the milestone moments, the streak, the band meter fill, self-hosted fonts
@@ -574,8 +586,9 @@ Nothing is ticked without session-log evidence.
 - [ ] The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
   Slice 4, scoped by Gate K; the articles' French is part of Gate L
 - [~] Observability: the client diagnostic bundle, the prefilled issue path, no error reporting service (ADR 15). **The
-  item-report issue path exists** (Phase 2). Missing: the diagnostic bundle, the error states and `/api/health`. Slice 2.
-  The realtime route's exclusion from Vercel logging moves with studio mode (D131)
+  item-report issue path exists** (Phase 2). **Slice 2, built on this branch** (D140–D142): the diagnostic bundle, the error
+  states with a prefilled issue, and `/api/health`. The realtime route's exclusion from Vercel logging moves with studio
+  mode (D131)
 - [~] Content: the about page, the non-affiliation statement in both languages, the privacy notice, the contribution guide
   with the originality attestation, the PR template. **The footer statement and a two-paragraph about page exist** (Phase 0,
   Phase 2). Slice 3, after Gate K
@@ -588,7 +601,8 @@ Nothing is ticked without session-log evidence.
 - [x] **Slice 1 — Security hardening, no new UI.** **Built 28 September 2026, merged (#39)** (`dougkeefe/next-progress-slice-v7`;
   D133–D137; session-log evidence). The strict CSP and Trusted Types on the built output, the dependency audit
   gate and Dependabot, `SECURITY.md`, `RATE_LIMIT_SALT` failing the deploy, and the deliberate attempt to leak the key.
-- [~] **Slice 2 — Server lifecycle and observability.** In flight on `dougkeefe/next-slice-from-progress-v3`. The retention job and the storage alert, `/api/health`, the error
+- [~] **Slice 2 — Server lifecycle and observability.** **Built 28 September 2026** (`dougkeefe/next-slice-from-progress-v3`;
+  D138–D144; session-log evidence), with finding 13's wipe half. The retention job and the storage alert, `/api/health`, the error
   states with the diagnostic bundle, and the two "outlives its screen" defects.
 - [ ] **Gate K — Phase 7's UI and content direction (human).** The privacy notice's and about page's wording, where the
   non-affiliation statement appears, whether PRD §9's streak, XP and milestones are in 1.0, the library's 1.0 scope, and the
@@ -4961,11 +4975,208 @@ merged, none critical. The human chose to fix all of them.
 - **If Production's `RATE_LIMIT_SALT` was never set, the next production deploy fails.** That is the intent. The
   runbook's environment table says so.
 
+### D138 — the retention job: activity is any authenticated request, the tombstone purge deletes nothing yet, and a scheduled run deletes
+**Date:** 28 September 2026 · **Status:** accepted (the delete-on-schedule call is the human's); Phase 7 Slice 2
+
+- **"No activity for 180 days" reads two columns.** `accounts.last_active_at` moves only on a push, but a device that only
+  pulls is still in use. So an account goes when its `last_active_at` is past the cutoff **and** it has no unrevoked device
+  whose `last_seen_at` is since then. `authenticate()` stamps `last_seen_at` on every request. No schema change, no migration.
+  A revoked device's last request does not keep its account.
+- **Boundaries are strict.** A row older than its cutoff goes, and a row exactly at it stays. The PGlite test holds every
+  boundary a millisecond either side, and five mutations of the SQL (`<` → `<=` on each rule, `>=` → `>` on the device, the
+  revoked filter dropped) each fail it.
+- **Nothing writes a tombstone yet** (D69, `schema.ts`). The purge is `deleted and updated_at < cutoff`, since `updated_at`
+  is stamped on every accepted write, and it removes nothing in production today. It is built and tested now, so the first
+  feature that deletes a single record inherits it.
+- **The job is self-contained raw SQL** (`src/server/retention-job.ts`), like the item-statistics job: no relative import,
+  `postgres` imported dynamically, and one statement per rule that counts in a dry run and deletes otherwise. The script
+  on postgres.js and the integration test on PGlite run the same text.
+- **A scheduled run deletes; a run by hand is a dry run unless unticked** (human decision). `.github/workflows/retention.yml`
+  runs daily at 05:00 UTC, and skips with a notice without `RETENTION_DATABASE_URL`, a role that can delete. The runbook
+  says to dry-run it by hand before the first scheduled run.
+- **The script itself did not run against a real Postgres here.** This machine has only the libpq client and Docker was
+  down. Its SQL ran on PGlite, and its guards ran by hand: no `DATABASE_URL` exits 1, and a bad `PLAN_STORAGE_MB` throws
+  before connecting. The first run by hand is the human's (Next, decided).
+
+### D139 — the storage alert and two housekeeping purges on the same run
+**Date:** 28 September 2026 · **Status:** accepted
+
+- **The plan's storage is a workflow input**, never a number in code. It is `inputs.plan_storage_mb` on a run by hand, or
+  the `PLAN_STORAGE_MB` repository variable, in MiB. Neon's free tier is 512. Without it the run still deletes, and says
+  it checked no alert. A value that is not a positive number fails the run, so a typo cannot silently turn the alert off.
+- **At 60% and at 80% the run fails**, and a failed scheduled run is what notifies. The log names the threshold.
+  architecture.md §9.4's 60% response, the aggregation, is **a runbook step, not built**, until the alert first fires
+  (`docs/deploy.md`, "The retention job").
+- **Two purges the plan did not name**: expired pair codes, and rate-limit rows from windows over a day old. Every window
+  is an hour or shorter. Neither row means anything once past, and without the purge the storage alert would one day fire
+  on rows that mean nothing.
+- `docs/deploy.md`'s environment table had a blank line that ended it early, so its last two rows did not render as part
+  of it. It is joined up, and the two new rows added.
+
+### D140 — `GET /api/health` on Node; the build version from the commit, and the bank version out of the browser-only root
+**Date:** 28 September 2026 · **Status:** accepted; architecture.md §10 amended in place
+
+- **The route runs on Node**, not Edge as §10 said, because ADR 21 put every route on Node.
+- **What it answers:** `{ build, bank, database }` with `Cache-Control: no-store`, and no identifier of any kind.
+  - `database` is `ok`, `not-configured` (no `DATABASE_URL`, a working deployment under ADR 21) or `unreachable`;
+  - only `unreachable` answers 503. `db.ts`'s `databaseAnswers` runs `select 1` against a two-second limit and never throws.
+- **The build version** is `VERCEL_GIT_COMMIT_SHA`'s first seven characters, or `local`. `next.config.ts` inlines it as
+  `PALIER_BUILD_VERSION`, so the server and the client name the same build. It is `dev` where the config never ran.
+- **`BANK_VERSION` and `BANK_BASE_PATH` moved to `src/lib/bank-version.ts`.** `container.ts` is browser-only (D59), and the
+  health route and the diagnostic bundle need the version. `container.ts` re-exports both. The three readers of the line by
+  pattern (`prepare-public.mjs`, `item-statistics.mjs`, `e2e/helpers.ts`) read the new file.
+
+### D141 — the error states: a bundle with no free text, a generated copy for `global-error`, and a 404 that is not `notFound()`
+**Date:** 28 September 2026 · **Status:** accepted
+
+- **The diagnostic bundle carries no message at all**, which is stronger than redacting one. An error's message can quote
+  anything: a Zod error the value it refused, a fetch the URL it called. What is kept is chosen by shape:
+  - the name, if it looks like a class name;
+  - Next's digest, if it is digits;
+  - the `/_next/static/…:line:col` locations on real frame lines. A message line that imitates a frame is dropped.
+  Around them go the build, the bank, the browser's family and system (`deviceLabel`), the path without query or fragment,
+  and the time. The unit test poisons message, stack and digest with the key-leak sentinel and a user's sentence. Keeping
+  the message fails it.
+- **The user reads the bundle before anything leaves.** It sits in a `<details>`, with Copy (a status line says whether it
+  worked) and a prefilled GitHub issue, `errorIssueUrl`, beside `reportIssueUrl`. Nothing sends it (ADR 15).
+- **`global-error.tsx` has no next-intl provider**, and it loads with every page. Importing both message files would add
+  about 32 KB gzipped to every page, so `prepare-public.mjs` writes the `errors` namespace alone to
+  `components/errors/global-error-copy.json`. That file is committed and held equal to the messages by a drift test.
+- **An unknown path answers 200 with `noindex`, not 404.** The production CSP spec found this.
+  - Next serves any `notFound()` under this app's dynamic root layout as its error shell (`<html id="__next_error__">`), in
+    development too. The layout arrives only in the RSC payload, so its Trusted Types script never runs, and every chunk
+    load is refused. The 404 rendered blank.
+  - So `[locale]/[...rest]` renders the localised 404 itself, inside the layout. `[locale]/not-found.tsx` stays for a
+    `notFound()`, which only the layout's invalid-locale check can now reach, and the proxy redirects those first.
+  - Next's own answer, `global-not-found.tsx`, is experimental, and would grow the default-export exemption list. It is
+    named, not scheduled.
+- **The not-found page offers no bundle.** It is not an error the app made.
+- **A route error retitles the document while it shows, and gives the title back on recovery.** Next streams a page's
+  metadata into the head after the page has mounted, so a rendered `<title>` loses. The screen holds the title against
+  later writes.
+
+### D142 — the error states' E2E hook, and `global-error` checked through its view
+**Date:** 28 September 2026 · **Status:** accepted
+
+- **`[locale]/hermetic/[view]`** throws in the browser (`route`) or shows the global screen's view (`global`). It does this
+  in the hermetic lane only, and is the 404 anywhere else.
+- **It is a dynamic segment on purpose.** `routesFrom` skips those, so the service worker never precaches a page that is
+  a 404 in production.
+- **The thrown error carries `?leak=` everywhere**: its message, a line that imitates a frame, and a frame on another
+  origin. `errors.spec.ts` passes the key-leak sentinel and proves it is in neither what the screen shows, the clipboard,
+  nor the issue link. The hook throws until the URL's fragment is `#recover`, so Try again is seen to recover.
+- **`global-error.tsx` itself is not reached**, since the root layout works. Axe runs on its view inside a page, and its
+  document (`lang`, title, its own CSS) is held by review. This is a gap, recorded rather than covered.
+
+### D143 — a spending call outlives its screen: joined, never repeated, and a wipe drops what it would write (finding 13, whole)
+**Date:** 28 September 2026 · **Status:** accepted (the wipe half is in by human decision); closes finding 13
+
+- **Finding 13's first wording had two halves.** #37 dropped the second when it fixed the report:
+  - leaving mid-call keeps spending out of sight, so coming back could pay again;
+  - a wipe made meanwhile is refilled when the call settles.
+- **The join is D127's, generalised** (`lib/in-flight.ts`), at module scope in `container.ts`, so a rebuilt container finds
+  it:
+  - a report per session;
+  - feedback per submission;
+  - **one fresh set at a time on this device.** A generation request has no id, so a second request while one is out
+    joins it, whatever it asked for. The held request names its sub-skill, so the screen shows the right one.
+- **Each screen reads the held request when it loads** and shows it as still being made:
+  - the workshop, on mount and when a submission is reopened;
+  - the fresh-set screen, starting in `sending`.
+  While its feedback is being made the workshop's text is read-only, and the reducer ignores an edit, which would bring
+  Get feedback back mid-call.
+- **A wipe or delete-everywhere bumps a counter and forgets every held request.** Each call's content stores
+  (`writing.put`, `generated.putSet`, `oral.put`) drop their writes once the counter has moved since the call began. The
+  wrapper is in the composition root, and no port changed.
+  - **The cost ledger is not guarded**, because the call was billed and the meter should say so.
+  - A call already past its write is not affected: IndexedDB orders it before the wipe's clear.
+- **Proven to bite:** without the guard, each wipe test fails; with a join keyed apart, the join test fails; and with the
+  workshop's resume removed, the leave-and-return E2E fails.
+
+### D144 — a spoken session after a hard close: an `OralLiveness` port over Web Locks, and `closeAbandonedSessions`
+**Date:** 28 September 2026 · **Status:** accepted; `implementation-plan.md` §3.3 amended in place; closes D116's named defect
+
+- **The defect:** a hard close runs no code, so the session kept `endedAt: null` until the next session started. Until then
+  it was missing from the list of past sessions, and its report was blocked as running. Worse, `startOralSessionRun`
+  stamped **every** open session, including one another tab was running, and that tab then wrote it back as running.
+- **A new port, `OralLiveness { hold(id) → release, live() }`**, in `@palier/app`. The practice controller holds its
+  session from before it is stored until it ends.
+  - **The browser's implementation is a Web Lock per session** (`lib/oral/liveness.ts`, in both graphs). The browser
+    releases it itself when the tab goes, however it goes.
+  - Without Web Locks nothing is live, which is the old behaviour.
+  - The memory implementation is `memoryOralLiveness()`, with `abandon` for a tab closed hard.
+  - No new dependency.
+- **`closeAbandonedSessions`** stamps `interrupted` on every open session no page holds, and answers which it closed.
+  - It stamps at the clock's now, as before, which the existing tests pin.
+  - `startOralSessionRun` calls it, and so do the oral picker and the report as they load. So a closed tab's session is
+    listed and reportable at once, and another tab's never.
+- **E2E on the production build:** a second tab does not list a session the first is running; once the first is closed,
+  it does, and its report is offered. Proven to bite: with the controller holding nothing, the second tab closes the
+  running session and the spec fails.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 28 September 2026 — `dougkeefe/next-slice-from-progress-v3` (Phase 7 Slice 2: server lifecycle and observability)
+
+**Phase 7 Slice 1 had merged as #39**, so its In-flight row was replaced by this branch's in the first commit, and Slice 1 and
+the security item were ticked.
+
+**Human decisions this session:**
+- **a scheduled retention run deletes**, and a run by hand is a dry run unless unticked (D138);
+- **finding 13's wipe half is in** the slice (D143).
+
+**Built** (D138–D144):
+- the retention job and its daily workflow, with the storage alert and two housekeeping purges (`retention-job.ts`,
+  `scripts/retention.mjs`, `retention.yml`);
+- `GET /api/health`, with the build version inlined from the commit and the bank version moved out of the browser-only
+  root (`lib/build-info.ts`, `lib/bank-version.ts`);
+- the error states in both locales: `[locale]/error.tsx`, the localised 404 through `[locale]/[...rest]`, and
+  `global-error.tsx`, each with the diagnostic bundle (`lib/diagnostic.ts`) and a prefilled issue (`errorIssueUrl`);
+- the in-flight joins for the workshop and fresh sets, and the wipe guard over all three spending screens
+  (`lib/in-flight.ts`);
+- the `OralLiveness` port over Web Locks, and `closeAbandonedSessions`;
+- the runbook's retention section and smoke check, `implementation-plan.md` §3.3 and architecture.md §10 amended in place,
+  and the three packages' `CLAUDE.md`.
+
+No new dependency.
+
+**Found by the suite and fixed** (D141): on the production build the 404 rendered blank. Next serves any `notFound()` under
+this dynamic root layout as its error shell, which has neither the layout nor its Trusted Types policy, so every chunk load
+was refused. `csp-production.spec.ts`'s new 404 page caught it, with one violation, `require-trusted-types-for …
+HTMLScriptElement src`. The catch-all now renders the 404 inside the layout, 200 with `noindex`.
+
+**Evidence** (after the last code change, on a fresh production build):
+
+```
+pnpm verify           → check-types, lint, boundaries (454 + 266 modules, no violations),
+                        test: 217 files, 3276 passed, 8 todo; coverage thresholds met
+pnpm test:integration → 7 files, 50 passed (retention.integration.test.ts among them)
+CI=1 pnpm test:e2e     → 74 passed (1.2m): errors.spec.ts's 7, the workshop's and generate's leave-and-return,
+                        oral-production's closed tab, health, and csp-production's 404 page
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.9 KB of 180.0 KB (unchanged)
+pnpm --filter @palier/web lighthouse  → 17 URLs × 5 runs, every assertion passed; lowest median performance 0.99,
+                        accessibility 1.00 on all, max CLS 0
+git diff packages/engine/src/__fixtures__ → empty
+```
+
+**Proven to bite** (each reverted):
+- retention, on PGlite: `<` → `<=` on inactive accounts, pair codes and rate limits, `>=` → `>` on the device, and the revoked
+  filter dropped. Each fails the boundary test;
+- the bundle keeping the error's message → the sentinel test and two others fail;
+- the workshop, generate and report writes unguarded → each wipe test fails. A join keyed apart → the join test fails;
+- the workshop's resume dropped → the leave-and-return E2E fails;
+- the practice controller holding no lock, on a production build → the closed-tab E2E fails, since the second tab closes the
+  running session.
+
+**Not run:** the retention script against a real Postgres. Only the libpq client is installed here, and Docker was down.
+Its guards were run by hand: exit 1 with no `DATABASE_URL`, and a thrown error for `PLAN_STORAGE_MB=abc`. The first dry
+run by hand is the human's (*Next, decided*).
+
+**Ticked:** none. Slice 2 and its two breakdown items are `[~]` until the branch merges. *Next, decided* names Gate K.
 
 ### 28 September 2026 — `dougkeefe/next-progress-slice-v7` (Phase 6's gate resolved; Phase 7 planned; Phase 7 Slice 1, security hardening)
 
