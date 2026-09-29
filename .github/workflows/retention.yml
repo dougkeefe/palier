@@ -32,6 +32,7 @@ jobs:
     name: Retention and the storage alert
     runs-on: ubuntu-latest
     steps:
+      # RETENTION_DATABASE_URL holds the same connection string as Production's DATABASE_URL (progress.md D138).
       - name: Skip without a retention database
         id: gate
         env:

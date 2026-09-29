@@ -245,7 +245,7 @@ agent's recommendation:
 **For the human, from Slice 2:**
 - after merging, **`curl -s https://palier-virid.vercel.app/api/health`** should answer `{"build":"<7 hex>","bank":3,"database":"ok"}`
   (`docs/deploy.md`'s smoke checks);
-- add the **`RETENTION_DATABASE_URL`** Actions secret (a role that can delete, `docs/deploy.md`, "The retention job") and the
+- add the **`RETENTION_DATABASE_URL`** Actions secret, with the same value as Production's `DATABASE_URL` (D138), and the
   **`PLAN_STORAGE_MB`** variable (`512` on Neon's free tier);
 - then **run the retention workflow by hand as a dry run** before its first scheduled run deletes (D138). The script has not
   yet run against a real Postgres.
@@ -4992,8 +4992,12 @@ merged, none critical. The human chose to fix all of them.
   `postgres` imported dynamically, and one statement per rule that counts in a dry run and deletes otherwise. The script
   on postgres.js and the integration test on PGlite run the same text.
 - **A scheduled run deletes; a run by hand is a dry run unless unticked** (human decision). `.github/workflows/retention.yml`
-  runs daily at 05:00 UTC, and skips with a notice without `RETENTION_DATABASE_URL`, a role that can delete. The runbook
-  says to dry-run it by hand before the first scheduled run.
+  runs daily at 05:00 UTC, and skips with a notice without `RETENTION_DATABASE_URL`. The runbook says to dry-run it by
+  hand before the first scheduled run.
+- **`RETENTION_DATABASE_URL` is the app's own connection** (human decision, 29 September 2026): the same pooled string as
+  Production's `DATABASE_URL`, whose role owns the tables. No separate deleting role is made. The secret keeps its own
+  name, since Actions cannot read Vercel's environment and the workflow should say what the string is for. If the
+  connection string is rotated, this secret must be updated with it.
 - **The script itself did not run against a real Postgres here.** This machine has only the libpq client and Docker was
   down. Its SQL ran on PGlite, and its guards ran by hand: no `DATABASE_URL` exits 1, and a bad `PLAN_STORAGE_MB` throws
   before connecting. The first run by hand is the human's (Next, decided).
@@ -5128,6 +5132,7 @@ the security item were ticked.
 **Human decisions this session:**
 - **a scheduled retention run deletes**, and a run by hand is a dry run unless unticked (D138);
 - **finding 13's wipe half is in** the slice (D143).
+- **the retention job uses the app's own connection**: `RETENTION_DATABASE_URL` holds Production's `DATABASE_URL` (D138).
 
 **Built** (D138–D144):
 - the retention job and its daily workflow, with the storage alert and two housekeeping purges (`retention-job.ts`,

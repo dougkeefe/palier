@@ -22,7 +22,7 @@ sync as unavailable (ADR 21, `architecture.md` §11).
 | `RATE_LIMIT_SALT` | 32 random bytes as hex (`openssl rand -hex 32`). It keys the per-IP rate-limit HMAC. Without it each serverless instance picks its own salt, and the limits stop holding across instances. **A production deployment with `DATABASE_URL` and no salt now fails at its migrate step** (`progress.md` D137), before any migration runs | Vercel, Production (and Preview, if a preview ever gets a database) |
 | `TELEMETRY_DATABASE_URL` | A **read-only** connection string to the same database, for the monthly item-statistics job (`progress.md` D94). It only ever runs `select … from telemetry_events`. Without it, the workflow skips with a notice | GitHub → Settings → Secrets and variables → Actions |
 | `OPENAI_SMOKE_KEY` | An OpenAI key **of its own**, with a small monthly limit, for the nightly live smoke (`progress.md` D112). Each run spends about US$0.15, so about US$4.50 a month at one run a night. Without it, the job skips with a notice | GitHub → Settings → Secrets and variables → Actions |
-| `RETENTION_DATABASE_URL` | A connection string for a role that **can delete** from `accounts`, `sync_documents`, `pair_codes` and `rate_limits`, and can read the database's size, for the daily retention job (`progress.md` D138). Without it, the workflow skips with a notice | GitHub → Settings → Secrets and variables → Actions |
+| `RETENTION_DATABASE_URL` | **The same pooled connection string as Production's `DATABASE_URL`**, for the daily retention job (`progress.md` D138). The app's role already owns the tables, so it can delete and read the database's size. Actions cannot read Vercel's environment, so the string is pasted here too. Without it, the workflow skips with a notice | GitHub → Settings → Secrets and variables → Actions |
 | `PLAN_STORAGE_MB` | The database plan's storage in MiB (Neon's free tier: `512`), which the retention job's storage alert reads (D139). A **variable**, not a secret. Without it, the job still deletes and says it checked no alert | GitHub → Settings → Secrets and variables → Actions → Variables |
 
 **Keep `DATABASE_URL` out of Preview.** A preview then runs exactly like a deployment without a
@@ -125,9 +125,8 @@ Then it reads `pg_database_size` against `PLAN_STORAGE_MB`. **The run fails at 6
 failed scheduled run is what notifies. Its log and step summary say which threshold was crossed.
 
 One-time settings, both human steps:
-- Add the `RETENTION_DATABASE_URL` secret. Neon: a role with `grant select, delete on accounts, sync_documents,
-  pair_codes, rate_limits` and `grant select on devices` (the cascade deletes devices as the table's owner).
-  Use its pooled connection string.
+- Add the `RETENTION_DATABASE_URL` secret, with the same value as Production's `DATABASE_URL` (human decision, D138). If
+  that connection string is ever rotated in Vercel, update this secret too, or the job fails to connect.
 - Add the `PLAN_STORAGE_MB` variable.
 
 **Before the first scheduled run, run it by hand as a dry run.** Actions → retention → Run workflow, with *dry
