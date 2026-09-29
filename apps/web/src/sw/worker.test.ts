@@ -9,6 +9,7 @@ import {
   startServiceWorker,
   staleCacheNames,
   staticAssetsIn,
+  staticAssetsInCss,
   strategyFor,
 } from "./worker";
 
@@ -46,6 +47,21 @@ describe("the precache lists", () => {
       '<script>self.__next_f.push([1,"\\"/_next/static/chunks/a.js\\""])</script>';
     expect(staticAssetsIn(html).sort()).toEqual(["/_next/static/chunks/a.js", "/_next/static/css/b.css"]);
     expect(staticAssetsIn("<p>no assets</p>")).toEqual([]);
+  });
+
+  it("finds the fonts a stylesheet loads, resolved against the stylesheet, once each (D159)", () => {
+    const css =
+      "@font-face{src:url(../media/inter.woff2) format('woff2')}" +
+      '@font-face{src:url("/_next/static/media/figtree.woff2")}' +
+      "@font-face{src:url( '../media/inter.woff2' )}" +
+      ".x{background:url(data:image/png;base64,AAAA)}" +
+      ".y{background:url(https://elsewhere.example/a.png)}" +
+      ".z{background:url(/favicon.ico)}";
+    expect(staticAssetsInCss(css, "/_next/static/chunks/app.css")).toEqual([
+      "/_next/static/media/inter.woff2",
+      "/_next/static/media/figtree.woff2",
+    ]);
+    expect(staticAssetsInCss("body{color:red}", "/_next/static/chunks/app.css")).toEqual([]);
   });
 
   it("lists every shard, passage shard, form and the scenarios file a bank manifest names, under the served base", () => {
@@ -219,6 +235,20 @@ describe("startServiceWorker", () => {
     // A route that 404s is skipped, not fatal, and the new worker takes over at once.
     expect(cached).not.toContain("/en/missing");
     expect(worker.skipped()).toBe(true);
+  });
+
+  it("follows a page's stylesheet to the font it loads, which no page preloads (D159)", async () => {
+    const worker = bootWorker({
+      "/en": '<link rel="stylesheet" href="/_next/static/chunks/app.css"><link href="/_next/static/chunks/gone.css">',
+      "/_next/static/chunks/app.css": "@font-face{src:url(../media/serif.woff2)}",
+      "/_next/static/media/serif.woff2": "wOF2",
+    });
+    await worker.dispatch("install");
+
+    const cached = [...worker.storage.caches.get("palier-b2")!.entries.keys()].map((u) => new URL(u).pathname);
+    expect(cached).toContain("/_next/static/media/serif.woff2");
+    // A stylesheet that fails to load is skipped, as any asset is.
+    expect(cached).not.toContain("/_next/static/chunks/gone.css");
   });
 
   it("still installs when the network is down, caching what it can later", async () => {

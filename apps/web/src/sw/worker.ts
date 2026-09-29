@@ -11,8 +11,8 @@
  *
  * What it caches, and how:
  *
- * - **On install**, every app route in every locale (their HTML and the
- *   `/_next/static/` assets that HTML references) and the whole served bank (each
+ * - **On install**, every app route in every locale (their HTML, the
+ *   `/_next/static/` assets that HTML references, and the fonts its stylesheets load) and the whole served bank (each
  *   manifest and every shard, passage and form path it lists). So offline works for
  *   routes and skills the user has not visited yet, not only the ones they have.
  * - **Cache-first** for `/content/bank/**` and `/_next/static/**`. Both are
@@ -96,6 +96,21 @@ export const staticAssetsIn = (html: string): string[] => [
 ];
 
 /**
+ * The `/_next/static/` files a stylesheet references: its fonts, mostly (progress.md D159). A face
+ * that is not preloaded appears in no HTML, only in the CSS, as `url(../media/…)` relative to the
+ * stylesheet, so each reference is resolved against the stylesheet's own path. `data:` and other
+ * origins are skipped.
+ */
+export const staticAssetsInCss = (css: string, cssPath: string): string[] => {
+  const base = new URL(cssPath, "https://stylesheet.invalid");
+  const paths = [...css.matchAll(/url\(\s*["']?([^"')]+)["']?\s*\)/g)].flatMap(([, ref]) => {
+    const url = new URL(ref ?? "", base);
+    return url.origin === base.origin && url.pathname.startsWith("/_next/static/") ? [url.pathname] : [];
+  });
+  return [...new Set(paths)];
+};
+
+/**
  * Every file a bank manifest names, as origin-relative URLs under the served base: its
  * shards, passage shards and forms, and its one oral scenarios file when it lists one
  * (progress.md D114), so a session's scenario is there offline too.
@@ -145,7 +160,12 @@ export const startServiceWorker = (
     for (const url of routeUrls(config.locales, config.routes)) {
       const page = await store(cache, url);
       if (page === null) continue;
-      for (const asset of staticAssetsIn(await page.text())) await store(cache, asset);
+      for (const asset of staticAssetsIn(await page.text())) {
+        const stored = await store(cache, asset);
+        // Follow a stylesheet to what it loads, so a face no page preloads is here offline too.
+        if (stored === null || !asset.endsWith(".css")) continue;
+        for (const nested of staticAssetsInCss(await stored.text(), asset)) await store(cache, nested);
+      }
     }
     for (const url of config.bankManifests) {
       const manifest = await store(cache, url);

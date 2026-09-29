@@ -341,7 +341,8 @@
 
 .pl-passage {
   max-width: 66ch;
-  font-family: "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  /* The app's self-hosted Source Serif 4 when it defines --font-serif (D159). */
+  font-family: var(--font-serif, "Source Serif 4"), "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", serif;
   font-size: 1.1875rem;
   line-height: 1.65;
   color: var(--ink);

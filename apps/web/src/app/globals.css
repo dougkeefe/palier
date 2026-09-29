@@ -26,11 +26,20 @@ body {
   flex-direction: column;
   background: var(--bg);
   color: var(--ink);
+  /* Inter, self-hosted (src/fonts, D159), then the system's own sans. */
   font-family:
-    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
+    var(--font-sans, ui-sans-serif), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Headings in Figtree (§10.3), falling back to the interface face. */
+h1,
+h2,
+h3,
+.pl-dialog__heading {
+  font-family: var(--font-display, var(--font-sans, ui-sans-serif)), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Skip link: visible only on focus, meeting 2.4.11 focus appearance. */
