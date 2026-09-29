@@ -242,3 +242,20 @@ export {
   oralReport,
   requestOralReport,
 } from "./oral-report.js";
+
+export type {
+  Milestones,
+  MilestonesDeps,
+  MilestonesRequest,
+  StreakReport,
+  StreakReportDeps,
+  StreakReportRequest,
+} from "./engagement.js";
+export {
+  MILESTONES_SHOWN_KEY,
+  STREAK_FREEZE_NOTICED_KEY,
+  markMilestoneShown,
+  milestones,
+  noteStreakFreeze,
+  streakReport,
+} from "./engagement.js";
