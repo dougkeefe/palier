@@ -1,4 +1,4 @@
-import type { Attempt, AttemptMode } from "@palier/domain";
+import type { Attempt, AttemptMode, OptionId } from "@palier/domain";
 import { attemptId, formId, itemId, sessionId } from "@palier/domain";
 import { describe, expect, it } from "vitest";
 
@@ -139,7 +139,7 @@ describe("noteStreakFreeze", () => {
 });
 
 describe("milestones", () => {
-  const answered = (response: string): readonly ExamAnswer[] =>
+  const answered = (response: OptionId): readonly ExamAnswer[] =>
     ITEM_IDS.map((id) => ({
       itemId: id,
       response,
