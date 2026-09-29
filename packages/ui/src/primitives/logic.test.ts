@@ -5,6 +5,8 @@ import {
   buttonClass,
   calloutState,
   dialogClass,
+  mascotClass,
+  streakFlameClass,
   optionRowKeydown,
   optionRowState,
   railGeometry,
@@ -175,5 +177,20 @@ describe("dialogClass", () => {
   it("names the placement", () => {
     expect(dialogClass("center")).toBe("pl-dialog pl-dialog--center");
     expect(dialogClass("side")).toBe("pl-dialog pl-dialog--side");
+    expect(dialogClass("full")).toBe("pl-dialog pl-dialog--full");
+  });
+});
+
+describe("mascotClass", () => {
+  it("settles a cheering Coco in with the celebration, and leaves a sleeping one still", () => {
+    expect(mascotClass("cheer")).toBe("pl-mascot pl-celebrate");
+    expect(mascotClass("asleep")).toBe("pl-mascot");
+  });
+});
+
+describe("streakFlameClass", () => {
+  it("lights the flame, with its settle, only when today is done", () => {
+    expect(streakFlameClass(true)).toBe("pl-streak-flame pl-streak-flame--lit");
+    expect(streakFlameClass(false)).toBe("pl-streak-flame");
   });
 });

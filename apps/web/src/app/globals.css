@@ -44,17 +44,12 @@ body {
   color: var(--ink);
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
-  transition: transform 120ms cubic-bezier(0.2, 0, 0, 1);
+  /* @palier/ui's motion switch turns this off under prefers-reduced-motion (D159). */
+  transition: transform var(--pl-motion-state) var(--pl-ease);
 }
 
 .app-skip-link:focus {
   transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .app-skip-link {
-    transition: none;
-  }
 }
 
 /* ------------------------------------------------------------------ header */

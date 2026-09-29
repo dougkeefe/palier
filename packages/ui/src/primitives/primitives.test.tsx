@@ -12,6 +12,7 @@ import { Passage } from "./Passage.js";
 import { ProgressRail } from "./ProgressRail.js";
 import { Sheet } from "./Sheet.js";
 import { Mascot } from "./Mascot.js";
+import { StreakFlame } from "./StreakFlame.js";
 import { Toast } from "./Toast.js";
 import { Timer } from "./Timer.js";
 import { Dialog } from "./Dialog.js";
@@ -212,6 +213,28 @@ describe("Mascot", () => {
     const svg = container.querySelector("svg");
     expect(svg?.getAttribute("aria-hidden")).toBe("true");
     expect(svg?.getAttribute("focusable")).toBe("false");
+  });
+
+  it("sleeps by default, and cheers with its wings up and the celebration class when asked", () => {
+    const asleep = render(<Mascot />).container.querySelector("svg");
+    const cheer = render(<Mascot pose="cheer" />).container.querySelector("svg");
+    expect(asleep?.getAttribute("class")).toBe("pl-mascot");
+    expect(cheer?.getAttribute("class")).toBe("pl-mascot pl-celebrate");
+    expect(cheer?.querySelectorAll("path").length).not.toBe(asleep?.querySelectorAll("path").length);
+    // No style attribute anywhere: the strict CSP would refuse it.
+    expect(cheer?.querySelector("[style]")).toBeNull();
+  });
+});
+
+describe("StreakFlame", () => {
+  it("is decorative, lit in the accent when today is done and an outline when not", () => {
+    const lit = render(<StreakFlame lit />).container.querySelector("svg");
+    const unlit = render(<StreakFlame lit={false} />).container.querySelector("svg");
+    expect(lit?.getAttribute("aria-hidden")).toBe("true");
+    expect(lit?.getAttribute("class")).toContain("pl-streak-flame--lit");
+    expect(lit?.querySelector("path")?.getAttribute("fill")).toBe("var(--accent)");
+    expect(unlit?.getAttribute("class")).toBe("pl-streak-flame");
+    expect(unlit?.querySelector("path")?.getAttribute("fill")).toBe("none");
   });
 });
 
