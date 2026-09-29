@@ -41,7 +41,7 @@ export const pgliteDatabase = async (folder: string) => {
   const client = new PGlite();
   const db = drizzle(client);
   await migrate(db, { migrationsFolder: folder });
-  return { db, close: () => client.close() };
+  return { db, client, close: () => client.close() };
 };
 
 const salt = (env: ServerEnv): string => env.RATE_LIMIT_SALT ?? randomBytes(32).toString("hex");
