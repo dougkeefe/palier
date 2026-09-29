@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Palier",
-    "description": "A free, open-source tool for practising the Public Service Commission's Second Language Evaluation."
+    "description": "A free, source-available tool for practising the Public Service Commission's Second Language Evaluation."
   },
   "nav": {
     "skipToContent": "Skip to main content",
@@ -23,7 +23,7 @@
     "offline": "Offline"
   },
   "footer": {
-    "nonAffiliation": "Palier is an independent, open-source study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official.",
+    "nonAffiliation": "Palier is an independent, source-available study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official.",
     "yourData": "Your data",
     "sync": "Sync",
     "key": "Your API key",
@@ -42,7 +42,7 @@
     "independence": "Palier is an independent study tool, built in the open. It is not the exam, and using it is not a substitute for the Public Service Commission's own preparation material.",
     "noRealItems": "It contains no real test questions. Every item is written or generated for practice, and no result it produces is official.",
     "whatTitle": "What it is",
-    "what": "A free, open-source place to practise the Second Language Evaluation’s reading, written expression and oral tests, aiming at level B or C. Drills and mock exams need no account and work offline. The parts that cost money (writing feedback, generated practice sets and spoken practice) run on your own OpenAI key, straight from your browser, and each one shows its cost before it spends.",
+    "what": "A free, source-available place to practise the Second Language Evaluation’s reading, written expression and oral tests, aiming at level B or C. Drills and mock exams need no account and work offline. The parts that cost money (writing feedback, generated practice sets and spoken practice) run on your own OpenAI key, straight from your browser, and each one shows its cost before it spends.",
     "notTitle": "What it is not",
     "notCourse": "Not a language course. It assumes you already work in French and helps you perform under exam conditions.",
     "notPredictor": "Not a predictor. It gives an estimate with its uncertainty shown, never a promised result.",
@@ -54,7 +54,7 @@
     "whoTitle": "Who makes it",
     "who": "Palier is a personal, non-governmental project, built in the open by Doug Keefe and anyone who contributes. It holds no government information and accepts none.",
     "licenceTitle": "Licence",
-    "licence": "The code is under the MIT licence and the content under Creative Commons Attribution 4.0. You may copy it, change it, and run your own version.",
+    "licence": "The code is under the PolyForm Noncommercial License 1.0.0 and the content under Creative Commons Attribution-NonCommercial-ShareAlike 4.0. You may copy it, change it, and run your own version for any non-commercial purpose. Commercial use is not permitted.",
     "linksTitle": "More",
     "privacyLink": "How Palier handles your data",
     "contributeLink": "Contribute an item or a fix",

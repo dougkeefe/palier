@@ -33,7 +33,7 @@ export type ItemProvenance = {
   readonly reviewedAt?: string | undefined;
   /**
    * Who wrote a hand-authored item: a public handle, such as a GitHub username, and
-   * never a name or an email (content-factory.md §5). CC BY 4.0 asks for attribution, and
+   * never a name or an email (content-factory.md §5). CC BY-NC-SA 4.0 asks for attribution, and
    * this is where it lives. Optional in the schema, so every bank published before it
    * stays valid; `validate()` flags an `origin: "authored"` item without one
    * (`authored-without-contributor`).

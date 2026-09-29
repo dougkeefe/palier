@@ -22,7 +22,7 @@
 
 | Constraint | Consequence |
 | --- | --- |
-| Free and open source, no operating budget | No server-side AI spend, no managed database in the critical path, everything possible runs on Vercel's free tier and in the browser |
+| Free and source-available, no operating budget | No server-side AI spend, no managed database in the critical path, everything possible runs on Vercel's free tier and in the browser |
 | Users bring their own OpenAI key | The key lives in the browser. The server never stores it and, with one narrow exception, never sees it |
 | Local-first, sync on by default, no sign-in required | The browser is the system of record and the cloud is a replica. Sync runs against an anonymous device-generated identity from first run, upgradeable to an email or GitHub identity later, and disableable in settings |
 | Works with no key and no sign-in | The item bank ships as static, cacheable assets and the whole drill and exam experience is client-side |
@@ -796,10 +796,10 @@ Deliberately minimal, since there is almost no server.
 
 ---
 
-## 17. Open source
+## 17. Licensing and contribution
 
-- **Code licence:** MIT. Maximises reuse, including by a department that wants to fork it.
-- **Content licence:** CC BY 4.0 for the item bank and library, so items can be reused with attribution. Note in the licence file that derived passages carry their source's terms and are marked as such.
+- **Code licence:** PolyForm Noncommercial 1.0.0 (ADR 23, superseding ADR 12's MIT). Free for any non-commercial purpose, and it names educational institutions and government institutions as permitted users, so a department that wants to fork it still can; commercial use is not permitted.
+- **Content licence:** CC BY-NC-SA 4.0 for the item bank and library, so items can be reused non-commercially with attribution and adaptations stay under the same terms. Note in the licence file that derived passages carry their source's terms and are marked as such.
 - **Contribution:** `CONTRIBUTING.md` with the content style guide, the item quality bar, and a mandatory originality attestation in the PR template. A `content/` PR runs the same validators as CI and posts a rendered preview of the new items.
 - **Governance:** benevolent dictator to start, with a documented path to adding maintainers. An `docs/adr/` directory for architecture decisions, which also serves as the record of why the BYOK and licensing choices were made.
 - **Reusability:** `@palier/engine` and `@palier/domain` are the two packages worth publishing to npm, so the engine can be reused for another exam. An external consumer noticing a leak is what keeps their boundaries honest.

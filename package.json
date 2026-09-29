@@ -2,7 +2,7 @@
   "name": "palier",
   "version": "0.1.0",
   "private": true,
-  "license": "MIT",
+  "license": "PolyForm-Noncommercial-1.0.0",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",

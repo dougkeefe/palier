@@ -13,11 +13,13 @@ project's best long-term source of quality, and this guide tries to make adding 
 
 ## Licences
 
-The code is under the MIT licence ([`LICENSE`](LICENSE)). The content (items, passages, forms
-and other practice material) is under Creative Commons Attribution 4.0 International
-([`LICENSE-CONTENT`](LICENSE-CONTENT)). By contributing you agree that your code is released
-under MIT and your content under CC BY 4.0. CC BY asks for attribution, so every item you write
-carries your public handle (ADR 12).
+The code is under the PolyForm Noncommercial License 1.0.0 ([`LICENSE`](LICENSE)). The content
+(items, passages, forms and other practice material) is under Creative Commons
+Attribution-NonCommercial-ShareAlike 4.0 International ([`LICENSE-CONTENT`](LICENSE-CONTENT)).
+Neither permits commercial use. By contributing you agree that your code is released under the
+PolyForm Noncommercial License 1.0.0 and your content under CC BY-NC-SA 4.0, the same terms
+the project is published under. CC BY-NC-SA asks for attribution, so every item you write
+carries your public handle (ADR 23).
 
 ## Writing an item
 

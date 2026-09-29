@@ -1,6 +1,6 @@
 # Palier
 
-Palier is a free, open-source web app for practising the Public Service Commission's
+Palier is a free, source-available web app for practising the Public Service Commission's
 Second Language Evaluation — reading, written expression and oral, French first, at level
 C. The browser is the system of record (ADR 1): the item bank ships as static JSON, drills
 and mock exams need no account and no key, and everything that costs money runs on the
@@ -64,7 +64,7 @@ the app can import them by package name. It appears in no §3.1 arrow. No packag
 | When you need | Read |
 | --- | --- |
 | What is built, in flight, or deliberately deviated from the plan | `docs/progress.md` — status, then deviations |
-| Why a choice was made, and what evidence would reverse it | `docs/adr/`, 22 records, each with a *revisit when*. Take the next free number |
+| Why a choice was made, and what evidence would reverse it | `docs/adr/`, 23 records, each with a *revisit when*. Take the next free number |
 | Whether something is a requirement or an opinion | `product-requirements.md` §0 and §0.1 (the 14 requirements) |
 | Exam variants, item counts, time limits, band cut tables | `product-requirements.md` §5 |
 | Screens, states, copy, visual language, accessibility commitments | `product-requirements.md` §8, §10, §11, §14 |

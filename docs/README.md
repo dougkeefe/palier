@@ -1,6 +1,6 @@
 # Palier: Document Set
 
-A free, open-source web app for practising the Public Service Commission's Second Language Evaluation.
+A free, source-available web app for practising the Public Service Commission's Second Language Evaluation.
 
 **Working name:** Palier (not final)
 **Owner:** Doug Keefe
@@ -43,7 +43,7 @@ If a future contributor cannot work out which category a statement belongs to, t
 
 ## Current shape of the thing
 
-Reading, written expression and oral practice for the SLE, aimed first at French as a second language at level C. Local-first: the browser is the system of record and everything works offline. The item bank ships as static JSON, so drills, mock exams and progress need no API key. The AI features (item generation, written feedback, oral examiner) run on the user's own OpenAI key, from their browser. Progress syncs across a user's devices by default, with pairing by code rather than accounts. Bilingual interface, WCAG 2.2 AA enforced in CI. MIT code, CC BY content.
+Reading, written expression and oral practice for the SLE, aimed first at French as a second language at level C. Local-first: the browser is the system of record and everything works offline. The item bank ships as static JSON, so drills, mock exams and progress need no API key. The AI features (item generation, written feedback, oral examiner) run on the user's own OpenAI key, from their browser. Progress syncs across a user's devices by default, with pairing by code rather than accounts. Bilingual interface, WCAG 2.2 AA enforced in CI. PolyForm Noncommercial code, CC BY-NC-SA content (ADR 23): free for any non-commercial use.
 
 The band estimate comes from mock exams scored against the published PSC cut tables. Practice shows accuracy per band tag with a confidence interval, and deliberately does not produce a band letter of its own.
 

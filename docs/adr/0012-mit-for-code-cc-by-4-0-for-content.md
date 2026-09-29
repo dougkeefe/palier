@@ -1,6 +1,6 @@
 # ADR 12: MIT for code, CC BY 4.0 for content
 
-**Status:** Accepted
+**Status:** Superseded by ADR 23
 **Date:** 2026-09-17
 **Supersedes:** None
 

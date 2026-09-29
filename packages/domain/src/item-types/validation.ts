@@ -34,7 +34,7 @@ export const validateCommon = (item: Item): ValidationIssue[] => {
     });
   }
 
-  // A hand-authored item enters the bank under CC BY 4.0, which asks for attribution,
+  // A hand-authored item enters the bank under CC BY-NC-SA 4.0, which asks for attribution,
   // so it must say who wrote it (content-factory.md §5). The schema keeps the field
   // optional, since generated items and every earlier bank have none.
   if (item.provenance.origin === "authored" && item.provenance.contributor === undefined) {

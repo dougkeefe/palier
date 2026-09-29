@@ -9,7 +9,7 @@ three, including for a code-only change, so the attestation is never skipped by 
 
 - [ ] The content in this pull request is my own original work.
 - [ ] It does not reproduce, paraphrase or reconstruct any Public Service Commission test item, or any other real test material, including recalled questions and the PSC's self-assessment tests.
-- [ ] I license the content in this pull request under CC BY 4.0 and the code under MIT.
+- [ ] I license the content in this pull request under CC BY-NC-SA 4.0 and the code under the PolyForm Noncommercial License 1.0.0.
 
 ## Checks
 

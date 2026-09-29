@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Palier",
-    "description": "Un outil gratuit et à code source ouvert pour s'exercer à l'Évaluation de langue seconde de la Commission de la fonction publique."
+    "description": "Un outil gratuit, au code source accessible, pour s'exercer à l'Évaluation de langue seconde de la Commission de la fonction publique."
   },
   "nav": {
     "skipToContent": "Passer au contenu principal",
@@ -23,7 +23,7 @@
     "offline": "Hors ligne"
   },
   "footer": {
-    "nonAffiliation": "Palier est un outil d'étude indépendant à code source ouvert. Il n'est ni affilié à la Commission de la fonction publique du Canada, ni approuvé ou reconnu par celle-ci. Il ne contient aucune question d'examen réelle et ses résultats ne sont pas officiels.",
+    "nonAffiliation": "Palier est un outil d'étude indépendant, au code source accessible. Il n'est ni affilié à la Commission de la fonction publique du Canada, ni approuvé ou reconnu par celle-ci. Il ne contient aucune question d'examen réelle et ses résultats ne sont pas officiels.",
     "yourData": "Vos données",
     "sync": "Synchronisation",
     "key": "Votre clé d’API",
@@ -42,7 +42,7 @@
     "independence": "Palier est un outil d'étude indépendant, conçu de façon ouverte. Il n'est pas l'examen, et son utilisation ne remplace pas le matériel de préparation de la Commission de la fonction publique.",
     "noRealItems": "Il ne contient aucune question d'examen réelle. Chaque question est rédigée ou générée à des fins d'exercice, et aucun résultat qu'il produit n'est officiel.",
     "whatTitle": "Ce que c’est",
-    "what": "Un outil gratuit et libre pour vous exercer aux épreuves de compréhension de l’écrit, d’expression écrite et d’expression orale de l’Évaluation de langue seconde, en visant le niveau B ou C. Les exercices et les examens simulés ne demandent aucun compte et fonctionnent hors ligne. Les fonctions payantes (la rétroaction sur vos textes, les séries d’exercices générées et la pratique orale) utilisent votre propre clé OpenAI, directement depuis votre navigateur, et chacune affiche son coût avant de dépenser.",
+    "what": "Un outil gratuit, au code source accessible, pour vous exercer aux épreuves de compréhension de l’écrit, d’expression écrite et d’expression orale de l’Évaluation de langue seconde, en visant le niveau B ou C. Les exercices et les examens simulés ne demandent aucun compte et fonctionnent hors ligne. Les fonctions payantes (la rétroaction sur vos textes, les séries d’exercices générées et la pratique orale) utilisent votre propre clé OpenAI, directement depuis votre navigateur, et chacune affiche son coût avant de dépenser.",
     "notTitle": "Ce que ce n’est pas",
     "notCourse": "Pas un cours de langue. L’outil suppose que vous travaillez déjà en français et vous aide à performer dans les conditions de l’examen.",
     "notPredictor": "Pas une prédiction. Il donne une estimation dont l’incertitude est affichée, jamais un résultat promis.",
@@ -54,7 +54,7 @@
     "whoTitle": "Qui le fait",
     "who": "Palier est un projet personnel et non gouvernemental, développé en public par Doug Keefe et les personnes qui y contribuent. Il ne détient aucune information gouvernementale et n’en accepte aucune.",
     "licenceTitle": "Licence",
-    "licence": "Le code est sous licence MIT et le contenu sous licence Creative Commons Attribution 4.0. Vous pouvez le copier, le modifier et en exploiter votre propre version.",
+    "licence": "Le code est sous licence PolyForm Noncommercial 1.0.0 et le contenu sous licence Creative Commons Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0. Vous pouvez le copier, le modifier et en exploiter votre propre version à toute fin non commerciale. L’utilisation commerciale n’est pas permise.",
     "linksTitle": "En savoir plus",
     "privacyLink": "Comment Palier traite vos données",
     "contributeLink": "Proposer un item ou une correction",

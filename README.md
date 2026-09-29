@@ -1,6 +1,6 @@
 # Palier
 
-Palier is an independent, open-source study tool. It is not affiliated with, endorsed by,
+Palier is an independent, source-available study tool. It is not affiliated with, endorsed by,
 or connected to the Public Service Commission of Canada. It contains no real test questions
 and its results are not official.
 
@@ -71,7 +71,11 @@ what happens to it after you open a pull request.
 
 ## Licence
 
-The application **code** is licensed under the MIT licence ([`LICENSE`](LICENSE)). The
-**content** — the item bank, passages, exam forms and other practice material — is licensed
-under Creative Commons Attribution 4.0 International (CC BY 4.0,
-[`LICENSE-CONTENT`](LICENSE-CONTENT)).
+Palier is source-available, not open source in the OSI sense: you may read, copy, change and
+run it for any **non-commercial** purpose, and commercial use is not permitted. The application
+**code** is licensed under the PolyForm Noncommercial License 1.0.0 ([`LICENSE`](LICENSE)),
+which expressly permits personal study and use by educational institutions, charities and
+government institutions. The **content** — the item bank, passages, exam forms and other
+practice material — is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+International (CC BY-NC-SA 4.0, [`LICENSE-CONTENT`](LICENSE-CONTENT)). See
+[ADR 23](docs/adr/0023-polyform-noncommercial-for-code-cc-by-nc-sa-4-0-for-content.md).
