@@ -1,9 +1,10 @@
 # Palier: Progress
 
-**Last updated:** 28 September 2026
+**Last updated:** 29 September 2026
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
-slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, and **Slice 2 is built** (below). Phase 3's
+slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
+resolved** (D145, human, 29 September 2026), and **Slice 3 is in flight** (below). Phase 3's
 product pilot still runs beside it (Gate E). The history, oldest first: **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
@@ -34,9 +35,11 @@ gave the same band on every criterion in all five live reports. **Gate I passed*
 check, is deferred by the human (D130). Phase 6's decision gate was then resolved the same day: **studio mode waits until
 after 1.0** (D131). See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
 phase before 1.0 (2–5) is built against the baseline committed bank, now `content/bank/v3`, and the content gate
-runs at 1.0. **Phase 7 Slice 1 merged (#39)**, and **Slice 2, server lifecycle and observability, is built**
-(`dougkeefe/next-slice-from-progress-v3`; D138–D144): the retention job and storage alert, `GET /api/health`, the error states with
-the diagnostic bundle, and both "outlives its screen" defects. **Gate K** (Phase 7's UI and content direction, human) is next.
+runs at 1.0. **Phase 7 Slice 1 merged (#39)**, and **Slice 2, server lifecycle and observability, merged (#45)**
+(D138–D144): the retention job and storage alert, `GET /api/health`, the error states with the diagnostic bundle, and both
+"outlives its screen" defects. **Gate K is resolved** (D145): the human took the recommendation on all five questions and chose
+to build the authored-item intake. **Slice 3, content, the contribution path and data rights, is in flight** on
+`dougkeefe/melbourne-v1`.
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -102,7 +105,7 @@ human for anything expensive.
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **deferred past 1.0** (decision gate resolved 28 September 2026, human, D131); built after Phase 7 if at all |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 built, D138–D144; Gate K next, human) |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 in flight) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -111,9 +114,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-slice-from-progress-v3` | **Phase 7 Slice 2, server lifecycle and observability**: the retention job and the storage alert, `GET /api/health`, the error states with the client diagnostic bundle, and the two "outlives its screen" defects, with finding 13's wipe half. | 28 September 2026 |
+| `dougkeefe/melbourne-v1` | **Phase 7 Slice 3, content, the contribution path and data rights** (D145): the about page and privacy notice, the statement in onboarding and beside every band, the one-page PDF by print stylesheet, the device-removal confirmation and pair-code expiry, the shortcut sheet and the `lang` audit, and the authored-item intake with `CONTRIBUTING.md` and the PR template. | 29 September 2026 |
 
-*(The prior rows — Phase 7 Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 7 Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -212,35 +215,23 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132) has two slices built. **Slice 1, security hardening, merged (#39; D133–D137).** **Slice 2, server lifecycle and
-observability, is built** on `dougkeefe/next-slice-from-progress-v3` (D138–D144):
-- the retention job and the storage alert;
-- `GET /api/health`;
-- the error states with the diagnostic bundle;
-- both "outlives its screen" defects, with finding 13's wipe half.
+Phase 7 (D132): **Slice 1 merged (#39; D133–D137)**, **Slice 2 merged (#45; D138–D144)**, and **Gate K is resolved** (D145, human,
+29 September 2026).
 
 Phase 5's deferred cost check (D130) and the product pilot (Gate E, D97) still run beside it, both the human's.
 
-**Next: Gate K — Phase 7's UI and content direction (human, D132).** Slices 3 and 4 wait on it, and nothing buildable is left
-before it. It asks what Gates A, D and F asked: adopt the PRD as written, or revise it first. The five questions, each with the
-agent's recommendation:
-1. **The privacy notice and the about page.** Neither has wording in the PRD. *Recommended:* the agent drafts both in Slice 3,
-   from architecture.md §12 as it stands:
-   - what is held, what is never held, what is deleted on a schedule (180 days, now built, D138), and the third parties;
-   - for the about page, PRD §7's "what this is, what it is not".
-   The human reads both in Gate L's French review.
-2. **Where the non-affiliation statement appears** beyond the footer. *Recommended:* as the PRD and Slice 3's scope say, in
-   onboarding and beside every band.
-3. **PRD §9's engagement mechanics in 1.0.** The readiness meter exists. *Recommended:* the streak (with its silent freeze) and
-   the milestone moments are in, in Slice 4. XP and levels, whose names need the French review, and the countdown come after
-   1.0.
-4. **The library's 1.0 scope** (PRD §7's `/library`, `implementation-plan.md` §7). *Recommended:* one short reference article per
-   written-expression sub-skill (ten), in both languages, linked from item explanations; reading's after 1.0.
-5. **The one-page PDF summary's shape** (PRD §8.9). *Recommended:* a print stylesheet over `/progress`, with no new dependency.
-   It carries the band trend per skill with its interval, accuracy by sub-skill, time invested, oral minutes, the "what this
-   does and does not tell you" panel, and the non-affiliation statement.
+**Next: Slice 3 — content, the contribution path and data rights**, in flight on `dougkeefe/melbourne-v1`. Its scope, as Gate K
+settled it (D145):
+- the about page (PRD §7, §13.0) and a new privacy notice at `/privacy` (architecture.md §12), both drafted by the agent;
+- the non-affiliation statement as one component, in onboarding and beside every band estimate;
+- the one-page PDF as a print stylesheet over `/progress`, with oral sessions and minutes added;
+- a confirmation before a device is removed, and the pair code's expiry shown and acted on;
+- PRD §11's shortcut sheet at `?`, and the `lang` audit;
+- the authored-item intake (`content/authored/`, a `contributor` on `ItemProvenance`, the factory taking it at stage 4),
+  `CONTRIBUTING.md` with the originality attestation, and the PR template.
 
-*Done:* the human's ruling on each is recorded as a deviation, and *Next, decided* names Slice 3.
+*Done:* each surface in both locales, axe-clean on its states, the PDF one page, the contribution path documented end to end, and
+*Next, decided* naming Slice 4.
 
 **For the human, from Slice 2:**
 - after merging, **`curl -s https://palier-virid.vercel.app/api/health`** should answer `{"build":"<7 hex>","bank":3,"database":"ok"}`
@@ -311,7 +302,8 @@ last exit criterion.
   direction, D84), **Gate E** (the pilot runs on the baseline bank, D97) and **Gate F** (Phase 4 UI
   direction, D97) on 25 September 2026; **Gate G** (the billing check, session log) on 26 September 2026; **Gate H**
   (Phase 5 direction, D113) on 27 September 2026; **Gate I** (the oral report, D129) and **Phase 6's decision gate** (studio
-  mode deferred past 1.0, D131) on 28 September 2026.
+  mode deferred past 1.0, D131) on 28 September 2026; **Gate K** (Phase 7's UI and content direction, D145) on 29 September
+  2026.
 
 Standing human items:
 - pointing `palier.dougkeefe.com` at the deployment;
@@ -575,21 +567,23 @@ Nothing is ticked without session-log evidence.
   `SyncSettings.tsx`, `removeDevice`, journey 8). Missing: a confirmation before a device is removed, the pair code's
   countdown and copy, and this device noticing it was removed elsewhere. Slice 3
 - [~] Retention job for inactive accounts (180 days) and the 90-day tombstone purge, the storage alerts, the aggregation
-  path (architecture.md §9.4; D78 moved both jobs here). **Slice 2, built on this branch** (D138, D139): the job, its daily
+  path (architecture.md §9.4; D78 moved both jobs here). **Slice 2, merged (#45)** (D138, D139): the job, its daily
   workflow and the alert at 60% and 80%. The aggregation path is the 60% response, written as a runbook step in
   `docs/deploy.md`, not built, until the alert first fires
 - [~] PDF progress summary; JSON export and import round trip. **The round trip exists** (D61, D62; `data-rights.test.ts`,
   journey 6). Missing: the one-page PDF (PRD §8.9), by print stylesheet. Slice 3
 - [ ] The motion and illustration pass: Coco, the milestone moments, the streak, the band meter fill, self-hosted fonts
-  (D65). Slice 4, as Gate K decides
+  (D65). Slice 4: the streak (with its silent freeze) and the milestone moments are in 1.0; XP, levels and the countdown
+  are after 1.0 (Gate K, D145)
 - [ ] Accessibility audit with VoiceOver and NVDA on the core flows, and a screen-reader user's pass if one can be arranged.
   Human (Gate L). An agent builds PRD §11's shortcut sheet and audits the `lang` attributes beforehand, in Slice 3
 - [x] Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to leak the key.
   **Slice 1, merged (#39)** (D133–D137). Gate L's red-team read is still the human's (D132)
 - [ ] The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
-  Slice 4, scoped by Gate K; the articles' French is part of Gate L
+  Slice 4: one article per written-expression sub-skill, ten, in both languages; reading's after 1.0 (Gate K, D145). The
+  articles' French is part of Gate L
 - [~] Observability: the client diagnostic bundle, the prefilled issue path, no error reporting service (ADR 15). **The
-  item-report issue path exists** (Phase 2). **Slice 2, built on this branch** (D140–D142): the diagnostic bundle, the error
+  item-report issue path exists** (Phase 2). **Slice 2, merged (#45)** (D140–D142): the diagnostic bundle, the error
   states with a prefilled issue, and `/api/health`. The realtime route's exclusion from Vercel logging moves with studio
   mode (D131)
 - [~] Content: the about page, the non-affiliation statement in both languages, the privacy notice, the contribution guide
@@ -604,16 +598,19 @@ Nothing is ticked without session-log evidence.
 - [x] **Slice 1 — Security hardening, no new UI.** **Built 28 September 2026, merged (#39)** (`dougkeefe/next-progress-slice-v7`;
   D133–D137; session-log evidence). The strict CSP and Trusted Types on the built output, the dependency audit
   gate and Dependabot, `SECURITY.md`, `RATE_LIMIT_SALT` failing the deploy, and the deliberate attempt to leak the key.
-- [~] **Slice 2 — Server lifecycle and observability.** **Built 28 September 2026** (`dougkeefe/next-slice-from-progress-v3`;
+- [x] **Slice 2 — Server lifecycle and observability.** **Built 28 September 2026, merged (#45)** (`dougkeefe/next-slice-from-progress-v3`;
   D138–D144; session-log evidence), with finding 13's wipe half. The retention job and the storage alert, `/api/health`, the error
   states with the diagnostic bundle, and the two "outlives its screen" defects.
-- [ ] **Gate K — Phase 7's UI and content direction (human).** The privacy notice's and about page's wording, where the
-  non-affiliation statement appears, whether PRD §9's streak, XP and milestones are in 1.0, the library's 1.0 scope, and the
-  PDF summary's shape. Gates Slices 3 and 4.
-- [ ] **Slice 3 — Content, the contribution path and data rights.** The about page and privacy notice, the statement in
-  onboarding and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR template, the device-removal
-  confirmation and pairing polish, the one-page PDF, the shortcut sheet.
-- [ ] **Slice 4 — Motion, engagement and the library**, as Gate K decides.
+- [x] **Gate K — Phase 7's UI and content direction (human).** **Resolved 29 September 2026** (D145): the agent drafts the
+  privacy notice and about page; the statement in onboarding and beside every band; the streak and milestones in 1.0, XP,
+  levels and the countdown after; ten written-expression library articles; the PDF as a print stylesheet over `/progress`;
+  and the authored-item intake built in Slice 3.
+- [~] **Slice 3 — Content, the contribution path and data rights.** In flight on `dougkeefe/melbourne-v1`. The about page and
+  privacy notice, the statement in onboarding and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR
+  template and the authored-item intake, the device-removal confirmation and pairing polish, the one-page PDF, the shortcut
+  sheet.
+- [ ] **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted
+  fonts, the streak with its silent freeze, the milestone moments, and ten written-expression library articles.
 - [ ] **Gate L — the human reviews (human).** R8's French review, the VoiceOver and NVDA pass, and the red-team read.
 - [ ] **Gate M — public (human).** The repo made public, an outside item submission [R13], the domain, §12.1's trademark
   check, and the full-volume bank (D54), which stays sequenced to the end (D56).
@@ -5144,11 +5141,38 @@ merged, none critical. The human chose to fix all of them.
   it does, and its report is offered. Proven to bite: with the controller holding nothing, the second tab closes the
   running session and the spec fails.
 
+
+### D145 — Gate K: the PRD adopted as recommended, and the authored-item intake built in Slice 3
+**Date:** 29 September 2026 · **Status:** accepted (human decision)
+
+The human took the agent's recommendation on each of Gate K's five questions:
+1. **The privacy notice and the about page:** the agent drafts both in Slice 3, from architecture.md §12 and PRD §7 and §13.0.
+   The human reads both in Gate L's French review.
+2. **The non-affiliation statement:** in onboarding and beside every band estimate, as well as the footer, as PRD §2 says.
+3. **PRD §9's mechanics:** the streak, with its silent freeze, and the milestone moments are in 1.0, in Slice 4. XP and levels,
+   whose names need the French review, and the countdown come after 1.0.
+4. **The library's 1.0 scope:** one short reference article per written-expression sub-skill, ten, in both languages, linked
+   from item explanations. Reading's articles come after 1.0.
+5. **The PDF summary:** a print stylesheet over `/progress`, with no new dependency. It carries the trend per skill with its
+   interval, accuracy by sub-skill, time invested, oral sessions and minutes, the honest panel and the statement.
+
+**A sixth question, asked while planning Slice 3:** the factory had no intake for hand-authored items. content-factory.md §5
+describes one ("enter at stage 4… carry `provenance.origin: 'authored'` and a contributor attribution"), but nothing built it, so
+Gate M's outside submission had no route. **The human chose to build it in Slice 3**, rather than an issue-only path or its own
+slice. Its model review runs on the next funded bank build (D54); the fast lane checks everything deterministic.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 29 September 2026 — `dougkeefe/melbourne-v1` (Gate K resolved; Phase 7 Slice 3 claimed)
+
+**Phase 7 Slice 2 had merged as #45**, so its In-flight row was replaced by this branch's, and Slice 2 was ticked.
+
+**Human decisions this session:** Gate K, all five questions as recommended, and the authored-item intake built in Slice 3
+(D145). `implementation-plan.md` §7's Phase 7 completion slices are updated to match.
 
 ### 29 September 2026 — `dougkeefe/next-slice-from-progress-v3` (pre-merge review of Phase 7 Slice 2)
 
