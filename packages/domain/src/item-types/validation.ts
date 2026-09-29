@@ -34,6 +34,16 @@ export const validateCommon = (item: Item): ValidationIssue[] => {
     });
   }
 
+  // A hand-authored item enters the bank under CC BY 4.0, which asks for attribution,
+  // so it must say who wrote it (content-factory.md §5). The schema keeps the field
+  // optional, since generated items and every earlier bank have none.
+  if (item.provenance.origin === "authored" && item.provenance.contributor === undefined) {
+    issues.push({
+      code: "authored-without-contributor",
+      message: 'An item with origin "authored" must name its contributor, a public handle, in provenance.contributor.',
+    });
+  }
+
   return issues;
 };
 

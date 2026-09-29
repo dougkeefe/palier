@@ -11,9 +11,11 @@ import { type ReactNode, type Ref, useEffect, useReducer, useRef, useState } fro
 import { currentItem, drillReducer, pendingAnswer, startDrill, summaryOf } from "../../features/drill/drill";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
+import { isPageKey } from "../../lib/keyboard";
 import { DIAGNOSTIC_SIZE, REVIEW_SET_LIMIT, readStudyProfile, sessionSizeFor } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
 import { KeyOffer } from "../key/KeyOffer";
+import { NonAffiliation } from "../NonAffiliation";
 import { useSync } from "../sync/SyncRunner";
 import { GeneratedProvenance } from "./GeneratedProvenance";
 import { ReportItem } from "./ReportItem";
@@ -262,15 +264,10 @@ function Runner({
   // inside it. Keys typed into a text field are left alone.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null;
-      if (target !== null && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
-        return;
-      }
-      // Enter on a real button (Confirm, Next, a link) is that control's own click;
-      // handling it here as well would act twice. Enter on an option radio confirms.
-      if (event.key === "Enter" && target !== null && (target.tagName === "BUTTON" || target.tagName === "A") && target.getAttribute("role") !== "radio") {
-        return;
-      }
+      // Keys typed into a field, Enter on a real button (Confirm, Next, a link: that
+      // control's own click), and a chord or held key are not the drill's
+      // (`lib/keyboard.ts`). Enter on an option radio confirms.
+      if (!isPageKey(event, event.target as HTMLElement | null)) return;
       // The reducer resolves the key against its current state (see the "key" event).
       if (event.key === "Enter" || /^[1-9]$/.test(event.key)) {
         dispatch({ type: "key", key: event.key, at: performance.now() });
@@ -535,6 +532,7 @@ function DiagnosticComplete({ skillName, trend }: { skillName: string; trend: Sk
       <h2>{t("resultTitle", { skill: skillName })}</h2>
       {trend === null ? <p role="status">{tCommon("loading")}</p> : <TrendMeters trend={trend} />}
       <p className="app-muted">{t("resultNote")}</p>
+      <NonAffiliation />
       <Link href="/home" className="pl-btn pl-btn--primary pl-focusable">
         {t("toToday")}
       </Link>

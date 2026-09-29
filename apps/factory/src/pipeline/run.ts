@@ -76,6 +76,16 @@ export type CarriedBank = {
   readonly scenarios?: readonly OralScenario[];
 };
 
+/**
+ * Hand-authored contributions, from `content/authored/` (content-factory.md §5). They
+ * enter at stage 4: review, then validation and the bank build, unchanged, and are not
+ * exempt from any gate. An item that fails review is discarded whoever wrote it.
+ */
+export type AuthoredContent = {
+  readonly items: readonly Item[];
+  readonly passages: readonly Passage[];
+};
+
 export type RunInput = {
   readonly sources: readonly SourceCandidate[];
   readonly profile: ExamProfile;
@@ -100,6 +110,8 @@ export type RunInput = {
   readonly formSeed?: number;
   /** The oral scenarios to plan (progress.md D114). Absent, the batch plans none. */
   readonly oralPlan?: OralSessionPlan;
+  /** Hand-authored items and passages, joining the drafted ones at stage 4. Absent, none. */
+  readonly authored?: AuthoredContent;
 };
 
 export type RunOutput = {
@@ -147,8 +159,20 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
   });
   const drafted = draftStage.items;
 
-  const passageIndex: ReadonlyMap<PassageId, Passage> = new Map(passages.map((p) => [p.id, p]));
-  const review = await reviewItems(drafted, metered.provider, passageIndex);
+  // Authored items enter here, at stage 4 (content-factory.md §5), reviewed against
+  // this batch's passages and their own. They are reviewed apart from the drafts, so
+  // stage-4 yield stays a measure of the drafter, and then joined to them: validation
+  // and the bank build treat the two alike.
+  const authoredItems = input.authored?.items ?? [];
+  const authoredPassages = input.authored?.passages ?? [];
+  const passageIndex = new Map<PassageId, Passage>(passages.map((p) => [p.id, p]));
+  for (const passage of authoredPassages) if (!passageIndex.has(passage.id)) passageIndex.set(passage.id, passage);
+  const draftedReview = await reviewItems(drafted, metered.provider, passageIndex);
+  const authoredReview = await reviewItems(authoredItems, metered.provider, passageIndex);
+  const review: ReviewResult<Item> = {
+    passed: [...draftedReview.passed, ...authoredReview.passed],
+    discarded: [...draftedReview.discarded, ...authoredReview.discarded],
+  };
   // The item stages' model, taken before the scenario stage calls its own.
   const itemModel = metered.provider.lastUsage()?.model ?? "scripted";
 
@@ -196,7 +220,7 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
   // provenance included, was published and never changes (D114). The two share an id only
   // when the body is the same; what differs is when the source was retrieved.
   const bankPassages = new Map<PassageId, Passage>();
-  for (const passage of [...(input.carried?.passages ?? []), ...passages]) {
+  for (const passage of [...(input.carried?.passages ?? []), ...passages, ...authoredPassages]) {
     if (!bankPassages.has(passage.id)) bankPassages.set(passage.id, passage);
   }
 
@@ -213,6 +237,7 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
   });
 
   const totals = metered.totals();
+  const authoredIds = new Set(authoredItems.map((i) => i.id));
   const report = batchReport({
     batchId: input.batchId,
     generatedAt: input.now,
@@ -220,9 +245,14 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
     sources: harvested.queue.length,
     passages: passages.length,
     itemsDrafted: drafted.length,
-    review,
+    review: draftedReview,
     validation,
     carriedPublished: validation.valid.filter((i) => carriedIds.has(i.id)).length,
+    authored: {
+      submitted: authoredItems.length,
+      passed: authoredReview.passed.length,
+      published: validation.valid.filter((i) => authoredIds.has(i.id) && !carriedIds.has(i.id)).length,
+    },
     scenarios: { published: newScenarios.length, carried: carriedScenarios.length },
     totalCostUsd: totals.costUsd,
   });

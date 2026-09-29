@@ -103,6 +103,10 @@ test("the workshop with a key: the pre-flight warns past the cap, a failure keep
   await expect(page.getByText("“écrit” becomes “écris”.")).toBeVisible();
   await expect(page.locator("del.app-writing-removed")).toContainText("écrit");
   await expect(page.locator("ins.app-writing-added")).toContainText("écris");
+  // Inside the French, the interface's own words read as English (WCAG 3.1.2, Slice 3's lang audit).
+  await expect(page.locator("ins.app-writing-added .pl-visually-hidden")).toHaveAttribute("lang", "en");
+  await expect(page.locator("mark.app-writing-mark .pl-visually-hidden")).toHaveAttribute("lang", "en");
+  await expect(page.locator("main .app-nonaffiliation")).toContainText("not affiliated");
   await axeClean(page);
 
   // The history keeps it, on this device only; opening it shows the feedback again, free.

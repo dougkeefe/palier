@@ -177,6 +177,7 @@ type Item = {
     generator?: { model: string; promptVersion: string; date: string }
     reviewedBy?: string
     reviewedAt?: string
+    contributor?: string        // a public handle; required when origin is 'authored' (content-factory.md §5)
   }
   status: 'draft' | 'review' | 'published' | 'retired'
   createdAt: string
@@ -206,6 +207,7 @@ type Passage = {
     licence?: 'OGL-Canada-2.0' | 'canada.ca-non-commercial' | 'public-domain' | 'other'
     licenceNote?: string
     transformation?: string     // how far it was rewritten
+    contributor?: string        // a public handle, for a hand-authored passage (content-factory.md §5)
   }
   status: 'draft' | 'review' | 'published' | 'retired'
 }

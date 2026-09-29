@@ -56,6 +56,22 @@
   --warning: #F2B35B;
 }
 
+@media print {
+  :root,
+  [data-theme] {
+    --bg: #FBF8F4;
+    --surface: #FFFFFF;
+    --ink: #1E1824;
+    --ink-muted: #5B5266;
+    --primary: #5B2C6F;
+    --accent: #E8913A;
+    --correct: #1F7A5C;
+    --incorrect: #B23A48;
+    --info: #2B6CB0;
+    --warning: #8A5300;
+  }
+}
+
 [data-mode="exam"] {
   --bg: #F3F3F1;
   --surface: #FFFFFF;

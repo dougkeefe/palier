@@ -9,7 +9,9 @@ import type { AiProvider } from "@palier/adapters/openai";
 import { DEFAULT_BANK_VERSION, buildProvider, runFactory } from "./cli.js";
 import type { CliDeps } from "./cli.js";
 import { scriptedAiProvider } from "./providers/scripted-ai-provider.js";
+import { anAuthoredItem, anAuthoredItemReviewRejects } from "./__tests__/authored-fixtures.js";
 import {
+  AUTHORED_DIR,
   BATCH_REPORT_PATH,
   EVAL_REPORT_PATH,
   ITEM_STATISTICS_PATH,
@@ -79,6 +81,29 @@ describe("runFactory", () => {
     };
     expect(report.counts.itemsPublished).toBeGreaterThan(0);
     expect(log.join(" ")).toMatch(/published/);
+  });
+
+  it("logs no authored line when there is nothing under content/authored", async () => {
+    await runFactory(["run"], deps());
+    expect(log.join("\n")).not.toMatch(/^authored:/m);
+    const report = JSON.parse(readFileSync(join(root, BATCH_REPORT_PATH), "utf8")) as Record<string, unknown>;
+    expect(report).not.toHaveProperty("authored");
+  });
+
+  it("takes in the contributions under content/authored, and says what became of them (content-factory.md §5)", async () => {
+    mkdirSync(join(root, AUTHORED_DIR), { recursive: true });
+    writeFileSync(
+      join(root, AUTHORED_DIR, "octocat.json"),
+      JSON.stringify({ items: [anAuthoredItem(), anAuthoredItemReviewRejects()] }),
+    );
+    expect(await runFactory(["run"], deps())).toBe(0);
+    expect(log).toContain("authored: 1 published / 2 submitted, 1 passed review");
+    const manifest = JSON.parse(readFileSync(join(root, `content/bank/${DEFAULT}/manifest.json`), "utf8")) as {
+      shards: { path: string }[];
+    };
+    const shipped = manifest.shards.flatMap((shard) => JSON.parse(readFileSync(join(root, "content", shard.path), "utf8")) as { id: string }[]);
+    expect(shipped.map((i) => i.id)).toContain(anAuthoredItem().id);
+    expect(shipped.map((i) => i.id)).not.toContain(anAuthoredItemReviewRejects().id);
   });
 
   it("runs the eval and returns 0 when detection clears the bar", async () => {

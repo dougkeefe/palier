@@ -65,4 +65,4 @@ export type { OralSessionCommand, OralSessionEvent, OralSessionState, OralStep }
 export { startOralSession, stepOralSession } from "./oral-session.js";
 
 export type { FluencyMetrics } from "./fluency.js";
-export { fluencyMetrics } from "./fluency.js";
+export { fluencyMetrics, speakingMs } from "./fluency.js";

@@ -1,4 +1,4 @@
-import type { SyncOutcome, SyncState } from "@palier/app";
+import { PAIR_CODE_TTL_MS, type SyncOutcome, type SyncState } from "@palier/app";
 
 /**
  * What the sync UI shows (product-requirements.md §8.11, §14): the header's quiet
@@ -69,3 +69,28 @@ export const statusLine = (view: SyncView): StatusLine => {
  */
 export const joinFailure = (error: unknown): "joinRejected" | "unavailable" =>
   error instanceof Error && error.name === "PairCodeRejectedError" ? "joinRejected" : "unavailable";
+
+/**
+ * When a code that has just arrived lapses, by this device's clock: its ten minutes counted from
+ * now. Not the server's `expiresAt`, which is on the server's clock: a device a few minutes out
+ * would count down the wrong ten minutes, and the screen and the server would disagree on when
+ * it lapsed. Counting from arrival is out only by the request's own time, and in the safe
+ * direction, since the server started its ten minutes first.
+ */
+export const codeLapsesAt = (arrivedAt: string, ttlMs: number = PAIR_CODE_TTL_MS): string =>
+  new Date(Date.parse(arrivedAt) + ttlMs).toISOString();
+
+/**
+ * A shown pair code, against the time (product-requirements.md §8.11: "valid ten minutes").
+ * `live` with the whole minutes left, rounded up, so the last minute reads "1 minute" and
+ * never "0"; `expired` from the moment it lapses, when the screen takes the code away,
+ * since the server would refuse it (architecture.md §9.3), and offers a new one.
+ */
+export type PairCodeView = { readonly status: "live"; readonly minutesLeft: number } | { readonly status: "expired" };
+
+const MINUTE_MS = 60_000;
+
+export const pairCodeView = (expiresAt: string, now: string): PairCodeView => {
+  const leftMs = Date.parse(expiresAt) - Date.parse(now);
+  return leftMs > 0 ? { status: "live", minutesLeft: Math.ceil(leftMs / MINUTE_MS) } : { status: "expired" };
+};

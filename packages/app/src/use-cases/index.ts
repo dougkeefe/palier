@@ -106,8 +106,14 @@ export { PRACTICE_MODES, practiceTrend, practiceTrendEvidence } from "./practice
 export type { ReviewQueueDeps, ReviewQueueRequest, ReviewQueueResult } from "./review-queue.js";
 export { reviewQueue } from "./review-queue.js";
 
-export type { ProgressReport, ProgressReportDeps, ProgressReportRequest } from "./progress-report.js";
-export { progressReport } from "./progress-report.js";
+export type {
+  OralTotals,
+  OralTotalsDeps,
+  ProgressReport,
+  ProgressReportDeps,
+  ProgressReportRequest,
+} from "./progress-report.js";
+export { oralTotals, progressReport } from "./progress-report.js";
 
 export type { SyncNowDeps, SyncNowRequest, SyncOutcome } from "./sync-now.js";
 export { MAX_PUSH_ROUNDS, PUSH_BATCH, syncNow } from "./sync-now.js";

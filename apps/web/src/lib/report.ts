@@ -8,6 +8,9 @@ import type { Item } from "@palier/domain";
  */
 export const REPOSITORY_URL = "https://github.com/dougkeefe/palier";
 
+/** The contribution guide, linked from the about page (progress.md D145). */
+export const CONTRIBUTING_URL = `${REPOSITORY_URL}/blob/main/CONTRIBUTING.md`;
+
 /** §13.0's four reasons, in its order. */
 export const REPORT_REASONS = ["key-wrong", "multiple-answers", "french-off", "unclear"] as const;
 export type ReportReason = (typeof REPORT_REASONS)[number];

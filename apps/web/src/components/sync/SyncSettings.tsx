@@ -1,11 +1,11 @@
 "use client";
 
-import { type DeviceSummary, normalizePairCode } from "@palier/app";
+import { type DeviceId, type DeviceSummary, normalizePairCode } from "@palier/app";
 import { Button, Callout, Card, Toast } from "@palier/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useId, useRef, useState } from "react";
 
-import { joinFailure, statusLine } from "../../features/sync/sync-view";
+import { codeLapsesAt, joinFailure, pairCodeView, statusLine } from "../../features/sync/sync-view";
 import { Link } from "../../i18n/navigation";
 import { deviceLabel } from "../../lib/device-label";
 import type { Container } from "../../lib/container";
@@ -39,8 +39,13 @@ const readSettings = async (container: Container) => {
  * - the danger zone.
  *
  * No account, email or password anywhere (ADR 5). Confirmations are in place, with focus
- * moved to their question, as on the data pane.
+ * moved to their question, as on the data pane: removing a device asks first, and says
+ * what removal does to that device (progress.md D145's Slice 3). A shown code counts down its
+ * ten minutes and is taken away when it lapses, since the server would refuse it.
  */
+
+/** How often a shown code's minutes are re-read. Well inside a minute, so the count is never a minute stale. */
+const CODE_TICK_MS = 15_000;
 export function SyncSettings() {
   const t = useTranslations("sync");
   const tCommon = useTranslations("common");
@@ -49,6 +54,11 @@ export function SyncSettings() {
   const id = useId();
   const offRef = useRef<HTMLHeadingElement>(null);
   const confirmRef = useRef<HTMLHeadingElement>(null);
+  const removeRef = useRef<HTMLHeadingElement>(null);
+  // The device whose Remove button takes focus back when it returns, after a cancelled removal.
+  const refocus = useRef<DeviceId | null>(null);
+  const [removing, setRemoving] = useState<DeviceId | null>(null);
+  const [now, setNow] = useState<string | null>(null);
   const [enabled, setEnabled] = useState(true);
   const [devices, setDevices] = useState<readonly DeviceSummary[]>([]);
   const [offOffer, setOffOffer] = useState<"hidden" | "asking" | "deleted">("hidden");
@@ -59,6 +69,10 @@ export function SyncSettings() {
   const [deleteStep, setDeleteStep] = useState<DeleteStep>("idle");
   const ready = container.status === "ready";
 
+  // Read on arrival, and again whenever an exchange this page did not start changes what is
+  // stored: another device removing this one turns its switch off (`syncNow`'s "removed"), and
+  // the switch and the list must say so, not only the status line.
+  const { paired, reason } = sync.view;
   useEffect(() => {
     if (container.status !== "ready") return;
     let live = true;
@@ -70,13 +84,24 @@ export function SyncSettings() {
     return () => {
       live = false;
     };
-  }, [container]);
+  }, [container, paired, reason]);
   useEffect(() => {
     if (offOffer === "asking") offRef.current?.focus();
   }, [offOffer]);
   useEffect(() => {
     if (deleteStep === "confirming") confirmRef.current?.focus();
   }, [deleteStep]);
+  useEffect(() => {
+    if (removing !== null) removeRef.current?.focus();
+  }, [removing]);
+  // Tick while a code is shown, so its minutes count down and it lapses on screen. The
+  // first reading is taken as the code arrives.
+  useEffect(() => {
+    if (code === null || container.status !== "ready") return;
+    const { clock } = container.container;
+    const timer = setInterval(() => setNow(clock.now()), CODE_TICK_MS);
+    return () => clearInterval(timer);
+  }, [code, container]);
 
   if (container.status !== "ready") return <p className="app-muted">{tCommon("loading")}</p>;
   const { useCases } = container.container;
@@ -141,7 +166,14 @@ export function SyncSettings() {
     }
   };
 
+  /** Back out of a removal, to the button that asked for it, once it is back on the page. */
+  const cancelRemove = (device: DeviceId) => {
+    refocus.current = device;
+    setRemoving(null);
+  };
+
   const line = statusLine(sync.view);
+  const codeView = code === null || now === null ? null : pairCodeView(code.expiresAt, now);
 
   return (
     <div className="app-stack">
@@ -243,12 +275,42 @@ export function SyncSettings() {
                   </p>
                   <p className="app-muted">{t("lastSeen", { when: new Date(device.lastSeenAt) })}</p>
                 </div>
-                <Button
-                  variant="secondary"
-                  onClick={() => void attempt(() => useCases.removeDevice({ id: device.id }))}
-                >
-                  {device.current ? t("removeThis") : t("remove", { label: device.label })}
-                </Button>
+                {removing === device.id ? (
+                  <section className="app-stack app-confirm" aria-labelledby={`${id}-remove`}>
+                    <h3 id={`${id}-remove`} ref={removeRef} tabIndex={-1} className="app-step-heading">
+                      {device.current ? t("removeThisTitle") : t("removeTitle", { label: device.label })}
+                    </h3>
+                    <p>{device.current ? t("removeThisBody") : t("removeBody")}</p>
+                    <div className="app-actions">
+                      <Button
+                        variant="danger"
+                        onClick={() =>
+                          void attempt(async () => {
+                            setRemoving(null);
+                            await useCases.removeDevice({ id: device.id });
+                          })
+                        }
+                      >
+                        {t("removeConfirm")}
+                      </Button>
+                      <Button variant="secondary" onClick={() => cancelRemove(device.id)}>
+                        {t("cancel")}
+                      </Button>
+                    </div>
+                  </section>
+                ) : (
+                  <Button
+                    variant="secondary"
+                    ref={(element: HTMLButtonElement | null) => {
+                      if (element === null || refocus.current !== device.id) return;
+                      refocus.current = null;
+                      element.focus();
+                    }}
+                    onClick={() => setRemoving(device.id)}
+                  >
+                    {device.current ? t("removeThis") : t("remove", { label: device.label })}
+                  </Button>
+                )}
               </li>
             ))}
           </ul>
@@ -264,20 +326,34 @@ export function SyncSettings() {
             disabled={!enabled}
             onClick={() =>
               void attempt(async () => {
-                setCode(await useCases.requestPairCode({ label: label() }));
+                const issued = await useCases.requestPairCode({ label: label() });
+                const arrivedAt = container.container.clock.now();
+                setCode({ code: issued.code, expiresAt: codeLapsesAt(arrivedAt) });
+                setNow(arrivedAt);
               })
             }
           >
-            {t("addAction")}
+            {codeView?.status === "expired" ? t("addAgain") : t("addAction")}
           </Button>
         </div>
         {code !== null ? (
           <div className="app-stack">
-            <p className="app-muted">{t("codeLabel")}</p>
-            <p className="app-code" aria-live="polite">
-              {code.code}
-            </p>
-            <p className="app-muted">{t("codeExpires", { time: new Date(code.expiresAt) })}</p>
+            {/* One live region for the code and its lapse, so both are announced; the countdown sits outside it. */}
+            <div aria-live="polite">
+              {codeView?.status === "expired" ? (
+                <p>{t("codeExpired")}</p>
+              ) : (
+                <>
+                  <p className="app-muted">{t("codeLabel")}</p>
+                  <p className="app-code">{code.code}</p>
+                </>
+              )}
+            </div>
+            {codeView?.status === "live" ? (
+              <p className="app-muted">
+                {t("codeLeft", { minutes: codeView.minutesLeft, time: new Date(code.expiresAt) })}
+              </p>
+            ) : null}
           </div>
         ) : null}
       </Card>

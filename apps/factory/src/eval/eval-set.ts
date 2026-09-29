@@ -27,6 +27,9 @@ export type DefectClass = (typeof DEFECT_CLASSES)[number];
 
 export type EvalItem = { readonly defect: DefectClass; readonly item: Item };
 
+/** The handle the eval set's fixtures are credited to: the project's own, not a person's. */
+export const EVAL_CONTRIBUTOR = "palier-eval";
+
 const LONG2 = "administration coordination";
 
 /** A band-B stem: two long words among ~11, so `estimateBand` returns B. */
@@ -67,7 +70,11 @@ const makeItem = (
   targetBand,
   topic: "human-resources",
   tags: ["eval", tag],
-  provenance: { origin: "authored" },
+  // Authored, by the project, as fixtures, so credited the way every authored item must be
+  // (content-factory.md §5). Without a contributor, validate() would flag every one of them
+  // as uncredited: each defect would be "detected" for that reason, not its own, and the clean
+  // control would fail, so the eval would measure nothing.
+  provenance: { origin: "authored", contributor: EVAL_CONTRIBUTOR },
   status: "draft",
   createdAt: "2026-09-21T00:00:00.000Z",
   updatedAt: "2026-09-21T00:00:00.000Z",

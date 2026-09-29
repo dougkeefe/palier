@@ -3,13 +3,20 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import { itemSchema, itemTypeDefinition, parseExamProfileOrThrow } from "@palier/domain";
-import type { ExamProfile, Item } from "@palier/domain";
+import type { ExamProfile, Item, ReviewRequest } from "@palier/domain";
+import type { AiProvider } from "@palier/adapters/openai";
 
 import { scriptedAiProvider } from "../providers/scripted-ai-provider.js";
 import type { OralSessionPlan, SourceCandidate } from "../lib/types.js";
 import { buildBank } from "./bank-build.js";
 import { defaultWritingPlan, runPipeline } from "./run.js";
 import type { RunInput } from "./run.js";
+import {
+  anAuthoredComprehensionItem,
+  anAuthoredItem,
+  anAuthoredItemReviewRejects,
+  anAuthoredPassage,
+} from "../__tests__/authored-fixtures.js";
 
 const profile = (): ExamProfile =>
   parseExamProfileOrThrow(
@@ -227,6 +234,95 @@ describe("runPipeline, with oral scenarios (D114)", () => {
     const withScenarios = await run({ oralPlan: ORAL_PLAN });
     expect(withScenarios.report.totalCostUsd).toBeGreaterThan(without.report.totalCostUsd ?? 0);
     expect(withScenarios.report.provider).toBe("scripted");
+  });
+});
+
+/** The scripted provider, recording every review request it is sent. */
+const recordingReviews = (): { provider: AiProvider; requests: ReviewRequest[] } => {
+  const inner = scriptedAiProvider();
+  const requests: ReviewRequest[] = [];
+  return {
+    requests,
+    provider: {
+      ...inner,
+      reviewItem: (req) => {
+        requests.push(req);
+        return inner.reviewItem(req);
+      },
+    },
+  };
+};
+
+const bankItems = (out: Awaited<ReturnType<typeof run>>): Item[] =>
+  out.bank.files.filter((f) => f.path.includes("/fr/")).flatMap((f) => JSON.parse(f.content) as Item[]);
+
+describe("runPipeline, with hand-authored items (content-factory.md §5)", () => {
+  it("sends an authored item to stage 4, the review, blind to its key like any draft", async () => {
+    const { provider, requests } = recordingReviews();
+    const authored = anAuthoredItem();
+    await run({ provider, authored: { items: [authored], passages: [] } });
+    const request = requests.find((r) => r.stem.fr === authored.stem.fr);
+    expect(request).toBeDefined();
+    expect(request).not.toHaveProperty("key");
+    expect(requests.at(-1)).toBe(request);
+  });
+
+  it("publishes a kept authored item with origin authored and its contributor intact", async () => {
+    const authored = anAuthoredItem();
+    const out = await run({ authored: { items: [authored], passages: [] } });
+    expect(out.validation.valid.map((i) => i.id)).toContain(authored.id);
+    const shipped = bankItems(out).find((i) => i.id === authored.id);
+    expect(shipped?.provenance).toEqual({ origin: "authored", contributor: "octocat" });
+  });
+
+  it("discards an authored item the review rejects, whoever wrote it", async () => {
+    const rejected = anAuthoredItemReviewRejects();
+    const out = await run({ authored: { items: [rejected], passages: [] } });
+    expect(out.validation.valid.map((i) => i.id)).not.toContain(rejected.id);
+    expect(bankItems(out).map((i) => i.id)).not.toContain(rejected.id);
+    const discard = out.review.discarded.find((d) => d.stemFr === rejected.stem.fr);
+    expect(discard?.reasons.join(" ")).toMatch(/register flag/);
+  });
+
+  it("rejects an uncredited authored item at validation, though the review passed it", async () => {
+    const uncredited = anAuthoredItem({ provenance: { origin: "authored" } });
+    const out = await run({ authored: { items: [uncredited], passages: [] } });
+    expect(out.review.passed.map((i) => i.id)).toContain(uncredited.id);
+    expect(out.validation.rejected.find((r) => r.itemId === uncredited.id)?.reasons.join(" ")).toMatch(
+      /authored-without-contributor/,
+    );
+    expect(bankItems(out).map((i) => i.id)).not.toContain(uncredited.id);
+  });
+
+  it("reviews an authored comprehension item against its authored passage, and ships both", async () => {
+    const { provider, requests } = recordingReviews();
+    const passage = anAuthoredPassage();
+    const item = anAuthoredComprehensionItem();
+    const out = await run({ provider, authored: { items: [item], passages: [passage] } });
+    expect(requests.find((r) => r.stem.fr === item.stem.fr)?.passage).toEqual({ title: passage.title, body: passage.body });
+    expect(bankItems(out).map((i) => i.id)).toContain(item.id);
+    const passages = out.bank.files.filter((f) => f.path.includes("/passages/")).flatMap((f) => JSON.parse(f.content) as unknown[]);
+    expect(passages).toContainEqual(passage);
+  });
+
+  it("counts authored items apart, so stage-4 yield and the published count stay the drafter's", async () => {
+    const without = await run();
+    const out = await run({ authored: { items: [anAuthoredItem(), anAuthoredItemReviewRejects()], passages: [] } });
+    expect(out.report.authored).toEqual({ submitted: 2, passed: 1, published: 1 });
+    expect(out.report.counts.itemsDrafted).toBe(without.report.counts.itemsDrafted);
+    expect(out.report.counts.itemsPassed).toBe(without.report.counts.itemsPassed);
+    expect(out.report.stage4Yield).toBe(without.report.stage4Yield);
+    expect(out.report.counts.itemsPublished).toBe(out.validation.valid.length - 1);
+    // Their two review calls are part of what the batch spent.
+    expect(out.report.totalCostUsd).toBeGreaterThan(without.report.totalCostUsd ?? 0);
+  });
+
+  it("builds exactly the bank and report it did before the intake when nothing is authored", async () => {
+    const without = await run();
+    const empty = await run({ authored: { items: [], passages: [] } });
+    expect(empty.bank.files).toEqual(without.bank.files);
+    expect(empty.report).toEqual(without.report);
+    expect(empty.report).not.toHaveProperty("authored");
   });
 });
 

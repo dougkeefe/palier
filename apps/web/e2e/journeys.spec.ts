@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { axeClean, drillThroughByKeyboard, onboard, setSize } from "./helpers";
+import { axeClean, drillThroughByKeyboard, expectStatementInMain, onboard, setSize } from "./helpers";
 
 /**
  * The E2E journeys Slice 1 owns (implementation-plan.md §6.2 tier 6), against the
@@ -32,6 +32,8 @@ test("journey 1: onboarding through the diagnostic to accuracy per band, with it
   }
   // R10: a figure only with enough evidence; otherwise it says how much more is needed.
   await expect(page.getByText(/more (is|are) needed|% correct, likely between/).first()).toBeVisible();
+  // Beside the readout, the statement that it is not official (R5, D145).
+  await expectStatementInMain(page);
   await axeClean(page);
 });
 
@@ -198,6 +200,8 @@ test("every page is titled for its purpose, ahead of the product name (WCAG 2.4.
     ["/en/practice/oral/report", "Report on a spoken session · Palier"],
     ["/fr/practice/oral/report", "Bilan d’une séance orale · Palier"],
     ["/en/exam", "Mock exam · Palier"],
+    ["/en/privacy", "Privacy · Palier"],
+    ["/fr/about", "Ce qu'est Palier, et ce qu'il n'est pas · Palier"],
     ["/fr/exam/results", "Résultats de l’examen · Palier"],
     ["/en", "Palier"],
   ] as const) {

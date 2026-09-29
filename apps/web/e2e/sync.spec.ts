@@ -171,3 +171,44 @@ test("the sync settings are keyboard-reachable and axe-clean in every state [R9]
   await axeClean(page);
   await page.getByRole("button", { name: "Cancel" }).click();
 });
+
+/**
+ * Removing a device (product-requirements.md §8.11; progress.md D145's Slice 3): it asks first,
+ * in place, and Cancel goes back to the button; the code says how long it has left. The removed
+ * device notices on its next exchange, says why sync stopped, and turns its own switch off.
+ */
+test("removing a device asks first, and the removed device notices and says so", async ({ browser }) => {
+  test.setTimeout(120_000);
+  const laptop = await device(browser);
+  const phone = await device(browser);
+  await onboard(laptop, "skip");
+  await drill(laptop);
+  await openSync(laptop);
+  await syncNow(laptop);
+  await laptop.getByRole("button", { name: "Show a code" }).click();
+  await expect(laptop.getByText(/^Valid for 10 more minutes, until /)).toBeVisible();
+  const code = (await laptop.locator(".app-code").textContent())?.trim() ?? "";
+  await onboard(phone, "skip");
+  await openSync(phone);
+  await phone.getByLabel("Code").fill(code);
+  await phone.getByRole("button", { name: "Link this device" }).click();
+  await expect(phone.getByRole("status").filter({ hasText: /^This device is linked\./ })).toBeVisible();
+  await expect(phone.locator(".app-device")).toHaveCount(2);
+
+  // The phone removes the laptop, and asks first; Cancel goes back to the button.
+  const remove = phone.getByRole("button", { name: /^Remove (?!this device)/ });
+  await remove.click();
+  await expect(phone.getByRole("heading", { name: /^Remove .+\?$/ })).toBeFocused();
+  await axeClean(phone);
+  await phone.getByRole("button", { name: "Cancel" }).click();
+  await expect(remove).toBeFocused();
+  await remove.click();
+  await phone.getByRole("button", { name: "Remove", exact: true }).click();
+  await expect(phone.locator(".app-device")).toHaveCount(1);
+
+  // The laptop's next exchange is refused: it says it was removed, and its switch is off.
+  await laptop.getByRole("button", { name: "Sync now" }).click();
+  await expect(laptop.getByRole("status").filter({ hasText: /^This device was removed from sync/ })).toBeVisible();
+  await expect(laptop.getByRole("switch", { name: "Sync my progress across my devices" })).not.toBeChecked();
+  await axeClean(laptop);
+});

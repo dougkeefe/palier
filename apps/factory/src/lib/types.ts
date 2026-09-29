@@ -63,4 +63,11 @@ export type BatchReport = {
   /** Cost per accepted item in USD, or null when no pricing was configured. */
   readonly costPerAcceptedItemUsd: number | null;
   readonly totalCostUsd: number | null;
+  /**
+   * Hand-authored items (content-factory.md §5): submitted, passed review, published.
+   * Present only when the batch took some in; they are outside `counts`, so yield and
+   * `itemsPublished` stay the drafter's. Their review calls are in `totalCostUsd`, as the
+   * scenario stage's are.
+   */
+  readonly authored?: { readonly submitted: number; readonly passed: number; readonly published: number };
 };

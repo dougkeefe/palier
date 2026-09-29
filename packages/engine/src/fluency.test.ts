@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { OralTurn } from "@palier/domain";
 
-import { fluencyMetrics } from "./fluency.js";
+import { fluencyMetrics, speakingMs } from "./fluency.js";
 
 const FILLERS = ["euh", "ben", "tu sais", "en fait"];
 
@@ -108,5 +108,16 @@ describe("fluencyMetrics (D123)", () => {
     // "bénéficie" in NFD, and "j’ai" with a curly apostrophe: two words in 1.2 s, 100 a minute.
     expect(fluencyMetrics([spoken(0, 1_200, "be\u0301ne\u0301ficie j’ai")], FILLERS).wordsPerMinute).toBe(100);
     expect(fluencyMetrics([spoken(0, 1_000, "Euh, j’veux dire")], ["j'veux dire"]).fillerCount).toBe(1);
+  });
+});
+
+describe("speakingMs (PRD §8.9's minutes spoken)", () => {
+  it("sums the spoken answers' durations, and nothing the examiner said or the candidate typed", () => {
+    const turns = [examiner(1_000), spoken(2_000, 32_000, "Je suis analyste."), typed(40_000, 90_000, "Et je gère."), spoken(95_000, 110_000, "Voilà.")];
+    expect(speakingMs(turns)).toBe(45_000);
+  });
+
+  it("is zero, not absent, when nothing was spoken, since it is a sum over sessions", () => {
+    expect(speakingMs([examiner(1_000), typed(1_000, 30_000, "Tapé.")])).toBe(0);
   });
 });

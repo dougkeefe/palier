@@ -28,7 +28,9 @@ when one event crosses several boundaries; at or past the scenario's length the 
 with every phase entered; **every close carries a reason**, exactly once, and an ended machine says nothing
 more; an earlier `atMs` than one already seen counts as the later. Property-tested, nine invariants. **Fluency**
 (`fluency.ts`, progress.md D123): `fluencyMetrics(turns, fillers)` gives words a minute, the filler count and the mean
-pause **over spoken answers only** (`input: "voice"`), each `null` rather than zero when nothing spoken measures it;
+pause **over spoken answers only** (`input: "voice"`), each `null` rather than zero when nothing spoken measures it.
+`speakingMs(turns)` is the time those spoken answers took, the same measure, summed; the progress summary's "minutes
+spoken" is it over every session (progress.md D145);
 the filler list is handed in, since it is content data, and words are domain's `spokenWords`. **The pause is each spoken
 turn's `pauseMs`, which the screen measures; never the gap between turns**, which counts the time the question was heard
 (D127). **An oral report's fixes bias the plan** (D124, closing D35): `SelectionCriteria.boost` favours its sub-skills at

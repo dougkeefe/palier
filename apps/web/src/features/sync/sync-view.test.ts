@@ -1,7 +1,7 @@
 import { INITIAL_SYNC_STATE, deviceId } from "@palier/app";
 import { describe, expect, it } from "vitest";
 
-import { INITIAL_VIEW, joinFailure, statusLine, viewFromOutcome, viewFromState, viewSyncing } from "./sync-view";
+import { INITIAL_VIEW, codeLapsesAt, joinFailure, pairCodeView, statusLine, viewFromOutcome, viewFromState, viewSyncing } from "./sync-view";
 
 const identity = { accountId: "a", deviceId: deviceId("d") };
 
@@ -88,5 +88,35 @@ describe("joinFailure", () => {
     expect(joinFailure(rejected)).toBe("joinRejected");
     expect(joinFailure(new Error("network"))).toBe("unavailable");
     expect(joinFailure("thrown string")).toBe("unavailable");
+  });
+});
+
+describe("pairCodeView", () => {
+  const expiresAt = "2026-09-29T12:10:00.000Z";
+
+  it("is live for its whole ten minutes, counting them from the time it was issued", () => {
+    expect(pairCodeView(expiresAt, "2026-09-29T12:00:00.000Z")).toEqual({ status: "live", minutesLeft: 10 });
+  });
+
+  it("rounds a part minute up, so the last minute reads one, never zero", () => {
+    expect(pairCodeView(expiresAt, "2026-09-29T12:05:30.000Z")).toEqual({ status: "live", minutesLeft: 5 });
+    expect(pairCodeView(expiresAt, "2026-09-29T12:09:59.000Z")).toEqual({ status: "live", minutesLeft: 1 });
+  });
+
+  it("is expired from the moment it lapses, and after", () => {
+    expect(pairCodeView(expiresAt, expiresAt)).toEqual({ status: "expired" });
+    expect(pairCodeView(expiresAt, "2026-09-29T13:00:00.000Z")).toEqual({ status: "expired" });
+  });
+});
+
+describe("codeLapsesAt", () => {
+  it("counts the code's ten minutes from its arrival on this device", () => {
+    expect(codeLapsesAt("2026-09-29T12:00:00.000Z")).toBe("2026-09-29T12:10:00.000Z");
+  });
+
+  it("is live for its whole life, and lapses at its end, whatever the server's clock says", () => {
+    const arrived = "2026-09-29T12:00:00.000Z";
+    expect(pairCodeView(codeLapsesAt(arrived), arrived)).toEqual({ status: "live", minutesLeft: 10 });
+    expect(pairCodeView(codeLapsesAt(arrived), "2026-09-29T12:10:00.000Z")).toEqual({ status: "expired" });
   });
 });

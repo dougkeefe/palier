@@ -50,6 +50,13 @@ export type BatchMetricsInput = {
    * rather than drafted in this batch. They are not this batch's output, so they are
    * kept out of its published count and its cost per item. */
   readonly carriedPublished?: number;
+  /**
+   * The hand-authored items this batch took in (content-factory.md §5): submitted, passed
+   * review, published. They are not drafts, so `review` and `itemsDrafted` leave them out,
+   * which keeps stage-4 yield a measure of the drafter; they are counted here instead, and
+   * kept out of `itemsPublished` as carried items are.
+   */
+  readonly authored?: { readonly submitted: number; readonly passed: number; readonly published: number };
   /** Oral scenarios published in this batch, and carried from the previous version. */
   readonly scenarios?: { readonly published: number; readonly carried: number };
   readonly totalCostUsd: number | null;
@@ -58,7 +65,8 @@ export type BatchMetricsInput = {
 export const batchReport = (input: BatchMetricsInput): BatchReport => {
   const itemsPassed = input.review.passed.length;
   const itemsCarried = input.carriedPublished ?? 0;
-  const itemsPublished = input.validation.valid.length - itemsCarried;
+  const authored = input.authored ?? { submitted: 0, passed: 0, published: 0 };
+  const itemsPublished = input.validation.valid.length - itemsCarried - authored.published;
   const stage4Yield = input.itemsDrafted === 0 ? 0 : itemsPassed / input.itemsDrafted;
   const costPerAcceptedItemUsd =
     input.totalCostUsd === null || itemsPublished === 0
@@ -83,5 +91,8 @@ export const batchReport = (input: BatchMetricsInput): BatchReport => {
     costPerAcceptedItemUsd,
     totalCostUsd:
       input.totalCostUsd === null ? null : Math.round(input.totalCostUsd * 1_000_000) / 1_000_000,
+    // Only a batch that took authored items in says so, so a batch without any reports
+    // exactly what it did before the intake existed.
+    ...(authored.submitted === 0 ? {} : { authored }),
   };
 };

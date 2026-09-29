@@ -27,6 +27,16 @@ describe("renderTokensCss", () => {
   });
 });
 
+describe("renderTokensCss — print", () => {
+  const css = renderTokensCss();
+
+  it("prints in the light theme whatever the screen shows, after the OS preference and the toggle", () => {
+    const printAt = css.indexOf("@media print {");
+    expect(printAt).toBeGreaterThan(css.indexOf('[data-theme="dark"] {'));
+    expect(css.slice(printAt)).toMatch(/^@media print \{\n {2}:root,\n {2}\[data-theme\] \{\n {4}--bg: #FBF8F4;/);
+  });
+});
+
 describe("renderTokensCss — the exam set", () => {
   const css = renderTokensCss();
 

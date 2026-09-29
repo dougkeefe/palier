@@ -64,6 +64,15 @@ framework. `.dependency-cruiser.cjs` enforces all three.
   carries an identity is **refused, not stored**: never loosen it. The retirement rules are data, the
   profile's `itemStatistics` block (ADR 9), and `ItemStats.pointBiserial` is `number | null`, because an
   item with no variance has no correlation to report.
+- **A hand-authored item names its contributor** (content-factory.md §5). `ItemProvenance.contributor`
+  and `PassageSource.contributor` are optional in the schema, so every bank published before them stays
+  valid, and are a public handle shaped as a GitHub username (`contributorSchema`: 1 to 39 letters, digits
+  and single hyphens), never a name or an email. **The rule is in `validate()`, not the schema**:
+  `validateCommon` reports `authored-without-contributor` for an `origin: "authored"` item with none, so
+  the factory's stage 5 drops it, and every type inherits the check. A passage has no `origin`, so the
+  schema cannot tell an authored one apart; the factory's intake check requires it of every passage under
+  `content/authored/`. Anything built with `origin: "authored"` must carry a contributor, the factory's
+  eval-set fixtures included (`palier-eval`), or `validate()` flags it for the wrong reason.
 - **The item type registry lives here, minus `render`** (ADR 17). `ITEM_TYPE_DEFINITIONS`
   is a `Record<ItemType, ItemTypeDefinition>` (`schema`, `score`, `validate`,
   `generatePrompt`, `a11yContract`), so adding an `ItemType` is a compile error until it has

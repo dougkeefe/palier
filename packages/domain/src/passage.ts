@@ -35,6 +35,13 @@ export type PassageSource = {
   readonly licenceNote?: string | undefined;
   /** How far it was rewritten. */
   readonly transformation?: string | undefined;
+  /**
+   * Who wrote a hand-authored passage, as a public handle (content-factory.md §5), the
+   * same attribution an authored item carries in `provenance.contributor`. A passage has
+   * no `origin`, so the schema cannot tell an authored one from a drafted one: the
+   * factory's authored-intake check requires it of every passage under `content/authored/`.
+   */
+  readonly contributor?: string | undefined;
 };
 
 export type Readability = {

@@ -12,6 +12,7 @@ import {
   loadPricing,
   loadProfile,
   latestBankVersionBelow,
+  loadAuthored,
   loadItemStatistics,
   loadPublishedBank,
   loadOralSessions,
@@ -84,7 +85,8 @@ export type RunOptions = {
 
 /**
  * The pipeline's whole input for a run rooted at `root`: the committed profile and
- * sources, and the previous bank version carried forward. The CLI and the
+ * sources, the previous bank version carried forward, and the hand-authored
+ * contributions under `content/authored/` (content-factory.md §5). The CLI and the
  * committed-bank drift test both build their input here, so they cannot disagree
  * about what produced `content/bank/`.
  */
@@ -106,6 +108,7 @@ export const runInputFor = (root: string, options: RunOptions): RunInput => {
     bankVersion: options.bankVersion,
     promptVersion: options.promptVersion,
     perSource: options.perSource,
+    authored: loadAuthored(root),
     ...(carried === null ? {} : { carried }),
   };
 };
@@ -181,6 +184,10 @@ export const runFactory = async (argv: readonly string[], deps: CliDeps): Promis
       `run: ${String(out.report.counts.itemsPublished)} published / ${String(out.report.counts.itemsDrafted)} drafted, ` +
         `yield ${y.toFixed(3)}, cost/item ${String(out.report.costPerAcceptedItemUsd)} USD`,
     );
+    if (out.report.authored !== undefined) {
+      const { submitted, passed, published } = out.report.authored;
+      deps.log(`authored: ${String(published)} published / ${String(submitted)} submitted, ${String(passed)} passed review`);
+    }
     deps.log(`discard reasons: ${JSON.stringify(discardReasonCounts(out.review.discarded))}`);
     if (out.providerFailures > 0) {
       deps.log(`provider failures (malformed responses, skipped): ${String(out.providerFailures)}`);

@@ -26,6 +26,7 @@ import type {
   LatestExamResult,
   PlanDailySessionRequest,
   PracticeTrendRequest,
+  OralTotals,
   ProgressReport,
   ProgressReportRequest,
   QueueForReviewRequest,
@@ -109,6 +110,7 @@ import {
   planDailySession,
   practiceTrend,
   practiceTrendEvidence,
+  oralTotals,
   progressReport,
   queueForReview,
   removeDevice,
@@ -313,6 +315,8 @@ export type UseCases = {
   readonly practiceTrendEvidence: (request: PracticeTrendRequest) => Promise<TrendEvidence>;
   readonly reviewQueue: (request: ReviewQueueRequest) => Promise<ReviewQueueResult>;
   readonly progressReport: (request: ProgressReportRequest) => Promise<ProgressReport>;
+  /** The progress summary's oral line: sessions ended and minutes spoken, on this device (§8.9). */
+  readonly oralTotals: () => Promise<OralTotals>;
   /** The data-rights trio [R11]: one action each (progress.md D61, D62). */
   readonly exportData: () => Promise<ExportDocument>;
   readonly importData: (request: ImportDataRequest) => Promise<ImportDataResult>;
@@ -543,6 +547,7 @@ function buildUseCases(ports: Ports): UseCases {
         items: ports.items,
         attempts: ports.attempts,
       }),
+    oralTotals: () => oralTotals({ oral: ports.oral }),
     exportData: () =>
       exportData({
         clock: ports.clock,

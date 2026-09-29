@@ -14,6 +14,7 @@ import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { type StudyProfile, daysUntil, minutesFor, planRows, readStudyProfile, sessionSizeFor } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
+import { NonAffiliation } from "../NonAffiliation";
 import { TrendMeters } from "../practice/TrendMeters";
 
 type Dashboard =
@@ -234,6 +235,7 @@ function ExamHalf({ exam }: { exam: ExamReadiness | null }) {
       ) : (
         <>
           <p className="app-exam-result__line">{t("examResult", { ...exam })}</p>
+          <NonAffiliation />
           <Link href={{ pathname: "/exam/results", query: { run: exam.runId } }} className="app-link pl-focusable">
             {t("examResultLink")}
           </Link>

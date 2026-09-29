@@ -28,6 +28,7 @@ import {
 } from "../../features/exam/runner";
 import { Link, useRouter } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
+import { isPageKey } from "../../lib/keyboard";
 import { useContainer } from "../ContainerProvider";
 import { useSync } from "../sync/SyncRunner";
 
@@ -308,21 +309,9 @@ function Runner({
   // field, and Enter on a real button or link, are left to that control.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      // A browser or system shortcut (Ctrl+F to search the passage), or a held key,
-      // is not an answer, a flag or a move.
-      if (event.metaKey || event.ctrlKey || event.altKey || event.repeat) return;
-      const target = event.target as HTMLElement | null;
-      if (target !== null && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
-        return;
-      }
-      if (
-        event.key === "Enter" &&
-        target !== null &&
-        (target.tagName === "BUTTON" || target.tagName === "A") &&
-        target.getAttribute("role") !== "radio"
-      ) {
-        return;
-      }
+      // A chord (Ctrl+F to search the passage) or a held key, a key typed into a field,
+      // and Enter on a real button are not the runner's (`lib/keyboard.ts`).
+      if (!isPageKey(event, event.target as HTMLElement | null)) return;
       if (event.key === "Enter" || event.key === "f" || event.key === "F" || /^[1-9]$/.test(event.key)) {
         // An option is a <button role="radio">, and Enter on a button also clicks it.
         // That click would land after the reducer has moved on, and answer the next
@@ -411,7 +400,7 @@ function Runner({
         <Button variant="secondary" onClick={() => dispatch({ type: "previous", at: performance.now() })} disabled={state.index === 0}>
           {t("previous")}
         </Button>
-        <Button variant="ghost" aria-pressed={flagged} onClick={() => dispatch({ type: "toggleFlag" })}>
+        <Button variant="ghost" aria-pressed={flagged} aria-keyshortcuts="F" onClick={() => dispatch({ type: "toggleFlag" })}>
           <Glyph name="flag" />
           {t("flag")}
         </Button>

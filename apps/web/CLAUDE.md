@@ -62,7 +62,21 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   - The runner's section carries `data-mode="exam"`, which gives it `@palier/ui`'s muted token set and no
     motion.
   - Nothing names or styles a pilot item (D84 ruling 9).
-- **The R5 non-affiliation statement** is in the footer of every page, from day one.
+- **The R5 non-affiliation statement** is in the footer of every page, from day one, and **beside every band
+  estimate and at the head of onboarding** (Gate K, progress.md D145): the exam result and home's exam half, the
+  diagnostic readout, the oral report, workshop feedback, `/progress` and `/start`. Every surface renders
+  `components/NonAffiliation.tsx`, never the key, so the wording cannot drift; a new screen that shows a band adds it.
+- **The about page and the privacy notice** (`/about`, `/privacy`, D145) are static pages the agent drafted and the
+  human reads at Gate L. **A change to what the server holds, never holds or deletes changes `/privacy` in the same
+  pull request.** Its never-synced list reads the sync settings' own keys (architecture.md §9.4, "verbatim").
+- **`/progress` is also the one-page PDF** (PRD §8.9, D145): a print stylesheet at the end of `globals.css`, no PDF
+  library. `app-print-only` / `app-screen-only` pick what paper shows, and the skill the switch does not show is
+  **mounted only while printing** (`usePrinting`: `beforeprint`/`afterprint` and the print media query), since a
+  hidden duplicate would still be in the document. `content.spec.ts` holds it to one page on Letter and A4.
+- **Keyboard** (PRD §11, D145). Every page-wide key handler asks `lib/keyboard.ts`'s `isPageKey` first (no chord,
+  no field, and not Enter on a real button). The shortcut sheet at `?` (`components/ShortcutSheet.tsx`, in the footer)
+  lists `features/shortcuts/shortcuts.ts`'s registry: **a screen that gains a key registers a row there**, with its
+  messages in the `shortcuts` namespace, which a test checks exist.
 - **The error states** (Phase 7 Slice 2, architecture.md §16, ADR 15; D141–D142).
   - `[locale]/error.tsx`, `[locale]/not-found.tsx` and `global-error.tsx` are one-line bindings; the screens are named
     components in `src/components/errors/`, so `NO_JSX_LITERALS` still applies to them.
@@ -236,6 +250,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
   titles, **journey 5 and step 5** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
   `errors.spec.ts` (the 404, a thrown route with its bundle and the key-leak sentinel, and the global view, D141–D142),
+  `content.spec.ts` (the about page and privacy notice, onboarding's statement, the shortcut sheet, and `/progress`
+  printed to one page, D145),
   and `sync.spec.ts`: journey 8 (two contexts, two devices), journey 7's sync half,
   and the sync settings' states, and `exam.spec.ts` (a fixture exam from the picker to its results), and `oral.spec.ts` (spoken practice's
   states, a refused microphone, a refused call and a French pass).

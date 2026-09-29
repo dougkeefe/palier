@@ -1085,7 +1085,8 @@ direction, then the human's reviews.
   and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR template, the device-removal confirmation and
   pairing polish, the one-page PDF summary (a print stylesheet over `/progress`), PRD §11's shortcut sheet, and the authored-item
   intake content-factory.md §5 describes (`content/authored/`, a contributor on the provenance, taken in at stage 4). *Done:* each
-  surface in both locales, axe-clean on its states, with the contribution path documented end to end.
+  surface in both locales, axe-clean on its states, with the contribution path documented end to end. **Status: built
+  29 September 2026** (`progress.md` D146–D152).
 - **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted fonts,
   §9's streak with its silent freeze and the milestone moments (XP, levels and the countdown after 1.0), and the MDX library,
   ten written-expression articles in both languages, linked from item explanations (reading's after 1.0).

@@ -34,7 +34,7 @@ const item = (over: Partial<Item> = {}): Item => ({
   targetBand: "B",
   topic: "human-resources",
   tags: [],
-  provenance: { origin: "authored" },
+  provenance: { origin: "authored", contributor: "a-contributor" },
   status: "published",
   createdAt: "2026-09-21T00:00:00.000Z",
   updatedAt: "2026-09-21T00:00:00.000Z",
@@ -67,6 +67,11 @@ describe("perItemReasons", () => {
   it("flags a distractor rationale that asserts it is correct", () => {
     const bad = item({ options: [opt("a", "alpha"), opt("b", "beta", "c'est la bonne reponse"), opt("c", "gamma"), opt("d", "delta")] });
     expect(perItemReasons(bad, profile).join(" ")).toMatch(/contradiction/);
+  });
+
+  it("flags an authored item that names no contributor (content-factory.md §5)", () => {
+    const uncredited = item({ provenance: { origin: "authored" } });
+    expect(perItemReasons(uncredited, profile).join(" ")).toMatch(/^authored-without-contributor: /);
   });
 
   it("flags a reading level far from the band tag", () => {

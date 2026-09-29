@@ -4,7 +4,8 @@ import { dirname, join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { MODELS_PATH, ORAL_SESSIONS_PATH, loadModels, loadOralSessions } from "./io.js";
+import { AUTHORED_DIR, MODELS_PATH, ORAL_SESSIONS_PATH, loadAuthored, loadModels, loadOralSessions } from "./io.js";
+import { anAuthoredComprehensionItem, anAuthoredItem, anAuthoredPassage } from "./__tests__/authored-fixtures.js";
 
 /** A root holding one file, so a loader reads exactly what the test wrote. */
 const rootWith = (relPath: string, data: unknown): string => {
@@ -54,5 +55,48 @@ describe("loadModels", () => {
   it("leaves the scenario model out when none is configured", () => {
     const models = loadModels(rootWith(MODELS_PATH, { passage: "p", draft: "d", review: "r" }));
     expect(models).toEqual({ passage: "p", draft: "d", review: "r" });
+  });
+});
+
+/** A root whose `content/authored/` holds exactly these files, raw text as given. */
+const authoredRoot = (files: Record<string, string>): string => {
+  const root = mkdtempSync(join(tmpdir(), "palier-authored-"));
+  mkdirSync(join(root, AUTHORED_DIR), { recursive: true });
+  for (const [name, text] of Object.entries(files)) writeFileSync(join(root, AUTHORED_DIR, name), text);
+  return root;
+};
+
+describe("loadAuthored (content-factory.md §5)", () => {
+  it("reads nothing when there is no authored directory", () => {
+    expect(loadAuthored(mkdtempSync(join(tmpdir(), "palier-authored-")))).toEqual({ items: [], passages: [] });
+  });
+
+  it("reads nothing from a directory holding only files that are not JSON", () => {
+    expect(loadAuthored(authoredRoot({ ".gitkeep": "", "notes.md": "# not a contribution" }))).toEqual({ items: [], passages: [] });
+  });
+
+  it("reads every contribution's items and passages, in file-name order", () => {
+    const root = authoredRoot({
+      "b-second.json": JSON.stringify({ items: [anAuthoredComprehensionItem()], passages: [anAuthoredPassage()] }),
+      "a-first.json": JSON.stringify({ items: [anAuthoredItem()] }),
+      ".gitkeep": "",
+    });
+    expect(loadAuthored(root)).toEqual({
+      items: [anAuthoredItem(), anAuthoredComprehensionItem()],
+      passages: [anAuthoredPassage()],
+    });
+  });
+
+  it.each([
+    ["is not JSON", "{ items: ", /content\/authored\/bad\.json is not valid JSON/],
+    ["is a list, not an object", "[]", /content\/authored\/bad\.json must be an object/],
+    ["is null", "null", /content\/authored\/bad\.json must be an object/],
+    ["carries a key a contribution does not take", JSON.stringify({ items: [], author: "me" }), /bad\.json has keys a contribution does not take: author/],
+    ["lists no items", JSON.stringify({ passages: [] }), /bad\.json must list its items under "items"/],
+    ["lists passages as something other than a list", JSON.stringify({ items: [], passages: {} }), /bad\.json: "passages", when present, must be a list/],
+    ["holds an item the schema refuses", JSON.stringify({ items: [{ ...anAuthoredItem(), key: "z" }] }), /bad\.json: items\[0\] fails the item schema/],
+    ["holds a passage the schema refuses", JSON.stringify({ items: [], passages: [{ ...anAuthoredPassage(), body: "" }] }), /bad\.json: passages\[0\] fails the passage schema/],
+  ])("refuses a contribution that %s, naming the file", (_name, text, message) => {
+    expect(() => loadAuthored(authoredRoot({ "bad.json": text }))).toThrow(message);
   });
 });

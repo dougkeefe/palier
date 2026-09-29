@@ -4,7 +4,7 @@
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
-resolved** (D145, human, 29 September 2026), and **Slice 3 is in flight** (below). Phase 3's
+resolved** (D145, human, 29 September 2026), and **Slice 3 is built** (D146–D152; below). Phase 3's
 product pilot still runs beside it (Gate E). The history, oldest first: **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
@@ -39,7 +39,7 @@ runs at 1.0. **Phase 7 Slice 1 merged (#39)**, and **Slice 2, server lifecycle a
 (D138–D144): the retention job and storage alert, `GET /api/health`, the error states with the diagnostic bundle, and both
 "outlives its screen" defects. **Gate K is resolved** (D145): the human took the recommendation on all five questions and chose
 to build the authored-item intake. **Slice 3, content, the contribution path and data rights, is in flight** on
-`dougkeefe/melbourne-v1`.
+`dougkeefe/next-slice-from-progress-v2`, and **built** (D146–D152). **Slice 4, motion, engagement and the library, is next.**
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -105,7 +105,7 @@ human for anything expensive.
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **deferred past 1.0** (decision gate resolved 28 September 2026, human, D131); built after Phase 7 if at all |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 in flight) |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 built, D146–D152; Slice 4 next) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -114,7 +114,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/melbourne-v1` | **Phase 7 Slice 3, content, the contribution path and data rights** (D145): the about page and privacy notice, the statement in onboarding and beside every band, the one-page PDF by print stylesheet, the device-removal confirmation and pair-code expiry, the shortcut sheet and the `lang` audit, and the authored-item intake with `CONTRIBUTING.md` and the PR template. | 29 September 2026 |
+| `dougkeefe/next-slice-from-progress-v2` | **Phase 7 Slice 3, content, the contribution path and data rights** (D145): the about page and privacy notice, the statement in onboarding and beside every band, the one-page PDF by print stylesheet, the device-removal confirmation and pair-code expiry, the shortcut sheet and the `lang` audit, and the authored-item intake with `CONTRIBUTING.md` and the PR template. | 29 September 2026 |
 
 *(The prior rows — Phase 7 Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -215,23 +215,58 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132): **Slice 1 merged (#39; D133–D137)**, **Slice 2 merged (#45; D138–D144)**, and **Gate K is resolved** (D145, human,
-29 September 2026).
+Phase 7 (D132): **Slice 1 merged (#39)**, **Slice 2 merged (#45)**, **Gate K resolved** (D145), and **Slice 3 built** on
+`dougkeefe/next-slice-from-progress-v2` (D146–D152): the about page and privacy notice, the statement beside every band, the
+one-page PDF, device removal and the code's countdown, the shortcut sheet and the `lang` audit, and the authored-item intake.
 
 Phase 5's deferred cost check (D130) and the product pilot (Gate E, D97) still run beside it, both the human's.
 
-**Next: Slice 3 — content, the contribution path and data rights**, in flight on `dougkeefe/melbourne-v1`. Its scope, as Gate K
-settled it (D145):
-- the about page (PRD §7, §13.0) and a new privacy notice at `/privacy` (architecture.md §12), both drafted by the agent;
-- the non-affiliation statement as one component, in onboarding and beside every band estimate;
-- the one-page PDF as a print stylesheet over `/progress`, with oral sessions and minutes added;
-- a confirmation before a device is removed, and the pair code's expiry shown and acted on;
-- PRD §11's shortcut sheet at `?`, and the `lang` audit;
-- the authored-item intake (`content/authored/`, a `contributor` on `ItemProvenance`, the factory taking it at stage 4),
-  `CONTRIBUTING.md` with the originality attestation, and the PR template.
+**Next: Slice 4 — motion, engagement and the library**, as Gate K ruled (D145). Scope:
+- **The streak with its silent freeze** (PRD §9).
+  - It counts local days with a completed session: `SessionStore`'s completed sessions, in the device's time zone
+    (`lib/time-zone.ts`).
+  - It is a pure `streak` in `@palier/engine`, with the freeze allowance handed in: up to two missed days a calendar
+    month. That allowance is a product constant beside `features/exam/rules.ts`, not the exam profile, since ADR 9 covers
+    exam rules.
+  - A `streakReport` use case sits in `@palier/app`.
+  - Home shows the streak. "We kept your streak" is said once after a freeze is used; that it was said is a synced setting.
+- **The milestone moments.** Four of them:
+  - the first mock exam;
+  - the first spoken session;
+  - 1,000 items;
+  - the first mock exam at C. Drills never give a band (§8.2, D64), so this milestone reads the exam.
 
-*Done:* each surface in both locales, axe-clean on its states, the PDF one page, the contribution path documented end to end, and
-*Next, decided* naming Slice 4.
+  A pure `milestonesReached` in the engine works over facts the app gathers, and each milestone is shown once. The moment
+  is full screen, with Coco (`@palier/ui`'s `Mascot`). Its card is shared by the Web Share API as text and the app's URL,
+  with no personal data and no image, so no new dependency. Never in exam mode or on a results screen (PRD §10.1).
+- **Motion**:
+  - the band meter's fill;
+  - the milestone moment;
+  - §10.5's 120, 200 and 400 ms with its easing;
+  - off under `prefers-reduced-motion` and in `[data-mode="exam"]`.
+- **Self-hosted fonts (D65):** Figtree for headings, Inter for the interface and Source Serif 4 for passages. They are
+  woff2 files under the OFL, served same-origin through `next/font/local`, so the CSP needs no new origin. Lighthouse and
+  the bundle budget still hold.
+- **The library: ten written-expression articles**, one per sub-skill in the profile, in both languages.
+  - They are linked from a written-expression item's explanation, at `/library` and `/library/[subSkill]`.
+  - **They are structured content in `@palier/content` (`content/library/*.json`, with a Zod schema in `@palier/domain`),
+    not MDX.** The same pipeline as the bank and the prompts; no MDX toolchain as a new dependency. Record the deviation
+    from §7's "MDX".
+  - The agent drafts them. Their French is Gate L's.
+
+*Done:*
+- each surface in both locales, axe-clean on its states;
+- the streak's and the milestones' rules property-tested;
+- the fonts loaded under the strict CSP, with Lighthouse ≥ 95;
+- every written-expression explanation reaches its article;
+- *Next, decided* naming Gate L.
+
+**For the human, from Slice 3:**
+- **read the about page and the privacy notice** (`/about`, `/privacy`; D147) in both languages, with Gate L's French review.
+  They are the agent's drafts;
+- **delete `about.bankToday`** ("still small and partly synthetic") when the full-volume bank ships (Gate M);
+- the contribution path is ready for Gate M's outside submission. An authored item's model review runs on the next funded
+  bank build (D152).
 
 **For the human, from Slice 2:**
 - after merging, **`curl -s https://palier-virid.vercel.app/api/health`** should answer `{"build":"<7 hex>","bank":3,"database":"ok"}`
@@ -275,7 +310,13 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
 - **`global-error.tsx` reached end to end**: only its view is checked, since the root layout works (D142);
 - **the wipe guard across tabs**: a `BroadcastChannel` so a wipe in one tab forgets the requests out in every tab (D143);
 - **an abandoned session's end at its last turn**, not when it was noticed, so its length reads true (D144; the pinned
-  tests move with it).
+  tests move with it);
+- **the band trend over time** on `/progress` and its printout: §8.9 asks for it, and the page shows the current window
+  (D148);
+- **a rendered preview on a `content/` pull request** (architecture.md §17, D152);
+- **home's exam half's statement end to end**: no hermetic spec builds an onboarded user who has sat an exam (D146);
+- **journey 4's flake**: after `setFixedTime` moves two days on, the review screen sometimes reads "Nothing due". It fails 3 in
+  6 on `origin/main` (session log, 29 September 2026).
 
 **Running now (human): the product pilot** (Gate E, D97).
 1. The Slice 4 branch has merged (#26). Confirm the production deploy applied migration `0001` itself.
@@ -564,19 +605,21 @@ Nothing is ticked without session-log evidence.
 **Work breakdown (§7)**
 
 - [~] Device list and revocation UI, pairing polished. **The list, remove and pairing by code exist** (Phase 2 Slice 2, D72:
-  `SyncSettings.tsx`, `removeDevice`, journey 8). Missing: a confirmation before a device is removed, the pair code's
-  countdown and copy, and this device noticing it was removed elsewhere. Slice 3
+  `SyncSettings.tsx`, `removeDevice`, journey 8). **Slice 3, built on this branch** (D149): a confirmation before a device is removed, the pair
+  code's countdown and lapse, and this device's switch following a removal elsewhere
 - [~] Retention job for inactive accounts (180 days) and the 90-day tombstone purge, the storage alerts, the aggregation
   path (architecture.md §9.4; D78 moved both jobs here). **Slice 2, merged (#45)** (D138, D139): the job, its daily
   workflow and the alert at 60% and 80%. The aggregation path is the 60% response, written as a runbook step in
   `docs/deploy.md`, not built, until the alert first fires
 - [~] PDF progress summary; JSON export and import round trip. **The round trip exists** (D61, D62; `data-rights.test.ts`,
-  journey 6). Missing: the one-page PDF (PRD §8.9), by print stylesheet. Slice 3
+  journey 6). **Slice 3, built on this branch** (D148): the one-page PDF (PRD §8.9) as `/progress` printed, both skills and the oral line,
+  one page on Letter and A4. A trend *over time* is named, not scheduled
 - [ ] The motion and illustration pass: Coco, the milestone moments, the streak, the band meter fill, self-hosted fonts
   (D65). Slice 4: the streak (with its silent freeze) and the milestone moments are in 1.0; XP, levels and the countdown
   are after 1.0 (Gate K, D145)
 - [ ] Accessibility audit with VoiceOver and NVDA on the core flows, and a screen-reader user's pass if one can be arranged.
-  Human (Gate L). An agent builds PRD §11's shortcut sheet and audits the `lang` attributes beforehand, in Slice 3
+  Human (Gate L). **The agent's half is built on this branch, Slice 3**: PRD §11's shortcut sheet at `?` (D150) and the `lang` audit
+  (D151)
 - [x] Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to leak the key.
   **Slice 1, merged (#39)** (D133–D137). Gate L's red-team read is still the human's (D132)
 - [ ] The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
@@ -587,8 +630,9 @@ Nothing is ticked without session-log evidence.
   states with a prefilled issue, and `/api/health`. The realtime route's exclusion from Vercel logging moves with studio
   mode (D131)
 - [~] Content: the about page, the non-affiliation statement in both languages, the privacy notice, the contribution guide
-  with the originality attestation, the PR template. **The footer statement and a two-paragraph about page exist** (Phase 0,
-  Phase 2). Slice 3, after Gate K
+  with the originality attestation, the PR template. **Slice 3, built on this branch** (D146, D147, D152): the about page and `/privacy`
+  drafted, the statement beside every band and in onboarding, `CONTRIBUTING.md`, the PR template and the authored-item
+  intake. Their French is Gate L's
 - [ ] Full French review of every interface string by a fluent speaker, with the workshop prompts (D107) and the bank's
   register (ADR 19). Human (Gate L)
 
@@ -605,10 +649,11 @@ Nothing is ticked without session-log evidence.
   privacy notice and about page; the statement in onboarding and beside every band; the streak and milestones in 1.0, XP,
   levels and the countdown after; ten written-expression library articles; the PDF as a print stylesheet over `/progress`;
   and the authored-item intake built in Slice 3.
-- [~] **Slice 3 — Content, the contribution path and data rights.** In flight on `dougkeefe/melbourne-v1`. The about page and
-  privacy notice, the statement in onboarding and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR
-  template and the authored-item intake, the device-removal confirmation and pairing polish, the one-page PDF, the shortcut
-  sheet.
+- [~] **Slice 3 — Content, the contribution path and data rights.** **Built 29 September 2026**
+  (`dougkeefe/next-slice-from-progress-v2`; D146–D152; session-log evidence). The about page and privacy notice, the
+  statement in onboarding and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR template and the
+  authored-item intake, the device-removal confirmation and pairing polish, the one-page PDF, the shortcut sheet and the
+  `lang` audit.
 - [ ] **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted
   fonts, the streak with its silent freeze, the milestone moments, and ten written-expression library articles.
 - [ ] **Gate L — the human reviews (human).** R8's French review, the VoiceOver and NVDA pass, and the red-team read.
@@ -5161,13 +5206,215 @@ describes one ("enter at stage 4… carry `provenance.origin: 'authored'` and a 
 Gate M's outside submission had no route. **The human chose to build it in Slice 3**, rather than an issue-only path or its own
 slice. Its model review runs on the next funded bank build (D54); the fast lane checks everything deterministic.
 
+### D146 — the non-affiliation statement is one component, beside every band and at the head of onboarding
+**Date:** 29 September 2026 · **Status:** accepted; Phase 7 Slice 3 (Gate K ruling 2, D145)
+
+- **`components/NonAffiliation.tsx`** renders `footer.nonAffiliation` everywhere, so the wording cannot drift between
+  surfaces. The footer is refactored onto it and keeps its `app-footer__disclaimer` class, which the smoke and offline specs
+  find it by.
+- **Where it now appears, beyond the footer:**
+  - `/start`, above the wizard, so every step shows it;
+  - the exam result's card and home's exam half;
+  - the diagnostic readout;
+  - the oral report, under the criteria;
+  - workshop feedback, under the criteria;
+  - `/progress`, which is also the printed summary.
+- **Not added:** the trend meters, which show accuracy per band tag and never a band (§8.2), and a generated item's
+  feedback, which shows no band.
+- **The E2E reaches all but one:** home's exam half needs an onboarded user who has sat an exam, which no hermetic spec
+  builds. It is covered by the component alone.
+
+### D147 — the about page and the privacy notice, as drafted
+**Date:** 29 September 2026 · **Status:** accepted, pending Gate L's French read (Gate K ruling 1, D145)
+
+- **The about page** (PRD §7, §13.0) has seven sections: what it is; what it is not (§1.3's non-goals); where the questions
+  come from; who makes it; the licence; the statement; and links to the privacy notice, `CONTRIBUTING.md` and the source.
+  - **"A second, different AI model", not "a second model family".** `apps/factory/config/models.json` reviews on another
+    OpenAI model, so cross-family (content-factory.md §4.4) is not what runs today.
+  - **The unattended pipeline is stated plainly**, as architecture.md §20 Q3 asks: "No person reads every item before it
+    is published."
+  - **`about.bankToday` says the bank is still small and partly synthetic** (D54, D56), matching `/progress`'s honest
+    panel. **Delete that key when the full-volume bank ships** (Gate M).
+  - "Who makes it" names Doug Keefe, the maintainer, as the repository and the planned domain already do.
+- **The privacy notice at `/privacy`** is architecture.md §12, in the voice of §10.1. It covers:
+  - what the server holds when sync is on;
+  - what is never held. The never-synced list reads the sync settings' own keys, so it is §9.4's list "verbatim";
+  - the 180-day deletion (D138) and the 90-day tombstones;
+  - the two third parties;
+  - no analytics, no banner cookies, and item statistics only after a yes;
+  - the user's controls.
+  - It does not mention the Privacy Act. §12's note on it is a design constraint, not a promise to the user.
+- **The footer links both**, so each is one step from every page (WCAG 3.2.6).
+
+### D148 — the one-page PDF is `/progress` printed, with an oral line, and the second skill mounted only for print
+**Date:** 29 September 2026 · **Status:** accepted; Phase 7 Slice 3 (Gate K ruling 5, D145)
+
+- **A print stylesheet**, at the end of `apps/web/src/app/globals.css`:
+  - it drops the header, the footer, the skill switch and the export card;
+  - it lays each skill's two cards side by side;
+  - it fits one page. `content.spec.ts` renders `page.pdf()` on Letter and A4 and counts one page on each.
+  - No new dependency.
+- **Printed, it carries both skills.** The skill the switch does not show is **mounted only while printing**, via
+  `beforeprint`/`afterprint` and the print media query, flushed at once. The first build kept it in the document,
+  hidden, and journeys 7 and 8 failed: their `getByText(/items answered/)` found two. The test was right, since a hidden
+  duplicate is still in the document for anything reading it, so the page changed, not the test.
+  - **Either signal is enough.** Chromium's PDF export fires `afterprint` while the page is still laid out for print,
+    and a screenshot after the export had lost the second skill. The media query is read with `useSyncExternalStore`
+    and outlasts the event. The print spec asserts both skills after the export.
+- **Oral sessions and minutes spoken are new** (§8.9 asks for them):
+  - `oralTotals` in `@palier/app` counts ended sessions from the device-local `OralStore`;
+  - it sums `speakingMs`, a new engine function, which is the time spoken answers took. `fluencyMetrics` now uses it too,
+    with no change in behaviour;
+  - the card says "on this device only", since transcripts never sync.
+- **Paper is always light.** `@palier/ui`'s generator emits `@media print` with the light tokens on `:root` and on any
+  `[data-theme]`. It is placed before the exam blocks, because an existing test finds the exam's dark block as the last
+  `@media` in the file.
+- **What §8.9 asks for that this does not have:** "band trend *over time*". The page shows the current per-band accuracy
+  with its interval, as the screen always has; there is no chart over time. **Named, not scheduled.**
+
+### D149 — removing a device asks first, the code counts down from its arrival, and a removed device's switch follows
+**Date:** 29 September 2026 · **Status:** accepted; Phase 7 Slice 3
+
+- **Remove asks, in place**, with focus moved to its question, as delete-everywhere and the sync switch already do.
+  - The copy differs for this device and for another device.
+  - Cancel returns focus to the Remove button, once that button is back on the page (a ref callback, since it was
+    unmounted while the question showed).
+- **The pair code counts down its ten minutes, and is taken away when they end**, with "Show a new code".
+  - **The countdown starts when the code arrives on this device** (`codeLapsesAt`, `PAIR_CODE_TTL_MS`), not from the
+    server's `expiresAt`. A device clock a few minutes out would otherwise count the wrong ten minutes; counting from
+    arrival errs only by the request's own time, and in the safe direction. The hermetic clock is fixed, so the E2E
+    sees "10 more minutes" and the lapse is unit-tested.
+  - One live region holds the code and its lapse, so both are announced; the minutes left sit outside it, so they are
+    not read out every tick.
+  - `sync.codeExpires` is replaced by `codeLeft`.
+- **"This device noticing it was removed elsewhere"** (the Phase 7 survey, D132) was half built. The status line said
+  so, but **the switch still read on** until the page was reloaded, because the page re-read its settings only after its
+  own actions. It now re-reads whenever the runner's `paired` or `reason` changes. The new sync spec found this.
+
+### D150 — the shortcut sheet: a registry, one key guard, and the existing `Dialog`
+**Date:** 29 September 2026 · **Status:** accepted; Phase 7 Slice 3
+
+- **`?` opens the sheet** from anywhere but a text field, and not over another open dialog. A footer button opens it
+  too. It is `@palier/ui`'s **existing** `Dialog`: the plan named a new primitive, but one exists (the exam's navigator
+  and submit confirmation use it), so none was written.
+- **Its content is a registry** (`features/shortcuts/shortcuts.ts`): a row per key per scope, with key names whose labels
+  are messages, so French reads "Entrée". A test checks that every scope, key and action has its message. Nothing
+  switches on a screen.
+- **One key guard**, `lib/keyboard.ts`'s `isPageKey`, taken out of the exam runner and the drill.
+  - **The drill gains the exam's chord guard**, which it lacked. Cmd+1 switching a browser tab, or a held key, no
+    longer also answers the drill. That is a behaviour change, and a fix.
+  - The existing handlers' tests are unchanged.
+- **The footer's links are a `<div>`**, not a `<p>`, since the dialog's headings are inside it. The `<p>` was invalid
+  nesting, and React reported a hydration mismatch on every page.
+- `aria-keyshortcuts` is on the opener (`?`) and the exam's Flag button (`F`).
+
+### D151 — the `lang` audit: two gaps, both in workshop feedback
+**Date:** 29 September 2026 · **Status:** accepted; Phase 7 Slice 3
+
+The audit searched every render of item, passage, scenario, transcript and model text.
+- **What already held:**
+  - item stems and options;
+  - passages;
+  - exam and drill feedback, through `inItemLang`;
+  - oral questions, answers and transcripts;
+  - workshop prompts and the text being written;
+  - the oral report's corrections, which D127 fixed.
+  - Scenarios render no free text.
+- **The two gaps:** in `WritingFeedback`, the visually hidden "error N" label and the "added" and "removed" labels sit
+  inside the writing's `lang` paragraph without the interface's own `lang`. So a screen reader read English words in a
+  French voice. Both now carry `lang={locale}`, as the oral report's do. The workshop spec asserts it.
+
+### D152 — the authored-item intake: `content/authored/`, a contributor handle, and stage 4
+**Date:** 29 September 2026 · **Status:** accepted (human decision at planning, D145); `docs/architecture.md` §5.1–§5.2
+amended in place
+
+- **One JSON file per contribution** in `content/authored/`, holding `{ items, passages? }` in the published schemas.
+  `content/` still holds no code (ADR 18): the directory has a `.gitkeep`, and the factory reads it from disk.
+- **`ItemProvenance.contributor`**, and `PassageSource.contributor`, are a **public handle**, shaped as a GitHub username
+  is, so an attribution can hold no name or email.
+  - The field is optional in the schema, so every earlier bank stays valid.
+  - The domain's `validate()` flags an `origin: "authored"` item without one (`authored-without-contributor`), so the
+    factory's validation drops it even after review passed it.
+  - A passage has no `origin`, so the intake test requires the contributor of every passage under `content/authored/`.
+- **The factory takes authored items at stage 4** (content-factory.md §5):
+  - they are reviewed apart from the drafts, so stage-4 yield still measures the drafter;
+  - they are then joined to the drafts for validation and the bank build;
+  - the batch report gains an `authored` block only when there is one, so with the directory empty the committed bank,
+    the batch report and the eval report are byte-identical.
+- **The eval set's fixtures are `origin: "authored"`**, so each now credits `palier-eval`. Otherwise every defect would
+  be "detected" for the missing credit instead of its real defect. **One test fixture changed:** `validate.test.ts`'s
+  base item gained a contributor, since the new rule makes it invalid by design. No assertion changed.
+- **`authored.test.ts` runs in the fast lane.** It holds every committed contribution to:
+  - the schemas and the factory's per-item rules;
+  - a contributor on every item and passage;
+  - no id colliding with the bank;
+  - an existing passage for every comprehension item.
+  It also checks `CONTRIBUTING.md`'s example, so the guide cannot go stale.
+- **`CONTRIBUTING.md` opens with the originality rule** (R6, PRD §2). The PR template carries the attestation as three
+  checkboxes. The README links both.
+- **Named, not scheduled:** architecture.md §17's rendered preview posted on a `content/` pull request. The model review
+  of an outside item runs on the next funded bank build (D54), so Gate M's outside submission is ready to take one.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 29 September 2026 — `dougkeefe/melbourne-v1` (Gate K resolved; Phase 7 Slice 3 claimed)
+### 29 September 2026 — `dougkeefe/next-slice-from-progress-v2` (Phase 7 Slice 3: content, the contribution path and data rights)
+
+**The branch name.** Conductor renamed this workspace's branch in the background to `dougkeefe/next-slice-from-progress-v2`.
+That name had already carried Phase 5 Slice 2 (#35, merged and deleted), so the entries of 27 and 28 September under the same
+name are that slice's, not this one's. The claim below was written as `dougkeefe/melbourne-v1` and corrected before it merged.
+
+**Built** (D146–D152):
+- the non-affiliation statement as one component, in onboarding and beside every band estimate;
+- the about page rewritten and a privacy notice at `/privacy`, both linked from the footer;
+- `/progress` as the one-page PDF, with oral sessions and minutes (`oralTotals`, the engine's `speakingMs`), and the token set
+  printing light;
+- device removal confirmed in place, the pair code counting down from its arrival, and a removed device's switch
+  following;
+- the shortcut sheet at `?`, over a registry and one shared key guard; the drill gains the exam's chord guard;
+- the `lang` audit, with its two fixes in workshop feedback;
+- the authored-item intake (`content/authored/`, `contributor`, stage 4), `CONTRIBUTING.md`, the PR template and the README's
+  Contributing section.
+
+The intake was built by a parallel agent in the same worktree, on disjoint files, and reviewed here.
+
+**Existing tests touched:**
+- **additive assertions** in journey 1 (the statement by the diagnostic readout), the exam spec (by the band), the oral
+  spec (in the report) and the workshop spec (the statement, and the `lang` of the interface's words inside the French);
+- the titles table and the CSP spec's `PAGES` gain `/privacy` (and `/fr/about`'s title);
+- **one fixture:** `validate.test.ts`'s base item gained a contributor (D152). No assertion changed.
+
+**Defects the new tests found, fixed:**
+- journeys 7 and 8 failed on a hidden print-only copy of the second skill (D148);
+- the removed device's switch still read on (D149);
+- the footer's `<p>` held the sheet's dialog, a hydration mismatch on every page (D150);
+- Chromium's PDF export cleared the print flag early (D148).
+
+**Evidence** (final run, on a fresh production build):
+
+```
+pnpm verify           → check-types, lint, boundaries (456 + 274 modules, no violations),
+                        test: 220 files, 3363 passed, 8 todo; coverage thresholds met
+pnpm test:integration → 7 files, 51 passed
+CI=1 pnpm test:e2e     → 83 passed, 1 failed: journey 4 (production.spec.ts), a flake that predates this slice (below)
+pnpm --filter @palier/web bundle-size → shared first-load JS 166.0 KB of 180.0 KB
+```
+
+The run before the last `ProgressScreen` fix passed all 84.
+
+**Proven to bite:**
+- with the statement removed from `ExamResults`, the exam spec fails;
+- with the print cards given a `min-height` of 300pt, the one-page spec counts two pages;
+- the screenshot after an export showed the second skill gone, and the assertion added for it holds now.
+
+**Journey 4 is flaky on `main` too.** It failed intermittently here, so it was run six times against a clean worktree of
+`origin/main` (`3c36790`): **3 failed, 3 passed**. Each time, the review screen reads "Nothing due" after the clock is moved
+two days on. Its cause is not found. **Named, not scheduled**, since it predates this slice.
+
+### 29 September 2026 — `dougkeefe/next-slice-from-progress-v2` (Gate K resolved; Phase 7 Slice 3 claimed)
 
 **Phase 7 Slice 2 had merged as #45**, so its In-flight row was replaced by this branch's, and Slice 2 was ticked.
 

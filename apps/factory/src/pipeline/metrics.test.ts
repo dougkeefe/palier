@@ -46,6 +46,22 @@ describe("batchReport", () => {
     expect(r.counts.itemsCarried).toBe(0);
   });
 
+  it("reports authored items apart, out of the drafter's yield and published count (content-factory.md §5)", () => {
+    const authored = { submitted: 3, passed: 2, published: 2 };
+    const r = batchReport({ ...base, itemsDrafted: 10, review: review(6), validation: validation(7), authored, totalCostUsd: 1 });
+    expect(r.authored).toEqual(authored);
+    expect(r.stage4Yield).toBe(0.6);
+    expect(r.counts.itemsPublished).toBe(5);
+    expect(r.costPerAcceptedItemUsd).toBe(0.2);
+  });
+
+  it("says nothing about authored items when the batch took none in, so its report is as before", () => {
+    const none = batchReport({ ...base, itemsDrafted: 10, review: review(6), validation: validation(5), authored: { submitted: 0, passed: 0, published: 0 }, totalCostUsd: 1 });
+    const absent = batchReport({ ...base, itemsDrafted: 10, review: review(6), validation: validation(5), totalCostUsd: 1 });
+    expect(none).not.toHaveProperty("authored");
+    expect(none).toEqual(absent);
+  });
+
   it("reports null cost when nothing was published", () => {
     const r = batchReport({ ...base, itemsDrafted: 4, review: review(2), validation: validation(0), totalCostUsd: 5 });
     expect(r.costPerAcceptedItemUsd).toBeNull();
