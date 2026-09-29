@@ -43,7 +43,8 @@ to build the authored-item intake. **Slice 3, content, the contribution path and
 The **cleanup slice** asked for by the human merged (#49; D154–D158): the Dependabot queue and alerts, TypeScript 6, and
 the red nightly. **Slice 4, motion, engagement and the library, is built** (`dougkeefe/smoke-key-next-slice`; D159–D162): the
 streak with its silent freeze, the four milestone moments, the motion pass, self-hosted fonts and ten written-expression
-library articles. The nightly live smoke has run on a real key for the first time (session log). **Gate L is next.**
+library articles. The nightly live smoke has run on a real key for the first time (session log). Slice 4 merged (#51).
+**Gate L passed** (D164, human), and the language-toggle defect the human found beside it is fixed (D163). **Gate M is next.**
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -109,7 +110,7 @@ human for anything expensive.
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **deferred past 1.0** (decision gate resolved 28 September 2026, human, D131); built after Phase 7 if at all |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 built, D159–D162; Gate L next) |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; Gate M next) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -118,7 +119,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/fix-language-toggle-crash` | **Defect: the language toggle lands on the global error page** in production (D163). | 29 September 2026 |
+| `dougkeefe/fix-language-toggle-crash` | **Defect: the language toggle lands on the global error page** in production (D163); and Gate L's pass recorded (D164). | 29 September 2026 |
 
 *(The prior rows — Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -219,30 +220,24 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132): **Slices 1–3 merged (#39, #45, #47)**, **Gate K resolved** (D145), the cleanup slice merged (#49), and
-**Slice 4 is built** (`dougkeefe/smoke-key-next-slice`; D159–D162): the streak with its silent freeze, the four milestone
-moments, the motion pass, self-hosted fonts and ten written-expression library articles. **Every buildable Phase 7 item is
-done.** What remains of 1.0 is the human's: Gate L, then Gate M.
+Phase 7 (D132): **Slices 1–4 merged (#39, #45, #47, #51)**, **Gate K resolved** (D145), the cleanup slice merged (#49), and
+**Gate L passed** (D164, human). The language-toggle defect (D163) is fixed on `dougkeefe/fix-language-toggle-crash` and
+merges first. **Every buildable Phase 7 item is done.** What remains of 1.0 is Gate M, the human's.
 
 Phase 5's deferred cost check (D130) and the product pilot (Gate E, D97) still run beside it, both the human's.
 
-**Next: Gate L — the human reviews (human).** No agent slice is queued ahead of it; the language-toggle defect the human
-found (D163) is fixed on `dougkeefe/fix-language-toggle-crash` and merges first. It is three reads:
-1. **R8's French review** by a fluent speaker, of every interface string (`apps/web/messages/fr.json`), with:
-   - the six workshop prompts (D107) and the bank's register (ADR 19);
-   - the about page and the privacy notice (D147);
-   - **the ten library articles** (`content/library/*.json`, D162): the prose, the examples, and each "instead of" sentence,
-     which must be wrong in exactly the way its note says;
-   - the new `engagement` and `library` namespaces (D159, D162), and the share texts, which leave the app.
-   Each correction is a content or message change; the parity and library tests hold the shape.
-2. **The VoiceOver and NVDA pass** on the core flows [R9]: onboarding, a drill with its feedback and the library link, a mock
-   exam and its results, the review queue, spoken practice, and home with a milestone moment open. A screen-reader user's pass
-   if one can be arranged.
-3. **The red-team read** of D136, and whether any path it did not try should be tried.
+**Next: Gate M — public (human).** No agent slice is queued ahead of it. It is five things:
+1. **The repo made public**, with the licences in place: ADR 23's PolyForm Noncommercial for code and CC BY-NC-SA 4.0 for
+   content, and the fonts' OFL (D161).
+2. **An outside item submission** [R13]: someone other than the maintainer submits an item through `CONTRIBUTING.md` and the
+   authored-item intake (D152), and it is taken in.
+3. **The domain.**
+4. **§12.1's trademark check.**
+5. **The full-volume bank** (D54), sequenced to the end (D56). Delete `about.bankToday` when it ships.
 
-*Done:* exit criterion 1's accessibility and security halves, and the R8 half of criterion 2 ("both languages reviewed by a
-human"). Each defect found is fixed or filed, and recorded in a session-log entry. Then **Gate M** (public): the repo made
-public, an outside item submission [R13], the domain, §12.1's trademark check, and the full-volume bank (D54, D56).
+*Done:* exit criterion 3 ("repo public, licences in place, contribution path tested by someone else submitting an item"),
+then exit criterion 1 with every gate green, and 1.0. An agent's part, if Gate M asks for one, is the bank build and whatever
+defect the outside submission finds. Each is recorded in a session-log entry.
 
 **For the human, from Slice 4:**
 - **look at the milestone moment and Coco's cheering pose** (seed or reach a milestone; D159, D160) and the self-hosted type
@@ -250,8 +245,6 @@ public, an outside item submission [R13], the domain, §12.1's trademark check, 
 - the share card's text names Palier as "free, unofficial" and the SLE: confirm that wording before the repo goes public.
 
 **For the human, from Slice 3:**
-- **read the about page and the privacy notice** (`/about`, `/privacy`; D147) in both languages, with Gate L's French review.
-  They are the agent's drafts;
 - **delete `about.bankToday`** ("still small and partly synthetic") when the full-volume bank ships (Gate M);
 - the contribution path is ready for Gate M's outside submission. An authored item's model review runs on the next funded
   bank build (D152).
@@ -607,11 +600,11 @@ Nothing is ticked without session-log evidence.
   are after 1.0 (Gate K, D145). **Slice 4, built on this branch** (D159–D161): the streak and its one-time freeze note, the
   four milestone moments with Coco cheering and a text-only share, the band meter's entrance fill, one motion switch, and
   Inter, Figtree and Source Serif 4 self-hosted
-- [ ] Accessibility audit with VoiceOver and NVDA on the core flows, and a screen-reader user's pass if one can be arranged.
-  Human (Gate L). **The agent's half is built on this branch, Slice 3**: PRD §11's shortcut sheet at `?` (D150) and the `lang` audit
-  (D151)
+- [x] Accessibility audit with VoiceOver and NVDA on the core flows, and a screen-reader user's pass if one can be arranged.
+  Human (Gate L). **Passed at Gate L** (D164). **The agent's half is built on this branch, Slice 3**: PRD §11's shortcut
+  sheet at `?` (D150) and the `lang` audit (D151)
 - [x] Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to leak the key.
-  **Slice 1, merged (#39)** (D133–D137). Gate L's red-team read is still the human's (D132)
+  **Slice 1, merged (#39)** (D133–D137). Gate L's red-team read passed (D164)
 - [~] The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
   Slice 4: one article per written-expression sub-skill, ten, in both languages; reading's after 1.0 (Gate K, D145). The
   articles' French is part of Gate L. **Slice 4, built on this branch** (D162): ten articles as structured JSON, not MDX, at
@@ -624,8 +617,8 @@ Nothing is ticked without session-log evidence.
   with the originality attestation, the PR template. **Slice 3, built on this branch** (D146, D147, D152): the about page and `/privacy`
   drafted, the statement beside every band and in onboarding, `CONTRIBUTING.md`, the PR template and the authored-item
   intake. Their French is Gate L's
-- [ ] Full French review of every interface string by a fluent speaker, with the workshop prompts (D107) and the bank's
-  register (ADR 19). Human (Gate L)
+- [x] Full French review of every interface string by a fluent speaker, with the workshop prompts (D107) and the bank's
+  register (ADR 19). Human (Gate L). **Passed at Gate L** (D164)
 
 **Completion slices (D132).** Four slices and three gates, mirroring `implementation-plan.md` §7 Phase 7 "Completion slices".
 **Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
@@ -640,22 +633,24 @@ Nothing is ticked without session-log evidence.
   privacy notice and about page; the statement in onboarding and beside every band; the streak and milestones in 1.0, XP,
   levels and the countdown after; ten written-expression library articles; the PDF as a print stylesheet over `/progress`;
   and the authored-item intake built in Slice 3.
-- [~] **Slice 3 — Content, the contribution path and data rights.** **Built 29 September 2026**
+- [x] **Slice 3 — Content, the contribution path and data rights.** **Built 29 September 2026, merged (#47)**
   (`dougkeefe/next-slice-from-progress-v2`; D146–D152; session-log evidence). The about page and privacy notice, the
   statement in onboarding and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR template and the
   authored-item intake, the device-removal confirmation and pairing polish, the one-page PDF, the shortcut sheet and the
   `lang` audit.
-- [~] **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted
+- [x] **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted
   fonts, the streak with its silent freeze, the milestone moments, and ten written-expression library articles. **Built
-  29 September 2026** (`dougkeefe/smoke-key-next-slice`; D159–D162; session-log evidence).
-- [ ] **Gate L — the human reviews (human).** R8's French review, the VoiceOver and NVDA pass, and the red-team read.
+  29 September 2026, merged (#51)** (`dougkeefe/smoke-key-next-slice`; D159–D162; session-log evidence).
+- [x] **Gate L — the human reviews (human).** R8's French review, the VoiceOver and NVDA pass, and the red-team read.
+  **Passed 29 September 2026** (D164): the human found no issue in any of the three.
 - [ ] **Gate M — public (human).** The repo made public, an outside item submission [R13], the domain, §12.1's trademark
   check, and the full-volume bank (D54), which stays sequenced to the end (D56).
 
 **Exit criteria** (the actual gate)
 
-- [ ] Every gate green, no known accessibility defects, no known security defects
-- [ ] Both languages reviewed by a human [R8]
+- [ ] Every gate green, no known accessibility defects, no known security defects. The accessibility and security halves
+  passed at Gate L (D164); ticked when Gate M is green
+- [x] Both languages reviewed by a human [R8]. Gate L (D164)
 - [ ] Repo public, licences in place, contribution path tested by someone else submitting an item [R13]
 
 ### Phase 6: Oral, studio mode — after 1.0
@@ -5647,11 +5642,36 @@ table and §5's tree amended in place
   the global-error title was on the page.
 - **The rule** is in `apps/web/CLAUDE.md`: any link that changes the locale is a document load.
 
+### D164 — Gate L passed: the French, the screen-reader pass and the red-team read found nothing
+**Date:** 29 September 2026 · **Status:** accepted (human decision); resolves Gate L, and ticks Phase 7 exit criterion 2 and
+the accessibility audit and French review items
+
+- **The human reviewed Gate L against its three criteria as written and found no issue**: R8's French review, the
+  VoiceOver and NVDA pass on the core flows [R9], and the red-team read of D136. The scope of each is the one *Next,
+  decided* gave it, which is superseded now but visible in git history.
+- **No correction came out of it**, so no message, content or code changed. The one defect the human reported at the same
+  time, the language toggle (D163), was a production crash, not a review finding, and is fixed separately.
+- **Not reported:** whether a screen-reader user's pass was arranged. The work item asked for it "if one can be arranged",
+  so it does not hold the tick.
+- **Exit criterion 1 stays open.** Its accessibility and security halves are met. "Every gate green" waits on Gate M.
+- **What would reopen it** was not stated at the gate. The agent's suggestion, not the human's: an outside contributor or a
+  pilot user reporting a French error or a screen-reader blocker, or a new sink or origin in the CSP.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 29 September 2026 — `dougkeefe/fix-language-toggle-crash` (Gate L passed, D164)
+
+**Gate L passed** (human): all three reads found no issue. Recorded as D164.
+- **Ticked:** Gate L, the accessibility audit, the French review, Phase 7 exit criterion 2, and Slices 3 and 4, which merged
+  (#47, #51).
+- Exit criterion 1 stays open until Gate M.
+- The Slice 3 "for the human" item to read `/about` and `/privacy` is removed, because Gate L's French review covered it.
+
+*Next, decided* is **Gate M**, the human's. The evidence is the human's word in this session. No command was run for it.
 
 ### 29 September 2026 — `dougkeefe/fix-language-toggle-crash` (a defect: the language toggle, D163)
 

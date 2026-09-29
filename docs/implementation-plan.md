@@ -1093,6 +1093,7 @@ direction, then the human's reviews.
   29 September 2026** (`progress.md` D159–D162): the library is structured JSON in `@palier/content`, not MDX (D162).
 - **Gate L — the human reviews.** The French review of every string, the workshop prompts and the bank's register [R8]; the
   VoiceOver and NVDA pass [R9]; the red-team read. *Done:* exit criterion 1's accessibility and security halves and the R8 half.
+  **Status: passed 29 September 2026** (`progress.md` D164).
 - **Gate M — public.** The repo made public and an outside item submission [R13], the domain, the trademark check, and the
   full-volume bank (D54), sequenced to the end (D56). *Done:* exit criterion 2, and 1.0.
 
