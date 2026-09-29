@@ -43,9 +43,16 @@ test("journey 4: wrong answers come due, the queue empties, and the empty state 
   await page.getByRole("link", { name: "Review", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Nothing due" })).toBeVisible();
 
-  // Two days on, every wrong answer is due.
+  // Two days on, every wrong answer is due. Leave the review screen and come back, so
+  // it mounts afresh and asks for the queue at the new time. Today must have landed
+  // before Review is clicked: `click()` resolves once the click is dispatched, not once
+  // the client-side navigation commits, and a Review click that overtakes the pending
+  // one to Today is a navigation to the route already on screen. The router keeps that
+  // tree, the review screen never remounts, and it still shows the "Nothing due" it
+  // read two days earlier.
   await page.clock.setFixedTime(START + 2 * 24 * 60 * 60 * 1000);
   await page.getByRole("link", { name: "Today", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Review queue" })).toBeVisible();
   await page.getByRole("link", { name: "Review", exact: true }).click();
   await expect(page.getByText(new RegExp(`^${wrong} items? due`))).toBeVisible();
   await expect(page.locator(".app-session__count")).toHaveText(`Item 1 of ${wrong}`);
