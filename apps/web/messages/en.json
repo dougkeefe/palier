@@ -27,6 +27,7 @@
     "yourData": "Your data",
     "sync": "Sync",
     "key": "Your API key",
+    "library": "Library",
     "about": "About",
     "privacy": "Privacy"
   },
@@ -64,7 +65,7 @@
     "title": "Privacy",
     "intro": "Palier keeps your practice in your browser. When sync is on, which it is unless you turn it off, a copy of your progress is also kept on Palier’s server, so your other devices can have it. This page says exactly what that copy holds, and what never leaves your device.",
     "heldTitle": "What the server holds, when sync is on",
-    "held": "A random account id, a scrambled (hashed) secret for each device, your language and target settings, and a copy of your progress: your answers, your review schedule and your exam results. No name, no email, no department, no free text, and nothing that identifies you.",
+    "held": "A random account id, a scrambled (hashed) secret for each device, your language and target settings, which milestones and streak notes you have already been shown, and a copy of your progress: your answers, your review schedule and your exam results. No name, no email, no department, no free text, and nothing that identifies you.",
     "neverTitle": "What Palier never holds",
     "neverIntro": "These stay on your device, under every setting:",
     "neverServer": "Nor does the server keep your IP address, beyond using it for a moment to limit abuse, and nothing links an anonymous item statistic to your account.",
@@ -929,5 +930,51 @@
     "openIssue": "Open an issue on GitHub",
     "notFoundTitle": "Page not found",
     "notFoundBody": "There is nothing at this address. The page may have moved, or the link may be mistyped."
+  },
+  "engagement": {
+    "streak": "{count, plural, one {#-day streak} other {#-day streak}}",
+    "freezeTitle": "We kept your streak",
+    "freezeBody": "You missed a day, and your streak carried on. Up to two missed days a month never break it.",
+    "share": "Share",
+    "copy": "Copy to share",
+    "copied": "Copied. Paste it wherever you like.",
+    "shareFailed": "That didn’t work, but the milestone is still yours.",
+    "close": "Keep going",
+    "milestones": {
+      "first-exam": {
+        "title": "Your first mock exam",
+        "body": "A full-length practice test, timed and scored against the published cuts. The first one is the hardest to start.",
+        "share": "I just sat my first full mock exam on Palier, a free, unofficial practice app for the federal Second Language Evaluation."
+      },
+      "first-oral": {
+        "title": "Your first spoken session",
+        "body": "You answered an examiner out loud. Speaking is the part most people put off, and you didn’t.",
+        "share": "I just did my first spoken practice session on Palier, a free, unofficial practice app for the federal Second Language Evaluation."
+      },
+      "items-answered": {
+        "title": "{count, number} questions answered",
+        "body": "Every one of them fed your review queue and your trend. That is a lot of French.",
+        "share": "I’ve answered {count, number} practice questions on Palier, a free, unofficial practice app for the federal Second Language Evaluation."
+      },
+      "first-exam-at-c": {
+        "title": "A mock exam at C",
+        "body": "Your first practice test to score at level C. It is a practice result, not an official one, but it is real evidence.",
+        "share": "I just scored at level C on a mock exam on Palier, a free, unofficial practice app for the federal Second Language Evaluation."
+      }
+    }
+  },
+  "library": {
+    "title": "Library",
+    "intro": "Short reference articles on the ten points of written expression Palier tracks. Each sets out the rule, the traps an anglophone writer meets, and examples.",
+    "skillHeading": "Written expression",
+    "readingLater": "Articles on reading comprehension come after 1.0.",
+    "back": "All articles",
+    "examples": "Examples",
+    "insteadOf": "Instead of",
+    "write": "Write",
+    "related": "Read next",
+    "practise": "Practise written expression",
+    "readAbout": "Read about {subSkill} in the library",
+    "newTab": "(opens in a new tab)"
   }
 }

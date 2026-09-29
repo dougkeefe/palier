@@ -29,6 +29,16 @@ describe("prepare-public", () => {
     ]);
   });
 
+  it("expands a dynamic directory whose values are known at build time, the library's articles (D162)", () => {
+    const expansions = { "library/[subSkill]": ["agreement", "pronouns"], "[top]": ["only"] };
+    expect(routesFrom(["library", "library/[subSkill]", "review/[id]", "[top]"], expansions)).toEqual([
+      "library",
+      "library/agreement",
+      "library/pronouns",
+      "only",
+    ]);
+  });
+
   it("reads the locales the app routes, and refuses a routing file without them", () => {
     expect(localesFrom(read("src/i18n/routing.ts"))).toEqual(["en", "fr"]);
     expect(() => localesFrom("export const routing = {};")).toThrow(/locales/);

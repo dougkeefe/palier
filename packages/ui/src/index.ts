@@ -34,6 +34,7 @@ export {
   type CalloutState,
   type CalloutTone,
   type DialogPlacement,
+  type MascotPose,
   type GlyphName,
   type OptionOutcome,
   type OptionRowInput,
@@ -60,7 +61,8 @@ export { BandMeter, type BandMeterProps } from "./primitives/BandMeter.js";
 export { Sheet, type SheetProps } from "./primitives/Sheet.js";
 export { Passage, type PassageProps } from "./primitives/Passage.js";
 export { Toast, type ToastProps } from "./primitives/Toast.js";
-export { Mascot } from "./primitives/Mascot.js";
+export { Mascot, type MascotProps } from "./primitives/Mascot.js";
+export { StreakFlame, type StreakFlameProps } from "./primitives/StreakFlame.js";
 export { Timer, type TimerProps } from "./primitives/Timer.js";
 export { Dialog, type DialogProps } from "./primitives/Dialog.js";
 

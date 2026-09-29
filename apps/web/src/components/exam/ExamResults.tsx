@@ -9,6 +9,7 @@ import { type ReactNode, useEffect, useState } from "react";
 import { type ResultsView, type ReviewRow, resultsView } from "../../features/exam/results";
 import { promptShown } from "../../features/telemetry/telemetry";
 import { Link } from "../../i18n/navigation";
+import { ArticleLink } from "../library/ArticleLink";
 import type { Container } from "../../lib/container";
 import { useContainer } from "../ContainerProvider";
 import { NonAffiliation } from "../NonAffiliation";
@@ -220,6 +221,7 @@ function ReviewEntry({ row, container }: { row: ReviewRow; container: Container 
         )}
         <h3 className="app-feedback__subheading">{tDrill("theRule")}</h3>
         <p>{item.explanation[locale]}</p>
+        <ArticleLink subSkill={item.subSkill} />
         <div className="app-actions">
           {queue === "added" ? (
             <p className="app-muted" role="status">

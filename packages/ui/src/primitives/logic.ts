@@ -190,7 +190,19 @@ export const timerState = (tone: TimerTone): TimerState => ({
 
 // ---- Dialog (a modal <dialog>: the exam's submit confirmation and item navigator) ----
 
-/** `center` for a confirmation, `side` for a drawer that slides in from the edge. */
-export type DialogPlacement = "center" | "side";
+/**
+ * `center` for a confirmation, `side` for a drawer that slides in from the edge, `full` for a
+ * moment that takes the whole screen (a milestone, §9).
+ */
+export type DialogPlacement = "center" | "side" | "full";
 
 export const dialogClass = (placement: DialogPlacement): string => `pl-dialog pl-dialog--${placement}`;
+
+// ---- Mascot and streak flame (§9, §10.1, §10.5) ----
+
+export type MascotPose = "asleep" | "cheer";
+
+/** A cheering Coco settles in with the celebration spring; a sleeping one does not move. */
+export const mascotClass = (pose: MascotPose): string => (pose === "cheer" ? "pl-mascot pl-celebrate" : "pl-mascot");
+
+export const streakFlameClass = (lit: boolean): string => (lit ? "pl-streak-flame pl-streak-flame--lit" : "pl-streak-flame");

@@ -21,7 +21,9 @@
         "http://localhost:3200/fr/practice/oral/report",
         "http://localhost:3200/en/exam",
         "http://localhost:3200/fr/exam/run",
-        "http://localhost:3200/en/exam/results"
+        "http://localhost:3200/en/exam/results",
+        "http://localhost:3200/en/library",
+        "http://localhost:3200/fr/library/agreement"
       ],
       "numberOfRuns": 5,
       "settings": {

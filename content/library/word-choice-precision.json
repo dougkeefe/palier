@@ -1,0 +1,92 @@
+{
+  "subSkill": "word-choice-precision",
+  "lang": "fr",
+  "title": {
+    "en": "Precise word choice",
+    "fr": "La précision du vocabulaire"
+  },
+  "summary": {
+    "en": "Replacing all-purpose words with the one that says exactly what is meant. At C, the reader should not have to guess which of several senses you intend.",
+    "fr": "Remplacer les mots passe-partout par celui qui dit exactement ce qu’on veut dire. Au niveau C, le lecteur ne devrait pas avoir à deviner le sens voulu."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Replace the all-purpose verbs",
+        "fr": "Remplacez les verbes passe-partout"
+      },
+      "paragraphs": [
+        {
+          "en": "_Faire_, _mettre_, _avoir_, _dire_ and _il y a_ fit almost anywhere, which is why they say little. _Faire une enquête_ becomes _mener une enquête_; _mettre en place_ becomes _instaurer_ or _établir_; _dire_ becomes _préciser_, _affirmer_ or _signaler_, as the meaning requires.",
+          "fr": "_Faire_, _mettre_, _avoir_, _dire_ et _il y a_ s’emploient presque partout, et c’est pourquoi ils disent peu. _Faire une enquête_ devient _mener une enquête_; _mettre en place_ devient _instaurer_ ou _établir_; _dire_ devient _préciser_, _affirmer_ ou _signaler_, selon le sens."
+        },
+        {
+          "en": "The same goes for _chose_, _problème_ and _aspect_: name the thing itself (_la contrainte_, _l’écart_, _le retard_).",
+          "fr": "Il en va de même pour _chose_, _problème_ et _aspect_ : nommez la réalité visée (_la contrainte_, _l’écart_, _le retard_)."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Words that are often confused",
+        "fr": "Les mots souvent confondus"
+      },
+      "paragraphs": [
+        {
+          "en": "Some pairs look alike and mean different things: _éminent_ (distinguished) and _imminent_ (about to happen); _conjecture_ (a guess) and _conjoncture_ (the circumstances); _prolonger_ (in time) and _allonger_ (in length).",
+          "fr": "Certaines paires se ressemblent sans avoir le même sens : _éminent_ et _imminent_; _conjecture_ (une supposition) et _conjoncture_ (la situation); _prolonger_ (dans le temps) et _allonger_ (dans l’espace)."
+        },
+        {
+          "en": "Collocations matter too: one _prend une décision_, _émet un avis_, _formule une recommandation_ and _pose une question_.",
+          "fr": "Les cooccurrences comptent aussi : on _prend une décision_, _émet un avis_, _formule une recommandation_ et _pose une question_."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "avoid": "Le comité a fait plusieurs recommandations.",
+      "write": "Le comité a formulé plusieurs recommandations.",
+      "why": {
+        "en": "One _formule_, or _présente_, a recommendation.",
+        "fr": "On _formule_, ou _présente_, une recommandation."
+      }
+    },
+    {
+      "avoid": "Il y a un problème avec les données du deuxième trimestre.",
+      "write": "Les données du deuxième trimestre présentent un écart.",
+      "why": {
+        "en": "Name the problem, and give the sentence a real verb.",
+        "fr": "Nommez le problème et donnez à la phrase un vrai verbe."
+      }
+    },
+    {
+      "avoid": "Vu la conjecture économique, les dépenses sont gelées.",
+      "write": "Vu la conjoncture économique, les dépenses sont gelées.",
+      "why": {
+        "en": "_Conjoncture_ is the situation; _conjecture_ is a guess.",
+        "fr": "La _conjoncture_ est la situation; la _conjecture_, une supposition."
+      }
+    },
+    {
+      "avoid": "Nous avons allongé la période de consultation d’un mois.",
+      "write": "Nous avons prolongé la période de consultation d’un mois.",
+      "why": {
+        "en": "_Prolonger_ for a length of time.",
+        "fr": "_Prolonger_ pour une durée."
+      }
+    },
+    {
+      "avoid": "La directrice a dit que le dossier était prioritaire.",
+      "write": "La directrice a précisé que le dossier était prioritaire.",
+      "why": {
+        "en": "_Dire_ is correct but vague; _préciser_ says what kind of statement it was.",
+        "fr": "_Dire_ est correct, mais vague; _préciser_ indique la nature du propos."
+      }
+    }
+  ],
+  "related": [
+    "register-and-formality",
+    "false-friends-and-anglicisms"
+  ]
+}

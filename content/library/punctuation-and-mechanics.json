@@ -1,0 +1,92 @@
+{
+  "subSkill": "punctuation-and-mechanics",
+  "lang": "fr",
+  "title": {
+    "en": "Punctuation and mechanics",
+    "fr": "La ponctuation et la typographie"
+  },
+  "summary": {
+    "en": "Punctuating, and writing numbers, capitals and quotation marks, the French way. The rules differ from English in small, visible ways.",
+    "fr": "Ponctuer et écrire les nombres, les majuscules et les guillemets à la française. Les règles diffèrent de l’anglais par de petits détails bien visibles."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Punctuation",
+        "fr": "La ponctuation"
+      },
+      "paragraphs": [
+        {
+          "en": "Use French quotation marks, _« comme ceci »_, with a space inside each. In Canadian usage, the colon has a space before it; the semicolon, question mark and exclamation mark usually do not. A comma never separates a subject from its verb.",
+          "fr": "Employez les guillemets français, « comme ceci », avec une espace à l’intérieur. Dans l’usage canadien, le deux-points est précédé d’une espace; le point-virgule, le point d’interrogation et le point d’exclamation, généralement pas. La virgule ne sépare jamais le sujet de son verbe."
+        },
+        {
+          "en": "A comma usually sets off a phrase moved to the head of the sentence (_Dans ce contexte, …_) and comes before _mais_, but not before an _et_ joining two short clauses.",
+          "fr": "La virgule détache généralement le complément placé en tête de phrase (_Dans ce contexte, …_) et précède _mais_, mais pas le _et_ qui unit deux courtes propositions."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Numbers, capitals and dates",
+        "fr": "Les nombres, les majuscules et les dates"
+      },
+      "paragraphs": [
+        {
+          "en": "Digits group in threes with a space, and the decimal marker is a comma: _1 500 000 $_, _3,5 %_. The dollar sign follows the number, after a space. The time is written _14 h 30_.",
+          "fr": "On groupe les chiffres par tranches de trois séparées par une espace, et la virgule sert de séparateur décimal : 1 500 000 $, 3,5 %. Le symbole du dollar suit le nombre, après une espace. L’heure s’écrit 14 h 30."
+        },
+        {
+          "en": "Days and months take no capital: _le lundi 3 mars_. An organization’s name takes a capital on its first word (_l’Agence du revenu du Canada_), but a department’s generic word does not: _le ministère des Finances_.",
+          "fr": "Les jours et les mois s’écrivent sans majuscule : _le lundi 3 mars_. Le nom d’un organisme prend la majuscule au premier mot (_l’Agence du revenu du Canada_), mais le mot générique d’un ministère, non : _le ministère des Finances_."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "avoid": "Le budget s’élève à $1,500,000.",
+      "write": "Le budget s’élève à 1 500 000 $.",
+      "why": {
+        "en": "A space groups the digits, and the symbol follows the number.",
+        "fr": "L’espace groupe les chiffres, et le symbole suit le nombre."
+      }
+    },
+    {
+      "avoid": "La réunion aura lieu le Lundi 3 Mars à 14:30.",
+      "write": "La réunion aura lieu le lundi 3 mars à 14 h 30.",
+      "why": {
+        "en": "No capital on days and months, and the hour is written with _h_.",
+        "fr": "Pas de majuscule aux jours et aux mois, et l’heure s’écrit avec _h_."
+      }
+    },
+    {
+      "avoid": "La directrice a écrit: \"le dossier est prioritaire\".",
+      "write": "La directrice a écrit : « Le dossier est prioritaire. »",
+      "why": {
+        "en": "A space before the colon, French quotation marks, and a capital to open the quoted sentence.",
+        "fr": "Une espace avant le deux-points, des guillemets français et une majuscule au début de la phrase citée."
+      }
+    },
+    {
+      "avoid": "Les employés du secteur, ont reçu la note.",
+      "write": "Les employés du secteur ont reçu la note.",
+      "why": {
+        "en": "No comma between the subject and its verb.",
+        "fr": "Pas de virgule entre le sujet et le verbe."
+      }
+    },
+    {
+      "avoid": "Le taux a augmenté de 3.5%.",
+      "write": "Le taux a augmenté de 3,5 %.",
+      "why": {
+        "en": "A decimal comma, and a space before _%_.",
+        "fr": "Une virgule décimale et une espace avant _%_."
+      }
+    }
+  ],
+  "related": [
+    "connectors-and-discourse-markers",
+    "sentence-structure"
+  ]
+}

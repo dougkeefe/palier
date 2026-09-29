@@ -173,6 +173,12 @@ export type {
   OralReportViewDeps,
   OralSessionCost,
   MeterTag,
+  Milestones,
+  MilestonesDeps,
+  MilestonesRequest,
+  StreakReport,
+  StreakReportDeps,
+  StreakReportRequest,
 } from "./use-cases/index.js";
 export {
   EmptyApiKeyError,
@@ -277,6 +283,12 @@ export {
   oralHistory,
   oralReport,
   requestOralReport,
+  MILESTONES_SHOWN_KEY,
+  STREAK_FREEZE_NOTICED_KEY,
+  markMilestoneShown,
+  milestones,
+  noteStreakFreeze,
+  streakReport,
 } from "./use-cases/index.js";
 
 export type { ProgressStores, SyncRecord } from "./sync/records.js";

@@ -1,0 +1,92 @@
+{
+  "subSkill": "register-and-formality",
+  "lang": "fr",
+  "title": {
+    "en": "Register and formality",
+    "fr": "Le registre et le niveau de langue"
+  },
+  "summary": {
+    "en": "Writing at the level of formality a federal workplace expects: neutral or formal in notes and letters, never familiar, and never stiff for its own sake.",
+    "fr": "Écrire au niveau de langue qu’attend un milieu de travail fédéral : neutre ou soutenu dans les notes et les lettres, jamais familier, et jamais guindé pour le plaisir."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "What shifts the register",
+        "fr": "Ce qui fait changer le registre"
+      },
+      "paragraphs": [
+        {
+          "en": "Familiar words (_le boss_, _la job_, _gérer ça_), spoken forms (_on_ for _nous_ in a formal letter, a dropped _ne_ in a negation) and relaxed spellings of speech (_y a_) have no place in a note or a letter.",
+          "fr": "Les mots familiers (_le boss_, _la job_, _gérer ça_), les tournures de l’oral (_on_ pour _nous_ dans une lettre officielle, le _ne_ omis dans la négation) et les formes relâchées (_y a_) n’ont pas leur place dans une note ou une lettre."
+        },
+        {
+          "en": "The neutral register uses precise, everyday standard words: _le gestionnaire_, _le poste_, _s’occuper de ce dossier_. The formal register adds complete constructions and courteous formulas, without piling up rare words.",
+          "fr": "Le registre neutre emploie des mots justes et courants : _le gestionnaire_, _le poste_, _s’occuper de ce dossier_. Le registre soutenu ajoute des constructions complètes et des formules de politesse, sans accumuler les mots rares."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Correspondence conventions",
+        "fr": "Les conventions de la correspondance"
+      },
+      "paragraphs": [
+        {
+          "en": "Address the reader as _vous_. Open with _Madame,_ or _Monsieur,_ and close with a formula that matches, such as _Veuillez agréer, Madame, mes salutations distinguées_. In an email, _Bonjour Madame_ and _Cordialement_ are accepted.",
+          "fr": "Adressez-vous au lecteur par _vous_. Ouvrez par _Madame,_ ou _Monsieur,_ et terminez par une formule assortie, comme _Veuillez agréer, Madame, mes salutations distinguées_. Dans un courriel, _Bonjour Madame_ et _Cordialement_ sont admis."
+        },
+        {
+          "en": "Keep the written form of a question, too: inversion (_Pourriez-vous confirmer…?_) or _est-ce que_, not a statement with a question mark (_Vous pouvez confirmer?_).",
+          "fr": "Gardez aussi la forme écrite de l’interrogation : l’inversion (_Pourriez-vous confirmer…?_) ou _est-ce que_, et non une phrase déclarative suivie d’un point d’interrogation (_Vous pouvez confirmer?_)."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "avoid": "On a reçu votre demande et on va la traiter bientôt.",
+      "write": "Nous avons reçu votre demande et la traiterons sous peu.",
+      "why": {
+        "en": "In a letter, _nous_ rather than _on_.",
+        "fr": "Dans une lettre, _nous_ plutôt que _on_."
+      }
+    },
+    {
+      "avoid": "Faut que l’équipe finisse le rapport.",
+      "write": "Il faut que l’équipe termine le rapport.",
+      "why": {
+        "en": "_Il_ is not dropped in writing.",
+        "fr": "Le _il_ ne s’omet pas à l’écrit."
+      }
+    },
+    {
+      "avoid": "Vous pouvez m’envoyer ça d’ici jeudi?",
+      "write": "Pourriez-vous me faire parvenir ce document d’ici jeudi?",
+      "why": {
+        "en": "A written question, a courteous conditional, and a precise noun in place of _ça_.",
+        "fr": "Une interrogation écrite, le conditionnel de politesse et un nom précis au lieu de _ça_."
+      }
+    },
+    {
+      "avoid": "Mon boss m’a demandé de checker les chiffres.",
+      "write": "Ma gestionnaire m’a demandé de vérifier les chiffres.",
+      "why": {
+        "en": "Familiar English borrowings have standard French equivalents.",
+        "fr": "Les emprunts familiers à l’anglais ont des équivalents français courants."
+      }
+    },
+    {
+      "avoid": "Je ne sais pas c’est quoi le problème.",
+      "write": "J’ignore quel est le problème.",
+      "why": {
+        "en": "An indirect question does not keep the spoken _c’est quoi_.",
+        "fr": "L’interrogation indirecte ne garde pas le _c’est quoi_ de l’oral."
+      }
+    }
+  ],
+  "related": [
+    "word-choice-precision",
+    "false-friends-and-anglicisms"
+  ]
+}

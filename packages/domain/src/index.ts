@@ -159,6 +159,9 @@ export type { WritingPrompt, WritingRegister } from "./writing-prompt.js";
 export { WRITING_REGISTERS } from "./writing-prompt.js";
 export type { WritingPromptsParseResult } from "./writing-prompts.js";
 export { parseWritingPrompts, parseWritingPromptsOrThrow } from "./writing-prompts.js";
+export type { LibraryArticle, LibraryExample, LibrarySection } from "./library-article.js";
+export type { LibraryParseResult } from "./library.js";
+export { CITED_MARK, parseLibrary, parseLibraryOrThrow } from "./library.js";
 
 // The oral filler list, a content artefact the fluency metrics read (progress.md D123).
 export type { OralFillers, OralFillersParseResult } from "./oral-fillers.js";
@@ -199,6 +202,7 @@ export {
   attemptSchema,
   examFormSchema,
   itemSchema,
+  libraryArticleSchema,
   oralFillersSchema,
   oralScenarioSchema,
   passageSchema,

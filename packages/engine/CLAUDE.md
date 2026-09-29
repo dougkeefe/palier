@@ -36,7 +36,13 @@ turn's `pauseMs`, which the screen measures; never the gap between turns**, whic
 (D127). **An oral report's fixes bias the plan** (D124, closing D35): `SelectionCriteria.boost` favours its sub-skills at
 `FOCUS_WEIGHT` (2), **multiplied** with `WEAKEST_WEIGHT` rather than joining the weakest set, so a weakest sub-skill stays
 ahead (D127), in practice mode only; `DayPlanInput.focusSubSkills` passes them to new items, never maintenance's rule.
-Absent or empty changes nothing, so the goldens did not move. Everything is
+Absent or empty changes nothing, so the goldens did not move. **Engagement** (`engagement.ts`, progress.md D159):
+`localDay(at, timeZone)` is the device's calendar day, read by `Intl` part rather than a locale's separator; `streak` walks
+back from `today`, where today still to do breaks nothing, and a missed day is **frozen while fewer than the allowance are
+frozen in that day's own calendar month**. A frozen day keeps the streak but adds nothing to its length, and a freeze is kept
+only when an active day precedes it. The allowance is handed in, since it is a product rule, not exam data. Both are
+functions of the day *set*, property-tested. `milestonesReached` is a threshold check over facts the app gathers, in the
+fixed `MILESTONES` order. Everything is
 re-exported from `src/index.ts` — the package's public surface is the barrel, not a relative
 path, so a new algorithm is not done until it is exported there.
 

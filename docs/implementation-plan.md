@@ -1089,7 +1089,8 @@ direction, then the human's reviews.
   29 September 2026** (`progress.md` D146–D152).
 - **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted fonts,
   §9's streak with its silent freeze and the milestone moments (XP, levels and the countdown after 1.0), and the MDX library,
-  ten written-expression articles in both languages, linked from item explanations (reading's after 1.0).
+  ten written-expression articles in both languages, linked from item explanations (reading's after 1.0). **Status: built
+  29 September 2026** (`progress.md` D159–D162): the library is structured JSON in `@palier/content`, not MDX (D162).
 - **Gate L — the human reviews.** The French review of every string, the workshop prompts and the bank's register [R8]; the
   VoiceOver and NVDA pass [R9]; the red-team read. *Done:* exit criterion 1's accessibility and security halves and the R8 half.
 - **Gate M — public.** The repo made public and an outside item submission [R13], the domain, the trademark check, and the

@@ -1,0 +1,96 @@
+{
+  "subSkill": "verb-tense-and-mood",
+  "lang": "fr",
+  "title": {
+    "en": "Verb tense and mood",
+    "fr": "Les temps et les modes verbaux"
+  },
+  "summary": {
+    "en": "Choosing the tense that fits the time you mean, and the mood the main clause calls for. The subjunctive is where C-level writing most often shows.",
+    "fr": "Choisir le temps qui correspond au moment visé, et le mode qu’exige la principale. C’est au subjonctif que l’écrit de niveau C se distingue le plus souvent."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "When the subjunctive is required",
+        "fr": "Quand le subjonctif s’impose"
+      },
+      "paragraphs": [
+        {
+          "en": "After an expression of necessity, wish, doubt, feeling or possibility (_il faut que_, _vouloir que_, _douter que_, _être heureux que_, _il est possible que_), the verb of the subordinate clause goes in the subjunctive.",
+          "fr": "Après une expression de nécessité, de volonté, de doute, de sentiment ou de possibilité (_il faut que_, _vouloir que_, _douter que_, _être heureux que_, _il est possible que_), le verbe de la subordonnée se met au subjonctif."
+        },
+        {
+          "en": "Some conjunctions always take it: _bien que_, _pour que_, _afin que_, _avant que_, _à moins que_, _sans que_. _Après que_ does not. It takes the indicative, because what follows has happened.",
+          "fr": "Certaines conjonctions l’exigent toujours : _bien que_, _pour que_, _afin que_, _avant que_, _à moins que_, _sans que_. _Après que_, au contraire, se construit avec l’indicatif, puisque le fait est accompli."
+        },
+        {
+          "en": "_Espérer que_ and _penser que_ take the indicative when affirmative. In the negative or in a question, _penser que_ usually takes the subjunctive.",
+          "fr": "_Espérer que_ et _penser que_ se construisent avec l’indicatif à la forme affirmative. À la forme négative ou interrogative, _penser que_ appelle généralement le subjonctif."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Tense sequence and the conditional",
+        "fr": "La concordance des temps et le conditionnel"
+      },
+      "paragraphs": [
+        {
+          "en": "In reported speech after a past verb, the present becomes the imperfect and the future becomes the conditional: _Il a dit qu’il viendrait_.",
+          "fr": "Au discours indirect, après un verbe au passé, le présent devient l’imparfait et le futur devient le conditionnel : _Il a dit qu’il viendrait_."
+        },
+        {
+          "en": "After the _si_ of a condition, never use the conditional or the future: _si_ with the imperfect, then the conditional in the main clause (_Si nous avions les fonds, nous lancerions le projet_).",
+          "fr": "Après le _si_ de condition, jamais de conditionnel ni de futur : _si_ avec l’imparfait, puis le conditionnel dans la principale (_Si nous avions les fonds, nous lancerions le projet_)."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "avoid": "Il faut que vous remplissez le formulaire avant vendredi.",
+      "write": "Il faut que vous remplissiez le formulaire avant vendredi.",
+      "why": {
+        "en": "_Il faut que_ always takes the subjunctive.",
+        "fr": "_Il faut que_ exige toujours le subjonctif."
+      }
+    },
+    {
+      "avoid": "Bien que le rapport est complet, il manque une annexe.",
+      "write": "Bien que le rapport soit complet, il manque une annexe.",
+      "why": {
+        "en": "_Bien que_ takes the subjunctive.",
+        "fr": "_Bien que_ se construit avec le subjonctif."
+      }
+    },
+    {
+      "avoid": "Après que la directrice ait approuvé la note, nous l’avons diffusée.",
+      "write": "Après que la directrice a approuvé la note, nous l’avons diffusée.",
+      "why": {
+        "en": "_Après que_ takes the indicative: the approval happened.",
+        "fr": "_Après que_ se construit avec l’indicatif : l’approbation a eu lieu."
+      }
+    },
+    {
+      "avoid": "Si nous aurions plus de temps, nous consulterions les régions.",
+      "write": "Si nous avions plus de temps, nous consulterions les régions.",
+      "why": {
+        "en": "No conditional after the _si_ of a condition.",
+        "fr": "Pas de conditionnel après le _si_ de condition."
+      }
+    },
+    {
+      "avoid": "Je doute que la réponse arrivera à temps.",
+      "write": "Je doute que la réponse arrive à temps.",
+      "why": {
+        "en": "_Douter que_ takes the subjunctive.",
+        "fr": "_Douter que_ appelle le subjonctif."
+      }
+    }
+  ],
+  "related": [
+    "sentence-structure",
+    "connectors-and-discourse-markers"
+  ]
+}

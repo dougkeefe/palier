@@ -32,6 +32,28 @@ test("a route never visited online still opens offline, in the other locale", as
 
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
   await expect(page.locator("main")).not.toBeEmpty();
+
+  // A library article too: a dynamic route, precached by name from the content (D162).
+  await page.goto("/fr/library/pronouns");
+  await expect(page.getByRole("heading", { level: 1, name: "Les pronoms" })).toBeVisible();
+});
+
+test("the three self-hosted faces are precached, the passage serif too, which no page preloads (D161)", async ({
+  page,
+}) => {
+  await page.goto("/en");
+  await waitForOfflineReady(page);
+
+  const fonts = await page.evaluate(async () => {
+    const urls: string[] = [];
+    for (const name of await caches.keys()) {
+      for (const request of await (await caches.open(name)).keys()) urls.push(new URL(request.url).pathname);
+    }
+    return urls.filter((url) => url.endsWith(".woff2")).map((url) => url.split("/").pop() ?? "");
+  });
+  for (const family of ["inter", "figtree", "source_serif_4"]) {
+    expect(fonts.some((file) => file.startsWith(family)), `${family} in ${fonts.join(", ")}`).toBe(true);
+  }
 });
 
 test("every shard and form of the served bank is readable offline, not only the ones fetched online", async ({

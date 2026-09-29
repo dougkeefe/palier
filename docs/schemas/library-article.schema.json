@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "subSkill": {
+      "type": "string",
+      "enum": [
+        "verb-tense-and-mood",
+        "agreement",
+        "prepositions-and-government",
+        "pronouns",
+        "connectors-and-discourse-markers",
+        "register-and-formality",
+        "word-choice-precision",
+        "false-friends-and-anglicisms",
+        "punctuation-and-mechanics",
+        "sentence-structure"
+      ]
+    },
+    "lang": {
+      "type": "string",
+      "enum": [
+        "en",
+        "fr"
+      ]
+    },
+    "title": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fr": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "en",
+        "fr"
+      ],
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fr": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "en",
+        "fr"
+      ],
+      "additionalProperties": false
+    },
+    "sections": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "heading": {
+            "type": "object",
+            "properties": {
+              "en": {
+                "type": "string",
+                "minLength": 1
+              },
+              "fr": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "en",
+              "fr"
+            ],
+            "additionalProperties": false
+          },
+          "paragraphs": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "en": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fr": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "en",
+                "fr"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "heading",
+          "paragraphs"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "examples": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "avoid": {
+            "type": "string",
+            "minLength": 1
+          },
+          "write": {
+            "type": "string",
+            "minLength": 1
+          },
+          "why": {
+            "type": "object",
+            "properties": {
+              "en": {
+                "type": "string",
+                "minLength": 1
+              },
+              "fr": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "en",
+              "fr"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "write",
+          "why"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "related": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "verb-tense-and-mood",
+          "agreement",
+          "prepositions-and-government",
+          "pronouns",
+          "connectors-and-discourse-markers",
+          "register-and-formality",
+          "word-choice-precision",
+          "false-friends-and-anglicisms",
+          "punctuation-and-mechanics",
+          "sentence-structure"
+        ]
+      }
+    }
+  },
+  "required": [
+    "subSkill",
+    "lang",
+    "title",
+    "summary",
+    "sections",
+    "examples"
+  ],
+  "additionalProperties": false
+}

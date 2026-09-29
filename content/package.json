@@ -6,9 +6,11 @@
   "exports": {
     "./profiles/psc-sle.json": "./profiles/psc-sle.json",
     "./writing/prompts.json": "./writing/prompts.json",
-    "./oral/fillers.json": "./oral/fillers.json"
+    "./oral/fillers.json": "./oral/fillers.json",
+    "./library/*.json": "./library/*.json"
   },
   "files": [
+    "library",
     "oral",
     "profiles",
     "writing"

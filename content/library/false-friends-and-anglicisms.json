@@ -1,0 +1,100 @@
+{
+  "subSkill": "false-friends-and-anglicisms",
+  "lang": "fr",
+  "title": {
+    "en": "False friends and anglicisms",
+    "fr": "Les faux amis et les anglicismes"
+  },
+  "summary": {
+    "en": "Avoiding French words used in their English sense, and English structures translated word for word. They are the most common marks of an anglophone writer.",
+    "fr": "Éviter les mots français employés au sens anglais et les structures anglaises traduites mot à mot. Ce sont les traces les plus fréquentes d’un rédacteur anglophone."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "False friends",
+        "fr": "Les faux amis"
+      },
+      "paragraphs": [
+        {
+          "en": "Some French words look like English ones and mean something else. _Éventuellement_ means possibly, not eventually (_finir par_, _à terme_). _Actuellement_ means currently, not actually (_en fait_). A _librairie_ sells books; a _bibliothèque_ lends them.",
+          "fr": "Certains mots français ressemblent à des mots anglais sans en avoir le sens. _Éventuellement_ signifie peut-être, et non finalement ou à terme. _Actuellement_ signifie en ce moment, et non en fait. Une _librairie_ vend des livres; une _bibliothèque_ les prête."
+        },
+        {
+          "en": "At work, one applies for a job by _poser sa candidature_, not _appliquer_; an _agenda_ is a planner, and a meeting’s agenda is _l’ordre du jour_.",
+          "fr": "Au travail, on _pose sa candidature_ à un poste, on n’y _applique_ pas; l’_agenda_ est un carnet, et l’agenda d’une réunion est l’_ordre du jour_."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Structural anglicisms",
+        "fr": "Les anglicismes de structure"
+      },
+      "paragraphs": [
+        {
+          "en": "Some calques keep French words but an English structure: _prendre place_ (for _avoir lieu_), _être en charge de_ (for _être responsable de_), _sur une base régulière_ (for _régulièrement_), _faire du sens_ (for _avoir du sens_).",
+          "fr": "Certains calques gardent des mots français, mais une structure anglaise : _prendre place_ (pour _avoir lieu_), _être en charge de_ (pour _être responsable de_), _sur une base régulière_ (pour _régulièrement_), _faire du sens_ (pour _avoir du sens_)."
+        },
+        {
+          "en": "Canadian workplaces have their own: _céduler_ (for _planifier_ or _fixer_), _canceller_ (for _annuler_), _un meeting_ (for _une réunion_). Termium Plus and the Banque de dépannage linguistique give the standard forms.",
+          "fr": "Les milieux de travail canadiens ont les leurs : _céduler_ (pour _planifier_ ou _fixer_), _canceller_ (pour _annuler_), _un meeting_ (pour _une réunion_). Termium Plus et la Banque de dépannage linguistique donnent les formes correctes."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "avoid": "La réunion prendra place le 12 mars.",
+      "write": "La réunion aura lieu le 12 mars.",
+      "why": {
+        "en": "_Prendre place_ copies “take place”.",
+        "fr": "_Prendre place_ calque « take place »."
+      }
+    },
+    {
+      "avoid": "Elle est en charge du dossier des langues officielles.",
+      "write": "Elle est responsable du dossier des langues officielles.",
+      "why": {
+        "en": "_Être en charge de_ copies “in charge of”.",
+        "fr": "_Être en charge de_ calque « in charge of »."
+      }
+    },
+    {
+      "avoid": "Nous allons éventuellement terminer la refonte du site.",
+      "write": "Nous finirons par terminer la refonte du site.",
+      "why": {
+        "en": "_Éventuellement_ means possibly; for eventually, write _finir par_ or _à terme_.",
+        "fr": "_Éventuellement_ signifie peut-être; pour « eventually », on dit _finir par_ ou _à terme_."
+      }
+    },
+    {
+      "avoid": "Pouvez-vous céduler une rencontre avec l’équipe?",
+      "write": "Pouvez-vous fixer une rencontre avec l’équipe?",
+      "why": {
+        "en": "_Céduler_ comes from “to schedule”.",
+        "fr": "_Céduler_ vient de « to schedule »."
+      }
+    },
+    {
+      "avoid": "Cette approche fait du sens pour la région.",
+      "write": "Cette approche a du sens pour la région.",
+      "why": {
+        "en": "_Avoir du sens_, not _faire du sens_, which copies “make sense”.",
+        "fr": "_Avoir du sens_, et non _faire du sens_, qui calque « make sense »."
+      }
+    },
+    {
+      "avoid": "Nous communiquerons avec vous sur une base régulière.",
+      "write": "Nous communiquerons régulièrement avec vous.",
+      "why": {
+        "en": "_Sur une base régulière_ copies “on a regular basis”.",
+        "fr": "_Sur une base régulière_ calque « on a regular basis »."
+      }
+    }
+  ],
+  "related": [
+    "prepositions-and-government",
+    "word-choice-precision"
+  ]
+}

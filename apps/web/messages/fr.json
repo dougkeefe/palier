@@ -27,6 +27,7 @@
     "yourData": "Vos données",
     "sync": "Synchronisation",
     "key": "Votre clé d’API",
+    "library": "Bibliothèque",
     "about": "À propos",
     "privacy": "Confidentialité"
   },
@@ -64,7 +65,7 @@
     "title": "Confidentialité",
     "intro": "Palier garde votre pratique dans votre navigateur. Quand la synchronisation est activée, ce qui est le cas à moins que vous la désactiviez, une copie de vos progrès est aussi gardée sur le serveur de Palier, pour que vos autres appareils y aient accès. Cette page dit exactement ce que contient cette copie, et ce qui ne quitte jamais votre appareil.",
     "heldTitle": "Ce que le serveur conserve, quand la synchronisation est activée",
-    "held": "Un identifiant de compte aléatoire, un secret brouillé (haché) pour chaque appareil, vos paramètres de langue et de niveau visé, et une copie de vos progrès : vos réponses, votre calendrier de révision et vos résultats d’examen. Aucun nom, aucun courriel, aucun ministère, aucun texte libre, et rien qui vous identifie.",
+    "held": "Un identifiant de compte aléatoire, un secret brouillé (haché) pour chaque appareil, vos paramètres de langue et de niveau visé, les étapes franchies et les avis de série déjà affichés, et une copie de vos progrès : vos réponses, votre calendrier de révision et vos résultats d’examen. Aucun nom, aucun courriel, aucun ministère, aucun texte libre, et rien qui vous identifie.",
     "neverTitle": "Ce que Palier ne conserve jamais",
     "neverIntro": "Ces éléments restent sur votre appareil, quel que soit le réglage :",
     "neverServer": "Le serveur ne conserve pas non plus votre adresse IP, sauf pour s’en servir un instant afin de limiter les abus, et rien ne relie une statistique anonyme sur un item à votre compte.",
@@ -929,5 +930,51 @@
     "openIssue": "Ouvrir un signalement sur GitHub",
     "notFoundTitle": "Page introuvable",
     "notFoundBody": "Il n’y a rien à cette adresse. La page a peut-être été déplacée ou le lien contient une erreur."
+  },
+  "engagement": {
+    "streak": "{count, plural, one {Série de # jour} other {Série de # jours}}",
+    "freezeTitle": "Nous avons gardé votre série",
+    "freezeBody": "Vous avez manqué une journée, et votre série a continué. Jusqu’à deux journées manquées par mois ne l’interrompent jamais.",
+    "share": "Partager",
+    "copy": "Copier pour partager",
+    "copied": "Copié. Collez-le où vous voulez.",
+    "shareFailed": "Ça n’a pas fonctionné, mais l’étape franchie reste la vôtre.",
+    "close": "Continuer",
+    "milestones": {
+      "first-exam": {
+        "title": "Votre premier examen simulé",
+        "body": "Un test d’entraînement complet, chronométré et noté selon les seuils publiés. Le premier est le plus difficile à commencer.",
+        "share": "Je viens de faire mon premier examen simulé complet sur Palier, une application d’entraînement gratuite et non officielle pour l’Évaluation de langue seconde fédérale."
+      },
+      "first-oral": {
+        "title": "Votre première séance orale",
+        "body": "Vous avez répondu à voix haute à un examinateur. C’est la partie que la plupart des gens remettent à plus tard, et pas vous.",
+        "share": "Je viens de faire ma première séance d’entraînement oral sur Palier, une application d’entraînement gratuite et non officielle pour l’Évaluation de langue seconde fédérale."
+      },
+      "items-answered": {
+        "title": "{count, number} questions répondues",
+        "body": "Chacune a nourri votre file de révision et votre tendance. Ça fait beaucoup de français.",
+        "share": "J’ai répondu à {count, number} questions d’entraînement sur Palier, une application d’entraînement gratuite et non officielle pour l’Évaluation de langue seconde fédérale."
+      },
+      "first-exam-at-c": {
+        "title": "Un examen simulé au niveau C",
+        "body": "Votre premier test d’entraînement noté au niveau C. C’est un résultat d’entraînement, pas un résultat officiel, mais c’est une preuve réelle.",
+        "share": "Je viens d’obtenir le niveau C à un examen simulé sur Palier, une application d’entraînement gratuite et non officielle pour l’Évaluation de langue seconde fédérale."
+      }
+    }
+  },
+  "library": {
+    "title": "Bibliothèque",
+    "intro": "De courts articles de référence sur les dix points d’expression écrite que Palier suit. Chacun présente la règle, les pièges que rencontre un rédacteur anglophone et des exemples.",
+    "skillHeading": "Expression écrite",
+    "readingLater": "Les articles sur la compréhension de l’écrit viendront après la version 1.0.",
+    "back": "Tous les articles",
+    "examples": "Exemples",
+    "insteadOf": "Au lieu de",
+    "write": "Écrivez",
+    "related": "À lire ensuite",
+    "practise": "S’exercer à l’expression écrite",
+    "readAbout": "Lire l’article « {subSkill} » dans la bibliothèque",
+    "newTab": "(s’ouvre dans un nouvel onglet)"
   }
 }

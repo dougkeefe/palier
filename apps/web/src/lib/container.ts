@@ -27,6 +27,10 @@ import type {
   PlanDailySessionRequest,
   PracticeTrendRequest,
   OralTotals,
+  Milestones,
+  MilestonesRequest,
+  StreakReport,
+  StreakReportRequest,
   ProgressReport,
   ProgressReportRequest,
   QueueForReviewRequest,
@@ -112,6 +116,10 @@ import {
   practiceTrendEvidence,
   oralTotals,
   progressReport,
+  markMilestoneShown,
+  milestones,
+  noteStreakFreeze,
+  streakReport,
   queueForReview,
   removeDevice,
   requestPairCode,
@@ -166,7 +174,7 @@ import type {
   WritingPrompt,
 } from "@palier/domain";
 import { parseExamProfileOrThrow, parseOralFillersOrThrow, parseWritingPromptsOrThrow } from "@palier/domain";
-import type { DayPlan, ExamResult, Preflight, SkillTrend, TrendEvidence } from "@palier/engine";
+import type { DayPlan, ExamResult, MilestoneId, Preflight, SkillTrend, TrendEvidence } from "@palier/engine";
 import {
   counterIdGenerator,
   fakeClock,
@@ -317,6 +325,12 @@ export type UseCases = {
   readonly progressReport: (request: ProgressReportRequest) => Promise<ProgressReport>;
   /** The progress summary's oral line: sessions ended and minutes spoken, on this device (§8.9). */
   readonly oralTotals: () => Promise<OralTotals>;
+  /** PRD §9's streak, on the device's days, and a freeze still to announce (D159). */
+  readonly streakReport: (request: StreakReportRequest) => Promise<StreakReport>;
+  readonly noteStreakFreeze: (request: { readonly day: string }) => Promise<void>;
+  /** PRD §9's milestones, and those not yet shown; each is shown once, across devices (D159). */
+  readonly milestones: (request: MilestonesRequest) => Promise<Milestones>;
+  readonly markMilestoneShown: (request: { readonly id: MilestoneId }) => Promise<void>;
   /** The data-rights trio [R11]: one action each (progress.md D61, D62). */
   readonly exportData: () => Promise<ExportDocument>;
   readonly importData: (request: ImportDataRequest) => Promise<ImportDataResult>;
@@ -548,6 +562,25 @@ function buildUseCases(ports: Ports): UseCases {
         attempts: ports.attempts,
       }),
     oralTotals: () => oralTotals({ oral: ports.oral }),
+    streakReport: (request) =>
+      streakReport(request, {
+        sessions: ports.sessions,
+        examRuns: ports.examRuns,
+        oral: ports.oral,
+        attempts: ports.attempts,
+        settings: ports.settings,
+        clock: ports.clock,
+      }),
+    noteStreakFreeze: (request) => noteStreakFreeze(request.day, { settings: ports.settings }),
+    milestones: (request) =>
+      milestones(request, {
+        items: ports.items,
+        examRuns: ports.examRuns,
+        oral: ports.oral,
+        attempts: ports.attempts,
+        settings: ports.settings,
+      }),
+    markMilestoneShown: (request) => markMilestoneShown(request.id, { settings: ports.settings }),
     exportData: () =>
       exportData({
         clock: ports.clock,

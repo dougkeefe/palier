@@ -67,4 +67,11 @@ describe("@palier/engine public surface", () => {
     expect(engine.TAPER_DAYS).toBeGreaterThan(0);
     expect(engine.SHORTEN_FACTOR).toBeLessThan(1);
   });
+
+  it("exports the streak, the local day and the milestones", () => {
+    expect(typeof engine.localDay).toBe("function");
+    expect(typeof engine.streak).toBe("function");
+    expect(typeof engine.milestonesReached).toBe("function");
+    expect(engine.MILESTONES).toContain("first-exam");
+  });
 });

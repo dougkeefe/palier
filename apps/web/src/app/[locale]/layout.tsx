@@ -13,6 +13,7 @@ import { ServiceWorkerRegistrar } from "../../components/ServiceWorkerRegistrar"
 import { SyncRunner } from "../../components/sync/SyncRunner";
 import { routing } from "../../i18n/routing";
 import { NONCE_HEADER } from "../../lib/csp";
+import { fontVariables } from "../../fonts/fonts";
 import { TRUSTED_TYPES_SCRIPT } from "../../lib/trusted-types";
 
 // The design system of record. Imported once here, ahead of the app's own
@@ -51,7 +52,7 @@ export default async function LocaleLayout({
   const t = await getTranslations("nav");
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={fontVariables}>
       <head>
         {/* In the head, so the Trusted Types policy exists before the chunk loader's first write. */}
         <script nonce={nonce} dangerouslySetInnerHTML={{ __html: TRUSTED_TYPES_SCRIPT }} />

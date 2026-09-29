@@ -4,8 +4,8 @@
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
-resolved** (D145, human, 29 September 2026), **Slice 3 merged (#47**; D146–D152), the relicense merged (#48, D153), and a
-**cleanup slice** is in flight (D154–D157; below). Phase 3's
+resolved** (D145, human, 29 September 2026), **Slice 3 merged (#47**; D146–D152), the relicense merged (#48, D153), the
+**cleanup slice** merged (#49; D154–D158), and **Slice 4 is built** (`dougkeefe/smoke-key-next-slice`; D159–D162). Phase 3's
 product pilot still runs beside it (Gate E). The history, oldest first: **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
@@ -40,8 +40,10 @@ runs at 1.0. **Phase 7 Slice 1 merged (#39)**, and **Slice 2, server lifecycle a
 (D138–D144): the retention job and storage alert, `GET /api/health`, the error states with the diagnostic bundle, and both
 "outlives its screen" defects. **Gate K is resolved** (D145): the human took the recommendation on all five questions and chose
 to build the authored-item intake. **Slice 3, content, the contribution path and data rights, merged (#47**; D146–D152).
-A **cleanup slice** asked for by the human comes before Slice 4 (`dougkeefe/dependabot-cleanup-slice`; D154–D157): the
-Dependabot queue and alerts, TypeScript 6, and the red nightly. **Slice 4, motion, engagement and the library, is next.**
+The **cleanup slice** asked for by the human merged (#49; D154–D158): the Dependabot queue and alerts, TypeScript 6, and
+the red nightly. **Slice 4, motion, engagement and the library, is built** (`dougkeefe/smoke-key-next-slice`; D159–D162): the
+streak with its silent freeze, the four milestone moments, the motion pass, self-hosted fonts and ten written-expression
+library articles. The nightly live smoke has run on a real key for the first time (session log). **Gate L is next.**
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -107,7 +109,7 @@ human for anything expensive.
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **deferred past 1.0** (decision gate resolved 28 September 2026, human, D131); built after Phase 7 if at all |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; a cleanup slice, D154–D157; Slice 4 next) |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 built, D159–D162; Gate L next) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -116,9 +118,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/yaounde` | **Cleanup slice** (human, 29 September 2026): the Dependabot queue and alerts, TypeScript 6, the red nightly (property timeouts, three sync-simulator seeds, duplicate issues), journey 4's flake, and stale bookkeeping here. | 29 September 2026 |
+| `dougkeefe/smoke-key-next-slice` | **Phase 7 Slice 4 — motion, engagement and the library** (D145): the streak with its silent freeze, the milestone moments, the motion pass, self-hosted fonts, ten written-expression library articles; and the smoke key's first nightly run. | 29 September 2026 |
 
-*(The prior rows — the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -217,52 +219,34 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132): **Slice 1 merged (#39)**, **Slice 2 merged (#45)**, **Gate K resolved** (D145), and **Slice 3 merged** (#47;
-D146–D152): the about page and privacy notice, the statement beside every band, the one-page PDF, device removal and the
-code's countdown, the shortcut sheet and the `lang` audit, and the authored-item intake. **The cleanup slice** (D154–D157)
-emptied the Dependabot queue, took TypeScript 6, and turned the nightly lane green. It is done, so the plan resumes here.
+Phase 7 (D132): **Slices 1–3 merged (#39, #45, #47)**, **Gate K resolved** (D145), the cleanup slice merged (#49), and
+**Slice 4 is built** (`dougkeefe/smoke-key-next-slice`; D159–D162): the streak with its silent freeze, the four milestone
+moments, the motion pass, self-hosted fonts and ten written-expression library articles. **Every buildable Phase 7 item is
+done.** What remains of 1.0 is the human's: Gate L, then Gate M.
 
 Phase 5's deferred cost check (D130) and the product pilot (Gate E, D97) still run beside it, both the human's.
 
-**Next: Slice 4 — motion, engagement and the library**, as Gate K ruled (D145). Scope:
-- **The streak with its silent freeze** (PRD §9).
-  - It counts local days with a completed session: `SessionStore`'s completed sessions, in the device's time zone
-    (`lib/time-zone.ts`).
-  - It is a pure `streak` in `@palier/engine`, with the freeze allowance handed in: up to two missed days a calendar
-    month. That allowance is a product constant beside `features/exam/rules.ts`, not the exam profile, since ADR 9 covers
-    exam rules.
-  - A `streakReport` use case sits in `@palier/app`.
-  - Home shows the streak. "We kept your streak" is said once after a freeze is used; that it was said is a synced setting.
-- **The milestone moments.** Four of them:
-  - the first mock exam;
-  - the first spoken session;
-  - 1,000 items;
-  - the first mock exam at C. Drills never give a band (§8.2, D64), so this milestone reads the exam.
+**Next: Gate L — the human reviews (human).** No agent slice is queued ahead of it. It is three reads:
+1. **R8's French review** by a fluent speaker, of every interface string (`apps/web/messages/fr.json`), with:
+   - the six workshop prompts (D107) and the bank's register (ADR 19);
+   - the about page and the privacy notice (D147);
+   - **the ten library articles** (`content/library/*.json`, D162): the prose, the examples, and each "instead of" sentence,
+     which must be wrong in exactly the way its note says;
+   - the new `engagement` and `library` namespaces (D159, D162), and the share texts, which leave the app.
+   Each correction is a content or message change; the parity and library tests hold the shape.
+2. **The VoiceOver and NVDA pass** on the core flows [R9]: onboarding, a drill with its feedback and the library link, a mock
+   exam and its results, the review queue, spoken practice, and home with a milestone moment open. A screen-reader user's pass
+   if one can be arranged.
+3. **The red-team read** of D136, and whether any path it did not try should be tried.
 
-  A pure `milestonesReached` in the engine works over facts the app gathers, and each milestone is shown once. The moment
-  is full screen, with Coco (`@palier/ui`'s `Mascot`). Its card is shared by the Web Share API as text and the app's URL,
-  with no personal data and no image, so no new dependency. Never in exam mode or on a results screen (PRD §10.1).
-- **Motion**:
-  - the band meter's fill;
-  - the milestone moment;
-  - §10.5's 120, 200 and 400 ms with its easing;
-  - off under `prefers-reduced-motion` and in `[data-mode="exam"]`.
-- **Self-hosted fonts (D65):** Figtree for headings, Inter for the interface and Source Serif 4 for passages. They are
-  woff2 files under the OFL, served same-origin through `next/font/local`, so the CSP needs no new origin. Lighthouse and
-  the bundle budget still hold.
-- **The library: ten written-expression articles**, one per sub-skill in the profile, in both languages.
-  - They are linked from a written-expression item's explanation, at `/library` and `/library/[subSkill]`.
-  - **They are structured content in `@palier/content` (`content/library/*.json`, with a Zod schema in `@palier/domain`),
-    not MDX.** The same pipeline as the bank and the prompts; no MDX toolchain as a new dependency. Record the deviation
-    from §7's "MDX".
-  - The agent drafts them. Their French is Gate L's.
+*Done:* exit criterion 1's accessibility and security halves, and the R8 half of criterion 2 ("both languages reviewed by a
+human"). Each defect found is fixed or filed, and recorded in a session-log entry. Then **Gate M** (public): the repo made
+public, an outside item submission [R13], the domain, §12.1's trademark check, and the full-volume bank (D54, D56).
 
-*Done:*
-- each surface in both locales, axe-clean on its states;
-- the streak's and the milestones' rules property-tested;
-- the fonts loaded under the strict CSP, with Lighthouse ≥ 95;
-- every written-expression explanation reaches its article;
-- *Next, decided* naming Gate L.
+**For the human, from Slice 4:**
+- **look at the milestone moment and Coco's cheering pose** (seed or reach a milestone; D159, D160) and the self-hosted type
+  (D161), and say whether either needs another pass before 1.0;
+- the share card's text names Palier as "free, unofficial" and the SLE: confirm that wording before the repo goes public.
 
 **For the human, from Slice 3:**
 - **read the about page and the privacy notice** (`/about`, `/privacy`; D147) in both languages, with Gate L's French review.
@@ -293,10 +277,8 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
 **Also for the human:**
 - **listen to the examiner's voice** (`tts-1`, "sage") in French, and say whether it will do or another voice should be data in
   `ai-models.json`;
-- add the `OPENAI_SMOKE_KEY` Actions secret (`docs/deploy.md`) and run the nightly workflow once by hand. The smoke now also
-  asks for one report, about two cents more a run. **Still not set** (29 September 2026): the only Actions secrets are
-  `RETENTION_DATABASE_URL` and `TELEMETRY_DATABASE_URL`, and every nightly so far has skipped the smoke, a skip reporting
-  success;
+- *(Done 29 September 2026: the `OPENAI_SMOKE_KEY` Actions secret is set, and the nightly ran by hand with it: the live smoke
+  passed, 15 completions all accepted first time, about US$0.19. Session log, Slice 4.)*
 - read the `generate`, `oral` and **`oralReport`** namespaces' French, with the rest of Phase 7's R8 review.
 
 **Named, not scheduled:**
@@ -619,17 +601,20 @@ Nothing is ticked without session-log evidence.
 - [~] PDF progress summary; JSON export and import round trip. **The round trip exists** (D61, D62; `data-rights.test.ts`,
   journey 6). **Slice 3, built on this branch** (D148): the one-page PDF (PRD §8.9) as `/progress` printed, both skills and the oral line,
   one page on Letter and A4. A trend *over time* is named, not scheduled
-- [ ] The motion and illustration pass: Coco, the milestone moments, the streak, the band meter fill, self-hosted fonts
+- [~] The motion and illustration pass: Coco, the milestone moments, the streak, the band meter fill, self-hosted fonts
   (D65). Slice 4: the streak (with its silent freeze) and the milestone moments are in 1.0; XP, levels and the countdown
-  are after 1.0 (Gate K, D145)
+  are after 1.0 (Gate K, D145). **Slice 4, built on this branch** (D159–D161): the streak and its one-time freeze note, the
+  four milestone moments with Coco cheering and a text-only share, the band meter's entrance fill, one motion switch, and
+  Inter, Figtree and Source Serif 4 self-hosted
 - [ ] Accessibility audit with VoiceOver and NVDA on the core flows, and a screen-reader user's pass if one can be arranged.
   Human (Gate L). **The agent's half is built on this branch, Slice 3**: PRD §11's shortcut sheet at `?` (D150) and the `lang` audit
   (D151)
 - [x] Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to leak the key.
   **Slice 1, merged (#39)** (D133–D137). Gate L's red-team read is still the human's (D132)
-- [ ] The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
+- [~] The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
   Slice 4: one article per written-expression sub-skill, ten, in both languages; reading's after 1.0 (Gate K, D145). The
-  articles' French is part of Gate L
+  articles' French is part of Gate L. **Slice 4, built on this branch** (D162): ten articles as structured JSON, not MDX, at
+  `/library`, linked from every written-expression explanation
 - [~] Observability: the client diagnostic bundle, the prefilled issue path, no error reporting service (ADR 15). **The
   item-report issue path exists** (Phase 2). **Slice 2, merged (#45)** (D140–D142): the diagnostic bundle, the error
   states with a prefilled issue, and `/api/health`. The realtime route's exclusion from Vercel logging moves with studio
@@ -659,8 +644,9 @@ Nothing is ticked without session-log evidence.
   statement in onboarding and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR template and the
   authored-item intake, the device-removal confirmation and pairing polish, the one-page PDF, the shortcut sheet and the
   `lang` audit.
-- [ ] **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted
-  fonts, the streak with its silent freeze, the milestone moments, and ten written-expression library articles.
+- [~] **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted
+  fonts, the streak with its silent freeze, the milestone moments, and ten written-expression library articles. **Built
+  29 September 2026** (`dougkeefe/smoke-key-next-slice`; D159–D162; session-log evidence).
 - [ ] **Gate L — the human reviews (human).** R8's French review, the VoiceOver and NVDA pass, and the red-team read.
 - [ ] **Gate M — public (human).** The repo made public, an outside item submission [R13], the domain, §12.1's trademark
   check, and the full-volume bank (D54), which stays sequenced to the end (D56).
@@ -5528,11 +5514,163 @@ devices; nightly lane, 100,000 seeds)
 - **Proven to bite:** with `main`'s `openai/errors.ts` built, the spec fails: the status "OpenAI did not accept this key."
   never appears. With the fix, it passes.
 
+### D159 — the streak counts every kind of session, on the device's day, and "said once" is a synced setting
+**Date:** 29 September 2026 · **Status:** accepted; Phase 7 Slice 4 (Gate K ruling 3, D145)
+
+- **What makes a day.** PRD §9 says "days with any completed session", but only a drill writes to `SessionStore`, so the
+  Next section's "`SessionStore`'s completed sessions" would have missed review, diagnostic, exam and oral days.
+  `streakReport` (`@palier/app`) counts:
+  - a completed drill (`Session.completedAt`);
+  - a submitted exam (`ExamRun.submittedAt`);
+  - an ended spoken session (`endedAt`), on this device only, since the `OralStore` never syncs;
+  - a review or diagnostic answer, since neither writes a session record.
+  A drill's bare answer (a drill left unfinished) and an exam attempt do not count on their own.
+- **The day is the device's.** The engine's `localDay(at, timeZone)` reads `Intl` by part; the use case takes the time zone
+  in the request and the clock as a dep. No `todayIn` helper was needed in `lib/time-zone.ts`, as the plan had guessed.
+- **The freeze** (`streak`, `@palier/engine`): walk back from today, where today still to do breaks nothing. A missed day is
+  frozen while fewer than the allowance are frozen **in that day's own calendar month**; otherwise the streak ends. A frozen
+  day keeps the streak but adds nothing to its length, and a freeze is kept only when an active day precedes it. Six
+  properties hold it: order and duplicates change nothing, the length never exceeds the active days, no month spends more
+  than its allowance, and one more active day or one more freeze never shortens it. **Proven to bite:** `>` for `>=` failed
+  the allowance property.
+- **The rules are product constants** (`features/engagement/rules.ts`: two freezes a month, 1,000 items), handed in as request
+  fields, not profile data: ADR 9 covers exam rules.
+- **"Said once" is a synced setting**, so a paired phone does not say it again:
+  - `streakFreezeNoticed` is the newest frozen day announced. It never moves back, since another device may have announced a
+    later one;
+  - `milestonesShown` is a `MilestoneId[]`.
+  Settings merge as "the local value wins" (D69), so two devices showing different milestones at the same moment can each
+  show one milestone once more. Accepted: it is a repeat celebration, never lost data. `/privacy` now says the server holds
+  them.
+- **The milestones** (`milestonesReached`, a threshold check over facts the app gathers):
+  - **"First mock exam at C" reads the exam, and counts C or above**, so an E counts. Drills never give a band (§8.2, D64).
+    Every submitted run is rescored, and a run the bank can no longer score is passed over, as `latestExamResult` does (D89);
+  - "1,000 items" counts every answer, exam attempts included;
+  - "first spoken session" is per device, as the oral store is.
+- **Shown on home only**, full screen through `Dialog`'s new `full` placement, so never in exam mode or on a results screen
+  (§10.1). The first unseen one is shown per visit; closing it, by its button or Escape, marks it.
+- **The share is text and the app's address**: the Web Share API where `canShare` allows it, else the clipboard with a status,
+  else no button. The text names the milestone, "free, unofficial" and the SLE, and nothing about the person. No image, so
+  no new dependency.
+- **One journey changed, and why.** The key-leak journey (`key-leak.spec.ts`) returns home after its spoken session, and
+  home now opens the first-oral moment, a modal, a beat after the page renders. Its next click was covered, and the medium
+  lane failed there. The moment was doing what §9 asks, so the journey now expects it and closes it as a user would. No
+  assertion about the key changed.
+
+### D160 — motion: three duration tokens, one switch for reduced motion and exam mode, and transform only
+**Date:** 29 September 2026 · **Status:** accepted; Phase 7 Slice 4
+
+- **The tokens are custom properties in `components.css`** (`--pl-motion-state` 120ms, `--pl-motion-panel` 200ms,
+  `--pl-motion-celebrate` 400ms, `--pl-ease`), not `tokens.ts`, whose type, drift guard and contrast test are about colours.
+  A fourth curve, `--pl-ease-spring`, is §10.5's "small spring", on the 400ms moments only.
+- **One switch replaces the class lists.** `*, ::before, ::after` get `animation: none !important; transition: none
+  !important` under `prefers-reduced-motion` and inside `[data-mode="exam"]`, so a new animation cannot be left out of
+  either. Reduced motion was a 0.01ms transition before; it is now none. Nothing listens for `transitionend`.
+  - `motion.test.ts` fails a literal duration or a keyframe that touches opacity, visibility or colour in either stylesheet.
+    **Proven to bite** with a `300ms` transition and an opacity keyframe.
+  - `motion.spec.ts` reads the computed styles in a real browser, both ways.
+- **What moves:** the band meter fills from empty when it appears (`scaleX`, transform only, since a fade is low-contrast text,
+  D65); a cheering Coco and the streak flame settle in with the spring.
+- **New in `@palier/ui`:** `Mascot`'s `cheer` pose, `StreakFlame` (decorative, outlined when today is still to do, never a
+  warning), and `Dialog`'s `full` placement, laid out only while open so a closed dialog stays `display: none`.
+
+### D161 — the fonts are committed woff2 files, and the service worker follows stylesheets to them
+**Date:** 29 September 2026 · **Status:** accepted; Phase 7 Slice 4. Resolves D65's deferral of self-hosted fonts
+
+- **The files are the Latin subsets of Inter, Figtree and Source Serif 4's variable fonts**, as Google Fonts serves them, fetched
+  once and committed under `apps/web/src/fonts/`, about 117 KiB together. Each has its OFL text beside it, and `SOURCES.md` gives its
+  URL and SHA-256, which `fonts.test.ts` checks. They are assets, not a dependency: nothing present supplied them, and no
+  font CDN is used at build or at run time (architecture.md §6.4).
+  - The subset covers every French letter, `œ`, `« »`, the curly apostrophe and the dashes. Only capital `Ÿ` falls outside
+    it, and renders in the fallback. The `unicode-range` is declared, so the browser knows.
+- **`next/font/local`** puts them on `<html>` as `--font-sans`, `--font-display` and `--font-serif`. **Its arguments must be
+  literals**: the loader refused a shared range constant at build, so the range is written out in each call.
+  - Inter and Figtree preload (§10.3's "the two above the fold"). Source Serif 4 does not, and falls back on Times New Roman's
+    metrics.
+  - Headings now use Figtree, which no rule named before.
+  - `.pl-passage` reads `var(--font-serif)`: D65's literal "Source Serif 4" would not have matched next/font's hashed family.
+- **Offline.** The worker's precache read URLs from the HTML only, so a face nobody preloads was never cached.
+  `staticAssetsInCss` follows each precached stylesheet's `url()`s, resolved against the stylesheet (`../media/…`).
+  **Proven to bite:** without it, the offline spec found no Source Serif file in the cache.
+- **The CSP is unchanged** (`font-src 'self'`). `csp-production.spec.ts` asserts all three faces load, from this origin only,
+  with zero violations, and that body text and headings compute to them.
+
+### D162 — the library is structured JSON, not MDX, with cited French marked for its `lang`
+**Date:** 29 September 2026 · **Status:** accepted; Phase 7 Slice 4 (Gate K ruling 4, D145). `docs/architecture.md` §4's
+table and §5's tree amended in place
+
+- **Not MDX** (§7 Phase 7 and architecture.md said MDX): `content/library/<subSkill>.json`, one per written-expression
+  sub-skill, under a Zod schema in `@palier/domain` (`library-article` in `CONTENT_SCHEMAS`). It is the same pipeline as the
+  bank and the prompts, and adds no MDX toolchain as a dependency.
+  - **`parseLibrary` refuses a library missing any sub-skill's article, or with two**, since every written-expression
+    explanation links to its sub-skill's page.
+  - **Proven to bite:** with one file removed, the content tests failed.
+- **Cited French inside the prose is marked `_like this_`** and renders as `<i lang="fr">`, so a screen reader reads a French
+  phrase in French inside an English paragraph (WCAG 3.1.2, the rule D151 applied). The parser refuses an unpaired marker, by
+  path. The examples carry the article's `lang` whole.
+  - **Residual:** an English phrase quoted inside the French prose (« take place ») is not marked `lang="en"`. It is short,
+    in quotation marks, and a second marker would be a markup language.
+- **The pages are server components** over `lib/library.ts`, so no article reaches the client's JavaScript. A link needs only
+  `features/library/links.ts`.
+- **The link from an explanation** is on every written-expression item: the drill's feedback (generated sets included) and
+  the exam review. **From a drill it opens a new tab**, with a hidden "opens in a new tab", so the session in progress is
+  never left. The exam review opens it in place.
+- **Offline:** `prepare-public.mjs` skipped every dynamic route. It now expands `library/[subSkill]` from the content's file
+  names, and stamps the articles into the worker's build hash. The offline spec opens an article nobody visited.
+- **The route lists** gained the library: Lighthouse (19 URLs), `csp-production.spec.ts`'s pages, and the titles journey.
+- **The articles are the agent's drafts**, French included, and are Gate L's to read. Reading's articles come after 1.0.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 29 September 2026 — `dougkeefe/smoke-key-next-slice` (Phase 7 Slice 4, D159–D162; the smoke key's first run)
+
+**The smoke key.** The human set `OPENAI_SMOKE_KEY` (`gh secret list`: set 2026-09-29T21:00Z). The nightly was dispatched on
+`main` by hand (run 36631552668), and **the live smoke ran on a real key for the first time and passed**:
+15 completions, all accepted on the first try; writing feedback US$0.029, item generation US$0.140, oral practice US$0.004,
+oral assessment US$0.021, about US$0.19 in all. Every configured model id is still listed. The item is struck under *Also
+for the human*.
+
+**Built** (Gate K's Slice 4, D145):
+- **The streak with its silent freeze** (D159):
+  - `localDay`, `streak` and `milestonesReached` in the engine;
+  - `streakReport`, `noteStreakFreeze`, `milestones` and `markMilestoneShown` in the app;
+  - the streak on today's plan, with "We kept your streak" said once, through a synced setting.
+- **The four milestone moments** (D159): full screen on home only, with Coco cheering, and a text-only share (Web Share, else
+  the clipboard).
+- **Motion** (D160): three duration tokens, the band meter's entrance fill, one switch for reduced motion and exam mode,
+  `StreakFlame`, `Mascot`'s `cheer` pose and `Dialog`'s `full` placement.
+- **Self-hosted fonts** (D161): Inter, Figtree and Source Serif 4, committed with their hashes and licences, and the service
+  worker follows stylesheets to them.
+- **The library** (D162): ten written-expression articles as structured JSON, not MDX, at `/library` and
+  `/library/[subSkill]`, with cited French marked for its `lang`, linked from every writing explanation, precached by name.
+- `/privacy` now says the server holds which milestones and streak notes were shown.
+- One journey changed (`key-leak.spec.ts`): it now closes the first-oral moment its spoken session earns (D159).
+
+Nothing is ticked `[x]`: Slice 4 is `[~]` until this merges. *Next, decided* is **Gate L**, the human's three reviews.
+
+**Evidence:**
+
+```
+pnpm verify                → check-types, lint, boundaries (467 + 304 modules, no violations),
+                             test: 234 files, 3485 passed, 8 todo; coverage thresholds met; exit 0
+CI=1 pnpm verify:medium    → integration 7 files, 51 passed; Playwright 93 passed (1.4m); exit 0
+  (first run: 1 failed, key-leak.spec.ts, the milestone moment covering the next click; the journey now closes it)
+pnpm --filter @palier/web bundle-size  → shared first-load JS 166.1 KB of 180.0 KB
+pnpm --filter @palier/web lighthouse   → 19 URLs, 95 runs, assertions pass; lowest medians perf 0.99, a11y 1.0;
+                                         /en/library and /fr/library/agreement 1.0 and 1.0
+gh workflow run nightly.yml --ref main (run 36631552668) → live smoke: success, 15 completions, 15 accepted first try
+engine engagement.ts                   → 100% statements, branches, functions and lines
+app use-cases/engagement.ts            → 100% branches; domain library*.ts → 100% branches
+proven to bite:
+  streak `spent > freezesPerMonth`     → "never freezes more than the allowance…" failed after 5 runs
+  a 300ms transition and an opacity keyframe in components.css → motion.test.ts: 2 failed
+  worker without staticAssetsInCss     → offline spec: no Source Serif woff2 in the cache (1 failed)
+  content/library/pronouns.json removed → library-content.test.ts: 4 failed
+```
 
 ### 29 September 2026 — `dougkeefe/dependabot-cleanup-slice` (cleanup slice, D154–D158)
 

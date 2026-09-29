@@ -21,8 +21,12 @@ system, not the application.
   rest fall back. `warning` is the tenth token, the exam clock's amber, because `accent` is
   decorative and ungated. `tokens.css` is generated: build the package, then write
   `renderTokensCss()` from `dist/tokens/css.js` over `src/styles/tokens.css`. The drift guard fails
-  until you do. Under `[data-mode="exam"]`, `components.css` switches every transition and
-  animation off. **`@media print` restores the light theme** on `:root` and on any `[data-theme]`,
+  until you do. **Motion is one switch, not a class list** (progress.md D160): `components.css`
+  turns every animation and transition off, with `!important`, for `*, ::before, ::after` under
+  `prefers-reduced-motion` and inside `[data-mode="exam"]`, so a new animation cannot be left out of
+  either. **Every duration is `--pl-motion-state` (120ms), `--pl-motion-panel` (200ms) or
+  `--pl-motion-celebrate` (400ms)**, with `--pl-ease` or, on a celebration, `--pl-ease-spring`;
+  `apps/web/src/app/motion.test.ts` fails a literal duration or a keyframe that fades. **`@media print` restores the light theme** on `:root` and on any `[data-theme]`,
   after the manual toggle and before the exam blocks, so a printout is always light (the progress
   summary, progress.md D145). It sits before the exam blocks, whose test finds the last `@media`.
 - **Accessibility is a build gate, not an audit** (ADR 13). New surfaces get an axe
@@ -39,7 +43,10 @@ system, not the application.
   Slice 3, **Timer** (presentation only: the tone arrives decided, with a glyph and words as well
   as colour, and the caller's once-a-minute announcement is the only live text) and **Dialog** (a
   native modal `<dialog>` opened with `showModal()`, labelled by its heading, with a `side`
-  placement for drawers. Focus goes back to the opener on close).
+  placement for drawers and a `full` one for a milestone moment. Focus goes back to the opener on
+  close), and, from Phase 7 Slice 4, **Mascot's `cheer` pose** (wings up, settling in with the
+  celebration spring) and **StreakFlame** (decorative; lit in `accent` when today is done, an
+  outline otherwise, never a warning).
 - **Nothing that carries text fades in.** An `opacity` animation makes its text low-contrast for
   its opening frames, which fails 1.4.3 while it lasts. The Sheet's first draft did, and axe
   caught it (progress.md D65). Animate `transform`, and respect `prefers-reduced-motion`.

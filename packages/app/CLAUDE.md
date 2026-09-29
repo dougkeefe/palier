@@ -187,6 +187,15 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   same line over the **whole** practice record (`AttemptStore.all()`), and `reviewQueue` resolves
   what is due now across both skills (D66). `oralTotals` is the summary's oral line: ended sessions and
   the engine's `speakingMs` over them, from the device-local `OralStore`, so this device only (D145).
+- **The streak and the milestones** (`use-cases/engagement.ts`, Phase 7 Slice 4, progress.md D159). A streak day is
+  any record that means a session was done: a completed drill, a submitted exam (`submittedAt`), an ended spoken
+  session (this device only) and **a review or diagnostic answer, since neither writes a `Session`**. A drill's
+  bare answer and an exam attempt do not count on their own. The day is the device's (`timeZone` in the request, the
+  engine's `localDay`), and the freeze allowance is a request field, since it is a product rule. **"We kept your
+  streak" and "shown" are synced settings** (`STREAK_FREEZE_NOTICED_KEY`, a `LocalDay` mark that never moves back;
+  `MILESTONES_SHOWN_KEY`, a `MilestoneId[]`), so each is said once across paired devices. The exam-at-C milestone
+  rescores every submitted run, counts **C or above** (`compareBands`), and passes over a run the bank can no longer
+  score, as `latestExamResult` does.
 - **A mock exam's result is never stored** (ADR 16). `rescoreExam` derives it from the stored run, whose
   form and `bandCuts` never change, and `submitExam` returns exactly that, so scoring is idempotent by
   construction and held to it by a property (Phase 3 exit criterion 4). **An exam attempt is a pure
