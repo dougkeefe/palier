@@ -5597,6 +5597,9 @@ D157 fix reverted → regression seeds 54693, 72951, 91998 fail (run.test.ts: 3 
 pnpm verify (with D158)    → 221 files, 3377 passed, 8 todo; exit 0
 key-states-production.spec.ts --project=offline → 1 passed; with main's openai/errors.ts built → 1 failed
   ("OpenAI did not accept this key." never shown)
+gh workflow run nightly.yml --ref dougkeefe/dependabot-cleanup-slice (run 36614291646, before D158)
+  → success: full property runs, Integration (100,000 simulator seeds), E2E every browser; the live smoke skipped
+    (no OPENAI_SMOKE_KEY)
 ```
 
 ### 29 September 2026 — `dougkeefe/noncommercial-license` (relicensed non-commercial, D153)
