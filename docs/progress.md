@@ -293,6 +293,10 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
 **Also for the human:**
 - **listen to the examiner's voice** (`tts-1`, "sage") in French, and say whether it will do or another voice should be data in
   `ai-models.json`;
+- add the `OPENAI_SMOKE_KEY` Actions secret (`docs/deploy.md`) and run the nightly workflow once by hand. The smoke now also
+  asks for one report, about two cents more a run. **Still not set** (29 September 2026): the only Actions secrets are
+  `RETENTION_DATABASE_URL` and `TELEMETRY_DATABASE_URL`, and every nightly so far has skipped the smoke, a skip reporting
+  success;
 - read the `generate`, `oral` and **`oralReport`** namespaces' French, with the rest of Phase 7's R8 review.
 
 **Named, not scheduled:**
@@ -5536,8 +5540,11 @@ Newest first. One entry per session that changed something. Never edit an older 
 - **Bookkeeping:**
   - the header and status row say Slice 3 (#47) and the relicense (#48) merged;
   - the scaffolding checklist names ADR 23's licences;
-  - the done human items are struck: private vulnerability reporting enabled (confirmed through the API), the smoke key set
-    (the live smoke passed on 28 and 29 September), and Dependabot watched.
+  - the done human items are struck: private vulnerability reporting enabled (confirmed through the API), and Dependabot
+    watched.
+  - This entry's first draft also struck the smoke key as set, because the 28 and 29 September live-smoke jobs read
+    "success". They had skipped: a skip reports success. The key is not set, and the item is back under *Also for the
+    human*.
 - **Not done:** the 36 merged `dougkeefe/*` branches on origin, and the "delete head branches" setting, which was left to the
   human.
 
