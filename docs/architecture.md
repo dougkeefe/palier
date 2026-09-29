@@ -73,7 +73,7 @@
                     └────────────────────────┘
 ```
 
-Three things to notice. First, the item bank is a static asset, so the core product is a CDN-served experience with no backend dependency and no cold starts. Second, the only server code in the paid path is a stateless token minter small enough to review in one sitting, which is also the only place the user's key touches our infrastructure. Third, sync is on the side of the architecture, never in front of it: every read the session engine makes comes from IndexedDB, so a sync outage is invisible to someone studying.
+Three things to notice. First, the item bank is a static asset, so the core product is a CDN-served experience with no backend dependency and no cold starts. *(Amended 28 September 2026, ADR 22, `progress.md` D133: the bank and the chunks are still static, but each page's HTML now renders per request so the strict CSP can carry a nonce. Studying still depends on no backend, since the service worker serves every page offline.)* Second, the only server code in the paid path is a stateless token minter small enough to review in one sitting, which is also the only place the user's key touches our infrastructure. Third, sync is on the side of the architecture, never in front of it: every read the session engine makes comes from IndexedDB, so a sync outage is invisible to someone studying.
 
 ---
 
@@ -293,7 +293,7 @@ The exception is realtime voice. OpenAI's Realtime API over WebRTC requires an e
 
 Design:
 
-- `POST /api/realtime/secret` on a Vercel Edge Function.
+- `POST /api/realtime/secret` on a Vercel Edge Function. *(After 1.0: studio mode is deferred past it, `progress.md` D131, so this route is not built for 1.0 and the exception stays dormant.)*
 - The user's key arrives in an `Authorization` header, is used once to call OpenAI, and the ephemeral token is returned. The key is never written to disk, never placed in a log line, never attached to an error report, and never held past the request.
 - The function sets `export const runtime = 'edge'`, disables request logging for that route, and returns only the ephemeral token, its expiry, and the session id.
 - A prominent note in settings states plainly that this single call is the one time the key transits our infrastructure, why it is necessary, and that the route's source is short enough for anyone to read in full.
@@ -303,7 +303,7 @@ Rejected alternatives, recorded so the decision is not relitigated: WebSocket fr
 
 ### 6.4 Additional controls
 
-- Strict CSP with no inline script, `connect-src` limited to self, `api.openai.com` and the bank origin, and Trusted Types where supported. XSS is the real threat to a browser-held key, so this is the main mitigation.
+- Strict CSP with no inline script, `connect-src` limited to self, `api.openai.com` and the bank origin, and Trusted Types where supported. XSS is the real threat to a browser-held key, so this is the main mitigation. *(Implemented 28 September 2026, Phase 7 Slice 1, ADR 22, `progress.md` D133–D136: a per-request nonce set by `src/proxy.ts`, Trusted Types enforced with one `default` policy, and the bank on this origin, so `connect-src` is `'self' https://api.openai.com`. The nonce is why pages render per request.)*
 - No third-party scripts at all. No analytics SDK, no tag manager, no font CDN.
 - Subresource integrity on anything not same-origin.
 - Dependabot plus a lockfile audit gate in CI, since a supply chain compromise of a client dependency is the other realistic path to the key.
@@ -687,7 +687,7 @@ Small by design.
 
 | Route | Runtime | Auth | Purpose |
 | --- | --- | --- | --- |
-| `POST /api/realtime/secret` | Edge | none, user key in header | Mint an ephemeral realtime token. Stateless, no logging |
+| `POST /api/realtime/secret` | Edge | none, user key in header | Mint an ephemeral realtime token. Stateless, no logging. After 1.0 (D131) |
 | `POST /api/telemetry` | Edge | none | Opt-in anonymous item outcomes, batched, rate limited by IP hash |
 | `GET /api/health` | Edge | none | Build version, bank version |
 | `POST /api/account/device` | Edge | none, creates identity | Register a device, create an anonymous account on first call, return the account id |
@@ -704,7 +704,7 @@ answers **202**, is rate-limited per IP hash at 120 batches an hour, and answers
 
 *Amended 24 September 2026 (ADR 21):* every account and sync route runs on **Node**. Next.js 16 deprecates the Edge runtime, and the Postgres driver needs Node. The wire protocol, including every status code, is the table in `packages/testing/src/msw/sync-handlers.ts`. With no database configured, every sync route answers 503.
 
-Everything else is static: the app shell, the bank bundles, and the library content.
+Everything else is static: the app shell, the bank bundles, and the library content. *(Amended 28 September 2026, ADR 22: the app shell's HTML renders per request, for the CSP's nonce. The bank bundles and the chunks stay static.)*
 
 ---
 
@@ -731,7 +731,7 @@ Sync being on by default is a real change to this posture and the specification 
 - **Third parties:** OpenAI, on the user's own account and under their own agreement with OpenAI, which the onboarding states plainly. Vercel as host. Nothing else.
 - **Security headers:** strict CSP as in 6.4, HSTS, `X-Content-Type-Options`, `Referrer-Policy: no-referrer`, `Permissions-Policy` allowing microphone on the app origin only.
 - **Dependency hygiene:** lockfile committed, `npm audit` gate in CI, Dependabot, no dependency added without an entry in `docs/adr/`.
-- **Disclosure:** a `SECURITY.md` with a contact address and a 90 day coordinated disclosure commitment.
+- **Disclosure:** a `SECURITY.md` with a contact address and a 90 day coordinated disclosure commitment. *(Written 28 September 2026, `progress.md` D135. The contact is GitHub's private vulnerability reporting rather than an email address, so no personal address is published.)*
 - **Data rights:** export everything to JSON in one tap, import it back, delete everything locally and server-side in one tap with a confirmation.
 
 Note on the Privacy Act: this is a personal, non-governmental project holding no government information, so the Act does not apply to it. Keep it that way. Do not accept departmental data, do not add SSO against a GC identity provider, and do not add any feature where a manager can see an employee's results.
@@ -770,7 +770,7 @@ Summary table. The full strategy, including the tier model, tooling, coverage ta
 | Accessibility | axe-core in Playwright on every route and on each session state; keyboard-only traversal tests of the three core flows; contrast validation computed from the token set | Fails the build |
 | i18n | Key parity between `en.json` and `fr.json`; a lint rule banning string literals in JSX; a pseudo-locale render to catch truncation | Fails the build |
 | E2E | Playwright: onboarding to first drill, full mock exam including resume after reload, review queue, key entry and validation, data export and import, oral practice mode with a mocked API | Fails the build |
-| Realtime | Cannot be meaningfully mocked end to end. A manual pre-release checklist covering mic permission, phase transitions, disconnection recovery and cost accounting | Manual, per release |
+| Realtime | Cannot be meaningfully mocked end to end. A manual pre-release checklist covering mic permission, phase transitions, disconnection recovery and cost accounting | Manual, per release once studio mode ships (after 1.0, D131) |
 
 ---
 
@@ -846,7 +846,7 @@ learning value at roughly a tenth of the cost, which is why section 8.5 describe
 
 ## 20. Open questions for you
 
-1. Should studio mode ship at all in v1, or is practice mode plus a very good post-session report the better first bet, given cost and complexity?
+1. Should studio mode ship at all in v1, or is practice mode plus a very good post-session report the better first bet, given cost and complexity? *(Decided 28 September 2026, `progress.md` D131: not in v1. Practice mode and its report ship at 1.0, and studio mode follows it.)*
 2. Do you want a pre-launch pilot with a small group for calibration? With a machine-authored bank this moves from nice to have to close to necessary, since telemetry is the only real evidence the items work. It does raise the question of whether recruiting colleagues creates workplace optics you would rather avoid while the CRA move is in progress.
 3. Will you do the 5 percent sample review yourself, or is the pipeline expected to be fully unattended? If unattended, say so explicitly in the about page and lean harder on the report control and auto-retirement.
 4. Which second model family do you want for the stage 4 review gate? Cross-provider is meaningfully stronger than cross-model within one provider, and it is the difference between a real gate and a model marking its own homework.

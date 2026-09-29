@@ -10,7 +10,7 @@ import { Link } from "../../i18n/navigation";
  * which supply the heading level and the actions, since one ends a form and the other a page.
  *
  * The copy is honest about ADR 3 as it stands: nothing through Phase 5 sends the key
- * anywhere but OpenAI. The realtime exception joins this copy when Phase 6 builds it.
+ * anywhere but OpenAI. The realtime exception joins this copy when studio mode is built, after 1.0 (D131).
  */
 export function KeyOffer({
   heading,

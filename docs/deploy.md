@@ -19,7 +19,7 @@ sync as unavailable (ADR 21, `architecture.md` §11).
 | A Vercel project, root directory `apps/web` | Hosts the app (ADR 11) | Vercel dashboard |
 | A serverless Postgres, e.g. Neon | The sync replica (ADR 21, `architecture.md` §9.2) | The provider's dashboard |
 | `DATABASE_URL` | The pooled connection string. postgres.js runs with `prepare: false`, so a pooler is fine | Vercel → Settings → Environment Variables, **Production only** |
-| `RATE_LIMIT_SALT` | 32 random bytes as hex (`openssl rand -hex 32`). It keys the per-IP rate-limit HMAC. Without it each serverless instance picks its own salt, and the limits stop holding across instances | Vercel, Production (and Preview, if a preview ever gets a database) |
+| `RATE_LIMIT_SALT` | 32 random bytes as hex (`openssl rand -hex 32`). It keys the per-IP rate-limit HMAC. Without it each serverless instance picks its own salt, and the limits stop holding across instances. **A production deployment with `DATABASE_URL` and no salt now fails at its migrate step** (`progress.md` D137), before any migration runs | Vercel, Production (and Preview, if a preview ever gets a database) |
 
 | `TELEMETRY_DATABASE_URL` | A **read-only** connection string to the same database, for the monthly item-statistics job (`progress.md` D94). It only ever runs `select … from telemetry_events`. Without it, the workflow skips with a notice | GitHub → Settings → Secrets and variables → Actions |
 | `OPENAI_SMOKE_KEY` | An OpenAI key **of its own**, with a small monthly limit, for the nightly live smoke (`progress.md` D112). Each run spends about US$0.15, so about US$4.50 a month at one run a night. Without it, the job skips with a notice | GitHub → Settings → Secrets and variables → Actions |
@@ -246,10 +246,25 @@ back. That is why migrations have to be backward-compatible, as described above.
 without redeploying, remove `DATABASE_URL` from Production and redeploy: the app keeps working
 offline-first, and sync answers 503.
 
+## The strict CSP (Phase 7 Slice 1)
+
+Every page carries a `Content-Security-Policy` with a fresh nonce and Trusted Types enforced
+(`apps/web/src/lib/csp.ts`, ADR 22, `progress.md` D133–D134). So **every page renders per request**:
+it is a function invocation on Vercel, not a static file on the CDN, and it answers
+`Cache-Control: private, no-store`. The bank, the chunks and `sw.js` are still static. After a deploy:
+
+1. Open `/en/home` with the browser's console open. There must be no "Content Security Policy" or
+   "Trusted Types" message, and the page must work (the plan and the buttons appear).
+2. `curl -sI https://palier-virid.vercel.app/en | grep -i content-security-policy` shows the header,
+   with `'nonce-…'`, `require-trusted-types-for 'script'` and `connect-src 'self' https://api.openai.com`.
+   Two requests show two different nonces.
+
+A console message on a real page means the policy is wrong for the app: roll back (above) and add the
+page to `e2e/csp-production.spec.ts`, which holds every page to zero.
+
 ## Not yet built
 
 - The 90-day tombstone purge and the 180-day inactive-account deletion (`architecture.md` §9.4, §12).
   Nothing creates a tombstone yet, and no account can be 180 days old, so these are Phase 7's
   scheduled jobs (`progress.md` D78).
-- A strict Content-Security-Policy with nonces, and the tier-11 check on the built output (Phase 7).
 - The maintainer CI job that refreshes `pricing.json` from OpenAI's prices (`architecture.md` §8.6; Phase 7, `progress.md` D103).

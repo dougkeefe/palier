@@ -13,7 +13,7 @@
  *   cannot resume, because an examiner's conversation cannot be replayed.
  *
  * There is no time-cap reason: a session completes at its scenario's total, and
- * architecture.md §8.6's 25-minute disconnect is a studio-mode guard (Phase 6).
+ * architecture.md §8.6's 25-minute disconnect is a studio-mode guard (Phase 6, after 1.0: D131).
  */
 export const ORAL_END_REASONS = [
   "completed",

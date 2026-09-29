@@ -1,7 +1,10 @@
 # Palier: Progress
 
 **Last updated:** 28 September 2026
-**Current phase:** **Phase 3 (Exams and item statistics) is open.** **Phase 2 is complete**: the last
+**Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
+resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
+slices and three gates (D132), and **Slice 1, security hardening, is in flight** on `dougkeefe/next-progress-slice-v7`. Phase 3's
+product pilot still runs beside it (Gate E). The history, oldest first: **Phase 2 is complete**: the last
 exit criterion, "shared with a handful of people", was confirmed by the human on 24 September 2026. They
 paired two real browsers on https://palier-virid.vercel.app and shared the link. Phase 3 is sliced as
 four, mirrored in `implementation-plan.md` §7 (D79). **Slices 1–3 merged (#22, #23, #25); Gate D is resolved
@@ -28,8 +31,9 @@ test extended to audio, which ticks exit criterion 3. It merged (#35). **Slice 3
 report at `/practice/oral/report`, the fixes into tomorrow's plan (closing D35), a session's cost from its own ledger rows,
 and the stability eval. Gate J is deferred by the human, so pronunciation reads "not assessed". **Exit criterion 4 is met** (D128): the scorer
 gave the same band on every criterion in all five live reports. **Gate I passed** (D129, human). **Phase 5 is complete on four of its five criteria**: the fifth, the real session's cost
-check, is deferred by the human (D130). Phase 6's decision gate is open. See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
-phase (2–6) is built against the baseline committed bank, now `content/bank/v2`, and the content gate
+check, is deferred by the human (D130). Phase 6's decision gate was then resolved the same day: **studio mode waits until
+after 1.0** (D131). See [Next, decided](#next-decided). The **full-volume published bank** (D54) is still a standing human gate, **sequenced to the end** (D56): every feature
+phase before 1.0 (2–5) is built against the baseline committed bank, now `content/bank/v3`, and the content gate
 runs at 1.0.
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
@@ -95,8 +99,8 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | not started |
-| 7 Polish and hardening | 1.0 | 2–3 wk | not started |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **deferred past 1.0** (decision gate resolved 28 September 2026, human, D131); built after Phase 7 if at all |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 in flight) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -105,9 +109,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-progress-slice-v6` | **Phase 5 closed — the funded runs' follow-up.** `assessOral.json` and `assessOral-stability.json` were recorded by the human and imported into the replay gate, and the stability eval passed (criterion 4, D128). Gate I passed (D129). Criterion 2 is deferred by the human (D130). **Built; pending merge.** | 28 September 2026 |
+| `dougkeefe/next-progress-slice-v7` | **Phase 6's gate resolved (D131), Phase 7 planned (D132), and Phase 7 Slice 1, security hardening**: the strict CSP and Trusted Types on the built output, the dependency audit gate and Dependabot, `SECURITY.md`, `RATE_LIMIT_SALT` failing the deploy, and the deliberate attempt to leak the key. | 28 September 2026 |
 
-*(The prior rows — Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -206,32 +210,47 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-**Phase 5 is complete on four of its five criteria** (D128–D130). The fifth, the real session's cost check, is deferred by the
-human, and its runbook is in `docs/deploy.md`. The product pilot still runs beside it (Gate E, D97).
+**Phase 6's decision gate is resolved: studio mode is deferred past 1.0** (28 September 2026, human, D131). Phase 7 follows
+Phase 5 directly and is planned as four slices and three gates (D132), mirrored in `implementation-plan.md` §7. **Slice 1,
+security hardening, is built** on `dougkeefe/next-progress-slice-v7` (D133–D137). Phase 5's deferred cost check (D130) and the product
+pilot (Gate E, D97) still run beside it, both the human's.
 
-**Next: Phase 6's decision gate (human).** Is studio mode built for 1.0, and on what? Nothing is to be built before it is
-decided, since Phase 6's work breakdown depends on the answer.
+**Next: Phase 7 Slice 2 — server lifecycle and observability.** No new product surface beyond the error states, so no gate
+before it. Scope:
+- **The retention job** (architecture.md §9.4, §12; D78 moved it here): accounts whose `lastActiveAt` is over 180 days old
+  are deleted with their devices and documents, and tombstones (`sync_documents.deleted`) over 90 days old are hard-deleted.
+  The decision (which rows, as of which instant) is a pure function under `apps/web/src/server/`, unit-tested at each
+  boundary; the run is a script beside `scripts/item-statistics.mjs` and a scheduled workflow on the
+  `item-statistics.yml` pattern: it skips when its secret is missing and needs a role that can delete. Integration-tested
+  on PGlite.
+- **The storage alert:** the same job reads the database size and fails its run, which notifies, at 60% and at 80% of the
+  plan's storage (§9.4). The plan's storage is a workflow input, not a number in code.
+- **`GET /api/health`** (architecture.md §10): the build and bank versions, and whether the database answers, with no
+  identifiers. Its handler joins `handlers.ts` with a test per branch.
+- **Error states:** `error.tsx`, `global-error.tsx` and `not-found.tsx` under `apps/web/src/app/` (framework file
+  conventions, already on the root `eslint.config.mjs` default-export exemption list, so it does not grow). Each offers the
+  **client diagnostic bundle** (architecture.md §16: build version, bank version, browser, the sanitised error, never the
+  key or any user text) copied to the clipboard, and a prefilled issue built beside `reportIssueUrl` in
+  `apps/web/src/lib/report.ts`. The sanitiser is pure and tested against the key-leak sentinel. Both locales; axe on each
+  state.
+- **The two "outlives its screen" defects** (Named below): an in-flight flag a remount reads, for a generation or a report
+  (finding 13) and for a spoken session (D116).
 
-- **The evidence at the gate:** Gate I passed, so practice mode's reports land (D129). Practice mode's placeholder estimate is
-  about US$0.0076 a minute, and GPT-Live is published at US$0.05 a minute (D130, D113).
-  - At that price, studio mode is affordable. The gate's premise, "measured realtime cost is high", probably does not hold.
-  - The question is whether realtime is worth building, and whether GPT-Live can carry it.
-- **GPT-Live is the leading candidate.** D113's three checks come before committing to it:
-  1. French recognition and a French voice at C-level quality, which needs the human's ear;
-  2. the session length limit, against the 22-minute simulation and the 25-minute cap;
-  3. whether a short-lived browser credential exists.
+*Done:* the job retires exactly the rows past each boundary and none before it, on PGlite; the health route and the error
+states are tested and axe-clean; `pnpm verify` and `CI=1 pnpm test:e2e` green. Then **Gate K** (Phase 7's UI and content
+direction, human, D132) opens before Slices 3 and 4.
 
-  Checks 2 and 3 are documentation reads an agent session can make on request, and check 1 is the human's.
-- **Adopting it needs a new ADR superseding ADR 3's mechanism**, never an edit. ADR 3's *revisit when*, "OpenAI documents a
-  browser-direct realtime auth path", has not been met, since the Live docs keep the key on a backend (D113).
-- **If studio mode is built,** Phase 6 is planned as slices mirrored in `implementation-plan.md` §7, as D79, D97 and D113 did.
-  **If not,** Phase 7 (polish and hardening, 1.0) is next, and studio mode waits until after 1.0.
+**For the human, from Slice 1:**
+- **enable GitHub's private vulnerability reporting** on the repository (Settings → Security), which `SECURITY.md` names as
+  the reporting route (D135);
+- **read the red-team result** (D136) and say whether any path it did not try should be tried;
+- watch the first **Dependabot** pull requests and the audit step on `main` (D135).
 
 **Gate J, still open (human):** confirm the pronunciation model and its price. OpenAI's pricing page listed, on 27 September
 2026, audio-capable chat models priced per million audio tokens, such as `gpt-audio-mini` at US$10 in. Chat-completions audio
 input takes WAV or MP3 only, and the recording is WebM/Opus. So Gate J's slice is: a `pronounce` role and a method on
 `AiProvider`, the recording converted to WAV in the browser (Web Audio, no new dependency), the opt-in on the pre-flight, off by
-default and asked each session, and the key-leak test's opt-in half, ticked and unticked (D113, D122). It does not block Phase 6's gate.
+default and asked each session, and the key-leak test's opt-in half, ticked and unticked (D113, D122). It does not block Phase 7.
 
 **Also for the human:**
 - **listen to the examiner's voice** (`tts-1`, "sage") in French, and say whether it will do or another voice should be data in
@@ -277,7 +296,8 @@ last exit criterion.
   **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026; **Gate D** (exam UI
   direction, D84), **Gate E** (the pilot runs on the baseline bank, D97) and **Gate F** (Phase 4 UI
   direction, D97) on 25 September 2026; **Gate G** (the billing check, session log) on 26 September 2026; **Gate H**
-  (Phase 5 direction, D113) on 27 September 2026; **Gate I** (the oral report, D129) on 28 September 2026.
+  (Phase 5 direction, D113) on 27 September 2026; **Gate I** (the oral report, D129) and **Phase 6's decision gate** (studio
+  mode deferred past 1.0, D131) on 28 September 2026.
 
 Standing human items:
 - pointing `palier.dougkeefe.com` at the deployment;
@@ -529,19 +549,84 @@ pronunciation offered as a per-session opt-in.
   it at nightly strength. It was proven to bite: stamping every turn phase 0 failed all five session types (session
   log, 27 September 2026, `dougkeefe/next-progress-slice-v5`)
 
-### Phase 6: Oral, studio mode
-
-**Decision gate before starting.** If phase 5's reports land well and measured realtime cost is high, shipping 1.0 without studio mode is the honest answer. Record that call here with its evidence. **Noted 27 September 2026 (D113):** GPT-Live's published US$0.05 a minute probably removes the "cost is high" premise. It is the leading candidate, and adopting it needs an ADR superseding ADR 3's mechanism, plus the checks D113 lists.
-
-- [ ] Session establishes in under 2.5 seconds from tap to first word
-- [ ] Disconnection mid-session recovers or fails cleanly with the transcript preserved
-- [ ] Manual realtime checklist (`architecture.md` §14) passes on Chrome, Safari, Firefox, desktop and mobile
-
 ### Phase 7: Polish and hardening — 1.0
+
+**Opened 28 September 2026** (`dougkeefe/next-progress-slice-v7`), directly after Phase 5, because studio mode is deferred past 1.0
+(D131). The `implementation-plan.md` §7 work breakdown, expanded on start, with what already exists ticked and pointed at.
+Nothing is ticked without session-log evidence.
+
+**Work breakdown (§7)**
+
+- [~] Device list and revocation UI, pairing polished. **The list, remove and pairing by code exist** (Phase 2 Slice 2, D72:
+  `SyncSettings.tsx`, `removeDevice`, journey 8). Missing: a confirmation before a device is removed, the pair code's
+  countdown and copy, and this device noticing it was removed elsewhere. Slice 3
+- [ ] Retention job for inactive accounts (180 days) and the 90-day tombstone purge, the storage alerts, the aggregation
+  path (architecture.md §9.4; D78 moved both jobs here). Slice 2. The aggregation path is the 60% response and is written
+  as a runbook step, not built, until the alert first fires
+- [~] PDF progress summary; JSON export and import round trip. **The round trip exists** (D61, D62; `data-rights.test.ts`,
+  journey 6). Missing: the one-page PDF (PRD §8.9), by print stylesheet. Slice 3
+- [ ] The motion and illustration pass: Coco, the milestone moments, the streak, the band meter fill, self-hosted fonts
+  (D65). Slice 4, as Gate K decides
+- [ ] Accessibility audit with VoiceOver and NVDA on the core flows, and a screen-reader user's pass if one can be arranged.
+  Human (Gate L). An agent builds PRD §11's shortcut sheet and audits the `lang` attributes beforehand, in Slice 3
+- [~] Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to leak the key.
+  **Slice 1, built on this branch** (D133–D137)
+- [ ] The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
+  Slice 4, scoped by Gate K; the articles' French is part of Gate L
+- [~] Observability: the client diagnostic bundle, the prefilled issue path, no error reporting service (ADR 15). **The
+  item-report issue path exists** (Phase 2). Missing: the diagnostic bundle, the error states and `/api/health`. Slice 2.
+  The realtime route's exclusion from Vercel logging moves with studio mode (D131)
+- [~] Content: the about page, the non-affiliation statement in both languages, the privacy notice, the contribution guide
+  with the originality attestation, the PR template. **The footer statement and a two-paragraph about page exist** (Phase 0,
+  Phase 2). Slice 3, after Gate K
+- [ ] Full French review of every interface string by a fluent speaker, with the workshop prompts (D107) and the bank's
+  register (ADR 19). Human (Gate L)
+
+**Completion slices (D132).** Four slices and three gates, mirroring `implementation-plan.md` §7 Phase 7 "Completion slices".
+**Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
+
+- [~] **Slice 1 — Security hardening, no new UI.** The strict CSP and Trusted Types on the built output, the dependency audit
+  gate and Dependabot, `SECURITY.md`, `RATE_LIMIT_SALT` failing the deploy, and the deliberate attempt to leak the key.
+- [ ] **Slice 2 — Server lifecycle and observability.** The retention job and the storage alert, `/api/health`, the error
+  states with the diagnostic bundle, and the two "outlives its screen" defects.
+- [ ] **Gate K — Phase 7's UI and content direction (human).** The privacy notice's and about page's wording, where the
+  non-affiliation statement appears, whether PRD §9's streak, XP and milestones are in 1.0, the library's 1.0 scope, and the
+  PDF summary's shape. Gates Slices 3 and 4.
+- [ ] **Slice 3 — Content, the contribution path and data rights.** The about page and privacy notice, the statement in
+  onboarding and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR template, the device-removal
+  confirmation and pairing polish, the one-page PDF, the shortcut sheet.
+- [ ] **Slice 4 — Motion, engagement and the library**, as Gate K decides.
+- [ ] **Gate L — the human reviews (human).** R8's French review, the VoiceOver and NVDA pass, and the red-team read.
+- [ ] **Gate M — public (human).** The repo made public, an outside item submission [R13], the domain, §12.1's trademark
+  check, and the full-volume bank (D54), which stays sequenced to the end (D56).
+
+**Exit criteria** (the actual gate)
 
 - [ ] Every gate green, no known accessibility defects, no known security defects
 - [ ] Both languages reviewed by a human [R8]
 - [ ] Repo public, licences in place, contribution path tested by someone else submitting an item [R13]
+
+### Phase 6: Oral, studio mode — after 1.0
+
+**Decision gate before starting.** If phase 5's reports land well and measured realtime cost is high, shipping 1.0 without studio mode is the honest answer. Record that call here with its evidence. **Noted 27 September 2026 (D113):** GPT-Live's published US$0.05 a minute probably removes the "cost is high" premise. It is the leading candidate, and adopting it needs an ADR superseding ADR 3's mechanism, plus the checks D113 lists.
+
+**The call, 28 September 2026 (human, D131): studio mode is deferred past 1.0.** The section sits after Phase 7 for that
+reason; its number is kept so the cross-references hold. The evidence:
+- **Gate I passed** (D129): practice mode's report is one a user would act on, so 1.0 has an oral feature without realtime.
+- **Cost was not the reason.** Practice mode's estimate is about US$0.0076 a minute against GPT-Live's US$0.05 (D130).
+- **D113's checks, read by an agent session on 28 September 2026:**
+  1. French: the Live API's voice table lists English and Portuguese voices only. No French voice is documented.
+  2. The session length: a limit exists (a session carries `expires_at` and can close as `expired`), but its value is not
+     published.
+  3. A browser credential: none. The server exchanges the browser's offer at `POST /v1/live/sessions` with the key.
+- **ADR 3 stands, dormant.** A deferral is not "the feature is dropped", so its *revisit when* is not met.
+
+**What reopens it:** a French voice documented and heard by the human at C-level quality, or a documented browser-direct
+credential, or 1.0 shipped.
+
+- [ ] Session establishes in under 2.5 seconds from tap to first word
+- [ ] Disconnection mid-session recovers or fails cleanly with the transcript preserved
+- [ ] Manual realtime checklist (`architecture.md` §14) passes on Chrome, Safari, Firefox, desktop and mobile
 
 ### Phase 8: English mirror
 
@@ -556,7 +641,7 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 
 | # | Requirement | Phase | Status |
 | --- | --- | --- | --- |
-| R1 | Practises all three tested skills | 2, 5, 6 | reading and written expression practised end to end (24 September 2026); oral is Phases 5–6 |
+| R1 | Practises all three tested skills | 2, 5 (6 after 1.0) | reading and written expression practised end to end (24 September 2026); **oral in practice mode** since Phase 5 (28 September 2026, Gate I, D129). Studio mode is after 1.0 (D131) |
 | R2 | Format and register match the real tests | 1 | not started |
 | R3 | Mock exams mirror published structure and cuts | 3 | **satisfied for reading and written expression** (25 September 2026): goldens at every cut (Slice 1), a form per variant at its exact counts, time and cuts (Slice 2), and all four variants runnable and scored in the app (Slice 3). The bank's French stays synthetic until the full-volume run (D54) |
 | R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams too: journey 3 finishes and submits a full exam with the network off and reads its results offline (25 September 2026) |
@@ -4710,11 +4795,227 @@ merged, none critical. The human chose to fix all of them.
   GPT-Live is published at US$0.05 a minute, so practice mode's estimate is about a seventh of it. The recalibration can
   move this figure, but no plausible error closes a gap of that size.
 
+### D131 — Phase 6's decision gate: studio mode is deferred past 1.0, and Phase 7 follows Phase 5
+**Date:** 28 September 2026 · **Status:** accepted (human decision); resolves Phase 6's decision gate; supersedes D113's
+"What GPT-Live changes" items 3 and 5 as forward plans, and D130's "Phase 6's decision gate opens"
+
+- **The human deferred studio mode past 1.0** and opened Phase 7 next. They also asked that every document be brought into line
+  so later sessions follow this order. The agent recommended it on the evidence below.
+- **D113's checks 2 and 3 were documentation reads, made by this session on 28 September 2026:**
+  - **The session length.** The Live API has a limit. A session carries `expires_at` and can close with reason `expired`
+    ("The session reached its duration limit"), but no value is published. So it would have been measured on a first
+    session against the 22-minute simulation and the 25-minute cap. Sources: developers.openai.com/api/docs/guides/live-conversations
+    and learn.microsoft.com/en-us/azure/foundry/openai/gpt-live-reference.
+  - **A short-lived browser credential.** None exists. "Keep the key on the server": the server exchanges the browser's SDP
+    offer at `POST /v1/live/sessions` with the project key. Source: developers.openai.com/api/docs/guides/live.
+  - **Check 1, French, is the human's ear, but the documents already weigh on it.** The voice table lists English and
+    Portuguese voices only. No French voice is documented for a French C-level rehearsal.
+- **Why defer, when cost is not the reason.** Gate I passed (D129), so 1.0 has an oral feature. Practice mode's estimate is
+  about a seventh of GPT-Live's price (D130), and the gate's premise, "measured realtime cost is high", did not hold. What decided
+  it is that the leading candidate has no documented French voice and no browser credential, and that Phase 7 is what 1.0 is
+  waiting on.
+- **ADR 3 is unchanged and dormant.** Its *revisit when* is "OpenAI documents a browser-direct realtime auth path, or the
+  feature is dropped". Neither has happened, since deferring studio mode is not dropping it. No ADR is written or superseded.
+- **What this moves, and where it is noted:**
+  - `implementation-plan.md` §7's Phase 6 note, the §8 R1 row, the §9 timeline and the §11 risk row (taken);
+  - product-requirements.md §8.6, §16 and §17 question 4, and architecture.md §6.3, §10, §14 and §20 question 1, each noted in
+    place;
+  - D100's "the realtime exception joins the copy when Phase 6 builds `/api/realtime/secret`" and D116's 25-minute guard now
+    mean after 1.0. Two code comments say so (`KeyOffer.tsx`, `oral-session.ts`);
+  - Phase 7's observability item "the realtime route excluded from Vercel logging" moves with studio mode.
+- **What reopens it:** a French voice documented and heard by the human at C-level quality, a documented browser-direct
+  credential, or 1.0 shipped.
+
+### D132 — Phase 7 is planned as four slices and three gates, mirrored in two documents
+**Date:** 28 September 2026 · **Status:** accepted
+
+- **The same scoped exception D79, D97 and D113 made:** `implementation-plan.md` §7 gains Phase 7 "Completion slices", and this
+  file mirrors them. Keep the two in sync.
+- **The survey first.** An agent session read the tree against §7's ten items on 28 September 2026. Five are partly built and
+  are ticked `[~]` with pointers: the device list and pairing, the JSON round trip, the item-report issue path, the footer
+  statement and the about page. Nothing exists for the rest.
+- **The order is built work first, then the human's direction, then the human's reviews:**
+  1. **Slice 1 — security hardening, no new UI.** First, because it changes no product surface and needs no direction, and
+     because XSS is the real threat to a browser-held key (architecture.md §6.4).
+  2. **Slice 2 — server lifecycle and observability.** Its only surfaces are error states.
+  3. **Gate K — the UI and content direction (human).** It asks what Gate A, D and F asked: adopt the PRD as written or revise
+     it. It covers the privacy notice and about page's wording, where the statement appears, PRD §9's streak, XP and
+     milestones in 1.0 or not, the library's 1.0 scope, and the PDF's shape.
+  4. **Slice 3 — content, the contribution path and data rights.**
+  5. **Slice 4 — motion, engagement and the library**, as Gate K decides.
+  6. **Gate L — the human reviews:** R8's French, VoiceOver and NVDA, and the red-team read.
+  7. **Gate M — public:** the repo, an outside submission, the domain, the trademark check, and the full-volume bank (D54, D56).
+- **Exit criterion 1's "no known security defects"** cannot be ticked by the agent that built the hardening. Slice 1 gives the
+  evidence; Gate L's red-team read is the human's.
+
+### D133 — the strict CSP is nonce-based, so every page renders per request (ADR 22)
+**Date:** 28 September 2026 · **Status:** accepted (human decision on the spike's evidence); Phase 7 Slice 1
+
+- **The spike came first, on the built output**, as the plan said. What it found:
+  - Next 16 writes two inline `self.__next_f.push(…)` scripts into every page, so `script-src 'self'` stops hydration;
+  - `experimental.sri` adds `integrity` to the external chunks and leaves the inline scripts alone;
+  - hashing the inline scripts would need a second build to bake per-route headers, and a difference between the two
+    builds would break hydration in production;
+  - a nonce through `src/proxy.ts` gave zero violations on all 19 routes.
+- **The human chose nonces with per-request rendering** over static pages with build-time hashes, and over
+  `'unsafe-inline'`. **ADR 22** records it, because architecture.md said "the app shell is static". It is amended in
+  place.
+- **Built:**
+  - `lib/csp.ts`: a pure policy builder and `withContentSecurityPolicy`, one test per directive and per dev branch;
+  - `proxy.ts`: it composes that with next-intl, which forwards the request's headers to the render
+    (`NextResponse.next({ request: { headers } })`), so Next sees the nonce;
+  - the layout reads `x-nonce`, and `generateStaticParams` is gone.
+- **Deliberate choices in the policy:**
+  - **no `'strict-dynamic'`**, which would trust any origin a trusted script loads from;
+  - **`style-src 'self'`**, since the built pages have no inline style;
+  - **the bank is same-origin**, so `connect-src` is `'self' https://api.openai.com`;
+  - `media-src blob:` is for the examiner's voice and the recording.
+- **`next dev` is relaxed** (`'unsafe-eval'`, inline styles, `ws:`, no Trusted Types), so the hermetic lane runs a
+  policy but not the strict one. The strict one is held on the build by `e2e/csp-production.spec.ts`: both locales,
+  every page, every script nonced, zero violations, and a fresh nonce per response.
+- **What it cost, measured:**
+  - bundle 165.9 KB of 180 (was 165.7);
+  - E2E 63 passed, the offline journeys among them, since the service worker caches each page with its own header;
+  - Lighthouse: the session log has the figures.
+- Pages answer `Cache-Control: private, no-store`, a function invocation per view. `docs/deploy.md` gains the post-deploy
+  check.
+
+### D134 — Trusted Types enforced: one default policy, passed through unchanged, and zod's code generation off
+**Date:** 28 September 2026 · **Status:** accepted
+
+- **`require-trusted-types-for 'script'` and `trusted-types default`** are enforced in production.
+- **The spike's violations came from three places:**
+  - Turbopack's chunk loader assigning `script.src`;
+  - `serviceWorker.register`;
+  - zod 4's `allowsEval` probe, `Function("")`.
+- **The policy is `lib/trusted-types.ts`**, a self-contained installer serialised into one inline, nonced script in the
+  layout's `<head>`. It is the app's only inline script:
+  - a script URL passes only if it is this origin's `/_next/static/` or `/sw.js`;
+  - there is no HTML or script factory, so `innerHTML`, `eval` and `Function` stay refused.
+- **A defect the E2E suite found, recorded because it is not obvious.** The first policy returned the URL made absolute.
+  Every page loaded with zero violations, but every production journey failed, because the container never became
+  ready.
+  - Turbopack finds a loaded chunk by its `src` attribute's text, so a lazily imported chunk waited forever.
+  - The policy now returns its input unchanged, after checking it, and a unit test holds that.
+  - The zero-violations spec cannot catch this class of fault. The production journeys can, and they did.
+- **zod's `jitless` is set in `src/instrumentation-client.ts`**, Next's file that runs before any app code.
+  - A `z.config` in `container.ts` came too late, because some module in the graph parses as it loads.
+  - The file sets `globalThis.__zod_globalConfig` without importing zod. zod reads that object when it loads, so zod
+    stays out of the shared first-load JS.
+  - That global is zod's internal hook, not a documented API. If a zod upgrade stops reading it, the E2E gate fails on
+    the first page that parses, which is where it should be caught.
+  - The server's handlers keep the fast path.
+
+### D135 — the supply chain: the audit gate, Dependabot, and `SECURITY.md` through GitHub's private reporting
+**Date:** 28 September 2026 · **Status:** accepted
+
+- **`pnpm audit --prod --audit-level=high`** is a step in the fast job, outside its timed window, since it calls the
+  registry. It covers production dependencies only, because dev tooling never ships to a browser that holds a key.
+- **Two false positives are ignored, with the reason in `pnpm-workspace.yaml`.**
+  - `pnpm audit` names the private `@palier/content` workspace by its directory, `content`, at 0.0.0. It then matches
+    that against the unrelated npm package `content` (GHSA-x6wp-rfwh-hcx7, GHSA-5854-jvxx-2cg9).
+  - No package of that name is in the lockfile.
+- **The whole tree, dev tooling included, has three high advisories**, all under `@lhci/cli`: `tmp` <0.2.6 and
+  `extract-zip` ≤2.0.1 (twice), through `inquirer` and `@puppeteer/browsers`. They are dev-only and run only on CI's
+  Lighthouse step, so they are recorded, not gated. Dependabot will propose the updates.
+- **`.github/dependabot.yml`:** npm weekly, with minor and patch grouped and each major its own pull request;
+  github-actions monthly.
+- **`SECURITY.md`:**
+  - the reporting route, the 90-day coordinated disclosure architecture.md §12 asks for, and the scope;
+  - the key's protections stated honestly, including ADR 3's dormant exception and the one thing a CSP cannot stop,
+    a running script navigating the page away.
+- **One deviation from §12:** it asks for "a contact address", and the route is GitHub's private vulnerability reporting
+  instead, so no personal address is published. **The human must enable it** in the repository's settings.
+
+### D136 — the deliberate attempt to leak the key, written as tests the policy must stop
+**Date:** 28 September 2026 · **Status:** accepted; Gate L's red-team read is the human's (D132)
+
+- **Two red-team tests in `e2e/csp-production.spec.ts`**, on the production build.
+- **The injected tag.** A script tag written through `page.addScriptTag`, inline or from another origin, does not run.
+- **Code already running** in the page (`page.evaluate`) tries each way to run more script: a written inline script, a
+  foreign script, a `data:` script, and HTML with an `onerror`. Each is refused by Trusted Types.
+- **It also tries each way to send the sentinel key to another origin:** `fetch`, `sendBeacon`, an image, a websocket
+  and a form post. Each is refused before it leaves.
+  - The reports name `connect-src`, `img-src`, `form-action` and Trusted Types.
+  - Nothing reaches the attacker's origin. That is recorded where a request would be answered, since Chromium also
+    reports a request that the policy then blocks on the page's `request` event.
+- **Not tried, and why:** DevTools evaluation is exempt from the policy's eval check, so `eval` and `Function` prove
+  nothing there. The header test holds `'unsafe-eval'` out, and zod's refused probe (D134) was the page's own `Function`.
+- **Proven to bite, twice, each reverted:**
+  - with `script-src 'self' 'unsafe-inline'`, no Trusted Types and `connect-src *`, all five tests failed;
+  - with only `connect-src *`, the red team failed on `fetch: "ran"`.
+- **What a CSP cannot stop:** script that is already running navigating the top-level page to another origin, with the
+  key in the URL. `navigate-to` never shipped in any browser. The defence is that no script the app did not ship can run,
+  and `SECURITY.md` says so.
+
+### D137 — a missing `RATE_LIMIT_SALT` fails the production deploy, never a request
+**Date:** 28 September 2026 · **Status:** accepted; closes D78's deferred item
+
+- D78 left "a missing salt fails loudly" to Phase 7. It gave its reason: failing the running sync service over it would
+  trade a weaker limit for an outage.
+- **`migrateDatabase` now throws before any migration** on a production deploy (`VERCEL_ENV=production`) that has a
+  `DATABASE_URL` and no salt, or an empty one. It is the step the build command already runs.
+  - A preview, a person migrating by hand, and a deploy with no database are not held to it.
+  - `db.ts` keeps its runtime fallback.
+- **If Production's `RATE_LIMIT_SALT` was never set, the next production deploy fails.** That is the intent. The
+  runbook's environment table says so.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 28 September 2026 — `dougkeefe/next-progress-slice-v7` (Phase 6's gate resolved; Phase 7 planned; Phase 7 Slice 1, security hardening)
+
+**Phase 5 closed had merged as #38**, so its In-flight row was replaced by this branch's in the first commit.
+
+**Human decisions this session:**
+- **Phase 6's decision gate: studio mode is deferred past 1.0**, and Phase 7 is next (D131). This session first made
+  D113's documentation checks 2 and 3. The Live API has a duration limit it does not publish, and no short-lived browser
+  credential. Its voice table lists no French voice. The human also asked that every document be aligned, and it is: this
+  file, `implementation-plan.md` §7–§11, the PRD §8.6, §16 and §17, architecture.md §6.3, §10, §14 and §20, and two code
+  comments.
+- **The CSP mechanism: nonces with per-request pages** (D133, ADR 22), chosen on the spike's evidence over static pages
+  with build-time hashes and over `'unsafe-inline'`.
+
+**Planned:** Phase 7 as four slices and three gates (D132), mirrored in `implementation-plan.md` §7. The §7 breakdown is
+expanded above, with what already existed ticked `[~]`.
+
+**Built, Slice 1** (D133–D137):
+- the strict CSP (`lib/csp.ts`, `proxy.ts`, the layout's nonce);
+- Trusted Types with one default policy (`lib/trusted-types.ts`);
+- zod jitless in `instrumentation-client.ts`;
+- `e2e/csp-production.spec.ts`: every page in both locales and the red team;
+- the audit step and Dependabot;
+- `SECURITY.md`;
+- `RATE_LIMIT_SALT` failing a production deploy;
+- ADR 22, and `apps/web/CLAUDE.md`'s invariants.
+
+No new dependency.
+
+**Evidence** (after the last code change, on a fresh production build):
+
+```
+pnpm verify          → check-types, lint, boundaries (451 + 237 modules, no violations),
+                       test: 210 files, 3178 passed, 8 todo; coverage thresholds met
+CI=1 pnpm test:e2e    → 63 passed (1.1m) — the 58 before, and csp-production.spec.ts's 5
+pnpm --filter @palier/web bundle-size → shared first-load JS 165.9 KB of 180.0 KB (was 165.7)
+pnpm --filter @palier/web lighthouse  → 17 URLs × 5 runs, every assertion passed;
+                       lowest median performance 0.99, accessibility 1.00 on all, max CLS 0
+pnpm audit --prod --audit-level=high  → 2 high, both ignored (the `content` false positive, D135); exit 0
+git diff packages/engine/src/__fixtures__ → empty
+```
+
+**Proven to bite** (each reverted, then rebuilt):
+- `script-src 'self' 'unsafe-inline'`, no Trusted Types and `connect-src *` → all 5 CSP tests failed;
+- only `connect-src *` → the red team failed on `fetch: "ran"`.
+
+**Found by the suite and fixed** (D134): a Trusted Types policy returning absolute URLs left every lazily imported chunk
+waiting. Nine production journeys failed on a disabled "Continue", with zero violations reported.
+
+**Ticked:** none. Slice 1 is `[~]` until it merges, and exit criterion 1's security half waits on Gate L's red-team read
+(D132). *Next, decided* names Slice 2.
 
 ### 28 September 2026 — `dougkeefe/next-progress-slice-v6` (Phase 5 closed: the stability recording, Gate I, criterion 2 deferred)
 

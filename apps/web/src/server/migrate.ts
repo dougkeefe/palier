@@ -28,6 +28,22 @@ export const migrationDecision = (env: MigrationEnv): MigrationDecision => {
   return { run: true, url };
 };
 
+/**
+ * **A production deployment with a database must carry `RATE_LIMIT_SALT`** (progress.md
+ * D78, D137). Without it `db.ts` salts the per-IP limits with a random value per process,
+ * and on serverless that is a salt per instance, so no limit holds across instances. The
+ * running service keeps that fallback, because failing every request over it would trade a
+ * weaker limit for an outage; the deploy is where it fails loudly instead. A preview and a
+ * person migrating by hand are not the running service, and a deploy with no database
+ * serves no rate-limited route, so neither is held to it.
+ */
+export const missingProductionSecret = (env: MigrationEnv): string | null => {
+  const production = env.VERCEL_ENV === "production" && env.DATABASE_URL !== undefined && env.DATABASE_URL !== "";
+  if (!production) return null;
+  if (env.RATE_LIMIT_SALT === undefined || env.RATE_LIMIT_SALT === "") return "RATE_LIMIT_SALT";
+  return null;
+};
+
 /** Apply every pending migration in `folder` to the database at `url`. */
 export type ApplyMigrations = (url: string, folder: string) => Promise<void>;
 
@@ -39,8 +55,16 @@ export type MigrateDeps = {
   readonly folder?: string;
 };
 
-/** Migrate when `migrationDecision` says so; resolves to whether it did. A failed migration rejects, failing the deploy. */
+/**
+ * Migrate when `migrationDecision` says so; resolves to whether it did. A failed migration
+ * rejects, failing the deploy, and so does a production deploy missing its salt, before any
+ * migration runs.
+ */
 export const migrateDatabase = async (deps: MigrateDeps): Promise<boolean> => {
+  const missing = missingProductionSecret(deps.env);
+  if (missing !== null) {
+    throw new Error(`${missing} is not set for this production deployment. Set it in the project's environment (docs/deploy.md).`);
+  }
   const decision = migrationDecision(deps.env);
   if (!decision.run) {
     deps.log(`Skipping migrations: ${decision.reason}.`);
