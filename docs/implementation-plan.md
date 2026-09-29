@@ -1075,17 +1075,21 @@ direction, then the human's reviews.
   90-day-old tombstones (architecture.md §9.4), with the storage alert at 60% and 80% on the same scheduled run; `GET
   /api/health`; the error states with the client diagnostic bundle and a prefilled issue (architecture.md §16); and the two
   "outlives its screen" defects `progress.md` names. *Done:* the job retires exactly the rows past each boundary on PGlite, and
-  the error states are tested and axe-clean. **Status: built 28 September 2026** (`progress.md` D138–D144), with finding 13's wipe half, and
+  the error states are tested and axe-clean. **Status: merged (#45; `progress.md` D138–D144)**, with finding 13's wipe half, and
   an unknown path's 404 rendered inside the layout, since Next's error shell cannot run under the strict CSP (D141).
 - **Gate K — Phase 7's UI and content direction (human).** Adopt the PRD as written or revise it first, as Gates A, D and F
   did: the privacy notice and about page, where the non-affiliation statement appears, whether §9's streak, XP and milestones
-  are in 1.0, the library's 1.0 scope, and the PDF summary's shape. Gates Slices 3 and 4.
+  are in 1.0, the library's 1.0 scope, and the PDF summary's shape. Gates Slices 3 and 4. **Status: resolved 29 September 2026
+  (`progress.md` D145)**: the PRD adopted as recommended on all five, and the authored-item intake added to Slice 3.
 - **Slice 3 — Content, the contribution path and data rights.** The about page and privacy notice, the statement in onboarding
   and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR template, the device-removal confirmation and
-  pairing polish, the one-page PDF summary, and PRD §11's shortcut sheet. *Done:* each surface in both locales, axe-clean on its
-  states, with the contribution path documented end to end.
-- **Slice 4 — Motion, engagement and the library**, as Gate K decides: the motion and illustration pass, self-hosted fonts, the
-  §9 mechanics if they are in, and the MDX library linked from item explanations.
+  pairing polish, the one-page PDF summary (a print stylesheet over `/progress`), PRD §11's shortcut sheet, and the authored-item
+  intake content-factory.md §5 describes (`content/authored/`, a contributor on the provenance, taken in at stage 4). *Done:* each
+  surface in both locales, axe-clean on its states, with the contribution path documented end to end. **Status: built
+  29 September 2026** (`progress.md` D146–D152).
+- **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted fonts,
+  §9's streak with its silent freeze and the milestone moments (XP, levels and the countdown after 1.0), and the MDX library,
+  ten written-expression articles in both languages, linked from item explanations (reading's after 1.0).
 - **Gate L — the human reviews.** The French review of every string, the workshop prompts and the bank's register [R8]; the
   VoiceOver and NVDA pass [R9]; the red-team read. *Done:* exit criterion 1's accessibility and security halves and the R8 half.
 - **Gate M — public.** The repo made public and an outside item submission [R13], the domain, the trademark check, and the

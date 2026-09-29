@@ -50,6 +50,7 @@ describe("@palier/engine public surface", () => {
     expect(typeof engine.startOralSession).toBe("function");
     expect(typeof engine.stepOralSession).toBe("function");
     expect(typeof engine.fluencyMetrics).toBe("function");
+    expect(typeof engine.speakingMs).toBe("function");
   });
 
   it("exports the spend meter, the cap and the pre-flight estimate", () => {

@@ -153,6 +153,38 @@ describe("itemSchema", () => {
       itemSchema.safeParse({ ...aValidItem(), difficulty: 0.7 }).success,
     ).toBe(false);
   });
+
+  it("accepts an authored item crediting its contributor by handle", () => {
+    const credited = aValidItem({ provenance: { origin: "authored", contributor: "octo-cat42" } });
+    expect(itemSchema.safeParse(credited).success).toBe(true);
+  });
+
+  it("accepts an authored item with no contributor, which validate() flags instead, so older banks stay valid", () => {
+    expect(itemSchema.safeParse(aValidItem({ provenance: { origin: "authored" } })).success).toBe(true);
+  });
+
+  it.each([
+    ["a full name, which is personal information", "Jean Tremblay"],
+    ["an email address", "jean@example.ca"],
+    ["a leading hyphen", "-octocat"],
+    ["a trailing hyphen", "octocat-"],
+    ["two hyphens in a row", "octo--cat"],
+    ["the empty string", ""],
+    ["more than 39 characters", "a".repeat(40)],
+  ])("rejects a contributor that is not a handle: %s", (_name, contributor) => {
+    const result = itemSchema.safeParse(aValidItem({ provenance: { origin: "authored", contributor } }));
+    expect(result.success).toBe(false);
+  });
+
+  it("names the handle rule when it rejects a contributor", () => {
+    const result = itemSchema.safeParse(aValidItem({ provenance: { origin: "authored", contributor: "Jean Tremblay" } }));
+    expect(reasons(result)).toMatch(/public handle such as a GitHub username/);
+  });
+
+  it("accepts a 39-character handle, GitHub's longest", () => {
+    const result = itemSchema.safeParse(aValidItem({ provenance: { origin: "authored", contributor: "a".repeat(39) } }));
+    expect(result.success).toBe(true);
+  });
 });
 
 describe("passageSchema", () => {
@@ -197,6 +229,16 @@ describe("passageSchema", () => {
     expect(
       passageSchema.safeParse({ ...aValidPassage(), docType: "tweet" }).success,
     ).toBe(false);
+  });
+
+  it("accepts a hand-authored passage crediting its contributor by handle", () => {
+    const credited = aValidPassage({ source: { kind: "original", contributor: "octo-cat42" } });
+    expect(passageSchema.safeParse(credited).success).toBe(true);
+  });
+
+  it("rejects a passage contributor that is not a handle", () => {
+    const result = passageSchema.safeParse(aValidPassage({ source: { kind: "original", contributor: "jean@example.ca" } }));
+    expect(reasons(result)).toMatch(/public handle such as a GitHub username/);
   });
 });
 

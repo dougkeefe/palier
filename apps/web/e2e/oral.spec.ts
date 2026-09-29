@@ -107,6 +107,7 @@ test("a spoken session: the level check, the pre-flight, the question voiced, tw
   const report = page.getByRole("region", { name: "Your report" });
   await expect(report.getByText("Level B", { exact: true })).toHaveCount(5);
   await expect(report.getByText("Not assessed", { exact: true })).toBeVisible();
+  await expect(report.locator(".app-nonaffiliation")).toContainText("not affiliated");
   await expect(report.getByRole("link", { name: "Practise agreement in written expression" })).toBeVisible();
   await expect(report.getByRole("link", { name: "Practise inference in reading" })).toBeVisible();
   await expect(report.getByRole("heading", { name: "Five useful words you did not use" })).toBeVisible();

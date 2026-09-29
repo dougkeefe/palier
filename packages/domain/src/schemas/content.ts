@@ -7,6 +7,7 @@ import { WRITING_REGISTERS } from "../writing-prompt.js";
 import {
   bandSchema,
   contentStatusSchema,
+  contributorSchema,
   examModeSchema,
   idSchema,
   isoSchema,
@@ -54,6 +55,9 @@ export const itemProvenanceShape = z.strictObject({
     .optional(),
   reviewedBy: z.string().min(1).optional(),
   reviewedAt: isoSchema.optional(),
+  // Optional, so every bank published before it stays valid; validate() requires it of
+  // an authored item (content-factory.md §5).
+  contributor: contributorSchema.optional(),
 });
 
 export const itemOptionShape = z.strictObject({
@@ -151,6 +155,7 @@ export const passageShape = z.strictObject({
       licence: z.enum(LICENCES).optional(),
       licenceNote: z.string().min(1).optional(),
       transformation: z.string().min(1).optional(),
+      contributor: contributorSchema.optional(),
     })
     .check((ctx) => {
       // "Provenance is not optional... the licensing posture only holds if this

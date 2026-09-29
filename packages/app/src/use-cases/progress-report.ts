@@ -1,7 +1,7 @@
 import type { ScoredSkill } from "@palier/domain";
-import { type SkillTrend, type SubSkillTally, calculateTrend, subSkillBreakdown } from "@palier/engine";
+import { type SkillTrend, type SubSkillTally, calculateTrend, speakingMs, subSkillBreakdown } from "@palier/engine";
 
-import type { AttemptStore, ItemRepository } from "../ports/index.js";
+import type { AttemptStore, ItemRepository, OralStore } from "../ports/index.js";
 import { PRACTICE_MODES } from "./practice-trend.js";
 
 /**
@@ -42,5 +42,31 @@ export const progressReport = async (
     bySubSkill: subSkillBreakdown(request.skill, practice, items),
     answered: practice.length,
     msAnswering: practice.reduce((sum, a) => sum + a.msToConfirm, 0),
+  };
+};
+
+/**
+ * The oral line of the progress summary (product-requirements.md §8.9): "oral sessions and
+ * minutes spoken". A session counts once it has ended, however it ended, since one still
+ * running has no settled length. `msSpoken` is the engine's `speakingMs` over every session,
+ * so a typed answer adds nothing: it was not spoken.
+ *
+ * Read from the device-local `OralStore`, so it covers this device only, as the transcripts
+ * do (architecture.md §9.4); the screen says so.
+ */
+export type OralTotals = {
+  readonly sessions: number;
+  readonly msSpoken: number;
+};
+
+export type OralTotalsDeps = {
+  readonly oral: OralStore;
+};
+
+export const oralTotals = async (deps: OralTotalsDeps): Promise<OralTotals> => {
+  const ended = (await deps.oral.all()).filter((session) => session.endedAt !== null);
+  return {
+    sessions: ended.length,
+    msSpoken: ended.reduce((sum, session) => sum + speakingMs(session.turns), 0),
   };
 };

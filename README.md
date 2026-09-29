@@ -62,6 +62,13 @@ fails the lint on anything else. `strict`, `noUncheckedIndexedAccess` and
 
 See [`AGENTS.md`](AGENTS.md) for the full working rules.
 
+## Contributing
+
+Items, passages and code are all welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md): it
+opens with the rule that matters most (every item is original, with no real test material),
+then shows how to write an item in `content/authored/`, the quality bar it must clear, and
+what happens to it after you open a pull request.
+
 ## Licence
 
 The application **code** is licensed under the MIT licence ([`LICENSE`](LICENSE)). The

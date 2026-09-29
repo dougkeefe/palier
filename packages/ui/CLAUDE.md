@@ -22,7 +22,9 @@ system, not the application.
   decorative and ungated. `tokens.css` is generated: build the package, then write
   `renderTokensCss()` from `dist/tokens/css.js` over `src/styles/tokens.css`. The drift guard fails
   until you do. Under `[data-mode="exam"]`, `components.css` switches every transition and
-  animation off.
+  animation off. **`@media print` restores the light theme** on `:root` and on any `[data-theme]`,
+  after the manual toggle and before the exam blocks, so a printout is always light (the progress
+  summary, progress.md D145). It sits before the exam blocks, whose test finds the last `@media`.
 - **Accessibility is a build gate, not an audit** (ADR 13). New surfaces get an axe
   assertion on their *states* — panel open, dialog focused — not the initial render alone.
 - Logic (formatters, band-meter geometry, timer tone classes, keyboard handling, registry

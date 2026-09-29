@@ -11,7 +11,10 @@ import { EXAM_OVERRIDES, TOKENS, type ThemeName, type TokenName, type TokenOverr
  *      asks for it.
  *   3. `[data-theme="light"]` / `[data-theme="dark"]` come next, so a manual
  *      toggle (equal specificity to `:root`) wins over the OS preference.
- *   4. The exam set, `[data-mode="exam"]`, last, in the same order: light, then the
+ *   4. `@media print` puts the light theme back on the page and on any manual toggle:
+ *      paper is white, and the progress summary is printed (progress.md D145). Same
+ *      specificity as what it overrides, and later, so it wins.
+ *   5. The exam set, `[data-mode="exam"]`, last, in the same order: light, then the
  *      OS dark preference, then the manual toggle. It is set on an element inside
  *      the page, so its own declarations beat the values it inherits from `:root`.
  *      The toggle selectors (`[data-theme] [data-mode]`, and both on one element)
@@ -50,6 +53,13 @@ ${declarations("light")}
 
 [data-theme="dark"] {
 ${declarations("dark")}
+}
+
+@media print {
+  :root,
+  [data-theme] {
+${TOKENS.map((t) => `    ${t.cssVar}: ${t.light};`).join("\n")}
+  }
 }
 
 [data-mode="exam"] {

@@ -11,6 +11,7 @@ import { promptShown } from "../../features/telemetry/telemetry";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { useContainer } from "../ContainerProvider";
+import { NonAffiliation } from "../NonAffiliation";
 import { ReportItem } from "../practice/ReportItem";
 import { TelemetryPrompt } from "./TelemetryPrompt";
 
@@ -104,6 +105,7 @@ function Results({
         {view.pauses > 0 ? <Callout tone="info">{t("paused", { count: view.pauses })}</Callout> : null}
         {view.extraTime ? <Callout tone="info">{t("withExtraTime")}</Callout> : null}
         {view.retake ? <Callout tone="info">{t("retake")}</Callout> : null}
+        <NonAffiliation />
       </Card>
 
       <section className="app-stack" aria-labelledby="exam-cuts">

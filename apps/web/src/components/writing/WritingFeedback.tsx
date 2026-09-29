@@ -3,18 +3,21 @@
 import type { WritingSubmission } from "@palier/app";
 import type { Lang, TargetBand } from "@palier/domain";
 import { WRITING_CRITERIA } from "@palier/domain";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Fragment, type Ref } from "react";
 
 import { segmentText } from "../../features/writing/inline-errors";
 import { wordDiff } from "../../features/writing/word-diff";
 import { criterionLabel } from "../../features/writing/workshop-view";
+import { NonAffiliation } from "../NonAffiliation";
 
 /**
  * The feedback on one submission (PRD §8.7, architecture.md §8.4): the five criteria, the
  * user's own text with each error marked where it is, the corrections numbered to match,
  * and the model answer with its changes against the user's text shown word by word.
- * `lang` is the writing's language, so a screen reader reads the French as French.
+ * `lang` is the writing's language, so a screen reader reads the French as French. The
+ * interface's own words inside it (an error's number, "added", "removed") carry the interface's
+ * language back, as the oral report's do (WCAG 3.1.2; progress.md D127, and Slice 3's `lang` audit).
  */
 export function WritingFeedback({
   submission,
@@ -28,6 +31,7 @@ export function WritingFeedback({
   headingRef: Ref<HTMLHeadingElement>;
 }) {
   const t = useTranslations("writing");
+  const locale = useLocale();
   const { assessment, text } = submission;
   const segments = segmentText(text, assessment.errors);
   const numbered = segments.flatMap((segment) => (segment.kind === "error" ? [segment] : []));
@@ -50,6 +54,7 @@ export function WritingFeedback({
           </div>
         ))}
       </dl>
+      <NonAffiliation />
 
       <h3>{t("errorsTitle")}</h3>
       <p className="app-writing-text" lang={lang}>
@@ -60,7 +65,9 @@ export function WritingFeedback({
             <mark key={index} className="app-writing-mark">
               {segment.text}
               <sup>
-                <span className="pl-visually-hidden">{t("errorNumber", { number: segment.number })}</span>
+                <span className="pl-visually-hidden" lang={locale}>
+                  {t("errorNumber", { number: segment.number })}
+                </span>
                 <span aria-hidden="true">{segment.number}</span>
               </sup>
             </mark>
@@ -99,7 +106,9 @@ export function WritingFeedback({
                 run.text
               ) : (
                 <Tag className={`app-writing-${run.kind}`}>
-                  <span className="pl-visually-hidden">{t(run.kind)} </span>
+                  <span className="pl-visually-hidden" lang={locale}>
+                    {t(run.kind)}{" "}
+                  </span>
                   {run.text}
                 </Tag>
               )}

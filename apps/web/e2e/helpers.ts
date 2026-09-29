@@ -205,3 +205,11 @@ export const getOralReport = async (page: Page, { onState = async () => undefine
   await expect(page.getByRole("heading", { level: 2, name: "Your report" })).toBeFocused();
   await onState("report");
 };
+
+/**
+ * The non-affiliation statement beside what it qualifies, not only in the footer (R5,
+ * product-requirements.md §2; progress.md D145): in onboarding and beside every band.
+ */
+export const expectStatementInMain = async (page: Page, words = "not affiliated") => {
+  await expect(page.locator("main .app-nonaffiliation").first()).toContainText(words);
+};

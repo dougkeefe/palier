@@ -35,6 +35,20 @@ export const subSkillSchema = z.enum(
 /** Ids are non-empty strings; the brand is a compile-time concern only. */
 export const idSchema = z.string().min(1);
 
+/**
+ * A contributor's public handle, shaped as a GitHub username is: 1 to 39 letters,
+ * digits and single hyphens, never starting or ending with one. A handle rather than a
+ * free-text name, so an attribution can hold no name, email or other personal detail
+ * (content-factory.md §5).
+ */
+export const contributorSchema = z
+  .string()
+  .min(1)
+  .max(39)
+  .regex(/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/, {
+    message: "A contributor is a public handle such as a GitHub username: letters, digits and single hyphens, 39 at most.",
+  });
+
 /** An ISO 8601 instant. */
 export const isoSchema = z.iso.datetime();
 

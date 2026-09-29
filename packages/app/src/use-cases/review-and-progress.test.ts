@@ -1,9 +1,9 @@
 import type { Attempt, AttemptMode, Item, ItemId } from "@palier/domain";
-import { attemptId, itemId, sessionId } from "@palier/domain";
+import { attemptId, itemId, scenarioId, sessionId } from "@palier/domain";
 import { describe, expect, it, vi } from "vitest";
 
-import type { AttemptStore, Clock, ItemRepository, ScheduleEntry, ScheduleStore } from "../ports/index.js";
-import { progressReport } from "./progress-report.js";
+import type { AttemptStore, Clock, ItemRepository, OralSession, OralStore, ScheduleEntry, ScheduleStore } from "../ports/index.js";
+import { oralTotals, progressReport } from "./progress-report.js";
 import { reviewQueue } from "./review-queue.js";
 
 // Local stubs rather than @palier/testing (progress.md D37).
@@ -150,5 +150,38 @@ describe("progressReport", () => {
     const report = await progressReport({ skill: "writing" }, { items: itemsFrom([]), attempts: attemptsOf([]) });
     expect(report).toMatchObject({ answered: 0, msAnswering: 0, bySubSkill: [] });
     expect(report.trend.windowSize).toBe(0);
+  });
+});
+
+describe("oralTotals (PRD §8.9's oral sessions and minutes spoken)", () => {
+  const session = (id: string, endedAt: string | null, turns: OralSession["turns"]): OralSession => ({
+    id: sessionId(id),
+    scenarioId: scenarioId("scenario-1"),
+    startedAt: NOW,
+    endedAt,
+    endReason: endedAt === null ? null : "completed",
+    turns,
+    assessment: null,
+  });
+  const voice = (startMs: number, endMs: number) =>
+    ({ speaker: "candidate", text: "Oui.", phase: 0, startMs, endMs, input: "voice" }) as const;
+  const oralFrom = (sessions: readonly OralSession[]): OralStore =>
+    ({ all: () => Promise.resolve(sessions) }) as unknown as OralStore;
+
+  it("counts nothing on a device that has never spoken", async () => {
+    expect(await oralTotals({ oral: oralFrom([]) })).toEqual({ sessions: 0, msSpoken: 0 });
+  });
+
+  it("counts the ended sessions and sums what was spoken in them", async () => {
+    const oral = oralFrom([
+      session("a", NOW, [voice(0, 60_000), { speaker: "examiner", text: "Merci.", phase: 0, startMs: 61_000, endMs: 61_000 }]),
+      session("b", NOW, [voice(0, 30_000), { ...voice(40_000, 90_000), input: "typed" }]),
+    ]);
+    expect(await oralTotals({ oral })).toEqual({ sessions: 2, msSpoken: 90_000 });
+  });
+
+  it("leaves out a session still running, which has no settled length", async () => {
+    const oral = oralFrom([session("a", NOW, [voice(0, 60_000)]), session("live", null, [voice(0, 45_000)])]);
+    expect(await oralTotals({ oral })).toEqual({ sessions: 1, msSpoken: 60_000 });
   });
 });

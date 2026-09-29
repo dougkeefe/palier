@@ -66,6 +66,16 @@ content *schemas* with the app, never runtime. The `AiProvider` port type is imp
   minutes do not fill the session, a phase with no harder follow-up or no simpler reframe, a duplicate. It
   runs after the item stages, so the batch report's `provider` stays the item stages' model. The manifest
   lists the file as `scenarios: { path, hash }`, or `null` with none; v1 and v2 predate the key.
+- **Hand-authored contributions enter at stage 4 and are not exempt from any gate** (content-factory.md §5).
+  `loadAuthored` reads every `*.json` under `content/authored/` (`{ items, passages? }`, parsed with the domain
+  schemas; a file that does not parse throws, naming it) and `runInputFor` passes it in as `RunInput.authored`.
+  Authored items are reviewed after the drafts, against this batch's passages and their own, then join them:
+  validation and the bank build treat the two alike, and **an item that fails review is discarded whoever wrote
+  it**. Authored passages join the bank after carried and drafted ones. They are reviewed apart so that
+  `stage4Yield`, `itemsPassed` and `itemsPublished` stay the drafter's; the report counts them in an `authored`
+  block, present only when the batch took some in, so a batch with none is byte-identical to one built before
+  the intake. `authored.test.ts` checks the committed contributions (schemas, stage 5's per-item rules, origin,
+  a contributor on every item and passage, no id the bank holds) and that CONTRIBUTING.md's example passes them.
 - **A retirement takes effect at the next bank build** (progress.md D94). `runInputFor` applies
   `content/factory/item-statistics.json`, which the monthly job in `apps/web` writes, to the carried bank
   (`pipeline/carry.ts`): judged items gain `stats`, and an item with a reason becomes `status: "retired"`.

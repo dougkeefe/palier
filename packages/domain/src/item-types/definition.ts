@@ -59,6 +59,8 @@ export const ITEM_VALIDATION_CODES = [
   "cloze-missing-blank",
   /** A comprehension item names no passage, so there is nothing to comprehend. */
   "comprehension-missing-passage",
+  /** A hand-authored item names no contributor, so it carries no attribution (content-factory.md §5). */
+  "authored-without-contributor",
 ] as const;
 export type ItemValidationCode = (typeof ITEM_VALIDATION_CODES)[number];
 

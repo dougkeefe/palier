@@ -182,7 +182,8 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   attempts**, because the readiness card keeps the exam result and the practice trend visually
   distinct (§8.2, progress.md D64). Do not merge them behind a flag. `progressReport` holds the
   same line over the **whole** practice record (`AttemptStore.all()`), and `reviewQueue` resolves
-  what is due now across both skills (D66).
+  what is due now across both skills (D66). `oralTotals` is the summary's oral line: ended sessions and
+  the engine's `speakingMs` over them, from the device-local `OralStore`, so this device only (D145).
 - **A mock exam's result is never stored** (ADR 16). `rescoreExam` derives it from the stored run, whose
   form and `bandCuts` never change, and `submitExam` returns exactly that, so scoring is idempotent by
   construction and held to it by a property (Phase 3 exit criterion 4). **An exam attempt is a pure

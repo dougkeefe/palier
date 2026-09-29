@@ -56,6 +56,8 @@ test("a mock exam runs from the picker to its results, by keyboard, with the nav
   await expect(page).toHaveURL(/\/en\/exam\/results\?run=/);
   await expect(page.getByRole("heading", { name: "Exam results" })).toBeVisible();
   await expect(page.getByText(/^Level [XABCE]$/)).toBeVisible();
+  // The band never stands without the statement that it is not official (R5, D145).
+  await expect(page.locator(".app-result .app-nonaffiliation")).toContainText("not affiliated");
   await expect(page.getByText(/of 25 correct\./)).toBeVisible();
   await expect(page.getByText("Taken with extra time.")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Every item" })).toBeVisible();

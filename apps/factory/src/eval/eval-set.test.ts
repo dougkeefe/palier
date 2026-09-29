@@ -9,6 +9,7 @@ import { scriptedAiProvider } from "../providers/scripted-ai-provider.js";
 import { perItemReasons } from "../pipeline/validate.js";
 import {
   DEFECT_CLASSES,
+  EVAL_CONTRIBUTOR,
   buildEvalSet,
   cleanControlItem,
   runEvalDetection,
@@ -31,6 +32,13 @@ describe("review-gate evaluation set", () => {
     const verdict = await scriptedAiProvider().reviewItem(reviewRequestFor(item));
     expect(gateReasons(item, verdict)).toEqual([]);
     expect(perItemReasons(item, profile())).toEqual([]);
+  });
+
+  it("credits every fixture, so no defect is detected for a missing contributor rather than its own", () => {
+    for (const { item } of [...buildEvalSet(10), { item: cleanControlItem() }]) {
+      expect(item.provenance).toEqual({ origin: "authored", contributor: EVAL_CONTRIBUTOR });
+      expect(perItemReasons(item, profile()).join(" ")).not.toMatch(/authored-without-contributor/);
+    }
   });
 
   it("detects at least 90% of every defect class (the Phase-1 bar)", async () => {

@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-import { itemStatisticsReportSchema, parseExamProfileOrThrow } from "@palier/domain";
+import { itemSchema, itemStatisticsReportSchema, parseExamProfileOrThrow, passageSchema } from "@palier/domain";
 import { ORAL_SESSION_TYPES } from "@palier/domain";
 import type { ExamForm, ExamProfile, Item, ItemStatisticsReport, OralScenario, Passage } from "@palier/domain";
 import type { OpenAiModels, OpenAiPricing } from "@palier/adapters/openai";
@@ -10,7 +10,7 @@ import { RECORDED_METHODS, type RecordedRunData } from "./eval/conformance.js";
 import { canonicalStringify } from "./lib/json.js";
 import type { OralSessionPlan, SourceCandidate } from "./lib/types.js";
 import type { BankBuild, BankManifest } from "./pipeline/bank-build.js";
-import type { CarriedBank } from "./pipeline/run.js";
+import type { AuthoredContent, CarriedBank } from "./pipeline/run.js";
 
 /**
  * The factory's only file I/O — kept out of the pipeline so the stages stay pure
@@ -36,6 +36,12 @@ export const EVAL_REPORT_PATH = "content/factory/eval-report.json";
 export const RECORDED_COMPLETIONS_DIR = "packages/testing/src/recorded/openai";
 /** Written by the monthly statistics job in `apps/web` (progress.md D94), read here. */
 export const ITEM_STATISTICS_PATH = "content/factory/item-statistics.json";
+/**
+ * Hand-authored contributions (content-factory.md §5): one JSON file per contribution,
+ * `{ "items": Item[], "passages"?: Passage[] }`, in the published schemas. They enter the
+ * pipeline at stage 4, review, and are not exempt from any gate. CONTRIBUTING.md says how.
+ */
+export const AUTHORED_DIR = "content/authored";
 
 const readJson = (path: string): unknown => JSON.parse(readFileSync(path, "utf8"));
 
@@ -96,6 +102,55 @@ export const loadItemStatistics = (root: string): ItemStatisticsReport | null =>
   const path = join(root, ITEM_STATISTICS_PATH);
   if (!existsSync(path)) return null;
   return itemStatisticsReportSchema.parse(readJson(path)) as unknown as ItemStatisticsReport;
+};
+
+const AUTHORED_KEYS: ReadonlySet<string> = new Set(["items", "passages"]);
+
+/**
+ * Every hand-authored contribution under `AUTHORED_DIR`, in file-name order, parsed
+ * with the domain schemas: none when the directory is absent or holds no JSON (its
+ * `.gitkeep` is not a contribution). A file that does not parse throws, naming the file
+ * and the entry, so a broken contribution stops the build rather than vanishing from it.
+ * Parsing is all this does: whether an item is credited, clean and reviewed is decided
+ * by the gates it then goes through, as for any drafted item.
+ */
+export const loadAuthored = (root: string): AuthoredContent => {
+  const dir = join(root, AUTHORED_DIR);
+  if (!existsSync(dir)) return { items: [], passages: [] };
+  const items: Item[] = [];
+  const passages: Passage[] = [];
+  for (const file of readdirSync(dir).filter((name) => name.endsWith(".json")).sort()) {
+    const where = `${AUTHORED_DIR}/${file}`;
+    let raw: unknown;
+    try {
+      raw = readJson(join(dir, file));
+    } catch (error) {
+      throw new Error(`${where} is not valid JSON: ${(error as Error).message}`);
+    }
+    if (raw === null || typeof raw !== "object" || Array.isArray(raw)) {
+      throw new Error(`${where} must be an object: { "items": [...], "passages": [...] }`);
+    }
+    const unknown = Object.keys(raw).filter((key) => !AUTHORED_KEYS.has(key));
+    if (unknown.length > 0) throw new Error(`${where} has keys a contribution does not take: ${unknown.join(", ")}`);
+    const { items: rawItems, passages: rawPassages = [] } = raw as { items?: unknown; passages?: unknown };
+    if (!Array.isArray(rawItems)) throw new Error(`${where} must list its items under "items"`);
+    if (!Array.isArray(rawPassages)) throw new Error(`${where}: "passages", when present, must be a list`);
+    for (const [index, entry] of rawItems.entries()) {
+      const parsed = itemSchema.safeParse(entry);
+      if (!parsed.success) {
+        throw new Error(`${where}: items[${String(index)}] fails the item schema: ${parsed.error.issues.map((i) => i.message).join("; ")}`);
+      }
+      items.push(parsed.data as unknown as Item);
+    }
+    for (const [index, entry] of rawPassages.entries()) {
+      const parsed = passageSchema.safeParse(entry);
+      if (!parsed.success) {
+        throw new Error(`${where}: passages[${String(index)}] fails the passage schema: ${parsed.error.issues.map((i) => i.message).join("; ")}`);
+      }
+      passages.push(parsed.data as unknown as Passage);
+    }
+  }
+  return { items, passages };
 };
 
 const RECORDED_METHOD_NAMES: ReadonlySet<string> = new Set(RECORDED_METHODS);

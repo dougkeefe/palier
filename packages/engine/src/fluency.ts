@@ -48,6 +48,14 @@ const occurrences = (words: readonly string[], phrase: readonly string[]): numbe
 
 const isSpoken = (turn: OralTurn): boolean => turn.speaker === "candidate" && turn.input === "voice";
 
+/**
+ * How long the candidate spoke: the spoken answers' durations summed, the same time words per
+ * minute is measured over. A typed answer adds nothing. The progress summary's "minutes spoken"
+ * (product-requirements.md §8.9) is this over every session.
+ */
+export const speakingMs = (turns: readonly OralTurn[]): number =>
+  turns.filter(isSpoken).reduce((sum, turn) => sum + (turn.endMs - turn.startMs), 0);
+
 export const fluencyMetrics = (turns: readonly OralTurn[], fillers: readonly string[]): FluencyMetrics => {
   const spoken = turns.filter(isSpoken);
   if (spoken.length === 0) {
@@ -55,7 +63,7 @@ export const fluencyMetrics = (turns: readonly OralTurn[], fillers: readonly str
   }
 
   const words = spoken.map((turn) => wordsOf(turn.text));
-  const speakingMs = spoken.reduce((sum, turn) => sum + (turn.endMs - turn.startMs), 0);
+  const spokenMs = speakingMs(spoken);
   const wordCount = words.reduce((sum, list) => sum + list.length, 0);
 
   const phrases = fillers.map(wordsOf).filter((phrase) => phrase.length > 0);
@@ -68,7 +76,7 @@ export const fluencyMetrics = (turns: readonly OralTurn[], fillers: readonly str
 
   return {
     spokenTurns: spoken.length,
-    wordsPerMinute: speakingMs === 0 ? null : (wordCount * MINUTE_MS) / speakingMs,
+    wordsPerMinute: spokenMs === 0 ? null : (wordCount * MINUTE_MS) / spokenMs,
     fillerCount,
     meanPauseMs: pauses.length === 0 ? null : pauses.reduce((sum, pause) => sum + pause, 0) / pauses.length,
   };

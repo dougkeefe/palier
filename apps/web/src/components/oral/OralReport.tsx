@@ -32,6 +32,7 @@ import type { Container } from "../../lib/container";
 import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
+import { NonAffiliation } from "../NonAffiliation";
 
 /** The session named in `?session=`, or none. */
 const sessionInUrl = () => {
@@ -369,6 +370,7 @@ function Assessment({
           <dd>{t("pronunciationWhy")}</dd>
         </div>
       </dl>
+      <NonAffiliation />
 
       <h3>{t("fixesTitle")}</h3>
       <ol className="app-list app-stack">

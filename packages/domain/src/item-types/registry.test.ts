@@ -67,6 +67,32 @@ describe("validateCommon", () => {
     const keyIssue = issues.find((i) => i.code === "key-not-an-option");
     expect(keyIssue?.optionId).toBe("d");
   });
+
+  it("flags a hand-authored item that names no contributor (content-factory.md §5)", () => {
+    const issues = validateCommon(aValidItem({ provenance: { origin: "authored" } }));
+    expect(issues.map((i) => i.code)).toEqual(["authored-without-contributor"]);
+  });
+
+  it("accepts a hand-authored item that names its contributor", () => {
+    expect(validateCommon(aValidItem({ provenance: { origin: "authored", contributor: "a-contributor" } }))).toEqual([]);
+  });
+
+  it("asks no contributor of a generated or adapted item", () => {
+    expect(validateCommon(aValidItem({ provenance: { origin: "generated" } }))).toEqual([]);
+    expect(validateCommon(aValidItem({ provenance: { origin: "adapted" } }))).toEqual([]);
+  });
+
+  it("flags an uncredited authored item whatever its type, since every type runs the shared checks", () => {
+    const uncredited = { provenance: { origin: "authored" } } as const;
+    for (const issues of [
+      validateCloze(aValidCloze(uncredited)),
+      validateComprehension(aValidComprehension(uncredited)),
+      validateErrorId(aValidItem({ ...uncredited, type: "error-id" })),
+      validateBestCompletion(aValidItem({ ...uncredited, type: "best-completion" })),
+    ]) {
+      expect(issues.map((i) => i.code)).toContain("authored-without-contributor");
+    }
+  });
 });
 
 describe("validateCloze", () => {
