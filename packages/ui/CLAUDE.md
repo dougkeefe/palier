@@ -21,7 +21,7 @@ system, not the application.
   rest fall back. `warning` is the tenth token, the exam clock's amber, because `accent` is
   decorative and ungated. `tokens.css` is generated: build the package, then write
   `renderTokensCss()` from `dist/tokens/css.js` over `src/styles/tokens.css`. The drift guard fails
-  until you do. **Motion is one switch, not a class list** (progress.md D159): `components.css`
+  until you do. **Motion is one switch, not a class list** (progress.md D160): `components.css`
   turns every animation and transition off, with `!important`, for `*, ::before, ::after` under
   `prefers-reduced-motion` and inside `[data-mode="exam"]`, so a new animation cannot be left out of
   either. **Every duration is `--pl-motion-state` (120ms), `--pl-motion-panel` (200ms) or

@@ -4,7 +4,7 @@ import { createRequire } from "node:module";
 import { describe, expect, it } from "vitest";
 
 /**
- * The motion pass's rules (product-requirements.md §10.5, progress.md D159), held over the two
+ * The motion pass's rules (product-requirements.md §10.5, progress.md D160), held over the two
  * stylesheets every page loads: `@palier/ui`'s components and this app's globals.
  * - every duration is one of §10.5's three, through its token, so no rule invents a fourth;
  * - a keyframe moves things and never fades them, since a fade is low-contrast text (D65);

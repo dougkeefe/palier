@@ -4,7 +4,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 /**
- * The committed fonts are what `SOURCES.md` says they are (progress.md D159): every woff2 here has
+ * The committed fonts are what `SOURCES.md` says they are (progress.md D161): every woff2 here has
  * a row there whose hash matches the bytes, and each family's licence sits beside it. A replaced
  * file with a stale row, or a font with no provenance, fails.
  */

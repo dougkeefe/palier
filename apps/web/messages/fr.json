@@ -65,7 +65,7 @@
     "title": "Confidentialité",
     "intro": "Palier garde votre pratique dans votre navigateur. Quand la synchronisation est activée, ce qui est le cas à moins que vous la désactiviez, une copie de vos progrès est aussi gardée sur le serveur de Palier, pour que vos autres appareils y aient accès. Cette page dit exactement ce que contient cette copie, et ce qui ne quitte jamais votre appareil.",
     "heldTitle": "Ce que le serveur conserve, quand la synchronisation est activée",
-    "held": "Un identifiant de compte aléatoire, un secret brouillé (haché) pour chaque appareil, vos paramètres de langue et de niveau visé, et une copie de vos progrès : vos réponses, votre calendrier de révision et vos résultats d’examen. Aucun nom, aucun courriel, aucun ministère, aucun texte libre, et rien qui vous identifie.",
+    "held": "Un identifiant de compte aléatoire, un secret brouillé (haché) pour chaque appareil, vos paramètres de langue et de niveau visé, les étapes franchies et les avis de série déjà affichés, et une copie de vos progrès : vos réponses, votre calendrier de révision et vos résultats d’examen. Aucun nom, aucun courriel, aucun ministère, aucun texte libre, et rien qui vous identifie.",
     "neverTitle": "Ce que Palier ne conserve jamais",
     "neverIntro": "Ces éléments restent sur votre appareil, quel que soit le réglage :",
     "neverServer": "Le serveur ne conserve pas non plus votre adresse IP, sauf pour s’en servir un instant afin de limiter les abus, et rien ne relie une statistique anonyme sur un item à votre compte.",

@@ -4,7 +4,7 @@ import type { WritingSubSkill } from "./sub-skills.js";
 
 /**
  * One reference article in the library (product-requirements.md §13.2, implementation-plan.md
- * §7 Phase 7; progress.md D145, D159): the grammar or register point one written-expression
+ * §7 Phase 7; progress.md D145, D162): the grammar or register point one written-expression
  * sub-skill names, published under `@palier/content/library/<subSkill>.json`.
  *
  * Structured content, not MDX: the same Zod-checked JSON pipeline as the bank and the prompts, and

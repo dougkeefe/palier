@@ -1,6 +1,6 @@
 # Font sources
 
-The three typefaces PRD §10.3 names (progress.md D65, D159). Each file is the **Latin subset**
+The three typefaces PRD §10.3 names (progress.md D65, D161). Each file is the **Latin subset**
 of the family's variable font, as Google Fonts serves it, fetched once on 29 September 2026 and
 committed, so nothing is fetched from a font CDN at build or at run time (architecture.md §6.4).
 Each is under the SIL Open Font License 1.1; its licence text is beside it.

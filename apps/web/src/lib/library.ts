@@ -12,7 +12,7 @@ import type { LibraryArticle } from "@palier/domain";
 import { WRITING_SUB_SKILLS, parseLibraryOrThrow } from "@palier/domain";
 
 /**
- * The library (PRD §13.2, progress.md D145, D159): one reference article per written-expression
+ * The library (PRD §13.2, progress.md D145, D162): one reference article per written-expression
  * sub-skill, parsed once here, like the profile and the prompts, from `@palier/content/library/`.
  * `parseLibraryOrThrow` refuses a library missing any sub-skill's article, so every link a writing
  * item's explanation makes has a page.

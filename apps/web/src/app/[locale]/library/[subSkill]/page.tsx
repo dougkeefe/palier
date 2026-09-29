@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/library/
 }
 
 /**
- * One library article (PRD §13.2, progress.md D159): the rule, the traps, then examples, each a
+ * One library article (PRD §13.2, progress.md D162): the rule, the traps, then examples, each a
  * sentence to write and, usually, the one it replaces. The examples are in the article's language
  * and marked up with it, and so is every cited run in the prose. An unknown sub-skill renders the
  * 404 in place, never `notFound()`, which cannot run under the strict CSP (D141).

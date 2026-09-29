@@ -139,7 +139,7 @@ test("progress prints as a one-page summary of both skills, with the statement (
   await expect(page.getByRole("heading", { name: "Practice trend — Written expression" })).toBeVisible();
 });
 
-test("the library lists ten articles, and an article reads its examples in French, in both languages (D159)", async ({ page }) => {
+test("the library lists ten articles, and an article reads its examples in French, in both languages (D162)", async ({ page }) => {
   await page.goto("/en/library");
   await expect(page.getByRole("heading", { level: 1, name: "Library" })).toBeVisible();
   await expect(page.locator(".app-library__entry")).toHaveCount(10);
@@ -168,7 +168,7 @@ test("the library lists ten articles, and an article reads its examples in Frenc
   await expect(page.getByRole("heading", { level: 1, name: "Page not found" })).toBeVisible();
 });
 
-test("a written-expression item's feedback reaches its library article, in a new tab (D159)", async ({ page, context }) => {
+test("a written-expression item's feedback reaches its library article, in a new tab (D162)", async ({ page, context }) => {
   await onboard(page, "skip");
   await expect(page).toHaveURL(/\/en\/home$/);
   await page.getByRole("radio", { name: "Written expression" }).check();

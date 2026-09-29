@@ -1,7 +1,7 @@
 import localFont from "next/font/local";
 
 /**
- * The three typefaces PRD §10.3 names, self-hosted (progress.md D65, D159). Each is a variable
+ * The three typefaces PRD §10.3 names, self-hosted (progress.md D65, D161). Each is a variable
  * woff2 of the Latin subset, which holds every French letter, « », the dashes and œ, and is
  * served from this origin under `/_next/static/media/`, so the CSP's `font-src 'self'` needs no
  * new origin. Where each file came from, and its hash, is `SOURCES.md`; each is under the SIL
@@ -10,7 +10,7 @@ import localFont from "next/font/local";
  * - **Inter** for the interface and **Figtree** for headings are preloaded: they are the two above
  *   the fold (§10.3).
  * - **Source Serif 4** is for passages only, and is not preloaded. The service worker follows the
- *   stylesheet to it, so a passage still reads in it offline (D159).
+ *   stylesheet to it, so a passage still reads in it offline (D161).
  *
  * Each is exposed as a CSS variable on `<html>`; `globals.css` and `@palier/ui`'s passage read them.
  * `display: swap` and the metric-matched fallback keep a late font from shifting the layout.

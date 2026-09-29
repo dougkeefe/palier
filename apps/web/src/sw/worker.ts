@@ -96,7 +96,7 @@ export const staticAssetsIn = (html: string): string[] => [
 ];
 
 /**
- * The `/_next/static/` files a stylesheet references: its fonts, mostly (progress.md D159). A face
+ * The `/_next/static/` files a stylesheet references: its fonts, mostly (progress.md D161). A face
  * that is not preloaded appears in no HTML, only in the CSS, as `url(../media/…)` relative to the
  * stylesheet, so each reference is resolved against the stylesheet's own path. `data:` and other
  * origins are skipped.

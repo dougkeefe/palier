@@ -33,12 +33,12 @@ test("a route never visited online still opens offline, in the other locale", as
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
   await expect(page.locator("main")).not.toBeEmpty();
 
-  // A library article too: a dynamic route, precached by name from the content (D159).
+  // A library article too: a dynamic route, precached by name from the content (D162).
   await page.goto("/fr/library/pronouns");
   await expect(page.getByRole("heading", { level: 1, name: "Les pronoms" })).toBeVisible();
 });
 
-test("the three self-hosted faces are precached, the passage serif too, which no page preloads (D159)", async ({
+test("the three self-hosted faces are precached, the passage serif too, which no page preloads (D161)", async ({
   page,
 }) => {
   await page.goto("/en");

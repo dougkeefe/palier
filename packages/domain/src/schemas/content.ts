@@ -282,7 +282,7 @@ export const writingPromptShape = z.strictObject({
 });
 
 /**
- * A library article (progress.md D159): one written-expression sub-skill's reference page.
+ * A library article (progress.md D162): one written-expression sub-skill's reference page.
  * Prose in both interface languages, examples in `lang`. `avoid` is optional, since some
  * examples only show the form to write.
  */

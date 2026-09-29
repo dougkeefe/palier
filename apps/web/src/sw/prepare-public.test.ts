@@ -29,7 +29,7 @@ describe("prepare-public", () => {
     ]);
   });
 
-  it("expands a dynamic directory whose values are known at build time, the library's articles (D159)", () => {
+  it("expands a dynamic directory whose values are known at build time, the library's articles (D162)", () => {
     const expansions = { "library/[subSkill]": ["agreement", "pronouns"], "[top]": ["only"] };
     expect(routesFrom(["library", "library/[subSkill]", "review/[id]", "[top]"], expansions)).toEqual([
       "library",

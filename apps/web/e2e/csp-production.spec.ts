@@ -102,7 +102,7 @@ for (const locale of ["en", "fr"]) {
   });
 }
 
-test("the three self-hosted faces load from this origin under the policy (D159)", async ({ page }) => {
+test("the three self-hosted faces load from this origin under the policy (D161)", async ({ page }) => {
   const violations = await recordViolations(page);
   const fontRequests: string[] = [];
   page.on("request", (request) => {

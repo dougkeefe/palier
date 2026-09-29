@@ -77,6 +77,25 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   no field, and not Enter on a real button). The shortcut sheet at `?` (`components/ShortcutSheet.tsx`, in the footer)
   lists `features/shortcuts/shortcuts.ts`'s registry: **a screen that gains a key registers a row there**, with its
   messages in the `shortcuts` namespace, which a test checks exist.
+- **The streak and the milestones** (Phase 7 Slice 4, PRD §9, D159). `components/engagement/Engagement.tsx` reads both
+  once when home mounts, on the device's time zone, with the product rules in `features/engagement/rules.ts` (two freezes a
+  month, 1,000 items), never the exam profile (ADR 9). "We kept your streak" and each milestone are said once through synced
+  settings. **A milestone's moment is shown on home only**, full screen through `Dialog`'s `full` placement with Coco
+  cheering, so never in exam mode or on a results screen (§10.1). Its share is text and the app's address
+  (`features/engagement/share.ts`: Web Share, else the clipboard, else no button), never an image or personal data.
+- **Motion** (D160): every duration is one of `@palier/ui`'s three tokens, and one switch in `components.css` turns all
+  motion off under `prefers-reduced-motion` and inside `[data-mode="exam"]`. `src/app/motion.test.ts` fails a literal
+  duration or a fading keyframe in either stylesheet; `e2e/motion.spec.ts` reads the computed styles.
+- **Fonts are self-hosted** (D161): `src/fonts/fonts.ts` loads the three committed woff2 files through `next/font/local`
+  (its arguments must be literals), as CSS variables on `<html>`. `SOURCES.md` records each file's origin and hash, and
+  `fonts.test.ts` holds them to it. **The service worker follows each precached stylesheet to the fonts it loads**
+  (`staticAssetsInCss`), since the passage serif is not preloaded and appears in no HTML.
+- **The library** (D162) is `/library` and `/library/[subSkill]`, server components over `lib/library.ts`, which parses
+  `@palier/content/library/*.json` once. **Never import `lib/library.ts` into a client component**: it would put every
+  article in the JavaScript; a link needs only `features/library/links.ts`. Every written-expression item's explanation
+  links its article (`components/library/ArticleLink.tsx`), in a new tab from a drill so the session is never left. Cited
+  French in the prose renders through `Cited` with the article's `lang`. `prepare-public.mjs` expands the article route
+  from the content's file names, so every article is precached.
 - **The error states** (Phase 7 Slice 2, architecture.md §16, ADR 15; D141–D142).
   - `[locale]/error.tsx`, `[locale]/not-found.tsx` and `global-error.tsx` are one-line bindings; the screens are named
     components in `src/components/errors/`, so `NO_JSX_LITERALS` still applies to them.
@@ -250,8 +269,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
   titles, **journey 5 and step 5** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
   `errors.spec.ts` (the 404, a thrown route with its bundle and the key-leak sentinel, and the global view, D141–D142),
-  `content.spec.ts` (the about page and privacy notice, onboarding's statement, the shortcut sheet, and `/progress`
-  printed to one page, D145),
+  `content.spec.ts` (the about page and privacy notice, onboarding's statement, the shortcut sheet, `/progress`
+  printed to one page, D145, and the library with a drill's link into it, D162), `motion.spec.ts` (D160),
   and `sync.spec.ts`: journey 8 (two contexts, two devices), journey 7's sync half,
   and the sync settings' states, and `exam.spec.ts` (a fixture exam from the picker to its results), and `oral.spec.ts` (spoken practice's
   states, a refused microphone, a refused call and a French pass).
@@ -260,7 +279,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   (**journey 3**: a full exam through a reload and a network drop, scored against an independent oracle) and
   `key-leak-production.spec.ts` (the key at rest, both modes, through a reload, with a ledger row in
   the dump), `oral-production.spec.ts` (a phase crossed by time), `spend-production.spec.ts` (the meter and the cap's warnings over real IndexedDB),
-  `key-states-production.spec.ts` (each key-check result on the minified build, D158), and
+  `key-states-production.spec.ts` (each key-check result on the minified build, D158),
+  `engagement-production.spec.ts` (a milestone and a kept streak, each said once through a reload, D159), and
   `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
   whose fake timers stall Dexie and React), and `csp-production.spec.ts` (every page's nonce and zero
   violations, and the red team, D136). Axe on the states, (`e2e/`),

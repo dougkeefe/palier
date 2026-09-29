@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/library"
 }
 
 /**
- * The library's index (PRD §13.2, progress.md D145, D159): one article per written-expression
+ * The library's index (PRD §13.2, progress.md D145, D162): one article per written-expression
  * sub-skill, in the taxonomy's order, each with its summary. A server component, so the articles
  * never reach the client's JavaScript. Reading's articles come after 1.0 (Gate K).
  */

@@ -6,7 +6,7 @@ import { parseLibrary, parseLibraryOrThrow } from "../library.js";
 import { WRITING_SUB_SKILLS } from "../sub-skills.js";
 
 /**
- * The committed library (progress.md D159), read off disk here in `__tests__` because domain does
+ * The committed library (progress.md D162), read off disk here in `__tests__` because domain does
  * no I/O. The app imports the same files by package name. One file per written-expression
  * sub-skill, named for it, so a drill's link to `/library/<subSkill>` always has a page.
  */

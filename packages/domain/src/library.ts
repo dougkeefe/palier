@@ -6,7 +6,7 @@ import { WRITING_SUB_SKILLS } from "./sub-skills.js";
 
 /**
  * Parses an **already-read** library, as `parseWritingPrompts` parses the prompts: no I/O here,
- * the app imports the JSON (progress.md D159). The library is **one article per written-expression
+ * the app imports the JSON (progress.md D162). The library is **one article per written-expression
  * sub-skill, exactly**: an item's explanation links to its sub-skill's article, so a missing one is
  * a dead link and a repeated one is ambiguous. Every `related` id must be another sub-skill.
  *

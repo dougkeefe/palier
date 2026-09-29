@@ -91,7 +91,7 @@ Three things to notice. First, the item bank is a static asset, so the core prod
 | Charts | Visx or hand-rolled SVG | The charts are few and specific. Avoid a heavy library |
 | Audio | Native WebRTC and MediaRecorder | No wrapper needed. `@openai/agents-realtime` is an option for studio mode if it reduces the state machine work |
 | Testing | Vitest, Playwright, axe-core, Zod for runtime validation | See section 14 |
-| Content authoring | MDX for library articles, JSON for items, validated by Zod schemas in CI | Items are data, not code |
+| Content authoring | JSON for items and for library articles, validated by Zod schemas in CI *(amended 29 September 2026, `progress.md` D162: the library is structured JSON, not MDX)* | Items are data, not code, and so are the articles: one pipeline, no markup toolchain |
 | Sync backend | Serverless Postgres (Neon or equivalent), Drizzle ORM. No auth library in v1 | Scale-to-zero matters because sync is on for everyone. See section 9.4 for the capacity model and ADR 5 for why there is no auth library |
 
 Deliberately not used: a CMS, a state management framework beyond Zustand, a component library with its own design language, server-side rendering of session content, and any analytics SDK.
@@ -122,7 +122,7 @@ palier/
 │   ├── items/en/
 │   ├── passages/              Source passages with provenance metadata
 │   ├── forms/                 Fixed mock exam forms
-│   └── library/               MDX reference articles
+│   └── library/               Reference articles, one JSON file per written-expression sub-skill (D162)
 └── docs/                      These specs, the contribution guide, ADRs
 ```
 

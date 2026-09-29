@@ -49,7 +49,7 @@ describe("the precache lists", () => {
     expect(staticAssetsIn("<p>no assets</p>")).toEqual([]);
   });
 
-  it("finds the fonts a stylesheet loads, resolved against the stylesheet, once each (D159)", () => {
+  it("finds the fonts a stylesheet loads, resolved against the stylesheet, once each (D161)", () => {
     const css =
       "@font-face{src:url(../media/inter.woff2) format('woff2')}" +
       '@font-face{src:url("/_next/static/media/figtree.woff2")}' +
@@ -237,7 +237,7 @@ describe("startServiceWorker", () => {
     expect(worker.skipped()).toBe(true);
   });
 
-  it("follows a page's stylesheet to the font it loads, which no page preloads (D159)", async () => {
+  it("follows a page's stylesheet to the font it loads, which no page preloads (D161)", async () => {
     const worker = bootWorker({
       "/en": '<link rel="stylesheet" href="/_next/static/chunks/app.css"><link href="/_next/static/chunks/gone.css">',
       "/_next/static/chunks/app.css": "@font-face{src:url(../media/serif.woff2)}",

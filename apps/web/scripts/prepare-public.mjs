@@ -28,7 +28,7 @@ const WEB_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
  * `(name)` add no URL segment; dynamic `[param]` and private `_folder` routes cannot
  * be precached by name, so they are left to runtime caching, **unless the dynamic
  * directory's values are known at build time and listed in `expansions`**: the
- * library's articles, one per written-expression sub-skill (progress.md D159), so every
+ * library's articles, one per written-expression sub-skill (progress.md D162), so every
  * article opens offline.
  * @param {readonly string[]} pageDirs directories holding a page, relative to `[locale]`, "/"-separated
  * @param {Readonly<Record<string, readonly string[]>>} [expansions] a dynamic directory's values
@@ -195,7 +195,7 @@ const main = async () => {
   const pageDirs = (await filesBelow(localeDir))
     .filter((file) => /[/\\]page\.tsx$/.test(file))
     .map((file) => toPosix(relative(localeDir, dirname(file))));
-  // The library's articles, by name (D159): one file per sub-skill, named for it.
+  // The library's articles, by name (D162): one file per sub-skill, named for it.
   const libraryFiles = (await readdir(join(contentDir, "library"))).filter((name) => name.endsWith(".json")).sort();
   const routes = routesFrom(pageDirs, { "library/[subSkill]": libraryFiles.map((name) => name.replace(/\.json$/, "")) });
   const locales = localesFrom(await readFile(join(WEB_ROOT, "src/i18n/routing.ts"), "utf8"));

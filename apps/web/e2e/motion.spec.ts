@@ -1,7 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
 /**
- * The motion switches, as a browser computes them (PRD §10.5, progress.md D159): a button's
+ * The motion switches, as a browser computes them (PRD §10.5, progress.md D160): a button's
  * state change takes §10.5's 120ms and the band meter fills over 400ms, and both are instant
  * under `prefers-reduced-motion` and anywhere inside `[data-mode="exam"]`. The elements are made
  * on the page, with the real stylesheets, so each rule is read where it is applied.

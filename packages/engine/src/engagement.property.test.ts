@@ -1,7 +1,7 @@
 import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 
-import { localDay, streak } from "./engagement.js";
+import { MILESTONES, localDay, milestonesReached, streak } from "./engagement.js";
 
 /**
  * The streak is a function of the day *set* (D73): two synced devices gather the same days in
@@ -83,6 +83,38 @@ describe("localDay, over any instant", () => {
           expect(Math.abs(local - utc)).toBeLessThanOrEqual(DAY_MS);
         },
       ),
+    );
+  });
+});
+
+describe("milestonesReached, over any facts", () => {
+  const facts = fc.record({
+    examsSubmitted: fc.nat({ max: 20 }),
+    examsAtOrAboveC: fc.nat({ max: 20 }),
+    oralSessionsEnded: fc.nat({ max: 20 }),
+    itemsAnswered: fc.nat({ max: 3000 }),
+  });
+  const more = fc.record({
+    examsSubmitted: fc.nat({ max: 5 }),
+    examsAtOrAboveC: fc.nat({ max: 5 }),
+    oralSessionsEnded: fc.nat({ max: 5 }),
+    itemsAnswered: fc.nat({ max: 500 }),
+  });
+
+  it("never un-reaches a milestone as activity grows, and keeps the fixed order", () => {
+    fc.assert(
+      fc.property(facts, more, (before, extra) => {
+        const after = {
+          examsSubmitted: before.examsSubmitted + extra.examsSubmitted,
+          examsAtOrAboveC: before.examsAtOrAboveC + extra.examsAtOrAboveC,
+          oralSessionsEnded: before.oralSessionsEnded + extra.oralSessionsEnded,
+          itemsAnswered: before.itemsAnswered + extra.itemsAnswered,
+        };
+        const earlier = milestonesReached(before, { itemsAnswered: 1000 });
+        const later = milestonesReached(after, { itemsAnswered: 1000 });
+        for (const id of earlier) expect(later).toContain(id);
+        expect([...later]).toEqual(MILESTONES.filter((id) => later.includes(id)));
+      }),
     );
   });
 });

@@ -54,6 +54,11 @@ from disk (progress.md D154).
   optional, because rows stored before them have none. **The filler list is a content artefact** (`oral-fillers` in
   `CONTENT_SCHEMAS`, `parseOralFillers`, D123): language, not an exam rule, so not profile data. It lists only clear
   hesitations, and `spokenWords` is the one tokeniser the parser and the engine share (D127).
+- **The library is a content artefact** (`library-article` in `CONTENT_SCHEMAS`, `library.ts`, progress.md D162): one
+  `LibraryArticle` per written-expression sub-skill, prose `Localised`, examples in `lang`. **`parseLibrary` refuses a
+  library missing any sub-skill's article, or with two**, since an item's explanation links to its sub-skill's page, and
+  an article related to itself. Cited target-language text in the prose is marked `_like this_` (`CITED_MARK`), which the
+  page renders with the article's `lang`; an unpaired marker is refused, with its path.
 - **The adversarial-review gate lives here** (`review-gate.ts`, progress.md D109): `gateReasons`,
   `CONFIDENCE_THRESHOLD` and the key-blind `reviewRequestFor`, pure over an `Item` and a `ReviewVerdict`.
   The factory's stage 4 and the browser's `generatePracticeSet` share it, and domain is the one package both

@@ -26,7 +26,7 @@ body {
   flex-direction: column;
   background: var(--bg);
   color: var(--ink);
-  /* Inter, self-hosted (src/fonts, D159), then the system's own sans. */
+  /* Inter, self-hosted (src/fonts, D161), then the system's own sans. */
   font-family:
     var(--font-sans, ui-sans-serif), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
@@ -53,7 +53,7 @@ h3,
   color: var(--ink);
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
-  /* @palier/ui's motion switch turns this off under prefers-reduced-motion (D159). */
+  /* @palier/ui's motion switch turns this off under prefers-reduced-motion (D160). */
   transition: transform var(--pl-motion-state) var(--pl-ease);
 }
 
@@ -399,7 +399,7 @@ h3,
   }
 }
 
-/* The library (PRD §13.2, D159): an index of articles, then each article's examples. A cited
+/* The library (PRD §13.2, D162): an index of articles, then each article's examples. A cited
    run is italic by its <i>; an example to write stands out by weight, never by colour alone. */
 .app-library__index {
   list-style: none;

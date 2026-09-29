@@ -6,7 +6,7 @@
 
 /* ---- Motion tokens (§10.5: 120ms state changes, 200ms panels, 400ms moments) ---
    Every duration in this file and in apps/web's globals.css is one of these three,
-   which a unit test holds (progress.md D159). The spring is the "small spring" §10.5
+   which a unit test holds (progress.md D160). The spring is the "small spring" §10.5
    asks for on the celebration moments; everything else uses the standard easing. */
 
 :root {
@@ -341,7 +341,7 @@
 
 .pl-passage {
   max-width: 66ch;
-  /* The app's self-hosted Source Serif 4 when it defines --font-serif (D159). */
+  /* The app's self-hosted Source Serif 4 when it defines --font-serif (D161). */
   font-family: var(--font-serif, "Source Serif 4"), "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", serif;
   font-size: 1.1875rem;
   line-height: 1.65;
@@ -359,7 +359,7 @@
 
 /* ---- Motion off (§10.5, §8.4) ---------------------------------------------------
    One switch for everything, rather than a list of classes a new animation could be
-   left out of (progress.md D159). Under prefers-reduced-motion every change is instant,
+   left out of (progress.md D160). Under prefers-reduced-motion every change is instant,
    with no loss of information, since nothing here carries meaning in its movement. In
    exam mode there is no motion at all, whatever the user's preference (D84 ruling 11).
    `!important` because the switch must beat any component's own rule. */

@@ -65,7 +65,7 @@
     "title": "Privacy",
     "intro": "Palier keeps your practice in your browser. When sync is on, which it is unless you turn it off, a copy of your progress is also kept on Palier’s server, so your other devices can have it. This page says exactly what that copy holds, and what never leaves your device.",
     "heldTitle": "What the server holds, when sync is on",
-    "held": "A random account id, a scrambled (hashed) secret for each device, your language and target settings, and a copy of your progress: your answers, your review schedule and your exam results. No name, no email, no department, no free text, and nothing that identifies you.",
+    "held": "A random account id, a scrambled (hashed) secret for each device, your language and target settings, which milestones and streak notes you have already been shown, and a copy of your progress: your answers, your review schedule and your exam results. No name, no email, no department, no free text, and nothing that identifies you.",
     "neverTitle": "What Palier never holds",
     "neverIntro": "These stay on your device, under every setting:",
     "neverServer": "Nor does the server keep your IP address, beyond using it for a moment to limit abuse, and nothing links an anonymous item statistic to your account.",
