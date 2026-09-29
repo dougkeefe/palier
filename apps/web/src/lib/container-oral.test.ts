@@ -7,6 +7,7 @@ import { scenarioId, sessionId } from "@palier/domain";
 import { mswServer, openAiHandlers } from "@palier/testing";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
+import { holdLedger } from "./__tests__/hold";
 import aiModels from "./ai-models.json";
 import { BANK_BASE_PATH, createContainer } from "./container";
 
@@ -325,6 +326,43 @@ describe.each([
     const second = c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
     expect(second).not.toBe(first);
     await expect(second).rejects.toMatchObject({ name: "InvalidApiKeyError" });
+  });
+
+  it("never writes a report back onto a session a wipe deleted mid-call, and forgets the request (D143) [R12]", async () => {
+    serveBankBesideMsw();
+    const criterion = { band: "B", evidence: "e" };
+    mswServer.use(
+      ...openAiHandlers({
+        mode: "ok",
+        completions: [
+          {
+            content: {
+              criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
+              fixes: [{ criterion: "grammar", subSkill: "agreement", advice: "a", evidence: "e" }],
+              missingWords: [{ word: "piloter", turn: 0, excerpt: "je dirige", example: "x" }],
+              errors: [],
+            },
+            usage: { prompt_tokens: 100, completion_tokens: 100 },
+          },
+        ],
+      }),
+    );
+    const c = createContainer({ hermetic });
+    await c.useCases.saveApiKey({ key: KEY, remember: true });
+    const [choice] = await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" });
+    if (choice === undefined) throw new Error("the bank offers a session");
+    const id = sessionId("oral-report-wiped");
+    await c.oral.put({ ...aSession("oral-report-wiped"), startedAt: "2020-01-01T10:00:00.000Z", endedAt: "2020-01-01T10:10:00.000Z", scenarioId: choice.scenario.id });
+    const { release, reached } = holdLedger(c);
+
+    const asked = c.useCases.requestOralReport({ sessionId: id, feedbackLang: "en" });
+    await reached;
+    await c.useCases.wipeData();
+    expect(c.useCases.oralReportInFlight({ sessionId: id })).toBeNull();
+    release();
+    await asked;
+
+    expect(await c.useCases.oralSession({ sessionId: id })).toBeNull();
   });
 
   it("plays back and deletes one session's recording, keeping its transcript (D126)", async () => {

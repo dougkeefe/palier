@@ -27,6 +27,11 @@ export type PracticeUseCases = {
 export type PracticeControllerDeps = {
   readonly useCases: PracticeUseCases;
   readonly newSessionId: () => SessionId;
+  /**
+   * Mark the session as running in this page until the release is called (D144): the browser lets it
+   * go if the page closes first, so a session left open by a closed tab can be told from one running.
+   */
+  readonly holdSession: (id: SessionId) => () => void;
   /** Open the microphone (`getUserMedia`). */
   readonly openMic: () => Promise<MediaStream>;
   /** Listen for the level check, reporting each reading, and settle with the loudest. */
@@ -89,6 +94,8 @@ const ignore = (): void => undefined;
  * - **A recorder that cannot start** turns the rest of the session to typing rather than leaving a
  *   dead button, and a clip is only ever kept once its recorder is running.
  * - **A session whose driver fails** is closed, and named as failed, with the transcript it stored.
+ * - **The session is held as running in this page** from before it is stored until it ends (D144),
+ *   so another tab never closes it as abandoned, and a closed tab's session is.
  */
 export const practiceController = (deps: PracticeControllerDeps): PracticeController => {
   let stream: MediaStream | null = null;
@@ -104,6 +111,7 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
   let finished = true;
   let question: QuestionHeard | null = null;
   let pauseMs: number | undefined;
+  let release: (() => void) | null = null;
 
   const stopStream = (): void => {
     for (const track of stream?.getTracks() ?? []) track.stop();
@@ -113,6 +121,8 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
   const finish = async (session: OralSession, failed: OralFailure | null): Promise<void> => {
     if (finished) return;
     finished = true;
+    release?.();
+    release = null;
     const kept = run?.failure() ?? null;
     const failure = failed ?? (kept === null ? null : oralFailure(kept));
     if (failure === "no-key") deps.onNoKey();
@@ -194,6 +204,7 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
       endRequested = false;
       const sessionId = deps.newSessionId();
       id = sessionId;
+      release = deps.holdSession(sessionId);
       bridge = answerBridge();
       bridge.subscribe((waiting) => {
         if (waiting !== null) question = { shownAtMs: deps.now(), voiced: waiting.audio !== null, heardAtMs: null };

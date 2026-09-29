@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 import { join } from "node:path";
 
 import { isHermetic } from "@palier/testing/in-memory";
+import { sql } from "drizzle-orm";
 
 import { drizzleSyncRepository } from "./drizzle-repository";
 import { drizzleTelemetryRepository } from "./drizzle-telemetry-repository";
@@ -41,18 +42,27 @@ export const pgliteDatabase = async (folder: string) => {
   const client = new PGlite();
   const db = drizzle(client);
   await migrate(db, { migrationsFolder: folder });
-  return { db, close: () => client.close() };
+  return { db, client, close: () => client.close() };
 };
 
 const salt = (env: ServerEnv): string => env.RATE_LIMIT_SALT ?? randomBytes(32).toString("hex");
 
-type Repositories = { readonly sync: SyncRepository; readonly telemetry: TelemetryRepository };
+type Repositories = {
+  readonly sync: SyncRepository;
+  readonly telemetry: TelemetryRepository;
+  /** Resolves when the database answers a trivial query (`GET /api/health`, D140). */
+  readonly ping: () => Promise<void>;
+};
 
 /** The one database both APIs share: in the hermetic lane, one PGlite, never two. */
 const connect = async (env: ServerEnv): Promise<Repositories | null> => {
   if (isHermetic(env)) {
     const { db } = await pgliteDatabase(migrationsFolder());
-    return { sync: drizzleSyncRepository(db), telemetry: drizzleTelemetryRepository(db) };
+    return {
+      sync: drizzleSyncRepository(db),
+      telemetry: drizzleTelemetryRepository(db),
+      ping: async () => void (await db.execute(sql`select 1`)),
+    };
   }
   const url = env.DATABASE_URL;
   if (url === undefined || url === "") return null;
@@ -60,7 +70,11 @@ const connect = async (env: ServerEnv): Promise<Repositories | null> => {
   const { drizzle } = await import("drizzle-orm/postgres-js");
   // `prepare: false`: a serverless pooler (Neon's, PgBouncer) does not keep prepared statements.
   const db = drizzle(postgres(url, { prepare: false }));
-  return { sync: drizzleSyncRepository(db), telemetry: drizzleTelemetryRepository(db) };
+  return {
+    sync: drizzleSyncRepository(db),
+    telemetry: drizzleTelemetryRepository(db),
+    ping: async () => void (await db.execute(sql`select 1`)),
+  };
 };
 
 const cache = globalThis as {
@@ -70,7 +84,11 @@ const cache = globalThis as {
 };
 
 const database = (env: ServerEnv): Promise<Repositories | null> => {
-  cache.__palierDatabase ??= connect(env);
+  // A connection that failed is forgotten, so the next request tries again rather than fail for the instance's life.
+  cache.__palierDatabase ??= connect(env).catch((error: unknown) => {
+    delete cache.__palierDatabase;
+    throw error;
+  });
   return cache.__palierDatabase;
 };
 
@@ -93,6 +111,39 @@ export const telemetryApi = (env: ServerEnv = process.env): Promise<TelemetryApi
     repos === null ? null : createTelemetryApi({ repo: repos.telemetry, now: () => new Date(), rateLimitSalt: salt(env) }),
   );
   return cache.__palierTelemetryApi;
+};
+
+/** How long `GET /api/health` waits for the database before calling it unreachable. */
+export const HEALTH_TIMEOUT_MS = 2_000;
+
+/**
+ * Whether the database answers (`GET /api/health`, D140): `null` when none is configured,
+ * otherwise `true` if a trivial query returns within `timeoutMs`, and `false` if it fails
+ * or takes longer. It never throws, so the health route always answers.
+ */
+export const databaseAnswers = async (env: ServerEnv = process.env, timeoutMs = HEALTH_TIMEOUT_MS): Promise<boolean | null> => {
+  let repos: Repositories | null;
+  try {
+    repos = await database(env);
+  } catch {
+    return false;
+  }
+  return repos === null ? null : answersWithin(repos.ping, timeoutMs);
+};
+
+/** `true` if `ping` resolves within `timeoutMs`; `false` if it rejects or is late. */
+export const answersWithin = async (ping: () => Promise<void>, timeoutMs: number): Promise<boolean> => {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const late = new Promise<boolean>((resolve) => {
+    timer = setTimeout(() => resolve(false), timeoutMs);
+  });
+  try {
+    return await Promise.race([ping().then(() => true), late]);
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timer);
+  }
 };
 
 /** Forget the memoised database and APIs — for tests that build them under a different environment. */

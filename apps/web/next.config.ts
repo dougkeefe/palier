@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
+import { buildVersionFrom } from "./src/lib/build-info";
+
 // Points the plugin at the per-request i18n config (src/i18n/request.ts).
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
@@ -19,6 +21,8 @@ const SECURITY_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
+  // Which build this is, inlined for the server and the client alike (src/lib/build-info.ts, D140).
+  env: { PALIER_BUILD_VERSION: buildVersionFrom(process.env) },
   async headers() {
     return [
       { source: "/:path*", headers: SECURITY_HEADERS },

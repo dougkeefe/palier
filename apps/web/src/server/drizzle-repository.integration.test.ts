@@ -1,10 +1,11 @@
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { syncRepositoryContract } from "./__tests__/repository.contract";
 import { resetDatabase } from "./__tests__/reset";
-import { pgliteDatabase, resetSyncApi, syncApi } from "./db";
+import { databaseAnswers, pgliteDatabase, resetSyncApi, syncApi } from "./db";
 import { drizzleSyncRepository } from "./drizzle-repository";
 
 /**
@@ -46,6 +47,22 @@ describe("drizzleSyncRepository on PGlite", () => {
   });
 });
 
+describe("databaseAnswers, hermetic (D140)", () => {
+  it("answers false when the database cannot be built, and tries again on the next request", async () => {
+    const previous = process.cwd();
+    try {
+      // No migrations folder here, so building the PGlite fails.
+      process.chdir(tmpdir());
+      expect(await databaseAnswers({ PALIER_HERMETIC: "1" })).toBe(false);
+      process.chdir(fileURLToPath(new URL("../..", import.meta.url)));
+      expect(await databaseAnswers({ PALIER_HERMETIC: "1" })).toBe(true);
+    } finally {
+      process.chdir(previous);
+      resetSyncApi();
+    }
+  });
+});
+
 describe("syncApi, hermetic", () => {
   it("serves the real handlers over an in-process PGlite with the migrations applied", async () => {
     const previous = process.cwd();
@@ -61,6 +78,8 @@ describe("syncApi, hermetic", () => {
       );
 
       expect(res?.status).toBe(200);
+      // The health route's check, on the same PGlite (D140).
+      expect(await databaseAnswers({ PALIER_HERMETIC: "1" })).toBe(true);
     } finally {
       process.chdir(previous);
       resetSyncApi();

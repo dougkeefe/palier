@@ -54,6 +54,13 @@ const IDLE: RequestState = { kind: "idle" };
 
 export const initialGenerator = (subSkill: SubSkill): GeneratorState => ({ phase: "choosing", subSkill, request: IDLE });
 
+/**
+ * The screen opened while a set it asked for earlier is still being made (progress.md D143): it
+ * shows that request as sending, for the sub-skill it named, and follows it rather than offering
+ * Generate again, which would pay a second time.
+ */
+export const resumedGenerator = (subSkill: SubSkill): GeneratorState => ({ phase: "choosing", subSkill, request: { kind: "sending" } });
+
 /** Whether the screen may take a new request: choosing, and nothing being generated. */
 const idleChoosing = (state: GeneratorState): state is Extract<GeneratorState, { phase: "choosing" }> =>
   state.phase === "choosing" && state.request.kind !== "sending";
@@ -77,7 +84,10 @@ export const generator = (state: GeneratorState, action: GeneratorAction): Gener
     case "failed":
       return state.phase === "choosing" ? { ...state, request: { kind: "failed", failure: action.failure } } : state;
     case "generated":
-      return { phase: "result", subSkill: state.subSkill, result: action.result };
+      // Only while a set is being made: a late one must not pull the user out of practising (D143).
+      return state.phase === "choosing" && state.request.kind === "sending"
+        ? { phase: "result", subSkill: state.subSkill, result: action.result }
+        : state;
     case "practise":
       return { phase: "practising", subSkill: state.subSkill, set: action.set };
     case "back":

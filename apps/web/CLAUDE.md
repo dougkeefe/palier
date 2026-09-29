@@ -40,8 +40,10 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 - **`public/content/` and `public/sw.js` are generated, gitignored and never edited.**
   `scripts/prepare-public.mjs` runs before `dev` and `build`: it copies `content/bank/` and
   compiles the service worker from `src/sw/worker.ts` (D60). Every bank version is copied, but the
-  worker **precaches only `BANK_VERSION`'s**, which the script reads from `container.ts`; a
-  `BANK_VERSION` with no committed bank fails the build (D82). `worker.ts` may have **no runtime
+  worker **precaches only `BANK_VERSION`'s**, which the script reads from `src/lib/bank-version.ts` (D140); a
+  `BANK_VERSION` with no committed bank fails the build (D82). It also writes
+  `src/components/errors/global-error-copy.json` from the messages' `errors` namespace (D141), committed and held equal
+  by a drift test. `worker.ts` may have **no runtime
   imports** (the output is a classic script); a test compiles and runs it. The worker
   registers only in production builds (`src/sw/register.ts`).
 - **The exam profile is parsed here, once**, from `@palier/content/profiles/psc-sle.json`
@@ -61,6 +63,29 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     motion.
   - Nothing names or styles a pilot item (D84 ruling 9).
 - **The R5 non-affiliation statement** is in the footer of every page, from day one.
+- **The error states** (Phase 7 Slice 2, architecture.md §16, ADR 15; D141–D142).
+  - `[locale]/error.tsx`, `[locale]/not-found.tsx` and `global-error.tsx` are one-line bindings; the screens are named
+    components in `src/components/errors/`, so `NO_JSX_LITERALS` still applies to them.
+  - **The diagnostic bundle (`lib/diagnostic.ts`) carries no free text**: an error's name, digest and in-app frame
+    locations, the build, the bank, the browser's family and the path without its query. Never the message. The user
+    reads it before copying it or opening the prefilled issue (`errorIssueUrl`); nothing sends it.
+  - **An unknown path renders the 404 from `[locale]/[...rest]`**, inside the layout, 200 with `noindex`. A `notFound()`
+    under this dynamic root layout is served as Next's error shell, which has neither the layout nor its Trusted Types
+    policy, so under the strict CSP it renders blank. Do not route a user-facing 404 through `notFound()`.
+  - `global-error.tsx` has no provider; it reads `global-error-copy.json`, never the whole message files, which would add
+    about 32 KB gzipped to every page.
+  - The build is `BUILD_VERSION` (`lib/build-info.ts`), inlined by `next.config.ts` from `VERCEL_GIT_COMMIT_SHA`; the bank
+    is `lib/bank-version.ts`, which the server may import, unlike `container.ts`.
+  - `[locale]/hermetic/[view]` is the E2E hook: it throws, or shows the global view, in the hermetic lane only, and is the
+    404 anywhere else. A dynamic segment, so the worker never precaches it.
+- **A spending call outlives its screen** (D127, D143; `lib/in-flight.ts`). A report, a submission's feedback and a
+  fresh set still out are joined, never repeated, from module scope in `container.ts`, so a rebuilt container finds
+  them; each screen reads the held request on mount and shows it as still being made. **A wipe or delete-everywhere
+  forgets them and drops what each would write** (`writesUntilWiped`); the ledger still records the billed call. A new
+  spending screen follows the same pattern.
+- **A spoken session is held as running by its page** (D144): the practice controller takes a Web Lock for its session
+  (`lib/oral/liveness.ts`, the container's `oralLiveness`), and the oral screens call `closeAbandonedSessions` as they
+  load, so a session a closed tab left open is listed at once and another tab's is left alone.
 - **The sync backend lives in `src/server/` and nowhere else** (ADR 21, progress.md D70).
   - It holds the Drizzle schema, a `SyncRepository` whose every method takes an account id (there
     is no cross-account read path), pure `Request → Response` handlers, and `db.ts`, the server's one
@@ -87,12 +112,20 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `scripts/item-statistics.mjs` runs it under type stripping. It reads events through one query,
     `EVENTS_SQL`, which the Drizzle repository reads through too, and it reads the bank through
     `@palier/adapters/bank`. A monthly workflow opens its report as a pull request.
+  - **The retention job** (`retention-job.ts`, D138–D139) is self-contained the same way, run by
+    `scripts/retention.mjs` and the daily `retention.yml`. Its rules are raw parameterised SQL, so the script on
+    postgres.js and `retention.integration.test.ts` on PGlite run the same text; a boundary is strict (older goes,
+    exactly at the cutoff stays). It is the one cross-account path, and it only deletes by age. The plan's storage is
+    `PLAN_STORAGE_MB`, never a number in code; the run fails at 60% and 80%.
+  - **`GET /api/health`** (D140) is `serveHealth` over `healthResponse` in `handlers.ts`: the build, the bank, and
+    whether the database answers, uncached, with no identifier; 503 only when a configured database does not answer.
 - **Baseline security headers on every response** (`next.config.ts`, architecture.md §12): HSTS,
   `nosniff`, `Referrer-Policy: no-referrer`, and a `Permissions-Policy` allowing the microphone on
   this origin only. They are asserted on the production server in `e2e/production.spec.ts`.
 - **The strict CSP on every page** (Phase 7 Slice 1; ADR 22, progress.md D133–D136).
   - `src/proxy.ts` mints a nonce per request and sets the policy from `lib/csp.ts` on the request, where
-    Next reads the nonce, and on the response.
+    Next reads the nonce, and on the response. **Every path under a locale runs it**, a dot in the path or not
+    (`/(en|fr)/:path*`), because the policy is set nowhere else (D141).
   - Production has `script-src 'self' 'nonce-…'`, `connect-src 'self' https://api.openai.com`, and Trusted
     Types enforced. `next dev` gets a relaxed policy.
   - **A new origin the browser must reach is a `csp.ts` change with its test**, never a loosening
@@ -202,6 +235,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   keep it the `chromium` project's dependency. **`chromium`** (hermetic, `next dev`) runs the
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
   titles, **journey 5 and step 5** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
+  `errors.spec.ts` (the 404, a thrown route with its bundle and the key-leak sentinel, and the global view, D141–D142),
   and `sync.spec.ts`: journey 8 (two contexts, two devices), journey 7's sync half,
   and the sync settings' states, and `exam.spec.ts` (a fixture exam from the picker to its results), and `oral.spec.ts` (spoken practice's
   states, a refused microphone, a refused call and a French pass).

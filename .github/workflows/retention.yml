@@ -1,0 +1,86 @@
+# The daily retention job (architecture.md §9.4 and §12, progress.md D138–D139): delete
+# accounts inactive for 180 days, hard-delete tombstones over 90 days old, purge expired
+# pair codes and stale rate-limit rows, then read the database's size against the plan's
+# storage. The run fails at 60% of the plan or over, and a failed scheduled run notifies:
+# docs/deploy.md, "The retention job", says what to do at each threshold.
+name: retention
+
+on:
+  schedule:
+    # 05:00 UTC daily.
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Count what would be removed, and delete nothing"
+        type: boolean
+        default: true
+      plan_storage_mb:
+        description: "The database plan's storage in MiB (defaults to the PLAN_STORAGE_MB variable)"
+        type: string
+        required: false
+
+env:
+  TURBO_TELEMETRY_DISABLED: 1
+  DO_NOT_TRACK: 1
+
+permissions:
+  contents: read
+
+# A run by hand and the scheduled one never overlap; a second waits for the first.
+concurrency:
+  group: retention
+  cancel-in-progress: false
+
+jobs:
+  retention:
+    name: Retention and the storage alert
+    runs-on: ubuntu-latest
+    # A delete stuck behind a lock fails the run, which notifies, rather than hold a runner for six hours.
+    timeout-minutes: 15
+    steps:
+      # RETENTION_DATABASE_URL holds the same connection string as Production's DATABASE_URL (progress.md D138).
+      - name: Skip without a retention database
+        id: gate
+        env:
+          RETENTION_DATABASE_URL: ${{ secrets.RETENTION_DATABASE_URL }}
+        run: |
+          if [ -z "$RETENTION_DATABASE_URL" ]; then
+            echo "::notice::RETENTION_DATABASE_URL is not set, so nothing is retained (docs/deploy.md)."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.gate.outputs.run == 'true'
+        uses: actions/checkout@v7
+      - if: steps.gate.outputs.run == 'true'
+        uses: pnpm/action-setup@v6
+      - if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      # The job imports no workspace package, so it needs no build step, only postgres.js.
+      - if: steps.gate.outputs.run == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Run the job
+        if: steps.gate.outputs.run == 'true'
+        env:
+          DATABASE_URL: ${{ secrets.RETENTION_DATABASE_URL }}
+          PLAN_STORAGE_MB: ${{ inputs.plan_storage_mb || vars.PLAN_STORAGE_MB }}
+          # A scheduled run has no inputs, so it deletes; a run by hand is a dry run unless unticked.
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        # The report is fenced, so the step summary keeps its lines; pipefail carries the job's exit through tee.
+        run: |
+          set -o pipefail
+          flag=""
+          if [ "$DRY_RUN" = "true" ]; then flag="--dry-run"; fi
+          {
+            echo '```'
+            status=0
+            pnpm --silent --filter @palier/web retention $flag || status=$?
+            echo '```'
+            exit $status
+          } | tee -a "$GITHUB_STEP_SUMMARY"

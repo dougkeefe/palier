@@ -28,7 +28,7 @@ const require = createRequire(import.meta.url);
 const profilePath = require.resolve("@palier/content/profiles/psc-sle.json");
 const contentDir = dirname(dirname(profilePath));
 const profile = parseExamProfileOrThrow(JSON.parse(await readFile(profilePath, "utf8")));
-const bankVersion = bankVersionFrom(await readFile(join(WEB_ROOT, "src/lib/container.ts"), "utf8"));
+const bankVersion = bankVersionFrom(await readFile(join(WEB_ROOT, "src/lib/bank-version.ts"), "utf8"));
 
 const report = await runItemStatistics({
   readEvents: () => readEventsWithPostgres(url),

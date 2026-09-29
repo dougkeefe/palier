@@ -20,9 +20,10 @@ sync as unavailable (ADR 21, `architecture.md` §11).
 | A serverless Postgres, e.g. Neon | The sync replica (ADR 21, `architecture.md` §9.2) | The provider's dashboard |
 | `DATABASE_URL` | The pooled connection string. postgres.js runs with `prepare: false`, so a pooler is fine | Vercel → Settings → Environment Variables, **Production only** |
 | `RATE_LIMIT_SALT` | 32 random bytes as hex (`openssl rand -hex 32`). It keys the per-IP rate-limit HMAC. Without it each serverless instance picks its own salt, and the limits stop holding across instances. **A production deployment with `DATABASE_URL` and no salt now fails at its migrate step** (`progress.md` D137), before any migration runs | Vercel, Production (and Preview, if a preview ever gets a database) |
-
 | `TELEMETRY_DATABASE_URL` | A **read-only** connection string to the same database, for the monthly item-statistics job (`progress.md` D94). It only ever runs `select … from telemetry_events`. Without it, the workflow skips with a notice | GitHub → Settings → Secrets and variables → Actions |
 | `OPENAI_SMOKE_KEY` | An OpenAI key **of its own**, with a small monthly limit, for the nightly live smoke (`progress.md` D112). Each run spends about US$0.15, so about US$4.50 a month at one run a night. Without it, the job skips with a notice | GitHub → Settings → Secrets and variables → Actions |
+| `RETENTION_DATABASE_URL` | **The same pooled connection string as Production's `DATABASE_URL`**, for the daily retention job (`progress.md` D138). The app's role already owns the tables, so it can delete and read the database's size. Actions cannot read Vercel's environment, so the string is pasted here too. Without it, the workflow skips with a notice | GitHub → Settings → Secrets and variables → Actions |
+| `PLAN_STORAGE_MB` | The database plan's storage in MiB (Neon's free tier: `512`), which the retention job's storage alert reads (D139). A **variable**, not a secret. Without it, the job still deletes and says it checked no alert | GitHub → Settings → Secrets and variables → Actions → Variables |
 
 **Keep `DATABASE_URL` out of Preview.** A preview then runs exactly like a deployment without a
 database: fully usable, with sync answering 503. The build's migration step also refuses to run for
@@ -80,6 +81,10 @@ DATABASE_URL='postgres://…' pnpm --filter @palier/web db:migrate
 
 ## Smoke checks
 
+**`/api/health` asks the database on every request.** Do not point an interval uptime monitor at it on Neon's free tier:
+polling every few minutes keeps the compute from ever suspending, and uses up the free compute allowance.
+
+
 Run these after every production deploy that touches the server or the schema:
 
 | Check | Expect | If not |
@@ -90,6 +95,7 @@ Run these after every production deploy that touches the server or the schema:
 | `curl -sI https://<host>/sw.js` | `200`, `cache-control: no-cache, no-store, must-revalidate` | `next.config.ts` |
 | Two browsers: onboard on one, finish a session, then Settings → Sync → add a device, and enter the code on the other | Both show the same progress | The session log's journey-8 notes |
 | Delete everything everywhere on the test account (Settings → Sync → danger zone) | Leaves nothing on the server | — |
+| `curl -s https://<host>/api/health` | **`200`** with `{"build":"<7 hex>","bank":<BANK_VERSION in src/lib/bank-version.ts>,"database":"ok"}`, and `cache-control: no-store` (D140) | **`"not-configured"`** means no `DATABASE_URL`; **`503`** with `"unreachable"` means the database did not answer within two seconds, which a single request can do while Neon wakes from idle, so ask twice; a `"build"` of `"local"` means the build did not see `VERCEL_GIT_COMMIT_SHA` |
 
 ## The monthly item-statistics job
 
@@ -108,6 +114,42 @@ Two one-time settings, both human steps:
 
 To run it by hand: `DATABASE_URL='postgres://…' pnpm --filter @palier/web item-statistics`, after
 `pnpm exec turbo run build --filter=@palier/web^...`.
+
+## The retention job
+
+`.github/workflows/retention.yml` runs at 05:00 UTC daily, and on demand (`progress.md` D138, D139). Over
+`RETENTION_DATABASE_URL` it deletes, in order:
+- accounts with no activity for 180 days. A push stamps activity on the account, and any authenticated request
+  stamps it on the device, so an account with an unrevoked device seen since then is kept. The account's
+  devices, documents and pair codes go with it, by cascade;
+- tombstones (`sync_documents.deleted`) written over 90 days ago. Nothing writes one yet;
+- expired pair codes, and rate-limit rows from windows over a day old.
+
+Then it reads `pg_database_size` against `PLAN_STORAGE_MB`. **The run fails at 60% of the plan or over**, and a
+failed scheduled run is what notifies. Its log and step summary say which threshold was crossed.
+
+One-time settings, both human steps:
+- Add the `RETENTION_DATABASE_URL` secret, with the same value as Production's `DATABASE_URL` (human decision, D138). If
+  that connection string is ever rotated in Vercel, update this secret too, or the job fails to connect.
+- Add the `PLAN_STORAGE_MB` variable.
+
+**Before the first scheduled run, run it by hand as a dry run.** Actions → retention → Run workflow, with *dry
+run* ticked, which is the default. It counts what it would remove and deletes nothing. A scheduled run deletes.
+By hand from a terminal: `DATABASE_URL='postgres://…' PLAN_STORAGE_MB=512 pnpm --filter @palier/web retention
+--dry-run`. No build is needed.
+
+**At 60%: aggregate** (architecture.md §9.4). This is a runbook step, not built, until the alert first fires:
+1. Export a backup of the database (Neon: a branch).
+2. Keep each account's attempt documents of the last 180 days as they are, and replace older ones with monthly
+   aggregates. A device keeps its own full history regardless (§9.4). A device paired afterwards would pull only
+   the aggregates, so first decide how the trend reads them. Write the aggregation as a script with a PGlite test,
+   and record it as a deviation.
+3. Reclaim the space. A `DELETE` leaves the table's files the same size, so `pg_database_size` does not fall until
+   `VACUUM (FULL, ANALYZE) sync_documents;` rewrites the table. It locks the table while it runs, so do it in a quiet
+   window. Neon's own storage figure, in its dashboard, is the one the plan counts, and it spans the project's branches.
+4. Rerun the job and confirm the size fell.
+
+**At 80%: move to a paid tier** (about US$20 a month, §9.4), and raise `PLAN_STORAGE_MB` to match.
 
 ## Gate G: the billing check
 
@@ -264,7 +306,5 @@ page to `e2e/csp-production.spec.ts`, which holds every page to zero.
 
 ## Not yet built
 
-- The 90-day tombstone purge and the 180-day inactive-account deletion (`architecture.md` §9.4, §12).
-  Nothing creates a tombstone yet, and no account can be 180 days old, so these are Phase 7's
-  scheduled jobs (`progress.md` D78).
+- The 60% aggregation itself, which is a runbook step (above) until the storage alert first fires.
 - The maintainer CI job that refreshes `pricing.json` from OpenAI's prices (`architecture.md` §8.6; Phase 7, `progress.md` D103).

@@ -8,6 +8,7 @@ import {
   generator,
   initialGenerator,
   resultSummary,
+  resumedGenerator,
 } from "./generate-view";
 
 const named = (name: string, extra: object = {}) => Object.assign(new Error(name), { name, ...extra });
@@ -96,6 +97,36 @@ describe("generator", () => {
     ] as const) {
       expect(generator(practising, action)).toBe(practising);
     }
+  });
+});
+
+describe("resumedGenerator (D143)", () => {
+  const resumed = resumedGenerator("pronouns");
+
+  it("opens on a set still being made, for the sub-skill it was asked for", () => {
+    expect(resumed).toEqual({ phase: "choosing", subSkill: "pronouns", request: { kind: "sending" } });
+  });
+
+  it("offers no second request while it is out: a pre-flight, a cancel and a new sub-skill are all ignored", () => {
+    expect(generator(resumed, { type: "preflighted", preflight: PREFLIGHT })).toBe(resumed);
+    expect(generator(resumed, { type: "cancel" })).toBe(resumed);
+    expect(generator(resumed, { type: "choose-sub-skill", subSkill: "agreement" })).toBe(resumed);
+  });
+
+  it("shows the result when the run it follows arrives, or its failure", () => {
+    const result = { set: SET, drafted: 5, discarded: 0 };
+    expect(generator(resumed, { type: "generated", result })).toEqual({ phase: "result", subSkill: "pronouns", result });
+    expect(generator(resumed, { type: "failed", failure: "timeout" })).toMatchObject({ request: { kind: "failed", failure: "timeout" } });
+  });
+});
+
+describe("generator — a late set (D143)", () => {
+  it("is ignored unless a set is being made, so it never pulls the user out of practising", () => {
+    const result = { set: SET, drafted: 5, discarded: 0 };
+    const practising = generator(initialGenerator("agreement"), { type: "practise", set: SET });
+
+    expect(generator(practising, { type: "generated", result })).toBe(practising);
+    expect(generator(initialGenerator("agreement"), { type: "generated", result })).toEqual(initialGenerator("agreement"));
   });
 });
 

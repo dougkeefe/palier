@@ -98,10 +98,12 @@ export type WorkshopAction =
   | { readonly type: "sending" }
   | { readonly type: "saved"; readonly id: string; readonly text: string }
   | { readonly type: "assessed"; readonly submission: WritingSubmission }
-  | { readonly type: "failed"; readonly failure: FeedbackFailure }
+  /** `submissionId` names the request that failed; absent when the save itself failed, before any request. */
+  | { readonly type: "failed"; readonly failure: FeedbackFailure; readonly submissionId?: string }
   | { readonly type: "revise" }
   | { readonly type: "choose" }
-  | { readonly type: "reopen"; readonly submission: WritingSubmission; readonly nowMs: number };
+  | { readonly type: "reopen"; readonly submission: WritingSubmission; readonly nowMs: number }
+  | { readonly type: "resume"; readonly submission: WritingSubmission; readonly nowMs: number };
 
 export const INITIAL_WORKSHOP: WorkshopState = { phase: "choosing" };
 
@@ -123,24 +125,35 @@ export const workshop = (state: WorkshopState, action: WorkshopAction): Workshop
       return INITIAL_WORKSHOP;
     case "reopen": {
       const { submission } = action;
-      const draft: Draft = {
-        promptId: submission.promptId,
-        text: submission.text,
-        startedAtMs: action.nowMs,
-        saved: { id: submission.id, text: submission.text },
-      };
+      const draft = draftOf(submission, action.nowMs);
       return submission.assessment === null
         ? { phase: "writing", draft, request: IDLE }
         : { phase: "feedback", draft, submission };
     }
+    case "resume":
+      // Feedback asked for before this screen opened, and still being made (D143): shown as
+      // sending, so it is followed rather than asked for, and paid for, again.
+      return { phase: "writing", draft: draftOf(action.submission, action.nowMs), request: { kind: "sending" } };
     case "revise":
       return state.phase === "feedback" ? { phase: "writing", draft: state.draft, request: IDLE } : state;
     case "assessed":
-      return state.phase === "writing" ? { phase: "feedback", draft: state.draft, submission: action.submission } : state;
+      // Only onto the draft it was asked for: a request still out when another prompt was chosen or
+      // another submission reopened must not land its feedback there (D143).
+      return state.phase === "writing" && state.draft.saved?.id === action.submission.id
+        ? { phase: "feedback", draft: state.draft, submission: action.submission }
+        : state;
     default:
       return state.phase === "writing" ? writing(state, action) : state;
   }
 };
+
+/** A saved submission as the draft it was written from. */
+const draftOf = (submission: WritingSubmission, nowMs: number): Draft => ({
+  promptId: submission.promptId,
+  text: submission.text,
+  startedAtMs: nowMs,
+  saved: { id: submission.id, text: submission.text },
+});
 
 /** The actions that only mean something while writing. */
 const writing = (
@@ -149,6 +162,9 @@ const writing = (
 ): WorkshopState => {
   switch (action.type) {
     case "edit":
+      // The text being assessed is fixed until its feedback arrives: an edit now would bring
+      // "Get feedback" back mid-call, and a second paid request with it (D143).
+      if (state.request.kind === "sending") return state;
       // Editing clears a pending confirmation or a failure: the estimate was for the old text.
       return { ...state, draft: { ...state.draft, text: action.text }, request: IDLE };
     case "preflighted":
@@ -160,6 +176,8 @@ const writing = (
     case "saved":
       return { ...state, draft: { ...state.draft, saved: { id: action.id, text: action.text } } };
     case "failed":
+      // As `assessed`: another submission's failure is not this draft's, and its Try again would pay for this one.
+      if (action.submissionId !== undefined && state.draft.saved?.id !== action.submissionId) return state;
       return { ...state, request: { kind: "failed", failure: action.failure } };
   }
 };

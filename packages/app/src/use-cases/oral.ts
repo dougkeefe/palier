@@ -5,6 +5,7 @@ import { startOralSession, stepOralSession } from "@palier/engine";
 import type {
   Clock,
   ItemRepository,
+  OralLiveness,
   OralSession,
   OralStore,
   OralTransport,
@@ -43,6 +44,38 @@ export type OralSessionRunDeps = {
   readonly items: ItemRepository;
   readonly oral: OralStore;
   readonly transport: OralTransport;
+  readonly liveness: OralLiveness;
+};
+
+export type CloseAbandonedSessionsDeps = {
+  readonly clock: Clock;
+  readonly oral: OralStore;
+  readonly liveness: OralLiveness;
+};
+
+/**
+ * Stamp `interrupted` on every session left running that no page on this device is running
+ * now (progress.md D144), and answer which it closed. A session cannot resume (D116), so one
+ * whose page went away is over; closed, it keeps its turns, joins the list of past sessions
+ * and can be reported on. One another tab holds is left alone, since that tab would write it
+ * back as running. Nothing is asked of `liveness` when nothing is open.
+ */
+export const closeAbandonedSessions = async (deps: CloseAbandonedSessionsDeps): Promise<readonly SessionId[]> => {
+  const open = (await deps.oral.all()).filter((session) => session.endedAt === null);
+  if (open.length === 0) return [];
+  const live = await deps.liveness.live();
+  const endedAt = deps.clock.now();
+  const closed: SessionId[] = [];
+  for (const session of open) {
+    if (live.has(session.id)) continue;
+    // Read again: its page may have ended it, and let go, since the list was read. Stamping the old
+    // copy would lose its last turns and call a completed session interrupted.
+    const current = await deps.oral.get(session.id);
+    if (current === null || current.endedAt !== null) continue;
+    await deps.oral.put({ ...current, endedAt, endReason: "interrupted" });
+    closed.push(session.id);
+  }
+  return closed;
 };
 
 export type StartOralSessionRequest = {
@@ -66,8 +99,9 @@ export type OralSessionRun = {
  * Run one spoken session over a transport (progress.md D116): the engine's machine
  * decides, this carries it out and keeps the record.
  *
- * - **Earlier sessions left running are stamped `interrupted`** first. A session cannot
- *   resume, so one whose page went away is over, and it keeps its turns.
+ * - **Earlier sessions left running are stamped `interrupted`** first, unless a page on
+ *   this device is running them (`closeAbandonedSessions`, D144). A session cannot resume,
+ *   so one whose page went away is over, and it keeps its turns.
  * - **Time is elapsed wall-clock time from the start**, read from the `Clock` at each
  *   event and tick. A session never resumes, so, unlike an exam run, no elapsed time
  *   needs carrying across a reload.
@@ -89,9 +123,7 @@ export const startOralSessionRun = async (
   if ((await deps.oral.get(request.sessionId)) !== null) throw new OralSessionExistsError(request.sessionId);
 
   const startedAt = deps.clock.now();
-  for (const earlier of await deps.oral.all()) {
-    if (earlier.endedAt === null) await deps.oral.put({ ...earlier, endedAt: startedAt, endReason: "interrupted" });
-  }
+  await closeAbandonedSessions(deps);
 
   const start = startOralSession(scenario.phases);
   let machine: OralSessionState = start.state;

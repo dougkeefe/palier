@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import { resetSyncApi, syncApi, telemetryApi } from "./db";
+import { answersWithin, databaseAnswers, resetSyncApi, syncApi, telemetryApi } from "./db";
 
 afterEach(() => {
   resetSyncApi();
@@ -47,5 +47,29 @@ describe("telemetryApi — the telemetry half of the same composition point", ()
     // The second call's environment is ignored: the database was already chosen.
     expect(sync).not.toBeNull();
     expect(telemetry).not.toBeNull();
+  });
+});
+
+describe("databaseAnswers — the health route's database check (D140)", () => {
+  it("is null when no database is configured", async () => {
+    expect(await databaseAnswers({})).toBeNull();
+  });
+
+  it("is false when the configured database cannot be reached, and never throws", async () => {
+    expect(await databaseAnswers({ DATABASE_URL: "postgres://palier:palier@127.0.0.1:1/palier" })).toBe(false);
+  });
+});
+
+describe("answersWithin", () => {
+  it("is true when the ping resolves in time", async () => {
+    expect(await answersWithin(() => Promise.resolve(), 1_000)).toBe(true);
+  });
+
+  it("is false when the ping rejects", async () => {
+    expect(await answersWithin(() => Promise.reject(new Error("down")), 1_000)).toBe(false);
+  });
+
+  it("is false when the ping is later than the limit", async () => {
+    expect(await answersWithin(() => new Promise<void>(() => undefined), 10)).toBe(false);
   });
 });

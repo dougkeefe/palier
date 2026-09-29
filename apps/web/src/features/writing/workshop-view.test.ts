@@ -162,7 +162,9 @@ describe("workshop", () => {
   });
 
   it("revises from the feedback with the same draft, and chooses another prompt from anywhere", () => {
-    const feedback = workshop(workshop(writingState(), { type: "sending" }), { type: "assessed", submission: aSubmission() });
+    // Saved before it is sent, as the screen always does.
+    const sending = workshop(workshop(writingState(), { type: "sending" }), { type: "saved", id: "sub-1", text: "Madame, merci." });
+    const feedback = workshop(sending, { type: "assessed", submission: aSubmission() });
     expect(workshop(feedback, { type: "revise" })).toMatchObject({ phase: "writing", draft: { promptId: "wp-reply-01" } });
     expect(workshop(feedback, { type: "choose" })).toEqual(INITIAL_WORKSHOP);
   });
@@ -179,6 +181,34 @@ describe("workshop", () => {
       draft: { promptId: "wp-reply-01", text: "Madame, merci.", startedAtMs: 5, saved: { id: "sub-1", text: "Madame, merci." } },
       request: { kind: "idle" },
     });
+  });
+
+  it("resumes feedback asked for before the screen opened as sending, so it is followed and not asked again (D143)", () => {
+    const unassessed = aSubmission({ assessment: null });
+    const resumed = workshop(INITIAL_WORKSHOP, { type: "resume", submission: unassessed, nowMs: 5 });
+
+    expect(resumed).toEqual({
+      phase: "writing",
+      draft: { promptId: "wp-reply-01", text: "Madame, merci.", startedAtMs: 5, saved: { id: "sub-1", text: "Madame, merci." } },
+      request: { kind: "sending" },
+    });
+    expect(workshop(resumed, { type: "assessed", submission: aSubmission() })).toMatchObject({ phase: "feedback" });
+  });
+
+  it("keeps the text fixed while its feedback is being made, so Get feedback cannot come back mid-call (D143)", () => {
+    const sending = workshop(writingState(), { type: "sending" });
+
+    expect(workshop(sending, { type: "edit", text: "autre chose" })).toBe(sending);
+  });
+
+  it("never lands another submission's feedback or failure on the draft on screen (D143)", () => {
+    // Feedback asked for on sub-1, then another prompt chosen and a draft saved as sub-2.
+    const other = workshop(workshop(writingState(), { type: "saved", id: "sub-2", text: "Autre texte." }), { type: "sending" });
+
+    expect(workshop(other, { type: "assessed", submission: aSubmission() })).toBe(other);
+    expect(workshop(other, { type: "failed", failure: "timeout", submissionId: "sub-1" })).toBe(other);
+    expect(workshop(writingState(), { type: "assessed", submission: aSubmission() })).toEqual(writingState());
+    expect(workshop(other, { type: "failed", failure: "timeout", submissionId: "sub-2" })).toMatchObject({ request: { kind: "failed" } });
   });
 
   it("ignores an action that does not belong to the phase it arrives in", () => {

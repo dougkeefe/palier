@@ -830,5 +830,22 @@
     "fail_gone": "This session is no longer on this device.",
     "loadFailed": "This session could not be read from this device. Nothing was lost: try again.",
     "retryLoad": "Read it again"
+  },
+  "errors": {
+    "routeTitle": "Something went wrong",
+    "routeBody": "This screen stopped working. What you have already done is saved on this device, so trying again is safe.",
+    "globalTitle": "Palier stopped working",
+    "globalBody": "Something went wrong before the page could load. Try again, or reload the page.",
+    "retry": "Try again",
+    "home": "Go to today’s plan",
+    "reportHeading": "Tell us about it",
+    "reportBody": "If it keeps happening, you can send us a report. It holds only what is shown below: this build, the item bank, your browser and the page. It never holds anything you wrote or said, or your key.",
+    "details": "See what the report holds",
+    "copy": "Copy the report",
+    "copied": "Copied.",
+    "copyFailed": "This browser would not copy it. Select the text above and copy it yourself.",
+    "openIssue": "Open an issue on GitHub",
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "There is nothing at this address. The page may have moved, or the link may be mistyped."
   }
 }

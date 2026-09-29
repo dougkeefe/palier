@@ -61,6 +61,8 @@ const loadSetup = async (container: Container): Promise<Setup> => {
     lang: TARGET_LANG,
   });
   const perMinuteUsd = container.useCases.featureCosts().find((cost) => cost.feature === "oral-practice")?.estimateUsd ?? null;
+  // A session a tab was closed on is over: close it first, so it is listed and can be reported on (D144).
+  await container.useCases.closeAbandonedSessions().catch(() => []);
   const history = await container.useCases.oralHistory().catch(() => []);
   return { keyHeld: status !== null, choices, perMinuteUsd, history };
 };
@@ -96,10 +98,11 @@ export function OralPractice() {
   // The session's controller, one per container: it holds the microphone, the recorders and the run.
   const control = useMemo((): PracticeController | null => {
     if (container.status !== "ready") return null;
-    const { useCases, ids } = container.container;
+    const { useCases, ids, oralLiveness } = container.container;
     return practiceController({
       useCases,
       newSessionId: () => sessionId(ids.ulid()),
+      holdSession: (id) => oralLiveness.hold(id),
       openMic: () => navigator.mediaDevices.getUserMedia({ audio: true }),
       measureLevel: (stream, onLevel) => measureLevel(stream, LEVEL_CHECK_MS, onLevel, browserLevelKit()),
       media: browserMediaKit(),

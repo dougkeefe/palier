@@ -830,5 +830,22 @@
     "fail_gone": "Cette séance ne se trouve plus sur cet appareil.",
     "loadFailed": "Impossible de lire cette séance sur cet appareil. Rien n’a été perdu : réessayez.",
     "retryLoad": "Relire"
+  },
+  "errors": {
+    "routeTitle": "Un problème est survenu",
+    "routeBody": "Cet écran a cessé de fonctionner. Ce que vous avez déjà fait est enregistré sur cet appareil : vous pouvez réessayer sans risque.",
+    "globalTitle": "Palier a cessé de fonctionner",
+    "globalBody": "Un problème est survenu avant le chargement de la page. Réessayez ou rechargez la page.",
+    "retry": "Réessayer",
+    "home": "Aller au plan du jour",
+    "reportHeading": "Signaler le problème",
+    "reportBody": "Si le problème persiste, vous pouvez nous envoyer un rapport. Il contient seulement ce qui est affiché ci-dessous : cette version, la banque d’items, votre navigateur et la page. Il ne contient jamais ce que vous avez écrit ou dit, ni votre clé.",
+    "details": "Voir le contenu du rapport",
+    "copy": "Copier le rapport",
+    "copied": "Copié.",
+    "copyFailed": "Ce navigateur n’a pas pu le copier. Sélectionnez le texte ci-dessus et copiez-le vous-même.",
+    "openIssue": "Ouvrir un signalement sur GitHub",
+    "notFoundTitle": "Page introuvable",
+    "notFoundBody": "Il n’y a rien à cette adresse. La page a peut-être été déplacée ou le lien contient une erreur."
   }
 }

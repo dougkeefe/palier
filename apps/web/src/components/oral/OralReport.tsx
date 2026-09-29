@@ -76,6 +76,8 @@ export function OralReport() {
   const reload = useCallback(async (ready: Container, keepAsk = false) => {
     const id = sessionInUrl();
     try {
+      // A session a tab was closed on is over, so its report can be asked for (D144).
+      if (id !== null) await ready.useCases.closeAbandonedSessions().catch(() => []);
       const report = id === null ? null : await ready.useCases.oralReport({ sessionId: id });
       dispatch(keepAsk && report !== null ? { type: "refreshed", report } : { type: "loaded", report });
     } catch {

@@ -9,6 +9,7 @@ import {
   START,
   anOralSession,
   handTransport,
+  liveSessions,
   oralStore,
   scenarioBank,
   settableClock,
@@ -19,6 +20,7 @@ import {
   OralSessionExistsError,
   UnknownScenarioError,
   cleanUpAudio,
+  closeAbandonedSessions,
   oralStorageEstimate,
   saveOralAudio,
   startOralSessionRun,
@@ -27,12 +29,17 @@ import {
 const MIN = 60_000;
 const request = { sessionId: SESSION_ID, scenarioId: SCENARIO.id };
 
-const setUp = (options: Parameters<typeof handTransport>[0] = {}, seed: Parameters<typeof oralStore>[0] = []) => {
+const setUp = (
+  options: Parameters<typeof handTransport>[0] = {},
+  seed: Parameters<typeof oralStore>[0] = [],
+  live: readonly string[] = [],
+) => {
   const clock = settableClock();
   const hand = handTransport(options);
   const oral = oralStore(seed);
-  const deps = { clock, items: scenarioBank(), oral, transport: hand.transport };
-  return { clock, hand, oral, deps };
+  const liveness = liveSessions(live);
+  const deps = { clock, items: scenarioBank(), oral, transport: hand.transport, liveness };
+  return { clock, hand, oral, liveness, deps };
 };
 
 /** Let queued work settle: the run's queue is a chain of promises. */
@@ -67,6 +74,14 @@ describe("startOralSessionRun", () => {
 
     expect(await oral.get(running.id)).toMatchObject({ endedAt: START, endReason: "interrupted" });
     expect(await oral.get(done.id)).toEqual(done);
+  });
+
+  it("leaves a session another page on this device is running, which that page would write back as running (D144)", async () => {
+    const elsewhere = anOralSession({ id: sessionId("other-tab"), startedAt: "2026-09-26T09:00:00.000Z" });
+    const { oral, deps } = setUp({}, [elsewhere], ["other-tab"]);
+    await startOralSessionRun(request, deps);
+
+    expect(await oral.get(elsewhere.id)).toEqual(elsewhere);
   });
 
   it("stores the running session and enters the first phase at its baseline", async () => {
@@ -294,5 +309,50 @@ describe("oralStorageEstimate and cleanUpAudio", () => {
 
     expect(await oral.audioIndex()).toEqual([]);
     expect(await oral.all()).toHaveLength(3);
+  });
+});
+
+describe("closeAbandonedSessions (D144)", () => {
+  const abandoned = anOralSession({ id: sessionId("closed-hard"), startedAt: "2026-09-26T09:00:00.000Z" });
+  const running = anOralSession({ id: sessionId("other-tab"), startedAt: "2026-09-27T09:55:00.000Z" });
+  const done = anOralSession({ id: sessionId("done"), endedAt: "2026-09-25T09:10:00.000Z", endReason: "completed" });
+
+  it("stamps a session no page is running as interrupted, now, keeping its turns, and names it", async () => {
+    const withTurn = { ...abandoned, turns: [{ speaker: "candidate" as const, text: "Je travaille aux finances.", startMs: 0, endMs: 900, phase: 0 }] };
+    const { oral, deps } = setUp({}, [withTurn]);
+
+    expect(await closeAbandonedSessions(deps)).toEqual([abandoned.id]);
+    expect(await oral.get(abandoned.id)).toEqual({ ...withTurn, endedAt: START, endReason: "interrupted" });
+  });
+
+  it("leaves a session a page is running, and one already ended", async () => {
+    const { oral, deps } = setUp({}, [abandoned, running, done], ["other-tab"]);
+
+    expect(await closeAbandonedSessions(deps)).toEqual([abandoned.id]);
+    expect(await oral.get(running.id)).toEqual(running);
+    expect(await oral.get(done.id)).toEqual(done);
+  });
+
+  it("leaves a session its page ended, and let go of, after the list was read", async () => {
+    const { oral, deps } = setUp({}, [abandoned]);
+    const ended = { ...abandoned, endedAt: "2026-09-27T09:59:00.000Z", endReason: "completed" as const };
+    // The other tab's last write and its release land between reading the list and asking who is live.
+    const liveness = {
+      hold: () => () => undefined,
+      live: async () => {
+        await oral.put(ended);
+        return new Set<ReturnType<typeof sessionId>>();
+      },
+    };
+
+    expect(await closeAbandonedSessions({ ...deps, liveness })).toEqual([]);
+    expect(await oral.get(abandoned.id)).toEqual(ended);
+  });
+
+  it("asks nothing of the pages when no session is open", async () => {
+    const { liveness, deps } = setUp({}, [done]);
+
+    expect(await closeAbandonedSessions(deps)).toEqual([]);
+    expect(liveness.asked()).toBe(0);
   });
 });

@@ -6,6 +6,7 @@ import { sessionId } from "@palier/domain";
 
 import { fakeClock } from "../clock/fake-clock.js";
 import { FIXTURE_BANK, fixtureBankRepository } from "../fixtures/bank.js";
+import { memoryOralLiveness } from "./oral-liveness.js";
 import { memoryOralStore } from "./oral-store.js";
 import type { OralScriptEntry } from "./oral-transport.js";
 import { memoryOralTransport } from "./oral-transport.js";
@@ -43,8 +44,9 @@ const setUp = (scenario: OralScenario, options: Parameters<typeof memoryOralTran
   const clock = fakeClock(START);
   const fake = memoryOralTransport(scriptFor(scenario), options);
   const oral = memoryOralStore();
-  const deps = { clock, items: fixtureBankRepository(), oral, transport: fake.transport };
-  return { clock, fake, oral, deps };
+  const liveness = memoryOralLiveness();
+  const deps = { clock, items: fixtureBankRepository(), oral, transport: fake.transport, liveness };
+  return { clock, fake, oral, liveness, deps };
 };
 
 /** Drive the screen's timer: the clock moves, the examiner says what is due, the session ticks. */
@@ -142,5 +144,24 @@ describe("an oral session driven end to end over a fake transport", () => {
       endReason: "interrupted",
       endedAt: "2026-09-27T10:01:00.000Z",
     });
+  });
+
+  it("leaves a session another tab still runs, and closes one whose tab was closed hard (D144)", async () => {
+    const handles = setUp(work);
+    const running = sessionId("other-tab");
+    const closedHard = sessionId("closed-hard");
+    handles.liveness.hold(running);
+    await startOralSessionRun({ sessionId: running, scenarioId: work.id }, handles.deps);
+    handles.liveness.hold(closedHard);
+    await startOralSessionRun({ sessionId: closedHard, scenarioId: work.id }, { ...handles.deps, transport: memoryOralTransport().transport });
+    handles.liveness.abandon(closedHard);
+    handles.clock.advance(MIN);
+    await startOralSessionRun({ sessionId: sessionId("next"), scenarioId: work.id }, {
+      ...handles.deps,
+      transport: memoryOralTransport().transport,
+    });
+
+    expect(await handles.oral.get(running)).toMatchObject({ endedAt: null, endReason: null });
+    expect(await handles.oral.get(closedHard)).toMatchObject({ endReason: "interrupted", endedAt: "2026-09-27T10:01:00.000Z" });
   });
 });

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { memorySyncRepository } from "./__tests__/memory-repository";
 import { syncRepositoryContract } from "./__tests__/repository.contract";
-import { MAX_PUSH_ITEMS, RATE_LIMITS, type SyncApi, createSyncApi } from "./handlers";
+import { MAX_PUSH_ITEMS, RATE_LIMITS, type SyncApi, createSyncApi, healthResponse } from "./handlers";
 import type { SyncRepository } from "./repository";
 import { pairCodeFrom, rateLimitKey, sha256 } from "./secrets";
 
@@ -45,6 +45,32 @@ const register = (api: SyncApi, n = 1, ip?: string) =>
   api.registerDevice(request({ method: "POST", path: "/api/account/device", bearer: secret(n), body: { label: "Laptop" }, ...(ip === undefined ? {} : { ip }) }));
 
 const bodyOf = async <T>(response: Response): Promise<T> => (await response.json()) as T;
+
+describe("healthResponse (GET /api/health, D140)", () => {
+  const health = { build: "d9fbed6", bank: 3 } as const;
+
+  it("reports the build, the bank and a database that answers, uncached", async () => {
+    const response = healthResponse({ ...health, database: true });
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("cache-control")).toBe("no-store");
+    expect(await response.json()).toEqual({ build: "d9fbed6", bank: 3, database: "ok" });
+  });
+
+  it("is healthy with no database configured, since the app works without one (ADR 21)", async () => {
+    const response = healthResponse({ ...health, database: null });
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ build: "d9fbed6", bank: 3, database: "not-configured" });
+  });
+
+  it("answers 503 when a configured database does not answer", async () => {
+    const response = healthResponse({ ...health, database: false });
+
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({ build: "d9fbed6", bank: 3, database: "unreachable" });
+  });
+});
 
 describe("registerDevice", () => {
   it("creates an account for a new secret and returns its ids", async () => {

@@ -1,7 +1,8 @@
-import { generationCompletions, mswServer, openAiHandlers, verdictFor } from "@palier/testing";
+import { type OpenAiCompletion, generationCompletions, mswServer, openAiHandlers, verdictFor } from "@palier/testing";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import aiModels from "./ai-models.json";
+import { holdLedger } from "./__tests__/hold";
 import { createContainer } from "./container";
 
 /**
@@ -26,6 +27,10 @@ afterEach(async () => {
 afterAll(() => {
   mswServer.close();
 });
+
+/** A recorded completion's content, whether it is fixed or made from the prompt. */
+const contentOf = (completion: OpenAiCompletion, prompt: string): unknown =>
+  typeof completion.content === "function" ? (completion.content as (p: string) => unknown)(prompt) : completion.content;
 
 const keyed = async (hermetic: boolean) => {
   const c = createContainer({ hermetic });
@@ -130,6 +135,54 @@ describe.each([
     await c.useCases.saveApiKey({ key: KEY, remember: true });
     expect((await c.useCases.generatePracticeSet(REQUEST)).set).not.toBeNull();
     await c.useCases.deleteEverywhere();
+    expect(await c.useCases.latestGeneratedSet()).toBeNull();
+  });
+
+  it("joins a generation still out rather than paying twice, from a rebuilt container too, and names what it is for (D143)", async () => {
+    let drafts = 0;
+    const [draft, ...reviews] = generationCompletions(MARKER);
+    if (draft === undefined) throw new Error("the fixture drafts a set");
+    const counted = { ...draft, content: (prompt: string) => ((drafts += 1), contentOf(draft, prompt)) };
+    mswServer.use(...openAiHandlers({ mode: "ok", completions: [counted, ...reviews] }));
+    const c = await keyed(hermetic);
+    const { release } = holdLedger(c);
+
+    const first = c.useCases.generatePracticeSet(REQUEST);
+    expect(c.useCases.generatePracticeSet({ ...REQUEST, subSkill: "pronouns" })).toBe(first);
+    expect(c.useCases.generationInFlight()?.request).toEqual(REQUEST);
+    // A container built again, as a change of language builds one, still finds it.
+    const rebuilt = createContainer({ hermetic });
+    expect(rebuilt.useCases.generationInFlight()?.result).toBe(first);
+    release();
+    await first;
+
+    expect(drafts).toBe(1);
+    expect(c.useCases.generationInFlight()).toBeNull();
+  });
+
+  it("forgets a generation that failed, so asking again makes a new call (D143)", async () => {
+    mswServer.use(...openAiHandlers({ mode: "rate-limited" }));
+    const c = await keyed(hermetic);
+
+    await expect(c.useCases.generatePracticeSet(REQUEST)).rejects.toMatchObject({ name: "RateLimitError" });
+    expect(c.useCases.generationInFlight()).toBeNull();
+  });
+
+  it("never keeps a set that arrives after a wipe, and forgets the request (D143)", async () => {
+    mswServer.use(...openAiHandlers({ mode: "ok", completions: generationCompletions(MARKER) }));
+    const c = await keyed(hermetic);
+    // The draft and four reviews are recorded; the fifth review's answer is held, so every call
+    // is made and only the keeping is left when "Delete everything" is pressed.
+    const { release, reached } = holdLedger(c, { from: 6 });
+
+    const asked = c.useCases.generatePracticeSet(REQUEST);
+    await reached;
+    await c.useCases.wipeData();
+    expect(c.useCases.generationInFlight()).toBeNull();
+    release();
+    const { set } = await asked;
+
+    expect(set?.items).toHaveLength(5);
     expect(await c.useCases.latestGeneratedSet()).toBeNull();
   });
 });

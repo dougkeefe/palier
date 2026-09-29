@@ -159,6 +159,11 @@ interface AnswerSource   { answer(q: { text: string; audio: Blob | null; phase: 
                              Promise<{ kind: "audio"; audio: Blob; durationMs: number } | { kind: "typed"; text: string }> }
 // A port §3.3 did not name, added 27 September 2026 (progress.md D118): the candidate's side of practice mode. The
 // turn-based transport (`turnBasedTransport`, in @palier/app) hands it each question and waits; it rejects on abort.
+interface OralLiveness   { hold(id: SessionId): () => void; live(): Promise<ReadonlySet<SessionId>> }
+// A port §3.3 did not name, added 28 September 2026 (Phase 7 Slice 2, progress.md D144): which spoken sessions a page
+// on this device is running now. The page running a session holds it; `closeAbandonedSessions` closes only the open
+// sessions nobody holds. The browser's is a Web Lock per session (apps/web `lib/oral/liveness.ts`), which the browser
+// releases when the tab goes; the memory one is in @palier/testing.
 interface SettingsStore  { get<T>(k: string): Promise<T|null>; set<T>(k: string, v: T): Promise<void> }
 // Amended 24 September 2026: AttemptStore, ScheduleStore, SessionStore and SettingsStore each
 // gained `all()` and `clear()` (SettingsStore's `all()` returns `{ key, value }` entries). The
@@ -1065,12 +1070,13 @@ direction, then the human's reviews.
   checked on the built output; the lockfile audit gate in CI and Dependabot; `SECURITY.md` with the 90-day disclosure
   commitment; a missing `RATE_LIMIT_SALT` failing the production deploy (D78); and the deliberate attempt to get the key to
   leak, written as tests the CSP must stop. *Done:* the evidence for exit criterion 1's "no known security defects", which
-  Gate L's red-team read confirms.
+  Gate L's red-team read confirms. **Status: merged (#39; `progress.md` D133–D137).**
 - **Slice 2 — Server lifecycle and observability.** The retention job, deleting accounts inactive for 180 days and hard-deleting
   90-day-old tombstones (architecture.md §9.4), with the storage alert at 60% and 80% on the same scheduled run; `GET
   /api/health`; the error states with the client diagnostic bundle and a prefilled issue (architecture.md §16); and the two
   "outlives its screen" defects `progress.md` names. *Done:* the job retires exactly the rows past each boundary on PGlite, and
-  the error states are tested and axe-clean.
+  the error states are tested and axe-clean. **Status: built 28 September 2026** (`progress.md` D138–D144), with finding 13's wipe half, and
+  an unknown path's 404 rendered inside the layout, since Next's error shell cannot run under the strict CSP (D141).
 - **Gate K — Phase 7's UI and content direction (human).** Adopt the PRD as written or revise it first, as Gates A, D and F
   did: the privacy notice and about page, where the non-affiliation statement appears, whether §9's streak, XP and milestones
   are in 1.0, the library's 1.0 scope, and the PDF summary's shape. Gates Slices 3 and 4.

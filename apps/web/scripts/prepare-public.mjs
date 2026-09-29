@@ -50,24 +50,44 @@ export const localesFrom = (source) => {
 };
 
 /**
- * `BANK_BASE_PATH` from the composition root, so the served location has one source.
+ * The copy `global-error.tsx` shows, per locale: the `errors` namespace of each message file
+ * and nothing else (progress.md D141). `global-error` replaces the root layout, so it has no
+ * next-intl provider, and it loads with every page, so importing whole message files would
+ * put about 32 KB gzipped into every page for a screen almost nobody sees. The messages stay
+ * the one source; this file is written from them before `dev` and `build`, committed, and
+ * held equal to them by `src/components/errors/copy.test.ts`.
+ * @param {Record<string, { errors?: unknown }>} messagesByLocale
+ * @returns {string}
+ */
+export const globalErrorCopyOf = (messagesByLocale) => {
+  /** @type {Record<string, unknown>} */
+  const copy = {};
+  for (const [locale, messages] of Object.entries(messagesByLocale)) {
+    if (messages.errors === undefined) throw new Error(`prepare-public: messages/${locale}.json has no errors namespace`);
+    copy[locale] = messages.errors;
+  }
+  return `${JSON.stringify(copy, null, 2)}\n`;
+};
+
+/**
+ * `BANK_BASE_PATH` from `src/lib/bank-version.ts`, so the served location has one source.
  * @param {string} source
  * @returns {string}
  */
 export const bankBasePathFrom = (source) => {
   const base = /export const BANK_BASE_PATH = "([^"]+)"/.exec(source)?.[1];
-  if (base === undefined) throw new Error("prepare-public: no BANK_BASE_PATH in src/lib/container.ts");
+  if (base === undefined) throw new Error("prepare-public: no BANK_BASE_PATH in src/lib/bank-version.ts");
   return base;
 };
 
 /**
- * `BANK_VERSION` from the composition root: the one version this build reads.
+ * `BANK_VERSION` from `src/lib/bank-version.ts`: the one version this build reads.
  * @param {string} source
  * @returns {number}
  */
 export const bankVersionFrom = (source) => {
   const version = /export const BANK_VERSION = (\d+);/.exec(source)?.[1];
-  if (version === undefined) throw new Error("prepare-public: no BANK_VERSION in src/lib/container.ts");
+  if (version === undefined) throw new Error("prepare-public: no BANK_VERSION in src/lib/bank-version.ts");
   return Number(version);
 };
 
@@ -140,9 +160,9 @@ const main = async () => {
   const contentDir = dirname(dirname(require.resolve("@palier/content/profiles/psc-sle.json")));
   const bankSrc = join(contentDir, "bank");
   const publicDir = join(WEB_ROOT, "public");
-  const containerSource = await readFile(join(WEB_ROOT, "src/lib/container.ts"), "utf8");
-  const bankBasePath = bankBasePathFrom(containerSource);
-  const bankVersion = bankVersionFrom(containerSource);
+  const bankSource = await readFile(join(WEB_ROOT, "src/lib/bank-version.ts"), "utf8");
+  const bankBasePath = bankBasePathFrom(bankSource);
+  const bankVersion = bankVersionFrom(bankSource);
   const bankDest = join(publicDir, ...bankBasePath.split("/").filter(Boolean), "bank");
 
   // 1. The bank.
@@ -176,6 +196,13 @@ const main = async () => {
   for (const manifest of bankManifests) {
     stampInputs.push(await readFile(join(publicDir, ...manifest.split("/").filter(Boolean)), "utf8"));
   }
+
+  // 3. The copy global-error.tsx shows.
+  const messagesByLocale = {};
+  for (const locale of locales) messagesByLocale[locale] = JSON.parse(await readFile(join(WEB_ROOT, "messages", `${locale}.json`), "utf8"));
+  const copyPath = join(WEB_ROOT, "src/components/errors/global-error-copy.json");
+  const copy = globalErrorCopyOf(messagesByLocale);
+  if ((await readFile(copyPath, "utf8").catch(() => "")) !== copy) await writeFile(copyPath, copy);
 
   const compiled = ts.transpileModule(workerSource, {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },

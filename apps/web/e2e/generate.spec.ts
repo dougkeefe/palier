@@ -194,3 +194,40 @@ test("fresh items in French, at parity", async ({ page, context }) => {
   await expect(page.getByRole("heading", { name: "Les nouvelles questions exigent une clé OpenAI" })).toBeVisible();
   await axeClean(page);
 });
+
+test("a set still being made is waited for when you come back, and never asked for twice (D143)", async ({ page, context }) => {
+  test.setTimeout(90_000);
+  await stubOpenAi(context);
+  let drafts = 0;
+  let release: () => void = () => undefined;
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  // Registered after the stub, so it is asked first: it holds the draft's answer, and passes every other call on.
+  await context.route("https://api.openai.com/v1/chat/completions", async (route) => {
+    if (completionKind(route.request().postData() ?? "") === "draft") {
+      drafts += 1;
+      await held;
+    }
+    await route.fallback();
+  });
+  await openGenerator(page);
+  await addKeyAndCap(page);
+  await page.getByRole("button", { name: "Generate a fresh set" }).click();
+  await page.getByRole("button", { name: "Generate the set" }).click();
+  const sending = page.getByRole("status").filter({ hasText: "Drafting and checking the set." });
+  await expect(sending).toBeVisible();
+
+  // Leave while it is being made, and come back the browser's way.
+  await page.getByRole("link", { name: "About" }).first().click();
+  await expect(page.getByRole("heading", { level: 1, name: "What Palier is, and what it is not" })).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole("heading", { level: 1, name: "Fresh practice items" })).toBeVisible();
+  await expect(sending).toBeVisible();
+  await expect(page.getByRole("button", { name: "Generate a fresh set" })).toBeDisabled();
+  await axeClean(page);
+
+  release();
+  await expect(page.getByRole("heading", { name: "Your fresh set" })).toBeVisible();
+  expect(drafts).toBe(1);
+});

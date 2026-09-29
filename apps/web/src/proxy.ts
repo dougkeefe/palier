@@ -34,5 +34,7 @@ export default function proxy(request: NextRequest): NextResponse {
 export const config = {
   // Run on everything except API routes, Next internals, and files with an
   // extension (static assets). Those never need a locale prefix, and render no HTML.
-  matcher: "/((?!api|_next|_vercel|.*\\..*).*)",
+  // A path under a locale always runs, dot or not: `[locale]/[...rest]` renders the
+  // app's 404 for `/en/x.php`, and a page is never served without its CSP (D141).
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)", "/(en|fr)/:path*"],
 };

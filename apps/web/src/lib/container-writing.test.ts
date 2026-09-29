@@ -2,6 +2,7 @@ import { mswServer, openAiHandlers, type OpenAiCompletion } from "@palier/testin
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import aiModels from "./ai-models.json";
+import { gate, holdLedger } from "./__tests__/hold";
 import { createContainer } from "./container";
 
 /**
@@ -133,4 +134,53 @@ describe.each([
     await c.useCases.deleteEverywhere();
     expect(await c.useCases.writingHistory()).toEqual([]);
   });
+
+  it("joins a feedback request still out rather than paying twice, from a rebuilt container too, and forgets it once settled (D143)", async () => {
+    let calls = 0;
+    mswServer.use(...openAiHandlers({ mode: "ok", completions: [answer(() => ((calls += 1), FEEDBACK))] }));
+    const { c, submission } = await saved(hermetic);
+    const { release } = holdLedger(c);
+    const request = { submissionId: submission.id, targetBand: "C", feedbackLang: "en" } as const;
+
+    const first = c.useCases.requestWritingFeedback(request);
+    expect(c.useCases.requestWritingFeedback(request)).toBe(first);
+    expect(c.useCases.writingFeedbackInFlight({ submissionId: submission.id })).toBe(first);
+    // A container built again, as a change of language builds one, still finds it and joins it.
+    const rebuilt = createContainer({ hermetic });
+    expect(rebuilt.useCases.writingFeedbackInFlight({ submissionId: submission.id })).toBe(first);
+    expect(rebuilt.useCases.requestWritingFeedback({ ...request, feedbackLang: "fr" })).toBe(first);
+    release();
+    await first;
+
+    expect(calls).toBe(1);
+    expect(c.useCases.writingFeedbackInFlight({ submissionId: submission.id })).toBeNull();
+  });
+
+  it("forgets a feedback request that failed, so asking again makes a new call (D143)", async () => {
+    mswServer.use(...openAiHandlers({ mode: "invalid-key" }));
+    const { c, submission } = await saved(hermetic);
+
+    await expect(c.useCases.requestWritingFeedback({ submissionId: submission.id, targetBand: "C", feedbackLang: "en" })).rejects.toMatchObject({
+      name: "InvalidApiKeyError",
+    });
+    expect(c.useCases.writingFeedbackInFlight({ submissionId: submission.id })).toBeNull();
+  });
+
+  it("never writes the submission back when a wipe happens mid-call, and forgets the request (D143) [R12]", async () => {
+    const atOpenAi = gate();
+    mswServer.use(...openAiHandlers({ mode: "ok", completions: [answer(() => (atOpenAi.open(), FEEDBACK))] }));
+    const { c, submission } = await saved(hermetic);
+    const { release } = holdLedger(c);
+
+    const asked = c.useCases.requestWritingFeedback({ submissionId: submission.id, targetBand: "C", feedbackLang: "en" });
+    // The call is out, past the key, when "Delete everything" is pressed.
+    await atOpenAi.opened;
+    await c.useCases.wipeData();
+    expect(c.useCases.writingFeedbackInFlight({ submissionId: submission.id })).toBeNull();
+    release();
+    await asked;
+
+    expect(await c.useCases.writingHistory()).toEqual([]);
+  });
 });
+
