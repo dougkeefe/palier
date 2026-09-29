@@ -5505,6 +5505,60 @@ devices; nightly lane, 100,000 seeds)
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
+### 29 September 2026 — `dougkeefe/dependabot-cleanup-slice` (cleanup slice, D154–D157)
+
+**Asked for by the human** before Phase 7 Slice 4: clear what was lingering.
+
+**Changed:**
+- **The Dependabot queue is empty** (D155):
+  - #41 (the minor-and-patch group) and #40 (`github-script` v9) merged;
+  - #42 (`@types/node` 26) closed;
+  - #44 (TypeScript 6) closed and superseded here (D154);
+  - #43 (`jsdom` 30) merges once its CI is green, and `.nvmrc` moved to 22.23.3 for it.
+- **Dependabot alerts:** five fixed by scoped `pnpm` overrides, and the two `extract-zip` alerts dismissed as tolerable risk.
+  They close on GitHub when this merges.
+- **The nightly lane's two causes are fixed:**
+  - the lane-wide timeout (D156);
+  - a real sync data-loss bug in `requestPairCode`, which three simulator seeds found (D157, now regression seeds).
+
+  Its five duplicate issues (#24, #29, #33, #36, #46) close with this PR, and a later failure comments instead of opening
+  another.
+- **Journey 4's flake was the test.** A client-side `Link` click resolves when the click is sent, not when the navigation
+  commits. Under parallel load, the "Review" click overtook the pending navigation to "Today", which made it a navigation to
+  the page already on screen. The review screen never remounted and kept the "Nothing due" it read two days earlier.
+
+  An instrumented copy showed it in every failure: no `pushState` to `/en/home`, the original heading node still mounted,
+  and IndexedDB holding six rows due 25 September under a page clock of 26 September. The data and the clock were right
+  every time. The test now waits for Today's "Review queue" heading.
+
+  That a mounted review screen doesn't re-read the queue when the day changes is named, not built.
+- **Bookkeeping:**
+  - the header and status row say Slice 3 (#47) and the relicense (#48) merged;
+  - the scaffolding checklist names ADR 23's licences;
+  - the done human items are struck: private vulnerability reporting enabled (confirmed through the API), the smoke key set
+    (the live smoke passed on 28 and 29 September), and Dependabot watched.
+- **Not done:** the 36 merged `dougkeefe/*` branches on origin, and the "delete head branches" setting, which was left to the
+  human.
+
+*Next, decided* is unchanged: Phase 7 Slice 4.
+
+**Evidence:**
+
+```
+pnpm verify                → check-types, lint, boundaries (456 + 274 modules, no violations),
+                             test: 220 files, 3369 passed, 8 todo; coverage thresholds met; exit 0
+CI=1 pnpm verify:medium    → integration 7 files, 51 passed; Playwright 84 passed (1.4m); exit 0
+pnpm --filter @palier/web bundle-size  → shared first-load JS 166.1 KB of 180.0 KB
+pnpm --filter @palier/web lighthouse   → 17 URLs, 85 runs, assertions pass; exit 0
+pnpm audit (whole tree)    → 4 high (2 ignored: the `content` false positives, D135) = extract-zip ×2 only
+PALIER_INTEGRATION=1 PALIER_SIM_SEEDS=5000 vitest run --project integration-testing → 1 passed (138 s)
+CI_LANE=nightly vitest run trend-calculator.property + weakest-sub-skills.property   → 4 passed
+  … with testTimeout set to 1 ms                     → "Test timed out in 1ms" (the setting reaches the projects)
+journey 4, --repeat-each=10 before                   → 6 failed, 4 passed
+journey 4, --repeat-each=20; --repeat-each=30 --workers=8 after → 20 passed; 30 passed
+D157 fix reverted → regression seeds 54693, 72951, 91998 fail (run.test.ts: 3 failed, 39 passed)
+```
+
 ### 29 September 2026 — `dougkeefe/noncommercial-license` (relicensed non-commercial, D153)
 
 **Changed:** `LICENSE` is now the verbatim PolyForm Noncommercial License 1.0.0 and `LICENSE-CONTENT` the verbatim CC BY-NC-SA
