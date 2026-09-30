@@ -14,6 +14,9 @@ import type { OralDirection, OralEndReason, OralRegister } from "@palier/domain"
  *   `completed`, and every phase has been entered.
  * - **Difficulty adapts the current phase**, to its escalation or de-escalation
  *   questions. A phase always starts at its baseline.
+ * - **Studio mode's cap ends a session `time-cap`** (architecture.md §8.6, progress.md
+ *   D166), checked before the scenario's length, so a cap shorter than a scenario wins.
+ *   The cap is a spend guard from `pricing.json`, handed in as data; practice mode has none.
  * - **Every end carries a reason**, and once ended the machine says nothing more.
  * - **Time never runs backwards.** An event stamped earlier than one already seen is
  *   taken as happening at the later time.
@@ -24,6 +27,8 @@ export type OralSessionState = {
   readonly boundariesMs: readonly number[];
   /** The session's length in ms: the last boundary. */
   readonly lengthMs: number;
+  /** Studio mode's hard cap in ms since the session opened, or `null` for none (D166). */
+  readonly capMs: number | null;
   readonly phase: number;
   readonly register: OralRegister;
   /** The latest time seen, in ms since the session opened. */
@@ -51,10 +56,18 @@ const MINUTE_MS = 60_000;
 
 /**
  * Open a session over its phases' minutes, entering the first phase. Rounded once
- * per boundary, from the running total, so fractional minutes never drift.
+ * per boundary, from the running total, so fractional minutes never drift. `capMs`
+ * is studio mode's hard cap (D166).
  */
-export const startOralSession = (phases: readonly { readonly minutes: number }[]): OralStep => {
+export const startOralSession = (
+  phases: readonly { readonly minutes: number }[],
+  options: { readonly capMs?: number } = {},
+): OralStep => {
   if (phases.length === 0) throw new RangeError("A session needs at least one phase.");
+  const capMs = options.capMs ?? null;
+  if (capMs !== null && (!Number.isFinite(capMs) || capMs <= 0)) {
+    throw new RangeError(`A session's cap must be a positive number of milliseconds, not ${String(capMs)}.`);
+  }
   let total = 0;
   const boundariesMs = phases.map(({ minutes }) => {
     if (!Number.isFinite(minutes) || minutes <= 0) {
@@ -64,7 +77,15 @@ export const startOralSession = (phases: readonly { readonly minutes: number }[]
     return Math.round(total * MINUTE_MS);
   });
   return {
-    state: { boundariesMs, lengthMs: Math.round(total * MINUTE_MS), phase: 0, register: "baseline", lastAtMs: 0, ended: null },
+    state: {
+      boundariesMs,
+      lengthMs: Math.round(total * MINUTE_MS),
+      capMs,
+      phase: 0,
+      register: "baseline",
+      lastAtMs: 0,
+      ended: null,
+    },
     commands: [{ kind: "enter-phase", phase: 0 }],
   };
 };
@@ -98,7 +119,8 @@ export const stepOralSession = (state: OralSessionState, event: OralSessionEvent
     lastAtMs: atMs,
   };
 
-  const reason = atMs >= state.lengthMs ? "completed" : endReasonFor(event);
+  const reason =
+    state.capMs !== null && atMs >= state.capMs ? "time-cap" : atMs >= state.lengthMs ? "completed" : endReasonFor(event);
   if (reason !== null) {
     commands.push({ kind: "close", reason });
     return { state: { ...next, ended: reason }, commands };

@@ -1,5 +1,6 @@
 import * as z from "zod";
 
+import { ORAL_CRITERIA, ORAL_NOTE_SEVERITIES } from "../ai.js";
 import { ORAL_INPUTS, ORAL_SPEAKERS } from "../oral-session.js";
 
 /**
@@ -21,3 +22,17 @@ export const oralTurnShape = z
   .refine((turn) => turn.startMs <= turn.endMs, { message: "a turn cannot end before it starts", path: ["endMs"] });
 
 export const oralTurnSchema = oralTurnShape.readonly();
+
+/**
+ * A studio examiner's note (progress.md D168), read back from the device the way a turn is,
+ * and the shape the realtime transport checks a `note_observation` call against. Evidence
+ * must say something.
+ */
+export const oralNoteShape = z.strictObject({
+  criterion: z.enum(ORAL_CRITERIA),
+  evidence: z.string().trim().min(1),
+  severity: z.enum(ORAL_NOTE_SEVERITIES),
+  phase: z.number().int().nonnegative(),
+});
+
+export const oralNoteSchema = oralNoteShape.readonly();

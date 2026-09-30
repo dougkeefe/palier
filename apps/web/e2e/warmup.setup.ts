@@ -48,4 +48,6 @@ const SYNC_ROUTES = [
   ["DELETE", "/api/account"],
   ["GET", "/api/sync"],
   ["POST", "/api/telemetry"],
+  // Studio mode's secret (D169): 401 with no key, which is enough to build it.
+  ["POST", "/api/realtime/secret"],
 ] as const;

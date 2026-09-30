@@ -1,7 +1,7 @@
 import type { OralAudioEntry, OralSession, OralStore } from "@palier/app";
 import { StorageQuotaError } from "@palier/app";
-import type { OralAssessment, OralEndReason, OralTurn, SessionId } from "@palier/domain";
-import { ORAL_END_REASONS, checkOralAssessment, oralAssessmentSchema, oralTurnSchema } from "@palier/domain";
+import type { OralAssessment, OralEndReason, OralNote, OralTurn, SessionId } from "@palier/domain";
+import { ORAL_END_REASONS, checkOralAssessment, oralAssessmentSchema, oralNoteSchema, oralTurnSchema } from "@palier/domain";
 
 import type { OralAudioRow, PalierDb } from "./db.js";
 
@@ -23,6 +23,18 @@ const assessmentOf = (turns: readonly OralTurn[], raw: unknown): OralAssessment 
 };
 
 /**
+ * A studio examiner's notes (D168), each checked like a turn. A broken note is dropped and the
+ * rest kept: a note is the examiner's aside, never the user's words, so losing one costs the
+ * report a hint, where losing the session would cost the transcript. `undefined` when there are
+ * none to keep, so a practice session reads as it was stored.
+ */
+const notesOf = (raw: unknown): readonly OralNote[] | undefined => {
+  if (!Array.isArray(raw)) return undefined;
+  const notes = raw.filter((note) => oralNoteSchema.safeParse(note).success) as OralNote[];
+  return notes.length === 0 ? undefined : notes;
+};
+
+/**
  * The structure check at the edge (D55's approach). A session reads only if it is whole:
  * its ids and start, an end and a reason that are both set or both null, and every turn
  * a whole `OralTurn`. Anything else reads as nothing, so a broken row never reaches the
@@ -34,7 +46,7 @@ const assessmentOf = (turns: readonly OralTurn[], raw: unknown): OralAssessment 
  */
 const sessionOf = (raw: unknown): OralSession | null => {
   if (raw === undefined || raw === null) return null;
-  const { id, scenarioId, startedAt, endedAt, endReason, turns, assessment } = raw as Partial<
+  const { id, scenarioId, startedAt, endedAt, endReason, turns, assessment, notes } = raw as Partial<
     Record<keyof OralSession, unknown>
   >;
   if (!isText(id) || !isText(scenarioId) || !isInstant(startedAt)) return null;
@@ -42,7 +54,13 @@ const sessionOf = (raw: unknown): OralSession | null => {
   const ended = isInstant(endedAt) && isEndReason(endReason);
   if (!running && !ended) return null;
   if (!Array.isArray(turns) || !turns.every((turn) => oralTurnSchema.safeParse(turn).success)) return null;
-  return { ...(raw as OralSession), assessment: assessmentOf(turns as OralTurn[], assessment) };
+  const { notes: _stored, ...session } = raw as OralSession;
+  const kept = notesOf(notes);
+  return {
+    ...session,
+    assessment: assessmentOf(turns as OralTurn[], assessment),
+    ...(kept === undefined ? {} : { notes: kept }),
+  };
 };
 
 const audioOf = (raw: unknown): OralAudioRow | null => {

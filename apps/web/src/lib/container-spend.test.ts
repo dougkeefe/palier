@@ -173,7 +173,7 @@ describe.each([
 describe("the per-feature table", () => {
   it("prices a typical use of every feature from pricing.json", () => {
     const costs = createContainer({ hermetic: true }).useCases.featureCosts();
-    expect(costs.map((cost) => cost.feature)).toEqual(["writing-feedback", "item-generation", "oral-practice", "oral-assessment"]);
+    expect(costs.map((cost) => cost.feature)).toEqual(["writing-feedback", "item-generation", "oral-practice", "oral-assessment", "oral-studio"]);
     for (const cost of costs) expect(cost.estimateUsd).toBeGreaterThan(0);
   });
 });

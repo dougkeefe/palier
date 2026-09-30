@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { OralDirective, OralTransport, OralTransportEvent } from "@palier/app";
 import type { OralScenario } from "@palier/domain";
+import { ORAL_CRITERIA, ORAL_NOTE_SEVERITIES } from "@palier/domain";
 
 import { anOralScenario } from "../fixtures/builders.js";
 
@@ -35,7 +36,9 @@ const closedEvents = (events: readonly OralTransportEvent[]) => events.filter((e
  * transport (progress.md D116). A turn's times are sane, never reversed, and never
  * run backwards for one speaker, though the two speakers' turns may overlap. A
  * session hears `closed` exactly once, last, whoever ends it, and a directive after
- * that is a harmless no-op.
+ * that is a harmless no-op. A note, from a transport whose examiner takes them (D168),
+ * names a criterion and a severity the report knows and says something; a transport
+ * whose examiner takes none passes that check with nothing to check.
  */
 export const oralTransportContract = (name: string, make: () => Promise<OralTransportHarness>): void => {
   describe(`OralTransport contract: ${name}`, () => {
@@ -62,6 +65,19 @@ export const oralTransportContract = (name: string, make: () => Promise<OralTran
         expect(starts).toEqual([...starts].sort((a, b) => a - b));
       }
       expect(closedEvents(events)).toEqual([]);
+    });
+
+    it("sends only whole notes, on a criterion and at a severity the report knows (D168)", async () => {
+      const harness = await make();
+      const { events, sink } = listen();
+      await harness.transport.open({ scenario: SCENARIO }, sink);
+      await harness.advance(SCRIPT_END_MS);
+
+      for (const note of events.flatMap((e) => (e.kind === "note" ? [e] : []))) {
+        expect(ORAL_CRITERIA).toContain(note.criterion);
+        expect(ORAL_NOTE_SEVERITIES).toContain(note.severity);
+        expect(note.evidence.trim()).not.toBe("");
+      }
     });
 
     it("carries each directive to the examiner's side, in order", async () => {

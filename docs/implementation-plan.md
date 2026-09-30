@@ -150,11 +150,20 @@ interface OralStore      { put(s: OralSession): Promise<void>; get(id: SessionId
 // `assessment: OralAssessment | null`, the report on it, and OralTurn an optional `input: "voice" | "typed"`,
 // which the fluency metrics need, and `pauseMs`, the pause the screen measured before a spoken answer (D127).
 // A stored report whose offsets no longer fit its turns reads as unassessed.
+// Amended 29 September 2026 (Phase 6 Slice 1, progress.md D166, D168): OralSession gains optional `notes: OralNote[]`,
+// a studio examiner's observations ({ criterion, evidence, severity, phase }), and OralEndReason gains `time-cap`.
 interface OralTransport  { open(req: { scenario: OralScenario }, sink: (e: OralTransportEvent) => void): Promise<void>;
                            direct(d: { phase: number; register: OralRegister }): Promise<void>; close(): Promise<void> }
 // A port §3.3 did not name, added 27 September 2026 (progress.md D116). One shape for the turn-based
 // (Phase 5) and full-duplex (Phase 6) transports. Push: the transport sends whole turns with their
 // start/end ms, difficulty flags, and exactly one `closed { failed }`, last; the client drives the phases.
+// Amended 29 September 2026 (Phase 6 Slice 1, progress.md D168): OralTransportEvent gains
+// `note { criterion, evidence, severity }`, from the studio examiner's `note_observation` tool; the driver stamps its phase.
+// Studio mode's transport is `realtimeTransport`, in the openai adapter (D170).
+interface RealtimeSecretSource { mint(apiKey: string): Promise<{ value: string; expiresAt: ISO }> }
+// A port §3.3 did not name, added 29 September 2026 (Phase 6 Slice 1, progress.md D165, D169): where studio mode's short-lived
+// browser secret comes from. Called only inside KeyVault.withApiKey. The browser's (`routeRealtimeSecrets`) posts the key
+// to POST /api/realtime/secret; the server's (`openAiRealtimeSecrets`), which that route runs, calls OpenAI.
 interface AnswerSource   { answer(q: { text: string; audio: Blob | null; phase: number }, signal: AbortSignal):
                              Promise<{ kind: "audio"; audio: Blob; durationMs: number } | { kind: "typed"; text: string }> }
 // A port §3.3 did not name, added 27 September 2026 (progress.md D118): the candidate's side of practice mode. The
@@ -188,6 +197,7 @@ interface AiProvider {
   generateScenario(req: GenerateScenarioRequest): Promise<ScenarioDraft>  // Phase 5 Slice 1, ADDED (progress.md D114):
                                     // the factory's scenario stage; a phase plan, assembled by the factory
   assessOral(req: OralRequest): Promise<OralAssessment>            // Phase 5 Slice 3 (progress.md D122): per-criterion
+                                    // (OralRequest gains optional `notes`, quoted when present: Phase 6 Slice 1, D168)
                                     // bands with quoted evidence, three fixes on drillable sub-skills, five missing words,
                                     // and the errors placed per candidate turn; the model quotes, the adapter places
   transcribe(req: TranscribeRequest): Promise<Transcript>          // Phase 5 Slice 2, AMENDED (progress.md D117): was
@@ -1067,24 +1077,27 @@ sync.**
 - **Gate N — the examiner's voice (human).** Beside Slice 1, and before Slice 2. `marin` and `cedar` heard in French at C level
   in OpenAI's Realtime playground; the human picks one. A fail stops the phase, and the deferral returns.
 - **Slice 2 — The studio screen, on the key.**
+  - The key copy's one exception, stated in both languages, plus §6.3's settings note and `SECURITY.md`. *(Moved here from
+    Slice 3 by `progress.md` D173: a screen that sends the key to the route must not ship under copy that says it never
+    leaves for anywhere but OpenAI.)*
   - The mode choice on `/practice/oral`, with cost up front for both.
   - PRD §8.6's screen: the voice form over both levels, the phase indicator, the timer, the end control, "could you repeat",
     no live transcript, and a reduced-motion fallback.
   - The whole-session local recording, the pre-flight estimate and a running meter.
   - The report over the realtime transcript and notes, with synced audio.
   - A hermetic journey over a memory transport, with every state axe-clean.
+  - The key-leak test's fake-peer half: `/v1/realtime/calls` gets the `ek_` secret, never the key (`progress.md` D171).
 
-  *Done:* exit criterion 1 measured live, and the cost per minute measured and written into `pricing.json` (principle 8).
-- **Slice 3 — The exception, stated and escapable.**
-  - Every absolute key claim amended in both languages to name the one exception, plus §6.3's settings note. That includes
-    `SECURITY.md`.
+  *Done:* exit criterion 1 measured live, the cost per minute measured and written into `pricing.json` (principle 8), and the
+  copy's parity.
+- **Slice 3 — The exception, escapable.** (Its copy half moved to Slice 2, D173.)
   - The self-hosted escape: a popup to the user's own endpoint and `postMessage`, so `connect-src` is unchanged for everyone
     (D165).
   - The one-file Worker and Vercel function.
   - The Vercel log exclusion verified, and in `docs/deploy.md`.
   - `docs/realtime-checklist.md`.
 
-  *Done:* the copy's parity, and the self-hosted path working end to end against a local endpoint.
+  *Done:* the self-hosted path working end to end against a local endpoint.
 - **Gate O — studio mode's release reads (human).** The checklist on the six browser and platform pairs (exit criterion 3), the
   route read line by line, and the French of the new copy. Then Gate M.
 

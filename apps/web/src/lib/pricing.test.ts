@@ -5,7 +5,7 @@ import { estimateFeatureCost } from "@palier/engine";
 import { describe, expect, it } from "vitest";
 
 import aiModels from "./ai-models.json";
-import { PRICING, parsePricing, roleModels } from "./pricing";
+import { PRICING, STUDIO_MAX_MINUTES, parsePricing, parseStudioMaxMinutes, roleModels } from "./pricing";
 
 const factoryPricing = JSON.parse(
   readFileSync(new URL("../../../factory/config/pricing.json", import.meta.url), "utf8"),
@@ -14,7 +14,17 @@ const factoryPricing = JSON.parse(
 const models = { draft: "m" };
 const good = {
   models: { m: { inputPerMTok: 1, outputPerMTok: 2 } },
-  features: { "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }], "item-generation": [], "oral-practice": [], "oral-assessment": [] },
+  features: { "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }], "item-generation": [], "oral-practice": [], "oral-assessment": [], "oral-studio": [] },
+};
+
+const realtimeRates = { textInputPerMTok: 4, textOutputPerMTok: 24, audioInputPerMTok: 32, audioOutputPerMTok: 64, cachedInputPerMTok: 0.4 };
+const realtimeCall = {
+  role: "realtime",
+  textInputTokens: 300,
+  textOutputTokens: 60,
+  audioInputTokens: 360,
+  audioOutputTokens: 480,
+  cachedInputTokens: 30_000,
 };
 
 describe("PRICING, this build's pricing.json", () => {
@@ -28,6 +38,15 @@ describe("PRICING, this build's pricing.json", () => {
     for (const model of Object.values(roleModels(aiModels))) {
       expect(PRICING.prices[model], model).toBeDefined();
     }
+  });
+
+  it("caps a studio session at a positive number of minutes (D166)", () => {
+    expect(STUDIO_MAX_MINUTES).toBeGreaterThan(0);
+  });
+
+  it("prices studio mode's realtime model, and never takes its voice for a model (D165)", () => {
+    expect(PRICING.models.realtime).toBe(aiModels.realtime);
+    expect(Object.values(PRICING.models)).not.toContain(aiModels.realtimeVoice);
   });
 
   it("holds the browser's model prices equal to the factory's, for every model both price", () => {
@@ -45,6 +64,10 @@ describe("roleModels", () => {
   it("leaves out the examiner's voice, which is not a model (D117)", () => {
     expect(roleModels({ speech: "tts-1", voice: "sage" })).toEqual({ speech: "tts-1" });
   });
+
+  it("leaves out studio mode's voice too (D165)", () => {
+    expect(roleModels({ realtime: "rt-1", realtimeVoice: "marin" })).toEqual({ realtime: "rt-1" });
+  });
 });
 
 describe("parsePricing", () => {
@@ -57,8 +80,19 @@ describe("parsePricing", () => {
         "item-generation": [],
         "oral-practice": [],
         "oral-assessment": [],
+        "oral-studio": [],
       },
     });
+  });
+
+  it("reads a realtime model's five rates, and a call in realtime tokens (D167)", () => {
+    const studio = {
+      models: { ...good.models, rt: realtimeRates },
+      features: { ...good.features, "oral-studio": [realtimeCall, { role: "transcribe", minutes: 0.6 }] },
+    };
+    const parsed = parsePricing(studio, models);
+    expect(parsed.prices.rt).toEqual(realtimeRates);
+    expect(parsed.features["oral-studio"]).toEqual([realtimeCall, { role: "transcribe", minutes: 0.6 }]);
   });
 
   it("reads audio priced by the minute and by the character, and calls in those units (D117)", () => {
@@ -78,6 +112,13 @@ describe("parsePricing", () => {
     ["a price that is not an object", { ...good, models: { m: 2 } }, "the price of m"],
     ["a negative rate per minute", { ...good, models: { m: { perMinute: -1 } } }, "the price of m"],
     ["a price in two units at once", { ...good, models: { m: { perMinute: 1, perMChars: 1 } } }, "the price of m"],
+    ["a realtime price missing a rate", { ...good, models: { m: { ...realtimeRates, cachedInputPerMTok: undefined } } }, "the price of m"],
+    ["a realtime price with a negative rate", { ...good, models: { m: { ...realtimeRates, audioOutputPerMTok: -1 } } }, "the price of m"],
+    [
+      "a realtime call missing a unit",
+      { ...good, features: { ...good.features, "oral-studio": [{ ...realtimeCall, cachedInputTokens: undefined }] } },
+      "a call of oral-studio",
+    ],
     [
       "a call in no unit",
       { ...good, features: { ...good.features, "oral-practice": [{ role: "speech", seconds: 3 }] } },
@@ -96,5 +137,21 @@ describe("parsePricing", () => {
     ],
   ])("refuses %s, naming what is wrong", (_, raw, message) => {
     expect(() => parsePricing(raw, models)).toThrow(message);
+  });
+});
+
+describe("parseStudioMaxMinutes", () => {
+  it("reads the cap", () => {
+    expect(parseStudioMaxMinutes({ studioMaxMinutes: 25 })).toBe(25);
+  });
+
+  it.each([
+    ["not an object", null],
+    ["no cap", {}],
+    ["a cap of zero", { studioMaxMinutes: 0 }],
+    ["a negative cap", { studioMaxMinutes: -5 }],
+    ["a cap that is not a number", { studioMaxMinutes: "25" }],
+  ])("refuses %s", (_, raw) => {
+    expect(() => parseStudioMaxMinutes(raw)).toThrow("studioMaxMinutes");
   });
 });

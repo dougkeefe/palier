@@ -9,8 +9,10 @@ import { Link } from "../../i18n/navigation";
  * the wizard's last step on the skip path and the diagnostic's readout (progress.md D100),
  * which supply the heading level and the actions, since one ends a form and the other a page.
  *
- * The copy is honest about ADR 3 as it stands: nothing through Phase 5 sends the key
- * anywhere but OpenAI. The realtime exception joins this copy when studio mode is built, after 1.0 (D131).
+ * The copy is honest about ADR 3 as it stands: no screen yet sends the key anywhere but OpenAI.
+ * Studio mode is in 1.0 (progress.md D165), and its route, `POST /api/realtime/secret`, is built
+ * (Phase 6 Slice 1) but called by no screen. The realtime exception joins this copy in the same
+ * pull request as the studio screen that uses it (D173).
  */
 export function KeyOffer({
   heading,

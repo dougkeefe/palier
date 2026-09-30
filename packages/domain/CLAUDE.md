@@ -53,7 +53,12 @@ from disk (progress.md D154).
   problem. `OralTurn.input` (`"voice" | "typed"`) and `OralTurn.pauseMs` (the screen's measured pause, D127) are
   optional, because rows stored before them have none. **The filler list is a content artefact** (`oral-fillers` in
   `CONTENT_SCHEMAS`, `parseOralFillers`, D123): language, not an exam rule, so not profile data. It lists only clear
-  hesitations, and `spokenWords` is the one tokeniser the parser and the engine share (D127).
+  hesitations, and `spokenWords` is the one tokeniser the parser and the engine share (D127). **Studio mode's notes**
+  (D168): `OralNote { criterion, evidence, severity, phase }`, a criterion from `ORAL_CRITERIA` and a severity from
+  `ORAL_NOTE_SEVERITIES` (`minor`, `moderate`, `major`), evidence that says something, checked by `oralNoteSchema`;
+  `OralRequest.notes` is optional. `ORAL_END_REASONS` gains `time-cap` (D166). **A realtime price is a fourth
+  `ModelPrice` kind** (`RealtimePrice`: text and audio in and out, and one cached-input rate), and `costOf` prices
+  `RealtimeTokens`, whose input counts are the uncached part, `null` when any unit is unmeasured (D167).
 - **The library is a content artefact** (`library-article` in `CONTENT_SCHEMAS`, `library.ts`, progress.md D162): one
   `LibraryArticle` per written-expression sub-skill, prose `Localised`, examples in `lang`. **`parseLibrary` refuses a
   library missing any sub-skill's article, or with two**, since an item's explanation links to its sub-skill's page, and

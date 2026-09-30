@@ -1,10 +1,17 @@
 {
-  "note": "Pricing as data (architecture.md §8.6, progress.md D103). `models` is each model's price in the unit it is billed by, keyed by model id: USD per million tokens, per minute of audio or per million characters (D117). For every model the factory also prices it is the factory's own figure, held equal to apps/factory/config/pricing.json by pricing.test.ts; the audio models are the browser's alone. Rates confirmed at Gate G, 26 September 2026: the meter matched OpenAI's billing exactly (progress.md session log). `features` is a typical use of each feature as its calls, each naming a role in ai-models.json; one entry may stand for several calls to the same role, their tokens summed, since pricing is linear. Token counts MEASURED by the live smoke on 27 September 2026, on prompt version 4 (progress.md D112), and re-measured on 28 September 2026 by the recording that first captured `assessOral` (D128): writing feedback is one assess call, the average of two; a generated set is one draft call of five items, the average of three, plus five reviews, each averaged. The nightly live smoke prints the same block on every run. A maintainer CI job refreshing this file is Phase 7. Phase 5 Slice 2 (D117) adds audio, priced in the unit OpenAI bills it by, from its pricing page on 27 September 2026: gpt-transcribe at US$0.0045 a minute and tts-1 at US$15 per million characters. `oral-practice` is ONE MINUTE of a practice session, so a session's estimate is its minutes times this: about 1.5 examiner turns (each a question written and voiced, about 120 characters) and 0.6 minutes of the candidate's speech transcribed. The examiner's tokens are the recording's measured turn (376 in, 89 out, on prompt version 4) times those 1.5 turns. The turns a minute, the characters and the minutes transcribed are PLACEHOLDERS until Slice 3 measures a whole session's cost (Phase 5 exit criterion 2). The Slice 2 recording (27 September 2026) re-measured the other two features, and the recording of 28 September 2026 (D128) again; the counts above are the latest. Phase 5 Slice 3 (D122) adds `oral-assessment`, the report on one session: one assess call over the whole transcript. Its tokens are a PLACEHOLDER, estimated rather than measured: a 10-minute session's transcript of about 1,500 words and the prompt (about 3,000 tokens in), and a report of about 1,200 tokens out. The nightly live smoke measures a short fixed session's report, and a real 10-minute session measures a typical one (Phase 5 exit criterion 2).",
+  "note": "Pricing as data (architecture.md §8.6, progress.md D103). `models` is each model's price in the unit it is billed by, keyed by model id: USD per million tokens, per minute of audio or per million characters (D117). For every model the factory also prices it is the factory's own figure, held equal to apps/factory/config/pricing.json by pricing.test.ts; the audio models are the browser's alone. Rates confirmed at Gate G, 26 September 2026: the meter matched OpenAI's billing exactly (progress.md session log). `features` is a typical use of each feature as its calls, each naming a role in ai-models.json; one entry may stand for several calls to the same role, their tokens summed, since pricing is linear. Token counts MEASURED by the live smoke on 27 September 2026, on prompt version 4 (progress.md D112), and re-measured on 28 September 2026 by the recording that first captured `assessOral` (D128): writing feedback is one assess call, the average of two; a generated set is one draft call of five items, the average of three, plus five reviews, each averaged. The nightly live smoke prints the same block on every run. A maintainer CI job refreshing this file is Phase 7. Phase 5 Slice 2 (D117) adds audio, priced in the unit OpenAI bills it by, from its pricing page on 27 September 2026: gpt-transcribe at US$0.0045 a minute and tts-1 at US$15 per million characters. `oral-practice` is ONE MINUTE of a practice session, so a session's estimate is its minutes times this: about 1.5 examiner turns (each a question written and voiced, about 120 characters) and 0.6 minutes of the candidate's speech transcribed. The examiner's tokens are the recording's measured turn (376 in, 89 out, on prompt version 4) times those 1.5 turns. The turns a minute, the characters and the minutes transcribed are PLACEHOLDERS until Slice 3 measures a whole session's cost (Phase 5 exit criterion 2). The Slice 2 recording (27 September 2026) re-measured the other two features, and the recording of 28 September 2026 (D128) again; the counts above are the latest. Phase 5 Slice 3 (D122) adds `oral-assessment`, the report on one session: one assess call over the whole transcript. Its tokens are a PLACEHOLDER, estimated rather than measured: a 10-minute session's transcript of about 1,500 words and the prompt (about 3,000 tokens in), and a report of about 1,200 tokens out. The nightly live smoke measures a short fixed session's report, and a real 10-minute session measures a typical one (Phase 5 exit criterion 2). Phase 6 Slice 1 (progress.md D165, D167) adds the realtime model, from OpenAI's pricing page read on 29 September 2026 (developers.openai.com/api/docs/pricing, gpt-realtime-2.1): text US$4 in and US$24 out, audio US$32 in and US$64 out, and cached input US$0.40 for text and audio alike, per million tokens. `oral-studio` is ONE MINUTE of a studio conversation, like `oral-practice`: the realtime model's tokens plus the candidate's speech transcribed by `transcribe`. Its token counts are PROVISIONAL, derived rather than measured: OpenAI counts input audio at one token per 100 ms and output audio at one per 50 ms, so the candidate speaking 60% of a minute is 360 audio tokens in and the examiner 40% is 480 out; about 300 text tokens in (the phase instructions) and 60 out; and about three responses a minute each re-reading a context that averages 10,000 tokens over a 22-minute session, 30,000 cached. That is about US$0.055 a minute, beside the published estimates of about US$0.05 (D165). Phase 6 Slice 2 measures a real session and replaces these (principle 8). `studioMaxMinutes` is studio mode's hard session cap (architecture.md §8.6): a spend guard, not an exam rule (ADR 9 covers exam rules), so it lives here beside the price it guards (D165, D166).",
   "models": {
     "gpt-6-luna": { "inputPerMTok": 2.0, "outputPerMTok": 8.0 },
     "gpt-6-sol": { "inputPerMTok": 2.0, "outputPerMTok": 8.0 },
     "gpt-transcribe": { "perMinute": 0.0045 },
-    "tts-1": { "perMChars": 15 }
+    "tts-1": { "perMChars": 15 },
+    "gpt-realtime-2.1": {
+      "textInputPerMTok": 4.0,
+      "textOutputPerMTok": 24.0,
+      "audioInputPerMTok": 32.0,
+      "audioOutputPerMTok": 64.0,
+      "cachedInputPerMTok": 0.4
+    }
   },
   "features": {
     "writing-feedback": [{ "role": "assess", "inputTokens": 517, "outputTokens": 1813 }],
@@ -17,6 +24,18 @@
       { "role": "speech", "characters": 180 },
       { "role": "transcribe", "minutes": 0.6 }
     ],
-    "oral-assessment": [{ "role": "assess", "inputTokens": 3000, "outputTokens": 1200 }]
-  }
+    "oral-assessment": [{ "role": "assess", "inputTokens": 3000, "outputTokens": 1200 }],
+    "oral-studio": [
+      {
+        "role": "realtime",
+        "textInputTokens": 300,
+        "textOutputTokens": 60,
+        "audioInputTokens": 360,
+        "audioOutputTokens": 480,
+        "cachedInputTokens": 30000
+      },
+      { "role": "transcribe", "minutes": 0.6 }
+    ]
+  },
+  "studioMaxMinutes": 25
 }

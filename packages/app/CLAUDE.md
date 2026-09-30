@@ -86,6 +86,15 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   derives `focusSubSkills`** from the newest assessed session **in the plan's language**, through `oral: Pick<OralStore,
   "all">` and the bank's scenarios, as it derives `lastDayCompleted` (D124, D127). Each candidate's turn says how it
   arrived (`input`) and, for a clip, the pause the screen measured (`CandidateAnswer.pauseMs` → `OralTurn.pauseMs`, D127).
+- **Studio mode** (Phase 6 Slice 1, progress.md D165–D172). `OralTransportEvent` gains `note { criterion, evidence,
+  severity }`; the driver stamps the phase and keeps it on `OralSession.notes` (optional: a practice session has none),
+  and `requestOralReport` passes them as `OralRequest.notes` only when there are some. `startOralSessionRun` takes an
+  optional `capMs`, and the machine ends the session `time-cap` at it (D166). **`RealtimeSecretSource { mint(apiKey) }`**
+  is the port the one key-seeing route sits behind (ADR 3, D169). **`startOralStudioRun`** composes the driver with a
+  studio transport the composition root makes, handing it two hooks and never the adapter's name: `secret`, which
+  mints inside `KeyVault.withApiKey` (`NoApiKeyError` with none), and `usage`, which writes each billed usage to the
+  ledger as `oral-studio` under the session. `ended` waits for those writes, and a write that fails is not the
+  session's failure (D170).
 - **Ports are transcribed from §3.3, not invented.** Eight live under `src/ports/`:
   `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`,
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the

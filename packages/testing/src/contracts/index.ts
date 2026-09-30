@@ -22,3 +22,4 @@ export { generatedItemStoreContract } from "./generated-item-store.contract.js";
 export { oralStoreContract } from "./oral-store.contract.js";
 export { oralTransportContract, SCRIPT_END_MS } from "./oral-transport.contract.js";
 export type { OralTransportHarness } from "./oral-transport.contract.js";
+export { CONTRACT_REALTIME_KEYS, realtimeSecretSourceContract } from "./realtime-secret-source.contract.js";

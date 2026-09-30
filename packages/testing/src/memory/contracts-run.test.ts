@@ -16,6 +16,8 @@ import {
   generatedItemStoreContract,
   oralStoreContract,
   oralTransportContract,
+  realtimeSecretSourceContract,
+  CONTRACT_REALTIME_KEYS,
 } from "../contracts/index.js";
 import {
   fakeAiProvider,
@@ -35,6 +37,7 @@ import {
   memoryGeneratedItemStore,
   memoryOralStore,
   memoryOralTransport,
+  memoryRealtimeSecretSource,
 } from "./index.js";
 
 /**
@@ -60,13 +63,17 @@ costLedgerContract("memory", () => Promise.resolve(memoryCostLedger()));
 writingStoreContract("memory", () => Promise.resolve(memoryWritingStore()));
 generatedItemStoreContract("memory", () => Promise.resolve(memoryGeneratedItemStore()));
 oralStoreContract("memory", () => Promise.resolve(memoryOralStore()));
-// Overlapping turns and a flag, as a full-duplex session would give them.
+realtimeSecretSourceContract("memory", () =>
+  Promise.resolve(memoryRealtimeSecretSource({ refuses: [CONTRACT_REALTIME_KEYS.refused] })),
+);
+// Overlapping turns, a flag and a note, as a full-duplex studio session would give them.
 oralTransportContract("memory", () =>
   Promise.resolve(
     memoryOralTransport([
       { atMs: 2_000, kind: "turn", speaker: "examiner", text: "Parlez-moi de votre rôle.", startMs: 0, endMs: 2_000 },
       { atMs: 9_000, kind: "turn", speaker: "candidate", text: "Je suis analyste.", startMs: 1_800, endMs: 9_000 },
       { atMs: 9_500, kind: "difficulty", direction: "escalate" },
+      { atMs: 9_600, kind: "note", criterion: "vocabulary", evidence: "« analyste » sans précision", severity: "minor" },
       { atMs: 12_000, kind: "turn", speaker: "examiner", text: "Et ensuite ?", startMs: 9_600, endMs: 12_000 },
     ]),
   ),

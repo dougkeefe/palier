@@ -148,6 +148,19 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(reportRequest?.body).toContain(TRANSCRIPT_SENTINEL);
   expect(reportRequest?.body).not.toContain(AUDIO_SENTINEL);
   expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
+  // 3e. Studio mode's secret (ADR 3, D169): the one route on this origin that may see the key, posted to
+  // as the studio transport's route client posts, with the key in Authorization and no body. Its answer
+  // is a secret and its expiry and nothing else; the final check reads that answer for the key too. The
+  // fake-peer half, the studio screen dialling /v1/realtime/calls with the secret, is Slice 2's (D171).
+  const minted = await page.evaluate(async (key) => {
+    const response = await fetch("/api/realtime/secret", { method: "POST", headers: { authorization: `Bearer ${key}` } });
+    return { status: response.status, body: (await response.json()) as Record<string, unknown> };
+  }, SENTINEL);
+  expect(minted.status).toBe(200);
+  expect(Object.keys(minted.body).sort()).toEqual(["expiresAt", "value"]);
+  expect(String(minted.body.value)).toMatch(/^ek_memory_\d+$/);
+  expect(laptop.watch.realtimeSecretAuthorizations()).toEqual([`Bearer ${SENTINEL}`]);
+  expect(laptop.watch.openAiAuthorizations()).toHaveLength(17);
 
   // The first return home after a spoken session shows its milestone moment once (D159); it is closed as a user would.
   await page.getByRole("link", { name: "Today", exact: true }).click();

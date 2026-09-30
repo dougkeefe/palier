@@ -40,3 +40,14 @@ describe("memoryOralTransport", () => {
     expect(dropped).toEqual([{ kind: "closed", failed: true }]);
   });
 });
+
+describe("memoryOralTransport — notes (D168)", () => {
+  it("delivers a scripted note as the examiner's note, with no phase: the driver stamps it", async () => {
+    const events: OralTransportEvent[] = [];
+    const fake = memoryOralTransport([{ atMs: 1_000, kind: "note", criterion: "task", evidence: "a répondu à côté", severity: "major" }]);
+    await fake.transport.open({ scenario: anOralScenario() }, (e) => void events.push(e));
+    await fake.advance(1_000);
+
+    expect(events).toEqual([{ kind: "note", criterion: "task", evidence: "a répondu à côté", severity: "major" }]);
+  });
+});

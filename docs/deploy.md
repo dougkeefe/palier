@@ -95,6 +95,7 @@ Run these after every production deploy that touches the server or the schema:
 | `curl -sI https://<host>/sw.js` | `200`, `cache-control: no-cache, no-store, must-revalidate` | `next.config.ts` |
 | Two browsers: onboard on one, finish a session, then Settings → Sync → add a device, and enter the code on the other | Both show the same progress | The session log's journey-8 notes |
 | Delete everything everywhere on the test account (Settings → Sync → danger zone) | Leaves nothing on the server | — |
+| `curl -s -X POST https://<host>/api/realtime/secret` | **`401`** with `{"error":"missing-key"}`: studio mode's secret route is live and asked for a key it did not get (`progress.md` D169). **Never send a real key by `curl`**: a shell history keeps it | **`404`** means the route did not deploy; **`502`** here cannot happen, since no key means no call to OpenAI |
 | `curl -s https://<host>/api/health` | **`200`** with `{"build":"<7 hex>","bank":<BANK_VERSION in src/lib/bank-version.ts>,"database":"ok"}`, and `cache-control: no-store` (D140) | **`"not-configured"`** means no `DATABASE_URL`; **`503`** with `"unreachable"` means the database did not answer within two seconds, which a single request can do while Neon wakes from idle, so ask twice; a `"build"` of `"local"` means the build did not see `VERCEL_GIT_COMMIT_SHA` |
 
 ## The monthly item-statistics job

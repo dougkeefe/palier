@@ -222,6 +222,8 @@ export type {
   TurnBasedTransportDeps,
 } from "./oral-practice.js";
 export { oralSessionChoices, startOralPracticeRun, turnBasedTransport } from "./oral-practice.js";
+export type { OralStudioDeps, OralStudioRun, StudioTransport, StudioTransportHooks } from "./oral-studio.js";
+export { startOralStudioRun } from "./oral-studio.js";
 export type {
   OralCostLine,
   OralHistoryEntry,

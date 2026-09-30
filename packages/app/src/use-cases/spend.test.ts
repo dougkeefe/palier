@@ -36,6 +36,8 @@ const pricing: SpendPricing = {
     ],
     // One report on a session (D122).
     "oral-assessment": [{ role: "assess", inputTokens: 250_000, outputTokens: 62_500 }], // 0.5 + 0.5
+    // One minute of a studio conversation (D167).
+    "oral-studio": [{ role: "transcribe", minutes: 0.6 }], // 0.3
   },
 };
 
@@ -114,16 +116,17 @@ describe("spendSummary", () => {
 describe("featureCosts", () => {
   it("prices a typical use of every feature, in the features' order", () => {
     const costs = featureCosts(aDevice());
-    expect(costs.map((c) => c.feature)).toEqual(["writing-feedback", "item-generation", "oral-practice", "oral-assessment"]);
+    expect(costs.map((c) => c.feature)).toEqual(["writing-feedback", "item-generation", "oral-practice", "oral-assessment", "oral-studio"]);
     expect(costs[0]?.estimateUsd).toBeCloseTo(2, 10);
     expect(costs[1]?.estimateUsd).toBeCloseTo(2.5, 10);
     expect(costs[2]?.estimateUsd).toBeCloseTo(0.2, 10);
     expect(costs[3]?.estimateUsd).toBeCloseTo(1, 10);
+    expect(costs[4]?.estimateUsd).toBeCloseTo(0.3, 10);
   });
 
   it("gives no figure for a feature whose model is unpriced", () => {
     const costs = featureCosts({ pricing: { ...pricing, prices: { "m-small": { inputPerMTok: 1, outputPerMTok: 4 } } } });
-    expect(costs.map((c) => c.estimateUsd)).toEqual([null, null, null, null]);
+    expect(costs.map((c) => c.estimateUsd)).toEqual([null, null, null, null, null]);
   });
 });
 

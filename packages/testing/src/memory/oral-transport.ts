@@ -1,5 +1,5 @@
 import type { OralDirective, OralTransport, OralTransportEvent } from "@palier/app";
-import type { OralDirection, OralSpeaker } from "@palier/domain";
+import type { OralCriterion, OralDirection, OralNoteSeverity, OralSpeaker } from "@palier/domain";
 
 /** One thing the examiner's side says or signals, at `atMs` after `open`. */
 export type OralScriptEntry =
@@ -11,7 +11,14 @@ export type OralScriptEntry =
       readonly startMs: number;
       readonly endMs: number;
     }
-  | { readonly atMs: number; readonly kind: "difficulty"; readonly direction: OralDirection };
+  | { readonly atMs: number; readonly kind: "difficulty"; readonly direction: OralDirection }
+  | {
+      readonly atMs: number;
+      readonly kind: "note";
+      readonly criterion: OralCriterion;
+      readonly evidence: string;
+      readonly severity: OralNoteSeverity;
+    };
 
 export type MemoryOralTransport = {
   readonly transport: OralTransport;
@@ -52,6 +59,9 @@ export const memoryOralTransport = (
     if (entry.kind === "turn") {
       const { speaker, text, startMs, endMs } = entry;
       send({ kind: "turn", speaker, text, startMs, endMs });
+    } else if (entry.kind === "note") {
+      const { criterion, evidence, severity } = entry;
+      send({ kind: "note", criterion, evidence, severity });
     } else {
       send({ kind: "difficulty", direction: entry.direction });
     }

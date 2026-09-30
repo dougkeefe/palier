@@ -557,6 +557,8 @@
     "featureUse_oral-practice": "Une minute d’une séance de pratique orale : les questions de l’examinateur, lues à voix haute, et vos réponses transcrites.",
     "feature_oral-assessment": "Bilan d’une séance orale",
     "featureUse_oral-assessment": "Un bilan d’une séance orale : un niveau et des preuves pour chaque critère, trois points à travailler, cinq mots utiles et vos réponses corrigées.",
+    "feature_oral-studio": "Conversation en studio",
+    "featureUse_oral-studio": "Une minute d’une conversation orale en direct avec l’examinateur, et vos réponses transcrites.",
     "offerHeading": "Une clé OpenAI, si vous en voulez une",
     "offerUnlocks": "Une clé active les fonctions qui utilisent l’IA : de la rétroaction sur vos textes, de nouveaux items de pratique rédigés pour vous, et la pratique orale avec un examinateur.",
     "offerCosts": "Vous payez OpenAI directement pour ce que vous utilisez, et vous pouvez fixer une limite mensuelle dans votre compte OpenAI.",

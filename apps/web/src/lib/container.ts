@@ -79,6 +79,7 @@ import type {
   AnswerSource,
   OralHistoryEntry,
   OralPracticeRun,
+  OralStudioRun,
   OralReport,
   OralSession,
   OralSessionChoice,
@@ -151,11 +152,13 @@ import {
   requestOralReport,
   saveOralAudio,
   startOralPracticeRun,
+  startOralStudioRun,
 } from "@palier/app";
 import { httpBankRepository } from "@palier/adapters/bank";
 import { dexieStores } from "@palier/adapters/dexie";
 import { webCryptoIdGenerator } from "@palier/adapters/ids";
-import { PROMPT_VERSION, openAiProvider } from "@palier/adapters/openai";
+import type { RealtimePeerFactory } from "@palier/adapters/openai";
+import { PROMPT_VERSION, openAiProvider, realtimeTransport, routeRealtimeSecrets } from "@palier/adapters/openai";
 import { httpSyncTransport } from "@palier/adapters/sync";
 import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
@@ -199,7 +202,7 @@ import aiModels from "./ai-models.json";
 import { BANK_BASE_PATH, BANK_VERSION } from "./bank-version";
 import { type Held, beforeClear, inFlight, wipeCount, writesUntilWiped } from "./in-flight";
 import { webLocksLiveness } from "./oral/liveness";
-import { EXAMINER_VOICE, PRICING } from "./pricing";
+import { EXAMINER_VOICE, PRICING, STUDIO_MAX_MINUTES } from "./pricing";
 import { selectionSeedFor, systemClock } from "./system-clock";
 
 /**
@@ -305,6 +308,17 @@ export const openAiFor: AiProviderFactory = (apiKey) =>
     voice: EXAMINER_VOICE,
   });
 
+/**
+ * Studio mode's secret (ADR 3, progress.md D169): the key goes to this origin's one route that may
+ * see it, in `Authorization`, and only the `ek_` secret comes back. Both graphs post to the real
+ * route, as they sync over the real routes; the hermetic server's mints from memory.
+ */
+export const REALTIME_SECRET_PATH = "/api/realtime/secret";
+const REALTIME_SECRETS = routeRealtimeSecrets({ path: REALTIME_SECRET_PATH });
+
+/** Studio mode's hard cap (`pricing.json`'s `studioMaxMinutes`, D166), for the session and the transport alike. */
+const STUDIO_CAP_MS = STUDIO_MAX_MINUTES * 60_000;
+
 export type Env = {
   readonly hermetic: boolean;
 };
@@ -406,6 +420,15 @@ export type UseCases = {
     request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId },
     answers: AnswerSource,
   ) => Promise<OralPracticeRun>;
+  /**
+   * A studio session (Phase 6 Slice 1, D165, D170): the realtime transport over `peer`, which the studio
+   * screen makes from its microphone (`browserRealtimePeer`, Slice 2), fed a secret from the route and
+   * metered as `oral-studio`. No screen calls it yet.
+   */
+  readonly startOralStudio: (
+    request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId },
+    peer: RealtimePeerFactory,
+  ) => Promise<OralStudioRun>;
   readonly oralSession: (request: { readonly sessionId: SessionId }) => Promise<OralSession | null>;
   /**
    * Close the spoken sessions left running that no page on this device is running now, and name them
@@ -715,6 +738,26 @@ function buildUseCases(ports: Ports): UseCases {
         oral: ports.oral,
         answers,
         liveness: ports.oralLiveness,
+      }),
+    startOralStudio: (request, peer) =>
+      startOralStudioRun(request, {
+        vault: ports.vault,
+        secrets: REALTIME_SECRETS,
+        studioTransport: (hooks) =>
+          realtimeTransport({
+            ...hooks,
+            peer,
+            model: aiModels.realtime,
+            transcribeModel: aiModels.transcribe,
+            maxMs: STUDIO_CAP_MS,
+            pricing: PRICING.prices,
+          }),
+        ledger: ports.costLedger,
+        clock: ports.clock,
+        items: ports.items,
+        oral: ports.oral,
+        liveness: ports.oralLiveness,
+        capMs: STUDIO_CAP_MS,
       }),
     oralSession: (request) => ports.oral.get(request.sessionId),
     closeAbandonedSessions: () => closeAbandonedSessions({ clock: ports.clock, oral: ports.oral, liveness: ports.oralLiveness }),

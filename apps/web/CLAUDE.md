@@ -157,6 +157,15 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `PLAN_STORAGE_MB`, never a number in code; the run fails at 60% and 80%.
   - **`GET /api/health`** (D140) is `serveHealth` over `healthResponse` in `handlers.ts`: the build, the bank, and
     whether the database answers, uncached, with no identifier; 503 only when a configured database does not answer.
+  - **`POST /api/realtime/secret` is the one route that sees the user's key** (ADR 3, Phase 6 Slice 1, D169). The
+    handler is `realtime-handlers.ts`, small enough to read line by line:
+    - the key is read from `Authorization` and nowhere else; the body is never read;
+    - it is used once, through a `RealtimeSecretSource`, and never logged, stored or echoed;
+    - the answer is `{ value, expiresAt }`, uncached, and a refusal is a code.
+
+    `realtime.ts` composes it: the memory source when hermetic, otherwise OpenAI's for `ai-models.json`'s `realtime`
+    and `realtimeVoice`. It needs no database. **Never add a `console` call, a store or a body read to it**; every
+    branch has a test in `realtime-handlers.test.ts`.
 - **Baseline security headers on every response** (`next.config.ts`, architecture.md §12): HSTS,
   `nosniff`, `Referrer-Policy: no-referrer`, and a `Permissions-Policy` allowing the microphone on
   this origin only. They are asserted on the production server in `e2e/production.spec.ts`.
@@ -193,8 +202,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 - **The user's key** (Phase 4 Slice 1, progress.md D98–D100).
   - The container's `aiProvider` is `openAiFor`, the real `@palier/adapters/openai` in **both** graphs,
     over model ids that are data (`src/lib/ai-models.json`). It is only ever called inside the vault's
-    callback by `@palier/app`'s key use cases: `withAiProvider`, metered, and `checkApiKey` (D101). The browser calls `api.openai.com` directly; the key never reaches
-    `src/server`.
+    callback by `@palier/app`'s key use cases: `withAiProvider`, metered, and `checkApiKey` (D101). The browser calls `api.openai.com` directly; the key reaches
+    `src/server` at one route only, `POST /api/realtime/secret` (ADR 3, D169).
   - `/settings/key` (`components/key/KeySettings.tsx`, with its decisions in `features/key/key-view.ts`)
     saves, checks, removes and keeps a key for a tab. Every check result is a sentence mapped by error
     **name**, never the raw error. `/settings/key/guide` is static.
@@ -246,6 +255,14 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     container. The leak guard stubs the report by its prompt (`completionKind`'s `oral-report`) and follows its words
     as `REPORT_SENTINEL`. **A report request still out is joined, never repeated** (`oralReportInFlight`, D127), and
     the screen's pause before each spoken answer is measured by the practice controller from the question's voice.
+  - **Studio mode** (Phase 6 Slice 1, D165–D171) is `startOralStudio(request, peer)`. It runs the openai adapter's
+    `realtimeTransport` over the caller's `RealtimePeerFactory`, since Slice 2's screen owns the microphone. It is fed
+    secrets by `routeRealtimeSecrets` at `REALTIME_SECRET_PATH` in both graphs, capped at `STUDIO_MAX_MINUTES`
+    (`pricing.json`'s `studioMaxMinutes`), and metered as `oral-studio`. No screen calls it yet.
+    `container-studio.test.ts` runs it through the real route file over a fake peer: the key reaches this origin only
+    in `Authorization`, `/v1/realtime/calls` sees only `ek_` secrets, and a drop reconnects once, then fails cleanly
+    with every turn kept. **The realtime exception joins the key copy in the same pull request as the screen that
+    calls this** (D173).
   - **Tier 11, the key-leak test**, is `e2e/key-leak.spec.ts` (hermetic, with real sync and telemetry)
     and `e2e/key-leak-production.spec.ts` (real Dexie), over `e2e/leak-guard.ts`. A new flow that can
     touch the key belongs in the first. A flow that holds user writing passes it to `assertNoLeak` as
@@ -253,7 +270,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     on `requestfinished`, because `allHeaders()` never settles for a request a reload aborts.
     Audio is followed by its bytes (D120): `installFakeAudio` synthesises the microphone and numbers each
     recorder's bytes, request bodies are read as bytes, and a `Blob` at rest is dumped as its bytes. Chromium's
-    fake capture device never answers on macOS, so never rely on it.
+    fake capture device never answers on macOS, so never rely on it. **The sentinel may reach this origin in one place
+    only: the `authorization` header of `POST /api/realtime/secret`** (D171). The guard records that header as
+    `realtimeSecretAuthorizations()`, and still searches the request's URL, its other headers, its body and its answer.
 
 ## Gates this app owns
 

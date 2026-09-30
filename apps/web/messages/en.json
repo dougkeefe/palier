@@ -557,6 +557,8 @@
     "featureUse_oral-practice": "One minute of a spoken practice session: the examiner's questions, voiced, and your answers transcribed.",
     "feature_oral-assessment": "Report on a spoken session",
     "featureUse_oral-assessment": "One report on a spoken session: a level and evidence for each criterion, three things to work on, five useful words and your answers corrected.",
+    "feature_oral-studio": "Studio conversation",
+    "featureUse_oral-studio": "One minute of a live spoken conversation with the examiner, and your answers transcribed.",
     "offerHeading": "An OpenAI key, if you want one",
     "offerUnlocks": "A key turns on the parts that use AI: feedback on your writing, fresh practice items written for you, and spoken practice with an examiner.",
     "offerCosts": "You pay OpenAI directly for what you use, and you can set a monthly limit on your OpenAI account.",

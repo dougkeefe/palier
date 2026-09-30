@@ -118,6 +118,7 @@ export const main = async ({
         transcribe: roles.transcribe,
         speech: roles.speech,
         examiner: roles.examiner,
+        realtime: roles.realtime,
       },
       voice,
       prices: pricing.models,

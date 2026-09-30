@@ -57,6 +57,28 @@ const run = (plan: readonly { minutes: number }[], events: readonly OralSessionE
   return { state, commands };
 };
 
+/** A plan, a studio cap from a quarter of its length to twice it, and events past both (D166). */
+const cappedPlanAndEvents = phases.chain((plan) => {
+  const length = lengthOf(plan);
+  return fc.tuple(
+    fc.constant(plan),
+    fc.integer({ min: Math.max(1, Math.round(length / 4)), max: length * 2 }),
+    fc.array(eventAt(length * 2), { maxLength: 40 }),
+  );
+});
+
+const runCapped = (plan: readonly { minutes: number }[], capMs: number, events: readonly OralSessionEvent[]): Run => {
+  const start = startOralSession(plan, { capMs });
+  let state = start.state;
+  const commands = [...start.commands];
+  for (const event of events) {
+    const step = stepOralSession(state, event);
+    state = step.state;
+    commands.push(...step.commands);
+  }
+  return { state, commands };
+};
+
 const entered = (commands: readonly OralSessionCommand[]) =>
   commands.flatMap((c) => (c.kind === "enter-phase" ? [c.phase] : []));
 
@@ -122,6 +144,20 @@ describe("the oral session machine, over any plan and any events", () => {
         expect(commands.at(-1)).toEqual(closes[0]);
         expect(ORAL_END_REASONS).toContain(state.ended);
         expect(closes[0]).toEqual({ kind: "close", reason: state.ended });
+      }),
+    );
+  });
+
+  it("never ends a session time-capped before its cap, and ends every one by the earlier of cap and length (D166)", () => {
+    fc.assert(
+      fc.property(cappedPlanAndEvents, ([plan, capMs, events]) => {
+        const end = Math.min(capMs, lengthOf(plan));
+        const withEnd = [...events, { kind: "tick" as const, atMs: end }];
+        const { state, commands } = runCapped(plan, capMs, withEnd);
+        expect(state.ended).not.toBeNull();
+        if (state.ended === "time-cap") expect(Math.max(...withEnd.map((e) => e.atMs))).toBeGreaterThanOrEqual(capMs);
+        expect(commands.filter((c) => c.kind === "close")).toHaveLength(1);
+        expect(commands.at(-1)?.kind).toBe("close");
       }),
     );
   });

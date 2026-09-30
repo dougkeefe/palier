@@ -97,12 +97,16 @@ export type {
   OralAssessmentDraft,
   OralCriterion,
   OralFix,
+  OralNote,
+  OralNoteSeverity,
   OralRequest,
   OralTurnError,
   OralTurnErrorDraft,
   ModelPrice,
   PassageContext,
   PassageDraft,
+  RealtimePrice,
+  RealtimeTokens,
   ReviewOption,
   ReviewRequest,
   ReviewVerdict,
@@ -120,7 +124,7 @@ export type {
   WritingFeedbackDraft,
   WritingRequest,
 } from "./ai.js";
-export { AI_FEATURES, ORAL_CRITERIA, WRITING_CRITERIA } from "./ai.js";
+export { AI_FEATURES, ORAL_CRITERIA, ORAL_NOTE_SEVERITIES, WRITING_CRITERIA } from "./ai.js";
 export type { BilledAmounts } from "./pricing.js";
 export { costOf } from "./pricing.js";
 export {
@@ -145,7 +149,7 @@ export type {
   OralTurn,
 } from "./oral-session.js";
 export { ORAL_END_REASONS, ORAL_INPUTS, ORAL_SPEAKERS } from "./oral-session.js";
-export { oralTurnSchema } from "./schemas/oral.js";
+export { oralNoteSchema, oralTurnSchema } from "./schemas/oral.js";
 // The oral report's placement rule, D105's per turn (progress.md D122).
 export type { AssembleOralResult } from "./oral-assessment.js";
 export { assembleOralAssessment, checkOralAssessment } from "./oral-assessment.js";

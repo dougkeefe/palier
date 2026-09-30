@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import { ORAL_END_REASONS, ORAL_INPUTS, ORAL_SPEAKERS } from "./oral-session.js";
-import { oralTurnSchema } from "./schemas/oral.js";
+import { ORAL_NOTE_SEVERITIES } from "./ai.js";
+import { oralNoteSchema, oralTurnSchema } from "./schemas/oral.js";
 
 const aTurn = (over: Record<string, unknown> = {}) => ({
   speaker: "candidate",
@@ -14,7 +15,7 @@ const aTurn = (over: Record<string, unknown> = {}) => ({
 
 describe("the oral session vocabulary", () => {
   it("names every end reason, with completion first", () => {
-    expect(ORAL_END_REASONS).toEqual(["completed", "ended-by-user", "transport-closed", "transport-failed", "interrupted"]);
+    expect(ORAL_END_REASONS).toEqual(["completed", "ended-by-user", "transport-closed", "transport-failed", "interrupted", "time-cap"]);
   });
 
   it("has two speakers", () => {
@@ -64,5 +65,35 @@ describe("oralTurnSchema", () => {
     ["a fractional pause", { pauseMs: 1.5 }],
   ])("rejects %s", (_name, over) => {
     expect(oralTurnSchema.safeParse(aTurn(over)).success).toBe(false);
+  });
+});
+
+const aNote = (over: Record<string, unknown> = {}) => ({
+  criterion: "grammar",
+  evidence: "« si j'aurais su » au lieu de « si j'avais su »",
+  severity: "moderate",
+  phase: 1,
+  ...over,
+});
+
+describe("oralNoteSchema (D168)", () => {
+  it("has three severities, lightest first", () => {
+    expect(ORAL_NOTE_SEVERITIES).toEqual(["minor", "moderate", "major"]);
+  });
+
+  it("accepts a whole note", () => {
+    expect(oralNoteSchema.safeParse(aNote()).success).toBe(true);
+  });
+
+  it.each([
+    ["a criterion the report does not have", { criterion: "pronunciation" }],
+    ["an unknown severity", { severity: "fatal" }],
+    ["empty evidence", { evidence: "" }],
+    ["evidence that is only spaces", { evidence: "   " }],
+    ["a negative phase", { phase: -1 }],
+    ["a fractional phase", { phase: 1.5 }],
+    ["an extra field", { atMs: 3_000 }],
+  ])("rejects %s", (_name, over) => {
+    expect(oralNoteSchema.safeParse(aNote(over)).success).toBe(false);
   });
 });

@@ -123,6 +123,52 @@ describe("startOralSessionRun", () => {
     expect(hand.directives().at(-1)).toEqual({ phase: 1, register: "baseline" });
   });
 
+  it("keeps a studio examiner's notes as they arrive, stamped with the phase the clock is in (D168)", async () => {
+    const { clock, hand, oral, deps } = setUp();
+    await startOralSessionRun(request, deps);
+    clock.at(1);
+    hand.note("grammar", "« si j'aurais »");
+    await settled();
+    clock.at(3);
+    hand.note("vocabulary", "« faire du sens »");
+    await settled();
+
+    const stored = await oral.get(SESSION_ID);
+    expect(stored?.notes).toEqual([
+      { criterion: "grammar", evidence: "« si j'aurais »", severity: "moderate", phase: 0 },
+      { criterion: "vocabulary", evidence: "« faire du sens »", severity: "moderate", phase: 1 },
+    ]);
+    expect(stored?.turns).toEqual([]);
+  });
+
+  it("stores no notes on a session whose examiner took none", async () => {
+    const { hand, deps } = setUp();
+    const run = await startOralSessionRun(request, deps);
+    hand.hangUp(false);
+
+    expect((await run.ended).notes).toBeUndefined();
+  });
+
+  it("ends a studio session at its cap as time-cap, before the scenario's length (D166)", async () => {
+    const { clock, hand, deps } = setUp();
+    const run = await startOralSessionRun({ ...request, capMs: 8 * MIN }, deps);
+    clock.at(8);
+    await run.tick();
+    const ended = await run.ended;
+
+    expect(ended.endReason).toBe("time-cap");
+    expect(hand.closeCalls()).toBe(1);
+  });
+
+  it("calls the transport's own clean close at the cap time-cap, not transport-closed", async () => {
+    const { clock, hand, deps } = setUp();
+    const run = await startOralSessionRun({ ...request, capMs: 8 * MIN }, deps);
+    clock.at(8.1);
+    hand.hangUp(false);
+
+    expect((await run.ended).endReason).toBe("time-cap");
+  });
+
   it("adapts the current phase when the examiner flags the candidate's difficulty", async () => {
     const { clock, hand, deps } = setUp();
     await startOralSessionRun(request, deps);

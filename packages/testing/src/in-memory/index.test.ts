@@ -60,6 +60,7 @@ describe("@palier/testing/in-memory", () => {
         "memoryItemRepository",
         "memoryKeyVault",
         "memoryOralStore",
+        "memoryRealtimeSecretSource",
         "memoryScheduleStore",
         "memorySessionStore",
         "memorySettingsStore",

@@ -300,6 +300,27 @@ export const ORAL_CRITERIA = ["comprehension", "fluency", "grammar", "vocabulary
 export type OralCriterion = (typeof ORAL_CRITERIA)[number];
 
 /**
+ * How much an observation the examiner noted during a studio session weighs (progress.md
+ * D168). The examiner's `note_observation` tool takes one of these, and `assessOral` quotes
+ * the notes as observations, never as verdicts.
+ */
+export const ORAL_NOTE_SEVERITIES = ["minor", "moderate", "major"] as const;
+export type OralNoteSeverity = (typeof ORAL_NOTE_SEVERITIES)[number];
+
+/**
+ * One observation the realtime examiner noted during a studio session (architecture.md §8.5
+ * step 6, D165, D168): the criterion it bears on, what the candidate said or did, and how much
+ * it weighs. `phase` is stamped by the client, as a turn's is. Notes never surface during the
+ * session; the report reads them.
+ */
+export type OralNote = {
+  readonly criterion: OralCriterion;
+  readonly evidence: string;
+  readonly severity: OralNoteSeverity;
+  readonly phase: number;
+};
+
+/**
  * A sub-skill the bank has items for, so a fix can be drilled and can bias the plan
  * (progress.md D122). The bank has no oral items, so an oral sub-skill would reach
  * nothing: an oral fix names the oral criterion it hurt and a reading or writing
@@ -323,6 +344,8 @@ export type OralRequest = {
   readonly phases: readonly { readonly name: string; readonly intent: string }[];
   readonly turns: readonly OralTurn[];
   readonly descriptors: Readonly<Record<"A" | "B" | "C", string>>;
+  /** A studio session's examiner notes (D168), quoted by the prompt when present; practice mode has none. */
+  readonly notes?: readonly OralNote[] | undefined;
 };
 
 /**
@@ -408,9 +431,11 @@ export type UsageRecord = {
  * Slice 3, item generation Slice 4, and oral practice Phase 5 Slice 2 (D117): a
  * session's examiner turns, voice and transcriptions. The report on a session is
  * Slice 3's `oral-assessment` (D122), apart from the session, so each is shown at
- * its own cost. A key check spends nothing, so it is not a feature.
+ * its own cost. A key check spends nothing, so it is not a feature. Studio mode's
+ * realtime conversation is `oral-studio` (Phase 6 Slice 1, D165): its audio in and
+ * out, and the candidate's speech transcribed, each row stamped with its session.
  */
-export const AI_FEATURES = ["writing-feedback", "item-generation", "oral-practice", "oral-assessment"] as const;
+export const AI_FEATURES = ["writing-feedback", "item-generation", "oral-practice", "oral-assessment", "oral-studio"] as const;
 export type AiFeature = (typeof AI_FEATURES)[number];
 
 /**
@@ -425,7 +450,32 @@ export type TokenPrice = {
 };
 export type MinutePrice = { readonly perMinute: number };
 export type CharacterPrice = { readonly perMChars: number };
-export type ModelPrice = TokenPrice | MinutePrice | CharacterPrice;
+/**
+ * A realtime model's price (Phase 6 Slice 1, D167): text and audio are billed at their own
+ * rates, in and out, and input the model has already read is billed at the cached rate.
+ * OpenAI lists one cached rate for text and audio alike, so it is one field here; the day
+ * they differ, it becomes two.
+ */
+export type RealtimePrice = {
+  readonly textInputPerMTok: number;
+  readonly textOutputPerMTok: number;
+  readonly audioInputPerMTok: number;
+  readonly audioOutputPerMTok: number;
+  readonly cachedInputPerMTok: number;
+};
+export type ModelPrice = TokenPrice | MinutePrice | CharacterPrice | RealtimePrice;
+
+/**
+ * A realtime call's tokens in the units it is priced by (D167). The input counts are the
+ * UNCACHED part; `cachedInputTokens` is the rest, text and audio together.
+ */
+export type RealtimeTokens = {
+  readonly textInputTokens: number;
+  readonly textOutputTokens: number;
+  readonly audioInputTokens: number;
+  readonly audioOutputTokens: number;
+  readonly cachedInputTokens: number;
+};
 
 /**
  * One typical call a feature makes, for the per-feature estimate (D103), in its
@@ -435,4 +485,5 @@ export type ModelPrice = TokenPrice | MinutePrice | CharacterPrice;
 export type FeatureCall =
   | { readonly role: string; readonly inputTokens: number; readonly outputTokens: number }
   | { readonly role: string; readonly minutes: number }
-  | { readonly role: string; readonly characters: number };
+  | { readonly role: string; readonly characters: number }
+  | ({ readonly role: string } & RealtimeTokens);

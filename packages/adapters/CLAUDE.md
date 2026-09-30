@@ -91,6 +91,34 @@ completion adds to it, a retry included, and a 2xx answer is billed before its c
 failed-but-billed call still reports its tokens, and no call inherits an earlier one's. With `pricing`, the
 summed tokens are priced into `costUsd`.
 
+**Studio mode's realtime pieces live in `src/openai/` too** (Phase 6 Slice 1, progress.md D169–D172), under the same
+`./openai` subpath:
+- **Two `RealtimeSecretSource`s.** `openAiRealtimeSecrets` is the server's: one `POST /realtime/client_secrets` for a
+  60-second `ek_` secret, for the configured model and voice, never the request's. It never reads a refusal's body,
+  so nothing OpenAI echoes reaches a message. `routeRealtimeSecrets` is the browser's: it posts the key in
+  `Authorization`, and nowhere else, to this origin's route, and maps the route's refusal codes back to this
+  adapter's named errors.
+- **`realtimeTransport`** is studio mode's `OralTransport`, over a `RealtimePeer` seam that no `RTCPeerConnection` type
+  crosses.
+  - It sends the SDP offer to `/realtime/calls` with the `ek_` secret, then `session.update` with
+    `studioInstructions` and `STUDIO_TOOLS` (data in `prompts.ts`, versioned apart as `STUDIO_PROMPT_VERSION`), then
+    `response.create`.
+  - A new phase is `session.update` plus `response.create`; a register change is `session.update` alone. **One response
+    at a time**: a cue asked for between `response.created` and `response.done` waits for the end, and a run of tool-only
+    responses gets one follow-up, never a chain. A server `error` is kept for `lastError`, never fatal.
+  - Server events are read through a table by type. Transcripts become whole turns timed by the client's clock, and
+    the tools become `difficulty` and `note`, each call answered. A response that only called tools gets a follow-up
+    `response.create`.
+  - `response.done` is priced at the realtime rates, and each transcription at the transcribe model's, through the
+    app's `usage` hook.
+  - **One reconnect**, with a fresh secret and the transcript seeded. A second drop is `closed { failed }`, the
+    examiner's words in flight delivered first.
+  - It closes itself at `maxMs`.
+- **`browserRealtimePeer`** is native `RTCPeerConnection`, no SDK (D170). Its unit test stubs the constructor, and
+  whether real WebRTC carries it is the manual realtime checklist's.
+- **The timed exchange is shared.** `http.ts` holds the one `fetch` exchange under a time limit, and the structural
+  `FetchLike`, which the provider, both sources and the transport use.
+
 **Every error class names itself with a string literal** (`override name = "…"`), never
 `new.target.name`: the UI matches errors by name, and a production build minifies class names (D158).
 

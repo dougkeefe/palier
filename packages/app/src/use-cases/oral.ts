@@ -82,6 +82,8 @@ export type StartOralSessionRequest = {
   /** Minted by the caller, as an exam run's is (D39). */
   readonly sessionId: SessionId;
   readonly scenarioId: ScenarioId;
+  /** Studio mode's hard cap, in ms since the session started (D166); absent for practice mode. */
+  readonly capMs?: number;
 };
 
 /** A running session: the screen's timer ticks it, the end control ends it. */
@@ -108,7 +110,10 @@ export type OralSessionRun = {
  * - **One queue carries everything**, the transport's events, the ticks and the end
  *   control, so the machine and the store see them in the order they happened.
  * - **Each turn is saved as it arrives**, stamped with the phase the machine is in once
- *   it has caught up with the clock, so a disconnect keeps the transcript.
+ *   it has caught up with the clock, so a disconnect keeps the transcript. A studio
+ *   examiner's note is kept the same way (D168).
+ * - **Studio mode's cap** (`capMs`, D166) is handed to the machine, which ends the session
+ *   `time-cap` at it.
  * - **Turns are kept until the transport says `closed`**, even after the machine has
  *   asked it to close, so an answer still in flight is not lost. Only then are the end
  *   and its reason written, and `ended` settled.
@@ -125,7 +130,7 @@ export const startOralSessionRun = async (
   const startedAt = deps.clock.now();
   await closeAbandonedSessions(deps);
 
-  const start = startOralSession(scenario.phases);
+  const start = startOralSession(scenario.phases, request.capMs === undefined ? {} : { capMs: request.capMs });
   let machine: OralSessionState = start.state;
   let session: OralSession = {
     id: request.sessionId,
@@ -180,6 +185,13 @@ export const startOralSessionRun = async (
         ...(pauseMs === undefined ? {} : { pauseMs }),
       };
       session = { ...session, turns: [...session.turns, turn] };
+      return deps.oral.put(session);
+    }
+    if (event.kind === "note") {
+      await step({ kind: "tick", atMs });
+      const { criterion, evidence, severity } = event;
+      const note = { criterion, evidence, severity, phase: machine.phase };
+      session = { ...session, notes: [...(session.notes ?? []), note] };
       return deps.oral.put(session);
     }
     closed = true;

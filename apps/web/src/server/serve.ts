@@ -2,6 +2,7 @@ import { BANK_VERSION } from "../lib/bank-version";
 import { BUILD_VERSION } from "../lib/build-info";
 import { databaseAnswers, syncApi, telemetryApi } from "./db";
 import { type SyncApi, healthResponse } from "./handlers";
+import { realtimeSecretApi } from "./realtime";
 import type { TelemetryApi } from "./telemetry-handlers";
 
 /**
@@ -32,3 +33,9 @@ export const serveTelemetry =
 /** `GET /api/health`: the build, the bank, and whether the database answers (D140). */
 export const serveHealth = async (): Promise<Response> =>
   healthResponse({ build: BUILD_VERSION, bank: BANK_VERSION, database: await databaseAnswers() });
+
+/**
+ * `POST /api/realtime/secret` (ADR 3, D169): the one route that sees the user's key, bound to its
+ * handler. Built per request, since it holds nothing to memoise.
+ */
+export const serveRealtimeSecret = (request: Request): Promise<Response> => realtimeSecretApi().mint(request);

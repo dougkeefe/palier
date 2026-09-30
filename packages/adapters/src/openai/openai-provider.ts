@@ -39,10 +39,10 @@ import {
   InvalidApiKeyError,
   InvalidResponseError,
   ProviderRequestError,
-  ProviderTimeoutError,
-  ProviderUnavailableError,
   RateLimitError,
 } from "./errors.js";
+import type { FetchLike, FetchResponse, RequestInit } from "./http.js";
+import { platformFetch, timedExchange } from "./http.js";
 import { buildPrompt } from "./prompts.js";
 
 /**
@@ -65,20 +65,6 @@ import { buildPrompt } from "./prompts.js";
  * measures: the clip's seconds and the characters voiced.
  */
 
-type FetchResponse = {
-  readonly ok: boolean;
-  readonly status: number;
-  readonly headers?: { get: (name: string) => string | null };
-  json: () => Promise<unknown>;
-  text: () => Promise<string>;
-  blob?: () => Promise<Blob>;
-};
-type RequestInit = {
-  method: string;
-  headers: Record<string, string>;
-  body?: string | FormData;
-};
-export type FetchLike = (url: string, init: RequestInit & { signal?: AbortSignal }) => Promise<FetchResponse>;
 
 /**
  * Model ids, as data (§8.1). One per stage that calls the model: the factory's three,
@@ -151,12 +137,11 @@ const clipName = (type: string): string => {
 const count = (value: unknown): number | undefined =>
   typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : undefined;
 
-const defaultFetch: FetchLike = (url, init) =>
-  fetch(url, init) as unknown as Promise<FetchResponse>;
+export type { FetchLike } from "./http.js";
 
 export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
   const baseUrl = config.baseUrl ?? DEFAULT_BASE_URL;
-  const doFetch = config.fetchImpl ?? defaultFetch;
+  const doFetch = config.fetchImpl ?? platformFetch;
   const maxRetries = config.maxRetries ?? 1;
   const timeoutMs = config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const verifyTimeoutMs = config.verifyTimeoutMs ?? DEFAULT_VERIFY_TIMEOUT_MS;
@@ -167,35 +152,12 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
    * limit races the work rather than trusting the fetch to honour the abort, and it is
    * rejected before the abort is signalled, so a timeout always reads as a timeout.
    */
-  const exchange = async <T>(
+  const exchange = <T>(
     url: string,
     init: RequestInit,
     limitMs: number,
     read: (res: FetchResponse) => Promise<T>,
-  ): Promise<T> => {
-    const controller = new AbortController();
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    const timedOut = new Promise<never>((_, reject) => {
-      timer = setTimeout(() => {
-        reject(new ProviderTimeoutError("OpenAI did not answer in time."));
-        controller.abort();
-      }, limitMs);
-    });
-    const work = async (): Promise<T> => {
-      let res: FetchResponse;
-      try {
-        res = await doFetch(url, { ...init, signal: controller.signal });
-      } catch (cause) {
-        throw new ProviderUnavailableError("Could not reach OpenAI.", { cause });
-      }
-      return read(res);
-    };
-    try {
-      return await Promise.race([work(), timedOut]);
-    } finally {
-      clearTimeout(timer);
-    }
-  };
+  ): Promise<T> => timedExchange(doFetch, url, init, limitMs, read);
 
   /**
    * A non-2xx answer, as one of our errors. The body is kept for diagnosis, but with the key
