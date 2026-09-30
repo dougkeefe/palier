@@ -14,10 +14,10 @@
     }
   },
   "features": {
-    "writing-feedback": [{ "role": "assess", "inputTokens": 517, "outputTokens": 1813 }],
+    "writing-feedback": [{ "role": "assess", "inputTokens": 517, "outputTokens": 1695 }],
     "item-generation": [
-      { "role": "draft", "inputTokens": 392, "outputTokens": 4482 },
-      { "role": "review", "inputTokens": 1680, "outputTokens": 3775 }
+      { "role": "draft", "inputTokens": 392, "outputTokens": 3413 },
+      { "role": "review", "inputTokens": 1640, "outputTokens": 2045 }
     ],
     "oral-practice": [
       { "role": "examiner", "inputTokens": 564, "outputTokens": 134 },

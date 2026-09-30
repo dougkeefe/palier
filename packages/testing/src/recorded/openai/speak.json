@@ -1,7 +1,7 @@
 {
   "note": "Recorded from the live API by `pnpm --filter @palier/web live-smoke --record` (progress.md D112). Regenerate, never hand-edit.",
-  "recordedAt": "2026-09-28T18:49:15.175Z",
-  "promptVersion": "4",
+  "recordedAt": "2026-09-30T12:11:39.308Z",
+  "promptVersion": "5",
   "completions": [
     {
       "method": "speak",
@@ -11,7 +11,7 @@
         "lang": "fr"
       },
       "attempt": 1,
-      "content": "{\"contentType\":\"audio/mpeg\",\"bytes\":81024}",
+      "content": "{\"contentType\":\"audio/mpeg\",\"bytes\":79488}",
       "usage": {
         "prompt_tokens": 0,
         "completion_tokens": 0

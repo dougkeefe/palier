@@ -5,7 +5,7 @@ import type { ExamForm, Item, Passage as PassageData } from "@palier/domain";
 import { sessionId } from "@palier/domain";
 import { Button, Callout, Dialog, EmptyState, Glyph, Passage, Timer, itemRenderers } from "@palier/ui";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 
 import {
   SUBMIT_PAUSE_MS,
@@ -307,7 +307,10 @@ function Runner({
 
   // The keys (1 to 4, Enter, F) whenever the runner is on screen. Keys typed into a
   // field, and Enter on a real button or link, are left to that control.
-  useEffect(() => {
+  // A layout effect, so the listener is on before the first item is painted: the
+  // runner mounts with its item, and a passive effect can run after that paint, so a
+  // key pressed as the item appeared was lost (progress.md D179).
+  useLayoutEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       // A chord (Ctrl+F to search the passage) or a held key, a key typed into a field,
       // and Enter on a real button are not the runner's (`lib/keyboard.ts`).

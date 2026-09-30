@@ -1,7 +1,7 @@
 {
   "note": "Recorded from the live API by `pnpm --filter @palier/web live-smoke --record` (progress.md D112). Regenerate, never hand-edit.",
-  "recordedAt": "2026-09-28T18:49:15.175Z",
-  "promptVersion": "4",
+  "recordedAt": "2026-09-30T12:11:39.308Z",
+  "promptVersion": "5",
   "completions": [
     {
       "method": "reviewItem",
@@ -9,25 +9,25 @@
       "request": {
         "itemType": "cloze",
         "stem": {
-          "en": "Each of the shortlisted candidates ___ the required security screening.",
-          "fr": "Chacune des personnes candidates présélectionnées ___ la vérification de sécurité requise."
+          "en": "The leave requests submitted after the deadline will be ____ by the team.",
+          "fr": "Les demandes de congé présentées après la date limite seront ____ par l’équipe."
         },
         "options": [
           {
             "id": "a",
-            "text": "has completed"
+            "text": "reçu"
           },
           {
             "id": "b",
-            "text": "have completed"
+            "text": "reçues"
           },
           {
             "id": "c",
-            "text": "is completed"
+            "text": "reçue"
           },
           {
             "id": "d",
-            "text": "were completing"
+            "text": "reçus"
           }
         ],
         "subSkill": "agreement",
@@ -35,10 +35,10 @@
         "lang": "fr"
       },
       "attempt": 1,
-      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.86,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"“Chacune” is singular, so “has completed” is the best match for subject–verb agreement.\",\n    \"b\": \"The nearby plural “personnes candidates” could attract a plural verb, but “chacune” remains the subject and requires singular agreement.\",\n    \"c\": \"“Is” agrees with a singular subject, but the passive construction does not make sense with the candidate as its subject.\",\n    \"d\": \"A past-progressive meaning is conceivable in another context, but “were” does not agree with “chacune.”\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false,\n    \"note\": \"The French is acceptable Canadian administrative usage. The separate item-design problem is that English options cannot grammatically complete the French sentence.\"\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "content": "{\n  \"chosenKey\": \"b\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Reçu » serait correct avec un sujet masculin singulier, mais « les demandes » est féminin pluriel.\",\n    \"b\": \"« Reçues » s’accorde avec le sujet féminin pluriel « les demandes » dans la construction passive « seront reçues ».\",\n    \"c\": \"« Reçue » conviendrait à « la demande », mais pas au sujet pluriel ici.\",\n    \"d\": \"« Reçus » conviendrait à un sujet masculin pluriel, mais « demandes » est féminin.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
       "usage": {
-        "prompt_tokens": 333,
-        "completion_tokens": 725
+        "prompt_tokens": 330,
+        "completion_tokens": 364
       },
       "conformant": true
     },
@@ -48,25 +48,25 @@
       "request": {
         "itemType": "cloze",
         "stem": {
-          "en": "The list of employees eligible for the bilingual bonus ___ each month by the staffing team.",
-          "fr": "La liste des membres du personnel admissibles à la prime au bilinguisme ___ chaque mois par l’équipe de dotation."
+          "en": "Each manager must send the ____ forms to Human Resources by Friday.",
+          "fr": "Chaque gestionnaire doit transmettre les formulaires ____ aux Ressources humaines d’ici vendredi."
         },
         "options": [
           {
             "id": "a",
-            "text": "is reviewed"
+            "text": "rempli"
           },
           {
             "id": "b",
-            "text": "are reviewed"
+            "text": "remplie"
           },
           {
             "id": "c",
-            "text": "review"
+            "text": "remplis"
           },
           {
             "id": "d",
-            "text": "have reviewed"
+            "text": "remplies"
           }
         ],
         "subSkill": "agreement",
@@ -74,10 +74,10 @@
         "lang": "fr"
       },
       "attempt": 1,
-      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.8,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"In an English version of the sentence, the singular head noun “list” takes “is reviewed,” and “by the staffing team” calls for a passive verb.\",\n    \"b\": \"The nearby plural “members” could attract plural agreement, but the subject’s head noun is singular.\",\n    \"c\": \"“Review” could fit a plural subject in an active sentence, but not this subject-and-agent structure.\",\n    \"d\": \"“Have reviewed” could describe a plural subject’s completed action, but it conflicts with both the singular head noun and the passive agent.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false,\n    \"note\": \"The French is natural Canadian administrative language. The item is nevertheless invalid as a French cloze: none of the English options completes the French sentence.\"\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "content": "{\n  \"chosenKey\": \"c\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Rempli » is masculine singular, but « formulaires » is masculine plural.\",\n    \"b\": \"« Remplie » is feminine singular and does not agree with « formulaires ».\",\n    \"c\": \"« Remplis » agrees with « les formulaires » in masculine plural.\",\n    \"d\": \"« Remplies » is feminine plural. It cannot agree with « formulaires »; « Ressources humaines » is the destination, not the noun being described.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"A\"\n}",
       "usage": {
-        "prompt_tokens": 338,
-        "completion_tokens": 613
+        "prompt_tokens": 330,
+        "completion_tokens": 445
       },
       "conformant": true
     },
@@ -87,25 +87,25 @@
       "request": {
         "itemType": "cloze",
         "stem": {
-          "en": "Neither the manager nor the advisers ___ available to answer questions about the staffing process.",
-          "fr": "Ni la gestionnaire ni les conseillers ___ disponibles pour répondre aux questions sur le processus de dotation."
+          "en": "The new employees have ____ for the orientation program.",
+          "fr": "Les nouvelles recrues se sont ____ au programme d’accueil."
         },
         "options": [
           {
             "id": "a",
-            "text": "are"
+            "text": "inscrit"
           },
           {
             "id": "b",
-            "text": "is"
+            "text": "inscrite"
           },
           {
             "id": "c",
-            "text": "was"
+            "text": "inscrits"
           },
           {
             "id": "d",
-            "text": "has been"
+            "text": "inscrites"
           }
         ],
         "subSkill": "agreement",
@@ -113,10 +113,10 @@
         "lang": "fr"
       },
       "attempt": 1,
-      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.85,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"The strongest choice if the sentence is translated into English: “Neither the manager nor the advisers are available.” It is not, however, a French word that can fill the blank.\",\n    \"b\": \"“Is” could agree with the singular “la gestionnaire,” but not with the nearer plural “les conseillers”; it also cannot fill a French blank.\",\n    \"c\": \"“Was” could describe past availability of the singular manager, but the nearer subject is plural, and the stem gives no past-time cue.\",\n    \"d\": \"“Has been” could describe the manager’s availability up to now, but it is singular and has no supporting time cue.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false,\n    \"note\": \"The French is natural Canadian administrative usage. The item’s problem is that every answer option is in English; the French blank requires « sont ».\"\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "content": "{\n  \"chosenKey\": \"d\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Inscrit » would fit a masculine singular subject, but « les nouvelles recrues » is feminine plural.\",\n    \"b\": \"« Inscrite » has the right gender, but it is singular.\",\n    \"c\": \"« Inscrits » has the right number and could describe a group of men, but « recrues » is grammatically feminine regardless of the recruits’ genders.\",\n    \"d\": \"« Inscrites » agrees in feminine plural with « les nouvelles recrues »: « se sont inscrites au programme ».\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
       "usage": {
-        "prompt_tokens": 332,
-        "completion_tokens": 728
+        "prompt_tokens": 325,
+        "completion_tokens": 403
       },
       "conformant": true
     },
@@ -126,25 +126,25 @@
       "request": {
         "itemType": "cloze",
         "stem": {
-          "en": "The information in the applicants’ files ___ confidential and is shared only with authorized staff.",
-          "fr": "Les renseignements contenus dans les dossiers des personnes candidates ___ confidentiels et ne sont communiqués qu’au personnel autorisé."
+          "en": "The committee retained the applications ____ by the selection panel.",
+          "fr": "Le comité a retenu les candidatures ____ par le comité de sélection."
         },
         "options": [
           {
             "id": "a",
-            "text": "is"
+            "text": "évaluées"
           },
           {
             "id": "b",
-            "text": "are"
+            "text": "évalué"
           },
           {
             "id": "c",
-            "text": "seem"
+            "text": "évaluée"
           },
           {
             "id": "d",
-            "text": "have been"
+            "text": "évalués"
           }
         ],
         "subSkill": "agreement",
@@ -152,10 +152,10 @@
         "lang": "fr"
       },
       "attempt": 1,
-      "content": "{\n  \"chosenKey\": \"b\",\n  \"confidence\": 0.55,\n  \"defensibleDistractors\": [\"c\", \"d\"],\n  \"optionCases\": {\n    \"a\": \"“Is” would fit a singular English subject such as “information,” but the French subject, “Les renseignements,” is plural.\",\n    \"b\": \"“Are” expresses the intended plural agreement and the meaning “sont confidentiels.” It is the likely intended answer, although an English word cannot complete this French sentence.\",\n    \"c\": \"“Seem” agrees with a plural subject and could express “semblent confidentiels.” It changes the claim from certainty to appearance, but agreement alone does not rule it out.\",\n    \"d\": \"“Have been” agrees with a plural subject and could express “ont été confidentiels.” Its tense is less natural beside the present-tense “ne sont communiqués,” but it is not excluded by agreement.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false,\n    \"note\": \"The French stem is natural Canadian administrative French. The defect is that every answer option is in English, not the stem’s register.\"\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Évaluées » s’accorde avec « candidatures », féminin pluriel.\",\n    \"b\": \"« Évalué » conviendrait à un nom masculin singulier, mais pas à « candidatures ».\",\n    \"c\": \"« Évaluée » conviendrait à « candidature » au singulier; ici, le nom est pluriel.\",\n    \"d\": \"« Évalués » conviendrait à un nom masculin pluriel, mais « candidatures » est féminin.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
       "usage": {
-        "prompt_tokens": 335,
-        "completion_tokens": 777
+        "prompt_tokens": 329,
+        "completion_tokens": 430
       },
       "conformant": true
     },
@@ -165,25 +165,25 @@
       "request": {
         "itemType": "cloze",
         "stem": {
-          "en": "A number of employees ___ for the internal language training offered this fall.",
-          "fr": "Un certain nombre de membres du personnel ___ pour la formation linguistique interne offerte cet automne."
+          "en": "The ____ overtime hours must be approved by the director.",
+          "fr": "Les heures supplémentaires ____ doivent être approuvées par la direction."
         },
         "options": [
           {
             "id": "a",
-            "text": "have requested to register"
+            "text": "effectué"
           },
           {
             "id": "b",
-            "text": "has requested to register"
+            "text": "effectuées"
           },
           {
             "id": "c",
-            "text": "is requesting to register"
+            "text": "effectuée"
           },
           {
             "id": "d",
-            "text": "was requesting to register"
+            "text": "effectués"
           }
         ],
         "subSkill": "agreement",
@@ -191,10 +191,10 @@
         "lang": "fr"
       },
       "attempt": 1,
-      "content": "{\n  \"chosenKey\": \"a\",\n  \"confidence\": 0.78,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"The strongest intended answer: in English, “a certain number of members” normally takes a plural verb, “have.”\",\n    \"b\": \"One could try treating “a certain number” as a singular quantity, but “has” is not the natural agreement for members making requests.\",\n    \"c\": \"A present-time request could fit the autumn context, but the singular “is” has the same agreement problem.\",\n    \"d\": \"A past request could fit a supplied narrative context, but none is given, and “was” also has the agreement problem.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": true,\n    \"note\": \"The French stem is appropriate institutional Canadian French. The item is nevertheless unfit as a French cloze: every completion is in English, so none produces a French sentence.\"\n  },\n  \"estimatedBand\": \"B\"\n}",
+      "content": "{\n  \"chosenKey\": \"b\",\n  \"confidence\": 0.99,\n  \"defensibleDistractors\": [],\n  \"optionCases\": {\n    \"a\": \"« Effectué » would agree with a masculine singular noun, but « heures » is feminine plural.\",\n    \"b\": \"« Effectuées » agrees in gender and number with « heures supplémentaires ».\",\n    \"c\": \"« Effectuée » would agree with « heure supplémentaire » in the singular, but « heures » is plural.\",\n    \"d\": \"« Effectués » has the required plural ending but is masculine, while « heures » is feminine.\"\n  },\n  \"registerFlag\": {\n    \"flagged\": false\n  },\n  \"estimatedBand\": \"B\"\n}",
       "usage": {
-        "prompt_tokens": 341,
-        "completion_tokens": 933
+        "prompt_tokens": 326,
+        "completion_tokens": 403
       },
       "conformant": true
     }
