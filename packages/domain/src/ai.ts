@@ -300,6 +300,27 @@ export const ORAL_CRITERIA = ["comprehension", "fluency", "grammar", "vocabulary
 export type OralCriterion = (typeof ORAL_CRITERIA)[number];
 
 /**
+ * How much an observation the examiner noted during a studio session weighs (progress.md
+ * D168). The examiner's `note_observation` tool takes one of these, and `assessOral` quotes
+ * the notes as observations, never as verdicts.
+ */
+export const ORAL_NOTE_SEVERITIES = ["minor", "moderate", "major"] as const;
+export type OralNoteSeverity = (typeof ORAL_NOTE_SEVERITIES)[number];
+
+/**
+ * One observation the realtime examiner noted during a studio session (architecture.md §8.5
+ * step 6, D165, D168): the criterion it bears on, what the candidate said or did, and how much
+ * it weighs. `phase` is stamped by the client, as a turn's is. Notes never surface during the
+ * session; the report reads them.
+ */
+export type OralNote = {
+  readonly criterion: OralCriterion;
+  readonly evidence: string;
+  readonly severity: OralNoteSeverity;
+  readonly phase: number;
+};
+
+/**
  * A sub-skill the bank has items for, so a fix can be drilled and can bias the plan
  * (progress.md D122). The bank has no oral items, so an oral sub-skill would reach
  * nothing: an oral fix names the oral criterion it hurt and a reading or writing
@@ -323,6 +344,8 @@ export type OralRequest = {
   readonly phases: readonly { readonly name: string; readonly intent: string }[];
   readonly turns: readonly OralTurn[];
   readonly descriptors: Readonly<Record<"A" | "B" | "C", string>>;
+  /** A studio session's examiner notes (D168), quoted by the prompt when present; practice mode has none. */
+  readonly notes?: readonly OralNote[] | undefined;
 };
 
 /**

@@ -97,6 +97,8 @@ export const requestOralReport = async (request: OralReportRequest, deps: OralRe
     phases: scenario.phases.map(({ name, intent }) => ({ name, intent })),
     turns: session.turns,
     descriptors: { A: descriptors.A[lang], B: descriptors.B[lang], C: descriptors.C[lang] },
+    // A studio examiner's notes (D168), quoted by the prompt; a practice session has none.
+    ...(session.notes === undefined || session.notes.length === 0 ? {} : { notes: session.notes }),
   };
   const assessment = await withAiProvider(deps, "oral-assessment", (ai) => ai.assessOral(oralRequest), {
     sessionId: session.id,

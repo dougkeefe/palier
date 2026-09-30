@@ -117,6 +117,17 @@ describe("requestOralReport (D126)", () => {
     });
   });
 
+  it("hands a studio session's examiner notes to the report, and none from a session with none (D168)", async () => {
+    const notes = [{ criterion: "grammar" as const, evidence: "« si j'aurais »", severity: "major" as const, phase: 1 }];
+    const studio = setUp([anEnded({ notes })]);
+    await requestOralReport({ sessionId: SESSION_ID, feedbackLang: "en" }, studio.deps);
+    const empty = setUp([anEnded({ notes: [] })]);
+    await requestOralReport({ sessionId: SESSION_ID, feedbackLang: "en" }, empty.deps);
+
+    expect(studio.ai.asked[0]?.notes).toEqual(notes);
+    expect(empty.ai.asked[0]).not.toHaveProperty("notes");
+  });
+
   it("quotes the descriptors in French for a French interface", async () => {
     const { ai, deps } = setUp([anEnded()]);
     await requestOralReport({ sessionId: SESSION_ID, feedbackLang: "fr" }, deps);

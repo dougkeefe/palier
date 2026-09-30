@@ -187,6 +187,7 @@ export const handTransport = (
     say: (speaker: "examiner" | "candidate", text: string, startMs: number, endMs: number) =>
       emit({ kind: "turn", speaker, text, startMs, endMs }),
     flag: (direction: "escalate" | "deescalate") => emit({ kind: "difficulty", direction }),
+    note: (criterion: "grammar" | "vocabulary", evidence: string) => emit({ kind: "note", criterion, evidence, severity: "moderate" }),
     hangUp: (failed: boolean) => end(failed),
     directives: () => directives,
     closeCalls: () => closeCalls,

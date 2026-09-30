@@ -94,6 +94,32 @@ describe("dexieOralStore", () => {
     expect(await store.get(aSession.id)).toEqual(assessed);
   });
 
+  it("reads a studio session's notes back with it (D168)", async () => {
+    const store = dexieOralStore(new PalierDb(dbName()));
+    const noted = { ...aSession, notes: [{ criterion: "grammar" as const, evidence: "« j'aurais »", severity: "minor" as const, phase: 0 }] };
+    await store.put(noted);
+
+    expect(await store.get(aSession.id)).toEqual(noted);
+  });
+
+  it("drops a broken note and keeps the rest, and the session, whole (D168)", async () => {
+    const db = new PalierDb(dbName());
+    const good = { criterion: "task", evidence: "a répondu à côté", severity: "major", phase: 1 };
+    await db.oralSessions.put({ ...aSession, notes: [good, { ...good, criterion: "pronunciation" }, "note"] } as never);
+
+    expect(await dexieOralStore(db).get(aSession.id)).toEqual({ ...aSession, notes: [good] });
+  });
+
+  it.each([
+    ["only broken notes", [{ criterion: "task", evidence: "", severity: "major", phase: 0 }]],
+    ["notes that are not a list", "a note"],
+  ])("reads a session with %s as having none", async (_, notes) => {
+    const db = new PalierDb(dbName());
+    await db.oralSessions.put({ ...aSession, notes } as never);
+
+    expect(await dexieOralStore(db).get(aSession.id)).toEqual(aSession);
+  });
+
   it("reads a running session, with no end and no reason, as whole", async () => {
     const running = { ...aSession, endedAt: null, endReason: null };
     const store = dexieOralStore(new PalierDb(dbName()));

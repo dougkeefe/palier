@@ -15,6 +15,7 @@ export type { OralAudioEntry, OralSession, OralStore } from "./oral-store.js";
 export { StorageQuotaError } from "./oral-store.js";
 export type { OralDirective, OralTransport, OralTransportEvent } from "./oral-transport.js";
 export type { OralLiveness } from "./oral-liveness.js";
+export type { RealtimeSecret, RealtimeSecretSource } from "./realtime-secret-source.js";
 export type { AnswerSource, CandidateAnswer, ExaminerQuestion } from "./answer-source.js";
 export type {
   DeviceId,

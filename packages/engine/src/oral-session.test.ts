@@ -18,6 +18,7 @@ describe("startOralSession", () => {
     expect(state).toEqual({
       boundariesMs: [2 * MIN, 7 * MIN, 10 * MIN],
       lengthMs: 10 * MIN,
+      capMs: null,
       phase: 0,
       register: "baseline",
       lastAtMs: 0,
@@ -38,6 +39,52 @@ describe("startOralSession", () => {
 
   it.each([0, -1, Number.NaN, Number.POSITIVE_INFINITY])("refuses a phase of %s minutes", (minutes) => {
     expect(() => startOralSession([{ minutes: 2 }, { minutes }])).toThrow(RangeError);
+  });
+
+  it("keeps studio mode's cap when it is given one (D166)", () => {
+    expect(startOralSession(WORK, { capMs: 25 * MIN }).state.capMs).toBe(25 * MIN);
+  });
+
+  it.each([0, -1, Number.NaN, Number.POSITIVE_INFINITY])("refuses a cap of %s ms", (capMs) => {
+    expect(() => startOralSession(WORK, { capMs })).toThrow(RangeError);
+  });
+});
+
+describe("stepOralSession — studio mode's cap (D166)", () => {
+  const capped = (capMs: number): OralSessionState => startOralSession(WORK, { capMs }).state;
+
+  it("ends a session the connection closed at or past its cap with time-cap, not transport-closed", () => {
+    const { state, commands } = stepOralSession(capped(8 * MIN), { kind: "transport-closed", failed: false, atMs: 8 * MIN });
+
+    expect(commands.at(-1)).toEqual({ kind: "close", reason: "time-cap" });
+    expect(state.ended).toBe("time-cap");
+  });
+
+  it("lets a cap shorter than the scenario end it before its last phase", () => {
+    const { commands } = stepOralSession(capped(8 * MIN), tick(9 * MIN));
+
+    expect(commands).toEqual([
+      { kind: "enter-phase", phase: 1 },
+      { kind: "enter-phase", phase: 2 },
+      { kind: "close", reason: "time-cap" },
+    ]);
+  });
+
+  it("still completes a session at its length when the cap is longer", () => {
+    expect(stepOralSession(capped(25 * MIN), tick(10 * MIN)).commands.at(-1)).toEqual({ kind: "close", reason: "completed" });
+  });
+
+  it("says nothing of the cap before it", () => {
+    expect(stepOralSession(capped(8 * MIN), tick(8 * MIN - 1)).commands).toEqual([
+      { kind: "enter-phase", phase: 1 },
+      { kind: "enter-phase", phase: 2 },
+    ]);
+  });
+
+  it("takes the end control before the cap as the user's end", () => {
+    expect(stepOralSession(capped(8 * MIN), { kind: "end-requested", atMs: MIN }).commands).toEqual([
+      { kind: "close", reason: "ended-by-user" },
+    ]);
   });
 });
 

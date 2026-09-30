@@ -27,9 +27,10 @@ import type {
  * vendor error and payload into our types at the edge (§8.2), and accounts for
  * cost. Nothing above this port knows OpenAI exists.
  *
- * **Not yet the whole of §3.3.** `openVoiceSession` and its net-new domain types land
- * with Phase 6, the same "the minimum the consumer needs" discipline the store ports
- * already use (progress.md D45). Two §3.3 amendments
+ * **Not the whole of the original §3.3.** `openVoiceSession` was dropped (progress.md D165):
+ * a provider is made per call inside `withApiKey`, and a voice session outlives the call and
+ * never uses the key after minting, so studio mode is an `OralTransport` fed by a
+ * `RealtimeSecretSource` instead. Two §3.3 amendments
  * are recorded in the D-log: `generatePassage` is added (the factory's stage 2
  * needs AI passage construction, content-factory.md §4.2), and `generateItems`/
  * `generatePassage` return **drafts** rather than assembled `Item[]`/`Passage[]`

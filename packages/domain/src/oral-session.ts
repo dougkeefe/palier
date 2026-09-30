@@ -11,9 +11,10 @@
  * - `transport-closed` / `transport-failed`: the connection ended it, cleanly or not.
  * - `interrupted`: the page went away mid-session, found on the next start. A session
  *   cannot resume, because an examiner's conversation cannot be replayed.
- *
- * There is no time-cap reason: a session completes at its scenario's total, and
- * architecture.md §8.6's 25-minute disconnect is a studio-mode guard (Phase 6, after 1.0: D131).
+ * - `time-cap`: studio mode's hard session cap ran out (architecture.md §8.6), a spend guard
+ *   in `pricing.json`, not an exam rule (progress.md D165, D166). A session normally completes
+ *   at its scenario's total first; the cap ends one whose clock or connection outran it.
+ *   Practice mode has no cap.
  */
 export const ORAL_END_REASONS = [
   "completed",
@@ -21,6 +22,7 @@ export const ORAL_END_REASONS = [
   "transport-closed",
   "transport-failed",
   "interrupted",
+  "time-cap",
 ] as const;
 export type OralEndReason = (typeof ORAL_END_REASONS)[number];
 
@@ -47,9 +49,8 @@ export const ORAL_INPUTS = ["voice", "typed"] as const;
 export type OralInput = (typeof ORAL_INPUTS)[number];
 
 /**
- * One utterance, whole. Times are milliseconds since the session opened, the shape
- * GPT-Live's transcript deltas carry (`start_ms`/`end_ms`, progress.md D113), so a
- * turn-based and a full-duplex transport write the same record. Turns may overlap
+ * One utterance, whole. Times are milliseconds since the session opened, so a
+ * turn-based and a full-duplex transport write the same record (progress.md D116). Turns may overlap
  * in a full-duplex session. `phase` indexes the scenario's `phases`, and is stamped
  * by the client, which drives the phases (architecture.md §8.5 step 5). `input` is
  * set on a candidate's turn by the transport that took it; a turn stored before

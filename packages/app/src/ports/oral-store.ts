@@ -1,4 +1,4 @@
-import type { OralAssessment, OralEndReason, OralTurn, ScenarioId, SessionId } from "@palier/domain";
+import type { OralAssessment, OralEndReason, OralNote, OralTurn, ScenarioId, SessionId } from "@palier/domain";
 
 import type { ISO } from "./time.js";
 
@@ -17,6 +17,8 @@ import type { ISO } from "./time.js";
  * - **`assessment` is the report on it**, `null` until one is asked for and returned
  *   (progress.md D126), as a `WritingSubmission`'s is. Its offsets point into `turns`, which
  *   no longer change once the session has ended, and only an ended session is assessed.
+ * - **`notes` are a studio examiner's observations** (progress.md D168), kept as they arrive
+ *   and quoted by the report. Absent on a practice session and on every row stored before them.
  */
 export type OralSession = {
   readonly id: SessionId;
@@ -26,6 +28,7 @@ export type OralSession = {
   readonly endReason: OralEndReason | null;
   readonly turns: readonly OralTurn[];
   readonly assessment: OralAssessment | null;
+  readonly notes?: readonly OralNote[] | undefined;
 };
 
 /** A stored recording, as the retention policy sees it: whose, how big, how old. */

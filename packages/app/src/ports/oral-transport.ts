@@ -1,14 +1,25 @@
-import type { OralDirection, OralInput, OralRegister, OralScenario, OralSpeaker } from "@palier/domain";
+import type {
+  OralCriterion,
+  OralDirection,
+  OralInput,
+  OralNoteSeverity,
+  OralRegister,
+  OralScenario,
+  OralSpeaker,
+} from "@palier/domain";
 
 /**
  * What a transport tells the session (progress.md D116), pushed as it happens:
  *
  * - `turn`: one utterance, **whole**, with its times in milliseconds since `open`
  *   resolved. A turn-based transport emits the examiner's question and then the
- *   candidate's transcribed answer; a full-duplex one assembles its transcript deltas
- *   (GPT-Live's `start_ms`/`end_ms`, D113) into completed turns, which may overlap.
+ *   candidate's transcribed answer; a full-duplex one (studio mode's `realtimeTransport`,
+ *   D165) assembles its transcripts into completed turns, which may overlap.
  * - `difficulty`: the examiner judged the candidate to be coping or struggling
  *   (architecture.md §8.5's `flag_difficulty`), so the client can adapt the phase.
+ * - `note`: the examiner noted an observation (§8.5's `note_observation`, D165, D168). Only
+ *   a studio examiner takes notes; the driver stamps the phase and keeps them on the
+ *   session, and the report quotes them. Never shown during the session.
  * - `closed`: the connection is over, cleanly or not. **Exactly once, and last.**
  */
 export type OralTransportEvent =
@@ -24,6 +35,12 @@ export type OralTransportEvent =
       readonly pauseMs?: number | undefined;
     }
   | { readonly kind: "difficulty"; readonly direction: OralDirection }
+  | {
+      readonly kind: "note";
+      readonly criterion: OralCriterion;
+      readonly evidence: string;
+      readonly severity: OralNoteSeverity;
+    }
   | { readonly kind: "closed"; readonly failed: boolean };
 
 /**
@@ -39,7 +56,8 @@ export type OralDirective = {
 /**
  * The examiner's side of a spoken session (progress.md D116), a port §3.3 did not
  * name. One shape for both transports: Phase 5's turn-based one and Phase 6's
- * full-duplex one, so Phase 6 adds a transport and inherits a tested session.
+ * full-duplex one (`realtimeTransport`, in the openai adapter), so Phase 6 adds a
+ * transport and inherits a tested session.
  *
  * **Push, not pull.** A full-duplex client must send each phase boundary on time
  * even while the candidate is silent, so the session is driven by the events a
