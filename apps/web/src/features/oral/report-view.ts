@@ -6,7 +6,7 @@ import {
   UnknownScenarioError,
   hasAnswers,
 } from "@palier/app";
-import type { Lang, OralCriterion, OralTurn, OralTurnError, ScoredSubSkill } from "@palier/domain";
+import type { Lang, OralCriterion, OralMode, OralTurn, OralTurnError, ScoredSubSkill } from "@palier/domain";
 import { ORAL_CRITERIA, READING_SUB_SKILLS } from "@palier/domain";
 import type { FluencyMetrics, Preflight } from "@palier/engine";
 
@@ -199,18 +199,24 @@ const amountWords = (usd: number, unpriced: number, locale: string): CostWords =
 };
 
 /**
- * What the session cost, measured (Phase 5 exit criterion 2, D125, D127): the practice, the report and
- * the two together, from the rows the ledger made for it. The report line says "not asked for yet"
- * only when no report call was made, since a call OpenAI billed and the adapter refused is spend too.
+ * What the session cost, measured (Phase 5 exit criterion 2, D125, D127): the session's own calls, the report
+ * and the two together, from the rows the ledger made for it. The session's line is the conversation's for a
+ * studio session (D182), and practice's otherwise. The report line says "not asked for yet" only when no report
+ * call was made, since a call OpenAI billed and the adapter refused is spend too.
  */
-export const costRows = (cost: OralSessionCost, locale: string): readonly { readonly label: string; readonly words: CostWords }[] => {
+export const costRows = (
+  cost: OralSessionCost,
+  locale: string,
+  mode: OralMode = "practice",
+): readonly { readonly label: string; readonly words: CostWords }[] => {
+  const held = mode === "studio" ? cost.studio : cost.practice;
   const total: OralCostLine = {
-    usd: cost.practice.usd + cost.report.usd,
-    calls: cost.practice.calls + cost.report.calls,
-    unpriced: cost.practice.unpriced + cost.report.unpriced,
+    usd: held.usd + cost.report.usd,
+    calls: held.calls + cost.report.calls,
+    unpriced: held.unpriced + cost.report.unpriced,
   };
   return [
-    { label: "costPractice", words: amountWords(cost.practice.usd, cost.practice.unpriced, locale) },
+    { label: mode === "studio" ? "costStudio" : "costPractice", words: amountWords(held.usd, held.unpriced, locale) },
     {
       label: "costReport",
       words: cost.report.calls === 0 ? { key: "costNoReport" } : amountWords(cost.report.usd, cost.report.unpriced, locale),

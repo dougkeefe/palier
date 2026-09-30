@@ -206,3 +206,27 @@ export type MascotPose = "asleep" | "cheer";
 export const mascotClass = (pose: MascotPose): string => (pose === "cheer" ? "pl-mascot pl-celebrate" : "pl-mascot");
 
 export const streakFlameClass = (lit: boolean): string => (lit ? "pl-streak-flame pl-streak-flame--lit" : "pl-streak-flame");
+
+// ---- Voice form (studio mode's one visual, product-requirements.md §8.6, progress.md D184) ----
+
+/** Two voices' loudness, each a root-mean-square level as the microphone meter reads one. */
+export type VoiceLevels = { readonly examiner: number; readonly candidate: number };
+
+/** The level at which a voice fills its layer's reach: speech at a normal distance reads about this. */
+export const VOICE_FULL_LEVEL = 0.3;
+
+/** How far past its resting size a layer grows at a full voice. */
+export const VOICE_REACH = 0.35;
+
+/** How much of the way to the level heard each frame moves, so the form breathes rather than flickers. */
+export const VOICE_EASE = 0.25;
+
+/** A layer's scale for a level: 1 at silence, `1 + VOICE_REACH` at a full voice and beyond, 1 for a reading that is not one. */
+export const voiceFormScale = (level: number): number =>
+  Number.isFinite(level) ? 1 + Math.min(Math.max(level, 0) / VOICE_FULL_LEVEL, 1) * VOICE_REACH : 1;
+
+/** One frame's step from the level shown towards the level heard; a reading that is not one leaves it where it is. */
+export const easeLevel = (shown: number, heard: number): number => (Number.isFinite(heard) ? shown + (heard - shown) * VOICE_EASE : shown);
+
+/** A still form, under reduced motion, is drawn at rest and never moves. */
+export const voiceFormClass = (still: boolean): string => (still ? "pl-voice-form pl-voice-form--still" : "pl-voice-form");

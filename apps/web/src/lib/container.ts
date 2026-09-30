@@ -82,6 +82,7 @@ import type {
   OralStudioRun,
   OralReport,
   OralSession,
+  OralSessionCost,
   OralSessionChoice,
   OralStorageEstimate,
   SaveOralAudioResult,
@@ -147,6 +148,7 @@ import {
   oralHistory,
   closeAbandonedSessions,
   oralReport,
+  oralSessionCost,
   oralSessionChoices,
   oralStorageEstimate,
   requestOralReport,
@@ -158,7 +160,7 @@ import { httpBankRepository } from "@palier/adapters/bank";
 import { dexieStores } from "@palier/adapters/dexie";
 import { webCryptoIdGenerator } from "@palier/adapters/ids";
 import type { RealtimePeerFactory } from "@palier/adapters/openai";
-import { PROMPT_VERSION, openAiProvider, realtimeTransport, routeRealtimeSecrets } from "@palier/adapters/openai";
+import { PROMPT_VERSION, browserRealtimePeer, openAiProvider, realtimeTransport, routeRealtimeSecrets } from "@palier/adapters/openai";
 import { httpSyncTransport } from "@palier/adapters/sync";
 import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
@@ -421,15 +423,17 @@ export type UseCases = {
     answers: AnswerSource,
   ) => Promise<OralPracticeRun>;
   /**
-   * A studio session (Phase 6 Slice 1, D165, D170): the realtime transport over `peer`, which the studio
-   * screen makes from its microphone (`browserRealtimePeer`, Slice 2), fed a secret from the route and
-   * metered as `oral-studio`. No screen calls it yet.
+   * A studio session (Phase 6 Slices 1 and 2, D165, D170): the realtime transport over `peer`, which the studio
+   * screen makes from its microphone and its examiner's audio element (`browserRealtimePeer`), fed a secret from
+   * the route and metered as `oral-studio`.
    */
   readonly startOralStudio: (
     request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId },
     peer: RealtimePeerFactory,
   ) => Promise<OralStudioRun>;
   readonly oralSession: (request: { readonly sessionId: SessionId }) => Promise<OralSession | null>;
+  /** What a session has cost so far, from its own ledger rows (D182): studio mode's running meter. */
+  readonly oralSessionCost: (request: { readonly sessionId: SessionId }) => Promise<OralSessionCost | null>;
   /**
    * Close the spoken sessions left running that no page on this device is running now, and name them
    * (D144): a tab closed mid-session leaves its session open, and it is over. The oral screens call it
@@ -509,6 +513,12 @@ export type Container = Ports & {
    * its variants (ADR 9). The same parsed value every use case receives.
    */
   readonly profile: ExamProfile;
+  /**
+   * The browser's realtime peer over the studio screen's microphone and the element the examiner's voice plays in
+   * (Phase 6 Slice 2, D185): native WebRTC, the same in both graphs, as the OpenAI adapter is. Here so the adapter
+   * stays in this lazily loaded module, never the island's own chunk.
+   */
+  readonly realtimePeer: (microphone: MediaStream, remoteAudio: HTMLAudioElement) => RealtimePeerFactory;
 };
 
 /**
@@ -761,6 +771,7 @@ function buildUseCases(ports: Ports): UseCases {
         capMs: STUDIO_CAP_MS,
       }),
     oralSession: (request) => ports.oral.get(request.sessionId),
+    oralSessionCost: (request) => oralSessionCost(request.sessionId, { oral: ports.oral, ledger: ports.costLedger }),
     closeAbandonedSessions: () => closeAbandonedSessions({ clock: ports.clock, oral: ports.oral, liveness: ports.oralLiveness }),
     saveOralAudio: (request) => saveOralAudio(request, { oral: ports.oral }),
     oralStorageEstimate: () => oralStorageEstimate({ oral: ports.oral }),
@@ -824,7 +835,12 @@ export function readEnv(
  */
 export function createContainer(env: Env): Container {
   const ports = env.hermetic ? hermeticPorts() : productionPorts();
-  return { ...ports, useCases: buildUseCases(ports), profile: PROFILE };
+  return {
+    ...ports,
+    useCases: buildUseCases(ports),
+    profile: PROFILE,
+    realtimePeer: (microphone, remoteAudio) => browserRealtimePeer({ microphone, remoteAudio }),
+  };
 }
 
 /** The real adapters. Browser-only — see the file comment (D59). */

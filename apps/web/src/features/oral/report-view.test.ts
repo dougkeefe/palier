@@ -45,7 +45,7 @@ const REPORT: OralReport = {
   },
   scenario: null,
   fluency: { spokenTurns: 0, wordsPerMinute: null, fillerCount: null, meanPauseMs: null },
-  cost: { practice: { usd: 0, calls: 0, unpriced: 0 }, report: { usd: 0, calls: 0, unpriced: 0 } },
+  cost: { practice: { usd: 0, calls: 0, unpriced: 0 }, studio: { usd: 0, calls: 0, unpriced: 0 }, report: { usd: 0, calls: 0, unpriced: 0 } },
   blocked: null,
 };
 
@@ -189,13 +189,22 @@ describe("fluencyWords", () => {
 describe("costRows (D125, D127)", () => {
   const line = (usd: number, calls: number, unpriced = 0) => ({ usd, calls, unpriced });
   const words = (practice: ReturnType<typeof line>, report: ReturnType<typeof line>) =>
-    costRows({ practice, report }, "en").map((row) => [row.label, row.words.key, row.words.values?.amount]);
+    costRows({ practice, studio: line(0, 0), report }, "en").map((row) => [row.label, row.words.key, row.words.values?.amount]);
 
   it("gives each line its amount, and the report's as not asked for when no report call was made", () => {
     expect(words(line(0.08, 5), line(0, 0))).toEqual([
       ["costPractice", "costExact", "US$0.08"],
       ["costReport", "costNoReport", undefined],
       ["costTotal", "costExact", "US$0.08"],
+    ]);
+  });
+
+  it("counts a studio session's conversation, never practice's line, on the session's row (D182)", () => {
+    const cost = { practice: line(9, 9), studio: line(0.4, 12), report: line(0.02, 1) };
+    expect(costRows(cost, "en", "studio").map((row) => [row.label, row.words.values?.amount])).toEqual([
+      ["costStudio", "US$0.40"],
+      ["costReport", "US$0.02"],
+      ["costTotal", "US$0.42"],
     ]);
   });
 

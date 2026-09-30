@@ -1,5 +1,5 @@
 import type { ExaminerQuestion, OralSession, OralSessionChoice } from "@palier/app";
-import type { OralEndReason } from "@palier/domain";
+import type { OralEndReason, OralMode } from "@palier/domain";
 import type { Preflight } from "@palier/engine";
 
 import { checkFailure } from "../key/key-view";
@@ -19,10 +19,23 @@ export type OralFailure = "invalid-key" | "out-of-credit" | "timeout" | "unreach
 /** Where the answer to the current question stands. */
 export type Turn = "idle" | "recording" | "sending";
 
+/**
+ * The screen's steps, for both modes (product-requirements.md §8.6, progress.md D185). `held` is the mode the
+ * candidate chose on the picker, and what the pre-flight priced; absent is practice, as on a stored session.
+ * Studio mode goes on to its own view once started, and comes back to the same end card as practice.
+ */
 export type PracticeState =
   | { readonly phase: "picking" }
-  | { readonly phase: "mic"; readonly choice: OralSessionChoice; readonly mic: MicState }
-  | { readonly phase: "confirming"; readonly choice: OralSessionChoice; readonly mode: AnswerMode; readonly preflight: Preflight }
+  | { readonly phase: "mic"; readonly choice: OralSessionChoice; readonly mic: MicState; readonly held?: OralMode }
+  | {
+      readonly phase: "confirming";
+      readonly choice: OralSessionChoice;
+      readonly mode: AnswerMode;
+      readonly preflight: Preflight;
+      readonly held?: OralMode;
+    }
+  /** A studio conversation, rendered by the studio view from its own controller (D185). */
+  | { readonly phase: "studio"; readonly choice: OralSessionChoice }
   | {
       readonly phase: "running";
       readonly choice: OralSessionChoice;
@@ -46,10 +59,12 @@ export type PracticeState =
     };
 
 export type PracticeAction =
-  | { readonly type: "choose"; readonly choice: OralSessionChoice }
+  | { readonly type: "choose"; readonly choice: OralSessionChoice; readonly held?: OralMode }
   | { readonly type: "mic"; readonly mic: MicState }
-  | { readonly type: "preflighted"; readonly mode: AnswerMode; readonly preflight: Preflight }
+  | { readonly type: "preflighted"; readonly mode: AnswerMode; readonly preflight: Preflight; readonly held?: OralMode }
   | { readonly type: "back" }
+  /** A studio session started: the studio view takes over until it ends (D185). */
+  | { readonly type: "studio" }
   | { readonly type: "started"; readonly nowMs: number; readonly mode?: AnswerMode }
   | { readonly type: "question"; readonly waiting: ExaminerQuestion | null }
   | { readonly type: "recording" }
@@ -67,24 +82,46 @@ export type PracticeAction =
 
 export const INITIAL_PRACTICE: PracticeState = { phase: "picking" };
 
+/** `held` as a step carries it: said only for studio mode, since absent is practice. */
+const studioHeld = (held: OralMode | undefined): { readonly held?: OralMode } => (held === "studio" ? { held } : {});
+
 /**
- * The screen's steps: pick a session, check the microphone (or choose to type), confirm the
+ * The screen's steps: pick a session and a mode, check the microphone (or choose to type), confirm the
  * estimate, then run it until it ends. An action that does not belong to the current step is
  * ignored, so a late event (a question after the end, a tap during the check) never moves it.
+ * A studio session leaves for its own view and comes back to the end card (D185).
  */
 export const practice = (state: PracticeState, action: PracticeAction): PracticeState => {
   if (action.type === "back") return INITIAL_PRACTICE;
   switch (state.phase) {
     case "picking":
-      return action.type === "choose" ? { phase: "mic", choice: action.choice, mic: "idle" } : state;
+      return action.type === "choose" ? { phase: "mic", choice: action.choice, mic: "idle", ...studioHeld(action.held) } : state;
     case "mic":
       if (action.type === "mic") return { ...state, mic: action.mic };
       if (action.type === "preflighted") {
-        return { phase: "confirming", choice: state.choice, mode: action.mode, preflight: action.preflight };
+        return {
+          phase: "confirming",
+          choice: state.choice,
+          mode: action.mode,
+          preflight: action.preflight,
+          ...studioHeld(action.held),
+        };
       }
       return state;
+    case "studio":
+      return action.type === "ended"
+        ? {
+            phase: "ended",
+            choice: state.choice,
+            session: action.session,
+            evicted: action.evicted,
+            failure: action.failure,
+            recordingKept: action.recordingKept,
+          }
+        : state;
     case "confirming":
-      if (action.type !== "started") return state;
+      if (action.type === "studio") return state.held === "studio" ? { phase: "studio", choice: state.choice } : state;
+      if (action.type !== "started" || state.held === "studio") return state;
       return {
         phase: "running",
         choice: state.choice,
@@ -153,6 +190,8 @@ export const endMessage = (reason: OralEndReason | null): string => {
       return "endByYou";
     case "transport-failed":
       return "endFailed";
+    case "time-cap":
+      return "endTimeCap";
     default:
       return "endOther";
   }

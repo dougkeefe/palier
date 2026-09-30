@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { type MediaKit, type RecorderLike, pickRecordingType, recordClip, recordSession } from "./recorder";
+import { type MediaKit, type RecorderLike, pickRecordingType, recordClip, recordSession, recordWhole } from "./recorder";
 
 /** A `MediaRecorder` stand-in: each `stop` flushes the chunks given since `start`, as the browser does. */
 const fakeRecorder = (mimeType: string) => {
@@ -128,5 +128,23 @@ describe("recordSession (D119)", () => {
     session.pause();
     expect(await session.finish()).not.toBeNull();
     expect(made[0]?.recorder.calls).toEqual(["start", "stop"]);
+  });
+});
+
+describe("recordWhole (D183)", () => {
+  it("records from the start, never pausing, and settles with the whole session", async () => {
+    const { kit, made } = kitWith();
+    const recording = recordWhole(stream, kit);
+    const recorder = made[0]!.recorder;
+    recorder.chunks.push("the whole conversation");
+
+    const audio = await recording.finish();
+    expect(recorder.calls).toEqual(["start", "stop"]);
+    expect(await audio?.text()).toBe("the whole conversation");
+  });
+
+  it("is nothing when the recorder gave no bytes", async () => {
+    const { kit } = kitWith();
+    expect(await recordWhole(stream, kit).finish()).toBeNull();
   });
 });

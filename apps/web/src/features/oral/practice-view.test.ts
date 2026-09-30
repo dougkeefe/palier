@@ -111,6 +111,49 @@ describe("practice, the screen's steps (D119)", () => {
   });
 });
 
+describe("practice, studio mode's steps (D185)", () => {
+  const studioConfirming = () =>
+    run(
+      { type: "choose", choice: CHOICE, held: "studio" },
+      { type: "mic", mic: "ok" },
+      { type: "preflighted", mode: "spoken", preflight: PREFLIGHT, held: "studio" },
+    );
+
+  it("carries studio mode from the picker through the check to the pre-flight", () => {
+    expect(run({ type: "choose", choice: CHOICE, held: "studio" })).toEqual({ phase: "mic", choice: CHOICE, mic: "idle", held: "studio" });
+    expect(studioConfirming()).toEqual({ phase: "confirming", choice: CHOICE, mode: "spoken", preflight: PREFLIGHT, held: "studio" });
+  });
+
+  it("prices a studio choice that fell back to typing as practice", () => {
+    const mic = run({ type: "choose", choice: CHOICE, held: "studio" });
+    expect(practice(mic, { type: "preflighted", mode: "typed", preflight: PREFLIGHT })).not.toHaveProperty("held");
+  });
+
+  it("hands a studio session to the studio view, and never runs it as practice", () => {
+    expect(practice(studioConfirming(), { type: "studio" })).toEqual({ phase: "studio", choice: CHOICE });
+    expect(practice(studioConfirming(), { type: "started", nowMs: 1 })).toMatchObject({ phase: "confirming" });
+  });
+
+  it("never hands a practice session to the studio view", () => {
+    const confirming = run({ type: "choose", choice: CHOICE }, { type: "preflighted", mode: "spoken", preflight: PREFLIGHT });
+    expect(practice(confirming, { type: "studio" })).toBe(confirming);
+  });
+
+  it("comes back from the studio view to the same end card, and ignores anything else meanwhile", () => {
+    const studio = practice(studioConfirming(), { type: "studio" });
+    expect(practice(studio, { type: "question", waiting: QUESTION })).toBe(studio);
+    expect(practice(studio, { type: "ended", session: null, evicted: 0, failure: "invalid-key", recordingKept: true })).toEqual({
+      phase: "ended",
+      choice: CHOICE,
+      session: null,
+      evicted: 0,
+      failure: "invalid-key",
+      recordingKept: true,
+    });
+    expect(practice(studio, { type: "back" })).toEqual(INITIAL_PRACTICE);
+  });
+});
+
 describe("oralFailure and its words (D119)", () => {
   it.each([
     ["InvalidApiKeyError", "invalid-key", "failInvalidKey"],
@@ -131,6 +174,7 @@ describe("endMessage (D119)", () => {
     ["completed", "endCompleted"],
     ["ended-by-user", "endByYou"],
     ["transport-failed", "endFailed"],
+    ["time-cap", "endTimeCap"],
     ["interrupted", "endOther"],
     [null, "endOther"],
   ] as const)("says how a session that ended %s ended", (reason, key) => {

@@ -213,7 +213,7 @@ function Summary({ report, headingRef }: { report: Report; headingRef: Ref<HTMLH
   const format = useFormatter();
   const locale = useLocale();
   const { session, scenario } = report;
-  const rows = costRows(report.cost, locale);
+  const rows = costRows(report.cost, locale, report.session.mode);
   return (
     <Card>
       <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
