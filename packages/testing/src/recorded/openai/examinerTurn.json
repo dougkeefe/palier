@@ -1,7 +1,7 @@
 {
   "note": "Recorded from the live API by `pnpm --filter @palier/web live-smoke --record` (progress.md D112). Regenerate, never hand-edit.",
-  "recordedAt": "2026-09-28T18:49:15.175Z",
-  "promptVersion": "4",
+  "recordedAt": "2026-09-30T12:11:39.308Z",
+  "promptVersion": "5",
   "completions": [
     {
       "method": "examinerTurn",
@@ -32,7 +32,7 @@
       "attempt": 1,
       "content": "{\"text\":\"Bonjour. Parlez-moi de votre poste actuel.\",\"difficulty\":null}",
       "usage": {
-        "prompt_tokens": 352,
+        "prompt_tokens": 487,
         "completion_tokens": 23
       },
       "conformant": true
@@ -73,10 +73,53 @@
         ]
       },
       "attempt": 1,
-      "content": "{\"text\":\"Qu’auriez-vous fait autrement si le budget de votre projet avait été réduit de moitié?\",\"difficulty\":\"escalate\"}",
+      "content": "{\"text\":\"Si plusieurs provinces rejetaient l’orientation proposée, comment ajusteriez-vous les consultations tout en respectant l’échéancier?\",\"difficulty\":\"escalate\"}",
       "usage": {
-        "prompt_tokens": 400,
-        "completion_tokens": 104
+        "prompt_tokens": 529,
+        "completion_tokens": 188
+      },
+      "conformant": true
+    },
+    {
+      "method": "examinerTurn",
+      "model": "gpt-6-luna",
+      "request": {
+        "sessionType": "work",
+        "targetBand": "C",
+        "lang": "fr",
+        "topic": "project-management",
+        "phase": {
+          "name": "Votre travail",
+          "minutes": 5,
+          "intent": "Have the candidate describe their role and a recent project in detail.",
+          "seedQuestions": [
+            "Parlez-moi de votre poste actuel.",
+            "Décrivez un projet récent dont vous êtes fier."
+          ],
+          "escalation": [
+            "Qu'auriez-vous fait autrement si le budget avait été réduit de moitié ?"
+          ],
+          "deescalation": [
+            "Quelles sont vos tâches d'une journée typique ?"
+          ]
+        },
+        "register": "escalate",
+        "transcript": [
+          {
+            "speaker": "examiner",
+            "text": "Parlez-moi d'un projet que vous avez géré."
+          },
+          {
+            "speaker": "candidate",
+            "text": "Je n'ai jamais géré de projet ; je travaille surtout sur des dossiers de politique."
+          }
+        ]
+      },
+      "attempt": 1,
+      "content": "{\"text\":\"Dans un dossier de politique, comment réorganiseriez-vous le travail si l’échéance était réduite de moitié?\",\"difficulty\":\"escalate\"}",
+      "usage": {
+        "prompt_tokens": 519,
+        "completion_tokens": 152
       },
       "conformant": true
     }

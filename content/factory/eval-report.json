@@ -64,15 +64,15 @@
         "spread": 0
       },
       "task": {
-        "agreement": 1,
+        "agreement": 0.8,
         "bands": [
-          "C",
+          "B",
           "C",
           "C",
           "C",
           "C"
         ],
-        "spread": 0
+        "spread": 1
       },
       "vocabulary": {
         "agreement": 1,
@@ -91,7 +91,7 @@
     "file": "assessOral-stability.json",
     "maxSpread": 1,
     "passed": true,
-    "promptVersion": "4",
+    "promptVersion": "5",
     "runs": 5
   },
   "overallRate": 1,
@@ -108,9 +108,9 @@
         "total": 2
       },
       "examinerTurn": {
-        "conformant": 2,
+        "conformant": 3,
         "rate": 1,
-        "total": 2
+        "total": 3
       },
       "generateItems": {
         "conformant": 3,
@@ -142,7 +142,7 @@
       "speak.json",
       "transcribe.json"
     ],
-    "promptVersion": "4",
+    "promptVersion": "5",
     "rate": 1
   }
 }
