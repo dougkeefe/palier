@@ -22,4 +22,6 @@ export type { MemoryOralLiveness } from "./oral-liveness.js";
 export { memoryOralTransport } from "./oral-transport.js";
 export type { MemoryOralTransport, OralScriptEntry } from "./oral-transport.js";
 export { memoryAnswerSource } from "./answer-source.js";
+export { memoryRealtimeSecretSource } from "./realtime-secret-source.js";
+export type { MemoryRealtimeSecretSource } from "./realtime-secret-source.js";
 export type { MemoryAnswerSource } from "./answer-source.js";
