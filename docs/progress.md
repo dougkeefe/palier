@@ -45,7 +45,8 @@ the red nightly. **Slice 4, motion, engagement and the library, is built** (`dou
 streak with its silent freeze, the four milestone moments, the motion pass, self-hosted fonts and ten written-expression
 library articles. The nightly live smoke has run on a real key for the first time (session log). Slice 4 merged (#51).
 **Gate L passed** (D164, human), and the language-toggle defect the human found beside it is fixed (D163). **Studio mode is
-back in 1.0** (D165, human): Phase 6 is three slices and two gates, built before Gate M. **Phase 6 Slice 1 is next.**
+back in 1.0** (D165, human): Phase 6 is three slices and two gates, built before Gate M. **Phase 6 Slice 1, the realtime
+session core, is built** (`dougkeefe/krakow-v1`; D166–D173). **Gate N, the examiner's voice, is next (human), then Slice 2.**
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -110,7 +111,7 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **planned, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 next |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 built, D166–D173; Gate N, then Slice 2, next |
 | 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; Gate M waits on Phase 6, D165) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
@@ -221,69 +222,75 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132): **Slices 1–4 merged (#39, #45, #47, #51)**, **Gate K resolved** (D145), the cleanup slice merged (#49), and
-**Gate L passed** (D164). The language-toggle defect (D163) is fixed on `dougkeefe/fix-language-toggle-crash` and merges
-first. **Studio mode is in 1.0** (D165, human): Phase 6 is built next, and Gate M waits for it.
+Phase 7 (D132): **Slices 1–4 merged**, and **Gate L passed** (D164). **Studio mode is in 1.0** (D165, human), and Gate M waits
+for Phase 6. **Phase 6 Slice 1, the realtime session core, is built** on `dougkeefe/krakow-v1` (D166–D173) and merges first.
 
 Phase 5's deferred cost check (D130), the product pilot (Gate E, D97) and Gate M's calls that need no build (the domain, the
 trademark check, lining up an outside submitter) still run beside it, all the human's. Gate M's one build item, **the
-full-volume bank run** (D54), touches no oral code. It can run in its own worktree beside Phase 6 once the human funds a key
-for it.
+full-volume bank run** (D54), touches no oral code. It can run in its own worktree once the human funds a key for it.
 
-**Next: Phase 6 Slice 1 — the realtime session core, no UI** (D165). Build it in a fresh worktree off `main`. Read ADR 3,
-architecture.md §6.3, §8.5 and §8.6, and D165 first. Everything below is decided.
-- **Data, not code.**
-  - `oral-studio` joins `AI_FEATURES` (`packages/domain/src/ai.ts`). The Dexie ledger drops unknown features, so this comes
-    first.
-  - `ai-models.json` gains `realtime: "gpt-realtime-2.1"` and `realtimeVoice: "marin"`. Gate N may change the voice. The nightly
-    smoke checks that the id is still listed.
-  - `pricing.json` gains the realtime audio and text prices, from OpenAI's pricing page, cited, and **`studioMaxMinutes: 25`**.
-    That is a spend guard, not an exam rule, so it lives with the prices, not the profile.
-- **The port changes** (implementation-plan.md §3.3, amended by D165):
-  - `OralTransportEvent` gains `note{criterion, evidence, severity}`, from the `note_observation` tool. `oralTransportContract`
-    holds every transport to it.
-  - `OralSession` keeps its notes. `OralRequest.notes` is optional, and `assessOral`'s prompt quotes them when present
-    (architecture.md §8.5).
-  - The engine's session machine gains a `time-cap` end reason at `studioMaxMinutes`, a studio-only guard. It amends D116,
-    which kept none.
-  - A new **`RealtimeSecretSource`** port, `mint(apiKey) → { value, expiresAt }`, with a memory fake and a contract suite.
-    `AiProvider.openVoiceSession` is dropped: a voice session outlives one provider call, and it never uses the key after
-    minting.
-- **`POST /api/realtime/secret`**, the one route ADR 3 allows.
-  - It runs on Node, like every route (ADR 21). The Edge runtime is deprecated in Next 16.
-  - The key comes in `Authorization` and is used once, for `/v1/realtime/client_secrets` with a short `expires_after`
-    (60 s). The model must match `ai-models.json`'s `realtime`.
-  - It returns `{ value, expiresAt }` only. It logs nothing, and no error it returns carries the key.
-  - A handler in `src/server/` with a unit test per branch, small enough to read line by line.
-- **`realtimeTransport`**, in `packages/adapters/src/openai/`, exported through the existing `openai` subpath. It implements
-  `OralTransport` over WebRTC, through a peer-connection seam that the tests fake.
-  - Setup: the SDP offer goes to `https://api.openai.com/v1/realtime/calls` with the ephemeral secret, which needs no CSP
-    change. `session.update` sends the examiner persona's instructions, which are data beside practice mode's examiner
-    prompt, plus the two tools and input transcription.
-  - Directives: client-driven phases, via `direct()` → `session.update` and `response.create`.
-  - Events: the candidate's transcription and the examiner's transcript become `turn`s with their `startMs`/`endMs`.
-    `flag_difficulty` becomes `difficulty`, and `note_observation` becomes `note`.
-  - Usage from `response.done` goes to the ledger under the `sessionId`.
-  - A dropped connection gets **one reconnect**: a fresh secret, with the transcript so far seeded as conversation items.
-    Otherwise the transport emits `closed{failed}` with every turn kept.
-  - **Native `RTCPeerConnection`, no SDK.** architecture.md §3 names `@openai/agents-realtime` as an option. It is a new
-    dependency, so it needs to state what it replaces (root `CLAUDE.md`), and the session machine it would save already
-    exists.
-- **The key-leak test extended** (`key-leak.spec.ts`, hermetic, with a fake peer).
-  - The key reaches this origin only at `/api/realtime/secret`, only in `Authorization`.
-  - `/v1/realtime/calls` gets the `ek_` secret, never the key.
-  - The route's response holds no key.
-- The comments at `KeyOffer.tsx:12` and `packages/domain/src/oral-session.ts:16` still say "after 1.0 (D131)". Correct them.
-
-*Done:* exit criterion 2 at the port level. A dropped connection, faked, keeps every turn, and `closed{failed}` comes last.
-`pnpm verify` and `CI=1 pnpm verify:medium` pass.
-
-**Beside it, Gate N — the examiner's voice (human).**
-- In OpenAI's Realtime playground, on `gpt-realtime-2.1`, hear `marin` and `cedar` hold a French C-level interview. Use Slice 1's
-  persona instructions once they exist, or a short prompt of your own.
-- **Pass:** a credible francophone examiner, and you pick the voice.
+**Next: Gate N, the examiner's voice (human).** It is the gate before Slice 2's screen, so it is the next step, and it is the
+human's.
+- In OpenAI's Realtime playground, on `gpt-realtime-2.1`, hear `marin` and `cedar` hold a French C-level interview. Paste
+  `studioInstructions` for a work scenario's first phase as the instructions (`packages/adapters/src/openai/prompts.ts`), or
+  write a short prompt of your own.
+- **Pass:** a credible francophone examiner, and you pick the voice. `ai-models.json`'s `realtimeVoice` is set to your
+  choice (it is `marin` now), and any persona change is a `STUDIO_PROMPT_VERSION` bump.
 - **Fail:** studio mode stops, and D131's deferral returns.
-- **It must pass before Slice 2** builds the screen.
+
+**Then: Phase 6 Slice 2 — the studio screen, on the key.** Build it in a fresh worktree off `main`, after Slice 1 merges.
+Read PRD §8.6, architecture.md §8.5–§8.6, and D165–D173 first. Everything below is decided.
+- **The copy's exception first** (D173). Amend every absolute key claim in both languages to name `POST /api/realtime/secret`:
+  - `key.offerStays`, `privacy.third`, `neverKey`, and `KeyOffer`'s comment;
+  - `SECURITY.md`'s "designed but not built";
+  - architecture.md §6.3's settings note, linking the route's source (`apps/web/src/server/realtime-handlers.ts`).
+
+  `/privacy` changes in the same PR (`apps/web/CLAUDE.md`).
+- **The screen, `/practice/oral`**:
+  - a mode choice between practice and studio, each with its cost up front from `featureCosts`/`preflightSpend`
+    (`oral-practice` and `oral-studio`, per minute);
+  - the studio view of PRD §8.6: the voice form over both levels (the examiner's `remoteAudio` and the microphone, through
+    Web Audio analysers), the phase indicator, the elapsed timer, a large end control, and "I did not understand, could you
+    repeat". The repeat control sends a `conversation.item.create` user text asking for it, then `response.create`. That is
+    a new `RealtimeTransport` method, `repeat()`, reached through `OralStudioRun.repeat`, each with its test;
+  - no live transcript;
+  - a static fallback under `prefers-reduced-motion`, and every state keyboard-operable and axe-clean;
+  - `end` when the session ends: `time-cap` gets its own message (`features/oral/practice-view.ts` maps it to `endOther`
+    today).
+- **The controller.** It follows `features/oral/practice-controller.ts`:
+  - it owns the microphone, builds `browserRealtimePeer({ microphone, remoteAudio })`, and calls
+    `container.useCases.startOralStudio(request, peer)`;
+  - it holds the Web Lock (D144), ticks the run every second, and records the whole session with `MediaRecorder` into
+    `saveOralAudio`;
+  - it maps a failure by name: `NoApiKeyError`, `InvalidApiKeyError`, `RateLimitError` and `ProviderUnavailableError`,
+    each a sentence.
+- **Spend.** The pre-flight at the scenario's minutes, and a running meter from the session's own ledger rows (D125).
+- **The report.** `/practice/oral/report` already works for a studio session: the transcript's turns, and the notes quoted
+  by `assessOral` (D168). It gains synced audio: play the recording from a turn's `startMs`.
+- **Tests.**
+  - **One fake, an init script that stubs `RTCPeerConnection`**, in `e2e/leak-guard.ts` beside `installFakeAudio`. Its data
+    channel plays a short scripted examiner, and `page.route` answers `/v1/realtime/calls` with SDP. The hermetic graph
+    keeps the real transport, as it keeps the real OpenAI adapter, so the bundle holds no test code. This amends the plan's
+    "memory transport" for the journey.
+  - A hermetic journey (`oral.spec.ts`) through every studio state, axe-clean.
+  - `key-leak.spec.ts` gains the fake-peer half (D171): the calls endpoint's `authorization` is the `ek_memory_` secret,
+    never the key.
+
+*Done:* exit criterion 1 measured live (tap to first word under 2.5 s, on the human's key), the cost of a real session
+measured and written into `pricing.json` over D167's provisional figures, the copy's parity, and `pnpm verify` and
+`CI=1 pnpm verify:medium` passing.
+
+**For the human, from Phase 6 Slice 1:**
+- **Gate N** (above) is the next step.
+- After merging, run the new smoke check: `curl -s -X POST https://palier-virid.vercel.app/api/realtime/secret` should answer
+  `401 {"error":"missing-key"}` (`docs/deploy.md`).
+- The route is live from this merge, but no screen sends it a key until Slice 2. Two things it does not have yet:
+  - a rate limit (D169);
+  - a verified exclusion from Vercel's logs, which Slice 3 checks.
+
+  Say if either should come before Slice 2.
+- The spend table on `/settings/key` now lists "Studio conversation" at a provisional US$0.055 a minute (D167). Say if it
+  should stay hidden until Slice 2 ships the screen.
 
 **For the human, from Slice 4:**
 - **look at the milestone moment and Coco's cheering pose** (seed or reach a milestone; D159, D160) and the self-hosted type
@@ -729,37 +736,39 @@ built after Phase 7's slices and before Gate M.
 **Completion slices (D165).** Three slices and two gates, mirroring `implementation-plan.md` §7 Phase 6 "Completion slices".
 **Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
 
-- [ ] **Slice 1 — The realtime session core, no UI.** The work:
+- [~] **Slice 1 — The realtime session core, no UI.** Built on `dougkeefe/krakow-v1` (D166–D173), not yet merged. The work:
   - `oral-studio` as a feature, the `realtime` model and voice, and the prices with the 25-minute cap as data;
   - `note` events, notes into `assessOral`, and the `time-cap` end reason;
   - the `RealtimeSecretSource` port and `POST /api/realtime/secret` on Node;
   - `realtimeTransport` over WebRTC, with one reconnect, then a clean failure;
-  - the key-leak test extended to the route.
+  - the key-leak test extended to the route (its fake-peer half moved to Slice 2, D171).
 
-  *Done:* exit criterion 2 at the port level.
+  *Done:* exit criterion 2 at the port level, met by `container-studio.test.ts` (session log).
 - [ ] **Gate N — the examiner's voice (human).** Beside Slice 1, and before Slice 2. `marin` and `cedar` heard in French at C
   level in OpenAI's playground; the human picks one. A fail stops Phase 6.
 - [ ] **Slice 2 — The studio screen, on the key.** The work:
+  - **the key copy's one exception, stated in both languages** (moved here from Slice 3 by D173): `key.offerStays`,
+    `privacy.third`, `neverKey`, `KeyOffer` and `SECURITY.md`, plus architecture.md §6.3's settings note linking the
+    route's source;
   - the mode choice on `/practice/oral`, with cost shown up front for both;
   - the studio screen of PRD §8.6: the voice form over both levels, the phase indicator, the timer, the end control, "could
     you repeat", no live transcript, and a reduced-motion fallback;
   - the whole-session local recording;
   - the pre-flight estimate and a running meter;
   - the report over the realtime transcript and its notes, with synced audio;
-  - a hermetic journey over a memory transport, and every state axe-clean.
+  - a hermetic journey over a memory transport, and every state axe-clean;
+  - the key-leak test's fake-peer half (D171): the screen dials `/v1/realtime/calls` with the `ek_` secret, never the key.
 
-  *Done:* exit criterion 1 measured live, and the cost per minute measured and written into `pricing.json` (principle 8).
-- [ ] **Slice 3 — The exception, stated and escapable.** The work:
-  - every absolute "the key never leaves / the server never sees it" claim amended in both languages to name the one
-    exception, plus architecture.md §6.3's settings note linking the route's source. That covers `key.offerStays`,
-    `privacy.third`, `neverKey`, `KeyOffer` and `SECURITY.md`'s "designed but not built";
+  *Done:* exit criterion 1 measured live, the cost per minute measured and written into `pricing.json` (principle 8), and
+  the copy's parity.
+- [ ] **Slice 3 — The exception, escapable.** The work (the copy moved to Slice 2, D173):
   - the self-hosted escape of ADR 3, through a popup to the user's own endpoint and `postMessage`, so `connect-src` stays
     `'self'` and OpenAI (D165);
   - the one-file Cloudflare Worker and the Vercel function in the repo;
   - the route's exclusion from Vercel logging verified, and written into `docs/deploy.md`;
   - the manual realtime checklist written out as `docs/realtime-checklist.md`.
 
-  *Done:* the copy's parity, and the self-hosted path working end to end against a local endpoint.
+  *Done:* the self-hosted path working end to end against a local endpoint.
 - [ ] **Gate O — studio mode's release reads (human).** The checklist on Chrome, Safari and Firefox, desktop and mobile (exit
   criterion 3), the route read line by line, and the French of the new copy. Then Gate M.
 
@@ -5806,11 +5815,234 @@ the accessibility audit and French review items
 - **Not changed here:** the two code comments that say "after 1.0 (D131)", `KeyOffer.tsx:12` and
   `packages/domain/src/oral-session.ts:16`. They are Slice 1's, so this session stayed in documents.
 
+### D166 — studio mode's cap: the machine ends at it, and the transport closes itself at it too
+**Date:** 29 September 2026 · **Status:** accepted (agent, Phase 6 Slice 1). Amends D116
+
+- **The rule.** `startOralSession(phases, { capMs })` ends a session `time-cap` at or past `capMs`.
+  - The cap is checked **before** the scenario's length, so a cap shorter than a scenario wins.
+  - Otherwise a session still completes at its length, and it always does today, since no scenario runs past 22 minutes and
+    the cap is 25.
+  - Practice mode passes no cap and is unchanged.
+- **The belt and the braces.** `realtimeTransport` also arms its own timer at `maxMs` from `open` and closes cleanly. So the
+  cap holds even when the screen's ticks stall, a background tab for example. The driver steps that close at
+  `atMs ≥ capMs`, so it is stored `time-cap`, never `transport-closed`. Both numbers come from `pricing.json`'s
+  `studioMaxMinutes`, through `STUDIO_MAX_MINUTES` in `apps/web/src/lib/pricing.ts`, parsed and checked there.
+- **Why the cap is not profile data.** It is a spend guard, not an exam rule (ADR 9 covers exam rules). D165 decided that,
+  and so it lives beside the price it guards.
+
+### D167 — a realtime price is a fourth `ModelPrice` kind, and studio mode's estimate is provisional
+**Date:** 29 September 2026 · **Status:** accepted (agent, Phase 6 Slice 1)
+
+- **The prices.** OpenAI's pricing page, read 29 September 2026, lists these for gpt-realtime-2.1, in US$ per million
+  tokens: text 4 in and 24 out, audio 32 in and 64 out, and cached input 0.40 for text and audio alike.
+  - A token pair cannot price that, so domain gains `RealtimePrice`: five rates, one of them the cached input, since OpenAI
+    lists one figure for both.
+  - It also gains `RealtimeTokens`, whose input counts are the **uncached** part, and `costOf` prices it. It is `null` when
+    any unit is unmeasured, as D103 and D117 require.
+- **The usage.** The transport reads each `response.done`'s `input_token_details` and its `cached_tokens_details`, and
+  subtracts the cached part itself. A response with no token details is left unpriced, never free.
+- **The estimate is derived, not measured**: `oral-studio` is one minute, like `oral-practice`.
+  - Audio: OpenAI counts input audio at one token per 100 ms and output audio at one per 50 ms. The candidate speaking 60%
+    of a minute is 360 in, and the examiner 40% is 480 out.
+  - Text: about 300 in and 60 out.
+  - Cached: 30,000 a minute, about three responses each re-reading a context that averages 10,000 tokens over 22 minutes.
+  - Transcription: 0.6 minutes of the candidate's speech, by `transcribe`.
+  - That is about US$0.055 a minute, beside the published US$0.05 (D165). The plan said "600 in and 1,200 out"; the
+    speaking shares above were used instead because a conversation is two people.
+  - **Slice 2 replaces it with a measured session** (principle 8).
+- **Input transcription** is billed by the transcription model, at `gpt-transcribe`'s rate per minute. The event's own
+  `usage.seconds` is used when it reports duration, and the speech it heard otherwise, as the practice transcriber does
+  (D117).
+- **The feature table shows it now.** `SpendSettings` lists every `AI_FEATURES` entry, so "Studio conversation" appears
+  before a screen can spend on it. It is labelled as what it is, and the French goes to Gate O's read.
+
+### D168 — a studio examiner's note: five criteria, three severities, and the phase stamped by the client
+**Date:** 29 September 2026 · **Status:** accepted (agent, Phase 6 Slice 1)
+
+- **The shape.** `OralNote = { criterion, evidence, severity, phase }`, checked by `oralNoteSchema`.
+  - The criterion is one of `ORAL_CRITERIA`. Pronunciation is not one, because it is not assessed (Gate J).
+  - The severity is `minor`, `moderate` or `major`. The docs named the argument and never its values.
+  - The evidence must say something.
+- **Who stamps what.**
+  - The transport's event carries no phase. The driver stamps it, as it does a turn's.
+  - `OralSession.notes` is optional, so every stored practice session stays valid.
+  - The Dexie store drops a broken note and keeps the rest and the session. A note is the examiner's aside, and the
+    transcript is the user's words.
+- **The report.** `OralRequest.notes` is passed only when there are some. The prompt quotes them after the transcript, each
+  evidence as a JSON string, as observations the transcript decides.
+- **The contract.** `oralTransportContract` holds every transport's notes to a known criterion and severity. A transport
+  whose examiner takes none passes with nothing to check.
+
+### D169 — the realtime secret: one port, two sources, one route, one contract
+**Date:** 29 September 2026 · **Status:** accepted (agent, Phase 6 Slice 1). ADR 3 unchanged
+
+- **The port.** `RealtimeSecretSource { mint(apiKey) → { value, expiresAt } }` lives in `@palier/app`, because `ISO` lives
+  there (D18). The app calls it only inside `withApiKey`, through `startOralStudioRun`'s `secret` hook, and `NoApiKeyError`
+  comes first when no key is held.
+- **Two sources, both in `packages/adapters/src/openai/`**, under the existing `./openai` subpath. A new adapter directory
+  would be a new `exports` entry and a new boundaries element for two files.
+  - `openAiRealtimeSecrets` is the server's. It makes one `POST /v1/realtime/client_secrets` with
+    `expires_after: { anchor: "created_at", seconds: 60 }` and the configured model and voice. It never reads a refusal's
+    body.
+  - `routeRealtimeSecrets` is the browser's. It posts the key in `Authorization`, with no body, and maps the route's codes
+    back to the adapter's named errors.
+- **The route.** `POST /api/realtime/secret` runs on Node with no `runtime` export (ADR 21). The handler is
+  `apps/web/src/server/realtime-handlers.ts`.
+  - It reads a `Bearer` token of printable characters, at most 512 long, from `Authorization`, and never reads the body.
+  - It answers `{ value, expiresAt }` with `cache-control: no-store`.
+  - A refusal is a code, never upstream text: `missing-key` 401, `invalid-key` 401, `rate-limited` 429, `upstream` 502.
+  - The model and voice are `ai-models.json`'s, never the request's.
+  - It holds no key past its request. The API object is memoised on `globalThis` as `db.ts`'s are, so the hermetic
+    source's secrets stay distinct.
+- **Hermetic**, the route mints from `memoryRealtimeSecretSource`, which calls nobody. That is what lets the key-leak test
+  post the real sentinel to the real route.
+- **One contract.** `realtimeSecretSourceContract`, with `CONTRACT_REALTIME_KEYS`, runs against four things:
+  - the memory source;
+  - `openAiRealtimeSecrets` over a canned OpenAI;
+  - `routeRealtimeSecrets` through the real route file and handler (`app/api/realtime-secrets.test.ts`);
+  - and, by the route's binding test, the route itself.
+- **Not built here** (Slice 3, or never): a rate limit on the route; the Vercel log exclusion, which Slice 3 verifies;
+  the self-hosted escape.
+
+### D170 — `realtimeTransport`: a peer seam, hooks for the key and the ledger, one reconnect
+**Date:** 29 September 2026 · **Status:** accepted (agent, Phase 6 Slice 1)
+
+- **The seam.** `RealtimePeer { offer, answer, send, onMessage, onState("open" | "dropped"), close }`, so no
+  `RTCPeerConnection` type crosses it.
+  - `browserRealtimePeer({ microphone, remoteAudio })` is native WebRTC, no SDK. D165 decided that: the session machine an
+    SDK would save already exists.
+  - Its unit test stubs the `RTCPeerConnection` constructor, so its wiring is tested. Whether real WebRTC carries it is the
+    manual checklist's (Slice 3, Gate O).
+- **Hooks, not ports, for the key and the ledger.** The transport is an adapter, so it can reach neither the vault nor the
+  ledger. `startOralStudioRun` hands it two hooks:
+  - `secret`, which mints inside the vault;
+  - `usage`, which appends each billed usage as `oral-studio` under the session.
+
+  The run's `ended` waits for those appends. A failed append is not the session's failure: the conversation happened.
+- **Directives** (the plan's decision 7).
+  - A new phase is `session.update` then `response.create`. A register change is `session.update` alone. `direct` returns
+    at once (D118).
+  - A directive sent while the line is down is applied by the reconnect's `session.update`.
+  - The directive is kept as sent, and `studioInstructions` holds the phase to the scenario's own.
+- **Events.** Server events are handled through a table by type, and anything else is ignored.
+  - The candidate's turn is timed from `speech_started` to `speech_stopped` by the client's clock since `open`. That
+    clock does not restart on a reconnect, as OpenAI's `audio_start_ms` would.
+  - The examiner's turn runs from its first transcript delta to `.done`.
+  - Starts are clamped so they never run backwards for one speaker.
+  - Blank transcripts make no turn, and are still billed.
+- **Tools** (decision 8). Every call is answered with a `function_call_output`, and a malformed one is not passed on. A
+  response whose output is only function calls gets a follow-up `response.create`, so the examiner never falls silent
+  after a note.
+- **One reconnect.** A drop once connected delivers the examiner's words in flight. It then redials with a fresh secret and
+  a new peer, sending `session.update`, then each delivered turn as a `conversation.item.create` (candidate as
+  `user`/`input_text`, examiner as `assistant`/`output_text`), then `response.create`.
+  - A second drop, or any failure in the redial, is `closed { failed }`, last, with `lastError` kept.
+  - A close while dialling abandons the dial, so `open` never hangs.
+- **Shared code.** `openai/http.ts` now holds the timed `fetch` exchange and `FetchLike`, moved out of `openai-provider.ts`
+  unchanged, and the provider's tests pass over it unchanged.
+
+### D171 — the key-leak test learns the one route; its fake-peer half waits for the screen
+**Date:** 29 September 2026 · **Status:** accepted (agent, Phase 6 Slice 1)
+
+- **The guard's allowance is narrow.** A `POST` to this origin's `/api/realtime/secret` may carry the sentinel in its
+  `authorization` header, and nowhere else.
+  - That header is recorded apart, as `realtimeSecretAuthorizations()`.
+  - The request's URL, its other headers and its body are still searched, and so is the route's answer, which every
+    `/api/*` answer already is.
+- **The spec's new step (3e)** posts the sentinel to the real route from the page and asserts:
+  - a 200 whose body is exactly `{ value, expiresAt }`, with an `ek_memory_` value;
+  - the one recorded authorization;
+  - OpenAI's count unchanged.
+
+  `assertNoLeak` then reads the answer.
+- **What moved to Slice 2.** D165 asked for "`/v1/realtime/calls` gets the `ek_` secret" in the hermetic e2e test, with a
+  fake peer. No screen exists yet to dial it, and a test-only hook in the shipped bundle is worse than waiting. So that
+  half is proven in Node instead, by `container-studio.test.ts` through the real route file. It joins `key-leak.spec.ts`
+  with Slice 2's screen, over an `RTCPeerConnection` stubbed by an init script, as `installFakeAudio` stubs the
+  microphone.
+
+### D172 — studio instructions are data beside the practice examiner's prompt, versioned apart
+**Date:** 29 September 2026 · **Status:** accepted (agent, Phase 6 Slice 1)
+
+- **`studioInstructions(scenario, directive)` and `STUDIO_TOOLS`** are in `packages/adapters/src/openai/prompts.ts`. They
+  give §8.5 step 4's persona, spoken:
+  - the target language only, no coaching, short turns;
+  - repeat once when asked;
+  - the phase's purpose and question lists, and the register's ask;
+  - a greeting in the first phase, and a natural transition in later ones;
+  - both tools named, and never mentioned to the candidate.
+- **The tools' enums are domain's**, never typed there.
+- **`STUDIO_PROMPT_VERSION` is "1"**, apart from `PROMPT_VERSION`, which stays at 4. The report prompt is byte-identical
+  when a session has no notes, and a test holds it to that.
+- Gate N may bring persona changes. Each is a version bump.
+
+### D173 — the key copy's exception ships with the first screen that sends the key to the route
+**Date:** 29 September 2026 · **Status:** accepted (agent, Phase 6 Slice 1). Moves one item of D165's Slice 3 into Slice 2
+
+- **The problem with the order D165 planned.** Slice 2 builds the studio screen and Slice 3 amends the copy, so a Slice 2
+  merged and deployed on its own would send the key to `/api/realtime/secret`. It would do so under `key.offerStays`,
+  `privacy.third`, `neverKey`, `KeyOffer` and `SECURITY.md` still saying the key goes only to OpenAI. main deploys to
+  production.
+- **Decided.** The copy amendment, Slice 3's first bullet, moves into Slice 2.
+  - It covers every absolute claim, in both languages, plus architecture.md §6.3's settings note linking the route's
+    source, plus `SECURITY.md`.
+  - Slice 3 keeps the self-hosted escape, the Worker and function, the log exclusion and the checklist.
+- **This slice changes no copy**: no screen calls the route yet, so every claim is still true. `KeyOffer.tsx`'s comment
+  says so.
+- `implementation-plan.md` §7 Phase 6 is moved with this entry.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 29 September 2026 — `dougkeefe/krakow-v1` (Phase 6 Slice 1, the realtime session core; D166–D173)
+
+**Phase 6 Slice 1 is built**: everything below studio mode's screen.
+- **Data.** `oral-studio` in `AI_FEATURES`. `realtime` (`gpt-realtime-2.1`) and `realtimeVoice` (`marin`) in
+  `ai-models.json`. Realtime prices from OpenAI's pricing page, read today, with a provisional per-minute estimate and
+  `studioMaxMinutes: 25`, in `pricing.json`. The nightly smoke now checks the realtime id is listed.
+- **Ports.** A `note` transport event, kept on the session and quoted by `assessOral`. The engine's `time-cap` end
+  reason. `RealtimeSecretSource`, and `startOralStudioRun`.
+- **The route.** `POST /api/realtime/secret`, the one route that sees the key, with a test per branch. It is served
+  from memory in the hermetic lane.
+- **The transport.** `realtimeTransport` over a peer seam, with `browserRealtimePeer` on native WebRTC. Client-driven
+  phases, both tools, usage priced, one reconnect with the transcript seeded, then `closed{failed}`, and its own cap timer.
+- **Wiring.** `startOralStudio` in the composition root. No screen calls it yet.
+- **Exit criterion 2 at the port level** is met by `container-studio.test.ts`, in both graphs, through the real route file:
+  - the key reaches this origin only in `Authorization`;
+  - `/v1/realtime/calls` sees only `ek_` secrets;
+  - one drop reconnects with the transcript seeded;
+  - a second drop stores the session `transport-failed`, with all three turns and the note kept.
+
+  The criterion itself stays unticked until a real disconnection is tried (Gate O's checklist).
+- **The key-leak guard allows the sentinel only in the route's `authorization` header** (D171). Proven to bite, on scratch
+  edits reverted before commit: the sentinel in `Authorization` to `/api/telemetry` failed the guard (`request headers
+  …/api/telemetry`), and the sentinel in the realtime route's *body* failed it (`request body …/api/realtime/secret`).
+- **Decided along the way:**
+  - D166, the cap;
+  - D167, the realtime price kind;
+  - D168, the note shape;
+  - D169, the secret's port and route;
+  - D170, the transport;
+  - D171, the fake-peer half of the key-leak test moves to Slice 2;
+  - D172, the studio instructions as data;
+  - **D173, the key copy's exception moves into Slice 2**, so no deploy sends the key to the route under copy that says
+    it never leaves for anywhere but OpenAI.
+- The stale "after 1.0 (D131)" comments are corrected. `implementation-plan.md` §3.3 and §7 Phase 6 are amended. The six
+  package `CLAUDE.md` files and `docs/deploy.md`'s smoke checks are updated.
+
+*Next, decided* is **Gate N** (human), then **Phase 6 Slice 2**. Slice 1 is `[~]` until it merges. **Evidence:**
+
+```
+pnpm verify                → check-types, lint, boundaries (484 + 312 modules, no dependency violations),
+                             test: 245 files, 3684 passed, 8 todo; coverage thresholds met; exit 0
+pnpm run build             → @palier/web:build cache miss, rebuilt (BUILD_ID 22:26)
+CI=1 pnpm verify:medium    → integration: 7 files, 51 passed; Playwright: 94 passed (1.4m); exit 0
+pnpm --filter @palier/web bundle-size → shared first-load JS 166.1 KB of 180.0 KB, within budget
+pnpm --filter @palier/web lighthouse  → assertions checked against 19 URLs, 95 runs; exit 0
+```
 
 ### 29 September 2026 — `dougkeefe/fix-language-toggle-crash` (studio mode into 1.0, D165; documents only)
 

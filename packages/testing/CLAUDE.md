@@ -74,7 +74,11 @@ the contract suites call `describe` at module scope; `msw`, `@electric-sql/pglit
   with `release`, `idle` and `fail`. `memory/turn-based-transport.test.ts` holds `@palier/app`'s real
   `turnBasedTransport` to `oralTransportContract`, and `memory/oral-practice.test.ts` runs a whole practice
   session per session type over it. `fakeAiProvider` transcribes a clip to its own bytes and voices a question
-  as its words, so a test can follow both.) (`ExamRunStore` has landed: `memoryExamRunStore`,
+  as its words, so a test can follow both. Studio mode, Phase 6 Slice 1, D168–D169: `oralTransportContract` holds
+  every note to a known criterion and severity with evidence, and `memoryOralTransport` scripts notes;
+  `memoryRealtimeSecretSource({ now?, refuses? })` mints `ek_memory_<n>` and records the keys it was handed, and is
+  in `./in-memory` because the hermetic server's route mints from it; `realtimeSecretSourceContract` with
+  `CONTRACT_REALTIME_KEYS` runs against it, both openai sources and the real route.) (`ExamRunStore` has landed: `memoryExamRunStore`,
   `examRunStoreContract` and `anExamRun`, progress.md D80. `SessionStore` has landed:
   `memorySessionStore` and `sessionStoreContract` exist, progress.md D45. `IdGenerator`
   likewise: `counterIdGenerator` and `idGeneratorContract`, D48 — the Web Crypto adapter in

@@ -26,7 +26,9 @@ opened, and returns the next state and the commands (`enter-phase`, `adapt`, `cl
 `@palier/app`'s driver to carry out. **Phases are entered in order and never skipped or repeated**, even
 when one event crosses several boundaries; at or past the scenario's length the session is `completed`
 with every phase entered; **every close carries a reason**, exactly once, and an ended machine says nothing
-more; an earlier `atMs` than one already seen counts as the later. Property-tested, nine invariants. **Fluency**
+more; an earlier `atMs` than one already seen counts as the later. **Studio mode's cap** (`startOralSession(phases,
+{ capMs })`, D166) is data from `pricing.json`, never typed here: at or past it the session ends `time-cap`, checked
+before the scenario's length, so a cap shorter than a scenario wins; practice mode has none. Property-tested, ten invariants. **Fluency**
 (`fluency.ts`, progress.md D123): `fluencyMetrics(turns, fillers)` gives words a minute, the filler count and the mean
 pause **over spoken answers only** (`input: "voice"`), each `null` rather than zero when nothing spoken measures it.
 `speakingMs(turns)` is the time those spoken answers took, the same measure, summed; the progress summary's "minutes
