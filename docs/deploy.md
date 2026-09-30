@@ -291,7 +291,7 @@ offline-first, and sync answers 503.
 
 ## Required checks on `main`
 
-`main` is protected (`progress.md` D177): a pull request merges only when these four checks from
+`main` is protected (`progress.md` D177), so a pull request merges only when these four checks from
 `.github/workflows/verify.yml` pass. Branches need not be up to date first, and no review is required.
 
 | Check | What it runs | Budget |

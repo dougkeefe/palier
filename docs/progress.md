@@ -50,8 +50,8 @@ session core, merged (#53**; D166–D173). **Gate N passed** (D174, human): the 
 cut in on pauses and one that did not listen, are fixed (#54; D175, D176). #54 merged before its re-recording, and **CI had
 never been able to fail** (D177): both lanes swallowed their exit code from Phase 0 on. **CI that can fail** is built
 (`dougkeefe/next-dev-slice`; D177–D179): the v5 re-recording, which makes `main` green again; every lane through one
-script; the medium lane in three parallel jobs; the fast lane's budget at 120 s (human); and `main` protected by the four
-lanes. **Phase 6 Slice 2 is next.**
+script; the medium lane in three parallel jobs; the fast lane's budget at 120 s (human); and `main`'s required checks set to
+the four lanes, which until now always passed. **Phase 6 Slice 2 is next.**
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -6083,7 +6083,7 @@ voice" exit criterion
     reverted.
 
 ### D177 — no CI lane could fail from Phase 0 until now, and `main` is protected
-**Date:** 30 September 2026 · **Status:** accepted; the human chose protection through `gh` (this session)
+**Date:** 30 September 2026 · **Status:** accepted; the human chose to have the protection set through `gh` (this session)
 
 - **The defect.** Both lanes of `verify.yml` ran `if ! timeout … pnpm run verify; then code=$?; …; exit "$code"; fi`.
   Inside that branch `$?` is the status of the negation, which is always 0. So a failing gate and a blown budget both
@@ -6110,8 +6110,10 @@ voice" exit criterion
   - a failing unit test fails the fast lane with exit 1;
   - a test sleeping 95 s fails it with exit 124 and the budget message;
   - a failing E2E assertion fails its shard, with the other shard green.
-- **`main` is protected**, with the four lanes as required checks (`docs/deploy.md`): `strict` off, no review, admins not
-  enforced. A red run is now a merge that cannot happen, rather than one that the author has to notice.
+- **`main` was already protected**, contrary to D91's note: the two old lanes, "Fast lane (budget 90s)" and "Medium lane
+  (budget 5m)", were required checks, with `strict` off and admins not enforced. Protection was never what was missing. The
+  checks reported success whatever happened, so it held nothing back. The required checks are now the four lanes by their
+  new names (`docs/deploy.md`), and the other settings are unchanged. From now on a red lane blocks the merge.
 - **Revisit when** a lane's job is renamed or re-sharded. The protection names checks, so the PR that renames one also
   updates it.
 
@@ -6217,8 +6219,8 @@ re-recording, and its checks were green while its log showed three failing tests
   budget to 120 s** (D178), because a core-package change measured about 92 s.
 - **A flake found and fixed in the product** (D179). Journey 9 lost the first keys pressed as the exam's first item appeared.
   The runner's listener now goes on in a layout effect.
-- **Branch protection on `main`**, with the four lanes required (`docs/deploy.md`). It was set once this branch's lanes were
-  green, so this is the first PR it gates.
+- **Branch protection on `main`** already required the two old lanes, which passed whatever happened. It now requires the
+  four lanes by name (`docs/deploy.md`), set once this branch's lanes were green, so this is the first PR it truly gates.
 
 *Next, decided* is **Phase 6 Slice 2**, with its scope unchanged. **Evidence:**
 
