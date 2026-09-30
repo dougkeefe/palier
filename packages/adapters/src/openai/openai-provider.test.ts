@@ -228,7 +228,6 @@ describe("openAiProvider", () => {
     const user = (JSON.parse(textOf(init.body) || "{}") as { messages: { content: string }[] }).messages[1]?.content ?? "";
     expect(user).toContain('exactly one of "A", "B", "C", never a CEFR level');
     expect(user).toContain('"estimatedBand": "A" | "B" | "C"');
-    expect(PROMPT_VERSION).toBe("4");
   });
 
   it("records token usage after a call, and no usage before", async () => {
@@ -1060,6 +1059,14 @@ describe("openAiProvider — generateScenario (D114)", () => {
     expect(user).toContain("add up to exactly 10");
   });
 
+  it("asks for follow-ups that stand on their own, presupposing nothing the candidate has not said (D176)", async () => {
+    const { fetchImpl, sent } = answers(SCENARIO_PLAN);
+    await makeProvider({ fetchImpl }).generateScenario(aRequest);
+    const user = (JSON.parse(sent()[0] ?? "{}") as { messages: { content: string }[] }).messages[1]?.content ?? "";
+
+    expect(user).toContain("Write every follow-up and reframe so it stands on its own");
+  });
+
   it("retries a plan whose phases do not fill the session, then accepts one that does", async () => {
     const short = { phases: [aPhase(3), aPhase(4)] };
     const { fetchImpl, sent } = answers(short, SCENARIO_PLAN);
@@ -1330,7 +1337,21 @@ describe("openAiProvider — the turn loop's audio and examiner (D117)", () => {
       await makeProvider({ fetchImpl }).examinerTurn({ ...anExaminerRequest, register: "baseline", transcript: [] });
       const user = (JSON.parse(sent()[0] ?? "{}") as { messages: { content: string }[] }).messages[1]?.content ?? "";
       expect(user).toContain("The session is just starting");
-      expect(user).toContain("Ask from the phase's seed questions");
+      expect(user).toContain("open new ground within the phase, as its seed questions do");
+    });
+
+    it("tells the examiner to follow from the last answer, never down the lists, and never on a contradicted premise (D176)", async () => {
+      const { fetchImpl, sent } = answers(EXAMINER_TURN);
+      await makeProvider({ fetchImpl }).examinerTurn(anExaminerRequest);
+      const system = (JSON.parse(sent()[0] ?? "{}") as { messages: { content: string }[] }).messages[0]?.content ?? "";
+
+      expect(system).toContain("Every question follows from what the candidate has just said");
+      expect(system).toContain("they are not a script");
+      expect(system).toContain("Never ask a question whose premise the candidate has contradicted");
+    });
+
+    it("is prompt version 5 since the examiner listens (D176)", () => {
+      expect(PROMPT_VERSION).toBe("5");
     });
 
     it("asks for a simpler reframe when the client de-escalates", async () => {

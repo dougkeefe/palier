@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 29 September 2026
+**Last updated:** 30 September 2026
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -46,7 +46,9 @@ streak with its silent freeze, the four milestone moments, the motion pass, self
 library articles. The nightly live smoke has run on a real key for the first time (session log). Slice 4 merged (#51).
 **Gate L passed** (D164, human), and the language-toggle defect the human found beside it is fixed (D163). **Studio mode is
 back in 1.0** (D165, human): Phase 6 is three slices and two gates, built before Gate M. **Phase 6 Slice 1, the realtime
-session core, is built** (`dougkeefe/next-slice-from-progress-v4`; D166–D173). **Gate N, the examiner's voice, is next (human), then Slice 2.**
+session core, merged (#53**; D166–D173). **Gate N passed** (D174, human): the voice is `cedar`. Its two findings, an examiner that
+cut in on pauses and one that did not listen, are fixed (`dougkeefe/confirm-gate-n`; D175, D176), pending the human's re-recording.
+**Slice 2 is next.**
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -111,7 +113,7 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 built, D166–D173; Gate N, then Slice 2, next |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176; Slice 2 next |
 | 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; Gate M waits on Phase 6, D165) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
@@ -121,9 +123,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-slice-from-progress-v4` | **Phase 6 Slice 1 — the realtime session core, no UI** (D165): `oral-studio` and the realtime data, `note` events and the `time-cap` end reason, the `RealtimeSecretSource` port and `POST /api/realtime/secret`, `realtimeTransport` over WebRTC with one reconnect, the key-leak guard extended to the route. | 29 September 2026 |
+| `dougkeefe/confirm-gate-n` | **Gate N and its two findings** (D174–D176): `cedar` as the voice; semantic turn detection at `low` eagerness, as data; both examiners told to follow from the last answer, `PROMPT_VERSION` 5 and `STUDIO_PROMPT_VERSION` 2. Waits on the human's re-recording before it merges. | 30 September 2026 |
 
-*(The prior rows — the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -223,23 +225,21 @@ Built now rather than retrofitted — §7 is emphatic about this.
 ### Next, decided
 
 Phase 7 (D132): **Slices 1–4 merged**, and **Gate L passed** (D164). **Studio mode is in 1.0** (D165, human), and Gate M waits
-for Phase 6. **Phase 6 Slice 1, the realtime session core, is built** on `dougkeefe/next-slice-from-progress-v4` (D166–D173) and merges first.
+for Phase 6. **Phase 6 Slice 1 merged (#53)**, and **Gate N passed** (D174, human): the voice is `cedar`. Its two findings are
+fixed on `dougkeefe/confirm-gate-n`: semantic turn detection at `low` eagerness (D175), and an examiner that listens (D176). **That
+branch merges first, after the human's re-recording** (below).
 
 Phase 5's deferred cost check (D130), the product pilot (Gate E, D97) and Gate M's calls that need no build (the domain, the
 trademark check, lining up an outside submitter) still run beside it, all the human's. Gate M's one build item, **the
 full-volume bank run** (D54), touches no oral code. It can run in its own worktree once the human funds a key for it.
 
-**Next: Gate N, the examiner's voice (human).** It is the gate before Slice 2's screen, so it is the next step, and it is the
-human's.
-- In OpenAI's Realtime playground, on `gpt-realtime-2.1`, hear `marin` and `cedar` hold a French C-level interview. Paste
-  `studioInstructions` for a work scenario's first phase as the instructions (`packages/adapters/src/openai/prompts.ts`), or
-  write a short prompt of your own.
-- **Pass:** a credible francophone examiner, and you pick the voice. `ai-models.json`'s `realtimeVoice` is set to your
-  choice (it is `marin` now), and any persona change is a `STUDIO_PROMPT_VERSION` bump.
-- **Fail:** studio mode stops, and D131's deferral returns.
+**First, for the human: re-record on `PROMPT_VERSION` 5** (D176), so `dougkeefe/confirm-gate-n` can merge. Follow
+`docs/deploy.md`'s re-recording, then `pnpm --filter @palier/web oral-stability`, then `node apps/factory/dist/index.js eval`.
+Read the third `examinerTurn` in `examinerTurn.json`: after "Je n'ai jamais géré de projet", it must not ask about the
+candidate's project. Commit the fixtures with the regenerated `eval-report.json`.
 
-**Then: Phase 6 Slice 2 — the studio screen, on the key.** Build it in a fresh worktree off `main`, after Slice 1 merges.
-Read PRD §8.6, architecture.md §8.5–§8.6, and D165–D173 first. Everything below is decided.
+**Next: Phase 6 Slice 2 — the studio screen, on the key.** Build it in a fresh worktree off `main`, after
+`dougkeefe/confirm-gate-n` merges. Read PRD §8.6, architecture.md §8.5–§8.6, and D165–D176 first. Everything below is decided.
 - **The copy's exception first** (D173). Amend every absolute key claim in both languages to name `POST /api/realtime/secret`:
   - `key.offerStays`, `privacy.third`, `neverKey`, and `KeyOffer`'s comment;
   - `SECURITY.md`'s "designed but not built";
@@ -276,12 +276,14 @@ Read PRD §8.6, architecture.md §8.5–§8.6, and D165–D173 first. Everything
   - `key-leak.spec.ts` gains the fake-peer half (D171): the calls endpoint's `authorization` is the `ek_memory_` secret,
     never the key.
 
-*Done:* exit criterion 1 measured live (tap to first word under 2.5 s, on the human's key), the cost of a real session
-measured and written into `pricing.json` over D167's provisional figures, the copy's parity, and `pnpm verify` and
-`CI=1 pnpm verify:medium` passing.
+*Done:*
+- exit criterion 1 measured live (tap to first word under 2.5 s, on the human's key);
+- the cost of a real session measured and written into `pricing.json` over D167's provisional figures;
+- heard live on the real screen, on `cedar`: the examiner waits through a mid-sentence pause (D175), and follows an answer
+  that contradicts its question's premise (D176). If it still cuts in, D175's *revisit when* applies;
+- the copy's parity, and `pnpm verify` and `CI=1 pnpm verify:medium` passing.
 
 **For the human, from Phase 6 Slice 1:**
-- **Gate N** (above) is the next step.
 - After merging, run the new smoke check: `curl -s -X POST https://palier-virid.vercel.app/api/realtime/secret` should answer
   `401 {"error":"missing-key"}` (`docs/deploy.md`).
 - The route is live from this merge, but no screen sends it a key until Slice 2. Two things it does not have yet:
@@ -736,7 +738,7 @@ built after Phase 7's slices and before Gate M.
 **Completion slices (D165).** Three slices and two gates, mirroring `implementation-plan.md` §7 Phase 6 "Completion slices".
 **Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
 
-- [~] **Slice 1 — The realtime session core, no UI.** Built on `dougkeefe/next-slice-from-progress-v4` (D166–D173), not yet merged. The work:
+- [x] **Slice 1 — The realtime session core, no UI.** Merged (#53; D166–D173). The work:
   - `oral-studio` as a feature, the `realtime` model and voice, and the prices with the 25-minute cap as data;
   - `note` events, notes into `assessOral`, and the `time-cap` end reason;
   - the `RealtimeSecretSource` port and `POST /api/realtime/secret` on Node;
@@ -744,8 +746,9 @@ built after Phase 7's slices and before Gate M.
   - the key-leak test extended to the route (its fake-peer half moved to Slice 2, D171).
 
   *Done:* exit criterion 2 at the port level, met by `container-studio.test.ts` (session log).
-- [ ] **Gate N — the examiner's voice (human).** Beside Slice 1, and before Slice 2. `marin` and `cedar` heard in French at C
-  level in OpenAI's playground; the human picks one. A fail stops Phase 6.
+- [x] **Gate N — the examiner's voice (human).** Beside Slice 1, and before Slice 2. `marin` and `cedar` heard in French at C
+  level in OpenAI's playground; the human picks one. A fail stops Phase 6. **Passed, 30 September 2026 (D174): `cedar`.**
+  Two findings came with it, and are fixed: the examiner cut in on a pause (D175), and did not listen (D176).
 - [ ] **Slice 2 — The studio screen, on the key.** The work:
   - **the key copy's one exception, stated in both languages** (moved here from Slice 3 by D173): `key.offerStays`,
     `privacy.third`, `neverKey`, `KeyOffer` and `SECURITY.md`, plus architecture.md §6.3's settings note linking the
@@ -777,7 +780,7 @@ built after Phase 7's slices and before Gate M.
 - [ ] Session establishes in under 2.5 seconds from tap to first word
 - [ ] Disconnection mid-session recovers or fails cleanly with the transcript preserved
 - [ ] Manual realtime checklist (`architecture.md` §14) passes on Chrome, Safari, Firefox, desktop and mobile
-- [ ] The examiner's French voice is judged credible at C level by a human (Gate N)
+- [x] The examiner's French voice is judged credible at C level by a human (Gate N) — `cedar`, D174
 - [ ] The key exception is stated wherever the copy promised otherwise, in both languages, and the self-hosted escape works
 
 ### Phase 8: English mirror
@@ -5999,11 +6002,120 @@ the accessibility audit and French review items
   says so.
 - `implementation-plan.md` §7 Phase 6 is moved with this entry.
 
+### D174 — Gate N passed: `cedar` is a credible French examiner at C level
+**Date:** 30 September 2026 · **Status:** accepted (human decision); resolves Gate N, and ticks Phase 6's "examiner's French
+voice" exit criterion
+
+- **The human ran the gate as written.** In OpenAI's Realtime playground, on `gpt-realtime-2.1`, they heard `marin` and
+  `cedar` hold a French C-level work interview. The instructions pasted were `studioInstructions` for phase 1 ("Mise en
+  train") of the bank's work scenario `704IHNU22VKHO1H7PCJU` (procurement, band C), without the two tool lines.
+- **They chose `cedar`.** `ai-models.json`'s `realtimeVoice` moves from `marin`. The server route reads it from there, so
+  the minted secret names `cedar` with no code change.
+- **The voice was not the problem.** The human reported two faults in how the examiner *behaved*, each its own entry: it
+  cut in on a pause (D175), and it did not listen (D176). Neither is a fail of the gate, which asks whether the voice is
+  credible.
+- **What would reopen it:** a pilot user or an outside French reader finding the examiner's French not credible, or
+  OpenAI retiring `cedar`. The agent's suggestion, not the human's.
+
+### D175 — the examiner waits for a speaker who pauses: semantic turn detection at `low`, as data
+**Date:** 30 September 2026 · **Status:** accepted (human decision, Gate N's first finding)
+
+- **The finding.** In the playground the examiner cut in whenever the human paused mid-sentence or between sentences. A
+  candidate at C level pauses to find a word, and the SLE's examiner waits.
+- **What the app sent.** Slice 1's `session.update` asked for `turn_detection: { type: "semantic_vad" }` with no
+  eagerness, which is the API's `auto`. The playground's default is most likely plain silence detection. Either is too
+  eager for this candidate.
+- **Decided: semantic VAD at `eagerness: "low"`.** The model judges whether the utterance sounds finished, and waits
+  longest on silence alone.
+  - The value is a tunable parameter, so it is data (principle 8): `realtimeEagerness` in `ai-models.json`, beside the
+    voice, not a model, so `roleModels` leaves it out.
+  - `apps/web`'s `parseRealtimeEagerness` checks it at load: one of `low`, `medium`, `high` and `auto`, or the build fails.
+  - `realtimeTransport` takes an optional `turnEagerness`, and the reconnect's `session.update` carries it too. Without it
+    the payload is Slice 1's.
+- **Rejected:**
+  - silence detection with a long timeout (about 1.5 s), which is predictable, but a long hesitation still ends the turn;
+  - push-to-talk or an "I'm done" control, which never interrupts, but is less like the exam and a larger Slice 2 change.
+- **Revisit when** Slice 2's live session still cuts in on a pause, or `low` makes the examiner feel sluggish. Try silence
+  detection at about 1.5 s first, then an explicit end-of-turn control.
+
+### D176 — the examiner listens: every question follows from the last answer
+**Date:** 30 September 2026 · **Status:** accepted (human decision, Gate N's second finding). `PROMPT_VERSION` 4 → 5,
+`STUDIO_PROMPT_VERSION` 1 → 2
+
+- **The finding.** The examiner worked through the phase's questions whatever the candidate said. The human's example:
+  asked about a project they had managed, a candidate who answers "I have never managed a project" is still asked what
+  the project's biggest risk was.
+- **Three causes, all in `packages/adapters/src/openai/prompts.ts`:**
+  1. `REGISTER_ASK` offered the lists as a menu. Baseline was "Ask from the phase's seed questions, **or** follow on
+     naturally", and escalate and deescalate asked "from the phase's harder follow-ups" and "simpler reframes".
+  2. Nothing told the examiner to build on the last answer, or to drop a question whose premise the candidate had
+     contradicted.
+  3. The factory's scenario prompt let a follow-up presuppose an answer, as the bank's "Quels compromis *cette décision*
+     impose-t-elle à votre ministère ?" does.
+- **Practice mode had the same fault.** Its text examiner shares `REGISTER_ASK`, so both examiners are fixed.
+- **Decided:**
+  - a shared `LISTEN` instruction in both examiners: every question follows from what the candidate has just said; the
+    lists show the phase's ground and level, never a script; never a question on a contradicted premise, with the
+    human's example as the model's;
+  - `REGISTER_ASK` rewritten so each register asks about the last answer, pitched like its list;
+  - the scenario prompt asks for follow-ups and reframes that stand on their own.
+- **Both versions are bumped**, since both prompts changed materially. `PROMPT_VERSION` covers every written prompt, so its
+  bump makes every recorded fixture a v4 run. The human re-records before this merges (`docs/deploy.md`), and until then
+  three factory tests fail on "no recorded run on prompt v5", which is the gate working.
+- **A measured case (principle 8).** The live smoke gains a third examiner turn: escalate, after "Je n'ai jamais géré de
+  projet". The recorded reply is the evidence a human reads, since a unit test can only check that the instruction was sent.
+- **Two tests changed with the wording they pinned:**
+  - the studio `it.each` baseline case, which asserted "seed questions, or follow on";
+  - the practice examiner's opening test, which asserted "Ask from the phase's seed questions".
+
+  Both asserted the defect itself. Three more changed with what the live smoke does, not bent to fit: `live-smoke.test.ts`'s
+  examiner calls (2 → 3), its oral-practice calls (4 → 5) and its register list, since the smoke now makes a third,
+  contradicted-premise examiner call. The review prompt's test no longer pins `PROMPT_VERSION` to 4, and a test of its own
+  pins it to 5, as another pins `STUDIO_PROMPT_VERSION` to 2, so a later bump fails a test named for the version.
+- **Not changed here:**
+  - The committed bank's scenarios keep their presupposing follow-ups until Gate M's full-volume run regenerates them. Until
+    then `LISTEN` is what stops the examiner reading one out when it does not fit.
+  - `apps/factory/src/eval/oral-stability.test.ts` builds its runs on version `"4"`, and every test but seven named `"4"` as
+    the shipping version too. The seven fell back to the shipping `PROMPT_VERSION`: two failed at version 5, and five that
+    expect a failed report still passed, now partly for the wrong reason. With the human's yes (a candid review), all
+    seven name `"4"`, as the rest of the file does, so none depends on the shipping version and what each asserts is
+    unchanged. A first try, defaulting the fixture to `PROMPT_VERSION`, broke the three tests that name `"4"`, and was
+    reverted.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 30 September 2026 — `dougkeefe/confirm-gate-n` (Gate N passed, and its two findings fixed; D174–D176)
+
+**Gate N passed on `cedar`** (D174, human), and the human reported two faults in the examiner's behaviour, both fixed here.
+- **The voice.** `realtimeVoice` is `cedar`.
+- **It waits** (D175). `realtimeEagerness: "low"` in `ai-models.json`, checked at load by `parseRealtimeEagerness`, is
+  handed to `realtimeTransport` as `turnEagerness`. Every `session.update` asks for it, the reconnect's included.
+- **It listens** (D176). Both examiners get a shared `LISTEN` instruction, `REGISTER_ASK` asks about the last answer rather
+  than down a list, and the scenario prompt asks for follow-ups that presuppose nothing. `PROMPT_VERSION` is 5 and
+  `STUDIO_PROMPT_VERSION` is 2. The live smoke gains a contradicted-premise examiner turn, whose recorded reply is the
+  evidence.
+- **Five test expectations changed**, each named in D176: two pinned the defect, three counted the smoke's calls. Every new
+  branch has its own named test. A candid review then moved the version pins into tests of their own, put the eagerness
+  values in one place in the adapter, and made every `oral-stability.test.ts` case name its shipping version (human's yes).
+- `implementation-plan.md` §7 Phase 6 is noted, and `packages/adapters/CLAUDE.md` and `apps/web/CLAUDE.md` are updated.
+
+**Not mergeable yet.** `PROMPT_VERSION` 5 needs the human's re-recording (*Next, decided*). Until then three factory tests
+fail, each on the version alone, because they read the committed recordings ("no recorded run on prompt v5"):
+`committed-eval`, `loadRecordedRuns`, and `cli.test`'s eval run.
+
+*Next, decided* is the re-recording, then **Phase 6 Slice 2**. **Evidence:**
+
+```
+pnpm verify                → check-types, lint, boundaries (484 + 312 modules, no dependency violations) pass;
+                             test: 245 files, 3702 passed, 3 failed, 8 todo; exit 1, the three above only
+                             (after the candid review's fixes)
+pnpm run build             → exit 0
+CI=1 pnpm verify:medium    → integration: 7 files, 51 passed; Playwright: 94 passed (1.6m)
+```
 
 ### 29 September 2026 — `dougkeefe/next-slice-from-progress-v4` (Phase 6 Slice 1, the realtime session core; D166–D173)
 

@@ -1,5 +1,5 @@
 {
-  "note": "Model ids are data, never hardcoded in TS (architecture.md §8.1). The browser's copy of apps/factory/config/models.json, plus `assess`, the model writing feedback uses (Phase 4 Slice 3; progress.md D103), and the oral practice turn loop's three (Phase 5 Slice 2, D117, human decision 27 September 2026): `transcribe` (gpt-transcribe, billed by the minute), `speech` (tts-1, billed by the character; both units the device measures, so the meter matches the bill) and `examiner` (the text model that writes each question). `voice` is the examiner's voice, not a model, so `roleModels` leaves it out. Studio mode (Phase 6 Slice 1, progress.md D165) adds `realtime`, the Realtime API's conversation model (gpt-realtime-2.1, architecture.md §8.1), which the one server route mints a browser secret for and never takes from the client, and `realtimeVoice`, its voice, which is not a model either; Gate N (the human's ear, in French at C level) may change it to `cedar`. Studio mode's input transcription uses `transcribe`. The nightly live smoke checks every id is still listed.",
+  "note": "Model ids are data, never hardcoded in TS (architecture.md §8.1). The browser's copy of apps/factory/config/models.json, plus `assess`, the model writing feedback uses (Phase 4 Slice 3; progress.md D103), and the oral practice turn loop's three (Phase 5 Slice 2, D117, human decision 27 September 2026): `transcribe` (gpt-transcribe, billed by the minute), `speech` (tts-1, billed by the character; both units the device measures, so the meter matches the bill) and `examiner` (the text model that writes each question). `voice` is the examiner's voice, not a model, so `roleModels` leaves it out. Studio mode (Phase 6 Slice 1, progress.md D165) adds `realtime`, the Realtime API's conversation model (gpt-realtime-2.1, architecture.md §8.1), which the one server route mints a browser secret for and never takes from the client, and `realtimeVoice`, its voice, which is not a model either: `cedar`, chosen by the human's ear in French at C level at Gate N (progress.md D174). `realtimeEagerness` is how readily semantic turn detection decides the candidate has finished speaking, not a model either: `low`, so a candidate's pause mid-sentence is not the end of their turn (D175). Studio mode's input transcription uses `transcribe`. The nightly live smoke checks every id is still listed.",
   "passage": "gpt-6-luna",
   "draft": "gpt-6-luna",
   "review": "gpt-6-sol",
@@ -9,5 +9,6 @@
   "examiner": "gpt-6-luna",
   "voice": "sage",
   "realtime": "gpt-realtime-2.1",
-  "realtimeVoice": "marin"
+  "realtimeVoice": "cedar",
+  "realtimeEagerness": "low"
 }

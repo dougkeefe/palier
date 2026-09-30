@@ -202,7 +202,7 @@ import aiModels from "./ai-models.json";
 import { BANK_BASE_PATH, BANK_VERSION } from "./bank-version";
 import { type Held, beforeClear, inFlight, wipeCount, writesUntilWiped } from "./in-flight";
 import { webLocksLiveness } from "./oral/liveness";
-import { EXAMINER_VOICE, PRICING, STUDIO_MAX_MINUTES } from "./pricing";
+import { EXAMINER_VOICE, PRICING, REALTIME_EAGERNESS, STUDIO_MAX_MINUTES } from "./pricing";
 import { selectionSeedFor, systemClock } from "./system-clock";
 
 /**
@@ -749,6 +749,7 @@ function buildUseCases(ports: Ports): UseCases {
             peer,
             model: aiModels.realtime,
             transcribeModel: aiModels.transcribe,
+            turnEagerness: REALTIME_EAGERNESS,
             maxMs: STUDIO_CAP_MS,
             pricing: PRICING.prices,
           }),

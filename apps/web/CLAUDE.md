@@ -164,7 +164,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     - the answer is `{ value, expiresAt }`, uncached, and a refusal is a code.
 
     `realtime.ts` composes it: the memory source when hermetic, otherwise OpenAI's for `ai-models.json`'s `realtime`
-    and `realtimeVoice`. It needs no database. **Never add a `console` call, a store or a body read to it**; every
+    and `realtimeVoice` (`cedar` since Gate N, D174). `ai-models.json`'s `realtimeEagerness` is not the route's: the
+    composition root hands it to `realtimeTransport` through `pricing.ts`'s `REALTIME_EAGERNESS`, checked at load (D175). It needs no database. **Never add a `console` call, a store or a body read to it**; every
     branch has a test in `realtime-handlers.test.ts`.
 - **Baseline security headers on every response** (`next.config.ts`, architecture.md §12): HSTS,
   `nosniff`, `Referrer-Policy: no-referrer`, and a `Permissions-Policy` allowing the microphone on

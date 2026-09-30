@@ -1,3 +1,4 @@
+import { REALTIME_TURN_EAGERNESS, type RealtimeTurnEagerness } from "@palier/adapters/openai";
 import type { SpendPricing } from "@palier/app";
 import { AI_FEATURES, type FeatureCall, type ModelPrice, type RealtimePrice, type RealtimeTokens } from "@palier/domain";
 
@@ -17,9 +18,9 @@ const isObject = (value: unknown): value is Record<string, unknown> => typeof va
 
 /**
  * The keys of `ai-models.json` that are not a role's model: its `note`, the examiner's `voice` (D117), and
- * studio mode's `realtimeVoice` (D165).
+ * studio mode's `realtimeVoice` (D165) and `realtimeEagerness` (D175).
  */
-const NOT_ROLES: ReadonlySet<string> = new Set(["note", "voice", "realtimeVoice"]);
+const NOT_ROLES: ReadonlySet<string> = new Set(["note", "voice", "realtimeVoice", "realtimeEagerness"]);
 
 /** The model each role uses: `ai-models.json` without its `note` and voices. */
 export const roleModels = (raw: Record<string, unknown>): Readonly<Record<string, string>> =>
@@ -112,8 +113,24 @@ export const parseStudioMaxMinutes = (raw: unknown): number => {
 /** The examiner's voice for speech (D117), from `ai-models.json`. */
 export const EXAMINER_VOICE: string = aiModels.voice;
 
-/** Studio mode's voice (D165), from `ai-models.json`. Gate N may change it. */
+/** Studio mode's voice (D165), from `ai-models.json`, chosen at Gate N (D174). */
 export const REALTIME_VOICE: string = aiModels.realtimeVoice;
+
+const EAGERNESS: ReadonlySet<string> = new Set(REALTIME_TURN_EAGERNESS);
+
+/**
+ * How readily studio mode decides the candidate has finished speaking (D175), checked at the edge:
+ * one of the Realtime API's four eagerness values, or the build fails.
+ */
+export const parseRealtimeEagerness = (raw: unknown): RealtimeTurnEagerness => {
+  if (typeof raw !== "string" || !EAGERNESS.has(raw)) {
+    throw new Error(`ai-models.json: \`realtimeEagerness\` is not one of ${REALTIME_TURN_EAGERNESS.join(", ")}.`);
+  }
+  return raw as RealtimeTurnEagerness;
+};
+
+/** This build's studio turn detection eagerness. */
+export const REALTIME_EAGERNESS: RealtimeTurnEagerness = parseRealtimeEagerness(aiModels.realtimeEagerness);
 
 /** This build's pricing, parsed once. */
 export const PRICING: SpendPricing = parsePricing(pricingJson, roleModels(aiModels));

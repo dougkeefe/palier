@@ -34,8 +34,8 @@ import { memoryCostLedger, memoryKeyVault } from "@palier/testing/in-memory";
  * - `reviewItem` on the first drafts, one at a time, as `generatePracticeSet` does;
  * - `assessWriting` on two workshop prompts;
  * - the oral turn loop's three (Phase 5 Slice 2, D117): `speak` on a fixed French question, then
- *   `transcribe` that same audio, so no recording of anyone's voice is needed, then two
- *   `examinerTurn`s, an opening and a follow-up;
+ *   `transcribe` that same audio, so no recording of anyone's voice is needed, then three
+ *   `examinerTurn`s, an opening, a follow-up, and a follow-up on a contradicted premise (D176);
  * - `assessOral` on one short fixed session, `ORAL_SESSION` (Phase 5 Slice 3, D122). `runOralStability`
  *   scores a longer one, `STABILITY_SESSION`, five times, for the stability eval (D127).
  *
@@ -139,7 +139,11 @@ const EXAMINER_PHASE: ExaminerTurnRequest["phase"] = {
   deescalation: ["Quelles sont vos tâches d'une journée typique ?"],
 };
 
-/** An opening turn, and a follow-up after a capable answer. */
+/**
+ * An opening turn, a follow-up after a capable answer, and a follow-up after an answer that
+ * contradicts the question's premise (D176): the recorded reply is the evidence that the examiner
+ * listens, and a human reads it.
+ */
 const EXAMINER_REQUESTS: readonly ExaminerTurnRequest[] = [
   { sessionType: "work", targetBand: "C", lang: "fr", topic: "project-management", phase: EXAMINER_PHASE, register: "baseline", transcript: [] },
   {
@@ -155,6 +159,18 @@ const EXAMINER_REQUESTS: readonly ExaminerTurnRequest[] = [
         speaker: "candidate",
         text: "Je suis analyste principale des politiques. Je coordonne les consultations avec les provinces et je rédige des notes d'information pour la sous-ministre.",
       },
+    ],
+  },
+  {
+    sessionType: "work",
+    targetBand: "C",
+    lang: "fr",
+    topic: "project-management",
+    phase: EXAMINER_PHASE,
+    register: "escalate",
+    transcript: [
+      { speaker: "examiner", text: "Parlez-moi d'un projet que vous avez géré." },
+      { speaker: "candidate", text: "Je n'ai jamais géré de projet ; je travaille surtout sur des dossiers de politique." },
     ],
   },
 ];

@@ -165,6 +165,16 @@ describe("realtimeTransport — setup", () => {
     ]);
   });
 
+  it("asks semantic turn detection for the configured eagerness, so a candidate's pause is not the end of their turn", async () => {
+    const h = setUp({ turnEagerness: "low" });
+    await h.open();
+
+    const [update] = h.sentOf("session.update");
+    expect(update?.session).toMatchObject({
+      audio: { input: { turn_detection: { type: "semantic_vad", eagerness: "low" } } },
+    });
+  });
+
   it("opens once", async () => {
     const h = setUp();
     await h.open();
@@ -605,6 +615,18 @@ describe("realtimeTransport — one reconnect, then a clean failure (exit criter
       },
     ]);
     expect(h.events.filter((e) => e.kind === "closed")).toEqual([]);
+  });
+
+  it("asks the reconnected line for the same turn detection eagerness", async () => {
+    const h = setUp({ turnEagerness: "low" });
+    await converse(h);
+    h.peers.current().drop();
+    await settle();
+
+    const [update] = h.sentOf("session.update");
+    expect(update?.session).toMatchObject({
+      audio: { input: { turn_detection: { type: "semantic_vad", eagerness: "low" } } },
+    });
   });
 
   it("carries on after a reconnect: the new line's turns are delivered, the old line's ignored", async () => {
