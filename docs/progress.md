@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 30 September 2026
+**Last updated:** 30 September 2026 (CI that can fail, D177–D179)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -47,8 +47,11 @@ library articles. The nightly live smoke has run on a real key for the first tim
 **Gate L passed** (D164, human), and the language-toggle defect the human found beside it is fixed (D163). **Studio mode is
 back in 1.0** (D165, human): Phase 6 is three slices and two gates, built before Gate M. **Phase 6 Slice 1, the realtime
 session core, merged (#53**; D166–D173). **Gate N passed** (D174, human): the voice is `cedar`. Its two findings, an examiner that
-cut in on pauses and one that did not listen, are fixed (`dougkeefe/confirm-gate-n`; D175, D176), pending the human's re-recording.
-**Slice 2 is next.**
+cut in on pauses and one that did not listen, are fixed (#54; D175, D176). #54 merged before its re-recording, and **CI had
+never been able to fail** (D177): both lanes swallowed their exit code from Phase 0 on. **CI that can fail** is built
+(`dougkeefe/next-dev-slice`; D177–D179): the v5 re-recording, which makes `main` green again; every lane through one
+script; the medium lane in three parallel jobs; the fast lane's budget at 120 s (human); and `main` protected by the four
+lanes. **Phase 6 Slice 2 is next.**
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -113,7 +116,7 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176; Slice 2 next |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 next |
 | 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; Gate M waits on Phase 6, D165) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
@@ -123,7 +126,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/ljubljana` | **CI that can fail** (D177–D178): the swallowed exit code in both lanes of `verify.yml`, the medium lane sharded, the fast lane measured, branch protection; and the v5 re-recording that #54 merged without, so `main` is green. | 30 September 2026 |
+| `dougkeefe/next-dev-slice` | **CI that can fail** (D177–D178): the swallowed exit code in both lanes of `verify.yml`, the medium lane sharded, the fast lane measured, branch protection; and the v5 re-recording that #54 merged without, so `main` is green. | 30 September 2026 |
 
 *(The prior rows — Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -226,20 +229,17 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 Phase 7 (D132): **Slices 1–4 merged**, and **Gate L passed** (D164). **Studio mode is in 1.0** (D165, human), and Gate M waits
 for Phase 6. **Phase 6 Slice 1 merged (#53)**, and **Gate N passed** (D174, human): the voice is `cedar`. Its two findings are
-fixed on `dougkeefe/confirm-gate-n`: semantic turn detection at `low` eagerness (D175), and an examiner that listens (D176). **That
-branch merges first, after the human's re-recording** (below).
+fixed (#54): semantic turn detection at `low` eagerness (D175), and an examiner that listens (D176). **The v5 re-recording is
+done** (`dougkeefe/next-dev-slice`): the third examiner turn follows the contradicted premise. **CI can fail now, and `main`
+is protected** (D177): a red lane blocks the merge, so run `pnpm verify` and `CI=1 pnpm verify:medium` before pushing.
 
 Phase 5's deferred cost check (D130), the product pilot (Gate E, D97) and Gate M's calls that need no build (the domain, the
 trademark check, lining up an outside submitter) still run beside it, all the human's. Gate M's one build item, **the
 full-volume bank run** (D54), touches no oral code. It can run in its own worktree once the human funds a key for it.
 
-**First, for the human: re-record on `PROMPT_VERSION` 5** (D176), so `dougkeefe/confirm-gate-n` can merge. Follow
-`docs/deploy.md`'s re-recording, then `pnpm --filter @palier/web oral-stability`, then `node apps/factory/dist/index.js eval`.
-Read the third `examinerTurn` in `examinerTurn.json`: after "Je n'ai jamais géré de projet", it must not ask about the
-candidate's project. Commit the fixtures with the regenerated `eval-report.json`.
-
 **Next: Phase 6 Slice 2 — the studio screen, on the key.** Build it in a fresh worktree off `main`, after
-`dougkeefe/confirm-gate-n` merges. Read PRD §8.6, architecture.md §8.5–§8.6, and D165–D176 first. Everything below is decided.
+`dougkeefe/next-dev-slice` merges. Read PRD §8.6, architecture.md §8.5–§8.6, and D165–D179 first. Everything below is decided.
+Budget note (D178): a change to a core package puts the fast lane near 92 s of its 120; watch the step summary's phase times.
 - **The copy's exception first** (D173). Amend every absolute key claim in both languages to name `POST /api/realtime/secret`:
   - `key.offerStays`, `privacy.third`, `neverKey`, and `KeyOffer`'s comment;
   - `SECURITY.md`'s "designed but not built";
@@ -6081,6 +6081,102 @@ voice" exit criterion
     seven name `"4"`, as the rest of the file does, so none depends on the shipping version and what each asserts is
     unchanged. A first try, defaulting the fixture to `PROMPT_VERSION`, broke the three tests that name `"4"`, and was
     reverted.
+
+### D177 — no CI lane could fail from Phase 0 until now, and `main` is protected
+**Date:** 30 September 2026 · **Status:** accepted; the human chose protection through `gh` (this session)
+
+- **The defect.** Both lanes of `verify.yml` ran `if ! timeout … pnpm run verify; then code=$?; …; exit "$code"; fi`.
+  Inside that branch `$?` is the status of the negation, which is always 0. So a failing gate and a blown budget both
+  exited 0, and the job passed. It had been that way since the workflow was written (#2, 19 September).
+- **What it hid.** Found from the Actions logs of every `main` run, not assumed:
+  - **the fast lane was killed at its 90 s budget** on every `main` run from Phase 3 Slice 2 (25 September) but one, and
+    passed each time. The tests stopped wherever the kill landed;
+  - **#54 merged with three failing tests**: the v4 recordings under `PROMPT_VERSION` 5 (D176). So `main` was red. It is
+    green again here by the re-recording (session log);
+  - **the medium lane's Playwright run was usually killed at 300 s**. On #54, 64 of 94 tests had run. On #49, one
+    failed, and the lane passed;
+  - D90's red medium lane on PR #25 was Lighthouse failing *after* the swallowed kill, not the kill itself.
+
+  Every earlier session also ran `pnpm verify` locally and pasted the result, which is why this is not worse. The Phase 0
+  exit criterion "a deliberate violation fails CI" was proved on 20 September against dependency-cruiser's exit code,
+  which is not wrapped in the step, and was never rerun against a test failure.
+- **The fix.** One script, `.github/scripts/within-budget.sh`, runs every lane:
+  - `timeout … || code=$?`, then exits with the lane's own status;
+  - the same `::error::` line when the budget kills the lane;
+  - each `> palier@…` phase's offset written to the step summary, so a lane over budget says which phase took the time.
+
+  `nightly.yml` and `retention.yml` were checked for the same shape, and both capture their status correctly.
+- **Proved to bite, on three scratch branches,** deleted afterwards (session log for the runs):
+  - a failing unit test fails the fast lane with exit 1;
+  - a test sleeping 95 s fails it with exit 124 and the budget message;
+  - a failing E2E assertion fails its shard, with the other shard green.
+- **`main` is protected**, with the four lanes as required checks (`docs/deploy.md`): `strict` off, no review, admins not
+  enforced. A red run is now a merge that cannot happen, rather than one that the author has to notice.
+- **Revisit when** a lane's job is renamed or re-sharded. The protection names checks, so the PR that renames one also
+  updates it.
+
+### D178 — the medium lane is three parallel jobs, and the fast lane keeps its caches
+**Date:** 30 September 2026 · **Status:** accepted (human decisions: shard the medium lane; make the fast lane faster;
+then, with the numbers below, **raise the fast lane's budget from 90 s to 120 s**). `implementation-plan.md` §6.5 amended
+in place
+
+- **The medium lane** runs in three jobs, in parallel, after the fast lane. Each has its own 5-minute wall clock:
+  - integration, then bundle size and Lighthouse outside the timed window as before;
+  - Playwright `--shard=1/2` and `--shard=2/2`, each with its own build, browser and servers, which also retires D90's
+    orphaned-server hazard.
+
+  The `warmup` setup project runs in both shards. `pnpm verify:medium` locally is unchanged.
+- **The first honest measurements** (this branch, 30 September):
+  - E2E shard 1: 48 passed in 3.1 min; shard 2: 47 passed in 3.4 min, about 200 s each of the 300;
+  - integration: about 50 s, as before.
+
+  Unsharded, the E2E alone is about 3.5–4.2 minutes on a runner, which is why it was being killed.
+- **The fast lane, measured by phase on the runner:**
+
+  | Phase | Cold | Warm |
+  | --- | --- | --- |
+  | check-types | 13–30 s (turbo cache partly hit) | 0.4 s (14 of 14 cached) |
+  | lint | 12–17 s | 2.5 s |
+  | boundaries | 3–4 s | 3–4 s |
+  | test | 46–56 s | 46–56 s |
+
+  Warm, the lane is about 63 s. A change to a core package costs about 20 s of check-types, which puts the lane near 85 s.
+- **What made it faster, removing no gate:**
+  - **ESLint's cache is kept between runs.** `pnpm lint` already passed `--cache`, but the cache never survived a checkout,
+    and the default mtime strategy misses on a fresh checkout anyway. The script now uses `--cache-strategy content`, and
+    CI restores `.eslintcache`. No rule is type-aware (`eslint.config.mjs`), so a file's result depends only on its own
+    text and the config, and ESLint empties the cache when either the config or its version changes. Locally: 17 s cold,
+    2.8 s warm.
+  - **Both caches are saved even when the lane fails**, with `actions/cache/restore` and `/save` under `if: always()`.
+    `actions/cache` alone saves only after a green job, so a lane over budget could never warm the cache that would bring
+    it back under.
+- **Rejected:**
+  - Vitest's `threads` pool: about 7% faster locally, and it changes how tests are isolated;
+  - `isolate: false`, for the same reason.
+- **Why 90 s could not hold.** Proof (a) of D177, a failing test in `@palier/engine` on a warm runner, took 29 s of
+  check-types, because changing a core package rebuilds its dependents, and 54 s of tests, before the kill at 90 s. Most
+  feature slices touch a core package. Lint was the only cut found that removes no gate.
+- **The human raised the fast lane to 120 s**, as D91 did for the medium lane. That leaves about 25 s over a core-package
+  change. The job is renamed "Fast lane (budget 120s)", and the required check with it.
+  - **Rejected:** two parallel fast jobs, static and unit, at 90 s each. The unit job pays its own build, so it would sit
+    at about 75–85 s. It would also add a required check.
+- **Revisit when** a core-package change passes 105 s on the fast lane. The unit suite is 46–56 s of that, and it grows
+  with every slice. The next step is then the split above, with a merged coverage report, not another raise.
+
+### D179 — the exam runner's keys are live before its first item is painted
+**Date:** 30 September 2026 · **Status:** accepted
+
+- **Found by the first full medium run on this branch**: journey 9 (`telemetry-offline.spec.ts`) failed once under the
+  whole suite at 4 workers. "1" and Enter, pressed as soon as "Item 1 of 25" showed, were both lost. It passed 10 of 10
+  when run alone.
+- **The cause is in the product, not the test.** `Runner` mounts with its first item already rendered, and its `keydown`
+  listener on `window` was added in a passive `useEffect`, which React may run after the paint. A native listener gets
+  none of the flush React gives its own events, so a key pressed in that gap does nothing. A candidate who types fast
+  would lose it the same way.
+- **The fix:** the listener moves to `useLayoutEffect`, which runs before the paint. The drill (`PracticeSession`) is left
+  as it is: it adds its listener while still loading, long before an item exists.
+- **Evidence:** the whole E2E suite three times at 4 workers, 280 passed. There is no component test in `apps/web` to
+  extend; the journeys that answer by keyboard are the test.
 
 ---
 

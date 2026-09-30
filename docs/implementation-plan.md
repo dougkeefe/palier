@@ -632,10 +632,12 @@ A PR suite that takes fifteen minutes stops being run. Three lanes:
 
 | Lane | Contents | Budget | When |
 | --- | --- | --- | --- |
-| Fast | Typecheck, lint, dependency-cruiser, **the full unit suite across every package with coverage thresholds**, property (reduced runs), contract, content, i18n parity, contrast | Under 90 seconds | Every push |
-| Medium | Integration with PGlite and fake-indexeddb, sync simulation with a few hundred seeds, E2E on Chromium, axe, bundle size | Under 5 minutes *(amended 25 September 2026 from 4, `progress.md` D91)* | Every PR |
+| Fast | Typecheck, lint, dependency-cruiser, **the full unit suite across every package with coverage thresholds**, property (reduced runs), contract, content, i18n parity, contrast | Under 120 seconds *(amended 30 September 2026 from 90, `progress.md` D178)* | Every push |
+| Medium | Integration with PGlite and fake-indexeddb, sync simulation with a few hundred seeds, E2E on Chromium, axe, bundle size | Under 5 minutes per job *(amended 25 September 2026 from 4, `progress.md` D91; 30 September 2026, run as three parallel jobs, integration and two E2E shards, each held to 5 minutes, D178)* | Every PR |
 | Nightly | Full property runs, sync simulation at scale, E2E on Firefox and WebKit and mobile viewports, Lighthouse, AI evals, Testcontainers against real Postgres, dependency audit | Unbounded | Nightly, opens issues |
 | One-off | Mutation testing on engine, at the end of phase 2 and after any engine rewrite | Unbounded | On demand |
+
+**A budget is a build failure, and so is every gate.** Until 30 September 2026 neither lane could fail, because the workflow read the wrong exit status (`progress.md` D177). Every lane now runs through `.github/scripts/within-budget.sh`, and the four checks are required on `main` (`docs/deploy.md`).
 
 **Flake policy: zero tolerance.** No retries in the fast or medium lanes, because everything in them is deterministic by construction and a flake means a real bug. A flaky test is quarantined with an issue the same day, not left to erode trust in the suite.
 

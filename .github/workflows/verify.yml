@@ -22,7 +22,7 @@ env:
 
 jobs:
   fast:
-    name: Fast lane (budget 90s)
+    name: Fast lane (budget 120s)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -73,7 +73,7 @@ jobs:
       # and so should the budget. The script fails the step on a failing gate
       # or a blown budget alike, and stamps each phase into the summary (D177).
       - name: pnpm verify
-        run: .github/scripts/within-budget.sh 90 "Fast lane" pnpm run verify
+        run: .github/scripts/within-budget.sh 120 "Fast lane" pnpm run verify
 
       - name: Save Turborepo cache
         if: always()
