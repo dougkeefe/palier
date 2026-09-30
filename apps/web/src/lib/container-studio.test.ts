@@ -152,8 +152,12 @@ describe.each([
     await settle();
 
     peers.current().drop();
-    await settle();
-    expect(peers.peers).toHaveLength(2);
+    // The redial reads the key through the vault again (IndexedDB, in the production graph): wait for the new
+    // line to be configured rather than for a fixed number of ticks.
+    await vi.waitFor(() => {
+      expect(peers.peers).toHaveLength(2);
+      expect(peers.current().sent.map((m) => m.type)).toContain("response.create");
+    });
     const seeded = peers.current().sent.filter((m) => m.type === "conversation.item.create");
     expect(seeded).toHaveLength(2);
     peers.current().emit({ type: "response.output_audio_transcript.done", item_id: "e2", transcript: "Reprenons là où nous étions." });

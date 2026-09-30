@@ -36,7 +36,7 @@ const setUp = (options: { key?: string | null; ledger?: CostLedger } = {}) => {
   const clock = settableClock();
   const hand = handTransport();
   const secrets = secretSource();
-  const ledger = options.ledger ?? costLedger();
+  const ledger = costLedger();
   let hooks: StudioTransportHooks | null = null;
   const lastError = new Error("the far end dropped");
   const deps = {
@@ -46,7 +46,7 @@ const setUp = (options: { key?: string | null; ledger?: CostLedger } = {}) => {
       hooks = given;
       return { ...hand.transport, lastError: () => lastError };
     },
-    ledger,
+    ledger: options.ledger ?? ledger,
     clock,
     items: scenarioBank(),
     oral: oralStore(),
