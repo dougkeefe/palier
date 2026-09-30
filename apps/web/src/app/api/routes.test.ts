@@ -4,6 +4,7 @@ import { BANK_VERSION } from "../../lib/bank-version";
 import { memorySyncRepository } from "../../server/__tests__/memory-repository";
 import { memoryTelemetryRepository } from "../../server/__tests__/memory-telemetry-repository";
 import { type SyncApi, createSyncApi } from "../../server/handlers";
+import { createRealtimeSecretApi } from "../../server/realtime-handlers";
 import { type TelemetryApi, createTelemetryApi } from "../../server/telemetry-handlers";
 
 /**
@@ -22,6 +23,10 @@ vi.mock("../../server/db", () => ({
   telemetryApi: () => Promise.resolve(state.telemetry),
   databaseAnswers: () => Promise.resolve(state.database),
 }));
+vi.mock("../../server/realtime", async () => {
+  const { memoryRealtimeSecretSource } = await import("@palier/testing/in-memory");
+  return { realtimeSecretApi: () => createRealtimeSecretApi({ secrets: memoryRealtimeSecretSource() }) };
+});
 
 const { POST: register } = await import("./account/device/route");
 const { DELETE: revoke } = await import("./account/device/[id]/route");
@@ -32,6 +37,7 @@ const { DELETE: deleteAccount } = await import("./account/route");
 const { GET: pull, POST: push } = await import("./sync/route");
 const { POST: telemetry } = await import("./telemetry/route");
 const { GET: health } = await import("./health/route");
+const { POST: realtimeSecret } = await import("./realtime/secret/route");
 
 const secret = (n: number) => n.toString(16).padStart(64, "0");
 const req = (method: string, path: string, body?: unknown, n = 1) =>
@@ -125,5 +131,24 @@ describe("the health route (D140)", () => {
     state.database = false;
 
     expect((await health()).status).toBe(503);
+  });
+});
+
+describe("the realtime secret route (D169)", () => {
+  const mint = (headers: Record<string, string>) =>
+    realtimeSecret(new Request("http://palier.test/api/realtime/secret", { method: "POST", headers }));
+
+  it("binds to the realtime secret handler, which needs no database", async () => {
+    state.api = null;
+    state.telemetry = null;
+
+    const response = await mint({ authorization: "Bearer sk-user" });
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ value: "ek_memory_1" });
+  });
+
+  it("refuses a request with no key", async () => {
+    expect((await mint({})).status).toBe(401);
   });
 });

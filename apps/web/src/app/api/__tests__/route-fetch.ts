@@ -14,6 +14,7 @@ const routes = async () => {
   const devices = await import("../account/devices/route");
   const account = await import("../account/route");
   const sync = await import("../sync/route");
+  const realtimeSecret = await import("../realtime/secret/route");
   return (method: string, path: string): { handler: Handler; id?: string } | null => {
     const byId = /^\/api\/account\/device\/([^/]+)$/.exec(path);
     if (byId !== null && method === "DELETE") return { handler: deviceById.DELETE as Handler, id: decodeURIComponent(byId[1] ?? "") };
@@ -25,6 +26,7 @@ const routes = async () => {
       "DELETE /api/account": account.DELETE,
       "GET /api/sync": sync.GET,
       "POST /api/sync": sync.POST,
+      "POST /api/realtime/secret": realtimeSecret.POST,
     };
     const handler = table[`${method} ${path}`];
     return handler === undefined ? null : { handler };
