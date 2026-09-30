@@ -7,7 +7,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "check-types": "turbo run check-types",
-    "lint": "eslint --cache --max-warnings=0 .",
+    "lint": "eslint --cache --cache-strategy content --max-warnings=0 .",
     "boundaries": "depcruise --config .dependency-cruiser.cjs --output-type err-long packages/*/src apps/factory/src && depcruise --config apps/web/.dependency-cruiser.cjs --output-type err-long apps/web/src",
     "test": "vitest run --coverage",
     "verify": "pnpm run check-types && pnpm run lint && pnpm run boundaries && pnpm run test",

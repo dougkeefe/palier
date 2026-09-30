@@ -54,6 +54,17 @@ jobs:
           key: turbo-${{ runner.os }}-${{ github.sha }}
           restore-keys: turbo-${{ runner.os }}-
 
+      # ESLint's own cache, kept between runs (progress.md D178). Keyed on
+      # content, not mtime, because a checkout stamps every file fresh. No rule
+      # is type-aware (eslint.config.mjs), so a file's result depends only on
+      # its own text and the config, and a config or ESLint change empties it.
+      - name: Restore ESLint cache
+        uses: actions/cache@v6
+        with:
+          path: .eslintcache
+          key: eslint-${{ runner.os }}-${{ github.sha }}
+          restore-keys: eslint-${{ runner.os }}-
+
       # `turbo build` IS inside the window, because `pnpm verify` pays for it
       # and so should the budget. The script fails the step on a failing gate
       # or a blown budget alike, and stamps each phase into the summary (D177).
