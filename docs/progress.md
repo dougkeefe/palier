@@ -6386,6 +6386,21 @@ then holds one real session); the figures are the agent's
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
+### 30 September 2026 — `dougkeefe/raleigh-v3` (Oral practice in the main navigation, human request)
+
+- **The header gains "Oral practice" / "Pratique orale"**, between Review and Progress, linking `/practice/oral`, at the
+  human's request. Until now spoken practice was reached from home's actions card only.
+- **The header now wraps** (`flex-wrap` on the header and its nav) rather than overflowing: five links, the sync status and
+  the language toggle no longer fit one line on a phone. Checked at 320 px in French, the longest labels: no horizontal
+  overflow, and the link lands on the spoken-practice page (screenshots in the session, not committed).
+- The label is the human's words. The page's own title stays "Spoken practice".
+
+```
+pnpm verify                → 247 files, 3786 passed, 8 todo; exit 0
+CI=1 pnpm verify:medium    → integration 51 passed; Playwright 99 passed (1.6m); exit 0
+node apps/web/scripts/check-bundle-size.mjs → 166.1 KB of 180.0 KB
+```
+
 ### 30 September 2026 — `dougkeefe/raleigh-v3` (Phase 6 Slice 2: the studio screen, on the key; D180–D189)
 
 Opened to *Next, decided*'s Phase 6 Slice 2, after #55 merged. The plan was approved with two human decisions: the studio
