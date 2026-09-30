@@ -20,6 +20,16 @@ export { REALTIME_SECRET_SECONDS, openAiRealtimeSecrets } from "./realtime-secre
 export type { OpenAiRealtimeSecretsConfig } from "./realtime-secrets.js";
 export { routeRealtimeSecrets } from "./route-realtime-secrets.js";
 export type { RouteRealtimeSecretsConfig } from "./route-realtime-secrets.js";
+export { realtimeTransport } from "./realtime-transport.js";
+export type {
+  RealtimePeer,
+  RealtimePeerFactory,
+  RealtimePeerState,
+  RealtimeTransport,
+  RealtimeTransportConfig,
+} from "./realtime-transport.js";
+export { REALTIME_EVENTS_CHANNEL, browserRealtimePeer } from "./browser-peer.js";
+export type { BrowserRealtimePeerMedia } from "./browser-peer.js";
 export {
   InvalidApiKeyError,
   InvalidResponseError,
