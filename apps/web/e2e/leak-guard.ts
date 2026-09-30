@@ -75,6 +75,8 @@ export const EXAMINER_QUESTION = "Pouvez-vous me décrire votre poste actuel ?";
 
 /** The only origin the key may reach (architecture.md §6.3). */
 const OPENAI_ORIGIN = "https://api.openai.com";
+/** This origin's one route that may see the key (ADR 3, D169). */
+const REALTIME_SECRET_ROUTE = "/api/realtime/secret";
 
 /**
  * `onDevice` marks a place that is this device's own copy: the page as drawn, a field's
@@ -98,7 +100,13 @@ export type LeakWatch = {
   /** Every request to OpenAI, its path and its body read as bytes, so a spec can say where audio went (D120). */
   readonly openAiRequests: () => readonly { readonly path: string; readonly body: string }[];
   /**
-   * Fail, naming the place, if the sentinel is anywhere but a request to OpenAI, if a
+   * Every `authorization` header sent to this origin's realtime secret route (ADR 3, D169): the one
+   * place on this origin the key may go, and the positive control that it went there.
+   */
+  readonly realtimeSecretAuthorizations: () => readonly string[];
+  /**
+   * Fail, naming the place, if the sentinel is anywhere but a request to OpenAI or the realtime
+   * secret route's `authorization` header (D169), if a
    * `deviceOnly` text left the device other than for OpenAI, or if a `nowhere` text is anywhere.
    */
   readonly assertNoLeak: (pages: readonly Page[], check?: LeakCheck) => Promise<void>;
@@ -393,6 +401,7 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
   const pending: Promise<unknown>[] = [];
   const authorizations: string[] = [];
   const openAiRequests: { path: string; body: string }[] = [];
+  const realtimeSecretAuthorizations: string[] = [];
 
   // Headers are read as sent, synchronously: `allHeaders()` waits for a response, and a
   // request a reload aborts never gets one. Every header a page sets is among them.
@@ -405,7 +414,13 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
       return;
     }
     seen.push({ where: `request URL ${url}`, text: url });
-    seen.push({ where: `request headers ${url}`, text: JSON.stringify(headers) });
+    // The realtime secret route may carry the key in `authorization` and nowhere else (ADR 3, D169):
+    // that one header is recorded apart, and its URL, its other headers, its body and its answer are
+    // still searched like any other request's.
+    const { authorization, ...others } = headers;
+    const toRealtimeSecret = new URL(url).pathname === REALTIME_SECRET_ROUTE && request.method() === "POST";
+    if (toRealtimeSecret && authorization !== undefined) realtimeSecretAuthorizations.push(authorization);
+    seen.push({ where: `request headers ${url}`, text: JSON.stringify(toRealtimeSecret ? others : headers) });
     seen.push({ where: `request body ${url}`, text: bodyOf(request) });
   });
   // What our own server sends back: a pull would show the key if a push had stored it. Read
@@ -436,6 +451,7 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
     openAiAuthorizations: () => authorizations,
     openAiBodies: () => openAiRequests.map((request) => request.body),
     openAiRequests: () => openAiRequests,
+    realtimeSecretAuthorizations: () => realtimeSecretAuthorizations,
     assertNoLeak: async (pages, { deviceOnly = [], nowhere = [] } = {}) => {
       await Promise.all(pending);
       // This call's own dump, so an earlier check's page does not answer for this one.
