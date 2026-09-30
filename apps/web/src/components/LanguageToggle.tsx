@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 
-import { Link, usePathname } from "../i18n/navigation";
+import { getPathname, Link, usePathname } from "../i18n/navigation";
 
 /**
  * Switches the interface language while preserving the current route
@@ -13,12 +13,23 @@ import { Link, usePathname } from "../i18n/navigation";
  * same route under the other prefix. The visible text is the other language's
  * own name and carries `lang` so a screen reader pronounces "Français" or
  * "English" correctly (R9, language of parts).
+ *
+ * **Switching is a document load, never a soft navigation** (progress.md D163).
+ * The locale is the root layout's segment, so a client-side switch remounts the
+ * whole layout, and React writes the Trusted Types policy's `<script>` back
+ * through `innerHTML`, which the production CSP refuses: the layout throws and
+ * `global-error` renders. So `onNavigate` cancels the router's navigation and
+ * loads the page instead. It stays next-intl's `Link` because its click handler
+ * writes the locale cookie, and the proxy cannot: once the service worker
+ * controls the page, the navigation reaches the proxy as the worker's `fetch`,
+ * not as a document request, and next-intl leaves the cookie alone for those.
  */
 export function LanguageToggle() {
   const t = useTranslations("languageToggle");
   const locale = useLocale();
   const pathname = usePathname();
   const other = locale === "en" ? "fr" : "en";
+  const href = getPathname({ href: pathname, locale: other });
 
   return (
     <Link
@@ -26,6 +37,10 @@ export function LanguageToggle() {
       locale={other}
       lang={other}
       className="app-lang-toggle pl-focusable"
+      onNavigate={(event) => {
+        event.preventDefault();
+        window.location.assign(href);
+      }}
     >
       {t("otherLanguage")}
     </Link>

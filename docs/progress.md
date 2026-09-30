@@ -43,7 +43,9 @@ to build the authored-item intake. **Slice 3, content, the contribution path and
 The **cleanup slice** asked for by the human merged (#49; D154–D158): the Dependabot queue and alerts, TypeScript 6, and
 the red nightly. **Slice 4, motion, engagement and the library, is built** (`dougkeefe/smoke-key-next-slice`; D159–D162): the
 streak with its silent freeze, the four milestone moments, the motion pass, self-hosted fonts and ten written-expression
-library articles. The nightly live smoke has run on a real key for the first time (session log). **Gate L is next.**
+library articles. The nightly live smoke has run on a real key for the first time (session log). Slice 4 merged (#51).
+**Gate L passed** (D164, human), and the language-toggle defect the human found beside it is fixed (D163). **Studio mode is
+back in 1.0** (D165, human): Phase 6 is three slices and two gates, built before Gate M. **Phase 6 Slice 1 is next.**
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -108,8 +110,8 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **deferred past 1.0** (decision gate resolved 28 September 2026, human, D131); built after Phase 7 if at all |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 built, D159–D162; Gate L next) |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **planned, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 next |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; Gate M waits on Phase 6, D165) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -118,9 +120,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/smoke-key-next-slice` | **Phase 7 Slice 4 — motion, engagement and the library** (D145): the streak with its silent freeze, the milestone moments, the motion pass, self-hosted fonts, ten written-expression library articles; and the smoke key's first nightly run. | 29 September 2026 |
+| `dougkeefe/fix-language-toggle-crash` | **Defect: the language toggle lands on the global error page** in production (D163); Gate L's pass recorded (D164); studio mode brought into 1.0 and planned, docs only (D165). | 29 September 2026 |
 
-*(The prior rows — the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -219,29 +221,69 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132): **Slices 1–3 merged (#39, #45, #47)**, **Gate K resolved** (D145), the cleanup slice merged (#49), and
-**Slice 4 is built** (`dougkeefe/smoke-key-next-slice`; D159–D162): the streak with its silent freeze, the four milestone
-moments, the motion pass, self-hosted fonts and ten written-expression library articles. **Every buildable Phase 7 item is
-done.** What remains of 1.0 is the human's: Gate L, then Gate M.
+Phase 7 (D132): **Slices 1–4 merged (#39, #45, #47, #51)**, **Gate K resolved** (D145), the cleanup slice merged (#49), and
+**Gate L passed** (D164). The language-toggle defect (D163) is fixed on `dougkeefe/fix-language-toggle-crash` and merges
+first. **Studio mode is in 1.0** (D165, human): Phase 6 is built next, and Gate M waits for it.
 
-Phase 5's deferred cost check (D130) and the product pilot (Gate E, D97) still run beside it, both the human's.
+Phase 5's deferred cost check (D130), the product pilot (Gate E, D97) and Gate M's calls that need no build (the domain, the
+trademark check, lining up an outside submitter) still run beside it, all the human's. Gate M's one build item, **the
+full-volume bank run** (D54), touches no oral code. It can run in its own worktree beside Phase 6 once the human funds a key
+for it.
 
-**Next: Gate L — the human reviews (human).** No agent slice is queued ahead of it. It is three reads:
-1. **R8's French review** by a fluent speaker, of every interface string (`apps/web/messages/fr.json`), with:
-   - the six workshop prompts (D107) and the bank's register (ADR 19);
-   - the about page and the privacy notice (D147);
-   - **the ten library articles** (`content/library/*.json`, D162): the prose, the examples, and each "instead of" sentence,
-     which must be wrong in exactly the way its note says;
-   - the new `engagement` and `library` namespaces (D159, D162), and the share texts, which leave the app.
-   Each correction is a content or message change; the parity and library tests hold the shape.
-2. **The VoiceOver and NVDA pass** on the core flows [R9]: onboarding, a drill with its feedback and the library link, a mock
-   exam and its results, the review queue, spoken practice, and home with a milestone moment open. A screen-reader user's pass
-   if one can be arranged.
-3. **The red-team read** of D136, and whether any path it did not try should be tried.
+**Next: Phase 6 Slice 1 — the realtime session core, no UI** (D165). Build it in a fresh worktree off `main`. Read ADR 3,
+architecture.md §6.3, §8.5 and §8.6, and D165 first. Everything below is decided.
+- **Data, not code.**
+  - `oral-studio` joins `AI_FEATURES` (`packages/domain/src/ai.ts`). The Dexie ledger drops unknown features, so this comes
+    first.
+  - `ai-models.json` gains `realtime: "gpt-realtime-2.1"` and `realtimeVoice: "marin"`. Gate N may change the voice. The nightly
+    smoke checks that the id is still listed.
+  - `pricing.json` gains the realtime audio and text prices, from OpenAI's pricing page, cited, and **`studioMaxMinutes: 25`**.
+    That is a spend guard, not an exam rule, so it lives with the prices, not the profile.
+- **The port changes** (implementation-plan.md §3.3, amended by D165):
+  - `OralTransportEvent` gains `note{criterion, evidence, severity}`, from the `note_observation` tool. `oralTransportContract`
+    holds every transport to it.
+  - `OralSession` keeps its notes. `OralRequest.notes` is optional, and `assessOral`'s prompt quotes them when present
+    (architecture.md §8.5).
+  - The engine's session machine gains a `time-cap` end reason at `studioMaxMinutes`, a studio-only guard. It amends D116,
+    which kept none.
+  - A new **`RealtimeSecretSource`** port, `mint(apiKey) → { value, expiresAt }`, with a memory fake and a contract suite.
+    `AiProvider.openVoiceSession` is dropped: a voice session outlives one provider call, and it never uses the key after
+    minting.
+- **`POST /api/realtime/secret`**, the one route ADR 3 allows.
+  - It runs on Node, like every route (ADR 21). The Edge runtime is deprecated in Next 16.
+  - The key comes in `Authorization` and is used once, for `/v1/realtime/client_secrets` with a short `expires_after`
+    (60 s). The model must match `ai-models.json`'s `realtime`.
+  - It returns `{ value, expiresAt }` only. It logs nothing, and no error it returns carries the key.
+  - A handler in `src/server/` with a unit test per branch, small enough to read line by line.
+- **`realtimeTransport`**, in `packages/adapters/src/openai/`, exported through the existing `openai` subpath. It implements
+  `OralTransport` over WebRTC, through a peer-connection seam that the tests fake.
+  - Setup: the SDP offer goes to `https://api.openai.com/v1/realtime/calls` with the ephemeral secret, which needs no CSP
+    change. `session.update` sends the examiner persona's instructions, which are data beside practice mode's examiner
+    prompt, plus the two tools and input transcription.
+  - Directives: client-driven phases, via `direct()` → `session.update` and `response.create`.
+  - Events: the candidate's transcription and the examiner's transcript become `turn`s with their `startMs`/`endMs`.
+    `flag_difficulty` becomes `difficulty`, and `note_observation` becomes `note`.
+  - Usage from `response.done` goes to the ledger under the `sessionId`.
+  - A dropped connection gets **one reconnect**: a fresh secret, with the transcript so far seeded as conversation items.
+    Otherwise the transport emits `closed{failed}` with every turn kept.
+  - **Native `RTCPeerConnection`, no SDK.** architecture.md §3 names `@openai/agents-realtime` as an option. It is a new
+    dependency, so it needs to state what it replaces (root `CLAUDE.md`), and the session machine it would save already
+    exists.
+- **The key-leak test extended** (`key-leak.spec.ts`, hermetic, with a fake peer).
+  - The key reaches this origin only at `/api/realtime/secret`, only in `Authorization`.
+  - `/v1/realtime/calls` gets the `ek_` secret, never the key.
+  - The route's response holds no key.
+- The comments at `KeyOffer.tsx:12` and `packages/domain/src/oral-session.ts:16` still say "after 1.0 (D131)". Correct them.
 
-*Done:* exit criterion 1's accessibility and security halves, and the R8 half of criterion 2 ("both languages reviewed by a
-human"). Each defect found is fixed or filed, and recorded in a session-log entry. Then **Gate M** (public): the repo made
-public, an outside item submission [R13], the domain, §12.1's trademark check, and the full-volume bank (D54, D56).
+*Done:* exit criterion 2 at the port level. A dropped connection, faked, keeps every turn, and `closed{failed}` comes last.
+`pnpm verify` and `CI=1 pnpm verify:medium` pass.
+
+**Beside it, Gate N — the examiner's voice (human).**
+- In OpenAI's Realtime playground, on `gpt-realtime-2.1`, hear `marin` and `cedar` hold a French C-level interview. Use Slice 1's
+  persona instructions once they exist, or a short prompt of your own.
+- **Pass:** a credible francophone examiner, and you pick the voice.
+- **Fail:** studio mode stops, and D131's deferral returns.
+- **It must pass before Slice 2** builds the screen.
 
 **For the human, from Slice 4:**
 - **look at the milestone moment and Coco's cheering pose** (seed or reach a milestone; D159, D160) and the self-hosted type
@@ -249,8 +291,6 @@ public, an outside item submission [R13], the domain, §12.1's trademark check, 
 - the share card's text names Palier as "free, unofficial" and the SLE: confirm that wording before the repo goes public.
 
 **For the human, from Slice 3:**
-- **read the about page and the privacy notice** (`/about`, `/privacy`; D147) in both languages, with Gate L's French review.
-  They are the agent's drafts;
 - **delete `about.bankToday`** ("still small and partly synthetic") when the full-volume bank ships (Gate M);
 - the contribution path is ready for Gate M's outside submission. An authored item's model review runs on the next funded
   bank build (D152).
@@ -606,11 +646,11 @@ Nothing is ticked without session-log evidence.
   are after 1.0 (Gate K, D145). **Slice 4, built on this branch** (D159–D161): the streak and its one-time freeze note, the
   four milestone moments with Coco cheering and a text-only share, the band meter's entrance fill, one motion switch, and
   Inter, Figtree and Source Serif 4 self-hosted
-- [ ] Accessibility audit with VoiceOver and NVDA on the core flows, and a screen-reader user's pass if one can be arranged.
-  Human (Gate L). **The agent's half is built on this branch, Slice 3**: PRD §11's shortcut sheet at `?` (D150) and the `lang` audit
-  (D151)
+- [x] Accessibility audit with VoiceOver and NVDA on the core flows, and a screen-reader user's pass if one can be arranged.
+  Human (Gate L). **Passed at Gate L** (D164). **The agent's half is built on this branch, Slice 3**: PRD §11's shortcut
+  sheet at `?` (D150) and the `lang` audit (D151)
 - [x] Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to leak the key.
-  **Slice 1, merged (#39)** (D133–D137). Gate L's red-team read is still the human's (D132)
+  **Slice 1, merged (#39)** (D133–D137). Gate L's red-team read passed (D164)
 - [~] The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
   Slice 4: one article per written-expression sub-skill, ten, in both languages; reading's after 1.0 (Gate K, D145). The
   articles' French is part of Gate L. **Slice 4, built on this branch** (D162): ten articles as structured JSON, not MDX, at
@@ -623,8 +663,8 @@ Nothing is ticked without session-log evidence.
   with the originality attestation, the PR template. **Slice 3, built on this branch** (D146, D147, D152): the about page and `/privacy`
   drafted, the statement beside every band and in onboarding, `CONTRIBUTING.md`, the PR template and the authored-item
   intake. Their French is Gate L's
-- [ ] Full French review of every interface string by a fluent speaker, with the workshop prompts (D107) and the bank's
-  register (ADR 19). Human (Gate L)
+- [x] Full French review of every interface string by a fluent speaker, with the workshop prompts (D107) and the bank's
+  register (ADR 19). Human (Gate L). **Passed at Gate L** (D164)
 
 **Completion slices (D132).** Four slices and three gates, mirroring `implementation-plan.md` §7 Phase 7 "Completion slices".
 **Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
@@ -639,25 +679,27 @@ Nothing is ticked without session-log evidence.
   privacy notice and about page; the statement in onboarding and beside every band; the streak and milestones in 1.0, XP,
   levels and the countdown after; ten written-expression library articles; the PDF as a print stylesheet over `/progress`;
   and the authored-item intake built in Slice 3.
-- [~] **Slice 3 — Content, the contribution path and data rights.** **Built 29 September 2026**
+- [x] **Slice 3 — Content, the contribution path and data rights.** **Built 29 September 2026, merged (#47)**
   (`dougkeefe/next-slice-from-progress-v2`; D146–D152; session-log evidence). The about page and privacy notice, the
   statement in onboarding and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR template and the
   authored-item intake, the device-removal confirmation and pairing polish, the one-page PDF, the shortcut sheet and the
   `lang` audit.
-- [~] **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted
+- [x] **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted
   fonts, the streak with its silent freeze, the milestone moments, and ten written-expression library articles. **Built
-  29 September 2026** (`dougkeefe/smoke-key-next-slice`; D159–D162; session-log evidence).
-- [ ] **Gate L — the human reviews (human).** R8's French review, the VoiceOver and NVDA pass, and the red-team read.
+  29 September 2026, merged (#51)** (`dougkeefe/smoke-key-next-slice`; D159–D162; session-log evidence).
+- [x] **Gate L — the human reviews (human).** R8's French review, the VoiceOver and NVDA pass, and the red-team read.
+  **Passed 29 September 2026** (D164): the human found no issue in any of the three.
 - [ ] **Gate M — public (human).** The repo made public, an outside item submission [R13], the domain, §12.1's trademark
-  check, and the full-volume bank (D54), which stays sequenced to the end (D56).
+  check, and the full-volume bank (D54), which stays sequenced to the end (D56). **It waits on Phase 6** (D165).
 
 **Exit criteria** (the actual gate)
 
-- [ ] Every gate green, no known accessibility defects, no known security defects
-- [ ] Both languages reviewed by a human [R8]
+- [ ] Every gate green, no known accessibility defects, no known security defects. The accessibility and security halves
+  passed at Gate L (D164); ticked when Gate M is green
+- [x] Both languages reviewed by a human [R8]. Gate L (D164)
 - [ ] Repo public, licences in place, contribution path tested by someone else submitting an item [R13]
 
-### Phase 6: Oral, studio mode — after 1.0
+### Phase 6: Oral, studio mode — in 1.0, before Gate M
 
 **Decision gate before starting.** If phase 5's reports land well and measured realtime cost is high, shipping 1.0 without studio mode is the honest answer. Record that call here with its evidence. **Noted 27 September 2026 (D113):** GPT-Live's published US$0.05 a minute probably removes the "cost is high" premise. It is the leading candidate, and adopting it needs an ADR superseding ADR 3's mechanism, plus the checks D113 lists.
 
@@ -675,9 +717,59 @@ reason; its number is kept so the cross-references hold. The evidence:
 **What reopens it:** a French voice documented and heard by the human at C-level quality, or a documented browser-direct
 credential, or 1.0 shipped.
 
+**Brought back into 1.0, 29 September 2026 (human, D165).** It supersedes the deferral above. D131's two blockers were the
+Live API's. OpenAI's **Realtime API**, the one ADR 3 was written for, has neither problem:
+- it still mints a short-lived browser secret (`/v1/realtime/client_secrets`);
+- its ten voices speak every supported language, French among the strongest;
+- a session lasts up to 60 minutes.
+
+ADR 3 stands as written and is live again. The section keeps its place after Phase 7 so the cross-references hold. Read it as
+built after Phase 7's slices and before Gate M.
+
+**Completion slices (D165).** Three slices and two gates, mirroring `implementation-plan.md` §7 Phase 6 "Completion slices".
+**Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
+
+- [ ] **Slice 1 — The realtime session core, no UI.** The work:
+  - `oral-studio` as a feature, the `realtime` model and voice, and the prices with the 25-minute cap as data;
+  - `note` events, notes into `assessOral`, and the `time-cap` end reason;
+  - the `RealtimeSecretSource` port and `POST /api/realtime/secret` on Node;
+  - `realtimeTransport` over WebRTC, with one reconnect, then a clean failure;
+  - the key-leak test extended to the route.
+
+  *Done:* exit criterion 2 at the port level.
+- [ ] **Gate N — the examiner's voice (human).** Beside Slice 1, and before Slice 2. `marin` and `cedar` heard in French at C
+  level in OpenAI's playground; the human picks one. A fail stops Phase 6.
+- [ ] **Slice 2 — The studio screen, on the key.** The work:
+  - the mode choice on `/practice/oral`, with cost shown up front for both;
+  - the studio screen of PRD §8.6: the voice form over both levels, the phase indicator, the timer, the end control, "could
+    you repeat", no live transcript, and a reduced-motion fallback;
+  - the whole-session local recording;
+  - the pre-flight estimate and a running meter;
+  - the report over the realtime transcript and its notes, with synced audio;
+  - a hermetic journey over a memory transport, and every state axe-clean.
+
+  *Done:* exit criterion 1 measured live, and the cost per minute measured and written into `pricing.json` (principle 8).
+- [ ] **Slice 3 — The exception, stated and escapable.** The work:
+  - every absolute "the key never leaves / the server never sees it" claim amended in both languages to name the one
+    exception, plus architecture.md §6.3's settings note linking the route's source. That covers `key.offerStays`,
+    `privacy.third`, `neverKey`, `KeyOffer` and `SECURITY.md`'s "designed but not built";
+  - the self-hosted escape of ADR 3, through a popup to the user's own endpoint and `postMessage`, so `connect-src` stays
+    `'self'` and OpenAI (D165);
+  - the one-file Cloudflare Worker and the Vercel function in the repo;
+  - the route's exclusion from Vercel logging verified, and written into `docs/deploy.md`;
+  - the manual realtime checklist written out as `docs/realtime-checklist.md`.
+
+  *Done:* the copy's parity, and the self-hosted path working end to end against a local endpoint.
+- [ ] **Gate O — studio mode's release reads (human).** The checklist on Chrome, Safari and Firefox, desktop and mobile (exit
+  criterion 3), the route read line by line, and the French of the new copy. Then Gate M.
+
+**Exit criteria** (the actual gate). Two are added by D165.
+
 - [ ] Session establishes in under 2.5 seconds from tap to first word
 - [ ] Disconnection mid-session recovers or fails cleanly with the transcript preserved
 - [ ] Manual realtime checklist (`architecture.md` §14) passes on Chrome, Safari, Firefox, desktop and mobile
+- [ ] The examiner's French voice is judged credible at C level by a human (Gate N)
+- [ ] The key exception is stated wherever the copy promised otherwise, in both languages, and the self-hosted escape works
 
 ### Phase 8: English mirror
 
@@ -5620,11 +5712,152 @@ table and §5's tree amended in place
 - **The route lists** gained the library: Lighthouse (19 URLs), `csp-production.spec.ts`'s pages, and the titles journey.
 - **The articles are the agent's drafts**, French included, and are Gate L's to read. Reading's articles come after 1.0.
 
+### D163 — a change of locale is a document load, never a soft navigation
+**Date:** 29 September 2026 · **Status:** accepted; a defect the human found in production. Amends D134's reach, not its policy
+
+- **The defect.** On the production build, every click on "Français" or "English" rendered `global-error`: "Palier stopped
+  working". A reload showed the right page. `LanguageToggle` was next-intl's `Link` with `locale`, a client-side navigation.
+  - The locale is the root layout's segment. Next keeps it a soft navigation, since `/en` and `/fr` are the same
+    `[locale]/layout.tsx`, but the segment's key changes, so React **remounts the whole root layout**.
+  - React builds any `<script>` it renders on the client by writing `innerHTML` (`<script></script>`) on a wrapper. The
+    remounted layout's Trusted Types `<script>` therefore hit the HTML sink. D134's `default` policy has no `createHTML`,
+    so it threw: `Failed to set the 'innerHTML' property on 'Element': This document requires 'TrustedHTML' assignment`.
+  - **Unseen until now** because the toggle's only test (`smoke.spec.ts`) runs on `next dev`, where Trusted Types is off,
+    and `csp-production.spec.ts` only ever loaded pages with `goto`.
+- **The fix: `onNavigate` cancels the router's navigation and `location.assign` loads the page.** A locale is a new
+  document anyway (its `lang`, its head, a fresh nonce). The href, right-click, middle-click and no-JavaScript behaviour
+  are unchanged.
+  - **The policy is not loosened.** A `createHTML` that let React's wrapper through would reopen the sink D134 closed, for
+    one component's convenience.
+  - **It stays next-intl's `Link`, not a plain `<a>`,** because its click handler writes the locale cookie. The proxy
+    cannot: once the service worker controls the page, a navigation reaches it as the worker's `fetch`, not as a document
+    request, and next-intl's `syncCookie` leaves the cookie alone for those. **Proven to bite:** with a plain `<a>`, the
+    cookie assertion failed (`Received: undefined`).
+- **The test** is in `csp-production.spec.ts`, with the worker in control. It clicks EN→FR→EN on `/about` and checks, both
+  ways, the URL, `lang`, the page's heading, no global-error copy, the cookie, and zero violations. **Red before the fix**:
+  the global-error title was on the page.
+- **The rule** is in `apps/web/CLAUDE.md`: any link that changes the locale is a document load.
+
+### D164 — Gate L passed: the French, the screen-reader pass and the red-team read found nothing
+**Date:** 29 September 2026 · **Status:** accepted (human decision); resolves Gate L, and ticks Phase 7 exit criterion 2 and
+the accessibility audit and French review items
+
+- **The human reviewed Gate L against its three criteria as written and found no issue**: R8's French review, the
+  VoiceOver and NVDA pass on the core flows [R9], and the red-team read of D136. The scope of each is the one *Next,
+  decided* gave it, which is superseded now but visible in git history.
+- **No correction came out of it**, so no message, content or code changed. The one defect the human reported at the same
+  time, the language toggle (D163), was a production crash, not a review finding, and is fixed separately.
+- **Not reported:** whether a screen-reader user's pass was arranged. The work item asked for it "if one can be arranged",
+  so it does not hold the tick.
+- **Exit criterion 1 stays open.** Its accessibility and security halves are met. "Every gate green" waits on Gate M.
+- **What would reopen it** was not stated at the gate. The agent's suggestion, not the human's: an outside contributor or a
+  pilot user reporting a French error or a screen-reader blocker, or a new sink or origin in the CSP.
+
+### D165 — studio mode is back in 1.0, on the Realtime API that ADR 3 was written for
+**Date:** 29 September 2026 · **Status:** accepted (human decision); supersedes D131. Amends D116 and implementation-plan.md
+§3.3; ADR 3 is unchanged and live again
+
+- **The human wants the realtime conversation built, and in 1.0.** Asked where it sits, they chose "in 1.0": Gate M waits
+  for it. The agent recommended this because studio mode changes the privacy and key copy, and that is better said before the
+  repo goes public than walked back after. The human builds it in a separate worktree. This session changed documents only.
+- **Why D131's evidence no longer decides it.** Its blockers belonged to GPT-Live and the Live API, not to the Realtime API
+  ADR 3 names. OpenAI's documents, read by this session on 29 September 2026:
+  - **The browser credential exists.** `POST /v1/realtime/client_secrets` mints an `ek_` secret: 10 s to 2 h, 10 min by
+    default. The browser then posts its SDP offer to `/v1/realtime/calls`. That is exactly ADR 3's one server call.
+    Sources: developers.openai.com/api/docs/guides/realtime-webrtc, and the client-secrets reference.
+  - **French.** Ten voices: alloy, ash, ballad, coral, echo, sage, shimmer, verse, marin and cedar, with `marin` and `cedar`
+    recommended. Voices are not chosen by language. Every voice speaks every supported language, and French is among the
+    strongest. The accent can lean neutral or US, so **Gate N is the human's ear.**
+  - **The length.** "The maximum duration of a Realtime session is 60 minutes." That clears the 22-minute simulation and
+    the 25-minute cap.
+  - **The model.** `gpt-realtime-2.1`, as architecture.md §8.1 already names. Published estimates are about US$0.05 a
+    conversation minute, and about US$0.016 on the mini model. Those are third parties' figures. Slice 2 measures the real
+    one (principle 8).
+- **ADR 3 stands as written**, so no ADR is written or superseded. Its *revisit when* ("a browser-direct realtime auth path,
+  or the feature is dropped") is still unmet: the client secret is still minted with a standard key on a server.
+  - **Two readings of it, recorded here.**
+    - "Edge function" is read as the route's shape: stateless, holding nothing, no logging. It is not read as a runtime,
+      because ADR 21 put every route on Node and Next 16 deprecates Edge.
+    - "A self-hosted endpoint option ships" is kept, and its mechanism is decided below.
+  - If the human reads either one differently, that is a new ADR superseding ADR 3.
+- **The self-hosted escape cannot be a plain `fetch`.** The strict CSP's `connect-src` is this origin and OpenAI, the same
+  for every user (D133). A user's own endpoint lives in their browser, so the server cannot add it without widening the
+  policy for everyone, or trusting a cookie an injected script could set. **Decided: a popup.**
+  - Palier opens the user's endpoint in a popup and hands it the key by `postMessage`, to that origin only.
+  - The page there, served by the shipped Worker or function, mints the secret on its own origin and posts it back.
+  - The page checks `event.origin` both ways. `postMessage` is not a fetch, so the policy is unchanged.
+  - If Slice 3 finds this unworkable, it records why before choosing again.
+- **Where the new numbers live.**
+  - The 25-minute cap is a spend guard, not an exam rule (ADR 9 covers exam rules), so it goes in `pricing.json` as
+    `studioMaxMinutes` beside the realtime price.
+  - The model and voice go in `ai-models.json`.
+- **The ports.**
+  - `AiProvider.openVoiceSession` is dropped from §3.3. A provider is made per call inside `withApiKey`, and a voice session
+    outlives the call and never uses the key after minting. Studio mode is instead a new `OralTransport`, which Phase 5
+    Slice 1 shaped for this, fed by a new `RealtimeSecretSource`.
+  - `OralTransportEvent` gains `note`, and `OralRequest` gains optional `notes`. The session machine gains a `time-cap` end
+    reason, which D116 had left to Phase 6.
+- **The plan.** Three slices and two gates, as in the Phase 6 section, with two exit criteria added: the French voice
+  (Gate N), and the exception stated and escapable. Gate M waits on Gate O.
+- **Moved in place**, each noted with this entry:
+  - `implementation-plan.md` §7 Phase 6 and Phase 7, §3.3, the §8 R1 row, the §9 timeline and the §11 risk row;
+  - product-requirements.md §8.6, §16 and §17 question 4;
+  - architecture.md §6.3, §10, §14 and §20 question 1.
+- **Not changed here:** the two code comments that say "after 1.0 (D131)", `KeyOffer.tsx:12` and
+  `packages/domain/src/oral-session.ts:16`. They are Slice 1's, so this session stayed in documents.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 29 September 2026 — `dougkeefe/fix-language-toggle-crash` (studio mode into 1.0, D165; documents only)
+
+**The human brought studio mode back into 1.0** (D165), and asked for the documents to be ready for a separate worktree to
+build it.
+- **What decided it:** OpenAI's Realtime API documents, read today. D131's blockers were the Live API's.
+- **What changed:** Phase 6 is planned as three slices and Gates N and O, with two exit criteria added. `implementation-plan.md`
+  §7 mirrors it. Every in-place note D131 left is reversed, each naming D165.
+- **What's next:** *Next, decided* is **Phase 6 Slice 1**, with Gate N beside it.
+
+No code changed and nothing is ticked. **Evidence:**
+
+```
+pnpm verify                → check-types, lint, boundaries (467 + 304 modules, no violations),
+                             test: 234 files, 3485 passed, 8 todo; coverage thresholds met; exit 0
+```
+
+### 29 September 2026 — `dougkeefe/fix-language-toggle-crash` (Gate L passed, D164)
+
+**Gate L passed** (human): all three reads found no issue. Recorded as D164.
+- **Ticked:** Gate L, the accessibility audit, the French review, Phase 7 exit criterion 2, and Slices 3 and 4, which merged
+  (#47, #51).
+- Exit criterion 1 stays open until Gate M.
+- The Slice 3 "for the human" item to read `/about` and `/privacy` is removed, because Gate L's French review covered it.
+
+*Next, decided* is **Gate M**, the human's. The evidence is the human's word in this session. No command was run for it.
+
+### 29 September 2026 — `dougkeefe/fix-language-toggle-crash` (a defect: the language toggle, D163)
+
+**The defect**, reported by the human: every click on "Français" / "English" rendered the global error page, and a reload
+recovered. It was reproduced on `next start` and traced to a Trusted Types refusal when the root layout remounts
+(D163). **Fixed** in `LanguageToggle`: `onNavigate` cancels the router's navigation, and `location.assign` loads the
+page. It is still next-intl's `Link`, so the locale cookie is still written. The policy is unchanged.
+
+- A new production-lane test in `csp-production.spec.ts`: red before the fix (the global-error title on the page), green
+  after, 3/3 with `--repeat-each 3`. Its cookie assertion failed against a plain-`<a>` variant, with the worker in control.
+- The rule is in `apps/web/CLAUDE.md`. The merged Slice 4 row (#51) is retired from *In flight*.
+
+*Next, decided* is still **Gate L**, and this merges ahead of it.
+
+**Evidence:**
+
+```
+pnpm verify                → check-types, lint, boundaries (467 + 304 modules, no violations),
+                             test: 234 files, 3485 passed, 8 todo; coverage thresholds met; exit 0
+CI=1 pnpm verify:medium    → integration 7 files, 51 passed; Playwright 94 passed (1.7m); exit 0
+```
 
 ### 29 September 2026 — `dougkeefe/smoke-key-next-slice` (Phase 7 Slice 4, D159–D162; the smoke key's first run)
 

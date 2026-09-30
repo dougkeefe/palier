@@ -195,7 +195,8 @@ interface AiProvider {
   speak(req: SpeechRequest): Promise<Blob>                         // Phase 5 Slice 2, ADDED (D117): the examiner's voice
   examinerTurn(req: ExaminerTurnRequest): Promise<ExaminerTurn>    // Phase 5 Slice 2, ADDED (D117): the next question and a
                                     // difficulty flag, from the phase, the register and the transcript so far
-  openVoiceSession(cfg: VoiceSessionConfig): Promise<VoiceSession>  // may throw Unsupported; deferred to Phase 6
+  // openVoiceSession: DROPPED 29 September 2026 (progress.md D165). A voice session outlives one provider call and never
+  // uses the key after minting, so studio mode is an OralTransport (realtimeTransport) fed by a RealtimeSecretSource port
   verifyKey(): Promise<void>        // Phase 4 Slice 1, ADDED (progress.md D99): one cheap call; resolves or throws the adapter's own error
   lastUsage(): UsageRecord | null   // amended 26 September 2026 (progress.md D102): the WHOLE last method call, retries
                                     // included; null when it billed nothing. Never an earlier call's usage carried over
@@ -1015,12 +1016,15 @@ practice mode and report, with all five session types and pronunciation as a per
 ---
 
 ### Phase 6: Oral, studio mode
-**2 weeks, after 1.0. Goal: the feature people tell their colleagues about.**
+**2 weeks, in 1.0, before Gate M (`progress.md` D165). Goal: the feature people tell their colleagues about.**
 
 **Decision gate before starting.** If phase 5's reports are landing well and measured cost for realtime is high, the honest answer may be to ship 1.0 without studio mode and add it later. Make that call on evidence. *(Noted 27 September 2026, `progress.md` D113: GPT-Live, `gpt-live-1` on the Live API, is published at US$0.05 a minute. It is the leading candidate for this phase. Using it would supersede ADR 3's mechanism with a new ADR, because the Live API exchanges the browser's connection offer through a server holding the key rather than minting a Realtime client secret.)* *(Decided 28 September 2026, human, `progress.md` D131: **studio mode is deferred
 past 1.0**, and Phase 7 follows Phase 5 directly. Cost was not the reason. The Live API documents no French voice and no
 short-lived browser credential, and a duration limit whose value it does not publish. ADR 3 stands, dormant. The number is kept
-so cross-references hold; read this phase as the first after 1.0.)*
+so cross-references hold; read this phase as the first after 1.0.)* *(Brought back into 1.0 on 29 September 2026, human,
+`progress.md` D165, superseding D131. D131's blockers were the Live API's. The Realtime API that ADR 3 was written for still
+mints a short-lived browser secret (`/v1/realtime/client_secrets`), its voices speak French, and a session lasts up to 60
+minutes. ADR 3 stands as written and is live again. The phase is built after Phase 7's slices, and Gate M waits for it.)*
 
 **Work breakdown**
 
@@ -1038,12 +1042,58 @@ so cross-references hold; read this phase as the first after 1.0.)*
 - Session establishes in under 2.5 seconds from tap to first word.
 - Disconnection mid-session recovers or fails cleanly with the transcript preserved.
 - The manual realtime checklist from architecture spec section 14 passes on Chrome, Safari and Firefox, desktop and mobile.
+- The examiner's French voice is judged credible at C level by a human (Gate N). *(Added by `progress.md` D165.)*
+- The key exception is stated wherever the copy promised otherwise, in both languages, and the self-hosted escape works.
+  *(Added by D165.)*
+
+**Completion slices** (`progress.md` D165). The same scoped exception that D79, D97, D113 and D132 made. **Keep the two in
+sync.**
+
+- **Slice 1 — The realtime session core, no UI.**
+  - **Data, not code:** `oral-studio` as an AI feature; `realtime` and `realtimeVoice` in `ai-models.json`; and the realtime
+    prices plus `studioMaxMinutes: 25` in `pricing.json`. The cap is a spend guard, not an exam rule.
+  - **The port changes:** `OralTransportEvent` gains `note`; `OralSession` keeps notes; `OralRequest.notes` is quoted by
+    `assessOral`; and the session machine gains a `time-cap` end reason (amending D116).
+  - **The secret:** a `RealtimeSecretSource` port with a memory fake and a contract suite; and `POST /api/realtime/secret` on
+    Node (ADR 21). It is stateless, logs nothing, and returns `{ value, expiresAt }` only. Its handler is unit-tested per
+    branch.
+  - **The transport:** `realtimeTransport` in the `openai` adapter, WebRTC through a faked peer-connection seam. The SDP
+    goes to `/v1/realtime/calls` with the `ek_` secret. It has client-driven phases, the two tools, input transcription and
+    usage to the ledger. A dropped connection gets one reconnect, seeded with the transcript, or else `closed{failed}` with
+    every turn kept.
+  - **The key-leak test** is extended to the route.
+
+  *Done:* exit criterion 2 at the port level.
+- **Gate N — the examiner's voice (human).** Beside Slice 1, and before Slice 2. `marin` and `cedar` heard in French at C level
+  in OpenAI's Realtime playground; the human picks one. A fail stops the phase, and the deferral returns.
+- **Slice 2 — The studio screen, on the key.**
+  - The mode choice on `/practice/oral`, with cost up front for both.
+  - PRD §8.6's screen: the voice form over both levels, the phase indicator, the timer, the end control, "could you repeat",
+    no live transcript, and a reduced-motion fallback.
+  - The whole-session local recording, the pre-flight estimate and a running meter.
+  - The report over the realtime transcript and notes, with synced audio.
+  - A hermetic journey over a memory transport, with every state axe-clean.
+
+  *Done:* exit criterion 1 measured live, and the cost per minute measured and written into `pricing.json` (principle 8).
+- **Slice 3 — The exception, stated and escapable.**
+  - Every absolute key claim amended in both languages to name the one exception, plus §6.3's settings note. That includes
+    `SECURITY.md`.
+  - The self-hosted escape: a popup to the user's own endpoint and `postMessage`, so `connect-src` is unchanged for everyone
+    (D165).
+  - The one-file Worker and Vercel function.
+  - The Vercel log exclusion verified, and in `docs/deploy.md`.
+  - `docs/realtime-checklist.md`.
+
+  *Done:* the copy's parity, and the self-hosted path working end to end against a local endpoint.
+- **Gate O — studio mode's release reads (human).** The checklist on the six browser and platform pairs (exit criterion 3), the
+  route read line by line, and the French of the new copy. Then Gate M.
 
 ---
 
 ### Phase 7: Polish and hardening
 **2 to 3 weeks. Goal: 1.0.** *(From 28 September 2026 it follows Phase 5 directly, since studio mode is after 1.0,
-`progress.md` D131.)*
+`progress.md` D131.)* *(Studio mode is back in 1.0 from 29 September 2026, D165: Phase 6 is built after this phase's
+slices, and Gate M waits for it.)*
 
 **Work breakdown**
 
@@ -1054,7 +1104,7 @@ so cross-references hold; read this phase as the first after 1.0.)*
 - Accessibility audit with VoiceOver and NVDA on all core flows, plus a pass by someone who actually uses a screen reader if you can arrange it.
 - Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to get the key to leak.
 - The library: MDX reference articles on the grammar and register points the sub-skill taxonomy names, linked from item explanations. Deferred this far on purpose, since the explanations carry most of the teaching and the library is only worth writing once the sub-skills have real data behind them.
-- Observability: the client diagnostic bundle, the pre-filled issue path, the decision to run no error reporting service, and the realtime route excluded from Vercel logging. Verify that exclusion rather than assume it. *(The realtime route's exclusion moves with studio mode to after 1.0, D131.)*
+- Observability: the client diagnostic bundle, the pre-filled issue path, the decision to run no error reporting service, and the realtime route excluded from Vercel logging. Verify that exclusion rather than assume it. *(The realtime route's exclusion moves with studio mode, D131, and is Phase 6 Slice 3's, D165.)*
 - Content: the about page, the non-affiliation statement in both languages, the privacy notice, the contribution guide with the originality attestation, the PR template.
 - Full French review of every interface string by a fluent speaker. An English-first bilingual tool for this audience gets one chance at this.
 
@@ -1093,8 +1143,10 @@ direction, then the human's reviews.
   29 September 2026** (`progress.md` D159–D162): the library is structured JSON in `@palier/content`, not MDX (D162).
 - **Gate L — the human reviews.** The French review of every string, the workshop prompts and the bank's register [R8]; the
   VoiceOver and NVDA pass [R9]; the red-team read. *Done:* exit criterion 1's accessibility and security halves and the R8 half.
+  **Status: passed 29 September 2026** (`progress.md` D164).
 - **Gate M — public.** The repo made public and an outside item submission [R13], the domain, the trademark check, and the
-  full-volume bank (D54), sequenced to the end (D56). *Done:* exit criterion 2, and 1.0.
+  full-volume bank (D54), sequenced to the end (D56). **It waits on Phase 6's Gate O** (`progress.md` D165). *Done:* exit
+  criterion 2, and 1.0.
 
 ---
 
@@ -1111,7 +1163,7 @@ Which phase satisfies which requirement from `product-requirements.md` section 0
 
 | # | Requirement | Satisfied by | Verified by |
 | --- | --- | --- | --- |
-| R1 | Practises all three tested skills | 2 (reading, writing), 5 (oral, practice mode); 6 (studio mode) after 1.0, D131 | E2E journeys 1, 2; the oral journey and Gate I (D129); the manual realtime checklist once studio mode ships |
+| R1 | Practises all three tested skills | 2 (reading, writing), 5 (oral, practice mode), 6 (studio mode, in 1.0, D165) | E2E journeys 1, 2; the oral journey and Gate I (D129); the manual realtime checklist once studio mode ships |
 | R2 | Format and register match the real tests | 1 | Register read by fluent speakers; item report rate |
 | R3 | Mock exams mirror published structure and cuts | 3 | Golden fixture per variant at every cut boundary |
 | R4 | Works with no key and offline after first load | 2 | E2E journey 7 with the network disabled; hermetic build has no key |
@@ -1140,8 +1192,8 @@ Two observations worth keeping in view. Every requirement is covered by phase 7,
 | 3 Exams and item statistics | 2 | 13 | **Closed pilot** |
 | 4 BYOK and generation | 2 | 15 | Key features live |
 | 5 Oral practice mode | 2 to 3 | 18 | Oral rehearsal usable |
-| 7 Polish and hardening | 2 | 20 | **1.0 public** |
-| 6 Oral studio mode | 2 | 22 | After 1.0 (decision gate resolved 28 September 2026, D131) |
+| 7 Polish and hardening | 2 | 20 | Hardened |
+| 6 Oral studio mode | 2 | 22 | **1.0 public** (back in 1.0 29 September 2026, D165; D131 had deferred it) |
 | 8 English mirror | 2 | 24 | Architecture validated |
 
 Roughly five months part-time on these assumptions, with something public around week 11 and the largest risk tested in week 1 of phase 1. Treat the numbers as relative sizing rather than a schedule: this is evening and weekend work with a full-time job and a department change in the middle of it, and the phase order is designed so that stopping early still leaves a finished thing.
@@ -1176,7 +1228,7 @@ Applies to every PR, not just phase ends:
 | Phase 1 exit criteria fail | Work down the descoping list in `content-factory.md` section 9, in order. Do not improvise a rescue |
 | Nobody uses the public alpha | The bank is fine but the product is not the problem either. Check whether people know it exists before changing the product |
 | Item statistics never accumulate | Lower stakes than it was, because nothing the user sees depends on them (ADR 7). The consequence is slower retirement of bad items, so lean harder on the in-app report control and check the reports weekly |
-| Realtime cost is worse than modelled | Ship 1.0 without studio mode. Phase 5 already delivers the value. *(Taken 28 September 2026, `progress.md` D131, though on the Live API's missing French voice and browser credential rather than on cost)* |
+| Realtime cost is worse than modelled | Ship 1.0 without studio mode. Phase 5 already delivers the value. *(Taken 28 September 2026, `progress.md` D131, though on the Live API's missing French voice and browser credential rather than on cost. Reversed 29 September 2026, D165: the Realtime API has both. Cost is measured in Phase 6 Slice 2, and this response stays available if it is far worse than modelled)* |
 | The factory's output degrades when a model changes | The batch report and the yield metric are the early warning. Pin model versions in the factory config and treat a model upgrade as a change requiring a fresh sample review |
 | You lose interest in month four | The phase order means a useful public tool already shipped at week 11. Keep the repo in a state where that is a complete artefact rather than an abandoned half-product, which mostly means not leaving a half-built phase on main |
 | An assumption in `product-requirements.md` section 18 turns out false | Each one names how it would be falsified. Check P2 (key setup completion) and P3 (users wanting a band letter) against real behaviour after the public alpha, because both would change the product rather than the plan |

@@ -17,6 +17,11 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   in `messages/{en,fr}.json` at full key parity (lint `NO_JSX_LITERALS` + the parity
   test in `src/i18n/messages.test.ts`, R8). Use `Link`/`redirect` from
   `src/i18n/navigation`, never `next/link` directly, so locale prefixes are automatic.
+  **A link that changes the locale must be a document load, never a soft navigation** (progress.md
+  D163): the locale is the root layout's segment, so a client-side switch remounts the layout, and
+  React's client-built `<script>` hits the `innerHTML` sink that Trusted Types refuses, which renders
+  `global-error`. `LanguageToggle` keeps next-intl's `Link`, which writes the locale cookie, and
+  cancels the router in `onNavigate` for `location.assign`.
 - **Design system only.** The app composes `@palier/ui` (`tokens.css` + `components.css`,
   the `.pl-*` classes) plus `src/app/globals.css` for page layout. No Tailwind (D25); no
   new primitives here — they belong in `@palier/ui`.

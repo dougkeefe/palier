@@ -1,5 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
+import { waitForOfflineReady } from "./helpers";
 import { SENTINEL } from "./leak-guard";
 
 /**
@@ -131,6 +132,32 @@ test("the three self-hosted faces load from this origin under the policy (D161)"
   expect(unquoted(heading).startsWith(unquoted(faces[1]?.family ?? "missing"))).toBe(true);
   expect(fontRequests.length).toBeGreaterThan(0);
   expect(new Set(fontRequests)).toEqual(new Set([new URL(page.url()).origin]));
+  expect(await violations()).toEqual([]);
+});
+
+// A soft change of locale remounts the root layout, and React writes its inline policy script
+// back through `innerHTML`, which Trusted Types refuses, so the toggle is a document load (D163).
+// `next dev` has no Trusted Types, so only this lane can see the difference. The worker is in
+// control first: through it the proxy no longer sees a document request, so the cookie is the
+// toggle's to write.
+test("the language toggle loads the other locale's page, not the global error (D163)", async ({ page }) => {
+  const violations = await recordViolations(page);
+  await page.goto("/en/about");
+  await waitForOfflineReady(page);
+  const localeCookie = async () =>
+    (await page.context().cookies()).find((cookie) => cookie.name === "NEXT_LOCALE")?.value;
+
+  for (const [name, locale, crashed] of [
+    ["Français", "fr", "Palier a cessé de fonctionner"],
+    ["English", "en", "Palier stopped working"],
+  ] as const) {
+    await page.getByRole("link", { name }).click();
+    await expect(page).toHaveURL(new RegExp(`/${locale}/about$`));
+    await expect(page.locator("html")).toHaveAttribute("lang", locale);
+    await expect(page.locator("#main h1")).toBeVisible();
+    await expect(page.getByText(crashed)).toHaveCount(0);
+    expect(await localeCookie()).toBe(locale);
+  }
   expect(await violations()).toEqual([]);
 });
 
