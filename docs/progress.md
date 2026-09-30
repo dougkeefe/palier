@@ -52,7 +52,7 @@ never been able to fail** (D177): both lanes swallowed their exit code from Phas
 (`dougkeefe/next-dev-slice`; D177–D179): the v5 re-recording, which makes `main` green again; every lane through one
 script; the medium lane in three parallel jobs; the fast lane's budget at 120 s (human); and `main`'s required checks set to
 the four lanes, which until now always passed. It merged (#55). **Phase 6 Slice 2, the studio screen, is built**
-(`dougkeefe/raleigh-v3`; D180–D189): the mode choice, the studio view, the whole-session recording, the meter, playback from
+(`dougkeefe/next-slice-from-progress-v5`; D180–D189): the mode choice, the studio view, the whole-session recording, the meter, playback from
 each answer, and the key copy's exception in both languages. Tap to first word was measured live and is **not yet under
 2.5 s** (D189), and the live run found a turn that never ended, which the human's session must check first.
 
@@ -119,7 +119,7 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 built, `dougkeefe/raleigh-v3`, D180–D189 |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 built, `dougkeefe/next-slice-from-progress-v5`, D180–D189 |
 | 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; Gate M waits on Phase 6, D165) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
@@ -129,7 +129,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/raleigh-v3` | **Phase 6 Slice 2 — the studio screen, on the key** (D173's copy exception, the mode choice, the studio view, the whole-session recording, the meter, synced audio on the report, the hermetic journey and the key-leak test's fake-peer half, and the live measurements). | 30 September 2026 |
+| `dougkeefe/next-slice-from-progress-v5` | **Phase 6 Slice 2 — the studio screen, on the key** (D173's copy exception, the mode choice, the studio view, the whole-session recording, the meter, synced audio on the report, the hermetic journey and the key-leak test's fake-peer half, and the live measurements). | 30 September 2026 |
 
 *(The prior rows — CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -239,7 +239,7 @@ Phase 5's deferred cost check (D130), the product pilot (Gate E, D97) and Gate M
 trademark check, lining up an outside submitter) still run beside it, all the human's. Gate M's one build item, **the
 full-volume bank run** (D54), touches no oral code. It can run in its own worktree once the human funds a key for it.
 
-**Phase 6 Slice 2 is built** (`dougkeefe/raleigh-v3`; D180–D189). Merge it first: `main` deploys to production, and the
+**Phase 6 Slice 2 is built** (`dougkeefe/next-slice-from-progress-v5`; D180–D189). Merge it first: `main` deploys to production, and the
 key copy's exception ships with the screen (D173).
 
 **Next: the human's live studio session, then "the dial under 2.5 s", then Slice 3.**
@@ -744,7 +744,7 @@ built after Phase 7's slices and before Gate M.
 - [x] **Gate N — the examiner's voice (human).** Beside Slice 1, and before Slice 2. `marin` and `cedar` heard in French at C
   level in OpenAI's playground; the human picks one. A fail stops Phase 6. **Passed, 30 September 2026 (D174): `cedar`.**
   Two findings came with it, and are fixed: the examiner cut in on a pause (D175), and did not listen (D176).
-- [~] **Slice 2 — The studio screen, on the key.** **Built 30 September 2026** (`dougkeefe/raleigh-v3`; D180–D189;
+- [~] **Slice 2 — The studio screen, on the key.** **Built 30 September 2026** (`dougkeefe/next-slice-from-progress-v5`; D180–D189;
   session-log evidence), not merged. Its *done*: the copy's parity is met; exit criterion 1 is measured and not met (D189);
   the cost per minute is not measured, and `pricing.json` keeps D167's figures (D189). The work:
   - **the key copy's one exception, stated in both languages** (moved here from Slice 3 by D173): `key.offerStays`,
@@ -6396,7 +6396,7 @@ then holds one real session); the figures are the agent's
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 30 September 2026 — `dougkeefe/raleigh-v3` (Oral practice in the main navigation, human request)
+### 30 September 2026 — `dougkeefe/next-slice-from-progress-v5` (Oral practice in the main navigation, human request)
 
 - **The header gains "Oral practice" / "Pratique orale"**, between Review and Progress, linking `/practice/oral`, at the
   human's request. Until now spoken practice was reached from home's actions card only.
@@ -6411,7 +6411,7 @@ CI=1 pnpm verify:medium    → integration 51 passed; Playwright 99 passed (1.6m
 node apps/web/scripts/check-bundle-size.mjs → 166.1 KB of 180.0 KB
 ```
 
-### 30 September 2026 — `dougkeefe/raleigh-v3` (Phase 6 Slice 2: the studio screen, on the key; D180–D189)
+### 30 September 2026 — `dougkeefe/next-slice-from-progress-v5` (Phase 6 Slice 2: the studio screen, on the key; D180–D189)
 
 Opened to *Next, decided*'s Phase 6 Slice 2, after #55 merged. The plan was approved with two human decisions: the studio
 recording holds **the microphone only** (D183), and the live checks are **shared**, the agent by script on the smoke key and
