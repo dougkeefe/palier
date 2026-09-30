@@ -129,7 +129,7 @@ const setUp = (over: Over = {}) => {
   const audio = { srcObject: null as unknown, paused: false, pause() { this.paused = true; } };
   const peers: { microphone: MediaStream; remoteAudio: unknown }[] = [];
   const useCases = {
-    startOralStudio: vi.fn(() => over.started ?? Promise.resolve(current.run)),
+    startOralStudio: vi.fn((_request: unknown, _peer: unknown, _signal?: AbortSignal) => over.started ?? Promise.resolve(current.run)),
     oralSession: vi.fn(() => Promise.resolve<OralSession | null>(session({ endReason: "transport-failed" }))),
     oralSessionCost: vi.fn(() =>
       Promise.resolve(over.cost === undefined ? { practice: line(0, 0), studio: line(0.05, 2), report: line(0, 0) } : over.cost),
@@ -183,7 +183,11 @@ describe("studioController — starting (D185)", () => {
     const { controller, actions, useCases, holds, peers, mic, audio, media } = setUp();
     await controller.start(CHOICE, mic.stream);
 
-    expect(useCases.startOralStudio).toHaveBeenCalledWith({ sessionId: ID, scenarioId: CHOICE.scenario.id }, expect.any(Function));
+    expect(useCases.startOralStudio).toHaveBeenCalledWith(
+      { sessionId: ID, scenarioId: CHOICE.scenario.id },
+      expect.any(Function),
+      expect.any(AbortSignal),
+    );
     expect(peers).toEqual([{ microphone: mic.stream, remoteAudio: audio }]);
     expect(holds).toEqual([{ id: ID, released: false }]);
     expect(media.calls).toEqual(["start"]);
@@ -420,6 +424,42 @@ describe("studioController — the end (D185)", () => {
 
     expect(handles.current.endByUser).toHaveBeenCalled();
     expect(handles.endings).toHaveLength(1);
+  });
+
+  it("cancels a call still dialling when End is pressed, and names no failure (D185)", async () => {
+    const pending = deferred<OralStudioRun>();
+    const handles = setUp({ started: pending.promise });
+    const starting = handles.controller.start(CHOICE, handles.mic.stream);
+    const signal = (handles.useCases.startOralStudio.mock.calls[0] as unknown[] | undefined)?.[2] as AbortSignal | undefined;
+    expect(signal?.aborted).toBe(false);
+    await handles.controller.end();
+    expect(signal?.aborted).toBe(true);
+
+    pending.reject(new Error("A realtime transport opens once."));
+    await starting;
+    expect(handles.endings[0]).toMatchObject({ failure: null, recordingKept: null });
+    expect(handles.mic.track.stopped).toBe(true);
+  });
+
+  it("cancels a call still dialling when the screen goes away", async () => {
+    const pending = deferred<OralStudioRun>();
+    const handles = setUp({ started: pending.promise });
+    const starting = handles.controller.start(CHOICE, handles.mic.stream);
+    const signal = (handles.useCases.startOralStudio.mock.calls[0] as unknown[] | undefined)?.[2] as AbortSignal | undefined;
+    handles.controller.dispose();
+    expect(signal?.aborted).toBe(true);
+    pending.resolve(handles.current.run);
+    await starting;
+  });
+
+  it("leaves an open conversation's dial alone on End, and ends the run instead", async () => {
+    const handles = setUp();
+    await handles.controller.start(CHOICE, handles.mic.stream);
+    const signal = (handles.useCases.startOralStudio.mock.calls[0] as unknown[] | undefined)?.[2] as AbortSignal | undefined;
+    await handles.controller.end();
+
+    expect(signal?.aborted).toBe(false);
+    expect(handles.current.endByUser).toHaveBeenCalled();
   });
 
   it("ends the session when the screen goes away, and tells nobody", async () => {

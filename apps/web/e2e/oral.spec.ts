@@ -333,7 +333,7 @@ test("studio mode: both modes costed, the studio pre-flight, the conversation wi
 
   await expect(page.getByText("You ended the session.")).toBeVisible();
   await expect(page.getByRole("region", { name: "Transcript" }).getByText(STUDIO_ANSWER)).toBeVisible();
-  await expect(page.getByText("The recording of your answers is kept", { exact: false })).toBeVisible();
+  await expect(page.getByText("The recording of your microphone, for the whole conversation, is kept", { exact: false })).toBeVisible();
 
   // The report: the conversation's cost on its own line, and the recording played from the answer (D182, D187).
   await page.getByRole("link", { name: "See the report on this session" }).click();
@@ -403,7 +403,7 @@ test("a realtime call OpenAI refuses ends the studio session at once, and names 
 
   await expect(page.getByRole("heading", { name: "Session over" })).toBeFocused();
   await expect(page.getByText("OpenAI did not accept your key.", { exact: false })).toBeVisible();
-  await expect(page.getByText("The recording of your answers is kept", { exact: false })).toHaveCount(0);
+  await expect(page.getByText("The recording of your microphone", { exact: false })).toHaveCount(0);
   await axeClean(page);
 });
 

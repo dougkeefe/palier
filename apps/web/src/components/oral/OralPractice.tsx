@@ -542,7 +542,9 @@ export function OralPractice() {
             </Callout>
           )}
           {evicted > 0 ? <Callout tone="info">{t("evicted", { count: evicted })}</Callout> : null}
-          {recordingKept === true ? <p className="app-muted">{t("recordingKept")}</p> : null}
+          {recordingKept === true ? (
+            <p className="app-muted">{t(session?.mode === "studio" ? "recordingKeptStudio" : "recordingKept")}</p>
+          ) : null}
           {recordingKept === false ? <Callout tone="info">{t("recordingNotSaved")}</Callout> : null}
           {endReportLink(session) && session !== null ? (
             <div className="app-actions">

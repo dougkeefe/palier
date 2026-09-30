@@ -6274,6 +6274,16 @@ in place
 - **A failure is named only when the connection failed** (`transport-failed`). The transport keeps a server `error`
   without ending (D170), so a session the candidate ended is never reported as failed because of one.
 - **The large end control** is `app-studio-end`: the ordinary button, taller and wider, as PRD §8.6 asks.
+- **From the pre-PR review (candid-review, on this branch):**
+  - **End, or leaving the page, while the call is still dialling cancels the dial.** `startOralStudioRun` takes an
+    `AbortSignal` that closes the transport, and the transport already abandons a pending dial cleanly. Before this, nothing
+    could reach the transport until it opened, up to about 25 s: the microphone went on recording, and a first response
+    could be billed with no ledger row. An end the candidate asked for is never named as a failure.
+  - **Neither control is disabled under the focus that pressed it**, which dropped a keyboard user's focus to the page.
+    Repeat is single-flight in the controller. End says it is under way with `aria-disabled` and ignores a second press.
+  - **The end card's recording sentence has a studio version** (`recordingKeptStudio`): a studio recording is the
+    microphone for the whole conversation, not "your answers". `key.whereNever` no longer quotes "only OpenAI", which the
+    amended `whereStored` stopped saying.
 
 ### D186 — the key copy's exception, as shipped
 **Date:** 30 September 2026 · **Status:** accepted (agent, Phase 6 Slice 2). Carries out D173

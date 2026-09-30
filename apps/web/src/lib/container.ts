@@ -430,6 +430,8 @@ export type UseCases = {
   readonly startOralStudio: (
     request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId },
     peer: RealtimePeerFactory,
+    /** Cancels the dial while it is still in progress (D185). */
+    signal?: AbortSignal,
   ) => Promise<OralStudioRun>;
   readonly oralSession: (request: { readonly sessionId: SessionId }) => Promise<OralSession | null>;
   /** What a session has cost so far, from its own ledger rows (D182): studio mode's running meter. */
@@ -749,27 +751,31 @@ function buildUseCases(ports: Ports): UseCases {
         answers,
         liveness: ports.oralLiveness,
       }),
-    startOralStudio: (request, peer) =>
-      startOralStudioRun(request, {
-        vault: ports.vault,
-        secrets: REALTIME_SECRETS,
-        studioTransport: (hooks) =>
-          realtimeTransport({
-            ...hooks,
-            peer,
-            model: aiModels.realtime,
-            transcribeModel: aiModels.transcribe,
-            turnEagerness: REALTIME_EAGERNESS,
-            maxMs: STUDIO_CAP_MS,
-            pricing: PRICING.prices,
-          }),
-        ledger: ports.costLedger,
-        clock: ports.clock,
-        items: ports.items,
-        oral: ports.oral,
-        liveness: ports.oralLiveness,
-        capMs: STUDIO_CAP_MS,
-      }),
+    startOralStudio: (request, peer, signal) =>
+      startOralStudioRun(
+        request,
+        {
+          vault: ports.vault,
+          secrets: REALTIME_SECRETS,
+          studioTransport: (hooks) =>
+            realtimeTransport({
+              ...hooks,
+              peer,
+              model: aiModels.realtime,
+              transcribeModel: aiModels.transcribe,
+              turnEagerness: REALTIME_EAGERNESS,
+              maxMs: STUDIO_CAP_MS,
+              pricing: PRICING.prices,
+            }),
+          ledger: ports.costLedger,
+          clock: ports.clock,
+          items: ports.items,
+          oral: ports.oral,
+          liveness: ports.oralLiveness,
+          capMs: STUDIO_CAP_MS,
+        },
+        signal,
+      ),
     oralSession: (request) => ports.oral.get(request.sessionId),
     oralSessionCost: (request) => oralSessionCost(request.sessionId, { oral: ports.oral, ledger: ports.costLedger }),
     closeAbandonedSessions: () => closeAbandonedSessions({ clock: ports.clock, oral: ports.oral, liveness: ports.oralLiveness }),

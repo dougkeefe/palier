@@ -68,11 +68,19 @@ export function OralStudio({
           <p className="app-muted">{t(meter.key, meter.values)}</p>
         </div>
       </Card>
+      {/* Neither control is disabled once pressed, so focus never falls off it (WCAG 2.4.3): repeat is single-flight
+          in the controller, and End says it is under way with aria-disabled and ignores a second press. */}
       <div className="app-actions">
-        <Button variant="secondary" onClick={() => void control.repeat()} disabled={!state.connected || state.repeating || state.ending}>
+        <Button variant="secondary" onClick={() => void control.repeat()} disabled={!state.connected}>
           {t("repeat")}
         </Button>
-        <Button className="app-studio-end" onClick={() => void control.end()} disabled={state.ending}>
+        <Button
+          className="app-studio-end"
+          aria-disabled={state.ending}
+          onClick={() => {
+            if (!state.ending) void control.end();
+          }}
+        >
           {t("end")}
         </Button>
       </div>

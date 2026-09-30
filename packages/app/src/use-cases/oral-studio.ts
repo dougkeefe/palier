@@ -63,10 +63,15 @@ export type OralStudioRun = OralSessionRun & {
  * transport has closed **and** every usage it reported is in the ledger, so the report reads the
  * session's whole cost. A ledger write that fails is not the session's failure: the conversation
  * already happened, and the meter is a record, not a gate.
+ *
+ * **`signal` cancels a dial still in progress** (D185): the candidate pressed End, or left, before the conversation
+ * opened. It closes the transport, which abandons the dial cleanly, so the microphone is not held for a call nobody
+ * wants and no response is started on the key.
  */
 export const startOralStudioRun = async (
   request: Omit<StartOralSessionRequest, "capMs">,
   deps: OralStudioDeps,
+  signal?: AbortSignal,
 ): Promise<OralStudioRun> => {
   let writes: Promise<void> = Promise.resolve();
   const transport = deps.studioTransport({
@@ -90,6 +95,9 @@ export const startOralStudioRun = async (
         .catch(() => undefined);
     },
   });
+  const cancel = (): void => void transport.close();
+  if (signal?.aborted === true) cancel();
+  else signal?.addEventListener("abort", cancel, { once: true });
   const run = await startOralSessionRun(
     { ...request, capMs: deps.capMs, mode: "studio" },
     { clock: deps.clock, items: deps.items, oral: deps.oral, transport, liveness: deps.liveness },

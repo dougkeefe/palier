@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import type { CostLedger, RealtimeSecretSource } from "../ports/index.js";
+import type { CostLedger, OralTransportEvent, RealtimeSecretSource } from "../ports/index.js";
 import { NoApiKeyError } from "./api-key.js";
 import {
   SCENARIO,
@@ -13,7 +13,7 @@ import {
   vaultWith,
 } from "./__tests__/oral-fakes.js";
 import { costLedger } from "./__tests__/spend-fakes.js";
-import type { StudioTransportHooks } from "./oral-studio.js";
+import type { StudioTransport, StudioTransportHooks } from "./oral-studio.js";
 import { startOralStudioRun } from "./oral-studio.js";
 
 const MIN = 60_000;
@@ -30,6 +30,37 @@ const secretSource = (): RealtimeSecretSource & { readonly keys: string[] } => {
       return Promise.resolve(SECRET);
     },
   };
+};
+
+/**
+ * A studio transport still dialling, as the realtime one is between `open` and its channel opening: `open` waits
+ * until the call connects or is closed, and a transport closed before `open` refuses to open.
+ */
+const dialler = () => {
+  let sink: ((event: OralTransportEvent) => void) | null = null;
+  let connected: (() => void) | null = null;
+  let closed = false;
+  let closes = 0;
+  const transport: StudioTransport = {
+    open: (_request, listener) => {
+      if (closed) return Promise.reject(new Error("A realtime transport opens once."));
+      sink = listener;
+      return new Promise<void>((resolve) => {
+        connected = resolve;
+      });
+    },
+    direct: () => Promise.resolve(),
+    close: () => {
+      closes += 1;
+      closed = true;
+      sink?.({ kind: "closed", failed: false });
+      connected?.();
+      return Promise.resolve();
+    },
+    lastError: () => null,
+    repeat: () => Promise.resolve(),
+  };
+  return { transport, dialling: () => sink !== null, closes: () => closes };
 };
 
 const setUp = (options: { key?: string | null; ledger?: CostLedger } = {}) => {
@@ -138,6 +169,32 @@ describe("startOralStudioRun (D165, D169)", () => {
     await run.repeat();
 
     expect(repeats()).toBe(1);
+  });
+
+  it("closes a call still dialling when its signal is aborted, and the session ends (D185)", async () => {
+    const { deps } = setUp();
+    const dial = dialler();
+    const abort = new AbortController();
+    const starting = startOralStudioRun(request, { ...deps, studioTransport: () => dial.transport }, abort.signal);
+    await vi.waitFor(() => {
+      expect(dial.dialling()).toBe(true);
+    });
+    abort.abort();
+    // The abort closed it; the driver may close it again on hearing `closed`, which a real transport ignores.
+    expect(dial.closes()).toBeGreaterThan(0);
+    const run = await starting;
+    expect((await run.ended).endReason).toBe("transport-closed");
+  });
+
+  it("never dials when its signal was aborted before it began", async () => {
+    const { deps } = setUp();
+    const dial = dialler();
+    const abort = new AbortController();
+    abort.abort();
+
+    await expect(startOralStudioRun(request, { ...deps, studioTransport: () => dial.transport }, abort.signal)).rejects.toThrow("opens once");
+    expect(dial.closes()).toBe(1);
+    expect(dial.dialling()).toBe(false);
   });
 
   it("names the transport's failure, as the practice run does", async () => {

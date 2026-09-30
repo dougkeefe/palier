@@ -13,6 +13,7 @@ export type StudioUseCases = {
   readonly startOralStudio: (
     request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId },
     peer: RealtimePeerFactory,
+    signal?: AbortSignal,
   ) => Promise<OralStudioRun>;
   readonly oralSession: (request: { readonly sessionId: SessionId }) => Promise<OralSession | null>;
   readonly oralSessionCost: (request: { readonly sessionId: SessionId }) => Promise<OralSessionCost | null>;
@@ -76,7 +77,9 @@ const isStream = (value: unknown): value is MediaStream =>
  *   the recording runs on the session's own clock to within the moments the call takes to set up. It is kept on
  *   this device by `saveOralAudio`; a session that never connected keeps none.
  * - **The session is held as running in this page** (D144), from before it is stored until it ends.
- * - **End before the run exists is kept**, and applied the moment it does, as in practice.
+ * - **End before the run exists cancels the dial**: End, or leaving the page, while the call is still being set up
+ *   aborts it, so the microphone is not held for a call nobody wants. An end the candidate asked for is never named
+ *   as a failure.
  * - **A failure is named only when the connection failed.** The realtime transport keeps a server's error without
  *   ending, so a session the candidate ended is never reported as failed because of one.
  * - **Each tick reads the phase and the cost so far** from the session's own ledger rows (D182).
@@ -93,6 +96,8 @@ export const studioController = (deps: StudioControllerDeps): StudioController =
   let endRequested = false;
   let repeating = false;
   let release: (() => void) | null = null;
+  /** Cancels the dial while no run exists yet. */
+  let dial: AbortController | null = null;
   let micLevel: LevelSource | null = null;
   let voiceLevel: LevelSource | null = null;
   let voiceSource: MediaStream | null = null;
@@ -142,6 +147,7 @@ export const studioController = (deps: StudioControllerDeps): StudioController =
     letGo();
     run = null;
     id = null;
+    dial = null;
     if (disposed) return;
     deps.onEnded({ type: "ended", session, evicted, failure, recordingKept });
     deps.dispatch({ type: "reset" });
@@ -180,14 +186,20 @@ export const studioController = (deps: StudioControllerDeps): StudioController =
         } catch {
           recording = null;
         }
-        const started = await deps.useCases.startOralStudio({ sessionId, scenarioId: choice.scenario.id }, deps.peer(microphone, player));
+        dial = new AbortController();
+        const started = await deps.useCases.startOralStudio(
+          { sessionId, scenarioId: choice.scenario.id },
+          deps.peer(microphone, player),
+          dial.signal,
+        );
         run = started;
         if (!disposed) deps.dispatch({ type: "connected" });
         if (endRequested || disposed) void started.endByUser().catch(ignore);
         void started.ended.then(ended, (error: unknown) => recover(error, choice, sessionId));
       } catch (error) {
         const stored = await deps.useCases.oralSession({ sessionId }).catch(() => null);
-        await finish(stored ?? emptySession(sessionId, choice), oralFailure(error), false);
+        // A dial the candidate cancelled is not a failure.
+        await finish(stored ?? emptySession(sessionId, choice), endRequested ? null : oralFailure(error), false);
       } finally {
         busy = false;
       }
@@ -220,6 +232,7 @@ export const studioController = (deps: StudioControllerDeps): StudioController =
     end: async () => {
       deps.dispatch({ type: "ending" });
       endRequested = true;
+      if (run === null) dial?.abort();
       await run?.endByUser();
     },
 
@@ -241,6 +254,7 @@ export const studioController = (deps: StudioControllerDeps): StudioController =
     dispose: () => {
       disposed = true;
       endRequested = true;
+      if (run === null) dial?.abort();
       void run?.endByUser().catch(ignore);
     },
   };
