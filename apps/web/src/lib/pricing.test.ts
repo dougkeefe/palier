@@ -5,7 +5,15 @@ import { estimateFeatureCost } from "@palier/engine";
 import { describe, expect, it } from "vitest";
 
 import aiModels from "./ai-models.json";
-import { PRICING, STUDIO_MAX_MINUTES, parsePricing, parseStudioMaxMinutes, roleModels } from "./pricing";
+import {
+  PRICING,
+  REALTIME_EAGERNESS,
+  STUDIO_MAX_MINUTES,
+  parsePricing,
+  parseRealtimeEagerness,
+  parseStudioMaxMinutes,
+  roleModels,
+} from "./pricing";
 
 const factoryPricing = JSON.parse(
   readFileSync(new URL("../../../factory/config/pricing.json", import.meta.url), "utf8"),
@@ -67,6 +75,26 @@ describe("roleModels", () => {
 
   it("leaves out studio mode's voice too (D165)", () => {
     expect(roleModels({ realtime: "rt-1", realtimeVoice: "marin" })).toEqual({ realtime: "rt-1" });
+  });
+
+  it("leaves out studio mode's turn detection eagerness, which is not a model either (D175)", () => {
+    expect(roleModels({ realtime: "rt-1", realtimeEagerness: "low" })).toEqual({ realtime: "rt-1" });
+  });
+});
+
+describe("parseRealtimeEagerness (D175)", () => {
+  it("reads each of the Realtime API's four eagerness values", () => {
+    for (const value of ["low", "medium", "high", "auto"]) expect(parseRealtimeEagerness(value)).toBe(value);
+  });
+
+  it("fails the build on any other value, or none", () => {
+    expect(() => parseRealtimeEagerness("sluggish")).toThrow("realtimeEagerness");
+    expect(() => parseRealtimeEagerness(undefined)).toThrow("realtimeEagerness");
+  });
+
+  it("gives this build a valid eagerness, never priced as a model", () => {
+    expect(REALTIME_EAGERNESS).toBe(aiModels.realtimeEagerness);
+    expect(Object.values(PRICING.models)).not.toContain(aiModels.realtimeEagerness);
   });
 });
 

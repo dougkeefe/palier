@@ -1,6 +1,7 @@
 import type { FetchLike } from "@palier/adapters/openai";
 import { draftsFor, verdictFor } from "@palier/testing";
 import writingPromptLibrary from "@palier/content/writing/prompts.json";
+import type { ExaminerTurnRequest } from "@palier/domain";
 import { parseWritingPromptsOrThrow } from "@palier/domain";
 import { describe, expect, it } from "vitest";
 
@@ -210,7 +211,7 @@ describe("runLiveSmoke — the oral turn loop's three (D117)", () => {
       fetchImpl,
     });
 
-  it("voices a question, transcribes that same audio, and asks the examiner twice, all metered as oral practice", async () => {
+  it("voices a question, transcribes that same audio, and asks the examiner three times, all metered as oral practice", async () => {
     const { fetchImpl, requests } = network();
     const result = await runOral(fetchImpl);
 
@@ -219,10 +220,10 @@ describe("runLiveSmoke — the oral turn loop's three (D117)", () => {
     const upload = requests.find((r) => r.body instanceof FormData)?.body as FormData;
     expect(await (upload.get("file") as File).text()).toBe("ID3-voiced");
     expect(JSON.parse(requests.find((r) => r.url.endsWith("/audio/speech"))?.body as string)).toMatchObject({ voice: "sage" });
-    expect(result.byMethod.examinerTurn).toEqual({ calls: 2, inputTokens: 300, outputTokens: 500 });
+    expect(result.byMethod.examinerTurn).toEqual({ calls: 3, inputTokens: 300, outputTokens: 500 });
     expect(result.byMethod.speak.calls).toBe(1);
     expect(result.byMethod.transcribe.calls).toBe(1);
-    expect(result.byFeature["oral-practice"].calls).toBe(4);
+    expect(result.byFeature["oral-practice"].calls).toBe(5);
     expect(result.byFeature["oral-practice"].costUsd).toBeGreaterThan(0);
   });
 
@@ -241,8 +242,15 @@ describe("runLiveSmoke — the oral turn loop's three (D117)", () => {
   it("records each examiner turn with the request it answered", async () => {
     const result = await runOral(network().fetchImpl);
     const turns = result.completions.filter((c) => c.method === "examinerTurn");
-    expect(turns.map((t) => (t.request as { register: string }).register)).toEqual(["baseline", "escalate"]);
+    expect(turns.map((t) => (t.request as { register: string }).register)).toEqual(["baseline", "escalate", "escalate"]);
     expect(turns.every((t) => t.conformant)).toBe(true);
+  });
+
+  it("asks the examiner to follow on from an answer that contradicts its question's premise, so a human can read whether it listened (D176)", async () => {
+    const result = await runOral(network().fetchImpl);
+    const last = result.completions.filter((c) => c.method === "examinerTurn").at(-1);
+    const request = last?.request as ExaminerTurnRequest | undefined;
+    expect(request?.transcript.at(-1)?.text).toContain("Je n'ai jamais géré de projet");
   });
 });
 

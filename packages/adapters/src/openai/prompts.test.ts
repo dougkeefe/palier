@@ -2,7 +2,7 @@ import { ORAL_CRITERIA, ORAL_NOTE_SEVERITIES } from "@palier/domain";
 import { anOralScenario } from "@palier/testing";
 import { describe, expect, it } from "vitest";
 
-import { STUDIO_TOOLS, studioInstructions } from "./prompts.js";
+import { STUDIO_PROMPT_VERSION, STUDIO_TOOLS, studioInstructions } from "./prompts.js";
 
 /** Studio mode's examiner instructions and tools (architecture.md §8.5, progress.md D172). */
 
@@ -43,10 +43,31 @@ describe("studioInstructions", () => {
   it.each([
     ["escalate", "harder follow-up"],
     ["deescalate", "simpler reframe"],
-    ["baseline", "seed questions, or follow on"],
+    ["baseline", "Follow on from the candidate's last answer"],
   ] as const)("asks for the %s register's questions", (register, asks) => {
     expect(studioInstructions(scenario, { phase: 0, register })).toContain(asks);
   });
+
+  it("follows from what the candidate has just said, and never on a premise they have contradicted (D176)", () => {
+    const text = studioInstructions(scenario, { phase: 0, register: "baseline" });
+
+    expect(text).toContain("Every question follows from what the candidate has just said");
+    expect(text).toContain("Never ask a question whose premise the candidate has contradicted");
+  });
+
+  it("is studio prompt version 2 since the examiner listens (D176)", () => {
+    expect(STUDIO_PROMPT_VERSION).toBe("2");
+  });
+
+  it.each(["baseline", "escalate", "deescalate"] as const)(
+    "treats the phase's questions as its ground and level, never a script, in the %s register (D176)",
+    (register) => {
+      const text = studioInstructions(scenario, { phase: 0, register });
+
+      expect(text).toContain("they are not a script");
+      expect(text).not.toMatch(/Ask from the phase's|from the phase's (harder follow-ups|simpler reframes) when there are any/);
+    },
+  );
 
   it("holds a phase past either end to the scenario's own phases", () => {
     const last = scenario.phases.length - 1;

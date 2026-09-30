@@ -1075,7 +1075,9 @@ sync.**
 
   *Done:* exit criterion 2 at the port level.
 - **Gate N — the examiner's voice (human).** Beside Slice 1, and before Slice 2. `marin` and `cedar` heard in French at C level
-  in OpenAI's Realtime playground; the human picks one. A fail stops the phase, and the deferral returns.
+  in OpenAI's Realtime playground; the human picks one. A fail stops the phase, and the deferral returns. *(Passed on `cedar`,
+  `progress.md` D174. Its two findings are fixed before Slice 2: semantic turn detection at `low` eagerness, as data (D175),
+  and both examiners told to follow from the last answer (D176).)*
 - **Slice 2 — The studio screen, on the key.**
   - The key copy's one exception, stated in both languages, plus §6.3's settings note and `SECURITY.md`. *(Moved here from
     Slice 3 by `progress.md` D173: a screen that sends the key to the route must not ship under copy that says it never

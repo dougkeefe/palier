@@ -36,8 +36,14 @@ const QUOTED_BANDS = TARGET_BANDS.map((band) => `"${band}"`);
  * The report prompt quotes a studio examiner's notes when a session has them (progress.md D168,
  * D172). Without notes it is byte for byte what it was, so the version stays at 4. Studio mode's
  * examiner instructions are versioned apart, as `STUDIO_PROMPT_VERSION`.
+ *
+ * **Version 5** (Gate N, progress.md D176): the examiner listens. Heard live, it worked through the
+ * phase's questions whatever the candidate said, and asked about "the project's biggest risk" of a
+ * candidate who had just said they had never managed one. The register asks offered the lists as a
+ * menu, so the examiner now follows from the last answer (`LISTEN`), the lists show the ground and
+ * the level, and the scenario prompt asks for follow-ups that presuppose no answer.
  */
-export const PROMPT_VERSION = "4";
+export const PROMPT_VERSION = "5";
 
 const REGISTER = [
   "You write in Canadian federal public-service French: the register of a real",
@@ -205,18 +211,34 @@ const scenario = (req: GenerateScenarioRequest): { system: string; user: string 
       `Split it into phases whose minutes add up to exactly ${String(req.minutes)}.`,
       "Give every phase at least one seed question, one harder follow-up for a candidate who is coping,",
       "and one simpler reframe for a candidate who is struggling, all in the target language.",
+      "Write every follow-up and reframe so it stands on its own: never presuppose a detail of the candidate's answer,",
+      "such as 'cette décision' or 'ce projet', that the question does not itself name.",
       `Reply with JSON only, in this shape: ${example}`,
     ].join(" "),
   };
 };
 
-/** Which of the phase's question lists the client asked for (D117), and what to do when it is empty. */
+/**
+ * How the examiner chooses its next question, for both examiners (D176): from what the candidate
+ * has just said, never down a list, and never on a premise the candidate has contradicted.
+ */
+const LISTEN = [
+  "Listen before you ask. Every question follows from what the candidate has just said: pick up a detail they gave,",
+  "ask why or what if, or, when that thread is exhausted, move to new ground within the phase. The phase's seed",
+  "questions, harder follow-ups and simpler reframes show its ground and its level; they are not a script, so never",
+  "read them out in turn. Never ask a question whose premise the candidate has contradicted: if they say they have",
+  "never managed a project, do not ask about their project's risks, but about one they took part in, or how they",
+  "would run one.",
+].join(" ");
+
+/** What the client's register asks of the next question (D117, D176), always about the last answer. */
 const REGISTER_ASK: Readonly<Record<ExaminerTurnRequest["register"], string>> = {
-  baseline: "Ask from the phase's seed questions, or follow on naturally from the candidate's last answer.",
+  baseline:
+    "Follow on from the candidate's last answer or, when it gives you nothing more, open new ground within the phase, as its seed questions do.",
   escalate:
-    "The candidate is coping: ask a harder follow-up, from the phase's harder follow-ups when there are any, pushing toward abstraction, hypotheticals or justification.",
+    "The candidate is coping: ask a harder follow-up on what they have just said, pushing toward abstraction, hypotheticals or justification, at the level of the phase's harder follow-ups.",
   deescalate:
-    "The candidate is struggling: ask a simpler reframe, from the phase's simpler reframes when there are any, concrete and short.",
+    "The candidate is struggling: ask a simpler reframe, concrete and short, about what they have been talking about, at the level of the phase's simpler reframes.",
 };
 
 /**
@@ -235,6 +257,7 @@ const examiner = (req: ExaminerTurnRequest): { system: string; user: string } =>
       `You are the examiner in a rehearsal of the Public Service Commission's oral interview, conducted entirely in ${languageName(req.lang)}.`,
       "You speak only that language. You never coach, never correct, never praise and never explain;",
       "you ask one short question at a time so that the candidate does most of the talking.",
+      LISTEN,
     ].join(" "),
     user: [
       `Session: "${req.sessionType}" (${SESSION_PURPOSE[req.sessionType]}), on the topic "${req.topic}", pitched at band "${req.targetBand}".`,
@@ -347,9 +370,9 @@ const SPOKEN_REGISTER = [
 /**
  * Studio mode's examiner instructions (architecture.md §8.5 steps 4–6, progress.md D165, D172),
  * versioned apart from `PROMPT_VERSION`: bump it whenever the persona, the phase framing or the
- * tools change materially.
+ * tools change materially. Version 2 (D176): the examiner listens, as the practice examiner does.
  */
-export const STUDIO_PROMPT_VERSION = "1";
+export const STUDIO_PROMPT_VERSION = "2";
 
 /**
  * The realtime examiner's instructions for one phase and register (§8.5). They are data beside the
@@ -366,6 +389,7 @@ export const studioInstructions = (scenario: OralScenario, directive: { phase: n
     `You are the examiner in a spoken rehearsal of the Public Service Commission's oral interview, conducted entirely in ${languageName(scenario.lang)}.`,
     "You speak only that language, in a calm, neutral and courteous register. You never coach, never correct, never praise and never explain.",
     "Keep your own turns short, one question at a time, so that the candidate does most of the talking.",
+    LISTEN,
     "If the candidate asks you to repeat or says they did not understand, repeat or rephrase your question naturally, once, without comment.",
     `Session: "${scenario.sessionType}" (${SESSION_PURPOSE[scenario.sessionType]}), on the topic "${scenario.topic}", pitched at band "${scenario.targetBand}".`,
     `Current phase, ${String(index + 1)} of ${String(scenario.phases.length)}: "${phase.name}". Its purpose, for you: ${phase.intent}`,

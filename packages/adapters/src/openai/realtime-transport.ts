@@ -27,6 +27,13 @@ export type RealtimePeer = {
 };
 export type RealtimePeerFactory = () => RealtimePeer;
 
+/**
+ * How readily semantic turn detection decides the candidate has finished (progress.md D175):
+ * `low` waits longest through a pause, `auto` is the API's own default.
+ */
+export const REALTIME_TURN_EAGERNESS = ["low", "medium", "high", "auto"] as const;
+export type RealtimeTurnEagerness = (typeof REALTIME_TURN_EAGERNESS)[number];
+
 export type RealtimeTransportConfig = {
   /** A fresh short-lived secret (ADR 3): the app's hook, which spends the key inside the vault. */
   readonly secret: () => Promise<RealtimeSecret>;
@@ -37,6 +44,8 @@ export type RealtimeTransportConfig = {
   readonly model: string;
   /** The candidate's input transcription, from `ai-models.json`. */
   readonly transcribeModel: string;
+  /** Semantic turn detection's eagerness, from `ai-models.json` (D175); the API's default when absent. */
+  readonly turnEagerness?: RealtimeTurnEagerness;
   /** Studio mode's hard cap in ms (`studioMaxMinutes`, D166): the transport closes itself at it. */
   readonly maxMs: number;
   readonly pricing?: OpenAiPricing;
@@ -83,8 +92,9 @@ const readSdp = async (res: FetchResponse): Promise<string> => {
  * realtime conversation over WebRTC, the examiner's voice straight from OpenAI to the browser.
  *
  * - **Setup.** A fresh secret, the peer's offer to `/realtime/calls` with the `ek_` secret (never
- *   the key), the answer back, then `session.update` with the phase's instructions, the two tools
- *   and input transcription, and `response.create` so the examiner speaks first.
+ *   the key), the answer back, then `session.update` with the phase's instructions, the two tools,
+ *   input transcription and semantic turn detection at the configured eagerness (D175), and
+ *   `response.create` so the examiner speaks first.
  * - **The client drives the phases** (§8.5 step 5). A new phase is `session.update` then
  *   `response.create`, so the examiner makes the transition; a register change within a phase is
  *   `session.update` alone. `direct` returns at once (D118); a directive during a reconnect is
@@ -109,6 +119,8 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
   const timeoutMs = config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const now = config.now ?? (() => Date.now());
   const instructionsFor = config.instructions ?? studioInstructions;
+  const turnDetection =
+    config.turnEagerness === undefined ? { type: "semantic_vad" } : { type: "semantic_vad", eagerness: config.turnEagerness };
 
   let state: "idle" | "open" | "closed" = "idle";
   let sink: (event: OralTransportEvent) => void = () => undefined;
@@ -408,7 +420,7 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
         audio: {
           input: {
             transcription: { model: config.transcribeModel, language: (scenario as OralScenario).lang },
-            turn_detection: { type: "semantic_vad" },
+            turn_detection: turnDetection,
           },
         },
       },

@@ -22,8 +22,8 @@ database at the previous version with rows in it and proves they survive: **a ne
 case there**. `./openai` → `openAiProvider` (the `AiProvider` port, Phase 1; `assessWriting` since Phase 4
 Slice 3, on the optional `models.assess`. **The model quotes each error's words and `@palier/domain`'s
 `assembleAssessment` places them**; an excerpt not in the text, or two on the same words, is a malformed answer,
-retried once, then `InvalidResponseError`; D105). **`PROMPT_VERSION` is 4** since the review prompt named the band
-scale (D112). **`recorded-fixtures.test.ts` replays every completion the live API really sent** (`@palier/testing`'s
+retried once, then `InvalidResponseError`; D105). **`PROMPT_VERSION` is 5** since both examiners were told to follow
+from the last answer, never down the phase's lists (D176); it was 4 when the review prompt named the band scale (D112). **`recorded-fixtures.test.ts` replays every completion the live API really sent** (`@palier/testing`'s
 `RECORDED_RUNS`) with no retry and requires the verdict it got when recorded, so a schema or parser change that would
 refuse real output, or accept what was refused, fails the fast lane. **The turn loop's audio** (Phase 5 Slice 2,
 D117): `transcribe` posts one clip as multipart to `/audio/transcriptions` and is **never retried**, since a retry
@@ -101,8 +101,9 @@ summed tokens are priced into `costUsd`.
 - **`realtimeTransport`** is studio mode's `OralTransport`, over a `RealtimePeer` seam that no `RTCPeerConnection` type
   crosses.
   - It sends the SDP offer to `/realtime/calls` with the `ek_` secret, then `session.update` with
-    `studioInstructions` and `STUDIO_TOOLS` (data in `prompts.ts`, versioned apart as `STUDIO_PROMPT_VERSION`), then
-    `response.create`.
+    `studioInstructions` and `STUDIO_TOOLS` (data in `prompts.ts`, versioned apart as `STUDIO_PROMPT_VERSION`, 2 since
+    D176), then `response.create`. The update asks for semantic turn detection at the configured `turnEagerness`
+    (`ai-models.json`'s `realtimeEagerness`, D175), and without one leaves the API's default.
   - A new phase is `session.update` plus `response.create`; a register change is `session.update` alone. **One response
     at a time**: a cue asked for between `response.created` and `response.done` waits for the end, and a run of tool-only
     responses gets one follow-up, never a chain. A server `error` is kept for `lastError`, never fatal.

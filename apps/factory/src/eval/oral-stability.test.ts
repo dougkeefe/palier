@@ -74,7 +74,7 @@ describe("oralStability (D126)", () => {
 
   it("passes one report a level apart on one criterion: four in five agree, within one level", async () => {
     const completions = [...five("B").slice(0, 4), aCompletion(aReport("B", { fluency: "C" }))];
-    const report = await oralStability([aRun(completions)]);
+    const report = await oralStability([aRun(completions)], "4");
 
     expect(report?.byCriterion.fluency).toEqual({ bands: ["B", "B", "B", "B", "C"], spread: 1, agreement: 0.8 });
     expect(report?.passed).toBe(true);
@@ -82,7 +82,7 @@ describe("oralStability (D126)", () => {
 
   it("fails a criterion that moves two levels, even when four in five agree", async () => {
     const completions = [...five("B").slice(0, 4), aCompletion(aReport("B", { task: "E" }))];
-    const report = await oralStability([aRun(completions)]);
+    const report = await oralStability([aRun(completions)], "4");
 
     expect(report?.byCriterion.task.spread).toBe(2);
     expect(report?.passed).toBe(false);
@@ -90,7 +90,7 @@ describe("oralStability (D126)", () => {
 
   it("fails a criterion on which only three in five agree, though none is more than a level apart", async () => {
     const completions = [...five("B").slice(0, 3), aCompletion(aReport("C")), aCompletion(aReport("C"))];
-    const report = await oralStability([aRun(completions)]);
+    const report = await oralStability([aRun(completions)], "4");
 
     expect(report?.byCriterion.comprehension.agreement).toBeCloseTo(0.6, 10);
     expect(report?.passed).toBe(false);
@@ -99,14 +99,14 @@ describe("oralStability (D126)", () => {
   it("counts a retried call once, by its accepted reply, and fails fewer than five calls", async () => {
     const refused = aCompletion({ ...aReport("B"), errors: [{ turn: 0, excerpt: "Parlez", correction: "x", rule: "r" }] });
     const retried = [refused, aCompletion(aReport("B"), 2)];
-    const report = await oralStability([aRun([...five("B").slice(0, 3), ...retried])]);
+    const report = await oralStability([aRun([...five("B").slice(0, 3), ...retried])], "4");
 
     expect(report).toMatchObject({ runs: 4, failedRuns: 0, passed: false });
   });
 
   it("counts a call once though both its replies would be accepted, taking the last (D127)", async () => {
     const both = [aCompletion(aReport("C")), aCompletion(aReport("B"), 2)];
-    const report = await oralStability([aRun([...five("B").slice(0, 4), ...both])]);
+    const report = await oralStability([aRun([...five("B").slice(0, 4), ...both])], "4");
 
     expect(report).toMatchObject({ runs: 5, failedRuns: 0, passed: true });
     expect(report?.byCriterion.task.bands).toEqual(["B", "B", "B", "B", "B"]);
@@ -114,7 +114,7 @@ describe("oralStability (D126)", () => {
 
   it("fails a recording in which a call gave no report, even when the rest agree (D127)", async () => {
     const refused = aCompletion({ ...aReport("B"), fixes: [] });
-    const report = await oralStability([aRun([...five("B"), refused, aCompletion({ ...aReport("B"), fixes: [] }, 2)])]);
+    const report = await oralStability([aRun([...five("B"), refused, aCompletion({ ...aReport("B"), fixes: [] }, 2)])], "4");
 
     expect(report).toMatchObject({ runs: 6, failedRuns: 1, passed: false });
   });
@@ -130,7 +130,7 @@ describe("oralStability (D126)", () => {
   });
 
   it("reports an empty recording as no reports, spread 0 and agreement 0, and failed", async () => {
-    const report = await oralStability([aRun([])]);
+    const report = await oralStability([aRun([])], "4");
 
     expect(report?.byCriterion.task).toEqual({ bands: [], spread: 0, agreement: 0 });
     expect(report?.passed).toBe(false);
