@@ -6184,6 +6184,53 @@ in place
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
+### 30 September 2026 — `dougkeefe/next-dev-slice` (CI that can fail, and `main` green again; D177–D179)
+
+The session opened to *Next, decided*'s "re-record, then Phase 6 Slice 2". #54 had already merged without the
+re-recording, and its checks were green while its log showed three failing tests. That led to D177.
+- **`main` is green again.** The fixtures are re-recorded on `PROMPT_VERSION` 5, on the capped smoke key, loaded from
+  `.env.local` in a subshell, so no key entered a transcript or a file (`grep sk-` over the fixtures: 0).
+  - The live smoke recorded 16 completions, all accepted first time.
+  - The stability recording scored five reports out of five, for US$0.12.
+  - Conformance on v5 is **1.000**, and oral stability **passed** (task spread 1, agreement 0.80; every other criterion
+    spread 0).
+  - **D176 heard in text:** after "Je n'ai jamais géré de projet ; je travaille surtout sur des dossiers de politique",
+    the examiner asked "Dans un dossier de politique, comment réorganiseriez-vous le travail si l'échéance était réduite de
+    moitié?". It builds on the answer and does not ask about a project.
+  - `pricing.json`'s `writing-feedback` (out 1813 → 1695) and `item-generation` (draft out 4482 → 3413; review 1680/3775 →
+    1640/2045) take the measured counts.
+- **CI can fail** (D177). `.github/scripts/within-budget.sh` runs every lane with `|| code=$?`. The proofs, each red for the
+  stated reason:
+  - (a) a failing unit test: [run 36720073858](https://github.com/dougkeefe/palier/actions/runs/36720073858), "Test Files 1
+    failed | 245 passed", exit 1;
+  - (b) a 95 s test: [run 36714317602](https://github.com/dougkeefe/palier/actions/runs/36714317602), the budget message,
+    exit 124;
+  - (c) a failing E2E assertion: [run 36714320153](https://github.com/dougkeefe/palier/actions/runs/36714320153), shard 1/2
+    red on `ci-bites.spec.ts`, shard 2/2 green.
+
+  (a) was pushed to this branch and reverted, so it ran with warm caches; (b) and (c) ran on scratch branches, now deleted.
+  An earlier try at (a), at the 90 s budget, found the failing test and was still killed by the budget first. That
+  measurement is what took the budget to the human.
+- **The medium lane is three jobs** (D178): integration 36 s, E2E shard 1 48 passed in 3.1 min, shard 2 47 passed in 3.4
+  min ([run 36715672260](https://github.com/dougkeefe/palier/actions/runs/36715672260)).
+- **The fast lane**, with the ESLint cache kept and both caches saved on failure, is about 63 s warm. **The human raised its
+  budget to 120 s** (D178), because a core-package change measured about 92 s.
+- **A flake found and fixed in the product** (D179). Journey 9 lost the first keys pressed as the exam's first item appeared.
+  The runner's listener now goes on in a layout effect.
+- **Branch protection on `main`**, with the four lanes required (`docs/deploy.md`). It was set once this branch's lanes were
+  green, so this is the first PR it gates.
+
+*Next, decided* is **Phase 6 Slice 2**, with its scope unchanged. **Evidence:**
+
+```
+pnpm verify                → check-types, lint, boundaries (no dependency violations) pass;
+                             test: 245 files, 3706 passed, 8 todo; exit 0
+CI=1 pnpm verify:medium    → integration: 7 files, 51 passed; Playwright: 93 passed, 1 failed (journey 9, before D179)
+CI=1 pnpm run test:e2e --repeat-each=3 --workers=4 (after D179) → 280 passed (3.6m)
+CI=1 pnpm verify:medium (final tree) → integration: 7 files, 51 passed; Playwright: 94 passed (1.5m)
+node apps/factory/dist/index.js eval → schema conformance on prompt v5: 1.000; oral stability over 5 call(s): passed
+```
+
 ### 30 September 2026 — `dougkeefe/confirm-gate-n` (Gate N passed, and its two findings fixed; D174–D176)
 
 **Gate N passed on `cedar`** (D174, human), and the human reported two faults in the examiner's behaviour, both fixed here.
