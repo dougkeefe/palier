@@ -103,6 +103,8 @@ export type {
   ModelPrice,
   PassageContext,
   PassageDraft,
+  RealtimePrice,
+  RealtimeTokens,
   ReviewOption,
   ReviewRequest,
   ReviewVerdict,

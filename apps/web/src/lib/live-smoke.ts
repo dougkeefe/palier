@@ -72,6 +72,8 @@ export type LiveSmokeDeps = {
     readonly transcribe?: string;
     readonly speech?: string;
     readonly examiner?: string;
+    /** Studio mode's realtime model (D165): only checked as listed, never called, until a studio session is smoked. */
+    readonly realtime?: string;
   };
   /** The examiner's voice (D117). */
   readonly voice?: string;
@@ -488,6 +490,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
         "item-generation": nothing,
         "oral-practice": nothing,
         "oral-assessment": nothing,
+        "oral-studio": nothing,
       },
       byMethod: {
         generateItems: empty,
@@ -566,6 +569,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
       "item-generation": measure("item-generation"),
       "oral-practice": measure("oral-practice"),
       "oral-assessment": measure("oral-assessment"),
+      "oral-studio": measure("oral-studio"),
     },
     byMethod: {
       generateItems: average("generateItems"),

@@ -20,6 +20,8 @@ const PROMPTS = parseWritingPromptsOrThrow(writingPromptLibrary);
 const MODELS = { passage: aiModels.passage, draft: aiModels.draft, review: aiModels.review, assess: aiModels.assess };
 /** The oral turn loop's three (D117), which the script configures from `ai-models.json`. */
 const ORAL = { transcribe: aiModels.transcribe, speech: aiModels.speech, examiner: aiModels.examiner };
+/** Studio mode's model (D165), which the script checks is listed and never calls. */
+const STUDIO = { realtime: aiModels.realtime };
 
 const criterion = { band: "B", evidence: "e" };
 const FEEDBACK = {
@@ -53,7 +55,7 @@ type Options = {
 
 /** A network that answers like OpenAI, recording each request's headers and body. */
 const network = ({
-  listed = [...Object.values(MODELS), ...Object.values(ORAL)],
+  listed = [...Object.values(MODELS), ...Object.values(ORAL), ...Object.values(STUDIO)],
   malformedFirstReview = false,
   status = 200,
   htmlError = false,
@@ -167,6 +169,21 @@ describe("runLiveSmoke", () => {
     expect(result.missingModels).toEqual([...new Set([MODELS.review, MODELS.assess])].filter((m) => m !== MODELS.draft));
     expect(requests.filter((r) => r.url.endsWith("/chat/completions"))).toEqual([]);
     expect(result.calls).toEqual([]);
+  });
+
+  it("names studio mode's realtime model when OpenAI no longer lists it, though the smoke never calls it (D165)", async () => {
+    const { fetchImpl } = network({ listed: [MODELS.draft, MODELS.review, MODELS.assess] });
+    const result = await runLiveSmoke({
+      apiKey: KEY,
+      models: { ...MODELS, realtime: "gpt-realtime-retired" },
+      prices: PRICING.prices,
+      descriptors: DESCRIPTORS,
+      prompts: PROMPTS,
+      fetchImpl,
+    });
+
+    expect(result.missingModels).toEqual(["gpt-realtime-retired"]);
+    expect(result.byFeature["oral-studio"]).toEqual({ calls: 0, inputTokens: 0, outputTokens: 0, costUsd: 0 });
   });
 
   it("sends the key to OpenAI as a bearer token, and records none of it", async () => {

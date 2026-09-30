@@ -27,7 +27,7 @@ describe("dexieCostLedger", () => {
 
   it.each([
     ["the placeholder a v1 device may hold", { ts: "2026-09-26T09:00:00.000Z", feature: "none" }],
-    ["an unknown feature", { ...anEntry, feature: "oral-studio" }],
+    ["an unknown feature", { ...anEntry, feature: "oral-telepathy" }],
     ["a time that is not an instant", { ...anEntry, ts: "2026-99" }],
     ["a model that is not a name", { ...anEntry, model: 7 }],
     ["negative tokens", { ...anEntry, inputTokens: -1 }],

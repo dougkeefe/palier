@@ -408,9 +408,11 @@ export type UsageRecord = {
  * Slice 3, item generation Slice 4, and oral practice Phase 5 Slice 2 (D117): a
  * session's examiner turns, voice and transcriptions. The report on a session is
  * Slice 3's `oral-assessment` (D122), apart from the session, so each is shown at
- * its own cost. A key check spends nothing, so it is not a feature.
+ * its own cost. A key check spends nothing, so it is not a feature. Studio mode's
+ * realtime conversation is `oral-studio` (Phase 6 Slice 1, D165): its audio in and
+ * out, and the candidate's speech transcribed, each row stamped with its session.
  */
-export const AI_FEATURES = ["writing-feedback", "item-generation", "oral-practice", "oral-assessment"] as const;
+export const AI_FEATURES = ["writing-feedback", "item-generation", "oral-practice", "oral-assessment", "oral-studio"] as const;
 export type AiFeature = (typeof AI_FEATURES)[number];
 
 /**
@@ -425,7 +427,32 @@ export type TokenPrice = {
 };
 export type MinutePrice = { readonly perMinute: number };
 export type CharacterPrice = { readonly perMChars: number };
-export type ModelPrice = TokenPrice | MinutePrice | CharacterPrice;
+/**
+ * A realtime model's price (Phase 6 Slice 1, D167): text and audio are billed at their own
+ * rates, in and out, and input the model has already read is billed at the cached rate.
+ * OpenAI lists one cached rate for text and audio alike, so it is one field here; the day
+ * they differ, it becomes two.
+ */
+export type RealtimePrice = {
+  readonly textInputPerMTok: number;
+  readonly textOutputPerMTok: number;
+  readonly audioInputPerMTok: number;
+  readonly audioOutputPerMTok: number;
+  readonly cachedInputPerMTok: number;
+};
+export type ModelPrice = TokenPrice | MinutePrice | CharacterPrice | RealtimePrice;
+
+/**
+ * A realtime call's tokens in the units it is priced by (D167). The input counts are the
+ * UNCACHED part; `cachedInputTokens` is the rest, text and audio together.
+ */
+export type RealtimeTokens = {
+  readonly textInputTokens: number;
+  readonly textOutputTokens: number;
+  readonly audioInputTokens: number;
+  readonly audioOutputTokens: number;
+  readonly cachedInputTokens: number;
+};
 
 /**
  * One typical call a feature makes, for the per-feature estimate (D103), in its
@@ -435,4 +462,5 @@ export type ModelPrice = TokenPrice | MinutePrice | CharacterPrice;
 export type FeatureCall =
   | { readonly role: string; readonly inputTokens: number; readonly outputTokens: number }
   | { readonly role: string; readonly minutes: number }
-  | { readonly role: string; readonly characters: number };
+  | { readonly role: string; readonly characters: number }
+  | ({ readonly role: string } & RealtimeTokens);
