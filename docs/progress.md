@@ -5940,6 +5940,14 @@ the accessibility audit and French review items
   - A close while dialling abandons the dial, so `open` never hangs.
 - **Shared code.** `openai/http.ts` now holds the timed `fetch` exchange and `FetchLike`, moved out of `openai-provider.ts`
   unchanged, and the provider's tests pass over it unchanged.
+- **From the pre-PR review, on this branch:**
+  - **One response at a time.** A cue asked for while the examiner is mid-response, from `response.created` to
+    `response.done`, waits for its end, because the API refuses a second `response.create`.
+  - **Tool-only follow-ups are capped.** A run of tool-only responses gets one follow-up, never a chain that spends the
+    key with nobody speaking.
+  - **A response with no usage writes no ledger row**, where it had written an unpriced one.
+  - **A server `error` is kept for `lastError`**, and never closes the session.
+  - **The studio instructions open with a spoken register line**, not the written prompts' "You write…".
 
 ### D171 — the key-leak test learns the one route; its fake-peer half waits for the screen
 **Date:** 29 September 2026 · **Status:** accepted (agent, Phase 6 Slice 1)
@@ -6030,6 +6038,9 @@ Newest first. One entry per session that changed something. Never edit an older 
   - D172, the studio instructions as data;
   - **D173, the key copy's exception moves into Slice 2**, so no deploy sends the key to the route under copy that says
     it never leaves for anywhere but OpenAI.
+- **A pre-PR review found five transport and prompt gaps, all fixed with tests** (D170's last bullet): the tool-only loop,
+  a phase cue lost during an active response, unpriced rows for usage-less responses, server errors dropped, and a
+  "You write" register for a spoken examiner.
 - The stale "after 1.0 (D131)" comments are corrected. `implementation-plan.md` §3.3 and §7 Phase 6 are amended. The six
   package `CLAUDE.md` files and `docs/deploy.md`'s smoke checks are updated.
 
@@ -6037,9 +6048,9 @@ Newest first. One entry per session that changed something. Never edit an older 
 
 ```
 pnpm verify                → check-types, lint, boundaries (484 + 312 modules, no dependency violations),
-                             test: 245 files, 3684 passed, 8 todo; coverage thresholds met; exit 0
-pnpm run build             → @palier/web:build cache miss, rebuilt (BUILD_ID 22:26)
-CI=1 pnpm verify:medium    → integration: 7 files, 51 passed; Playwright: 94 passed (1.4m); exit 0
+                             test: 245 files, 3690 passed, 8 todo; coverage thresholds met; exit 0 (after the review fixes)
+pnpm run build             → @palier/web rebuilt after the review fixes
+CI=1 pnpm verify:medium    → integration: 7 files, 51 passed; Playwright: 94 passed (1.4m); exit 0 (before and after the fixes)
 pnpm --filter @palier/web bundle-size → shared first-load JS 166.1 KB of 180.0 KB, within budget
 pnpm --filter @palier/web lighthouse  → assertions checked against 19 URLs, 95 runs; exit 0
 ```

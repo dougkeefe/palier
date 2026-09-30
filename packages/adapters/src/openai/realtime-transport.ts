@@ -93,6 +93,9 @@ const readSdp = async (res: FetchResponse): Promise<string> => {
  *   timed from `open` by the client's clock; `flag_difficulty` becomes `difficulty` and
  *   `note_observation` becomes `note`, each answered so the model carries on. A call whose
  *   arguments are not whole is answered and dropped.
+ * - **One response at a time.** A cue asked for while the examiner is mid-response waits for its
+ *   `response.done`, since the API refuses a second; a response that only called tools gets one
+ *   follow-up, never a chain of them. A server `error` is kept for `lastError`, never fatal.
  * - **Usage.** Each `response.done` is priced at the realtime rates, and each transcription at the
  *   transcription model's, and handed to `usage`.
  * - **One reconnect.** A dropped connection is dialled again with a fresh secret, the transcript so
@@ -122,6 +125,11 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
   let timer: ReturnType<typeof setTimeout> | undefined;
   /** Ends a dial still waiting for its channel, so a close never leaves `open` hanging. */
   let abandonDial: (() => void) | null = null;
+  /** Whether the examiner is mid-response: a `response.create` then is refused, so the cue waits for it to end. */
+  let responding = false;
+  let cueWaiting = false;
+  /** Follow-ups sent after responses that only called tools, since the examiner last spoke: at most one. */
+  let toolOnlyFollowUps = 0;
 
   const lastStart: Record<OralSpeaker, number> = { examiner: 0, candidate: 0 };
   /** Every turn delivered, for seeding a reconnect. */
@@ -166,6 +174,12 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
     return price === undefined ? undefined : (costOf(price, amounts) ?? undefined);
   };
 
+  /** Ask the examiner to speak, now or as soon as the response in progress ends. */
+  const cue = (): void => {
+    if (responding) cueWaiting = true;
+    else send({ type: "response.create" });
+  };
+
   const phaseUpdate = (): Record<string, unknown> => ({
     type: "session.update",
     session: { type: "realtime", instructions: instructionsFor(scenario as OralScenario, directive) },
@@ -206,7 +220,22 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
   };
 
   const onResponseDone = (event: ServerEvent): void => {
+    responding = false;
     const response = record(event.response);
+    // A response that only called tools said nothing aloud: ask the examiner to carry on, once, so a model
+    // that keeps calling tools cannot keep spending the key with nobody speaking.
+    const items = Array.isArray(response.output) ? response.output.map(record) : [];
+    const toolOnly = items.length > 0 && items.every((item) => item.type === "function_call");
+    if (!toolOnly) toolOnlyFollowUps = 0;
+    if (cueWaiting) {
+      cueWaiting = false;
+      cue();
+    } else if (toolOnly && toolOnlyFollowUps < 1) {
+      toolOnlyFollowUps += 1;
+      cue();
+    }
+    // A response cancelled before it billed anything reports no usage: no ledger row, not an unpriced one.
+    if (response.usage === undefined || response.usage === null) return;
     const usage = record(response.usage);
     const input = record(usage.input_token_details);
     const cached = record(input.cached_tokens_details);
@@ -228,9 +257,6 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
       outputTokens: count(usage.output_tokens) ?? 0,
       ...(costUsd === undefined ? {} : { costUsd }),
     });
-    // A response that only called tools said nothing aloud: ask the examiner to carry on.
-    const items = Array.isArray(response.output) ? response.output.map(record) : [];
-    if (items.length > 0 && items.every((item) => item.type === "function_call")) send({ type: "response.create" });
   };
 
   const onTranscription = (event: ServerEvent): void => {
@@ -276,7 +302,15 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
       if (words.trim() !== "") say("examiner", words, partial?.startMs ?? elapsed(), elapsed(), false);
     },
     "response.function_call_arguments.done": onToolCall,
+    "response.created": () => {
+      responding = true;
+    },
     "response.done": onResponseDone,
+    // Kept for the screen and the checklist, never fatal: a refused event or an expired session says so here.
+    error: (event) => {
+      const detail = record(event.error);
+      error = new ProviderRequestError(0, text(detail.code) ?? text(detail.message) ?? "the realtime session reported an error.");
+    },
   };
 
   const onMessage = (mine: number) => (message: string) => {
@@ -300,6 +334,8 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
   const dropped = (): void => {
     if (state !== "open") return;
     live = false;
+    responding = false;
+    cueWaiting = false;
     deliverSpeaking();
     heard.clear();
     if (reconnected) {
@@ -425,7 +461,7 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
       const moved = next.phase !== directive.phase;
       directive = next;
       send(phaseUpdate());
-      if (moved) send({ type: "response.create" });
+      if (moved) cue();
       return Promise.resolve();
     },
     close,

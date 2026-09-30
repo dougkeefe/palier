@@ -20,6 +20,8 @@ describe("studioInstructions", () => {
     const text = studioInstructions(scenario, { phase: 0, register: "baseline" });
 
     expect(text).toContain("conducted entirely in French");
+    expect(text).toContain("You speak Canadian federal public-service French");
+    expect(text).not.toContain("You write");
     expect(text).toContain("never coach");
     expect(text).toContain(scenario.topic);
   });

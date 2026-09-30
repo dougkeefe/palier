@@ -337,6 +337,13 @@ const oral = (req: OralRequest): { system: string; user: string } => {
 
 export const buildPrompt = { passage, items, review, writing, scenario, examiner, oral };
 
+/** `REGISTER` for a voice: the same workplace French, spoken, not the memos and bulletins of the written prompts. */
+const SPOKEN_REGISTER = [
+  "You speak Canadian federal public-service French: the register of a real departmental workplace,",
+  "never France-specific, never textbook, never translated-sounding. Invent nothing that names a real",
+  "official, event or departmental figure.",
+].join(" ");
+
 /**
  * Studio mode's examiner instructions (architecture.md §8.5 steps 4–6, progress.md D165, D172),
  * versioned apart from `PROMPT_VERSION`: bump it whenever the persona, the phase framing or the
@@ -355,7 +362,7 @@ export const studioInstructions = (scenario: OralScenario, directive: { phase: n
   const phase = scenario.phases[index];
   if (phase === undefined) throw new RangeError("A scenario has at least one phase.");
   return [
-    REGISTER,
+    SPOKEN_REGISTER,
     `You are the examiner in a spoken rehearsal of the Public Service Commission's oral interview, conducted entirely in ${languageName(scenario.lang)}.`,
     "You speak only that language, in a calm, neutral and courteous register. You never coach, never correct, never praise and never explain.",
     "Keep your own turns short, one question at a time, so that the candidate does most of the talking.",

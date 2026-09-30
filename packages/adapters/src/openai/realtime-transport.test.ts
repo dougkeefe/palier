@@ -296,9 +296,22 @@ describe("realtimeTransport — turns", () => {
     h.peers.current().emitRaw("{");
     h.peers.current().emitRaw('"a string"');
     h.peers.current().emit({ type: "session.updated" });
-    h.peers.current().emit({ type: "error", error: { message: "unknown event" } });
 
     expect(h.events).toEqual([]);
+    expect(h.transport.lastError()).toBeNull();
+  });
+
+  it.each([
+    [{ code: "conversation_already_has_active_response", message: "m" }, "conversation_already_has_active_response"],
+    [{ message: "Session expired" }, "Session expired"],
+    [{}, "the realtime session reported an error."],
+  ])("keeps a server error %o for lastError, and carries on", async (detail, says) => {
+    const h = setUp();
+    await h.open();
+    h.peers.current().emit({ type: "error", error: detail });
+
+    expect(h.events).toEqual([]);
+    expect(String((h.transport.lastError() as Error).message)).toContain(says);
   });
 });
 
@@ -362,6 +375,21 @@ describe("realtimeTransport — tools (D168)", () => {
     expect(h.sentOf("response.create")).toHaveLength(before + 1);
   });
 
+  it("follows up only once on a run of responses that only called tools, so it cannot spend in a loop", async () => {
+    const h = setUp();
+    await h.open();
+    const before = h.sentOf("response.create").length;
+    const toolsOnly = { type: "response.done", response: { output: [{ type: "function_call" }] } };
+    h.peers.current().emit(toolsOnly);
+    h.peers.current().emit(toolsOnly);
+    h.peers.current().emit(toolsOnly);
+    expect(h.sentOf("response.create")).toHaveLength(before + 1);
+
+    h.peers.current().emit({ type: "response.done", response: { output: [{ type: "message" }] } });
+    h.peers.current().emit(toolsOnly);
+    expect(h.sentOf("response.create")).toHaveLength(before + 2);
+  });
+
   it.each([
     ["spoke as well", [{ type: "function_call" }, { type: "message" }]],
     ["said nothing at all", []],
@@ -417,12 +445,20 @@ describe("realtimeTransport — usage (D167)", () => {
     expect(h.usage).toEqual([{ model: "rt", inputTokens: 10, outputTokens: 5 }]);
   });
 
-  it("leaves every usage unpriced with no pricing, and a response with no usage at zero tokens", async () => {
+  it("records nothing for a response that reported no usage, since it billed nothing", async () => {
     const h = setUp();
     await h.open();
-    h.peers.current().emit({ type: "response.done", response: {} });
+    h.peers.current().emit({ type: "response.done", response: { status: "cancelled" } });
 
-    expect(h.usage).toEqual([{ model: "rt", inputTokens: 0, outputTokens: 0 }]);
+    expect(h.usage).toEqual([]);
+  });
+
+  it("leaves a response's usage unpriced when there is no pricing", async () => {
+    const h = setUp();
+    await h.open();
+    h.peers.current().emit({ type: "response.done", response: { usage: { input_tokens: 3, output_tokens: 2 } } });
+
+    expect(h.usage).toEqual([{ model: "rt", inputTokens: 3, outputTokens: 2 }]);
   });
 
   it("prices a transcription by the seconds OpenAI billed, or else by the speech it heard", async () => {
@@ -458,6 +494,21 @@ describe("realtimeTransport — directives", () => {
       { type: "session.update", session: { type: "realtime", instructions: studioInstructions(SCENARIO, { phase: 1, register: "baseline" }) } },
       { type: "response.create" },
     ]);
+  });
+
+  it("holds a new phase's cue while the examiner is mid-response, and sends it once that response ends", async () => {
+    const h = setUp();
+    await h.open();
+    h.peers.current().emit({ type: "response.created", response: { id: "r1" } });
+    const before = h.sentOf("response.create").length;
+    await h.transport.direct({ phase: 1, register: "baseline" });
+
+    expect(h.sentOf("session.update").at(-1)).toMatchObject({ session: { instructions: studioInstructions(SCENARIO, { phase: 1, register: "baseline" }) } });
+    expect(h.sentOf("response.create")).toHaveLength(before);
+    h.peers.current().emit({ type: "response.done", response: { output: [{ type: "message" }] } });
+    expect(h.sentOf("response.create")).toHaveLength(before + 1);
+    h.peers.current().emit({ type: "response.done", response: { output: [{ type: "message" }] } });
+    expect(h.sentOf("response.create")).toHaveLength(before + 1);
   });
 
   it("changes register within a phase with its instructions alone", async () => {

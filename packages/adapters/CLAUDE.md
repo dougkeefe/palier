@@ -103,7 +103,9 @@ summed tokens are priced into `costUsd`.
   - It sends the SDP offer to `/realtime/calls` with the `ek_` secret, then `session.update` with
     `studioInstructions` and `STUDIO_TOOLS` (data in `prompts.ts`, versioned apart as `STUDIO_PROMPT_VERSION`), then
     `response.create`.
-  - A new phase is `session.update` plus `response.create`; a register change is `session.update` alone.
+  - A new phase is `session.update` plus `response.create`; a register change is `session.update` alone. **One response
+    at a time**: a cue asked for between `response.created` and `response.done` waits for the end, and a run of tool-only
+    responses gets one follow-up, never a chain. A server `error` is kept for `lastError`, never fatal.
   - Server events are read through a table by type. Transcripts become whole turns timed by the client's clock, and
     the tools become `difficulty` and `note`, each call answered. A response that only called tools gets a follow-up
     `response.create`.
