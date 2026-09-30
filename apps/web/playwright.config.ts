@@ -46,7 +46,7 @@ export default defineConfig({
     {
       name: "chromium",
       dependencies: ["warmup"],
-      testIgnore: /(offline|production)\.spec\.ts/,
+      testIgnore: /(offline|production|live)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${HERMETIC_PORT}` },
     },
     {
@@ -54,6 +54,20 @@ export default defineConfig({
       testMatch: /(offline|production)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${PRODUCTION_PORT}` },
     },
+    // Studio mode on a real key (progress.md D189): opt-in, spending, in no lane. It exists only when asked for.
+    ...(process.env.PALIER_LIVE === "1"
+      ? [
+          {
+            name: "live",
+            testMatch: /studio-live\.spec\.ts/,
+            use: {
+              ...devices["Desktop Chrome"],
+              baseURL: `http://localhost:${PRODUCTION_PORT}`,
+              launchOptions: { args: ["--autoplay-policy=no-user-gesture-required"] },
+            },
+          },
+        ]
+      : []),
   ],
   webServer: [
     {

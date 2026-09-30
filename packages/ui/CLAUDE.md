@@ -46,7 +46,11 @@ system, not the application.
   placement for drawers and a `full` one for a milestone moment. Focus goes back to the opener on
   close), and, from Phase 7 Slice 4, **Mascot's `cheer` pose** (wings up, settling in with the
   celebration spring) and **StreakFlame** (decorative; lit in `accent` when today is done, an
-  outline otherwise, never a warning).
+  outline otherwise, never a warning), and, from Phase 6 Slice 2, **VoiceForm** (studio mode's one visual,
+  progress.md D184: two decorative, `aria-hidden` layers scaled by the examiner's and the microphone's levels. The
+  levels are written to two custom properties from a `requestAnimationFrame` loop, `transform` only, never React state.
+  **The global motion switch cannot reach a frame loop**, so the caller passes `still` under `prefers-reduced-motion`,
+  and a still form runs no loop at all. It carries `"use client"`).
 - **Nothing that carries text fades in.** An `opacity` animation makes its text low-contrast for
   its opening frames, which fails 1.4.3 while it lasts. The Sheet's first draft did, and axe
   caught it (progress.md D65). Animate `transform`, and respect `prefers-reduced-motion`.

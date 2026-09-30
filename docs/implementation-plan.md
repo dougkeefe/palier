@@ -1093,7 +1093,11 @@ sync.**
   - The key-leak test's fake-peer half: `/v1/realtime/calls` gets the `ek_` secret, never the key (`progress.md` D171).
 
   *Done:* exit criterion 1 measured live, the cost per minute measured and written into `pricing.json` (principle 8), and the
-  copy's parity.
+  copy's parity. *(Built 30 September 2026, `progress.md` D180–D189. The copy's parity is met. Exit criterion 1 was measured
+  live and is not met: the median of twelve dials was about 2.49 s. The cost per minute was not measured, because the
+  synthetic candidate's turn never ended (D189). So a short agent slice, "the dial under 2.5 s", follows the human's live
+  session, before Slice 3, as `progress.md`'s *Next, decided* says. The hermetic journey runs over a stubbed
+  `RTCPeerConnection`, not a memory transport (D188).)*
 - **Slice 3 — The exception, escapable.** (Its copy half moved to Slice 2, D173.)
   - The self-hosted escape: a popup to the user's own endpoint and `postMessage`, so `connect-src` is unchanged for everyone
     (D165).

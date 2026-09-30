@@ -92,7 +92,8 @@ test("step 5 is the skip path's last step: three lines, the guide, and it can be
   await expect(page.getByText("Step 5 of 5")).toBeVisible();
   const heading = page.getByRole("heading", { name: "An OpenAI key, if you want one" });
   await expect(heading).toBeFocused();
-  await expect(page.getByText("sent only to OpenAI")).toBeVisible();
+  // The offer names the one exception, studio mode's route, since the copy may no longer say "only OpenAI" (D173, D186).
+  await expect(page.getByText("goes to OpenAI, and once to Palier’s server for each studio conversation", { exact: false })).toBeVisible();
   await axeClean(page);
 
   await page.getByRole("link", { name: "How to create a key and set a spend limit" }).click();

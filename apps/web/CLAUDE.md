@@ -259,11 +259,31 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   - **Studio mode** (Phase 6 Slice 1, D165–D171) is `startOralStudio(request, peer)`. It runs the openai adapter's
     `realtimeTransport` over the caller's `RealtimePeerFactory`, since Slice 2's screen owns the microphone. It is fed
     secrets by `routeRealtimeSecrets` at `REALTIME_SECRET_PATH` in both graphs, capped at `STUDIO_MAX_MINUTES`
-    (`pricing.json`'s `studioMaxMinutes`), and metered as `oral-studio`. No screen calls it yet.
+    (`pricing.json`'s `studioMaxMinutes`), and metered as `oral-studio`.
     `container-studio.test.ts` runs it through the real route file over a fake peer: the key reaches this origin only
     in `Authorization`, `/v1/realtime/calls` sees only `ek_` secrets, and a drop reconnects once, then fails cleanly
-    with every turn kept. **The realtime exception joins the key copy in the same pull request as the screen that
-    calls this** (D173).
+    with every turn kept.
+  - **The studio screen** (Phase 6 Slice 2, progress.md D180–D189) is the same `/practice/oral` island: a **mode
+    choice** on the picker, each mode's cost a minute from `featureCosts`, and studio's pre-flight as `oral-studio` at
+    the session's minutes. Studio mode needs the microphone; without it the screen offers practice by typing.
+    - **`features/oral/studio-controller.ts`** owns the conversation, tested over fakes: the microphone is **handed
+      over** by the practice controller's check (`handOver`), the examiner's voice plays in an `Audio` element outside
+      the layout, and the peer is the container's `realtimePeer`, so `@palier/adapters/openai` stays in the lazily loaded
+      container chunk. It holds the Web Lock, records the microphone **whole** from the tap (`recordWhole`, D183), ticks
+      the run for its `phase()` and reads `oralSessionCost` for the running meter. A failure is named only when the
+      connection failed, since the transport keeps a server error without ending.
+    - **`components/oral/OralStudio.tsx`** renders the conversation: `@palier/ui`'s `VoiceForm` (still under reduced
+      motion), the phase, the timer, the meter, "could you repeat" and a large end control. **Never a transcript during
+      the session.** It ends on the practice screen's end card, where `time-cap` has its own sentence.
+    - **The report plays a studio recording from each spoken answer** (`playbackMarks`, D187); a practice recording
+      is paused between answers, so it has no such places.
+    - **The key copy states the exception** (D173, D186): the onboarding offer, the key settings (with a card linking
+      the route's source, `lib/report.ts`'s `REALTIME_ROUTE_SOURCE_URL`, held to an existing file by a test) and
+      `/privacy`, in both languages. A change to what that route does changes this copy in the same pull request.
+    - **Tests.** `e2e/oral.spec.ts` runs every studio state axe-clean over `installFakeRealtime`, an init script that
+      stubs `RTCPeerConnection` with a scripted examiner on the data channel, so the real transport, route and dial run
+      with no test code in the bundle (D188). `e2e/studio-live.spec.ts` is the **opt-in live measurement** (the `live`
+      project, only with `PALIER_LIVE=1`, in no lane, D189).
   - **Tier 11, the key-leak test**, is `e2e/key-leak.spec.ts` (hermetic, with real sync and telemetry)
     and `e2e/key-leak-production.spec.ts` (real Dexie), over `e2e/leak-guard.ts`. A new flow that can
     touch the key belongs in the first. A flow that holds user writing passes it to `assertNoLeak` as
@@ -274,6 +294,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     fake capture device never answers on macOS, so never rely on it. **The sentinel may reach this origin in one place
     only: the `authorization` header of `POST /api/realtime/secret`** (D171). The guard records that header as
     `realtimeSecretAuthorizations()`, and still searches the request's URL, its other headers, its body and its answer.
+    **The studio screen's dial to `/v1/realtime/calls` is recorded apart** as `realtimeCallAuthorizations()` (D188),
+    and step 3f holds every one to an `ek_memory_` secret.
 
 ## Gates this app owns
 
