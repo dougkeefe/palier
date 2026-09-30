@@ -55,22 +55,18 @@ jobs:
           restore-keys: turbo-${{ runner.os }}-
 
       # `turbo build` IS inside the window, because `pnpm verify` pays for it
-      # and so should the budget.
+      # and so should the budget. The script fails the step on a failing gate
+      # or a blown budget alike, and stamps each phase into the summary (D177).
       - name: pnpm verify
-        run: |
-          set -o pipefail
-          start=$SECONDS
-          if ! timeout --kill-after=15s 90s pnpm run verify; then
-            code=$?
-            if [ "$code" -eq 124 ] || [ "$code" -eq 137 ]; then
-              echo "::error::Fast lane exceeded its 90 second budget (implementation-plan.md 6.5). This is the baseline the project defends; make the suite faster rather than raising the number."
-            fi
-            exit "$code"
-          fi
-          echo "Fast lane: $((SECONDS - start))s of the 90s budget." >> "$GITHUB_STEP_SUMMARY"
+        run: .github/scripts/within-budget.sh 90 "Fast lane" pnpm run verify
 
-  medium:
-    name: Medium lane (budget 5m)
+  # The medium lane is three jobs in parallel, each held to the 5 minute budget
+  # on its own wall clock (progress.md D178): the integration projects, and the
+  # E2E suite in two Playwright shards. `pnpm verify:medium` runs all of it in
+  # one process locally. The job names are required status checks on `main`
+  # (docs/deploy.md), so renaming one breaks branch protection.
+  medium-integration:
+    name: "Medium lane: integration (budget 5m)"
     runs-on: ubuntu-latest
     needs: fast
     steps:
@@ -81,6 +77,39 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+      - run: pnpm run build
+
+      - name: Integration (budget 5m)
+        run: .github/scripts/within-budget.sh 300 "Medium lane, integration" pnpm run test:integration
+
+      # Bundle-size and Lighthouse budgets (architecture.md §13). Both read the
+      # production build produced above; both fail the lane on a breach.
+      # Lighthouse drives the runner's own Chrome, not Playwright's.
+      - name: Bundle-size budget (< 180 KB gzipped first-load JS)
+        run: pnpm --filter @palier/web bundle-size
+
+      - name: Lighthouse budget (performance and accessibility >= 95)
+        run: pnpm --filter @palier/web lighthouse
+
+  medium-e2e:
+    name: "Medium lane: E2E ${{ matrix.shard }}/2 (budget 5m)"
+    runs-on: ubuntu-latest
+    needs: fast
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # The `offline` project drives `next start` over this build.
       - run: pnpm run build
 
       # Browser download sits OUTSIDE the timed window: it is ~150 MB of
@@ -93,23 +122,7 @@ jobs:
 
       - run: pnpm --filter @palier/web exec playwright install --with-deps chromium
 
-      - name: pnpm verify:medium (budget 5m)
-        run: |
-          set -o pipefail
-          start=$SECONDS
-          if ! timeout --kill-after=30s 300s pnpm run verify:medium; then
-            code=$?
-            if [ "$code" -eq 124 ] || [ "$code" -eq 137 ]; then
-              echo "::error::Medium lane exceeded its 5 minute budget (implementation-plan.md 6.5)."
-            fi
-            exit "$code"
-          fi
-          echo "Medium lane: $((SECONDS - start))s of the 300s budget." >> "$GITHUB_STEP_SUMMARY"
-
-      # Bundle-size and Lighthouse budgets (architecture.md §13). Both read the
-      # production build produced above; both fail the lane on a breach.
-      - name: Bundle-size budget (< 180 KB gzipped first-load JS)
-        run: pnpm --filter @palier/web bundle-size
-
-      - name: Lighthouse budget (performance and accessibility >= 95)
-        run: pnpm --filter @palier/web lighthouse
+      - name: E2E shard ${{ matrix.shard }}/2 (budget 5m)
+        run: >-
+          .github/scripts/within-budget.sh 300 "Medium lane, E2E ${{ matrix.shard }}/2"
+          pnpm run test:e2e --shard=${{ matrix.shard }}/2
