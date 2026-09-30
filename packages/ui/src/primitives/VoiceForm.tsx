@@ -1,3 +1,5 @@
+"use client";
+
 import { type JSX, useEffect, useRef } from "react";
 
 import { type VoiceLevels, easeLevel, voiceFormClass, voiceFormScale } from "./logic.js";

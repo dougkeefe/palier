@@ -1,16 +1,19 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { axeClean, getOralReport, practiseSpeaking } from "./helpers";
+import { axeClean, getOralReport, practiseSpeaking, talkInStudio } from "./helpers";
 import {
   EXAMINER_QUESTION,
   MODELS_ANSWER,
   type OpenAiAnswer,
   REPORT_SENTINEL,
   SENTINEL,
+  STUDIO_ANSWER,
   TRANSCRIPT_SENTINEL,
   completionKind,
   defaultAnswer,
   installFakeAudio,
+  installFakeRealtime,
+  realtimeSent,
   stubOpenAi,
 } from "./leak-guard";
 
@@ -24,6 +27,9 @@ import {
  * The hermetic container lives for one page load, so the key is added by the card's in-app link and
  * the way back is the browser's own, which keeps the page. The hermetic clock is frozen, so these
  * sessions end by the end control; a phase crossed by time is `oral-production.spec.ts`'s (D119).
+ *
+ * Studio mode (D185, D188) runs its real realtime transport and its real secret route over an
+ * `RTCPeerConnection` stubbed by `installFakeRealtime`, whose data channel plays a short scripted examiner.
  */
 
 const REFUSED: OpenAiAnswer = { status: 401, body: { error: { message: "bad key", code: "invalid_api_key" } } };
@@ -284,5 +290,149 @@ test("en français : la même pratique, à parité", async ({ page, context }) =
   await expect(bilan.getByText("Non évaluée", { exact: true })).toBeVisible();
   await expect(page.getByText("Vous avez tapé vos réponses : il n’y a pas de parole à mesurer.")).toBeVisible();
   await bilan.getByRole("button", { expanded: false }).first().click();
+  await axeClean(page);
+});
+
+/** The user messages the studio screen sent: each repeat request. */
+const repeatRequests = async (page: Page) =>
+  (await realtimeSent(page)).filter((m) => m.type === "conversation.item.create" && (m.item as { type?: string } | undefined)?.type === "message");
+
+test("studio mode: both modes costed, the studio pre-flight, the conversation with its meter and a repeat, the end, and playback from each answer", async ({
+  page,
+  context,
+}) => {
+  test.setTimeout(120_000);
+  await stubOpenAi(context);
+  await installFakeAudio(context);
+  await installFakeRealtime(context);
+  await openOral(page);
+  await addKeyFromCard(page);
+  await expect(page.getByRole("radio", { name: /^Practice mode.*About US\$\d+\.\d+ a minute\.$/ })).toBeChecked();
+  await expect(page.getByRole("radio", { name: /^Studio mode.*About US\$\d+\.\d+ a minute\.$/ })).toBeVisible();
+
+  const states: string[] = [];
+  await talkInStudio(page, {
+    onState: async (state) => {
+      states.push(state);
+      if (state === "repeated") {
+        await expect.poll(async () => (await repeatRequests(page)).length).toBe(1);
+        const [request] = await repeatRequests(page);
+        expect(JSON.stringify(request)).toContain("répéter");
+        const sent = await realtimeSent(page);
+        expect(sent.map((m) => m.type).at(-1)).toBe("response.create");
+      }
+      if (state === "conversation") {
+        // No transcript while the conversation runs (PRD §8.6), and a form that moves with the voices.
+        await expect(page.getByText(STUDIO_ANSWER)).toHaveCount(0);
+        await expect(page.locator(".pl-voice-form")).toHaveAttribute("aria-hidden", "true");
+      }
+      await axeClean(page);
+    },
+  });
+  expect(states).toEqual(["picker", "microphone", "pre-flight", "conversation", "repeated", "ended"]);
+
+  await expect(page.getByText("You ended the session.")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Transcript" }).getByText(STUDIO_ANSWER)).toBeVisible();
+  await expect(page.getByText("The recording of your answers is kept", { exact: false })).toBeVisible();
+
+  // The report: the conversation's cost on its own line, and the recording played from the answer (D182, D187).
+  await page.getByRole("link", { name: "See the report on this session" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Report on a spoken session" })).toBeVisible();
+  await expect(page.getByRole("term").filter({ hasText: "The conversation" })).toBeVisible();
+  await expect(page.getByText("It holds your microphone for the whole conversation", { exact: false })).toBeVisible();
+  const play = page.getByRole("button", { name: "Play from here: answer 1" });
+  await expect(play).toBeVisible();
+  await play.click();
+  await axeClean(page);
+});
+
+test("studio mode under reduced motion: the voice form at rest, and every control still there", async ({ page, context }) => {
+  test.setTimeout(90_000);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await stubOpenAi(context);
+  await installFakeAudio(context);
+  await installFakeRealtime(context);
+  await openOral(page);
+  await addKeyFromCard(page);
+  await talkInStudio(page, {
+    onState: async (state) => {
+      if (state !== "conversation") return;
+      const form = page.locator(".pl-voice-form");
+      await expect(form).toHaveClass(/pl-voice-form--still/);
+      expect(await form.evaluate((element) => (element as HTMLElement).style.getPropertyValue("--pl-voice-examiner"))).toBe("");
+      await axeClean(page);
+    },
+  });
+});
+
+test("studio mode without a microphone: it says why, and offers practice by typing", async ({ page, context }) => {
+  test.setTimeout(90_000);
+  await stubOpenAi(context);
+  await context.addInitScript(() => {
+    navigator.mediaDevices.getUserMedia = () => Promise.reject(new DOMException("Permission denied", "NotAllowedError"));
+  });
+  await openOral(page);
+  await addKeyFromCard(page);
+  await page.getByRole("radio", { name: /^Studio mode/ }).check();
+  await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Warm-up", exact: true }) }).getByRole("button", { name: "Choose" }).click();
+  await page.getByRole("button", { name: "Check my microphone" }).click();
+  await expect(page.getByText("The microphone is blocked")).toBeVisible();
+  await expect(page.getByText("Studio mode is a spoken conversation, so it needs your microphone.", { exact: false })).toBeVisible();
+  await axeClean(page);
+
+  await page.getByRole("button", { name: "Practise by typing instead" }).click();
+  await expect(page.getByRole("heading", { name: "Before you start" })).toBeFocused();
+  await expect(page.getByText("Your typed answers go to OpenAI only", { exact: false })).toBeVisible();
+  await page.getByRole("button", { name: "Start the session" }).click();
+  await expect(page.getByText(EXAMINER_QUESTION)).toBeVisible();
+});
+
+test("a realtime call OpenAI refuses ends the studio session at once, and names why in words", async ({ page, context }) => {
+  test.setTimeout(90_000);
+  await stubOpenAi(context, (path, body) => (path.endsWith("/realtime/calls") ? REFUSED : defaultAnswer(path, body)));
+  await installFakeAudio(context);
+  await installFakeRealtime(context);
+  await openOral(page);
+  await addKeyFromCard(page);
+  await page.getByRole("radio", { name: /^Studio mode/ }).check();
+  await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Warm-up", exact: true }) }).getByRole("button", { name: "Choose" }).click();
+  await page.getByRole("button", { name: "Check my microphone" }).click();
+  await expect(page.getByText("Palier can hear you.").or(page.getByText("Palier heard very little.", { exact: false }))).toBeVisible({ timeout: 10_000 });
+  await page.getByRole("button", { name: /^Continue/ }).first().click();
+  await page.getByRole("button", { name: "Start the session" }).click();
+
+  await expect(page.getByRole("heading", { name: "Session over" })).toBeFocused();
+  await expect(page.getByText("OpenAI did not accept your key.", { exact: false })).toBeVisible();
+  await expect(page.getByText("The recording of your answers is kept", { exact: false })).toHaveCount(0);
+  await axeClean(page);
+});
+
+test("en français : le mode studio, à parité", async ({ page, context }) => {
+  test.setTimeout(90_000);
+  await stubOpenAi(context);
+  await installFakeAudio(context);
+  await installFakeRealtime(context);
+  await openOral(page, "/fr/practice/oral");
+  await addKeyFromCard(page, {
+    add: "Ajouter une clé",
+    field: "Clé d’API OpenAI",
+    save: "Enregistrer la clé",
+    saved: /^Enregistrée sur cet appareil/,
+  });
+  await page.getByRole("radio", { name: /^Mode studio/ }).check();
+  await expect(page.getByText("Votre clé est transmise une fois au serveur de Palier", { exact: false })).toBeVisible();
+  await axeClean(page);
+  await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Mise en train", exact: true }) }).getByRole("button", { name: "Choisir" }).click();
+  await page.getByRole("button", { name: "Vérifier mon microphone" }).click();
+  await expect(page.getByText("Palier vous entend.").or(page.getByText("Palier n’a presque rien entendu", { exact: false }))).toBeVisible({ timeout: 10_000 });
+  await page.getByRole("button", { name: /^Continuer/ }).first().click();
+  await expect(page.getByRole("heading", { name: "Avant de commencer" })).toBeFocused();
+  await page.getByRole("button", { name: "Commencer la séance" }).click();
+  await expect(page.getByRole("heading", { name: "La conversation" })).toBeFocused();
+  await expect(page.getByRole("status").filter({ hasText: "La conversation est en cours." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Je n’ai pas compris, pourriez-vous répéter" })).toBeVisible();
+  await axeClean(page);
+  await page.getByRole("button", { name: "Terminer la séance" }).click();
+  await expect(page.getByRole("heading", { name: "Séance terminée" })).toBeFocused();
   await axeClean(page);
 });
