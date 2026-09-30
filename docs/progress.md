@@ -46,7 +46,7 @@ streak with its silent freeze, the four milestone moments, the motion pass, self
 library articles. The nightly live smoke has run on a real key for the first time (session log). Slice 4 merged (#51).
 **Gate L passed** (D164, human), and the language-toggle defect the human found beside it is fixed (D163). **Studio mode is
 back in 1.0** (D165, human): Phase 6 is three slices and two gates, built before Gate M. **Phase 6 Slice 1, the realtime
-session core, is built** (`dougkeefe/krakow-v1`; D166–D173). **Gate N, the examiner's voice, is next (human), then Slice 2.**
+session core, is built** (`dougkeefe/next-slice-from-progress-v4`; D166–D173). **Gate N, the examiner's voice, is next (human), then Slice 2.**
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -121,7 +121,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/krakow-v1` | **Phase 6 Slice 1 — the realtime session core, no UI** (D165): `oral-studio` and the realtime data, `note` events and the `time-cap` end reason, the `RealtimeSecretSource` port and `POST /api/realtime/secret`, `realtimeTransport` over WebRTC with one reconnect, the key-leak guard extended to the route. | 29 September 2026 |
+| `dougkeefe/next-slice-from-progress-v4` | **Phase 6 Slice 1 — the realtime session core, no UI** (D165): `oral-studio` and the realtime data, `note` events and the `time-cap` end reason, the `RealtimeSecretSource` port and `POST /api/realtime/secret`, `realtimeTransport` over WebRTC with one reconnect, the key-leak guard extended to the route. | 29 September 2026 |
 
 *(The prior rows — the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -223,7 +223,7 @@ Built now rather than retrofitted — §7 is emphatic about this.
 ### Next, decided
 
 Phase 7 (D132): **Slices 1–4 merged**, and **Gate L passed** (D164). **Studio mode is in 1.0** (D165, human), and Gate M waits
-for Phase 6. **Phase 6 Slice 1, the realtime session core, is built** on `dougkeefe/krakow-v1` (D166–D173) and merges first.
+for Phase 6. **Phase 6 Slice 1, the realtime session core, is built** on `dougkeefe/next-slice-from-progress-v4` (D166–D173) and merges first.
 
 Phase 5's deferred cost check (D130), the product pilot (Gate E, D97) and Gate M's calls that need no build (the domain, the
 trademark check, lining up an outside submitter) still run beside it, all the human's. Gate M's one build item, **the
@@ -736,7 +736,7 @@ built after Phase 7's slices and before Gate M.
 **Completion slices (D165).** Three slices and two gates, mirroring `implementation-plan.md` §7 Phase 6 "Completion slices".
 **Keep the two in sync**: the plan holds the fuller scope and each slice's *done*.
 
-- [~] **Slice 1 — The realtime session core, no UI.** Built on `dougkeefe/krakow-v1` (D166–D173), not yet merged. The work:
+- [~] **Slice 1 — The realtime session core, no UI.** Built on `dougkeefe/next-slice-from-progress-v4` (D166–D173), not yet merged. The work:
   - `oral-studio` as a feature, the `realtime` model and voice, and the prices with the 25-minute cap as data;
   - `note` events, notes into `assessOral`, and the `time-cap` end reason;
   - the `RealtimeSecretSource` port and `POST /api/realtime/secret` on Node;
@@ -6005,7 +6005,7 @@ the accessibility audit and French review items
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 29 September 2026 — `dougkeefe/krakow-v1` (Phase 6 Slice 1, the realtime session core; D166–D173)
+### 29 September 2026 — `dougkeefe/next-slice-from-progress-v4` (Phase 6 Slice 1, the realtime session core; D166–D173)
 
 **Phase 6 Slice 1 is built**: everything below studio mode's screen.
 - **Data.** `oral-studio` in `AI_FEATURES`. `realtime` (`gpt-realtime-2.1`) and `realtimeVoice` (`marin`) in
