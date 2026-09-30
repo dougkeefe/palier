@@ -6,7 +6,7 @@ import { InvalidApiKeyError, InvalidResponseError, ProviderRequestError } from "
 import type { FetchLike, FetchResponse } from "./http.js";
 import { platformFetch, timedExchange } from "./http.js";
 import type { OpenAiPricing } from "./openai-provider.js";
-import { STUDIO_TOOLS, studioInstructions } from "./prompts.js";
+import { STUDIO_TOOLS, studioInstructions, studioRepeatRequest } from "./prompts.js";
 
 /**
  * The seam between the transport and WebRTC (progress.md D170): an offer out, an answer in, JSON
@@ -62,6 +62,12 @@ export type RealtimeTransportConfig = {
 export type RealtimeTransport = {
   readonly open: (req: { readonly scenario: OralScenario }, sink: (event: OralTransportEvent) => void) => Promise<void>;
   readonly direct: (directive: OralDirective) => Promise<void>;
+  /**
+   * The candidate's "I did not understand, could you repeat" (product-requirements.md §8.6, progress.md D180): a
+   * user message asking for it, then the examiner's cue, which waits for a response in progress. A no-op once
+   * closed, and while the line is down, since a request made during a reconnect has nothing to follow.
+   */
+  readonly repeat: () => Promise<void>;
   readonly close: () => Promise<void>;
   readonly lastError: () => unknown;
 };
@@ -112,6 +118,8 @@ const readSdp = async (res: FetchResponse): Promise<string> => {
  *   far seeded as conversation items. A second drop, or a failed reconnect, is `closed { failed }`,
  *   with every turn already delivered, and the examiner's words in flight delivered first.
  * - **The cap.** At `maxMs` from `open` the transport closes itself, cleanly.
+ * - **Repeat** (D180). The candidate's request goes as a user message and a cue. It is not a turn: the candidate did
+ *   not say it, so it enters neither the transcript nor a reconnect's seed.
  */
 export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTransport => {
   const baseUrl = config.baseUrl ?? DEFAULT_BASE_URL;
@@ -474,6 +482,14 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
       directive = next;
       send(phaseUpdate());
       if (moved) cue();
+      return Promise.resolve();
+    },
+    repeat: () => {
+      if (state === "idle") return Promise.reject(new Error("The transport is not open."));
+      if (state === "closed" || !live) return Promise.resolve();
+      const request = studioRepeatRequest((scenario as OralScenario).lang);
+      send({ type: "conversation.item.create", item: { type: "message", role: "user", content: [{ type: "input_text", text: request }] } });
+      cue();
       return Promise.resolve();
     },
     close,

@@ -144,11 +144,12 @@ export type {
   OralDirection,
   OralEndReason,
   OralInput,
+  OralMode,
   OralRegister,
   OralSpeaker,
   OralTurn,
 } from "./oral-session.js";
-export { ORAL_END_REASONS, ORAL_INPUTS, ORAL_SPEAKERS } from "./oral-session.js";
+export { ORAL_END_REASONS, ORAL_INPUTS, ORAL_MODES, ORAL_SPEAKERS } from "./oral-session.js";
 export { oralNoteSchema, oralTurnSchema } from "./schemas/oral.js";
 // The oral report's placement rule, D105's per turn (progress.md D122).
 export type { AssembleOralResult } from "./oral-assessment.js";

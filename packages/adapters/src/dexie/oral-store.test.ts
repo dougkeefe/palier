@@ -120,6 +120,21 @@ describe("dexieOralStore", () => {
     expect(await dexieOralStore(db).get(aSession.id)).toEqual(aSession);
   });
 
+  it("reads a studio session's mode back with it (D181)", async () => {
+    const store = dexieOralStore(new PalierDb(dbName()));
+    const studio = { ...aSession, mode: "studio" as const };
+    await store.put(studio);
+
+    expect(await store.get(aSession.id)).toEqual(studio);
+  });
+
+  it("reads a mode that is not one as none, keeping the session (D181)", async () => {
+    const db = new PalierDb(dbName());
+    await db.oralSessions.put({ ...aSession, mode: "karaoke" } as never);
+
+    expect(await dexieOralStore(db).get(aSession.id)).toEqual(aSession);
+  });
+
   it("reads a running session, with no end and no reason, as whole", async () => {
     const running = { ...aSession, endedAt: null, endReason: null };
     const store = dexieOralStore(new PalierDb(dbName()));

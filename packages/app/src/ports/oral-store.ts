@@ -1,4 +1,4 @@
-import type { OralAssessment, OralEndReason, OralNote, OralTurn, ScenarioId, SessionId } from "@palier/domain";
+import type { OralAssessment, OralEndReason, OralMode, OralNote, OralTurn, ScenarioId, SessionId } from "@palier/domain";
 
 import type { ISO } from "./time.js";
 
@@ -19,6 +19,8 @@ import type { ISO } from "./time.js";
  *   no longer change once the session has ended, and only an ended session is assessed.
  * - **`notes` are a studio examiner's observations** (progress.md D168), kept as they arrive
  *   and quoted by the report. Absent on a practice session and on every row stored before them.
+ * - **`mode` is how it was held** (progress.md D181). A studio session says `studio`; absent is
+ *   practice, which every row stored before it was.
  */
 export type OralSession = {
   readonly id: SessionId;
@@ -29,6 +31,7 @@ export type OralSession = {
   readonly turns: readonly OralTurn[];
   readonly assessment: OralAssessment | null;
   readonly notes?: readonly OralNote[] | undefined;
+  readonly mode?: OralMode | undefined;
 };
 
 /** A stored recording, as the retention policy sees it: whose, how big, how old. */

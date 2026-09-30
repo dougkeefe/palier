@@ -1,7 +1,7 @@
 import type { OralAudioEntry, OralSession, OralStore } from "@palier/app";
 import { StorageQuotaError } from "@palier/app";
 import type { OralAssessment, OralEndReason, OralNote, OralTurn, SessionId } from "@palier/domain";
-import { ORAL_END_REASONS, checkOralAssessment, oralAssessmentSchema, oralNoteSchema, oralTurnSchema } from "@palier/domain";
+import { ORAL_END_REASONS, ORAL_MODES, checkOralAssessment, oralAssessmentSchema, oralNoteSchema, oralTurnSchema } from "@palier/domain";
 
 import type { OralAudioRow, PalierDb } from "./db.js";
 
@@ -46,7 +46,7 @@ const notesOf = (raw: unknown): readonly OralNote[] | undefined => {
  */
 const sessionOf = (raw: unknown): OralSession | null => {
   if (raw === undefined || raw === null) return null;
-  const { id, scenarioId, startedAt, endedAt, endReason, turns, assessment, notes } = raw as Partial<
+  const { id, scenarioId, startedAt, endedAt, endReason, turns, assessment, notes, mode } = raw as Partial<
     Record<keyof OralSession, unknown>
   >;
   if (!isText(id) || !isText(scenarioId) || !isInstant(startedAt)) return null;
@@ -54,12 +54,15 @@ const sessionOf = (raw: unknown): OralSession | null => {
   const ended = isInstant(endedAt) && isEndReason(endReason);
   if (!running && !ended) return null;
   if (!Array.isArray(turns) || !turns.every((turn) => oralTurnSchema.safeParse(turn).success)) return null;
-  const { notes: _stored, ...session } = raw as OralSession;
+  const { notes: _stored, mode: _mode, ...session } = raw as OralSession;
   const kept = notesOf(notes);
+  // A mode that is not one reads as none, which is practice (D181): the transcript is kept either way.
+  const held = ORAL_MODES.find((known) => known === mode);
   return {
     ...session,
     assessment: assessmentOf(turns as OralTurn[], assessment),
     ...(kept === undefined ? {} : { notes: kept }),
+    ...(held === undefined ? {} : { mode: held }),
   };
 };
 

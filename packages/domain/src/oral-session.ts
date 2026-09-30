@@ -26,6 +26,14 @@ export const ORAL_END_REASONS = [
 ] as const;
 export type OralEndReason = (typeof ORAL_END_REASONS)[number];
 
+/**
+ * How a session was held (progress.md D181): `practice`, turn by turn, or `studio`, a realtime conversation.
+ * It matters after the session because a studio recording runs on the session's own clock, so a turn's
+ * `startMs` is a place in it; a practice recording holds the answers alone, back to back.
+ */
+export const ORAL_MODES = ["practice", "studio"] as const;
+export type OralMode = (typeof ORAL_MODES)[number];
+
 export const ORAL_SPEAKERS = ["examiner", "candidate"] as const;
 export type OralSpeaker = (typeof ORAL_SPEAKERS)[number];
 

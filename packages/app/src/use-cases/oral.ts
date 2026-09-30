@@ -1,4 +1,4 @@
-import type { OralScenario, ScenarioId, SessionId } from "@palier/domain";
+import type { OralMode, OralScenario, ScenarioId, SessionId } from "@palier/domain";
 import type { OralSessionCommand, OralSessionEvent, OralSessionState } from "@palier/engine";
 import { startOralSession, stepOralSession } from "@palier/engine";
 
@@ -84,6 +84,8 @@ export type StartOralSessionRequest = {
   readonly scenarioId: ScenarioId;
   /** Studio mode's hard cap, in ms since the session started (D166); absent for practice mode. */
   readonly capMs?: number;
+  /** How the session is held, stored on it (D181); absent for practice mode, as every earlier row. */
+  readonly mode?: OralMode;
 };
 
 /** A running session: the screen's timer ticks it, the end control ends it. */
@@ -93,6 +95,11 @@ export type OralSessionRun = {
   readonly tick: () => Promise<void>;
   /** The candidate ends the session early. */
   readonly endByUser: () => Promise<void>;
+  /**
+   * The scenario phase the session is in, counted from zero, as the machine last saw it (D181): studio mode's
+   * phase indicator, which has no question to read a phase from.
+   */
+  readonly phase: () => number;
   /** Settles once the transport has closed, with the stored, ended session. */
   readonly ended: Promise<OralSession>;
 };
@@ -140,6 +147,7 @@ export const startOralSessionRun = async (
     endReason: null,
     turns: [],
     assessment: null,
+    ...(request.mode === undefined ? {} : { mode: request.mode }),
   };
   await deps.oral.put(session);
 
@@ -222,6 +230,7 @@ export const startOralSessionRun = async (
     scenario,
     tick: () => enqueue(() => (closed ? Promise.resolve() : step({ kind: "tick", atMs: elapsedMs() }))),
     endByUser: () => enqueue(() => (closed ? Promise.resolve() : step({ kind: "end-requested", atMs: elapsedMs() }))),
+    phase: () => machine.phase,
     ended,
   };
 };

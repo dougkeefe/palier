@@ -38,13 +38,21 @@ const setUp = (options: { key?: string | null; ledger?: CostLedger } = {}) => {
   const secrets = secretSource();
   const ledger = costLedger();
   let hooks: StudioTransportHooks | null = null;
+  let repeats = 0;
   const lastError = new Error("the far end dropped");
   const deps = {
     vault: vaultWith(options.key === undefined ? "sk-test" : options.key),
     secrets,
     studioTransport: (given: StudioTransportHooks) => {
       hooks = given;
-      return { ...hand.transport, lastError: () => lastError };
+      return {
+        ...hand.transport,
+        lastError: () => lastError,
+        repeat: () => {
+          repeats += 1;
+          return Promise.resolve();
+        },
+      };
     },
     ledger: options.ledger ?? ledger,
     clock,
@@ -57,7 +65,7 @@ const setUp = (options: { key?: string | null; ledger?: CostLedger } = {}) => {
     if (hooks === null) throw new Error("the transport was never made");
     return hooks;
   };
-  return { clock, hand, secrets, ledger, deps, hooked, lastError };
+  return { clock, hand, secrets, ledger, deps, hooked, lastError, repeats: () => repeats };
 };
 
 describe("startOralStudioRun (D165, D169)", () => {
@@ -113,6 +121,23 @@ describe("startOralStudioRun (D165, D169)", () => {
     await run.tick();
 
     expect((await run.ended).endReason).toBe("time-cap");
+  });
+
+  it("stores the session as held in studio mode (D181)", async () => {
+    const { hand, deps } = setUp();
+    const run = await startOralStudioRun(request, deps);
+    expect((await deps.oral.get(SESSION_ID))?.mode).toBe("studio");
+    hand.hangUp(false);
+
+    expect((await run.ended).mode).toBe("studio");
+  });
+
+  it("asks the transport to repeat when the candidate does (D180)", async () => {
+    const { deps, repeats } = setUp();
+    const run = await startOralStudioRun(request, deps);
+    await run.repeat();
+
+    expect(repeats()).toBe(1);
   });
 
   it("names the transport's failure, as the practice run does", async () => {

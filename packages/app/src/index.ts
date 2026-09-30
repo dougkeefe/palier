@@ -289,6 +289,7 @@ export {
   oralFocusSubSkills,
   oralHistory,
   oralReport,
+  oralSessionCost,
   requestOralReport,
   MILESTONES_SHOWN_KEY,
   STREAK_FREEZE_NOTICED_KEY,

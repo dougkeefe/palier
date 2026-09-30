@@ -107,6 +107,25 @@ describe("startOralSessionRun", () => {
     ]);
   });
 
+  it("says which phase it is in, for studio mode's indicator, moving with the clock (D181)", async () => {
+    const { clock, deps } = setUp();
+    const run = await startOralSessionRun(request, deps);
+    expect(run.phase()).toBe(0);
+    clock.at(2);
+    await run.tick();
+
+    expect(run.phase()).toBe(1);
+  });
+
+  it("stores the mode it is held in when told one, and none otherwise (D181)", async () => {
+    const { oral, deps } = setUp();
+    await startOralSessionRun({ ...request, mode: "studio" }, deps);
+    await startOralSessionRun({ sessionId: sessionId("01J0000000000000000000OTHER"), scenarioId: SCENARIO.id }, deps);
+
+    expect((await oral.get(SESSION_ID))?.mode).toBe("studio");
+    expect(await oral.get(sessionId("01J0000000000000000000OTHER"))).not.toHaveProperty("mode");
+  });
+
   it("saves each turn as it arrives, stamped with the phase the clock is in", async () => {
     const { clock, hand, oral, deps } = setUp();
     await startOralSessionRun(request, deps);
