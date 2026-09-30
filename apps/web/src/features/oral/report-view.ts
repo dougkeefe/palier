@@ -225,6 +225,34 @@ export const costRows = (
   ];
 };
 
+/** How far before a turn's start playback begins, so its first syllable is never cut (D187). */
+export const PLAY_LEAD_MS = 300;
+
+/** One place in a studio recording: a spoken answer, numbered from 1, and the second to play it from. */
+export type PlaybackMark = { readonly number: number; readonly turn: number; readonly text: string; readonly fromSeconds: number };
+
+/**
+ * Where each of the candidate's spoken answers starts in the recording (PRD §8.6, "audio playback with the
+ * transcript synchronised"; progress.md D187), or `null` when the recording is not on the session's clock. A
+ * studio recording is the microphone from the start, so a turn's `startMs` is a place in it. A practice
+ * recording holds the answers back to back, paused between them, so its places are not the turns'. The
+ * examiner's turns have none: the recording holds the microphone only (D183).
+ */
+export const playbackMarks = (session: OralSession): readonly PlaybackMark[] | null => {
+  if (session.mode !== "studio") return null;
+  const marks: PlaybackMark[] = [];
+  session.turns.forEach((turn, index) => {
+    if (turn.speaker !== "candidate" || turn.input !== "voice") return;
+    marks.push({
+      number: marks.length + 1,
+      turn: index,
+      text: turn.text,
+      fromSeconds: Math.max(0, turn.startMs - PLAY_LEAD_MS) / 1000,
+    });
+  });
+  return marks;
+};
+
 /** The words for a past session's state in the list of them. */
 export const historyTag = (entry: { readonly assessed: boolean; readonly answered: boolean }): string =>
   entry.assessed ? "historyAssessed" : entry.answered ? "historyUnassessed" : "historyNothing";

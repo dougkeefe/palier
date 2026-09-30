@@ -3,7 +3,18 @@ import { describe, expect, it } from "vitest";
 import type { Item } from "@palier/domain";
 import { itemId } from "@palier/domain";
 
-import { REPORT_REASONS, REPOSITORY_URL, contributeIssueUrl, errorIssueUrl, exportFileName, reportIssueUrl } from "./report";
+import { existsSync } from "node:fs";
+
+import {
+  REALTIME_ROUTE_SOURCE,
+  REALTIME_ROUTE_SOURCE_URL,
+  REPORT_REASONS,
+  REPOSITORY_URL,
+  contributeIssueUrl,
+  errorIssueUrl,
+  exportFileName,
+  reportIssueUrl,
+} from "./report";
 
 describe("reportIssueUrl", () => {
   const url = new URL(
@@ -132,5 +143,15 @@ describe("errorIssueUrl", () => {
 
   it("labels the issue as an error report", () => {
     expect(url.searchParams.get("labels")).toBe("error-report");
+  });
+});
+
+describe("REALTIME_ROUTE_SOURCE_URL (D186)", () => {
+  it("names a file this repository holds, so the key settings' link never points at nothing", () => {
+    expect(existsSync(new URL(`../../../../${REALTIME_ROUTE_SOURCE}`, import.meta.url))).toBe(true);
+  });
+
+  it("links it on the repository's main branch", () => {
+    expect(REALTIME_ROUTE_SOURCE_URL).toBe(`${REPOSITORY_URL}/blob/main/apps/web/src/server/realtime-handlers.ts`);
   });
 });

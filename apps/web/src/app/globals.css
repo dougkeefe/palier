@@ -1017,6 +1017,28 @@ h3,
   justify-content: space-between;
 }
 
+/* Studio mode (progress.md D185): the conversation centred on its voice form, and the end control large,
+   as PRD §8.6 asks, so it is found without looking for it. */
+.app-studio {
+  justify-items: center;
+  text-align: center;
+}
+
+.app-studio-end {
+  min-height: 3.5rem;
+  padding-inline: 2rem;
+  font-size: 1.125rem;
+}
+
+/* A studio recording's answers, each playable from where it starts (D187). */
+.app-oral-marks > li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .app-oral-question {
   margin: 0;
   font-size: 1.25rem;

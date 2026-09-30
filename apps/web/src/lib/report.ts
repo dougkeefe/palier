@@ -11,6 +11,15 @@ export const REPOSITORY_URL = "https://github.com/dougkeefe/palier";
 /** The contribution guide, linked from the about page (progress.md D145). */
 export const CONTRIBUTING_URL = `${REPOSITORY_URL}/blob/main/CONTRIBUTING.md`;
 
+/** Where the one route that sees the key lives in the repository (ADR 3, D169). */
+export const REALTIME_ROUTE_SOURCE = "apps/web/src/server/realtime-handlers.ts";
+
+/**
+ * The route's source, linked from the key settings' note on studio mode (architecture.md §6.3, progress.md D186),
+ * so anyone can read in full the one place the key reaches Palier's server.
+ */
+export const REALTIME_ROUTE_SOURCE_URL = `${REPOSITORY_URL}/blob/main/${REALTIME_ROUTE_SOURCE}`;
+
 /** §13.0's four reasons, in its order. */
 export const REPORT_REASONS = ["key-wrong", "multiple-answers", "french-off", "unclear"] as const;
 export type ReportReason = (typeof REPORT_REASONS)[number];

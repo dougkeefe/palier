@@ -1,7 +1,7 @@
 "use client";
 
 import type { OralHistoryEntry, OralSession, OralSessionChoice } from "@palier/app";
-import type { Lang, TargetBand } from "@palier/domain";
+import type { Lang, OralMode, TargetBand } from "@palier/domain";
 import { sessionId } from "@palier/domain";
 import { Button, Callout, Card, Timer, Toast } from "@palier/ui";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
@@ -20,6 +20,8 @@ import {
   turnFocus,
 } from "../../features/oral/practice-view";
 import { endReportLink, historyTag } from "../../features/oral/report-view";
+import { type StudioController, studioController } from "../../features/oral/studio-controller";
+import { INITIAL_STUDIO, studio } from "../../features/oral/studio-view";
 import { elapsedText, preflightNotice } from "../../features/writing/workshop-view";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
@@ -29,6 +31,7 @@ import { readStudyProfile } from "../../lib/study";
 import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
+import { OralStudio } from "./OralStudio";
 
 /** The practice language is French until the English mirror (Phase 8), as for generated sets. */
 const TARGET_LANG: Lang = "fr";
@@ -48,8 +51,8 @@ const METER_MAX = 0.3;
 type Setup = {
   readonly keyHeld: boolean;
   readonly choices: readonly OralSessionChoice[];
-  /** What a minute of practice is estimated to cost, or none when it is unpriced (D117). */
-  readonly perMinuteUsd: number | null;
+  /** What a minute of each mode is estimated to cost, or none when it is unpriced (D117, D167). */
+  readonly perMinuteUsd: Readonly<Record<OralMode, number | null>>;
   /** This device's past sessions, newest first, each linking to its report (D126). */
   readonly history: readonly OralHistoryEntry[];
 };
@@ -60,17 +63,26 @@ const loadSetup = async (container: Container): Promise<Setup> => {
     targetBand: profile?.targetBand ?? DEFAULT_TARGET,
     lang: TARGET_LANG,
   });
-  const perMinuteUsd = container.useCases.featureCosts().find((cost) => cost.feature === "oral-practice")?.estimateUsd ?? null;
+  const costs = container.useCases.featureCosts();
+  const perMinute = (feature: "oral-practice" | "oral-studio") => costs.find((cost) => cost.feature === feature)?.estimateUsd ?? null;
+  const perMinuteUsd = { practice: perMinute("oral-practice"), studio: perMinute("oral-studio") };
   // A session a tab was closed on is over: close it first, so it is listed and can be reported on (D144).
   await container.useCases.closeAbandonedSessions().catch(() => []);
   const history = await container.useCases.oralHistory().catch(() => []);
   return { keyHeld: status !== null, choices, perMinuteUsd, history };
 };
 
+/** An audio element that plays the studio examiner's voice as it arrives, outside the page's layout. */
+const examinerAudio = (): HTMLAudioElement => {
+  const audio = new Audio();
+  audio.autoplay = true;
+  return audio;
+};
+
 /**
- * Spoken practice (product-requirements.md §8.6 practice mode, §14; progress.md D117–D121). Pick a
+ * Spoken practice (product-requirements.md §8.6, §14; progress.md D117–D121, D185). Pick a mode and a
  * session, check the microphone or choose to type, confirm the estimate, then answer the examiner's
- * questions one at a time. Each question is shown and played; each recorded answer is sent to OpenAI to
+ * questions one at a time, or, in studio mode, talk with the examiner live (`OralStudio`). Each question is shown and played; each recorded answer is sent to OpenAI to
  * be written down, and nowhere else [R12]. There is no running transcript: only the question being asked
  * is shown, as the real test gives none (§8.6). At the end the recording of the candidate's answers is
  * kept on this device under architecture.md §9.1's policy, and the transcript is shown.
@@ -85,6 +97,8 @@ export function OralPractice() {
   const container = useContainer();
   const [setup, setSetup] = useState<Setup | null>(null);
   const [state, dispatch] = useReducer(practice, INITIAL_PRACTICE);
+  const [studioState, studioDispatch] = useReducer(studio, INITIAL_STUDIO);
+  const [held, setHeld] = useState<OralMode>("practice");
   const [level, setLevel] = useState(0);
   const [elapsedMs, setElapsedMs] = useState(0);
   const [typed, setTyped] = useState("");
@@ -113,11 +127,36 @@ export function OralPractice() {
     });
   }, [container]);
 
+  // Studio mode's conversation, its own controller over the same container (D185): it takes the checked
+  // microphone from the practice controller and hands the ended session back to the practice screen's end card.
+  const studioControl = useMemo((): StudioController | null => {
+    if (container.status !== "ready") return null;
+    const { useCases, ids, oralLiveness, realtimePeer } = container.container;
+    const levelKit = browserLevelKit();
+    return studioController({
+      useCases,
+      newSessionId: () => sessionId(ids.ulid()),
+      holdSession: (id) => oralLiveness.hold(id),
+      peer: realtimePeer,
+      makeAudio: examinerAudio,
+      openLevel: (stream) => levelKit.open(stream),
+      media: browserMediaKit(),
+      now: monotonicNow,
+      dispatch: studioDispatch,
+      onEnded: dispatch,
+      onNoKey: () => setSetup((current) => (current === null ? current : { ...current, keyHeld: false })),
+    });
+  }, [container]);
+
   // Leaving the page ends a session in progress and lets the microphone go; coming back attaches again.
   useEffect(() => {
     control?.attach();
     return () => control?.dispose();
   }, [control]);
+  useEffect(() => {
+    studioControl?.attach();
+    return () => studioControl?.dispose();
+  }, [studioControl]);
 
   // The picker reads its sessions again each time it is shown, so "Practise again" lists the one just
   // finished, and its report once it has one (D127).
@@ -143,6 +182,18 @@ export function OralPractice() {
     return () => clearInterval(timer);
   }, [running, startedAtMs, control]);
 
+  // The same for a studio conversation: the time shown, and a tick that moves the phase and reads the cost.
+  const studioLive = studioState.phase === "live";
+  const studioStartedAtMs = studioState.phase === "live" ? studioState.startedAtMs : 0;
+  useEffect(() => {
+    if (!studioLive) return;
+    const timer = setInterval(() => {
+      setElapsedMs(monotonicNow() - studioStartedAtMs);
+      void studioControl?.tick();
+    }, TICK_MS);
+    return () => clearInterval(timer);
+  }, [studioLive, studioStartedAtMs, studioControl]);
+
   // Focus follows each step, to its heading, but not on the first render.
   useEffect(() => {
     if (shownPhase.current === state.phase) return;
@@ -165,7 +216,7 @@ export function OralPractice() {
   }, [state.phase, waitingNow, modeNow]);
 
   if (container.status === "failed") return <p role="status">{tCommon("loadFailed")}</p>;
-  if (container.status !== "ready" || setup === null || control === null) {
+  if (container.status !== "ready" || setup === null || control === null || studioControl === null) {
     return <p role="status">{tCommon("loading")}</p>;
   }
 
@@ -176,13 +227,38 @@ export function OralPractice() {
   );
 
   if (state.phase === "picking") {
+    const perMinuteUsd = setup.perMinuteUsd[held];
     return (
       <div className="app-stack">
         <p>{t("intro")}</p>
+        <fieldset className="app-fieldset">
+          <legend>{t("modeTitle")}</legend>
+          {(["practice", "studio"] as const).map((mode) => {
+            const minute = setup.perMinuteUsd[mode];
+            const hint = mode === "practice" ? "modePracticeHint" : "modeStudioHint";
+            return (
+              <label key={mode} className="app-choice">
+                <input type="radio" name="oral-mode" value={mode} checked={held === mode} onChange={() => setHeld(mode)} />
+                <span className="app-choice__label">{t(mode === "practice" ? "modePractice" : "modeStudio")}</span>
+                <span className="app-choice__hint">
+                  {minute === null ? t(`${hint}Unpriced`) : t(hint, { amount: estimateText(minute, locale) })}
+                </span>
+              </label>
+            );
+          })}
+        </fieldset>
         <Callout tone="info">
-          <strong>{t("practiceModeTitle")}</strong> {t("practiceMode")}
+          {held === "practice" ? (
+            <>
+              <strong>{t("practiceModeTitle")}</strong> {t("practiceMode")}
+            </>
+          ) : (
+            <>
+              <strong>{t("studioModeTitle")}</strong> {t("studioMode")}
+            </>
+          )}
         </Callout>
-        {setup.keyHeld ? null : <NoKeyCard namespace="oral" estimateUsd={setup.perMinuteUsd} />}
+        {setup.keyHeld ? null : <NoKeyCard namespace="oral" estimateUsd={perMinuteUsd} />}
         <section className="app-stack" aria-labelledby="oral-choose-title">
           <h2 id="oral-choose-title" ref={stepRef} tabIndex={-1} className="app-step-heading">
             {t("chooseTitle")}
@@ -190,7 +266,7 @@ export function OralPractice() {
           {setup.choices.length === 0 ? <p>{t("noneAvailable")}</p> : null}
           <ul className="app-list app-prompts">
             {setup.choices.map((choice) => {
-              const estimate = sessionEstimate(setup.perMinuteUsd, choice.minutes);
+              const estimate = sessionEstimate(perMinuteUsd, choice.minutes);
               return (
                 <li key={choice.sessionType}>
                   <Card>
@@ -206,7 +282,7 @@ export function OralPractice() {
                         <Button
                           variant="secondary"
                           aria-describedby={`oral-${choice.sessionType}`}
-                          onClick={() => dispatch({ type: "choose", choice })}
+                          onClick={() => dispatch({ type: "choose", choice, held })}
                         >
                           {t("choose")}
                         </Button>
@@ -231,11 +307,18 @@ export function OralPractice() {
 
   if (state.phase === "mic") {
     const { choice, mic } = state;
+    const studioHeld = state.held === "studio";
+    const heldMode: OralMode = studioHeld ? "studio" : "practice";
     const typeInstead = (
       <Button variant="ghost" onClick={() => void control.continueWith(choice, "typed")}>
-        {t("typeInstead")}
+        {t(studioHeld ? "studioTypeInstead" : "typeInstead")}
       </Button>
     );
+    // Studio mode is a spoken conversation: without the microphone it can only be practice by typing (D185).
+    const needsMic =
+      studioHeld && (mic === "denied" || mic === "no-mic" || mic === "unsupported" || mic === "failed") ? (
+        <Callout tone="info">{t("studioNeedsMic")}</Callout>
+      ) : null;
     return (
       <Card>
         {heading("micTitle")}
@@ -261,7 +344,7 @@ export function OralPractice() {
             <>
               <Callout tone="correct">{t("micOk")}</Callout>
               <div className="app-actions">
-                <Button onClick={() => void control.continueWith(choice, "spoken")}>{t("micContinue")}</Button>
+                <Button onClick={() => void control.continueWith(choice, "spoken", heldMode)}>{t("micContinue")}</Button>
                 {typeInstead}
               </div>
             </>
@@ -271,7 +354,7 @@ export function OralPractice() {
               <Callout tone="info">{t("micQuiet")}</Callout>
               <div className="app-actions">
                 <Button onClick={() => void control.checkMic()}>{t("micAgain")}</Button>
-                <Button variant="secondary" onClick={() => void control.continueWith(choice, "spoken")}>
+                <Button variant="secondary" onClick={() => void control.continueWith(choice, "spoken", heldMode)}>
                   {t("micContinueAnyway")}
                 </Button>
                 {typeInstead}
@@ -305,6 +388,7 @@ export function OralPractice() {
               </div>
             </>
           ) : null}
+          {needsMic}
           <div className="app-actions">{back}</div>
         </div>
       </Card>
@@ -313,7 +397,19 @@ export function OralPractice() {
 
   if (state.phase === "confirming") {
     const { choice, mode, preflight } = state;
+    const studioHeld = state.held === "studio";
     const notice = preflightNotice(preflight);
+    const start = () => {
+      if (!studioHeld) {
+        void control.start(choice, mode);
+        return;
+      }
+      // The tap that starts the conversation: the microphone the check opened goes to the studio controller.
+      const microphone = control.handOver();
+      setElapsedMs(0);
+      dispatch({ type: "studio" });
+      void studioControl.start(choice, microphone);
+    };
     return (
       <Card>
         {heading("preflightTitle")}
@@ -327,14 +423,19 @@ export function OralPractice() {
               : t("preflightEstimate", { amount: estimateText(preflight.estimateUsd, locale) })}
           </p>
           {notice === null ? null : <Callout tone={notice.tone}>{t(notice.key)}</Callout>}
-          <p className="app-muted">{t(mode === "spoken" ? "sendsToSpoken" : "sendsToTyped")}</p>
+          <p className="app-muted">{t(studioHeld ? "sendsToStudio" : mode === "spoken" ? "sendsToSpoken" : "sendsToTyped")}</p>
           <div className="app-actions">
-            <Button onClick={() => void control.start(choice, mode)}>{t("start")}</Button>
+            <Button onClick={start}>{t("start")}</Button>
             {back}
           </div>
         </div>
       </Card>
     );
+  }
+
+  if (state.phase === "studio") {
+    if (studioState.phase !== "live") return <p role="status">{tCommon("loading")}</p>;
+    return <OralStudio state={studioState} control={studioControl} elapsedMs={elapsedMs} headingRef={stepRef} />;
   }
 
   if (state.phase === "running") {
