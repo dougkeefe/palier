@@ -6,7 +6,7 @@ import {
   UnknownScenarioError,
   hasAnswers,
 } from "@palier/app";
-import type { Lang, OralCriterion, OralTurn, OralTurnError, ScoredSubSkill } from "@palier/domain";
+import type { Lang, OralCriterion, OralMode, OralTurn, OralTurnError, ScoredSubSkill } from "@palier/domain";
 import { ORAL_CRITERIA, READING_SUB_SKILLS } from "@palier/domain";
 import type { FluencyMetrics, Preflight } from "@palier/engine";
 
@@ -199,24 +199,58 @@ const amountWords = (usd: number, unpriced: number, locale: string): CostWords =
 };
 
 /**
- * What the session cost, measured (Phase 5 exit criterion 2, D125, D127): the practice, the report and
- * the two together, from the rows the ledger made for it. The report line says "not asked for yet"
- * only when no report call was made, since a call OpenAI billed and the adapter refused is spend too.
+ * What the session cost, measured (Phase 5 exit criterion 2, D125, D127): the session's own calls, the report
+ * and the two together, from the rows the ledger made for it. The session's line is the conversation's for a
+ * studio session (D182), and practice's otherwise. The report line says "not asked for yet" only when no report
+ * call was made, since a call OpenAI billed and the adapter refused is spend too.
  */
-export const costRows = (cost: OralSessionCost, locale: string): readonly { readonly label: string; readonly words: CostWords }[] => {
+export const costRows = (
+  cost: OralSessionCost,
+  locale: string,
+  mode: OralMode = "practice",
+): readonly { readonly label: string; readonly words: CostWords }[] => {
+  const held = mode === "studio" ? cost.studio : cost.practice;
   const total: OralCostLine = {
-    usd: cost.practice.usd + cost.report.usd,
-    calls: cost.practice.calls + cost.report.calls,
-    unpriced: cost.practice.unpriced + cost.report.unpriced,
+    usd: held.usd + cost.report.usd,
+    calls: held.calls + cost.report.calls,
+    unpriced: held.unpriced + cost.report.unpriced,
   };
   return [
-    { label: "costPractice", words: amountWords(cost.practice.usd, cost.practice.unpriced, locale) },
+    { label: mode === "studio" ? "costStudio" : "costPractice", words: amountWords(held.usd, held.unpriced, locale) },
     {
       label: "costReport",
       words: cost.report.calls === 0 ? { key: "costNoReport" } : amountWords(cost.report.usd, cost.report.unpriced, locale),
     },
     { label: "costTotal", words: amountWords(total.usd, total.unpriced, locale) },
   ];
+};
+
+/** How far before a turn's start playback begins, so its first syllable is never cut (D187). */
+export const PLAY_LEAD_MS = 300;
+
+/** One place in a studio recording: a spoken answer, numbered from 1, and the second to play it from. */
+export type PlaybackMark = { readonly number: number; readonly turn: number; readonly text: string; readonly fromSeconds: number };
+
+/**
+ * Where each of the candidate's spoken answers starts in the recording (PRD §8.6, "audio playback with the
+ * transcript synchronised"; progress.md D187), or `null` when the recording is not on the session's clock. A
+ * studio recording is the microphone from the start, so a turn's `startMs` is a place in it. A practice
+ * recording holds the answers back to back, paused between them, so its places are not the turns'. The
+ * examiner's turns have none: the recording holds the microphone only (D183).
+ */
+export const playbackMarks = (session: OralSession): readonly PlaybackMark[] | null => {
+  if (session.mode !== "studio") return null;
+  const marks: PlaybackMark[] = [];
+  session.turns.forEach((turn, index) => {
+    if (turn.speaker !== "candidate" || turn.input !== "voice") return;
+    marks.push({
+      number: marks.length + 1,
+      turn: index,
+      text: turn.text,
+      fromSeconds: Math.max(0, turn.startMs - PLAY_LEAD_MS) / 1000,
+    });
+  });
+  return marks;
 };
 
 /** The words for a past session's state in the list of them. */

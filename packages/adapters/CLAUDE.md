@@ -14,7 +14,7 @@ not a whole entry as nothing, v1's `{ ts, feature: "none" }` placeholder include
 item with `setId` and `position` beside v1's `skill` and `createdAt` indexes, and reads a row whose item is not a whole `Item` of
 the row's id and skill as nothing (D110). The oral store is over v1's own `oralSessions` and `oralAudio` tables
 (D115): a session reads only whole, with an end and a reason both set or both null and every turn a whole
-`OralTurn`; a recording row keeps its blob's size and its session's start beside it; and a write refused as
+`OralTurn`, and a `mode` that is not one of `ORAL_MODES` reads as none, which is practice (D181); a recording row keeps its blob's size and its session's start beside it; and a write refused as
 `QuotaExceededError` (by name, or as a wrapper's `inner`) becomes the port's `StorageQuotaError`. The writing store reads a row without a whole id, prompt,
 text and instant as nothing, and a row whose assessment is broken, or whose offsets no longer fit its text, as the
 text unassessed: the writing is the user's. Every version's `stores()` block is an exported constant, and `migration.test.ts` opens a real
@@ -114,6 +114,10 @@ summed tokens are priced into `costUsd`.
     app's `usage` hook.
   - **One reconnect**, with a fresh secret and the transcript seeded. A second drop is `closed { failed }`, the
     examiner's words in flight delivered first.
+  - **`repeat()`** (Phase 6 Slice 2, D180) sends the candidate's "could you repeat" as a user `input_text` message in the
+    session's language (`studioRepeatRequest` in `prompts.ts`), then cues through the one-response queue. It is not a
+    turn and is never seeded on a reconnect; while the line is down, or once closed, it does nothing. The instructions
+    already told the examiner to repeat once when asked, so `STUDIO_PROMPT_VERSION` did not move.
   - It closes itself at `maxMs`.
 - **`browserRealtimePeer`** is native `RTCPeerConnection`, no SDK (D170). Its unit test stubs the constructor, and
   whether real WebRTC carries it is the manual realtime checklist's.

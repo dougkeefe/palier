@@ -56,7 +56,9 @@ from disk (progress.md D154).
   hesitations, and `spokenWords` is the one tokeniser the parser and the engine share (D127). **Studio mode's notes**
   (D168): `OralNote { criterion, evidence, severity, phase }`, a criterion from `ORAL_CRITERIA` and a severity from
   `ORAL_NOTE_SEVERITIES` (`minor`, `moderate`, `major`), evidence that says something, checked by `oralNoteSchema`;
-  `OralRequest.notes` is optional. `ORAL_END_REASONS` gains `time-cap` (D166). **A realtime price is a fourth
+  `OralRequest.notes` is optional. `ORAL_END_REASONS` gains `time-cap` (D166). **`ORAL_MODES`** (`practice`, `studio`)
+  name how a session was held (D181); the stored session carries it, because a studio recording runs on the session's
+  clock and a practice one does not. **A realtime price is a fourth
   `ModelPrice` kind** (`RealtimePrice`: text and audio in and out, and one cached-input rate), and `costOf` prices
   `RealtimeTokens`, whose input counts are the uncached part, `null` when any unit is unmeasured (D167).
 - **The library is a content artefact** (`library-article` in `CONTENT_SCHEMAS`, `library.ts`, progress.md D162): one

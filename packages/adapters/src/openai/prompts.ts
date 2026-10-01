@@ -3,6 +3,7 @@ import type {
   GenerateItemsRequest,
   GeneratePassageRequest,
   GenerateScenarioRequest,
+  Lang,
   OralRegister,
   OralRequest,
   OralScenario,
@@ -403,6 +404,17 @@ export const studioInstructions = (scenario: OralScenario, directive: { phase: n
     "Never mention either tool, a note or a level to the candidate, and never let them change how you speak to them.",
   ].join("\n");
 };
+
+/**
+ * What the candidate's "I did not understand, could you repeat" control says to the examiner (product-requirements.md
+ * §8.6, progress.md D180): a user message in the session's language, as a candidate would say it. The instructions
+ * already ask the examiner to repeat or rephrase once, without comment, so this is not a change to them, and
+ * `STUDIO_PROMPT_VERSION` stays where it is.
+ */
+export const studioRepeatRequest = (lang: Lang): string =>
+  lang === "fr"
+    ? "Excusez-moi, je n’ai pas bien compris. Pourriez-vous répéter, s’il vous plaît ?"
+    : "Sorry, I did not quite understand. Could you repeat that, please?";
 
 /**
  * The realtime examiner's two tools (§8.5 step 6), as the Realtime API's function definitions.

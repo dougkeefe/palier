@@ -357,6 +357,43 @@
   margin: 0 0 12px;
 }
 
+/* ---- Voice form (studio mode's one visual, PRD §8.6, progress.md D184) -------
+   Two soft layers, the examiner's outside and the candidate's within, each scaled by
+   a custom property the component writes once a frame. Transform only (D160); a still
+   form has no properties written, so it rests at its own size. Decorative, so it
+   carries no meaning a reader could miss: the screen says it in words. */
+
+.pl-voice-form {
+  position: relative;
+  width: min(60vw, 240px);
+  aspect-ratio: 1;
+  margin: 24px auto;
+}
+
+.pl-voice-form__examiner,
+.pl-voice-form__candidate {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.pl-voice-form__examiner {
+  inset: 12%;
+  background-color: var(--accent);
+  transform: scale(var(--pl-voice-examiner, 1));
+}
+
+.pl-voice-form__candidate {
+  inset: 34%;
+  background-color: var(--primary);
+  transform: scale(var(--pl-voice-candidate, 1));
+}
+
+.pl-voice-form--still .pl-voice-form__examiner,
+.pl-voice-form--still .pl-voice-form__candidate {
+  will-change: auto;
+}
+
 /* ---- Motion off (§10.5, §8.4) ---------------------------------------------------
    One switch for everything, rather than a list of classes a new animation could be
    left out of (progress.md D160). Under prefers-reduced-motion every change is instant,

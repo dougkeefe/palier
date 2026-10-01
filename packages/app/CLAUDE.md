@@ -94,7 +94,12 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   studio transport the composition root makes, handing it two hooks and never the adapter's name: `secret`, which
   mints inside `KeyVault.withApiKey` (`NoApiKeyError` with none), and `usage`, which writes each billed usage to the
   ledger as `oral-studio` under the session. `ended` waits for those writes, and a write that fails is not the
-  session's failure (D170).
+  session's failure (D170). **Slice 2** (D180–D182): `StudioTransport` and `OralStudioRun` gain `repeat()`, **studio
+  only**, never on the `OralTransport` port, because a turn-based examiner's question is on screen to be played again.
+  Every `OralSessionRun` gains `phase()`, the machine's current phase, for studio mode's indicator. A request's optional
+  `mode` is stamped on the stored `OralSession.mode`: `startOralStudioRun` passes `"studio"`, and absent is practice.
+  **`oralSessionCost`** reads a session's cost from its own ledger rows, and `OralSessionCost` has a `studio` line beside
+  `practice` and `report`, so a studio conversation is never read as free.
 - **Ports are transcribed from §3.3, not invented.** Eight live under `src/ports/`:
   `ItemRepository`, `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`,
   `KeyVault`, `Clock`, `Random`. `OralStore` (no §3.3 signature) and the

@@ -73,6 +73,15 @@ export const REPORT_SENTINEL = "Pimprenellard6f21";
 /** The question the stubbed examiner asks. */
 export const EXAMINER_QUESTION = "Pouvez-vous me décrire votre poste actuel ?";
 
+/**
+ * What the fake realtime examiner says (D188): a question per response, in order, and the question again when
+ * the candidate asks for it. Its candidate answers once, with {@link TRANSCRIPT_SENTINEL} in the words, as the
+ * transcription would hear them.
+ */
+export const STUDIO_EXAMINER = [EXAMINER_QUESTION, "Quel est le plus grand défi de votre équipe cette année ?"] as const;
+export const STUDIO_REPEATED = "Bien sûr. Je répète : pouvez-vous me décrire votre poste actuel ?";
+export const STUDIO_ANSWER = `Je coordonne les consultations avec les provinces, ${TRANSCRIPT_SENTINEL}.`;
+
 /** The only origin the key may reach (architecture.md §6.3). */
 const OPENAI_ORIGIN = "https://api.openai.com";
 /** This origin's one route that may see the key (ADR 3, D169). */
@@ -104,6 +113,12 @@ export type LeakWatch = {
    * place on this origin the key may go, and the positive control that it went there.
    */
   readonly realtimeSecretAuthorizations: () => readonly string[];
+  /**
+   * Every `authorization` header sent to OpenAI's `/v1/realtime/calls` (D171, D188): the studio screen's dial,
+   * which must carry the short-lived `ek_` secret and never the key. Kept apart from
+   * `openAiAuthorizations`, which are the key's own uses.
+   */
+  readonly realtimeCallAuthorizations: () => readonly string[];
   /**
    * Fail, naming the place, if the sentinel is anywhere but a request to OpenAI or the realtime
    * secret route's `authorization` header (D169), if a
@@ -274,9 +289,13 @@ export const defaultCompletion = (body: string): OpenAiAnswer => {
   return feedbackAnswer();
 };
 
-/** The default answer to any OpenAI path: a completion, a transcription, a voice, or the model list. */
+/** The realtime call's answer (D188): SDP, as `/v1/realtime/calls` gives, for the fake peer to take. */
+export const realtimeCallAnswer = (): OpenAiAnswer => ({ status: 201, contentType: "application/sdp", body: "v=0\r\no=- fake-answer\r\n" });
+
+/** The default answer to any OpenAI path: a completion, a transcription, a voice, a realtime call, or the model list. */
 export const defaultAnswer = (path: string, body: string): OpenAiAnswer => {
   if (path.endsWith("/chat/completions")) return defaultCompletion(body);
+  if (path.endsWith("/realtime/calls")) return realtimeCallAnswer();
   if (path.endsWith("/audio/transcriptions")) return transcriptionAnswer();
   if (path.endsWith("/audio/speech")) return speechAnswer();
   return MODELS_ANSWER;
@@ -395,6 +414,138 @@ export const installFakeAudio = async (context: BrowserContext) => {
   }, AUDIO_SENTINEL);
 };
 
+/**
+ * Stand in for WebRTC on every page of `context` (Phase 6 Slice 2, D171, D188): an `RTCPeerConnection` whose
+ * data channel plays a short scripted examiner, so the studio screen runs its real transport, its real secret
+ * route and its real call to `/v1/realtime/calls` (stubbed by {@link stubOpenAi}), with no test code in the
+ * bundle.
+ *
+ * - The channel opens once the answer is set, and the examiner's voice arrives as an oscillator's stream.
+ * - Each `response.create` gets a whole response: a transcript, then `response.done` with usage, so the
+ *   ledger is written. A user message before it (the repeat control) makes it {@link STUDIO_REPEATED}.
+ * - After the first question, the candidate answers once, heard as {@link STUDIO_ANSWER}, and the examiner
+ *   takes a note and asks the next question, as the API's own turn detection would have it.
+ * - Every message the page sends is kept on `window.__palierRealtimeSent`, for the spec to read.
+ */
+export const installFakeRealtime = async (context: BrowserContext) => {
+  await context.addInitScript(
+    ({ questions, repeated, answer }: { questions: readonly string[]; repeated: string; answer: string }) => {
+      type Listener<T> = ((event: T) => void) | null;
+      const sent: Record<string, unknown>[] = [];
+      Object.defineProperty(window, "__palierRealtimeSent", { value: sent, configurable: true });
+      const usage = {
+        input_tokens: 400,
+        output_tokens: 200,
+        input_token_details: { text_tokens: 300, audio_tokens: 100, cached_tokens: 0, cached_tokens_details: {} },
+        output_token_details: { text_tokens: 40, audio_tokens: 160 },
+      };
+
+      class FakeChannel {
+        readyState: "connecting" | "open" | "closed" = "connecting";
+        onopen: Listener<Event> = null;
+        onclose: Listener<Event> = null;
+        onmessage: Listener<MessageEvent> = null;
+        private responses = 0;
+        private asked = 0;
+        private answered = false;
+        private repeat = false;
+        constructor(readonly label: string) {}
+        open() {
+          this.readyState = "open";
+          this.onopen?.(new Event("open"));
+        }
+        emit(event: Record<string, unknown>) {
+          if (this.readyState === "open") this.onmessage?.(new MessageEvent("message", { data: JSON.stringify(event) }));
+        }
+        send(message: string) {
+          const event = JSON.parse(message) as { type?: string; item?: { type?: string; role?: string } };
+          sent.push(event as Record<string, unknown>);
+          if (event.type === "conversation.item.create" && event.item?.type === "message" && event.item.role === "user") this.repeat = true;
+          if (event.type === "response.create") setTimeout(() => this.speak(), 30);
+        }
+        close() {
+          this.readyState = "closed";
+        }
+        private speak() {
+          this.responses += 1;
+          const item = `e${String(this.responses)}`;
+          const words = this.repeat ? repeated : (questions[Math.min(this.asked, questions.length - 1)] ?? "");
+          const repeating = this.repeat;
+          this.repeat = false;
+          if (!repeating) this.asked += 1;
+          this.emit({ type: "response.created", response: { id: `r${String(this.responses)}` } });
+          this.emit({ type: "response.output_audio_transcript.delta", item_id: item, delta: words });
+          this.emit({ type: "response.output_audio_transcript.done", item_id: item, transcript: words });
+          this.emit({ type: "response.done", response: { output: [{ type: "message" }], usage } });
+          if (!repeating && !this.answered) setTimeout(() => this.answer(), 50);
+        }
+        private answer() {
+          this.answered = true;
+          this.emit({ type: "input_audio_buffer.speech_started", item_id: "c1" });
+          this.emit({ type: "input_audio_buffer.speech_stopped", item_id: "c1" });
+          this.emit({
+            type: "conversation.item.input_audio_transcription.completed",
+            item_id: "c1",
+            transcript: answer,
+            usage: { type: "duration", seconds: 3 },
+          });
+          this.emit({
+            type: "response.function_call_arguments.done",
+            call_id: "k1",
+            name: "note_observation",
+            arguments: JSON.stringify({ criterion: "vocabulary", evidence: "« coordonne » répété", severity: "minor" }),
+          });
+          setTimeout(() => this.speak(), 30);
+        }
+      }
+
+      class FakePeerConnection {
+        connectionState: "new" | "connected" | "closed" = "new";
+        ontrack: Listener<{ streams: MediaStream[] }> = null;
+        onconnectionstatechange: Listener<Event> = null;
+        private channel: FakeChannel | null = null;
+        addTrack() {
+          return {};
+        }
+        createDataChannel(label: string) {
+          this.channel = new FakeChannel(label);
+          return this.channel;
+        }
+        createOffer() {
+          return Promise.resolve({ type: "offer", sdp: "v=0\r\no=- fake-offer\r\n" });
+        }
+        setLocalDescription() {
+          return Promise.resolve();
+        }
+        setRemoteDescription() {
+          setTimeout(() => {
+            if (this.connectionState === "closed") return;
+            this.connectionState = "connected";
+            const audio = new AudioContext();
+            const tone = audio.createOscillator();
+            const out = audio.createMediaStreamDestination();
+            tone.connect(out);
+            tone.start();
+            this.ontrack?.({ streams: [out.stream] });
+            this.channel?.open();
+          }, 10);
+          return Promise.resolve();
+        }
+        close() {
+          this.connectionState = "closed";
+          this.channel?.close();
+        }
+      }
+      Object.defineProperty(window, "RTCPeerConnection", { value: FakePeerConnection, configurable: true, writable: true });
+    },
+    { questions: [...STUDIO_EXAMINER], repeated: STUDIO_REPEATED, answer: STUDIO_ANSWER },
+  );
+};
+
+/** Every message the studio screen sent the fake realtime examiner on `page` (D188). */
+export const realtimeSent = (page: Page): Promise<readonly Record<string, unknown>[]> =>
+  page.evaluate(() => [...((window as unknown as { __palierRealtimeSent?: Record<string, unknown>[] }).__palierRealtimeSent ?? [])]);
+
 /** Start watching a context. Call it before the first page opens. */
 export const watchForLeaks = (context: BrowserContext): LeakWatch => {
   const seen: Seen[] = [];
@@ -402,6 +553,7 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
   const authorizations: string[] = [];
   const openAiRequests: { path: string; body: string }[] = [];
   const realtimeSecretAuthorizations: string[] = [];
+  const realtimeCallAuthorizations: string[] = [];
 
   // Headers are read as sent, synchronously: `allHeaders()` waits for a response, and a
   // request a reload aborts never gets one. Every header a page sets is among them.
@@ -409,7 +561,10 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
     const url = request.url();
     const headers = request.headers();
     if (url.startsWith(OPENAI_ORIGIN)) {
-      if (headers.authorization !== undefined) authorizations.push(headers.authorization);
+      // The studio screen's dial carries a short-lived secret, never the key (D171): recorded apart, so a
+      // spec can say which it was and every other authorization stays the key's own.
+      const toCalls = new URL(url).pathname.endsWith("/realtime/calls");
+      if (headers.authorization !== undefined) (toCalls ? realtimeCallAuthorizations : authorizations).push(headers.authorization);
       if (request.method() !== "OPTIONS") openAiRequests.push({ path: new URL(url).pathname, body: bodyOf(request) });
       return;
     }
@@ -452,6 +607,7 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
     openAiBodies: () => openAiRequests.map((request) => request.body),
     openAiRequests: () => openAiRequests,
     realtimeSecretAuthorizations: () => realtimeSecretAuthorizations,
+    realtimeCallAuthorizations: () => realtimeCallAuthorizations,
     assertNoLeak: async (pages, { deviceOnly = [], nowhere = [] } = {}) => {
       await Promise.all(pending);
       // This call's own dump, so an earlier check's page does not answer for this one.

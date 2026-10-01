@@ -121,11 +121,39 @@ export type OralCostLine = {
 /**
  * What a session cost, from the ledger rows made for it (D125): the session's own calls and its
  * report's, apart. A report call that failed after OpenAI billed it is a row too, so `report.calls`
- * can be above zero while the session has no report (D127).
+ * can be above zero while the session has no report (D127). A session is held in one mode, so one of
+ * `practice` and `studio` (D182) is empty.
  */
 export type OralSessionCost = {
   readonly practice: OralCostLine;
+  readonly studio: OralCostLine;
   readonly report: OralCostLine;
+};
+
+/** The ledger rows made for `session`, as its cost's lines (D125, D182). */
+const sessionCostOf = async (session: OralSession, ledger: CostLedger): Promise<OralSessionCost> => {
+  const rows = (await ledger.since(session.startedAt)).filter((row) => row.sessionId === session.id);
+  const line = (feature: "oral-practice" | "oral-studio" | "oral-assessment"): OralCostLine => {
+    const mine = rows.filter((row) => row.feature === feature);
+    return {
+      usd: mine.reduce((total, row) => total + (row.costUsd ?? 0), 0),
+      calls: mine.length,
+      unpriced: mine.filter((row) => row.costUsd === null).length,
+    };
+  };
+  return { practice: line("oral-practice"), studio: line("oral-studio"), report: line("oral-assessment") };
+};
+
+/**
+ * What a session has cost so far (D182), or `null` for a session this device does not hold: studio mode's
+ * running meter, read while the conversation goes on, from the rows its usage hook writes.
+ */
+export const oralSessionCost = async (
+  sessionId: SessionId,
+  deps: { readonly oral: OralStore; readonly ledger: CostLedger },
+): Promise<OralSessionCost | null> => {
+  const session = await deps.oral.get(sessionId);
+  return session === null ? null : sessionCostOf(session, deps.ledger);
 };
 
 /**
@@ -165,16 +193,7 @@ export const oralReport = async (sessionId: SessionId, deps: OralReportViewDeps)
   const measured = fluencyMetrics(session.turns, scenario === null ? [] : deps.fillers[scenario.lang]);
   const fluency = scenario === null ? { ...measured, fillerCount: null } : measured;
 
-  const rows = (await deps.ledger.since(session.startedAt)).filter((row) => row.sessionId === session.id);
-  const line = (feature: "oral-practice" | "oral-assessment"): OralCostLine => {
-    const mine = rows.filter((row) => row.feature === feature);
-    return {
-      usd: mine.reduce((total, row) => total + (row.costUsd ?? 0), 0),
-      calls: mine.length,
-      unpriced: mine.filter((row) => row.costUsd === null).length,
-    };
-  };
-  const cost = { practice: line("oral-practice"), report: line("oral-assessment") };
+  const cost = await sessionCostOf(session, deps.ledger);
 
   return { session, scenario, fluency, cost, blocked: reportBlock(session, scenario) };
 };

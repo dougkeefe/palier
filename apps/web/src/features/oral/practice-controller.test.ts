@@ -231,6 +231,34 @@ describe("practiceController — the pre-flight (D121)", () => {
     expect(mic.track.stopped).toBe(true);
   });
 
+  it("prices studio mode as a studio conversation when the microphone is open (D185)", async () => {
+    const { controller, actions, useCases } = setUp();
+    await controller.checkMic();
+    await controller.continueWith(CHOICE, "spoken", "studio");
+
+    expect(useCases.preflightSpend).toHaveBeenCalledWith({ feature: "oral-studio", quantity: 5 });
+    expect(actions.at(-1)).toEqual({ type: "preflighted", mode: "spoken", preflight: PREFLIGHT, held: "studio" });
+  });
+
+  it("prices studio mode with no microphone as practice by typing (D185)", async () => {
+    const { controller, actions, useCases } = setUp();
+    await controller.continueWith(CHOICE, "spoken", "studio");
+
+    expect(useCases.preflightSpend).toHaveBeenCalledWith({ feature: "oral-practice", quantity: 5 });
+    expect(actions.at(-1)).toEqual({ type: "preflighted", mode: "typed", preflight: PREFLIGHT });
+  });
+
+  it("hands the checked microphone over once, and never stops it after (D185)", async () => {
+    const { controller, mic } = setUp();
+    await controller.checkMic();
+
+    expect(controller.handOver()).toBe(mic.stream);
+    expect(controller.handOver()).toBeNull();
+    controller.back();
+    controller.dispose();
+    expect(mic.track.stopped).toBe(false);
+  });
+
   it("answers by typing when asked to speak with no microphone open", async () => {
     const { controller, actions } = setUp();
     await controller.continueWith(CHOICE, "spoken");

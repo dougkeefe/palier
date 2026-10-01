@@ -53,9 +53,15 @@ This is a free, personal project maintained in spare time, with no bug bounty.
 - Every page is served with a strict Content Security Policy. No inline script runs without that
   response's nonce. `connect-src` allows only this origin and `api.openai.com`. Trusted Types are
   enforced, and no third-party script is loaded (ADR 22).
-- **One exception is designed but not built.** Realtime voice would need one stateless server call
-  that sees the key, to mint a short-lived token (ADR 3). That feature is deferred past 1.0, so today
-  no server of ours ever receives the key.
+- **One exception, and only one.** Studio mode's live voice conversation needs a short-lived client
+  secret, which OpenAI mints only for a request made with a standard key (ADR 3). So when a user starts
+  a studio conversation, the browser sends the key in the `Authorization` header of one request,
+  `POST /api/realtime/secret`, and the server uses it once to call `POST /v1/realtime/client_secrets`.
+  It returns `{ value, expiresAt }` and nothing else. The route never reads a body, never logs, stores
+  or echoes the key, and holds it no longer than the request. A refusal is a code, never OpenAI's
+  text. The handler is `apps/web/src/server/realtime-handlers.ts`, short enough to read in full, and
+  every branch has a test. The key settings and the privacy notice say this to users. No other
+  request ever carries the key to a server of ours, and the key-leak test holds that.
 - **The Content Security Policy cannot stop one thing:** script that is already running navigating
   the whole page to another origin. The protection there is that no script the app did not ship can
   run. If you find one that can, that is the report we most want.

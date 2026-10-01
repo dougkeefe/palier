@@ -28,6 +28,8 @@ import {
   historyTag,
   reportScreen,
   transcriptRows,
+  PLAY_LEAD_MS,
+  playbackMarks,
 } from "./report-view";
 
 const named = (name: string) => Object.assign(new Error(name), { name });
@@ -45,7 +47,7 @@ const REPORT: OralReport = {
   },
   scenario: null,
   fluency: { spokenTurns: 0, wordsPerMinute: null, fillerCount: null, meanPauseMs: null },
-  cost: { practice: { usd: 0, calls: 0, unpriced: 0 }, report: { usd: 0, calls: 0, unpriced: 0 } },
+  cost: { practice: { usd: 0, calls: 0, unpriced: 0 }, studio: { usd: 0, calls: 0, unpriced: 0 }, report: { usd: 0, calls: 0, unpriced: 0 } },
   blocked: null,
 };
 
@@ -189,13 +191,22 @@ describe("fluencyWords", () => {
 describe("costRows (D125, D127)", () => {
   const line = (usd: number, calls: number, unpriced = 0) => ({ usd, calls, unpriced });
   const words = (practice: ReturnType<typeof line>, report: ReturnType<typeof line>) =>
-    costRows({ practice, report }, "en").map((row) => [row.label, row.words.key, row.words.values?.amount]);
+    costRows({ practice, studio: line(0, 0), report }, "en").map((row) => [row.label, row.words.key, row.words.values?.amount]);
 
   it("gives each line its amount, and the report's as not asked for when no report call was made", () => {
     expect(words(line(0.08, 5), line(0, 0))).toEqual([
       ["costPractice", "costExact", "US$0.08"],
       ["costReport", "costNoReport", undefined],
       ["costTotal", "costExact", "US$0.08"],
+    ]);
+  });
+
+  it("counts a studio session's conversation, never practice's line, on the session's row (D182)", () => {
+    const cost = { practice: line(9, 9), studio: line(0.4, 12), report: line(0.02, 1) };
+    expect(costRows(cost, "en", "studio").map((row) => [row.label, row.words.values?.amount])).toEqual([
+      ["costStudio", "US$0.40"],
+      ["costReport", "US$0.02"],
+      ["costTotal", "US$0.42"],
     ]);
   });
 
@@ -285,5 +296,49 @@ describe("askFocusMoves (D127)", () => {
     expect(askFocusMoves(null, "idle")).toBe(false);
     expect(askFocusMoves("idle", "idle")).toBe(false);
     expect(askFocusMoves("asking", null)).toBe(false);
+  });
+});
+
+describe("playbackMarks (D187)", () => {
+  const turn = (speaker: "examiner" | "candidate", text: string, startMs: number, input?: "voice" | "typed") => ({
+    speaker,
+    text,
+    phase: 0,
+    startMs,
+    endMs: startMs + 1_000,
+    ...(input === undefined ? {} : { input }),
+  });
+  const studioSession = (turns: ReturnType<typeof turn>[]) => ({
+    id: sessionId("studio"),
+    scenarioId: scenarioId("s"),
+    startedAt: "2026-09-30T10:00:00.000Z",
+    endedAt: "2026-09-30T10:05:00.000Z",
+    endReason: "ended-by-user" as const,
+    turns,
+    assessment: null,
+    mode: "studio" as const,
+  });
+
+  it("places each spoken answer of a studio session a moment before it starts, numbered in order", () => {
+    const marks = playbackMarks(
+      studioSession([turn("examiner", "Bonjour.", 0), turn("candidate", "Je suis analyste.", 4_000, "voice"), turn("candidate", "Et gestionnaire.", 9_100, "voice")]),
+    );
+    expect(marks).toEqual([
+      { number: 1, turn: 1, text: "Je suis analyste.", fromSeconds: (4_000 - PLAY_LEAD_MS) / 1000 },
+      { number: 2, turn: 2, text: "Et gestionnaire.", fromSeconds: (9_100 - PLAY_LEAD_MS) / 1000 },
+    ]);
+  });
+
+  it("never plays from before the recording began", () => {
+    expect(playbackMarks(studioSession([turn("candidate", "Oui.", 100, "voice")]))?.[0]?.fromSeconds).toBe(0);
+  });
+
+  it("leaves out the examiner's turns and any answer that was not spoken", () => {
+    expect(playbackMarks(studioSession([turn("examiner", "Bonjour.", 0), turn("candidate", "écrit", 500, "typed"), turn("candidate", "sans source", 700)]))).toEqual([]);
+  });
+
+  it("has none for a practice recording, whose places are not the session's", () => {
+    const { mode: _mode, ...practiceSession } = studioSession([turn("candidate", "Oui.", 4_000, "voice")]);
+    expect(playbackMarks(practiceSession)).toBeNull();
   });
 });

@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { fakePeers } from "./__tests__/fake-peer.js";
 import type { FetchLike } from "./http.js";
-import { STUDIO_TOOLS, studioInstructions } from "./prompts.js";
+import { STUDIO_TOOLS, studioInstructions, studioRepeatRequest } from "./prompts.js";
 import type { RealtimeTransportConfig } from "./realtime-transport.js";
 import { realtimeTransport } from "./realtime-transport.js";
 
@@ -530,6 +530,67 @@ describe("realtimeTransport — directives", () => {
     expect(h.peers.current().sent().slice(before)).toEqual([
       { type: "session.update", session: { type: "realtime", instructions: studioInstructions(SCENARIO, { phase: 0, register: "escalate" }) } },
     ]);
+  });
+});
+
+describe("realtimeTransport — repeat (D180)", () => {
+  const asked = {
+    type: "conversation.item.create",
+    item: { type: "message", role: "user", content: [{ type: "input_text", text: studioRepeatRequest("fr") }] },
+  };
+
+  it("asks the examiner to repeat, in the session's language, then cues the examiner", async () => {
+    const h = setUp();
+    await h.open();
+    const before = h.peers.current().sent().length;
+    await h.transport.repeat();
+
+    expect(h.peers.current().sent().slice(before)).toEqual([asked, { type: "response.create" }]);
+  });
+
+  it("holds the cue while the examiner is mid-response, and sends it once that response ends", async () => {
+    const h = setUp();
+    await h.open();
+    h.peers.current().emit({ type: "response.created", response: { id: "r1" } });
+    const before = h.sentOf("response.create").length;
+    await h.transport.repeat();
+
+    expect(h.sentOf("conversation.item.create").at(-1)).toEqual(asked);
+    expect(h.sentOf("response.create")).toHaveLength(before);
+    h.peers.current().emit({ type: "response.done", response: { output: [{ type: "message" }] } });
+    expect(h.sentOf("response.create")).toHaveLength(before + 1);
+  });
+
+  it("makes no turn of the request, and leaves it out of a reconnect's seed", async () => {
+    const h = setUp();
+    await h.open();
+    await h.transport.repeat();
+    h.peers.current().drop();
+    await settle();
+
+    expect(turns(h.events)).toEqual([]);
+    expect(h.peers.current().sent().map((m) => m.type)).toEqual(["session.update", "response.create"]);
+  });
+
+  it("is refused before the transport opens", async () => {
+    const h = setUp();
+    await expect(h.transport.repeat()).rejects.toThrow("not open");
+  });
+
+  it("does nothing while the line is down, and nothing once it is closed", async () => {
+    const h = setUp({}, [{}, { opens: false }]);
+    await h.open();
+    const first = h.peers.current();
+    first.drop();
+    await settle();
+    const redialled = h.peers.current();
+    await h.transport.repeat();
+    expect(first.sent().filter((m) => m.type === "conversation.item.create")).toEqual([]);
+    expect(redialled.sent()).toEqual([]);
+
+    await h.transport.close();
+    await h.transport.repeat();
+    expect(redialled.sent()).toEqual([]);
   });
 });
 

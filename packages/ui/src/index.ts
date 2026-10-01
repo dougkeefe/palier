@@ -47,6 +47,13 @@ export {
   type TimerTone,
   sheetState,
   timerState,
+  easeLevel,
+  voiceFormClass,
+  voiceFormScale,
+  VOICE_EASE,
+  VOICE_FULL_LEVEL,
+  VOICE_REACH,
+  type VoiceLevels,
 } from "./primitives/logic.js";
 
 // Primitives.
@@ -65,6 +72,7 @@ export { Mascot, type MascotProps } from "./primitives/Mascot.js";
 export { StreakFlame, type StreakFlameProps } from "./primitives/StreakFlame.js";
 export { Timer, type TimerProps } from "./primitives/Timer.js";
 export { Dialog, type DialogProps } from "./primitives/Dialog.js";
+export { VoiceForm, type VoiceFormProps } from "./primitives/VoiceForm.js";
 
 // The render half of the item type registry (implementation-plan.md §3.4, ADR 17).
 export { McqItem, type ItemRenderer, type ItemRendererProps } from "./item-types/McqItem.js";

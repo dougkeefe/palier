@@ -199,6 +199,54 @@ describe.each([
     expect(rows.every((row) => row.costUsd !== null && row.costUsd > 0)).toBe(true);
   });
 
+  it("serves the screen: the phase, a repeat asked of the examiner, the cost so far, and the session held as studio (D180–D182)", async () => {
+    await network();
+    const c = createContainer({ hermetic });
+    await c.useCases.saveApiKey({ key: KEY, remember: true });
+    const [choice] = (await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" })).filter((x) => x.sessionType === "work");
+    if (choice === undefined) throw new Error("the bank offers a work discussion");
+    const peers = fakePeers();
+    const id = sessionId(c.ids.ulid());
+
+    const run = await c.useCases.startOralStudio({ sessionId: id, scenarioId: choice.scenario.id }, peers.factory);
+    expect(run.phase()).toBe(0);
+    await run.repeat();
+    expect(peers.current().sent.slice(-2)).toEqual([
+      {
+        type: "conversation.item.create",
+        item: { type: "message", role: "user", content: [{ type: "input_text", text: expect.stringMatching(/répéter/) }] },
+      },
+      { type: "response.create" },
+    ]);
+    peers.current().emit({
+      type: "response.done",
+      response: {
+        output: [{ type: "message" }],
+        usage: {
+          input_tokens: 400,
+          output_tokens: 200,
+          input_token_details: { text_tokens: 300, audio_tokens: 100, cached_tokens: 0, cached_tokens_details: {} },
+          output_token_details: { text_tokens: 40, audio_tokens: 160 },
+        },
+      },
+    });
+    await vi.waitFor(async () => {
+      expect((await c.useCases.oralSessionCost({ sessionId: id }))?.studio.calls).toBe(1);
+    });
+    expect((await c.useCases.oralSession({ sessionId: id }))?.mode).toBe("studio");
+
+    await run.endByUser();
+    const ended = await run.ended;
+    expect(ended.mode).toBe("studio");
+    expect((await c.useCases.oralReport({ sessionId: id }))?.cost.studio.usd).toBeGreaterThan(0);
+  });
+
+  it("gives the screen the browser's realtime peer, which dials nothing until asked", () => {
+    const c = createContainer({ hermetic });
+    const factory = c.realtimePeer({} as MediaStream, {} as HTMLAudioElement);
+    expect(typeof factory).toBe("function");
+  });
+
   it("refuses to dial with no key held, naming it, and sends the route nothing", async () => {
     await network();
     const c = createContainer({ hermetic });

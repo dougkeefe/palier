@@ -187,6 +187,46 @@ export const practiseSpeaking = async (
 };
 
 /**
+ * Studio mode's spending path (progress.md D185, D188), from the spoken-practice screen, over the fake realtime
+ * examiner `installFakeRealtime` gives and the synthesised microphone `installFakeAudio` gives: choose studio mode
+ * and `session`, check the microphone, start past the studio pre-flight, wait for the examiner's first response to
+ * be counted and the candidate's answer to be heard, ask for a repeat, then end and wait for the end card, whose
+ * heading takes focus. `onState` runs at each state a user rests on, for axe.
+ */
+export const talkInStudio = async (
+  page: Page,
+  { session = "Warm-up", onState = async () => undefined }: { session?: string; onState?: (state: string) => Promise<void> } = {},
+) => {
+  await expect(page.getByRole("heading", { name: "Choose a session" })).toBeVisible();
+  await page.getByRole("radio", { name: /^Studio mode/ }).check();
+  await expect(page.getByText("Your key goes once to Palier’s server", { exact: false })).toBeVisible();
+  await onState("picker");
+  await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: session, exact: true }) }).getByRole("button", { name: "Choose" }).click();
+  await expect(page.getByRole("heading", { name: "Check your microphone" })).toBeFocused();
+  await expect(page.getByRole("button", { name: "Practise by typing instead" })).toBeVisible();
+  await onState("microphone");
+  await page.getByRole("button", { name: "Check my microphone" }).click();
+  const heard = page.getByText("Palier can hear you.");
+  const quiet = page.getByText("Palier heard very little.", { exact: false });
+  await expect(heard.or(quiet)).toBeVisible({ timeout: 10_000 });
+  await page.getByRole("button", { name: (await heard.isVisible()) ? "Continue" : "Continue anyway", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Before you start" })).toBeFocused();
+  await expect(page.getByText("Starting sends your key once to Palier’s server", { exact: false })).toBeVisible();
+  await onState("pre-flight");
+  await page.getByRole("button", { name: "Start the session" }).click();
+  await expect(page.getByRole("heading", { name: "The conversation" })).toBeFocused();
+  await expect(page.getByRole("status").filter({ hasText: "The conversation is on." })).toBeVisible();
+  // The first response's usage reaches the ledger, and the next tick reads it.
+  await expect(page.getByText(/^About US\$\d+\.\d+ so far$/)).toBeVisible({ timeout: 10_000 });
+  await onState("conversation");
+  await page.getByRole("button", { name: "I did not understand, could you repeat" }).click();
+  await onState("repeated");
+  await page.getByRole("button", { name: "End the session" }).click();
+  await expect(page.getByRole("heading", { name: "Session over" })).toBeFocused();
+  await onState("ended");
+};
+
+/**
  * The report on the session just ended (progress.md D126), from its end screen: follow the link,
  * ask for the report past its pre-flight, and wait for it. `onState` runs at each state a user
  * rests on, for axe.

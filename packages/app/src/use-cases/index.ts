@@ -242,6 +242,7 @@ export {
   oralFocusSubSkills,
   oralHistory,
   oralReport,
+  oralSessionCost,
   requestOralReport,
 } from "./oral-report.js";
 

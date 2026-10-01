@@ -6,7 +6,9 @@
  *   `AnswerSource` to hand to the transcription.
  * - **The session recording**: one recorder for the whole session, resumed while the candidate
  *   answers and paused otherwise, so it holds their answers and nothing else. It is what
- *   `saveOralAudio` keeps, on this device only; nothing uploads it in this slice [R12].
+ *   `saveOralAudio` keeps, on this device only; nothing uploads it [R12].
+ * - **A studio recording** (`recordWhole`, D183): the microphone from the conversation's start to
+ *   its end, never paused, kept the same way.
  */
 
 /** What the app needs of a `MediaRecorder`. */
@@ -101,6 +103,24 @@ export const recordSession = (stream: MediaStream, kit: MediaKit): SessionRecord
       return audio.size === 0 ? null : audio;
     },
   };
+};
+
+/** A studio session's recording: the microphone, whole, from the moment it starts. */
+export type WholeRecording = {
+  /** Stop, and settle with the recording, or `null` when the recorder gave no bytes. */
+  readonly finish: () => Promise<Blob | null>;
+};
+
+/**
+ * Record the microphone for the whole of a studio session (progress.md D183): started when the conversation
+ * is, and never paused, so a turn's `startMs` is a place in it and the report can play from a turn. It holds
+ * the candidate's microphone and nothing of the examiner's voice (architecture.md §8.5 step 8), as a practice
+ * recording does.
+ */
+export const recordWhole = (stream: MediaStream, kit: MediaKit): WholeRecording => {
+  const recording = recordSession(stream, kit);
+  recording.resume();
+  return { finish: recording.finish };
 };
 
 /** The browser's own `MediaRecorder` and clock. */

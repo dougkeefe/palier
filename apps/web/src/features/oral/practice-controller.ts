@@ -1,5 +1,5 @@
 import type { OralPracticeRun, OralSession, OralSessionChoice, SaveOralAudioResult } from "@palier/app";
-import type { ScenarioId, SessionId } from "@palier/domain";
+import type { OralMode, ScenarioId, SessionId } from "@palier/domain";
 import type { Preflight } from "@palier/engine";
 
 import {
@@ -15,7 +15,7 @@ import { type AnswerMode, type OralFailure, type PracticeAction, type QuestionHe
 
 /** The use cases the screen's session needs, as the container binds them. */
 export type PracticeUseCases = {
-  readonly preflightSpend: (request: { readonly feature: "oral-practice"; readonly quantity: number }) => Promise<Preflight>;
+  readonly preflightSpend: (request: { readonly feature: "oral-practice" | "oral-studio"; readonly quantity: number }) => Promise<Preflight>;
   readonly startOralPractice: (
     request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId },
     answers: AnswerBridge["source"],
@@ -47,7 +47,16 @@ export type PracticeControllerDeps = {
 
 export type PracticeController = {
   readonly checkMic: () => Promise<void>;
-  readonly continueWith: (choice: OralSessionChoice, mode: AnswerMode) => Promise<void>;
+  /**
+   * On to the pre-flight, answering as `mode`, in the mode `held` chose (D185). Studio mode needs the microphone:
+   * without it, the session is priced, and run, as practice by typing.
+   */
+  readonly continueWith: (choice: OralSessionChoice, mode: AnswerMode, held?: OralMode) => Promise<void>;
+  /**
+   * Give the checked microphone to studio mode's controller (D185), which lets it go when its session ends.
+   * This controller forgets it, so neither Back nor leaving the page stops it under the studio session.
+   */
+  readonly handOver: () => MediaStream | null;
   readonly back: () => void;
   readonly start: (choice: OralSessionChoice, mode: AnswerMode) => Promise<void>;
   readonly record: () => void;
@@ -70,7 +79,7 @@ export type PracticeController = {
 };
 
 /** A session that never reached the store, for the end screen: no turns, and no reason. */
-const emptySession = (id: SessionId, choice: OralSessionChoice): OralSession => ({
+export const emptySession = (id: SessionId, choice: OralSessionChoice): OralSession => ({
   id,
   scenarioId: choice.scenario.id,
   startedAt: new Date(0).toISOString(),
@@ -177,15 +186,17 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
       }
     },
 
-    continueWith: async (choice, requested) => {
+    continueWith: async (choice, requested, held = "practice") => {
       if (busy) return;
       busy = true;
       check += 1;
       const mode: AnswerMode = requested === "spoken" && stream !== null ? "spoken" : "typed";
       if (mode === "typed") stopStream();
+      const heldNow: OralMode = held === "studio" && mode === "spoken" ? "studio" : "practice";
       try {
-        const preflight = await deps.useCases.preflightSpend({ feature: "oral-practice", quantity: choice.minutes });
-        if (!disposed) deps.dispatch({ type: "preflighted", mode, preflight });
+        const feature = heldNow === "studio" ? "oral-studio" : "oral-practice";
+        const preflight = await deps.useCases.preflightSpend({ feature, quantity: choice.minutes });
+        if (!disposed) deps.dispatch({ type: "preflighted", mode, preflight, ...(heldNow === "studio" ? { held: heldNow } : {}) });
       } finally {
         busy = false;
       }
@@ -195,6 +206,13 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
       check += 1;
       stopStream();
       deps.dispatch({ type: "back" });
+    },
+
+    handOver: () => {
+      check += 1;
+      const given = stream;
+      stream = null;
+      return given;
     },
 
     start: async (choice, requested) => {

@@ -13,6 +13,7 @@ import {
   oralFocusSubSkills,
   oralHistory,
   oralReport,
+  oralSessionCost,
   requestOralReport,
 } from "./oral-report.js";
 import { profile } from "./__tests__/exam-fakes.js";
@@ -251,6 +252,22 @@ describe("oralReport (D126)", () => {
     expect(report?.cost.report).toEqual({ usd: 0.02, calls: 1, unpriced: 0 });
   });
 
+  it("costs a studio session's conversation on its own line, apart from practice and the report (D182)", async () => {
+    const mine = { sessionId: SESSION_ID, ts: "2026-09-27T10:01:00.000Z" };
+    const rows = [
+      aCostEntry({ ...mine, feature: "oral-studio", costUsd: 0.04 }),
+      aCostEntry({ ...mine, feature: "oral-studio", costUsd: null }),
+      aCostEntry({ ...mine, feature: "oral-assessment", costUsd: 0.02 }),
+    ];
+    const report = await oralReport(SESSION_ID, view([anEnded({ mode: "studio" })], rows));
+
+    expect(report?.cost).toEqual({
+      practice: { usd: 0, calls: 0, unpriced: 0 },
+      studio: { usd: 0.04, calls: 2, unpriced: 1 },
+      report: { usd: 0.02, calls: 1, unpriced: 0 },
+    });
+  });
+
   it("counts a report call OpenAI billed though it failed, while the session has no report (D127)", async () => {
     const rows = [aCostEntry({ sessionId: SESSION_ID, ts: "2026-09-27T10:12:00.000Z", feature: "oral-assessment", costUsd: 0.03 })];
     const report = await oralReport(SESSION_ID, view([anEnded()], rows));
@@ -267,6 +284,22 @@ describe("oralReport (D126)", () => {
     expect(await blockOf(anEnded({ assessment: REPORT }))).toBe("assessed");
     expect(await blockOf(anEnded({ turns: [TURNS[0]!] }))).toBe("no-answer");
     expect(await blockOf(anEnded({ scenarioId: scenarioId("gone") }))).toBe("scenario-gone");
+  });
+});
+
+describe("oralSessionCost (D182)", () => {
+  it("reads a running session's cost so far from its own rows, for studio mode's meter", async () => {
+    const rows = [
+      aCostEntry({ sessionId: SESSION_ID, ts: "2026-09-27T10:01:00.000Z", feature: "oral-studio", costUsd: 0.01 }),
+      aCostEntry({ sessionId: sessionId("other"), ts: "2026-09-27T10:01:00.000Z", feature: "oral-studio", costUsd: 5 }),
+    ];
+    const cost = await oralSessionCost(SESSION_ID, { oral: oralStore([anOralSession({ mode: "studio" })]), ledger: costLedger(rows) });
+
+    expect(cost?.studio).toEqual({ usd: 0.01, calls: 1, unpriced: 0 });
+  });
+
+  it("is nothing for a session this device does not hold", async () => {
+    expect(await oralSessionCost(sessionId("absent"), { oral: oralStore([]), ledger: costLedger([]) })).toBeNull();
   });
 });
 

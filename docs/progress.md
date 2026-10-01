@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 30 September 2026 (CI that can fail, D177–D179)
+**Last updated:** 30 September 2026 (Phase 6 Slice 2, the studio screen, D180–D189)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -51,7 +51,10 @@ cut in on pauses and one that did not listen, are fixed (#54; D175, D176). #54 m
 never been able to fail** (D177): both lanes swallowed their exit code from Phase 0 on. **CI that can fail** is built
 (`dougkeefe/next-dev-slice`; D177–D179): the v5 re-recording, which makes `main` green again; every lane through one
 script; the medium lane in three parallel jobs; the fast lane's budget at 120 s (human); and `main`'s required checks set to
-the four lanes, which until now always passed. **Phase 6 Slice 2 is next.**
+the four lanes, which until now always passed. It merged (#55). **Phase 6 Slice 2, the studio screen, is built**
+(`dougkeefe/next-slice-from-progress-v5`; D180–D189): the mode choice, the studio view, the whole-session recording, the meter, playback from
+each answer, and the key copy's exception in both languages. Tap to first word was measured live and is **not yet under
+2.5 s** (D189), and the live run found a turn that never ended, which the human's session must check first.
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -116,7 +119,7 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 next |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 built, `dougkeefe/next-slice-from-progress-v5`, D180–D189 |
 | 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; Gate M waits on Phase 6, D165) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
@@ -126,9 +129,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-dev-slice` | **CI that can fail** (D177–D178): the swallowed exit code in both lanes of `verify.yml`, the medium lane sharded, the fast lane measured, branch protection; and the v5 re-recording that #54 merged without, so `main` is green. | 30 September 2026 |
+| `dougkeefe/next-slice-from-progress-v5` | **Phase 6 Slice 2 — the studio screen, on the key** (D173's copy exception, the mode choice, the studio view, the whole-session recording, the meter, synced audio on the report, the hermetic journey and the key-leak test's fake-peer half, and the live measurements). | 30 September 2026 |
 
-*(The prior rows — Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -229,59 +232,50 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 Phase 7 (D132): **Slices 1–4 merged**, and **Gate L passed** (D164). **Studio mode is in 1.0** (D165, human), and Gate M waits
 for Phase 6. **Phase 6 Slice 1 merged (#53)**, and **Gate N passed** (D174, human): the voice is `cedar`. Its two findings are
-fixed (#54): semantic turn detection at `low` eagerness (D175), and an examiner that listens (D176). **The v5 re-recording is
-done** (`dougkeefe/next-dev-slice`): the third examiner turn follows the contradicted premise. **CI can fail now, and `main`
-is protected** (D177): a red lane blocks the merge, so run `pnpm verify` and `CI=1 pnpm verify:medium` before pushing.
+fixed (#54): semantic turn detection at `low` eagerness (D175), and an examiner that listens (D176). **CI can fail now, and
+`main` is protected** (D177, #55): a red lane blocks the merge.
 
 Phase 5's deferred cost check (D130), the product pilot (Gate E, D97) and Gate M's calls that need no build (the domain, the
 trademark check, lining up an outside submitter) still run beside it, all the human's. Gate M's one build item, **the
 full-volume bank run** (D54), touches no oral code. It can run in its own worktree once the human funds a key for it.
 
-**Next: Phase 6 Slice 2 — the studio screen, on the key.** Build it in a fresh worktree off `main`, after
-`dougkeefe/next-dev-slice` merges. Read PRD §8.6, architecture.md §8.5–§8.6, and D165–D179 first. Everything below is decided.
-Budget note (D178): a change to a core package puts the fast lane near 92 s of its 120; watch the step summary's phase times.
-- **The copy's exception first** (D173). Amend every absolute key claim in both languages to name `POST /api/realtime/secret`:
-  - `key.offerStays`, `privacy.third`, `neverKey`, and `KeyOffer`'s comment;
-  - `SECURITY.md`'s "designed but not built";
-  - architecture.md §6.3's settings note, linking the route's source (`apps/web/src/server/realtime-handlers.ts`).
+**Phase 6 Slice 2 is built** (`dougkeefe/next-slice-from-progress-v5`; D180–D189). Merge it first: `main` deploys to production, and the
+key copy's exception ships with the screen (D173).
 
-  `/privacy` changes in the same PR (`apps/web/CLAUDE.md`).
-- **The screen, `/practice/oral`**:
-  - a mode choice between practice and studio, each with its cost up front from `featureCosts`/`preflightSpend`
-    (`oral-practice` and `oral-studio`, per minute);
-  - the studio view of PRD §8.6: the voice form over both levels (the examiner's `remoteAudio` and the microphone, through
-    Web Audio analysers), the phase indicator, the elapsed timer, a large end control, and "I did not understand, could you
-    repeat". The repeat control sends a `conversation.item.create` user text asking for it, then `response.create`. That is
-    a new `RealtimeTransport` method, `repeat()`, reached through `OralStudioRun.repeat`, each with its test;
-  - no live transcript;
-  - a static fallback under `prefers-reduced-motion`, and every state keyboard-operable and axe-clean;
-  - `end` when the session ends: `time-cap` gets its own message (`features/oral/practice-view.ts` maps it to `endOther`
-    today).
-- **The controller.** It follows `features/oral/practice-controller.ts`:
-  - it owns the microphone, builds `browserRealtimePeer({ microphone, remoteAudio })`, and calls
-    `container.useCases.startOralStudio(request, peer)`;
-  - it holds the Web Lock (D144), ticks the run every second, and records the whole session with `MediaRecorder` into
-    `saveOralAudio`;
-  - it maps a failure by name: `NoApiKeyError`, `InvalidApiKeyError`, `RateLimitError` and `ProviderUnavailableError`,
-    each a sentence.
-- **Spend.** The pre-flight at the scenario's minutes, and a running meter from the session's own ledger rows (D125).
-- **The report.** `/practice/oral/report` already works for a studio session: the transcript's turns, and the notes quoted
-  by `assessOral` (D168). It gains synced audio: play the recording from a turn's `startMs`.
-- **Tests.**
-  - **One fake, an init script that stubs `RTCPeerConnection`**, in `e2e/leak-guard.ts` beside `installFakeAudio`. Its data
-    channel plays a short scripted examiner, and `page.route` answers `/v1/realtime/calls` with SDP. The hermetic graph
-    keeps the real transport, as it keeps the real OpenAI adapter, so the bundle holds no test code. This amends the plan's
-    "memory transport" for the journey.
-  - A hermetic journey (`oral.spec.ts`) through every studio state, axe-clean.
-  - `key-leak.spec.ts` gains the fake-peer half (D171): the calls endpoint's `authorization` is the `ek_memory_` secret,
-    never the key.
+**Next: the human's live studio session, then "the dial under 2.5 s", then Slice 3.**
 
-*Done:*
-- exit criterion 1 measured live (tap to first word under 2.5 s, on the human's key);
-- the cost of a real session measured and written into `pricing.json` over D167's provisional figures;
-- heard live on the real screen, on `cedar`: the examiner waits through a mid-sentence pause (D175), and follows an answer
-  that contradicts its question's premise (D176). If it still cuts in, D175's *revisit when* applies;
-- the copy's parity, and `pnpm verify` and `CI=1 pnpm verify:medium` passing.
+1. **The human's live session (do not self-direct).** On the deployed site after the merge, on your key, on `cedar`, hold
+   one Work discussion in studio mode of at least five minutes, and report four things:
+   - **Does the examiner answer once you finish speaking?** The synthetic run never had a turn end (D189). If it does
+     not, the agent's next slice is D175's *revisit when*, silence detection at about 1.5 s, as data, before anything
+     below.
+   - Does it wait through a mid-sentence pause (D175), and follow an answer that contradicts its question (D176)?
+   - The report's "The conversation" line and the session's minutes. That dollar figure a minute replaces D167's
+     provisional one in `pricing.json`: the agent converts it to the token mix, keeping D167's shares where no split was
+     measured.
+   - Whether the start felt slow.
+2. **Agent slice, "the dial under 2.5 s"** (exit criterion 1, before Slice 3; D189's timeline says where the time goes):
+   - **warm the route**: when the studio pre-flight card shows, `POST /api/realtime/secret` with no key, and the 401
+     `missing-key` warms a cold function without the key leaving the browser. It needs a unit test that no header or body
+     is sent, and the key-leak test's count holds;
+   - **overlap the dial**: start the peer and its offer while the secret is minted, rather than after;
+   - **measure on the deployed site**, with `studio-live.spec.ts` given the site's address as its base URL: twelve dials,
+     the first included.
+
+   *Done:* the median of twelve dials is under 2.5 s, with the figures in the session log, and the criterion ticked. **If
+   it is still over**, the remaining lever is minting the secret at the pre-flight, before the tap. That sends the key
+   before the candidate has pressed Start, so it is the human's call at Gate O, not the agent's.
+3. **Then Slice 3, the exception escapable**, as planned in the Phase 6 section: the popup escape, the Worker and function,
+   the log exclusion verified, and `docs/realtime-checklist.md`.
+
+Budget note (D178): a change to a core package puts the fast lane near 92 s of its 120 s. Run `pnpm verify` and
+`CI=1 pnpm verify:medium` before pushing.
+
+**For the human, from Phase 6 Slice 2:**
+- The session above.
+- **Read the new copy** in both languages: the picker's studio callout, the pre-flight's line, the key settings' "one
+  exception" card, the onboarding offer and `/privacy` (D186). It goes to Gate O's French read. The card's link to the
+  route's source resolves once the repo is public.
 
 **For the human, from Phase 6 Slice 1:**
 - After merging, run the new smoke check: `curl -s -X POST https://palier-virid.vercel.app/api/realtime/secret` should answer
@@ -335,7 +329,8 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
 - **one `debiasKeyPosition`** in domain for the factory and the browser (finding 16);
 - **the vocabulary queue** (PRD §8.6's "added to the vocabulary queue"): v1's `vocab` table behind a port and a vocabulary item
   type in the registry (ADR 17);
-- **transcript sync with playback** (PRD §8.6): the turns have times, but no clip is cut from the recording;
+- **transcript sync with playback for practice mode** (PRD §8.6). A studio recording plays from each spoken answer (D187),
+  but a practice recording is paused between answers, so its places are not the turns';
 - **a drill filtered to one sub-skill**, so a fix's link lands on that sub-skill today rather than biasing the next plan (D124);
 - **fillers the transcription drops**: asking the transcription to keep hesitations (its `prompt` parameter) (D123);
 - **a 404 status for an unknown path**: it answers 200 with `noindex`, because Next serves `notFound()` under this root layout
@@ -749,7 +744,9 @@ built after Phase 7's slices and before Gate M.
 - [x] **Gate N — the examiner's voice (human).** Beside Slice 1, and before Slice 2. `marin` and `cedar` heard in French at C
   level in OpenAI's playground; the human picks one. A fail stops Phase 6. **Passed, 30 September 2026 (D174): `cedar`.**
   Two findings came with it, and are fixed: the examiner cut in on a pause (D175), and did not listen (D176).
-- [ ] **Slice 2 — The studio screen, on the key.** The work:
+- [~] **Slice 2 — The studio screen, on the key.** **Built 30 September 2026** (`dougkeefe/next-slice-from-progress-v5`; D180–D189;
+  session-log evidence), not merged. Its *done*: the copy's parity is met; exit criterion 1 is measured and not met (D189);
+  the cost per minute is not measured, and `pricing.json` keeps D167's figures (D189). The work:
   - **the key copy's one exception, stated in both languages** (moved here from Slice 3 by D173): `key.offerStays`,
     `privacy.third`, `neverKey`, `KeyOffer` and `SECURITY.md`, plus architecture.md §6.3's settings note linking the
     route's source;
@@ -777,7 +774,8 @@ built after Phase 7's slices and before Gate M.
 
 **Exit criteria** (the actual gate). Two are added by D165.
 
-- [ ] Session establishes in under 2.5 seconds from tap to first word
+- [ ] Session establishes in under 2.5 seconds from tap to first word. **Measured, not met** (D189): twelve dials, median about
+  2.49 s, the first on a fresh server 2.5–3.6 s
 - [ ] Disconnection mid-session recovers or fails cleanly with the transcript preserved
 - [ ] Manual realtime checklist (`architecture.md` §14) passes on Chrome, Safari, Firefox, desktop and mobile
 - [x] The examiner's French voice is judged credible at C level by a human (Gate N) — `cedar`, D174
@@ -6180,11 +6178,283 @@ in place
 - **Evidence:** the whole E2E suite three times at 4 workers, 280 passed. There is no component test in `apps/web` to
   extend; the journeys that answer by keyboard are the test.
 
+### D180 — "could you repeat" is studio mode's alone: a user message and a cue, never a turn
+**Date:** 30 September 2026 · **Status:** accepted (agent, Phase 6 Slice 2)
+
+- **Where it lives.** `repeat()` is on the adapter's `RealtimeTransport`, on `StudioTransport` and on `OralStudioRun`. It is
+  **not** on the `OralTransport` port. A turn-based examiner's question is on the screen to be played again, so the memory
+  transport, the practice transport and every contract implementer are left alone.
+- **What it sends.** A `conversation.item.create` user message in the session's language, then the examiner's cue through
+  the one-response queue (D170). So a repeat asked mid-response waits for that response to end. The wording is
+  `studioRepeatRequest(lang)` in `prompts.ts`.
+- **What it is not.** The candidate did not say it, so it is not a turn:
+  - it enters neither the transcript nor a reconnect's seed;
+  - while the line is down it does nothing, since a request made during a reconnect has nothing to follow;
+  - once closed it does nothing.
+- **`STUDIO_PROMPT_VERSION` stays at 2.** The plan said to bump it. The instructions already told the examiner to repeat or
+  rephrase once, without comment, and they did not change. The version covers the instructions, so a bump would say they
+  had.
+- **The screen** makes the control single-flight, and disables it until the call is open and once the end is asked for.
+
+### D181 — a session carries the mode it was held in, and a run says its phase
+**Date:** 30 September 2026 · **Status:** accepted (agent, Phase 6 Slice 2). Amends D116's `OralSessionRun`
+
+- **`OralSession.mode?: "practice" | "studio"`**, from domain's `ORAL_MODES`.
+  - `startOralStudioRun` stamps `studio` through the driver's request.
+  - Absent is practice, which covers every row stored before it.
+  - It matters after the session because a studio recording runs on the session's clock and a practice one does not
+    (D187).
+- **Where it lives.** The plan put the field in a domain schema. There is none: `OralSession` is `@palier/app`'s persisted
+  aggregate, checked by hand at the Dexie edge (D115). So the vocabulary is in domain, the field is on the port's type, and
+  the Dexie reader keeps a known mode and reads anything else as none. The field is not indexed, so there is no version
+  bump.
+- **`OralSessionRun.phase()`** reads the machine's current phase. Studio mode's indicator has no question to read one
+  from. Practice does not use it.
+- **The plan's other names.** `held` on the screen's steps follows the same rule as `mode` on the session: it is said only
+  for studio, so every existing step keeps its shape.
+
+### D182 — a studio conversation's cost is its own line, and the meter reads it every tick
+**Date:** 30 September 2026 · **Status:** accepted (agent, Phase 6 Slice 2). Amends D125
+
+- **The gap.** `oralReport` counted `oral-practice` and `oral-assessment` rows only. A studio session's report would have
+  shown its conversation as free.
+- **The fix.** `OralSessionCost` gains `studio` beside `practice` and `report`, all from the session's own rows. The
+  report's first line is the conversation for a studio session and the session for a practice one.
+- **`oralSessionCost({ sessionId })`** is the same reading on its own, for the running meter. The studio controller reads
+  it at each one-second tick. Ledger rows arrive as each `response.done` and transcription is priced, through Slice 1's
+  `usage` hook.
+- **The meter's words** say "about" when every call was priced and "at least" when one was not (D103), and "nothing counted
+  yet" before the first row.
+
+### D183 — the studio recording is the microphone, whole, from the tap
+**Date:** 30 September 2026 · **Status:** accepted (human decision: the microphone only; the rest, agent)
+
+- **The microphone only** (architecture.md §8.5 step 8). The human chose it over mixing in the examiner's voice. It keeps
+  the recording fit for Gate J's opt-in, which must upload only the candidate's voice.
+- **Whole and never paused** (`recordWhole`), so a turn's `startMs` is a place in it (D187).
+- **When it starts.** At the tap, before the dial. The transport's clock starts when it opens, a moment after, so the
+  recording leads the session's clock by the time the scenario lookup and the first store write take. That is tens of
+  milliseconds, inside D187's lead. Starting it once connected would have lagged the clock by the whole dial, which is
+  seconds (D189).
+- **A start that fails keeps no recording**, since there was no conversation to replay. A recorder that cannot start leaves
+  the conversation running with no recording, as practice does.
+
+### D184 — the voice form is a `@palier/ui` primitive that the reduced-motion switch cannot reach, so it is told
+**Date:** 30 September 2026 · **Status:** accepted (agent, Phase 6 Slice 2)
+
+- **`VoiceForm`** has two decorative, `aria-hidden` layers, the outer the examiner's and the inner the candidate's.
+  - The levels are the practice check's own analyser (`browserLevelKit`), on the microphone and on the remote stream once
+    it arrives, reopened if a reconnect brings a new stream.
+  - They are written to two custom properties from a `requestAnimationFrame` loop, eased, `transform` only (D160). They
+    never go through React state, so the screen does not re-render at the frame rate.
+- **Why `still` is a prop.** D160's one switch turns off CSS animations and transitions. A frame loop is neither, so the
+  switch cannot reach it. The screen reads `prefers-reduced-motion` and passes `still`, and a still form runs no loop at
+  all.
+- **Status in words.** The form carries no meaning a reader could miss: a status line says whether the call is dialling,
+  open or ending.
+
+### D185 — the studio screen's calls: one island, two controllers, one end card
+**Date:** 30 September 2026 · **Status:** accepted (agent, Phase 6 Slice 2)
+
+- **The mode choice** is a radio pair above the sessions. Practice is the default, each mode shows its cost a minute, and
+  each session card is priced in the chosen mode. The picker's callout says what each mode sends where.
+- **Studio needs the microphone.**
+  - A refused, missing or failing microphone shows why, and offers "Practise by typing instead".
+  - That choice is priced and run as practice, never as studio.
+- **Two controllers, one island.**
+  - The practice controller keeps the check and the pre-flight. At the tap it **hands the microphone over** (`handOver`)
+    to `studio-controller.ts`, which owns it from then on and stops it at the end.
+  - The studio controller dispatches its own small reducer (`studio-view.ts`), and hands the ended session to the practice
+    reducer's `ended`. So the end card, the transcript, the report link and "Practise again" are one code path.
+  - `time-cap` gains its own sentence there, as D166 promised.
+- **The peer comes from the container** (`realtimePeer`). Importing `browserRealtimePeer` into the island would pull
+  `@palier/adapters/openai` into the island's chunk, and the container is loaded lazily so the adapters are not (D59).
+- **The examiner's voice** plays in an `Audio` element made by the controller, outside the layout, with `autoplay`; the tap
+  is the gesture.
+- **A failure is named only when the connection failed** (`transport-failed`). The transport keeps a server `error`
+  without ending (D170), so a session the candidate ended is never reported as failed because of one.
+- **The large end control** is `app-studio-end`: the ordinary button, taller and wider, as PRD §8.6 asks.
+- **From the pre-PR review (candid-review, on this branch):**
+  - **End, or leaving the page, while the call is still dialling cancels the dial.** `startOralStudioRun` takes an
+    `AbortSignal` that closes the transport, and the transport already abandons a pending dial cleanly. Before this, nothing
+    could reach the transport until it opened, up to about 25 s: the microphone went on recording, and a first response
+    could be billed with no ledger row. An end the candidate asked for is never named as a failure.
+  - **Neither control is disabled under the focus that pressed it**, which dropped a keyboard user's focus to the page.
+    Repeat is single-flight in the controller. End says it is under way with `aria-disabled` and ignores a second press.
+  - **The end card's recording sentence has a studio version** (`recordingKeptStudio`): a studio recording is the
+    microphone for the whole conversation, not "your answers". `key.whereNever` no longer quotes "only OpenAI", which the
+    amended `whereStored` stopped saying.
+
+### D186 — the key copy's exception, as shipped
+**Date:** 30 September 2026 · **Status:** accepted (agent, Phase 6 Slice 2). Carries out D173
+
+- **Changed, in both languages.**
+  - `key.offerStays`: onboarding's offer.
+  - `key.whereStored` and `key.whereNever`: the key settings' own statement, which said "sent only to OpenAI" and "never
+    sent to Palier's server". Neither was on D173's list; both were absolute.
+  - `privacy.third`.
+  - `oral.studioMode` and `oral.sendsToStudio`: the picker's callout and the pre-flight say it where the key is about to
+    go.
+- **Added.** A card on `/settings/key`, "The one exception: studio mode" (architecture.md §6.3's "prominent note"). It says
+  why the route exists and what it does and does not do, and links the route's source.
+  - The link is `lib/report.ts`'s `REALTIME_ROUTE_SOURCE_URL`, on `main`, and a test holds its path to a file that exists.
+  - **It resolves once the repository is public (Gate M).** Until then it is a 404 for anyone but the owner.
+- **Unchanged, and why.**
+  - `sync.neverKey` ("Your OpenAI API key"), in the never-synced list and in `/privacy`'s "what Palier never holds". Both
+    stay true: the key is never synced or kept.
+  - Each feature's own `sendsTo`. Each is about its own feature, and none of them sends the key to our route.
+- **Also changed:** `KeyOffer`'s comment, `SECURITY.md` ("one exception, and only one", what the route does and never does),
+  and architecture.md §6.3's note.
+- **One test changed with the claim it pinned.** `e2e/key.spec.ts`'s step 5 asserted the offer read "sent only to OpenAI",
+  which is the absolute claim D173 required this pull request to remove. It now asserts the offer names the exception. Found
+  by the medium lane, not bent to fit: what it checks, that the offer states where the key goes, is unchanged.
+
+### D187 — synced playback: each spoken answer from where it starts, in the recording's card
+**Date:** 30 September 2026 · **Status:** accepted (agent, Phase 6 Slice 2)
+
+- **Where.** In the report's recording card, beside the player: each of the candidate's spoken answers, with "Play from
+  here". The transcript with its errors is shown only once a report exists, and the recording should play before one is
+  asked for, so the card holds both the player and its places.
+- **The places.** `playbackMarks(session)` seeks to each spoken answer's `startMs` less 300 ms (`PLAY_LEAD_MS`), so the
+  first syllable is not cut and D183's small lead is covered.
+  - The examiner's turns have none, since the recording is the microphone only.
+  - Typed answers have none.
+- **Practice sessions have none.** Their recording is paused between answers, so its places are not the turns'. Synced
+  playback for practice mode is *named, not scheduled*.
+
+### D188 — the hermetic studio journey dials over a stubbed `RTCPeerConnection`, and the guard sorts the dial apart
+**Date:** 30 September 2026 · **Status:** accepted (agent, Phase 6 Slice 2). Amends implementation-plan.md §7's "a
+hermetic journey over a memory transport"
+
+- **The fake**, as *Next, decided* specified: `installFakeRealtime` is an init script beside `installFakeAudio`.
+  - Its `RTCPeerConnection` opens a data channel once the answer is set, and gives an oscillator's stream as the
+    examiner's voice.
+  - Each `response.create` gets a whole response with usage, so the ledger and the meter are real.
+  - A user message before it makes that response the repeat.
+  - The candidate answers once, heard with `TRANSCRIPT_SENTINEL`.
+  - Everything the page sends is kept on `window.__palierRealtimeSent`.
+
+  The hermetic graph keeps the real transport, the real secret route and the real dial, with no test code in the bundle.
+  A memory transport would have skipped exactly the part the key-leak test must see.
+- **`stubOpenAi`** answers `/v1/realtime/calls` with SDP.
+- **The guard** files the calls endpoint's `authorization` as `realtimeCallAuthorizations()`, apart from
+  `openAiAuthorizations()`, which remain the key's own uses. Every earlier count holds.
+- **Key-leak step 3f.** A studio session from the screen:
+  - the route's authorization is the key once more;
+  - the one dial carries an `ek_memory_` secret;
+  - no other call spends the key;
+  - the conversation's recording, the page's fourth recorder, reaches no request.
+- **Proved to bite:** with `repeat` disabled in the controller, the studio journey fails at the repeat (session log).
+
+### D189 — the live measurement: tap to first word is measured and not yet met, and the conversation's cost is the human's
+**Date:** 30 September 2026 · **Status:** accepted (human decision: the agent measures by script on the smoke key, the human
+then holds one real session); the figures are the agent's
+
+- **The instrument.** `e2e/studio-live.spec.ts`, the `live` Playwright project, exists only with `PALIER_LIVE=1` and runs
+  in no lane.
+  - It runs the production build on the capped `OPENAI_SMOKE_KEY`, loaded from `.env.local` in a subshell.
+  - It times the tap on "Start the session" to the first moment the examiner's voice crosses a level on the remote track,
+    through an analyser, and each step of the dial between.
+  - It then holds a two-minute conversation whose microphone plays French answers synthesised by `tts-1`, summing every
+    `response.done` usage off the data channel.
+- **Tap to first word (exit criterion 1): measured, not met.** Twelve dials over four runs, headless Chromium on a local
+  production server over a home connection, in ms:
+
+  | Run | Dial 1 (first on a fresh server) | Dial 2 | Dial 3 |
+  | --- | --- | --- | --- |
+  | 1 | 3,518 | 2,765 | 3,582 |
+  | 2 | 3,169 | 2,022 | 2,005 |
+  | 3 | 2,503 | 2,467 | 2,009 |
+  | 4 | 2,673 | 2,032 | 1,635 |
+
+  - The median is about 2.49 s, so about half the dials are over 2.5 s.
+  - The steps, from a warm run: the secret back at about 340 ms, the SDP answer at about 640 ms, the channel open at about
+    1.05 s, `response.created` at about 1.23 s, the first transcript delta at about 1.70 s, and the voice at about 1.9 s.
+  - The first dial on a fresh server spent about 470–930 ms on the secret against about 330–380 ms warm. A cold Vercel
+    function would add more, so the deployed figure may be worse.
+  - The criterion is not ticked. Making it pass is in *Next, decided*.
+- **The conversation's cost: not measured.** In every run the server heard the synthetic answer begin
+  (`input_audio_buffer.speech_started`) and never heard it end: no `speech_stopped` and no transcription in two minutes, so
+  the examiner never replied. The diagnostics ruled out the page's own instruments: the answer played once, the examiner's
+  channel went quiet, and no error was raised.
+  - **What caused it is not known.** It is either the synthetic microphone (a Web Audio destination) or semantic turn
+    detection at D175's `low` eagerness never closing a turn.
+  - **The second would be a product defect**, and the worst kind for this feature: a candidate who finishes speaking and
+    is never answered.
+  - So the human's live session must check it first. D175's *revisit when* names the fallback already, silence detection
+    at about 1.5 s.
+  - The spec reports that half as an annotation rather than failing on it.
+- **`pricing.json` keeps D167's provisional figures.** Principle 8 wants a measured session, and none was measured. The one
+  usable reading is from run 4's greeting: 832 of the response's 952 text input tokens were already cached on the second
+  dial, which supports D167's heavy cached-input share.
+- **Spend.** Four runs, each three short dials, one two-minute session and five `tts-1` answers: about US$0.50 on the smoke
+  key.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 30 September 2026 — `dougkeefe/next-slice-from-progress-v5` (Oral practice in the main navigation, human request)
+
+- **The header gains "Oral practice" / "Pratique orale"**, between Review and Progress, linking `/practice/oral`, at the
+  human's request. Until now spoken practice was reached from home's actions card only.
+- **The header now wraps** (`flex-wrap` on the header and its nav) rather than overflowing: five links, the sync status and
+  the language toggle no longer fit one line on a phone. Checked at 320 px in French, the longest labels: no horizontal
+  overflow, and the link lands on the spoken-practice page (screenshots in the session, not committed).
+- The label is the human's words. The page's own title stays "Spoken practice".
+
+```
+pnpm verify                → 247 files, 3786 passed, 8 todo; exit 0
+CI=1 pnpm verify:medium    → integration 51 passed; Playwright 99 passed (1.6m); exit 0
+node apps/web/scripts/check-bundle-size.mjs → 166.1 KB of 180.0 KB
+```
+
+### 30 September 2026 — `dougkeefe/next-slice-from-progress-v5` (Phase 6 Slice 2: the studio screen, on the key; D180–D189)
+
+Opened to *Next, decided*'s Phase 6 Slice 2, after #55 merged. The plan was approved with two human decisions: the studio
+recording holds **the microphone only** (D183), and the live checks are **shared**, the agent by script on the smoke key and
+then the human on the real screen (D189).
+- **The core** (D180–D182):
+  - `repeat()` on the realtime transport and the studio run, studio only;
+  - `OralSessionRun.phase()`;
+  - `OralSession.mode`, stamped `studio`;
+  - `oralSessionCost` with a studio line, closing a gap where a studio session's report would have read its conversation as
+    free.
+- **The screen** (D183–D185): the mode choice with each mode's cost a minute, studio's pre-flight, and `studio-controller.ts`
+  (the microphone handed over, recorded whole from the tap, the Web Lock, the phase and the meter each tick). Then
+  `OralStudio` with `@palier/ui`'s new `VoiceForm`, still under reduced motion, and the practice end card with `time-cap`'s
+  own sentence.
+- **The copy's exception** (D186), in both languages:
+  - the onboarding offer, the key settings' statement, a new "one exception" card linking the route's source, and
+    `/privacy`;
+  - `SECURITY.md` and architecture.md §6.3.
+  - One test pinned the old claim and changed with it (D186).
+- **Synced playback** (D187): the report's recording card plays a studio recording from each spoken answer.
+- **Tests** (D188):
+  - `installFakeRealtime` stubs `RTCPeerConnection` with a scripted examiner, and five new journeys in `oral.spec.ts`
+    cover every studio state axe-clean, reduced motion, no microphone, a refused dial, and French.
+  - Key-leak step 3f: the dial carries only an `ek_memory_` secret, and the conversation's recording reaches no request.
+  - **Proved to bite:** with the controller's `repeat` disabled, the studio journey failed at the repeat poll ("expected 1,
+    received 0"), and passed again restored.
+- **Live, on the smoke key** (D189), four runs, about US$0.50:
+  - tap to first word: 3518, 2765, 3582 · 3169, 2022, 2005 · 2503, 2467, 2009 · 2673, 2032, 1635 ms, median about 2.49 s.
+    **Not ticked.**
+  - The synthetic candidate's turn was heard to begin and never to end, so the conversation's cost was not measured, and
+    `pricing.json` is unchanged.
+
+*Next, decided* is rewritten: the human's live session comes first, then the dial under 2.5 s, then Slice 3. **Evidence:**
+
+```
+pnpm verify                → check-types, lint, boundaries (no dependency violations) pass;
+                             test: 247 files, 3786 passed, 8 todo; exit 0
+CI=1 pnpm verify:medium    → integration: 7 files, 51 passed; Playwright: 98 passed, 1 failed (key.spec step 5,
+                             the pinned "sent only to OpenAI", D186)
+CI=1 pnpm verify:medium (after the fix) → integration: 7 files, 51 passed; Playwright: 99 passed (1.8m); exit 0
+node apps/web/scripts/check-bundle-size.mjs → shared first-load JS 166.1 KB of 180.0 KB, within budget
+PALIER_LIVE=1 playwright test --project=live (×4) → connects as above; conversation: speech_started 1, speech_stopped 0
+```
 
 ### 30 September 2026 — `dougkeefe/next-dev-slice` (CI that can fail, and `main` green again; D177–D179)
 

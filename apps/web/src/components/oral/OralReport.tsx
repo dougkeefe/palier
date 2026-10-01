@@ -18,6 +18,7 @@ import {
   blockMessage,
   canRetry,
   costRows,
+  playbackMarks,
   drillHref,
   drillMessage,
   feedbackLangFor,
@@ -213,7 +214,7 @@ function Summary({ report, headingRef }: { report: Report; headingRef: Ref<HTMLH
   const format = useFormatter();
   const locale = useLocale();
   const { session, scenario } = report;
-  const rows = costRows(report.cost, locale);
+  const rows = costRows(report.cost, locale, report.session.mode);
   return (
     <Card>
       <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
@@ -513,7 +514,10 @@ function Fluency({ report }: { report: Report }) {
   );
 }
 
-/** The recording of the candidate's answers, kept on this device only, played back or deleted in one tap. */
+/**
+ * The recording, kept on this device only, played back or deleted in one tap. A studio session's is the microphone
+ * for the whole conversation, so each spoken answer can be played from where it starts (D187).
+ */
 function Recording({ report }: { report: Report }) {
   const t = useTranslations("oralReport");
   const container = useContainer();
@@ -522,6 +526,8 @@ function Recording({ report }: { report: Report }) {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const player = useRef<HTMLAudioElement>(null);
   const id = report.session.id;
+  const marks = playbackMarks(report.session);
+  const lang = report.scenario?.lang ?? "fr";
 
   useEffect(() => {
     if (container.status !== "ready") return;
@@ -567,7 +573,28 @@ function Recording({ report }: { report: Report }) {
       ) : (
         <div className="app-stack">
           <audio ref={player} controls aria-label={t("recordingLabel")} />
-          <p className="app-muted">{t("recordingLocal")}</p>
+          <p className="app-muted">{t(marks === null ? "recordingLocal" : "recordingStudio")}</p>
+          {marks === null || marks.length === 0 ? null : (
+            <ol className="app-list app-oral-marks">
+              {marks.map((mark) => (
+                <li key={mark.turn}>
+                  <span lang={lang}>{mark.text}</span>
+                  <Button
+                    variant="ghost"
+                    aria-label={t("playFromLabel", { number: mark.number })}
+                    onClick={() => {
+                      const element = player.current;
+                      if (element === null) return;
+                      element.currentTime = mark.fromSeconds;
+                      void element.play().catch(() => undefined);
+                    }}
+                  >
+                    {t("playFrom")}
+                  </Button>
+                </li>
+              ))}
+            </ol>
+          )}
           {deleteFailed ? <Callout tone="incorrect">{t("recordingDeleteFailed")}</Callout> : null}
           <div className="app-actions">
             <Button variant="secondary" onClick={() => void remove()}>

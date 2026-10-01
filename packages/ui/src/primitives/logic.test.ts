@@ -12,6 +12,12 @@ import {
   railGeometry,
   sheetState,
   timerState,
+  VOICE_EASE,
+  VOICE_FULL_LEVEL,
+  VOICE_REACH,
+  easeLevel,
+  voiceFormClass,
+  voiceFormScale,
 } from "./logic.js";
 
 describe("buttonClass", () => {
@@ -192,5 +198,37 @@ describe("streakFlameClass", () => {
   it("lights the flame, with its settle, only when today is done", () => {
     expect(streakFlameClass(true)).toBe("pl-streak-flame pl-streak-flame--lit");
     expect(streakFlameClass(false)).toBe("pl-streak-flame");
+  });
+});
+
+describe("voiceFormScale (D184)", () => {
+  it("rests at 1 in silence and grows with the voice, up to its reach at a full voice", () => {
+    expect(voiceFormScale(0)).toBe(1);
+    expect(voiceFormScale(VOICE_FULL_LEVEL / 2)).toBeCloseTo(1 + VOICE_REACH / 2, 10);
+    expect(voiceFormScale(VOICE_FULL_LEVEL)).toBeCloseTo(1 + VOICE_REACH, 10);
+    expect(voiceFormScale(1)).toBeCloseTo(1 + VOICE_REACH, 10);
+  });
+
+  it("rests for a negative reading or one that is not a number", () => {
+    expect(voiceFormScale(-0.2)).toBe(1);
+    expect(voiceFormScale(Number.NaN)).toBe(1);
+  });
+});
+
+describe("easeLevel (D184)", () => {
+  it("moves part of the way towards the level heard each frame", () => {
+    expect(easeLevel(0, 1)).toBeCloseTo(VOICE_EASE, 10);
+    expect(easeLevel(1, 0)).toBeCloseTo(1 - VOICE_EASE, 10);
+  });
+
+  it("stays where it is for a reading that is not a number", () => {
+    expect(easeLevel(0.2, Number.NaN)).toBe(0.2);
+  });
+});
+
+describe("voiceFormClass (D184)", () => {
+  it("marks a still form", () => {
+    expect(voiceFormClass(true)).toBe("pl-voice-form pl-voice-form--still");
+    expect(voiceFormClass(false)).toBe("pl-voice-form");
   });
 });

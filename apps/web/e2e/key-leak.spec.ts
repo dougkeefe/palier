@@ -7,6 +7,7 @@ import {
   onboard,
   practiseSpeaking,
   setSize,
+  talkInStudio,
   writeAndGetFeedback,
 } from "./helpers";
 import {
@@ -18,6 +19,7 @@ import {
   TRANSCRIPT_SENTINEL,
   downloadedText,
   installFakeAudio,
+  installFakeRealtime,
   recorderMarker,
   stubOpenAi,
   watchForLeaks,
@@ -40,7 +42,9 @@ import {
  * practice session (Phase 5 exit criterion 3, D120): each answer's clip reaches only OpenAI's
  * transcription endpoint, the session recording reaches no request at all, and the transcript stays
  * on this device and goes back to OpenAI only in the examiner's next question and in the request for
- * its report (D126), whose words stay on this device.
+ * its report (D126), whose words stay on this device. So is a studio conversation (Phase 6 Slice 2, D171, D188):
+ * the key goes to this origin's one realtime route in `Authorization` and nowhere else on it, OpenAI's
+ * `/v1/realtime/calls` gets only the short-lived `ek_` secret, and the whole-session recording reaches no request.
  *
  * The hermetic container lives for one page load, so this moves by in-app links only. The
  * at-rest half on real IndexedDB is `key-leak-production.spec.ts`.
@@ -64,6 +68,7 @@ const device = async (browser: Browser) => {
   const watch = watchForLeaks(context);
   await stubOpenAi(context);
   await installFakeAudio(context);
+  await installFakeRealtime(context);
   return { page: await context.newPage(), watch };
 };
 
@@ -150,8 +155,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
   // 3e. Studio mode's secret (ADR 3, D169): the one route on this origin that may see the key, posted to
   // as the studio transport's route client posts, with the key in Authorization and no body. Its answer
-  // is a secret and its expiry and nothing else; the final check reads that answer for the key too. The
-  // fake-peer half, the studio screen dialling /v1/realtime/calls with the secret, is Slice 2's (D171).
+  // is a secret and its expiry and nothing else; the final check reads that answer for the key too.
   const minted = await page.evaluate(async (key) => {
     const response = await fetch("/api/realtime/secret", { method: "POST", headers: { authorization: `Bearer ${key}` } });
     return { status: response.status, body: (await response.json()) as Record<string, unknown> };
@@ -161,6 +165,17 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(String(minted.body.value)).toMatch(/^ek_memory_\d+$/);
   expect(laptop.watch.realtimeSecretAuthorizations()).toEqual([`Bearer ${SENTINEL}`]);
   expect(laptop.watch.openAiAuthorizations()).toHaveLength(17);
+  // 3f. A studio conversation from the screen (D171, D188): the fake-peer half. The screen posts the key to the
+  // route once, in Authorization; the call to /v1/realtime/calls carries the minted ek_ secret, never the key; the
+  // conversation's recording, the page's fourth recorder, reaches no request; and no other call spends the key.
+  await page.getByRole("link", { name: "Back to spoken practice" }).first().click();
+  await talkInStudio(page);
+  expect(laptop.watch.realtimeSecretAuthorizations()).toEqual([`Bearer ${SENTINEL}`, `Bearer ${SENTINEL}`]);
+  const dialled = laptop.watch.realtimeCallAuthorizations();
+  expect(dialled).toHaveLength(1);
+  expect(dialled.every((authorization) => /^Bearer ek_memory_\d+$/.test(authorization))).toBe(true);
+  expect(laptop.watch.openAiAuthorizations()).toHaveLength(17);
+  expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(4)))).toBe(false);
 
   // The first return home after a spoken session shows its milestone moment once (D159); it is closed as a user would.
   await page.getByRole("link", { name: "Today", exact: true }).click();

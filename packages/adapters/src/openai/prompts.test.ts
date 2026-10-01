@@ -2,7 +2,7 @@ import { ORAL_CRITERIA, ORAL_NOTE_SEVERITIES } from "@palier/domain";
 import { anOralScenario } from "@palier/testing";
 import { describe, expect, it } from "vitest";
 
-import { STUDIO_PROMPT_VERSION, STUDIO_TOOLS, studioInstructions } from "./prompts.js";
+import { STUDIO_PROMPT_VERSION, STUDIO_TOOLS, studioInstructions, studioRepeatRequest } from "./prompts.js";
 
 /** Studio mode's examiner instructions and tools (architecture.md §8.5, progress.md D172). */
 
@@ -89,6 +89,16 @@ describe("studioInstructions", () => {
     expect(text).toContain('"flag_difficulty"');
     expect(text).toContain('"note_observation"');
     expect(text).toContain("Never mention either tool");
+  });
+});
+
+describe("studioRepeatRequest (D180)", () => {
+  it("asks, in French, for the question again, as a candidate would", () => {
+    expect(studioRepeatRequest("fr")).toMatch(/pas bien compris.*répéter/);
+  });
+
+  it("asks in English for an English session", () => {
+    expect(studioRepeatRequest("en")).toMatch(/did not quite understand.*repeat/);
   });
 });
 

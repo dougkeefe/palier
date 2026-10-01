@@ -16,6 +16,7 @@ import { StreakFlame } from "./StreakFlame.js";
 import { Toast } from "./Toast.js";
 import { Timer } from "./Timer.js";
 import { Dialog } from "./Dialog.js";
+import { VoiceForm } from "./VoiceForm.js";
 
 afterEach(cleanup);
 
@@ -363,5 +364,38 @@ describe("Dialog", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(document.activeElement).toBe(opener);
     opener.remove();
+  });
+});
+
+describe("VoiceForm (D184)", () => {
+  it("is hidden from assistive technology, and scales each layer by its voice once a frame", () => {
+    const frames: FrameRequestCallback[] = [];
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => frames.push(callback));
+    vi.stubGlobal("cancelAnimationFrame", vi.fn());
+    const levels = vi.fn(() => ({ examiner: 0.3, candidate: 0 }));
+    const { container, unmount } = render(<VoiceForm levels={levels} still={false} />);
+    const form = container.firstElementChild as HTMLElement;
+    expect(form.getAttribute("aria-hidden")).toBe("true");
+
+    frames.shift()?.(0);
+    expect(levels).toHaveBeenCalledTimes(1);
+    expect(Number(form.style.getPropertyValue("--pl-voice-examiner"))).toBeGreaterThan(1);
+    expect(form.style.getPropertyValue("--pl-voice-candidate")).toBe("1");
+
+    unmount();
+    expect(cancelAnimationFrame).toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+
+  it("runs no loop and reads no level when still", () => {
+    const request = vi.fn();
+    vi.stubGlobal("requestAnimationFrame", request);
+    const levels = vi.fn(() => ({ examiner: 1, candidate: 1 }));
+    const { container } = render(<VoiceForm levels={levels} still />);
+
+    expect(request).not.toHaveBeenCalled();
+    expect(levels).not.toHaveBeenCalled();
+    expect(container.firstElementChild?.className).toBe("pl-voice-form pl-voice-form--still");
+    vi.unstubAllGlobals();
   });
 });
