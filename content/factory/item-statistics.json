@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-10-01T12:02:58.485Z",
+  "bankVersion": 3,
+  "events": 0,
+  "rules": {
+    "pCorrectMin": 0.15,
+    "pCorrectMax": 0.95,
+    "pointBiserialMin": 0,
+    "minResponsesDifficulty": 30,
+    "minResponsesDiscrimination": 100
+  },
+  "verdicts": []
+}
