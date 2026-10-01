@@ -14,6 +14,7 @@ import {
   recordingsMegabytes,
   answerPause,
   sessionEstimate,
+  studioWarmup,
   turnFocus,
 } from "./practice-view";
 
@@ -151,6 +152,34 @@ describe("practice, studio mode's steps (D185)", () => {
       recordingKept: true,
     });
     expect(practice(studio, { type: "back" })).toEqual(INITIAL_PRACTICE);
+  });
+});
+
+describe("studioWarmup (D190)", () => {
+  it("wakes the route on the microphone check and again on the pre-flight of a studio session", () => {
+    const mic = run({ type: "choose", choice: CHOICE, held: "studio" });
+    expect(studioWarmup(mic)).toBe("mic");
+    expect(studioWarmup(practice(mic, { type: "mic", mic: "ok" }))).toBe("mic");
+    expect(studioWarmup(practice(mic, { type: "preflighted", mode: "spoken", preflight: PREFLIGHT, held: "studio" }))).toBe(
+      "confirming",
+    );
+  });
+
+  it("never wakes it for practice mode, or for a studio choice that fell back to typing", () => {
+    const practiceMic = run({ type: "choose", choice: CHOICE });
+    expect(studioWarmup(practiceMic)).toBeNull();
+    expect(studioWarmup(practice(practiceMic, { type: "preflighted", mode: "spoken", preflight: PREFLIGHT }))).toBeNull();
+    const studioMic = run({ type: "choose", choice: CHOICE, held: "studio" });
+    expect(studioWarmup(practice(studioMic, { type: "preflighted", mode: "typed", preflight: PREFLIGHT }))).toBeNull();
+  });
+
+  it("never wakes it once the tap is made, or before a session is chosen", () => {
+    const studioConfirming = run(
+      { type: "choose", choice: CHOICE, held: "studio" },
+      { type: "preflighted", mode: "spoken", preflight: PREFLIGHT, held: "studio" },
+    );
+    expect(studioWarmup(INITIAL_PRACTICE)).toBeNull();
+    expect(studioWarmup(practice(studioConfirming, { type: "studio" }))).toBeNull();
   });
 });
 

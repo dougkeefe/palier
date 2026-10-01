@@ -97,9 +97,12 @@ summed tokens are priced into `costUsd`.
   60-second `ek_` secret, for the configured model and voice, never the request's. It never reads a refusal's body,
   so nothing OpenAI echoes reaches a message. `routeRealtimeSecrets` is the browser's: it posts the key in
   `Authorization`, and nowhere else, to this origin's route, and maps the route's refusal codes back to this
-  adapter's named errors.
+  adapter's named errors. **`warmRealtimeRoute`** beside it (D190) posts to the same route with **no key, no header and
+  no body**, so a cold function wakes before the tap, and never rejects.
 - **`realtimeTransport`** is studio mode's `OralTransport`, over a `RealtimePeer` seam that no `RTCPeerConnection` type
   crosses.
+  - It asks for the secret and makes the peer's offer **at once** (D190), so a peer exists before the secret is back;
+    one whose secret never comes is hung up and nothing is dialled.
   - It sends the SDP offer to `/realtime/calls` with the `ek_` secret, then `session.update` with
     `studioInstructions` and `STUDIO_TOOLS` (data in `prompts.ts`, versioned apart as `STUDIO_PROMPT_VERSION`, 2 since
     D176), then `response.create`. The update asks for semantic turn detection at the configured `turnEagerness`

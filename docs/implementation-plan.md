@@ -1097,7 +1097,10 @@ sync.**
   live and is not met: the median of twelve dials was about 2.49 s. The cost per minute was not measured, because the
   synthetic candidate's turn never ended (D189). So a short agent slice, "the dial under 2.5 s", follows the human's live
   session, before Slice 3, as `progress.md`'s *Next, decided* says. The hermetic journey runs over a stubbed
-  `RTCPeerConnection`, not a memory transport (D188).)*
+  `RTCPeerConnection`, not a memory transport (D188). Merged (#57). **Then, 30 September 2026:** the human's live session
+  passed, and the human kept D167's per-minute estimate rather than a measured one (D191). On the deployed site the median
+  of twelve dials was about 2.12 s, so exit criterion 1 is met; "the dial under 2.5 s" built its three levers for the cold
+  first dial anyway (D190).)*
 - **Slice 3 — The exception, escapable.** (Its copy half moved to Slice 2, D173.)
   - The self-hosted escape: a popup to the user's own endpoint and `postMessage`, so `connect-src` is unchanged for everyone
     (D165).

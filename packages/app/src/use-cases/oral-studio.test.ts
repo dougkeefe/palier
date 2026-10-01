@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import type { CostLedger, OralTransportEvent, RealtimeSecretSource } from "../ports/index.js";
 import { NoApiKeyError } from "./api-key.js";
+import { UnknownScenarioError } from "./oral.js";
 import {
   SCENARIO,
   SESSION_ID,
@@ -106,6 +107,37 @@ describe("startOralStudioRun (D165, D169)", () => {
 
     expect(await hooked().secret()).toEqual(SECRET);
     expect(secrets.keys).toEqual(["sk-test"]);
+  });
+
+  it("mints the first secret at the start, before the transport asks, and a fresh one for a reconnect (D190)", async () => {
+    const { secrets, deps, hooked } = setUp();
+    await startOralStudioRun(request, deps);
+
+    // The memory transport never dials, so this mint is the one asked for at the tap.
+    await vi.waitFor(() => {
+      expect(secrets.keys).toEqual(["sk-test"]);
+    });
+    expect(await hooked().secret()).toEqual(SECRET);
+    expect(secrets.keys).toEqual(["sk-test"]);
+    expect(await hooked().secret()).toEqual(SECRET);
+    expect(secrets.keys).toEqual(["sk-test", "sk-test"]);
+  });
+
+  it("mints nothing when its signal was aborted before it began", async () => {
+    const { secrets, deps } = setUp();
+    const abort = new AbortController();
+    abort.abort();
+
+    await expect(startOralStudioRun(request, { ...deps, studioTransport: () => dialler().transport }, abort.signal)).rejects.toThrow();
+    expect(secrets.keys).toEqual([]);
+  });
+
+  it("fails as the session's own setup failed, not as the early secret did, when the session cannot start", async () => {
+    const { deps } = setUp({ key: null });
+
+    await expect(startOralStudioRun({ ...request, scenarioId: "absent" as never }, deps)).rejects.toThrow(
+      UnknownScenarioError,
+    );
   });
 
   it("names a missing key and mints nothing", async () => {

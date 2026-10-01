@@ -37,6 +37,13 @@ const ANSWERS = [
 /** How long the measured conversation runs before it is ended. */
 const CONVERSATION_MS = 120_000;
 
+/**
+ * `PALIER_LIVE_DIALS_ONLY=1` measures the three dials and skips the conversation, for a run that asks only how long
+ * the start takes (D190). The site is `PALIER_LIVE_BASE_URL` when given (`playwright.config.ts`), so the deployed
+ * site can be measured as well as a local production server.
+ */
+const DIALS_ONLY = process.env.PALIER_LIVE_DIALS_ONLY === "1";
+
 /** One answer spoken by `tts-1`, as base64 for the page to decode. */
 const speak = async (text: string): Promise<string> => {
   const response = await fetch("https://api.openai.com/v1/audio/speech", {
@@ -107,7 +114,9 @@ const instrument = ({ answers }: { answers: readonly string[] }) => {
   const nativeFetch = window.fetch.bind(window);
   window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
-    const step = url.includes("/api/realtime/secret") ? "secret" : url.includes("/realtime/calls") ? "sdp" : null;
+    // The screen's warm-up posts to the route with no key before the tap (D190); only the mint is a step of the dial.
+    const keyed = new Headers(init?.headers).has("authorization");
+    const step = url.includes("/api/realtime/secret") && keyed ? "secret" : url.includes("/realtime/calls") ? "sdp" : null;
     const response = await nativeFetch(input, init);
     if (step !== null) mark(step);
     return response;
@@ -270,7 +279,17 @@ test("studio mode, live: tap to first word three times, and what a minute of con
     const measured = await live(page);
     connects.push(Math.round((measured.firstVoiceAt ?? 0) - (measured.tapAt ?? 0)));
     timelines.push(measured.timeline);
-    if (run < 2) await endStudio(page);
+    if (run < 2 || DIALS_ONLY) await endStudio(page);
+  }
+
+  if (DIALS_ONLY) {
+    const figures = { baseURL: test.info().project.use.baseURL, connectsMs: connects, timelines };
+    await mkdir("test-results", { recursive: true });
+    await writeFile("test-results/studio-live.json", `${JSON.stringify(figures, null, 2)}\n`);
+    console.log(JSON.stringify(figures));
+    expect(connects).toHaveLength(3);
+    expect((await live(page)).errors).toEqual([]);
+    return;
   }
 
   // The third session goes on as a conversation: the page answers each time the examiner stops.

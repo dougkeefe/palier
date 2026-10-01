@@ -198,6 +198,14 @@ export const endMessage = (reason: OralEndReason | null): string => {
 };
 
 /**
+ * When studio mode's route is woken (D190): on each step before the tap, the microphone check and the pre-flight, of a
+ * session held in studio mode. The step is the answer, so the screen wakes it once as each is shown. Practice mode,
+ * and a studio choice that fell back to typing, never call the route.
+ */
+export const studioWarmup = (state: PracticeState): "mic" | "confirming" | null =>
+  (state.phase === "mic" || state.phase === "confirming") && state.held === "studio" ? state.phase : null;
+
+/**
  * A session's estimate: oral practice is priced per minute (D117), so it is the minute's
  * estimate times the session's minutes, or none when the minute is unpriced.
  */

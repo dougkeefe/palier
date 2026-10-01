@@ -169,7 +169,10 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   // route once, in Authorization; the call to /v1/realtime/calls carries the minted ek_ secret, never the key; the
   // conversation's recording, the page's fourth recorder, reaches no request; and no other call spends the key.
   await page.getByRole("link", { name: "Back to spoken practice" }).first().click();
+  const warmupsBefore = laptop.watch.realtimeSecretWarmups();
   await talkInStudio(page);
+  // The steps before the tap woke the route with no key (D190); the key itself went once, at the tap.
+  expect(laptop.watch.realtimeSecretWarmups()).toBeGreaterThan(warmupsBefore);
   expect(laptop.watch.realtimeSecretAuthorizations()).toEqual([`Bearer ${SENTINEL}`, `Bearer ${SENTINEL}`]);
   const dialled = laptop.watch.realtimeCallAuthorizations();
   expect(dialled).toHaveLength(1);

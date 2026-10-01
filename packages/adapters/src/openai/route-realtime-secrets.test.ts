@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { FetchLike } from "./http.js";
-import { routeRealtimeSecrets } from "./route-realtime-secrets.js";
+import { routeRealtimeSecrets, warmRealtimeRoute } from "./route-realtime-secrets.js";
 
 /**
  * The browser's realtime secret source (ADR 3, progress.md D169), over a canned route. The
@@ -70,5 +70,27 @@ describe("routeRealtimeSecrets", () => {
     const { source } = route(200, body);
 
     await expect(source.mint("sk-user")).rejects.toMatchObject({ name: "InvalidResponseError" });
+  });
+});
+
+describe("warmRealtimeRoute (D190)", () => {
+  it("posts to this origin's route with no key, no header and no body", async () => {
+    const { fetchImpl, sent } = route(401, { error: "missing-key" });
+
+    await warmRealtimeRoute({ path: "/api/realtime/secret", fetchImpl })();
+
+    expect(sent).toEqual([{ url: "/api/realtime/secret", method: "POST", headers: {}, body: undefined }]);
+  });
+
+  it("resolves whatever the route answers", async () => {
+    const { fetchImpl } = route(502, undefined);
+
+    await expect(warmRealtimeRoute({ path: "/api/realtime/secret", fetchImpl })()).resolves.toBeUndefined();
+  });
+
+  it("resolves when the route cannot be reached", async () => {
+    const fetchImpl: FetchLike = () => Promise.reject(new TypeError("offline"));
+
+    await expect(warmRealtimeRoute({ path: "/api/realtime/secret", fetchImpl })()).resolves.toBeUndefined();
   });
 });

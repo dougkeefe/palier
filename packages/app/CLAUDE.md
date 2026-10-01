@@ -92,8 +92,9 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   optional `capMs`, and the machine ends the session `time-cap` at it (D166). **`RealtimeSecretSource { mint(apiKey) }`**
   is the port the one key-seeing route sits behind (ADR 3, D169). **`startOralStudioRun`** composes the driver with a
   studio transport the composition root makes, handing it two hooks and never the adapter's name: `secret`, which
-  mints inside `KeyVault.withApiKey` (`NoApiKeyError` with none), and `usage`, which writes each billed usage to the
-  ledger as `oral-studio` under the session. `ended` waits for those writes, and a write that fails is not the
+  mints inside `KeyVault.withApiKey` (`NoApiKeyError` with none), **the first time at the start**, beside the session's
+  setup, and the transport's first `secret()` takes that one (D190; none when the signal is already aborted), and
+  `usage`, which writes each billed usage to the ledger as `oral-studio` under the session. `ended` waits for those writes, and a write that fails is not the
   session's failure (D170). **Slice 2** (D180–D182): `StudioTransport` and `OralStudioRun` gain `repeat()`, **studio
   only**, never on the `OralTransport` port, because a turn-based examiner's question is on screen to be played again.
   Every `OralSessionRun` gains `phase()`, the machine's current phase, for studio mode's indicator. A request's optional

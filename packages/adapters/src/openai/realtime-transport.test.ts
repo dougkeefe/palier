@@ -188,7 +188,66 @@ describe("realtimeTransport — setup", () => {
 
     await expect(h.open()).rejects.toThrow("no key held");
     expect(h.transport.lastError()).toMatchObject({ message: "no key held" });
-    expect(h.peers.peers).toEqual([]);
+    // The peer was made beside the secret (D190): it is hung up, and nothing was dialled.
+    expect(h.peers.peers).toHaveLength(1);
+    expect(h.peers.current().closed()).toBe(true);
+    expect(h.endpoint.calls).toEqual([]);
+  });
+
+  it("makes the peer's offer while the secret is minted, not after it is back (D190)", async () => {
+    const steps: string[] = [];
+    let mint!: (secret: { value: string; expiresAt: string }) => void;
+    const peers = fakePeers();
+    const h = setUp({
+      secret: () => {
+        steps.push("secret asked");
+        return new Promise((resolve) => {
+          mint = (secret) => {
+            steps.push("secret back");
+            resolve(secret);
+          };
+        });
+      },
+      peer: () => {
+        const peer = peers.factory();
+        return {
+          ...peer,
+          offer: () => {
+            steps.push("offer made");
+            return peer.offer();
+          },
+        };
+      },
+    });
+    const opening = h.open();
+    await settle();
+
+    expect(steps).toEqual(["secret asked", "offer made"]);
+    expect(h.endpoint.calls).toEqual([]);
+    mint({ value: "ek_late", expiresAt: EXPIRES });
+    await opening;
+
+    expect(steps).toEqual(["secret asked", "offer made", "secret back"]);
+    expect(h.endpoint.calls.map((c) => c.headers.authorization)).toEqual(["Bearer ek_late"]);
+  });
+
+  it("hangs up the peer it made, and dials nothing, when closed while the secret is minted", async () => {
+    let mint!: (secret: { value: string; expiresAt: string }) => void;
+    const h = setUp({
+      secret: () =>
+        new Promise((resolve) => {
+          mint = resolve;
+        }),
+    });
+    const opening = h.open();
+    await settle();
+    await h.transport.close();
+    mint({ value: "ek_late", expiresAt: EXPIRES });
+
+    await expect(opening).resolves.toBeUndefined();
+    expect(h.peers.current().closed()).toBe(true);
+    expect(h.endpoint.calls).toEqual([]);
+    expect(h.events).toEqual([{ kind: "closed", failed: false }]);
   });
 
   it.each([
