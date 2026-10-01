@@ -160,7 +160,14 @@ import { httpBankRepository } from "@palier/adapters/bank";
 import { dexieStores } from "@palier/adapters/dexie";
 import { webCryptoIdGenerator } from "@palier/adapters/ids";
 import type { RealtimePeerFactory } from "@palier/adapters/openai";
-import { PROMPT_VERSION, browserRealtimePeer, openAiProvider, realtimeTransport, routeRealtimeSecrets } from "@palier/adapters/openai";
+import {
+  PROMPT_VERSION,
+  browserRealtimePeer,
+  openAiProvider,
+  realtimeTransport,
+  routeRealtimeSecrets,
+  warmRealtimeRoute,
+} from "@palier/adapters/openai";
 import { httpSyncTransport } from "@palier/adapters/sync";
 import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
@@ -317,6 +324,7 @@ export const openAiFor: AiProviderFactory = (apiKey) =>
  */
 export const REALTIME_SECRET_PATH = "/api/realtime/secret";
 const REALTIME_SECRETS = routeRealtimeSecrets({ path: REALTIME_SECRET_PATH });
+const WARM_REALTIME = warmRealtimeRoute({ path: REALTIME_SECRET_PATH });
 
 /** Studio mode's hard cap (`pricing.json`'s `studioMaxMinutes`, D166), for the session and the transport alike. */
 const STUDIO_CAP_MS = STUDIO_MAX_MINUTES * 60_000;
@@ -521,6 +529,11 @@ export type Container = Ports & {
    * stays in this lazily loaded module, never the island's own chunk.
    */
   readonly realtimePeer: (microphone: MediaStream, remoteAudio: HTMLAudioElement) => RealtimePeerFactory;
+  /**
+   * Wake the realtime secret route before the tap (D190): a post with no key, which the route refuses without
+   * reaching OpenAI, so the mint after the tap meets a warm function. Never rejects.
+   */
+  readonly warmRealtime: () => Promise<void>;
 };
 
 /**
@@ -846,6 +859,7 @@ export function createContainer(env: Env): Container {
     useCases: buildUseCases(ports),
     profile: PROFILE,
     realtimePeer: (microphone, remoteAudio) => browserRealtimePeer({ microphone, remoteAudio }),
+    warmRealtime: WARM_REALTIME,
   };
 }
 

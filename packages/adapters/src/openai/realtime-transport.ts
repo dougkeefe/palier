@@ -97,8 +97,8 @@ const readSdp = async (res: FetchResponse): Promise<string> => {
  * Studio mode's `OralTransport` (architecture.md §8.5, progress.md D165, D170): a full-duplex
  * realtime conversation over WebRTC, the examiner's voice straight from OpenAI to the browser.
  *
- * - **Setup.** A fresh secret, the peer's offer to `/realtime/calls` with the `ek_` secret (never
- *   the key), the answer back, then `session.update` with the phase's instructions, the two tools,
+ * - **Setup.** A fresh secret and the peer's offer, asked for together (D190), the offer to
+ *   `/realtime/calls` with the `ek_` secret (never the key), the answer back, then `session.update` with the phase's instructions, the two tools,
  *   input transcription and semantic turn detection at the configured eagerness (D175), and
  *   `response.create` so the examiner speaks first.
  * - **The client drives the phases** (§8.5 step 5). A new phase is `session.update` then
@@ -371,13 +371,12 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
   };
 
   /**
-   * Dial one connection: a secret, a peer, the SDP exchange, then the session's instructions,
-   * the transcript so far when this is a reconnect, and the examiner's cue. Resolves once the
-   * channel is open and configured.
+   * Dial one connection: a secret and the peer's offer at once (D190), the SDP exchange, then the
+   * session's instructions, the transcript so far when this is a reconnect, and the examiner's cue.
+   * Resolves once the channel is open and configured. A peer whose secret never comes is hung up
+   * by whoever catches the failure: `open`, or `finish` for a reconnect.
    */
   const connect = async (seed: boolean): Promise<void> => {
-    const secret = await config.secret();
-    if (isClosed()) return;
     generation += 1;
     const mine = generation;
     const next = config.peer();
@@ -402,7 +401,12 @@ export const realtimeTransport = (config: RealtimeTransportConfig): RealtimeTran
     // Awaited below; a drop before then must not read as an unhandled rejection meanwhile.
     opened.catch(() => undefined);
     next.onMessage(onMessage(mine));
-    const offer = await next.offer();
+    // Neither waits for the other: the secret's round trip through our route is the longer, and the offer fits inside it.
+    const [secret, offer] = await Promise.all([config.secret(), next.offer()]);
+    if (isClosed() || mine !== generation) {
+      next.close();
+      return;
+    }
     const answer = await timedExchange(
       doFetch,
       `${baseUrl}/realtime/calls`,

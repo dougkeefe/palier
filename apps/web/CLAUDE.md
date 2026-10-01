@@ -272,6 +272,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
       container chunk. It holds the Web Lock, records the microphone **whole** from the tap (`recordWhole`, D183), ticks
       the run for its `phase()` and reads `oralSessionCost` for the running meter. A failure is named only when the
       connection failed, since the transport keeps a server error without ending.
+    - **The route is woken before the tap** (D190): on the microphone check and the pre-flight of a studio session
+      (`practice-view.ts`'s `studioWarmup`), the screen calls the container's `warmRealtime`, a post with **no key**. The
+      key still reaches the route only after the tap. The leak guard counts these as `realtimeSecretWarmups()`.
     - **`components/oral/OralStudio.tsx`** renders the conversation: `@palier/ui`'s `VoiceForm` (still under reduced
       motion), the phase, the timer, the meter, "could you repeat" and a large end control. **Never a transcript during
       the session.** It ends on the practice screen's end card, where `time-cap` has its own sentence.
@@ -283,7 +286,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     - **Tests.** `e2e/oral.spec.ts` runs every studio state axe-clean over `installFakeRealtime`, an init script that
       stubs `RTCPeerConnection` with a scripted examiner on the data channel, so the real transport, route and dial run
       with no test code in the bundle (D188). `e2e/studio-live.spec.ts` is the **opt-in live measurement** (the `live`
-      project, only with `PALIER_LIVE=1`, in no lane, D189).
+      project, only with `PALIER_LIVE=1`, in no lane, D189). `PALIER_LIVE_BASE_URL` points it at a deployed site and starts
+      no local server; `PALIER_LIVE_DIALS_ONLY=1` measures the three dials and skips the conversation (D190).
   - **Tier 11, the key-leak test**, is `e2e/key-leak.spec.ts` (hermetic, with real sync and telemetry)
     and `e2e/key-leak-production.spec.ts` (real Dexie), over `e2e/leak-guard.ts`. A new flow that can
     touch the key belongs in the first. A flow that holds user writing passes it to `assertNoLeak` as

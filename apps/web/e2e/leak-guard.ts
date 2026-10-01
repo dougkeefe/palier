@@ -113,6 +113,8 @@ export type LeakWatch = {
    * place on this origin the key may go, and the positive control that it went there.
    */
   readonly realtimeSecretAuthorizations: () => readonly string[];
+  /** How many posts reached the realtime secret route with no `authorization` at all: the screen's warm-ups (D190). */
+  readonly realtimeSecretWarmups: () => number;
   /**
    * Every `authorization` header sent to OpenAI's `/v1/realtime/calls` (D171, D188): the studio screen's dial,
    * which must carry the short-lived `ek_` secret and never the key. Kept apart from
@@ -554,6 +556,7 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
   const openAiRequests: { path: string; body: string }[] = [];
   const realtimeSecretAuthorizations: string[] = [];
   const realtimeCallAuthorizations: string[] = [];
+  let realtimeSecretWarmups = 0;
 
   // Headers are read as sent, synchronously: `allHeaders()` waits for a response, and a
   // request a reload aborts never gets one. Every header a page sets is among them.
@@ -575,6 +578,7 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
     const { authorization, ...others } = headers;
     const toRealtimeSecret = new URL(url).pathname === REALTIME_SECRET_ROUTE && request.method() === "POST";
     if (toRealtimeSecret && authorization !== undefined) realtimeSecretAuthorizations.push(authorization);
+    if (toRealtimeSecret && authorization === undefined) realtimeSecretWarmups += 1;
     seen.push({ where: `request headers ${url}`, text: JSON.stringify(toRealtimeSecret ? others : headers) });
     seen.push({ where: `request body ${url}`, text: bodyOf(request) });
   });
@@ -608,6 +612,7 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
     openAiRequests: () => openAiRequests,
     realtimeSecretAuthorizations: () => realtimeSecretAuthorizations,
     realtimeCallAuthorizations: () => realtimeCallAuthorizations,
+    realtimeSecretWarmups: () => realtimeSecretWarmups,
     assertNoLeak: async (pages, { deviceOnly = [], nowhere = [] } = {}) => {
       await Promise.all(pending);
       // This call's own dump, so an earlier check's page does not answer for this one.

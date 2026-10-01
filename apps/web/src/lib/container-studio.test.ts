@@ -247,6 +247,16 @@ describe.each([
     expect(typeof factory).toBe("function");
   });
 
+  it("wakes the real route with no key: no Authorization, no body, and nothing minted (D190)", async () => {
+    const sent = await network();
+    const c = createContainer({ hermetic });
+    await c.useCases.saveApiKey({ key: KEY, remember: true });
+
+    await expect(c.warmRealtime()).resolves.toBeUndefined();
+    expect(sent).toEqual([{ url: REALTIME_SECRET_PATH, authorization: undefined, body: undefined }]);
+    expect(minted.keys).toEqual([]);
+  });
+
   it("refuses to dial with no key held, naming it, and sends the route nothing", async () => {
     await network();
     const c = createContainer({ hermetic });

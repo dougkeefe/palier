@@ -17,6 +17,7 @@ import {
   phaseProgress,
   practice,
   sessionEstimate,
+  studioWarmup,
   turnFocus,
 } from "../../features/oral/practice-view";
 import { endReportLink, historyTag } from "../../features/oral/report-view";
@@ -169,6 +170,14 @@ export function OralPractice() {
       alive = false;
     };
   }, [container, picking]);
+
+  // Studio mode's route is woken on the steps before the tap, with no key, so the mint after it meets a warm
+  // function (D190).
+  const warmup = studioWarmup(state);
+  useEffect(() => {
+    if (container.status !== "ready" || warmup === null) return;
+    void container.container.warmRealtime();
+  }, [container, warmup]);
 
   // The screen's timer: the elapsed time shown, and a tick so the session moves on at a phase boundary.
   const running = state.phase === "running";

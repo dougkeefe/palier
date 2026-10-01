@@ -18,7 +18,7 @@ export type {
 export { PROMPT_VERSION, STUDIO_PROMPT_VERSION } from "./prompts.js";
 export { REALTIME_SECRET_SECONDS, openAiRealtimeSecrets } from "./realtime-secrets.js";
 export type { OpenAiRealtimeSecretsConfig } from "./realtime-secrets.js";
-export { routeRealtimeSecrets } from "./route-realtime-secrets.js";
+export { routeRealtimeSecrets, warmRealtimeRoute } from "./route-realtime-secrets.js";
 export type { RouteRealtimeSecretsConfig } from "./route-realtime-secrets.js";
 export { REALTIME_TURN_EAGERNESS, realtimeTransport } from "./realtime-transport.js";
 export type {

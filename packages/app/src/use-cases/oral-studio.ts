@@ -22,7 +22,7 @@ import { startOralSessionRun } from "./oral.js";
  *
  * - **`secret`** spends the key once, inside `KeyVault.withApiKey`, for a short-lived browser
  *   secret (ADR 3). The transport calls it to connect, and once more to reconnect; it never sees
- *   the key.
+ *   the key. The first is minted at the start, beside the session's setup (D190).
  * - **`usage`** takes what each realtime response billed, priced by the transport, and writes it to
  *   the ledger as `oral-studio`, under the session (D125). The transport is an adapter and cannot
  *   reach the ledger, so this is the hook `withAiProvider` would be for a provider call (D170).
@@ -74,10 +74,20 @@ export const startOralStudioRun = async (
   signal?: AbortSignal,
 ): Promise<OralStudioRun> => {
   let writes: Promise<void> = Promise.resolve();
+  const mint = async (): Promise<RealtimeSecret> => {
+    if (!(await deps.vault.hasApiKey())) throw new NoApiKeyError();
+    return deps.vault.withApiKey((key) => deps.secrets.mint(key));
+  };
+  // The first secret is asked for now, at the tap, while the session is set up on this device, rather than once the
+  // transport dials (D190). A dial cancelled before it began asks for none. One the transport never takes, because
+  // the session could not start, is left to expire, and its failure is not this one's.
+  let early: Promise<RealtimeSecret> | null = signal?.aborted === true ? null : mint();
+  early?.catch(() => undefined);
   const transport = deps.studioTransport({
-    secret: async () => {
-      if (!(await deps.vault.hasApiKey())) throw new NoApiKeyError();
-      return deps.vault.withApiKey((key) => deps.secrets.mint(key));
+    secret: () => {
+      const secret = early ?? mint();
+      early = null;
+      return secret;
     },
     usage: (usage) => {
       writes = writes

@@ -26,6 +26,12 @@ import { HERMETIC_ENV_FLAG } from "@palier/testing";
 const HERMETIC_PORT = 3000;
 const PRODUCTION_PORT = 3100;
 
+/**
+ * The live studio measurement on a deployed site rather than a local production server (progress.md D190):
+ * `PALIER_LIVE=1 PALIER_LIVE_BASE_URL=https://… playwright test --project=live`. No local server is started for it.
+ */
+const LIVE_BASE_URL = process.env.PALIER_LIVE === "1" ? process.env.PALIER_LIVE_BASE_URL : undefined;
+
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
@@ -62,14 +68,14 @@ export default defineConfig({
             testMatch: /studio-live\.spec\.ts/,
             use: {
               ...devices["Desktop Chrome"],
-              baseURL: `http://localhost:${PRODUCTION_PORT}`,
+              baseURL: LIVE_BASE_URL ?? `http://localhost:${PRODUCTION_PORT}`,
               launchOptions: { args: ["--autoplay-policy=no-user-gesture-required"] },
             },
           },
         ]
       : []),
   ],
-  webServer: [
+  webServer: LIVE_BASE_URL !== undefined ? [] : [
     {
       command: "pnpm --filter @palier/web dev",
       url: `http://localhost:${HERMETIC_PORT}`,

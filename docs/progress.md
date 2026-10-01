@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 30 September 2026 (Phase 6 Slice 2, the studio screen, D180–D189)
+**Last updated:** 30 September 2026 (the human's studio session and the dial, D190–D191)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -54,7 +54,10 @@ script; the medium lane in three parallel jobs; the fast lane's budget at 120 s 
 the four lanes, which until now always passed. It merged (#55). **Phase 6 Slice 2, the studio screen, is built**
 (`dougkeefe/next-slice-from-progress-v5`; D180–D189): the mode choice, the studio view, the whole-session recording, the meter, playback from
 each answer, and the key copy's exception in both languages. Tap to first word was measured live and is **not yet under
-2.5 s** (D189), and the live run found a turn that never ended, which the human's session must check first.
+2.5 s** (D189), and the live run found a turn that never ended, which the human's session must check first. It merged (#57).
+**The human's live session passed** (D191): the examiner answers a real voice and follows up, and D167's estimate stays
+(human). **On the deployed site, tap to first word has a median of about 2.12 s**, so exit criterion 1 is met (D190), and
+the dial's three levers for a cold first dial are built (`dougkeefe/testing-before-development`; D190).
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -119,7 +122,7 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 built, `dougkeefe/next-slice-from-progress-v5`, D180–D189 |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 merged, #57, D180–D189; the human's session, D191; exit criterion 1 met on the deployed site, and the dial's levers built, `dougkeefe/testing-before-development`, D190 |
 | 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; Gate M waits on Phase 6, D165) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
@@ -129,9 +132,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/next-slice-from-progress-v5` | **Phase 6 Slice 2 — the studio screen, on the key** (D173's copy exception, the mode choice, the studio view, the whole-session recording, the meter, synced audio on the report, the hermetic journey and the key-leak test's fake-peer half, and the live measurements). | 30 September 2026 |
+| `dougkeefe/testing-before-development` | **The human's studio session recorded (D191), and "the dial under 2.5 s"** (D190): the route woken with no key before the tap, the first secret at the tap, the offer beside it, and the deployed site measured. | 30 September 2026 |
 
-*(The prior rows — CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -231,62 +234,54 @@ Built now rather than retrofitted — §7 is emphatic about this.
 ### Next, decided
 
 Phase 7 (D132): **Slices 1–4 merged**, and **Gate L passed** (D164). **Studio mode is in 1.0** (D165, human), and Gate M waits
-for Phase 6. **Phase 6 Slice 1 merged (#53)**, and **Gate N passed** (D174, human): the voice is `cedar`. Its two findings are
-fixed (#54): semantic turn detection at `low` eagerness (D175), and an examiner that listens (D176). **CI can fail now, and
-`main` is protected** (D177, #55): a red lane blocks the merge.
+for Phase 6. Phase 6: **Slices 1 and 2 merged (#53, #57)**, **Gate N passed** (D174, `cedar`), and **the human's live session
+passed** (D191): the examiner answers a real voice and follows up, and D167's estimate stays. **Exit criterion 1 is met on
+the deployed site** (D190). `main` is protected, and a red lane blocks the merge (D177).
 
 Phase 5's deferred cost check (D130), the product pilot (Gate E, D97) and Gate M's calls that need no build (the domain, the
 trademark check, lining up an outside submitter) still run beside it, all the human's. Gate M's one build item, **the
 full-volume bank run** (D54), touches no oral code. It can run in its own worktree once the human funds a key for it.
 
-**Phase 6 Slice 2 is built** (`dougkeefe/next-slice-from-progress-v5`; D180–D189). Merge it first: `main` deploys to production, and the
-key copy's exception ships with the screen (D173).
+**The dial's levers are built** (`dougkeefe/testing-before-development`; D190). Merge it first.
 
-**Next: the human's live studio session, then "the dial under 2.5 s", then Slice 3.**
+**Next: measure the dial again on `main`, then Phase 6 Slice 3.**
 
-1. **The human's live session (do not self-direct).** On the deployed site after the merge, on your key, on `cedar`, hold
-   one Work discussion in studio mode of at least five minutes, and report four things:
-   - **Does the examiner answer once you finish speaking?** The synthetic run never had a turn end (D189). If it does
-     not, the agent's next slice is D175's *revisit when*, silence detection at about 1.5 s, as data, before anything
-     below.
-   - Does it wait through a mid-sentence pause (D175), and follow an answer that contradicts its question (D176)?
-   - The report's "The conversation" line and the session's minutes. That dollar figure a minute replaces D167's
-     provisional one in `pricing.json`: the agent converts it to the token mix, keeping D167's shares where no split was
-     measured.
-   - Whether the start felt slow.
-2. **Agent slice, "the dial under 2.5 s"** (exit criterion 1, before Slice 3; D189's timeline says where the time goes):
-   - **warm the route**: when the studio pre-flight card shows, `POST /api/realtime/secret` with no key, and the 401
-     `missing-key` warms a cold function without the key leaving the browser. It needs a unit test that no header or body
-     is sent, and the key-leak test's count holds;
-   - **overlap the dial**: start the peer and its offer while the secret is minted, rather than after;
-   - **measure on the deployed site**, with `studio-live.spec.ts` given the site's address as its base URL: twelve dials,
-     the first included.
+1. **Measure again after the merge** (agent, about US$0.10 on the smoke key). Once `/api/health` answers the merge's build,
+   run the dials-only spec on the deployed site four times, 90 s apart:
+   ```
+   cd apps/web && (set -a; . ../../.env.local; set +a; PALIER_LIVE=1 PALIER_LIVE_DIALS_ONLY=1 \
+     PALIER_LIVE_BASE_URL=https://palier-virid.vercel.app pnpm exec playwright test --project=live)
+   ```
+   *Done:* the twelve figures, and each run's first `secret` step, in the session log beside D190's baseline. If the median
+   is over 2.5 s, which the baseline's was not, find the step that moved before building anything else. Otherwise go on.
+2. **Phase 6 Slice 3, the exception escapable**, as planned in the Phase 6 section and `implementation-plan.md` §7:
+   - the self-hosted escape of ADR 3: a popup to the user's own endpoint and `postMessage`, so `connect-src` stays
+     `'self'` and OpenAI (D165). It is the third `RealtimeSecretSource` the port's comment names;
+   - the one-file Cloudflare Worker and the Vercel function in the repo;
+   - the route's exclusion from Vercel logging verified, and written into `docs/deploy.md`;
+   - `docs/realtime-checklist.md`: architecture.md §14's manual checklist written out for Gate O.
 
-   *Done:* the median of twelve dials is under 2.5 s, with the figures in the session log, and the criterion ticked. **If
-   it is still over**, the remaining lever is minting the secret at the pre-flight, before the tap. That sends the key
-   before the candidate has pressed Start, so it is the human's call at Gate O, not the agent's.
-3. **Then Slice 3, the exception escapable**, as planned in the Phase 6 section: the popup escape, the Worker and function,
-   the log exclusion verified, and `docs/realtime-checklist.md`.
+   *Done:* the self-hosted path working end to end against a local endpoint, with the key-leak test's counts holding.
+3. **Then Gate O (human)**: the checklist on Chrome, Safari and Firefox, desktop and mobile (exit criterion 3), the route
+   read line by line, and the French of the new copy. Then Gate M.
 
 Budget note (D178): a change to a core package puts the fast lane near 92 s of its 120 s. Run `pnpm verify` and
-`CI=1 pnpm verify:medium` before pushing.
+`CI=1 pnpm verify:medium` before pushing. A fresh worktree needs `pnpm --filter @palier/web build` first, or the medium
+lane's production server cannot start.
+
+**For the human, from this branch (D190, D191):**
+- Merge it. The warm-up sends no key: the key still reaches the route once per dial, after the tap.
 
 **For the human, from Phase 6 Slice 2:**
-- The session above.
 - **Read the new copy** in both languages: the picker's studio callout, the pre-flight's line, the key settings' "one
   exception" card, the onboarding offer and `/privacy` (D186). It goes to Gate O's French read. The card's link to the
   route's source resolves once the repo is public.
 
 **For the human, from Phase 6 Slice 1:**
-- After merging, run the new smoke check: `curl -s -X POST https://palier-virid.vercel.app/api/realtime/secret` should answer
-  `401 {"error":"missing-key"}` (`docs/deploy.md`).
-- The route is live from this merge, but no screen sends it a key until Slice 2. Two things it does not have yet:
-  - a rate limit (D169);
-  - a verified exclusion from Vercel's logs, which Slice 3 checks.
-
-  Say if either should come before Slice 2.
-- The spend table on `/settings/key` now lists "Studio conversation" at a provisional US$0.055 a minute (D167). Say if it
-  should stay hidden until Slice 2 ships the screen.
+- *(Done 30 September 2026: on the deployed `5b47616`, `POST /api/realtime/secret` with no key answered
+  `401 {"error":"missing-key"}`, and `/api/health` answered `{"build":"5b47616","bank":3,"database":"ok"}`.)*
+- The route still has no rate limit (D169), and its exclusion from Vercel's logs is verified only in Slice 3. Say if the
+  rate limit should come before Gate O.
 
 **For the human, from Slice 4:**
 - **look at the milestone moment and Coco's cheering pose** (seed or reach a milestone; D159, D160) and the self-hosted type
@@ -325,6 +320,8 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
 - read the `generate`, `oral` and **`oralReport`** namespaces' French, with the rest of Phase 7's R8 review.
 
 **Named, not scheduled:**
+- **a measured studio minute in `pricing.json`**: the human kept D167's estimate (D191), so it is replaced only if a measured
+  session says otherwise;
 - reading-set generation (D110);
 - **one `debiasKeyPosition`** in domain for the factory and the browser (finding 16);
 - **the vocabulary queue** (PRD §8.6's "added to the vocabulary queue"): v1's `vocab` table behind a port and a vocabulary item
@@ -744,9 +741,10 @@ built after Phase 7's slices and before Gate M.
 - [x] **Gate N — the examiner's voice (human).** Beside Slice 1, and before Slice 2. `marin` and `cedar` heard in French at C
   level in OpenAI's playground; the human picks one. A fail stops Phase 6. **Passed, 30 September 2026 (D174): `cedar`.**
   Two findings came with it, and are fixed: the examiner cut in on a pause (D175), and did not listen (D176).
-- [~] **Slice 2 — The studio screen, on the key.** **Built 30 September 2026** (`dougkeefe/next-slice-from-progress-v5`; D180–D189;
-  session-log evidence), not merged. Its *done*: the copy's parity is met; exit criterion 1 is measured and not met (D189);
-  the cost per minute is not measured, and `pricing.json` keeps D167's figures (D189). The work:
+- [x] **Slice 2 — The studio screen, on the key.** **Built 30 September 2026, merged (#57)** (`dougkeefe/next-slice-from-progress-v5`;
+  D180–D189; session-log evidence). Its *done*: the copy's parity is met; exit criterion 1 is met on the deployed site
+  (D190); the cost per minute was not measured, and the human chose to keep D167's figures in `pricing.json` (D191). The
+  human's live session passed (D191). The work:
   - **the key copy's one exception, stated in both languages** (moved here from Slice 3 by D173): `key.offerStays`,
     `privacy.third`, `neverKey`, `KeyOffer` and `SECURITY.md`, plus architecture.md §6.3's settings note linking the
     route's source;
@@ -774,8 +772,9 @@ built after Phase 7's slices and before Gate M.
 
 **Exit criteria** (the actual gate). Two are added by D165.
 
-- [ ] Session establishes in under 2.5 seconds from tap to first word. **Measured, not met** (D189): twelve dials, median about
-  2.49 s, the first on a fresh server 2.5–3.6 s
+- [x] Session establishes in under 2.5 seconds from tap to first word. **Met on the deployed site** (D190): twelve dials,
+  median about 2.12 s, one over (the first, on a cold function, 2.98 s). A local server measured a median of about 2.49 s
+  (D189). The levers for the cold first dial are built (D190) and are measured once on `main`
 - [ ] Disconnection mid-session recovers or fails cleanly with the transcript preserved
 - [ ] Manual realtime checklist (`architecture.md` §14) passes on Chrome, Safari, Firefox, desktop and mobile
 - [x] The examiner's French voice is judged credible at C level by a human (Gate N) — `cedar`, D174
@@ -6390,11 +6389,94 @@ then holds one real session); the figures are the agent's
 - **Spend.** Four runs, each three short dials, one two-minute session and five `tts-1` answers: about US$0.50 on the smoke
   key.
 
+### D190 — the dial: the route woken before the tap, the secret asked for at the tap, the offer made beside it
+**Date:** 30 September 2026 · **Status:** accepted (agent, Phase 6, "the dial under 2.5 s"). Carries out *Next, decided*'s
+item 2
+
+- **Measured first, on the deployed site.** `studio-live.spec.ts` takes `PALIER_LIVE_BASE_URL` (no local server is
+  started then) and `PALIER_LIVE_DIALS_ONLY=1` (three dials, no conversation). On `main` as deployed (`5b47616`), before
+  any lever, twelve dials over four runs, 90 s apart, headless Chromium over a home connection, in ms:
+
+  | Run | Dial 1 | Dial 2 | Dial 3 |
+  | --- | --- | --- | --- |
+  | 1 | 2,977 | 1,718 | 2,375 |
+  | 2 | 2,193 | 2,073 | 2,097 |
+  | 3 | 2,238 | 1,684 | 2,125 |
+  | 4 | 2,114 | 2,266 | 2,078 |
+
+  - **The median is about 2.12 s, so exit criterion 1 is met on the deployed site** and is ticked. Only one dial was
+    over: the first, whose secret took 692 ms against about 280–490 ms after it. That is a cold function.
+  - D189's local figures were worse because the local server was further from OpenAI than Vercel's region is: its SDP
+    answer and its first word each came later.
+- **The three levers, built anyway**, because the cold first dial is the one a candidate meets:
+  - **The route is woken before the tap.** `warmRealtimeRoute` in the openai adapter posts to the route **with no key,
+    no header and no body**, and never rejects. The route answers `401 missing-key` before it reaches OpenAI. The
+    container's `warmRealtime` binds it, and the screen calls it on each step before the tap of a session held in
+    studio mode (`studioWarmup`): the microphone check, which lasts at least `LEVEL_CHECK_MS`, and the pre-flight. That
+    is earlier than *Next, decided* asked (the pre-flight alone), because a candidate can tap Start a moment after the
+    pre-flight shows. Practice mode, and a studio choice that fell back to typing, never call the route.
+  - **The first secret is asked for at the tap.** `startOralStudioRun` mints it at once, beside the session's setup on
+    this device, and the transport's first `secret()` takes it. A reconnect mints a fresh one, as before. A dial aborted
+    before it began mints nothing. A session that cannot start leaves the early secret to expire unused, and fails with
+    its own error, not the secret's. The key still goes after the tap, never before it, so this needs no Gate O call.
+  - **The offer is made beside the secret.** The transport makes the peer and its offer while the secret is minted,
+    rather than after. A peer whose secret never comes is hung up, and nothing is dialled.
+- **One test changed with the order it pinned.** `realtime-transport.test.ts`'s "fails to open, keeping why, when no
+  secret can be minted" asserted that no peer was made. Making the peer before the secret is back is exactly what this
+  lever is, so it now asserts that the peer was made and hung up, and that `/realtime/calls` saw nothing. What it
+  protects, a failed mint leaving nothing connected, is unchanged.
+- **Tests.** The warm-up: no header and no body, and it resolves on a refusal and on a network fault (adapter); the real
+  route through the container, which mints nothing (`container-studio.test.ts`); and `studioWarmup`'s steps. The key-leak
+  test's step 3f holds that the screen's warm-ups reached the route with no `authorization` at all, and that the key's
+  counts are unchanged (`realtimeSecretWarmups()`, a new watch in `leak-guard.ts`). The early mint and the overlap each
+  have a test that **failed with its lever removed** (session log). The live spec's "secret" step now times only the
+  keyed post, so a warm-up is never read as the mint.
+- **Not measured on the deployed site with the levers.** Vercel's previews ask for a login (a `302`), so the branch can
+  be measured there only once it is on `main`. *Next, decided* makes that the first step after the merge.
+
+### D191 — the human's live studio session: the examiner answers, and D167's estimate stays
+**Date:** 30 September 2026 · **Status:** accepted (human)
+
+- **The session.** On the deployed site, on the human's key, on `cedar`, in studio mode. Reported: "a good test.
+  Sometimes there's a pause but you get used to it. I had several follow up questions. Pacing was good for the voice.
+  Cost seems accurate."
+- **What it settles.**
+  - **The examiner answers a real voice.** D189's unended turn did not happen with a person speaking, so it was the
+    synthetic microphone, not semantic turn detection. D175's fallback, silence detection, is not needed for it.
+  - **The examiner follows the answer** (D176): it asked several follow-up questions.
+  - **The pause.** D175's *revisit when* names "`low` makes the examiner feel sluggish". A pause was noticed, and the
+    human judged it one "you get used to". That is the evidence appearing in a mild form, and the human accepted it, so
+    `realtimeEagerness` stays `low`. Whether the pause was before the first word or after an answer was not said.
+- **The cost.** The human judged it accurate and chose to **keep D167's provisional figures** in `pricing.json` rather
+  than replace them with a measured minute. Slice 2's *done* asked for the measured figure (principle 8); this is the
+  human waiving it, as D130 waived practice mode's. A measured studio minute stays named, not scheduled.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 30 September 2026 — `dougkeefe/testing-before-development` (the human's studio session; the dial under 2.5 s; D190–D191)
+
+- **The human's live session** (D191): the examiner answered, followed up, and its pacing was good; a pause is noticed but
+  accepted; the cost reads accurate, and D167's estimate stays (human). D189's unended turn was the synthetic microphone.
+- **The deployed site, measured before any change** (D190): twelve dials, median about 2.12 s, the first at 2.98 s on a
+  cold function. **Phase 6 exit criterion 1 is ticked.**
+- **The three levers** (D190): the route woken with no key on the microphone check and the pre-flight, the first secret
+  minted at the tap, and the offer made beside it. **Proved to bite:** with the offer awaited after the secret, "makes
+  the peer's offer while the secret is minted" failed ("secret back" before "offer made"); with no early mint, "mints the
+  first secret at the start" failed. Both passed again restored.
+
+```
+PALIER_LIVE=1 PALIER_LIVE_DIALS_ONLY=1 PALIER_LIVE_BASE_URL=https://palier-virid.vercel.app \
+  playwright test --project=live (×4, 90 s apart)
+                           → 2977, 1718, 2375 · 2193, 2073, 2097 · 2238, 1684, 2125 · 2114, 2266, 2078 ms; 4 passed
+pnpm verify                → check-types, lint, boundaries pass; test: 247 files, 3804 passed, 8 todo; exit 0
+CI=1 pnpm verify:medium    → integration: 7 files, 51 passed; Playwright: 99 passed (1.5m); exit 0
+                             (after `pnpm --filter @palier/web build`: the first try found no production build)
+node apps/web/scripts/check-bundle-size.mjs → shared first-load JS 166.1 KB of 180.0 KB, within budget
+```
 
 ### 30 September 2026 — `dougkeefe/next-slice-from-progress-v5` (Oral practice in the main navigation, human request)
 

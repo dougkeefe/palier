@@ -60,3 +60,20 @@ export const routeRealtimeSecrets = (config: RouteRealtimeSecretsConfig): Realti
       timedExchange(doFetch, config.path, { method: "POST", headers: { authorization: `Bearer ${apiKey}` } }, timeoutMs, read),
   };
 };
+
+/** A warm-up is a courtesy: past this it has done what it could. */
+const WARM_TIMEOUT_MS = 5_000;
+
+/**
+ * Wake this origin's realtime route before the candidate taps Start (progress.md D190), so the mint after the tap
+ * meets a warm function. It posts **with no key and no body**, so the route answers `401 missing-key` without
+ * reaching OpenAI, and the key never leaves the browser for it. It never rejects: whatever the route answers, or
+ * if it cannot be reached, the dial after it is unchanged.
+ */
+export const warmRealtimeRoute = (config: RouteRealtimeSecretsConfig): (() => Promise<void>) => {
+  const doFetch = config.fetchImpl ?? platformFetch;
+  return () =>
+    timedExchange(doFetch, config.path, { method: "POST", headers: {} }, WARM_TIMEOUT_MS, () => Promise.resolve()).catch(
+      () => undefined,
+    );
+};
