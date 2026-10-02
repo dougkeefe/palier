@@ -1114,7 +1114,7 @@ sync.**
   - `docs/realtime-checklist.md`.
 
   *Done:* the self-hosted path working end to end against a local endpoint. *(Built 2 October 2026, `progress.md`
-  D192–D194, `dougkeefe/1bf42`. The self-hosted path runs end to end on the production build against the repository's
+  D192–D194, `dougkeefe/conductor/settings.local.toml-update`. The self-hosted path runs end to end on the production build against the repository's
   own Worker on a local port (`studio-selfhost-production.spec.ts`), under the real CSP, with the route seeing no key. The
   endpoint is kept in the vault, not the settings, because settings sync (§3.3 amended). The Vercel log exclusion has no
   per-route switch: what holds is that nothing Vercel records can carry the key, checked in code and tests, and on the

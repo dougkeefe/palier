@@ -58,7 +58,7 @@ each answer, and the key copy's exception in both languages. Tap to first word w
 **The human's live session passed** (D191): the examiner answers a real voice and follows up, and D167's estimate stays
 (human). **On the deployed site, tap to first word has a median of about 2.12 s**, so exit criterion 1 is met (D190), and
 the dial's three levers for a cold first dial are built (`dougkeefe/testing-before-development`; D190). It merged (#58).
-**Phase 6 Slice 3, the exception escapable, is built** (`dougkeefe/1bf42`; D192–D194): the self-hosted secret endpoint by
+**Phase 6 Slice 3, the exception escapable, is built** (`dougkeefe/conductor/settings.local.toml-update`; D192–D194): the self-hosted secret endpoint by
 popup and `postMessage`, working end to end on the production build against the repository's own Worker; the one-file
 Worker and Vercel function in `selfhost/`; the route's log exclusion written into `docs/deploy.md` (Vercel has no per-route
 switch, D193); and `docs/realtime-checklist.md` for Gate O.
@@ -126,7 +126,7 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 merged, #57, D180–D189; the human's session, D191; exit criterion 1 met on the deployed site, and the dial's levers built, D190, merged #58; Slice 3 built, `dougkeefe/1bf42`, D192–D194 |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 merged, #57, D180–D189; the human's session, D191; exit criterion 1 met on the deployed site, and the dial's levers built, D190, merged #58; Slice 3 built, `dougkeefe/conductor/settings.local.toml-update`, D192–D194 |
 | 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; Gate M waits on Phase 6, D165) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
@@ -136,7 +136,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/1bf42` | **Phase 6 Slice 3, the exception escapable**: the self-hosted secret endpoint by popup and `postMessage`, the one-file Worker and Vercel function, the route's log exclusion written into `docs/deploy.md`, and `docs/realtime-checklist.md`. | 2 October 2026 |
+| `dougkeefe/conductor/settings.local.toml-update` | **Phase 6 Slice 3, the exception escapable**: the self-hosted secret endpoint by popup and `postMessage`, the one-file Worker and Vercel function, the route's log exclusion written into `docs/deploy.md`, and `docs/realtime-checklist.md`. | 2 October 2026 |
 
 *(The prior rows — the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -240,7 +240,7 @@ Built now rather than retrofitted — §7 is emphatic about this.
 Phase 7 (D132): **Slices 1–4 merged**, and **Gate L passed** (D164). **Studio mode is in 1.0** (D165, human), and Gate M waits
 for Phase 6. Phase 6: **Slices 1 and 2 merged (#53, #57)**, **Gate N passed** (D174, `cedar`), **the human's live session
 passed** (D191), **exit criterion 1 is met on the deployed site** (D190) and the dial's levers merged (#58). **Slice 3 is
-built** (`dougkeefe/1bf42`; D192–D194). `main` is protected, and a red lane blocks the merge (D177).
+built** (`dougkeefe/conductor/settings.local.toml-update`; D192–D194). `main` is protected, and a red lane blocks the merge (D177).
 
 Phase 5's deferred cost check (D130), the product pilot (Gate E, D97) and Gate M's calls that need no build (the domain, the
 trademark check, lining up an outside submitter) still run beside it, all the human's. Gate M's one build item, **the
@@ -248,7 +248,7 @@ full-volume bank run** (D54), touches no oral code. It can run in its own worktr
 
 **Next: merge Slice 3, measure the dial on `main`, then Gate O.**
 
-1. **Merge `dougkeefe/1bf42`** once its four required lanes are green.
+1. **Merge `dougkeefe/conductor/settings.local.toml-update`** once its four required lanes are green.
 2. **Measure the dial on `main`** (agent, about US$0.10 on the smoke key; carried from the last *Next, decided*, D194).
    Once `/api/health` answers the merge's build, run the dials-only spec on the deployed site four times, 90 s apart:
    ```
@@ -774,7 +774,7 @@ built after Phase 7's slices and before Gate M.
 
   *Done:* exit criterion 1 measured live, the cost per minute measured and written into `pricing.json` (principle 8), and
   the copy's parity.
-- [~] **Slice 3 — The exception, escapable.** **Built 2 October 2026** (`dougkeefe/1bf42`; D192–D194; session-log
+- [~] **Slice 3 — The exception, escapable.** **Built 2 October 2026** (`dougkeefe/conductor/settings.local.toml-update`; D192–D194; session-log
   evidence); ticked when merged. Its *done* is met on the branch: `studio-selfhost-production.spec.ts` runs the
   self-hosted path end to end on the production build, against the repository's own Worker on a local port. The log
   exclusion's deployment check is the human's, at Gate O (D193). The work (the copy moved to Slice 2, D173):
@@ -797,7 +797,7 @@ built after Phase 7's slices and before Gate M.
 - [ ] Manual realtime checklist (`architecture.md` §14) passes on Chrome, Safari, Firefox, desktop and mobile
 - [x] The examiner's French voice is judged credible at C level by a human (Gate N) — `cedar`, D174
 - [ ] The key exception is stated wherever the copy promised otherwise, in both languages, and the self-hosted escape works.
-  **Met on `dougkeefe/1bf42`** (D186, D192): the escape runs end to end under the production CSP; ticked once merged and
+  **Met on `dougkeefe/conductor/settings.local.toml-update`** (D186, D192): the escape runs end to end under the production CSP; ticked once merged and
   the French is read at Gate O
 
 ### Phase 8: English mirror
@@ -6577,7 +6577,7 @@ deployment check is the human's, at Gate O
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 2 October 2026 — `dougkeefe/1bf42` (Phase 6 Slice 3: the exception, escapable; D192–D194)
+### 2 October 2026 — `dougkeefe/conductor/settings.local.toml-update` (Phase 6 Slice 3: the exception, escapable; D192–D194)
 
 Opened to *Next, decided*. Its first step, re-measuring the dial on `main` after #58, was **not run**: this machine has no
 `.env.local` and no smoke key (D194). The slice does not touch the default dial, so it went ahead, and the measurement
