@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { waitForOfflineReady } from "./helpers";
+import { recordViolations, waitForOfflineReady } from "./helpers";
 import { SENTINEL } from "./leak-guard";
 
 /**
@@ -53,18 +53,6 @@ const PAGES = [
 ];
 
 const ATTACKER = "https://attacker.example";
-
-/** Collects every CSP and Trusted Types violation a page reports, from before its first script. */
-const recordViolations = async (page: Page) => {
-  await page.addInitScript(() => {
-    const seen: string[] = [];
-    Object.defineProperty(window, "__cspViolations", { value: seen });
-    document.addEventListener("securitypolicyviolation", (event) => {
-      seen.push(`${event.effectiveDirective} ${event.blockedURI} ${event.sample}`);
-    });
-  });
-  return () => page.evaluate(() => (window as unknown as { __cspViolations: string[] }).__cspViolations.slice());
-};
 
 /**
  * Every request that leaves the page for the attacker's origin. Recorded where the request

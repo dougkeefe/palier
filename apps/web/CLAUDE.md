@@ -166,7 +166,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `realtime.ts` composes it: the memory source when hermetic, otherwise OpenAI's for `ai-models.json`'s `realtime`
     and `realtimeVoice` (`cedar` since Gate N, D174). `ai-models.json`'s `realtimeEagerness` is not the route's: the
     composition root hands it to `realtimeTransport` through `pricing.ts`'s `REALTIME_EAGERNESS`, checked at load (D175). It needs no database. **Never add a `console` call, a store or a body read to it**; every
-    branch has a test in `realtime-handlers.test.ts`.
+    branch has a test in `realtime-handlers.test.ts`, which also holds that the route writes nothing to the console,
+    its log exclusion's half in code (D193; `docs/deploy.md` has the half on Vercel).
 - **Baseline security headers on every response** (`next.config.ts`, architecture.md §12): HSTS,
   `nosniff`, `Referrer-Policy: no-referrer`, and a `Permissions-Policy` allowing the microphone on
   this origin only. They are asserted on the production server in `e2e/production.spec.ts`.
@@ -283,6 +284,18 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     - **The key copy states the exception** (D173, D186): the onboarding offer, the key settings (with a card linking
       the route's source, `lib/report.ts`'s `REALTIME_ROUTE_SOURCE_URL`, held to an existing file by a test) and
       `/privacy`, in both languages. A change to what that route does changes this copy in the same pull request.
+    - **The way around it, the user's own endpoint** (Phase 6 Slice 3, D192). `components/key/RealtimeEndpointSettings.tsx`
+      (decisions in `features/key/endpoint-view.ts`) sits in that card and keeps the address in the vault through the
+      container's `realtimeEndpoint`/`setRealtimeEndpoint`. The oral screen reads it with its setup and passes it to
+      `studioController.start` → `startOralStudio({ …, endpoint })`, where the container builds
+      `selfHostedRealtimeSecrets` and **opens its popup synchronously, inside the tap** (a browser opens a popup only from
+      a gesture), and cancels it if the run fails before its mint. With an endpoint the route is never woken, and the
+      picker's and the pre-flight's copy name the endpoint (`studioModeNote`, `sendsTo`); its failure is `failEndpoint`.
+      **`connect-src` is unchanged**: the popup and `postMessage` are not connections.
+    - **`selfhost/`** at the repository root is not a workspace: the one-file Cloudflare Worker and Vercel function
+      users deploy, and their README (linked as `SELFHOST_GUIDE_URL`). `src/server/selfhost.test.ts` loads both by file
+      URL (a relative import would break `no-relative-escape`), runs every behaviour against each platform's entry
+      point, runs the page's own script in a sandbox, and holds their shared code identical between its markers.
     - **Tests.** `e2e/oral.spec.ts` runs every studio state axe-clean over `installFakeRealtime`, an init script that
       stubs `RTCPeerConnection` with a scripted examiner on the data channel, so the real transport, route and dial run
       with no test code in the bundle (D188). `e2e/studio-live.spec.ts` is the **opt-in live measurement** (the `live`
@@ -299,7 +312,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     only: the `authorization` header of `POST /api/realtime/secret`** (D171). The guard records that header as
     `realtimeSecretAuthorizations()`, and still searches the request's URL, its other headers, its body and its answer.
     **The studio screen's dial to `/v1/realtime/calls` is recorded apart** as `realtimeCallAuthorizations()` (D188),
-    and step 3f holds every one to an `ek_memory_` secret.
+    and step 3f holds every one to an `ek_memory_` secret. **A spec that points studio mode at its own endpoint**
+    passes `watchForLeaks(context, { selfHostedOrigin })`: a `POST` there may carry the key in `authorization` too, as
+    `selfHostedAuthorizations()`, and nowhere else (D192).
 
 ## Gates this app owns
 
@@ -331,7 +346,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   `key-leak-production.spec.ts` (the key at rest, both modes, through a reload, with a ledger row in
   the dump), `oral-production.spec.ts` (a phase crossed by time), `spend-production.spec.ts` (the meter and the cap's warnings over real IndexedDB),
   `key-states-production.spec.ts` (each key-check result on the minified build, D158),
-  `engagement-production.spec.ts` (a milestone and a kept streak, each said once through a reload, D159), and
+  `engagement-production.spec.ts` (a milestone and a kept streak, each said once through a reload, D159),
+  `studio-selfhost-production.spec.ts` (ADR 3's self-hosted escape under the real CSP, against the repository's Worker
+  run by `e2e/selfhost-server.mjs` on port 3300, which the config starts as a third server, D192), and
   `production.spec.ts` (journey 4, via `page.clock.setFixedTime`, **not** `clock.install`,
   whose fake timers stall Dexie and React), and `csp-production.spec.ts` (every page's nonce and zero
   violations, and the red team, D136). Axe on the states, (`e2e/`),

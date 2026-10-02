@@ -80,6 +80,47 @@ export const keyVaultContract = (
       await expect(vault.withApiKey(() => Promise.resolve("never"))).rejects.toThrow();
     });
 
+    it("holds no realtime endpoint until one is set, then keeps it (D192)", async () => {
+      const vault = await make();
+      expect(await vault.realtimeEndpoint()).toBeNull();
+
+      await vault.setRealtimeEndpoint("https://secret.example.org/");
+
+      expect(await vault.realtimeEndpoint()).toBe("https://secret.example.org/");
+    });
+
+    it("replaces the realtime endpoint, and forgets it when set to null", async () => {
+      const vault = await make();
+      await vault.setRealtimeEndpoint("https://one.example.org/");
+      await vault.setRealtimeEndpoint("https://two.example.org/");
+      expect(await vault.realtimeEndpoint()).toBe("https://two.example.org/");
+
+      await vault.setRealtimeEndpoint(null);
+
+      expect(await vault.realtimeEndpoint()).toBeNull();
+    });
+
+    it("forgets the realtime endpoint with the key on clear, so a wipe leaves neither", async () => {
+      const vault = await make();
+      await vault.putApiKey("sk-test");
+      await vault.setRealtimeEndpoint("https://secret.example.org/");
+
+      await vault.clear();
+
+      expect(await vault.realtimeEndpoint()).toBeNull();
+      expect(await vault.hasApiKey()).toBe(false);
+    });
+
+    it("keeps the key when the realtime endpoint changes", async () => {
+      const vault = await make();
+      await vault.putApiKey("sk-test");
+
+      await vault.setRealtimeEndpoint("https://secret.example.org/");
+      await vault.setRealtimeEndpoint(null);
+
+      expect(await vault.withApiKey((key) => Promise.resolve(key))).toBe("sk-test");
+    });
+
     it("returns a device secret", async () => {
       const vault = await make();
 

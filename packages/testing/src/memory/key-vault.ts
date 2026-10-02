@@ -8,10 +8,11 @@ import type { ApiKeyStorage, KeyVault } from "@palier/app";
  *
  * It keeps the two modes apart as the Dexie vault does (progress.md D98): a
  * remembered key stands for the encrypted row, a tab-only key for the in-memory copy,
- * and putting one drops the other.
+ * and putting one drops the other. The realtime endpoint (D192) is forgotten with the key.
  */
 export const memoryKeyVault = (deviceSecret = "test-device-secret"): KeyVault => {
   let held: { key: string; storage: ApiKeyStorage } | null = null;
+  let endpoint: string | null = null;
 
   return {
     putApiKey: (key, options) => {
@@ -28,8 +29,14 @@ export const memoryKeyVault = (deviceSecret = "test-device-secret"): KeyVault =>
     apiKeyStorage: () => Promise.resolve(held?.storage ?? null),
     clear: () => {
       held = null;
+      endpoint = null;
       return Promise.resolve();
     },
     deviceSecret: () => Promise.resolve(deviceSecret),
+    realtimeEndpoint: () => Promise.resolve(endpoint),
+    setRealtimeEndpoint: (url) => {
+      endpoint = url;
+      return Promise.resolve();
+    },
   };
 };

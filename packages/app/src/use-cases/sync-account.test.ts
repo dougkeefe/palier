@@ -58,6 +58,8 @@ const vault = (): KeyVault => ({
   apiKeyStorage: () => Promise.resolve(null),
   clear: () => Promise.resolve(),
   deviceSecret: () => Promise.resolve("secret"),
+  realtimeEndpoint: () => Promise.resolve(null),
+  setRealtimeEndpoint: () => Promise.resolve(),
 });
 
 const aDevice = (transport: SyncTransport) => ({

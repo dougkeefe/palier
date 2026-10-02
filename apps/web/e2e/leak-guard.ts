@@ -84,6 +84,13 @@ export const STUDIO_ANSWER = `Je coordonne les consultations avec les provinces,
 
 /** The only origin the key may reach (architecture.md §6.3). */
 const OPENAI_ORIGIN = "https://api.openai.com";
+
+/**
+ * The end-to-end test's own secret endpoint (progress.md D192), `e2e/selfhost-server.mjs`, which the Playwright config
+ * starts. Not 3200, which Lighthouse holds (D90).
+ */
+export const SELFHOST_PORT = 3300;
+export const SELFHOST_ORIGIN = `http://localhost:${String(SELFHOST_PORT)}`;
 /** This origin's one route that may see the key (ADR 3, D169). */
 const REALTIME_SECRET_ROUTE = "/api/realtime/secret";
 
@@ -122,8 +129,16 @@ export type LeakWatch = {
    */
   readonly realtimeCallAuthorizations: () => readonly string[];
   /**
-   * Fail, naming the place, if the sentinel is anywhere but a request to OpenAI or the realtime
-   * secret route's `authorization` header (D169), if a
+   * Every `authorization` header the user's own secret endpoint was sent (D192), when the watch was told its origin:
+   * the popup's mint, on the endpoint's own origin. The one other place, besides the route, the key may go, and only
+   * when the user has pointed studio mode there.
+   */
+  readonly selfHostedAuthorizations: () => readonly string[];
+  /** Every page the context opened after the first: the endpoint's popup, for a spec to look at. */
+  readonly popupUrls: () => readonly string[];
+  /**
+   * Fail, naming the place, if the sentinel is anywhere but a request to OpenAI, the realtime
+   * secret route's `authorization` header (D169) or the user's own endpoint's (D192), if a
    * `deviceOnly` text left the device other than for OpenAI, or if a `nowhere` text is anywhere.
    */
   readonly assertNoLeak: (pages: readonly Page[], check?: LeakCheck) => Promise<void>;
@@ -548,14 +563,19 @@ export const installFakeRealtime = async (context: BrowserContext) => {
 export const realtimeSent = (page: Page): Promise<readonly Record<string, unknown>[]> =>
   page.evaluate(() => [...((window as unknown as { __palierRealtimeSent?: Record<string, unknown>[] }).__palierRealtimeSent ?? [])]);
 
-/** Start watching a context. Call it before the first page opens. */
-export const watchForLeaks = (context: BrowserContext): LeakWatch => {
+/**
+ * Start watching a context. Call it before the first page opens. `selfHostedOrigin` is the user's own secret endpoint,
+ * when the spec points studio mode at one (D192): a `POST` there may carry the key in `authorization`, and nowhere else.
+ */
+export const watchForLeaks = (context: BrowserContext, { selfHostedOrigin }: { readonly selfHostedOrigin?: string } = {}): LeakWatch => {
   const seen: Seen[] = [];
   const pending: Promise<unknown>[] = [];
   const authorizations: string[] = [];
   const openAiRequests: { path: string; body: string }[] = [];
   const realtimeSecretAuthorizations: string[] = [];
   const realtimeCallAuthorizations: string[] = [];
+  const selfHostedAuthorizations: string[] = [];
+  const popupUrls: string[] = [];
   let realtimeSecretWarmups = 0;
 
   // Headers are read as sent, synchronously: `allHeaders()` waits for a response, and a
@@ -579,7 +599,10 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
     const toRealtimeSecret = new URL(url).pathname === REALTIME_SECRET_ROUTE && request.method() === "POST";
     if (toRealtimeSecret && authorization !== undefined) realtimeSecretAuthorizations.push(authorization);
     if (toRealtimeSecret && authorization === undefined) realtimeSecretWarmups += 1;
-    seen.push({ where: `request headers ${url}`, text: JSON.stringify(toRealtimeSecret ? others : headers) });
+    // The user's own endpoint (D192) is allowed the same narrow exception, on its own origin, when the spec named it.
+    const toSelfHosted = selfHostedOrigin !== undefined && new URL(url).origin === selfHostedOrigin && request.method() === "POST";
+    if (toSelfHosted && authorization !== undefined) selfHostedAuthorizations.push(authorization);
+    seen.push({ where: `request headers ${url}`, text: JSON.stringify(toRealtimeSecret || toSelfHosted ? others : headers) });
     seen.push({ where: `request body ${url}`, text: bodyOf(request) });
   });
   // What our own server sends back: a pull would show the key if a push had stored it. Read
@@ -605,6 +628,11 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
     );
   context.pages().forEach(watchSockets);
   context.on("page", watchSockets);
+  context.on("page", (page) => {
+    page.on("framenavigated", (frame) => {
+      if (frame === page.mainFrame() && page.url() !== "about:blank") popupUrls.push(page.url());
+    });
+  });
 
   return {
     openAiAuthorizations: () => authorizations,
@@ -613,6 +641,8 @@ export const watchForLeaks = (context: BrowserContext): LeakWatch => {
     realtimeSecretAuthorizations: () => realtimeSecretAuthorizations,
     realtimeCallAuthorizations: () => realtimeCallAuthorizations,
     realtimeSecretWarmups: () => realtimeSecretWarmups,
+    selfHostedAuthorizations: () => selfHostedAuthorizations,
+    popupUrls: () => popupUrls,
     assertNoLeak: async (pages, { deviceOnly = [], nowhere = [] } = {}) => {
       await Promise.all(pending);
       // This call's own dump, so an earlier check's page does not answer for this one.

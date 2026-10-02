@@ -41,7 +41,9 @@ finish. Follow it.
 seventh package** (ADR 18): `content/` holds no code, no `src`, no build and no tests — it
 is the exam profile, and from Phase 2 the bank shards, published through an `exports` map so
 the app can import them by package name. It appears in no §3.1 arrow. No package may import anything absent from its own
-`package.json` — pnpm's strict isolation and `dependency-cruiser` both enforce that.
+`package.json` — pnpm's strict isolation and `dependency-cruiser` both enforce that. `selfhost/` is **not a workspace at
+all** (progress.md D192): two one-file deployables, a Cloudflare Worker and a Vercel function, that users run on their own
+accounts so studio mode's key never reaches Palier's server. Nothing imports them; `apps/web`'s tests load them by file URL.
 
 ## Hard rules
 
@@ -84,6 +86,8 @@ the app can import them by package name. It appears in no §3.1 arrow. No packag
 | The content pipeline, its metrics, its descoping options | `content-factory.md`, §6 and §9 especially |
 | A prompt for the next session, or the shape of a review | `docs/prompts.md` |
 | Deploying: environment variables, migrations at deploy, smoke checks, rollback | `docs/deploy.md` |
+| Studio mode's manual pre-release checks, on six browser and platform pairs | `docs/realtime-checklist.md` |
+| The self-hosted realtime secret endpoint a user deploys | `selfhost/README.md` |
 | Anything under `apps/web` | `apps/web/AGENTS.md`, maintained by `next dev` |
 
 ## Verify

@@ -185,8 +185,14 @@ export type {
   StreakReport,
   StreakReportDeps,
   StreakReportRequest,
+  ParsedRealtimeEndpoint,
+  RealtimeEndpointProblem,
 } from "./use-cases/index.js";
 export {
+  InvalidRealtimeEndpointError,
+  parseRealtimeEndpoint,
+  realtimeEndpoint,
+  setRealtimeEndpoint,
   EmptyApiKeyError,
   NoApiKeyError,
   apiKeyStatus,

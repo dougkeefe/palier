@@ -194,6 +194,32 @@ describe("studioController — starting (D185)", () => {
     expect(actions).toEqual([{ type: "started", choice: CHOICE, nowMs: 5_000 }, { type: "connected" }]);
   });
 
+  it("dials through the user's own endpoint when the screen hands one over, and names none when it is null (D192)", async () => {
+    const own = setUp();
+    await own.controller.start(CHOICE, own.mic.stream, "https://secret.example.org/");
+    expect(own.useCases.startOralStudio).toHaveBeenCalledWith(
+      { sessionId: ID, scenarioId: CHOICE.scenario.id, endpoint: "https://secret.example.org/" },
+      expect.any(Function),
+      expect.any(AbortSignal),
+    );
+
+    const route = setUp();
+    await route.controller.start(CHOICE, route.mic.stream, null);
+    expect(route.useCases.startOralStudio).toHaveBeenCalledWith(
+      { sessionId: ID, scenarioId: CHOICE.scenario.id },
+      expect.any(Function),
+      expect.any(AbortSignal),
+    );
+  });
+
+  it("asks for the user's endpoint before anything awaits, so its popup opens inside the tap (D192)", () => {
+    const { controller, useCases, mic } = setUp();
+
+    void controller.start(CHOICE, mic.stream, "https://secret.example.org/");
+
+    expect(useCases.startOralStudio).toHaveBeenCalledTimes(1);
+  });
+
   it("starts once however often it is tapped while in flight", async () => {
     const pending = deferred<OralStudioRun>();
     const { controller, useCases, mic, current } = setUp({ started: pending.promise });

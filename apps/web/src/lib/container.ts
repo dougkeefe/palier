@@ -90,8 +90,10 @@ import type {
 import {
   apiKeyStatus,
   checkApiKey,
+  realtimeEndpoint,
   removeApiKey,
   saveApiKey,
+  setRealtimeEndpoint,
   featureCosts,
   preflightSpend,
   setSpendCap,
@@ -159,13 +161,15 @@ import {
 import { httpBankRepository } from "@palier/adapters/bank";
 import { dexieStores } from "@palier/adapters/dexie";
 import { webCryptoIdGenerator } from "@palier/adapters/ids";
-import type { RealtimePeerFactory } from "@palier/adapters/openai";
+import type { RealtimePeerFactory, SelfHostedRealtimeSecrets } from "@palier/adapters/openai";
 import {
   PROMPT_VERSION,
+  browserEndpointWindows,
   browserRealtimePeer,
   openAiProvider,
   realtimeTransport,
   routeRealtimeSecrets,
+  selfHostedRealtimeSecrets,
   warmRealtimeRoute,
 } from "@palier/adapters/openai";
 import { httpSyncTransport } from "@palier/adapters/sync";
@@ -326,6 +330,23 @@ export const REALTIME_SECRET_PATH = "/api/realtime/secret";
 const REALTIME_SECRETS = routeRealtimeSecrets({ path: REALTIME_SECRET_PATH });
 const WARM_REALTIME = warmRealtimeRoute({ path: REALTIME_SECRET_PATH });
 
+/**
+ * The user's own secret endpoint instead of the route (ADR 3's self-hosted escape, progress.md D192), its popup opened
+ * **now**: this runs inside the tap that starts the session, and a browser opens a popup only from a gesture. The mint
+ * after it waits on the vault, so it cannot open the popup itself. The model and voice are the route's.
+ */
+const selfHostedSecrets = (endpoint: string, signal: AbortSignal | undefined): SelfHostedRealtimeSecrets => {
+  const secrets = selfHostedRealtimeSecrets({
+    endpoint,
+    model: aiModels.realtime,
+    voice: aiModels.realtimeVoice,
+    windows: browserEndpointWindows(),
+    ...(signal === undefined ? {} : { signal }),
+  });
+  secrets.open();
+  return secrets;
+};
+
 /** Studio mode's hard cap (`pricing.json`'s `studioMaxMinutes`, D166), for the session and the transport alike. */
 const STUDIO_CAP_MS = STUDIO_MAX_MINUTES * 60_000;
 
@@ -392,6 +413,12 @@ export type UseCases = {
   readonly apiKeyStatus: () => Promise<ApiKeyStatus | null>;
   readonly checkApiKey: () => Promise<void>;
   readonly removeApiKey: () => Promise<void>;
+  /**
+   * Studio mode's own secret endpoint on this device (ADR 3's escape, progress.md D192), or `null` for Palier's route;
+   * kept as `parseRealtimeEndpoint` normalises it, or forgotten when blank. Never synced, never exported.
+   */
+  readonly realtimeEndpoint: () => Promise<string | null>;
+  readonly setRealtimeEndpoint: (request: { readonly url: string }) => Promise<string | null>;
   /** Spend (PRD §8.10, progress.md D101–D104): the meter, the soft cap, the table, the pre-flight. */
   readonly spendSummary: () => Promise<SpendSummary>;
   readonly spendCap: () => Promise<number | null>;
@@ -433,10 +460,11 @@ export type UseCases = {
   /**
    * A studio session (Phase 6 Slices 1 and 2, D165, D170): the realtime transport over `peer`, which the studio
    * screen makes from its microphone and its examiner's audio element (`browserRealtimePeer`), fed a secret from
-   * the route and metered as `oral-studio`.
+   * the route and metered as `oral-studio`. With an `endpoint`, the secret comes from the user's own page instead
+   * (D192), whose popup this opens at once: call it synchronously in the tap's handler.
    */
   readonly startOralStudio: (
-    request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId },
+    request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId; readonly endpoint?: string | null },
     peer: RealtimePeerFactory,
     /** Cancels the dial while it is still in progress (D185). */
     signal?: AbortSignal,
@@ -715,6 +743,8 @@ function buildUseCases(ports: Ports): UseCases {
     apiKeyStatus: () => apiKeyStatus({ vault: ports.vault }),
     checkApiKey: () => checkApiKey({ vault: ports.vault, aiProvider: ports.aiProvider }),
     removeApiKey: () => removeApiKey({ vault: ports.vault }),
+    realtimeEndpoint: () => realtimeEndpoint({ vault: ports.vault }),
+    setRealtimeEndpoint: (request) => setRealtimeEndpoint(request, { vault: ports.vault }),
     spendSummary: () => spendSummary(spendDeps),
     spendCap: () => spendCap(spendDeps),
     setSpendCap: (request) => setSpendCap(request.capUsd, spendDeps),
@@ -764,12 +794,13 @@ function buildUseCases(ports: Ports): UseCases {
         answers,
         liveness: ports.oralLiveness,
       }),
-    startOralStudio: (request, peer, signal) =>
-      startOralStudioRun(
+    startOralStudio: ({ endpoint, ...request }, peer, signal) => {
+      const own = endpoint === undefined || endpoint === null ? null : selfHostedSecrets(endpoint, signal);
+      const run = startOralStudioRun(
         request,
         {
           vault: ports.vault,
-          secrets: REALTIME_SECRETS,
+          secrets: own ?? REALTIME_SECRETS,
           studioTransport: (hooks) =>
             realtimeTransport({
               ...hooks,
@@ -788,7 +819,15 @@ function buildUseCases(ports: Ports): UseCases {
           capMs: STUDIO_CAP_MS,
         },
         signal,
-      ),
+      );
+      // A session that fails before its first mint leaves no popup waiting for a key that will not come.
+      return own === null
+        ? run
+        : run.catch((error: unknown) => {
+            own.cancel();
+            throw error;
+          });
+    },
     oralSession: (request) => ports.oral.get(request.sessionId),
     oralSessionCost: (request) => oralSessionCost(request.sessionId, { oral: ports.oral, ledger: ports.costLedger }),
     closeAbandonedSessions: () => closeAbandonedSessions({ clock: ports.clock, oral: ports.oral, liveness: ports.oralLiveness }),

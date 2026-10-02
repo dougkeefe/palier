@@ -328,6 +328,39 @@ it is a function invocation on Vercel, not a static file on the CDN, and it answ
 A console message on a real page means the policy is wrong for the app: roll back (above) and add the
 page to `e2e/csp-production.spec.ts`, which holds every page to zero.
 
+## The realtime secret route and the logs (Phase 6 Slice 3)
+
+`POST /api/realtime/secret` is the one route that sees a user's key (ADR 3, `progress.md` D169). ADR 3 says request
+logging is disabled for it. **Vercel has no switch that turns logging off for one route** (read 2 October 2026,
+vercel.com/docs/logs/runtime), so what holds instead is that nothing Vercel records can carry the key (D193):
+
+- **What Vercel records for each function request:** the method, the path, the status, the host, the user agent, the
+  search parameters, the region, the function's name, duration and memory, the URLs of the outgoing requests it made,
+  and every line it writes to the console. Request headers and bodies are not among them.
+- **The key travels in the `Authorization` header and nowhere else.** The route never reads the body, takes no search
+  parameters, and its one outgoing request is to `https://api.openai.com/v1/realtime/client_secrets`, a URL with no key
+  in it.
+- **The route writes nothing.** There is no `console` call in `realtime-handlers.ts` or `realtime.ts`, and every
+  failure is answered as a code, so none escapes for Next to log with its message. `realtime-handlers.test.ts` holds
+  both: a spied console stays empty through every answer, the key-bearing failures included, and the files hold no
+  `console` call.
+- **No log drain.** A drain forwards the same fields elsewhere, headers still excluded, but it is a copy we would not
+  control. This project has none. Do not add one without reading this section again.
+- Retention on the Hobby plan is one hour (Pro, one day).
+
+**Check it on the deployment** after any change to the route, and at Gate O:
+
+1. Vercel → the project → **Logs**. Filter **Request Path** to `/api/realtime/secret`, and **Environment** to
+   `production`.
+2. From a browser with a key saved, start a studio session (or, with no key, `curl -s -X POST
+   https://palier-virid.vercel.app/api/realtime/secret`, which answers `401 {"error":"missing-key"}` and spends nothing).
+3. Open the request's row. Its details must show the method, path, status and the fields above, **no log messages**, and
+   at most one outgoing request, to `api.openai.com/v1/realtime/client_secrets`. Search the logs for `sk-`: nothing.
+4. Record the date, the deployment and what the row showed in the session log.
+
+**The self-hosted escape** (`selfhost/`, D192) is for a user who will not accept even this. It runs on their own account,
+so its logs are theirs; `selfhost/README.md` tells them what Cloudflare and Vercel record.
+
 ## Not yet built
 
 - The 60% aggregation itself, which is a runbook step (above) until the storage alert first fires.

@@ -99,6 +99,18 @@ summed tokens are priced into `costUsd`.
   `Authorization`, and nowhere else, to this origin's route, and maps the route's refusal codes back to this
   adapter's named errors. **`warmRealtimeRoute`** beside it (D190) posts to the same route with **no key, no header and
   no body**, so a cold function wakes before the tap, and never rejects.
+- **The third source, `selfHostedRealtimeSecrets`** (Phase 6 Slice 3, D192), is the user's own endpoint, reached by a
+  popup and `postMessage`, never a `fetch`, so the CSP's `connect-src` is unchanged. It runs over an `EndpointWindows`
+  seam (`browserEndpointWindows` is `window.open` without `noopener`, and the page's `message` events, each compared with
+  the popup by identity), so no `Window` crosses it. **`open()` must run inside the tap's gesture**, before anything
+  awaits; `mint` then uses that popup, and a later mint opens its own, each a new `_blank` window, never a named one a
+  stale popup could share. **`cancel()` is final**: it closes the prepared popup, abandons a mint in flight, and every
+  later mint rejects without opening anything. A popup counts as closed only when seen closed on two polls running,
+  since the page closes itself right after its answer. The key is posted **only after the page's
+  `ready`, from that popup, at the endpoint's origin, and only to that origin**; the answer is read only from there, for
+  the mint's id. Blocked, closed, silent (30 s) or a refusal of the page's own is `SelfHostedEndpointError` by `reason`;
+  the route's codes map through `realtimeRefusal` to the same errors as the route's. `SELF_HOSTED_MESSAGES` and
+  `SELF_HOSTED_VERSION` are the protocol the repository's `selfhost/` files speak; a web test holds both sides to them.
 - **`realtimeTransport`** is studio mode's `OralTransport`, over a `RealtimePeer` seam that no `RTCPeerConnection` type
   crosses.
   - It asks for the secret and makes the peer's offer **at once** (D190), so a peer exists before the secret is back;
@@ -153,7 +165,7 @@ a `CryptoKey` round-trips structured clone (including under `fake-indexeddb`), s
 derived from a persisted secret (an HKDF-from-stored-bytes variant was rejected in review: those
 bytes would let a storage-reader decrypt offline, D50). `withApiKey` hands the plaintext to a
 callback and never returns it; there is no `getApiKey`. The `device-secret` is a separate value
-(the sync identity seed, §9.3), so `clear` wipes the API key but not it. The key-leak test is live
+(the sync identity seed, §9.3), so `clear` wipes the API key but not it; it also wipes the realtime endpoint row (D192). The key-leak test is live
 in the contract suite (not deferred to Phase 4), plus a Dexie-specific assertion that what sits at
 rest is ciphertext, not the key.
 

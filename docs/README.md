@@ -19,6 +19,7 @@ A free, source-available web app for practising the Public Service Commission's 
 | `adr/` | Why each significant choice was made, and what would reverse it | The reasoning, the alternatives, the revisit conditions | Never edited. Superseded by a new ADR |
 | `progress.md` | Where the build actually is | What is done, what is in flight, deviations from the plan, the session log | Every session that changes something |
 | `deploy.md` | How to deploy it, check it and roll it back | The provisioning steps, the environment variables, the smoke checks | The hosting or the migration step changes |
+| `realtime-checklist.md` | Whether studio mode's live conversation works on real browsers | The manual checks on six browser and platform pairs, before each release that touches studio mode, and the results table | Studio mode's screen, transport or secret path changes |
 
 Read them in that order the first time. After that, `adr/` is usually the one you want, because it holds the arguments the other documents deliberately do not.
 

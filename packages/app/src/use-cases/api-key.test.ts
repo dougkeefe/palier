@@ -44,6 +44,8 @@ const vaultStub = () => {
       return Promise.resolve();
     },
     deviceSecret: () => Promise.resolve("device-secret"),
+    realtimeEndpoint: () => Promise.resolve(null),
+    setRealtimeEndpoint: () => Promise.resolve(),
   };
   return { vault, puts, inCallback: () => inCallback };
 };

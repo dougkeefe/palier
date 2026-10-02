@@ -15,6 +15,7 @@ import {
 import { Link } from "../../i18n/navigation";
 import { REALTIME_ROUTE_SOURCE_URL } from "../../lib/report";
 import { useContainer } from "../ContainerProvider";
+import { RealtimeEndpointSettings } from "./RealtimeEndpointSettings";
 import { SpendSettings } from "./SpendSettings";
 
 /**
@@ -23,7 +24,8 @@ import { SpendSettings } from "./SpendSettings";
  * - with a key, where it is held and how it ends, check and remove, and the check's result
  *   in plain words (§14), never the raw error;
  * - the plain statement of where the key is kept and what it is used for, with the guide;
- * - the one exception, studio mode's route, said plainly with a link to its source (architecture.md §6.3, D186);
+ * - the one exception, studio mode's route, said plainly with a link to its source (architecture.md §6.3, D186), and
+ *   the way around it, the user's own endpoint (`RealtimeEndpointSettings`, D192);
  * - then the spend half, `SpendSettings` (Phase 4 Slice 2, D101–D104).
  *
  * The field is cleared as soon as the key is saved, and the key is never shown again, only
@@ -186,6 +188,8 @@ export function KeySettings() {
         <a href={REALTIME_ROUTE_SOURCE_URL} className="app-link pl-focusable" rel="noreferrer">
           {t("realtimeSource")}
         </a>
+        {/* Removing the key forgets the endpoint too (D192), so the form reads it again when the key changes. */}
+        <RealtimeEndpointSettings key={state.phase} useCases={useCases} />
       </Card>
 
       <SpendSettings />

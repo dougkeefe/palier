@@ -10,6 +10,8 @@ import {
   REALTIME_ROUTE_SOURCE_URL,
   REPORT_REASONS,
   REPOSITORY_URL,
+  SELFHOST_GUIDE,
+  SELFHOST_GUIDE_URL,
   contributeIssueUrl,
   errorIssueUrl,
   exportFileName,
@@ -153,5 +155,15 @@ describe("REALTIME_ROUTE_SOURCE_URL (D186)", () => {
 
   it("links it on the repository's main branch", () => {
     expect(REALTIME_ROUTE_SOURCE_URL).toBe(`${REPOSITORY_URL}/blob/main/apps/web/src/server/realtime-handlers.ts`);
+  });
+});
+
+describe("SELFHOST_GUIDE_URL (D192)", () => {
+  it("names a file this repository holds, so the own-endpoint form's link never points at nothing", () => {
+    expect(existsSync(new URL(`../../../../${SELFHOST_GUIDE}`, import.meta.url))).toBe(true);
+  });
+
+  it("links it on the repository's main branch", () => {
+    expect(SELFHOST_GUIDE_URL).toBe(`${REPOSITORY_URL}/blob/main/selfhost/README.md`);
   });
 });

@@ -247,8 +247,13 @@ interface KeyVault {
   withApiKey<T>(fn: (k: string) => Promise<T>): Promise<T>   // never returns the key
   hasApiKey(): Promise<boolean>
   apiKeyStorage(): Promise<"device" | "tab" | null>          // added (D98): where it is held, never the key
-  clear(): Promise<void>                                      // forgets both modes
+  clear(): Promise<void>                                      // forgets both modes, and the endpoint (D192)
   deviceSecret(): Promise<string>
+  // Amended in place 2 October 2026 (Phase 6 Slice 3, progress.md D192): ADR 3's self-hosted escape. The user's own
+  // realtime secret endpoint, kept with the key because settings sync and an address can name a person: device-local,
+  // never synced, never exported. The caller checks it first (@palier/app's parseRealtimeEndpoint).
+  realtimeEndpoint(): Promise<string | null>                  // null: Palier's route
+  setRealtimeEndpoint(url: string | null): Promise<void>      // null forgets it
 }
 
 // Added 26 September 2026 with Phase 4 Slice 2 (progress.md D101): the local cost ledger, a port §3.3 did
@@ -1108,7 +1113,12 @@ sync.**
   - The Vercel log exclusion verified, and in `docs/deploy.md`.
   - `docs/realtime-checklist.md`.
 
-  *Done:* the self-hosted path working end to end against a local endpoint.
+  *Done:* the self-hosted path working end to end against a local endpoint. *(Built 2 October 2026, `progress.md`
+  D192–D194, `dougkeefe/1bf42`. The self-hosted path runs end to end on the production build against the repository's
+  own Worker on a local port (`studio-selfhost-production.spec.ts`), under the real CSP, with the route seeing no key. The
+  endpoint is kept in the vault, not the settings, because settings sync (§3.3 amended). The Vercel log exclusion has no
+  per-route switch: what holds is that nothing Vercel records can carry the key, checked in code and tests, and on the
+  deployment by the human at Gate O (D193). The checklist is written (D194).)*
 - **Gate O — studio mode's release reads (human).** The checklist on the six browser and platform pairs (exit criterion 3), the
   route read line by line, and the French of the new copy. Then Gate M.
 

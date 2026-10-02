@@ -16,7 +16,9 @@ import {
   failureMessage,
   phaseProgress,
   practice,
+  sendsTo,
   sessionEstimate,
+  studioModeNote,
   studioWarmup,
   turnFocus,
 } from "../../features/oral/practice-view";
@@ -56,10 +58,18 @@ type Setup = {
   readonly perMinuteUsd: Readonly<Record<OralMode, number | null>>;
   /** This device's past sessions, newest first, each linking to its report (D126). */
   readonly history: readonly OralHistoryEntry[];
+  /** The user's own realtime secret endpoint, or `null` for Palier's route (D192): read now, used at the tap. */
+  readonly endpoint: string | null;
 };
 
 const loadSetup = async (container: Container): Promise<Setup> => {
-  const [status, profile] = await Promise.all([container.useCases.apiKeyStatus(), readStudyProfile(container.settings)]);
+  // The endpoint is read with no fallback: a read that fails stops the screen like any other, and never reads as "no
+  // endpoint", which would send the key to the route the user set an endpoint to avoid (D192).
+  const [status, profile, endpoint] = await Promise.all([
+    container.useCases.apiKeyStatus(),
+    readStudyProfile(container.settings),
+    container.useCases.realtimeEndpoint(),
+  ]);
   const choices = await container.useCases.oralSessionChoices({
     targetBand: profile?.targetBand ?? DEFAULT_TARGET,
     lang: TARGET_LANG,
@@ -70,7 +80,7 @@ const loadSetup = async (container: Container): Promise<Setup> => {
   // A session a tab was closed on is over: close it first, so it is listed and can be reported on (D144).
   await container.useCases.closeAbandonedSessions().catch(() => []);
   const history = await container.useCases.oralHistory().catch(() => []);
-  return { keyHeld: status !== null, choices, perMinuteUsd, history };
+  return { keyHeld: status !== null, choices, perMinuteUsd, history, endpoint };
 };
 
 /** An audio element that plays the studio examiner's voice as it arrives, outside the page's layout. */
@@ -172,8 +182,8 @@ export function OralPractice() {
   }, [container, picking]);
 
   // Studio mode's route is woken on the steps before the tap, with no key, so the mint after it meets a warm
-  // function (D190).
-  const warmup = studioWarmup(state);
+  // function (D190). A device that mints on its own endpoint never calls the route, so it is not woken (D192).
+  const warmup = setup?.endpoint == null ? studioWarmup(state) : null;
   useEffect(() => {
     if (container.status !== "ready" || warmup === null) return;
     void container.container.warmRealtime();
@@ -263,7 +273,7 @@ export function OralPractice() {
             </>
           ) : (
             <>
-              <strong>{t("studioModeTitle")}</strong> {t("studioMode")}
+              <strong>{t("studioModeTitle")}</strong> {t(studioModeNote(setup.endpoint !== null))}
             </>
           )}
         </Callout>
@@ -413,11 +423,12 @@ export function OralPractice() {
         void control.start(choice, mode);
         return;
       }
-      // The tap that starts the conversation: the microphone the check opened goes to the studio controller.
+      // The tap that starts the conversation: the microphone the check opened goes to the studio controller. With
+      // the user's own endpoint, its popup opens inside this handler, before anything awaits (D192).
       const microphone = control.handOver();
       setElapsedMs(0);
       dispatch({ type: "studio" });
-      void studioControl.start(choice, microphone);
+      void studioControl.start(choice, microphone, setup.endpoint);
     };
     return (
       <Card>
@@ -432,7 +443,7 @@ export function OralPractice() {
               : t("preflightEstimate", { amount: estimateText(preflight.estimateUsd, locale) })}
           </p>
           {notice === null ? null : <Callout tone={notice.tone}>{t(notice.key)}</Callout>}
-          <p className="app-muted">{t(studioHeld ? "sendsToStudio" : mode === "spoken" ? "sendsToSpoken" : "sendsToTyped")}</p>
+          <p className="app-muted">{t(sendsTo(studioHeld, setup.endpoint !== null, mode))}</p>
           <div className="app-actions">
             <Button onClick={start}>{t("start")}</Button>
             {back}

@@ -29,6 +29,21 @@ export const axeClean = async (page: Page) => {
   expect(results.violations).toEqual([]);
 };
 
+/**
+ * Collects every CSP and Trusted Types violation a page reports, from before its first script, for the production
+ * specs that hold a flow to zero (`csp-production.spec.ts`, `studio-selfhost-production.spec.ts`).
+ */
+export const recordViolations = async (page: Page) => {
+  await page.addInitScript(() => {
+    const seen: string[] = [];
+    Object.defineProperty(window, "__cspViolations", { value: seen });
+    document.addEventListener("securitypolicyviolation", (event) => {
+      seen.push(`${event.effectiveDirective} ${event.blockedURI} ${event.sample}`);
+    });
+  });
+  return () => page.evaluate(() => (window as unknown as { __cspViolations: string[] }).__cspViolations.slice());
+};
+
 /** Wait until the worker has installed (so precaching is done) and controls the page. */
 export const waitForOfflineReady = async (page: Page) => {
   await page.evaluate(async () => {
@@ -191,15 +206,22 @@ export const practiseSpeaking = async (
  * examiner `installFakeRealtime` gives and the synthesised microphone `installFakeAudio` gives: choose studio mode
  * and `session`, check the microphone, start past the studio pre-flight, wait for the examiner's first response to
  * be counted and the candidate's answer to be heard, ask for a repeat, then end and wait for the end card, whose
- * heading takes focus. `onState` runs at each state a user rests on, for axe.
+ * heading takes focus. `onState` runs at each state a user rests on, for axe. `ownEndpoint` expects the copy for a device
+ * that mints on the user's own endpoint (D192), whose popup the tap opens.
  */
 export const talkInStudio = async (
   page: Page,
-  { session = "Warm-up", onState = async () => undefined }: { session?: string; onState?: (state: string) => Promise<void> } = {},
+  {
+    session = "Warm-up",
+    onState = async () => undefined,
+    ownEndpoint = false,
+  }: { session?: string; onState?: (state: string) => Promise<void>; ownEndpoint?: boolean } = {},
 ) => {
   await expect(page.getByRole("heading", { name: "Choose a session" })).toBeVisible();
   await page.getByRole("radio", { name: /^Studio mode/ }).check();
-  await expect(page.getByText("Your key goes once to Palier’s server", { exact: false })).toBeVisible();
+  await expect(
+    page.getByText(ownEndpoint ? "Your key goes once to your own endpoint" : "Your key goes once to Palier’s server", { exact: false }),
+  ).toBeVisible();
   await onState("picker");
   await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: session, exact: true }) }).getByRole("button", { name: "Choose" }).click();
   await expect(page.getByRole("heading", { name: "Check your microphone" })).toBeFocused();
@@ -211,7 +233,11 @@ export const talkInStudio = async (
   await expect(heard.or(quiet)).toBeVisible({ timeout: 10_000 });
   await page.getByRole("button", { name: (await heard.isVisible()) ? "Continue" : "Continue anyway", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Before you start" })).toBeFocused();
-  await expect(page.getByText("Starting sends your key once to Palier’s server", { exact: false })).toBeVisible();
+  await expect(
+    page.getByText(ownEndpoint ? "Starting opens your own endpoint in a small window" : "Starting sends your key once to Palier’s server", {
+      exact: false,
+    }),
+  ).toBeVisible();
   await onState("pre-flight");
   await page.getByRole("button", { name: "Start the session" }).click();
   await expect(page.getByRole("heading", { name: "The conversation" })).toBeFocused();

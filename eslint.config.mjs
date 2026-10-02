@@ -36,6 +36,9 @@ const FRAMEWORK_DEFAULT_EXPORT_FILES = [
   "apps/web/src/i18n/request.ts",
   "apps/web/next.config.ts",
   "apps/web/playwright.config.ts",
+  // Cloudflare's module Worker finds its handler by the default export, with no named
+  // alternative (progress.md D192). The Vercel function beside it exports by name.
+  "selfhost/cloudflare-worker.mjs",
   "eslint.config.mjs",
   "vitest.config.mts",
 ];
@@ -112,6 +115,25 @@ export default defineConfig([
     languageOptions: {
       globals: { process: "readonly", console: "readonly", URL: "readonly" },
     },
+  },
+  {
+    // The self-hosted realtime secret endpoint (progress.md D192) runs on a Worker or a
+    // Vercel function: the Fetch API's globals, and no `console`, since it logs nothing.
+    files: ["selfhost/**/*.mjs"],
+    languageOptions: {
+      globals: {
+        Request: "readonly",
+        Response: "readonly",
+        Headers: "readonly",
+        fetch: "readonly",
+        crypto: "readonly",
+        AbortSignal: "readonly",
+        URL: "readonly",
+        process: "readonly",
+        console: "off",
+      },
+    },
+    rules: { "no-console": "error" },
   },
   {
     rules: {
