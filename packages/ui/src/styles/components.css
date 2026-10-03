@@ -160,9 +160,13 @@
   background-color: var(--surface-quiet);
 }
 
+/* On the deep fill, the light ground's muted ink and accent would vanish (1.23:1 and 2.39:1), so
+   anything drawn in them inside, the streak's flame among them, takes the panel's light inks. */
 .pl-card--deep {
   background-color: var(--surface-deep);
   color: var(--on-deep);
+  --ink-muted: var(--on-deep-muted);
+  --accent: var(--on-deep);
 }
 
 /* ---- OptionRow (drill answer; real radio; glyph + label, never colour) ----- */
@@ -219,6 +223,21 @@
 
 .pl-option--incorrect {
   border-color: var(--incorrect);
+}
+
+/* Under forced colours every border is repainted in a system colour, the transparent one too, and the
+   dot's gradient keeps its dark primary on a dark ground: the selection would not show. So it is drawn
+   in the system's selection colour, on the ring and on the option's edge. */
+@media (forced-colors: active) {
+  .pl-option--selected,
+  .pl-option--selected::before {
+    border-color: Highlight;
+  }
+
+  .pl-option--selected::before {
+    forced-color-adjust: none;
+    background: radial-gradient(circle, Highlight 0 4px, transparent 4.5px);
+  }
 }
 
 .pl-option[aria-disabled="true"] {
@@ -638,9 +657,10 @@
   color: var(--ink);
 }
 
-/* The footer's deep teal, so the page behind reads as set aside, not as gone. */
+/* The footer's deep teal, so the page behind reads as set aside, not as gone. Before Safari 17.4 and
+   Chrome 122, ::backdrop inherits no custom property, so the token carries its value as a fallback. */
 .pl-dialog::backdrop {
-  background-color: color-mix(in srgb, var(--primary) 60%, transparent);
+  background-color: color-mix(in srgb, var(--primary, #00384A) 60%, transparent);
 }
 
 .pl-dialog--side {

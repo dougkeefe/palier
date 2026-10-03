@@ -6867,8 +6867,9 @@ So the work is in the tokens, the primitives and the chrome, with bespoke layout
   - **`rule`, `#6B6663`, is not in the design.** Its inputs are a fill alone, about 1.1:1 against the paper, short of WCAG
     1.4.11's 3:1 for a component's boundary. Inputs keep the design's quiet fill and gain a 1px `rule` border. ADR 13 is a
     floor.
-  - The contrast gate grew from 60 checks to 92: every text token on the paper, a card, a tinted panel and a quiet one;
-    the light text on a deep panel and on a primary button; and `primary`, `accent` and `rule` at 3:1, in both sets.
+  - The contrast gate grew from 60 checks to 102: every text token, `primary` among them, on the paper, a card, a tinted
+    panel and a quiet one; the light text on a deep panel and on a primary button; and `primary`, `accent` and `rule` at
+    3:1, `accent` on the tinted and quiet panels too, as the focus ring lands there, in both sets.
 - **The type.** Source Serif 4 for everything, as the landing page had it. Inter and Figtree, their licences and their
   `SOURCES.md` rows are removed; the serif is **preloaded on every page**, and `landing-font.ts`, D201's landing-only
   preload of the same file, is folded into `fonts.ts`. D201's metric-matched "Serif Fallback" face moved from `landing.css`
@@ -6904,6 +6905,16 @@ So the work is in the tokens, the primitives and the chrome, with bespoke layout
     zero specificity, and nothing on the landing page.
   - Ten specs could not click a footer link. The giant wordmark's glyph box reaches up over the links and took the click,
     as it would a person's. It is `pointer-events: none`.
+- **What the review found, and fixed** (candid-review, before the pull request):
+  - **Forced colours.** The drawn radios (a gradient dot, and a transparent border that turns primary) cannot show a
+    selection under Windows High Contrast, which repaints every border, the transparent ones too, and keeps the dot's
+    dark colour. There the app's radios are the platform's again (`appearance: auto`), and a selected answer option is
+    drawn in the system's `Highlight`.
+  - **The deep panel redefines `--ink-muted` and `--accent`** to its light inks: the unlit streak flame, an outline in
+    `ink-muted`, measured 1.23:1 on today's plan.
+  - **The dialog's backdrop names its token's value as a fallback**: before Safari 17.4 and Chrome 122, `::backdrop`
+    inherits no custom property, and the dimming would have vanished.
+  - The gate's new pairs above: `primary` as text, and the focus ring on the panels.
 - **Proved to bite:** with `correct` back at `#1F7A5C`, the contrast gate fails four pairs; with `rule` lightened to
   `#B9B5B2`, it fails four more.
 - **For the human, not settled here:**
@@ -6925,12 +6936,13 @@ ruled on two questions first: light only, and an exam set of greys on the same p
 Gate O, then Gate M.
 
 - **`@palier/ui`'s tokens are the design's** (D202): one light theme, nine new roles, `accent` gated, `correct` darkened,
-  and `rule` for inputs' borders (WCAG 1.4.11). The contrast gate checks 92 pairs.
+  and `rule` for inputs' borders (WCAG 1.4.11). The contrast gate checks 102 pairs.
 - **Source Serif 4 for everything**, preloaded; Inter and Figtree removed.
 - **Flat primitives**: pills with the arrow disc, `Card` tones, radio rings on answer options, the tinted empty banner.
 - **The chrome as drawn**: the pill-track nav with the current page marked (`HeaderNav`), the deep-teal footer with its
   wordmark. **Today and setup as drawn**; every other screen takes the header, ground, buttons and panels.
 - **Found by the suites**: a base `h3` colour that reached the landing page, and a wordmark that took footer clicks (D202).
+- **Found by the review**: radios under forced colours, the flame on the deep panel, the backdrop in older Safari (D202).
 - **For the human:** Coco is teal now, and the landing page's palette could fold onto the tokens (D202).
 
 ```
@@ -6942,6 +6954,11 @@ playwright --project=chromium                      → 74 passed
 playwright --project=offline (production build)    → 35 passed (csp-production: zero violations, the serif from this origin)
 pnpm --filter @palier/web lighthouse (19 URLs × 5) → all assertions pass; medians: performance ≥ 0.99, accessibility 1.00, CLS 0
 check-bundle-size                                  → 166.3 KB of 180.0 KB
+after the review's four fixes:
+pnpm verify                                        → 258 files, 4108 passed, 8 todo; exit 0
+playwright --project=chromium                      → 74 passed
+playwright --project=offline (production build)    → 35 passed
+forced-colors emulated, /en/start step 2           → the radios are the platform's (appearance: auto); Level C shows chosen
 ```
 
 ### 3 October 2026 — `dougkeefe/palier-landing-page-update` (the landing page as designed; D201)

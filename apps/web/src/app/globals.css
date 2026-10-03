@@ -464,6 +464,18 @@ body {
   border-color: var(--rule);
 }
 
+/* Under forced colours the drawn dot would not show (its gradient keeps its dark colour on a dark ground),
+   so the platform's own radio comes back, which the system paints. */
+@media (forced-colors: active) {
+  .app-choice input[type="radio"],
+  .app-segmented__option input[type="radio"],
+  .app-choice input[type="radio"]:checked,
+  .app-segmented__option input[type="radio"]:checked {
+    appearance: auto;
+    background: none;
+  }
+}
+
 /* A checkbox choice keeps the platform's box, in primary, at the radio's size. */
 .app-choice input[type="checkbox"] {
   width: 18px;
@@ -662,11 +674,7 @@ body {
   font-size: 1.0625rem;
 }
 
-/* Today's plan, on the deep panel: its quiet words light, its rows ruled in a fifth of white. */
-.app-home__plan .app-muted {
-  color: var(--on-deep-muted);
-}
-
+/* Today's plan, on the deep panel (its muted ink is the panel's own): its rows ruled in a fifth of white. */
 .app-home__plan .app-plan__row {
   border-bottom: 0;
   border-top: 1px solid color-mix(in srgb, var(--on-deep) 20%, transparent);

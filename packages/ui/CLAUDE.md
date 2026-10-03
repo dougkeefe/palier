@@ -22,9 +22,12 @@ system, not the application.
   block and no `[data-theme]`; `:root` says `color-scheme: light`. A token has one value.
 - **Colour is never the only signal.** Correct and incorrect also carry a glyph and a label.
   Every pair clears 4.5:1 for text and 3:1 for UI **in both token sets**, asserted by a unit test over
-  the token set (`contrast.test.ts`): each text token on the paper, a card, a tinted and a quiet panel;
-  the light text on a deep panel and a primary button; and `primary`, `accent` (the focus ring, now
-  gated) and `rule` (an input's border, which the design's fill-only input lacked, WCAG 1.4.11) at 3:1.
+  the token set (`contrast.test.ts`): each text token, `primary` among them, on the paper, a card, a
+  tinted and a quiet panel; the light text on a deep panel and a primary button; and `primary`, `accent`
+  (the focus ring, now gated, on the panels too) and `rule` (an input's border, which the design's
+  fill-only input lacked, WCAG 1.4.11) at 3:1. **A deep panel redefines `--ink-muted` and `--accent`** to
+  its light inks, so what is drawn in them inside stays visible. **Under `forced-colors`** a selected
+  option is drawn in `Highlight`, since the drawn dot and the transparent border cannot show it.
 - **Two token sets** (progress.md D86, D202). `default` is the design's. `exam` is the mock-exam
   runner's muted set (§8.4, D84 ruling 11): the same paper and ink, with charcoal and warm greys in
   place of the teal, overriding a subset of tokens under `[data-mode="exam"]`; the rest fall back.
