@@ -35,6 +35,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     properties on `.landing`, held to the contrast gate by `landing-contrast.test.ts`, which reads them from the file.
     Next keeps a page's stylesheet after a soft navigation, so **every rule there is scoped under a `landing` class**.
     `motion.test.ts` reads it too.
+  - Its serif is `src/fonts/landing-font.ts`, the passage serif's file declared again with `preload: true`, so only the
+    landing page preloads it. Without the preload, the swap rewrapped the French hero and cost `/fr` its Lighthouse budget
+    on CI's Linux runner, which has no Times New Roman for `next/font`'s fallback.
   - Its photographs live in `components/landing/images/` and are CSS backgrounds. They are bundled under
     `/_next/static/media/`, so the CSP needs no new origin and the worker precaches them through the stylesheet. Never
     hotlink an image.

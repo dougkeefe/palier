@@ -12,6 +12,21 @@
  * from `./images`, bundled under `/_next/static/media/`, which the service worker precaches.
  */
 
+/*
+ * The serif's stand-in while it loads. `next/font` sizes its fallback to Source Serif 4 from Times New Roman,
+ * through `local()`, which Linux does not have. There the stack fell through to a wider generic serif, the French
+ * hero rewrapped when the face arrived, and the layout shift cost /fr its Lighthouse budget in CI (D201). Liberation
+ * Serif and Tinos are Times New Roman's metric twins, so the same overrides (next/font's, for this face) hold for them.
+ */
+@font-face {
+  font-family: "Landing Serif Fallback";
+  src: local("Times New Roman"), local("Liberation Serif"), local("Tinos");
+  ascent-override: 87.45%;
+  descent-override: 28.28%;
+  line-gap-override: 0%;
+  size-adjust: 118.46%;
+}
+
 .landing {
   --landing-bg: #f3f2f2;
   --landing-text: #201e1d;
@@ -29,7 +44,7 @@
   --landing-on-dark-muted: #d3dfe3;
   --landing-correct: #bfe6c8;
   --landing-incorrect: #f4c6d9;
-  --landing-font: var(--font-serif), Georgia, serif;
+  --landing-font: var(--font-landing-serif), "Landing Serif Fallback", Georgia, serif;
   --landing-gutter: clamp(20px, 4vw, 56px);
 
   position: relative;

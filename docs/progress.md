@@ -6805,6 +6805,17 @@ three tests with a live sample question, the oral banner, how it works, the FAQ 
 
   The decorative "PALIER" wordmark is drawn from a `data-` attribute by `::before`. As text at a tenth of white, axe
   failed it for contrast, and it is no text anyone reads.
+- **The landing serif is preloaded, on the landing page only** (after CI's first run). CI's Lighthouse gave `/fr` 0.88
+  for performance on all five runs, and `/en` passed. The serif was not preloaded (D161), so it arrived after the first
+  paint, and the hero, set in it, rewrapped as it swapped in. `next/font` sizes the fallback from `local("Times New
+  Roman")`, which the Linux runner lacks, and the long French lede moved the vertically centred hero most.
+  - `src/fonts/landing-font.ts` declares the same file again with `preload: true`. `next/font` preloads a face on the
+    routes that import it, so only `/en` and `/fr` send its `Link` header; `/en/about` does not. A landing page loads the
+    file once.
+  - `landing.css` adds a fallback face over `local("Times New Roman")`, `local("Liberation Serif")` and `local("Tinos")`
+    (the metric twins), with `next/font`'s overrides, for any load where the face is still late.
+  - Measured with Playwright at Lighthouse's desktop size, with no Times-sized fallback and no Georgia as on the runner:
+    `/fr`'s layout shift was 0.0053 before and is 0 after.
 - **The sample question** marks the right answer ✓ and a wrong pick ✗ beside the colour (PRD §11). Its decisions are
   `sampleFeedback` and `sampleOptionState` in `features/landing/landing.ts`.
 - **Tests changed, named here as the working agreement asks.** `smoke.spec.ts`'s "header focus order" ran on `/en`, which
@@ -6853,6 +6864,10 @@ Gate O, then Gate M.
 ```
 pnpm verify (design export moved out of the tree) → check-types, lint, boundaries pass; test: 257 files, 4058 passed, 8 todo; exit 0 (Node 24.21.0)
 pnpm verify (export committed, ESLint ignoring it)  → check-types, lint, boundaries pass; test: 257 files, 4058 passed, 8 todo; exit 0
+CI, medium lane: lhci /fr performance 0.88 on all five runs (≥ 0.95 asserted); /en passed → the landing serif preloaded
+pnpm verify                                         → 257 files, 4058 passed, 8 todo; exit 0
+pnpm --filter @palier/web lighthouse (19 URLs × 5) → all assertions pass; /en and /fr performance 1.00, CLS 0
+playwright test offline csp-production --project=offline → 13 passed; smoke --project=chromium → 13 passed
 playwright test smoke content motion --project=chromium → 21 passed, 4 failed (axe: the wordmark's contrast); fixed, then
 playwright test smoke journeys --project=chromium → 23 passed
 pnpm build; playwright test offline csp-production production discoverability-production --project=offline → 22 passed
