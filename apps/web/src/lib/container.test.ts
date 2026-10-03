@@ -288,6 +288,27 @@ describe("createContainer", () => {
     expect(Object.keys(trend.byBand).sort()).toEqual(["A", "B", "C"]);
   });
 
+  it("draws the practice trend over time from the same record, a point per week ending today (D198)", async () => {
+    const c = createContainer({ hermetic: true });
+    const [item] = await c.useCases.runDiagnostic({ skill: "reading", lang: "fr", targetBand: "B", count: 1 }).then((r) => r.items);
+    await c.useCases.answerItem({
+      attemptId: attemptId("01HHISTORY0000000000000001"),
+      itemId: item!.id,
+      response: item!.key,
+      sessionId: sessionId("01HSESSIONHISTORY0000001"),
+      mode: "drill",
+      msToFirstSelect: 1_000,
+      msToConfirm: 2_000,
+      changedAnswer: false,
+      slow: false,
+    });
+
+    const points = await c.useCases.practiceTrendHistory({ skill: "reading", weeks: 3, timeZone: "UTC" });
+    expect(points.map((p) => p.day)).toHaveLength(3);
+    expect(points.at(-1)?.day).toBe(c.clock.now().slice(0, 10));
+    expect(points.at(-1)?.trend.windowSize).toBe(1);
+  });
+
   it("round-trips a device's progress through export, wipe and import [R11]", async () => {
     await roundTripsProgress(createContainer({ hermetic: true }));
   });

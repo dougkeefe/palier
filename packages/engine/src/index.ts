@@ -16,6 +16,9 @@ export {
 export type { BandTrend, SkillTrend, TrendEvidence } from "./trend-calculator.js";
 export { MIN_EVIDENCE, TREND_WINDOW, calculateTrend, trendEvidence } from "./trend-calculator.js";
 
+export type { TrendPoint } from "./trend-history.js";
+export { trendHistory, weekEnds } from "./trend-history.js";
+
 export type { ExamResult, ScoredExamItem } from "./scorer.js";
 export { scoreExam } from "./scorer.js";
 
@@ -68,4 +71,4 @@ export type { FluencyMetrics } from "./fluency.js";
 export { fluencyMetrics, speakingMs } from "./fluency.js";
 
 export type { LocalDay, MilestoneFacts, MilestoneId, Streak, StreakInput } from "./engagement.js";
-export { MILESTONES, localDay, milestonesReached, streak } from "./engagement.js";
+export { MILESTONES, localDay, milestonesReached, shiftDay, streak } from "./engagement.js";

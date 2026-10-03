@@ -1,27 +1,36 @@
 "use client";
 
 import type { OralTotals, ProgressReport } from "@palier/app";
-import type { ScoredSkill } from "@palier/domain";
+import type { ScoredSkill, TargetBand } from "@palier/domain";
+import type { TrendPoint } from "@palier/engine";
 import { SCORED_SKILLS } from "@palier/domain";
 import { Button, Callout, Card } from "@palier/ui";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { flushSync } from "react-dom";
 
+import { TREND_HISTORY_WEEKS, historyBand } from "../../features/trend/trend-history";
+import { readStudyProfile } from "../../lib/study";
+import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { ExportButton } from "../data/ExportButton";
 import { NonAffiliation } from "../NonAffiliation";
 import { TrendMeters } from "../practice/TrendMeters";
+import { TrendHistory } from "./TrendHistory";
 
 type Loaded = {
   readonly reports: Readonly<Record<ScoredSkill, ProgressReport>>;
+  /** Each skill's trend at the end of each of the last `TREND_HISTORY_WEEKS` weeks (D198). */
+  readonly histories: Readonly<Record<ScoredSkill, readonly TrendPoint[]>>;
+  /** The band the history follows: the study profile's target. */
+  readonly band: TargetBand;
   readonly oral: OralTotals;
   readonly printedAt: string;
 };
 
 /**
- * Progress (product-requirements.md §8.9): the practice trend with its interval,
- * accuracy by sub-skill as plain counts (no percentage on a handful of answers, R10),
+ * Progress (product-requirements.md §8.9): the practice trend with its interval, and
+ * over time, week by week at the target band (D198), accuracy by sub-skill as plain counts (no percentage on a handful of answers, R10),
  * items answered, time spent answering, oral sessions and minutes spoken, an honest
  * panel on what this does and does not say, and the export.
  *
@@ -50,15 +59,20 @@ export function ProgressScreen() {
   useEffect(() => {
     if (container.status !== "ready") return;
     let live = true;
-    const { useCases, clock } = container.container;
+    const { useCases, clock, settings } = container.container;
+    const timeZone = deviceTimeZone();
     Promise.all([
       Promise.all(SCORED_SKILLS.map((s) => useCases.progressReport({ skill: s }))),
+      Promise.all(SCORED_SKILLS.map((s) => useCases.practiceTrendHistory({ skill: s, weeks: TREND_HISTORY_WEEKS, timeZone }))),
+      readStudyProfile(settings),
       useCases.oralTotals(),
     ]).then(
-      ([reports, oral]) =>
+      ([reports, histories, profile, oral]) =>
         live &&
         setLoaded({
           reports: Object.fromEntries(SCORED_SKILLS.map((s, i) => [s, reports[i]!])) as Record<ScoredSkill, ProgressReport>,
+          histories: Object.fromEntries(SCORED_SKILLS.map((s, i) => [s, histories[i]!])) as Record<ScoredSkill, TrendPoint[]>,
+          band: historyBand(profile?.targetBand ?? null),
           oral,
           printedAt: clock.now(),
         }),
@@ -91,7 +105,15 @@ export function ProgressScreen() {
             {t("printedOn", { date: format.dateTime(new Date(loaded.printedAt), { dateStyle: "long" }) })}
           </p>
           {SCORED_SKILLS.filter((s) => s === skill || printing).map((s) => (
-            <SkillCards key={s} skill={s} report={loaded.reports[s]} printOnly={s !== skill} />
+            <SkillCards
+              key={s}
+              skill={s}
+              report={loaded.reports[s]}
+              history={loaded.histories[s]}
+              band={loaded.band}
+              printing={printing}
+              printOnly={s !== skill}
+            />
           ))}
           <Card>
             <h2>{t("oralTitle")}</h2>
@@ -127,9 +149,24 @@ export function ProgressScreen() {
 
 /**
  * One skill's trend and sub-skill cards. The skill is named in each heading only when
- * printed, where both skills stand side by side; on screen the switch names it.
+ * printed, where both skills stand side by side; on screen the switch names it. The trend
+ * over time sits in the trend card on screen, and in a card of its own across the page on paper.
  */
-function SkillCards({ skill, report, printOnly }: { skill: ScoredSkill; report: ProgressReport; printOnly: boolean }) {
+function SkillCards({
+  skill,
+  report,
+  history,
+  band,
+  printing,
+  printOnly,
+}: {
+  skill: ScoredSkill;
+  report: ProgressReport;
+  history: readonly TrendPoint[];
+  band: TargetBand;
+  printing: boolean;
+  printOnly: boolean;
+}) {
   const t = useTranslations("progress");
   const tSkills = useTranslations("skills");
   const tSub = useTranslations("subSkills");
@@ -145,6 +182,7 @@ function SkillCards({ skill, report, printOnly }: { skill: ScoredSkill; report: 
         <TrendMeters trend={report.trend} />
         <p className="app-muted">{t("answered", { count: report.answered })}</p>
         <p className="app-muted">{t("timeAnswering", { minutes: Math.round(report.msAnswering / 60_000) })}</p>
+        {printing ? null : <TrendHistory points={history} band={band} printing={false} />}
       </Card>
       <Card className={className}>
         <h2>
@@ -164,6 +202,12 @@ function SkillCards({ skill, report, printOnly }: { skill: ScoredSkill; report: 
           </ul>
         )}
       </Card>
+      {/* Printed, the trend over time is its own row across the page, so the summary stays one page (D198). */}
+      {printing ? (
+        <Card className={["app-trend-history-card", className].filter(Boolean).join(" ")}>
+          <TrendHistory points={history} band={band} printing />
+        </Card>
+      ) : null}
     </>
   );
 }

@@ -40,18 +40,31 @@ const dayMs = (day: LocalDay): number => {
   return ms;
 };
 
-const previousDay = (day: LocalDay): LocalDay => new Date(dayMs(day) - DAY_MS).toISOString().slice(0, 10);
+/** The local day `days` calendar days after `day` (before it, when negative). */
+export const shiftDay = (day: LocalDay, days: number): LocalDay => new Date(dayMs(day) + days * DAY_MS).toISOString().slice(0, 10);
+
+const previousDay = (day: LocalDay): LocalDay => shiftDay(day, -1);
+
+/**
+ * One formatter per time zone, since building one costs far more than using it, and the trend
+ * history asks for a local day per attempt (D198). A cache of a pure function: same answers.
+ */
+const formatters = new Map<string, Intl.DateTimeFormat>();
+
+const formatterFor = (timeZone: string): Intl.DateTimeFormat => {
+  let formatter = formatters.get(timeZone);
+  if (formatter === undefined) {
+    formatter = new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit" });
+    formatters.set(timeZone, formatter);
+  }
+  return formatter;
+};
 
 /** The local day holding `at` in `timeZone`. */
 export const localDay = (at: string, timeZone: string): LocalDay => {
   const date = new Date(at);
   if (Number.isNaN(date.getTime())) throw new RangeError(`"${at}" is not an instant.`);
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(date);
+  const parts = formatterFor(timeZone).formatToParts(date);
   // Read by part rather than trusting a locale's separator, which differs between engines.
   const field = { year: "", month: "", day: "" };
   for (const { type, value } of parts) if (type === "year" || type === "month" || type === "day") field[type] = value;

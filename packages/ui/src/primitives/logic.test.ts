@@ -12,6 +12,9 @@ import {
   railGeometry,
   sheetState,
   timerState,
+  TREND_CHART_HEIGHT,
+  TREND_CHART_WIDTH,
+  trendChartGeometry,
   VOICE_EASE,
   VOICE_FULL_LEVEL,
   VOICE_REACH,
@@ -121,6 +124,56 @@ describe("calloutState", () => {
     expect(calloutState("correct").glyph).toBe("check");
     expect(calloutState("incorrect").glyph).toBe("cross");
     expect(calloutState("accent").glyph).toBe("star");
+  });
+});
+
+describe("trendChartGeometry", () => {
+  const P = { accuracy: 0.5, low: 0.4, high: 0.6 };
+
+  it("is empty but for its guides when no week has an estimate", () => {
+    const geo = trendChartGeometry([null, null]);
+    expect(geo.runs).toEqual([]);
+    expect(geo.dots).toEqual([]);
+    // 0% at the bottom, 100% at the top, inside the padding.
+    expect(geo.guides).toEqual([94, 50, 6]);
+  });
+
+  it("spreads the weeks across the width, oldest at the left, and puts a higher accuracy higher", () => {
+    const geo = trendChartGeometry([
+      { accuracy: 0, low: 0, high: 0.1 },
+      { accuracy: 1, low: 0.9, high: 1 },
+    ]);
+    expect(geo.dots).toEqual([
+      { x: 6, y: 94 },
+      { x: TREND_CHART_WIDTH - 6, y: 6 },
+    ]);
+    expect(geo.runs).toHaveLength(1);
+    expect(geo.runs[0]?.line).toBe("6.00,94.00 294.00,6.00");
+    // The interval's outline runs along the top left to right, then back along the bottom.
+    expect(geo.runs[0]?.area).toBe("6.00,85.20 294.00,6.00 294.00,14.80 6.00,94.00");
+  });
+
+  it("breaks the line at a week with too little evidence, never bridging the gap (R10)", () => {
+    const geo = trendChartGeometry([P, P, null, P, P]);
+    expect(geo.runs).toHaveLength(2);
+    expect(geo.dots).toHaveLength(4);
+  });
+
+  it("draws a lone week's interval a few units wide, so its range is still seen", () => {
+    const geo = trendChartGeometry([null, P, null]);
+    // The top edge is the interval's high bound, 60%; the bottom its low, 40%.
+    expect(geo.runs).toEqual([{ line: "150.00,50.00", area: "147.00,41.20 153.00,41.20 153.00,58.80 147.00,58.80" }]);
+  });
+
+  it("centres a single week", () => {
+    expect(trendChartGeometry([P]).dots).toEqual([{ x: TREND_CHART_WIDTH / 2, y: TREND_CHART_HEIGHT / 2 }]);
+  });
+
+  it("clamps out-of-range values and puts an inverted interval right", () => {
+    const geo = trendChartGeometry([{ accuracy: 2, low: 0.6, high: 0.4 }]);
+    expect(geo.dots).toEqual([{ x: 150, y: 6 }]);
+    // The same outline as the interval 40–60% the right way round.
+    expect(geo.runs[0]?.area).toBe(trendChartGeometry([P]).runs[0]?.area);
   });
 });
 

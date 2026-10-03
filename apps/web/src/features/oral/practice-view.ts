@@ -23,7 +23,9 @@ export type OralFailure =
   | "no-key"
   | "failed"
   /** The user's own realtime secret endpoint gave no secret: blocked, closed, silent or refusing (D192). */
-  | "endpoint";
+  | "endpoint"
+  /** Palier's realtime route refused this network for a while: its own rate limit, not OpenAI's (D195). */
+  | "throttled";
 
 /** Where the answer to the current question stands. */
 export type Turn = "idle" | "recording" | "sending";
@@ -175,6 +177,7 @@ export const practice = (state: PracticeState, action: PracticeAction): Practice
 /** Why a session failed, from the error the transport kept. */
 export const oralFailure = (error: unknown): OralFailure => {
   if (error instanceof Error && error.name === "SelfHostedEndpointError") return "endpoint";
+  if (error instanceof Error && error.name === "RouteThrottledError") return "throttled";
   const result = checkFailure(error);
   return result.kind === "valid" ? "failed" : result.kind;
 };
@@ -190,6 +193,7 @@ export const failureMessage = (failure: OralFailure): string =>
     "no-key": "failNoKey",
     failed: "failFailed",
     endpoint: "failEndpoint",
+    throttled: "failThrottled",
   })[failure];
 
 /** The sentence a session's end is announced with, in the `oral` namespace. */

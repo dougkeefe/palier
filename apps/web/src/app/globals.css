@@ -737,6 +737,33 @@ h3,
   font-variant-numeric: tabular-nums;
 }
 
+/* The trend over time on /progress (§8.9, D198): the chart, then its figures in a disclosure. */
+.app-trend-history {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.app-trend-history__title {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.app-trend-history__figures > summary {
+  cursor: pointer;
+  width: fit-content;
+}
+
+.app-trend-table th[scope="row"] {
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* A range kept on one line, so "(39–73 %)" never breaks at its dash. */
+.app-nowrap {
+  white-space: nowrap;
+}
+
 .app-input--code {
   max-width: 12rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -1129,7 +1156,7 @@ h3,
 
 @media print {
   @page {
-    margin: 12mm;
+    margin: 10mm;
   }
 
   .app-screen-only,
@@ -1141,7 +1168,7 @@ h3,
 
   body {
     background: var(--surface);
-    font-size: 9.5pt;
+    font-size: 9pt;
     line-height: 1.35;
   }
 
@@ -1161,7 +1188,7 @@ h3,
   .app-progress {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6pt 10pt;
+    gap: 4pt 10pt;
   }
 
   .app-progress > :is(p, [role="status"]) {
@@ -1170,7 +1197,7 @@ h3,
 
   .app-progress .pl-card {
     box-shadow: none;
-    padding: 6pt 8pt;
+    padding: 4pt 8pt;
     break-inside: avoid;
   }
 
@@ -1189,5 +1216,69 @@ h3,
   .app-progress .app-plan__row {
     min-height: 0;
     padding-block: 0;
+  }
+
+  .app-progress .app-plan {
+    gap: 1pt;
+  }
+
+  .app-progress .pl-band-meter__text {
+    font-size: 8.5pt;
+  }
+
+  /* The trend over time, a row across the page per skill: the chart, then the same table with
+   * its weeks running across, a column each, so twelve weeks take two lines, not twelve (D198). */
+  .app-progress .app-trend-history-card {
+    grid-column: 1 / -1;
+  }
+
+  .app-trend-history {
+    grid-template-columns: 1fr 5fr;
+    align-items: start;
+    gap: 2pt 8pt;
+    margin-top: 0;
+  }
+
+  .app-trend-history__title {
+    grid-column: 1 / -1;
+    font-size: 9.5pt;
+  }
+
+  /* On paper the table beside the chart names every week, so the chart's own dates go. */
+  .app-trend-history .pl-trend-chart__axis {
+    display: none;
+  }
+
+  .app-trend-table {
+    display: block;
+    font-size: 7pt;
+    line-height: 1.15;
+  }
+
+  .app-trend-table thead {
+    display: none;
+  }
+
+  .app-trend-table tbody {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 0 3pt;
+  }
+
+  .app-trend-table tr {
+    display: grid;
+    align-content: start;
+  }
+
+  .app-trend-table :is(th, td),
+  .app-trend-table td:last-child {
+    padding: 0;
+    border-bottom: none;
+    white-space: normal;
+  }
+
+  .app-trend-table th[scope="row"] {
+    font-weight: 600;
   }
 }

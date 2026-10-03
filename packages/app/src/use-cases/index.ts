@@ -100,8 +100,14 @@ export { importData } from "./import-data.js";
 export type { WipeDataDeps } from "./wipe-data.js";
 export { wipeData } from "./wipe-data.js";
 
-export type { PracticeTrendDeps, PracticeTrendEvidenceDeps, PracticeTrendRequest } from "./practice-trend.js";
-export { PRACTICE_MODES, practiceTrend, practiceTrendEvidence } from "./practice-trend.js";
+export type {
+  PracticeTrendDeps,
+  PracticeTrendEvidenceDeps,
+  PracticeTrendHistoryDeps,
+  PracticeTrendHistoryRequest,
+  PracticeTrendRequest,
+} from "./practice-trend.js";
+export { PRACTICE_MODES, practiceTrend, practiceTrendEvidence, practiceTrendHistory } from "./practice-trend.js";
 
 export type { ReviewQueueDeps, ReviewQueueRequest, ReviewQueueResult } from "./review-queue.js";
 export { reviewQueue } from "./review-queue.js";

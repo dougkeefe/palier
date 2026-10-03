@@ -18,6 +18,8 @@ describe("@palier/engine public surface", () => {
   it("exports the trend calculator", () => {
     expect(typeof engine.calculateTrend).toBe("function");
     expect(typeof engine.trendEvidence).toBe("function");
+    expect(typeof engine.trendHistory).toBe("function");
+    expect(typeof engine.weekEnds).toBe("function");
   });
 
   it("exports the exam scorer", () => {
@@ -70,6 +72,7 @@ describe("@palier/engine public surface", () => {
 
   it("exports the streak, the local day and the milestones", () => {
     expect(typeof engine.localDay).toBe("function");
+    expect(typeof engine.shiftDay).toBe("function");
     expect(typeof engine.streak).toBe("function");
     expect(typeof engine.milestonesReached).toBe("function");
     expect(engine.MILESTONES).toContain("first-exam");

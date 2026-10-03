@@ -48,7 +48,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   worker **precaches only `BANK_VERSION`'s**, which the script reads from `src/lib/bank-version.ts` (D140); a
   `BANK_VERSION` with no committed bank fails the build (D82). It also writes
   `src/components/errors/global-error-copy.json` from the messages' `errors` namespace (D141), committed and held equal
-  by a drift test. `worker.ts` may have **no runtime
+  by a drift test, and **`src/lib/routes.json`, the app's one route list** (D199): the page files, with the library's
+  articles, as the precache derives them, committed and held equal by `lib/routes.test.ts`. A new page is a new line
+  there, or the proxy answers it 404. `worker.ts` may have **no runtime
   imports** (the output is a classic script); a test compiles and runs it. The worker
   registers only in production builds (`src/sw/register.ts`).
 - **The exam profile is parsed here, once**, from `@palier/content/profiles/psc-sle.json`
@@ -107,9 +109,12 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   - **The diagnostic bundle (`lib/diagnostic.ts`) carries no free text**: an error's name, digest and in-app frame
     locations, the build, the bank, the browser's family and the path without its query. Never the message. The user
     reads it before copying it or opening the prefilled issue (`errorIssueUrl`); nothing sends it.
-  - **An unknown path renders the 404 from `[locale]/[...rest]`**, inside the layout, 200 with `noindex`. A `notFound()`
-    under this dynamic root layout is served as Next's error shell, which has neither the layout nor its Trusted Types
-    policy, so under the strict CSP it renders blank. Do not route a user-facing 404 through `notFound()`.
+  - **An unknown path renders the 404 from `[locale]/[...rest]`**, inside the layout, and **answers 404** (D199): the
+    proxy checks the path against `src/lib/routes.json` and rewrites an unknown one to itself with the status. On a 404
+    Next takes the head from the layout, not the page, so the layout titles it (it has no `x-palier-route`) and Next adds
+    `noindex`. A `notFound()` under this dynamic root layout is served as Next's error shell, which has neither the
+    layout nor its Trusted Types policy, so under the strict CSP it renders blank. Do not route a user-facing 404 through
+    `notFound()`.
   - `global-error.tsx` has no provider; it reads `global-error-copy.json`, never the whole message files, which would add
     about 32 KB gzipped to every page.
   - The build is `BUILD_VERSION` (`lib/build-info.ts`), inlined by `next.config.ts` from `VERCEL_GIT_COMMIT_SHA`; the bank
@@ -162,12 +167,21 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     - the key is read from `Authorization` and nowhere else; the body is never read;
     - it is used once, through a `RealtimeSecretSource`, and never logged, stored or echoed;
     - the answer is `{ value, expiresAt }`, uncached, and a refusal is a code.
+    - posts are limited to 60 an hour per IP hash (D195, D200), counted **before** the key is read and refused as
+      `throttled`, never `rate-limited`, which is OpenAI's quota. No limit in the hermetic lane or with no database
+      (`db.ts`'s `realtimeRateLimitStore`). A store that fails, or is silent for `RATE_LIMIT_WAIT_MS`, lets the post through.
 
     `realtime.ts` composes it: the memory source when hermetic, otherwise OpenAI's for `ai-models.json`'s `realtime`
     and `realtimeVoice` (`cedar` since Gate N, D174). `ai-models.json`'s `realtimeEagerness` is not the route's: the
     composition root hands it to `realtimeTransport` through `pricing.ts`'s `REALTIME_EAGERNESS`, checked at load (D175). It needs no database. **Never add a `console` call, a store or a body read to it**; every
     branch has a test in `realtime-handlers.test.ts`, which also holds that the route writes nothing to the console,
     its log exclusion's half in code (D193; `docs/deploy.md` has the half on Vercel).
+- **Found by search engines** (Phase 7 Slice 5, D199). `app/robots.ts` and `app/sitemap.ts` are one-line bindings over
+  `lib/discoverability.ts`, reading `routes.json` and the public origin, `siteUrlFrom` in `lib/build-info.ts`
+  (`PALIER_SITE_URL`, else `VERCEL_PROJECT_PRODUCTION_URL`, else localhost). The proxy names a known page's route to the
+  layout in `x-palier-route` (and deletes any the client sent); the layout's metadata turns it into the canonical and
+  `hreflang` links, with `metadataBase` and an Open Graph title and description. Both files are outside the proxy's
+  matcher, so they carry no CSP and need none.
 - **Baseline security headers on every response** (`next.config.ts`, architecture.md §12): HSTS,
   `nosniff`, `Referrer-Policy: no-referrer`, and a `Permissions-Policy` allowing the microphone on
   this origin only. They are asserted on the production server in `e2e/production.spec.ts`.

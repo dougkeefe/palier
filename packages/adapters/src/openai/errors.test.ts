@@ -8,6 +8,7 @@ import {
   ProviderTimeoutError,
   ProviderUnavailableError,
   RateLimitError,
+  RouteThrottledError,
 } from "./errors.js";
 
 /**
@@ -24,6 +25,7 @@ describe("the openai adapter's errors", () => {
     [new ProviderUnavailableError("x"), "ProviderUnavailableError"],
     [new ProviderTimeoutError("x"), "ProviderTimeoutError"],
     [new InvalidResponseError("x"), "InvalidResponseError"],
+    [new RouteThrottledError("x"), "RouteThrottledError"],
   ] as const)("names %o as %s, and is an OpenAiError", (error, name) => {
     expect(error.name).toBe(name);
     expect(error).toBeInstanceOf(OpenAiError);

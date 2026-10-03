@@ -52,6 +52,9 @@ const PAGES = [
   "/no-such.page",
 ];
 
+/** The two unknown paths above, which answer 404 with the page inside the layout (D199); every other page answers 200. */
+const UNKNOWN = new Set(["/no-such-page", "/no-such.page"]);
+
 const ATTACKER = "https://attacker.example";
 
 /**
@@ -76,6 +79,7 @@ for (const locale of ["en", "fr"]) {
     for (const path of PAGES) {
       const response = await page.goto(`/${locale}${path}`);
       await page.waitForLoadState("networkidle");
+      expect(response?.status(), path).toBe(UNKNOWN.has(path) ? 404 : 200);
       const policy = response?.headers()["content-security-policy"] ?? "";
       const nonce = /'nonce-([^']+)'/.exec(policy)?.[1];
 

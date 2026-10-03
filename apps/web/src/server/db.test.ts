@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import { answersWithin, databaseAnswers, resetSyncApi, syncApi, telemetryApi } from "./db";
+import { answersWithin, databaseAnswers, realtimeRateLimitStore, resetSyncApi, syncApi, telemetryApi } from "./db";
 
 afterEach(() => {
   resetSyncApi();
@@ -47,6 +47,33 @@ describe("telemetryApi — the telemetry half of the same composition point", ()
     // The second call's environment is ignored: the database was already chosen.
     expect(sync).not.toBeNull();
     expect(telemetry).not.toBeNull();
+  });
+});
+
+describe("realtimeRateLimitStore — the realtime route's limit (D195)", () => {
+  const DATABASE_URL = "postgres://palier:palier@127.0.0.1:1/palier";
+
+  it.each([
+    ["no database is configured", {}],
+    ["the database URL is empty", { DATABASE_URL: "" }],
+    ["the lane is hermetic, even with a database", { PALIER_HERMETIC: "1", DATABASE_URL }],
+  ])("is null when %s, so the route has no limit", (_, env) => {
+    expect(realtimeRateLimitStore(env)).toBeNull();
+  });
+
+  it("keys with RATE_LIMIT_SALT and counts in the configured database, rejecting when it cannot be reached", async () => {
+    const store = realtimeRateLimitStore({ DATABASE_URL, RATE_LIMIT_SALT: "s" });
+
+    expect(store?.salt).toBe("s");
+    await expect(store?.hit("key", "2026-10-03T12:00:00.000Z")).rejects.toThrow();
+  });
+
+  it("rejects a hit when the shared database was already chosen as none", async () => {
+    expect(await syncApi({})).toBeNull();
+
+    await expect(realtimeRateLimitStore({ DATABASE_URL })?.hit("key", "2026-10-03T12:00:00.000Z")).rejects.toThrow(
+      "No database is configured.",
+    );
   });
 });
 

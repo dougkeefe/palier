@@ -155,6 +155,74 @@ export const bandMeterGeometry = (input: BandMeterInput): BandMeterGeometry => {
   };
 };
 
+// ---- TrendChart (§8.9: the band trend over time, the interval shaded, a gap where evidence is short) ----
+
+/** The chart's drawing box, in SVG user units; the SVG scales to its container's width. */
+export const TREND_CHART_WIDTH = 300;
+export const TREND_CHART_HEIGHT = 100;
+const TREND_CHART_PAD = 6;
+/** Half the width an isolated week's interval is drawn at, so a one-point run still shows its range. */
+const TREND_CHART_LONE_HALF_WIDTH = 3;
+
+export type TrendChartGeometry = {
+  /** One run of consecutive weeks with an estimate: its line and its interval's outline, as SVG `points`. */
+  readonly runs: readonly { readonly line: string; readonly area: string }[];
+  /** Every week with an estimate, as a dot, so a lone week is still seen. */
+  readonly dots: readonly { readonly x: number; readonly y: number }[];
+  /** The y of the 0%, 50% and 100% guides. */
+  readonly guides: readonly number[];
+};
+
+const trendY = (value: number): number =>
+  TREND_CHART_HEIGHT - TREND_CHART_PAD - clampUnit(value) * (TREND_CHART_HEIGHT - 2 * TREND_CHART_PAD);
+
+const svgPoints = (points: readonly (readonly [number, number])[]): string =>
+  points.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(" ");
+
+/**
+ * The chart's shapes from one estimate per week, oldest first, `null` where the evidence is short
+ * (R10). A `null` breaks the line, so a week with too little evidence is drawn as a gap, never
+ * bridged. Values are clamped to [0, 1] and an inverted interval is put right, as the band meter's.
+ */
+export const trendChartGeometry = (points: readonly (BandMeterInput | null)[]): TrendChartGeometry => {
+  const span = TREND_CHART_WIDTH - 2 * TREND_CHART_PAD;
+  const x = (i: number): number => (points.length === 1 ? TREND_CHART_WIDTH / 2 : TREND_CHART_PAD + (i * span) / (points.length - 1));
+  type Placed = { readonly x: number; readonly y: number; readonly low: number; readonly high: number };
+  const groups: Placed[][] = [];
+  let current: Placed[] | null = null;
+  for (const [i, point] of points.entries()) {
+    if (point === null) {
+      current = null;
+      continue;
+    }
+    // A higher value is a smaller y, so the low bound is the larger y.
+    const [low, high] = [trendY(point.low), trendY(point.high)].sort((a, b) => b - a) as [number, number];
+    if (current === null) {
+      current = [];
+      groups.push(current);
+    }
+    current.push({ x: x(i), y: trendY(point.accuracy), low, high });
+  }
+  const runs = groups.map((run) => {
+    const only = run.length === 1 ? run[0] : undefined;
+    const outline: [number, number][] =
+      only === undefined
+        ? [...run.map((p): [number, number] => [p.x, p.high]), ...run.map((p): [number, number] => [p.x, p.low]).reverse()]
+        : [
+            [only.x - TREND_CHART_LONE_HALF_WIDTH, only.high],
+            [only.x + TREND_CHART_LONE_HALF_WIDTH, only.high],
+            [only.x + TREND_CHART_LONE_HALF_WIDTH, only.low],
+            [only.x - TREND_CHART_LONE_HALF_WIDTH, only.low],
+          ];
+    return { line: svgPoints(run.map((p) => [p.x, p.y])), area: svgPoints(outline) };
+  });
+  return {
+    runs,
+    dots: groups.flat().map((p) => ({ x: p.x, y: p.y })),
+    guides: [0, 0.5, 1].map(trendY),
+  };
+};
+
 // ---- Sheet (§8.3: the feedback panel that slides up after confirm) ----
 
 export type SheetTone = "correct" | "incorrect" | "neutral";

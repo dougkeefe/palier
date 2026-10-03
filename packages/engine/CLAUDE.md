@@ -14,7 +14,10 @@ point-biserial over **whole-number sums**, so it is a function of the event set 
 threshold strict**. `restBucket`/`restBuckets` give an item's quintile on the *other* scored items, which is
 what makes a point-biserial computable without an ability estimate (ADR 7). `trendEvidence` counts the
 items behind the practice trend, and those with trusted statistics, over the trend's own window, for the
-readiness disclosure; it never reweights the trend. **Spend** (`spend.ts`, progress.md D103):
+readiness disclosure; it never reweights the trend. **The trend over time** (`trend-history.ts`, progress.md D198): `trendHistory` is
+`calculateTrend` at the end of each cutoff **local day**, over the attempts made on or before it, so a point is what the
+screen showed that evening; `weekEnds(today, weeks)` gives the cutoffs, oldest first. A cutoff is a local day, not an
+instant, so a week ends on the user's evening across daylight time; `shiftDay` moves a local day by calendar days. **Spend** (`spend.ts`, progress.md D103):
 `spendTotals` sums a ledger's rows into this session (since `sessionStart`), this week (Monday 00:00
 UTC) and this month (the 1st, 00:00 UTC), with no upper bound; `capState` compares **whole micro-dollars**
 against `CAP_WARNING_PERCENT` (PRD §8.10's 80%, product behaviour, not profile data), so 80% and 100% are

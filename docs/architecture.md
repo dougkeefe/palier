@@ -689,7 +689,7 @@ Small by design.
 
 | Route | Runtime | Auth | Purpose |
 | --- | --- | --- | --- |
-| `POST /api/realtime/secret` | Node (ADR 21) | none, user key in header | Mint an ephemeral realtime token. Stateless, no logging. Phase 6 Slice 1, in 1.0 (D165; D131 had deferred it) |
+| `POST /api/realtime/secret` | Node (ADR 21) | none, user key in header | Mint an ephemeral realtime token. Stateless, no logging. Phase 6 Slice 1, in 1.0 (D165; D131 had deferred it). Rate limited by IP hash, 60 posts an hour, counted before the key is read and refused as `429 throttled`; no limit with no database, and a failing store lets the mint through (Phase 7 Slice 5, `progress.md` D195) |
 | `POST /api/telemetry` | Edge | none | Opt-in anonymous item outcomes, batched, rate limited by IP hash |
 | `GET /api/health` | Edge | none | Build version, bank version. *(Amended 28 September 2026, `progress.md` D140: on Node, as every route is since ADR 21; it also says whether the database answers, and answers 503 only when a configured one does not.)* |
 | `POST /api/account/device` | Edge | none, creates identity | Register a device, create an anonymous account on first call, return the account id |
@@ -717,6 +717,8 @@ There is no auth system in v1. There is a bearer credential.
 The device secret described in section 9.3 authorises sync for one account. There is no login, no password, no email, no OAuth provider, no session cookie and no auth library. Pairing extends an account to a second device. That is the whole of it (ADR 5).
 
 Two controls on the one unauthenticated route, `POST /api/account/device`, which creates a row for anyone who asks: rate limiting by IP hash, and deferred creation so a row only exists after a completed practice session. A proof-of-work challenge is available if abuse appears, and is not built until it does.
+
+The other route anyone may call, `POST /api/realtime/secret`, creates nothing but costs a function invocation, so it is rate limited by IP hash too: 60 posts an hour, every post counted, a warm-up with no key included. *(Added 3 October 2026, `progress.md` D195.)* Over it, the route answers `429 {"error":"throttled"}`, a code of its own, because `rate-limited` already means OpenAI's quota. It fails open: with no database, with the store failing, or with the store silent for a second, the mint goes ahead, since the spend is the user's own key and the limit guards only our function (`progress.md` D200).
 
 If the sync service is unavailable the application works fully offline behind a quiet indicator. Sync failure is never an error state that interrupts study.
 
