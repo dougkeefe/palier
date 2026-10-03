@@ -27,10 +27,11 @@ for (const locale of ["en", "fr"] as const) {
   const t = copy(locale);
 
   test(`${locale}: an unknown path is the localised 404, titled, unindexed, axe-clean, with the way home`, async ({ page }) => {
-    // A 200, with noindex: a 404 status would need `notFound()`, which Next serves blank here (D141).
+    // A 404, rendered inside the layout: the proxy rewrites an unknown path to itself with the status (D199).
+    // D141's 200 is gone; `notFound()`, which Next serves blank here, is still never used.
     const response = await page.goto(`/${locale}/no-such-page/at-all`);
 
-    expect(response?.status()).toBe(200);
+    expect(response?.status()).toBe(404);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
     await expect(page.locator("html")).toHaveAttribute("lang", locale);
     await expect(page.getByRole("heading", { level: 1, name: t("notFoundTitle") })).toBeVisible();

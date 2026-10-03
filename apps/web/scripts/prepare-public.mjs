@@ -9,6 +9,9 @@
 //    build's config: the app routes, the locales, the bank manifests, and a build
 //    stamp that changes whenever an input does, so a deploy gets a fresh cache.
 //
+// 3. Writes the copy `global-error.tsx` shows (D141), and the app's route list to
+//    `src/lib/routes.json` (D199), both committed and held equal by drift tests.
+//
 // It runs *before* `next build` because Next serves only the `public/` files that
 // exist at build time. Zero new dependencies: `typescript` is already a devDependency
 // here, and `ts.transpileModule` strips types without a type-check (tsc does that).
@@ -164,10 +167,36 @@ const filesBelow = async (dir) => {
 
 const toPosix = (path) => path.split(sep).join("/");
 
+/** @returns {string} the `content/` workspace, resolved through @palier/content's exports map (ADR 18), not a relative path. */
+export const contentDirOf = () =>
+  dirname(dirname(createRequire(import.meta.url).resolve("@palier/content/profiles/psc-sle.json")));
+
+/**
+ * The app's routes below `[locale]`: its page files, with the library's articles by name (D162), one
+ * file per sub-skill, named for it. The precache's list, and the one list the proxy, the sitemap and
+ * robots read (`src/lib/routes.json`, progress.md D199).
+ * @param {string} [webRoot]
+ * @param {string} [contentDir]
+ * @returns {Promise<string[]>}
+ */
+export const appRoutes = async (webRoot = WEB_ROOT, contentDir = contentDirOf()) => {
+  const localeDir = join(webRoot, "src/app/[locale]");
+  const pageDirs = (await filesBelow(localeDir))
+    .filter((file) => /[/\\]page\.tsx$/.test(file))
+    .map((file) => toPosix(relative(localeDir, dirname(file))));
+  const libraryFiles = (await readdir(join(contentDir, "library"))).filter((name) => name.endsWith(".json")).sort();
+  return routesFrom(pageDirs, { "library/[subSkill]": libraryFiles.map((name) => name.replace(/\.json$/, "")) });
+};
+
+/**
+ * `src/lib/routes.json`'s text: the routes, one per line, so a new page is a one-line diff.
+ * @param {readonly string[]} routes
+ * @returns {string}
+ */
+export const routesJsonOf = (routes) => `${JSON.stringify(routes, null, 2)}\n`;
+
 const main = async () => {
-  const require = createRequire(import.meta.url);
-  // Resolve content/ through @palier/content's exports map (ADR 18), not a relative path.
-  const contentDir = dirname(dirname(require.resolve("@palier/content/profiles/psc-sle.json")));
+  const contentDir = contentDirOf();
   const bankSrc = join(contentDir, "bank");
   const publicDir = join(WEB_ROOT, "public");
   const bankSource = await readFile(join(WEB_ROOT, "src/lib/bank-version.ts"), "utf8");
@@ -191,13 +220,8 @@ const main = async () => {
   const bankManifests = bankManifestsFor(bankBasePath, bankVersion, versionDirs);
 
   // 2. The service worker.
-  const localeDir = join(WEB_ROOT, "src/app/[locale]");
-  const pageDirs = (await filesBelow(localeDir))
-    .filter((file) => /[/\\]page\.tsx$/.test(file))
-    .map((file) => toPosix(relative(localeDir, dirname(file))));
-  // The library's articles, by name (D162): one file per sub-skill, named for it.
+  const routes = await appRoutes(WEB_ROOT, contentDir);
   const libraryFiles = (await readdir(join(contentDir, "library"))).filter((name) => name.endsWith(".json")).sort();
-  const routes = routesFrom(pageDirs, { "library/[subSkill]": libraryFiles.map((name) => name.replace(/\.json$/, "")) });
   const locales = localesFrom(await readFile(join(WEB_ROOT, "src/i18n/routing.ts"), "utf8"));
   const workerSource = await readFile(join(WEB_ROOT, "src/sw/worker.ts"), "utf8");
 
@@ -216,6 +240,11 @@ const main = async () => {
   const copyPath = join(WEB_ROOT, "src/components/errors/global-error-copy.json");
   const copy = globalErrorCopyOf(messagesByLocale);
   if ((await readFile(copyPath, "utf8").catch(() => "")) !== copy) await writeFile(copyPath, copy);
+
+  // 4. The route list the proxy, the sitemap and robots read (D199).
+  const routesPath = join(WEB_ROOT, "src/lib/routes.json");
+  const routesJson = routesJsonOf(routes);
+  if ((await readFile(routesPath, "utf8").catch(() => "")) !== routesJson) await writeFile(routesPath, routesJson);
 
   const compiled = ts.transpileModule(workerSource, {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },

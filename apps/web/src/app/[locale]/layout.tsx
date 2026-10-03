@@ -12,7 +12,9 @@ import { Header } from "../../components/Header";
 import { ServiceWorkerRegistrar } from "../../components/ServiceWorkerRegistrar";
 import { SyncRunner } from "../../components/sync/SyncRunner";
 import { routing } from "../../i18n/routing";
+import { siteUrlFrom } from "../../lib/build-info";
 import { NONCE_HEADER } from "../../lib/csp";
+import { ROUTE_HEADER, languageAlternates, localePath } from "../../lib/discoverability";
 import { fontVariables } from "../../fonts/fonts";
 import { TRUSTED_TYPES_SCRIPT } from "../../lib/trusted-types";
 
@@ -32,9 +34,29 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
-  // Each page names itself ahead of the product (WCAG 2.4.2: a title that says what the
-  // page is for); a page that sets no title of its own gets the product's.
-  return { title: { template: `%s · ${t("title")}`, default: t("title") }, description: t("description") };
+  // The page the proxy matched in routes.json (D199). None is an unknown path, which the proxy answers
+  // 404. On a 404 Next takes the head from this layout, not the page, so the 404's title is set here
+  // (Next adds the `noindex` itself), and it names no alternates.
+  const route = (await headers()).get(ROUTE_HEADER);
+  if (route === null) {
+    const errors = await getTranslations({ locale, namespace: "errors" });
+    return {
+      metadataBase: new URL(siteUrlFrom(process.env)),
+      title: { absolute: `${errors("notFoundTitle")} · ${t("title")}` },
+    };
+  }
+  return {
+    metadataBase: new URL(siteUrlFrom(process.env)),
+    // Each page names itself ahead of the product (WCAG 2.4.2: a title that says what the
+    // page is for); a page that sets no title of its own gets the product's.
+    title: { template: `%s · ${t("title")}`, default: t("title") },
+    description: t("description"),
+    openGraph: { type: "website", siteName: t("title"), title: t("title"), description: t("description") },
+    // Each page names itself and its twin in the other language, for search engines (D199).
+    ...(hasLocale(routing.locales, locale)
+      ? { alternates: { canonical: localePath(locale, route), languages: languageAlternates(route) } }
+      : {}),
+  };
 }
 
 export default async function LocaleLayout({

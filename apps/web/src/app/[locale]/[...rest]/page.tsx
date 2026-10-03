@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/[...rest
 // Every unknown path under a locale renders the localised 404 here, inside the layout, rather than
 // through `notFound()`: Next serves a `notFound()` under a dynamic root layout as its error shell,
 // which carries neither the layout nor its Trusted Types policy, so under the strict CSP it renders
-// blank. The cost is a 200 with `noindex` in place of a 404 (progress.md D141).
+// blank (progress.md D141). The proxy answers the path with status 404 (D199); on a 404 Next takes
+// the head from the layout, not this page, so the layout titles and unindexes it.
 export default function UnknownPath({ params }: PageProps<"/[locale]/[...rest]">) {
   const { locale } = use(params);
   setRequestLocale(locale);

@@ -113,8 +113,10 @@ test("GET /api/health names the build and the bank, and that no database is conf
 test("the hermetic error hook is only the 404 on a production build", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/en/hermetic/route?leak=x");
+  const response = await page.goto("/en/hermetic/route?leak=x");
 
+  // Outside the hermetic lane the hook is an unknown path, so the proxy answers it 404 (D199).
+  expect(response?.status()).toBe(404);
   await expect(page.getByRole("heading", { level: 1, name: "Page not found" })).toBeVisible();
   await expect(page).toHaveTitle("Page not found · Palier");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);

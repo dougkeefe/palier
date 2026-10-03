@@ -12,3 +12,17 @@ export const buildVersionFrom = (env: Record<string, string | undefined>): strin
   const sha = env.VERCEL_GIT_COMMIT_SHA;
   return sha === undefined || sha === "" ? "local" : sha.slice(0, 7);
 };
+
+/**
+ * The site's public origin, for the sitemap, robots and every page's canonical and `hreflang`
+ * links (progress.md D199): `PALIER_SITE_URL` when set, else Vercel's own production domain,
+ * which follows the domain the project serves, so pointing a new domain at it needs no code
+ * change; else the local dev server. No trailing slash.
+ */
+export const siteUrlFrom = (env: Record<string, string | undefined>): string => {
+  const explicit = env.PALIER_SITE_URL;
+  if (explicit !== undefined && explicit !== "") return explicit.replace(/\/+$/, "");
+  const vercel = env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (vercel !== undefined && vercel !== "") return `https://${vercel.replace(/\/+$/, "")}`;
+  return "http://localhost:3000";
+};
