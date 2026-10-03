@@ -66,6 +66,9 @@ test("journey 3: a full 90-minute reading exam survives a reload and a network d
   page,
   context,
 }) => {
+  // Its own budget, as every long journey has: the service worker's install, which precaches the bank and every route,
+  // took 21 s of the 30 s default on a slow CI runner, and left too little for the exam itself (progress.md D197).
+  test.setTimeout(90_000);
   expect(ITEMS).toHaveLength(60);
   expect(FORM.timeLimitMinutes).toBe(90);
 

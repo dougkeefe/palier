@@ -180,7 +180,11 @@ export const practiseSpeaking = async (
   await expect(page.getByRole("heading", { name: "Before you start" })).toBeFocused();
   await onState("pre-flight");
   await page.getByRole("button", { name: "Start the session" }).click();
-  await expect(page.getByRole("heading", { name: "The examiner asks" })).toBeFocused();
+  // Focus goes to the step's heading, then, once the first question waits, to where the answer starts (D121): the
+  // question for a spoken answer, the field for a typed one. Where it lands is what is checked. The heading can hold it
+  // for only a moment when the question comes back quickly, which CI caught (progress.md D196, D197).
+  await expect(page.getByRole("heading", { name: "The examiner asks" })).toBeVisible();
+  await expect(mode === "spoken" ? page.locator(".app-oral-question") : page.getByRole("textbox", { name: "Your answer" })).toBeFocused();
   for (let i = 0; i < answers; i++) {
     if (mode === "spoken") {
       await page.getByRole("button", { name: "Record your answer" }).click();

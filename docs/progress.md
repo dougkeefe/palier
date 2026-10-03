@@ -6649,11 +6649,43 @@ so that it makes it as ready as possible for launch"; the slice's content and or
   waiting. It waits for the human's yes, since the rule is to name a wrong test rather than change it quietly.
 - **Revisit when** the journey fails again: read the uploaded trace before changing anything.
 
+### D197 — CI's two red shards on `a7a8a99`: the examiner's heading checked too late, and journey 3 out of time
+**Date:** 3 October 2026 · **Status:** accepted (human: "fix the failing CI actions", the go-ahead D196 waited for on its
+test change; the diagnosis, agent)
+
+Read from the traces D196 started uploading, not guessed:
+
+- **Shard 1, `oral.spec.ts`'s D127 journey, in both the push and the pull-request run.** The screenshot at failure shows
+  the first question on screen and the answer field focused: a typed session, where D121 sends focus. The heading had it
+  first, for a moment. This is the race D196 named. **The test changed**, in `practiseSpeaking`: it now checks where
+  focus lands, the question for a spoken answer and the field for a typed one, after the heading is shown. That is
+  stricter than before, not looser. **Proved to bite:** with D121's move to the field removed, the journey fails on
+  exactly that assertion; restored, it passes.
+- **Shard 2, journey 3 (`exam-offline.spec.ts`).** The page was "Submitting your exam…" when the **test's 30 s default
+  timeout** ran out. The trace's timings show `waitForOfflineReady`, the service worker's install and precache, took
+  **21.4 s** on that runner, which left about 8 s for a 60-item exam, a reload, finishing offline and submitting. The
+  product did nothing wrong. Every other long journey sets its own budget (90–240 s), and journey 3 had none. **It gets
+  90 s**, and so does journey 9 (`telemetry-offline.spec.ts`), the other full exam after the same wait, which carries the
+  same exposure. No assertion changed.
+- **Evidence:** the five affected specs three times each at 4 workers, 46 passed; then the whole suite and the fast lane
+  (session log).
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 3 October 2026 — `dougkeefe/conductor/settings.local.toml-update` (CI's two red shards on `a7a8a99`; D197)
+
+- Read from the uploaded traces (D196): the examiner's heading checked after focus had moved on, and journey 3 out of its
+  30 s default. `practiseSpeaking` checks where focus lands (proved to bite); journeys 3 and 9 get 90 s each.
+
+```
+playwright test oral, key-leak, key-leak-production, exam-offline, telemetry-offline --repeat-each=3 → 46 passed
+CI=1 pnpm run test:e2e     → 101 passed (3.0m)
+pnpm verify                → 251 files, 3963 passed, 8 todo; exit 0
+```
 
 ### 3 October 2026 — `dougkeefe/conductor/settings.local.toml-update` (the drill's first keys; E2E traces kept; D196)
 
