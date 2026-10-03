@@ -14,6 +14,7 @@ import { Sheet } from "./Sheet.js";
 import { Mascot } from "./Mascot.js";
 import { StreakFlame } from "./StreakFlame.js";
 import { Toast } from "./Toast.js";
+import { TrendChart } from "./TrendChart.js";
 import { Timer } from "./Timer.js";
 import { Dialog } from "./Dialog.js";
 import { VoiceForm } from "./VoiceForm.js";
@@ -142,6 +143,26 @@ describe("Glyph", () => {
     );
     const svgs = container.querySelectorAll("svg[aria-hidden]");
     expect(svgs).toHaveLength(6);
+  });
+});
+
+describe("TrendChart", () => {
+  const P = { accuracy: 0.5, low: 0.4, high: 0.6 };
+
+  it("is hidden from assistive technology, since a table beside it carries the figures", () => {
+    const { container } = render(<TrendChart points={[P, P]} startLabel="13 Jul" endLabel="3 Oct" />);
+    const chart = container.querySelector(".pl-trend-chart");
+    expect(chart?.getAttribute("aria-hidden")).toBe("true");
+    expect(container.querySelector("svg")?.getAttribute("focusable")).toBe("false");
+  });
+
+  it("draws a line and a shaded interval per run, a dot per week, and the first and last week's names", () => {
+    const { container } = render(<TrendChart points={[P, P, null, P]} startLabel="13 Jul" endLabel="3 Oct" />);
+    expect(container.querySelectorAll("polyline")).toHaveLength(2);
+    expect(container.querySelectorAll("polygon")).toHaveLength(2);
+    expect(container.querySelectorAll("circle")).toHaveLength(3);
+    expect(container.querySelectorAll("line")).toHaveLength(3);
+    expect(container.textContent).toBe("13 Jul3 Oct");
   });
 });
 

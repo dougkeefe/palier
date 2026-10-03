@@ -3,7 +3,7 @@ import { attemptId, itemId, sessionId } from "@palier/domain";
 import { describe, expect, it, vi } from "vitest";
 
 import type { AttemptStore, ItemRepository } from "../ports/index.js";
-import { PRACTICE_MODES, practiceTrend, practiceTrendEvidence } from "./practice-trend.js";
+import { PRACTICE_MODES, practiceTrend, practiceTrendEvidence, practiceTrendHistory } from "./practice-trend.js";
 import { profile } from "./__tests__/exam-fakes.js";
 
 // Local fixtures rather than @palier/testing (progress.md D37).
@@ -136,5 +136,49 @@ describe("practiceTrendEvidence", () => {
     );
 
     expect(await practiceTrendEvidence({ skill: "reading" }, { ...deps, profile })).toEqual({ items: 3, trusted: 1 });
+  });
+});
+
+describe("practiceTrendHistory (D198)", () => {
+  const at = (attempt: Attempt, ts: string): Attempt => ({ ...attempt, ts });
+  const historyDeps = (attempts: readonly Attempt[], now: string) => {
+    const deps = depsFor([]);
+    vi.mocked(deps.attempts.all).mockResolvedValue([...attempts]);
+    return { ...deps, clock: { now: () => now } };
+  };
+
+  it("is one point per week, the last ending today in the device's time zone, oldest first", async () => {
+    // 02:00 UTC on Sunday 4 October is still Saturday 3 October in Toronto.
+    const points = await practiceTrendHistory(
+      { skill: "reading", weeks: 3, timeZone: "America/Toronto" },
+      historyDeps([], "2026-10-04T02:00:00.000Z"),
+    );
+
+    expect(points.map((p) => p.day)).toEqual(["2026-09-19", "2026-09-26", "2026-10-03"]);
+  });
+
+  it("counts the practice attempts made by each week's end, and never an exam's", async () => {
+    const early = Array.from({ length: 30 }, () => at(anAttempt("drill", true), "2026-09-22T12:00:00.000Z"));
+    const late = Array.from({ length: 10 }, () => at(anAttempt("review", false), "2026-10-01T12:00:00.000Z"));
+    const exam = Array.from({ length: 30 }, () => at(anAttempt("exam", false), "2026-09-22T12:00:00.000Z"));
+    const deps = historyDeps([...early, ...late, ...exam], "2026-10-03T12:00:00.000Z");
+
+    const [first, last] = await practiceTrendHistory({ skill: "reading", weeks: 2, timeZone: "UTC" }, deps);
+
+    expect(first?.trend.byBand.B).toMatchObject({ status: "estimated", attempted: 30, correct: 30 });
+    expect(last?.trend.byBand.B).toMatchObject({ status: "estimated", attempted: 40, correct: 30 });
+    // Only the practice attempts' items are resolved, each once.
+    expect(vi.mocked(deps.items.byIds).mock.calls[0]?.[0]).toHaveLength(40);
+  });
+
+  it("leaves out the other skill", async () => {
+    const writing = Array.from({ length: 30 }, () => ({ ...anAttempt("drill", true), skill: "writing" as const }));
+
+    const [point] = await practiceTrendHistory(
+      { skill: "reading", weeks: 1, timeZone: "UTC" },
+      historyDeps(writing, "2026-03-02T00:00:00.000Z"),
+    );
+
+    expect(point?.trend.windowSize).toBe(0);
   });
 });

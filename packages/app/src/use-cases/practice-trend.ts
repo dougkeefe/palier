@@ -1,7 +1,16 @@
 import type { Attempt, AttemptMode, ExamProfile, Item, ScoredSkill } from "@palier/domain";
-import { type SkillTrend, type TrendEvidence, calculateTrend, trendEvidence } from "@palier/engine";
+import {
+  type SkillTrend,
+  type TrendEvidence,
+  type TrendPoint,
+  calculateTrend,
+  localDay,
+  trendEvidence,
+  trendHistory,
+  weekEnds,
+} from "@palier/engine";
 
-import type { AttemptStore, ItemRepository } from "../ports/index.js";
+import type { AttemptStore, Clock, ItemRepository } from "../ports/index.js";
 
 /**
  * The practice trend the readiness card shows (product-requirements.md §8.2 Zone A,
@@ -70,4 +79,34 @@ export const practiceTrendEvidence = async (
 ): Promise<TrendEvidence> => {
   const { practice, items } = await practiceRecord(request, deps);
   return trendEvidence(request.skill, practice, items, deps.profile.itemStatistics);
+};
+
+export type PracticeTrendHistoryRequest = {
+  readonly skill: ScoredSkill;
+  /** How many week-ends to show, the last of them today. A display choice, not exam data. */
+  readonly weeks: number;
+  /** The device's IANA time zone, so a week ends on the user's Sunday evening, not UTC's. */
+  readonly timeZone: string;
+};
+
+export type PracticeTrendHistoryDeps = PracticeTrendDeps & {
+  readonly clock: Clock;
+};
+
+/**
+ * The practice trend over time (product-requirements.md §8.9, progress.md D198): the trend as it
+ * stood at the end of each of the last `weeks` weeks, today the last, over every practice attempt,
+ * so it reads the whole record (`all`, as `progressReport` does) rather than the recent window.
+ * The cutoffs are local days in the device's time zone, handed to the engine as plain data (D32).
+ */
+export const practiceTrendHistory = async (
+  request: PracticeTrendHistoryRequest,
+  deps: PracticeTrendHistoryDeps,
+): Promise<TrendPoint[]> => {
+  const practice = (await deps.attempts.all()).filter(
+    (a) => a.skill === request.skill && PRACTICE_MODES.includes(a.mode),
+  );
+  const items = await deps.items.byIds([...new Set(practice.map((a) => a.itemId))]);
+  const cutoffs = weekEnds(localDay(deps.clock.now(), request.timeZone), request.weeks);
+  return trendHistory(request.skill, practice, items, cutoffs, request.timeZone);
 };

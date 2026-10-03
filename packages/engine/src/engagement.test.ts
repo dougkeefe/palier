@@ -1,6 +1,19 @@
 import { describe, expect, it } from "vitest";
 
-import { MILESTONES, localDay, milestonesReached, streak } from "./engagement.js";
+import { MILESTONES, localDay, milestonesReached, shiftDay, streak } from "./engagement.js";
+
+describe("shiftDay", () => {
+  it("moves a local day by whole calendar days, across a month, a year and a leap day", () => {
+    expect(shiftDay("2026-10-03", -7)).toBe("2026-09-26");
+    expect(shiftDay("2026-12-31", 1)).toBe("2027-01-01");
+    expect(shiftDay("2028-03-01", -1)).toBe("2028-02-29");
+    expect(shiftDay("2026-10-03", 0)).toBe("2026-10-03");
+  });
+
+  it("refuses a value that is not a local day", () => {
+    expect(() => shiftDay("3 October", 1)).toThrow(RangeError);
+  });
+});
 
 describe("localDay", () => {
   it("is the calendar day on the device's clock, not UTC's", () => {

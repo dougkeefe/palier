@@ -28,6 +28,10 @@ export {
   optionRowKeydown,
   optionRowState,
   railGeometry,
+  trendChartGeometry,
+  TREND_CHART_HEIGHT,
+  TREND_CHART_WIDTH,
+  type TrendChartGeometry,
   type BandMeterGeometry,
   type BandMeterInput,
   type ButtonVariant,
@@ -65,6 +69,7 @@ export { Glyph, type GlyphProps } from "./primitives/Glyph.js";
 export { OptionRow, type OptionRowProps } from "./primitives/OptionRow.js";
 export { ProgressRail, type ProgressRailProps } from "./primitives/ProgressRail.js";
 export { BandMeter, type BandMeterProps } from "./primitives/BandMeter.js";
+export { TrendChart, type TrendChartProps } from "./primitives/TrendChart.js";
 export { Sheet, type SheetProps } from "./primitives/Sheet.js";
 export { Passage, type PassageProps } from "./primitives/Passage.js";
 export { Toast, type ToastProps } from "./primitives/Toast.js";

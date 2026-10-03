@@ -31,11 +31,13 @@ system, not the application.
   summary, progress.md D145). It sits before the exam blocks, whose test finds the last `@media`.
 - **Accessibility is a build gate, not an audit** (ADR 13). New surfaces get an axe
   assertion on their *states* — panel open, dialog focused — not the initial render alone.
-- Logic (formatters, band-meter geometry, timer tone classes, keyboard handling, registry
+- Logic (formatters, band-meter and trend-chart geometry, timer tone classes, keyboard handling, registry
   lookups) is 90% branch; rendering has no line target on purpose (§6.3).
 - **Primitives:** Button, Card, Callout, EmptyState, Glyph, OptionRow, ProgressRail, and, from
   Slice 1, **BandMeter** (the estimate solid, its interval a lighter band, and no bar at all
-  without an estimate, R10), **Sheet** (the feedback panel: a labelled region whose heading takes
+  without an estimate, R10), **TrendChart** (Phase 7 Slice 5, D198: an SVG line per week-end, the interval
+  shaded, a week without an estimate a gap, never bridged; `aria-hidden`, because the caller puts the same
+  figures in a table beside it; nothing animated), **Sheet** (the feedback panel: a labelled region whose heading takes
   focus, not a dialog), **Passage** (serif, 66ch, `lang`-marked), **Toast** (a polite status
   message that does **not** dismiss itself: a timed disappearance is a 2.2.1 problem) and
   **Mascot** (Coco asleep, decorative and `aria-hidden`; the empty state's words carry the
