@@ -6826,8 +6826,9 @@ three tests with a live sample question, the oral banner, how it works, the FAQ 
     as written, for Gate O's French read.
   - v4's English credit named Vitaly Gariev twice. Both credits now read as the French did, four names once each. The
     names were not checked against Unsplash.
-  - The export's runtime files (`support.js`, `image-slot.js`, `_ds/`) and v1–v3 are **not committed**. ESLint lints
-    `support.js` and the rest if they are in the tree, so `pnpm verify` was run with the folder moved out.
+  - The whole export, v1–v4 with its runtime files (`support.js`, `image-slot.js`, `_ds/`), **is committed as the
+    reference**, at the human's request. It is not source: `eslint.config.mjs` ignores `docs/Palier landing page/**`, since
+    its bundled scripts fail every rule.
 
 ---
 
@@ -6851,6 +6852,7 @@ Gate O, then Gate M.
 
 ```
 pnpm verify (design export moved out of the tree) → check-types, lint, boundaries pass; test: 257 files, 4058 passed, 8 todo; exit 0 (Node 24.21.0)
+pnpm verify (export committed, ESLint ignoring it)  → check-types, lint, boundaries pass; test: 257 files, 4058 passed, 8 todo; exit 0
 playwright test smoke content motion --project=chromium → 21 passed, 4 failed (axe: the wordmark's contrast); fixed, then
 playwright test smoke journeys --project=chromium → 23 passed
 pnpm build; playwright test offline csp-production production discoverability-production --project=offline → 22 passed
