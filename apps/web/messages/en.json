@@ -840,6 +840,7 @@
     "failNoKey": "There is no longer a key on this device. Add one to practise speaking.",
     "failFailed": "OpenAI returned an error. Try again later.",
     "failEndpoint": "Your own endpoint gave no pass. Allow its window if your browser blocked it, check that it is deployed for this site, or go back to Palier’s server in the key settings.",
+    "failThrottled": "Too many studio sessions have started from this network in the last hour. Wait a while and try again, or use your own endpoint in the key settings.",
     "transcriptKept": "Your transcript so far is kept on this device.",
     "evicted": "{count, plural, one {To make room, the recording of your oldest session was deleted.} other {To make room, the recordings of your # oldest sessions were deleted.}} Their transcripts are kept.",
     "recordingKept": "The recording of your answers is kept on this device only. You can delete it in your data settings.",

@@ -54,6 +54,7 @@ export {
   ProviderTimeoutError,
   ProviderUnavailableError,
   RateLimitError,
+  RouteThrottledError,
   SelfHostedEndpointError,
 } from "./errors.js";
 export type { SelfHostedEndpointFailure } from "./errors.js";

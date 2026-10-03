@@ -113,6 +113,25 @@ export const telemetryApi = (env: ServerEnv = process.env): Promise<TelemetryApi
   return cache.__palierTelemetryApi;
 };
 
+/**
+ * The rate-limit store and salt for the realtime secret route (D195), or `null` when it has none:
+ * **no database configured** (the route still needs none), and **the hermetic lane**, so a reused
+ * local dev server never throttles the E2E lanes. The database is connected on the first hit, not
+ * here, so the route's composition stays synchronous; a failed connection rejects that hit, and
+ * the route lets the post through.
+ */
+export const realtimeRateLimitStore = (
+  env: ServerEnv = process.env,
+): { readonly hit: (key: string, windowStart: string) => Promise<number>; readonly salt: string } | null => {
+  if (isHermetic(env) || env.DATABASE_URL === undefined || env.DATABASE_URL === "") return null;
+  const hit = async (key: string, windowStart: string): Promise<number> => {
+    const repos = await database(env);
+    if (repos === null) throw new Error("No database is configured.");
+    return repos.sync.hit(key, windowStart);
+  };
+  return { hit, salt: salt(env) };
+};
+
 /** How long `GET /api/health` waits for the database before calling it unreachable. */
 export const HEALTH_TIMEOUT_MS = 2_000;
 

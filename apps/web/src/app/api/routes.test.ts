@@ -17,6 +17,8 @@ const state = vi.hoisted(() => ({
   api: null as SyncApi | null,
   telemetry: null as TelemetryApi | null,
   database: null as boolean | null,
+  /** The realtime route's rate-limit count, or `null` for no limiter. */
+  realtimeCount: null as number | null,
 }));
 vi.mock("../../server/db", () => ({
   syncApi: () => Promise.resolve(state.api),
@@ -25,7 +27,15 @@ vi.mock("../../server/db", () => ({
 }));
 vi.mock("../../server/realtime", async () => {
   const { memoryRealtimeSecretSource } = await import("@palier/testing/in-memory");
-  return { realtimeSecretApi: () => createRealtimeSecretApi({ secrets: memoryRealtimeSecretSource() }) };
+  return {
+    realtimeSecretApi: () =>
+      createRealtimeSecretApi({
+        secrets: memoryRealtimeSecretSource(),
+        ...(state.realtimeCount === null
+          ? {}
+          : { limit: { hit: () => Promise.resolve(state.realtimeCount ?? 0), salt: "s", now: () => new Date() } }),
+      }),
+  };
 });
 
 const { POST: register } = await import("./account/device/route");
@@ -150,5 +160,17 @@ describe("the realtime secret route (D169)", () => {
 
   it("refuses a request with no key", async () => {
     expect((await mint({})).status).toBe(401);
+  });
+
+  it("answers a caller over the rate limit 429 throttled (D195)", async () => {
+    state.realtimeCount = 61;
+    try {
+      const response = await mint({ authorization: "Bearer sk-user" });
+
+      expect(response.status).toBe(429);
+      expect(await response.json()).toEqual({ error: "throttled" });
+    } finally {
+      state.realtimeCount = null;
+    }
   });
 });

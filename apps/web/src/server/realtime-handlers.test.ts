@@ -4,7 +4,9 @@ import { readFileSync } from "node:fs";
 
 import { describe, expect, it, vi } from "vitest";
 
-import { createRealtimeSecretApi } from "./realtime-handlers";
+import { RATE_LIMITS } from "./handlers";
+import { type RealtimeRateLimit, createRealtimeSecretApi } from "./realtime-handlers";
+import { rateLimitKey } from "./secrets";
 
 /**
  * The one route that sees the user's key (ADR 3, progress.md D169), one test per branch. The
@@ -117,6 +119,73 @@ describe("createRealtimeSecretApi", () => {
       errored.mockRestore();
       warned.mockRestore();
     }
+  });
+
+  describe("the rate limit (D195)", () => {
+    const NOW = new Date("2026-10-03T12:34:56.000Z");
+    const IP = "203.0.113.7";
+    const from = (headers: Record<string, string> = { authorization: `Bearer ${KEY}` }) => post({ "x-forwarded-for": IP, ...headers });
+
+    /** A store whose next count is `count`, recording what it was asked. */
+    const store = (count: number) => {
+      const hits: [string, string][] = [];
+      const limit: RealtimeRateLimit = {
+        hit: (key, windowStart) => {
+          hits.push([key, windowStart]);
+          return Promise.resolve(count);
+        },
+        salt: "salt",
+        now: () => NOW,
+      };
+      return { limit, hits };
+    };
+
+    it("counts the post under the caller's IP hash, in the hour's window", async () => {
+      const { limit, hits } = store(1);
+      await createRealtimeSecretApi({ secrets: memoryRealtimeSecretSource(), limit }).mint(from());
+
+      expect(hits).toEqual([[rateLimitKey("salt", "realtime", IP, NOW), "2026-10-03T12:00:00.000Z"]]);
+    });
+
+    it.each([
+      ["under", RATE_LIMITS.realtime.max - 1],
+      ["at", RATE_LIMITS.realtime.max],
+    ])("mints %s the limit", async (_, count) => {
+      const secrets = memoryRealtimeSecretSource();
+      const response = await createRealtimeSecretApi({ secrets, limit: store(count).limit }).mint(from());
+
+      expect(response.status).toBe(200);
+      expect(secrets.keys()).toEqual([KEY]);
+    });
+
+    it("refuses a post over the limit as throttled, 429, never rate-limited, and mints nothing", async () => {
+      const secrets = memoryRealtimeSecretSource();
+      const { status, text } = await answer(
+        await createRealtimeSecretApi({ secrets, limit: store(RATE_LIMITS.realtime.max + 1).limit }).mint(from()),
+      );
+
+      expect(status).toBe(429);
+      expect(JSON.parse(text)).toEqual({ error: "throttled" });
+      expect(secrets.keys()).toEqual([]);
+    });
+
+    it("counts before it reads the key, so a warm-up over the limit is throttled, not missing-key", async () => {
+      const { limit, hits } = store(RATE_LIMITS.realtime.max + 1);
+      const { status, text } = await answer(await createRealtimeSecretApi({ secrets: memoryRealtimeSecretSource(), limit }).mint(from({})));
+
+      expect(status).toBe(429);
+      expect(JSON.parse(text)).toEqual({ error: "throttled" });
+      expect(hits).toHaveLength(1);
+    });
+
+    it("lets the mint through when the store fails, since the spend is the user's own key", async () => {
+      const secrets = memoryRealtimeSecretSource();
+      const limit: RealtimeRateLimit = { hit: () => Promise.reject(new Error("database down")), salt: "salt", now: () => NOW };
+      const response = await createRealtimeSecretApi({ secrets, limit }).mint(from());
+
+      expect(response.status).toBe(200);
+      expect(secrets.keys()).toEqual([KEY]);
+    });
   });
 
   it.each([["realtime-handlers.ts"], ["realtime.ts"]])("holds no console call in %s", (file) => {

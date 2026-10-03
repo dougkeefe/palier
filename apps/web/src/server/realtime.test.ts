@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { resetSyncApi } from "./db";
+
 import aiModels from "../lib/ai-models.json";
 import { buildRealtimeSecretApi, realtimeSecretApi } from "./realtime";
 
@@ -10,6 +12,7 @@ const post = () =>
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  resetSyncApi();
 });
 
 describe("buildRealtimeSecretApi", () => {
@@ -37,6 +40,24 @@ describe("buildRealtimeSecretApi", () => {
     expect(JSON.parse(init?.body ?? "{}")).toMatchObject({
       session: { model: aiModels.realtime, audio: { output: { voice: aiModels.realtimeVoice } } },
     });
+  });
+});
+
+describe("buildRealtimeSecretApi's rate limit (D195)", () => {
+  it("has none in the hermetic lane, so the E2E lanes are never throttled", async () => {
+    const api = buildRealtimeSecretApi({ PALIER_HERMETIC: "1", DATABASE_URL: "postgres://palier:palier@127.0.0.1:1/palier" });
+    const statuses = [];
+    for (let i = 0; i < 70; i += 1) statuses.push((await api.mint(post())).status);
+
+    expect(new Set(statuses)).toEqual(new Set([200]));
+  });
+
+  it("counts in the configured database, and mints anyway when it cannot be reached", async () => {
+    vi.stubGlobal("fetch", () => Promise.resolve(Response.json({ value: "ek_live", expires_at: 1_790_000_000 })));
+
+    const response = await buildRealtimeSecretApi({ DATABASE_URL: "postgres://palier:palier@127.0.0.1:1/palier" }).mint(post());
+
+    expect(response.status).toBe(200);
   });
 });
 

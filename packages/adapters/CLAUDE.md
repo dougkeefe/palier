@@ -97,7 +97,8 @@ summed tokens are priced into `costUsd`.
   60-second `ek_` secret, for the configured model and voice, never the request's. It never reads a refusal's body,
   so nothing OpenAI echoes reaches a message. `routeRealtimeSecrets` is the browser's: it posts the key in
   `Authorization`, and nowhere else, to this origin's route, and maps the route's refusal codes back to this
-  adapter's named errors. **`warmRealtimeRoute`** beside it (D190) posts to the same route with **no key, no header and
+  adapter's named errors. The route's own rate limit, `throttled`, is **`RouteThrottledError`** (D195), never
+  `RateLimitError`, which says the user's key is out of quota. **`warmRealtimeRoute`** beside it (D190) posts to the same route with **no key, no header and
   no body**, so a cold function wakes before the tap, and never rejects.
 - **The third source, `selfHostedRealtimeSecrets`** (Phase 6 Slice 3, D192), is the user's own endpoint, reached by a
   popup and `postMessage`, never a `fetch`, so the CSP's `connect-src` is unchanged. It runs over an `EndpointWindows`

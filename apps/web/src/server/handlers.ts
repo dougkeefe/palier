@@ -56,6 +56,9 @@ export const RATE_LIMITS = {
   // Redeeming is where a guesser would work, so it is tightest: ten tries in ten minutes
   // against ~887 million codes.
   pair: { max: 10, windowMs: 10 * 60 * 1000 },
+  // The realtime secret route (D195): every post counts, a warm-up too, since each is an
+  // invocation. A studio session makes at most four (two warm-ups, the mint, one reconnect).
+  realtime: { max: 60, windowMs: 60 * 60 * 1000 },
 } as const;
 
 export type SyncApiDeps = {

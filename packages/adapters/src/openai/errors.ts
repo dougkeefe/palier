@@ -59,6 +59,14 @@ export class InvalidResponseError extends OpenAiError {
   override name = "InvalidResponseError";
 }
 
+/**
+ * Palier's realtime secret route refused this network for a while (`throttled`, progress.md D195): its own
+ * rate limit per IP hash, not OpenAI's. Never `RateLimitError`, which says the user's key is out of quota.
+ */
+export class RouteThrottledError extends OpenAiError {
+  override name = "RouteThrottledError";
+}
+
 /** Why the user's own realtime secret endpoint gave no secret (progress.md D192). */
 export type SelfHostedEndpointFailure = "blocked" | "closed" | "timeout" | "refused" | "malformed";
 

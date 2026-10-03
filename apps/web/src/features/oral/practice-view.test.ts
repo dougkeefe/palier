@@ -195,6 +195,7 @@ describe("oralFailure and its words (D119)", () => {
     ["NoApiKeyError", "no-key", "failNoKey"],
     ["Error", "failed", "failFailed"],
     ["SelfHostedEndpointError", "endpoint", "failEndpoint"],
+    ["RouteThrottledError", "throttled", "failThrottled"],
   ] as const)("names %s as %s", (name, failure, key) => {
     expect(oralFailure(named(name))).toBe(failure);
     expect(failureMessage(failure)).toBe(key);

@@ -42,6 +42,7 @@ describe("routeRealtimeSecrets", () => {
     ["missing-key", 401, "InvalidApiKeyError"],
     ["invalid-key", 401, "InvalidApiKeyError"],
     ["rate-limited", 429, "RateLimitError"],
+    ["throttled", 429, "RouteThrottledError"],
     ["upstream", 502, "ProviderUnavailableError"],
   ])("turns the route's %s refusal into %s by name", async (code, status, name) => {
     const { source } = route(status, { error: code });

@@ -6,6 +6,7 @@ import {
   ProviderRequestError,
   ProviderUnavailableError,
   RateLimitError,
+  RouteThrottledError,
 } from "./errors.js";
 import type { FetchLike, FetchResponse } from "./http.js";
 import { platformFetch, timedExchange } from "./http.js";
@@ -18,6 +19,7 @@ const REFUSALS: Readonly<Record<string, () => Error>> = {
   "missing-key": () => new InvalidApiKeyError("The realtime route received no key."),
   "invalid-key": () => new InvalidApiKeyError("OpenAI rejected the API key."),
   "rate-limited": () => new RateLimitError("OpenAI rate limit or quota reached."),
+  throttled: () => new RouteThrottledError("The realtime route's rate limit was reached."),
   upstream: () => new ProviderUnavailableError("Could not reach OpenAI for a realtime secret."),
 };
 
