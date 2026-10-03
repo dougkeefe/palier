@@ -141,7 +141,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | --- | --- | --- |
 | `dougkeefe/docs-content-development` | **Phase 7 Slice 5, launch readiness** (D195): the realtime route's rate limit, the band trend over time, robots, a sitemap and `hreflang`, and a true 404. | 3 October 2026 |
 | `dougkeefe/palier-landing-page-update` | **The landing page as designed** (D201): `docs/Palier landing page` v4 becomes `/en` and `/fr`, with its own header and footer and its own scoped palette. Outside the planned slices, by the human's request. | 3 October 2026 |
-| `dougkeefe/2rn64` | **The app as designed** (D202): `docs/Palier landing page/Palier App.dc.html` becomes every app page's look: the teal on warm paper, Source Serif 4 throughout, light only, flat panels, the header and footer as drawn. Outside the planned slices, by the human's request. | 3 October 2026 |
+| `dougkeefe/palier-app-update-plan` | **The app as designed** (D202): `docs/Palier landing page/Palier App.dc.html` becomes every app page's look: the teal on warm paper, Source Serif 4 throughout, light only, flat panels, the header and footer as drawn. Outside the planned slices, by the human's request. | 3 October 2026 |
 
 *(The prior rows — Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -6929,7 +6929,7 @@ So the work is in the tokens, the primitives and the chrome, with bespoke layout
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 3 October 2026 — `dougkeefe/2rn64` (the app as designed; D202)
+### 3 October 2026 — `dougkeefe/palier-app-update-plan` (the app as designed; D202)
 
 Not *Next, decided*: the human asked for `docs/Palier landing page/Palier App.dc.html` to become the app's look. They
 ruled on two questions first: light only, and an exam set of greys on the same paper. *Next, decided* is unchanged:
