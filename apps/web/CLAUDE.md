@@ -167,6 +167,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     - the key is read from `Authorization` and nowhere else; the body is never read;
     - it is used once, through a `RealtimeSecretSource`, and never logged, stored or echoed;
     - the answer is `{ value, expiresAt }`, uncached, and a refusal is a code.
+    - posts are limited to 60 an hour per IP hash (D195, D200), counted **before** the key is read and refused as
+      `throttled`, never `rate-limited`, which is OpenAI's quota. No limit in the hermetic lane or with no database
+      (`db.ts`'s `realtimeRateLimitStore`). A store that fails, or is silent for `RATE_LIMIT_WAIT_MS`, lets the post through.
 
     `realtime.ts` composes it: the memory source when hermetic, otherwise OpenAI's for `ai-models.json`'s `realtime`
     and `realtimeVoice` (`cedar` since Gate N, D174). `ai-models.json`'s `realtimeEagerness` is not the route's: the

@@ -32,24 +32,40 @@ const refusalFor = (thrown: unknown): never => {
   return refuse("upstream", 502);
 };
 
+/**
+ * How long the count may take before the post goes ahead uncounted. Tap to first word is held under
+ * 2.5 s (D190), and a database that does not answer must not spend it.
+ */
+export const RATE_LIMIT_WAIT_MS = 1_000;
+
 /** The rate limit's store and its secret, given only when a database is configured (`realtime.ts`). */
 export type RealtimeRateLimit = {
   readonly hit: (key: string, windowStart: string) => Promise<number>;
   readonly salt: string;
   readonly now: () => Date;
+  /** `RATE_LIMIT_WAIT_MS` unless a test says otherwise. */
+  readonly waitMs?: number;
 };
 
 /**
- * Whether this caller is over `RATE_LIMITS.realtime`. **A failing store lets the post through**
- * (D195), unlike the sync routes: the spend is the user's own key and the limit guards only this
- * function, so failing closed would let a database outage break studio mode.
+ * Whether this caller is over `RATE_LIMITS.realtime`. **A failing or silent store lets the post
+ * through** (D195, D200), unlike the sync routes: the spend is the user's own key and the limit
+ * guards only this function, so failing closed would let a database outage break studio mode.
  */
 const overLimit = async (limit: RealtimeRateLimit, request: Request): Promise<boolean> => {
   const { max, windowMs } = RATE_LIMITS.realtime;
   const now = limit.now();
   const windowStart = new Date(Math.floor(now.getTime() / windowMs) * windowMs).toISOString();
-  const count = await limit.hit(rateLimitKey(limit.salt, "realtime", clientIp(request), now), windowStart).catch(() => 0);
-  return count > max;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const late = new Promise<number>((resolve) => {
+    timer = setTimeout(() => resolve(0), limit.waitMs ?? RATE_LIMIT_WAIT_MS);
+  });
+  try {
+    const hit = limit.hit(rateLimitKey(limit.salt, "realtime", clientIp(request), now), windowStart);
+    return (await Promise.race([hit.catch(() => 0), late])) > max;
+  } finally {
+    clearTimeout(timer);
+  }
 };
 
 export type RealtimeSecretApi = {

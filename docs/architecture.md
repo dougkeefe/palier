@@ -718,7 +718,7 @@ The device secret described in section 9.3 authorises sync for one account. Ther
 
 Two controls on the one unauthenticated route, `POST /api/account/device`, which creates a row for anyone who asks: rate limiting by IP hash, and deferred creation so a row only exists after a completed practice session. A proof-of-work challenge is available if abuse appears, and is not built until it does.
 
-The other route anyone may call, `POST /api/realtime/secret`, creates nothing but costs a function invocation, so it is rate limited by IP hash too: 60 posts an hour, every post counted, a warm-up with no key included. *(Added 3 October 2026, `progress.md` D195.)* Over it, the route answers `429 {"error":"throttled"}`, a code of its own, because `rate-limited` already means OpenAI's quota. It fails open: with no database, or with the store failing, the mint goes ahead, since the spend is the user's own key and the limit guards only our function.
+The other route anyone may call, `POST /api/realtime/secret`, creates nothing but costs a function invocation, so it is rate limited by IP hash too: 60 posts an hour, every post counted, a warm-up with no key included. *(Added 3 October 2026, `progress.md` D195.)* Over it, the route answers `429 {"error":"throttled"}`, a code of its own, because `rate-limited` already means OpenAI's quota. It fails open: with no database, with the store failing, or with the store silent for a second, the mint goes ahead, since the spend is the user's own key and the limit guards only our function (`progress.md` D200).
 
 If the sync service is unavailable the application works fully offline behind a quiet indicator. Sync failure is never an error state that interrupts study.
 

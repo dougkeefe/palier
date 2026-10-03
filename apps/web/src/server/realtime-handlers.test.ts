@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
 import { RATE_LIMITS } from "./handlers";
-import { type RealtimeRateLimit, createRealtimeSecretApi } from "./realtime-handlers";
+import { RATE_LIMIT_WAIT_MS, type RealtimeRateLimit, createRealtimeSecretApi } from "./realtime-handlers";
 import { rateLimitKey } from "./secrets";
 
 /**
@@ -176,6 +176,19 @@ describe("createRealtimeSecretApi", () => {
       expect(status).toBe(429);
       expect(JSON.parse(text)).toEqual({ error: "throttled" });
       expect(hits).toHaveLength(1);
+    });
+
+    it("lets the mint through when the store does not answer in time, so a silent database never holds the dial (D200)", async () => {
+      const secrets = memoryRealtimeSecretSource();
+      const limit: RealtimeRateLimit = { hit: () => new Promise<number>(() => undefined), salt: "salt", now: () => NOW, waitMs: 5 };
+      const response = await createRealtimeSecretApi({ secrets, limit }).mint(from());
+
+      expect(response.status).toBe(200);
+      expect(secrets.keys()).toEqual([KEY]);
+    });
+
+    it("waits a second at most by default", () => {
+      expect(RATE_LIMIT_WAIT_MS).toBe(1_000);
     });
 
     it("lets the mint through when the store fails, since the spend is the user's own key", async () => {

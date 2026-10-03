@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 2 October 2026 (Phase 6 Slice 3, D192–D194; the repo public and Phase 7 Slice 5 planned, D195)
+**Last updated:** 3 October 2026 (Phase 7 Slice 5, launch readiness, built: D198–D199)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -61,7 +61,10 @@ the dial's three levers for a cold first dial are built (`dougkeefe/testing-befo
 **Phase 6 Slice 3, the exception escapable, is built** (`dougkeefe/conductor/settings.local.toml-update`; D192–D194): the self-hosted secret endpoint by
 popup and `postMessage`, working end to end on the production build against the repository's own Worker; the one-file
 Worker and Vercel function in `selfhost/`; the route's log exclusion written into `docs/deploy.md` (Vercel has no per-route
-switch, D193); and `docs/realtime-checklist.md` for Gate O.
+switch, D193); and `docs/realtime-checklist.md` for Gate O. It merged (#60). **Phase 7 Slice 5, launch readiness, is built**
+(`dougkeefe/zpaa2`; D198–D199): the realtime route's rate limit, refused as `throttled`; the band trend over time on `/progress`
+and its one-page printout; `robots.txt`, a sitemap and `hreflang` from one route list; and an unknown path answering 404.
+What remains before 1.0 is the human's: Gate O, then Gate M.
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -126,8 +129,8 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 merged, #57, D180–D189; the human's session, D191; exit criterion 1 met on the deployed site, and the dial's levers built, D190, merged #58; Slice 3 built, `dougkeefe/conductor/settings.local.toml-update`, D192–D194 |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; the repo is public, D195; Slice 5, launch readiness, planned, D195; Gate M waits on Phase 6, D165) |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 merged, #57, D180–D189; the human's session, D191; exit criterion 1 met on the deployed site, and the dial's levers built, D190, merged #58; Slice 3 merged, #60, D192–D194; Gate O next (human) |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; the repo is public, D195; Slice 5, launch readiness, built, `dougkeefe/zpaa2`, D198–D199; Gate M waits on Phase 6, D165) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -238,37 +241,35 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132): **Slices 1–4 merged**, **Gate L passed** (D164), and **the repo is public** (D195). **Studio mode is in 1.0**
-(D165): Phase 6's Slices 1 and 2 merged (#53, #57), Gate N passed (D174), the human's live session passed (D191), exit criterion
-1 is met on the deployed site (D190, #58), and **Slice 3 is built, PR #60, every lane green** (D192–D194). `main` is protected,
+Phase 7 (D132): **Slices 1–4 merged**, **Gate L passed** (D164), the repo is public (D195), and **Slice 5, launch readiness, is
+built** (`dougkeefe/zpaa2`; D198–D199): the realtime route's rate limit, the band trend over time, robots, a sitemap and
+`hreflang`, and a true 404. **Studio mode is in 1.0** (D165): Phase 6's three slices merged (#53, #57, #60), Gate N passed
+(D174), the human's live session passed (D191), and exit criterion 1 is met on the deployed site (D190). `main` is protected,
 and a red lane blocks the merge (D177).
 
-What stands between the code and 1.0: **Phase 7 Slice 5** (agent, below), **Gate O** (human), and **Gate M** (human: an outside
-item submission, the domain, the trademark check, and the full-volume bank run on a key the human funds, D54).
+What stands between the code and 1.0 is now **the human's**: **Gate O**, then **Gate M** (an outside item submission, the
+domain, the trademark check, and the full-volume bank run on a key the human funds, D54). No agent slice is left before them.
 
-**Next: merge #60, then build Phase 7 Slice 5, launch readiness.**
+**Next: merge Slice 5's pull request, then Gate O (human).**
 
-1. **Merge PR #60** (Phase 6 Slice 3). The next worktree branches from `main` after it.
-2. **Phase 7 Slice 5 — launch readiness** (D195). `implementation-plan.md` §7 Phase 7 holds each piece's full scope and *done*;
-   build them in this order:
-   1. **The realtime route's rate limit.** `RATE_LIMITS.realtime` (60 posts an hour per IP hash, every post counted),
-      checked before `Authorization` is read, through `rateLimitKey` and `rateLimitHit`; over it, `429 {"error":"throttled"}`
-      → `RouteThrottledError` → `failThrottled`. No limit without a database or in the hermetic graph; a failing store lets the
-      mint through. Files: `server/handlers.ts` (the constant), `server/realtime-handlers.ts`, `server/realtime.ts`,
-      `server/db.ts`, `adapters/openai/route-realtime-secrets.ts` and `errors.ts`, `features/oral/practice-view.ts`, the
-      messages.
-   2. **The band trend over time.** Engine `trendHistory(skill, attempts, items, cutoffs)` over `calculateTrend`; app
-      `practiceTrendHistory({ weeks, timeZone })`; a `TrendChart` primitive in `@palier/ui` (SVG, the Wilson interval shaded,
-      gaps where evidence is short, `aria-hidden` beside a table of the same figures); twelve weeks on `/progress` and its
-      printout, still one page.
-   3. **Discoverability.** `prepare-public.mjs` writes the route list it already derives to a committed `src/lib/routes.json`
-      (drift-tested); `app/robots.ts` and `app/sitemap.ts` from it; `metadataBase`, `hreflang` alternates and an Open Graph
-      title and description in the layout; the public origin from `PALIER_SITE_URL`, else `VERCEL_PROJECT_PRODUCTION_URL`.
-   4. **A true 404.** The proxy rewrites a path not in `routes.json` to the localised 404 page with status 404. If a rewrite
-      cannot carry the status on Next 16, a deviation says so and D141's 200 with `noindex` stays.
+1. **Merge Slice 5** once its four lanes are green. Then, on the deployed build:
+   - `curl -sI https://palier-virid.vercel.app/en/no-such-page` answers **404**;
+   - `curl -s https://palier-virid.vercel.app/robots.txt` names `https://palier-virid.vercel.app/sitemap.xml`, and the sitemap
+     lists `https://palier-virid.vercel.app/...` URLs. If either names `localhost`, `VERCEL_PROJECT_PRODUCTION_URL` was not
+     set at build time; set `PALIER_SITE_URL` for the build and redeploy (D199).
+2. **Gate O (human)**: `docs/realtime-checklist.md` on its six browser and platform pairs (Phase 6 exit criterion 3); the
+   route, `apps/web/src/server/realtime-handlers.ts`, read line by line, **its rate limit included** (D195): 60 posts an hour
+   per IP hash, counted before the key is read, refused as `429 throttled`, with no limit when there is no database and the
+   mint let through when the store fails. The count is kept, like the sync routes', under a day's HMAC of the address, which
+   `/privacy`'s "beyond using it for a moment to limit abuse" already covers, so no copy changed; say whether the key
+   copy's "which keeps nothing" (`key.offerStays`) still reads true to you. Then the self-hosted files in `selfhost/`; `docs/deploy.md`'s log check (D193); and the
+   French of the new copy:
+   - studio mode's (D186), the endpoint's (D192, with `selfhost/`'s two lines);
+   - Slice 5's: `oral.failThrottled`, and `progress.historyTitle`, `historyNone`, `historyFigures`, `historyWeek`,
+     `historyAccuracy`, `historyCell`, `historyCellPaper`, `historyShort` (D198). Print `/fr/progress` with some history
+     to see the paper cells.
 
-   *Done:* each piece's *done* in the plan; `pnpm verify` and `CI=1 pnpm verify:medium` green; the bundle within budget; the
-   new French listed for Gate O's read; the evidence in the session log; and this section rewritten to Gate O.
+   Its pass completes Phase 6. **Then Gate M.**
 3. **Beside it, whenever a smoke key is to hand** (agent, about US$0.10; carried from D194): measure the dial on `main`.
    Once `/api/health` answers the deployed build, run the dials-only spec on the deployed site four times, 90 s apart:
    ```
@@ -276,15 +277,14 @@ item submission, the domain, the trademark check, and the full-volume bank run o
      PALIER_LIVE_BASE_URL=https://palier-virid.vercel.app pnpm exec playwright test --project=live)
    ```
    *Done:* the twelve figures in the session log beside D190's. Over 2.5 s median, find the step that moved first. It needs
-   `OPENAI_SMOKE_KEY` in `.env.local` at the repository root.
-4. **Then Gate O (human)**, once Slice 5 has merged: `docs/realtime-checklist.md` on its six pairs, the route read line by line
-   with its rate limit, the self-hosted files, the French of the new copy (studio mode's, the endpoint's and Slice 5's), and
-   `docs/deploy.md`'s log check. Its pass completes Phase 6. **Then Gate M.**
+   `OPENAI_SMOKE_KEY` in `.env.local` at the repository root. This session had none (session log, 3 October 2026).
 
-Budget note (D178): a change to a core package puts the fast lane near 92 s of its 120 s, and Slice 5 touches the engine. Run
-`pnpm verify` and `CI=1 pnpm verify:medium` before pushing. A fresh worktree needs `pnpm --filter @palier/web build` first, or
-the medium lane's production server cannot start, and `pnpm exec playwright install chromium` if Playwright's browser is
-missing.
+If an agent session opens before Gate O is done, it has no slice to build: the remaining work is the human's, and *named, not
+scheduled* below is after 1.0. It should do no more than keep `main` green (the Dependabot queue, the nightly) and say so.
+
+Budget note (D178): a change to a core package puts the fast lane near 92 s of its 120 s. On this machine `pnpm verify` took
+48 s for Slice 5. A fresh worktree needs `pnpm --filter @palier/web build` first, or the medium lane's production server
+cannot start, and `pnpm exec playwright install chromium` if Playwright's browser is missing.
 
 **For the human, from Phase 6 Slice 3 (D192–D194):**
 - **Deploy your own endpoint** from `selfhost/` (Cloudflare or Vercel; `selfhost/README.md`) with `ALLOWED_ORIGIN` set to
@@ -355,16 +355,12 @@ default and asked each session, and the key-leak test's opt-in half, ticked and 
   but a practice recording is paused between answers, so its places are not the turns';
 - **a drill filtered to one sub-skill**, so a fix's link lands on that sub-skill today rather than biasing the next plan (D124);
 - **fillers the transcription drops**: asking the transcription to keep hesitations (its `prompt` parameter) (D123);
-- **a 404 status for an unknown path**: it answers 200 with `noindex`, because Next serves `notFound()` under this root layout
-  as an error shell that cannot run under the strict CSP (D141). Next's experimental `global-not-found.tsx` is the likely fix;
 - **the first single-record delete**, which will write the tombstones the retention job already purges (D138);
 - **the 60% aggregation** as code, written when the storage alert first fires (`docs/deploy.md`, D139);
 - **`global-error.tsx` reached end to end**: only its view is checked, since the root layout works (D142);
 - **the wipe guard across tabs**: a `BroadcastChannel` so a wipe in one tab forgets the requests out in every tab (D143);
 - **an abandoned session's end at its last turn**, not when it was noticed, so its length reads true (D144; the pinned
   tests move with it);
-- **the band trend over time** on `/progress` and its printout: §8.9 asks for it, and the page shows the current window
-  (D148);
 - **a rendered preview on a `content/` pull request** (architecture.md §17, D152);
 - **home's exam half's statement end to end**: no hermetic spec builds an onboarded user who has sat an exam (D146);
 - **a mounted review screen re-reading the queue when the day changes**: left open overnight, or clicked while already on it,
@@ -667,7 +663,8 @@ Nothing is ticked without session-log evidence.
 - [x] PDF progress summary; JSON export and import round trip. **Merged with Slice 3 (#47)**; the trend *over time* that
   PRD §8.9 asks of `/progress`, and so of its printout, is **Slice 5** (D195). **The round trip exists** (D61, D62; `data-rights.test.ts`,
   journey 6). **Slice 3, built on this branch** (D148): the one-page PDF (PRD §8.9) as `/progress` printed, both skills and the oral line,
-  one page on Letter and A4. A trend *over time* is named, not scheduled
+  one page on Letter and A4. A trend *over time* is named, not scheduled. **Slice 5, built** (D198): twelve weeks at the target
+band, a table beside the chart, and the printout still one page in both languages
 - [x] **Merged with Slice 4 (#51).** The motion and illustration pass: Coco, the milestone moments, the streak, the band meter fill, self-hosted fonts
   (D65). Slice 4: the streak (with its silent freeze) and the milestone moments are in 1.0; XP, levels and the countdown
   are after 1.0 (Gate K, D145). **Slice 4, built on this branch** (D159–D161): the streak and its one-time freeze note, the
@@ -722,6 +719,9 @@ Nothing is ticked without session-log evidence.
   2. the band trend over time on `/progress` and its printout (PRD §8.9, named since D148);
   3. `robots.txt`, a sitemap with `hreflang` alternates, and the public origin from Vercel's production URL;
   4. an unknown path answering 404, by a rewrite in the proxy, or a deviation saying why not (D141).
+
+  **Built 3 October 2026** (`dougkeefe/zpaa2`; D198–D199; session-log evidence): all four, the 404 by the rewrite, which
+  Next 16 carries.
 - [ ] **Gate M — public (human).** ~~The repo made public~~ (**public**, confirmed 2 October 2026, D195), an outside item
   submission [R13], the domain, §12.1's trademark check, and the full-volume bank (D54), which stays sequenced to the end
   (D56). **It waits on Phase 6's Gate O** (D165), which waits on Slice 5 (D195).
@@ -6670,11 +6670,135 @@ Read from the traces D196 started uploading, not guessed:
 - **Evidence:** the five affected specs three times each at 4 workers, 46 passed; then the whole suite and the fast lane
   (session log).
 
+### D198 — the trend over time: `calculateTrend` at each week's end, on local days, and on paper a row across the page
+**Date:** 3 October 2026 · **Status:** accepted (agent, Phase 7 Slice 5, as D195 planned). Refines the plan's signature
+
+- **Each point is `calculateTrend` itself**, over the attempts made on or before that point's day, so a point is exactly
+  what `/progress` would have shown that evening: the same window of 100, the same Wilson interval (ADR 7), accuracy per
+  band tag and never a band letter. A band short of evidence there is `insufficient`, and the chart draws it as a gap.
+  No golden value moved.
+- **A cutoff is a local day, not an instant.** The plan wrote `trendHistory(skill, attempts, items, cutoffs)` with week-end
+  instants in the device's time zone. Building the instant at which a local day ends needs time-zone arithmetic that
+  daylight time makes awkward. A local day needs none: an attempt counts when `localDay(ts, timeZone) <= day`, with the
+  engine's existing `localDay`. So the engine takes `cutoffs: LocalDay[]` and the time zone, and `weekEnds(today, weeks)`
+  gives the cutoffs, oldest first. `shiftDay` is exported from `engagement.ts` for it.
+- `localDay` now keeps one `Intl.DateTimeFormat` per time zone, since the history asks for a local day per attempt and
+  building a formatter costs far more than using it. Same answers.
+- **`practiceTrendHistory`** reads the whole practice record (`all`, as `progressReport` does), never exam attempts, and
+  takes "today" from the `Clock` in the device's time zone (D32).
+- **The band drawn** is the study profile's target. Before one is set, it is the highest of `TARGET_BANDS`.
+  **Twelve weeks** is `features/trend`'s `TREND_HISTORY_WEEKS`, a display constant, not exam data (ADR 9 covers exam rules).
+- **`TrendChart`** in `@palier/ui` is `aria-hidden`; the figures are a table. On screen it sits in a `<details>` under the
+  chart. Printed, it is simply there. It is one table either way, never a hidden copy (D148's lesson).
+- **The printout stays one page, with full history, in both languages.** A first build added the chart and a twelve-row
+  table to each trend card, and the page ran to 1,198 px of the 965 Letter allows. What changed on paper only:
+  - each skill's history is its own row across the page;
+  - the same table turns its weeks into columns (`tbody` a grid, `tr` a grid). The cell is shorter, "57% (39–73%)", from
+    `historyCellPaper`, and the range is a `nowrap` span, so it never breaks at its dash;
+  - the chart's own dates are dropped, since the table beside it names every week;
+  - the page is tightened: body 9pt (was 9.5), page margin 10 mm (was 12), card gaps and padding 4pt (were 6), the
+    sub-skill list's gap 1pt, and the meter's sentence 8.5pt.
+
+  `progress-history-production.spec.ts` seeds twelve weeks in both skills into real IndexedDB and holds the printout to
+  one page on Letter and A4 in English and in French. French is the tighter of the two.
+- **New copy for Gate O's French read**: `progress.history*` (seven keys) and `oral.failThrottled`.
+
+### D199 — one route list; robots, a sitemap and `hreflang` from it; and a 404 that answers 404
+**Date:** 3 October 2026 · **Status:** accepted (agent, Phase 7 Slice 5, as D195 planned). Closes D141's named 404
+
+- **`src/lib/routes.json`** is written by `prepare-public.mjs` from the routes it already derives for the precache (the page
+  files, with the library's articles). It is committed and held equal by `lib/routes.test.ts`, as `global-error-copy.json`
+  is. `appRoutes` and `routesJsonOf` are exported for the test.
+- **`app/robots.ts` and `app/sitemap.ts`** are one-line bindings over `lib/discoverability.ts`:
+  - robots allows everything but `/api/` and `/{en,fr}/hermetic/`, and names the sitemap;
+  - the sitemap lists every route in both locales, with `hreflang` alternates, `x-default` to English.
+
+  Both are **static, built once**, so their origin is the build's. On Vercel, `VERCEL_PROJECT_PRODUCTION_URL` is set at
+  build time. `PALIER_SITE_URL`, if used, must be set for the build too.
+- **The public origin** is `siteUrlFrom`: `PALIER_SITE_URL`, else `https://` plus `VERCEL_PROJECT_PRODUCTION_URL`, else
+  `http://localhost:3000`. Pointing `palier.dougkeefe.com` at the project moves it with no code change.
+- **How the layout knows the page.** Its metadata cannot see the path. So the proxy names a known route in a request
+  header, `x-palier-route`, and deletes any the client sent. The layout turns it into `metadataBase`, a canonical, the
+  `hreflang` alternates and an Open Graph title and description from `metadata.*`, with no image. Every page renders
+  per request already (ADR 22), so reading the header costs nothing.
+- **The 404.** The proxy checks a path under a locale against `routes.json`. A `hermetic/<view>` path also counts in the
+  hermetic lane only. It rewrites an unknown path to itself with `NextResponse.rewrite(url, { status: 404 })`, and
+  **Next 16.3.6 carries the status**, on `next start` and `next dev` alike. next-intl's redirects go first. `[...rest]` still
+  renders the page inside the layout, under the nonce and the Trusted Types policy, so the CSP spec's two 404 paths show
+  zero violations.
+  - **On a 404, Next takes the head from the layout, not the page**, so `[...rest]`'s own title did not apply: the document
+    read "Palier". Rendering a `<title>` in the view did not help either, since the layout's came first. So the layout
+    titles a request with no `x-palier-route` as the 404, and names no alternates. **Next adds `noindex` to a 404 itself**;
+    a second one from the layout was a duplicate, which the specs caught.
+  - An unknown library article and, on a production build, the hermetic hook now answer 404 too.
+- **A test changed, named here as the working agreement asks.** `errors.spec.ts` asserted `status() === 200`, which was
+  D141's deviation. This slice reverses it by plan (D195), so the assertion is now 404. `production.spec.ts` (the hook) and
+  `csp-production.spec.ts` (every page 200, the two unknown paths 404) gained status assertions. **Proved to bite:** with
+  the proxy's rewrite removed, `csp-production.spec.ts` failed on `/no-such-page`: expected 404, received 200.
+- `discoverability-production.spec.ts`: robots, every sitemap URL answering 200, a page's head naming its canonical, its
+  twin and `x-default`, and an unknown path naming none.
+
+### D200 — the realtime route's rate limit as built: counted in the sync database, connected on the first hit, and waited on for a second at most
+**Date:** 3 October 2026 · **Status:** accepted (agent, Phase 7 Slice 5). Builds D195's decision; adds the wait limit
+
+- **As D195 decided:** `RATE_LIMITS.realtime` is 60 posts an hour per IP hash, every post counted, a warm-up with no key too.
+  The handler counts **before** it reads `Authorization`, through `rateLimitKey` and the `rate_limits` table, and refuses
+  over the limit as `429 {"error":"throttled"}`. The browser maps `throttled` to the openai adapter's new
+  `RouteThrottledError`, and the studio screen says `failThrottled`, which points at the user's own endpoint as the way
+  round it. `warmRealtimeRoute` already ignored every refusal.
+- **Where the store comes from.** `db.ts`'s `realtimeRateLimitStore` is `null` in the hermetic lane and with no
+  `DATABASE_URL`. Otherwise it is the sync repository's `hit`, over the database the sync and telemetry APIs share, with
+  `RATE_LIMIT_SALT`. **It connects on the first hit, not when the route is built**, so the route's composition stays
+  synchronous and the route still answers with no database.
+- **A failing store lets the post through**, as D195 decided. **So does a silent one** (new here): the count is raced
+  against `RATE_LIMIT_WAIT_MS`, one second. Tap to first word is held under 2.5 s (D190). A database that never answers
+  would otherwise hold the mint until the driver's own connect timeout, and fail-open would not be open in practice.
+  **Proved to bite:** without the race, the silent-store test hung to its 5 s timeout; restored, it passes.
+- **What it costs a person:** one write per post, on the same database the dial's warm-up already wakes (D190). A studio
+  session posts at most four times.
+- `/privacy` is unchanged. The count is kept under a day's HMAC of the address, which its "beyond using it for a moment to
+  limit abuse" already describes.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 3 October 2026 — `dougkeefe/zpaa2` (Phase 7 Slice 5, launch readiness; D198–D200)
+
+Opened to *Next, decided*: #60 had merged, so Slice 5 was next. Its step 3, the dial on `main`, was **not run**: this machine
+has no `.env.local` and no smoke key, as on 2 October.
+
+- **The realtime route's rate limit** (D195, D200): 60 posts an hour per IP hash, counted before the key is read, refused
+  as `429 throttled` → `RouteThrottledError` → `failThrottled`. No limit in the hermetic lane or with no database. A failing
+  store, **or one silent for a second**, lets the mint through. **Proved to bite:** with the over-limit check disabled, the
+  over-limit and before-the-key tests failed; without the wait's race, the silent-store test hung to its timeout.
+- **The band trend over time** (D198): engine `trendHistory` and `weekEnds` on local days, app `practiceTrendHistory`,
+  `@palier/ui`'s `TrendChart`, and twelve weeks on `/progress` at the target band, the figures a table. The printout stays
+  one page with twelve weeks of history in both skills, on Letter and A4, in English and French
+  (`progress-history-production.spec.ts`). That took a paper-only layout: before it, the page ran 1,198 px of 965.
+- **Found by search engines** (D199): `src/lib/routes.json` from `prepare-public.mjs` under a drift test; `robots.txt`;
+  a sitemap with `hreflang`; and each page's canonical, alternates and Open Graph title. The origin comes from
+  `PALIER_SITE_URL` or Vercel's production domain.
+- **An unknown path answers 404** (D199): a rewrite in the proxy, which Next 16 carries. The layout titles the 404, since
+  on a 404 Next takes the head from it. **A test changed, named:** `errors.spec.ts`'s `status()` assertion moves from
+  D141's 200 to 404. **Proved to bite:** with the rewrite removed, `csp-production.spec.ts` failed on `/no-such-page`
+  (expected 404, received 200).
+- `docs/deploy.md` gains `PALIER_SITE_URL` and two smoke checks. architecture.md §10 and §11, the web, engine, ui and
+  adapters `CLAUDE.md`s, and `implementation-plan.md`'s Slice 5 status follow.
+- **The review** was the agent's own read of the diff, not a separate review skill. It found the silent-store gap D200
+  closes.
+
+```
+pnpm verify                → check-types, lint, boundaries pass; test: 255 files, 4025 passed, 8 todo; exit 0 (37 s, Node 22.23.3)
+CI=1 pnpm verify:medium    → integration: 7 files, 51 passed; Playwright: 106 passed (3.2m); exit 0
+                             (run before D200's wait limit, which no hermetic or database-less lane reaches)
+playwright test key-leak key-leak-production oral (CI=1, after D200, rebuilt) → 16 passed
+node apps/web/scripts/check-bundle-size.mjs → shared first-load JS 166.3 KB of 180.0 KB, within budget
+curl on next start :3100   → /en/no-such-page 404, /fr/no-such.page 404, /en/library/nope 404, /en/progress 200,
+                             /robots.txt 200, /sitemap.xml 200 (64 URLs, each with en, fr and x-default)
+```
 
 ### 3 October 2026 — `dougkeefe/conductor/settings.local.toml-update` (CI's two red shards on `a7a8a99`; D197)
 

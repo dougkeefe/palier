@@ -1245,6 +1245,11 @@ direction, then the human's reviews.
   *Slice done:* `pnpm verify` and `CI=1 pnpm verify:medium` green, the bundle within budget, and the session log's
   evidence. Not in it: the full-volume bank (Gate M's), Gate J, and everything else on `progress.md`'s *named, not
   scheduled* list, which reads as after 1.0.
+  *(Built 3 October 2026, `progress.md` D198–D199, `dougkeefe/zpaa2`. All four pieces as planned, with two refinements: the
+  trend's cutoffs are local days rather than instants, so a week ends on the user's evening across daylight time (D198);
+  and Next 16 carries a rewrite's 404, so D141's 200 is gone, with the 404's title set by the layout, since on a 404 Next
+  takes the head from the layout (D199). The printout stays one page with full history in both languages, by laying each
+  skill's history across the page on paper.)*
 - **Gate M — public.** ~~The repo made public~~ (**public, confirmed 2 October 2026**, `progress.md` D195), an outside item
   submission [R13], the domain, the trademark check, and the full-volume bank (D54), sequenced to the end (D56). **It waits
   on Phase 6's Gate O** (`progress.md` D165), which waits on Slice 5 (D195). *Done:* exit criterion 2, and 1.0.
