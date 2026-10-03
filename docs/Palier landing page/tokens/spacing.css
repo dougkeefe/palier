@@ -1,0 +1,7 @@
+:root{
+--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;--space-8:64px;
+--gutter:clamp(20px,4vw,56px);--section-y:clamp(48px,7vw,104px);--section-y-lg:clamp(72px,10vw,144px);--page-max:1360px;--faq-max:1000px;
+--radius-sm:8px;--radius-md:10px;--radius-lg:12px;--radius-xl:16px;--radius-pill:999px;
+--blur-glass:blur(10px);
+--focus-ring:2px solid var(--color-accent);
+}

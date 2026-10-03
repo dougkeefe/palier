@@ -15,6 +15,7 @@ import {
   profileFrom,
   stepAfter,
   stepBefore,
+  stepperSegments,
 } from "../../features/onboarding/onboarding";
 import { useRouter } from "../../i18n/navigation";
 import { DAILY_GOALS, writeStudyProfile } from "../../lib/study";
@@ -82,7 +83,14 @@ export function OnboardingWizard() {
         onNext();
       }}
     >
-      <p className="app-muted">{t("stepOf", { current: index + 1, total: ONBOARDING_TOTAL })}</p>
+      <div className="app-stepper">
+        <p className="app-muted">{t("stepOf", { current: index + 1, total: ONBOARDING_TOTAL })}</p>
+        <span className="app-stepper__bar" aria-hidden="true">
+          {stepperSegments(index).map((done, i) => (
+            <span key={i} className={done ? "app-stepper__segment app-stepper__segment--done" : "app-stepper__segment"} />
+          ))}
+        </span>
+      </div>
 
       {step === "direction" ? (
         <fieldset className="app-fieldset">
@@ -216,7 +224,7 @@ export function OnboardingWizard() {
             {t("placementSkip")}
           </Button>
         ) : null}
-        <Button type="submit" disabled={saving || container.status !== "ready"}>
+        <Button type="submit" arrow="next" disabled={saving || container.status !== "ready"}>
           {after === null ? t("finish") : t("next")}
         </Button>
       </div>

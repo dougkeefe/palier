@@ -1,11 +1,16 @@
 import type { HTMLAttributes, JSX, Ref } from "react";
 
+import { type CardTone, cardClass } from "./logic.js";
+
 export type CardProps = HTMLAttributes<HTMLDivElement> & {
+  /** The card's fill (progress.md D202). White by default. */
+  readonly tone?: CardTone;
   readonly ref?: Ref<HTMLDivElement>;
 };
 
-/** A surface with the §10.4 radius, border and two-soft-shadow elevation. */
-export const Card = ({ className, ...rest }: CardProps): JSX.Element => {
-  const cls = className === undefined ? "pl-card" : `pl-card ${className}`;
+/** A flat panel: a fill, the §10.4 radius, and no border or shadow (D202). */
+export const Card = ({ tone = "surface", className, ...rest }: CardProps): JSX.Element => {
+  const base = cardClass(tone);
+  const cls = className === undefined ? base : `${base} ${className}`;
   return <div className={cls} {...rest} />;
 };

@@ -1,36 +1,18 @@
-import { EXAM_OVERRIDES, TOKENS, type ThemeName, type TokenName, type TokenOverride } from "./tokens.js";
+import { EXAM_OVERRIDES, TOKENS } from "./tokens.js";
 
 /**
  * Generate the CSS custom-property stylesheet from the token source of truth
  * (`./tokens.ts`). The committed `../styles/tokens.css` is this string, held to
  * it by a drift-guard test, so there is one place a colour is defined.
  *
- * Cascade, in order:
- *   1. `:root` carries the light theme as the default.
- *   2. `@media (prefers-color-scheme: dark)` switches to dark for users whose OS
- *      asks for it.
- *   3. `[data-theme="light"]` / `[data-theme="dark"]` come next, so a manual
- *      toggle (equal specificity to `:root`) wins over the OS preference.
- *   4. `@media print` puts the light theme back on the page and on any manual toggle:
- *      paper is white, and the progress summary is printed (progress.md D145). Same
- *      specificity as what it overrides, and later, so it wins.
- *   5. The exam set, `[data-mode="exam"]`, last, in the same order: light, then the
- *      OS dark preference, then the manual toggle. It is set on an element inside
- *      the page, so its own declarations beat the values it inherits from `:root`.
- *      The toggle selectors (`[data-theme] [data-mode]`, and both on one element)
- *      have specificity 0,2,0, so a manual choice beats the OS rule here too.
+ * Two blocks, in order:
+ *   1. `:root` carries the one theme, and says it is light (`color-scheme`), so the
+ *      browser draws its own controls and scrollbars light too (progress.md D202:
+ *      there is no dark theme). Paper is the screen's palette as it is, so print
+ *      needs no block of its own.
+ *   2. The exam set, `[data-mode="exam"]`. It is set on an element inside the page,
+ *      so its own declarations beat the values it inherits from `:root`.
  */
-
-const declarations = (theme: ThemeName): string =>
-  TOKENS.map((t) => `  ${t.cssVar}: ${theme === "light" ? t.light : t.dark};`).join("\n");
-
-const EXAM: readonly (readonly [TokenName, TokenOverride])[] = TOKENS.flatMap((t) => {
-  const override = EXAM_OVERRIDES[t.name];
-  return override === undefined ? [] : [[t.name, override] as const];
-});
-
-const examDeclarations = (theme: ThemeName, indent: string): string =>
-  EXAM.map(([name, o]) => `${indent}--${name}: ${theme === "light" ? o.light : o.dark};`).join("\n");
 
 export const renderTokensCss = (): string =>
   `/* Generated from packages/ui/src/tokens/tokens.ts by renderTokensCss().
@@ -38,47 +20,14 @@ export const renderTokensCss = (): string =>
    generator output. Change tokens.ts and regenerate. */
 
 :root {
-${declarations("light")}
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-${TOKENS.map((t) => `    ${t.cssVar}: ${t.dark};`).join("\n")}
-  }
-}
-
-[data-theme="light"] {
-${declarations("light")}
-}
-
-[data-theme="dark"] {
-${declarations("dark")}
-}
-
-@media print {
-  :root,
-  [data-theme] {
-${TOKENS.map((t) => `    ${t.cssVar}: ${t.light};`).join("\n")}
-  }
+  color-scheme: light;
+${TOKENS.map((t) => `  ${t.cssVar}: ${t.value};`).join("\n")}
 }
 
 [data-mode="exam"] {
-${examDeclarations("light", "  ")}
-}
-
-@media (prefers-color-scheme: dark) {
-  [data-mode="exam"] {
-${examDeclarations("dark", "    ")}
-  }
-}
-
-[data-theme="light"] [data-mode="exam"],
-[data-theme="light"][data-mode="exam"] {
-${examDeclarations("light", "  ")}
-}
-
-[data-theme="dark"] [data-mode="exam"],
-[data-theme="dark"][data-mode="exam"] {
-${examDeclarations("dark", "  ")}
+${TOKENS.flatMap((t) => {
+  const value = EXAM_OVERRIDES[t.name];
+  return value === undefined ? [] : [`  ${t.cssVar}: ${value};`];
+}).join("\n")}
 }
 `;

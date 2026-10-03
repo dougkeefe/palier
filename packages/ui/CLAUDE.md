@@ -13,22 +13,30 @@ system, not the application.
 - **No string literals in JSX** — a lint rule fails the build, and both locale files move
   together (R8). Content in the non-interface language carries a `lang` attribute, which is
   what makes a screen reader pronounce it; this app mixes languages on every screen.
+- **The look is the app as designed** (progress.md D202, `docs/Palier landing page/Palier App.dc.html`):
+  a teal ink on a warm paper, Source Serif 4 throughout (the app's font, `--font-serif`), pills for
+  buttons with an arrow disc on a call to action (`Button`'s `arrow`), and **flat panels: a fill, a
+  12px radius, no border and no shadow** (`Card`'s `tone`: `surface`, `tint`, `quiet`, `deep`). This
+  replaced PRD §10.2's plum and amber and §10.4's "two soft shadows plus a 1px border".
+- **One theme, light** (D202, the human's ruling). There is no dark theme, no `prefers-color-scheme`
+  block and no `[data-theme]`; `:root` says `color-scheme: light`. A token has one value.
 - **Colour is never the only signal.** Correct and incorrect also carry a glyph and a label.
-  Every pair clears 4.5:1 for text and 3:1 for UI in both themes **and both token sets**, asserted
-  by a unit test over the token set (`product-requirements.md` §10.2).
-- **Two token sets** (progress.md D86). `default` is §10.2's. `exam` is the mock-exam runner's muted
-  set (§8.4, D84 ruling 11): it overrides a subset of tokens under `[data-mode="exam"]`, and the
-  rest fall back. `warning` is the tenth token, the exam clock's amber, because `accent` is
-  decorative and ungated. `tokens.css` is generated: build the package, then write
+  Every pair clears 4.5:1 for text and 3:1 for UI **in both token sets**, asserted by a unit test over
+  the token set (`contrast.test.ts`): each text token on the paper, a card, a tinted and a quiet panel;
+  the light text on a deep panel and a primary button; and `primary`, `accent` (the focus ring, now
+  gated) and `rule` (an input's border, which the design's fill-only input lacked, WCAG 1.4.11) at 3:1.
+- **Two token sets** (progress.md D86, D202). `default` is the design's. `exam` is the mock-exam
+  runner's muted set (§8.4, D84 ruling 11): the same paper and ink, with charcoal and warm greys in
+  place of the teal, overriding a subset of tokens under `[data-mode="exam"]`; the rest fall back.
+  `tokens.css` is generated: build the package, then write
   `renderTokensCss()` from `dist/tokens/css.js` over `src/styles/tokens.css`. The drift guard fails
   until you do. **Motion is one switch, not a class list** (progress.md D160): `components.css`
   turns every animation and transition off, with `!important`, for `*, ::before, ::after` under
   `prefers-reduced-motion` and inside `[data-mode="exam"]`, so a new animation cannot be left out of
   either. **Every duration is `--pl-motion-state` (120ms), `--pl-motion-panel` (200ms) or
   `--pl-motion-celebrate` (400ms)**, with `--pl-ease` or, on a celebration, `--pl-ease-spring`;
-  `apps/web/src/app/motion.test.ts` fails a literal duration or a keyframe that fades. **`@media print` restores the light theme** on `:root` and on any `[data-theme]`,
-  after the manual toggle and before the exam blocks, so a printout is always light (the progress
-  summary, progress.md D145). It sits before the exam blocks, whose test finds the last `@media`.
+  `apps/web/src/app/motion.test.ts` fails a literal duration or a keyframe that fades. With one light
+  theme, a printout needs no colours of its own (the progress summary, progress.md D145, D202).
 - **Accessibility is a build gate, not an audit** (ADR 13). New surfaces get an axe
   assertion on their *states* — panel open, dialog focused — not the initial render alone.
 - Logic (formatters, band-meter and trend-chart geometry, timer tone classes, keyboard handling, registry
@@ -47,7 +55,7 @@ system, not the application.
   native modal `<dialog>` opened with `showModal()`, labelled by its heading, with a `side`
   placement for drawers and a `full` one for a milestone moment. Focus goes back to the opener on
   close), and, from Phase 7 Slice 4, **Mascot's `cheer` pose** (wings up, settling in with the
-  celebration spring) and **StreakFlame** (decorative; lit in `accent` when today is done, an
+  celebration spring) and **StreakFlame** (decorative; lit in the teal `accent` when today is done, an
   outline otherwise, never a warning), and, from Phase 6 Slice 2, **VoiceForm** (studio mode's one visual,
   progress.md D184: two decorative, `aria-hidden` layers scaled by the examiner's and the microphone's levels. The
   levels are written to two custom properties from a `requestAnimationFrame` loop, `transform` only, never React state.

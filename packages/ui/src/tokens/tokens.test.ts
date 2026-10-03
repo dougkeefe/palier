@@ -3,14 +3,23 @@ import { describe, expect, it } from "vitest";
 import { EXAM_OVERRIDES, TOKENS, tokenValue } from "./tokens.js";
 
 describe("design tokens", () => {
-  it("defines the nine tokens from product-requirements.md §10.2, and the exam clock's warning", () => {
+  it("defines the design's roles (D202): the paper and its panels, the inks, the teal, the rule and the four states", () => {
     expect(TOKENS.map((t) => t.name)).toEqual([
       "bg",
       "surface",
+      "surface-tint",
+      "surface-quiet",
+      "surface-deep",
       "ink",
+      "ink-soft",
       "ink-muted",
+      "on-deep",
+      "on-deep-muted",
       "primary",
+      "primary-hover",
       "accent",
+      "link",
+      "rule",
       "correct",
       "incorrect",
       "info",
@@ -24,44 +33,45 @@ describe("design tokens", () => {
     }
   });
 
-  it("gives every token a 6-digit hex in both themes", () => {
+  it("gives every token one 6-digit hex: there is no dark theme (D202)", () => {
     for (const t of TOKENS) {
-      expect(t.light).toMatch(/^#[0-9A-F]{6}$/);
-      expect(t.dark).toMatch(/^#[0-9A-F]{6}$/);
+      expect(t.value).toMatch(/^#[0-9A-F]{6}$/);
     }
+  });
+
+  it("is the design's paper, ink and teal", () => {
+    expect(tokenValue("bg")).toBe("#F3F2F2");
+    expect(tokenValue("ink")).toBe("#201E1D");
+    expect(tokenValue("primary")).toBe("#00384A");
   });
 });
 
 describe("tokenValue", () => {
-  it("returns the light value for a light theme", () => {
-    expect(tokenValue("primary", "light")).toBe("#5B2C6F");
-  });
-
-  it("returns the dark value for a dark theme", () => {
-    expect(tokenValue("primary", "dark")).toBe("#B388CC");
+  it("returns the default set's value when no set is named", () => {
+    expect(tokenValue("surface-tint")).toBe("#D9F1F8");
   });
 
   it("throws on an unknown token name", () => {
     // @ts-expect-error — the guard exists for callers that reach it dynamically.
-    expect(() => tokenValue("nope", "light")).toThrow(/Unknown design token/);
+    expect(() => tokenValue("nope")).toThrow(/Unknown design token/);
   });
 });
 
 describe("the exam token set", () => {
-  it("gives an overridden token its exam value in each theme", () => {
-    expect(tokenValue("primary", "light", "exam")).toBe("#3D4752");
-    expect(tokenValue("primary", "dark", "exam")).toBe("#A7B3C1");
+  it("gives an overridden token its exam value: charcoal in place of the teal", () => {
+    expect(tokenValue("primary", "exam")).toBe("#33373B");
   });
 
-  it("falls back to the default for a token it does not override", () => {
-    expect(EXAM_OVERRIDES.info).toBeUndefined();
-    expect(tokenValue("info", "light", "exam")).toBe(tokenValue("info", "light"));
+  it("keeps the paper and the ink, which it does not override", () => {
+    expect(EXAM_OVERRIDES.bg).toBeUndefined();
+    expect(EXAM_OVERRIDES.ink).toBeUndefined();
+    expect(tokenValue("bg", "exam")).toBe(tokenValue("bg"));
+    expect(tokenValue("ink", "exam")).toBe(tokenValue("ink"));
   });
 
   it("uses 6-digit hex throughout", () => {
-    for (const o of Object.values(EXAM_OVERRIDES)) {
-      expect(o.light).toMatch(/^#[0-9A-F]{6}$/);
-      expect(o.dark).toMatch(/^#[0-9A-F]{6}$/);
+    for (const value of Object.values(EXAM_OVERRIDES)) {
+      expect(value).toMatch(/^#[0-9A-F]{6}$/);
     }
   });
 });

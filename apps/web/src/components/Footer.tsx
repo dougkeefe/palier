@@ -9,10 +9,12 @@ import { ShortcutSheet } from "./ShortcutSheet";
  * non-affiliation statement required from day one (R5, product-requirements.md
  * §2: "in the footer of every page"), and the links to the data pane, the sync settings and
  * the key settings, then the library (D162), the about page and the privacy notice (progress.md D145), so export, delete, the sync switch and the key are one step from anywhere
- * [R11, R12, R14] and always in the same place (WCAG 3.2.6).
+ * [R11, R12, R14] and always in the same place (WCAG 3.2.6). Deep teal, with the giant wordmark cropped at the
+ * bottom, as designed (progress.md D202).
  */
 export function Footer() {
   const t = useTranslations("footer");
+  const nav = useTranslations("nav");
 
   return (
     <footer className="app-footer">
@@ -41,6 +43,8 @@ export function Footer() {
           <ShortcutSheet />
         </div>
       </div>
+      {/* Decoration: drawn by the stylesheet from the attribute, so it is no text to read or to contrast-check. */}
+      <div className="app-footer__wordmark" data-wordmark={nav("brand")} aria-hidden="true" />
     </footer>
   );
 }

@@ -17,6 +17,13 @@ export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 /** §8.1's five, whichever path shows the fifth. */
 export const ONBOARDING_TOTAL = ONBOARDING_STEPS.length;
 
+/**
+ * The stepper's segments (progress.md D202): one per step, filled up to and including the step at
+ * `index`. The words beside it carry the step, so the bar is decoration.
+ */
+export const stepperSegments = (index: number, total: number = ONBOARDING_TOTAL): readonly boolean[] =>
+  Array.from({ length: total }, (_, i) => i <= index);
+
 export type Placement = "diagnostic" | "skip";
 
 /** The steps the wizard itself shows on a path: the key step only where no diagnostic follows. */

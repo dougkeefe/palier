@@ -25,6 +25,12 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 - **Design system only.** The app composes `@palier/ui` (`tokens.css` + `components.css`,
   the `.pl-*` classes) plus `src/app/globals.css` for page layout. No Tailwind (D25); no
   new primitives here — they belong in `@palier/ui`. **The one exception is the landing page** (D201), below.
+- **The app as designed** (D202, `docs/Palier landing page/Palier App.dc.html`): the landing page's teal on warm paper
+  and Source Serif 4, light only. The header is the wordmark, the destinations on a quiet pill track (`HeaderNav`, a
+  client component that marks the current page `aria-current="page"` from `features/nav/nav.ts`), then sync and the
+  language. The footer is deep teal with the giant wordmark, drawn by `::before` from a `data-` attribute. `.app-main`
+  is 760px, and a page whose section carries `.app-wide` (today) takes 1160px. Every colour in `globals.css` is a token.
+  A screen the design does not draw takes its header, ground, buttons and panels and keeps its function.
 - **The landing page brings its own chrome and palette** (`/[locale]`, D201, as designed in `docs/Palier landing page` v4).
   - The layout wraps every page in `components/Shell.tsx`. It renders the app's header, `main#main` and footer everywhere
     except `/` (`features/landing/landing.ts`'s `showsAppChrome`, on next-intl's pathname). There the page renders its own
@@ -35,9 +41,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     properties on `.landing`, held to the contrast gate by `landing-contrast.test.ts`, which reads them from the file.
     Next keeps a page's stylesheet after a soft navigation, so **every rule there is scoped under a `landing` class**.
     `motion.test.ts` reads it too.
-  - Its serif is `src/fonts/landing-font.ts`, the passage serif's file declared again with `preload: true`, so only the
-    landing page preloads it. Without the preload, the swap rewrapped the French hero and cost `/fr` its Lighthouse budget
-    on CI's Linux runner, which has no Times New Roman for `next/font`'s fallback.
+  - Its serif is the app's `--font-serif`, preloaded on every page since D202. Without the preload, the swap rewrapped the
+    French hero and cost `/fr` its Lighthouse budget on CI's Linux runner, which has no Times New Roman for `next/font`'s
+    fallback; `globals.css`'s "Serif Fallback" face is the metric-matched stand-in.
   - Its photographs live in `components/landing/images/` and are CSS backgrounds. They are bundled under
     `/_next/static/media/`, so the CSP needs no new origin and the worker precaches them through the stylesheet. Never
     hotlink an image.
@@ -109,10 +115,10 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 - **Motion** (D160): every duration is one of `@palier/ui`'s three tokens, and one switch in `components.css` turns all
   motion off under `prefers-reduced-motion` and inside `[data-mode="exam"]`. `src/app/motion.test.ts` fails a literal
   duration or a fading keyframe in either stylesheet; `e2e/motion.spec.ts` reads the computed styles.
-- **Fonts are self-hosted** (D161): `src/fonts/fonts.ts` loads the three committed woff2 files through `next/font/local`
-  (its arguments must be literals), as CSS variables on `<html>`. `SOURCES.md` records each file's origin and hash, and
-  `fonts.test.ts` holds them to it. **The service worker follows each precached stylesheet to the fonts it loads**
-  (`staticAssetsInCss`), since the passage serif is not preloaded and appears in no HTML.
+- **Fonts are self-hosted** (D161): `src/fonts/fonts.ts` loads the one committed woff2, Source Serif 4, through
+  `next/font/local` (its arguments must be literals), as `--font-serif` on `<html>`, **preloaded**: it sets every page
+  (D202; Inter and Figtree were removed). `SOURCES.md` records the file's origin and hash, and `fonts.test.ts` holds it
+  to it. **The service worker follows each precached stylesheet to the fonts it loads** (`staticAssetsInCss`).
 - **The library** (D162) is `/library` and `/library/[subSkill]`, server components over `lib/library.ts`, which parses
   `@palier/content/library/*.json` once. **Never import `lib/library.ts` into a client component**: it would put every
   article in the JavaScript; a link needs only `features/library/links.ts`. Every written-expression item's explanation

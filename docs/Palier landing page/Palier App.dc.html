@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600&amp;display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#f3f2f2;color:#201e1d;font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.55}
+a{color:#00607d;text-underline-offset:3px}a:hover{color:#004a61}
+:focus-visible{outline:2px solid #0088b0;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;background:#f3f2f2;color:#201e1d;font-family:'Source Serif 4',Georgia,serif">
+
+  <header style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding:16px clamp(20px,4vw,56px)">
+    <a href="#" onClick="{{ goToday }}" style="font-size:28px;font-weight:600;letter-spacing:-0.02em;color:#201e1d;text-decoration:none">Palier</a>
+    <nav aria-label="Main" style="display:flex;flex-wrap:wrap;gap:2px;padding:5px;border-radius:999px;background:#e8e6e5;font-size:15px">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+        <a href="#" onClick="{{ n.go }}" aria-current="{{ n.current }}" style="padding:8px 18px;border-radius:999px;text-decoration:none;color:#201e1d;background:{{ n.bg }}">{{ n.label }}</a>
+      </sc-for>
+    </nav>
+    <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:#55504d">
+      <span style="display:inline-flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#0088b0"></span>{{ t.sync }}</span>
+      <button type="button" onClick="{{ toggleLang }}" style="font:inherit;font-size:14px;padding:8px 16px;border:0;border-radius:999px;background:#fff;color:#201e1d;cursor:pointer" style-hover="background:#d9f1f8">{{ t.otherLang }}</button>
+    </div>
+  </header>
+
+  <main style="flex:1;width:100%;max-width:{{ mainMax }};margin:0 auto;padding:clamp(32px,5vw,64px) clamp(20px,4vw,32px) clamp(56px,8vw,104px)">
+
+    <sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+      <h1 style="margin:0;font-size:clamp(40px,5vw,64px);font-weight:400;line-height:1;letter-spacing:-0.035em">{{ t.today }}</h1>
+      <div style="margin-top:40px;padding:clamp(32px,5vw,56px);border-radius:16px;background:#d9f1f8;display:grid;gap:12px;justify-items:start">
+        <h2 style="margin:0;font-size:clamp(28px,3.4vw,40px);font-weight:500;line-height:1.1;letter-spacing:-0.02em">{{ t.todayH }}</h2>
+        <p style="margin:0;font-size:18px;color:#3d3936;max-width:40ch">{{ t.todayP }}</p>
+        <a href="#" onClick="{{ startSetup }}" style="margin-top:12px;display:inline-flex;align-items:center;gap:14px;padding:8px 8px 8px 22px;border-radius:999px;background:#00384a;color:#fff;font-size:16px;text-decoration:none" style-hover="background:#00607d;color:#fff">{{ t.setUp }} <span style="display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#fff;color:#00384a">↗</span></a>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isDash }}" hint-placeholder-val="{{ false }}">
+      <h1 style="margin:0;font-size:clamp(40px,5vw,64px);font-weight:400;line-height:1;letter-spacing:-0.035em">{{ t.today }}</h1>
+      <div role="radiogroup" aria-label="{{ t.practising }}" style="margin-top:32px">
+        <div style="font-size:13px;color:#55504d">{{ t.practising }}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+          <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+            <button type="button" role="radio" aria-checked="{{ m.on }}" onClick="{{ m.pick }}" style="font:inherit;display:inline-flex;align-items:center;gap:10px;padding:10px 20px 10px 16px;border-radius:999px;border:2px solid {{ m.bd }};background:{{ m.bg }};color:#201e1d;cursor:pointer;font-size:17px">
+              <span style="width:16px;height:16px;border-radius:50%;border:2px solid #00384a;display:grid;place-items:center"><span style="width:6px;height:6px;border-radius:50%;background:{{ m.dot }}"></span></span>{{ m.label }}
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;align-items:start">
+        <section style="display:grid;gap:28px;padding:28px;border-radius:12px;background:#fff">
+          <h2 style="margin:0;font-size:28px;font-weight:500;line-height:1.1;letter-spacing:-0.015em">{{ t.stand }}</h2>
+          <div style="display:grid;gap:10px;justify-items:start">
+            <h3 style="margin:0;font-size:20px;font-weight:600">{{ t.lastMock }}</h3>
+            <p style="margin:0;color:#3d3936;max-width:38ch">{{ t.mockP }}</p>
+            <a href="#" onClick="{{ stay }}" style="margin-top:6px;padding:11px 24px;border-radius:999px;background:#e8e6e5;color:#201e1d;font-size:16px;text-decoration:none" style-hover="background:#d9f1f8;color:#201e1d">{{ t.takeMock }}</a>
+          </div>
+          <div style="display:grid;gap:10px;justify-items:start">
+            <h3 style="margin:0;font-size:20px;font-weight:600">{{ t.trend }}</h3>
+            <div style="padding:16px 18px;border-radius:10px;background:#d9f1f8;width:100%">
+              <div style="font-size:17px;font-weight:600;color:#00384a">{{ t.seeStand }}</div>
+              <p style="margin:4px 0 0;color:#3d3936">{{ t.diagP }}</p>
+            </div>
+            <a href="#" onClick="{{ stay }}" style="margin-top:6px;padding:11px 24px;border-radius:999px;background:#e8e6e5;color:#201e1d;font-size:16px;text-decoration:none" style-hover="background:#d9f1f8;color:#201e1d">{{ t.takeDiag }}</a>
+          </div>
+        </section>
+
+        <div style="display:grid;gap:16px">
+          <section style="padding:28px;border-radius:12px;background:#004a61;color:#fff">
+            <h2 style="margin:0;font-size:28px;font-weight:500;line-height:1.1;letter-spacing:-0.015em">{{ t.plan }}</h2>
+            <div style="margin-top:20px">
+              <sc-for list="{{ planRows }}" as="r" hint-placeholder-count="2">
+                <div style="display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-top:1px solid rgba(255,255,255,0.2)">
+                  <span style="font-size:18px;font-weight:600">{{ r.name }}</span><span style="color:rgba(255,255,255,0.88)">{{ r.meta }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <a href="#" onClick="{{ stay }}" style="margin-top:12px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 8px 8px 24px;border-radius:999px;background:#fff;color:#201e1d;font-size:17px;text-decoration:none" style-hover="background:#d9f1f8;color:#201e1d">{{ t.start }} <span style="display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#00384a;color:#fff">↗</span></a>
+          </section>
+          <section style="padding:28px;border-radius:12px;background:#e8e6e5">
+            <h2 style="margin:0;font-size:28px;font-weight:500;line-height:1.1;letter-spacing:-0.015em">{{ t.queue }}</h2>
+            <p style="margin:16px 0 0;color:#3d3936">{{ t.nothing }}</p>
+            <div style="display:grid;gap:10px;margin-top:20px;font-size:17px">
+              <sc-for list="{{ queueLinks }}" as="q" hint-placeholder-count="4"><a href="#" onClick="{{ stay }}" style="display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #cfcbc9;color:#00384a;text-decoration:none" style-hover="color:#0088b0"><span>{{ q.label }}</span><span aria-hidden="true">→</span></a></sc-for>
+            </div>
+          </section>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSetup }}" hint-placeholder-val="{{ false }}">
+      <h1 style="margin:0;font-size:clamp(36px,4.6vw,56px);font-weight:400;line-height:1.02;letter-spacing:-0.035em">{{ t.setupH }}</h1>
+      <p style="margin:24px 0 0;padding:16px 20px;border-radius:12px;background:#e8e6e5;font-size:15px;line-height:1.55;color:#3d3936">{{ t.disclaimer }}</p>
+
+      <div style="display:flex;align-items:center;gap:14px;margin-top:32px;font-size:13px;color:#55504d">
+        <span>{{ stepLabel }}</span>
+        <div style="display:flex;gap:6px;flex:1;max-width:200px">
+          <sc-for list="{{ dots }}" as="d" hint-placeholder-count="5"><span style="flex:1;height:4px;border-radius:2px;background:{{ d.bg }}"></span></sc-for>
+        </div>
+      </div>
+
+      <sc-if value="{{ isS1 }}" hint-placeholder-val="{{ true }}">
+        <fieldset style="border:0;margin:20px 0 0;padding:0;display:grid;gap:12px">
+          <legend style="padding:0;margin-bottom:16px;font-size:clamp(24px,2.6vw,30px);font-weight:500;line-height:1.15;letter-spacing:-0.015em">{{ t.q1 }}</legend>
+          <button type="button" role="radio" aria-checked="{{ fr }}" onClick="{{ pickFr }}" style="font:inherit;text-align:left;display:flex;gap:16px;padding:20px 24px;border-radius:12px;cursor:pointer;color:#201e1d;border:2px solid {{ frBorder }};background:{{ frBg }}">
+            <span style="flex:none;margin-top:5px;width:18px;height:18px;border-radius:50%;border:2px solid #00384a;display:grid;place-items:center"><span style="width:8px;height:8px;border-radius:50%;background:{{ frDot }}"></span></span>
+            <span><span style="display:block;font-size:20px;font-weight:600">{{ t.o1 }}</span><span style="display:block;margin-top:2px;color:#3d3936">{{ t.o1s }}</span></span>
+          </button>
+          <div aria-disabled="true" style="display:flex;gap:16px;padding:20px 24px;border-radius:12px;border:2px solid transparent;background:#e8e6e5;color:#6b6663">
+            <span style="flex:none;margin-top:5px;width:18px;height:18px;border-radius:50%;border:2px solid #b9b5b2"></span>
+            <span><span style="display:block;font-size:20px;font-weight:600">{{ t.o2 }}</span><span style="display:block;margin-top:2px">{{ t.o2s }}</span></span>
+          </div>
+        </fieldset>
+        <p style="margin:20px 0 0;font-size:15px;color:#3d3936">{{ t.syncNote }}</p>
+        <div style="margin-top:28px">
+          <a href="#" onClick="{{ next }}" style="display:inline-flex;align-items:center;gap:14px;padding:8px 8px 8px 24px;border-radius:999px;background:#00384a;color:#fff;font-size:17px;text-decoration:none" style-hover="background:#00607d;color:#fff">{{ t.cont }} <span style="display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#fff;color:#00384a">→</span></a>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isS2 }}" hint-placeholder-val="{{ false }}">
+        <fieldset style="border:0;margin:20px 0 0;padding:0;display:grid;gap:12px">
+          <legend style="padding:0;margin-bottom:16px;font-size:clamp(24px,2.6vw,30px);font-weight:500;line-height:1.15;letter-spacing:-0.015em">{{ t.q2 }}</legend>
+          <button type="button" role="radio" aria-checked="{{ isB }}" onClick="{{ pickB }}" style="font:inherit;text-align:left;display:flex;gap:16px;padding:20px 24px;border-radius:12px;cursor:pointer;color:#201e1d;border:2px solid {{ bBorder }};background:{{ bBg }}">
+            <span style="flex:none;margin-top:5px;width:18px;height:18px;border-radius:50%;border:2px solid #00384a;display:grid;place-items:center"><span style="width:8px;height:8px;border-radius:50%;background:{{ bDot }}"></span></span>
+            <span><span style="display:block;font-size:20px;font-weight:600">{{ t.lb }}</span><span style="display:block;margin-top:2px;color:#3d3936">{{ t.lbs }}</span></span>
+          </button>
+          <button type="button" role="radio" aria-checked="{{ isC }}" onClick="{{ pickC }}" style="font:inherit;text-align:left;display:flex;gap:16px;padding:20px 24px;border-radius:12px;cursor:pointer;color:#201e1d;border:2px solid {{ cBorder }};background:{{ cBg }}">
+            <span style="flex:none;margin-top:5px;width:18px;height:18px;border-radius:50%;border:2px solid #00384a;display:grid;place-items:center"><span style="width:8px;height:8px;border-radius:50%;background:{{ cDot }}"></span></span>
+            <span><span style="display:block;font-size:20px;font-weight:600">{{ t.lc }}</span><span style="display:block;margin-top:2px;color:#3d3936">{{ t.lcs }}</span></span>
+          </button>
+        </fieldset>
+        <label style="display:block;margin-top:28px;font-size:18px" for="d">{{ t.date }}</label>
+        <input id="d" type="date" style="margin-top:8px;width:100%;font:inherit;font-size:18px;padding:14px 18px;border:0;border-radius:10px;background:#e8e6e5;color:#201e1d" />
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:28px">
+          <a href="#" onClick="{{ back }}" style="padding:12px 26px;border-radius:999px;background:#e8e6e5;color:#201e1d;font-size:17px;text-decoration:none" style-hover="background:#d9f1f8;color:#201e1d">{{ t.back }}</a>
+          <a href="#" onClick="{{ finish }}" style="display:inline-flex;align-items:center;gap:14px;padding:8px 8px 8px 24px;border-radius:999px;background:#00384a;color:#fff;font-size:17px;text-decoration:none" style-hover="background:#00607d;color:#fff">{{ t.cont }} <span style="display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#fff;color:#00384a">→</span></a>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ isOther }}" hint-placeholder-val="{{ false }}">
+      <h1 style="margin:0;font-size:clamp(40px,5vw,64px);font-weight:400;line-height:1;letter-spacing:-0.035em">{{ otherTitle }}</h1>
+      <p style="margin:24px 0 0;color:#3d3936;max-width:46ch">{{ t.other }}</p>
+    </sc-if>
+  </main>
+
+  <footer style="position:relative;overflow:hidden;background:#00384a;color:#fff;padding:clamp(40px,5vw,64px) clamp(20px,4vw,56px) 0">
+    <p style="margin:0;max-width:62ch;font-size:15px;line-height:1.6;color:rgba(255,255,255,0.88)">{{ t.disclaimer }}</p>
+    <nav aria-label="Footer" style="display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:28px;font-size:16px">
+      <sc-for list="{{ footLinks }}" as="l" hint-placeholder-count="7"><a href="#" onClick="{{ l.go }}" style="color:#fff" style-hover="color:#d9f1f8">{{ l.label }}</a></sc-for>
+    </nav>
+    <div aria-hidden="true" style="margin:24px 0 -0.22em;font-size:clamp(96px,22vw,320px);font-weight:600;line-height:1;letter-spacing:-0.05em;color:rgba(255,255,255,0.1);user-select:none">PALIER</div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;setupDone&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { lang: 'en', screen: 'today', step: 1, level: 'C', tab: 'today', mode: 'reading', done: this.props.setupDone ?? true };
+  T = {
+    en: { sync: 'Sync on', otherLang: 'Français', today: 'Today', todayH: 'Set up your practice first', todayP: 'Two quick questions and you’re ready.', setUp: 'Set up',
+      setupH: 'Let’s set up your practice', disclaimer: 'Palier is an independent, source-available study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official.',
+      step: 'Step', of: 'of', q1: 'Which language are you practising?', o1: 'French as a second language', o1s: 'Reading and written expression, level C focus', o2: 'English as a second language', o2s: 'Coming later',
+      syncNote: 'Your progress syncs across your devices. You can turn that off in settings.', cont: 'Continue', back: 'Back',
+      q2: 'What are you aiming for?', lb: 'Level B', lbs: 'You handle routine work situations: most emails, memos and meetings on familiar topics.', lc: 'Level C', lcs: 'You handle complex, abstract and sensitive matters: nuance, register and implication included.', date: 'I have a test booked on (optional)',
+      practising: 'Practising', reading: 'Reading', writing: 'Written expression', stand: 'Where you stand', lastMock: 'Your last mock exam', mockP: 'A full-length mock exam gives you a level scored against the published cut scores.', takeMock: 'Take a mock exam',
+      trend: 'Your practice trend', seeStand: 'See where you stand', diagP: 'Take the diagnostic and this card shows your accuracy on each level of item.', takeDiag: 'Take the diagnostic',
+      plan: 'Today’s plan', targeted: 'Targeted practice', targetedM: '9 items · 14 min', sharp: 'Keep sharp', sharpM: '4 items · 6 min', start: 'Start, 20 min',
+      queue: 'Review queue', nothing: 'Nothing due', qlinks: ['Open the review queue', 'Take a mock exam', 'Practise speaking', 'Retake the diagnostic'],
+      other: 'This screen keeps its current functionality and takes the same header, ground, buttons and panels as the screens shown here.',
+      nav: ['Today', 'Review', 'Oral practice', 'Progress', 'About'], foot: ['Your data', 'Sync', 'Your API key', 'Library', 'About', 'Privacy', 'Keyboard shortcuts'] },
+    fr: { sync: 'Synchro activée', otherLang: 'English', today: 'Aujourd’hui', todayH: 'Configurez d’abord votre pratique', todayP: 'Deux questions rapides et vous êtes prêt.', setUp: 'Configurer',
+      setupH: 'Configurons votre pratique', disclaimer: 'Palier est un outil d’étude indépendant dont le code source est accessible. Il n’est ni affilié à la Commission de la fonction publique du Canada, ni approuvé par elle, ni lié à elle. Il ne contient aucune vraie question d’examen et ses résultats ne sont pas officiels.',
+      step: 'Étape', of: 'sur', q1: 'Quelle langue pratiquez-vous?', o1: 'Le français langue seconde', o1s: 'Compréhension de l’écrit et expression écrite, accent sur le niveau C', o2: 'L’anglais langue seconde', o2s: 'À venir',
+      syncNote: 'Votre progression se synchronise entre vos appareils. Vous pouvez désactiver cela dans les paramètres.', cont: 'Continuer', back: 'Retour',
+      q2: 'Quel est votre objectif?', lb: 'Niveau B', lbs: 'Vous gérez les situations de travail courantes : la plupart des courriels, notes et réunions sur des sujets familiers.', lc: 'Niveau C', lcs: 'Vous gérez des sujets complexes, abstraits et délicats : nuances, registre et sous-entendus compris.', date: 'J’ai un examen prévu le (facultatif)',
+      practising: 'Vous pratiquez', reading: 'Compréhension de l’écrit', writing: 'Expression écrite', stand: 'Où vous en êtes', lastMock: 'Votre dernier examen blanc', mockP: 'Un examen blanc complet vous donne un niveau évalué selon les notes de passage publiées.', takeMock: 'Passer un examen blanc',
+      trend: 'Votre tendance', seeStand: 'Voyez où vous en êtes', diagP: 'Passez le diagnostic et cette carte affichera votre exactitude à chaque niveau de question.', takeDiag: 'Passer le diagnostic',
+      plan: 'Plan du jour', targeted: 'Pratique ciblée', targetedM: '9 questions · 14 min', sharp: 'Rester affûté', sharpM: '4 questions · 6 min', start: 'Commencer, 20 min',
+      queue: 'File de révision', nothing: 'Rien à réviser', qlinks: ['Ouvrir la file de révision', 'Passer un examen blanc', 'Pratiquer l’oral', 'Reprendre le diagnostic'],
+      other: 'Cet écran conserve ses fonctions actuelles et reprend le même en-tête, le même fond, les mêmes boutons et les mêmes panneaux.',
+      nav: ['Aujourd’hui', 'Révision', 'Pratique orale', 'Progrès', 'À propos'], foot: ['Vos données', 'Synchro', 'Votre clé API', 'Bibliothèque', 'À propos', 'Confidentialité', 'Raccourcis clavier'] }
+  };
+  go = (screen, tab) => e => { e && e.preventDefault(); this.setState({ screen, tab, step: 1 }); };
+  renderVals() {
+    const s = this.state, t = this.T[s.lang], tabs = ['today', 'review', 'oral', 'progress', 'about'];
+    const sel = (on) => on ? '#d9f1f8' : '#fff', bd = (on) => on ? '#00384a' : 'transparent', dot = (on) => on ? '#00384a' : 'transparent';
+    const setup = s.screen === 'setup', fr = true;
+    const other = s.screen === 'other';
+    const done = s.done, isDash = s.screen === 'today' && done;
+    return {
+      mainMax: isDash ? '1160px' : '760px', isDash, stay: e => e.preventDefault(),
+      modes: [['reading', t.reading], ['writing', t.writing]].map(([k, label]) => ({ label, on: s.mode === k, bg: s.mode === k ? '#d9f1f8' : '#fff', bd: s.mode === k ? '#00384a' : 'transparent', dot: s.mode === k ? '#00384a' : 'transparent', pick: () => this.setState({ mode: k }) })),
+      planRows: [{ name: t.targeted, meta: t.targetedM }, { name: t.sharp, meta: t.sharpM }],
+      queueLinks: t.qlinks.map(label => ({ label })),
+      t, fr, isToday: s.screen === 'today' && !done, isSetup: setup, isOther: other, isS1: setup && s.step === 1, isS2: setup && s.step === 2,
+      navItems: tabs.map((k, i) => ({ label: t.nav[i], current: s.tab === k ? 'page' : undefined, bg: s.tab === k ? '#fff' : 'transparent', go: this.go(k === 'today' ? 'today' : 'other', k) })),
+      otherTitle: t.nav[Math.max(0, tabs.indexOf(s.tab))],
+      footLinks: t.foot.map(label => ({ label, go: this.go('other', 'foot') })),
+      goToday: this.go('today', 'today'),
+      toggleLang: () => this.setState({ lang: s.lang === 'en' ? 'fr' : 'en' }),
+      startSetup: e => { e.preventDefault(); this.setState({ screen: 'setup', step: 1 }); },
+      stepLabel: t.step + ' ' + s.step + ' ' + t.of + ' 5',
+      dots: [1, 2, 3, 4, 5].map(n => ({ bg: n <= s.step ? '#00384a' : '#d3d0ce' })),
+      frBg: sel(true), frBorder: bd(true), frDot: dot(true),
+      isB: s.level === 'B', isC: s.level === 'C',
+      bBg: sel(s.level === 'B'), bBorder: bd(s.level === 'B'), bDot: dot(s.level === 'B'),
+      cBg: sel(s.level === 'C'), cBorder: bd(s.level === 'C'), cDot: dot(s.level === 'C'),
+      pickFr: () => {}, pickB: () => this.setState({ level: 'B' }), pickC: () => this.setState({ level: 'C' }),
+      next: e => { e.preventDefault(); this.setState({ step: 2 }); },
+      back: e => { e.preventDefault(); this.setState({ step: 1 }); },
+      finish: e => { e.preventDefault(); this.setState({ screen: 'today', tab: 'today', step: 1, done: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

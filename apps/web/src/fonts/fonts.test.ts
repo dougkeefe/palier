@@ -14,8 +14,8 @@ const sources = readFileSync(new URL("SOURCES.md", dir), "utf8");
 const fonts = readdirSync(dir).filter((name) => name.endsWith(".woff2"));
 
 describe("the self-hosted fonts", () => {
-  it("are the three families §10.3 names", () => {
-    expect(fonts.sort()).toEqual(["figtree-latin-wght.woff2", "inter-latin-wght.woff2", "source-serif-4-latin-wght.woff2"]);
+  it("are the one family the app is set in, Source Serif 4 (D202)", () => {
+    expect(fonts.sort()).toEqual(["source-serif-4-latin-wght.woff2"]);
   });
 
   it.each(fonts)("%s is a woff2 whose hash SOURCES.md records", (name) => {
@@ -26,9 +26,7 @@ describe("the self-hosted fonts", () => {
     expect(row).toContain(createHash("sha256").update(bytes).digest("hex"));
   });
 
-  it("carries each family's Open Font License", () => {
-    for (const family of ["inter", "figtree", "sourceserif4"]) {
-      expect(readFileSync(new URL(`OFL-${family}.txt`, dir), "utf8")).toContain("SIL Open Font License, Version 1.1");
-    }
+  it("carries the family's Open Font License", () => {
+    expect(readFileSync(new URL("OFL-sourceserif4.txt", dir), "utf8")).toContain("SIL Open Font License, Version 1.1");
   });
 });

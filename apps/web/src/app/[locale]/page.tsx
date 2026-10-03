@@ -14,7 +14,6 @@ import {
   Tests,
 } from "../../components/landing/LandingSections";
 import hero from "../../components/landing/images/hero.webp";
-import { landingFont } from "../../fonts/landing-font";
 import "../../components/landing/landing.css";
 
 // The unauthenticated landing page (product-requirements.md §7: marketing plus the
@@ -28,7 +27,7 @@ export default function LandingPage({ params }: PageProps<"/[locale]">) {
   setRequestLocale(locale);
 
   return (
-    <div className={`landing ${landingFont.variable}`}>
+    <div className="landing">
       {/* The hero's photograph is the largest paint, and as a CSS background the browser would find
           it only once the stylesheet had loaded. React hoists this into the head. */}
       <link rel="preload" as="image" href={hero.src} fetchPriority="high" />

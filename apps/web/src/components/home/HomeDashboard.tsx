@@ -3,7 +3,7 @@
 import type { ScoredSkill } from "@palier/domain";
 import { SCORED_SKILLS } from "@palier/domain";
 import type { DayPlan, SkillTrend } from "@palier/engine";
-import { Callout, Card, EmptyState } from "@palier/ui";
+import { Callout, Card, EmptyState, buttonClass } from "@palier/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
@@ -73,7 +73,8 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
  * then the practice trend per band tag with its interval, or a first-run invitation
  * to the diagnostic (§14). The two stay visually distinct, and the practice trend is
  * never a band letter (D64). Zone B, today's plan with one primary action. Zone C, the
- * review queue and the mock exam (D84 ruling 12).
+ * review queue and the mock exam (D84 ruling 12). As designed (D202): the readiness card
+ * white, the plan a deep panel, the queue a quiet one.
  */
 export function HomeDashboard() {
   const t = useTranslations("today");
@@ -107,7 +108,7 @@ export function HomeDashboard() {
       <EmptyState
         heading={t("setUpTitle")}
         action={
-          <Link href="/start" className="pl-btn pl-btn--primary pl-focusable">
+          <Link href="/start" className={`${buttonClass("primary", "go")} pl-focusable`}>
             {t("setUpAction")}
           </Link>
         }
@@ -157,20 +158,22 @@ export function HomeDashboard() {
                 )}
               </>
             ) : (
-              <div className="app-stack">
-                <p>
-                  <strong>{t("firstRunTitle")}</strong>
-                </p>
-                <p>{t("firstRunBody")}</p>
-                {dashboard.trend.windowSize === 0 ? null : <TrendMeters trend={dashboard.trend} />}
+              <>
+                <div className="app-home__inset">
+                  <p>
+                    <strong>{t("firstRunTitle")}</strong>
+                  </p>
+                  <p>{t("firstRunBody")}</p>
+                  {dashboard.trend.windowSize === 0 ? null : <TrendMeters trend={dashboard.trend} />}
+                </div>
                 <Link href="/diagnostic" className="pl-btn pl-btn--secondary pl-focusable">
                   {t("firstRunAction")}
                 </Link>
-              </div>
+              </>
             )}
           </Card>
 
-          <Card className="app-home__plan">
+          <Card tone="deep" className="app-home__plan">
             <h2>{t("planTitle")}</h2>
             {engagement === null || container.status !== "ready" ? null : (
               <StreakLine streak={engagement.streak} container={container.container} />
@@ -192,28 +195,30 @@ export function HomeDashboard() {
                     </li>
                   ))}
                 </ul>
-                <Link href={`/practice/${skill}`} className="pl-btn pl-btn--primary pl-focusable app-plan__start">
+                <Link href={`/practice/${skill}`} className={`${buttonClass("light", "go")} pl-focusable app-plan__start`}>
                   {t("start", { minutes: minutesFor(dashboard.plan.items.length) })}
                 </Link>
               </>
             )}
           </Card>
 
-          <Card className="app-home__actions">
+          <Card tone="quiet" className="app-home__actions">
             <h2>{t("reviewTitle")}</h2>
             <p>{t("reviewDue", { count: dashboard.dueCount })}</p>
-            <Link href="/review" className="app-link pl-focusable">
-              {t("reviewAction")}
-            </Link>
-            <Link href="/exam" className="app-link pl-focusable">
-              {t("examAction")}
-            </Link>
-            <Link href="/practice/oral" className="app-link pl-focusable">
-              {t("oralAction")}
-            </Link>
-            <Link href="/diagnostic" className="app-link pl-focusable">
-              {t("diagnosticAgain")}
-            </Link>
+            <div className="app-home__links">
+              <Link href="/review" className="app-link pl-focusable">
+                {t("reviewAction")}
+              </Link>
+              <Link href="/exam" className="app-link pl-focusable">
+                {t("examAction")}
+              </Link>
+              <Link href="/practice/oral" className="app-link pl-focusable">
+                {t("oralAction")}
+              </Link>
+              <Link href="/diagnostic" className="app-link pl-focusable">
+                {t("diagnosticAgain")}
+              </Link>
+            </div>
           </Card>
         </div>
       )}
