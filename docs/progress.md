@@ -62,7 +62,7 @@ the dial's three levers for a cold first dial are built (`dougkeefe/testing-befo
 popup and `postMessage`, working end to end on the production build against the repository's own Worker; the one-file
 Worker and Vercel function in `selfhost/`; the route's log exclusion written into `docs/deploy.md` (Vercel has no per-route
 switch, D193); and `docs/realtime-checklist.md` for Gate O. It merged (#60). **Phase 7 Slice 5, launch readiness, is built**
-(`dougkeefe/zpaa2`; D198–D199): the realtime route's rate limit, refused as `throttled`; the band trend over time on `/progress`
+(`dougkeefe/docs-content-development`; D198–D199): the realtime route's rate limit, refused as `throttled`; the band trend over time on `/progress`
 and its one-page printout; `robots.txt`, a sitemap and `hreflang` from one route list; and an unknown path answering 404.
 What remains before 1.0 is the human's: Gate O, then Gate M.
 
@@ -130,7 +130,7 @@ human for anything expensive.
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
 | 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 merged, #57, D180–D189; the human's session, D191; exit criterion 1 met on the deployed site, and the dial's levers built, D190, merged #58; Slice 3 merged, #60, D192–D194; Gate O next (human) |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; the repo is public, D195; Slice 5, launch readiness, built, `dougkeefe/zpaa2`, D198–D199; Gate M waits on Phase 6, D165) |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; the repo is public, D195; Slice 5, launch readiness, built, `dougkeefe/docs-content-development`, D198–D199; Gate M waits on Phase 6, D165) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -139,7 +139,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/zpaa2` | **Phase 7 Slice 5, launch readiness** (D195): the realtime route's rate limit, the band trend over time, robots, a sitemap and `hreflang`, and a true 404. | 3 October 2026 |
+| `dougkeefe/docs-content-development` | **Phase 7 Slice 5, launch readiness** (D195): the realtime route's rate limit, the band trend over time, robots, a sitemap and `hreflang`, and a true 404. | 3 October 2026 |
 
 *(The prior rows — Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -242,7 +242,7 @@ Built now rather than retrofitted — §7 is emphatic about this.
 ### Next, decided
 
 Phase 7 (D132): **Slices 1–4 merged**, **Gate L passed** (D164), the repo is public (D195), and **Slice 5, launch readiness, is
-built** (`dougkeefe/zpaa2`; D198–D199): the realtime route's rate limit, the band trend over time, robots, a sitemap and
+built** (`dougkeefe/docs-content-development`; D198–D199): the realtime route's rate limit, the band trend over time, robots, a sitemap and
 `hreflang`, and a true 404. **Studio mode is in 1.0** (D165): Phase 6's three slices merged (#53, #57, #60), Gate N passed
 (D174), the human's live session passed (D191), and exit criterion 1 is met on the deployed site (D190). `main` is protected,
 and a red lane blocks the merge (D177).
@@ -720,7 +720,7 @@ band, a table beside the chart, and the printout still one page in both language
   3. `robots.txt`, a sitemap with `hreflang` alternates, and the public origin from Vercel's production URL;
   4. an unknown path answering 404, by a rewrite in the proxy, or a deviation saying why not (D141).
 
-  **Built 3 October 2026** (`dougkeefe/zpaa2`; D198–D199; session-log evidence): all four, the 404 by the rewrite, which
+  **Built 3 October 2026** (`dougkeefe/docs-content-development`; D198–D199; session-log evidence): all four, the 404 by the rewrite, which
   Next 16 carries.
 - [ ] **Gate M — public (human).** ~~The repo made public~~ (**public**, confirmed 2 October 2026, D195), an outside item
   submission [R13], the domain, §12.1's trademark check, and the full-volume bank (D54), which stays sequenced to the end
@@ -6765,7 +6765,7 @@ Read from the traces D196 started uploading, not guessed:
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 3 October 2026 — `dougkeefe/zpaa2` (Phase 7 Slice 5, launch readiness; D198–D200)
+### 3 October 2026 — `dougkeefe/docs-content-development` (Phase 7 Slice 5, launch readiness; D198–D200)
 
 Opened to *Next, decided*: #60 had merged, so Slice 5 was next. Its step 3, the dial on `main`, was **not run**: this machine
 has no `.env.local` and no smoke key, as on 2 October.
