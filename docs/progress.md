@@ -140,6 +140,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | Branch | Task | Session started |
 | --- | --- | --- |
 | `dougkeefe/docs-content-development` | **Phase 7 Slice 5, launch readiness** (D195): the realtime route's rate limit, the band trend over time, robots, a sitemap and `hreflang`, and a true 404. | 3 October 2026 |
+| `dougkeefe/palier-landing-page-update` | **The landing page as designed** (D201): `docs/Palier landing page` v4 becomes `/en` and `/fr`, with its own header and footer and its own scoped palette. Outside the planned slices, by the human's request. | 3 October 2026 |
 
 *(The prior rows — Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -6759,11 +6760,120 @@ Read from the traces D196 started uploading, not guessed:
 - `/privacy` is unchanged. The count is kept under a day's HMAC of the address, which its "beyond using it for a moment to
   limit abuse" already describes.
 
+### D201 — the landing page as designed: its own chrome, its own palette, its photographs served from this origin
+**Date:** 3 October 2026 · **Status:** accepted (human's request and two rulings; agent's build). Outside the planned slices; deviates from PRD §10.1–§10.3 for `/` only
+
+The human designed the landing page in Claude Design. It sits in `docs/Palier landing page/`, and **v4 is the one built**.
+`/en` and `/fr` were a three-button hero in the app's shell. They are now v4's sections: hero, strip, three features, the
+three tests with a live sample question, the oral banner, how it works, the FAQ and the closing call.
+
+- **Two human rulings, asked before building.**
+  1. **The design's visual language, faithfully.** A teal ink on a warm paper, with Source Serif 4 for headings and body.
+     This departs from PRD §10.2's plum and amber and §10.3's Figtree and Inter, **for the landing page only**. The
+     palette is `--landing-*` custom properties on `.landing` in `components/landing/landing.css`. Every rule there is
+     scoped under a `landing` class, because Next keeps a page's stylesheet after a soft navigation away.
+     `landing-contrast.test.ts` reads the hex values from the file and holds 18 text pairs to 4.5:1 and 4 UI pairs to
+     3:1 with `@palier/ui`'s `contrastRatio`. Every value is the design's own; none needed retuning.
+  2. **The design's own header and footer**, not the app's. The layout's chrome is now `components/Shell.tsx`, a client
+     component that reads next-intl's pathname (`features/landing/landing.ts`'s `showsAppChrome`). On `/` it renders the
+     page alone, and the page brings its own header, `main#main` and footer. It is a pathname switch, not route groups,
+     which would have moved every route directory and every relative import. It is not a check in the layout either: the
+     layout persists across soft navigations, so its decision would go stale on the way from `/` into the app.
+- **What the export could not ship, and what replaced it.**
+  - Six `images.unsplash.com` hotlinks are blocked by `img-src 'self'` and ADR 15. They were downloaded once, as WebP
+    (23–118 KB each, 0.5 MB together), into `components/landing/images/`. `landing.css` uses them as backgrounds, so they
+    are bundled under `/_next/static/media/` with immutable caching, and **the worker precaches them by following the
+    stylesheet** (`staticAssetsInCss`). The landing page is whole offline. The CSP is unchanged. The hero is preloaded by
+    a `<link rel="preload" as="image">` that React hoists into the head. `react-dom`'s `preload()` emitted only an RSC
+    hint, too late for the first paint.
+  - **Fonts.** Google Fonts became the self-hosted `--font-serif` (D161).
+  - **Styles.** About 200 inline `style=""` attributes, blocked by `style-src 'self'`, became classes.
+  - **Scripts.** The `DCLogic` runtime and `{{ }}` templating became server components. The sample question is the one
+    island. The FAQ is native `<details>`, first answer open, with no script: the design's single-open accordion was
+    state that `<details>` does not need.
+  - **Copy.** The hardcoded EN/FR `COPY` object became the `landing` namespace in both message files. It replaces
+    `home`, which only the old landing page read. Each leaf is a string, since `messages.test.ts` refuses arrays.
+  - **Language switch.** The EN/FR pill buttons, a client-side copy swap, are now `LanguageToggle` with a `className`.
+    It reads "Français" / "English" (PRD §12) and loads the document (D163).
+  - **Links.** Absolute links to `palier-virid.vercel.app` became next-intl `Link`s.
+- **What the landing footer keeps from the app's** (R5, R11, R12, R14, WCAG 3.2.6):
+  - `NonAffiliation variant="footer"`. Its wording is v4's `disc` word for word, so the design's bold "Not an official
+    tool." leads it;
+  - the data, sync and key links, in a column the design did not have ("Your device");
+  - library, about and privacy;
+  - the shortcut sheet, so `?` works on `/` as on every page.
+
+  The decorative "PALIER" wordmark is drawn from a `data-` attribute by `::before`. As text at a tenth of white, axe
+  failed it for contrast, and it is no text anyone reads.
+- **The landing serif is preloaded, on the landing page only** (after CI's first run). CI's Lighthouse gave `/fr` 0.88
+  for performance on all five runs, and `/en` passed. The serif was not preloaded (D161), so it arrived after the first
+  paint, and the hero, set in it, rewrapped as it swapped in. `next/font` sizes the fallback from `local("Times New
+  Roman")`, which the Linux runner lacks, and the long French lede moved the vertically centred hero most.
+  - `src/fonts/landing-font.ts` declares the same file again with `preload: true`. `next/font` preloads a face on the
+    routes that import it, so only `/en` and `/fr` send its `Link` header; `/en/about` does not. A landing page loads the
+    file once.
+  - `landing.css` adds a fallback face over `local("Times New Roman")`, `local("Liberation Serif")` and `local("Tinos")`
+    (the metric twins), with `next/font`'s overrides, for any load where the face is still late.
+  - Measured with Playwright at Lighthouse's desktop size, with no Times-sized fallback and no Georgia as on the runner:
+    `/fr`'s layout shift was 0.0053 before and is 0 after.
+- **The sample question** marks the right answer ✓ and a wrong pick ✗ beside the colour (PRD §11). Its decisions are
+  `sampleFeedback` and `sampleOptionState` in `features/landing/landing.ts`.
+- **Tests changed, named here as the working agreement asks.** `smoke.spec.ts`'s "header focus order" ran on `/en`, which
+  no longer has the app's header. It now runs on `/en/about`, so the app header's order stays covered. A twin holds the
+  landing header to the same order: skip link, brand, its nav. Two new tests:
+  - `/en` stays axe-clean with two answers open and the sample answered, wrong then right;
+  - "Start free" leads to `/en/home` with the app's header and footer.
+
+  `motion.test.ts` now reads `landing.css` too.
+- **Proved to bite:**
+  - with `showsAppChrome` returning `true` everywhere, `landing.test.ts` fails;
+  - with `--landing-neutral-600` lightened to `#8a8582`, the contrast test fails;
+  - before the wordmark moved to `::before`, the smoke spec's axe checks failed on `/en` and `/fr`.
+- **For the human, not settled here:**
+  - The hero photograph is the Canadian flag before the Peace Tower. PRD §10.1 asks to "deliberately avoid … maple
+    leaves … and anything in red and white", and R5 asks that nothing look official. It is the design's choice, kept as
+    designed, and the non-affiliation statement is in the footer. **Gate O's read of the page should rule on it.**
+  - v4's English feature heading is "Built for exam conditions." and its French adds ", pas pour un cours". Both are kept
+    as written, for Gate O's French read.
+  - v4's English credit named Vitaly Gariev twice. Both credits now read as the French did, four names once each. The
+    names were not checked against Unsplash.
+  - The whole export, v1–v4 with its runtime files (`support.js`, `image-slot.js`, `_ds/`), **is committed as the
+    reference**, at the human's request. It is not source: `eslint.config.mjs` ignores `docs/Palier landing page/**`, since
+    its bundled scripts fail every rule.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 3 October 2026 — `dougkeefe/palier-landing-page-update` (the landing page as designed; D201)
+
+Not *Next, decided*: the human asked for `docs/Palier landing page` to become the site's landing page. They ruled on two
+questions first: the design's own palette and type, and the design's own header and footer. *Next, decided* is unchanged:
+Gate O, then Gate M.
+
+- **`/en` and `/fr` are v4** (D201): server components in `components/landing/`, the sample question as the one island, the
+  FAQ as `<details>`, and copy in the `landing` namespace of both message files.
+- **`components/Shell.tsx`** leaves `/` to its own header, `main` and footer. Every other page keeps the app's, after a
+  soft navigation too.
+- **The photographs are served from this origin**, bundled through the stylesheet and precached by the worker. The CSP is
+  unchanged, with zero violations on both locales.
+- **For Gate O:** the hero's flag against PRD §10.1 and R5, and the French feature heading (D201).
+
+```
+pnpm verify (design export moved out of the tree) → check-types, lint, boundaries pass; test: 257 files, 4058 passed, 8 todo; exit 0 (Node 24.21.0)
+pnpm verify (export committed, ESLint ignoring it)  → check-types, lint, boundaries pass; test: 257 files, 4058 passed, 8 todo; exit 0
+CI, medium lane: lhci /fr performance 0.88 on all five runs (≥ 0.95 asserted); /en passed → the landing serif preloaded
+pnpm verify                                         → 257 files, 4058 passed, 8 todo; exit 0
+pnpm --filter @palier/web lighthouse (19 URLs × 5) → all assertions pass; /en and /fr performance 1.00, CLS 0
+playwright test offline csp-production --project=offline → 13 passed; smoke --project=chromium → 13 passed
+playwright test smoke content motion --project=chromium → 21 passed, 4 failed (axe: the wordmark's contrast); fixed, then
+playwright test smoke journeys --project=chromium → 23 passed
+pnpm build; playwright test offline csp-production production discoverability-production --project=offline → 22 passed
+lhci autorun (/en, /fr, 3 runs each, desktop) → performance 0.97–1.00, accessibility 1.00
+pnpm --filter @palier/web bundle-size → shared first-load JS 166.3 KB of 180.0 KB, within budget
+```
 
 ### 3 October 2026 — `dougkeefe/docs-content-development` (Phase 7 Slice 5, launch readiness; D198–D200)
 

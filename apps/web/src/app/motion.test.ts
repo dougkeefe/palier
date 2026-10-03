@@ -5,7 +5,8 @@ import { describe, expect, it } from "vitest";
 
 /**
  * The motion pass's rules (product-requirements.md §10.5, progress.md D160), held over the two
- * stylesheets every page loads: `@palier/ui`'s components and this app's globals.
+ * stylesheets every page loads, `@palier/ui`'s components and this app's globals, and the landing
+ * page's own (D201).
  * - every duration is one of §10.5's three, through its token, so no rule invents a fourth;
  * - a keyframe moves things and never fades them, since a fade is low-contrast text (D65);
  * - one switch turns every animation and transition off under reduced motion, and another in
@@ -16,6 +17,7 @@ const require = createRequire(import.meta.url);
 const SHEETS = {
   "components.css": readFileSync(require.resolve("@palier/ui/components.css"), "utf8"),
   "globals.css": readFileSync(new URL("./globals.css", import.meta.url), "utf8"),
+  "landing.css": readFileSync(new URL("../components/landing/landing.css", import.meta.url), "utf8"),
 };
 
 const uncommented = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, "");

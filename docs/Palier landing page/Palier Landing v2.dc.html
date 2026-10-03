@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="_ds/broadsheet-4736d1d8-8799-4ef8-aec2-30489e597515/styles.css">
+<script src="_ds/broadsheet-4736d1d8-8799-4ef8-aec2-30489e597515/_ds_bundle.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--color-bg);color:var(--color-text);text-wrap:pretty}
+a{color:var(--color-accent-700);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{color:var(--color-accent-800)}
+:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+</style>
+</helmet>
+<div lang="{{ lang }}" style="min-height:100vh;background:var(--color-bg);font-family:var(--font-body);color:var(--color-text)">
+
+<header style="max-width:1360px;margin:0 auto;padding:var(--space-4) clamp(20px,5vw,72px) 0">
+  <div style="display:flex;align-items:center;gap:var(--space-6);flex-wrap:wrap">
+    <a href="#top" style="font-family:var(--font-heading);font-size:32px;font-weight:600;letter-spacing:-0.02em;color:var(--color-text);text-decoration:none;margin-right:auto">Palier</a>
+    <nav style="display:flex;gap:var(--space-6);flex-wrap:wrap;align-items:center;font-size:16px">
+      <a href="#tests" style="color:var(--color-text);text-decoration:none" style-hover="color:var(--color-accent-700)">{{ t.navTests }}</a>
+      <a href="#how" style="color:var(--color-text);text-decoration:none" style-hover="color:var(--color-accent-700)">{{ t.navHow }}</a>
+      <a href="#faq" style="color:var(--color-text);text-decoration:none" style-hover="color:var(--color-accent-700)">{{ t.navFaq }}</a>
+      <div role="group" aria-label="Language / Langue" style="display:flex;gap:2px">
+        <button type="button" onClick="{{ setEn }}" aria-pressed="{{ isEn }}" style="font:inherit;font-size:14px;padding:4px 10px;border:0;border-radius:var(--radius-md);cursor:pointer;background:{{ enBg }};color:{{ enFg }}">EN</button>
+        <button type="button" onClick="{{ setFr }}" aria-pressed="{{ isFr }}" style="font:inherit;font-size:14px;padding:4px 10px;border:0;border-radius:var(--radius-md);cursor:pointer;background:{{ frBg }};color:{{ frFg }}">FR</button>
+      </div>
+      <a href="{{ appHome }}" class="btn btn-primary">{{ t.cta }}</a>
+    </nav>
+  </div>
+  <div style="margin-top:var(--space-4);border-top:3px solid var(--color-text);padding-top:2px"><div style="border-top:1px solid var(--color-text)"></div></div>
+  <div style="display:flex;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap;padding:8px 0;font-size:14px;font-style:italic;color:var(--color-neutral-700)">
+    <span>{{ t.railL }}</span><span>{{ t.railR }}</span>
+  </div>
+  <div style="border-top:1px solid var(--color-text)"></div>
+</header>
+
+<main id="top">
+
+<section style="max-width:1360px;margin:0 auto;padding:clamp(48px,7vw,104px) clamp(20px,5vw,72px) clamp(40px,5vw,72px);display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:end">
+  <h1 style="font-family:var(--font-heading);font-size:clamp(52px,8vw,128px);line-height:0.98;letter-spacing:-0.035em;font-weight:600;margin:0">
+    <span style="display:block">{{ t.h1a }}</span>
+    <span style="display:block;font-weight:400;font-style:italic;color:var(--color-accent-700)">{{ t.h1b }}</span>
+  </h1>
+  <div style="padding-bottom:12px">
+    <p style="font-size:clamp(18px,1.4vw,21px);line-height:1.55;margin:0;color:var(--color-neutral-800)">{{ t.lede }}</p>
+    <div style="display:flex;gap:var(--space-4);align-items:center;flex-wrap:wrap;margin-top:var(--space-6)">
+      <a href="{{ appHome }}" class="btn btn-primary" style="font-size:18px;padding:16px 26px">{{ t.cta }}</a>
+      <a href="#how" style="font-size:17px">{{ t.cta2 }}</a>
+    </div>
+  </div>
+</section>
+
+<section aria-label="Ottawa" style="position:relative;max-width:1360px;margin:0 auto;padding:0 clamp(20px,5vw,72px)">
+  <div class="{{ imgClass }}" style="position:relative;width:100%;height:clamp(320px,42vw,600px);overflow:hidden">
+    <img src="https://images.unsplash.com/photo-1578973615934-8d9cdb0792b4?auto=format&amp;fit=crop&amp;w=2400&amp;q=70" alt="The Peace Tower on Parliament Hill, Ottawa, with the Canadian flag" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;transform:translateY({{ parallax }}px) scale(1.12)">
+  </div>
+  <div style="position:relative;margin:calc(-1 * clamp(56px,7vw,112px)) 0 0 auto;width:min(100%,640px);background:var(--color-bg);padding:var(--space-6) var(--space-6) 0 var(--space-6);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-4)">
+    <sc-for list="{{ t.stats }}" as="s" hint-placeholder-count="3">
+      <div>
+        <div style="font-family:var(--font-heading);font-size:clamp(34px,3.6vw,52px);line-height:1;font-weight:600;letter-spacing:-0.02em">{{ s.big }}</div>
+        <div style="margin-top:8px;font-size:15px;line-height:1.4;color:var(--color-neutral-700)">{{ s.small }}</div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<section id="tests" style="max-width:1360px;margin:0 auto;padding:clamp(80px,10vw,152px) clamp(20px,5vw,72px) clamp(48px,6vw,96px)">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:var(--space-4) clamp(32px,5vw,80px);align-items:end">
+    <h2 style="font-family:var(--font-heading);font-size:clamp(36px,4.4vw,64px);line-height:1.04;letter-spacing:-0.025em;font-weight:600;margin:0;max-width:16ch">{{ t.testsH }}</h2>
+    <p style="margin:0;max-width:46ch;font-size:18px;color:var(--color-neutral-800)">{{ t.testsP }}</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(32px,3.5vw,56px);margin-top:clamp(48px,6vw,80px)">
+    <sc-for list="{{ tests }}" as="x" hint-placeholder-count="3">
+      <a href="{{ x.href }}" style="display:flex;flex-direction:column;color:var(--color-text);text-decoration:none" style-hover="color:var(--color-accent-700)">
+        <div class="{{ imgClass }}" style="position:relative;aspect-ratio:4/5;overflow:hidden">
+          <div role="img" aria-label="{{ x.alt }}" style="position:absolute;inset:0;background-image:{{ x.bg }};background-size:cover;background-position:center"></div>
+          <span style="position:absolute;left:0;bottom:0;background:var(--color-bg);padding:10px 16px 0 0;font-size:14px;font-style:italic;color:var(--color-accent-2-700)">{{ x.kicker }}</span>
+        </div>
+        <h3 style="font-family:var(--font-heading);font-size:32px;line-height:1.1;font-weight:600;letter-spacing:-0.015em;margin:var(--space-3) 0 0">{{ x.name }}</h3>
+        <p style="margin:12px 0 0;font-size:17px;line-height:1.6;color:var(--color-neutral-800);flex:1">{{ x.body }}</p>
+        <span style="margin-top:var(--space-3);font-size:17px;color:var(--color-accent-700);text-decoration:underline;text-underline-offset:3px">{{ x.cta }}</span>
+      </a>
+    </sc-for>
+  </div>
+</section>
+
+<section id="how" style="max-width:1360px;margin:0 auto;padding:clamp(56px,8vw,128px) clamp(20px,5vw,72px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:clamp(40px,6vw,104px);align-items:center">
+  <figure style="margin:0;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:var(--space-3);align-items:end">
+    <div class="{{ imgClass }}" style="position:relative;aspect-ratio:3/4;overflow:hidden">
+      <img src="https://images.unsplash.com/photo-1713947503550-7c1bf16b8edf?auto=format&amp;fit=crop&amp;w=1200&amp;q=70" alt="A man working at a desk with a laptop and papers" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+    </div>
+    <div style="display:grid;gap:var(--space-3)">
+      <div class="{{ imgClass }}" style="position:relative;aspect-ratio:1/1;overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1695388474402-ed805a890d8d?auto=format&amp;fit=crop&amp;w=900&amp;q=70" alt="A woman at a table reading a printed page" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+      </div>
+      <figcaption style="font-size:14px;line-height:1.5;color:var(--color-neutral-700)">{{ t.howCap }}</figcaption>
+    </div>
+  </figure>
+  <div>
+    <h2 style="font-family:var(--font-heading);font-size:clamp(36px,4.4vw,64px);line-height:1.04;letter-spacing:-0.025em;font-weight:600;margin:0;max-width:14ch">{{ t.howH }}</h2>
+    <p style="margin:var(--space-3) 0 0;max-width:46ch;font-size:18px;color:var(--color-neutral-800)">{{ t.howP }}</p>
+    <div style="display:grid;gap:var(--space-6);margin-top:var(--space-6)">
+      <sc-for list="{{ t.how }}" as="s" hint-placeholder-count="3">
+        <div style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:var(--space-3)">
+          <span class="cmyk-num" style="font-family:var(--font-heading);font-size:56px;font-weight:600"><span class="paper">{{ s.n }}</span><span class="plate plate-c" aria-hidden="true">{{ s.n }}</span><span class="plate plate-m" aria-hidden="true">{{ s.n }}</span><span class="plate plate-y" aria-hidden="true">{{ s.n }}</span></span>
+          <div>
+            <h3 style="font-family:var(--font-heading);font-size:24px;line-height:1.2;font-weight:600;margin:0">{{ s.h }}</h3>
+            <p style="margin:8px 0 0;font-size:17px;line-height:1.6;color:var(--color-neutral-800);max-width:48ch">{{ s.p }}</p>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1360px;margin:0 auto;padding:clamp(48px,6vw,96px) clamp(20px,5vw,72px)">
+  <blockquote style="margin:0;max-width:22ch;font-family:var(--font-heading);font-size:clamp(36px,5vw,72px);line-height:1.08;letter-spacing:-0.025em;font-style:italic;font-weight:400">{{ t.pull }}</blockquote>
+  <p style="margin:var(--space-4) 0 0;font-size:16px;color:var(--color-neutral-700)">{{ t.pullBy }}</p>
+</section>
+
+<section id="faq" style="max-width:1360px;margin:0 auto;padding:clamp(56px,8vw,128px) clamp(20px,5vw,72px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(32px,5vw,80px)">
+  <div>
+    <h2 style="font-family:var(--font-heading);font-size:clamp(36px,4.4vw,64px);line-height:1.04;letter-spacing:-0.025em;font-weight:600;margin:0;max-width:10ch">{{ t.faqH }}</h2>
+  </div>
+  <div style="grid-column:span 2;min-width:0;display:grid">
+    <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="5">
+      <div style="padding-bottom:var(--space-4)">
+        <button type="button" onClick="{{ q.toggle }}" aria-expanded="{{ q.open }}" style="width:100%;display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-4);background:none;border:0;padding:var(--space-3) 0 0;font:inherit;font-family:var(--font-heading);font-size:26px;font-weight:600;line-height:1.3;color:var(--color-text);text-align:left;cursor:pointer" style-hover="color:var(--color-accent-700)">
+          <span>{{ q.q }}</span>
+          <span aria-hidden="true" style="font-weight:400;color:var(--color-accent);flex:none">{{ q.mark }}</span>
+        </button>
+        <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+          <p style="margin:12px 0 0;font-size:18px;line-height:1.65;color:var(--color-neutral-800);max-width:62ch">{{ q.a }}</p>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<section style="position:relative;max-width:1360px;margin:0 auto;padding:clamp(32px,4vw,64px) clamp(20px,5vw,72px) 0">
+  <div class="{{ imgClass }}" style="position:relative;width:100%;height:clamp(420px,44vw,620px);overflow:hidden">
+    <img src="https://images.unsplash.com/photo-1758523418784-efd368723c42?auto=format&amp;fit=crop&amp;w=2400&amp;q=70" alt="A man reading a document at a kitchen table with coffee" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+  </div>
+  <div style="position:relative;margin:calc(-1 * clamp(120px,14vw,220px)) 0 0 0;width:min(100%,700px);background:var(--color-bg);padding:var(--space-6) var(--space-6) 0 0">
+    <h2 style="font-family:var(--font-heading);font-size:clamp(40px,5.4vw,80px);line-height:1.02;letter-spacing:-0.03em;font-weight:600;margin:0">{{ t.closeH }}</h2>
+    <p style="margin:var(--space-3) 0 0;font-size:20px;line-height:1.55;max-width:40ch;color:var(--color-neutral-800)">{{ t.closeP }}</p>
+    <div style="display:flex;gap:var(--space-4);align-items:center;flex-wrap:wrap;margin-top:var(--space-6)">
+      <a href="{{ appHome }}" class="btn btn-primary" style="font-size:18px;padding:16px 26px">{{ t.cta }}</a>
+      <a href="https://github.com/dougkeefe/palier" style="font-size:17px">{{ t.source }}</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer style="max-width:1360px;margin:0 auto;padding:clamp(80px,10vw,144px) clamp(20px,5vw,72px) var(--space-6)">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:var(--space-4) var(--space-8);font-size:15px;line-height:1.6;color:var(--color-neutral-700)">
+    <p style="margin:0;max-width:62ch"><strong style="color:var(--color-text);font-weight:600">{{ t.discH }}</strong> {{ t.disc }}</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px var(--space-4);align-content:start;justify-content:flex-end">
+      <a href="{{ aboutHref }}">{{ t.about }}</a>
+      <a href="{{ privacyHref }}">{{ t.privacy }}</a>
+      <a href="https://github.com/dougkeefe/palier">{{ t.code }}</a>
+      <a href="https://github.com/dougkeefe/palier/blob/main/CONTRIBUTING.md">{{ t.contrib }}</a>
+    </div>
+  </div>
+  <div aria-hidden="true" style="margin-top:var(--space-6);font-family:var(--font-heading);font-weight:600;font-size:clamp(96px,22vw,340px);line-height:0.8;letter-spacing:-0.05em;color:var(--color-text)">Palier</div>
+  <p style="margin:var(--space-4) 0 0;font-size:13px;color:var(--color-neutral-600)">{{ t.photos }}</p>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;lang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;fr&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en'|'fr'&quot;},&quot;halftone&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;parallax&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const U = (id, w) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w || 1200}&q=70`;
+const IMG = [
+  { img: U('1758876020343-c8c2add9d527'), alt: 'A man in glasses reviewing documents at a desk' },
+  { img: U('1642543492691-ddf04d74a507'), alt: 'A hand writing in a notebook beside a cup of tea' },
+  { img: U('1752650733337-cb0189176fb9'), alt: 'A woman speaking on a video call at her laptop' }
+];
+const COPY = {
+  en: {
+    navTests: 'The tests', navHow: 'How it works', navFaq: 'Questions',
+    railL: 'A free study tool for the Second Language Evaluation',
+    railR: 'Reading · Written expression · Oral · Levels B and C',
+    h1a: 'Practise for your SLE.', h1b: 'Free, offline, no account.',
+    lede: 'Palier lets you rehearse the reading, written expression and oral tests of the Public Service Commission’s Second Language Evaluation under exam conditions. Open it and start.',
+    cta: 'Start practising', cta2: 'See how it works',
+    stats: [{ big: '3', small: 'tests: reading, writing, oral' }, { big: '$0', small: 'for drills and mock exams' }, { big: '0', small: 'accounts or sign-ups needed' }],
+    testsH: 'All three tests, practised the way they are asked.',
+    testsP: 'Palier assumes you already work in French. It aims at level B or C and helps you perform when the clock is running.',
+    howH: 'Nothing to set up before you begin.',
+    howP: 'The core of Palier costs nothing and asks for nothing. The extras are optional, and you pay only for what you use.',
+    how: [
+      { n: '1', h: 'Open it and practise', p: 'Drills and mock exams need no account. Your practice is kept in your browser and keeps working offline.' },
+      { n: '2', h: 'Add your own key, if you want more', p: 'Writing feedback, generated practice sets and spoken practice run on your own OpenAI key, straight from your browser. Each one shows its cost before it spends.' },
+      { n: '3', h: 'Follow an honest estimate', p: 'Progress shows an estimate of your level with its uncertainty, and says what it rests on. It is never a promised result.' }
+    ],
+    howCap: 'Drills and mock exams keep working with no connection, at home, on the bus or between meetings.',
+    pull: 'Palier, n.: the landing between two flights of stairs.',
+    pullBy: 'A place to steady yourself before the next level.',
+    faqH: 'Questions people ask',
+    closeH: 'Your next level starts on the landing.',
+    closeP: 'Open Palier and do today’s practice. No account, no download, no cost.',
+    source: 'Read the source code',
+    discH: 'Not an official tool.',
+    disc: 'Palier is an independent, source-available study tool. It is not affiliated with, endorsed by, or connected to the Public Service Commission of Canada. It contains no real test questions and its results are not official.',
+    about: 'About', privacy: 'Privacy', code: 'Source code', contrib: 'Contribute',
+    photos: 'Photographs: Jason Hafso, Vitaly Gariev, Kelly Sikkema, Anastassia Anufrieva on Unsplash.',
+    tests: [
+      { kicker: 'Test one', name: 'Reading', body: 'Timed sets and full mock exams with workplace passages. Answer with the keyboard alone: 1 to 4 to choose, Enter to move on, F to flag an item.', cta: 'Practise reading' },
+      { kicker: 'Test two', name: 'Written expression', body: 'Drills on the grammar and usage the test checks. With your own key, the writing workshop gives feedback on what you write.', cta: 'Practise writing' },
+      { kicker: 'Test three', name: 'Oral', body: 'Spoken practice with a partner that asks, listens and follows up, so the real interview is not the first time you answer out loud.', cta: 'Try oral practice' }
+    ],
+    faqs: [
+      { q: 'Are the results official?', a: 'No. Palier is not the exam and is not connected to the Public Service Commission. It contains no real test questions. It gives you an estimate with its uncertainty shown, never a promised result.' },
+      { q: 'Do I need an account?', a: 'No. Drills and mock exams work without one, and offline. Sync is on by default so your other devices can pick up your progress, using a random id with no name or email. You can turn it off at any time.' },
+      { q: 'What does the OpenAI key cost?', a: 'Palier itself is free. Only writing feedback, generated practice sets and spoken practice use an OpenAI key, and it is your own, billed by OpenAI on your account. Each feature shows its cost before it spends anything.' },
+      { q: 'Where do the questions come from?', a: 'Most items are drafted by AI from public Government of Canada material and rewritten into original passages that quote nothing. Each one is reviewed by a second, different AI model and a set of automatic checks; an item that fails is discarded. Every item shows where it came from, and reporting one takes a single tap.' },
+      { q: 'Is my data private?', a: 'Your practice stays in your browser. Your API key, session audio, oral transcripts and writing submissions never leave your device. There are no analytics, no advertising and no tracking cookies. You can export or delete everything in one step.' }
+    ]
+  },
+  fr: {
+    navTests: 'Les épreuves', navHow: 'Fonctionnement', navFaq: 'Questions',
+    railL: 'Un outil d’étude gratuit pour l’Évaluation de langue seconde',
+    railR: 'Compréhension de l’écrit · Expression écrite · Oral · Niveaux B et C',
+    h1a: 'Préparez votre ELS.', h1b: 'Gratuit, hors ligne, sans compte.',
+    lede: 'Palier vous permet de vous exercer aux épreuves de compréhension de l’écrit, d’expression écrite et d’oral de l’Évaluation de langue seconde de la Commission de la fonction publique, en conditions d’examen. Ouvrez-le et commencez.',
+    cta: 'Commencer', cta2: 'Voir le fonctionnement',
+    stats: [{ big: '3', small: 'épreuves : écrit, rédaction, oral' }, { big: '0 $', small: 'pour les exercices et examens blancs' }, { big: '0', small: 'compte ou inscription requis' }],
+    testsH: 'Les trois épreuves, pratiquées telles qu’on vous les posera.',
+    testsP: 'Palier suppose que vous travaillez déjà en français. Il vise le niveau B ou C et vous aide à performer quand le temps compte.',
+    howH: 'Rien à configurer avant de commencer.',
+    howP: 'L’essentiel de Palier ne coûte rien et ne demande rien. Les extras sont facultatifs, et vous ne payez que ce que vous utilisez.',
+    how: [
+      { n: '1', h: 'Ouvrez et exercez-vous', p: 'Les exercices et les examens blancs ne demandent aucun compte. Votre pratique reste dans votre navigateur et fonctionne hors ligne.' },
+      { n: '2', h: 'Ajoutez votre clé, si vous voulez plus', p: 'La rétroaction sur l’écrit, les séries générées et la pratique orale utilisent votre propre clé OpenAI, directement depuis votre navigateur. Chacune affiche son coût avant de dépenser.' },
+      { n: '3', h: 'Suivez une estimation honnête', p: 'Vos progrès affichent une estimation de votre niveau avec son incertitude et ce sur quoi elle repose. Jamais un résultat promis.' }
+    ],
+    howCap: 'Exercices et examens blancs fonctionnent sans connexion, à la maison, dans l’autobus ou entre deux réunions.',
+    pull: 'Palier, n. m. : la plateforme entre deux volées d’escalier.',
+    pullBy: 'L’endroit où l’on reprend appui avant le niveau suivant.',
+    faqH: 'Questions fréquentes',
+    closeH: 'Votre prochain niveau commence sur le palier.',
+    closeP: 'Ouvrez Palier et faites la pratique du jour. Sans compte, sans téléchargement, sans frais.',
+    source: 'Lire le code source',
+    discH: 'Outil non officiel.',
+    disc: 'Palier est un outil d’étude indépendant dont le code source est accessible. Il n’est ni affilié à la Commission de la fonction publique du Canada, ni approuvé par elle, ni lié à elle. Il ne contient aucune vraie question d’examen et ses résultats ne sont pas officiels.',
+    about: 'À propos', privacy: 'Confidentialité', code: 'Code source', contrib: 'Contribuer',
+    photos: 'Photographies : Jason Hafso, Vitaly Gariev, Kelly Sikkema, Anastassia Anufrieva sur Unsplash.',
+    tests: [
+      { kicker: 'Épreuve un', name: 'Compréhension de l’écrit', body: 'Séries chronométrées et examens blancs complets avec des textes du milieu de travail. Tout se fait au clavier : 1 à 4 pour choisir, Entrée pour continuer, F pour marquer une question.', cta: 'S’exercer à la lecture' },
+      { kicker: 'Épreuve deux', name: 'Expression écrite', body: 'Exercices sur la grammaire et l’usage que l’épreuve évalue. Avec votre clé, l’atelier d’écriture commente ce que vous écrivez.', cta: 'S’exercer à l’écrit' },
+      { kicker: 'Épreuve trois', name: 'Oral', body: 'Pratique orale avec un interlocuteur qui pose des questions, écoute et relance, pour que l’entrevue ne soit pas la première fois que vous répondez à voix haute.', cta: 'Essayer la pratique orale' }
+    ],
+    faqs: [
+      { q: 'Les résultats sont-ils officiels?', a: 'Non. Palier n’est pas l’examen et n’est pas lié à la Commission de la fonction publique. Il ne contient aucune vraie question d’examen. Il vous donne une estimation avec son incertitude, jamais un résultat promis.' },
+      { q: 'Faut-il un compte?', a: 'Non. Les exercices et les examens blancs fonctionnent sans compte, et hors ligne. La synchronisation est activée par défaut pour que vos autres appareils retrouvent vos progrès, avec un identifiant aléatoire, sans nom ni courriel. Vous pouvez la désactiver à tout moment.' },
+      { q: 'Combien coûte la clé OpenAI?', a: 'Palier est gratuit. Seules la rétroaction sur l’écrit, les séries générées et la pratique orale utilisent une clé OpenAI, la vôtre, facturée par OpenAI à votre compte. Chaque fonction affiche son coût avant de dépenser quoi que ce soit.' },
+      { q: 'D’où viennent les questions?', a: 'La plupart des questions sont rédigées par IA à partir de documents publics du gouvernement du Canada, puis réécrites en textes originaux qui ne citent rien. Chacune est revue par un second modèle d’IA différent et par des vérifications automatiques; une question qui échoue est écartée. Chaque question indique sa provenance, et la signaler ne prend qu’un geste.' },
+      { q: 'Mes données sont-elles privées?', a: 'Votre pratique reste dans votre navigateur. Votre clé API, l’audio des séances, les transcriptions orales et vos textes ne quittent jamais votre appareil. Aucune analytique, aucune publicité, aucun témoin de suivi. Vous pouvez tout exporter ou tout supprimer en une étape.' }
+    ]
+  }
+};
+const BASE = 'https://palier-virid.vercel.app/';
+
+class Component extends DCLogic {
+  state = { lang: null, open: 0, py: 0 };
+  componentDidMount() {
+    this.onScroll = () => { const y = Math.min(window.scrollY, 900); if (Math.abs(y - this.state.py) > 2) this.setState({ py: y }); };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+  }
+  componentWillUnmount() { window.removeEventListener('scroll', this.onScroll); }
+  componentDidUpdate(prev) { if (prev.lang !== this.props.lang) this.setState({ lang: null }); }
+  renderVals() {
+    const lang = this.state.lang || this.props.lang || 'en';
+    const t = COPY[lang];
+    const L = BASE + lang;
+    const on = (a) => ({ bg: a ? 'var(--color-text)' : 'transparent', fg: a ? 'var(--color-bg)' : 'var(--color-text)' });
+    const en = on(lang === 'en'), fr = on(lang === 'fr');
+    const motion = this.props.parallax ?? true;
+    return {
+      t, lang,
+      imgClass: (this.props.halftone ?? true) ? 'halftone' : '',
+      parallax: motion ? Math.round(this.state.py * 0.12 - 40) : 0,
+      appHome: L + '/home', aboutHref: L + '/about', privacyHref: L + '/privacy',
+      isEn: lang === 'en', isFr: lang === 'fr',
+      enBg: en.bg, enFg: en.fg, frBg: fr.bg, frFg: fr.fg,
+      setEn: () => this.setState({ lang: 'en' }),
+      setFr: () => this.setState({ lang: 'fr' }),
+      tests: t.tests.map((x, i) => ({ ...x, ...IMG[i], bg: `url("${IMG[i].img}")`, href: i === 2 ? L + '/practice/oral' : L + '/home' })),
+      faqs: t.faqs.map((f, i) => {
+        const open = this.state.open === i;
+        return { ...f, open, mark: open ? '−' : '+', toggle: () => this.setState({ open: open ? -1 : i }) };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -32,12 +32,146 @@
     "about": "About",
     "privacy": "Privacy"
   },
-  "home": {
-    "title": "Practise for the Second Language Evaluation",
-    "tagline": "Reading, written expression and oral practice for the Public Service Commission's SLE — no account, no cost, and it works offline.",
-    "cta": "Learn more",
-    "ctaStart": "Get started",
-    "ctaHome": "Go to today’s plan"
+  "landing": {
+    "navLabel": "On this page",
+    "nav": {
+      "home": "Home",
+      "tests": "The tests",
+      "how": "How it works",
+      "faq": "Questions"
+    },
+    "hero": {
+      "tag": "Second Language Evaluation · Levels B and C",
+      "title": "Practise for your SLE.",
+      "lede": "Palier is a free study tool for the Public Service Commission’s Second Language Evaluation. Take timed reading and written-expression drills and mock exams, get AI feedback on your writing, and rehearse the oral interview out loud with an AI partner. No account needed.",
+      "cta": "Try a free mock exam",
+      "ctaShort": "Start free",
+      "trySample": "Try a sample question"
+    },
+    "strip": {
+      "feedback": "AI feedback on your writing",
+      "oral": "Spoken practice with an AI partner",
+      "noAccount": "No account",
+      "source": "Source-available"
+    },
+    "features": {
+      "title": "Built for exam conditions.",
+      "open": {
+        "title": "Open it and start",
+        "body": "Drills and mock exams run in your browser. There is nothing to sign up for or install.",
+        "tag": "No account needed"
+      },
+      "ai": {
+        "title": "AI that marks and listens",
+        "body": "An AI coach comments on what you write and holds a spoken conversation with you. It runs on your own OpenAI key, a personal access code you create at openai.com. The cost shows before anything is spent.",
+        "tag": "Cost transparency"
+      },
+      "estimate": {
+        "title": "An honest estimate",
+        "body": "Progress shows an estimate of your level with its uncertainty, never a promised result.",
+        "tag": "Levels B and C"
+      }
+    },
+    "tests": {
+      "eyebrow": "The tests",
+      "title": "All three tests, practised the way they are asked.",
+      "reading": {
+        "kicker": "Test one",
+        "name": "Reading",
+        "body": "Timed sets and full mock exams with workplace passages. Answer with the keyboard alone: 1 to 4 to choose, Enter to move on, F to flag an item."
+      },
+      "writing": {
+        "kicker": "Test two",
+        "name": "Written expression",
+        "body": "Drills on the grammar and usage the test checks. With your own key, the writing workshop gives feedback on what you write."
+      },
+      "oral": {
+        "kicker": "Test three",
+        "name": "Oral",
+        "body": "Spoken practice with a partner that asks, listens and follows up."
+      }
+    },
+    "sample": {
+      "tag": "Sample reading question",
+      "passage": "Please note that Thursday’s team meeting has been moved to Friday at 10:00 because the boardroom is unavailable.",
+      "question": "Why was the meeting moved?",
+      "options": {
+        "a": "The boardroom is unavailable",
+        "b": "Several people are away",
+        "c": "The agenda has changed",
+        "d": "The deadline was extended"
+      },
+      "hint": "Choose an answer.",
+      "correct": "Correct. The reason follows “because”. The full mock exams are timed and use longer workplace passages.",
+      "incorrect": "Not quite. Reread the part after “because”."
+    },
+    "oral": {
+      "tag": "Test three · Oral",
+      "title": "Answer out loud before the real interview.",
+      "body": "A practice partner asks, listens and follows up, so the interview is not the first time you speak your answer."
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "Nothing to set up before you begin.",
+      "body": "Palier itself is totally free. The AI features run on your own OpenAI API key, and you pay OpenAI only for what you use.",
+      "open": {
+        "number": "01",
+        "title": "Open it and practise",
+        "body": "Drills and mock exams need no account. Your practice is kept in your browser."
+      },
+      "key": {
+        "number": "02",
+        "title": "Add your key for AI features",
+        "body": "Writing feedback, generated sets and spoken practice run on your own OpenAI key. You create it at openai.com, paste it into Palier, and each feature shows its cost first."
+      },
+      "estimate": {
+        "number": "03",
+        "title": "Follow an estimate",
+        "body": "Progress shows an estimate of your level with its uncertainty, and says what it rests on."
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Questions people ask",
+      "official": {
+        "q": "Are the results official?",
+        "a": "No. Palier is not the exam and is not connected to the Public Service Commission. It contains no real test questions. It gives you an estimate with its uncertainty shown, never a promised result."
+      },
+      "account": {
+        "q": "Do I need an account?",
+        "a": "No. Drills and mock exams work without one. Sync is on by default so your other devices can pick up your progress, using a random id with no name or email. You can turn it off at any time."
+      },
+      "key": {
+        "q": "What is an OpenAI key?",
+        "a": "A personal access code from your own OpenAI account. You create it at openai.com and paste it into Palier. It lets Palier ask the AI to mark your writing and talk with you, billed to your account."
+      },
+      "cost": {
+        "q": "What does the OpenAI key cost?",
+        "a": "Palier itself is free. Only writing feedback, generated practice sets and spoken practice use an OpenAI key, and it is your own, billed by OpenAI on your account. Each feature shows its cost before it spends anything."
+      },
+      "source": {
+        "q": "Where do the questions come from?",
+        "a": "Most items are drafted by AI from public Government of Canada material and rewritten into original passages that quote nothing. Each one is reviewed by a second, different AI model and a set of automatic checks; an item that fails is discarded. Every item shows where it came from, and reporting one takes a single tap."
+      },
+      "privacy": {
+        "q": "Is my data private?",
+        "a": "Palier has no server that stores your data. Your practice, API key, session audio, oral transcripts and writing submissions stay on your device. When you use an AI feature, the text or audio it needs is sent directly from your browser to OpenAI under your own key, and OpenAI’s terms and privacy policy apply to it. Palier never receives it. There are no analytics, no advertising and no tracking cookies. You can export or delete everything in one step."
+      }
+    },
+    "close": {
+      "title": "Your next level starts here.",
+      "body": "Open Palier and do today’s practice. No account, no download, free to use."
+    },
+    "footer": {
+      "tagline": "A free study tool for the Second Language Evaluation.",
+      "menu": "Menu",
+      "yourDevice": "Your device",
+      "more": "More",
+      "notOfficial": "Not an official tool.",
+      "code": "Source code",
+      "contribute": "Contribute",
+      "photos": "Photographs: Jason Hafso, Vitaly Gariev, Kelly Sikkema and Anastassia Anufrieva on Unsplash."
+    }
   },
   "about": {
     "title": "What Palier is, and what it is not",

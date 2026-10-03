@@ -32,12 +32,146 @@
     "about": "À propos",
     "privacy": "Confidentialité"
   },
-  "home": {
-    "title": "Préparez-vous à l'Évaluation de langue seconde",
-    "tagline": "Exercices de compréhension de l'écrit, d'expression écrite et d'expression orale pour l'ÉLS de la Commission de la fonction publique — sans compte, sans frais, et accessible hors ligne.",
-    "cta": "En savoir plus",
-    "ctaStart": "Commencer",
-    "ctaHome": "Voir le plan du jour"
+  "landing": {
+    "navLabel": "Sur cette page",
+    "nav": {
+      "home": "Accueil",
+      "tests": "Les épreuves",
+      "how": "Fonctionnement",
+      "faq": "Questions"
+    },
+    "hero": {
+      "tag": "Évaluation de langue seconde · Niveaux B et C",
+      "title": "Préparez votre ELS.",
+      "lede": "Palier est un outil d’étude gratuit pour l’Évaluation de langue seconde de la Commission de la fonction publique. Faites des exercices chronométrés et des examens blancs de compréhension de l’écrit et d’expression écrite, obtenez une rétroaction par IA sur vos textes et répétez l’entrevue orale à voix haute avec un interlocuteur IA. Aucun compte requis.",
+      "cta": "Essayer un examen blanc gratuit",
+      "ctaShort": "Commencer",
+      "trySample": "Essayer une question type"
+    },
+    "strip": {
+      "feedback": "Rétroaction IA sur vos textes",
+      "oral": "Pratique orale avec un interlocuteur IA",
+      "noAccount": "Sans compte",
+      "source": "Code source accessible"
+    },
+    "features": {
+      "title": "Conçu pour les conditions d’examen, pas pour un cours.",
+      "open": {
+        "title": "Ouvrez et commencez",
+        "body": "Exercices et examens blancs fonctionnent dans votre navigateur. Rien à créer ni à installer.",
+        "tag": "Aucun compte requis"
+      },
+      "ai": {
+        "title": "Une IA qui corrige et qui écoute",
+        "body": "Un coach IA commente vos textes et tient une conversation orale avec vous. Il utilise votre propre clé OpenAI, un code d’accès personnel que vous créez sur openai.com. Le coût s’affiche avant toute dépense.",
+        "tag": "Coût affiché d’abord"
+      },
+      "estimate": {
+        "title": "Une estimation honnête",
+        "body": "Vos progrès affichent une estimation de votre niveau avec son incertitude, jamais un résultat promis.",
+        "tag": "Niveaux B et C"
+      }
+    },
+    "tests": {
+      "eyebrow": "Les épreuves",
+      "title": "Les trois épreuves, pratiquées telles qu’on vous les posera.",
+      "reading": {
+        "kicker": "Épreuve un",
+        "name": "Compréhension de l’écrit",
+        "body": "Séries chronométrées et examens blancs avec des textes du milieu de travail. Tout se fait au clavier : 1 à 4 pour choisir, Entrée pour continuer, F pour marquer une question."
+      },
+      "writing": {
+        "kicker": "Épreuve deux",
+        "name": "Expression écrite",
+        "body": "Exercices sur la grammaire et l’usage que l’épreuve évalue. Avec votre clé, l’atelier d’écriture commente ce que vous écrivez."
+      },
+      "oral": {
+        "kicker": "Épreuve trois",
+        "name": "Oral",
+        "body": "Pratique orale avec un interlocuteur qui pose des questions, écoute et relance."
+      }
+    },
+    "sample": {
+      "tag": "Question type de compréhension de l’écrit",
+      "passage": "Veuillez noter que la réunion d’équipe de jeudi est reportée à vendredi, à 10 h, car la salle du conseil n’est pas disponible.",
+      "question": "Pourquoi la réunion a-t-elle été reportée?",
+      "options": {
+        "a": "La salle du conseil n’est pas disponible",
+        "b": "Plusieurs personnes sont absentes",
+        "c": "L’ordre du jour a changé",
+        "d": "L’échéance a été prolongée"
+      },
+      "hint": "Choisissez une réponse.",
+      "correct": "Exact. La raison suit « car ». Les examens blancs sont chronométrés et utilisent des textes du milieu de travail plus longs.",
+      "incorrect": "Pas tout à fait. Relisez ce qui suit « car »."
+    },
+    "oral": {
+      "tag": "Épreuve trois · Oral",
+      "title": "Répondez à voix haute avant l’entrevue.",
+      "body": "Un interlocuteur pose des questions, écoute et relance, pour que l’entrevue ne soit pas la première fois que vous dites votre réponse."
+    },
+    "how": {
+      "eyebrow": "Fonctionnement",
+      "title": "Rien à configurer avant de commencer.",
+      "body": "Palier lui-même ne coûte rien. Les fonctions IA utilisent votre propre clé, et vous ne payez à OpenAI que ce que vous utilisez.",
+      "open": {
+        "number": "01",
+        "title": "Ouvrez et exercez-vous",
+        "body": "Aucun compte requis. Votre pratique reste dans votre navigateur."
+      },
+      "key": {
+        "number": "02",
+        "title": "Ajoutez votre clé pour l’IA",
+        "body": "Rétroaction sur l’écrit, séries générées et pratique orale utilisent votre clé OpenAI. Vous la créez sur openai.com, la collez dans Palier, et chaque fonction affiche son coût d’abord."
+      },
+      "estimate": {
+        "number": "03",
+        "title": "Suivez une estimation",
+        "body": "Vos progrès affichent une estimation de votre niveau avec son incertitude et ce sur quoi elle repose."
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Questions fréquentes",
+      "official": {
+        "q": "Les résultats sont-ils officiels?",
+        "a": "Non. Palier n’est pas l’examen et n’est pas lié à la Commission de la fonction publique. Il ne contient aucune vraie question d’examen. Il vous donne une estimation avec son incertitude, jamais un résultat promis."
+      },
+      "account": {
+        "q": "Faut-il un compte?",
+        "a": "Non. Les exercices et les examens blancs fonctionnent sans compte. La synchronisation est activée par défaut pour que vos autres appareils retrouvent vos progrès, avec un identifiant aléatoire, sans nom ni courriel. Vous pouvez la désactiver à tout moment."
+      },
+      "key": {
+        "q": "Qu’est-ce qu’une clé OpenAI?",
+        "a": "Un code d’accès personnel lié à votre propre compte OpenAI. Vous le créez sur openai.com et le collez dans Palier. Il permet à Palier de demander à l’IA de corriger vos textes et de converser avec vous, aux frais de votre compte."
+      },
+      "cost": {
+        "q": "Combien coûte la clé OpenAI?",
+        "a": "Palier est gratuit. Seules la rétroaction sur l’écrit, les séries générées et la pratique orale utilisent une clé OpenAI, la vôtre, facturée par OpenAI à votre compte. Chaque fonction affiche son coût avant de dépenser quoi que ce soit."
+      },
+      "source": {
+        "q": "D’où viennent les questions?",
+        "a": "La plupart des questions sont rédigées par IA à partir de documents publics du gouvernement du Canada, puis réécrites en textes originaux qui ne citent rien. Chacune est revue par un second modèle d’IA différent et par des vérifications automatiques; une question qui échoue est écartée. Chaque question indique sa provenance, et la signaler ne prend qu’un geste."
+      },
+      "privacy": {
+        "q": "Mes données sont-elles privées?",
+        "a": "Palier n’a aucun serveur qui conserve vos données. Votre pratique, votre clé API, l’audio des séances, les transcriptions orales et vos textes restent sur votre appareil. Quand vous utilisez une fonction IA, le texte ou l’audio nécessaire est envoyé directement de votre navigateur à OpenAI, avec votre propre clé, et les conditions et la politique de confidentialité d’OpenAI s’appliquent. Palier ne le reçoit jamais. Aucune analytique, aucune publicité, aucun témoin de suivi. Vous pouvez tout exporter ou tout supprimer en une étape."
+      }
+    },
+    "close": {
+      "title": "Votre prochain palier commence ici.",
+      "body": "Ouvrez Palier et faites la pratique du jour. Sans compte, sans téléchargement, gratuit."
+    },
+    "footer": {
+      "tagline": "Un outil d’étude gratuit pour l’Évaluation de langue seconde.",
+      "menu": "Menu",
+      "yourDevice": "Votre appareil",
+      "more": "Plus",
+      "notOfficial": "Outil non officiel.",
+      "code": "Code source",
+      "contribute": "Contribuer",
+      "photos": "Photographies : Jason Hafso, Vitaly Gariev, Kelly Sikkema et Anastassia Anufrieva sur Unsplash."
+    }
   },
   "about": {
     "title": "Ce qu'est Palier, et ce qu'il n'est pas",

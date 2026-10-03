@@ -24,7 +24,23 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   cancels the router in `onNavigate` for `location.assign`.
 - **Design system only.** The app composes `@palier/ui` (`tokens.css` + `components.css`,
   the `.pl-*` classes) plus `src/app/globals.css` for page layout. No Tailwind (D25); no
-  new primitives here — they belong in `@palier/ui`.
+  new primitives here — they belong in `@palier/ui`. **The one exception is the landing page** (D201), below.
+- **The landing page brings its own chrome and palette** (`/[locale]`, D201, as designed in `docs/Palier landing page` v4).
+  - The layout wraps every page in `components/Shell.tsx`. It renders the app's header, `main#main` and footer everywhere
+    except `/` (`features/landing/landing.ts`'s `showsAppChrome`, on next-intl's pathname). There the page renders its own
+    `LandingHeader`, `main#main` and `LandingFooter`.
+  - The landing footer must keep what the app's promises: `NonAffiliation`, the data, sync and key links, about,
+    privacy, the library and `ShortcutSheet`.
+  - **`components/landing/landing.css` holds the only palette outside `@palier/ui`'s tokens**: the `--landing-*` custom
+    properties on `.landing`, held to the contrast gate by `landing-contrast.test.ts`, which reads them from the file.
+    Next keeps a page's stylesheet after a soft navigation, so **every rule there is scoped under a `landing` class**.
+    `motion.test.ts` reads it too.
+  - Its serif is `src/fonts/landing-font.ts`, the passage serif's file declared again with `preload: true`, so only the
+    landing page preloads it. Without the preload, the swap rewrapped the French hero and cost `/fr` its Lighthouse budget
+    on CI's Linux runner, which has no Times New Roman for `next/font`'s fallback.
+  - Its photographs live in `components/landing/images/` and are CSS backgrounds. They are bundled under
+    `/_next/static/media/`, so the CSP needs no new origin and the worker precaches them through the stylesheet. Never
+    hotlink an image.
 - **Composition root** at `src/lib/container.ts` (under `src/` so it is cruised, covered
   and tested — D23), assembling the use-case graph with `buildUseCases`. **Production**
   wires the real adapters — `@palier/adapters/bank` over `BANK_BASE_PATH`/`BANK_VERSION`,

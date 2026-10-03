@@ -10,6 +10,7 @@ import { ContainerProvider } from "../../components/ContainerProvider";
 import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
 import { ServiceWorkerRegistrar } from "../../components/ServiceWorkerRegistrar";
+import { Shell } from "../../components/Shell";
 import { SyncRunner } from "../../components/sync/SyncRunner";
 import { routing } from "../../i18n/routing";
 import { siteUrlFrom } from "../../lib/build-info";
@@ -86,11 +87,9 @@ export default async function LocaleLayout({
         <NextIntlClientProvider>
           <ContainerProvider hermetic={isHermetic(process.env)}>
             <SyncRunner>
-              <Header />
-              <main id="main" tabIndex={-1} className="app-main">
+              <Shell header={<Header />} footer={<Footer />}>
                 {children}
-              </main>
-              <Footer />
+              </Shell>
             </SyncRunner>
           </ContainerProvider>
         </NextIntlClientProvider>

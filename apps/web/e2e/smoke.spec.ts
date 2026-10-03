@@ -43,7 +43,8 @@ test("the shell stays clean with the language toggle focused", async ({ page }) 
 });
 
 test("header focus order is skip link, brand, then nav", async ({ page }) => {
-  await page.goto("/en");
+  // An app page: the landing page has its own header (D201), held to the same order below.
+  await page.goto("/en/about");
   await page.keyboard.press("Tab");
   await expect(page.locator(".app-skip-link")).toBeFocused();
   await page.keyboard.press("Tab");
@@ -52,6 +53,40 @@ test("header focus order is skip link, brand, then nav", async ({ page }) => {
   // brand, nav, and the nav's contents grow as screens land (progress.md, Slice 1).
   await page.keyboard.press("Tab");
   await expect(page.getByRole("navigation", { name: "Primary" }).getByRole("link").first()).toBeFocused();
+});
+
+test("the landing page's own header keeps the order: skip link, brand, then its nav (D201)", async ({ page }) => {
+  await page.goto("/en");
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".app-skip-link")).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".landing-header__brand")).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("navigation", { name: "On this page" }).getByRole("link").first()).toBeFocused();
+});
+
+test("the landing page stays clean with an answer open and the sample question answered (D201)", async ({ page }) => {
+  await page.goto("/en");
+  // The first answer starts open; open another, so two disclosures are expanded.
+  await page.getByText("Is my data private?").click();
+  await expect(page.getByText("Palier has no server that stores your data.", { exact: false })).toBeVisible();
+  // A wrong pick marks it and the right answer, and says so in words.
+  await page.getByRole("button", { name: "The agenda has changed" }).click();
+  await expect(page.getByRole("button", { name: "The agenda has changed" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByText("Not quite. Reread the part after “because”.")).toBeVisible();
+  await axeClean(page);
+  await page.getByRole("button", { name: "The boardroom is unavailable" }).click();
+  await expect(page.getByText("Correct. The reason follows “because”.", { exact: false })).toBeVisible();
+  await axeClean(page);
+});
+
+test("the landing page's way in leads to the app, with the app's header and footer (D201)", async ({ page }) => {
+  await page.goto("/en");
+  await expect(page.locator(".app-header")).toHaveCount(0);
+  await page.getByRole("link", { name: "Start free" }).click();
+  await expect(page).toHaveURL(/\/en\/home$/);
+  await expect(page.locator(".app-header")).toBeVisible();
+  await expect(page.locator(".app-footer__disclaimer")).toBeVisible();
 });
 
 test("activating the skip link moves focus into main", async ({ page }) => {
