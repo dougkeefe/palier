@@ -11,7 +11,7 @@ import { type StudioAction, spentOf } from "./studio-view";
 /** The use cases a studio session needs, as the container binds them. */
 export type StudioUseCases = {
   readonly startOralStudio: (
-    request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId },
+    request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId; readonly endpoint?: string | null },
     peer: RealtimePeerFactory,
     signal?: AbortSignal,
   ) => Promise<OralStudioRun>;
@@ -45,8 +45,11 @@ export type StudioControllerDeps = {
 };
 
 export type StudioController = {
-  /** Start the conversation on the microphone the check opened, which this controller now owns. */
-  readonly start: (choice: OralSessionChoice, microphone: MediaStream | null) => Promise<void>;
+  /**
+   * Start the conversation on the microphone the check opened, which this controller now owns. With the user's own
+   * secret endpoint (D192), its popup is opened before anything awaits, so it stays inside the tap's gesture.
+   */
+  readonly start: (choice: OralSessionChoice, microphone: MediaStream | null, endpoint?: string | null) => Promise<void>;
   /** The screen's timer: let the session look at the clock, then read its phase and its cost so far. */
   readonly tick: () => Promise<void>;
   /** "I did not understand, could you repeat" (D180). */
@@ -167,7 +170,7 @@ export const studioController = (deps: StudioControllerDeps): StudioController =
   };
 
   return {
-    start: async (choice, microphone) => {
+    start: async (choice, microphone, endpoint = null) => {
       if (busy || !finished) return;
       busy = true;
       finished = false;
@@ -188,7 +191,7 @@ export const studioController = (deps: StudioControllerDeps): StudioController =
         }
         dial = new AbortController();
         const started = await deps.useCases.startOralStudio(
-          { sessionId, scenarioId: choice.scenario.id },
+          { sessionId, scenarioId: choice.scenario.id, ...(endpoint === null ? {} : { endpoint }) },
           deps.peer(microphone, player),
           dial.signal,
         );

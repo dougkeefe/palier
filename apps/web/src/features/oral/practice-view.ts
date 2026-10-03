@@ -14,7 +14,16 @@ import type { MicState } from "./mic";
 export type AnswerMode = "spoken" | "typed";
 
 /** Why a session failed, in words the screen can say (the key screen's names, D100). */
-export type OralFailure = "invalid-key" | "out-of-credit" | "timeout" | "unreachable" | "unexpected" | "no-key" | "failed";
+export type OralFailure =
+  | "invalid-key"
+  | "out-of-credit"
+  | "timeout"
+  | "unreachable"
+  | "unexpected"
+  | "no-key"
+  | "failed"
+  /** The user's own realtime secret endpoint gave no secret: blocked, closed, silent or refusing (D192). */
+  | "endpoint";
 
 /** Where the answer to the current question stands. */
 export type Turn = "idle" | "recording" | "sending";
@@ -165,6 +174,7 @@ export const practice = (state: PracticeState, action: PracticeAction): Practice
 
 /** Why a session failed, from the error the transport kept. */
 export const oralFailure = (error: unknown): OralFailure => {
+  if (error instanceof Error && error.name === "SelfHostedEndpointError") return "endpoint";
   const result = checkFailure(error);
   return result.kind === "valid" ? "failed" : result.kind;
 };
@@ -179,6 +189,7 @@ export const failureMessage = (failure: OralFailure): string =>
     unexpected: "failUnexpected",
     "no-key": "failNoKey",
     failed: "failFailed",
+    endpoint: "failEndpoint",
   })[failure];
 
 /** The sentence a session's end is announced with, in the `oral` namespace. */
@@ -204,6 +215,18 @@ export const endMessage = (reason: OralEndReason | null): string => {
  */
 export const studioWarmup = (state: PracticeState): "mic" | "confirming" | null =>
   (state.phase === "mic" || state.phase === "confirming") && state.held === "studio" ? state.phase : null;
+
+/**
+ * The pre-flight's line on where the session sends what, in the `oral` namespace (D186). Studio mode's says where the
+ * key goes: Palier's route, or the user's own endpoint when this device has one (D192).
+ */
+export const sendsTo = (studio: boolean, ownEndpoint: boolean, mode: AnswerMode): string => {
+  if (studio) return ownEndpoint ? "sendsToStudioOwn" : "sendsToStudio";
+  return mode === "spoken" ? "sendsToSpoken" : "sendsToTyped";
+};
+
+/** The picker's studio callout, in the `oral` namespace: the same choice of where the key goes (D186, D192). */
+export const studioModeNote = (ownEndpoint: boolean): string => (ownEndpoint ? "studioModeOwn" : "studioMode");
 
 /**
  * A session's estimate: oral practice is priced per minute (D117), so it is the minute's

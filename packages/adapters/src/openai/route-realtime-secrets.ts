@@ -10,13 +10,19 @@ import {
 import type { FetchLike, FetchResponse } from "./http.js";
 import { platformFetch, timedExchange } from "./http.js";
 
-/** The route's refusals, by the code its body names (apps/web `realtime-handlers.ts`). */
+/**
+ * The route's refusals, by the code its body names (apps/web `realtime-handlers.ts`). The self-hosted endpoint
+ * answers the same codes (D192), so both sources name a refusal with the same error.
+ */
 const REFUSALS: Readonly<Record<string, () => Error>> = {
   "missing-key": () => new InvalidApiKeyError("The realtime route received no key."),
   "invalid-key": () => new InvalidApiKeyError("OpenAI rejected the API key."),
   "rate-limited": () => new RateLimitError("OpenAI rate limit or quota reached."),
   upstream: () => new ProviderUnavailableError("Could not reach OpenAI for a realtime secret."),
 };
+
+/** A refusal's code as the adapter's error, or `undefined` for a code the route never answers. */
+export const realtimeRefusal = (code: string): Error | undefined => (Object.hasOwn(REFUSALS, code) ? REFUSALS[code]?.() : undefined);
 
 /** The mint plus a little: the route makes one call to OpenAI, under its own limit. */
 const DEFAULT_TIMEOUT_MS = 15_000;
@@ -45,8 +51,7 @@ export const routeRealtimeSecrets = (config: RouteRealtimeSecretsConfig): Realti
   const timeoutMs = config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const read = async (res: FetchResponse): Promise<RealtimeSecret> => {
     if (!res.ok) {
-      const refusal = REFUSALS[(await errorCodeOf(res)) ?? ""];
-      throw refusal === undefined ? new ProviderRequestError(res.status, "the realtime route refused.") : refusal();
+      throw realtimeRefusal((await errorCodeOf(res)) ?? "") ?? new ProviderRequestError(res.status, "the realtime route refused.");
     }
     const raw = await res.json().catch(() => null);
     const { value, expiresAt } = (typeof raw === "object" && raw !== null ? raw : {}) as Record<string, unknown>;

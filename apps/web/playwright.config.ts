@@ -2,6 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 
 import { HERMETIC_ENV_FLAG } from "@palier/testing";
 
+import { SELFHOST_PORT } from "./e2e/leak-guard";
+
 /**
  * E2E lives beside the app it drives. The medium lane runs Chromium only;
  * Firefox, WebKit and the mobile viewports are nightly
@@ -39,7 +41,9 @@ export default defineConfig({
   retries: 0,
   reporter: process.env.CI ? "github" : "list",
   use: {
-    trace: "on-first-retry",
+    // Kept for a failed test only. With `retries: 0`, "on-first-retry" never recorded one, so a
+    // failure in CI left nothing to read (progress.md D196).
+    trace: "retain-on-failure",
   },
   projects: [
     {
@@ -88,6 +92,14 @@ export default defineConfig({
       command: `pnpm --filter @palier/web start --port ${String(PRODUCTION_PORT)}`,
       url: `http://localhost:${PRODUCTION_PORT}/en`,
       reuseExistingServer: !process.env.CI,
+    },
+    {
+      // The user's own secret endpoint for studio mode (progress.md D192): the repository's Cloudflare Worker under
+      // Node, allowed to talk to the production server, which `studio-selfhost-production.spec.ts` drives.
+      command: "node e2e/selfhost-server.mjs",
+      url: `http://localhost:${String(SELFHOST_PORT)}/`,
+      reuseExistingServer: !process.env.CI,
+      env: { PORT: String(SELFHOST_PORT), ALLOWED_ORIGIN: `http://localhost:${String(PRODUCTION_PORT)}` },
     },
   ],
 });

@@ -27,7 +27,8 @@ This is a free, personal project maintained in spare time, with no bug bounty.
 
 - **The user's key:** anything that lets it reach an origin other than `api.openai.com`, a server
   of ours, storage outside the browser's encrypted vault, a synced document, an export, a log or an
-  error report.
+  error report. With a self-hosted endpoint set, also anything that lets it reach another origin than
+  that endpoint's.
 - **Script injection:** anything that runs script the app did not ship, whatever the Content Security
   Policy and Trusted Types say (`apps/web/src/lib/csp.ts`).
 - **Other device-local data:** audio, transcripts and writing submissions leaving the device other
@@ -62,6 +63,13 @@ This is a free, personal project maintained in spare time, with no bug bounty.
   text. The handler is `apps/web/src/server/realtime-handlers.ts`, short enough to read in full, and
   every branch has a test. The key settings and the privacy notice say this to users. No other
   request ever carries the key to a server of ours, and the key-leak test holds that.
+- **The way around the exception.** A user who will not accept it can deploy `selfhost/` (a one-file
+  Cloudflare Worker or Vercel function) on their own account and enter its address in the key settings.
+  Palier then opens that endpoint in a popup and passes the key by `postMessage`, only after the page
+  there says it is ready, only to that endpoint's origin, and reads the answer only from that popup. The
+  endpoint's page mints on its own origin and closes itself. The address is kept on that device only,
+  never synced or exported. Anything that gets the key delivered to a window or origin other than the
+  configured endpoint's is in scope.
 - **The Content Security Policy cannot stop one thing:** script that is already running navigating
   the whole page to another origin. The protection there is that no script the app did not ship can
   run. If you find one that can, that is the report we most want.

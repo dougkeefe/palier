@@ -1,6 +1,8 @@
 import type { RealtimeSecretSource } from "@palier/app";
 import { memoryRealtimeSecretSource } from "@palier/testing";
-import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+
+import { describe, expect, it, vi } from "vitest";
 
 import { createRealtimeSecretApi } from "./realtime-handlers";
 
@@ -88,5 +90,36 @@ describe("createRealtimeSecretApi", () => {
 
     expect(status).toBe(502);
     expect(text).not.toContain(KEY);
+  });
+
+  /**
+   * The route's half of its log exclusion (architecture.md §16, progress.md D193): Vercel records each request's method,
+   * path and status, and whatever the function writes to the console. So the route writes nothing, and no failure
+   * escapes it for the framework to log with its message, which an adapter's might carry the key in.
+   */
+  it("writes nothing to the console on any answer, the key-bearing failures included", async () => {
+    const written = vi.spyOn(console, "log");
+    const errored = vi.spyOn(console, "error");
+    const warned = vi.spyOn(console, "warn");
+    try {
+      const answers = [
+        await createRealtimeSecretApi({ secrets: memoryRealtimeSecretSource() }).mint(post()),
+        await createRealtimeSecretApi({ secrets: failing("InvalidApiKeyError") }).mint(post()),
+        await createRealtimeSecretApi({ secrets: failing("TypeError") }).mint(post()),
+        await createRealtimeSecretApi({ secrets: { mint: (key) => Promise.reject(key) } }).mint(post()),
+        await createRealtimeSecretApi({ secrets: memoryRealtimeSecretSource() }).mint(post({})),
+      ];
+
+      expect(answers.map((response) => response.status)).toEqual([200, 401, 502, 502, 401]);
+      expect([...written.mock.calls, ...errored.mock.calls, ...warned.mock.calls]).toEqual([]);
+    } finally {
+      written.mockRestore();
+      errored.mockRestore();
+      warned.mockRestore();
+    }
+  });
+
+  it.each([["realtime-handlers.ts"], ["realtime.ts"]])("holds no console call in %s", (file) => {
+    expect(readFileSync(new URL(file, import.meta.url), "utf8")).not.toMatch(/\bconsole\s*\./);
   });
 });

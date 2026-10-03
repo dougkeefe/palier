@@ -58,3 +58,23 @@ export class ProviderTimeoutError extends OpenAiError {
 export class InvalidResponseError extends OpenAiError {
   override name = "InvalidResponseError";
 }
+
+/** Why the user's own realtime secret endpoint gave no secret (progress.md D192). */
+export type SelfHostedEndpointFailure = "blocked" | "closed" | "timeout" | "refused" | "malformed";
+
+/**
+ * The user's own realtime secret endpoint gave no secret (ADR 3's self-hosted escape, progress.md D192): the
+ * browser blocked its window, the window was closed, it never answered, it refused for a reason of its own
+ * (an origin it was not deployed for, say), or its answer was not a secret. A refusal that is the route's own
+ * code (a rejected key, a rate limit) is that code's error instead, so the screen says it in the same words.
+ */
+export class SelfHostedEndpointError extends OpenAiError {
+  override name = "SelfHostedEndpointError";
+
+  constructor(
+    readonly reason: SelfHostedEndpointFailure,
+    detail: string,
+  ) {
+    super(`The realtime endpoint failed: ${detail}`);
+  }
+}

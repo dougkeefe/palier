@@ -202,6 +202,8 @@ export const vaultWith = (key: string | null): KeyVault => ({
   apiKeyStorage: () => Promise.resolve(key === null ? null : "device"),
   clear: () => Promise.resolve(),
   deviceSecret: () => Promise.resolve("device-secret"),
+  realtimeEndpoint: () => Promise.resolve(null),
+  setRealtimeEndpoint: () => Promise.resolve(),
 });
 
 type ExaminerOptions = {

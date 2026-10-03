@@ -2,8 +2,9 @@
  * The `@palier/adapters/openai` public surface. One factory returning the
  * `AiProvider` port, the config types it takes, and the error types it throws —
  * every one of ours, no `openai`/SDK/HTTP type among them (adapters/CLAUDE.md).
- * Studio mode's realtime pieces (progress.md D165, D169, D170) sit beside it: the two
- * `RealtimeSecretSource`s, the server's and the browser's, and the realtime transport.
+ * Studio mode's realtime pieces (progress.md D165, D169, D170, D192) sit beside it: the three
+ * `RealtimeSecretSource`s, the server's, the browser's and the user's own endpoint's, and the
+ * realtime transport.
  */
 // Re-exported so `apps/factory` — which consumes this adapter and `@palier/domain`
 // and nothing else — can name the port it wires without depending on `@palier/app`.
@@ -20,6 +21,20 @@ export { REALTIME_SECRET_SECONDS, openAiRealtimeSecrets } from "./realtime-secre
 export type { OpenAiRealtimeSecretsConfig } from "./realtime-secrets.js";
 export { routeRealtimeSecrets, warmRealtimeRoute } from "./route-realtime-secrets.js";
 export type { RouteRealtimeSecretsConfig } from "./route-realtime-secrets.js";
+export {
+  SELF_HOSTED_MESSAGES,
+  SELF_HOSTED_VERSION,
+  browserEndpointWindows,
+  selfHostedRealtimeSecrets,
+} from "./self-hosted-secrets.js";
+export type {
+  EndpointMessage,
+  EndpointPopup,
+  EndpointWindowHost,
+  EndpointWindows,
+  SelfHostedRealtimeSecrets,
+  SelfHostedRealtimeSecretsConfig,
+} from "./self-hosted-secrets.js";
 export { REALTIME_TURN_EAGERNESS, realtimeTransport } from "./realtime-transport.js";
 export type {
   RealtimePeer,
@@ -39,4 +54,6 @@ export {
   ProviderTimeoutError,
   ProviderUnavailableError,
   RateLimitError,
+  SelfHostedEndpointError,
 } from "./errors.js";
+export type { SelfHostedEndpointFailure } from "./errors.js";

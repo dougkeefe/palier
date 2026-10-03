@@ -20,6 +20,12 @@ export const REALTIME_ROUTE_SOURCE = "apps/web/src/server/realtime-handlers.ts";
  */
 export const REALTIME_ROUTE_SOURCE_URL = `${REPOSITORY_URL}/blob/main/${REALTIME_ROUTE_SOURCE}`;
 
+/** The self-hosted endpoint's guide in the repository (ADR 3's escape, progress.md D192). */
+export const SELFHOST_GUIDE = "selfhost/README.md";
+
+/** The guide, linked from the key settings' own-endpoint form, beside the route's source. */
+export const SELFHOST_GUIDE_URL = `${REPOSITORY_URL}/blob/main/${SELFHOST_GUIDE}`;
+
 /** §13.0's four reasons, in its order. */
 export const REPORT_REASONS = ["key-wrong", "multiple-answers", "french-off", "unclear"] as const;
 export type ReportReason = (typeof REPORT_REASONS)[number];

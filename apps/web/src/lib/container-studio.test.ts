@@ -3,6 +3,7 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 
 import type { RealtimePeer, RealtimePeerFactory, RealtimePeerState } from "@palier/adapters/openai";
+import { SELF_HOSTED_MESSAGES, SELF_HOSTED_VERSION } from "@palier/adapters/openai";
 import { sessionId } from "@palier/domain";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -267,5 +268,115 @@ describe.each([
       c.useCases.startOralStudio({ sessionId: sessionId(c.ids.ulid()), scenarioId: choice.scenario.id }, fakePeers().factory),
     ).rejects.toMatchObject({ name: "NoApiKeyError" });
     expect(minted.keys).toEqual([]);
+  });
+});
+
+const ENDPOINT = "https://secret.example.org/";
+
+/**
+ * The browser's windows, with the user's own endpoint page behind the popup (D192): the page says ready, takes the key
+ * by `postMessage` at its own origin, and answers a secret of its own. `window` is stubbed, so the container's
+ * `browserEndpointWindows` runs as it does in a browser.
+ */
+const endpointBrowser = () => {
+  const origin = new URL(ENDPOINT).origin;
+  const listeners = new Set<(event: MessageEvent) => void>();
+  const opened: string[] = [];
+  const keys: string[] = [];
+  const popups: { closed: boolean }[] = [];
+  let secrets = 0;
+  const fire = (event: { origin: string; source: unknown; data: unknown }) => {
+    for (const listener of [...listeners]) listener(event as MessageEvent);
+  };
+  vi.stubGlobal("window", {
+    open: (url: string) => {
+      opened.push(url);
+      const popup = {
+        closed: false,
+        postMessage: (data: Record<string, unknown>, target: string) => {
+          if (target !== origin || data.type !== SELF_HOSTED_MESSAGES.mint) return;
+          keys.push(String(data.key));
+          const reply = {
+            type: SELF_HOSTED_MESSAGES.minted,
+            version: SELF_HOSTED_VERSION,
+            id: data.id,
+            value: `ek_own_${String(++secrets)}`,
+            expiresAt: "2026-10-02T12:01:00.000Z",
+          };
+          setTimeout(() => fire({ origin, source: popup, data: reply }), 0);
+        },
+        close: () => {
+          popup.closed = true;
+        },
+      };
+      popups.push(popup);
+      setTimeout(() => fire({ origin, source: popup, data: { type: SELF_HOSTED_MESSAGES.ready, version: SELF_HOSTED_VERSION } }), 0);
+      return popup;
+    },
+    addEventListener: (_type: string, listener: (event: MessageEvent) => void) => listeners.add(listener),
+    removeEventListener: (_type: string, listener: (event: MessageEvent) => void) => listeners.delete(listener),
+  });
+  return { opened, keys, popups };
+};
+
+describe.each([
+  ["hermetic", true],
+  ["production", false],
+] as const)("studio mode on the user's own endpoint, through the %s graph (D192)", (_graph, hermetic) => {
+  it("opens the endpoint's popup inside the call, mints there, and the route never sees the key", async () => {
+    const sent = await network();
+    const browser = endpointBrowser();
+    const c = createContainer({ hermetic });
+    await c.useCases.saveApiKey({ key: KEY, remember: true });
+    const [choice] = (await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" })).filter((x) => x.sessionType === "work");
+    if (choice === undefined) throw new Error("the bank offers a work discussion");
+    const peers = fakePeers();
+
+    const starting = c.useCases.startOralStudio(
+      { sessionId: sessionId(c.ids.ulid()), scenarioId: choice.scenario.id, endpoint: ENDPOINT },
+      peers.factory,
+    );
+    // Before anything has awaited: still inside the tap's gesture, where a browser lets a popup open.
+    expect(browser.opened).toEqual([ENDPOINT]);
+    const run = await starting;
+    await run.endByUser();
+    await run.ended;
+
+    expect(browser.keys).toEqual([KEY]);
+    expect(browser.popups.map((popup) => popup.closed)).toEqual([true]);
+    expect(minted.keys).toEqual([]);
+    expect(sent.filter((s) => s.url === REALTIME_SECRET_PATH)).toEqual([]);
+    expect(sent.filter((s) => s.url.endsWith("/realtime/calls")).map((s) => s.authorization)).toEqual(["Bearer ek_own_1"]);
+  });
+
+  it("closes the popup it opened when the session cannot start, and hands it no key", async () => {
+    await network();
+    const browser = endpointBrowser();
+    const c = createContainer({ hermetic });
+    const [choice] = await c.useCases.oralSessionChoices({ targetBand: "C", lang: "fr" });
+    if (choice === undefined) throw new Error("the bank offers a session");
+
+    await expect(
+      c.useCases.startOralStudio({ sessionId: sessionId(c.ids.ulid()), scenarioId: choice.scenario.id, endpoint: ENDPOINT }, fakePeers().factory),
+    ).rejects.toMatchObject({ name: "NoApiKeyError" });
+    expect(browser.popups.map((popup) => popup.closed)).toEqual([true]);
+    expect(browser.keys).toEqual([]);
+  });
+
+  it("keeps the endpoint on this device as the rule writes it, refuses a bad one, and forgets it on a wipe", async () => {
+    const c = createContainer({ hermetic });
+    expect(await c.useCases.realtimeEndpoint()).toBeNull();
+
+    expect(await c.useCases.setRealtimeEndpoint({ url: " https://Secret.example.org#x " })).toBe(ENDPOINT);
+    expect(await c.useCases.realtimeEndpoint()).toBe(ENDPOINT);
+    await expect(c.useCases.setRealtimeEndpoint({ url: "http://secret.example.org/" })).rejects.toMatchObject({
+      name: "InvalidRealtimeEndpointError",
+      problem: "not-https",
+    });
+    expect(await c.useCases.realtimeEndpoint()).toBe(ENDPOINT);
+
+    await c.useCases.wipeData();
+
+    expect(await c.useCases.realtimeEndpoint()).toBeNull();
   });
 });

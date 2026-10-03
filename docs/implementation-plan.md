@@ -247,8 +247,13 @@ interface KeyVault {
   withApiKey<T>(fn: (k: string) => Promise<T>): Promise<T>   // never returns the key
   hasApiKey(): Promise<boolean>
   apiKeyStorage(): Promise<"device" | "tab" | null>          // added (D98): where it is held, never the key
-  clear(): Promise<void>                                      // forgets both modes
+  clear(): Promise<void>                                      // forgets both modes, and the endpoint (D192)
   deviceSecret(): Promise<string>
+  // Amended in place 2 October 2026 (Phase 6 Slice 3, progress.md D192): ADR 3's self-hosted escape. The user's own
+  // realtime secret endpoint, kept with the key because settings sync and an address can name a person: device-local,
+  // never synced, never exported. The caller checks it first (@palier/app's parseRealtimeEndpoint).
+  realtimeEndpoint(): Promise<string | null>                  // null: Palier's route
+  setRealtimeEndpoint(url: string | null): Promise<void>      // null forgets it
 }
 
 // Added 26 September 2026 with Phase 4 Slice 2 (progress.md D101): the local cost ledger, a port §3.3 did
@@ -1108,9 +1113,15 @@ sync.**
   - The Vercel log exclusion verified, and in `docs/deploy.md`.
   - `docs/realtime-checklist.md`.
 
-  *Done:* the self-hosted path working end to end against a local endpoint.
+  *Done:* the self-hosted path working end to end against a local endpoint. *(Built 2 October 2026, `progress.md`
+  D192–D194, `dougkeefe/conductor/settings.local.toml-update`. The self-hosted path runs end to end on the production build against the repository's
+  own Worker on a local port (`studio-selfhost-production.spec.ts`), under the real CSP, with the route seeing no key. The
+  endpoint is kept in the vault, not the settings, because settings sync (§3.3 amended). The Vercel log exclusion has no
+  per-route switch: what holds is that nothing Vercel records can carry the key, checked in code and tests, and on the
+  deployment by the human at Gate O (D193). The checklist is written (D194).)*
 - **Gate O — studio mode's release reads (human).** The checklist on the six browser and platform pairs (exit criterion 3), the
-  route read line by line, and the French of the new copy. Then Gate M.
+  route read line by line, and the French of the new copy. Then Gate M. *(Sequenced after Phase 7 Slice 5, 2 October 2026,
+  `progress.md` D195: that slice adds the route's rate limit, so the route is read once, finished.)*
 
 ---
 
@@ -1159,18 +1170,84 @@ direction, then the human's reviews.
   and beside every band, `CONTRIBUTING.md` with the originality attestation, the PR template, the device-removal confirmation and
   pairing polish, the one-page PDF summary (a print stylesheet over `/progress`), PRD §11's shortcut sheet, and the authored-item
   intake content-factory.md §5 describes (`content/authored/`, a contributor on the provenance, taken in at stage 4). *Done:* each
-  surface in both locales, axe-clean on its states, with the contribution path documented end to end. **Status: built
-  29 September 2026** (`progress.md` D146–D152).
+  surface in both locales, axe-clean on its states, with the contribution path documented end to end. **Status: merged
+  (#47; `progress.md` D146–D152).**
 - **Slice 4 — Motion, engagement and the library**, as Gate K decided (D145): the motion and illustration pass, self-hosted fonts,
   §9's streak with its silent freeze and the milestone moments (XP, levels and the countdown after 1.0), and the MDX library,
   ten written-expression articles in both languages, linked from item explanations (reading's after 1.0). **Status: built
-  29 September 2026** (`progress.md` D159–D162): the library is structured JSON in `@palier/content`, not MDX (D162).
+  29 September 2026, merged (#51)** (`progress.md` D159–D162): the library is structured JSON in `@palier/content`, not MDX (D162).
 - **Gate L — the human reviews.** The French review of every string, the workshop prompts and the bank's register [R8]; the
   VoiceOver and NVDA pass [R9]; the red-team read. *Done:* exit criterion 1's accessibility and security halves and the R8 half.
   **Status: passed 29 September 2026** (`progress.md` D164).
-- **Gate M — public.** The repo made public and an outside item submission [R13], the domain, the trademark check, and the
-  full-volume bank (D54), sequenced to the end (D56). **It waits on Phase 6's Gate O** (`progress.md` D165). *Done:* exit
-  criterion 2, and 1.0.
+- **Slice 5 — Launch readiness** (planned 2 October 2026, `progress.md` D195). Four pieces the documents already name,
+  each needing no human decision. **Built before Gate O**, because its first piece changes the route Gate O reads line
+  by line, and its new copy joins Gate O's French read. In this order:
+  1. **The realtime route's rate limit** (D169's open question).
+     - `RATE_LIMITS.realtime` in `apps/web/src/server/handlers.ts`, beside the others: **60 posts an hour per IP hash**,
+       every post counted, since a warm-up is an invocation too. A studio session makes at most four (two warm-ups, the
+       mint, one reconnect), so a person never meets it.
+     - Checked **before** `Authorization` is read, through the existing `rateLimitKey` over `RATE_LIMIT_SALT` and
+       `rateLimitHit` on the `rate_limits` table. `db.ts` hands the hit to `realtime.ts`; the handler takes it as an
+       optional `limit` dep.
+     - Over the limit: `429 {"error":"throttled"}`. That is a **new code**, never `rate-limited`, which means OpenAI's
+       quota and reads as "out of credit". `routeRealtimeSecrets` maps it to a new `RouteThrottledError`; the studio
+       screen names it `failThrottled` in both languages; the warm-up already ignores every refusal.
+     - **No database configured, or the hermetic graph: no limit**, so the route still needs no database, and a reused
+       local dev server never throttles the lanes. **The limiter's store failing: the mint goes ahead.** The spend is the
+       user's own key and the limit guards only our function, so failing closed would let a database outage break
+       studio mode.
+     - The handler stays small enough to read line by line, with no `console` and no body read. architecture.md §10's
+       row and §11's controls say it.
+
+     *Done:* every new branch of the handler tested (under, at and over the limit; a store failure; no limiter), the route
+     binding test through the real route file, and the key-leak spec's counts unchanged.
+  2. **The band trend over time** (PRD §8.9; named since D148).
+     - **Engine:** `trendHistory(skill, attempts, items, cutoffs)`, pure: for each cutoff instant, `calculateTrend` over
+       the attempts at or before it. Same window and Wilson interval (ADR 7), so accuracy per band tag, never a band
+       letter (architecture.md §7.1). 100% branch with worked examples; no golden value moves.
+     - **App:** `practiceTrendHistory({ weeks, timeZone })` over the attempt store, the items and the `Clock`: the
+       week-end cutoffs in the device's time zone, handed to the engine as primitives (D32).
+     - **UI:** `@palier/ui` gains a `TrendChart` primitive: an SVG line per skill at the study profile's target band, the
+       interval as a shaded region, a week with too little evidence drawn as a gap (R10), token colours under the
+       contrast test, and nothing animated. The chart is `aria-hidden`: the same figures are a table, shown on paper and
+       in a disclosure on screen.
+     - `/progress` shows **twelve weeks**, a display constant in `features/trend`, not profile data. The printout stays
+       one page on Letter and A4.
+
+     *Done:* engine, use case and primitive tested per branch; `/progress` axe-clean with history, without, and printed;
+     `content.spec.ts`'s one-page check holds.
+  3. **Found by search engines, correctly** (new: the repository and the site are public).
+     - **One list of the app's routes**: `scripts/prepare-public.mjs` already derives them from the page files for the
+       precache (`routesFrom`, with `library/[subSkill]`'s values). It also writes them to a committed
+       `src/lib/routes.json`, held equal by a drift test, as `global-error-copy.json` is (D141).
+     - `app/robots.ts` allows everything but `/api/` and the hermetic hook, and names the sitemap. `app/sitemap.ts` lists
+       every route in both locales, each with its `hreflang` alternate. Both are on the exemption list already.
+     - The layout's metadata gains `metadataBase`, `alternates.languages` (en, fr, and `x-default` to en) and an Open
+       Graph title and description from the messages. No image.
+     - **The public origin** is `PALIER_SITE_URL` when set, else `https://` plus Vercel's own
+       `VERCEL_PROJECT_PRODUCTION_URL`, which follows the production domain, so pointing `palier.dougkeefe.com` at the
+       deployment needs no code change; else localhost. One tested function in `lib/build-info.ts`.
+     - The CSP is unaffected: `/robots.txt` and `/sitemap.xml` are outside the proxy's locale matcher.
+
+     *Done:* both answer on the production build (a production spec), every sitemap URL answers 200, and each page's head
+     names its alternate.
+  4. **An unknown path answers 404** (D141, named since).
+     - `src/proxy.ts` already runs on every locale path. It checks the path against `routes.json` and rewrites an unknown
+       one to the localised 404 page **with status 404** (`NextResponse.rewrite(url, { status: 404 })`). The page stays
+       inside the layout, so the nonce and the Trusted Types policy still apply. `[...rest]` stays as the safety net.
+     - **If Next 16 cannot carry the status on a rewrite**, as shown on the production build, record why in a deviation,
+       keep the 200 with `noindex`, and leave it named. Do not use `global-not-found`: it renders outside the layout,
+       without the nonce, which is D141's own failure.
+
+     *Done:* `curl -sI http://localhost:3100/en/no-such-page` answers 404 on `next start` with the localised page and zero
+     CSP violations (`csp-production.spec.ts`'s two 404 paths assert the status), and every real page still answers 200.
+
+  *Slice done:* `pnpm verify` and `CI=1 pnpm verify:medium` green, the bundle within budget, and the session log's
+  evidence. Not in it: the full-volume bank (Gate M's), Gate J, and everything else on `progress.md`'s *named, not
+  scheduled* list, which reads as after 1.0.
+- **Gate M — public.** ~~The repo made public~~ (**public, confirmed 2 October 2026**, `progress.md` D195), an outside item
+  submission [R13], the domain, the trademark check, and the full-volume bank (D54), sequenced to the end (D56). **It waits
+  on Phase 6's Gate O** (`progress.md` D165), which waits on Slice 5 (D195). *Done:* exit criterion 2, and 1.0.
 
 ---
 

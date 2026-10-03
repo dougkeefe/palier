@@ -13,7 +13,9 @@ import {
   practice,
   recordingsMegabytes,
   answerPause,
+  sendsTo,
   sessionEstimate,
+  studioModeNote,
   studioWarmup,
   turnFocus,
 } from "./practice-view";
@@ -192,9 +194,24 @@ describe("oralFailure and its words (D119)", () => {
     ["InvalidResponseError", "unexpected", "failUnexpected"],
     ["NoApiKeyError", "no-key", "failNoKey"],
     ["Error", "failed", "failFailed"],
+    ["SelfHostedEndpointError", "endpoint", "failEndpoint"],
   ] as const)("names %s as %s", (name, failure, key) => {
     expect(oralFailure(named(name))).toBe(failure);
     expect(failureMessage(failure)).toBe(key);
+  });
+});
+
+describe("where the key goes, in the pre-flight's line and the picker's callout (D186, D192)", () => {
+  it("names Palier's route for studio mode, or the user's own endpoint when this device has one", () => {
+    expect(sendsTo(true, false, "spoken")).toBe("sendsToStudio");
+    expect(sendsTo(true, true, "spoken")).toBe("sendsToStudioOwn");
+    expect(studioModeNote(false)).toBe("studioMode");
+    expect(studioModeNote(true)).toBe("studioModeOwn");
+  });
+
+  it("keeps practice mode's lines, endpoint or not, since practice never mints a secret", () => {
+    expect(sendsTo(false, false, "spoken")).toBe("sendsToSpoken");
+    expect(sendsTo(false, true, "typed")).toBe("sendsToTyped");
   });
 });
 

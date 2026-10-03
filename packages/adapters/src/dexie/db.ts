@@ -95,8 +95,17 @@ export type ApiKeyRow = {
   readonly ciphertext: Uint8Array;
 };
 
+/**
+ * The user's own realtime secret endpoint (progress.md D192): a URL, not a secret, so it is held as it is.
+ * A row of this table because it is where the key may go, and is never synced or exported, as the key is not.
+ */
+export type RealtimeEndpointRow = {
+  readonly id: "realtime-endpoint";
+  readonly url: string;
+};
+
 /** Every row the `keyVault` table holds, discriminated by `id`. */
-export type KeyVaultRow = DeviceKeyRow | DeviceSecretRow | ApiKeyRow;
+export type KeyVaultRow = DeviceKeyRow | DeviceSecretRow | ApiKeyRow | RealtimeEndpointRow;
 
 /** The one sync-state row: identity, watermark, switch, last sync (progress.md D69). */
 export type SyncStateRow = SyncState & { readonly id: "state" };

@@ -169,6 +169,8 @@ const vaultOf = (): KeyVault & { readonly apiKeyCleared: () => boolean } => {
       return Promise.resolve();
     },
     deviceSecret: () => Promise.resolve("device-secret"),
+    realtimeEndpoint: () => Promise.resolve(null),
+    setRealtimeEndpoint: () => Promise.resolve(),
     apiKeyCleared: () => cleared,
   };
 };

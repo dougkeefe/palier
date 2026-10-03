@@ -14,6 +14,11 @@ Knows what the product does, nothing about how anything is stored, fetched or re
 - **`KeyVault.withApiKey` hands the key to a callback and never returns it** (§3.3). Do not
   add a `getApiKey` — the shape is the control (ADR 2, ADR 3). `putApiKey(key, { remember: false })`
   holds it for this tab only, and `apiKeyStorage()` says where it is held, in a word (progress.md D98).
+  **`realtimeEndpoint()` / `setRealtimeEndpoint(url | null)`** keep the user's own realtime secret endpoint (ADR 3's
+  self-hosted escape, D192) **in the vault, not `SettingsStore`**, because settings sync and an address can name a
+  person: device-local, never synced, never exported. **`clear` forgets it with the key**, so `wipeData` leaves neither.
+  `use-cases/realtime-endpoint.ts` holds the rule (`parseRealtimeEndpoint`: https, or http on a loopback host; no
+  credentials; the fragment dropped) and the two use cases; a refusal is `InvalidRealtimeEndpointError` with its `problem`.
 - **A provider is made from the key inside `withApiKey`, once per call** (`use-cases/api-key.ts`,
   D99). `withAiProvider(deps, feature, fn)` is the one path from the key to a spending `AiProvider`,
   through the `AiProviderFactory` the composition root supplies; every AI use case goes through it, and

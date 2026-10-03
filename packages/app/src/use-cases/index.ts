@@ -150,6 +150,14 @@ export {
   withAiProvider,
 } from "./api-key.js";
 
+export type { ParsedRealtimeEndpoint, RealtimeEndpointProblem } from "./realtime-endpoint.js";
+export {
+  InvalidRealtimeEndpointError,
+  parseRealtimeEndpoint,
+  realtimeEndpoint,
+  setRealtimeEndpoint,
+} from "./realtime-endpoint.js";
+
 export type { FeatureCost, SpendDeps, SpendPricing, SpendSummary } from "./spend.js";
 export {
   InvalidSpendCapError,

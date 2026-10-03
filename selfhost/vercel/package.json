@@ -1,0 +1,8 @@
+{
+  "name": "palier-realtime-secret",
+  "private": true,
+  "description": "Palier's self-hosted realtime secret endpoint, as a Vercel function. See ../README.md.",
+  "engines": {
+    "node": "22.x"
+  }
+}

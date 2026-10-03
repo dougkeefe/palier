@@ -1,6 +1,6 @@
 import type { KeyVault } from "@palier/app";
 
-import type { ApiKeyRow, DeviceKeyRow, DeviceSecretRow, PalierDb } from "./db.js";
+import type { ApiKeyRow, DeviceKeyRow, DeviceSecretRow, PalierDb, RealtimeEndpointRow } from "./db.js";
 
 /**
  * The Dexie-backed `KeyVault` (architecture.md 6.2). The user's OpenAI key is stored in
@@ -28,6 +28,9 @@ import type { ApiKeyRow, DeviceKeyRow, DeviceSecretRow, PalierDb } from "./db.js
  * this closure and nowhere else. The composition root builds one vault per page load, so the
  * closure is the tab's, and a reload forgets it. Putting it deletes any stored ciphertext
  * first; putting a remembered key drops it.
+ *
+ * **The realtime endpoint** (progress.md D192) is one more row, held as written: a URL, not a secret. It is in
+ * this table, not the settings, because settings sync and it must not. `clear` deletes it with the key.
  */
 
 const encoder = new TextEncoder();
@@ -38,6 +41,7 @@ const IV_BYTES = 12;
 const DEVICE_KEY_ID = "device-key";
 const SECRET_ID = "device-secret";
 const KEY_ID = "api-key";
+const ENDPOINT_ID = "realtime-endpoint";
 
 const toHex = (bytes: Uint8Array): string =>
   Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
@@ -132,8 +136,20 @@ export const dexieKeyVault = (db: PalierDb): KeyVault => {
     },
     clear: async () => {
       tabKey = null;
-      await db.keyVault.delete(KEY_ID);
+      await db.keyVault.bulkDelete([KEY_ID, ENDPOINT_ID]);
     },
     deviceSecret: async () => toHex(await deviceSecretBytes()),
+    realtimeEndpoint: async () => {
+      const row = await db.keyVault.get(ENDPOINT_ID);
+      return row !== undefined && row.id === ENDPOINT_ID ? row.url : null;
+    },
+    setRealtimeEndpoint: async (url) => {
+      if (url === null) {
+        await db.keyVault.delete(ENDPOINT_ID);
+        return;
+      }
+      const row: RealtimeEndpointRow = { id: ENDPOINT_ID, url };
+      await db.keyVault.put(row);
+    },
   };
 };

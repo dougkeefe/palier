@@ -36,6 +36,9 @@ test("journey 9: opted in on the results screen offline, the exam's answers arri
   page,
   context,
 }) => {
+  // Its own budget, as every long journey has: the service worker's install, which precaches the bank and every route,
+  // took 21 s of the 30 s default on a slow CI runner, and left too little for the exam itself (progress.md D197).
+  test.setTimeout(90_000);
   const batches: { body: Batch; headers: Record<string, string> }[] = [];
   let online = true;
   await context.route("**/api/telemetry", async (route) => {

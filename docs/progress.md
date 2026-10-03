@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 30 September 2026 (the human's studio session and the dial, D190–D191)
+**Last updated:** 2 October 2026 (Phase 6 Slice 3, D192–D194; the repo public and Phase 7 Slice 5 planned, D195)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -57,7 +57,11 @@ each answer, and the key copy's exception in both languages. Tap to first word w
 2.5 s** (D189), and the live run found a turn that never ended, which the human's session must check first. It merged (#57).
 **The human's live session passed** (D191): the examiner answers a real voice and follows up, and D167's estimate stays
 (human). **On the deployed site, tap to first word has a median of about 2.12 s**, so exit criterion 1 is met (D190), and
-the dial's three levers for a cold first dial are built (`dougkeefe/testing-before-development`; D190).
+the dial's three levers for a cold first dial are built (`dougkeefe/testing-before-development`; D190). It merged (#58).
+**Phase 6 Slice 3, the exception escapable, is built** (`dougkeefe/conductor/settings.local.toml-update`; D192–D194): the self-hosted secret endpoint by
+popup and `postMessage`, working end to end on the production build against the repository's own Worker; the one-file
+Worker and Vercel function in `selfhost/`; the route's log exclusion written into `docs/deploy.md` (Vercel has no per-route
+switch, D193); and `docs/realtime-checklist.md` for Gate O.
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -122,8 +126,8 @@ human for anything expensive.
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
-| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 merged, #57, D180–D189; the human's session, D191; exit criterion 1 met on the deployed site, and the dial's levers built, `dougkeefe/testing-before-development`, D190 |
-| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; Gate M waits on Phase 6, D165) |
+| 6 Oral, studio mode | The feature people tell colleagues about | 2 wk | **in progress, in 1.0** (deferred 28 September 2026, D131; brought back into 1.0 29 September 2026, human, D165: three slices and Gates N and O, before Gate M); Slice 1 merged, #53, D166–D173; Gate N passed, D174, with its findings fixed, D175–D176 (#54), recorded on prompt v5 by `dougkeefe/next-dev-slice`; Slice 2 merged, #57, D180–D189; the human's session, D191; exit criterion 1 met on the deployed site, and the dial's levers built, D190, merged #58; Slice 3 built, `dougkeefe/conductor/settings.local.toml-update`, D192–D194 |
+| 7 Polish and hardening | 1.0 | 2–3 wk | **in progress** (opened 28 September 2026; four slices and three gates, D132; Slice 1 merged, #39; Slice 2 merged, #45; Gate K resolved, D145; Slice 3 merged, #47; the cleanup slice merged, #49, D154–D158; Slice 4 merged, #51, D159–D162; Gate L passed, D164; the repo is public, D195; Slice 5, launch readiness, planned, D195; Gate M waits on Phase 6, D165) |
 | 8 English mirror | Prove the architecture | 2 wk | not started |
 
 Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · `[!]` blocked or deferred, with a note.
@@ -132,9 +136,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/testing-before-development` | **The human's studio session recorded (D191), and "the dial under 2.5 s"** (D190): the route woken with no key before the tap, the first secret at the tap, the offer beside it, and the deployed site measured. | 30 September 2026 |
+| `dougkeefe/conductor/settings.local.toml-update` | **Phase 6 Slice 3, the exception escapable**: the self-hosted secret endpoint by popup and `postMessage`, the one-file Worker and Vercel function, the route's log exclusion written into `docs/deploy.md`, and `docs/realtime-checklist.md`. | 2 October 2026 |
 
-*(The prior rows — Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -159,11 +163,12 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 - [x] `@palier/domain`: Zod schemas for every content artefact, JSON Schema generated to `docs/schemas/`
 - [x] `@palier/domain`: `ExamProfile` loader
 - [x] `@palier/domain`: `psc-sle` profile transcribed from `product-requirements.md` §5 (ADR 9) — with one inferred band, see D12
-- [~] `@palier/app`: port interfaces from §3.3 — under `src/ports/`: `ItemRepository`,
+- [x] `@palier/app`: port interfaces from §3.3 — under `src/ports/`: `ItemRepository`,
   `AttemptStore`, `ScheduleStore`, `SessionStore`, `SettingsStore`, `KeyVault`, `Clock`, `Random`,
-  plus `IdGenerator` (a 9th port §3.3 does not name, D48); `OralStore` (no §3.3 signature) and
-  `AiProvider`/`SyncTransport`/`TelemetrySink` (net-new domain types) deferred; `ports.stub.ts`
-  deleted. See D18–D20, D45, D48
+  plus `IdGenerator` (a 9th port §3.3 does not name, D48). The deferred four landed with their phases
+  (`AiProvider` D52, `SyncTransport` D69, `TelemetrySink` D92, `OralStore` D115), and the ports since
+  (`CostLedger`, `WritingStore`, `GeneratedItemStore`, `OralTransport`, `AnswerSource`, `OralLiveness`,
+  `RealtimeSecretSource`). `ports.stub.ts` deleted. See D18–D20, D45, D48
 - [x] Item type registry (§3.4): React-free `ItemTypeDefinition` in `@palier/domain`,
   `itemRenderers` in `@palier/ui`, compile-time exhaustiveness in `apps/web`, plus the §4.5
   architecture test — **ADR 17** written, D13 resolved
@@ -180,10 +185,10 @@ Built now rather than retrofitted — §7 is emphatic about this.
 - [x] fake-indexeddb
 - [x] `@axe-core/playwright`
 - [x] Per-package coverage reporting with the §6.3 targets enforced — proven by a deliberate drop
-- [~] `@palier/testing`: in-memory implementation of every port — `ItemRepository`, `AttemptStore`,
+- [x] `@palier/testing`: in-memory implementation of every port — `ItemRepository`, `AttemptStore`,
   `ScheduleStore`, `SettingsStore`, `KeyVault`, `SessionStore` (memory stores) and
   `counterIdGenerator` (the `IdGenerator`, D48), all importing the real ports from `@palier/app`;
-  `OralStore`/`AiProvider`/`SyncTransport`/`TelemetrySink` follow their ports
+  the rest landed with their ports, each with its memory implementation and contract suite
 - [x] `@palier/testing`: port contract suites, exported as functions
 - [x] `@palier/testing`: fixture builders, seeded Random, FakeClock
 - [x] `@palier/testing`: the 60-item canonical fixture bank — `src/fixtures/bank.ts`, generated
@@ -233,60 +238,80 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132): **Slices 1–4 merged**, and **Gate L passed** (D164). **Studio mode is in 1.0** (D165, human), and Gate M waits
-for Phase 6. Phase 6: **Slices 1 and 2 merged (#53, #57)**, **Gate N passed** (D174, `cedar`), and **the human's live session
-passed** (D191): the examiner answers a real voice and follows up, and D167's estimate stays. **Exit criterion 1 is met on
-the deployed site** (D190). `main` is protected, and a red lane blocks the merge (D177).
+Phase 7 (D132): **Slices 1–4 merged**, **Gate L passed** (D164), and **the repo is public** (D195). **Studio mode is in 1.0**
+(D165): Phase 6's Slices 1 and 2 merged (#53, #57), Gate N passed (D174), the human's live session passed (D191), exit criterion
+1 is met on the deployed site (D190, #58), and **Slice 3 is built, PR #60, every lane green** (D192–D194). `main` is protected,
+and a red lane blocks the merge (D177).
 
-Phase 5's deferred cost check (D130), the product pilot (Gate E, D97) and Gate M's calls that need no build (the domain, the
-trademark check, lining up an outside submitter) still run beside it, all the human's. Gate M's one build item, **the
-full-volume bank run** (D54), touches no oral code. It can run in its own worktree once the human funds a key for it.
+What stands between the code and 1.0: **Phase 7 Slice 5** (agent, below), **Gate O** (human), and **Gate M** (human: an outside
+item submission, the domain, the trademark check, and the full-volume bank run on a key the human funds, D54).
 
-**The dial's levers are built** (`dougkeefe/testing-before-development`; D190). Merge it first.
+**Next: merge #60, then build Phase 7 Slice 5, launch readiness.**
 
-**Next: measure the dial again on `main`, then Phase 6 Slice 3.**
+1. **Merge PR #60** (Phase 6 Slice 3). The next worktree branches from `main` after it.
+2. **Phase 7 Slice 5 — launch readiness** (D195). `implementation-plan.md` §7 Phase 7 holds each piece's full scope and *done*;
+   build them in this order:
+   1. **The realtime route's rate limit.** `RATE_LIMITS.realtime` (60 posts an hour per IP hash, every post counted),
+      checked before `Authorization` is read, through `rateLimitKey` and `rateLimitHit`; over it, `429 {"error":"throttled"}`
+      → `RouteThrottledError` → `failThrottled`. No limit without a database or in the hermetic graph; a failing store lets the
+      mint through. Files: `server/handlers.ts` (the constant), `server/realtime-handlers.ts`, `server/realtime.ts`,
+      `server/db.ts`, `adapters/openai/route-realtime-secrets.ts` and `errors.ts`, `features/oral/practice-view.ts`, the
+      messages.
+   2. **The band trend over time.** Engine `trendHistory(skill, attempts, items, cutoffs)` over `calculateTrend`; app
+      `practiceTrendHistory({ weeks, timeZone })`; a `TrendChart` primitive in `@palier/ui` (SVG, the Wilson interval shaded,
+      gaps where evidence is short, `aria-hidden` beside a table of the same figures); twelve weeks on `/progress` and its
+      printout, still one page.
+   3. **Discoverability.** `prepare-public.mjs` writes the route list it already derives to a committed `src/lib/routes.json`
+      (drift-tested); `app/robots.ts` and `app/sitemap.ts` from it; `metadataBase`, `hreflang` alternates and an Open Graph
+      title and description in the layout; the public origin from `PALIER_SITE_URL`, else `VERCEL_PROJECT_PRODUCTION_URL`.
+   4. **A true 404.** The proxy rewrites a path not in `routes.json` to the localised 404 page with status 404. If a rewrite
+      cannot carry the status on Next 16, a deviation says so and D141's 200 with `noindex` stays.
 
-1. **Measure again after the merge** (agent, about US$0.10 on the smoke key). Once `/api/health` answers the merge's build,
-   run the dials-only spec on the deployed site four times, 90 s apart:
+   *Done:* each piece's *done* in the plan; `pnpm verify` and `CI=1 pnpm verify:medium` green; the bundle within budget; the
+   new French listed for Gate O's read; the evidence in the session log; and this section rewritten to Gate O.
+3. **Beside it, whenever a smoke key is to hand** (agent, about US$0.10; carried from D194): measure the dial on `main`.
+   Once `/api/health` answers the deployed build, run the dials-only spec on the deployed site four times, 90 s apart:
    ```
    cd apps/web && (set -a; . ../../.env.local; set +a; PALIER_LIVE=1 PALIER_LIVE_DIALS_ONLY=1 \
      PALIER_LIVE_BASE_URL=https://palier-virid.vercel.app pnpm exec playwright test --project=live)
    ```
-   *Done:* the twelve figures, and each run's first `secret` step, in the session log beside D190's baseline. If the median
-   is over 2.5 s, which the baseline's was not, find the step that moved before building anything else. Otherwise go on.
-2. **Phase 6 Slice 3, the exception escapable**, as planned in the Phase 6 section and `implementation-plan.md` §7:
-   - the self-hosted escape of ADR 3: a popup to the user's own endpoint and `postMessage`, so `connect-src` stays
-     `'self'` and OpenAI (D165). It is the third `RealtimeSecretSource` the port's comment names;
-   - the one-file Cloudflare Worker and the Vercel function in the repo;
-   - the route's exclusion from Vercel logging verified, and written into `docs/deploy.md`;
-   - `docs/realtime-checklist.md`: architecture.md §14's manual checklist written out for Gate O.
+   *Done:* the twelve figures in the session log beside D190's. Over 2.5 s median, find the step that moved first. It needs
+   `OPENAI_SMOKE_KEY` in `.env.local` at the repository root.
+4. **Then Gate O (human)**, once Slice 5 has merged: `docs/realtime-checklist.md` on its six pairs, the route read line by line
+   with its rate limit, the self-hosted files, the French of the new copy (studio mode's, the endpoint's and Slice 5's), and
+   `docs/deploy.md`'s log check. Its pass completes Phase 6. **Then Gate M.**
 
-   *Done:* the self-hosted path working end to end against a local endpoint, with the key-leak test's counts holding.
-3. **Then Gate O (human)**: the checklist on Chrome, Safari and Firefox, desktop and mobile (exit criterion 3), the route
-   read line by line, and the French of the new copy. Then Gate M.
+Budget note (D178): a change to a core package puts the fast lane near 92 s of its 120 s, and Slice 5 touches the engine. Run
+`pnpm verify` and `CI=1 pnpm verify:medium` before pushing. A fresh worktree needs `pnpm --filter @palier/web build` first, or
+the medium lane's production server cannot start, and `pnpm exec playwright install chromium` if Playwright's browser is
+missing.
 
-Budget note (D178): a change to a core package puts the fast lane near 92 s of its 120 s. Run `pnpm verify` and
-`CI=1 pnpm verify:medium` before pushing. A fresh worktree needs `pnpm --filter @palier/web build` first, or the medium
-lane's production server cannot start.
+**For the human, from Phase 6 Slice 3 (D192–D194):**
+- **Deploy your own endpoint** from `selfhost/` (Cloudflare or Vercel; `selfhost/README.md`) with `ALLOWED_ORIGIN` set to
+  `https://palier-virid.vercel.app`, before Gate O: the checklist's section 7 needs one.
+- **Read D193** and say whether "nothing Vercel records can carry the key" is what ADR 3's "request logging is disabled"
+  should mean.
+- *(The route's rate limit is decided: Phase 7 Slice 5 builds it before Gate O, D195.)*
+- The endpoint page's two lines of French are the agent's, in `selfhost/`; they go to Gate O's read with the rest.
 
-**For the human, from this branch (D190, D191):**
-- Merge it. The warm-up sends no key: the key still reaches the route once per dial, after the tap.
+**For the human, from the dial's branch (D190, D191):**
+- *(Done: merged as #58.)*
 
 **For the human, from Phase 6 Slice 2:**
 - **Read the new copy** in both languages: the picker's studio callout, the pre-flight's line, the key settings' "one
-  exception" card, the onboarding offer and `/privacy` (D186). It goes to Gate O's French read. The card's link to the
-  route's source resolves once the repo is public.
+  exception" card, the onboarding offer and `/privacy` (D186). It goes to Gate O's French read. *(The card's link to the
+  route's source resolves now: the repo is public, D195.)*
 
 **For the human, from Phase 6 Slice 1:**
 - *(Done 30 September 2026: on the deployed `5b47616`, `POST /api/realtime/secret` with no key answered
   `401 {"error":"missing-key"}`, and `/api/health` answered `{"build":"5b47616","bank":3,"database":"ok"}`.)*
-- The route still has no rate limit (D169), and its exclusion from Vercel's logs is verified only in Slice 3. Say if the
-  rate limit should come before Gate O.
+- *(Settled: the rate limit is Phase 7 Slice 5's, before Gate O, and the log exclusion is D193's, D195.)*
 
 **For the human, from Slice 4:**
 - **look at the milestone moment and Coco's cheering pose** (seed or reach a milestone; D159, D160) and the self-hosted type
   (D161), and say whether either needs another pass before 1.0;
-- the share card's text names Palier as "free, unofficial" and the SLE: confirm that wording before the repo goes public.
+- the share card's text names Palier as "free, unofficial" and the SLE: confirm that wording before launch (the repo is
+  public already, D195).
 
 **For the human, from Slice 3:**
 - **delete `about.bankToday`** ("still small and partly synthetic") when the full-volume bank ships (Gate M);
@@ -632,17 +657,18 @@ Nothing is ticked without session-log evidence.
 
 **Work breakdown (§7)**
 
-- [~] Device list and revocation UI, pairing polished. **The list, remove and pairing by code exist** (Phase 2 Slice 2, D72:
+- [x] Device list and revocation UI, pairing polished. **Merged with Slice 3 (#47).** **The list, remove and pairing by code exist** (Phase 2 Slice 2, D72:
   `SyncSettings.tsx`, `removeDevice`, journey 8). **Slice 3, built on this branch** (D149): a confirmation before a device is removed, the pair
   code's countdown and lapse, and this device's switch following a removal elsewhere
-- [~] Retention job for inactive accounts (180 days) and the 90-day tombstone purge, the storage alerts, the aggregation
+- [x] Retention job for inactive accounts (180 days) and the 90-day tombstone purge, the storage alerts, the aggregation
   path (architecture.md §9.4; D78 moved both jobs here). **Slice 2, merged (#45)** (D138, D139): the job, its daily
   workflow and the alert at 60% and 80%. The aggregation path is the 60% response, written as a runbook step in
   `docs/deploy.md`, not built, until the alert first fires
-- [~] PDF progress summary; JSON export and import round trip. **The round trip exists** (D61, D62; `data-rights.test.ts`,
+- [x] PDF progress summary; JSON export and import round trip. **Merged with Slice 3 (#47)**; the trend *over time* that
+  PRD §8.9 asks of `/progress`, and so of its printout, is **Slice 5** (D195). **The round trip exists** (D61, D62; `data-rights.test.ts`,
   journey 6). **Slice 3, built on this branch** (D148): the one-page PDF (PRD §8.9) as `/progress` printed, both skills and the oral line,
   one page on Letter and A4. A trend *over time* is named, not scheduled
-- [~] The motion and illustration pass: Coco, the milestone moments, the streak, the band meter fill, self-hosted fonts
+- [x] **Merged with Slice 4 (#51).** The motion and illustration pass: Coco, the milestone moments, the streak, the band meter fill, self-hosted fonts
   (D65). Slice 4: the streak (with its silent freeze) and the milestone moments are in 1.0; XP, levels and the countdown
   are after 1.0 (Gate K, D145). **Slice 4, built on this branch** (D159–D161): the streak and its one-time freeze note, the
   four milestone moments with Coco cheering and a text-only share, the band meter's entrance fill, one motion switch, and
@@ -652,15 +678,15 @@ Nothing is ticked without session-log evidence.
   sheet at `?` (D150) and the `lang` audit (D151)
 - [x] Security review: CSP tightening, Trusted Types, dependency audit, `SECURITY.md`, a deliberate attempt to leak the key.
   **Slice 1, merged (#39)** (D133–D137). Gate L's red-team read passed (D164)
-- [~] The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
+- [x] **Merged with Slice 4 (#51).** The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
   Slice 4: one article per written-expression sub-skill, ten, in both languages; reading's after 1.0 (Gate K, D145). The
   articles' French is part of Gate L. **Slice 4, built on this branch** (D162): ten articles as structured JSON, not MDX, at
   `/library`, linked from every written-expression explanation
-- [~] Observability: the client diagnostic bundle, the prefilled issue path, no error reporting service (ADR 15). **The
+- [x] **Merged with Slice 2 (#45); the realtime route's log exclusion is Phase 6 Slice 3's (D193).** Observability: the client diagnostic bundle, the prefilled issue path, no error reporting service (ADR 15). **The
   item-report issue path exists** (Phase 2). **Slice 2, merged (#45)** (D140–D142): the diagnostic bundle, the error
   states with a prefilled issue, and `/api/health`. The realtime route's exclusion from Vercel logging moves with studio
   mode (D131)
-- [~] Content: the about page, the non-affiliation statement in both languages, the privacy notice, the contribution guide
+- [x] **Merged with Slice 3 (#47).** Content: the about page, the non-affiliation statement in both languages, the privacy notice, the contribution guide
   with the originality attestation, the PR template. **Slice 3, built on this branch** (D146, D147, D152): the about page and `/privacy`
   drafted, the statement beside every band and in onboarding, `CONTRIBUTING.md`, the PR template and the authored-item
   intake. Their French is Gate L's
@@ -690,15 +716,23 @@ Nothing is ticked without session-log evidence.
   29 September 2026, merged (#51)** (`dougkeefe/smoke-key-next-slice`; D159–D162; session-log evidence).
 - [x] **Gate L — the human reviews (human).** R8's French review, the VoiceOver and NVDA pass, and the red-team read.
   **Passed 29 September 2026** (D164): the human found no issue in any of the three.
-- [ ] **Gate M — public (human).** The repo made public, an outside item submission [R13], the domain, §12.1's trademark
-  check, and the full-volume bank (D54), which stays sequenced to the end (D56). **It waits on Phase 6** (D165).
+- [ ] **Slice 5 — Launch readiness** (planned 2 October 2026, D195; the scope and each piece's *done* are
+  `implementation-plan.md` §7 Phase 7's, keep the two in sync). Built before Gate O, since it changes the route Gate O reads:
+  1. the realtime route's rate limit, 60 posts an hour per IP hash, refused as a new `throttled` code (D169's question);
+  2. the band trend over time on `/progress` and its printout (PRD §8.9, named since D148);
+  3. `robots.txt`, a sitemap with `hreflang` alternates, and the public origin from Vercel's production URL;
+  4. an unknown path answering 404, by a rewrite in the proxy, or a deviation saying why not (D141).
+- [ ] **Gate M — public (human).** ~~The repo made public~~ (**public**, confirmed 2 October 2026, D195), an outside item
+  submission [R13], the domain, §12.1's trademark check, and the full-volume bank (D54), which stays sequenced to the end
+  (D56). **It waits on Phase 6's Gate O** (D165), which waits on Slice 5 (D195).
 
 **Exit criteria** (the actual gate)
 
 - [ ] Every gate green, no known accessibility defects, no known security defects. The accessibility and security halves
   passed at Gate L (D164); ticked when Gate M is green
 - [x] Both languages reviewed by a human [R8]. Gate L (D164)
-- [ ] Repo public, licences in place, contribution path tested by someone else submitting an item [R13]
+- [ ] Repo public, licences in place, contribution path tested by someone else submitting an item [R13]. **Public and
+  licensed** (D153, D195); the outside submission is what remains
 
 ### Phase 6: Oral, studio mode — in 1.0, before Gate M
 
@@ -759,7 +793,10 @@ built after Phase 7's slices and before Gate M.
 
   *Done:* exit criterion 1 measured live, the cost per minute measured and written into `pricing.json` (principle 8), and
   the copy's parity.
-- [ ] **Slice 3 — The exception, escapable.** The work (the copy moved to Slice 2, D173):
+- [~] **Slice 3 — The exception, escapable.** **Built 2 October 2026** (`dougkeefe/conductor/settings.local.toml-update`; D192–D194; session-log
+  evidence); ticked when merged. Its *done* is met on the branch: `studio-selfhost-production.spec.ts` runs the
+  self-hosted path end to end on the production build, against the repository's own Worker on a local port. The log
+  exclusion's deployment check is the human's, at Gate O (D193). The work (the copy moved to Slice 2, D173):
   - the self-hosted escape of ADR 3, through a popup to the user's own endpoint and `postMessage`, so `connect-src` stays
     `'self'` and OpenAI (D165);
   - the one-file Cloudflare Worker and the Vercel function in the repo;
@@ -778,7 +815,9 @@ built after Phase 7's slices and before Gate M.
 - [ ] Disconnection mid-session recovers or fails cleanly with the transcript preserved
 - [ ] Manual realtime checklist (`architecture.md` §14) passes on Chrome, Safari, Firefox, desktop and mobile
 - [x] The examiner's French voice is judged credible at C level by a human (Gate N) — `cedar`, D174
-- [ ] The key exception is stated wherever the copy promised otherwise, in both languages, and the self-hosted escape works
+- [ ] The key exception is stated wherever the copy promised otherwise, in both languages, and the self-hosted escape works.
+  **Met on `dougkeefe/conductor/settings.local.toml-update`** (D186, D192): the escape runs end to end under the production CSP; ticked once merged and
+  the French is read at Gate O
 
 ### Phase 8: English mirror
 
@@ -793,19 +832,19 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 
 | # | Requirement | Phase | Status |
 | --- | --- | --- | --- |
-| R1 | Practises all three tested skills | 2, 5 (6 after 1.0) | reading and written expression practised end to end (24 September 2026); **oral in practice mode** since Phase 5 (28 September 2026, Gate I, D129). Studio mode is after 1.0 (D131) |
-| R2 | Format and register match the real tests | 1 | not started |
+| R1 | Practises all three tested skills | 2, 5, 6 | reading and written expression practised end to end (24 September 2026); **oral in practice mode** since Phase 5 (28 September 2026, Gate I, D129); **studio mode is in 1.0** (D165): Slices 1–3 built (D166–D194), its real-browser pass is Gate O |
+| R2 | Format and register match the real tests | 1 | **built, verified at the full-volume bank**: the factory's register and format gates run on every batch (Phase 1, D51–D54) and passed on the baseline bank; Gate L read the bank's register (D164). The 500–700-item run is Gate M (D54, D56) |
 | R3 | Mock exams mirror published structure and cuts | 3 | **satisfied for reading and written expression** (25 September 2026): goldens at every cut (Slice 1), a form per variant at its exact counts, time and cuts (Slice 2), and all four variants runnable and scored in the app (Slice 3). The bank's French stays synthetic until the full-volume run (D54) |
 | R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams too: journey 3 finishes and submits a full exam with the network off and reads its results offline (25 September 2026) |
-| R5 | Never presents as official | 0, 7 | not started |
-| R6 | No real test items, no PSC reproduction | 1 | not started |
-| R7 | Rationale per option, explanation per item | 1 | not started |
-| R8 | Fully bilingual, equal prominence | 0, 1, 7 | not started |
-| R9 | WCAG 2.2 AA | 0, all | not started |
+| R5 | Never presents as official | 0, 7 | **satisfied and verified**: the statement in every footer since Phase 0, beside every band estimate and at the head of onboarding (Gate K, D145; Slice 3, D146), through one component, `NonAffiliation.tsx`; read in both languages at Gate L (D164) |
+| R6 | No real test items, no PSC reproduction | 1 | **built, verified at the full-volume bank**: the factory generates every item and its review gate refuses a reproduction (Phase 1, D51–D54); authored items attest originality (`CONTRIBUTING.md`, D152). The full run is Gate M |
+| R7 | Rationale per option, explanation per item | 1 | **built, verified at the full-volume bank**: the item schema requires both and the factory's deterministic checks refuse a draft without them (Phase 1); every committed item carries them. The full run is Gate M |
+| R8 | Fully bilingual, equal prominence | 0, 1, 7 | **satisfied and verified**: key parity is a fast-lane gate since Phase 0, the toggle has equal prominence, and every string was read by a human at Gate L (D164). Copy added since (studio mode, the self-hosted endpoint, Slice 5) is read at Gate O |
+| R9 | WCAG 2.2 AA | 0, all | **satisfied and verified**: axe on every route and session state and the contrast test on the token set are build gates since Phase 0 (ADR 13); the VoiceOver and NVDA pass at Gate L found nothing (D164) |
 | R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
-| R11 | Export, import, delete, each in one action | 2, 7 | Phase 2 half verified (24 September 2026): `/settings/data` does each in one action; journey 6 round-trips export → delete → import and finds the same progress. Phase 7's server-side delete waits for sync |
+| R11 | Export, import, delete, each in one action | 2, 7 | **satisfied and verified**: `/settings/data` exports, imports and deletes in one action each (journey 6), and delete-everywhere removes the server copy too, with sync (Phase 2 Slice 2) |
 | R12 | Key, audio, transcripts and submissions stay local | 4, 5 | **the key half is satisfied and verified** (26 September 2026). The tier-11 key-leak test asserts the sentinel reaches no origin but `api.openai.com`, no storage but the vault's ciphertext, no synced document, no export and no error (D100). **The writing half is satisfied and verified** (26 September 2026, Slice 3): the leak guard follows a submission's text and finds it only in requests to `api.openai.com` and in this device's own copy (the page, the field, `writingSubmissions`), never in a push, a pull, an export, Web Storage or the paired phone; proven to bite three ways (D106). **Runtime-generated items are held the same way** (27 September 2026, Slice 4, D110): a generated stem reaches only OpenAI, in review requests, and this device's `generated` table and page. It never appears in a push, an export, Web Storage or on the paired phone, and no attempt is ever written for it. Audio and transcripts are Phase 5: **the store that holds them is device-local by construction** (27 September 2026, Slice 1, D115). It is never synced and never exported, and a wipe and a delete-everywhere clear it, over both graphs. **The audio half is satisfied and verified** (27 September 2026, Slice 2, D120): each answer's clip reaches only OpenAI's transcription endpoint; the session recording reaches no request at all; and the transcript stays on this device, going back to OpenAI only in the examiner's next question and never to a push, an export, Web Storage or the paired phone. Proven to bite three ways |
-| R13 | Free and source-available, non-commercial (amended by the human, 29 September 2026, D153) | 0, 7 | licences committed (PolyForm Noncommercial 1.0.0 and CC BY-NC-SA 4.0, ADR 23); the repo is still private, so the Phase 7 half waits for it going public |
+| R13 | Free and source-available, non-commercial (amended by the human, 29 September 2026, D153) | 0, 7 | licences committed (PolyForm Noncommercial 1.0.0 and CC BY-NC-SA 4.0, ADR 23); **the repository is public** (human, confirmed 2 October 2026, D195). An outside item submission, Gate M, completes it |
 | R14 | Progress across devices, with an off switch | 2 | satisfied and verified on the hermetic lane (24 September 2026): journey 8 pairs two devices by code and both show the same progress; the switch is tested off, with server deletion offered, in `sync.spec.ts`. A public deployment with a real database is Slice 3 |
 
 Eleven of fourteen are covered by the end of phase 3. That is the evidence behind
@@ -6451,11 +6490,257 @@ item 2
   than replace them with a measured minute. Slice 2's *done* asked for the measured figure (principle 8); this is the
   human waiving it, as D130 waived practice mode's. A measured studio minute stays named, not scheduled.
 
+### D192 — the self-hosted escape: a popup opened inside the tap, the key posted only to the ready page's origin, the address in the vault
+**Date:** 2 October 2026 · **Status:** accepted (agent, Phase 6 Slice 3). Carries out D165's mechanism; amends
+implementation-plan.md §3.3's `KeyVault`. ADR 3 unchanged
+
+- **The mechanism is D165's**, and it worked: Palier opens the user's endpoint in a popup and passes the key by
+  `postMessage`. `connect-src` stays `'self' https://api.openai.com` for everyone, and the end-to-end test reads the
+  served header and records zero violations through a whole session.
+- **Three things D165 did not settle, decided here.**
+  1. **The popup must open inside the tap.** A browser opens a popup only from a user's gesture, and the mint waits on
+     the vault first. So the container builds `selfHostedRealtimeSecrets` and calls its `open()` synchronously, in the
+     call the Start button's handler makes, before anything awaits. The studio controller asks for the endpoint before
+     its first `await`, and a test holds that. A run that fails before its mint closes the popup (`cancel()`), and a
+     cancelled dial closes it through the signal.
+  2. **Where the address lives: the vault, not `SettingsStore`.** Every setting syncs (`collectRecords`), and an address
+     such as `palier.jane-doe.workers.dev` can name a person, which architecture.md §12's "nothing that identifies a
+     person" forbids on the server. The `KeyVault` port gains `realtimeEndpoint()` and `setRealtimeEndpoint()`, a row in
+     Dexie's `keyVault` table (no schema bump: the table is keyed by `id`), and **`clear` forgets it with the key**, so
+     the one-tap wipe leaves neither. Removing the key forgets it too, which is said in `selfhost/README.md`. Rejected: a
+     sync exclusion list in `records.ts` (a change to the sync core for one key), and a new port (a store for one value).
+  3. **The protocol.** Four messages, each with `version: 1`: the page's `ready`, Palier's `mint` (`id`, `key`, `model`,
+     `voice`), and the page's `minted` (`value`, `expiresAt`) or `refused` (`error`). Palier posts the key **only after
+     `ready` came from the popup it opened, at the endpoint's origin, and only to that origin**, so a popup that
+     navigated anywhere else never receives it. The answer is read only from that popup and origin, for the mint's id.
+     The page checks Palier's origin and that the sender is its opener. The model and voice are Palier's
+     `ai-models.json`'s, sent in the message, so the endpoint needs no configuration but `ALLOWED_ORIGIN`.
+- **The endpoint is two one-file deployables in `selfhost/`**, not a workspace: `cloudflare-worker.mjs` and
+  `vercel/api/realtime-secret.mjs`, identical between their markers, plus `README.md`. The page mints by posting the key
+  to its own origin (D165's "mints the secret on its own origin"), whose server makes ADR 3's one call. Its `POST`
+  answers only a same-origin request, reads the key from `Authorization` alone, checks the model and voice as names,
+  and answers the route's own codes, so a refusal reads the same in Palier. It has no `console` call and sends no
+  `Cross-Origin-Opener-Policy`, which would sever the popup from its opener. The Cloudflare file's default export joins
+  the exhaustive exemption list: Cloudflare finds a module Worker by it and offers no named alternative.
+- **What it cannot do: a reconnect's popup may be blocked.** A drop mid-session mints again with no gesture. Chromium
+  may allow it within its activation window; Safari and Firefox will often block it. Then the transport closes
+  `failed` with every turn kept, which exit criterion 2 allows. `selfhost/README.md` says so, and the checklist records
+  which happens on each browser (D194).
+- **Errors.** `SelfHostedEndpointError { reason: blocked | closed | timeout | refused | malformed }`, named by string as
+  every adapter error is (D158). The screen names it `failEndpoint` ("Your own endpoint gave no pass…"), checked by name
+  in `oralFailure` before `checkFailure`, so `checkFailure`'s switch gains no case (principle 6).
+- **The screen.** The key settings' "one exception" card gains the form (`RealtimeEndpointSettings`). With an endpoint
+  set, the picker's callout and the pre-flight name it (`studioModeOwn`, `sendsToStudioOwn`), the route is never woken
+  (D190's warm-up is skipped), and `/privacy`'s third-party line says the server does not see the key then either. The
+  French is the agent's and goes to Gate O's read.
+- **Tests.** The adapter over a simulated popup, with the `RealtimeSecretSource` contract run against it; the container
+  through both graphs with `window` stubbed (the popup opened before the call awaits, the route seeing nothing, the
+  popup closed when the session cannot start); both deployables through each platform's entry point and the page's
+  script in a `vm` sandbox; and `studio-selfhost-production.spec.ts` on the production build. **Proved to bite:** with
+  the container ignoring the endpoint, the spec failed (the session never came up). The leak guard learns the endpoint's
+  origin (`selfHostedAuthorizations()`), as narrowly as the route's.
+- **From the pre-PR review (candid-review, harsh, with a second reviewer on the key path; on this branch):**
+  - **The endpoint is read with no fallback.** The oral screen caught a failed read as "no endpoint", which would have
+    sent a tab-only key to the route the user had opted out of. A failed read now stops the screen, as any other does.
+  - **`cancel()` is final.** A mint still waiting on the vault when its run failed would have opened a second popup with
+    no gesture and posted the key for a dead session. Now a cancel abandons a mint in flight and refuses every later one
+    without opening anything.
+  - **Each popup is a new `_blank` window.** A named window was reused, so a stale popup's end could close a newer
+    session's. The test that pinned the name changed with it.
+  - **A popup is closed only when seen closed on two polls running**, about 250 ms of grace, because the page closes
+    itself right after posting its answer and a popup in another process can read as closed first. The test that
+    failed at the first closed poll now expects the second; a new one holds that a late answer still wins.
+  - Removing the key re-reads the endpoint form, which had kept showing a forgotten address. The README and the
+    checklist name a redirecting address and a `forbidden-origin` refusal. Two tests in `selfhost.test.ts` were named
+    for what they did not prove: the markup test now asserts the origin the page embeds, and the 405 case runs on the
+    Worker alone, since Vercel answers a method with no export itself. `recordViolations` is one helper in
+    `e2e/helpers.ts`, shared with `csp-production.spec.ts`.
+
+### D193 — the route's log exclusion: no per-route switch exists, so nothing Vercel records may carry the key
+**Date:** 2 October 2026 · **Status:** accepted (agent, Phase 6 Slice 3). A third reading of ADR 3, beside D165's two; the
+deployment check is the human's, at Gate O
+
+- **ADR 3 says "Request logging is disabled for that route."** Vercel offers no switch for one route or function
+  (vercel.com/docs/logs/runtime, read 2 October 2026). Its runtime logs record, per request, the method, path, status,
+  host, user agent, search parameters, region, function metadata, the URLs of outgoing requests, and every console line.
+  Request headers and bodies are not recorded.
+- **So "disabled" is read as "nothing it records can carry the key".** The key is in `Authorization`; the route reads no
+  body and takes no search parameters; its one outgoing URL holds no key; and it writes nothing. Every failure is
+  answered as a code inside `handle`, so none escapes for Next to log with a message an adapter error might carry.
+  `realtime-handlers.test.ts` now holds both halves: a spied console stays empty through every answer, the key-bearing
+  failures included, and neither file holds a `console` call. **No log drain** is configured; `docs/deploy.md` says to
+  read its section before adding one.
+- **Not verified on the deployment by this session.** The Vercel CLI here was logged out, and the agent has no dashboard
+  access. `docs/deploy.md`'s "The realtime secret route and the logs" gives the four-step check (a keyless `curl` is
+  enough, and spends nothing); it is on the checklist for Gate O.
+- **If the human reads ADR 3's "disabled" literally**, that is a new ADR superseding it: the route would have to move to
+  a host that can switch logging off for it, or the self-hosted escape would become the only path.
+
+### D194 — the manual realtime checklist is written, and the dial was not re-measured on `main`
+**Date:** 2 October 2026 · **Status:** accepted (agent, Phase 6 Slice 3)
+
+- **`docs/realtime-checklist.md`** covers architecture.md §14's four headings (microphone permission, phase transitions,
+  disconnection recovery, cost accounting) and Phase 6's other criteria: the dial under 2.5 s, the examiner's French and
+  listening, "could you repeat", reduced motion, audio without headphones, the recording's places, the 25-minute cap,
+  and the self-hosted escape, on the six browser and platform pairs. It ends with a results table for the session log.
+  Its pairs are those Gate O names; section 7 runs on one pair per engine plus iOS, whose popups open as tabs.
+- **The first step of *Next, decided*, re-measuring the dial on `main` after #58, was not run.** It needs
+  `OPENAI_SMOKE_KEY` in `.env.local`, and this machine has none. It touches no code this slice changed (the self-hosted
+  path is not the default and is not held to 2.5 s), so the slice went ahead, and the measurement stays first in *Next,
+  decided*. The self-hosted dial is slower by the popup's load and the endpoint's mint; it is not measured, and the
+  checklist asks the human to write it down.
+
+### D195 — the repo is public, and Phase 7 gains a fifth slice, launch readiness, before Gate O
+**Date:** 2 October 2026 · **Status:** accepted (human: the repo is public, and "plan the remaining pieces for the next slice
+so that it makes it as ready as possible for launch"; the slice's content and order, agent). Amends D132's four slices
+
+- **The repository is public** (the human, confirmed through the API: `visibility: PUBLIC`). Gate M's first item is done,
+  R13 lacks only an outside item submission, and every link that "resolves once the repository is public" now does: the
+  key settings' link to the route's source (D186) and the self-hosted guide (D192).
+- **What was left between the code and a launch, read across the documents.** One build piece too large for a slice and
+  gated on money, the full-volume bank (Gate M, D54). Four pieces the documents already name that need no human decision,
+  which become **Slice 5**:
+  1. **the realtime route's rate limit**, asked about since Slice 1 (D169) and still open: the one public route with none;
+  2. **the band trend over time**, which PRD §8.9 asks of `/progress` and its printout, and which D148 left named;
+  3. **`robots.txt`, a sitemap and `hreflang`**: none exists, and the site is now public in two languages;
+  4. **a true 404** for an unknown path, named since D141.
+- **Decided for the rate limit**, so the slice need not re-derive it: 60 posts an hour per IP hash, counted before the
+  key is read, refused as a new `throttled` code (`rate-limited` already means OpenAI's quota and reads as "out of credit");
+  no limit with no database or in the hermetic graph; and a failing store lets the mint through, because the spend is the
+  user's own key and the limit guards only our function.
+- **Decided for the 404:** a rewrite with status 404 in the proxy, which keeps the page inside the layout and under the
+  CSP. If Next 16 cannot carry the status on a rewrite, the slice records why and keeps D141's 200 with `noindex`.
+  `global-not-found` is ruled out: it renders outside the layout, without the nonce.
+- **Why before Gate O.** Slice 5 changes `POST /api/realtime/secret`, which Gate O reads line by line, and adds copy that
+  Gate O's French read can take in the same pass. Gate O after it reads the route once, finished.
+- **Not in it:** the full-volume bank (Gate M's, funded by the human), Gate J, and the rest of *named, not scheduled*, which
+  reads as after 1.0. The human's launch items are unchanged: the outside submission, the domain, the trademark check.
+- **The records were brought up to date with the repository** in the same change: Phase 7's merged work items ticked,
+  Phase 0's port lines ticked (every deferred port has landed), and the requirement coverage table's stale rows (R1, R2, R5,
+  R6, R7, R8, R9, R11, R13) rewritten to what is built and verified.
+
+### D196 — the drill's keys are live before its first item is painted, and a failed E2E test now leaves a trace
+**Date:** 3 October 2026 · **Status:** accepted (agent). Corrects D179's reason for leaving the drill as it was
+
+- **Found by CI on PR #60**: `content.spec.ts`'s library-link journey failed once in shard 1 of a pull-request run. The
+  push run of the same commit, `9dfcf84`, passed, and the commit changed documents only. "1" and Enter, pressed as soon as
+  the drill's count showed, were lost: no feedback appeared.
+- **The cause is D179's, in the drill.** D179 left `PracticeSession` alone because "it adds its listener while still
+  loading". It does not: the listener is in `Runner`, which `LoadedSession` mounts only once the items have loaded, with
+  its first item painted, and the listener was added in a passive `useEffect`, which React may run after that paint. So
+  the listener moves to `useLayoutEffect`, as the exam runner's did.
+- **Not reproduced locally**, which is said plainly: 41 runs of the journey at 6 workers, and 21 more with the CPU slowed
+  eightfold, all passed on a fast Mac. The fix rests on the code. The symptom is D179's, the structure is the exam
+  runner's before D179, and like D179's failure it appeared only under a whole shard. Other paths were read and ruled
+  out: the reducer resolves keys against current state (D65), the container's context value is stable once set, and the
+  session id cannot change under a mounted `Runner`.
+- **Why there was nothing to read.** The Playwright config kept traces `on-first-retry`, and `retries` is 0, so no
+  trace was ever recorded, and CI uploaded no results. Now traces are `retain-on-failure`, and a failed E2E shard uploads
+  `apps/web/test-results/` (traces and error contexts) as an artifact, for 14 days. The hermetic lanes use only sentinel
+  keys and stubbed OpenAI answers, so a public artifact holds no secret.
+- **Evidence:** the whole E2E suite three times at 4 workers: 101 passed, then 99 with 2 failed, then 101 passed. The two
+  failures were not the drill, and are below.
+- **A second race, found by that evidence and not fixed here, because the fix is a test change.** `practiseSpeaking` in
+  `e2e/helpers.ts` asserts that "The examiner asks" holds focus after Start. The screen focuses that heading, then moves
+  focus to the first question as soon as it is waiting (D121, by design). When the stubbed question arrives quickly,
+  focus has left the heading before the assertion first looks, so `key-leak.spec.ts` and `oral.spec.ts` failed together
+  in one run. The product behaves as D121 intends; the assertion checks a state that can last a few milliseconds. It is
+  the same on `main`. The proposed fix asserts where focus *lands*: on the heading, or on the question once it is
+  waiting. It waits for the human's yes, since the rule is to name a wrong test rather than change it quietly.
+- **Revisit when** the journey fails again: read the uploaded trace before changing anything.
+
+### D197 — CI's two red shards on `a7a8a99`: the examiner's heading checked too late, and journey 3 out of time
+**Date:** 3 October 2026 · **Status:** accepted (human: "fix the failing CI actions", the go-ahead D196 waited for on its
+test change; the diagnosis, agent)
+
+Read from the traces D196 started uploading, not guessed:
+
+- **Shard 1, `oral.spec.ts`'s D127 journey, in both the push and the pull-request run.** The screenshot at failure shows
+  the first question on screen and the answer field focused: a typed session, where D121 sends focus. The heading had it
+  first, for a moment. This is the race D196 named. **The test changed**, in `practiseSpeaking`: it now checks where
+  focus lands, the question for a spoken answer and the field for a typed one, after the heading is shown. That is
+  stricter than before, not looser. **Proved to bite:** with D121's move to the field removed, the journey fails on
+  exactly that assertion; restored, it passes.
+- **Shard 2, journey 3 (`exam-offline.spec.ts`).** The page was "Submitting your exam…" when the **test's 30 s default
+  timeout** ran out. The trace's timings show `waitForOfflineReady`, the service worker's install and precache, took
+  **21.4 s** on that runner, which left about 8 s for a 60-item exam, a reload, finishing offline and submitting. The
+  product did nothing wrong. Every other long journey sets its own budget (90–240 s), and journey 3 had none. **It gets
+  90 s**, and so does journey 9 (`telemetry-offline.spec.ts`), the other full exam after the same wait, which carries the
+  same exposure. No assertion changed.
+- **Evidence:** the five affected specs three times each at 4 workers, 46 passed; then the whole suite and the fast lane
+  (session log).
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 3 October 2026 — `dougkeefe/conductor/settings.local.toml-update` (CI's two red shards on `a7a8a99`; D197)
+
+- Read from the uploaded traces (D196): the examiner's heading checked after focus had moved on, and journey 3 out of its
+  30 s default. `practiseSpeaking` checks where focus lands (proved to bite); journeys 3 and 9 get 90 s each.
+
+```
+playwright test oral, key-leak, key-leak-production, exam-offline, telemetry-offline --repeat-each=3 → 46 passed
+CI=1 pnpm run test:e2e     → 101 passed (3.0m)
+pnpm verify                → 251 files, 3963 passed, 8 todo; exit 0
+```
+
+### 3 October 2026 — `dougkeefe/conductor/settings.local.toml-update` (the drill's first keys; E2E traces kept; D196)
+
+- **CI's one red shard on PR #60** was the drill losing "1" and Enter pressed as its first item appeared (D196). The
+  drill's `keydown` listener moves to a layout effect, as the exam runner's did in D179.
+- **A failed E2E test now leaves evidence**: traces are kept on failure, and a failed shard uploads them.
+
+### 2 October 2026 — `dougkeefe/conductor/settings.local.toml-update` (the repo public; Phase 7 Slice 5 planned; D195)
+
+- **The repo is public** (human; `gh repo view` answers `PUBLIC`). Gate M's first item and R13's licence half are done.
+- **Phase 7 Slice 5, launch readiness, planned** (D195) in `implementation-plan.md` §7 Phase 7 and *Next, decided*: the
+  realtime route's rate limit, the band trend over time, robots and a sitemap with `hreflang`, and a true 404, before Gate O.
+- **The records brought up to date**: Phase 7's merged work items and Phase 0's port lines ticked; the requirement coverage
+  table's stale rows rewritten; the human's lists cleared of what the public repo and Slice 5 settle. Documents only; PR #60's
+  lanes were green before this change.
+
+### 2 October 2026 — `dougkeefe/conductor/settings.local.toml-update` (Phase 6 Slice 3: the exception, escapable; D192–D194)
+
+Opened to *Next, decided*. Its first step, re-measuring the dial on `main` after #58, was **not run**: this machine has no
+`.env.local` and no smoke key (D194). The slice does not touch the default dial, so it went ahead, and the measurement
+stays first in *Next, decided*.
+
+- **The self-hosted escape** (D192): `selfHostedRealtimeSecrets`, the third `RealtimeSecretSource`, over a popup seam; the
+  popup opened inside the tap by the container; the key posted by `postMessage` only after the page's `ready`, only to
+  its origin; `SelfHostedEndpointError`; the address kept in the vault (`KeyVault` gains two methods, §3.3 amended),
+  never synced or exported, forgotten by `clear`; the form on `/settings/key`; the picker's, the pre-flight's and
+  `/privacy`'s copy in both languages; `failEndpoint`.
+- **`selfhost/`**: the one-file Cloudflare Worker and Vercel function, identical between their markers by test, and their
+  README. A web test runs both through each platform's entry point and the page's script in a sandbox.
+- **End to end on the production build** (`studio-selfhost-production.spec.ts`, the `offline` project): the repository's
+  Worker under Node on port 3300 (`e2e/selfhost-server.mjs`, a third Playwright server), minting against a stand-in for
+  OpenAI. The route saw no key and no warm-up; the endpoint saw the key once, in `authorization`; the dial carried
+  `ek_selfhosted_1`; the served `connect-src` is unchanged and the session raised no CSP violation; axe-clean on the
+  form's states; a blocked popup ends with the endpoint's sentence. **Proved to bite:** with the container ignoring the
+  endpoint, the spec failed (the session never came up); restored, it passed.
+- **The route's log exclusion** (D193): Vercel has no per-route switch, so what holds is that nothing it records can carry
+  the key. `realtime-handlers.test.ts` now holds that the route writes nothing to the console on any answer. The
+  deployment check is written into `docs/deploy.md` and is the human's: the Vercel CLI here was logged out.
+- **`docs/realtime-checklist.md`** (D194), for Gate O; the docs index, the root `CLAUDE.md`, `SECURITY.md`, architecture.md
+  §6.3, §14 and §16, and the three package `CLAUDE.md`s follow.
+
+```
+pnpm verify                → check-types, lint, boundaries pass; test: 251 files, 3963 passed, 8 todo; exit 0 (Node 22.23.3)
+CI=1 pnpm verify:medium    → integration: 7 files, 51 passed; Playwright: 101 passed (1.9m); exit 0
+                             (after `pnpm --filter @palier/web build`, and `playwright install chromium`: this machine had none)
+playwright test --project=offline studio-selfhost-production → 2 passed; with the endpoint ignored → 1 failed
+node apps/web/scripts/check-bundle-size.mjs → shared first-load JS 166.3 KB of 180.0 KB, within budget
+```
+
+After the pre-PR review (candid-review, harsh; eight findings, all applied, D192):
+
+```
+pnpm verify                → 251 files, 3963 passed, 8 todo; exit 0
+CI=1 pnpm verify:medium    → integration 51 passed; Playwright 101 passed (2.0m); exit 0
+```
 
 ### 30 September 2026 — `dougkeefe/testing-before-development` (the human's studio session; the dial under 2.5 s; D190–D191)
 
