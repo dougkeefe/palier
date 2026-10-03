@@ -23,8 +23,11 @@ import { getPathname, Link, usePathname } from "../i18n/navigation";
  * writes the locale cookie, and the proxy cannot: once the service worker
  * controls the page, the navigation reaches the proxy as the worker's `fetch`,
  * not as a document request, and next-intl leaves the cookie alone for those.
+ *
+ * `className` restyles it where the app's header is not the one around it: the landing page's
+ * own header, over its photograph (D201).
  */
-export function LanguageToggle() {
+export function LanguageToggle({ className = "app-lang-toggle" }: { className?: string }) {
   const t = useTranslations("languageToggle");
   const locale = useLocale();
   const pathname = usePathname();
@@ -36,7 +39,7 @@ export function LanguageToggle() {
       href={pathname}
       locale={other}
       lang={other}
-      className="app-lang-toggle pl-focusable"
+      className={`${className} pl-focusable`}
       onNavigate={(event) => {
         event.preventDefault();
         window.location.assign(href);
