@@ -41,7 +41,9 @@ export default defineConfig({
   retries: 0,
   reporter: process.env.CI ? "github" : "list",
   use: {
-    trace: "on-first-retry",
+    // Kept for a failed test only. With `retries: 0`, "on-first-retry" never recorded one, so a
+    // failure in CI left nothing to read (progress.md D196).
+    trace: "retain-on-failure",
   },
   projects: [
     {

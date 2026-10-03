@@ -6619,11 +6619,47 @@ so that it makes it as ready as possible for launch"; the slice's content and or
   Phase 0's port lines ticked (every deferred port has landed), and the requirement coverage table's stale rows (R1, R2, R5,
   R6, R7, R8, R9, R11, R13) rewritten to what is built and verified.
 
+### D196 — the drill's keys are live before its first item is painted, and a failed E2E test now leaves a trace
+**Date:** 3 October 2026 · **Status:** accepted (agent). Corrects D179's reason for leaving the drill as it was
+
+- **Found by CI on PR #60**: `content.spec.ts`'s library-link journey failed once in shard 1 of a pull-request run. The
+  push run of the same commit, `9dfcf84`, passed, and the commit changed documents only. "1" and Enter, pressed as soon as
+  the drill's count showed, were lost: no feedback appeared.
+- **The cause is D179's, in the drill.** D179 left `PracticeSession` alone because "it adds its listener while still
+  loading". It does not: the listener is in `Runner`, which `LoadedSession` mounts only once the items have loaded, with
+  its first item painted, and the listener was added in a passive `useEffect`, which React may run after that paint. So
+  the listener moves to `useLayoutEffect`, as the exam runner's did.
+- **Not reproduced locally**, which is said plainly: 41 runs of the journey at 6 workers, and 21 more with the CPU slowed
+  eightfold, all passed on a fast Mac. The fix rests on the code. The symptom is D179's, the structure is the exam
+  runner's before D179, and like D179's failure it appeared only under a whole shard. Other paths were read and ruled
+  out: the reducer resolves keys against current state (D65), the container's context value is stable once set, and the
+  session id cannot change under a mounted `Runner`.
+- **Why there was nothing to read.** The Playwright config kept traces `on-first-retry`, and `retries` is 0, so no
+  trace was ever recorded, and CI uploaded no results. Now traces are `retain-on-failure`, and a failed E2E shard uploads
+  `apps/web/test-results/` (traces and error contexts) as an artifact, for 14 days. The hermetic lanes use only sentinel
+  keys and stubbed OpenAI answers, so a public artifact holds no secret.
+- **Evidence:** the whole E2E suite three times at 4 workers: 101 passed, then 99 with 2 failed, then 101 passed. The two
+  failures were not the drill, and are below.
+- **A second race, found by that evidence and not fixed here, because the fix is a test change.** `practiseSpeaking` in
+  `e2e/helpers.ts` asserts that "The examiner asks" holds focus after Start. The screen focuses that heading, then moves
+  focus to the first question as soon as it is waiting (D121, by design). When the stubbed question arrives quickly,
+  focus has left the heading before the assertion first looks, so `key-leak.spec.ts` and `oral.spec.ts` failed together
+  in one run. The product behaves as D121 intends; the assertion checks a state that can last a few milliseconds. It is
+  the same on `main`. The proposed fix asserts where focus *lands*: on the heading, or on the question once it is
+  waiting. It waits for the human's yes, since the rule is to name a wrong test rather than change it quietly.
+- **Revisit when** the journey fails again: read the uploaded trace before changing anything.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 3 October 2026 — `dougkeefe/conductor/settings.local.toml-update` (the drill's first keys; E2E traces kept; D196)
+
+- **CI's one red shard on PR #60** was the drill losing "1" and Enter pressed as its first item appeared (D196). The
+  drill's `keydown` listener moves to a layout effect, as the exam runner's did in D179.
+- **A failed E2E test now leaves evidence**: traces are kept on failure, and a failed shard uploads them.
 
 ### 2 October 2026 — `dougkeefe/conductor/settings.local.toml-update` (the repo public; Phase 7 Slice 5 planned; D195)
 

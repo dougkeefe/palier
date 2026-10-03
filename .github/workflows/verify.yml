@@ -155,3 +155,13 @@ jobs:
         run: >-
           .github/scripts/within-budget.sh 300 "Medium lane, E2E ${{ matrix.shard }}/2"
           pnpm run test:e2e --shard=${{ matrix.shard }}/2
+
+      # A failed test's trace and error context, so a failure can be read rather than
+      # re-run (progress.md D196). Nothing is uploaded when every test passes.
+      - name: Upload the failed tests' traces
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-failures-shard-${{ matrix.shard }}
+          path: apps/web/test-results/
+          retention-days: 14

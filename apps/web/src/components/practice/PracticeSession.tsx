@@ -6,7 +6,7 @@ import { attemptId, sessionId } from "@palier/domain";
 import type { SkillTrend } from "@palier/engine";
 import { Button, Callout, EmptyState, Passage, ProgressRail, Sheet, itemRenderers } from "@palier/ui";
 import { useLocale, useTranslations } from "next-intl";
-import { type ReactNode, type Ref, useEffect, useReducer, useRef, useState } from "react";
+import { type ReactNode, type Ref, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 
 import { currentItem, drillReducer, pendingAnswer, startDrill, summaryOf } from "../../features/drill/drill";
 import { Link } from "../../i18n/navigation";
@@ -262,8 +262,12 @@ function Runner({
   }, [state, container, session, mode]);
 
   // §8.3's keys, whenever the drill is on screen — not only while focus happens to be
-  // inside it. Keys typed into a text field are left alone.
-  useEffect(() => {
+  // inside it. Keys typed into a text field are left alone. A layout effect, so the
+  // listener is on before the first item is painted: `Runner` mounts only once the
+  // items have loaded, with its first item, and a passive effect can run after that
+  // paint, so "1" and Enter pressed as the item appeared were lost (progress.md D196,
+  // as the exam runner's were, D179).
+  useLayoutEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       // Keys typed into a field, Enter on a real button (Confirm, Next, a link: that
       // control's own click), and a chord or held key are not the drill's
