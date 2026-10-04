@@ -64,7 +64,7 @@ Worker and Vercel function in `selfhost/`; the route's log exclusion written int
 switch, D193); and `docs/realtime-checklist.md` for Gate O. It merged (#60). **Phase 7 Slice 5, launch readiness, is built**
 (`dougkeefe/docs-content-development`; D198–D199): the realtime route's rate limit, refused as `throttled`; the band trend over time on `/progress`
 and its one-page printout; `robots.txt`, a sitemap and `hreflang` from one route list; and an unknown path answering 404.
-**The full content run is built** (`dougkeefe/1nsv0`; D203–D207; ADR 24), by the human's decision on 4 October 2026: Claude
+**The full content run is built** (`dougkeefe/content-generation-run`; D203–D207; ADR 24), by the human's decision on 4 October 2026: Claude
 wrote 630 items on 60 passages and 20 oral scenarios through the authored intake, separate Claude instances reviewed them
 blind, 626 passed, and `content/bank/v4` is served with v3's synthetic content retired. That is Gate M's full-volume bank.
 What remains before 1.0 is the human's: Gate O, then the rest of Gate M.
@@ -142,7 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/1nsv0` | **The full content run, authored by Claude** (D203–D207; the human's decision, 4 October 2026): Claude writes the items, passages and oral scenarios through the authored intake, separate Claude subagents review them blind, v3's synthetic content is retired, and `content/bank/v4` is served. | 4 October 2026 |
+| `dougkeefe/content-generation-run` | **The full content run, authored by Claude** (D203–D207; the human's decision, 4 October 2026): Claude writes the items, passages and oral scenarios through the authored intake, separate Claude subagents review them blind, v3's synthetic content is retired, and `content/bank/v4` is served. | 4 October 2026 |
 
 *(The prior rows — the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -247,7 +247,7 @@ Built now rather than retrofitted — §7 is emphatic about this.
 Phase 7 (D132): **Slices 1–5 merged** (Slice 5 as #61), **Gate L passed** (D164), and the repo is public (D195). **Studio
 mode is in 1.0** (D165): Phase 6's three slices merged (#53, #57, #60), Gate N passed (D174), the human's live session passed
 (D191), and exit criterion 1 is met on the deployed site (D190). `main` is protected, and a red lane blocks the merge (D177).
-**The full content run is built** (`dougkeefe/1nsv0`; D203–D207; ADR 24): `content/bank/v4`, 626 items written by Claude and
+**The full content run is built** (`dougkeefe/content-generation-run`; D203–D207; ADR 24): `content/bank/v4`, 626 items written by Claude and
 reviewed blind by Claude, with v3's synthetic content retired.
 
 What stands between the code and 1.0 is now **the human's**: **Gate O**, then the rest of **Gate M** (an outside item
@@ -7079,7 +7079,7 @@ model review. They chose separate Claude instances.
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 4 October 2026 — `dougkeefe/1nsv0` (the full content run, authored by Claude; D203–D207, ADR 24)
+### 4 October 2026 — `dougkeefe/content-generation-run` (the full content run, authored by Claude; D203–D207, ADR 24)
 
 Not *Next, decided*: the human asked for the full content run "if it hasn't been done yet". It had not. They then decided:
 Claude writes the content, not the OpenAI API; separate Claude instances review it blind; v3's synthetic content is retired;
