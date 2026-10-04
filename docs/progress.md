@@ -6915,6 +6915,22 @@ So the work is in the tokens, the primitives and the chrome, with bespoke layout
   - **The dialog's backdrop names its token's value as a fallback**: before Safari 17.4 and Chrome 122, `::backdrop`
     inherits no custom property, and the dimming would have vanished.
   - The gate's new pairs above: `primary` as text, and the focus ring on the panels.
+- **What CI's medium lane found, and fixed** (the PR's first run, on the Linux runner):
+  - **`/progress` printed on two pages.** It fit Letter at 100% and overflowed at 105% on macOS, and the Linux runner's
+    rendering tipped it over. Two print rules:
+    - the inline statement keeps its panel, but at the page's 8pt with 3pt by 6pt of padding;
+    - the empty trend's note spans the row. It had sat in the chart's narrow first column and wrapped to 97px, twice.
+      This was D198's layout, and the serif made it worse.
+
+    It now fits up to 115% on both sizes.
+  - **The key-leak journey counted 14 calls on the key, not 16. The cause was a product bug, not the test.** After "Stop
+    and send", the practice reducer set `turn: "sending"` but left `waiting: true` until the bridge spoke again. While
+    the recorder stopped, "Record your answer" came back for the question just answered. Two things followed:
+    - the helper's wait for that button passed at once, so it ended the session before the third question was asked;
+    - a user could record a second answer to the same question.
+
+    `sent` now ends the wait (`waiting: false`). A clip's `stop` only resolves, so nobody is stranded. The new reducer
+    test fails without the fix.
 - **Proved to bite:** with `correct` back at `#1F7A5C`, the contrast gate fails four pairs; with `rule` lightened to
   `#B9B5B2`, it fails four more.
 - **For the human, not settled here:**
@@ -6959,6 +6975,11 @@ pnpm verify                                        → 258 files, 4108 passed, 8
 playwright --project=chromium                      → 74 passed
 playwright --project=offline (production build)    → 35 passed
 forced-colors emulated, /en/start step 2           → the radios are the platform's (appearance: auto); Level C shows chosen
+CI medium lane (PR #63, first run)                 → E2E 1/2: 2 failed (progress printed on 2 pages; key-leak 14 calls of 16); fixed
+print probe, Letter and A4 at scale 1–1.2          → before: 1 page to 1.0, 2 pages at 1.05; after: 1 page to 1.15
+vitest practice-view.test.ts, the fix reverted     → 1 failed (the new sent test); restored → 44 passed
+playwright --project=chromium                      → 74 passed; key-leak and the print test, --repeat-each=3 → 6 passed
+playwright --project=offline (production build)    → 35 passed
 ```
 
 ### 3 October 2026 — `dougkeefe/palier-landing-page-update` (the landing page as designed; D201)

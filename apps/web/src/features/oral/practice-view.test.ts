@@ -74,7 +74,21 @@ describe("practice, the screen's steps (D119)", () => {
     expect(practice(sent, { type: "question", waiting: { ...QUESTION, text: "Et ensuite ?" } })).toMatchObject({ turn: "idle", waiting: true });
   });
 
-  it("starts in the mode the controller says, when the recorder could not be made (D121)", () => {
+  it("stops waiting the moment an answer is sent, before the bridge says so, so no second answer can be recorded to it (D202)", () => {
+    const asked = run(
+      { type: "choose", choice: CHOICE },
+      { type: "preflighted", mode: "spoken", preflight: PREFLIGHT },
+      { type: "started", nowMs: 1 },
+      { type: "question", waiting: QUESTION },
+      { type: "recording" },
+    );
+    const sent = practice(asked, { type: "sent" });
+    expect(sent).toMatchObject({ waiting: false, turn: "sending" });
+    // A recording asked for now is refused: there is no question waiting for it.
+    expect(practice(sent, { type: "recording" })).toMatchObject({ turn: "sending" });
+  });
+
+    it("starts in the mode the controller says, when the recorder could not be made (D121)", () => {
     const typed = run({ type: "choose", choice: CHOICE }, { type: "preflighted", mode: "spoken", preflight: PREFLIGHT }, { type: "started", nowMs: 1, mode: "typed" });
     expect(typed).toMatchObject({ phase: "running", mode: "typed" });
   });

@@ -1544,6 +1544,15 @@ body {
     font-size: 8.5pt;
   }
 
+  /* The statement keeps its quiet panel on paper, at the page's size: on screen it is a 15px line in a
+   * padded panel, which tipped the summary onto a second page on CI's Linux runner (D202). */
+  .app-progress .app-nonaffiliation--inline {
+    padding: 3pt 6pt;
+    border-radius: 4pt;
+    font-size: 8pt;
+    line-height: 1.3;
+  }
+
   /* The trend over time, a row across the page per skill: the chart, then the same table with
    * its weeks running across, a column each, so twelve weeks take two lines, not twelve (D198). */
   .app-progress .app-trend-history-card {
@@ -1560,6 +1569,11 @@ body {
   .app-trend-history__title {
     grid-column: 1 / -1;
     font-size: 9.5pt;
+  }
+
+  /* With no week to draw, the note says so across the row, not in the chart's narrow column (D202). */
+  .app-trend-history > p {
+    grid-column: 1 / -1;
   }
 
   /* On paper the table beside the chart names every week, so the chart's own dates go. */
