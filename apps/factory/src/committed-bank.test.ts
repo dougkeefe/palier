@@ -6,11 +6,11 @@ import { describe, expect, it } from "vitest";
 import { ORAL_SESSION_TYPES } from "@palier/domain";
 
 import { DEFAULT_BANK_VERSION, SCRIPTED_PROMPT_VERSION, runInputFor } from "./cli.js";
-import { BATCH_REPORT_PATH, loadProfile, loadPublishedBank } from "./io.js";
+import { BATCH_REPORT_PATH, loadProfile, loadPublishedBank, loadRecordedReviews, loadRetirements } from "./io.js";
 import { canonicalStringify } from "./lib/json.js";
 import type { BatchReport } from "./lib/types.js";
 import { DEFAULT_PER_SOURCE, runPipeline } from "./pipeline/run.js";
-import { scriptedAiProvider } from "./providers/scripted-ai-provider.js";
+import { recordedReviewProvider } from "./providers/recorded-review-provider.js";
 
 /**
  * The committed bank is exactly what a plain `palier-factory run` produces from the
@@ -19,6 +19,10 @@ import { scriptedAiProvider } from "./providers/scripted-ai-provider.js";
  * edit to a shard, a stale regeneration, or a provider change that was not followed
  * by a regeneration fails here (content-factory.md §4.6: a bank that is not
  * byte-reproducible cannot be audited).
+ *
+ * v4 is the authored run (D203): it drafts nothing, and its reviewer's verdicts are the
+ * ones committed under `content/factory/reviews/` (D204), so it rebuilds with no key, as
+ * v3 did on the scripted provider.
  */
 
 const REPO = process.cwd();
@@ -42,10 +46,11 @@ const runOnce = async () => {
         now: committed.generatedAt,
         bankVersion: DEFAULT_BANK_VERSION,
         perSource: DEFAULT_PER_SOURCE,
-        provider: scriptedAiProvider(),
+        provider: recordedReviewProvider(loadRecordedReviews(REPO)),
         promptVersion: SCRIPTED_PROMPT_VERSION,
+        authoredOnly: true,
         // The committed version was built before any item-statistics report existed
-        // (progress.md D94): v3 on 27 September 2026. A later report applies to the next
+        // (progress.md D94): v4 on 4 October 2026. A later report applies to the next
         // version, never to one already published.
         applyItemStatistics: false,
       }),
@@ -84,11 +89,35 @@ describe(`the committed bank (content/bank/v${String(DEFAULT_BANK_VERSION)})`, (
     for (const form of previous?.forms ?? []) expect(out.forms).toContainEqual(form);
   });
 
-  it("ships an oral scenario for every session type at B and at C (D114)", async () => {
+  // Until v4 this said "exactly one scenario per type and band". v4 carries v3's ten, retired,
+  // beside the authored ones, so it now says what the picker needs and what a past session
+  // needs (D207).
+  it("offers a published oral scenario for every session type at B and at C (D114, D205)", async () => {
     const { out } = await rerun();
     expect(out.scenarioStage.rejected).toEqual([]);
-    expect(out.scenarios.map((s) => `${s.sessionType}-${s.targetBand}`).sort()).toEqual(
-      ORAL_SESSION_TYPES.flatMap((type) => [`${type}-B`, `${type}-C`]).sort(),
-    );
+    const offered = new Set(out.scenarios.filter((s) => s.status !== "retired").map((s) => `${s.sessionType}-${s.targetBand}`));
+    expect([...offered].sort()).toEqual(ORAL_SESSION_TYPES.flatMap((type) => [`${type}-B`, `${type}-C`]).sort());
+  });
+
+  it("carries every scenario the previous version published, so a past session still finds its own (D114)", async () => {
+    const { out } = await rerun();
+    const previous = loadPublishedBank(REPO, DEFAULT_BANK_VERSION - 1);
+    expect(previous?.scenarios?.length).toBeGreaterThan(0);
+    const shipped = new Set(out.scenarios.map((s) => s.id));
+    for (const scenario of previous?.scenarios ?? []) expect(shipped.has(scenario.id)).toBe(true);
+  });
+
+  it("retires everything the retirements file names, and serves nothing it names (D205)", async () => {
+    const { out } = await rerun();
+    const retirements = loadRetirements(REPO);
+    expect(retirements).not.toBeNull();
+    const models = new Set(retirements?.itemGeneratorModels);
+    const named = out.validation.valid.filter((i) => models.has(i.provenance.generator?.model ?? ""));
+    expect(named.length).toBeGreaterThan(0);
+    for (const item of named) expect(item.status).toBe("retired");
+    for (const id of retirements?.scenarioIds ?? []) expect(out.scenarios.find((s) => s.id === id)?.status).toBe("retired");
+    const own = out.forms.filter((f) => f.version === DEFAULT_BANK_VERSION);
+    const retired = new Set(out.validation.valid.filter((i) => i.status === "retired").map((i) => i.id));
+    for (const form of own) for (const id of form.itemIds) expect(retired.has(id)).toBe(false);
   });
 });

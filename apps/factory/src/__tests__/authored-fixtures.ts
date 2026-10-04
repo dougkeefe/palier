@@ -67,11 +67,16 @@ export const anAuthoredPassage = (over: Partial<Passage> = {}): Passage => ({
   lang: "fr",
   docType: "memo",
   title: "Note de service : horaire d'été",
-  body: "À compter du premier juillet, les bureaux ouvriront à huit heures. La direction remercie le personnel de sa collaboration habituelle.",
-  wordCount: 20,
+  body:
+    "À compter du premier juillet, les bureaux ouvriront à huit heures. Les employés qui souhaitent un autre horaire " +
+    "doivent en discuter avec leur gestionnaire avant la fin du mois. La direction remercie le personnel de sa " +
+    "collaboration habituelle et rappelle que le service à la clientèle reste ouvert jusqu'à seize heures.",
+  // Held to the drafted passages' rules since D203: at least three sentences, a band-B length,
+  // and the readability the factory computes from the body.
+  wordCount: 51,
   targetBand: "B",
   topic: "human-resources",
-  readability: { sentences: 2, avgSentenceLength: 10, rareWordRatio: 0.2 },
+  readability: { sentences: 3, avgSentenceLength: 17, rareWordRatio: 0.235 },
   source: { kind: "original", contributor: "octocat" },
   status: "published",
   ...over,

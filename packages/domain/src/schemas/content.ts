@@ -199,6 +199,7 @@ export const oralScenarioShape = z.strictObject({
   targetBand: z.enum(["B", "C"]),
   phases: z.array(oralPhaseShape).min(1),
   topic: topicSchema,
+  status: contentStatusSchema.optional(),
 });
 
 export const bandCutShape = z.strictObject({

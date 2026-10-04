@@ -1,16 +1,26 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-import { itemSchema, itemStatisticsReportSchema, parseExamProfileOrThrow, passageSchema } from "@palier/domain";
+import {
+  itemSchema,
+  itemStatisticsReportSchema,
+  oralScenarioSchema,
+  parseExamProfileOrThrow,
+  passageSchema,
+  reviewVerdictSchema,
+} from "@palier/domain";
 import { ORAL_SESSION_TYPES } from "@palier/domain";
-import type { ExamForm, ExamProfile, Item, ItemStatisticsReport, OralScenario, Passage } from "@palier/domain";
+import type { ExamForm, ExamProfile, Item, ItemStatisticsReport, OralScenario, Passage, ReviewVerdict } from "@palier/domain";
 import type { OpenAiModels, OpenAiPricing } from "@palier/adapters/openai";
 
 import { RECORDED_METHODS, type RecordedRunData } from "./eval/conformance.js";
+import { assembleScenario } from "./lib/assemble.js";
 import { canonicalStringify } from "./lib/json.js";
 import type { OralSessionPlan, SourceCandidate } from "./lib/types.js";
 import type { BankBuild, BankManifest } from "./pipeline/bank-build.js";
+import type { Retirements } from "./pipeline/carry.js";
 import type { AuthoredContent, CarriedBank } from "./pipeline/run.js";
+import type { RecordedReviews } from "./providers/recorded-review-provider.js";
 
 /**
  * The factory's only file I/O — kept out of the pipeline so the stages stay pure
@@ -38,10 +48,15 @@ export const RECORDED_COMPLETIONS_DIR = "packages/testing/src/recorded/openai";
 export const ITEM_STATISTICS_PATH = "content/factory/item-statistics.json";
 /**
  * Hand-authored contributions (content-factory.md §5): one JSON file per contribution,
- * `{ "items": Item[], "passages"?: Passage[] }`, in the published schemas. They enter the
- * pipeline at stage 4, review, and are not exempt from any gate. CONTRIBUTING.md says how.
+ * `{ "items": Item[], "passages"?: Passage[], "scenarios"?: AuthoredScenario[] }`, in the
+ * published schemas. They enter the pipeline at stage 4, review, and are not exempt from
+ * any gate. CONTRIBUTING.md says how.
  */
 export const AUTHORED_DIR = "content/authored";
+/** Content retired by decision, not by statistics (progress.md D205). Absent, none. */
+export const RETIREMENTS_PATH = "content/factory/retirements.json";
+/** Verdicts given outside the pipeline, one file per review pass (progress.md D204). */
+export const REVIEWS_DIR = "content/factory/reviews";
 
 const readJson = (path: string): unknown => JSON.parse(readFileSync(path, "utf8"));
 
@@ -104,7 +119,83 @@ export const loadItemStatistics = (root: string): ItemStatisticsReport | null =>
   return itemStatisticsReportSchema.parse(readJson(path)) as unknown as ItemStatisticsReport;
 };
 
-const AUTHORED_KEYS: ReadonlySet<string> = new Set(["items", "passages"]);
+const AUTHORED_KEYS: ReadonlySet<string> = new Set(["items", "passages", "scenarios"]);
+const AUTHORED_SCENARIO_KEYS: ReadonlySet<string> = new Set(["sessionType", "targetBand", "lang", "topic", "phases"]);
+
+/**
+ * An authored scenario names everything but its id, which is minted from its content as
+ * the scenario stage mints one (`assembleScenario`), so a contributor computes no hash and
+ * an unchanged scenario keeps its id. It is then parsed with the domain schema.
+ */
+const authoredScenario = (entry: unknown, where: string): OralScenario => {
+  if (entry === null || typeof entry !== "object" || Array.isArray(entry)) throw new Error(`${where} must be an object`);
+  const unknown = Object.keys(entry).filter((key) => !AUTHORED_SCENARIO_KEYS.has(key));
+  if (unknown.length > 0) throw new Error(`${where} has keys an authored scenario does not take: ${unknown.join(", ")}`);
+  const raw = entry as Pick<OralScenario, "sessionType" | "targetBand" | "lang" | "topic" | "phases">;
+  const scenario = assembleScenario(
+    { phases: raw.phases },
+    { sessionType: raw.sessionType, targetBand: raw.targetBand, lang: raw.lang, topic: raw.topic },
+  );
+  const parsed = oralScenarioSchema.safeParse(scenario);
+  if (!parsed.success) {
+    throw new Error(`${where} fails the scenario schema: ${parsed.error.issues.map((i) => i.message).join("; ")}`);
+  }
+  return parsed.data as unknown as OralScenario;
+};
+
+/**
+ * One contribution's content, parsed with the domain schemas. `where` names it in every
+ * error, so a broken contribution says which file and which entry is at fault.
+ */
+export const parseContribution = (raw: unknown, where: string): Required<AuthoredContent> => {
+  if (raw === null || typeof raw !== "object" || Array.isArray(raw)) {
+    throw new Error(`${where} must be an object: { "items": [...], "passages": [...] }`);
+  }
+  const unknown = Object.keys(raw).filter((key) => !AUTHORED_KEYS.has(key));
+  if (unknown.length > 0) throw new Error(`${where} has keys a contribution does not take: ${unknown.join(", ")}`);
+  const {
+    items: rawItems,
+    passages: rawPassages = [],
+    scenarios: rawScenarios = [],
+  } = raw as { items?: unknown; passages?: unknown; scenarios?: unknown };
+  if (!Array.isArray(rawItems)) throw new Error(`${where} must list its items under "items"`);
+  if (!Array.isArray(rawPassages)) throw new Error(`${where}: "passages", when present, must be a list`);
+  if (!Array.isArray(rawScenarios)) throw new Error(`${where}: "scenarios", when present, must be a list`);
+  const items = rawItems.map((entry, index) => {
+    const parsed = itemSchema.safeParse(entry);
+    if (!parsed.success) {
+      throw new Error(`${where}: items[${String(index)}] fails the item schema: ${parsed.error.issues.map((i) => i.message).join("; ")}`);
+    }
+    return parsed.data as unknown as Item;
+  });
+  const passages = rawPassages.map((entry, index) => {
+    const parsed = passageSchema.safeParse(entry);
+    if (!parsed.success) {
+      throw new Error(`${where}: passages[${String(index)}] fails the passage schema: ${parsed.error.issues.map((i) => i.message).join("; ")}`);
+    }
+    return parsed.data as unknown as Passage;
+  });
+  const scenarios = rawScenarios.map((entry, index) => authoredScenario(entry, `${where}: scenarios[${String(index)}]`));
+  return { items, passages, scenarios };
+};
+
+/** A contribution file read and parsed; it throws, naming the file, if it is not valid JSON. */
+export const readContribution = (path: string, where: string): Required<AuthoredContent> => {
+  let raw: unknown;
+  try {
+    raw = readJson(path);
+  } catch (error) {
+    throw new Error(`${where} is not valid JSON: ${(error as Error).message}`);
+  }
+  return parseContribution(raw, where);
+};
+
+/** The contribution files under `AUTHORED_DIR`, in file-name order; none when it is absent. */
+export const authoredFiles = (root: string): string[] => {
+  const dir = join(root, AUTHORED_DIR);
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir).filter((name) => name.endsWith(".json")).sort();
+};
 
 /**
  * Every hand-authored contribution under `AUTHORED_DIR`, in file-name order, parsed
@@ -114,43 +205,63 @@ const AUTHORED_KEYS: ReadonlySet<string> = new Set(["items", "passages"]);
  * Parsing is all this does: whether an item is credited, clean and reviewed is decided
  * by the gates it then goes through, as for any drafted item.
  */
-export const loadAuthored = (root: string): AuthoredContent => {
+export const loadAuthored = (root: string): Required<AuthoredContent> => {
   const dir = join(root, AUTHORED_DIR);
-  if (!existsSync(dir)) return { items: [], passages: [] };
   const items: Item[] = [];
   const passages: Passage[] = [];
-  for (const file of readdirSync(dir).filter((name) => name.endsWith(".json")).sort()) {
-    const where = `${AUTHORED_DIR}/${file}`;
-    let raw: unknown;
-    try {
-      raw = readJson(join(dir, file));
-    } catch (error) {
-      throw new Error(`${where} is not valid JSON: ${(error as Error).message}`);
-    }
-    if (raw === null || typeof raw !== "object" || Array.isArray(raw)) {
-      throw new Error(`${where} must be an object: { "items": [...], "passages": [...] }`);
-    }
-    const unknown = Object.keys(raw).filter((key) => !AUTHORED_KEYS.has(key));
-    if (unknown.length > 0) throw new Error(`${where} has keys a contribution does not take: ${unknown.join(", ")}`);
-    const { items: rawItems, passages: rawPassages = [] } = raw as { items?: unknown; passages?: unknown };
-    if (!Array.isArray(rawItems)) throw new Error(`${where} must list its items under "items"`);
-    if (!Array.isArray(rawPassages)) throw new Error(`${where}: "passages", when present, must be a list`);
-    for (const [index, entry] of rawItems.entries()) {
-      const parsed = itemSchema.safeParse(entry);
-      if (!parsed.success) {
-        throw new Error(`${where}: items[${String(index)}] fails the item schema: ${parsed.error.issues.map((i) => i.message).join("; ")}`);
-      }
-      items.push(parsed.data as unknown as Item);
-    }
-    for (const [index, entry] of rawPassages.entries()) {
-      const parsed = passageSchema.safeParse(entry);
-      if (!parsed.success) {
-        throw new Error(`${where}: passages[${String(index)}] fails the passage schema: ${parsed.error.issues.map((i) => i.message).join("; ")}`);
-      }
-      passages.push(parsed.data as unknown as Passage);
-    }
+  const scenarios: OralScenario[] = [];
+  for (const file of authoredFiles(root)) {
+    const content = readContribution(join(dir, file), `${AUTHORED_DIR}/${file}`);
+    items.push(...content.items);
+    passages.push(...content.passages);
+    scenarios.push(...content.scenarios);
   }
-  return { items, passages };
+  return { items, passages, scenarios };
+};
+
+const isStringList = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every((entry) => typeof entry === "string");
+
+/**
+ * The retirements file, or `null` when there is none. A file of the wrong shape throws:
+ * it decides what stops being served, so a damaged one must stop the build.
+ */
+export const loadRetirements = (root: string): Retirements | null => {
+  const path = join(root, RETIREMENTS_PATH);
+  if (!existsSync(path)) return null;
+  const raw = readJson(path) as Partial<Record<keyof Retirements, unknown>>;
+  if (!isStringList(raw.itemGeneratorModels) || !isStringList(raw.scenarioIds)) {
+    throw new Error(`${RETIREMENTS_PATH} must list itemGeneratorModels and scenarioIds as strings`);
+  }
+  return { itemGeneratorModels: raw.itemGeneratorModels, scenarioIds: raw.scenarioIds };
+};
+
+/**
+ * Every recorded review pass under `REVIEWS_DIR`, in file-name order; none when the
+ * directory is absent. Each verdict is parsed with the domain's verdict schema, the same
+ * one the OpenAI adapter holds a model's verdict to, and a file that does not parse throws.
+ */
+export const loadRecordedReviews = (root: string): RecordedReviews[] => {
+  const dir = join(root, REVIEWS_DIR);
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((name) => name.endsWith(".json"))
+    .sort()
+    .map((file) => {
+      const where = `${REVIEWS_DIR}/${file}`;
+      const raw = readJson(join(dir, file)) as { reviewer?: unknown; verdicts?: unknown };
+      if (typeof raw.reviewer !== "string" || raw.reviewer.length === 0 || !Array.isArray(raw.verdicts)) {
+        throw new Error(`${where} must name its reviewer and list its verdicts`);
+      }
+      const verdicts = (raw.verdicts as Partial<Record<"requestHash" | "itemId" | "verdict", unknown>>[]).map((entry, index) => {
+        const parsed = reviewVerdictSchema.safeParse(entry.verdict);
+        if (typeof entry.requestHash !== "string" || typeof entry.itemId !== "string" || !parsed.success) {
+          throw new Error(`${where}: verdicts[${String(index)}] is not a recorded verdict`);
+        }
+        return { requestHash: entry.requestHash, itemId: entry.itemId, verdict: parsed.data as ReviewVerdict };
+      });
+      return { reviewer: raw.reviewer, verdicts };
+    });
 };
 
 const RECORDED_METHOD_NAMES: ReadonlySet<string> = new Set(RECORDED_METHODS);

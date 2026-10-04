@@ -1,0 +1,18 @@
+{
+  "note": "Content retired by decision, not by statistics (progress.md D205). Banks v1 to v3 were built on the scripted provider, whose French is placeholder text (D54). From v4 every item it generated, and every scenario it planned, stays in the bank so the ids users hold, the forms they sat and their past oral sessions still resolve, but nothing new is served from them: the selector serves only published items, the form stage skips retired ones, and the oral picker never offers a retired scenario.",
+  "itemGeneratorModels": [
+    "scripted"
+  ],
+  "scenarioIds": [
+    "4P181GBSQCUO8JOE082G",
+    "6IK7038HUC8C1N772I9L",
+    "704IHNU22VKHO1H7PCJU",
+    "A75VR17L80MNH4BSMB1S",
+    "B00CTJNAV06LTM5BCJ03",
+    "BVS03STOP1FK89KGAJO4",
+    "CHAL4OONCJI4SGP2DVAD",
+    "CMN3IS6GM5BGDUC7LNGS",
+    "DCRMCU8K7P67HMMUBCE0",
+    "E8JVA3KIQCMLH80DBBFK"
+  ]
+}

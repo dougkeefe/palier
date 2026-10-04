@@ -39,3 +39,41 @@ export const applyStatistics = (carried: CarriedBank, report: ItemStatisticsRepo
     }),
   };
 };
+
+/**
+ * Content retired by decision rather than by statistics (progress.md D205), read from
+ * `content/factory/retirements.json`. Items are matched by the model that generated them,
+ * scenarios by id, because a scenario records no provenance.
+ */
+export type Retirements = {
+  readonly itemGeneratorModels: readonly string[];
+  readonly scenarioIds: readonly string[];
+};
+
+/**
+ * Retire the carried items and scenarios `retirements` names. Like a statistical
+ * retirement, each one stays in the bank, because users hold attempts, schedule entries,
+ * exam forms and oral sessions on its id (architecture.md 5.5), but nothing new is served
+ * from it: the selector serves only published items, the form stage skips a retired one,
+ * and the oral picker never offers a retired scenario. One way, as `applyStatistics` is.
+ */
+export const applyRetirements = (carried: CarriedBank, retirements: Retirements | null): CarriedBank => {
+  if (retirements === null) return carried;
+  const models = new Set(retirements.itemGeneratorModels);
+  const scenarioIds = new Set(retirements.scenarioIds);
+  const model = (item: Item): string | undefined => item.provenance.generator?.model;
+  return {
+    ...carried,
+    items: carried.items.map((item): Item => {
+      const generatedBy = model(item);
+      return generatedBy !== undefined && models.has(generatedBy) ? { ...item, status: "retired" } : item;
+    }),
+    ...(carried.scenarios === undefined
+      ? {}
+      : {
+          scenarios: carried.scenarios.map((scenario) =>
+            scenarioIds.has(scenario.id) ? { ...scenario, status: "retired" as const } : scenario,
+          ),
+        }),
+  };
+};

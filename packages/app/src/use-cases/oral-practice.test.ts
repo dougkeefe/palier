@@ -511,4 +511,14 @@ describe("oralSessionChoices (D118)", () => {
     expect(choices.map((c) => c.sessionType)).not.toContain("work");
     expect(choices.map((c) => c.sessionType)).not.toContain("situation");
   });
+
+  it("never offers a retired scenario, falling back to a published one of the type (D205)", async () => {
+    const retiredBank = scenarioBank([
+      { ...scenario("full", "C", [10, 12]), status: "retired" as const },
+      scenario("full", "B", [11, 11]),
+      { ...scenario("warmup", "C", [2, 3]), status: "retired" as const },
+    ]);
+    const choices = await oralSessionChoices({ targetBand: "C", lang: "fr" }, { items: retiredBank });
+    expect(choices.map((c) => [c.sessionType, c.scenario.targetBand])).toEqual([["full", "B"]]);
+  });
 });

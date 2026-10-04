@@ -258,13 +258,16 @@ const scenarioBand = (targetBand: TargetBand): "B" | "C" => (targetBand === "C" 
  * The practice picker's rows (product-requirements.md §8.6, progress.md D118): one scenario per
  * session type, in the PRD's order, in the language practised and at the study profile's band,
  * or the other band when the bank has none at it. A type the bank has no scenario for is left
- * out rather than offered empty.
+ * out rather than offered empty. A retired scenario is never offered (progress.md D205); a past
+ * session still finds it by id.
  */
 export const oralSessionChoices = async (
   request: { readonly targetBand: TargetBand; readonly lang: OralScenario["lang"] },
   deps: { readonly items: ItemRepository },
 ): Promise<readonly OralSessionChoice[]> => {
-  const scenarios = (await deps.items.scenarios()).filter((s) => s.lang === request.lang);
+  const scenarios = (await deps.items.scenarios()).filter(
+    (s) => s.lang === request.lang && s.status !== "retired",
+  );
   const band = scenarioBand(request.targetBand);
   return ORAL_SESSION_TYPES.flatMap((sessionType) => {
     const ofType = scenarios.filter((s) => s.sessionType === sessionType);

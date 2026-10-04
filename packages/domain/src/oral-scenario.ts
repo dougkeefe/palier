@@ -1,5 +1,5 @@
 import type { ScenarioId } from "./ids.js";
-import type { Lang } from "./skills.js";
+import type { ContentStatus, Lang } from "./skills.js";
 import type { Topic } from "./topics.js";
 
 export const ORAL_SESSION_TYPES = [
@@ -36,4 +36,9 @@ export type OralScenario = {
   readonly targetBand: "B" | "C";
   readonly phases: readonly OralPhase[];
   readonly topic: Topic;
+  /**
+   * Absent means published: banks v1 to v3 carry none. A retired scenario stays in the bank,
+   * because a past session names it by id, but the picker no longer offers it (progress.md D205).
+   */
+  readonly status?: ContentStatus;
 };
