@@ -1,0 +1,47 @@
+{
+  "wrong-key": {
+    "n": 10,
+    "rejected": 10,
+    "missed": []
+  },
+  "clean": {
+    "n": 10,
+    "rejected": 0,
+    "missed": [
+      "eval-real-02",
+      "eval-real-07",
+      "eval-real-13",
+      "eval-real-24",
+      "eval-real-28",
+      "eval-real-39",
+      "eval-real-45",
+      "eval-real-48",
+      "eval-real-54",
+      "eval-real-59"
+    ]
+  },
+  "two-defensible-keys": {
+    "n": 10,
+    "rejected": 10,
+    "missed": []
+  },
+  "mis-tagged-band": {
+    "n": 10,
+    "rejected": 10,
+    "missed": []
+  },
+  "ambiguous": {
+    "n": 10,
+    "rejected": 9,
+    "missed": [
+      "eval-real-58"
+    ]
+  },
+  "register": {
+    "n": 10,
+    "rejected": 9,
+    "missed": [
+      "eval-real-25"
+    ]
+  }
+}

@@ -1,0 +1,2195 @@
+{
+  "items": [
+    {
+      "id": "claude-w-false-friends-and-anglicisms-01",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Les fonctionnaires intéressés doivent ___ d'agent de programme d'ici le vendredi 14 mars, à midi, au moyen du système de dotation en ligne.",
+        "en": "Interested public servants must ___ program officer by Friday, March 14, at noon, through the online staffing system."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "appliquer sur le poste",
+          "rationale": {
+            "fr": "Calque de l'anglais « to apply for a position ». En français, « appliquer » signifie « mettre en pratique » ou « poser une chose sur une autre » ; les guides de rédaction fédéraux rejettent « appliquer sur un poste ».",
+            "en": "A calque of the English \"to apply for a position\". In French, « appliquer » means to put into practice or to lay one thing on another; federal writing guides reject « appliquer sur un poste »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "poser leur candidature au poste",
+          "rationale": {
+            "fr": "Tournure recommandée : on pose sa candidature à un poste. Le possessif « leur » renvoie au sujet « les fonctionnaires ».",
+            "en": "The recommended phrasing: one « pose sa candidature à un poste ». The possessive « leur » refers back to the subject « les fonctionnaires »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "faire application pour le poste",
+          "rationale": {
+            "fr": "Calque de « to make an application for ». « Faire application » n'existe pas dans ce sens en français, et « pour » reproduit la préposition anglaise ; la tournure est à écarter.",
+            "en": "A calque of \"to make an application for\". « Faire application » does not exist in this sense in French, and « pour » copies the English preposition; the phrasing must be rejected."
+          }
+        },
+        {
+          "id": "d",
+          "text": "s'appliquer au poste",
+          "rationale": {
+            "fr": "« S'appliquer à » signifie « mettre du soin à faire quelque chose » ou « concerner » (« la règle s'applique à tous ») ; la phrase ne dirait pas que les fonctionnaires présentent une demande d'emploi.",
+            "en": "« S'appliquer à » means to take care in doing something, or to concern (« la règle s'applique à tous »); the sentence would not say that the public servants are applying for the job."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour présenter une demande d'emploi, on écrit « poser sa candidature à un poste » (ou « postuler un poste »). « Appliquer sur un poste », « appliquer pour un poste » et « faire application » sont des calques de « to apply for » que le Bureau de la traduction déconseille. En français, « appliquer » garde les sens de « mettre en pratique » (appliquer une directive) et de « poser sur » (appliquer un enduit).",
+        "en": "To apply for a job, write « poser sa candidature à un poste » (or « postuler un poste »). « Appliquer sur un poste », « appliquer pour un poste » and « faire application » are calques of \"to apply for\" that the Translation Bureau advises against. In French, « appliquer » keeps the senses of putting into practice (appliquer une directive) and laying on (appliquer un enduit)."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-02",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "La gestionnaire de projet a ___ la réunion de lancement pour mardi prochain, à 9 h, dans la grande salle du troisième étage.",
+        "en": "The project manager has ___ the kick-off meeting for next Tuesday at 9 a.m. in the large room on the third floor."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "cédulé",
+          "rationale": {
+            "fr": "Anglicisme formé sur « to schedule » ; les guides fédéraux le rejettent et proposent « prévoir », « planifier » ou « fixer ».",
+            "en": "An anglicism built on \"to schedule\"; federal guides reject it and suggest « prévoir », « planifier » or « fixer »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "booké",
+          "rationale": {
+            "fr": "Emprunt direct à l'anglais « to book », de registre familier ; il n'a pas sa place dans un message administratif.",
+            "en": "A direct borrowing of the English \"to book\", informal in register; it has no place in an administrative message."
+          }
+        },
+        {
+          "id": "c",
+          "text": "réservé",
+          "rationale": {
+            "fr": "On réserve une salle, une place ou une ressource, mais pas une réunion : c'est un calque de « to book a meeting ». Le verbe conviendrait avec « la salle », pas avec « la réunion ».",
+            "en": "One reserves a room, a seat or a resource, but not a meeting: this is a calque of \"to book a meeting\". The verb would fit with « la salle », not with « la réunion »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "prévu",
+          "rationale": {
+            "fr": "« Prévoir une réunion pour une date » est la tournure idiomatique : la réunion est inscrite au calendrier pour mardi.",
+            "en": "« Prévoir une réunion pour une date » is the idiomatic phrasing: the meeting is set in the calendar for Tuesday."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le verbe « céduler » (de « to schedule ») et le nom « cédule » sont des anglicismes. Selon le sens, on écrit « prévoir », « planifier », « fixer » (fixer une réunion à mardi), « inscrire à l'horaire » ou « convoquer ». On réserve une salle, mais on prévoit ou on fixe une réunion.",
+        "en": "The verb « céduler » (from \"to schedule\") and the noun « cédule » are anglicisms. Depending on the meaning, write « prévoir », « planifier », « fixer » (fixer une réunion à mardi), « inscrire à l'horaire » or « convoquer ». One reserves a room, but one plans or sets a meeting."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-03",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Comme la gestion des ressources hydriques sur ce territoire relève ___, le Ministère ne peut intervenir qu'à titre consultatif, sous réserve d'une entente bilatérale conclue avec le gouvernement concerné.",
+        "en": "Because the management of water resources in this territory falls ___, the Department can act only in an advisory capacity, subject to a bilateral agreement concluded with the government concerned."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "de la compétence provinciale",
+          "rationale": {
+            "fr": "« Compétence » désigne le pouvoir qu'une autorité tient de la Constitution ou de la loi pour agir dans un domaine ; « relever de la compétence provinciale » est la tournure consacrée.",
+            "en": "« Compétence » denotes the power an authority holds under the Constitution or a statute to act in a field; « relever de la compétence provinciale » is the established phrasing."
+          }
+        },
+        {
+          "id": "b",
+          "text": "de la juridiction provinciale",
+          "rationale": {
+            "fr": "Calque de « provincial jurisdiction ». En français, « juridiction » désigne le pouvoir de juger ou un tribunal ; pour le partage des pouvoirs législatifs, les guides fédéraux recommandent « compétence ».",
+            "en": "A calque of \"provincial jurisdiction\". In French, « juridiction » denotes the power to judge, or a court; for the division of legislative powers, federal guides recommend « compétence »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "de la jurisprudence provinciale",
+          "rationale": {
+            "fr": "Paronyme : la jurisprudence est l'ensemble des décisions rendues par les tribunaux. La gestion de l'eau ne relève pas d'un corpus de décisions judiciaires ; le mot ne convient pas.",
+            "en": "A paronym: « jurisprudence » is the body of decisions handed down by the courts. Water management does not fall under a body of court decisions; the word does not fit."
+          }
+        },
+        {
+          "id": "d",
+          "text": "de l'expertise provinciale",
+          "rationale": {
+            "fr": "« Expertise » désigne un savoir-faire ou une évaluation faite par un expert, non un pouvoir conféré par la loi. Le mot confond la compétence au sens de capacité avec la compétence au sens juridique.",
+            "en": "« Expertise » denotes know-how or an expert's assessment, not a power conferred by law. The word confuses competence in the sense of ability with jurisdiction in the legal sense."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans la langue administrative et juridique, le partage des pouvoirs entre ordres de gouvernement s'exprime par « compétence » : « champ de compétence fédérale », « relever de la compétence des provinces ». « Juridiction » employé en ce sens est un calque de « jurisdiction » ; en français, le mot se rapporte au pouvoir de juger et aux tribunaux (« les juridictions d'appel »).",
+        "en": "In administrative and legal French, the division of powers between orders of government is expressed with « compétence »: « champ de compétence fédérale », « relever de la compétence des provinces ». « Juridiction » used in this sense is a calque of \"jurisdiction\"; in French the word relates to the power to judge and to the courts (« les juridictions d'appel »)."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-04",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Vous trouverez ci-joint ___ de la prochaine réunion du comité de rédaction ; n'hésitez pas à me signaler tout sujet que vous souhaitez y ajouter.",
+        "en": "Attached you will find ___ of the next editorial committee meeting; feel free to let me know of any topic you wish to add to it."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "l'agenda",
+          "rationale": {
+            "fr": "Faux ami : en français, un agenda est un carnet ou un calendrier où l'on note ses rendez-vous. La liste des sujets d'une réunion porte un autre nom.",
+            "en": "A false friend: in French, an « agenda » is a diary or calendar in which one notes appointments. The list of topics for a meeting has another name."
+          }
+        },
+        {
+          "id": "b",
+          "text": "la cédule",
+          "rationale": {
+            "fr": "Anglicisme tiré de « schedule » ; il est à écarter, et il désignerait de toute façon un horaire, non la liste des sujets à traiter.",
+            "en": "An anglicism taken from \"schedule\"; it must be rejected, and in any case it would denote a timetable, not the list of topics to discuss."
+          }
+        },
+        {
+          "id": "c",
+          "text": "l'ordre du jour",
+          "rationale": {
+            "fr": "Terme consacré pour la liste des sujets qu'une réunion doit traiter ; il s'accorde avec la suite de la phrase, qui invite à proposer d'autres sujets.",
+            "en": "The established term for the list of topics a meeting is to cover; it fits the rest of the sentence, which invites further topics."
+          }
+        },
+        {
+          "id": "d",
+          "text": "la liste des items",
+          "rationale": {
+            "fr": "« Item » est un anglicisme dans ce sens ; les sujets d'une réunion sont des « points » de l'ordre du jour.",
+            "en": "« Item » is an anglicism in this sense; the topics of a meeting are « points » on the « ordre du jour »."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "La liste des sujets d'une réunion est l'« ordre du jour », et chacun de ces sujets est un « point » (« le point 3 de l'ordre du jour »). « Agenda » est un faux ami : en français, c'est le carnet ou le calendrier personnel où l'on inscrit ses rendez-vous. « Item » et « cédule » sont des anglicismes.",
+        "en": "The list of topics for a meeting is the « ordre du jour », and each topic is a « point » (« le point 3 de l'ordre du jour »). « Agenda » is a false friend: in French it is the personal diary or calendar where one writes down appointments. « Item » and « cédule » are anglicisms."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-05",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Avant la fermeture de l'exercice, l'équipe des finances doit confirmer ___ de chaque crédit afin que les fonds non engagés puissent, le cas échéant, être reportés à l'exercice suivant conformément aux autorisations parlementaires.",
+        "en": "Before the year-end close, the finance team must confirm ___ of each appropriation so that uncommitted funds can, where applicable, be carried forward to the following fiscal year in accordance with parliamentary authorities."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "la balance",
+          "rationale": {
+            "fr": "Anglicisme dans ce sens : il reprend « balance » au sens de montant restant. En comptabilité, la balance est un tableau qui récapitule les comptes ; le montant disponible porte un autre nom.",
+            "en": "An anglicism in this sense: it copies \"balance\" meaning the amount remaining. In accounting, the « balance » is a table summarizing the accounts; the amount available has another name."
+          }
+        },
+        {
+          "id": "b",
+          "text": "le bilan",
+          "rationale": {
+            "fr": "Le bilan est l'état de la situation financière d'une organisation à une date donnée ; il ne s'applique pas au montant qui reste dans un crédit.",
+            "en": "The « bilan » is the statement of an organization's financial position at a given date; it does not apply to the amount remaining in an appropriation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "le solde",
+          "rationale": {
+            "fr": "Le solde est la différence entre les sommes autorisées et les sommes dépensées ou engagées ; c'est lui qu'on vérifie avant de reporter des fonds.",
+            "en": "The « solde » is the difference between the amounts authorized and the amounts spent or committed; it is what is checked before funds are carried forward."
+          }
+        },
+        {
+          "id": "d",
+          "text": "l'équilibre",
+          "rationale": {
+            "fr": "Traduction littérale d'un autre sens de « balance ». « L'équilibre d'un crédit » ne désigne aucun montant et ne permet pas de savoir quels fonds peuvent être reportés.",
+            "en": "A literal translation of another sense of \"balance\". « L'équilibre d'un crédit » denotes no amount and does not tell which funds can be carried forward."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le montant qui reste dans un compte ou un crédit est le « solde » (« solde disponible », « solde inutilisé », « solde à payer »). Employer « balance » en ce sens est un anglicisme fréquent au Canada ; en français, la « balance » est un document comptable qui récapitule les soldes de tous les comptes.",
+        "en": "The amount remaining in an account or appropriation is the « solde » (« solde disponible », « solde inutilisé », « solde à payer »). Using « balance » in this sense is a common anglicism in Canada; in French, the « balance » is an accounting document that summarizes the balances of all accounts."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-06",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "___ d'évacuation aura lieu mercredi matin ; dès que l'alarme retentira, tout le personnel devra quitter l'immeuble par l'escalier le plus proche.",
+        "en": "___ d'évacuation (an evacuation ___) will take place on Wednesday morning; as soon as the alarm sounds, all staff must leave the building by the nearest stairway."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Un exercice",
+          "rationale": {
+            "fr": "Terme consacré : un exercice d'évacuation (ou exercice d'incendie) simule une situation d'urgence pour vérifier que chacun connaît la marche à suivre.",
+            "en": "The established term: an « exercice d'évacuation » (or « exercice d'incendie ») simulates an emergency to check that everyone knows the procedure."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une pratique",
+          "rationale": {
+            "fr": "Calque de « fire practice » ou de « practice drill ». En français, « pratique » désigne l'application d'une connaissance ou une habitude, pas une simulation d'urgence ; les guides la rejettent dans ce sens.",
+            "en": "A calque of \"fire practice\" or \"practice drill\". In French, « pratique » denotes the application of knowledge or a habit, not an emergency simulation; the guides reject it in this sense."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Un drill",
+          "rationale": {
+            "fr": "Emprunt direct à l'anglais, inutile puisque le français dispose d'un terme établi ; il est à écarter dans un avis officiel.",
+            "en": "A direct borrowing from English, needless since French has an established term; it must be rejected in an official notice."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Un entraînement",
+          "rationale": {
+            "fr": "« Entraînement » évoque la préparation sportive ou l'apprentissage répété d'une habileté ; « entraînement d'évacuation » n'est pas une expression établie.",
+            "en": "« Entraînement » suggests athletic preparation or repeated practice of a skill; « entraînement d'évacuation » is not an established expression."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "La simulation d'une urgence s'appelle un « exercice » : exercice d'évacuation, exercice d'incendie, exercice de confinement. « Pratique de feu » et « pratique d'évacuation » sont des calques de l'anglais, tout comme « pratique » au sens de « séance de préparation » (on dit « répétition » au théâtre et « entraînement » au sport).",
+        "en": "The simulation of an emergency is called an « exercice »: exercice d'évacuation, exercice d'incendie, exercice de confinement. « Pratique de feu » and « pratique d'évacuation » are calques of English, as is « pratique » in the sense of a practice session (French says « répétition » in theatre and « entraînement » in sport)."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-07",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Si la demande de la prestataire ne peut être réglée au premier palier, l'agent doit la ___ régional du Ministère et lui transmettre, par écrit, les coordonnées du responsable désigné.",
+        "en": "If the claimant's request cannot be resolved at the first level, the officer must ___ regional office and give her, in writing, the contact information of the designated official."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "référer au bureau",
+          "rationale": {
+            "fr": "Anglicisme de sens : « référer quelqu'un à » calque « to refer someone to ». En français, le verbe s'emploie surtout à la forme pronominale (« se référer à un document ») ; il ne sert pas à orienter une personne vers un service.",
+            "en": "An anglicism of meaning: « référer quelqu'un à » is a calque of \"to refer someone to\". In French the verb is used mainly in its reflexive form (« se référer à un document »); it does not serve to send a person to a service."
+          }
+        },
+        {
+          "id": "b",
+          "text": "introduire au bureau",
+          "rationale": {
+            "fr": "Faux ami : « introduire » signifie « faire entrer » ou « insérer » ; il ne veut pas dire « orienter quelqu'un vers un service ».",
+            "en": "A false friend: « introduire » means to bring in or to insert; it does not mean to send someone to a service."
+          }
+        },
+        {
+          "id": "c",
+          "text": "rapporter au bureau",
+          "rationale": {
+            "fr": "« Rapporter » veut dire « ramener » ou « relater » ; « la rapporter au bureau » calque « to report to » et ne signifie pas orienter la prestataire.",
+            "en": "« Rapporter » means to bring back or to recount; « la rapporter au bureau » is a calque of \"to report to\" and does not mean sending the claimant on."
+          }
+        },
+        {
+          "id": "d",
+          "text": "diriger vers le bureau",
+          "rationale": {
+            "fr": "« Diriger quelqu'un vers un service » est la tournure recommandée pour orienter une personne vers l'instance compétente.",
+            "en": "« Diriger quelqu'un vers un service » is the recommended phrasing for sending a person to the office responsible."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour envoyer une personne vers un autre service, le français dit « diriger vers », « orienter vers » ou « adresser à ». « Référer quelqu'un à » est un calque de « to refer » que le Bureau de la traduction déconseille ; le verbe s'emploie correctement dans « se référer à un texte » ou « en référer à son supérieur ».",
+        "en": "To send a person to another service, French says « diriger vers », « orienter vers » or « adresser à ». « Référer quelqu'un à » is a calque of \"to refer\" that the Translation Bureau advises against; the verb is used properly in « se référer à un texte » or « en référer à son supérieur »."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-08",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Pour obtenir un accès au réseau sécurisé, vous devez d'abord ___ le formulaire de demande en ligne, puis le faire approuver par votre gestionnaire.",
+        "en": "To obtain access to the secure network, you must first ___ the online request form, then have it approved by your manager."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "compléter",
+          "rationale": {
+            "fr": "Anglicisme de sens (« to complete a form »). En français, « compléter » signifie « ajouter ce qui manque » ; pour inscrire les renseignements demandés, on emploie un autre verbe.",
+            "en": "An anglicism of meaning (\"to complete a form\"). In French, « compléter » means to add what is missing; another verb is used for entering the information requested."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplir",
+          "rationale": {
+            "fr": "« Remplir un formulaire » est l'expression consacrée pour inscrire les renseignements demandés.",
+            "en": "« Remplir un formulaire » is the established expression for entering the information requested."
+          }
+        },
+        {
+          "id": "c",
+          "text": "combler",
+          "rationale": {
+            "fr": "« Combler » s'emploie pour un vide, une lacune ou un poste vacant, non pour un formulaire.",
+            "en": "« Combler » is used for a gap, a shortcoming or a vacant position, not for a form."
+          }
+        },
+        {
+          "id": "d",
+          "text": "accomplir",
+          "rationale": {
+            "fr": "On accomplit une tâche ou une mission, pas un formulaire ; la collocation est fautive.",
+            "en": "One accomplishes a task or a mission, not a form; the collocation is wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "On « remplit » un formulaire, un questionnaire ou une demande. « Compléter un formulaire » calque « to complete a form » : en français, « compléter » signifie « rendre complet en ajoutant ce qui manque » (compléter un dossier par une pièce justificative). On peut aussi écrire « remplir et signer le formulaire ».",
+        "en": "One « remplit » a form, a questionnaire or an application. « Compléter un formulaire » is a calque of \"to complete a form\": in French, « compléter » means to make complete by adding what is missing (compléter un dossier par une pièce justificative). One can also write « remplir et signer le formulaire »."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-09",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Conformément à la directive sur la sécurité de l'information, les disques durs retirés du service doivent être ___ par un fournisseur agréé, qui remet ensuite un certificat de conformité à l'équipe responsable.",
+        "en": "In accordance with the directive on information security, hard drives withdrawn from service must be ___ by an approved supplier, which then provides a certificate of compliance to the responsible team."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "détruits",
+          "rationale": {
+            "fr": "Le verbe dit exactement ce que la directive exige : rendre les disques et leurs données irrécupérables.",
+            "en": "The verb says exactly what the directive requires: making the drives and their data unrecoverable."
+          }
+        },
+        {
+          "id": "b",
+          "text": "disposés",
+          "rationale": {
+            "fr": "Calque de « to dispose of ». En français, « disposer de » veut dire « avoir à sa disposition » ; de plus, ce verbe indirect ne se met pas au passif. Les guides recommandent « éliminer », « détruire » ou « se défaire de ».",
+            "en": "A calque of \"to dispose of\". In French, « disposer de » means to have at one's disposal; moreover, this indirect verb cannot be made passive. The guides recommend « éliminer », « détruire » or « se défaire de »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "dispensés",
+          "rationale": {
+            "fr": "Paronyme : « dispenser » signifie « exempter » ou « distribuer » (dispenser une formation) ; la phrase dirait que les disques sont exemptés de quelque chose.",
+            "en": "A paronym: « dispenser » means to exempt or to deliver (dispenser une formation); the sentence would say the drives are exempted from something."
+          }
+        },
+        {
+          "id": "d",
+          "text": "déposés",
+          "rationale": {
+            "fr": "« Déposer » signifie « poser » ou « remettre » ; la directive exige l'élimination des supports, non leur simple remise.",
+            "en": "« Déposer » means to set down or to hand in; the directive requires the media to be eliminated, not merely handed in."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Disposer de » est un faux ami : en français, il signifie « avoir à sa disposition » (« le Ministère dispose de trois mois pour répondre »). Le sens anglais de « to dispose of » (se débarrasser de) se rend par « éliminer », « détruire », « se défaire de » ou « mettre au rebut ». Comme « disposer de » est transitif indirect, la tournure passive « être disposé » est en outre impossible dans ce sens.",
+        "en": "« Disposer de » is a false friend: in French it means to have at one's disposal (« le Ministère dispose de trois mois pour répondre »). The English sense of \"to dispose of\" (get rid of) is rendered by « éliminer », « détruire », « se défaire de » or « mettre au rebut ». Since « disposer de » is an indirect transitive verb, the passive « être disposé » is moreover impossible in this sense."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-10",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Les employés nommés pour une période déterminée de plus de six mois sont ___ régime de soins de santé de la fonction publique, sous réserve des modalités prévues dans leur convention collective.",
+        "en": "Employees appointed for a term of more than six months are ___ public service health care plan, subject to the terms set out in their collective agreement."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "éligibles au",
+          "rationale": {
+            "fr": "Anglicisme de sens : en français, « éligible » qualifie la personne qui peut être élue. Pour qui remplit les conditions d'un programme ou d'un avantage, on emploie un autre adjectif.",
+            "en": "An anglicism of meaning: in French, « éligible » describes a person who can be elected. For someone who meets the conditions of a program or a benefit, another adjective is used."
+          }
+        },
+        {
+          "id": "b",
+          "text": "qualifiés pour le",
+          "rationale": {
+            "fr": "Calque de « qualified for ». « Qualifié » signifie « compétent » ou « ayant la formation voulue » ; il ne signifie pas « remplir les conditions d'adhésion ».",
+            "en": "A calque of \"qualified for\". « Qualifié » means competent or having the required training; it does not mean meeting the conditions for membership."
+          }
+        },
+        {
+          "id": "c",
+          "text": "sujets au",
+          "rationale": {
+            "fr": "« Être sujet à » veut dire « être exposé à » (sujet à des erreurs) ; la phrase présenterait le régime comme un risque que subissent les employés, ce qui fausse le sens.",
+            "en": "« Être sujet à » means to be prone to (sujet à des erreurs); the sentence would present the plan as a risk the employees are exposed to, which distorts the meaning."
+          }
+        },
+        {
+          "id": "d",
+          "text": "admissibles au",
+          "rationale": {
+            "fr": "« Admissible à » qualifie la personne qui remplit les conditions pour bénéficier d'un avantage ; c'est le terme retenu dans la langue administrative fédérale.",
+            "en": "« Admissible à » describes a person who meets the conditions to receive a benefit; it is the term adopted in federal administrative language."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Dans l'administration fédérale, une personne qui remplit les conditions requises pour un programme, une prestation ou un régime y est « admissible ». « Éligible » relève du domaine électoral (« éligible au conseil d'administration ») ; l'employer au sens de l'anglais « eligible » est un anglicisme que le Bureau de la traduction déconseille.",
+        "en": "In the federal administration, a person who meets the conditions for a program, a benefit or a plan is « admissible » to it. « Éligible » belongs to the electoral field (« éligible au conseil d'administration »); using it in the sense of the English \"eligible\" is an anglicism the Translation Bureau advises against."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-11",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le fournisseur ne peut ___ des frais supplémentaires pour la livraison sans avoir obtenu au préalable l'autorisation écrite de l'autorité contractante.",
+        "en": "The supplier may not ___ additional delivery fees without first obtaining the written authorization of the contracting authority."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "charger",
+          "rationale": {
+            "fr": "Anglicisme de sens (« to charge a fee »). En français, « charger » signifie « mettre une charge sur » ou « confier une tâche » ; il ne veut pas dire « demander le paiement ».",
+            "en": "An anglicism of meaning (\"to charge a fee\"). In French, « charger » means to load or to entrust with a task; it does not mean to ask for payment."
+          }
+        },
+        {
+          "id": "b",
+          "text": "rencontrer",
+          "rationale": {
+            "fr": "Calque de « to meet costs » ; « rencontrer » s'emploie pour des personnes. Il ne signifie ni payer ni exiger des frais.",
+            "en": "A calque of \"to meet costs\"; « rencontrer » is used for people. It means neither paying nor charging fees."
+          }
+        },
+        {
+          "id": "c",
+          "text": "facturer",
+          "rationale": {
+            "fr": "« Facturer des frais » signifie les porter sur une facture et en demander le paiement ; c'est précisément ce que le contrat interdit sans autorisation.",
+            "en": "« Facturer des frais » means putting them on an invoice and requesting payment; that is precisely what the contract forbids without authorization."
+          }
+        },
+        {
+          "id": "d",
+          "text": "chiffrer",
+          "rationale": {
+            "fr": "« Chiffrer » veut dire « évaluer en chiffres » ; estimer des frais n'est pas les exiger, et la phrase perdrait son sens contractuel.",
+            "en": "« Chiffrer » means to put a figure on; estimating fees is not charging them, and the sentence would lose its contractual meaning."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour demander le paiement d'un service, on « facture » des frais, ou on « exige » ou « perçoit » des frais. « Charger des frais » (de « to charge ») est un anglicisme courant au Canada ; « charger » garde en français les sens de « placer une charge » et de « confier une mission » (« être chargé d'un dossier »).",
+        "en": "To ask for payment for a service, one « facture » fees, or « exige » or « perçoit » fees. « Charger des frais » (from \"to charge\") is a common anglicism in Canada; in French « charger » keeps the senses of loading and of entrusting a task (« être chargé d'un dossier »)."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-12",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Si vous n'êtes pas encore ___ avec le logiciel de lecture d'écran, l'équipe de l'accessibilité offre des séances d'initiation individuelles tous les jeudis.",
+        "en": "If you are not yet ___ with the screen-reading software, the accessibility team offers individual introductory sessions every Thursday."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "confortable",
+          "rationale": {
+            "fr": "Calque de « comfortable with ». En français, « confortable » qualifie une chose qui procure du bien-être (un fauteuil confortable), pas une personne qui maîtrise un outil.",
+            "en": "A calque of \"comfortable with\". In French, « confortable » describes a thing that provides comfort (un fauteuil confortable), not a person who has mastered a tool."
+          }
+        },
+        {
+          "id": "b",
+          "text": "à l'aise",
+          "rationale": {
+            "fr": "« Être à l'aise avec » un outil signifie se sentir en confiance pour l'utiliser ; c'est la tournure idiomatique.",
+            "en": "« Être à l'aise avec » a tool means feeling confident using it; this is the idiomatic phrasing."
+          }
+        },
+        {
+          "id": "c",
+          "text": "commode",
+          "rationale": {
+            "fr": "« Commode » qualifie une chose pratique (un outil commode) ; appliqué à une personne, il signifie « facile à vivre » et ne convient pas ici.",
+            "en": "« Commode » describes a handy thing (un outil commode); applied to a person it means easy-going, which does not fit here."
+          }
+        },
+        {
+          "id": "d",
+          "text": "aisé",
+          "rationale": {
+            "fr": "« Aisé » signifie « facile » (une tâche aisée) ou « fortuné » (une famille aisée) ; il ne veut pas dire « qui se sent en confiance ».",
+            "en": "« Aisé » means easy (une tâche aisée) or well-off (une famille aisée); it does not mean feeling confident."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une personne est « à l'aise » avec un outil, une tâche ou une langue ; une chose est « confortable ». « Être confortable avec » calque « to be comfortable with » et est rejeté par les guides. Selon le contexte, on peut aussi écrire « maîtriser un outil » ou « se sentir en confiance ».",
+        "en": "A person is « à l'aise » with a tool, a task or a language; a thing is « confortable ». « Être confortable avec » is a calque of \"to be comfortable with\" and is rejected by the guides. Depending on context, one can also write « maîtriser un outil » or « se sentir en confiance »."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-13",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le nouveau plan d'action ministériel ___ sur l'offre active de services dans les deux langues officielles, notamment dans les bureaux désignés bilingues qui accueillent directement le public.",
+        "en": "The Department's new action plan ___ on the active offer of services in both official languages, particularly in offices designated bilingual that serve the public directly."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "met l'accent",
+          "rationale": {
+            "fr": "« Mettre l'accent sur » signifie « faire ressortir, insister sur » ; c'est l'expression recommandée.",
+            "en": "« Mettre l'accent sur » means to highlight, to stress; it is the recommended expression."
+          }
+        },
+        {
+          "id": "b",
+          "text": "met l'emphase",
+          "rationale": {
+            "fr": "Calque de « to put emphasis on ». En français, « emphase » désigne une manière de s'exprimer pompeuse ou exagérée ; « mettre l'emphase sur » est un anglicisme que les guides rejettent.",
+            "en": "A calque of \"to put emphasis on\". In French, « emphase » denotes a pompous or overblown way of speaking; « mettre l'emphase sur » is an anglicism the guides reject."
+          }
+        },
+        {
+          "id": "c",
+          "text": "met le focus",
+          "rationale": {
+            "fr": "Emprunt direct à l'anglais « focus », de registre relâché ; il est à écarter dans un texte officiel.",
+            "en": "A direct borrowing of the English \"focus\", loose in register; it must be rejected in an official text."
+          }
+        },
+        {
+          "id": "d",
+          "text": "fait emphase",
+          "rationale": {
+            "fr": "Variante du même calque : « faire emphase sur » n'existe pas en français et garde le sens erroné d'« emphase ».",
+            "en": "A variant of the same calque: « faire emphase sur » does not exist in French and keeps the mistaken sense of « emphase »."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour signaler qu'un texte ou un plan insiste sur un élément, on écrit « mettre l'accent sur », « insister sur », « faire ressortir » ou « privilégier ». « Mettre l'emphase sur » calque « to put emphasis on » : en français, l'« emphase » est une exagération dans le ton ou le style (« parler avec emphase »), non une priorité.",
+        "en": "To signal that a text or plan stresses an element, write « mettre l'accent sur », « insister sur », « faire ressortir » or « privilégier ». « Mettre l'emphase sur » is a calque of \"to put emphasis on\": in French, « emphase » is exaggeration in tone or style (« parler avec emphase »), not a priority."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-14",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Après examen de la demande présentée par l'équipe, le comité directeur a accepté de prolonger l'échéancier de deux semaines…",
+        "en": "After reviewing the request submitted by the team, the steering committee agreed to extend the schedule by two weeks…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "en autant que les livrables essentiels soient remis à la date prévue.",
+          "rationale": {
+            "fr": "« En autant que » calque « as long as » ; les guides fédéraux rejettent cette locution et recommandent « pourvu que » ou « dans la mesure où ».",
+            "en": "« En autant que » is a calque of \"as long as\"; federal guides reject this phrase and recommend « pourvu que » or « dans la mesure où »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "dépendamment que les livrables essentiels soient remis à la date prévue.",
+          "rationale": {
+            "fr": "« Dépendamment » calque « depending on » ; la locution n'existe pas en français, où l'on dit « selon que » ou « suivant que ». Elle n'exprimerait d'ailleurs pas une condition.",
+            "en": "« Dépendamment » is a calque of \"depending on\"; the phrase does not exist in French, which says « selon que » or « suivant que ». Nor would it express a condition."
+          }
+        },
+        {
+          "id": "c",
+          "text": "pourvu que les livrables essentiels soient remis à la date prévue.",
+          "rationale": {
+            "fr": "« Pourvu que » introduit une condition et se construit avec le subjonctif : la prolongation est accordée à la condition que les livrables soient remis à temps.",
+            "en": "« Pourvu que » introduces a condition and takes the subjunctive: the extension is granted on condition that the deliverables are submitted on time."
+          }
+        },
+        {
+          "id": "d",
+          "text": "aussi longtemps que les livrables essentiels soient remis à la date prévue.",
+          "rationale": {
+            "fr": "Calque de « as long as » au sens conditionnel. En français, « aussi longtemps que » exprime la durée et se construit avec l'indicatif ; il ne pose pas une condition.",
+            "en": "A calque of \"as long as\" in its conditional sense. In French, « aussi longtemps que » expresses duration and takes the indicative; it does not set a condition."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour exprimer une condition, on emploie « pourvu que » ou « à condition que », suivis du subjonctif, ou « dans la mesure où », suivi de l'indicatif. « En autant que » est un calque de « as long as » que les guides fédéraux rejettent, tout comme « dépendamment de » (on écrit « selon »). Quant à « aussi longtemps que », il exprime en français la durée, non la condition.",
+        "en": "To express a condition, use « pourvu que » or « à condition que » followed by the subjunctive, or « dans la mesure où » followed by the indicative. « En autant que » is a calque of \"as long as\" that federal guides reject, as is « dépendamment de » (write « selon »). As for « aussi longtemps que », in French it expresses duration, not condition."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-15",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Lorsqu'un client laisse un message dans la boîte vocale du centre de services, …",
+        "en": "When a client leaves a message in the service centre's voicemail, …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "rappelez-le dans un délai d'un jour ouvrable.",
+          "rationale": {
+            "fr": "« Rappeler quelqu'un » signifie lui téléphoner à son tour ; le verbe est transitif direct, d'où « rappelez-le ».",
+            "en": "« Rappeler quelqu'un » means to phone the person back; the verb takes a direct object, hence « rappelez-le »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "retournez-lui son appel dans un délai d'un jour ouvrable.",
+          "rationale": {
+            "fr": "« Retourner un appel » calque « to return a call » ; les guides fédéraux rejettent cette tournure.",
+            "en": "« Retourner un appel » is a calque of \"to return a call\"; federal guides reject this phrasing."
+          }
+        },
+        {
+          "id": "c",
+          "text": "rappelez-lui dans un délai d'un jour ouvrable.",
+          "rationale": {
+            "fr": "« Rappeler à quelqu'un » signifie « remettre en mémoire » (rappeler une échéance à quelqu'un) ; au sens de « téléphoner de nouveau », le complément est direct.",
+            "en": "« Rappeler à quelqu'un » means to remind someone (rappeler une échéance à quelqu'un); in the sense of phoning back, the object is direct."
+          }
+        },
+        {
+          "id": "d",
+          "text": "donnez-lui un retour d'appel dans un délai d'un jour ouvrable.",
+          "rationale": {
+            "fr": "Calque de « give him a call back » ; « retour d'appel » n'est pas une expression française pour désigner le fait de rappeler quelqu'un.",
+            "en": "A calque of \"give him a call back\"; « retour d'appel » is not a French expression for phoning someone back."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Retourner un appel » calque « to return a call » ; en français, on « rappelle » la personne. Dans ce sens, « rappeler » est transitif direct : « rappelez-le », « rappelez la cliente ». Avec un complément indirect, « rappeler quelque chose à quelqu'un » signifie « remettre en mémoire ».",
+        "en": "« Retourner un appel » is a calque of \"to return a call\"; in French one « rappelle » the person. In this sense « rappeler » takes a direct object: « rappelez-le », « rappelez la cliente ». With an indirect object, « rappeler quelque chose à quelqu'un » means to remind someone of something."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-16",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "En dehors des heures normales de travail, toute blessure survenue dans l'immeuble doit être signalée sans délai à l'agent de sécurité…",
+        "en": "Outside normal working hours, any injury occurring in the building must be reported without delay to the security officer…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "qui est en devoir, lequel consignera l'incident dans le registre prévu à cette fin.",
+          "rationale": {
+            "fr": "« Être en devoir » calque « to be on duty » ; les guides fédéraux rejettent cette tournure.",
+            "en": "« Être en devoir » is a calque of \"to be on duty\"; federal guides reject this phrasing."
+          }
+        },
+        {
+          "id": "b",
+          "text": "qui est sur appel, lequel consignera l'incident dans le registre prévu à cette fin.",
+          "rationale": {
+            "fr": "« Être sur appel » calque « to be on call » ; en français, on dit « être de garde ». Le sens serait en outre différent : l'agent de garde n'est pas forcément présent dans l'immeuble.",
+            "en": "« Être sur appel » is a calque of \"to be on call\"; French says « être de garde ». The meaning would also differ: an on-call officer is not necessarily in the building."
+          }
+        },
+        {
+          "id": "c",
+          "text": "qui est en charge, lequel consignera l'incident dans le registre prévu à cette fin.",
+          "rationale": {
+            "fr": "« Être en charge » calque « to be in charge » ; employé sans complément, il laisse en outre la phrase incomplète : responsable de quoi ?",
+            "en": "« Être en charge » is a calque of \"to be in charge\"; used without a complement, it also leaves the sentence incomplete: responsible for what?"
+          }
+        },
+        {
+          "id": "d",
+          "text": "de service, lequel consignera l'incident dans le registre prévu à cette fin.",
+          "rationale": {
+            "fr": "« De service » qualifie la personne qui assure son poste à un moment donné ; c'est la tournure recommandée pour « on duty ».",
+            "en": "« De service » describes the person staffing a post at a given time; it is the recommended equivalent of \"on duty\"."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Être en devoir » calque « to be on duty » ; en français, on est « de service » (présent au poste) ou « de garde » (disponible en cas de besoin). De même, « être sur appel » se dit « être de garde » ou « être en disponibilité », et « être en charge de » se rend par « être responsable de » ou « être chargé de ».",
+        "en": "« Être en devoir » is a calque of \"to be on duty\"; in French one is « de service » (at one's post) or « de garde » (available if needed). Likewise, « être sur appel » is « être de garde » or « être en disponibilité », and « être en charge de » is rendered by « être responsable de » or « être chargé de »."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-17",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans la préparation des prévisions budgétaires du prochain exercice, il serait imprudent…",
+        "en": "In preparing the budget forecasts for the next fiscal year, it would be unwise…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "de prendre pour acquis que le financement temporaire sera reconduit.",
+          "rationale": {
+            "fr": "Calque de « to take for granted » ; les guides fédéraux rejettent « prendre pour acquis » et recommandent un autre verbe dans cette locution.",
+            "en": "A calque of \"to take for granted\"; federal guides reject « prendre pour acquis » and recommend another verb in this phrase."
+          }
+        },
+        {
+          "id": "b",
+          "text": "de tenir pour acquis que le financement temporaire sera reconduit.",
+          "rationale": {
+            "fr": "« Tenir pour acquis » signifie « considérer comme certain sans vérification » ; c'est la locution recommandée.",
+            "en": "« Tenir pour acquis » means to regard as certain without checking; it is the recommended phrase."
+          }
+        },
+        {
+          "id": "c",
+          "text": "d'assumer que le financement temporaire sera reconduit.",
+          "rationale": {
+            "fr": "Calque de « to assume that ». En français, « assumer » signifie « prendre en charge » (assumer des coûts) ; il ne veut pas dire « supposer ».",
+            "en": "A calque of \"to assume that\". In French, « assumer » means to take on (assumer des coûts); it does not mean to suppose."
+          }
+        },
+        {
+          "id": "d",
+          "text": "de prendre pour accordé que le financement temporaire sera reconduit.",
+          "rationale": {
+            "fr": "Traduction mot à mot de « to take for granted » ; l'expression n'existe pas en français.",
+            "en": "A word-for-word translation of \"to take for granted\"; the expression does not exist in French."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour dire qu'on considère une chose comme certaine sans l'avoir vérifiée, on écrit « tenir pour acquis », « présumer » ou « supposer ». « Prendre pour acquis » et « prendre pour accordé » calquent « to take for granted », et « assumer que » calque « to assume that » : en français, « assumer » veut dire « prendre en charge » ou « accepter les conséquences de ».",
+        "en": "To say one regards something as certain without having checked it, write « tenir pour acquis », « présumer » or « supposer ». « Prendre pour acquis » and « prendre pour accordé » are calques of \"to take for granted\", and « assumer que » is a calque of \"to assume that\": in French, « assumer » means to take on or to accept the consequences of."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-18",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Merci de vos commentaires sur l'ébauche du bulletin ; votre suggestion d'ajouter un encadré sur les dates clés…",
+        "en": "Thank you for your comments on the draft newsletter; your suggestion to add a box on the key dates…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "améliorera définitivement la lisibilité du texte.",
+          "rationale": {
+            "fr": "Faux ami : « définitivement » signifie « de façon définitive, pour toujours ». Au sens de l'anglais « definitely » (assurément), c'est un anglicisme.",
+            "en": "A false friend: « définitivement » means permanently, once and for all. In the sense of the English \"definitely\" (certainly), it is an anglicism."
+          }
+        },
+        {
+          "id": "b",
+          "text": "améliorera sans aucun doute la lisibilité du texte.",
+          "rationale": {
+            "fr": "« Sans aucun doute » exprime la certitude de façon idiomatique ; « assurément » ou « certainement » conviendraient aussi.",
+            "en": "« Sans aucun doute » expresses certainty idiomatically; « assurément » or « certainement » would also fit."
+          }
+        },
+        {
+          "id": "c",
+          "text": "améliorera actuellement la lisibilité du texte.",
+          "rationale": {
+            "fr": "Faux ami : « actuellement » signifie « en ce moment », non « en fait » (« actually ») ; il jure en outre avec le futur « améliorera ».",
+            "en": "A false friend: « actuellement » means at present, not \"actually\"; it also clashes with the future « améliorera »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "améliorera positivement la lisibilité du texte.",
+          "rationale": {
+            "fr": "« Positivement » signifie « de façon positive » ; « améliorer positivement » est un pléonasme et n'exprime pas la certitude que suggère l'anglais « positively ».",
+            "en": "« Positivement » means in a positive way; « améliorer positivement » is a pleonasm and does not express the certainty suggested by the English \"positively\"."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Définitivement » signifie en français « de manière définitive, une fois pour toutes » (« le dossier est définitivement clos »). Pour exprimer la certitude, sens de l'anglais « definitely », on écrit « assurément », « certainement », « sans aucun doute » ou « sans contredit ». « Actuellement » est un autre faux ami : il veut dire « en ce moment ».",
+        "en": "In French, « définitivement » means permanently, once and for all (« le dossier est définitivement clos »). To express certainty, the sense of the English \"definitely\", write « assurément », « certainement », « sans aucun doute » or « sans contredit ». « Actuellement » is another false friend: it means at present."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-19",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le comité d'évaluation a déclaré la soumission de l'entreprise irrecevable au motif que…",
+        "en": "The evaluation committee declared the firm's bid non-compliant on the grounds that…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "celle-ci ne rencontrait pas les exigences obligatoires énoncées dans la demande de propositions.",
+          "rationale": {
+            "fr": "Calque de « to meet the requirements ». En français, « rencontrer » s'emploie pour des personnes ou des obstacles ; les guides rejettent « rencontrer des exigences ».",
+            "en": "A calque of \"to meet the requirements\". In French, « rencontrer » is used for people or obstacles; the guides reject « rencontrer des exigences »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "celle-ci ne remplissait pas aux exigences obligatoires énoncées dans la demande de propositions.",
+          "rationale": {
+            "fr": "« Remplir » est transitif direct ; « remplir à » est agrammatical. La construction mêle deux verbes différents.",
+            "en": "« Remplir » takes a direct object; « remplir à » is ungrammatical. The construction mixes up two different verbs."
+          }
+        },
+        {
+          "id": "c",
+          "text": "celle-ci ne se conformait pas avec les exigences obligatoires énoncées dans la demande de propositions.",
+          "rationale": {
+            "fr": "« Se conformer » se construit avec « à » (se conformer à une règle) ; « avec » reproduit l'anglais « to comply with ».",
+            "en": "« Se conformer » takes « à » (se conformer à une règle); « avec » copies the English \"to comply with\"."
+          }
+        },
+        {
+          "id": "d",
+          "text": "celle-ci ne satisfaisait pas aux exigences obligatoires énoncées dans la demande de propositions.",
+          "rationale": {
+            "fr": "« Satisfaire à des exigences » signifie s'y conformer ; c'est la tournure recommandée dans la langue des marchés publics.",
+            "en": "« Satisfaire à des exigences » means to comply with them; it is the recommended phrasing in procurement language."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour dire qu'une soumission ou une personne remplit des conditions, on écrit « satisfaire aux exigences », « répondre aux exigences » ou « se conformer aux exigences ». « Rencontrer les exigences » calque « to meet the requirements » ; de même, on « respecte » une échéance au lieu de la « rencontrer ». La préposition anglaise « with » ne se transpose pas : on se conforme « à » une règle.",
+        "en": "To say that a bid or a person meets conditions, write « satisfaire aux exigences », « répondre aux exigences » or « se conformer aux exigences ». « Rencontrer les exigences » is a calque of \"to meet the requirements\"; likewise, one « respecte » a deadline rather than « rencontrer » it. The English preposition \"with\" does not carry over: one « se conforme à » a rule."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-20",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Afin de suivre de près la consommation d'énergie de l'immeuble, l'équipe des installations…",
+        "en": "In order to monitor the building's energy consumption closely, the facilities team…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "relèvera les compteurs sur une base régulière.",
+          "rationale": {
+            "fr": "« Sur une base régulière » calque « on a regular basis » ; les guides fédéraux recommandent l'adverbe « régulièrement ».",
+            "en": "« Sur une base régulière » is a calque of \"on a regular basis\"; federal guides recommend the adverb « régulièrement »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "relèvera les compteurs sur un horaire régulier.",
+          "rationale": {
+            "fr": "« Sur un horaire » calque « on a schedule » ; en français, on agit « selon un horaire ». La tournure est à écarter.",
+            "en": "« Sur un horaire » is a calque of \"on a schedule\"; in French one acts « selon un horaire ». The phrasing must be rejected."
+          }
+        },
+        {
+          "id": "c",
+          "text": "relèvera régulièrement les compteurs.",
+          "rationale": {
+            "fr": "L'adverbe exprime simplement et directement la fréquence ; c'est la tournure recommandée.",
+            "en": "The adverb expresses frequency simply and directly; it is the recommended phrasing."
+          }
+        },
+        {
+          "id": "d",
+          "text": "relèvera les compteurs en temps régulier.",
+          "rationale": {
+            "fr": "« En temps régulier » calque « in regular time » et signifie, au mieux, « en temps normal » ; la tournure n'exprime pas la fréquence des relevés.",
+            "en": "« En temps régulier » is a calque of \"in regular time\" and means, at best, normally; the phrasing does not express how often the readings are taken."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour exprimer la fréquence, le français préfère l'adverbe ou un complément précis : « régulièrement », « périodiquement », « chaque mois », « tous les trimestres ». « Sur une base régulière » (de même que « sur une base mensuelle » ou « hebdomadaire ») calque l'anglais « on a … basis » ; les guides fédéraux recommandent de l'éviter.",
+        "en": "To express frequency, French prefers an adverb or a precise complement: « régulièrement », « périodiquement », « chaque mois », « tous les trimestres ». « Sur une base régulière » (like « sur une base mensuelle » or « hebdomadaire ») is a calque of the English \"on a … basis\"; federal guides recommend avoiding it."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-21",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le rapport de vérification relève que plusieurs formulaires en ligne sont incompatibles avec les lecteurs d'écran ; la direction générale s'engage donc…",
+        "en": "The audit report notes that several online forms are incompatible with screen readers; the branch therefore undertakes…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "à remédier à ces lacunes d'ici la fin de l'exercice.",
+          "rationale": {
+            "fr": "« Remédier à » signifie « apporter une solution à » et se construit avec « à » ; c'est la tournure idiomatique.",
+            "en": "« Remédier à » means to provide a remedy for and takes « à »; it is the idiomatic phrasing."
+          }
+        },
+        {
+          "id": "b",
+          "text": "à adresser ces lacunes d'ici la fin de l'exercice.",
+          "rationale": {
+            "fr": "Calque de « to address an issue ». En français, on adresse une lettre ou une demande à quelqu'un ; les guides rejettent « adresser un problème ».",
+            "en": "A calque of \"to address an issue\". In French one « adresse » a letter or a request to someone; the guides reject « adresser un problème »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "à prendre action sur ces lacunes d'ici la fin de l'exercice.",
+          "rationale": {
+            "fr": "« Prendre action » calque « to take action » ; les guides fédéraux recommandent « agir » ou « prendre des mesures ».",
+            "en": "« Prendre action » is a calque of \"to take action\"; federal guides recommend « agir » or « prendre des mesures »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "à corriger à ces lacunes d'ici la fin de l'exercice.",
+          "rationale": {
+            "fr": "« Corriger » est transitif direct : on corrige des lacunes. La préposition « à » rend la construction fautive.",
+            "en": "« Corriger » takes a direct object: one « corrige des lacunes ». The preposition « à » makes the construction wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour dire qu'on s'occupe d'un problème, on écrit « remédier à », « régler », « traiter », « corriger » ou « se pencher sur ». « Adresser un problème » (« to address an issue ») et « prendre action » (« to take action ») sont des calques que les guides fédéraux rejettent ; on « agit » ou on « prend des mesures ». Attention à la construction : « remédier à » est indirect, « corriger » est direct.",
+        "en": "To say one is dealing with a problem, write « remédier à », « régler », « traiter », « corriger » or « se pencher sur ». « Adresser un problème » (\"to address an issue\") and « prendre action » (\"to take action\") are calques that federal guides reject; one « agit » or « prend des mesures ». Mind the construction: « remédier à » is indirect, « corriger » is direct."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-22",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle correction faut-il apporter à la phrase suivante ? « Le coordonnateur de la santé et de la sécurité est en charge du programme de prévention depuis le mois dernier et répondra à vos questions. »",
+        "en": "Which correction does the following sentence need? « Le coordonnateur de la santé et de la sécurité est en charge du programme de prévention depuis le mois dernier et répondra à vos questions. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « depuis » par « dès »",
+          "rationale": {
+            "fr": "« Depuis » marque une situation qui dure jusqu'à maintenant, ce qui convient avec le présent « est » ; « dès » marquerait seulement un point de départ et s'accorde mal avec ce présent de durée.",
+            "en": "« Depuis » marks a situation lasting until now, which fits the present « est »; « dès » would only mark a starting point and fits poorly with this present of duration."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « répondra à vos questions » par « répondra vos questions »",
+          "rationale": {
+            "fr": "« Répondre » se construit avec « à » : on répond à une question. Supprimer la préposition rendrait la phrase fautive.",
+            "en": "« Répondre » takes « à »: one « répond à une question ». Removing the preposition would make the sentence wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « est en charge du » par « est responsable du »",
+          "rationale": {
+            "fr": "« Être en charge de » calque « to be in charge of » ; « être responsable de » est la tournure recommandée.",
+            "en": "« Être en charge de » is a calque of \"to be in charge of\"; « être responsable de » is the recommended phrasing."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « répondra » par « répondera »",
+          "rationale": {
+            "fr": "Le futur de « répondre » est « répondra » ; « répondera » est une forme fautive.",
+            "en": "The future of « répondre » is « répondra »; « répondera » is a wrong form."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Être en charge de » calque « to be in charge of ». Pour attribuer une responsabilité, on écrit « être responsable de », « être chargé de » ou « s'occuper de ». La tournure « avoir la charge de » est française, mais « être en charge de » est déconseillé par les guides fédéraux.",
+        "en": "« Être en charge de » is a calque of \"to be in charge of\". To assign a responsibility, write « être responsable de », « être chargé de » or « s'occuper de ». The phrasing « avoir la charge de » is good French, but « être en charge de » is advised against by federal guides."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-23",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase tirée d'une note de service contient une faute. Laquelle des corrections suivantes s'impose ? « Le Ministère devra implémenter la nouvelle directive sur la gestion intégrée des risques avant la fin de l'exercice, bien que certaines directions générales aient demandé un délai supplémentaire. »",
+        "en": "This sentence from a memo contains an error. Which of the following corrections is required? « Le Ministère devra implémenter la nouvelle directive sur la gestion intégrée des risques avant la fin de l'exercice, bien que certaines directions générales aient demandé un délai supplémentaire. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « implémenter » par « mettre en œuvre »",
+          "rationale": {
+            "fr": "« Implémenter » calque « to implement » ; pour une directive, on écrit « mettre en œuvre » ou « appliquer ».",
+            "en": "« Implémenter » is a calque of \"to implement\"; for a directive, write « mettre en œuvre » or « appliquer »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « aient demandé » par « ont demandé »",
+          "rationale": {
+            "fr": "« Bien que » exige le subjonctif ; passer à l'indicatif rendrait la phrase fautive.",
+            "en": "« Bien que » requires the subjunctive; switching to the indicative would make the sentence wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « délai » par « retard »",
+          "rationale": {
+            "fr": "Ici, « délai » désigne le temps accordé pour agir, sens exact du mot ; « retard » signifierait que les directions demandent à être en retard, ce qui n'a pas de sens.",
+            "en": "Here « délai » denotes the time allowed to act, the word's exact sense; « retard » would mean the branches are asking to be late, which makes no sense."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « avant la fin » par « avant que la fin »",
+          "rationale": {
+            "fr": "« Avant que » introduit une proposition contenant un verbe ; devant un nom seul, on emploie « avant ». La modification créerait une faute.",
+            "en": "« Avant que » introduces a clause containing a verb; before a bare noun, « avant » is used. The change would create an error."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Implémenter » est un calque de « to implement ». Pour une politique, une directive, un plan ou une recommandation, on écrit « mettre en œuvre », « appliquer » ou « exécuter ». Le verbe « implémenter » n'est admis que dans un sens technique étroit, en informatique, pour l'installation d'un logiciel ou d'une fonction.",
+        "en": "« Implémenter » is a calque of \"to implement\". For a policy, directive, plan or recommendation, write « mettre en œuvre », « appliquer » or « exécuter ». The verb « implémenter » is accepted only in a narrow technical sense, in computing, for installing software or a function."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-24",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Repérez l'erreur dans ce passage d'un courriel et choisissez la correction appropriée : « La Direction générale du dirigeant principal de l'information a initié ce printemps un projet de migration vers l'infonuagique, dont les retombées devraient se faire sentir dès l'an prochain. »",
+        "en": "Find the error in this excerpt from an email and choose the appropriate correction: « La Direction générale du dirigeant principal de l'information a initié ce printemps un projet de migration vers l'infonuagique, dont les retombées devraient se faire sentir dès l'an prochain. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « dont » par « que »",
+          "rationale": {
+            "fr": "« Dont » remplace un complément introduit par « de » (les retombées du projet) ; « que » ne peut pas jouer ce rôle.",
+            "en": "« Dont » stands for a complement introduced by « de » (les retombées du projet); « que » cannot play that role."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « se faire sentir » par « se sentir »",
+          "rationale": {
+            "fr": "« Se faire sentir » signifie « devenir perceptible » ; « se sentir » renvoie à ce qu'une personne éprouve et ne convient pas à des retombées.",
+            "en": "« Se faire sentir » means to become noticeable; « se sentir » refers to what a person feels and does not fit outcomes."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « dès » par « depuis »",
+          "rationale": {
+            "fr": "« Depuis » marque une durée qui se prolonge jusqu'au moment présent et ne s'emploie pas avec un futur ; « dès l'an prochain » est la tournure attendue.",
+            "en": "« Depuis » marks a duration that runs up to the present and is not used with a future; « dès l'an prochain » is the expected phrasing."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « a initié » par « a lancé »",
+          "rationale": {
+            "fr": "« Initier un projet » calque « to initiate a project » ; on « lance », « entreprend » ou « amorce » un projet.",
+            "en": "« Initier un projet » is a calque of \"to initiate a project\"; one « lance », « entreprend » or « amorce » a project."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "En français, « initier » signifie « faire connaître une discipline à quelqu'un » (« initier une stagiaire au logiciel ») ou « admettre dans un groupe ». L'emploi au sens de « commencer, prendre l'initiative de » est un calque de « to initiate » que le Bureau de la traduction déconseille : on « lance », « entreprend », « amorce » ou « met en branle » un projet.",
+        "en": "In French, « initier » means to introduce someone to a discipline (« initier une stagiaire au logiciel ») or to admit into a group. Using it to mean to begin or to take the initiative for is a calque of \"to initiate\" that the Translation Bureau advises against: one « lance », « entreprend », « amorce » or « met en branle » a project."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-25",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "La phrase suivante, tirée d'un bilan mensuel, contient une erreur. Quelle modification faut-il apporter ? « À date, notre centre de contact a traité plus de 3 000 demandes liées au nouveau programme de prestations. »",
+        "en": "The following sentence, taken from a monthly summary, contains an error. What change must be made? « À date, notre centre de contact a traité plus de 3 000 demandes liées au nouveau programme de prestations. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « a traité » par « a traitées »",
+          "rationale": {
+            "fr": "Le participe passé employé avec « avoir » s'accorde seulement avec un complément direct placé avant lui ; ici, « demandes » suit le verbe, donc il reste invariable.",
+            "en": "A past participle used with « avoir » agrees only with a direct object placed before it; here « demandes » follows the verb, so it stays invariable."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « À date » par « À ce jour »",
+          "rationale": {
+            "fr": "« À date » calque « to date » ; « à ce jour » ou « jusqu'à maintenant » sont les tournures recommandées.",
+            "en": "« À date » is a calque of \"to date\"; « à ce jour » or « jusqu'à maintenant » are the recommended phrasings."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « plus de » par « plus que »",
+          "rationale": {
+            "fr": "Devant un nombre, on emploie « plus de » ; « plus que » sert à la comparaison (« plus que l'an dernier »).",
+            "en": "Before a number, « plus de » is used; « plus que » is for comparison (« plus que l'an dernier »)."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « liées » par « lié »",
+          "rationale": {
+            "fr": "« Liées » s'accorde avec « demandes », féminin pluriel ; le masculin singulier serait fautif.",
+            "en": "« Liées » agrees with « demandes », feminine plural; the masculine singular would be wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« À date » calque « to date ». On écrit « à ce jour », « jusqu'à maintenant », « jusqu'à présent » ou « jusqu'ici ». En français, « à date » ne s'emploie que dans des expressions comme « à date fixe », où il signifie « à un jour précis ».",
+        "en": "« À date » is a calque of \"to date\". Write « à ce jour », « jusqu'à maintenant », « jusqu'à présent » or « jusqu'ici ». In French, « à date » is used only in expressions such as « à date fixe », where it means on a specific day."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-26",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Lisez attentivement cet extrait d'une procédure d'approvisionnement et indiquez la seule modification nécessaire : « Avant d'attribuer le contrat, l'autorité contractante doit vérifier que chaque item de la liste de prix correspond aux caractéristiques techniques énoncées dans la demande de propositions. »",
+        "en": "Read this excerpt from a procurement procedure carefully and indicate the only change required: « Avant d'attribuer le contrat, l'autorité contractante doit vérifier que chaque item de la liste de prix correspond aux caractéristiques techniques énoncées dans la demande de propositions. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « correspond aux » par « correspond avec les »",
+          "rationale": {
+            "fr": "« Correspondre à » signifie « être conforme à » ; « correspondre avec quelqu'un » veut dire « échanger du courrier ». La modification fausserait le sens.",
+            "en": "« Correspondre à » means to match; « correspondre avec quelqu'un » means to exchange letters. The change would distort the meaning."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « item » par « article »",
+          "rationale": {
+            "fr": "« Item » est un anglicisme ; dans une liste de prix, chaque élément est un « article ».",
+            "en": "« Item » is an anglicism; in a price list, each entry is an « article »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « énoncées » par « énoncés »",
+          "rationale": {
+            "fr": "Le participe s'accorde avec « caractéristiques », féminin pluriel ; le masculin serait fautif.",
+            "en": "The participle agrees with « caractéristiques », feminine plural; the masculine would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « Avant d'attribuer » par « Avant que d'attribuer »",
+          "rationale": {
+            "fr": "« Avant que de » est une tournure archaïque, réservée à la langue littéraire ; elle détonnerait dans une procédure administrative et ne règle pas la faute de la phrase.",
+            "en": "« Avant que de » is an archaic phrasing reserved for literary language; it would jar in an administrative procedure and does not fix the sentence's fault."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Item » est un anglicisme. Selon le contexte, on écrit « article » (dans une liste de prix ou un inventaire), « point » (dans un ordre du jour), « élément » ou « question » (dans un questionnaire). Le mot n'est admis en français que dans quelques emplois techniques étroits, par exemple en psychométrie.",
+        "en": "« Item » is an anglicism. Depending on context, write « article » (in a price list or inventory), « point » (on an agenda), « élément » or « question » (in a questionnaire). The word is accepted in French only in a few narrow technical uses, for example in psychometrics."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-27",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle correction cette phrase d'un avis aux employés exige-t-elle ? « En raison du gel des dépenses discrétionnaires, la direction a dû canceller la formation prévue pour les agents financiers. »",
+        "en": "Which correction does this sentence from a notice to employees require? « En raison du gel des dépenses discrétionnaires, la direction a dû canceller la formation prévue pour les agents financiers. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « prévue » par « prévu »",
+          "rationale": {
+            "fr": "« Prévue » s'accorde avec « la formation », féminin singulier ; le masculin serait fautif.",
+            "en": "« Prévue » agrees with « la formation », feminine singular; the masculine would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « En raison du » par « Dû au »",
+          "rationale": {
+            "fr": "« Dû à » placé en tête de phrase pour exprimer la cause calque « due to » ; « en raison de » est déjà la tournure juste.",
+            "en": "« Dû à » at the start of a sentence to express cause is a calque of \"due to\"; « en raison de » is already the proper phrasing."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « a dû » par « a du »",
+          "rationale": {
+            "fr": "« Dû », participe passé de « devoir », prend un accent circonflexe au masculin singulier pour le distinguer de l'article « du ».",
+            "en": "« Dû », the past participle of « devoir », takes a circumflex in the masculine singular to distinguish it from the article « du »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « canceller » par « annuler »",
+          "rationale": {
+            "fr": "« Canceller » est un anglicisme formé sur « to cancel » ; on annule une formation.",
+            "en": "« Canceller » is an anglicism built on \"to cancel\"; one « annule » a training session."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Canceller » (de « to cancel ») et « cancellation » sont des anglicismes. On « annule » une réunion, une formation, un contrat ou une commande, et l'on parle d'« annulation ». Pour un abonnement ou un bail, on peut aussi « résilier ».",
+        "en": "« Canceller » (from \"to cancel\") and « cancellation » are anglicisms. One « annule » a meeting, a training session, a contract or an order, and speaks of « annulation ». For a subscription or a lease, one can also « résilier »."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-28",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase d'un courriel de la conseillère en relations de travail comporte une impropriété. Quelle modification la rectifie ? « Il ne faut pas assumer que tous les employés connaissent les modalités du congé parental ; il convient plutôt de leur transmettre un guide qui les explique clairement. »",
+        "en": "This sentence from an email by the labour relations advisor contains a misuse of a word. Which change fixes it? « Il ne faut pas assumer que tous les employés connaissent les modalités du congé parental ; il convient plutôt de leur transmettre un guide qui les explique clairement. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « assumer » par « présumer »",
+          "rationale": {
+            "fr": "« Assumer que » calque « to assume that » ; « présumer que » ou « supposer que » rendent le sens voulu.",
+            "en": "« Assumer que » is a calque of \"to assume that\"; « présumer que » or « supposer que » convey the intended meaning."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « il convient » par « il convienne »",
+          "rationale": {
+            "fr": "Une proposition principale qui énonce un fait n'a aucune raison de passer au subjonctif ; la modification créerait une faute.",
+            "en": "A main clause stating a fact has no reason to switch to the subjunctive; the change would create an error."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « de leur transmettre » par « de les transmettre »",
+          "rationale": {
+            "fr": "« Transmettre » prend un complément direct (le guide) et un complément introduit par « à » (aux employés), d'où « leur transmettre un guide ». « Les transmettre un guide » serait agrammatical.",
+            "en": "« Transmettre » takes a direct object (the guide) and a complement introduced by « à » (to the employees), hence « leur transmettre un guide ». « Les transmettre un guide » would be ungrammatical."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « clairement » par « clair »",
+          "rationale": {
+            "fr": "Le verbe « explique » doit être modifié par un adverbe ; l'adjectif « clair » ne convient pas dans cet emploi.",
+            "en": "The verb « explique » must be modified by an adverb; the adjective « clair » does not fit in this use."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "En français, « assumer » signifie « prendre en charge » (assumer une responsabilité, des frais) ou « accepter » (assumer ses choix). L'emploi au sens de « supposer » calque « to assume » : on écrit « présumer que », « supposer que » ou « tenir pour acquis que ».",
+        "en": "In French, « assumer » means to take on (assumer une responsabilité, des frais) or to accept (assumer ses choix). Using it to mean to suppose is a calque of \"to assume\": write « présumer que », « supposer que » or « tenir pour acquis que »."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-29",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Relevez la faute dans cet extrait d'un bulletin interne et choisissez la modification qui convient : « Plusieurs lecteurs étaient sous l'impression que la nouvelle politique sur le télétravail entrerait en vigueur immédiatement, alors qu'elle ne s'appliquera qu'à compter de l'automne. »",
+        "en": "Identify the error in this excerpt from an internal newsletter and choose the appropriate change: « Plusieurs lecteurs étaient sous l'impression que la nouvelle politique sur le télétravail entrerait en vigueur immédiatement, alors qu'elle ne s'appliquera qu'à compter de l'automne. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « entrerait en vigueur » par « rentrerait en vigueur »",
+          "rationale": {
+            "fr": "« Rentrer » signifie « entrer de nouveau » ou « revenir » ; une politique entre en vigueur, elle n'y rentre pas.",
+            "en": "« Rentrer » means to enter again or to come back; a policy « entre en vigueur », it does not « rentre »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « ne s'appliquera qu' » par « s'appliquera qu' »",
+          "rationale": {
+            "fr": "L'omission de « ne » relève de l'oral familier ; à l'écrit, la restriction exige « ne… que ».",
+            "en": "Dropping « ne » belongs to casual speech; in writing, restriction requires « ne… que »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « étaient sous l'impression » par « avaient l'impression »",
+          "rationale": {
+            "fr": "« Être sous l'impression que » calque « to be under the impression that » ; en français, on a l'impression que.",
+            "en": "« Être sous l'impression que » is a calque of \"to be under the impression that\"; in French one « a l'impression que »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « immédiatement » par « de suite »",
+          "rationale": {
+            "fr": "« De suite » signifie « l'un après l'autre » (trois jours de suite) ; au sens d'« immédiatement », il faudrait « tout de suite ».",
+            "en": "« De suite » means in a row (trois jours de suite); in the sense of immediately, « tout de suite » would be needed."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Être sous l'impression que » calque « to be under the impression that ». En français, on « a l'impression que », on « croit » ou on « pense que ». Le verbe de la subordonnée reste au conditionnel pour exprimer le futur dans le passé : « avaient l'impression que la politique entrerait en vigueur ».",
+        "en": "« Être sous l'impression que » is a calque of \"to be under the impression that\". In French one « a l'impression que », « croit » or « pense que ». The verb in the subordinate clause stays in the conditional to express the future in the past: « avaient l'impression que la politique entrerait en vigueur »."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-30",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle modification faut-il apporter à cette consigne destinée au personnel de la réception ? « Faites sûr que tous les documents affichés à l'accueil sont offerts en français et en anglais, comme l'exige la politique sur les langues officielles. »",
+        "en": "What change must be made to this instruction for reception staff? « Faites sûr que tous les documents affichés à l'accueil sont offerts en français et en anglais, comme l'exige la politique sur les langues officielles. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « affichés » par « affichées »",
+          "rationale": {
+            "fr": "« Affichés » s'accorde avec « documents », masculin pluriel ; le féminin serait fautif.",
+            "en": "« Affichés » agrees with « documents », masculine plural; the feminine would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « en français et en anglais » par « en français et anglais »",
+          "rationale": {
+            "fr": "Devant des compléments coordonnés, la préposition « en » se répète ; la supprimer serait fautif.",
+            "en": "Before coordinated complements, the preposition « en » is repeated; dropping it would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « l'exige » par « l'exigent »",
+          "rationale": {
+            "fr": "Le sujet du verbe est « la politique », au singulier ; le pluriel serait fautif.",
+            "en": "The subject of the verb is « la politique », singular; the plural would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « Faites sûr que » par « Assurez-vous que »",
+          "rationale": {
+            "fr": "« Faire sûr que » calque « to make sure that » ; on écrit « s'assurer que » ou « veiller à ce que ».",
+            "en": "« Faire sûr que » is a calque of \"to make sure that\"; write « s'assurer que » or « veiller à ce que »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Faire sûr que » calque « to make sure that ». On écrit « s'assurer que », « veiller à ce que » (suivi du subjonctif) ou « vérifier que ». Après « s'assurer que », l'indicatif est d'usage : « assurez-vous que les documents sont offerts dans les deux langues ».",
+        "en": "« Faire sûr que » is a calque of \"to make sure that\". Write « s'assurer que », « veiller à ce que » (followed by the subjunctive) or « vérifier que ». After « s'assurer que », the indicative is customary: « assurez-vous que les documents sont offerts dans les deux langues »."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-31",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase extraite d'un procès-verbal renferme une faute. Laquelle des modifications suivantes s'impose ? « Le comité consultatif supporte pleinement le plan de réduction des émissions, pourvu que les mesures proposées soient évaluées chaque année au regard des cibles fixées. »",
+        "en": "This sentence from minutes of a meeting contains an error. Which of the following changes is required? « Le comité consultatif supporte pleinement le plan de réduction des émissions, pourvu que les mesures proposées soient évaluées chaque année au regard des cibles fixées. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « supporte » par « appuie »",
+          "rationale": {
+            "fr": "« Supporter » au sens de « soutenir une proposition » calque « to support » ; on appuie un plan.",
+            "en": "« Supporter » in the sense of backing a proposal is a calque of \"to support\"; one « appuie » a plan."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « soient évaluées » par « sont évaluées »",
+          "rationale": {
+            "fr": "« Pourvu que » exige le subjonctif ; l'indicatif rendrait la phrase fautive.",
+            "en": "« Pourvu que » requires the subjunctive; the indicative would make the sentence wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « au regard des » par « en regard aux »",
+          "rationale": {
+            "fr": "La locution est « au regard de » ou « en regard de » ; « en regard aux » est fautif.",
+            "en": "The phrase is « au regard de » or « en regard de »; « en regard aux » is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « fixées » par « fixés »",
+          "rationale": {
+            "fr": "« Fixées » s'accorde avec « cibles », féminin pluriel ; le masculin serait fautif.",
+            "en": "« Fixées » agrees with « cibles », feminine plural; the masculine would be wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "En français, « supporter » signifie « porter le poids de » ou « endurer » (supporter des coûts, supporter une situation pénible). Au sens d'« appuyer une proposition, soutenir une initiative », c'est un calque de « to support » : on écrit « appuyer », « soutenir » ou « être favorable à ».",
+        "en": "In French, « supporter » means to bear the weight of or to endure (supporter des coûts, supporter une situation pénible). In the sense of backing a proposal or supporting an initiative, it is a calque of \"to support\": write « appuyer », « soutenir » or « être favorable à »."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-32",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Une seule correction s'impose dans cette phrase tirée d'un rapport d'étape. Laquelle ? « Pour sauver du temps et respecter l'échéance fixée par le sous-ministre adjoint, l'équipe a regroupé les deux étapes de validation en une seule. »",
+        "en": "Only one correction is required in this sentence from a progress report. Which one? « Pour sauver du temps et respecter l'échéance fixée par le sous-ministre adjoint, l'équipe a regroupé les deux étapes de validation en une seule. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « respecter » par « rencontrer »",
+          "rationale": {
+            "fr": "« Rencontrer une échéance » calque « to meet a deadline » ; « respecter l'échéance » est déjà la tournure juste, et la modification introduirait un anglicisme.",
+            "en": "« Rencontrer une échéance » is a calque of \"to meet a deadline\"; « respecter l'échéance » is already the proper phrasing, and the change would introduce an anglicism."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « fixée » par « fixé »",
+          "rationale": {
+            "fr": "« Fixée » s'accorde avec « l'échéance », féminin singulier ; le masculin serait fautif.",
+            "en": "« Fixée » agrees with « l'échéance », feminine singular; the masculine would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « sauver du temps » par « gagner du temps »",
+          "rationale": {
+            "fr": "« Sauver du temps » calque « to save time » ; en français, on gagne ou on économise du temps.",
+            "en": "« Sauver du temps » is a calque of \"to save time\"; in French one « gagne » or « économise » time."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « a regroupé » par « a regroupées »",
+          "rationale": {
+            "fr": "Avec « avoir », le participe ne s'accorde qu'avec un complément direct placé avant lui ; ici, « les deux étapes » suit le verbe, donc pas d'accord.",
+            "en": "With « avoir », the participle agrees only with a direct object placed before it; here « les deux étapes » follows the verb, so there is no agreement."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Sauver du temps » calque « to save time ». En français, « sauver » signifie « tirer d'un danger » ; pour le temps, on « gagne » ou on « économise » du temps. Dans la même famille, « rencontrer une échéance » (« to meet a deadline ») se dit « respecter une échéance ».",
+        "en": "« Sauver du temps » is a calque of \"to save time\". In French, « sauver » means to rescue from danger; for time, one « gagne » or « économise » time. In the same family, « rencontrer une échéance » (\"to meet a deadline\") is rendered as « respecter une échéance »."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-false-friends-and-anglicisms-33",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase, extraite d'un avis sur la nouvelle politique ministérielle, contient une faute. Quelle correction proposez-vous ? « En vertu de la nouvelle politique, la déclaration des conflits d'intérêts est mandatoire pour tous les employés et doit être remise au plus tard le 30 juin. »",
+        "en": "This sentence, from a notice about the new departmental policy, contains an error. Which correction do you propose? « En vertu de la nouvelle politique, la déclaration des conflits d'intérêts est mandatoire pour tous les employés et doit être remise au plus tard le 30 juin. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « En vertu de » par « En vertu à »",
+          "rationale": {
+            "fr": "La locution est « en vertu de » ; « en vertu à » est fautif.",
+            "en": "The phrase is « en vertu de »; « en vertu à » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « mandatoire » par « obligatoire »",
+          "rationale": {
+            "fr": "« Mandatoire » est un anglicisme formé sur « mandatory » ; on écrit « obligatoire ».",
+            "en": "« Mandatoire » is an anglicism built on \"mandatory\"; write « obligatoire »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « remise » par « remis »",
+          "rationale": {
+            "fr": "« Remise » s'accorde avec « la déclaration », féminin singulier ; le masculin serait fautif.",
+            "en": "« Remise » agrees with « la déclaration », feminine singular; the masculine would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « doit être » par « doivent être »",
+          "rationale": {
+            "fr": "Le sujet est « la déclaration », au singulier ; « conflits d'intérêts » n'en est que le complément.",
+            "en": "The subject is « la déclaration », singular; « conflits d'intérêts » is only its complement."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Mandatoire » est un anglicisme formé sur « mandatory ». En français, on écrit « obligatoire », « exigé » ou « impératif ». Le nom « mandat » existe bien (le mandat d'un comité) et a donné « mandataire », mais l'adjectif « mandatoire » n'a pas le sens d'« obligatoire ».",
+        "en": "« Mandatoire » is an anglicism built on \"mandatory\". In French, write « obligatoire », « exigé » or « impératif ». The noun « mandat » does exist (a committee's mandate) and has given « mandataire », but the adjective « mandatoire » does not mean mandatory."
+      },
+      "subSkill": "false-friends-and-anglicisms",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ]
+}

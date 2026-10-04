@@ -1,18 +1,23 @@
 {
-  "batchId": "batch-2026-09-27",
+  "authored": {
+    "passed": 626,
+    "published": 626,
+    "submitted": 630
+  },
+  "batchId": "batch-2026-10-04",
   "costPerAcceptedItemUsd": null,
   "counts": {
     "itemsCarried": 242,
-    "itemsDrafted": 368,
-    "itemsPassed": 232,
+    "itemsDrafted": 0,
+    "itemsPassed": 0,
     "itemsPublished": 0,
-    "passages": 16,
-    "scenarios": 10,
-    "scenariosCarried": 0,
-    "sources": 8
+    "passages": 0,
+    "scenarios": 20,
+    "scenariosCarried": 10,
+    "sources": 0
   },
-  "generatedAt": "2026-09-27T00:00:00.000Z",
-  "provider": "scripted",
-  "stage4Yield": 0.63,
-  "totalCostUsd": 16.97
+  "generatedAt": "2026-10-04T00:00:00.000Z",
+  "provider": "claude-opus-5-5",
+  "stage4Yield": 0,
+  "totalCostUsd": null
 }

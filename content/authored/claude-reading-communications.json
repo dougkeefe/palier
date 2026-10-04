@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-communications-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-1",
+      "stem": {
+        "fr": "Quel est l'objet principal du courriel de Julie Tremblay ?",
+        "en": "What is the main purpose of Julie Tremblay's email?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer que l'ancien intranet cessera d'être accessible dès le 7 novembre.",
+          "rationale": {
+            "fr": "Le 7 novembre est la date après laquelle on ne pourra plus ajouter de pages ; l'ancien site « restera accessible » jusqu'au lancement.",
+            "en": "7 November is the date after which no pages can be added; the old site 'will remain accessible' until the launch."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Informer le personnel des règles qui encadreront la publication sur le nouvel intranet.",
+          "rationale": {
+            "fr": "C'est l'objet du courriel : la date de lancement, les éditeurs autorisés, la relecture, la durée de vie des pages et la marche à suivre servent tous à présenter les nouvelles règles de publication.",
+            "en": "This is the email's purpose: the launch date, authorized editors, review, page lifespan and next steps all serve to present the new publishing rules."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Présenter en détail les résultats de l'inventaire des pages de l'intranet.",
+          "rationale": {
+            "fr": "L'inventaire n'est cité que par un chiffre, pour justifier les règles ; il n'est pas l'objet du message.",
+            "en": "The inventory is cited only through one figure, to justify the rules; it is not the subject of the message."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Inviter l'ensemble des employés à une formation sur la rédaction pour le Web.",
+          "rationale": {
+            "fr": "La formation n'est offerte qu'aux éditeurs désignés, et elle n'est mentionnée qu'à la fin du courriel.",
+            "en": "The training is offered only to the designated editors, and it is mentioned only at the end of the email."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour dégager l'idée principale d'un courriel, demandez-vous quelle réponse englobe tous les paragraphes. Une date, un chiffre ou une activité mentionnés une seule fois sont des détails.",
+        "en": "To find the main idea of an email, ask which answer covers every part of it. A date, a figure or an activity mentioned only once is a detail."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-1",
+      "stem": {
+        "fr": "Que doit faire le personnel d'ici le 31 octobre ?",
+        "en": "What must staff do by 31 October?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Suivre la formation d'une heure destinée aux éditeurs.",
+          "rationale": {
+            "fr": "La formation aura lieu « la semaine suivante », donc après le 31 octobre, et elle vise les éditeurs seulement.",
+            "en": "The training takes place 'the following week', so after 31 October, and is meant for editors only."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Cesser d'ajouter des pages à l'ancien intranet.",
+          "rationale": {
+            "fr": "Cette échéance est le 7 novembre, et non le 31 octobre.",
+            "en": "That deadline is 7 November, not 31 October."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Faire relire toutes leurs pages par l'équipe des communications.",
+          "rationale": {
+            "fr": "La relecture s'applique à toute page publiée sur le nouvel intranet ; aucune échéance du 31 octobre n'y est rattachée.",
+            "en": "Review applies to every page published on the new intranet; no 31 October deadline is attached to it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Faire connaître à leur gestionnaire les éditeurs choisis pour leur secteur.",
+          "rationale": {
+            "fr": "Le courriel demande de « transmettre le nom de vos éditeurs à votre gestionnaire d'ici le 31 octobre ».",
+            "en": "The email asks staff to 'send the names of your editors to your manager by 31 October'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Quand une question porte sur une date, repérez-la dans le texte et lisez l'action qui y est liée ; les autres dates du courriel (7 et 17 novembre, semaine suivante) commandent d'autres actions.",
+        "en": "When a question is about a date, find it in the text and read the action attached to it; the email's other dates (7 and 17 November, the following week) govern other actions."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-1",
+      "stem": {
+        "fr": "Selon l'inventaire cité dans le courriel, quelle part des pages actuelles de l'intranet n'est plus à jour ?",
+        "en": "According to the inventory cited in the email, what share of the intranet's current pages is out of date?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Près de 40 % des quelque 2 300 pages.",
+          "rationale": {
+            "fr": "Le courriel indique que « près de 40 % des 2 300 pages actuelles ne sont plus à jour ».",
+            "en": "The email states that 'nearly 40% of the 2,300 current pages are out of date'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Environ 40 pages sur un total de 2 300.",
+          "rationale": {
+            "fr": "Le chiffre 40 est un pourcentage, et non un nombre de pages ; cette lecture confond les deux unités.",
+            "en": "The figure 40 is a percentage, not a number of pages; this reading confuses the two units."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Près de 90 % des pages, qui seront retirées automatiquement.",
+          "rationale": {
+            "fr": "Le nombre 90 renvoie au délai, en jours, après lequel les nouvelles internes seront retirées, et non à une proportion de pages.",
+            "en": "The number 90 refers to the period, in days, after which internal news items are removed, not to a share of pages."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Près de 40 % des pages de procédures seulement.",
+          "rationale": {
+            "fr": "La proportion porte sur l'ensemble des 2 300 pages actuelles, et non sur les seules pages de procédures.",
+            "en": "The share applies to all 2,300 current pages, not to procedure pages alone."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour lire un chiffre, vérifiez son unité (pourcentage, jours, nombre de pages) et ce à quoi il s'applique. Ici, 40 % s'applique à l'ensemble des 2 300 pages ; 90 est un nombre de jours.",
+        "en": "When reading a figure, check its unit (percentage, days, number of pages) and what it applies to. Here 40% applies to all 2,300 pages; 90 is a number of days."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-1",
+      "stem": {
+        "fr": "Dans le courriel, les nouvelles internes seront « retirées automatiquement après 90 jours ». Que signifie « retirées » dans ce contexte ?",
+        "en": "In the email, internal news items will be 'removed automatically after 90 days'. What does 'removed' mean in this context?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Révisées par l'équipe des communications avant d'être republiées.",
+          "rationale": {
+            "fr": "La révision concerne les pages de procédures, une fois par année ; « retirer » ne veut pas dire réviser.",
+            "en": "Revision concerns procedure pages, once a year; 'remove' does not mean revise."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Remplacées par une version plus récente de la même nouvelle.",
+          "rationale": {
+            "fr": "Le texte ne parle d'aucun remplacement : la nouvelle disparaît simplement du site.",
+            "en": "The text mentions no replacement: the news item simply disappears from the site."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Enlevées du site, sans que personne ait à le faire.",
+          "rationale": {
+            "fr": "« Retirer » une page signifie l'enlever de l'endroit où elle est publiée ; « automatiquement » précise qu'aucune intervention n'est requise.",
+            "en": "To 'remove' a page means to take it off the place where it is published; 'automatically' means no one has to act."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Transférées vers l'ancien intranet, qui restera accessible.",
+          "rationale": {
+            "fr": "L'ancien site reste accessible jusqu'au lancement, mais rien n'indique qu'on y déplacera les nouvelles.",
+            "en": "The old site remains accessible until launch, but nothing suggests news items will be moved there."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le sens d'un mot se confirme par son contexte : « retirées » s'oppose ici à « révisées », employé pour les pages de procédures. Une nouvelle retirée disparaît ; une page révisée est mise à jour.",
+        "en": "A word's meaning is confirmed by its context: 'removed' contrasts here with 'revised', used for procedure pages. A removed news item disappears; a revised page is updated."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-1",
+      "stem": {
+        "fr": "Dans la phrase « eux seuls pourront publier du contenu », à qui renvoie le pronom « eux » ?",
+        "en": "In the sentence 'they alone will be able to publish content', who does the pronoun 'they' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux membres de l'équipe des communications.",
+          "rationale": {
+            "fr": "L'équipe des communications relit les pages, mais elle est mentionnée dans la phrase suivante et ne publie pas elle-même.",
+            "en": "The communications team reviews pages, but it is mentioned in the next sentence and does not publish itself."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aux gestionnaires qui recevront le nom des éditeurs.",
+          "rationale": {
+            "fr": "Les gestionnaires n'apparaissent qu'à la fin du courriel ; le pronom renvoie à un nom placé immédiatement avant.",
+            "en": "Managers appear only at the end of the email; the pronoun refers to a noun placed immediately before it."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Aux deux éditeurs autorisés de chaque direction générale.",
+          "rationale": {
+            "fr": "« Eux » reprend « deux éditeurs autorisés », nommés juste avant le point-virgule.",
+            "en": "'They' takes up 'two authorized editors', named just before the semicolon."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aux directeurs des directions générales.",
+          "rationale": {
+            "fr": "Le texte parle de « chaque direction générale », au féminin singulier, et non de directeurs ; « eux » ne peut reprendre ce groupe.",
+            "en": "The text speaks of 'each branch' (feminine singular), not of directors; 'eux' cannot take up that group."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour trouver l'antécédent d'un pronom, cherchez juste avant lui un nom de même genre et de même nombre : « eux » (masculin pluriel) reprend « deux éditeurs autorisés ».",
+        "en": "To find a pronoun's antecedent, look just before it for a noun of the same gender and number: 'eux' (masculine plural) takes up 'two authorized editors'."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-2",
+      "stem": {
+        "fr": "Quel est le principal message de ce bulletin destiné au personnel ?",
+        "en": "What is the main message of this bulletin for staff?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Un employé joint par un journaliste doit transmettre la demande aux Relations avec les médias plutôt que d'y répondre lui-même.",
+          "rationale": {
+            "fr": "Tout le bulletin décrit cette marche à suivre : ne pas répondre, noter les renseignements, les transmettre, puis laisser un conseiller prendre le relais.",
+            "en": "The whole bulletin describes this procedure: do not answer, note the details, pass them on, then let an adviser take over."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les employés n'ont plus le droit de s'adresser aux médias, quelle que soit la situation.",
+          "rationale": {
+            "fr": "C'est une généralisation abusive : le bulletin précise que des experts accordent des entrevues après une préparation.",
+            "en": "This overgeneralizes: the bulletin says experts give interviews after preparation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les experts du Ministère devront accorder davantage d'entrevues aux journalistes.",
+          "rationale": {
+            "fr": "Le bulletin constate que les experts sont « régulièrement invités » à le faire ; il ne demande pas qu'ils en accordent davantage.",
+            "en": "The bulletin notes that experts are 'regularly invited' to do so; it does not ask them to give more."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les journalistes doivent désormais présenter leurs demandes au moyen de l'intranet.",
+          "rationale": {
+            "fr": "L'intranet est indiqué aux employés pour leurs questions ; les journalistes n'y ont pas accès selon le texte.",
+            "en": "The intranet is pointed out to employees for their questions; nothing says journalists use it."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le message principal d'un bulletin correspond à la consigne que tout le texte développe. Méfiez-vous des réponses qui durcissent la consigne (« plus le droit », « quelle que soit la situation ») : le texte prévoit des nuances.",
+        "en": "A bulletin's main message is the instruction the whole text develops. Be wary of answers that harden the instruction ('no longer allowed', 'whatever the situation'): the text allows for nuance."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-2",
+      "stem": {
+        "fr": "Quels renseignements l'employé joint par un journaliste doit-il noter ?",
+        "en": "What information must an employee contacted by a journalist write down?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le nom et le numéro de téléphone du journaliste, ainsi que le sujet de son article.",
+          "rationale": {
+            "fr": "Le numéro de téléphone n'est pas demandé, et le bulletin parle de la question posée, non du sujet de l'article.",
+            "en": "The phone number is not requested, and the bulletin speaks of the question asked, not the story's subject."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le nom du journaliste, son média et la réponse que l'employé lui a donnée.",
+          "rationale": {
+            "fr": "L'employé ne doit justement pas répondre ; il n'y a donc pas de réponse à noter.",
+            "en": "The employee must precisely not answer, so there is no answer to record."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le nom du journaliste et celui du porte-parole qu'il souhaite interviewer.",
+          "rationale": {
+            "fr": "C'est le conseiller qui désigne, au besoin, un porte-parole ; le journaliste ne le choisit pas.",
+            "en": "It is the adviser who designates a spokesperson if needed; the journalist does not choose one."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le nom du journaliste, son média, sa question et le moment où il doit remettre son texte.",
+          "rationale": {
+            "fr": "Le bulletin énumère « son nom, celui de son média, sa question et son heure de tombée » ; l'heure de tombée est le moment limite pour remettre l'article.",
+            "en": "The bulletin lists 'his or her name, the name of the outlet, the question and the deadline'; the deadline is the time by which the story must be filed."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour une question de détail, retrouvez l'énumération dans le texte et comparez chaque élément de l'option : un seul élément ajouté ou changé suffit à écarter une réponse.",
+        "en": "For a detail question, find the list in the text and compare each element of the option: a single added or changed element is enough to rule an answer out."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-2",
+      "stem": {
+        "fr": "Que peut-on déduire au sujet d'un employé spécialiste d'un dossier qui reçoit une demande d'entrevue ?",
+        "en": "What can be inferred about an employee who is a specialist on a file and receives an interview request?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il peut répondre sur-le-champ, puisque le sujet relève de son expertise.",
+          "rationale": {
+            "fr": "Le bulletin demande de ne pas répondre « même si le sujet vous semble simple » ; l'expertise ne dispense pas de la procédure.",
+            "en": "The bulletin asks staff not to answer 'even if the subject seems simple to you'; expertise does not exempt anyone from the procedure."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il pourrait être appelé à accorder l'entrevue, mais pas avant de s'y être préparé avec l'équipe des communications.",
+          "rationale": {
+            "fr": "Le bulletin indique que les experts accordent des entrevues « toujours après une préparation » ; un conseiller peut aussi désigner un porte-parole, qui pourrait être cet employé.",
+            "en": "The bulletin says experts give interviews 'always after preparation'; an adviser may also designate a spokesperson, who could be this employee."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il ne pourra en aucun cas parler aux médias de son dossier.",
+          "rationale": {
+            "fr": "C'est trop absolu : les experts accordent des entrevues, à condition d'être préparés.",
+            "en": "This is too absolute: experts do give interviews, provided they are prepared."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il doit d'abord obtenir l'accord du journaliste avant d'aviser les Relations avec les médias.",
+          "rationale": {
+            "fr": "Rien de tel n'est prévu : l'employé transmet les renseignements dans un délai d'une heure, sans condition.",
+            "en": "No such step exists: the employee passes on the details within one hour, unconditionally."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une inférence combine deux passages du texte : la règle générale (ne pas répondre soi-même) et la précision sur les experts (entrevues après préparation). La bonne déduction respecte les deux.",
+        "en": "An inference combines two parts of the text: the general rule (do not answer yourself) and the detail about experts (interviews after preparation). The sound deduction respects both."
+      },
+      "subSkill": "inference",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-2",
+      "stem": {
+        "fr": "Pourquoi le bulletin précise-t-il que « cette façon de faire ne vise pas à empêcher les employés de s'exprimer » ?",
+        "en": "Why does the bulletin specify that 'this approach is not meant to stop employees from speaking'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Pour éviter que la consigne soit perçue comme une forme de censure et en expliquer la raison d'être.",
+          "rationale": {
+            "fr": "La phrase anticipe une objection (« on veut nous faire taire ») et donne aussitôt le vrai motif : une information exacte et des réponses cohérentes.",
+            "en": "The sentence anticipates an objection ('they want to silence us') and immediately gives the real reason: accurate information and consistent answers."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Pour annoncer que la consigne sera bientôt assouplie.",
+          "rationale": {
+            "fr": "Rien n'indique un changement à venir ; le bulletin rappelle une règle en vigueur.",
+            "en": "Nothing points to an upcoming change; the bulletin restates a rule in force."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Pour reprocher aux employés d'avoir déjà donné des réponses contradictoires aux médias.",
+          "rationale": {
+            "fr": "Le texte veut « éviter » des réponses différentes ; il ne fait état d'aucun incident passé ni d'aucun reproche.",
+            "en": "The text aims to 'avoid' differing answers; it reports no past incident and makes no reproach."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pour inviter les employés à commenter la consigne sur l'intranet.",
+          "rationale": {
+            "fr": "L'intranet est proposé pour obtenir de l'information, non pour recueillir des commentaires.",
+            "en": "The intranet is offered for information, not to gather comments."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour cerner l'intention d'une phrase, demandez-vous à quelle réaction du lecteur elle répond. Une tournure du type « ne vise pas à… : elle permet de… » écarte une interprétation négative et la remplace par la justification voulue.",
+        "en": "To identify a sentence's intent, ask what reader reaction it responds to. A pattern like 'is not meant to…: it allows…' rules out a negative reading and replaces it with the intended justification."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-2",
+      "stem": {
+        "fr": "Comment les idées de ce rappel sur les demandes des journalistes sont-elles organisées ?",
+        "en": "How are the ideas in this reminder about journalists' requests organized?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il relate un incident récent, en analyse les causes, puis propose des solutions.",
+          "rationale": {
+            "fr": "Le bulletin ne relate aucun incident : il part d'une situation générale (« Il arrive que… »).",
+            "en": "The bulletin recounts no incident: it starts from a general situation ('It happens that…')."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il compare deux façons de traiter les demandes des médias et recommande la meilleure.",
+          "rationale": {
+            "fr": "Une seule marche à suivre est présentée ; il n'y a pas de comparaison.",
+            "en": "Only one procedure is presented; there is no comparison."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il commence par justifier la règle, puis énumère les sanctions prévues en cas de manquement.",
+          "rationale": {
+            "fr": "La justification vient après la consigne, et aucune sanction n'est mentionnée.",
+            "en": "The justification comes after the instruction, and no penalty is mentioned."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il décrit une situation, donne la marche à suivre, en explique le but, puis indique où se renseigner.",
+          "rationale": {
+            "fr": "C'est l'ordre du texte : la situation (un journaliste vous joint), les consignes, la justification (« Cette façon de faire… »), puis le renvoi à l'intranet.",
+            "en": "This is the text's order: the situation (a journalist contacts you), the instructions, the justification ('This approach…'), then the pointer to the intranet."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour reconnaître la structure d'un texte, résumez chaque phrase par sa fonction (situation, consigne, justification, renvoi) et comparez l'ordre obtenu à celui de chaque option.",
+        "en": "To recognize a text's structure, sum up each sentence by its function (situation, instruction, justification, referral) and compare the resulting order with each option."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-3",
+      "stem": {
+        "fr": "Que révèlent les données de l'évaluation sur la consultation des articles par le personnel des bureaux régionaux ?",
+        "en": "What do the evaluation data reveal about how often regional office staff read the articles?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Leur taux d'ouverture n'atteint que 4 %, contre 58 % pour l'ensemble du personnel.",
+          "rationale": {
+            "fr": "Cette option confond deux indicateurs : 4 % est un taux de clics, alors que 58 % est le taux d'ouverture moyen.",
+            "en": "This option confuses two indicators: 4% is a click rate, while 58% is the average open rate."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Ils sont 9 % à cliquer sur au moins un article, soit le taux le plus faible du Ministère.",
+          "rationale": {
+            "fr": "Le taux de 9 % vaut pour l'ensemble des destinataires ; chez les employés régionaux, il tombe à 4 %.",
+            "en": "The 9% rate applies to all recipients; among regional staff it drops to 4%."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Leur taux de clics représente moins de la moitié de celui de l'ensemble des destinataires.",
+          "rationale": {
+            "fr": "Le taux de clics passe de 9 % pour l'ensemble à 4 % pour les régions : il est donc inférieur à la moitié de la moyenne.",
+            "en": "The click rate goes from 9% overall to 4% in the regions: it is therefore less than half the average."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Leur taux de clics dépasse celui de l'administration centrale, malgré un taux d'ouverture plus faible.",
+          "rationale": {
+            "fr": "C'est l'inverse : le taux des régions « tombe » à 4 %, sous la moyenne, et le texte ne donne aucun taux d'ouverture régional.",
+            "en": "It is the reverse: the regional rate 'drops' to 4%, below the average, and the text gives no regional open rate."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Un rapport présente souvent plusieurs indicateurs voisins (taux d'ouverture, taux de clics) et plusieurs populations (ensemble, régions). Associez chaque chiffre à son indicateur et à sa population avant de comparer.",
+        "en": "A report often presents several related indicators (open rate, click rate) and several populations (all staff, regions). Match each figure to its indicator and population before comparing."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-3",
+      "stem": {
+        "fr": "Que laisse entendre l'équipe d'évaluation au sujet du taux d'ouverture moyen de 58 % ?",
+        "en": "What does the evaluation team imply about the average open rate of 58%?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Pris isolément, il donnerait une idée trop favorable de l'intérêt réel du personnel pour le bulletin.",
+          "rationale": {
+            "fr": "Le rapport écrit que ce chiffre « masque toutefois un faible engagement » : un bon taux d'ouverture coexiste avec très peu de clics.",
+            "en": "The report says this figure 'nevertheless masks low engagement': a good open rate coexists with very few clicks."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il démontre que le bulletin joint efficacement les employés des régions.",
+          "rationale": {
+            "fr": "Le texte ne donne pas de taux d'ouverture régional, et les régions affichent l'engagement le plus faible.",
+            "en": "The text gives no regional open rate, and the regions show the lowest engagement."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il est inférieur à celui des bulletins d'organisations fédérales comparables.",
+          "rationale": {
+            "fr": "C'est l'inverse : il « se compare favorablement » à ces bulletins.",
+            "en": "It is the reverse: it 'compares favourably' with those bulletins."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il justifie, à lui seul, la recommandation de maintenir le bulletin.",
+          "rationale": {
+            "fr": "Le maintien est justifié par le fait que le bulletin est « le seul canal qui joint l'ensemble du personnel », non par le taux d'ouverture.",
+            "en": "Keeping the bulletin is justified by its being 'the only channel that reaches all staff', not by the open rate."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Les connecteurs d'opposition (« toutefois ») signalent que l'auteur relativise ce qui précède. Ici, un chiffre flatteur est aussitôt nuancé : l'inférence attendue porte sur cette nuance.",
+        "en": "Contrast connectors ('nevertheless') signal that the author is qualifying what came before. Here a flattering figure is immediately qualified: the expected inference concerns that qualification."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-3",
+      "stem": {
+        "fr": "Dans l'extrait, l'expression « brossent un portrait nuancé » signifie que les données recueillies au cours du dernier exercice…",
+        "en": "In the excerpt, the expression 'paint a nuanced picture' means that the data gathered over the last fiscal year…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "donnent une image floue, difficile à interpréter faute de chiffres fiables.",
+          "rationale": {
+            "fr": "« Nuancé » ne veut pas dire flou : les chiffres sont précis, et le texte ne met pas leur fiabilité en doute.",
+            "en": "'Nuanced' does not mean blurry: the figures are precise, and the text does not question their reliability."
+          }
+        },
+        {
+          "id": "b",
+          "text": "décrivent une situation nettement défavorable au bulletin.",
+          "rationale": {
+            "fr": "Une image nettement défavorable ne serait pas « nuancée » ; le taux d'ouverture, par exemple, est jugé favorable.",
+            "en": "A clearly unfavourable picture would not be 'nuanced'; the open rate, for example, is judged favourable."
+          }
+        },
+        {
+          "id": "c",
+          "text": "dressent un bilan complet qui ne laisse place à aucune réserve.",
+          "rationale": {
+            "fr": "C'est le contraire d'un portrait nuancé, et le rapport formule justement plusieurs réserves.",
+            "en": "This is the opposite of a nuanced picture, and the report expresses several reservations."
+          }
+        },
+        {
+          "id": "d",
+          "text": "présentent une situation qui comporte à la fois des points forts et des faiblesses.",
+          "rationale": {
+            "fr": "« Brosser un portrait » signifie décrire ; « nuancé » indique que la description mêle éléments positifs (taux d'ouverture) et négatifs (taux de clics).",
+            "en": "'Paint a picture' means describe; 'nuanced' indicates the description mixes positive elements (open rate) and negative ones (click rate)."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une expression figée se comprend par son sens global et se vérifie dans la suite du texte : un « portrait nuancé » annonce un mélange de constats positifs et négatifs, ce que confirment les phrases suivantes.",
+        "en": "A set expression is understood through its overall meaning and checked against what follows: a 'nuanced picture' announces a mix of positive and negative findings, which the following sentences confirm."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-3",
+      "stem": {
+        "fr": "Dans la phrase « Encore faut-il nuancer ce constat », à quel élément de l'argumentation précédente l'expression démonstrative « ce constat » renvoie-t-elle ?",
+        "en": "In the sentence 'Yet this finding must be qualified', which element of the preceding argument does the demonstrative expression 'this finding' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Au taux d'ouverture de 58 %, jugé favorable par rapport aux autres organisations.",
+          "rationale": {
+            "fr": "Ce chiffre a déjà été nuancé deux phrases plus tôt ; « ce constat » reprend ce qui le précède immédiatement, soit les résultats du sondage.",
+            "en": "That figure was already qualified two sentences earlier; 'this finding' takes up what immediately precedes it, the survey results."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À l'idée que bien des répondants lisent le bulletin en diagonale et le trouvent centré sur l'administration centrale.",
+          "rationale": {
+            "fr": "« Ce constat » reprend la phrase précédente, qui résume le sondage : les répondants « survolent » le bulletin et le jugent axé sur l'administration centrale.",
+            "en": "'This finding' takes up the previous sentence, which sums up the survey: respondents 'skim' the bulletin and find it focused on headquarters."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À la recommandation de réduire la fréquence du bulletin.",
+          "rationale": {
+            "fr": "La recommandation vient après la phrase ; un démonstratif comme « ce » renvoie à ce qui a déjà été dit.",
+            "en": "The recommendation comes after the sentence; a demonstrative like 'this' refers to what has already been said."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Au fait que les employés récents se servent du bulletin pour comprendre le Ministère.",
+          "rationale": {
+            "fr": "C'est l'élément qui sert à nuancer le constat, et non le constat lui-même.",
+            "en": "This is the element used to qualify the finding, not the finding itself."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Un groupe nominal démonstratif (« ce constat », « cette mesure ») résume généralement la phrase qui précède. Distinguez ce qui est repris de ce qui est ajouté ensuite pour le nuancer (« puisque… »).",
+        "en": "A demonstrative noun phrase ('this finding', 'this measure') usually sums up the preceding sentence. Distinguish what is taken up from what is then added to qualify it ('since…')."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-3",
+      "stem": {
+        "fr": "Comment la progression de cet extrait du rapport d'évaluation est-elle construite ?",
+        "en": "How is the progression of this evaluation report excerpt built?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il expose un problème, écarte toutes les solutions envisagées, puis recommande l'abandon du bulletin.",
+          "rationale": {
+            "fr": "L'équipe recommande expressément de ne pas mettre fin au bulletin, et elle propose des solutions.",
+            "en": "The team expressly recommends not ending the bulletin, and it proposes solutions."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il compare Le Relais aux bulletins d'autres organisations fédérales d'un bout à l'autre.",
+          "rationale": {
+            "fr": "La comparaison n'occupe qu'une partie d'une phrase ; le reste porte sur les données internes.",
+            "en": "The comparison takes up only part of one sentence; the rest deals with internal data."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il présente des résultats, en relativise la portée à la lumière d'un sondage, puis formule des recommandations assorties d'un suivi.",
+          "rationale": {
+            "fr": "L'extrait passe des indicateurs (ouverture, clics) au sondage qui les éclaire et les nuance, puis aux recommandations et à la mesure prévue « d'ici un an ».",
+            "en": "The excerpt moves from the indicators (opens, clicks) to the survey that explains and qualifies them, then to the recommendations and the follow-up measurement 'within a year'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il énonce d'abord ses recommandations, puis présente les données qui les justifient.",
+          "rationale": {
+            "fr": "L'ordre est inverse : les recommandations figurent à la fin, après les données.",
+            "en": "The order is reversed: the recommendations come at the end, after the data."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "La structure d'un extrait d'évaluation suit souvent le schéma constat – explication – recommandation. Repérez les charnières (« toutefois », « Encore faut-il », « Elle propose plutôt ») qui marchent le passage d'une étape à l'autre.",
+        "en": "An evaluation excerpt often follows a finding – explanation – recommendation pattern. Spot the hinges ('nevertheless', 'Yet', 'It proposes instead') that mark the move from one step to the next."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-4",
+      "stem": {
+        "fr": "Quelle conclusion essentielle se dégage de cette note sur la gestion des communications pendant la panne ?",
+        "en": "What key conclusion emerges from this note on communications management during the outage?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La panne a eu des répercussions durables pour la clientèle, ce qui justifie un nouveau plan.",
+          "rationale": {
+            "fr": "La note affirme au contraire que l'incident a été résolu « sans conséquence durable ».",
+            "en": "The note says the opposite: the incident was resolved 'with no lasting consequences'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "L'équipe des communications a tardé à informer le public de l'interruption.",
+          "rationale": {
+            "fr": "C'est l'inverse : un avis a paru en moins de deux heures, ce que la note présente comme un point fort.",
+            "en": "It is the reverse: a notice appeared within two hours, which the note presents as a strength."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les réseaux sociaux devraient devenir le principal moyen de joindre le personnel en situation d'urgence.",
+          "rationale": {
+            "fr": "La note déplore que les agents aient appris la nouvelle par les réseaux sociaux ; elle recommande de les prévenir à l'interne.",
+            "en": "The note regrets that agents learned the news on social media; it recommends warning them internally."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Malgré une réaction initiale rapide, la coordination des messages a fait défaut et doit être resserrée en vue d'une crise plus longue.",
+          "rationale": {
+            "fr": "La note reconnaît un point fort, puis expose deux lacunes de coordination (messages divergents aux médias, personnel prévenu trop tard) et propose des mesures pour y remédier.",
+            "en": "The note acknowledges a strength, then sets out two coordination gaps (inconsistent messages to the media, staff warned too late) and proposes measures to fix them."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Dans une note de leçons apprises, la conclusion essentielle réunit le bilan (forces et lacunes) et ce qu'on en tire. Une option qui ne retient qu'un élément, ou qui inverse le bilan, ne rend pas l'idée principale.",
+        "en": "In a lessons-learned note, the key conclusion combines the assessment (strengths and gaps) and what follows from it. An option that keeps only one element, or reverses the assessment, misses the main idea."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-4",
+      "stem": {
+        "fr": "Pourquoi peut-on penser que les agents des bureaux régionaux se sont retrouvés dans une « position délicate devant la clientèle » ?",
+        "en": "Why can one conclude that regional office agents found themselves in an 'awkward position with clients'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Ils avaient eux-mêmes diffusé l'information sur les réseaux sociaux sans autorisation.",
+          "rationale": {
+            "fr": "Les agents ont appris la situation par les réseaux sociaux ; rien n'indique qu'ils y aient publié quoi que ce soit.",
+            "en": "The agents learned of the situation on social media; nothing suggests they posted anything there."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Des clients pouvaient les interroger sur une panne au sujet de laquelle ils n'avaient reçu aucune information officielle.",
+          "rationale": {
+            "fr": "Informés par les réseaux sociaux « avant même d'avoir reçu la moindre consigne interne », les agents devaient faire face au public sans savoir quoi lui dire.",
+            "en": "Informed through social media 'before receiving any internal instruction', agents had to face the public without knowing what to tell it."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Ils avaient reçu des consignes contradictoires de la part de trois directions.",
+          "rationale": {
+            "fr": "Ce sont les médias qui ont reçu des messages discordants de trois directions ; les agents, eux, n'avaient reçu aucune consigne.",
+            "en": "It was the media that received inconsistent messages from three branches; the agents had received no instructions at all."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La clientèle leur reprochait d'être responsables de la panne de la plateforme.",
+          "rationale": {
+            "fr": "Le texte n'attribue la panne à personne et ne mentionne aucun reproche de la clientèle.",
+            "en": "The text blames no one for the outage and mentions no complaints from clients."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une inférence relie une conséquence à sa cause dans le texte : ici, « ce qui les a placés dans une position délicate » renvoie à l'absence de consigne interne. Méfiez-vous des options qui empruntent un détail à une autre phrase (les trois directions).",
+        "en": "An inference links a consequence to its cause in the text: here, 'which put them in an awkward position' points back to the lack of internal instructions. Beware of options that borrow a detail from another sentence (the three branches)."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-4",
+      "stem": {
+        "fr": "Quelle intention traduit la phrase selon laquelle « il serait imprudent de considérer que le dispositif actuel suffira lors d'une crise plus longue » ?",
+        "en": "What intention does the sentence stating that 'it would be unwise to consider that the current arrangements will suffice in a longer crisis' convey?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Blâmer l'équipe des communications pour la durée de la panne.",
+          "rationale": {
+            "fr": "La note ne reproche pas la durée de la panne aux communications, dont elle salue même la rapidité.",
+            "en": "The note does not blame communications for the outage's length; it even praises its speed."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Rassurer la direction en soulignant que le dispositif a fait ses preuves.",
+          "rationale": {
+            "fr": "C'est l'inverse : le conditionnel « serait imprudent » sert à avertir, non à rassurer.",
+            "en": "It is the reverse: the conditional 'would be unwise' serves to warn, not to reassure."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Mettre en garde contre l'excès de confiance que pourrait inspirer l'issue favorable de l'incident.",
+          "rationale": {
+            "fr": "La concessive « Bien que l'incident ait été résolu sans conséquence durable » reconnaît le bon résultat, puis la principale avertit qu'il ne garantit rien pour une crise plus longue.",
+            "en": "The concessive clause 'Although the incident was resolved with no lasting consequences' acknowledges the good outcome, then the main clause warns that it guarantees nothing for a longer crisis."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Annoncer que le plan d'urgence actuel sera abandonné au profit d'un nouveau plan.",
+          "rationale": {
+            "fr": "Les recommandations complètent le plan existant (un porte-parole « dès l'activation du plan d'urgence ») ; elles ne le remplacent pas.",
+            "en": "The recommendations add to the existing plan (a spokesperson 'as soon as the emergency plan is activated'); they do not replace it."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le conditionnel d'atténuation (« il serait imprudent ») permet une mise en garde polie, typique des notes administratives. Associé à une concessive (« bien que »), il signale : « le résultat est bon, mais ne nous y fions pas ».",
+        "en": "The softening conditional ('it would be unwise') allows a polite warning, typical of administrative notes. Paired with a concessive ('although'), it signals: 'the outcome was good, but let us not rely on it'."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-4",
+      "stem": {
+        "fr": "Dans la recommandation, à quoi renvoie le pronom « celle-ci » dans le segment « quitte à retarder celle-ci de quelques minutes » ?",
+        "en": "In the recommendation, what does the pronoun 'celle-ci' refer to in the phrase 'even if it means delaying it by a few minutes'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À l'avis par lequel le Ministère informe le public de la situation.",
+          "rationale": {
+            "fr": "« Celle-ci » reprend le nom féminin le plus proche qui ait du sens : « toute annonce publique ». On accepte de retarder l'annonce pour prévenir d'abord le personnel.",
+            "en": "'Celle-ci' takes up the nearest feminine noun that makes sense: 'any public announcement'. Delaying the announcement is accepted in order to warn staff first."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À l'activation du plan d'urgence.",
+          "rationale": {
+            "fr": "« Activation » est féminin, mais retarder l'activation du plan contredirait la recommandation de nommer un porte-parole « dès » cette activation.",
+            "en": "'Activation' is feminine, but delaying the plan's activation would contradict the recommendation to name a spokesperson 'as soon as' it is activated."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À la crise plus longue évoquée dans la phrase précédente.",
+          "rationale": {
+            "fr": "On ne peut pas « retarder » une crise, et le pronom renvoie à un nom de la même phrase.",
+            "en": "One cannot 'delay' a crisis, and the pronoun refers to a noun in the same sentence."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À la première ligne, c'est-à-dire aux agents en contact avec la clientèle.",
+          "rationale": {
+            "fr": "Le personnel de première ligne est celui qu'on prévient ; le texte ne propose pas de le « retarder ».",
+            "en": "Front-line staff are the people being warned; the text does not propose 'delaying' them."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le pronom démonstratif « celle-ci » renvoie au nom féminin singulier le plus proche que le sens permet. Testez chaque candidat dans la phrase : seul « retarder l'annonce publique » est logique.",
+        "en": "The demonstrative pronoun 'celle-ci' refers to the nearest feminine singular noun that the meaning allows. Test each candidate in the sentence: only 'delay the public announcement' makes sense."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-4",
+      "stem": {
+        "fr": "Selon la note, quelle difficulté l'absence d'un porte-parole désigné à l'avance a-t-elle entraînée ?",
+        "en": "According to the note, what problem did the lack of a spokesperson designated in advance cause?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le premier avis public n'a pu être diffusé que deux jours après l'incident.",
+          "rationale": {
+            "fr": "L'avis a paru moins de deux heures après le signalement ; les deux jours correspondent à la durée de la panne.",
+            "en": "The notice appeared less than two hours after the report; the two days are the length of the outage."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les médias ont obtenu de plusieurs directions des indications qui ne s'accordaient pas toujours sur la durée de la panne.",
+          "rationale": {
+            "fr": "« Faute d'un porte-parole désigné d'avance, trois directions ont répondu aux médias », et leurs messages « ne concordaient pas toujours » sur la durée prévue.",
+            "en": "'Without a spokesperson designated in advance, three branches answered the media', and their messages 'did not always agree' on the expected length."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les journalistes n'ont obtenu aucune réponse du Ministère pendant la panne.",
+          "rationale": {
+            "fr": "Au contraire, trois directions ont répondu aux médias ; le problème tient à la cohérence, non à l'absence de réponse.",
+            "en": "On the contrary, three branches answered the media; the problem was consistency, not a lack of answers."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les agents des bureaux régionaux ont dû répondre eux-mêmes aux questions des journalistes.",
+          "rationale": {
+            "fr": "Les agents ont été mis en difficulté devant la clientèle, non devant les médias.",
+            "en": "The agents were put in difficulty with clients, not with the media."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Faute de » introduit une cause, ce qui relie directement le manque de porte-parole à sa conséquence dans la même phrase. Ne confondez pas les deux durées du texte : deux heures (l'avis) et deux jours (la panne).",
+        "en": "'Faute de' (for lack of) introduces a cause, which links the missing spokesperson directly to its consequence in the same sentence. Do not confuse the text's two durations: two hours (the notice) and two days (the outage)."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-5",
+      "stem": {
+        "fr": "Quel résultat de l'essai estival la directrice invoque-t-elle pour justifier les nouvelles exigences de rédaction ?",
+        "en": "Which result of the summer trial does the director cite to justify the new writing requirements?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Sur les pages réécrites, le temps nécessaire pour trouver une information a été réduit de plus de moitié.",
+          "rationale": {
+            "fr": "Le temps moyen « est passé de quatre minutes à moins de deux » : il a donc diminué de plus de la moitié.",
+            "en": "Average time 'went from four minutes to under two': it therefore fell by more than half."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les appels au centre de contact ont baissé de 45 %, toutes questions confondues.",
+          "rationale": {
+            "fr": "Le nombre 45 désigne les pages réécrites ; la baisse des appels est de 18 % et ne touche que les sujets de ces pages.",
+            "en": "The number 45 is the pages rewritten; calls fell by 18%, and only on those pages' topics."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le temps moyen de recherche est passé de deux minutes à un peu moins de quatre.",
+          "rationale": {
+            "fr": "Cette option inverse le sens de l'évolution : le temps a diminué, il n'a pas augmenté.",
+            "en": "This option reverses the direction of change: the time fell, it did not rise."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La fréquentation des pages réécrites a augmenté de 18 % au cours de l'été.",
+          "rationale": {
+            "fr": "Les 18 % mesurent une baisse des appels au centre de contact, et non une hausse de la fréquentation.",
+            "en": "The 18% measures a drop in calls to the contact centre, not a rise in page traffic."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour lire des résultats chiffrés, rattachez chaque nombre à ce qu'il mesure (pages, appels, minutes) et au sens de l'évolution (hausse ou baisse). Passer de quatre à moins de deux, c'est diminuer de plus de la moitié.",
+        "en": "When reading numerical results, tie each number to what it measures (pages, calls, minutes) and to the direction of change (up or down). Going from four to under two is a drop of more than half."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-5",
+      "stem": {
+        "fr": "Appliqué à la réécriture des pages existantes, que signifie le verbe « s'échelonnera » dans la note de service ?",
+        "en": "Applied to the rewriting of existing pages, what does the verb 's'échelonnera' mean in the memo?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle sera confiée à des employés de différents niveaux hiérarchiques.",
+          "rationale": {
+            "fr": "Ce sens est suggéré par le mot « échelon », mais le contexte (« sur deux ans ») renvoie au temps, non à la hiérarchie.",
+            "en": "This meaning is suggested by the word 'échelon' (rank), but the context ('over two years') points to time, not hierarchy."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle sera reportée en bloc à la fin de la période de deux ans.",
+          "rationale": {
+            "fr": "Un report en bloc est le contraire d'un échelonnement ; de plus, le travail commencera par les pages les plus fréquentées.",
+            "en": "Postponing everything is the opposite of spreading out; besides, the work will begin with the most visited pages."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle se fera par étapes successives réparties sur une période déterminée.",
+          "rationale": {
+            "fr": "« S'échelonner sur deux ans » signifie se répartir dans le temps, par étapes ; la suite (« en commençant par… ») confirme qu'il y aura un ordre de passage.",
+            "en": "'S'échelonner sur deux ans' means to be spread over time, in stages; what follows ('beginning with…') confirms there will be an order."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle sera accélérée afin d'être terminée avant le 1er décembre.",
+          "rationale": {
+            "fr": "La note dit justement que cette réécriture « ne saurait se faire du jour au lendemain » ; le 1er décembre ne vise que les nouvelles pages.",
+            "en": "The memo says this rewriting 'cannot be done overnight'; 1 December applies only to new pages."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Un mot de la même famille qu'un mot connu (« échelon ») peut égarer. Vérifiez le sens par le complément : « s'échelonner sur deux ans » renvoie à une répartition dans le temps.",
+        "en": "A word from the same family as a familiar one ('échelon') can mislead. Check the meaning through its complement: 's'échelonner sur deux ans' refers to spreading over time."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-5",
+      "stem": {
+        "fr": "Quelle est l'intention de la directrice lorsqu'elle précise qu'« il ne s'agit pas pour autant d'appauvrir le fond » ?",
+        "en": "What is the director's intention when she specifies that 'this does not, however, mean impoverishing the substance'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Reprocher aux rédacteurs d'avoir publié jusqu'ici des pages trop longues.",
+          "rationale": {
+            "fr": "La note n'adresse aucun reproche aux rédacteurs ; elle fixe des règles pour l'avenir.",
+            "en": "The memo makes no reproach to writers; it sets rules for the future."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Annoncer que les documents détaillés seront retirés du site Web.",
+          "rationale": {
+            "fr": "C'est l'inverse : une page claire peut « renvoyer le lecteur à un document plus détaillé », qui reste donc disponible.",
+            "en": "It is the reverse: a clear page may 'refer the reader to a more detailed document', which therefore remains available."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Laisser entendre que les pages techniques sont dispensées des lignes directrices.",
+          "rationale": {
+            "fr": "Aucune exemption n'est prévue : les termes techniques doivent même être expliqués dès leur première occurrence.",
+            "en": "No exemption is provided: technical terms must even be explained at first use."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Écarter l'idée que le langage clair autoriserait à omettre ou à simplifier à l'excès l'information.",
+          "rationale": {
+            "fr": "La tournure « Il ne s'agit pas pour autant de… » prévient une mauvaise interprétation des règles : la clarté ne doit sacrifier ni l'exactitude ni l'exhaustivité.",
+            "en": "The phrase 'This does not, however, mean…' heads off a misreading of the rules: clarity must sacrifice neither accuracy nor completeness."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Pour autant », après une négation, sert à écarter une conséquence que le lecteur pourrait tirer à tort de ce qui précède. Ici, l'auteure prévient la confusion entre « clair » et « appauvri ».",
+        "en": "'Pour autant', after a negation, rules out a conclusion the reader might wrongly draw from what precedes. Here the author heads off confusing 'clear' with 'impoverished'."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-5",
+      "stem": {
+        "fr": "Quel rôle joue, dans l'organisation générale de la note de service, la phrase introduite par l'adverbe « Certes » ?",
+        "en": "What role does the sentence introduced by the adverb 'Certes' (admittedly) play in the memo's overall organization?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle introduit une objection que la directrice juge ensuite sans fondement.",
+          "rationale": {
+            "fr": "« Certes » concède une contrainte réelle ; la directrice ne la rejette pas, elle y adapte l'échéancier.",
+            "en": "'Certes' concedes a real constraint; the director does not reject it but adapts the timeline to it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle reconnaît une contrainte de mise en œuvre et précise comment l'échéancier en tient compte.",
+          "rationale": {
+            "fr": "La concession « Certes… ne saurait se faire du jour au lendemain » admet la difficulté, et « donc… sur deux ans » expose la réponse retenue.",
+            "en": "The concession 'Admittedly… cannot be done overnight' admits the difficulty, and 'therefore… over two years' sets out the chosen response."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle résume les résultats de l'essai mené au cours de l'été.",
+          "rationale": {
+            "fr": "Les résultats de l'essai figurent dans la phrase précédente ; celle-ci porte sur les pages existantes.",
+            "en": "The trial results are in the previous sentence; this one deals with existing pages."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle annonce que les pages existantes sont dispensées des nouvelles exigences.",
+          "rationale": {
+            "fr": "Les pages existantes seront réécrites sur deux ans ; elles ne sont pas exemptées, seulement traitées plus tard.",
+            "en": "Existing pages will be rewritten over two years; they are not exempt, only handled later."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Certes » ouvre une concession : l'auteur admet une limite avant d'indiquer comment il la gère (« donc »). Distinguez une concession, qui accepte la difficulté, d'une réfutation, qui la rejette.",
+        "en": "'Certes' opens a concession: the author admits a limitation before stating how it is handled ('therefore'). Distinguish a concession, which accepts the difficulty, from a refutation, which rejects it."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-communications-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-communications-5",
+      "stem": {
+        "fr": "Que peut-on conclure, d'après la note, au sujet d'une page existante rarement consultée par les internautes ?",
+        "en": "What can be concluded, according to the memo, about an existing page that users rarely visit?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle devra respecter les lignes directrices dès le 1er décembre.",
+          "rationale": {
+            "fr": "L'échéance du 1er décembre vise « toute nouvelle page » ; les pages existantes suivent l'échéancier de deux ans.",
+            "en": "The 1 December deadline covers 'any new page'; existing pages follow the two-year timeline."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle sera retirée du site faute de fréquentation suffisante.",
+          "rationale": {
+            "fr": "La note ne prévoit aucun retrait de pages ; elle prévoit leur réécriture.",
+            "en": "The memo provides for no removal of pages; it provides for their rewriting."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Sa réécriture n'aura sans doute lieu que dans une étape tardive de l'échéancier.",
+          "rationale": {
+            "fr": "Comme la réécriture commence « par les pages les plus fréquentées », une page peu consultée passera vraisemblablement parmi les dernières.",
+            "en": "Since rewriting begins 'with the most visited pages', a rarely visited page will probably be among the last."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle sera réécrite en priorité, puisque son contenu est vraisemblablement mal compris.",
+          "rationale": {
+            "fr": "C'est l'ordre inverse : la priorité va aux pages les plus fréquentées, et le texte ne lie pas la faible fréquentation à une mauvaise compréhension.",
+            "en": "This is the reverse order: priority goes to the most visited pages, and the text does not link low traffic to poor understanding."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour inférer, appliquez une règle générale du texte à un cas particulier : si l'on commence par les pages les plus fréquentées, les moins fréquentées viennent en dernier. Vérifiez aussi la portée des dates (nouvelles pages ou pages existantes).",
+        "en": "To infer, apply a general rule from the text to a particular case: if work begins with the most visited pages, the least visited come last. Also check what each date covers (new pages or existing ones)."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-communications-1",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Nouvel intranet : règles de publication",
+      "body": "Bonjour à toutes et à tous,\n\nLe nouvel intranet du Ministère sera mis en ligne le lundi 17 novembre. D'ici là, l'ancien site restera accessible, mais aucune nouvelle page ne pourra y être ajoutée après le 7 novembre. Désormais, chaque direction générale désignera deux éditeurs autorisés ; eux seuls pourront publier du contenu. Toute page devra être relue par l'équipe des communications, qui s'engage à la traiter en trois jours ouvrables. Les nouvelles internes seront retirées automatiquement après 90 jours, alors que les pages de procédures devront être révisées une fois par année. Ces règles visent à limiter les pages en double ou périmées : selon notre inventaire, près de 40 % des 2 300 pages actuelles ne sont plus à jour. Veuillez transmettre le nom de vos éditeurs à votre gestionnaire d'ici le 31 octobre. Une formation d'une heure leur sera offerte la semaine suivante.\n\nMerci de votre collaboration,\n\nJulie Tremblay\nConseillère principale, Communications internes",
+      "wordCount": 156,
+      "targetBand": "B",
+      "topic": "communications",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 17.33,
+        "rareWordRatio": 0.231
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-communications-2",
+      "lang": "fr",
+      "docType": "bulletin",
+      "title": "Rappel : que faire si un journaliste vous joint",
+      "body": "Il arrive que des journalistes communiquent directement avec des employés, par téléphone, par courriel ou même lors d'un événement public. Dans ce cas, ne répondez pas aux questions, même si le sujet vous semble simple ou si la personne insiste. Prenez plutôt son nom, celui de son média, sa question et son heure de tombée, puis transmettez ces renseignements aux Relations avec les médias dans un délai d'une heure. Un conseiller communiquera ensuite avec le journaliste et, au besoin, désignera un porte-parole. Cette façon de faire ne vise pas à empêcher les employés de s'exprimer : elle permet de fournir une information exacte et d'éviter que deux personnes donnent des réponses différentes. Par ailleurs, les experts du Ministère sont régulièrement invités à accorder des entrevues, mais toujours après une préparation avec l'équipe des communications. Pour toute question, consultez la page « Relations avec les médias » de l'intranet.",
+      "wordCount": 148,
+      "targetBand": "B",
+      "topic": "communications",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 21.14,
+        "rareWordRatio": 0.257
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-communications-3",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Évaluation du bulletin interne Le Relais",
+      "body": "Lancé il y a cinq ans, Le Relais est diffusé chaque semaine par courriel aux quelque 6 800 employés du Ministère. Les données recueillies au cours du dernier exercice brossent un portrait nuancé. Le taux d'ouverture moyen s'établit à 58 %, ce qui se compare favorablement aux bulletins d'autres organisations fédérales de taille semblable. Ce chiffre masque toutefois un faible engagement : à peine 9 % des destinataires cliquent sur au moins un article, et ce taux tombe à 4 % chez les employés des bureaux régionaux. Le sondage mené auprès de 1 150 répondants laisse entrevoir une explication : bon nombre d'entre eux disent survoler le bulletin, faute de temps, et jugent que les articles portent surtout sur l'administration centrale. Encore faut-il nuancer ce constat, puisque les répondants comptant moins de deux ans d'ancienneté affirment s'en servir pour comprendre le fonctionnement du Ministère. Dans la mesure où le bulletin demeure le seul canal qui joint l'ensemble du personnel, l'équipe d'évaluation ne recommande pas d'y mettre fin. Elle propose plutôt d'en réduire la fréquence à deux parutions par mois, d'y réserver une rubrique aux régions et de mesurer, d'ici un an, si ces changements accroissent la consultation des articles.",
+      "wordCount": 199,
+      "targetBand": "C",
+      "topic": "communications",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 24.88,
+        "rareWordRatio": 0.241
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-communications-4",
+      "lang": "fr",
+      "docType": "note",
+      "title": "Leçons tirées de la panne du centre de contact",
+      "body": "Lorsque la plateforme téléphonique du centre de contact est tombée en panne pendant près de deux jours, l'équipe des communications a réagi rapidement : un premier avis a été publié sur le site Web moins de deux heures après le signalement de l'incident. Ce point fort ne doit cependant pas occulter les lacunes observées. Faute d'un porte-parole désigné d'avance, trois directions ont répondu aux questions des médias, et leurs messages ne concordaient pas toujours quant à la durée prévue de la panne. Par ailleurs, les agents des bureaux régionaux ont appris la situation par les réseaux sociaux, avant même d'avoir reçu la moindre consigne interne, ce qui les a placés dans une position délicate devant la clientèle. Bien que l'incident ait été résolu sans conséquence durable, il serait imprudent de considérer que le dispositif actuel suffira lors d'une crise plus longue. Nous recommandons donc de nommer un seul porte-parole dès l'activation du plan d'urgence, et de prévenir le personnel de première ligne avant toute annonce publique, quitte à retarder celle-ci de quelques minutes. Ces mesures seront mises à l'essai lors de l'exercice de simulation prévu au printemps.",
+      "wordCount": 187,
+      "targetBand": "C",
+      "topic": "communications",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 26.71,
+        "rareWordRatio": 0.219
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-communications-5",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Application des lignes directrices sur le langage clair",
+      "body": "Destinataires : rédacteurs et gestionnaires de contenu Web\n\nÀ compter du 1er décembre, toute nouvelle page publiée sur le site Web du Ministère devra respecter les lignes directrices sur le langage clair. Les phrases ne devront pas dépasser 20 mots en moyenne, chaque paragraphe se limitera à une seule idée, et tout terme technique sera expliqué dès sa première occurrence. Ces exigences découlent d'un essai mené cet été : après la réécriture de 45 pages parmi les plus consultées, les appels au centre de contact portant sur ces sujets ont diminué de 18 %, et le temps moyen nécessaire pour trouver une information est passé de quatre minutes à moins de deux. Certes, la réécriture des quelque 600 pages existantes ne saurait se faire du jour au lendemain ; elle s'échelonnera donc sur deux ans, en commençant par les pages les plus fréquentées. Il ne s'agit pas pour autant d'appauvrir le fond : une page claire doit demeurer exacte et complète, quitte à renvoyer le lecteur à un document plus détaillé. Un atelier d'une demi-journée sera offert à tous les rédacteurs ; il sera obligatoire pour ceux qui n'ont jamais suivi de formation en rédaction Web.\n\nLa directrice des communications numériques,\nHélène Gagnon",
+      "wordCount": 203,
+      "targetBand": "C",
+      "topic": "communications",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 29,
+        "rareWordRatio": 0.202
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

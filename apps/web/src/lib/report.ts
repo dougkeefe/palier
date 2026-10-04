@@ -26,6 +26,14 @@ export const SELFHOST_GUIDE = "selfhost/README.md";
 /** The guide, linked from the key settings' own-endpoint form, beside the route's source. */
 export const SELFHOST_GUIDE_URL = `${REPOSITORY_URL}/blob/main/${SELFHOST_GUIDE}`;
 
+/**
+ * Which provenance line an item shows (§13.0, "visible on request"). An item that came in
+ * through the authored intake but names the model that wrote it, as bank v4's do (progress.md
+ * D203), reads as machine-written, because it is: "written by hand" would not be true.
+ */
+export const provenanceLine = (item: Pick<Item, "provenance">): Item["provenance"]["origin"] =>
+  item.provenance.origin === "authored" && item.provenance.generator !== undefined ? "generated" : item.provenance.origin;
+
 /** §13.0's four reasons, in its order. */
 export const REPORT_REASONS = ["key-wrong", "multiple-answers", "french-off", "unclear"] as const;
 export type ReportReason = (typeof REPORT_REASONS)[number];

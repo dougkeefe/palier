@@ -1,6 +1,6 @@
 # ADR 19: Phase 1 quality gating is fully automated, with no human register gate at this stage
 
-**Status:** Accepted
+**Status:** Superseded by ADR 24
 **Date:** 2026-09-21
 **Supersedes:** Nothing accepted. It overrides the human-in-the-loop framing in `content-factory.md` §3 (assumptions A1, A3), the "5% sample for human spot check" in §4 and §6, and the human exit criteria in `implementation-plan.md` §7 Phase 1, each of which is amended in place with a pointer here.
 

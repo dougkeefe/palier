@@ -1,0 +1,2195 @@
+{
+  "items": [
+    {
+      "id": "claude-w-pronouns-01",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Pour terminer le dossier de dotation de la nouvelle analyste, veuillez me transmettre d'ici jeudi les formulaires ___.",
+        "en": "To complete the staffing file for the new analyst, please send me the forms ___ by Thursday."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "que nous avons besoin",
+          "rationale": {
+            "fr": "« Que » remplace un complément direct ; or « avoir besoin » se construit avec « de » : on a besoin de quelque chose. La forme est donc fautive.",
+            "en": "« Que » stands for a direct object, but « avoir besoin » takes « de »: one has need of something. The form is therefore wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "dont nous avons besoin",
+          "rationale": {
+            "fr": "« Dont » remplace un complément introduit par « de » : nous avons besoin des formulaires → les formulaires dont nous avons besoin. C'est la forme attendue.",
+            "en": "« Dont » stands for a complement introduced by « de »: nous avons besoin des formulaires → les formulaires dont nous avons besoin. This is the expected form."
+          }
+        },
+        {
+          "id": "c",
+          "text": "auxquels nous avons besoin",
+          "rationale": {
+            "fr": "« Auxquels » contient la préposition « à », alors qu'« avoir besoin » exige « de ». Le relatif ne correspond pas à la construction du verbe.",
+            "en": "« Auxquels » contains the preposition « à », whereas « avoir besoin » requires « de ». The relative does not match the verb's construction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "où nous avons besoin",
+          "rationale": {
+            "fr": "« Où » exprime le lieu ou le temps ; il ne peut pas remplacer un complément introduit par « de ».",
+            "en": "« Où » expresses place or time; it cannot stand for a complement introduced by « de »."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le choix du pronom relatif dépend de la construction du verbe de la relative. Quand ce verbe se construit avec « de » (avoir besoin de, parler de, se servir de), on emploie « dont » : « les formulaires dont nous avons besoin ». « Que » ne convient qu'au complément direct : « les formulaires que nous avons reçus ».",
+        "en": "The choice of relative pronoun depends on how the verb in the relative clause is constructed. When that verb takes « de » (avoir besoin de, parler de, se servir de), « dont » is used: « les formulaires dont nous avons besoin ». « Que » only fits a direct object: « les formulaires que nous avons reçus »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-02",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase tirée du compte rendu d'un comité de sélection contient une faute. Laquelle des corrections suivantes s'impose ? « Le comité a retenu trois candidates, dont une seule possède l'expérience en gestion de programmes que le poste exige ; c'est précisément le profil que la directrice générale tenait le plus. »",
+        "en": "This sentence taken from the minutes of a selection board contains an error. Which of the following corrections is required? « Le comité a retenu trois candidates, dont une seule possède l'expérience en gestion de programmes que le poste exige ; c'est précisément le profil que la directrice générale tenait le plus. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « dont une seule » par « qu'une seule »",
+          "rationale": {
+            "fr": "« Dont » est juste ici : il signifie « parmi lesquelles » et introduit une partie des candidates. « Qu'une seule » rendrait la phrase agrammaticale, et la vraie faute demeurerait.",
+            "en": "« Dont » is appropriate here: it means « among whom » and introduces a subset of the candidates. « Qu'une seule » would make the sentence ungrammatical, and the real error would remain."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « que le poste exige » par « dont le poste exige »",
+          "rationale": {
+            "fr": "« Exiger » se construit avec un complément direct (le poste exige une expérience) ; « que » est donc juste et « dont » serait fautif.",
+            "en": "« Exiger » takes a direct object (le poste exige une expérience); « que » is therefore right and « dont » would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « que la directrice générale tenait » par « auquel la directrice générale tenait »",
+          "rationale": {
+            "fr": "« Tenir à » se construit avec « à » : la directrice tenait à ce profil. Le relatif doit intégrer cette préposition et s'accorder avec « le profil » : « auquel ».",
+            "en": "« Tenir à » takes « à »: the director valued this profile. The relative must include that preposition and agree with « le profil »: « auquel »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « c'est précisément » par « ce sont précisément »",
+          "rationale": {
+            "fr": "L'attribut « le profil » est au singulier : « c'est » est la seule forme possible, et la faute sur le relatif resterait entière.",
+            "en": "The complement « le profil » is singular: « c'est » is the only possible form, and the error in the relative pronoun would remain untouched."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le pronom relatif reprend la préposition qu'exige le verbe de la relative. Avec « tenir à », il faut « auquel », « à laquelle », « auxquels » ou « auxquelles », selon le genre et le nombre de l'antécédent : « le profil auquel elle tenait ». « Que » ne remplace qu'un complément direct, comme dans « l'expérience que le poste exige ».",
+        "en": "The relative pronoun carries the preposition required by the verb of the relative clause. With « tenir à », « auquel », « à laquelle », « auxquels » or « auxquelles » is needed, depending on the gender and number of the antecedent: « le profil auquel elle tenait ». « Que » only stands for a direct object, as in « l'expérience que le poste exige »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-03",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Mon entente de rendement pour l'exercice en cours est déjà signée, mais ma collègue Julie attend toujours…",
+        "en": "My performance agreement for the current fiscal year is already signed, but my colleague Julie is still waiting for…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "la sienne, que sa gestionnaire doit approuver d'ici vendredi.",
+          "rationale": {
+            "fr": "« La sienne » renvoie à un seul possesseur de la troisième personne (Julie) et prend le genre de l'objet possédé, « entente », féminin : c'est la forme juste.",
+            "en": "« La sienne » refers to a single third-person owner (Julie) and takes the gender of the thing owned, « entente », which is feminine: this is the right form."
+          }
+        },
+        {
+          "id": "b",
+          "text": "la leur, que sa gestionnaire doit approuver d'ici vendredi.",
+          "rationale": {
+            "fr": "« La leur » renvoie à plusieurs possesseurs ; or l'entente appartient à une seule personne, Julie.",
+            "en": "« La leur » refers to several owners, but the agreement belongs to one person, Julie."
+          }
+        },
+        {
+          "id": "c",
+          "text": "le sien, que sa gestionnaire doit approuver d'ici vendredi.",
+          "rationale": {
+            "fr": "Le pronom possessif prend le genre de l'objet possédé, et non celui du possesseur : « entente » est féminin, il faut donc « la sienne ».",
+            "en": "The possessive pronoun takes the gender of the thing owned, not of the owner: « entente » is feminine, so « la sienne » is needed."
+          }
+        },
+        {
+          "id": "d",
+          "text": "la mienne, que sa gestionnaire doit approuver d'ici vendredi.",
+          "rationale": {
+            "fr": "« La mienne » désignerait l'entente de la personne qui écrit, déjà signée : la suite contredirait le début de la phrase.",
+            "en": "« La mienne » would refer to the writer's own agreement, which is already signed: the ending would contradict the start of the sentence."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le pronom possessif varie selon deux critères : la personne du possesseur (le mien, le tien, le sien, le nôtre, le vôtre, le leur) et le genre et le nombre de l'objet possédé. Ici, l'objet est « l'entente » (féminin singulier) et le possesseur est Julie (troisième personne du singulier) : « la sienne ».",
+        "en": "The possessive pronoun varies on two counts: the person of the owner (le mien, le tien, le sien, le nôtre, le vôtre, le leur) and the gender and number of the thing owned. Here the thing owned is « l'entente » (feminine singular) and the owner is Julie (third person singular): « la sienne »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-04",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Lors de la séance d'examen budgétaire, la directrice des finances a proposé de reporter une partie des dépenses d'immobilisations à l'exercice suivant, ___ les membres du comité de gouvernance ne s'attendaient manifestement pas.",
+        "en": "At the budget review session, the finance director proposed deferring part of the capital expenditures to the following fiscal year, ___ the members of the governance committee clearly did not expect."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "ce que",
+          "rationale": {
+            "fr": "« S'attendre » se construit avec « à » (s'attendre à quelque chose) ; « ce que » remplacerait un complément direct et rend la phrase fautive.",
+            "en": "« S'attendre » takes « à » (s'attendre à quelque chose); « ce que » would stand for a direct object and makes the sentence wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ce dont",
+          "rationale": {
+            "fr": "« Ce dont » convient aux verbes construits avec « de » (ce dont on parle) ; « s'attendre » exige « à ».",
+            "en": "« Ce dont » fits verbs that take « de » (ce dont on parle); « s'attendre » requires « à »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ce qui",
+          "rationale": {
+            "fr": "« Ce qui » serait sujet de la relative ; or celle-ci a déjà un sujet, « les membres du comité de gouvernance ».",
+            "en": "« Ce qui » would be the subject of the relative clause, but the clause already has a subject, « les membres du comité de gouvernance »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ce à quoi",
+          "rationale": {
+            "fr": "La relative reprend toute la proposition précédente (le report des dépenses) : il faut le pronom neutre « ce », suivi de « à quoi », puisque l'on s'attend à quelque chose.",
+            "en": "The relative clause refers back to the whole preceding clause (the deferral of expenditures): the neutral pronoun « ce » is needed, followed by « à quoi », since one « s'attend à » something."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Quand l'antécédent est une idée ou une proposition entière, on emploie « ce » suivi du relatif que demande le verbe : « ce que » (complément direct), « ce qui » (sujet), « ce dont » (verbe construit avec « de »), « ce à quoi » (verbe construit avec « à »). « S'attendre à », « consentir à » ou « renoncer à » appellent donc « ce à quoi ».",
+        "en": "When the antecedent is an idea or a whole clause, « ce » is used followed by the relative the verb requires: « ce que » (direct object), « ce qui » (subject), « ce dont » (verb taking « de »), « ce à quoi » (verb taking « à »). « S'attendre à », « consentir à » or « renoncer à » therefore call for « ce à quoi »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-05",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Repérez l'erreur dans ce passage d'un courriel et choisissez la correction appropriée : « Nous avions prévu l'achat de douze écrans dans le budget du trimestre, mais nous avons seulement reçu huit ; il faudra donc en commander quatre autres avant la fin de l'exercice. »",
+        "en": "Find the error in this passage from an email and choose the appropriate correction: « Nous avions prévu l'achat de douze écrans dans le budget du trimestre, mais nous avons seulement reçu huit ; il faudra donc en commander quatre autres avant la fin de l'exercice. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « en commander quatre autres » par « les commander quatre autres »",
+          "rationale": {
+            "fr": "« En » est juste : avec un nombre, le nom repris est remplacé par « en » (en commander quatre). « Les » désignerait des écrans déjà déterminés et ne se combine pas avec un nombre.",
+            "en": "« En » is appropriate: with a number, the noun referred back to is replaced by « en » (en commander quatre). « Les » would designate specific screens and cannot combine with a number."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « nous avons seulement reçu huit » par « nous en avons seulement reçu huit »",
+          "rationale": {
+            "fr": "Quand le complément direct est un nombre qui reprend un nom déjà mentionné (des écrans), le pronom « en » est obligatoire : « nous en avons reçu huit ».",
+            "en": "When the direct object is a number referring back to a noun already mentioned (screens), the pronoun « en » is mandatory: « nous en avons reçu huit »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « en commander » par « y commander »",
+          "rationale": {
+            "fr": "« Y » remplace un complément introduit par « à » ou un lieu ; il ne peut pas reprendre une quantité d'écrans.",
+            "en": "« Y » stands for a complement introduced by « à » or a place; it cannot refer back to a quantity of screens."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « nous avions prévu » par « nous en avions prévu »",
+          "rationale": {
+            "fr": "« L'achat de douze écrans » est déjà le complément de « prévu » ; ajouter « en » créerait un doublon fautif, et l'erreur de la deuxième proposition subsisterait.",
+            "en": "« L'achat de douze écrans » is already the object of « prévu »; adding « en » would create a faulty duplication, and the error in the second clause would remain."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Lorsque le complément direct est un nombre ou une expression de quantité (huit, plusieurs, beaucoup, quelques-uns) qui reprend un nom déjà mentionné, ce nom disparaît mais le pronom « en » devient obligatoire : « nous en avons reçu huit », « il faudra en commander quatre ». L'omettre est un calque de l'anglais « we only received eight ».",
+        "en": "When the direct object is a number or an expression of quantity (huit, plusieurs, beaucoup, quelques-uns) referring back to a noun already mentioned, the noun drops out but the pronoun « en » becomes mandatory: « nous en avons reçu huit », « il faudra en commander quatre ». Leaving it out copies the English « we only received eight »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-06",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Avant de signer l'autorisation de dépenser relative au projet de modernisation, le sous-ministre adjoint aimerait connaître précisément…",
+        "en": "Before signing the expenditure authorization for the modernization project, the assistant deputy minister would like to know precisely…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "ce que le projet a besoin pour respecter son échéancier.",
+          "rationale": {
+            "fr": "« Avoir besoin » se construit avec « de » ; « ce que » ne peut donc pas reprendre ce complément. Cette tournure, fréquente à l'oral, est fautive à l'écrit.",
+            "en": "« Avoir besoin » takes « de »; « ce que » therefore cannot stand for that complement. This phrasing, common in speech, is wrong in writing."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ce dont le projet en a besoin pour respecter son échéancier.",
+          "rationale": {
+            "fr": "« Dont » reprend déjà le complément introduit par « de » ; ajouter « en » le répète dans la même relative. Ce pléonasme est fautif.",
+            "en": "« Dont » already stands for the complement introduced by « de »; adding « en » repeats it within the same relative clause. This redundancy is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ce dont le projet a besoin pour respecter son échéancier.",
+          "rationale": {
+            "fr": "« Avoir besoin de » appelle « dont » ; précédé de « ce », il reprend une réalité non précisée. Le complément n'est exprimé qu'une fois : c'est la construction juste.",
+            "en": "« Avoir besoin de » calls for « dont »; preceded by « ce », it refers to something unspecified. The complement is expressed only once: this is the right construction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ce à quoi le projet a besoin pour respecter son échéancier.",
+          "rationale": {
+            "fr": "« À quoi » suppose un verbe construit avec « à » (s'attendre à, tenir à) ; « avoir besoin » exige « de ».",
+            "en": "« À quoi » presupposes a verb taking « à » (s'attendre à, tenir à); « avoir besoin » requires « de »."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Dont » remplace à lui seul un complément introduit par « de » ; il ne faut donc jamais le doubler de « en » dans la même relative (« ce dont il a besoin », et non « ce dont il en a besoin »). Après « ce », le relatif dépend toujours de la construction du verbe : avoir besoin de → ce dont ; s'attendre à → ce à quoi ; prévoir quelque chose → ce que.",
+        "en": "« Dont » on its own stands for a complement introduced by « de »; it must therefore never be doubled with « en » in the same relative clause (« ce dont il a besoin », not « ce dont il en a besoin »). After « ce », the relative always depends on the verb's construction: avoir besoin de → ce dont; s'attendre à → ce à quoi; prévoir quelque chose → ce que."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-07",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le nouveau portail de gestion des congés est en ligne depuis ce matin. Pour ___, utilisez vos identifiants réseau habituels ; aucune nouvelle inscription n'est nécessaire.",
+        "en": "The new leave management portal has been online since this morning. To ___, use your usual network credentials; no new registration is required."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "en accéder",
+          "rationale": {
+            "fr": "« En » remplace un complément introduit par « de » ; or on accède à un portail, et non d'un portail.",
+            "en": "« En » stands for a complement introduced by « de », but one accesses « à » a portal, not « de » a portal."
+          }
+        },
+        {
+          "id": "b",
+          "text": "lui accéder",
+          "rationale": {
+            "fr": "« Lui » remplace un complément de personne introduit par « à » (parler à quelqu'un → lui parler) ; pour une chose comme un portail, on emploie « y ».",
+            "en": "« Lui » stands for a person introduced by « à » (parler à quelqu'un → lui parler); for a thing such as a portal, « y » is used."
+          }
+        },
+        {
+          "id": "c",
+          "text": "accéder à lui",
+          "rationale": {
+            "fr": "La forme « à lui » après le verbe est réservée en principe aux personnes ; pour une chose, on emploie le pronom « y », placé devant le verbe.",
+            "en": "The form « à lui » after the verb is in principle reserved for people; for a thing, the pronoun « y » is used, placed before the verb."
+          }
+        },
+        {
+          "id": "d",
+          "text": "y accéder",
+          "rationale": {
+            "fr": "« Accéder » se construit avec « à » et le complément est une chose (le portail) : il est repris par « y », placé devant l'infinitif.",
+            "en": "« Accéder » takes « à » and the complement is a thing (the portal): it is replaced by « y », placed before the infinitive."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Y » remplace un complément de chose introduit par « à » (accéder à un portail, répondre à un courriel, assister à une séance). Pour une personne, on emploie « lui » ou « leur » (répondre à la gestionnaire → lui répondre). Le pronom se place devant l'infinitif dont il est le complément : « pour y accéder ».",
+        "en": "« Y » stands for a thing introduced by « à » (accéder à un portail, répondre à un courriel, assister à une séance). For a person, « lui » or « leur » is used (répondre à la gestionnaire → lui répondre). The pronoun goes before the infinitive it complements: « pour y accéder »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-08",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle correction faut-il apporter à cette phrase, extraite d'une note de service sur la gestion des incidents ? « La sous-ministre adjointe a demandé à consulter le rapport d'analyse de l'incident informatique ; dès que la Direction de la sécurité l'aura approuvé, je lui le transmettrai par courriel chiffré, comme le prévoit la procédure. »",
+        "en": "Which correction does this sentence, taken from a memo on incident management, need? « La sous-ministre adjointe a demandé à consulter le rapport d'analyse de l'incident informatique ; dès que la Direction de la sécurité l'aura approuvé, je lui le transmettrai par courriel chiffré, comme le prévoit la procédure. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « je lui le transmettrai » par « je le lui transmettrai »",
+          "rationale": {
+            "fr": "Quand « le », « la » ou « les » se combinent avec « lui » ou « leur », le complément direct vient en premier : « je le lui transmettrai ».",
+            "en": "When « le », « la » or « les » combine with « lui » or « leur », the direct object comes first: « je le lui transmettrai »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « l'aura approuvé » par « lui aura approuvé »",
+          "rationale": {
+            "fr": "On approuve quelque chose : le complément direct, « le rapport », est bien repris par « l' ». « Lui » en ferait un complément indirect, ce qui est fautif.",
+            "en": "One approves something: the direct object, « le rapport », is properly replaced by « l' ». « Lui » would make it an indirect object, which is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « je lui le transmettrai » par « je la lui transmettrai »",
+          "rationale": {
+            "fr": "L'ordre serait rétabli, mais « la » ne peut pas reprendre « le rapport », nom masculin : la correction introduit une nouvelle faute.",
+            "en": "The order would be fixed, but « la » cannot stand for « le rapport », a masculine noun: the correction introduces a new error."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « comme le prévoit » par « comme la prévoit »",
+          "rationale": {
+            "fr": "Dans « comme le prévoit la procédure », « le » est un pronom neutre qui reprend l'idée exprimée ; il reste invariable, quel que soit le genre du sujet.",
+            "en": "In « comme le prévoit la procédure », « le » is a neutral pronoun standing for the idea expressed; it stays invariable whatever the gender of the subject."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Devant le verbe, les pronoms compléments suivent un ordre fixe. Avec « me, te, nous, vous », le complément direct vient en second (« il me le transmet ») ; avec « lui » et « leur », il vient en premier (« je le lui transmettrai », « je les leur enverrai »). « Y » et « en » se placent toujours en dernier.",
+        "en": "Before the verb, object pronouns follow a fixed order. With « me, te, nous, vous », the direct object comes second (« il me le transmet »); with « lui » and « leur », it comes first (« je le lui transmettrai », « je les leur enverrai »). « Y » and « en » always come last."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-09",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "D'ici la fin de l'exercice, la Direction générale de la gestion de l'information remplacera le logiciel ___ les agents traitent actuellement les demandes de remboursement des frais de déplacement.",
+        "en": "By the end of the fiscal year, the Information Management Branch will replace the software ___ officers currently process travel expense reimbursement claims."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "grâce à laquelle",
+          "rationale": {
+            "fr": "« Laquelle » est féminin, alors que l'antécédent du relatif, « le logiciel », est masculin.",
+            "en": "« Laquelle » is feminine, whereas the antecedent of the relative, « le logiciel », is masculine."
+          }
+        },
+        {
+          "id": "b",
+          "text": "grâce duquel",
+          "rationale": {
+            "fr": "La locution est « grâce à » ; « duquel » contient la préposition « de » et ne peut donc pas convenir.",
+            "en": "The phrase is « grâce à »; « duquel » contains the preposition « de » and therefore cannot fit."
+          }
+        },
+        {
+          "id": "c",
+          "text": "grâce auquel",
+          "rationale": {
+            "fr": "Après la locution « grâce à », le relatif « lequel » se contracte avec « à » : à + lequel = auquel. Il s'accorde avec « le logiciel », masculin singulier.",
+            "en": "After the phrase « grâce à », the relative « lequel » contracts with « à »: à + lequel = auquel. It agrees with « le logiciel », masculine singular."
+          }
+        },
+        {
+          "id": "d",
+          "text": "grâce à lequel",
+          "rationale": {
+            "fr": "La contraction est obligatoire : « à lequel » n'existe pas en français ; on écrit « auquel ».",
+            "en": "The contraction is mandatory: « à lequel » does not exist in French; « auquel » is written."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Après une préposition, un antécédent qui désigne une chose est repris par « lequel », accordé en genre et en nombre avec lui. Avec « à » et « de », la contraction est obligatoire : auquel, auxquels, auxquelles ; duquel, desquels, desquelles (mais « à laquelle », « de laquelle »). Ainsi : « le logiciel grâce auquel », « les outils grâce auxquels », « la plateforme grâce à laquelle ».",
+        "en": "After a preposition, an antecedent denoting a thing is taken up by « lequel », which agrees with it in gender and number. With « à » and « de », contraction is mandatory: auquel, auxquels, auxquelles; duquel, desquels, desquelles (but « à laquelle », « de laquelle »). Hence: « le logiciel grâce auquel », « les outils grâce auxquels », « la plateforme grâce à laquelle »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-10",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Les demandeurs qui ont déposé leur dossier en ligne recevront d'abord un accusé de réception automatique ; un agent ___ ensuite un courriel personnalisé dès que l'évaluation sera terminée.",
+        "en": "Applicants who submitted their file online will first receive an automatic acknowledgement; an officer ___ a personalized email once the assessment is complete."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "les enverra",
+          "rationale": {
+            "fr": "On envoie un courriel à quelqu'un : le complément de personne est indirect. « Les » est un pronom complément direct et ne convient pas.",
+            "en": "One sends an email « à » someone: the person is an indirect object. « Les » is a direct object pronoun and does not fit."
+          }
+        },
+        {
+          "id": "b",
+          "text": "leur enverra",
+          "rationale": {
+            "fr": "« Leur » remplace « aux demandeurs », complément indirect au pluriel (envoyer quelque chose à quelqu'un). C'est la forme juste.",
+            "en": "« Leur » stands for « aux demandeurs », a plural indirect object (envoyer quelque chose à quelqu'un). This is the right form."
+          }
+        },
+        {
+          "id": "c",
+          "text": "leurs enverra",
+          "rationale": {
+            "fr": "Le pronom personnel « leur » est invariable ; « leurs », avec un s, est le déterminant possessif placé devant un nom pluriel.",
+            "en": "The personal pronoun « leur » is invariable; « leurs », with an s, is the possessive determiner placed before a plural noun."
+          }
+        },
+        {
+          "id": "d",
+          "text": "y enverra",
+          "rationale": {
+            "fr": "« Y » remplace un complément de chose ou de lieu ; pour des personnes, on emploie « lui » ou « leur ».",
+            "en": "« Y » stands for a thing or a place; for people, « lui » or « leur » is used."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Placé devant un verbe, le pronom « leur » est le pluriel de « lui » : il remplace un complément de personne introduit par « à » et ne prend jamais de s (« je leur écris »). Seul le déterminant possessif varie : « leurs dossiers ».",
+        "en": "Placed before a verb, the pronoun « leur » is the plural of « lui »: it stands for a person introduced by « à » and never takes an s (« je leur écris »). Only the possessive determiner varies: « leurs dossiers »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-11",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Des deux procédures de traitement des plaintes mises à l'essai cet automne, la direction régionale a finalement retenu…",
+        "en": "Of the two complaint-handling procedures piloted this fall, the regional directorate finally chose…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "celle que les agents de première ligne avaient le plus besoin pendant la période de pointe.",
+          "rationale": {
+            "fr": "« Avoir besoin » se construit avec « de » ; le relatif « que », réservé au complément direct, est fautif ici.",
+            "en": "« Avoir besoin » takes « de »; the relative « que », reserved for direct objects, is wrong here."
+          }
+        },
+        {
+          "id": "b",
+          "text": "celle dont les agents de première ligne en avaient le plus besoin pendant la période de pointe.",
+          "rationale": {
+            "fr": "« Dont » reprend déjà le complément introduit par « de » ; l'ajout de « en » forme un pléonasme fautif.",
+            "en": "« Dont » already stands for the complement introduced by « de »; adding « en » creates a faulty redundancy."
+          }
+        },
+        {
+          "id": "c",
+          "text": "celui dont les agents de première ligne avaient le plus besoin pendant la période de pointe.",
+          "rationale": {
+            "fr": "Le relatif est juste, mais le démonstratif doit reprendre « procédure », nom féminin : « celle », et non « celui ».",
+            "en": "The relative is appropriate, but the demonstrative must stand for « procédure », a feminine noun: « celle », not « celui »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "celle dont les agents de première ligne avaient le plus besoin pendant la période de pointe.",
+          "rationale": {
+            "fr": "« Celle » reprend « procédure » (féminin singulier) et « dont » correspond à la construction « avoir besoin de » : la phrase est juste et naturelle.",
+            "en": "« Celle » stands for « procédure » (feminine singular) and « dont » matches the construction « avoir besoin de »: the sentence is correct and natural."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le démonstratif « celui, celle, ceux, celles » reprend un nom déjà mentionné et en prend le genre et le nombre ; il ne s'emploie pas seul et doit être suivi d'un relatif ou d'un complément. Le relatif dépend ensuite du verbe de la relative : avoir besoin de → « celle dont les agents avaient besoin », sans « en » supplémentaire.",
+        "en": "The demonstrative « celui, celle, ceux, celles » stands for a noun already mentioned and takes its gender and number; it is not used alone and must be followed by a relative or a complement. The relative then depends on the verb of the relative clause: avoir besoin de → « celle dont les agents avaient besoin », with no extra « en »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-12",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "La phrase suivante, tirée d'une fiche d'information destinée aux citoyens, comporte une erreur. Quelle correction faut-il faire ? « Le formulaire en ligne indique clairement ce que le demandeur doit joindre à son dossier, mais il ne précise pas ce que se passe si une pièce justificative est manquante. »",
+        "en": "The following sentence, taken from a fact sheet for the public, contains an error. Which correction should be made? « Le formulaire en ligne indique clairement ce que le demandeur doit joindre à son dossier, mais il ne précise pas ce que se passe si une pièce justificative est manquante. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « ce que se passe » par « ce qui se passe »",
+          "rationale": {
+            "fr": "Dans la seconde relative, le pronom est sujet du verbe « se passe » : il faut « ce qui ».",
+            "en": "In the second relative clause, the pronoun is the subject of « se passe »: « ce qui » is needed."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « ce que le demandeur doit joindre » par « ce qui le demandeur doit joindre »",
+          "rationale": {
+            "fr": "Cette relative a déjà un sujet, « le demandeur » ; le pronom y est complément direct de « joindre », d'où « ce que », qui est juste.",
+            "en": "This relative clause already has a subject, « le demandeur »; the pronoun is the direct object of « joindre », hence « ce que », which is appropriate."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « ce que se passe » par « qu'est-ce qui se passe »",
+          "rationale": {
+            "fr": "« Qu'est-ce qui » appartient à l'interrogation directe ; dans une interrogation indirecte (il ne précise pas…), cette forme relève de la langue familière et est à écarter à l'écrit.",
+            "en": "« Qu'est-ce qui » belongs to direct questions; in an indirect question (il ne précise pas…), this form is colloquial and must be avoided in writing."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « il ne précise pas » par « il ne le précise pas »",
+          "rationale": {
+            "fr": "Le complément de « précise » est déjà la proposition qui suit ; ajouter « le » le reprendrait une seconde fois, ce qui est fautif.",
+            "en": "The object of « précise » is already the clause that follows; adding « le » would repeat it a second time, which is wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Ce qui » et « ce que » se distinguent comme « qui » et « que » : on emploie « ce qui » quand le pronom est sujet du verbe qui suit (ce qui se passe, ce qui manque) et « ce que » quand il est complément direct et que la relative a son propre sujet (ce que le demandeur doit joindre).",
+        "en": "« Ce qui » and « ce que » are distinguished like « qui » and « que »: « ce qui » is used when the pronoun is the subject of the following verb (ce qui se passe, ce qui manque) and « ce que » when it is the direct object and the clause has its own subject (ce que le demandeur doit joindre)."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-13",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le projet de directive ___ les intervenants régionaux ont formulé de nombreuses observations sera soumis au comité de gouvernance lors de sa prochaine réunion.",
+        "en": "The draft directive ___ regional stakeholders made numerous comments will be submitted to the governance committee at its next meeting."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "dont",
+          "rationale": {
+            "fr": "« Formuler des observations » ne se construit pas avec « de » ; le complément est introduit par « au sujet de » ou « sur ». « Dont » ne peut pas remplacer cette locution.",
+            "en": "« Formuler des observations » does not take « de »; the complement is introduced by « au sujet de » or « sur ». « Dont » cannot stand for that phrase."
+          }
+        },
+        {
+          "id": "b",
+          "text": "au sujet dont",
+          "rationale": {
+            "fr": "« Dont » ne peut jamais suivre une préposition ou une locution prépositive ; après « au sujet de », il faut un relatif de la série « lequel ».",
+            "en": "« Dont » can never follow a preposition or prepositional phrase; after « au sujet de », a relative from the « lequel » series is needed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "au sujet duquel",
+          "rationale": {
+            "fr": "Après la locution « au sujet de », on emploie « duquel » (de + lequel), accordé avec « le projet », masculin singulier.",
+            "en": "After the phrase « au sujet de », « duquel » (de + lequel) is used, agreeing with « le projet », masculine singular."
+          }
+        },
+        {
+          "id": "d",
+          "text": "au sujet de quoi",
+          "rationale": {
+            "fr": "« Quoi » ne s'emploie qu'avec un antécédent neutre (ce, rien, quelque chose) ou une idée ; il ne peut pas reprendre un nom précis comme « le projet ».",
+            "en": "« Quoi » is only used with a neutral antecedent (ce, rien, quelque chose) or an idea; it cannot stand for a specific noun such as « le projet »."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Dont » remplace un complément introduit par « de » qui dépend directement du verbe, du sujet ou du complément (parler de, la valeur de). Mais lorsque le complément est introduit par une locution prépositive terminée par « de » (au sujet de, à côté de, au cours de, en raison de), « dont » est impossible : on emploie « duquel », « de laquelle », « desquels » ou « desquelles ».",
+        "en": "« Dont » stands for a complement introduced by « de » that depends directly on the verb, subject or object (parler de, la valeur de). But when the complement is introduced by a prepositional phrase ending in « de » (au sujet de, à côté de, au cours de, en raison de), « dont » is impossible: « duquel », « de laquelle », « desquels » or « desquelles » is used."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-14",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cet extrait d'une politique ministérielle renferme une erreur. Choisissez la correction qui convient : « En vertu de la nouvelle politique, quiconque consulte un dossier protégé doit en consigner le motif dans le registre électronique, et nul peut accorder de dérogation sans l'autorisation écrite de la sous-ministre adjointe. »",
+        "en": "This excerpt from a departmental policy contains an error. Choose the appropriate correction: « En vertu de la nouvelle politique, quiconque consulte un dossier protégé doit en consigner le motif dans le registre électronique, et nul peut accorder de dérogation sans l'autorisation écrite de la sous-ministre adjointe. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « nul peut accorder » par « nul ne peut accorder »",
+          "rationale": {
+            "fr": "« Nul », comme « personne » ou « aucun », est un pronom à valeur négative qui exige la particule « ne » devant le verbe : « nul ne peut ».",
+            "en": "« Nul », like « personne » or « aucun », is a negative pronoun that requires the particle « ne » before the verb: « nul ne peut »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « quiconque consulte » par « quiconque consultent »",
+          "rationale": {
+            "fr": "« Quiconque » est un pronom singulier ; le verbe dont il est sujet se met au singulier, comme dans la phrase d'origine.",
+            "en": "« Quiconque » is a singular pronoun; the verb it governs is singular, as in the original sentence."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « doit en consigner » par « doit y consigner »",
+          "rationale": {
+            "fr": "« En » est juste : il reprend la consultation du dossier (consigner le motif de cette consultation). « Y » désignerait un lieu, déjà précisé par « dans le registre ».",
+            "en": "« En » is appropriate: it refers back to the consultation of the file (recording the reason for it). « Y » would designate a place, which « dans le registre » already specifies."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « nul peut » par « nul ne peut pas »",
+          "rationale": {
+            "fr": "« Nul » porte déjà la négation : il se combine avec « ne » seul, jamais avec « pas ». « Nul ne peut pas » est une double négation fautive.",
+            "en": "« Nul » already carries the negation: it combines with « ne » alone, never with « pas ». « Nul ne peut pas » is a faulty double negative."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Les pronoms indéfinis à valeur négative (nul, personne, rien, aucun) exigent la particule « ne » devant le verbe, mais jamais « pas » : « nul ne peut », « personne ne sait ». Ils restent au singulier. « Quiconque », qui signifie « toute personne qui », est lui aussi singulier.",
+        "en": "Negative indefinite pronouns (nul, personne, rien, aucun) require the particle « ne » before the verb, but never « pas »: « nul ne peut », « personne ne sait ». They stay singular. « Quiconque », meaning « anyone who », is singular too."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-15",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le comité d'examen jugeait les lignes directrices actuelles suffisantes ; or, l'évaluation indépendante démontre clairement qu'elles…",
+        "en": "The review committee considered the current guidelines sufficient; however, the independent evaluation clearly shows that they…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "ne les sont plus depuis l'entrée en vigueur de la nouvelle loi.",
+          "rationale": {
+            "fr": "« Les » est un pronom complément direct ; or « être » n'a pas de complément direct. Pour reprendre un adjectif attribut, on emploie le pronom neutre « le ».",
+            "en": "« Les » is a direct object pronoun, but « être » has no direct object. To refer back to a predicate adjective, the neutral pronoun « le » is used."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ne la sont plus depuis l'entrée en vigueur de la nouvelle loi.",
+          "rationale": {
+            "fr": "Le pronom qui reprend un attribut ne s'accorde pas avec le sujet : on écrit « le », même si « lignes directrices » est au féminin pluriel.",
+            "en": "The pronoun that stands for a predicate does not agree with the subject: « le » is written, even though « lignes directrices » is feminine plural."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ne leur sont plus depuis l'entrée en vigueur de la nouvelle loi.",
+          "rationale": {
+            "fr": "« Leur » remplace un complément de personne introduit par « à » ; il ne peut pas reprendre l'adjectif « suffisantes ».",
+            "en": "« Leur » stands for a person introduced by « à »; it cannot refer back to the adjective « suffisantes »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ne le sont plus depuis l'entrée en vigueur de la nouvelle loi.",
+          "rationale": {
+            "fr": "Le pronom neutre « le », invariable, reprend l'adjectif attribut « suffisantes » : elles ne sont plus suffisantes → elles ne le sont plus.",
+            "en": "The invariable neutral pronoun « le » stands for the predicate adjective « suffisantes »: elles ne sont plus suffisantes → elles ne le sont plus."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour reprendre un adjectif ou un nom attribut, on emploie le pronom neutre « le », toujours invariable : « Sont-elles prêtes ? Elles le sont. » L'accorder avec le sujet (« elles les sont », « elle la est ») est une faute fréquente, attirée par le genre ou le nombre du sujet.",
+        "en": "To refer back to a predicate adjective or noun, the neutral pronoun « le » is used, always invariable: « Sont-elles prêtes ? Elles le sont. » Making it agree with the subject (« elles les sont », « elle la est ») is a common error, drawn by the subject's gender or number."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-16",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "___ l'alarme d'incendie s'est déclenchée, la plupart des employés de la direction participaient à une réunion au troisième étage ; l'évacuation s'est néanmoins déroulée dans l'ordre.",
+        "en": "___ the fire alarm went off, most of the directorate's employees were attending a meeting on the third floor; the evacuation nevertheless went smoothly."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Le jour quand",
+          "rationale": {
+            "fr": "« Quand » est une conjonction et ne peut pas servir de relatif après un nom ; « le jour quand » est un calque de l'anglais « the day when ».",
+            "en": "« Quand » is a conjunction and cannot serve as a relative after a noun; « le jour quand » copies the English « the day when »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le jour où",
+          "rationale": {
+            "fr": "Après un nom qui exprime le temps (le jour, le moment, l'année), le relatif est « où ».",
+            "en": "After a noun expressing time (le jour, le moment, l'année), the relative is « où »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le jour dont",
+          "rationale": {
+            "fr": "« Dont » remplace un complément introduit par « de » ; il ne peut pas exprimer le moment où se produit un événement.",
+            "en": "« Dont » stands for a complement introduced by « de »; it cannot express the time at which an event happens."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le jour lequel",
+          "rationale": {
+            "fr": "« Lequel » ne s'emploie comme relatif qu'après une préposition (pendant lequel, au cours duquel) ; seul, il est fautif ici.",
+            "en": "« Lequel » is only used as a relative after a preposition (pendant lequel, au cours duquel); on its own it is wrong here."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Où » est le relatif du lieu, mais aussi du temps : « le jour où », « au moment où », « l'année où ». On ne le remplace pas par « quand », qui est une conjonction, ni par « dont » ou « lequel » employé seul.",
+        "en": "« Où » is the relative of place, but also of time: « le jour où », « au moment où », « l'année où ». It is not replaced by « quand », which is a conjunction, nor by « dont » or « lequel » used alone."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-17",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Un superviseur a rédigé la phrase suivante dans un avis de santé et sécurité. Quelle correction est nécessaire ? « Les nouvelles trousses de premiers soins ont été distribuées dans toutes les aires de travail ; chacun d'elles contient des gants, des pansements et une liste de vérification que les secouristes désignés doivent remplir chaque mois. »",
+        "en": "A supervisor wrote the following sentence in a health and safety notice. Which correction is needed? « Les nouvelles trousses de premiers soins ont été distribuées dans toutes les aires de travail ; chacun d'elles contient des gants, des pansements et une liste de vérification que les secouristes désignés doivent remplir chaque mois. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « chacun d'elles » par « chacun d'eux »",
+          "rationale": {
+            "fr": "« Eux » est masculin ; or le pronom renvoie aux trousses, nom féminin. Le genre resterait faux.",
+            "en": "« Eux » is masculine, but the pronoun refers to the kits (« trousses »), a feminine noun. The gender would still be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « que les secouristes » par « dont les secouristes »",
+          "rationale": {
+            "fr": "On remplit une liste : le complément est direct et « que » est juste. « Dont » exigerait un verbe construit avec « de ».",
+            "en": "One fills in a list: the object is direct and « que » is appropriate. « Dont » would require a verb taking « de »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « chacun d'elles » par « chacune d'elles »",
+          "rationale": {
+            "fr": "« Chacun » prend le genre du nom qu'il reprend : les trousses étant féminines, il faut « chacune d'elles ».",
+            "en": "« Chacun » takes the gender of the noun it refers to: since « trousses » is feminine, « chacune d'elles » is needed."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « chacun d'elles contient » par « chacun d'elles contiennent »",
+          "rationale": {
+            "fr": "« Chacun » est singulier et commande un verbe au singulier ; le pluriel est fautif, et le genre resterait erroné.",
+            "en": "« Chacun » is singular and takes a singular verb; the plural is wrong, and the gender would remain incorrect."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le pronom « chacun » prend le genre du nom qu'il reprend (chacun des dossiers, chacune des trousses) mais reste toujours au singulier, tout comme le verbe dont il est sujet : « chacune d'elles contient ».",
+        "en": "The pronoun « chacun » takes the gender of the noun it refers to (chacun des dossiers, chacune des trousses) but always stays singular, as does the verb it governs: « chacune d'elles contient »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-18",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Les fiches de données de sécurité doivent rester en permanence dans le classeur du local d'entreposage ; les employés qui les consultent sont tenus de ___ immédiatement après usage, faute de quoi l'inspection pourrait relever une non-conformité.",
+        "en": "Safety data sheets must remain in the storage room's filing cabinet at all times; employees who consult them are required to ___ immediately after use, failing which the inspection could identify a non-compliance."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "y les remettre",
+          "rationale": {
+            "fr": "Quand « les » et « y » se suivent, le complément direct précède « y » : l'ordre inverse est fautif.",
+            "en": "When « les » and « y » occur together, the direct object comes before « y »: the reverse order is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "les en remettre",
+          "rationale": {
+            "fr": "« En » remplacerait un complément introduit par « de » ou une quantité ; or on remet les fiches dans le classeur, complément de lieu repris par « y ».",
+            "en": "« En » would stand for a complement introduced by « de » or a quantity, but the sheets are put back in the cabinet, a place complement taken up by « y »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "leur y remettre",
+          "rationale": {
+            "fr": "« Leur » désigne des personnes destinataires (remettre à quelqu'un) ; ici, ce sont les fiches elles-mêmes, complément direct, qu'il faut reprendre.",
+            "en": "« Leur » designates people as recipients (remettre à quelqu'un); here it is the sheets themselves, the direct object, that must be referred to."
+          }
+        },
+        {
+          "id": "d",
+          "text": "les y remettre",
+          "rationale": {
+            "fr": "« Les » reprend les fiches (complément direct) et « y » le classeur (lieu) ; « y » se place après les autres pronoms compléments.",
+            "en": "« Les » stands for the sheets (direct object) and « y » for the cabinet (place); « y » goes after the other object pronouns."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Lorsque deux pronoms compléments précèdent le verbe, « y » et « en » occupent toujours la dernière position : « les y remettre », « je vous en parlerai », « il m'y a conduit ». Le complément direct (le, la, les) précède donc « y ».",
+        "en": "When two object pronouns precede the verb, « y » and « en » always take the last position: « les y remettre », « je vous en parlerai », « il m'y a conduit ». The direct object (le, la, les) therefore comes before « y »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-19",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Les critères d'évaluation ___ toutes les propositions seront soumises figurent à l'annexe B de la demande de propositions, publiée hier sur le service électronique d'appels d'offres.",
+        "en": "The evaluation criteria ___ all proposals will be subjected are set out in Annex B of the request for proposals, published yesterday on the electronic tendering service."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "auxquels",
+          "rationale": {
+            "fr": "« Soumettre à » appelle la préposition « à » ; contractée avec « lesquels », elle donne « auxquels », accordé avec « critères », masculin pluriel.",
+            "en": "« Soumettre à » calls for the preposition « à »; contracted with « lesquels », it gives « auxquels », agreeing with « critères », masculine plural."
+          }
+        },
+        {
+          "id": "b",
+          "text": "à lesquels",
+          "rationale": {
+            "fr": "La contraction de « à » et de « lesquels » est obligatoire : la forme « à lesquels » n'existe pas.",
+            "en": "The contraction of « à » and « lesquels » is mandatory: the form « à lesquels » does not exist."
+          }
+        },
+        {
+          "id": "c",
+          "text": "auxquelles",
+          "rationale": {
+            "fr": "« Auxquelles » est féminin ; or l'antécédent, « les critères », est masculin. Le voisinage du nom féminin « évaluation » ne change rien à l'accord.",
+            "en": "« Auxquelles » is feminine, but the antecedent, « les critères », is masculine. The nearby feminine noun « évaluation » does not change the agreement."
+          }
+        },
+        {
+          "id": "d",
+          "text": "dont",
+          "rationale": {
+            "fr": "« Dont » remplace un complément introduit par « de » ; or on soumet une proposition à des critères.",
+            "en": "« Dont » stands for a complement introduced by « de », but a proposal is submitted « à » criteria."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Avec un verbe construit avec « à » (soumettre à, répondre à, se conformer à), le relatif est « auquel, à laquelle, auxquels, auxquelles », accordé avec l'antécédent. Il faut identifier l'antécédent véritable, ici « les critères », et non le nom le plus proche, « évaluation ».",
+        "en": "With a verb taking « à » (soumettre à, répondre à, se conformer à), the relative is « auquel, à laquelle, auxquels, auxquelles », agreeing with the antecedent. The true antecedent must be identified, here « les critères », not the nearest noun, « évaluation »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-20",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "À la date de clôture, nous avions reçu sept soumissions conformes. Le comité d'évaluation…",
+        "en": "By the closing date, we had received seven compliant bids. The evaluation committee…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "en a déjà analysées trois ; les autres le seront d'ici vendredi.",
+          "rationale": {
+            "fr": "Le participe passé ne s'accorde pas avec « en », même si le nom repris est féminin pluriel : on écrit « en a analysé trois ».",
+            "en": "The past participle does not agree with « en », even when the noun it stands for is feminine plural: « en a analysé trois » is written."
+          }
+        },
+        {
+          "id": "b",
+          "text": "en a déjà analysé trois ; les autres le seront d'ici vendredi.",
+          "rationale": {
+            "fr": "« En » reprend « soumissions » devant le nombre « trois », et le participe reste invariable : la phrase est juste.",
+            "en": "« En » stands for « soumissions » before the number « trois », and the participle stays invariable: the sentence is correct."
+          }
+        },
+        {
+          "id": "c",
+          "text": "a déjà analysé trois ; les autres le seront d'ici vendredi.",
+          "rationale": {
+            "fr": "Quand le complément direct est un nombre qui reprend un nom déjà mentionné, le pronom « en » est obligatoire ; son absence est fautive.",
+            "en": "When the direct object is a number referring back to a noun already mentioned, the pronoun « en » is mandatory; leaving it out is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "y a déjà analysé trois ; les autres le seront d'ici vendredi.",
+          "rationale": {
+            "fr": "« Y » remplace un complément introduit par « à » ou un lieu ; il ne peut pas reprendre une partie des soumissions.",
+            "en": "« Y » stands for a complement introduced by « à » or a place; it cannot refer back to some of the bids."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Avec un nombre ou une expression de quantité, « en » remplace le nom déjà mentionné et devient obligatoire : « il en a analysé trois ». Le participe passé reste invariable avec « en », qui n'est pas un complément direct imposant l'accord.",
+        "en": "With a number or an expression of quantity, « en » replaces the noun already mentioned and becomes mandatory: « il en a analysé trois ». The past participle stays invariable with « en », which is not a direct object that triggers agreement."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-21",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Ce passage d'une note interne de la Direction de l'approvisionnement contient une faute. Quelle correction faut-il retenir ? « Le fournisseur dont son contrat arrive à échéance en mars a été invité à soumissionner de nouveau ; quiconque souhaite déroger à la procédure de mise en concurrence doit présenter une justification écrite à l'agente de négociation des contrats, à qui revient la décision finale. »",
+        "en": "This passage from an internal memo of the Procurement Directorate contains an error. Which correction should be made? « Le fournisseur dont son contrat arrive à échéance en mars a été invité à soumissionner de nouveau ; quiconque souhaite déroger à la procédure de mise en concurrence doit présenter une justification écrite à l'agente de négociation des contrats, à qui revient la décision finale. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « quiconque souhaite » par « quiconque souhaitent »",
+          "rationale": {
+            "fr": "« Quiconque » est singulier : le verbe « souhaite » est bien accordé, et le pluriel serait fautif.",
+            "en": "« Quiconque » is singular: the verb « souhaite » agrees properly, and the plural would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « à qui revient » par « dont revient »",
+          "rationale": {
+            "fr": "La décision revient à quelqu'un : le relatif doit contenir « à ». « Dont » supposerait un verbe construit avec « de ».",
+            "en": "The decision « revient à » someone: the relative must contain « à ». « Dont » would presuppose a verb taking « de »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « dont son contrat » par « duquel son contrat »",
+          "rationale": {
+            "fr": "« Duquel » ne s'emploie qu'après une locution prépositive ; ici, « dont » est juste, et c'est le possessif « son » qui fait double emploi.",
+            "en": "« Duquel » is only used after a prepositional phrase; here « dont » is appropriate, and it is the possessive « son » that duplicates it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « dont son contrat » par « dont le contrat »",
+          "rationale": {
+            "fr": "« Dont » exprime déjà l'appartenance (le contrat du fournisseur) ; le possessif « son » répète cette information. Il faut l'article défini : « dont le contrat ».",
+            "en": "« Dont » already expresses possession (the supplier's contract); the possessive « son » repeats that information. The definite article is needed: « dont le contrat »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Quand « dont » marque la possession, le nom possédé prend l'article défini et non le déterminant possessif : « le fournisseur dont le contrat arrive à échéance », et non « dont son contrat ». Le possessif ferait double emploi avec « dont », qui signifie déjà « de qui » ou « duquel ».",
+        "en": "When « dont » marks possession, the noun possessed takes the definite article, not the possessive determiner: « le fournisseur dont le contrat arrive à échéance », not « dont son contrat ». The possessive would duplicate « dont », which already means « whose »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-22",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Une journaliste a demandé ce matin une entrevue avec le directeur général ; je ___ que nous transmettrions plutôt une déclaration écrite d'ici la fin de la journée.",
+        "en": "A journalist asked this morning for an interview with the director general; I ___ that we would instead send a written statement by the end of the day."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "l'ai répondu",
+          "rationale": {
+            "fr": "On répond à quelqu'un : le complément de personne est indirect. « L' » est un pronom complément direct et ne convient pas.",
+            "en": "One « répond à » someone: the person is an indirect object. « L' » is a direct object pronoun and does not fit."
+          }
+        },
+        {
+          "id": "b",
+          "text": "leur ai répondu",
+          "rationale": {
+            "fr": "« Leur » renvoie à plusieurs personnes ; or une seule journaliste a fait la demande.",
+            "en": "« Leur » refers to several people, but only one journalist made the request."
+          }
+        },
+        {
+          "id": "c",
+          "text": "lui ai répondu",
+          "rationale": {
+            "fr": "« Lui » remplace « à la journaliste », complément indirect de personne au singulier : c'est la forme juste.",
+            "en": "« Lui » stands for « à la journaliste », a singular indirect object referring to a person: this is the right form."
+          }
+        },
+        {
+          "id": "d",
+          "text": "les ai répondu",
+          "rationale": {
+            "fr": "« Les » est un complément direct pluriel : il cumule deux fautes, de construction et de nombre.",
+            "en": "« Les » is a plural direct object: it combines two errors, of construction and of number."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Répondre » se construit avec « à » : répondre à quelqu'un. Le complément de personne est donc repris par « lui » au singulier et « leur » au pluriel, et non par « le, la, les », réservés au complément direct. La même règle vaut pour écrire, téléphoner, demander ou dire à quelqu'un.",
+        "en": "« Répondre » takes « à »: répondre à quelqu'un. The person is therefore replaced by « lui » in the singular and « leur » in the plural, not by « le, la, les », which are reserved for direct objects. The same rule applies to écrire, téléphoner, demander or dire à quelqu'un."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-23",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Une conseillère relit ce courriel destiné à un nouveau gestionnaire. Quelle correction doit-elle y apporter ? « Comme l'a rappelé la directrice lors de la séance d'information, c'est vous qui est responsable de l'approbation finale des messages destinés aux médias sociaux, et c'est à votre équipe que les conseillers en communication doivent soumettre leurs ébauches. »",
+        "en": "An advisor is proofreading this email addressed to a new manager. Which correction should she make? « Comme l'a rappelé la directrice lors de la séance d'information, c'est vous qui est responsable de l'approbation finale des messages destinés aux médias sociaux, et c'est à votre équipe que les conseillers en communication doivent soumettre leurs ébauches. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « qui est responsable » par « qui êtes responsable »",
+          "rationale": {
+            "fr": "Le verbe de la relative s'accorde avec l'antécédent de « qui », ici « vous » : c'est vous qui êtes responsable.",
+            "en": "The verb of the relative clause agrees with the antecedent of « qui », here « vous »: c'est vous qui êtes responsable."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « c'est à votre équipe que » par « c'est à votre équipe à qui »",
+          "rationale": {
+            "fr": "La préposition « à » figure déjà devant « votre équipe » ; la répéter dans « à qui » est fautif. Dans la mise en relief d'un complément, on garde « que ».",
+            "en": "The preposition « à » already appears before « votre équipe »; repeating it in « à qui » is wrong. When a complement is highlighted, « que » is kept."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « c'est vous qui » par « c'est vous que »",
+          "rationale": {
+            "fr": "« Que » ferait de « vous » un complément ; or « vous » est le sujet de « être responsable ». La mise en relief du sujet exige « qui ».",
+            "en": "« Que » would make « vous » an object, but « vous » is the subject of « être responsable ». Highlighting the subject requires « qui »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « c'est vous qui » par « ce sont vous qui »",
+          "rationale": {
+            "fr": "« Ce sont » ne s'emploie que devant un nom ou un pronom de la troisième personne du pluriel (ce sont elles) ; devant « vous », on écrit « c'est ».",
+            "en": "« Ce sont » is only used before a noun or a third-person plural pronoun (ce sont elles); before « vous », « c'est » is written."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans la mise en relief « c'est… qui », le verbe de la relative s'accorde avec le mot mis en relief : « c'est moi qui ai », « c'est nous qui avons », « c'est vous qui êtes ». Pour mettre en relief un complément, on emploie « c'est… que », sans répéter la préposition : « c'est à votre équipe que l'on soumet les ébauches ».",
+        "en": "In the « c'est… qui » focus structure, the verb of the relative clause agrees with the highlighted word: « c'est moi qui ai », « c'est nous qui avons », « c'est vous qui êtes ». To highlight a complement, « c'est… que » is used, without repeating the preposition: « c'est à votre équipe que l'on soumet les ébauches »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-24",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "La version française du communiqué a été diffusée deux heures après la version anglaise. Dans sa note de rappel aux conseillers en communication, la directrice souligne que…",
+        "en": "The French version of the news release was issued two hours after the English version. In her reminder memo to communications advisors, the director stresses that…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "ça contrevient à la politique ministérielle sur les langues officielles et ne doit pas se reproduire.",
+          "rationale": {
+            "fr": "« Ça » est la forme familière de « cela » : la phrase est grammaticale, mais ce registre ne convient pas à une note de service de la direction.",
+            "en": "« Ça » is the colloquial form of « cela »: the sentence is grammatical, but this register does not suit a management memo."
+          }
+        },
+        {
+          "id": "b",
+          "text": "cela contrevient à la politique ministérielle sur les langues officielles et ne doit pas se reproduire.",
+          "rationale": {
+            "fr": "« Cela » reprend l'ensemble du fait relaté (la diffusion décalée) dans le registre soigné qu'exige une note de service : c'est la forme qui convient.",
+            "en": "« Cela » refers back to the whole fact reported (the staggered release) in the careful register a memo requires: this is the fitting form."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ce contrevient à la politique ministérielle sur les langues officielles et ne doit pas se reproduire.",
+          "rationale": {
+            "fr": "« Ce » ne peut être sujet que du verbe « être » (c'est, ce sera) ou de quelques tours figés ; devant « contrevient », il faut « cela ».",
+            "en": "« Ce » can only be the subject of « être » (c'est, ce sera) or of a few fixed phrases; before « contrevient », « cela » is needed."
+          }
+        },
+        {
+          "id": "d",
+          "text": "lequel contrevient à la politique ministérielle sur les langues officielles et ne doit pas se reproduire.",
+          "rationale": {
+            "fr": "Le relatif « lequel » suppose un antécédent nominal placé juste avant lui ; après la conjonction « que », il ne peut pas reprendre un fait entier.",
+            "en": "The relative « lequel » requires a noun antecedent immediately before it; after the conjunction « que », it cannot refer back to a whole fact."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Cela » reprend une idée ou un fait déjà exprimé et peut être sujet de n'importe quel verbe. « Ça », sa forme abrégée, appartient à la langue familière et est à éviter dans un écrit administratif. « Ce » seul ne s'emploie comme sujet que devant « être » (c'est, ce sera) ou dans quelques tournures figées.",
+        "en": "« Cela » refers back to an idea or fact already expressed and can be the subject of any verb. « Ça », its shortened form, belongs to colloquial language and should be avoided in administrative writing. « Ce » alone is only used as a subject before « être » (c'est, ce sera) or in a few fixed expressions."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-25",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le projet de modernisation des systèmes fera l'objet, en janvier, d'un examen de mi-parcours, ___ le comité directeur décidera s'il y a lieu de modifier l'échéancier et de réaffecter certaines ressources.",
+        "en": "The systems modernization project will undergo a mid-term review in January, ___ the steering committee will decide whether to change the schedule and reassign certain resources."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "à l'issue de laquelle",
+          "rationale": {
+            "fr": "« Laquelle » est féminin ; or l'antécédent, « un examen », est masculin.",
+            "en": "« Laquelle » is feminine, but the antecedent, « un examen », is masculine."
+          }
+        },
+        {
+          "id": "b",
+          "text": "à l'issue dont",
+          "rationale": {
+            "fr": "« Dont » ne peut jamais suivre une locution prépositive comme « à l'issue de ».",
+            "en": "« Dont » can never follow a prepositional phrase such as « à l'issue de »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "à l'issue de lequel",
+          "rationale": {
+            "fr": "La contraction est obligatoire : de + lequel donne « duquel ». La forme « de lequel » n'existe pas.",
+            "en": "The contraction is mandatory: de + lequel gives « duquel ». The form « de lequel » does not exist."
+          }
+        },
+        {
+          "id": "d",
+          "text": "à l'issue duquel",
+          "rationale": {
+            "fr": "Après la locution « à l'issue de », on emploie « duquel » (de + lequel), accordé avec « examen », masculin singulier.",
+            "en": "After the phrase « à l'issue de », « duquel » (de + lequel) is used, agreeing with « examen », masculine singular."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Après une locution prépositive terminée par « de » (à l'issue de, au cours de, à la suite de, au sujet de), le relatif n'est jamais « dont » mais « duquel, de laquelle, desquels, desquelles », contracté au masculin et accordé avec l'antécédent : « un examen à l'issue duquel », « une rencontre à l'issue de laquelle ».",
+        "en": "After a prepositional phrase ending in « de » (à l'issue de, au cours de, à la suite de, au sujet de), the relative is never « dont » but « duquel, de laquelle, desquels, desquelles », contracted in the masculine and agreeing with the antecedent: « un examen à l'issue duquel », « une rencontre à l'issue de laquelle »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-26",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Dans ce message envoyé à une équipe de projet, une phrase contient une erreur. Quelle correction faut-il retenir ? « La date de remise du rapport d'étape a été devancée ; Marc a promis qu'il s'y occuperait dès lundi, et j'en ai informé le reste de l'équipe ce matin. »",
+        "en": "In this message sent to a project team, one sentence contains an error. Which correction should be chosen? « La date de remise du rapport d'étape a été devancée ; Marc a promis qu'il s'y occuperait dès lundi, et j'en ai informé le reste de l'équipe ce matin. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « j'en ai informé » par « j'y ai informé »",
+          "rationale": {
+            "fr": "On informe quelqu'un de quelque chose : « en » reprend bien ce complément introduit par « de », et « y » serait fautif.",
+            "en": "One « informe » someone « de » something: « en » properly stands for that complement introduced by « de », and « y » would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « j'en ai informé » par « je l'ai informé »",
+          "rationale": {
+            "fr": "« Le reste de l'équipe » est déjà le complément direct de « informer » ; « l' » ferait double emploi, et l'erreur sur « s'y occuperait » resterait.",
+            "en": "« Le reste de l'équipe » is already the direct object of « informer »; « l' » would duplicate it, and the error in « s'y occuperait » would remain."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « qu'il s'y occuperait » par « qu'il s'en occuperait »",
+          "rationale": {
+            "fr": "« S'occuper » se construit avec « de » (s'occuper du rapport) : le complément est repris par « en ».",
+            "en": "« S'occuper » takes « de » (s'occuper du rapport): the complement is replaced by « en »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « qu'il s'y occuperait » par « qu'il y occuperait »",
+          "rationale": {
+            "fr": "Supprimer le pronom réfléchi dénature le verbe pronominal « s'occuper » sans régler le choix entre « y » et « en ».",
+            "en": "Removing the reflexive pronoun distorts the pronominal verb « s'occuper » without fixing the choice between « y » and « en »."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le choix entre « y » et « en » dépend de la préposition qu'exige le verbe : « en » remplace un complément introduit par « de » (s'occuper de, parler de, informer de), « y » un complément introduit par « à » (penser à, répondre à, assister à). Il faut donc vérifier la construction du verbe avant de choisir le pronom.",
+        "en": "The choice between « y » and « en » depends on the preposition the verb requires: « en » stands for a complement introduced by « de » (s'occuper de, parler de, informer de), « y » for one introduced by « à » (penser à, répondre à, assister à). The verb's construction must therefore be checked before choosing the pronoun."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-27",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Lors de la rencontre de lancement, la gestionnaire de projet a rappelé que les livrables seraient répartis entre les quatre analystes et que…",
+        "en": "At the kick-off meeting, the project manager reminded everyone that the deliverables would be divided among the four analysts and that…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "chacun d'eux serait responsable de ses propres échéances.",
+          "rationale": {
+            "fr": "« Chacun » reprend les analystes, reste au singulier et entraîne le singulier du verbe, de l'adjectif et du possessif : la phrase est juste.",
+            "en": "« Chacun » refers to the analysts, stays singular and makes the verb, adjective and possessive singular: the sentence is correct."
+          }
+        },
+        {
+          "id": "b",
+          "text": "chacun d'eux seraient responsables de leurs propres échéances.",
+          "rationale": {
+            "fr": "« Chacun » est toujours singulier : le verbe et l'adjectif qui s'y rapportent doivent l'être aussi.",
+            "en": "« Chacun » is always singular: the verb and adjective that relate to it must be singular too."
+          }
+        },
+        {
+          "id": "c",
+          "text": "chaque d'eux serait responsable de ses propres échéances.",
+          "rationale": {
+            "fr": "« Chaque » est un déterminant et doit précéder un nom (chaque analyste) ; il ne peut pas tenir lieu de pronom. Il faut « chacun ».",
+            "en": "« Chaque » is a determiner and must precede a noun (chaque analyste); it cannot serve as a pronoun. « Chacun » is needed."
+          }
+        },
+        {
+          "id": "d",
+          "text": "chacune d'eux serait responsable de ses propres échéances.",
+          "rationale": {
+            "fr": "« Chacune » est féminin, alors que « eux » est masculin : les deux pronoms doivent s'accorder en genre.",
+            "en": "« Chacune » is feminine, whereas « eux » is masculine: the two pronouns must agree in gender."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Chacun » (ou « chacune ») est un pronom ; « chaque » est un déterminant qui accompagne toujours un nom. « Chacun » prend le genre du nom qu'il reprend mais reste au singulier, comme le verbe et le possessif qui s'y rapportent : « chacun d'eux est responsable de ses échéances ».",
+        "en": "« Chacun » (or « chacune ») is a pronoun; « chaque » is a determiner that always accompanies a noun. « Chacun » takes the gender of the noun it refers to but stays singular, as do the verb and possessive related to it: « chacun d'eux est responsable de ses échéances »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-28",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Selon la politique ministérielle sur les langues officielles, ___ communique avec le public au nom de l'institution doit être en mesure de le faire dans la langue officielle choisie par son interlocuteur.",
+        "en": "Under the departmental official languages policy, ___ communicates with the public on behalf of the institution must be able to do so in the official language chosen by the person they are dealing with."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "quiconque qui",
+          "rationale": {
+            "fr": "« Quiconque » contient déjà le relatif : il signifie « toute personne qui ». L'ajout de « qui » forme un pléonasme fautif.",
+            "en": "« Quiconque » already contains the relative: it means « toute personne qui ». Adding « qui » creates a faulty redundancy."
+          }
+        },
+        {
+          "id": "b",
+          "text": "quiconque",
+          "rationale": {
+            "fr": "« Quiconque » joue à la fois le rôle d'antécédent et de relatif : il est sujet de « communique », et l'ensemble est sujet de « doit ». Son registre soigné convient à une politique.",
+            "en": "« Quiconque » acts as both antecedent and relative: it is the subject of « communique », and the whole phrase is the subject of « doit ». Its careful register suits a policy."
+          }
+        },
+        {
+          "id": "c",
+          "text": "n'importe qui",
+          "rationale": {
+            "fr": "« N'importe qui » n'a pas la valeur relative de « quiconque » et ne peut pas, à lui seul, introduire le verbe « communique » ; sa nuance (« le premier venu ») serait d'ailleurs déplacée dans une politique.",
+            "en": "« N'importe qui » lacks the relative function of « quiconque » and cannot, on its own, introduce the verb « communique »; its nuance (« just anyone ») would also be out of place in a policy."
+          }
+        },
+        {
+          "id": "d",
+          "text": "celui",
+          "rationale": {
+            "fr": "« Celui » ne s'emploie jamais seul : il doit être suivi d'un relatif ou d'un complément (« celui qui communique »).",
+            "en": "« Celui » is never used alone: it must be followed by a relative or a complement (« celui qui communique »)."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Quiconque » signifie « toute personne qui » et cumule les rôles d'antécédent et de pronom relatif ; on ne le fait donc pas suivre de « qui ». Il est singulier et appartient à la langue soignée, d'où sa fréquence dans les textes juridiques et les politiques.",
+        "en": "« Quiconque » means « anyone who » and combines the roles of antecedent and relative pronoun; it is therefore not followed by « qui ». It is singular and belongs to careful language, which is why it is frequent in legal texts and policies."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-29",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le comité ministériel des langues officielles a formulé une recommandation sur l'offre active dans les points de service en personne, …",
+        "en": "The departmental official languages committee made a recommendation on active offer at in-person service points, …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "que la direction générale entend donner suite d'ici la fin de l'exercice.",
+          "rationale": {
+            "fr": "« Donner suite » se construit avec « à » ; « que » ne peut remplacer qu'un complément direct.",
+            "en": "« Donner suite » takes « à »; « que » can only stand for a direct object."
+          }
+        },
+        {
+          "id": "b",
+          "text": "à laquelle la direction générale entend y donner suite d'ici la fin de l'exercice.",
+          "rationale": {
+            "fr": "« À laquelle » reprend déjà le complément introduit par « à » ; l'ajout de « y » le répète inutilement. Ce pléonasme est fautif.",
+            "en": "« À laquelle » already stands for the complement introduced by « à »; adding « y » repeats it needlessly. This redundancy is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "dont la direction générale entend donner suite d'ici la fin de l'exercice.",
+          "rationale": {
+            "fr": "« Dont » suppose un verbe construit avec « de » ; or on donne suite à une recommandation.",
+            "en": "« Dont » presupposes a verb taking « de », but one « donne suite à » a recommendation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "à laquelle la direction générale entend donner suite d'ici la fin de l'exercice.",
+          "rationale": {
+            "fr": "« Donner suite à » appelle « à laquelle », accordé avec « recommandation », nom féminin singulier, sans autre pronom dans la relative.",
+            "en": "« Donner suite à » calls for « à laquelle », agreeing with « recommandation », a feminine singular noun, with no other pronoun in the relative clause."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le relatif doit contenir la préposition qu'exige le verbe de la relative, et une seule fois : avec « donner suite à », on écrit « la recommandation à laquelle on donne suite ». Le relatif remplaçant déjà le complément, on n'ajoute ni « y » ni « en » dans la relative.",
+        "en": "The relative must contain the preposition required by the verb of the relative clause, and only once: with « donner suite à », one writes « la recommandation à laquelle on donne suite ». Since the relative already stands for the complement, neither « y » nor « en » is added inside the clause."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-30",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Trouvez l'erreur dans cette phrase d'un guide sur les mesures d'adaptation et indiquez comment la corriger : « Les employés qui ont besoin d'une mesure d'adaptation doivent en faire la demande à leur gestionnaire, qui leurs remettra ensuite le formulaire à remplir. »",
+        "en": "Find the error in this sentence from a guide on workplace accommodation and indicate how to correct it: « Les employés qui ont besoin d'une mesure d'adaptation doivent en faire la demande à leur gestionnaire, qui leurs remettra ensuite le formulaire à remplir. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « leurs remettra » par « leur remettra »",
+          "rationale": {
+            "fr": "Devant un verbe, « leur » est un pronom personnel invariable : « le gestionnaire leur remettra le formulaire ».",
+            "en": "Before a verb, « leur » is an invariable personal pronoun: « le gestionnaire leur remettra le formulaire »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « en faire la demande » par « y faire la demande »",
+          "rationale": {
+            "fr": "« En » est juste : il reprend « une mesure d'adaptation » (faire la demande d'une mesure). « Y » supposerait un complément introduit par « à ».",
+            "en": "« En » is appropriate: it stands for « une mesure d'adaptation » (faire la demande d'une mesure). « Y » would presuppose a complement introduced by « à »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « leurs remettra » par « les remettra »",
+          "rationale": {
+            "fr": "On remet quelque chose à quelqu'un : le complément de personne est indirect et se reprend par « leur », non par « les ».",
+            "en": "One « remet » something « à » someone: the person is an indirect object, replaced by « leur », not « les »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « qui ont besoin » par « qui en ont besoin »",
+          "rationale": {
+            "fr": "Le complément « d'une mesure d'adaptation » est déjà exprimé ; ajouter « en » le répéterait. Ce pléonasme est fautif.",
+            "en": "The complement « d'une mesure d'adaptation » is already expressed; adding « en » would repeat it. This redundancy is wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Devant un verbe, « leur » est un pronom personnel, pluriel de « lui », et il est toujours invariable : « le gestionnaire leur remettra le formulaire ». Seul le déterminant possessif placé devant un nom pluriel prend un s : « leurs formulaires ».",
+        "en": "Before a verb, « leur » is a personal pronoun, the plural of « lui », and it is always invariable: « le gestionnaire leur remettra le formulaire ». Only the possessive determiner placed before a plural noun takes an s: « leurs formulaires »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-31",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Des deux salles de réunion du quatrième étage, ___ est équipée d'une boucle magnétique pour les personnes malentendantes se trouve près des ascenseurs.",
+        "en": "Of the two meeting rooms on the fourth floor, ___ is equipped with a hearing loop for people who are hard of hearing is located near the elevators."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "celui qui",
+          "rationale": {
+            "fr": "« Celui » est masculin ; il doit reprendre « salle », nom féminin.",
+            "en": "« Celui » is masculine; it must stand for « salle », a feminine noun."
+          }
+        },
+        {
+          "id": "b",
+          "text": "celle que",
+          "rationale": {
+            "fr": "« Que » est complément direct ; or le pronom est ici sujet de « est équipée », ce qui exige « qui ».",
+            "en": "« Que » is a direct object, but here the pronoun is the subject of « est équipée », which requires « qui »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "celle qui",
+          "rationale": {
+            "fr": "« Celle » reprend « salle » (féminin singulier) et « qui » est sujet de « est équipée » : c'est la forme juste.",
+            "en": "« Celle » stands for « salle » (feminine singular) and « qui » is the subject of « est équipée »: this is the right form."
+          }
+        },
+        {
+          "id": "d",
+          "text": "laquelle",
+          "rationale": {
+            "fr": "Sans antécédent placé juste avant lui, « laquelle » ne peut pas ouvrir cette proposition ; il faut le démonstratif « celle » suivi du relatif « qui ».",
+            "en": "Without an antecedent right before it, « laquelle » cannot open this clause; the demonstrative « celle » followed by the relative « qui » is needed."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour reprendre un nom déjà mentionné et le préciser par une relative, on emploie le démonstratif « celui, celle, ceux, celles », accordé avec ce nom, suivi du relatif approprié : « qui » si le pronom est sujet (celle qui est équipée), « que » s'il est complément direct (celle que nous réservons).",
+        "en": "To refer back to a noun already mentioned and specify it with a relative clause, the demonstrative « celui, celle, ceux, celles » is used, agreeing with that noun, followed by the appropriate relative: « qui » if the pronoun is the subject (celle qui est équipée), « que » if it is the direct object (celle que nous réservons)."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-32",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Si vous avez encore des exemplaires imprimés du guide sur la réduction des déchets, pourriez-vous…",
+        "en": "If you still have printed copies of the waste reduction guide, could you…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "me les en apporter quelques-uns avant la réunion de jeudi ?",
+          "rationale": {
+            "fr": "« Les » désigne l'ensemble des exemplaires, alors que « quelques-uns » n'en vise qu'une partie : les pronoms se contredisent et leur cumul est fautif.",
+            "en": "« Les » refers to all the copies, whereas « quelques-uns » refers to only some of them: the pronouns contradict each other and combining them is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "m'en apporter quelques-uns avant la réunion de jeudi ?",
+          "rationale": {
+            "fr": "« En » reprend « des exemplaires » avec la quantité « quelques-uns » ; « me » précède « en » et s'élide en « m' » : c'est la forme juste.",
+            "en": "« En » stands for « des exemplaires » with the quantity « quelques-uns »; « me » precedes « en » and elides to « m' »: this is the right form."
+          }
+        },
+        {
+          "id": "c",
+          "text": "en m'apporter quelques-uns avant la réunion de jeudi ?",
+          "rationale": {
+            "fr": "« En » se place toujours après les autres pronoms compléments : on écrit « m'en », non « en m' ».",
+            "en": "« En » always comes after the other object pronouns: « m'en » is written, not « en m' »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "m'y apporter quelques-uns avant la réunion de jeudi ?",
+          "rationale": {
+            "fr": "« Y » remplace un lieu ou un complément introduit par « à » ; pour reprendre une partie des exemplaires avec « quelques-uns », il faut « en ».",
+            "en": "« Y » stands for a place or a complement introduced by « à »; to refer to some of the copies with « quelques-uns », « en » is needed."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Avec une quantité (quelques-uns, plusieurs, deux), le nom repris est remplacé par « en ». Combiné à un autre pronom, « en » vient toujours en dernier : « m'en », « vous en », « leur en ». « Me », « te » et « se » s'élident devant lui : « pourriez-vous m'en apporter ».",
+        "en": "With a quantity (quelques-uns, plusieurs, deux), the noun referred back to is replaced by « en ». Combined with another pronoun, « en » always comes last: « m'en », « vous en », « leur en ». « Me », « te » and « se » elide before it: « pourriez-vous m'en apporter »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-pronouns-33",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Lisez attentivement cet extrait d'un rapport sur le développement durable : une seule correction s'impose. Laquelle ? « Le plan ministériel de développement durable précise les cibles de réduction des émissions que chaque direction générale doit atteindre, mais il ne dit rien de ce que les gestionnaires devront rendre compte si ces cibles ne sont pas respectées. »",
+        "en": "Read this excerpt from a sustainable development report carefully: only one correction is required. Which one? « Le plan ministériel de développement durable précise les cibles de réduction des émissions que chaque direction générale doit atteindre, mais il ne dit rien de ce que les gestionnaires devront rendre compte si ces cibles ne sont pas respectées. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « que chaque direction générale doit atteindre » par « dont chaque direction générale doit atteindre »",
+          "rationale": {
+            "fr": "On atteint une cible : le complément est direct et « que » est juste. « Dont » serait fautif.",
+            "en": "One « atteint » a target: the object is direct and « que » is appropriate. « Dont » would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « il ne dit rien de ce que » par « il ne dit rien sur ce que »",
+          "rationale": {
+            "fr": "Changer la préposition qui précède « ce » ne règle rien : c'est le relatif, complément de « rendre compte », qui est mal choisi.",
+            "en": "Changing the preposition before « ce » fixes nothing: it is the relative, the complement of « rendre compte », that is wrongly chosen."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « de ce que les gestionnaires » par « de ce dont les gestionnaires »",
+          "rationale": {
+            "fr": "« Rendre compte » se construit avec « de » (rendre compte de ses résultats) : après « ce », le relatif doit être « dont ».",
+            "en": "« Rendre compte » takes « de » (rendre compte de ses résultats): after « ce », the relative must be « dont »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « il ne dit rien » par « il n'en dit rien »",
+          "rationale": {
+            "fr": "« En » ferait double emploi avec le complément « de ce… » qui suit ; ce pléonasme est fautif, et la faute sur le relatif demeurerait.",
+            "en": "« En » would duplicate the complement « de ce… » that follows; this redundancy is wrong, and the error in the relative would remain."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Après le pronom « ce », le relatif se choisit d'après le verbe de la relative : rendre compte de → « ce dont ». La préposition qui précède « ce » (« ne rien dire de ») dépend, elle, du verbe principal ; les deux constructions s'additionnent : « il ne dit rien de ce dont les gestionnaires devront rendre compte ».",
+        "en": "After the pronoun « ce », the relative is chosen according to the verb of the relative clause: rendre compte de → « ce dont ». The preposition before « ce » (« ne rien dire de ») depends on the main verb; the two constructions combine: « il ne dit rien de ce dont les gestionnaires devront rendre compte »."
+      },
+      "subSkill": "pronouns",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ]
+}

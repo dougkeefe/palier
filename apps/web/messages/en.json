@@ -151,7 +151,7 @@
       },
       "source": {
         "q": "Where do the questions come from?",
-        "a": "Most items are drafted by AI from public Government of Canada material and rewritten into original passages that quote nothing. Each one is reviewed by a second, different AI model and a set of automatic checks; an item that fails is discarded. Every item shows where it came from, and reporting one takes a single tap."
+        "a": "The items are written by an AI model, Claude, as original passages and questions that copy nothing. Each one is reviewed blind by separate instances of the same model and by a set of automatic checks; an item that fails is discarded. Every item shows where it came from, and reporting one takes a single tap."
       },
       "privacy": {
         "q": "Is my data private?",
@@ -184,9 +184,8 @@
     "notPredictor": "Not a predictor. It gives an estimate with its uncertainty shown, never a promised result.",
     "notOfficial": "Not affiliated with the Public Service Commission of Canada, the Canada School of Public Service, or any department.",
     "bankTitle": "Where the questions come from",
-    "bankMachine": "Most items are drafted by AI from public Government of Canada material, rewritten into original passages that quote nothing. No person reads every item before it is published. Each one passes a review by a second, different AI model and a set of automatic checks, and an item that fails is discarded, not repaired. Items written by people are welcome, and they pass the same checks.",
+    "bankMachine": "The items are written by an AI model, Claude, as original passages and questions in the register of the federal workplace. Nothing is copied from a real exam or a real document. No person reads every item before it is published. Each one is reviewed blind by separate instances of the same model, which must find the intended answer and no second one, and then passes a set of automatic checks. An item that fails is discarded, not repaired. Items written by people are welcome, and they pass the same checks.",
     "bankHonest": "So the bank tells you where each item came from. Any item’s provenance is one tap away. Reporting an item takes one tap and opens a public issue, and items that turn out badly are retired. Your estimate says what it rests on, and is never quietly adjusted.",
-    "bankToday": "Today the bank is still small and partly synthetic. A full run of the pipeline comes before version 1.0.",
     "whoTitle": "Who makes it",
     "who": "Palier is a personal, non-governmental project, built in the open by Doug Keefe and anyone who contributes. It holds no government information and accepts none.",
     "licenceTitle": "Licence",
@@ -394,7 +393,7 @@
     "historyShort": "Not enough answers",
     "honestTitle": "What this does and does not tell you",
     "honestDoes": "It shows how often you get items right at each level, and the range the true rate most likely sits in.",
-    "honestDoesNot": "It is not a band. Practice items are not a calibrated test, and this bank is still small and partly synthetic. Only a full mock exam can give a band.",
+    "honestDoesNot": "It is not a band. Practice items are not a calibrated test, and no item has yet been calibrated against real answers. Only a full mock exam can give a band.",
     "exportTitle": "Keep a copy",
     "exportBody": "Download everything as a JSON file you can import later, on this device or another.",
     "printedOn": "Progress summary, {date}",

@@ -132,9 +132,10 @@ Some notes on the fields:
 - **`status`**: `published`. **`version`**: `1`. The timestamps are ISO 8601 in UTC.
 
 A **passage** is written from scratch, not copied from a real document, and carries your
-handle in its source: `"source": { "kind": "original", "contributor": "your-handle" }`. Fill in
-`wordCount` and `readability` (the number of sentences, the average sentence length in words,
-and the share of words longer than seven letters).
+handle in its source: `"source": { "kind": "original", "contributor": "your-handle" }`. It needs
+at least three sentences and, for band B, 40 to 170 words (C: 50 to 230), with no number of four
+or more digits in a row and no all-caps acronym. Leave `wordCount` and `readability` to the
+checker below, which computes them from the body.
 
 ### Register (product-requirements.md §13.1)
 
@@ -173,8 +174,18 @@ pnpm install && pnpm build && pnpm verify
 `apps/factory/src/authored.test.ts` checks every file in `content/authored/`: it must parse
 with the schemas, pass the same deterministic checks the bank build runs (the domain's
 `validate()` among them), credit a contributor on every item and passage, and use no id that
-the committed bank or another contribution already holds. Its failure message names the item
-and says what is wrong.
+the committed bank or another contribution already holds for something else. Its failure
+message names the item and says what is wrong.
+
+To check one file quickly, and to have your passages' `wordCount` and `readability` filled in:
+
+```bash
+pnpm --filter @palier/factory build
+node apps/factory/dist/index.js check-authored --write-readability content/authored/your-file.json
+```
+
+It prints one `ISSUE:` line per problem, including two stems so alike that the bank build would
+drop the second.
 
 ## What happens next
 

@@ -1,0 +1,1107 @@
+{
+  "reviewer": "claude-opus-5-5",
+  "verdicts": [
+    {
+      "requestHash": "e2a0f4964afc6930a9c0d2b0",
+      "itemId": "claude-r-procurement-1-1",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The contract will only be awarded in mid-January; nothing has been awarded yet.",
+          "b": "Correct: the email opens by transmitting the tender calendar and walks through its stages and dates.",
+          "c": "The 10 November session is one detail in the calendar, and the email is addressed to her team, not to suppliers.",
+          "d": "The scoring is mentioned in one sentence (100 points, 70-point threshold) and is not explained in detail."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "ba9ffc2c9e03e1c2320df01c",
+      "itemId": "claude-r-procurement-1-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The email requires all exchanges to go through the contracting authority, not direct email.",
+          "b": "The information session is an event for suppliers, not the required channel for all team exchanges.",
+          "c": "The 20 November deadline applies to suppliers' written questions, not to how the team communicates.",
+          "d": "Correct: 'tout échange avec les fournisseurs doit passer par l'autorité contractante'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "08a7861fdf9dbbfa2826db9d",
+      "itemId": "claude-r-procurement-1-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'attribuer le contrat' means awarding the contract to the selected supplier.",
+          "b": "Drafting the clauses is not what 'attribuer' means.",
+          "c": "It is the request for proposals that is published, not the contract.",
+          "d": "The estimated value is mentioned in the same sentence but is not what 'attribuer' means."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "19960fbf371fda6e2ea053e8",
+      "itemId": "claude-r-procurement-1-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Three weeks is how long the technical evaluation lasts.",
+          "b": "20 November is the deadline for written questions.",
+          "c": "Correct: suppliers have 30 calendar days to submit their bids.",
+          "d": "Mid-January is the planned date for awarding the contract."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "d43770350608b8708d0511cd",
+      "itemId": "claude-r-procurement-1-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'celles' picks up 'Chaque soumission', the bids that are scored out of 100.",
+          "b": "Written questions are not scored and do not move on to the financial evaluation.",
+          "c": "The three weeks are how long the evaluation lasts; they are not scored and cannot reach a financial evaluation.",
+          "d": "Committee members' availability is mentioned later and has nothing to do with scoring."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "54dcea744f215451525289be",
+      "itemId": "claude-r-procurement-2-1",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Termination is not announced; legal remedies are only to be examined if things do not improve.",
+          "b": "The installation of workstations is mentioned as a consequence of the delays, not explained.",
+          "c": "Correct: the note reports the supplier's delays and tells staff what to do in the meantime.",
+          "d": "The note asks staff to order earlier as a stopgap but does not blame them for the delays."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "95566d867422fd2294866a36",
+      "itemId": "claude-r-procurement-2-2",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'La fin du mois' is when the supplier expects things to return to normal, not when the contract ends.",
+          "b": "Correct: 'les recours prévus au contrat' implies the contract has clauses the organisation could invoke if the supplier defaults.",
+          "c": "This contradicts the sentence, which refers to remedies provided for in the contract.",
+          "d": "The manufacturer is not a party to the contract and the note says nothing about holding it responsible."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "1bf8e79af5a83e6bf9a05989",
+      "itemId": "claude-r-procurement-2-3",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The note reports the supplier's explanation (a parts shortage) without calling it negligence.",
+          "b": "The note proposes concrete measures: ordering three weeks ahead and reporting delays.",
+          "c": "The note does not praise the supplier.",
+          "d": "Correct: it states the facts, relays the supplier's explanation and mentions possible remedies, a measured tone."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "a676863a762da64167591eda",
+      "itemId": "claude-r-procurement-2-4",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The order is problem first and instructions later, not solution first.",
+          "b": "No other suppliers are compared.",
+          "c": "The note deals with a specific concrete case, not general rules.",
+          "d": "Correct: problem and its effects, the steps taken, the supplier's reply, instructions to staff, then a possible next step."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "614697f7c0e822eaa7b57c5f",
+      "itemId": "claude-r-procurement-2-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'puis nous lui avons envoyé un avis écrit lui demandant un plan de redressement'.",
+          "b": "No new call for tenders is mentioned.",
+          "c": "The manufacturer is only mentioned in the supplier's explanation; the team did not contact it.",
+          "d": "No financial penalty has been imposed; remedies are only to be examined later."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "3b24fe9985d8e84bb2b92909",
+      "itemId": "claude-r-procurement-3-1",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Il demeure interdit' says splitting was already prohibited, not permitted.",
+          "b": "Correct: issuing a warning against splitting to stay under a threshold implies management sees the risk that some might do so.",
+          "c": "Nothing in the passage requires routine purchases to be grouped into one annual contract.",
+          "d": "The review is only hypothetical ('si elle était constatée, donnerait lieu'); no past cases are reported."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "237261109919764fa5701737",
+      "itemId": "claude-r-procurement-3-2",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "No managers are replaced; 'relèvement' is not a 'relève' of staff.",
+          "b": "Tighter control is the opposite of what 'relèvement' refers to here; the passage stresses accountability separately.",
+          "c": "Correct: 'relèvement' is the raising of the threshold that managers can approve, from $25,000 to $40,000.",
+          "d": "No error in the earlier thresholds is mentioned."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "0fdbd9a8c07d61103300c7ed",
+      "itemId": "claude-r-procurement-3-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'lesquels' (masculine plural) refers to 'achats courants', which made up nearly 60% of files.",
+          "b": "The thresholds are not in that clause, and thresholds are not files processed.",
+          "c": "Managers do not 'represent 60% of files processed'.",
+          "d": "Contracts over $100,000 are covered in the previous sentence and make no sense as 60% of routine files."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "b5fa1865bf682c048171dcf1",
+      "itemId": "claude-r-procurement-3-4",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The financial system records approvals; it does not grant them.",
+          "b": "The review committee is for contracts over $100,000.",
+          "c": "Cost centre managers can approve up to $40,000 only.",
+          "d": "Correct: between $40,000 and $100,000 the director general's approval remains required."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ea8131b4200e1b3482727725",
+      "itemId": "claude-r-procurement-3-5",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The sentence says the opposite: the change is not a relaxation of controls.",
+          "b": "Correct: it warns managers that their wider authority does not exempt them from accountability.",
+          "c": "No apology is expressed.",
+          "d": "The writer expresses no doubt about the review."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "b0efce3470fd1e1e2e48b802",
+      "itemId": "claude-r-procurement-4-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The team explicitly found no indication of fraud.",
+          "b": "The passage is about amendments after award, not contracts awarded without tendering.",
+          "c": "The passage accepts most amendments as justified and only recommends prior written justification above 50%.",
+          "d": "Correct: some post-award amendments lacked justification or approval in time, exposing the department to risk of challenge."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "25ed87a9820d341e9a08589a",
+      "itemId": "claude-r-procurement-4-2",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: numerical findings, then likely causes and risk, then a recommendation at the end.",
+          "b": "The recommendation comes last, not first.",
+          "c": "The two fiscal years are sampled together, not compared to show improvement.",
+          "d": "No complaints from suppliers are summarised; only the risk of a challenge is mentioned."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "339750caee48e9b5ac2827aa",
+      "itemId": "claude-r-procurement-4-3",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The auditors found no sign of fraud, which rules out deliberate circumvention.",
+          "b": "Supplier pressure is not mentioned.",
+          "c": "Correct: the passage says the shortcomings 'semblent plutôt tenir à une méconnaissance des règles et à l'absence d'une liste de contrôle commune'.",
+          "d": "Staff shortages are not mentioned."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "523c4f836fa1d6db99ea2901",
+      "itemId": "claude-r-procurement-4-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "No reimbursement by suppliers is mentioned or implied.",
+          "b": "Correct: signing after the work was done breaches the rule that no commitment may precede approval, so the department committed before approval.",
+          "c": "The passage does not say whether the four cases overlap with the seven.",
+          "d": "Nothing suggests the work was unnecessary; the problem is the timing of approval."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "87097fe87194026a576b6a81",
+      "itemId": "claude-r-procurement-4-5",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The criterion is an increase of more than 50%, not a contract value over $50,000.",
+          "b": "$100,000 to $140,000 is a 40% increase, below the 50% threshold.",
+          "c": "Correct: $100,000 to $160,000 is a 60% increase, above 50%.",
+          "d": "Wrong because 'seulement' ignores increases between 50% and 100%, which the recommendation also covers."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "28c3d739177830b7cadd5868",
+      "itemId": "claude-r-procurement-5-1",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the letter confirms an intention to extend for six months under conditions and asks for a reply by 15 October.",
+          "b": "No termination is announced; the delays are a condition to correct.",
+          "c": "The new tender is mentioned only as the reason for the extension; there is no invitation.",
+          "d": "Rates are to stay unchanged unless the supplier documents higher costs; no increase is accepted."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8c24953d1444483b44b38ed6",
+      "itemId": "claude-r-procurement-5-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Savoir gré' expresses gratitude, not permission.",
+          "b": "It is a courteous request, not advice against something.",
+          "c": "A formal notice ('mise en demeure') is far stronger and legally loaded; 'savoir gré' is a polite formula.",
+          "d": "Correct: 'Nous vous saurions gré de' means 'we would be grateful if you would'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "2a083713bddddb478873720a",
+      "itemId": "claude-r-procurement-5-3",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The meeting is in the first sentence and is not what is subject to conditions.",
+          "b": "Correct: 'Elle' takes up 'Cette prolongation', the subject of the previous sentence, and the conditions that follow concern the extension.",
+          "c": "'La continuité du service' is feminine but sits inside a subordinate phrase; it is the purpose, not what is conditional.",
+          "d": "The supplier's team is mentioned later and is not subject to conditions."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8d0c3b23ba28b04dbc4acf03",
+      "itemId": "claude-r-procurement-5-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "No immediate termination is threatened; 'd'autres options' is only a measured warning.",
+          "b": "The letter is formal throughout ('Madame', 'Veuillez agréer...').",
+          "c": "Correct: it praises the collaboration while setting firm conditions and a deadline.",
+          "d": "The intention to extend is confirmed; the conditions are not hesitation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "f5a508a146c200fd90d0c9b3",
+      "itemId": "claude-r-procurement-5-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'certaines conditions' is announced, then set out under 'D'une part' and 'D'autre part'.",
+          "b": "The conditions are not ordered chronologically.",
+          "c": "Both conditions concern the supplier (documenting costs, correcting delays); there is no split with the department's obligations.",
+          "d": "The closing salutation contains no conditions."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f4305e07c3aa66fc125157b3",
+      "itemId": "claude-w-verb-tense-and-mood-01",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The passé composé presents a completed action and cannot express an ongoing action interrupted by the call.",
+          "b": "The present clashes with 'Hier' and the past-tense frame.",
+          "c": "Correct: the imparfait expresses the action in progress when the call ('m'a téléphoné') came.",
+          "d": "The future is impossible in a past narrative introduced by 'Hier'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e65e6436b7645dd4c9e9521b",
+      "itemId": "claude-w-verb-tense-and-mood-02",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'bien que' takes the subjunctive, here 'ne soit pas encore terminé'.",
+          "b": "'Bien que' with the indicative 'n'est' is a grammatical error.",
+          "c": "'Malgré que' is criticised in formal writing and would in any case require the subjunctive, not 'n'est'.",
+          "d": "'Même si' takes the indicative; 'même si ... soit' is a grammatical error."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "107dca7e028ef88f66e0bdde",
+      "itemId": "claude-w-verb-tense-and-mood-03",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The plus-que-parfait with 'depuis' needs a past reference point, but the sentence is in the present ('connaît').",
+          "b": "'Connaît' is correct; changing it leaves the 'a travaillé ... depuis' error in place.",
+          "c": "'A connu' would be wrong and leaves the real error in place.",
+          "d": "Correct: an action still going on with 'depuis cinq ans' takes the present, 'travaille'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "8780f62e6dcb788c1f744c2c",
+      "itemId": "claude-w-verb-tense-and-mood-04",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Nothing in the clause triggers the subjunctive; 'ait entraîné' is ungrammatical here.",
+          "b": "Correct: the past conditional reports an unverified fact, which fits 'Selon des renseignements encore non vérifiés'.",
+          "c": "The plus-que-parfait asserts the fact as certain and needs an earlier past reference point, which the sentence lacks.",
+          "d": "The error already happened during the last pay cycle, so the future does not fit."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c09d32ba9f3cf983468e63c6",
+      "itemId": "claude-w-verb-tense-and-mood-05",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Si + present cannot be followed by the present conditional in the main clause.",
+          "b": "Correct: si + present indicative takes the simple future in the main clause.",
+          "c": "The past conditional belongs with si + plus-que-parfait and clashes with 'mois prochain'.",
+          "d": "The imparfait cannot express a future consequence of a si + present condition."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "989b9211fa9660ca76d3c98c",
+      "itemId": "claude-w-verb-tense-and-mood-06",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Eût approuvé' is still a subjunctive (pluperfect), so the après que + subjunctive fault remains and the tense is literary.",
+          "b": "'Pourra' is correct for a future main clause; changing it leaves the real error untouched.",
+          "c": "'Puisse' would make the main clause ungrammatical and leaves the subjunctive after après que.",
+          "d": "Correct: après que takes the indicative, and the futur antérieur expresses anteriority to the future 'pourra'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "f76b791a7f4a3074fd260809",
+      "itemId": "claude-w-verb-tense-and-mood-07",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the near future passive 'va être redémarré' fits 'dans dix minutes' and the urgent instruction.",
+          "b": "The passé composé contradicts 'dans dix minutes', a future time marker.",
+          "c": "The imparfait cannot refer to an event ten minutes in the future.",
+          "d": "The conditional presents the restart as hypothetical or hearsay, which contradicts the firm notice asking staff to save now."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "090dd00afee5574fd95f519f",
+      "itemId": "claude-w-verb-tense-and-mood-08",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Fait' is indicative; 'il est essentiel que' requires the subjunctive.",
+          "b": "The future indicative is not allowed after an expression of necessity.",
+          "c": "Correct: 'il est essentiel que' takes the subjunctive 'fasse ... désigne'.",
+          "d": "The conditional is not allowed after 'il est essentiel que'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "e4f9c396a06f719265a4c7ca",
+      "itemId": "claude-w-verb-tense-and-mood-09",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the literary passé simple is out of place in an email and clashes with the coordinated 'a confiné'; the passé composé aligns both verbs.",
+          "b": "The imparfait 'confinait' turns a completed action into a background state and leaves the passé simple.",
+          "c": "The plus-que-parfait would place the confinement before the discovery, which is illogical, and leaves 'constata'.",
+          "d": "The imparfait suits neither a punctual discovery nor the coordination with the passé composé."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "7202d57655773c2360d8e2cf",
+      "itemId": "claude-w-verb-tense-and-mood-10",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'A été ouvert' calques the English 'has been open'; depuis + an ongoing state takes the present.",
+          "b": "Correct: depuis + a situation that is still going on takes the present indicative, consistent with 'réduit'.",
+          "c": "The imparfait would mean the situation is over, which contradicts 'ce qui réduit'.",
+          "d": "The future contradicts 'depuis le début du mois', which points to a state already under way."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "06d36e9f7bd05038d73eb74d",
+      "itemId": "claude-w-verb-tense-and-mood-11",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Pour que' requires the subjunctive, not the present indicative.",
+          "b": "The future indicative is ungrammatical after 'pour que'.",
+          "c": "The conditional is ungrammatical after 'pour que'.",
+          "d": "Correct: 'pour que' expresses purpose and takes the subjunctive 'puissent'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "cd444d9abd345dbff2598372",
+      "itemId": "claude-w-verb-tense-and-mood-12",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Changing the main clause leaves the forbidden si + conditional in place.",
+          "b": "'Pouvions' breaks the main clause and leaves 'si ... recevrions'.",
+          "c": "Correct: si + imparfait ('recevions') pairs with the present conditional 'pourrions'.",
+          "d": "The future is also forbidden after hypothetical si and would not match 'pourrions'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e5580306a5a0cca81c2bd4d7",
+      "itemId": "claude-w-verb-tense-and-mood-13",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The simple future breaks the sequence of tenses: June is now past and the plan was postponed, so the future in the past is required.",
+          "b": "The present does not express a future seen from a past announcement.",
+          "c": "Correct: the present conditional expresses the future in the past after 'avait annoncé que'.",
+          "d": "'Annoncer que' takes the indicative, and the past subjunctive makes no sense here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "f6f959cd9867d5b68c6d5b5a",
+      "itemId": "claude-w-verb-tense-and-mood-14",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'À moins que' requires the subjunctive, not the present indicative.",
+          "b": "Correct: 'à moins que' takes the subjunctive, here with the optional ne explétif.",
+          "c": "The future indicative is ungrammatical after 'à moins que'.",
+          "d": "The conditional is ungrammatical after 'à moins que'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "06d59d0e7fba053be0fed8eb",
+      "itemId": "claude-w-verb-tense-and-mood-15",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: affirmative 'croire que' takes the indicative, so 'soit' becomes 'est'.",
+          "b": "'Croie' would put a subjunctive in an independent main clause, which is ungrammatical, and leaves 'soit'.",
+          "c": "Changing the tense of 'croit' does not remove the wrong subjunctive in the subordinate clause.",
+          "d": "'Fût' is still a subjunctive, and a literary imperfect one that breaks the sequence of tenses."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6bec97c8249ac8dc97127a8e",
+      "itemId": "claude-w-verb-tense-and-mood-16",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Il faut que' requires the subjunctive, not the passé composé.",
+          "b": "The futur antérieur is indicative and ungrammatical after 'il faut que'.",
+          "c": "The conditional is ungrammatical after 'il faut que'.",
+          "d": "Correct: the past subjunctive 'ait coupé' follows 'il faut que', and its auxiliary also carries the participle 'apposé'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "49d580ebe435d01fcaa55bb7",
+      "itemId": "claude-w-verb-tense-and-mood-17",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the imparfait describes the state at the time of the incident, and the plus-que-parfait marks the earlier non-installation.",
+          "b": "The passé composé presents the wet floor as an event rather than the background state that 'au moment de' calls for.",
+          "c": "The passé simple is literary, out of place in an investigation report, and also treats the state as an event.",
+          "d": "The future contradicts a past incident."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "ac8a4bb5663dbb3c31eae2b0",
+      "itemId": "claude-w-verb-tense-and-mood-18",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The indicative after 'de sorte que' marks an achieved result, but this is the intended goal of a recommended change, which takes the subjunctive.",
+          "b": "Correct: 'de sorte que' expressing purpose takes the present subjunctive, matching the present 'recommande'.",
+          "c": "The imparfait indicative states neither a purpose nor a present result.",
+          "d": "'Pussent' is a literary imperfect subjunctive that breaks the sequence of tenses after a present main verb."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "a5648c95a7c85c369c84b2f8",
+      "itemId": "claude-w-verb-tense-and-mood-19",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The plus-que-parfait cannot serve as the main clause of a si + plus-que-parfait conditional.",
+          "b": "The futur antérieur does not express an unreal past consequence.",
+          "c": "The subjunctive has no place in the main clause of a conditional sentence.",
+          "d": "Correct: si + plus-que-parfait takes the past conditional, 'aurait été rejetée'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ac10e13168fa866191a38441",
+      "itemId": "claude-w-verb-tense-and-mood-20",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The imparfait contradicts 'dans dix jours ouvrables', a future time marker.",
+          "b": "The past conditional implies an unreal past, which contradicts the future time frame.",
+          "c": "Correct: 'dans dix jours' calls for the simple future, 'prendra fin ... ne sera acceptée'.",
+          "d": "The passé composé contradicts the future time frame."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "521cf8e664b58d5a4c125a7f",
+      "itemId": "claude-w-verb-tense-and-mood-21",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Il manquait' correctly describes a background state, so the passé composé would be wrong.",
+          "b": "Correct: the noticing is a punctual completed action ('immédiatement'), so it takes the passé composé, like 'avons reçu'.",
+          "c": "The futur antérieur contradicts the past narration and leaves 'remarquions'.",
+          "d": "The present breaks the past sequence of tenses."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "77220b0ce1e2595f5a138a56",
+      "itemId": "claude-w-verb-tense-and-mood-22",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the near future 'va le soumettre' matches 'demain matin' and 'pas encore diffusé'.",
+          "b": "'Vient de' is the recent past and contradicts 'demain matin'.",
+          "c": "The passé composé of 'aller' places the action in the past and contradicts 'demain matin'.",
+          "d": "The recent past in the imparfait contradicts both the present frame and 'demain matin'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "59fbf26ea2e99a9746049bb7",
+      "itemId": "claude-w-verb-tense-and-mood-23",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The plus-que-parfait states a fact, but 'Sans l'intervention...' introduces an unreal past.",
+          "b": "The futur antérieur of conjecture does not express an unreal consequence.",
+          "c": "Correct: an implicit past counterfactual ('Sans X') takes the past conditional 'aurait circulé'.",
+          "d": "The present conditional does not fit a completed past period ('fin de semaine dernière')."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "9317dc6ce071f1df6195c307",
+      "itemId": "claude-w-verb-tense-and-mood-24",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The present 'affirme' clashes with 'du mois dernier' and the past 'a fait', and leaves the concordance problem.",
+          "b": "The present does not express a future seen from a past statement.",
+          "c": "'Affirmer que' takes the indicative, and the past subjunctive makes no sense here.",
+          "d": "Correct: after a past main verb, a future that has since come to pass ('ce qu'il a fait') takes the conditional 'publierait'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "1276c845eec5471ed9fbcb1d",
+      "itemId": "claude-w-verb-tense-and-mood-25",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Dès que' takes the indicative, not the subjunctive.",
+          "b": "The conditional does not express a future completed before another future action.",
+          "c": "The plus-que-parfait is a past tense and contradicts the future 'présentera'.",
+          "d": "Correct: the futur antérieur marks an action completed before the future main action 'présentera'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "52dc746e94a68708c5410039",
+      "itemId": "claude-w-verb-tense-and-mood-26",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'dès que' with a future main clause takes the future indicative.",
+          "b": "The conditional does not match the future main verb 'pourrons'.",
+          "c": "The imparfait contradicts the future time frame.",
+          "d": "'Dès que' takes the indicative; the subjunctive is a common error."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "88b138ad78c41ef152614ec5",
+      "itemId": "claude-w-verb-tense-and-mood-27",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "This would make both verbs past, which contradicts 'La semaine prochaine'.",
+          "b": "The plus-que-parfait contradicts the future time marker.",
+          "c": "Correct: 'La semaine prochaine' calls for the near future, matching 'va répondre'.",
+          "d": "The imparfait contradicts the future time marker."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "c13105bd6c4f097acd1fdfa1",
+      "itemId": "claude-w-verb-tense-and-mood-28",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The imparfait would suggest a habitual or ongoing action, whereas joining the public service is a single completed event.",
+          "b": "Correct: the passé composé marks the punctual event against which the imparfait 'étaient' sets the background.",
+          "c": "The plus-que-parfait implies anteriority to another past reference point that the sentence does not supply.",
+          "d": "The future contradicts 'il y a une dizaine d'années'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f8930adbe03d5bb6c28e28a5",
+      "itemId": "claude-w-verb-tense-and-mood-29",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: affirmative 'espérer que' takes the indicative, here the future for sessions starting in January.",
+          "b": "The subjunctive after affirmative 'espérer' is non-standard.",
+          "c": "The past subjunctive is both the wrong mood and the wrong time for sessions that have not yet started.",
+          "d": "The imparfait contradicts the future time frame ('commenceront en janvier')."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6924f61085c3e2fbc9de9408",
+      "itemId": "claude-w-verb-tense-and-mood-30",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'A été' is still indicative, and the concessive 'quoique' requires the subjunctive.",
+          "b": "'Connaissent' is correct; changing it breaks the present frame and leaves the real error.",
+          "c": "'Quoi que' means 'whatever' and would make the sentence ungrammatical.",
+          "d": "Correct: 'quoique' takes the subjunctive, so 'est' becomes 'soit'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c792d3fe3d1b0f3c990c68ce",
+      "itemId": "claude-w-verb-tense-and-mood-31",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Avant que' requires the subjunctive, not the indicative.",
+          "b": "The future indicative is ungrammatical after 'avant que'.",
+          "c": "Correct: 'avant que' takes the subjunctive 'soit mis' (the ne explétif is optional).",
+          "d": "The conditional is ungrammatical after 'avant que'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "a73d92e052ff441efc1cd047",
+      "itemId": "claude-w-verb-tense-and-mood-32",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The future follows si + present, not si + imparfait.",
+          "b": "Correct: si + imparfait takes the present conditional in the main clause.",
+          "c": "The present indicative does not express the hypothetical consequence of si + imparfait.",
+          "d": "The subjunctive is ungrammatical in this main clause."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "d92b69727dea3f5206c14104",
+      "itemId": "claude-w-verb-tense-and-mood-33",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'à condition que' (repeated as 'que') takes the subjunctive, here the past subjunctive for a prior action.",
+          "b": "'Approuve' is already a correct subjunctive; the future indicative would introduce an error.",
+          "c": "'Pourront' is correct for a firm future entitlement; the error is in the subordinate clause.",
+          "d": "The future indicative is still the wrong mood after 'à condition que'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    }
+  ]
+}

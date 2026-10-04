@@ -125,6 +125,13 @@ An item passes only on all four: the reviewer picks the intended key with high c
 
 **On independence.** Cross-family review reduces correlated error; it does not eliminate it. Models share training data and share blind spots, particularly on register nuance in a second language. The honest claim is that this gate catches a measurable proportion of a measurable set of defects, which is why section 6 makes that proportion a tracked metric rather than an assumption. It is not equivalent to expert review and the product does not say that it is.
 
+**Amendment, 4 October 2026 (ADR 24, progress.md D203–D204).** Bank v4 was not drafted by the pipeline: Claude wrote it
+through the hand-authored path (§5), and **separate Claude instances reviewed it blind**, by the human's decision. Writer and
+reviewer therefore share a family, which this section's independence argument does not cover. The four judgements, the
+blindness and discard-not-repair are unchanged. The verdicts are committed (`content/factory/reviews/`) and replayed by
+`--provider recorded`, so the bank rebuilds without a model. The reviewer was measured on a real-French defect set rather
+than §6's placeholder one (`docs/content-runs/v4/eval/`). ADR 24 says what would bring a cross-family re-review.
+
 **On the obvious objection.** If the reviewer can detect a subtly broken item, why can it not draft a correct one? Because verification is an easier problem than generation, because the reviewer works blind to the intended key and so cannot rationalise toward it, and because discard-rather-than-repair means the reviewer never has to produce a fix. This is the same reason code review works.
 
 ### 4.5 Deterministic validation
@@ -152,6 +159,12 @@ This path exists because several things are better written by a person and some 
 - Curated benchmark sets for measuring whether generated items are getting better or worse over time.
 - Oral scenarios written by someone who has actually sat the test.
 - Contributions from public servants and language teachers, which are the project's best long-term source of quality.
+
+**Amendment, 4 October 2026 (progress.md D203).** The path now also takes **oral scenarios**, written without an id, which
+is minted from the content as the scenario stage mints one, and held to the scenario stage's checks. Authored **passages**
+are now held to stage 2's checks too. `palier-factory run --authored-only` builds a bank from the carried version and the
+contributions alone, drafting nothing, and `palier-factory check-authored` runs the intake's checks on a file. Bank v4's
+630 items, 60 passages and 20 scenarios came in this way, written by Claude (ADR 24).
 
 ---
 

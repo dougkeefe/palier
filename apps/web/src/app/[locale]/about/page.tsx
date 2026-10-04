@@ -15,10 +15,11 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/about">)
 
 /**
  * "What this is, what it is not, who made it, licence" (product-requirements.md §7), and
- * §13.0's "the about page says all of this plainly": a mostly machine-drafted bank, gated by
+ * §13.0's "the about page says all of this plainly": a machine-written bank, gated by
  * automation with no person reading every item (architecture.md §20 Q3), and how the product
  * is honest about that. Drafted by the agent at Gate K; the human reads it at Gate L
- * (progress.md D145). `bankToday` goes when the full-volume bank ships (D54, D56).
+ * (progress.md D145). `bankToday` went when the full-volume bank shipped, written by Claude
+ * and reviewed blind by Claude (D203, D204).
  */
 export default function AboutPage({ params }: PageProps<"/[locale]/about">) {
   const { locale } = use(params);
@@ -45,7 +46,6 @@ export default function AboutPage({ params }: PageProps<"/[locale]/about">) {
       <h2>{t("bankTitle")}</h2>
       <p>{t("bankMachine")}</p>
       <p>{t("bankHonest")}</p>
-      <p>{t("bankToday")}</p>
 
       <h2>{t("whoTitle")}</h2>
       <p>{t("who")}</p>

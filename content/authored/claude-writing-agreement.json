@@ -1,0 +1,2194 @@
+{
+  "items": [
+    {
+      "id": "claude-w-agreement-01",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Les dossiers de dotation qu'elle a ___ la semaine dernière ont tous été transmis à la conseillère en ressources humaines pour approbation.",
+        "en": "The staffing files she ___ last week were all forwarded to the human resources advisor for approval."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "traité",
+          "rationale": {
+            "fr": "Le participe ne peut rester invariable ici : le complément d'objet direct « qu' », mis pour « les dossiers », est placé avant l'auxiliaire avoir.",
+            "en": "The participle cannot stay invariable here: the direct object « qu' », standing for « les dossiers », comes before the auxiliary avoir."
+          }
+        },
+        {
+          "id": "b",
+          "text": "traitées",
+          "rationale": {
+            "fr": "Le féminin pluriel ne renvoie à aucun mot de la phrase : le COD antéposé, « les dossiers », est masculin, et le sujet « elle » ne compte pas pour l'accord avec avoir.",
+            "en": "The feminine plural matches nothing in the sentence: the preceding direct object, « les dossiers », is masculine, and the subject « elle » plays no part in agreement with avoir."
+          }
+        },
+        {
+          "id": "c",
+          "text": "traités",
+          "rationale": {
+            "fr": "Avec avoir, le participe s'accorde avec le complément d'objet direct placé avant lui : « qu' » reprend « les dossiers », masculin pluriel.",
+            "en": "With avoir, the participle agrees with a direct object placed before it: « qu' » stands for « les dossiers », masculine plural."
+          }
+        },
+        {
+          "id": "d",
+          "text": "traitée",
+          "rationale": {
+            "fr": "Cette forme s'accorde avec le sujet « elle », ce que la règle de l'auxiliaire avoir exclut ; le COD antéposé est masculin pluriel.",
+            "en": "This form agrees with the subject « elle », which the rule for the auxiliary avoir rules out; the preceding direct object is masculine plural."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le participe passé conjugué avec avoir s'accorde en genre et en nombre avec le complément d'objet direct lorsque celui-ci le précède. Le pronom relatif « que » prend le genre et le nombre de son antécédent : « les dossiers qu'elle a traités ». Le sujet, lui, ne compte jamais pour cet accord, et si le COD suit le verbe, le participe reste invariable : « elle a traité les dossiers ».",
+        "en": "A past participle conjugated with avoir agrees in gender and number with the direct object when that object comes before it. The relative pronoun « que » takes the gender and number of its antecedent: « les dossiers qu'elle a traités ». The subject never counts for this agreement, and if the direct object follows the verb the participle stays invariable: « elle a traité les dossiers »."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-02",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Compte tenu de la somme considérable qu'il a ___ pour mener à terme la modernisation du système de paie, le comité de vérification exige désormais une reddition de comptes trimestrielle.",
+        "en": "Given the considerable sum that ___ to complete the modernization of the pay system, the audit committee now requires quarterly reporting."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "fallu",
+          "rationale": {
+            "fr": "« Falloir » est un verbe impersonnel : son participe passé est toujours invariable, même lorsqu'un « que » le précède.",
+            "en": "« Falloir » is an impersonal verb: its past participle is always invariable, even when preceded by « que »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "fallue",
+          "rationale": {
+            "fr": "Cette forme accorde le participe avec « la somme », comme s'il s'agissait d'un COD ; or « falloir » est impersonnel et son participe ne varie jamais.",
+            "en": "This form makes the participle agree with « la somme » as if it were a direct object; but « falloir » is impersonal and its participle never varies."
+          }
+        },
+        {
+          "id": "c",
+          "text": "fallus",
+          "rationale": {
+            "fr": "Le masculin pluriel ne renvoie à rien dans la phrase ; le participe d'un verbe impersonnel reste de toute façon invariable.",
+            "en": "The masculine plural refers to nothing in the sentence; the participle of an impersonal verb stays invariable in any case."
+          }
+        },
+        {
+          "id": "d",
+          "text": "fallues",
+          "rationale": {
+            "fr": "Le féminin pluriel ne correspond même pas à l'antécédent « la somme », qui est singulier ; et le participe de « falloir » est invariable.",
+            "en": "The feminine plural does not even match the antecedent « la somme », which is singular; and the participle of « falloir » is invariable."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le participe passé des verbes impersonnels (falloir, y avoir, faire dans « il a fait froid ») est toujours invariable, car le « que » qui le précède n'est pas un complément d'objet direct : « la somme qu'il a fallu », « les tempêtes qu'il y a eu ». Le piège vient du modèle « les dossiers qu'elle a traités », où le relatif est bien un COD.",
+        "en": "The past participle of impersonal verbs (falloir, y avoir, faire in « il a fait froid ») is always invariable, because the « que » before it is not a direct object: « la somme qu'il a fallu », « les tempêtes qu'il y a eu ». The trap comes from the model « les dossiers qu'elle a traités », where the relative pronoun really is a direct object."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-03",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Des demandes de révision de prestations, le centre de traitement régional en a ___ plus de trois cents depuis l'entrée en vigueur des nouveaux critères d'admissibilité.",
+        "en": "Requests for review of benefits: the regional processing centre has ___ more than three hundred of them since the new eligibility criteria came into force."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "reçues",
+          "rationale": {
+            "fr": "Accorder avec « demandes » par l'intermédiaire de « en » est une erreur courante : « en » est neutre et ne commande pas l'accord du participe.",
+            "en": "Agreeing with « demandes » through « en » is a common mistake: « en » is neutral and does not trigger agreement of the participle."
+          }
+        },
+        {
+          "id": "b",
+          "text": "reçus",
+          "rationale": {
+            "fr": "Le masculin pluriel n'a aucun support : ni « en » ni « demandes » ne peuvent l'imposer, et le participe précédé de « en » reste invariable.",
+            "en": "The masculine plural has no basis: neither « en » nor « demandes » can require it, and a participle preceded by « en » stays invariable."
+          }
+        },
+        {
+          "id": "c",
+          "text": "reçue",
+          "rationale": {
+            "fr": "Le féminin singulier semble s'accorder avec « révision », mais « en » ne transmet aucun accord ; le participe reste invariable.",
+            "en": "The feminine singular seems to agree with « révision », but « en » passes on no agreement; the participle stays invariable."
+          }
+        },
+        {
+          "id": "d",
+          "text": "reçu",
+          "rationale": {
+            "fr": "Le pronom « en » n'est pas un complément d'objet direct qui transmet genre et nombre : le participe reste invariable.",
+            "en": "The pronoun « en » is not a direct object that passes on gender and number: the participle stays invariable."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Quand le complément d'objet direct placé avant le participe est le pronom « en », le participe passé conjugué avec avoir reste invariable, parce que « en » a une valeur partitive et neutre : « Des plaintes, nous en avons reçu ». Comparer avec « les plaintes que nous avons reçues », où « que » transmet le féminin pluriel de son antécédent.",
+        "en": "When the direct object placed before the participle is the pronoun « en », the past participle conjugated with avoir stays invariable, because « en » is partitive and neutral: « Des plaintes, nous en avons reçu ». Compare « les plaintes que nous avons reçues », where « que » passes on the feminine plural of its antecedent."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-04",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Depuis le lancement du projet de regroupement des centres de données, quatre gestionnaires se sont ___ à la tête de l'équipe, ce qui explique en partie les retards accumulés dans l'échéancier.",
+        "en": "Since the launch of the data centre consolidation project, four managers have ___ one another at the head of the team, which partly explains the delays that have built up in the schedule."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "succédés",
+          "rationale": {
+            "fr": "L'accord avec le sujet « gestionnaires » applique à tort la règle de l'auxiliaire être ; dans un verbe pronominal, le participe s'accorde avec le COD antéposé, et « se » est ici indirect.",
+            "en": "Agreeing with the subject « gestionnaires » wrongly applies the être rule; in a pronominal verb the participle agrees with a preceding direct object, and « se » is indirect here."
+          }
+        },
+        {
+          "id": "b",
+          "text": "succédé",
+          "rationale": {
+            "fr": "« Succéder » se construit avec « à » (succéder à quelqu'un) : le pronom « se » est complément indirect, il n'y a pas de COD et le participe reste invariable.",
+            "en": "« Succéder » takes « à » (to succeed someone): the pronoun « se » is an indirect object, there is no direct object, and the participle stays invariable."
+          }
+        },
+        {
+          "id": "c",
+          "text": "succédées",
+          "rationale": {
+            "fr": "Le féminin pluriel suppose un accord avec le sujet ou avec un COD féminin, qui n'existe pas : « se » vaut « l'un à l'autre ».",
+            "en": "The feminine plural assumes agreement with the subject or with a feminine direct object, neither of which applies: « se » means « to one another »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "succédée",
+          "rationale": {
+            "fr": "Le féminin singulier ne correspond à aucun mot de la phrase ; le participe de « se succéder » est invariable.",
+            "en": "The feminine singular matches no word in the sentence; the participle of « se succéder » is invariable."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le participe d'un verbe pronominal s'accorde avec le COD placé avant lui. Lorsque le pronom « se » est complément d'objet indirect — le verbe se construisant avec « à » : succéder à, parler à, nuire à, plaire à —, il n'y a pas de COD et le participe reste invariable : « ils se sont succédé », « elles se sont parlé », « elles se sont nui ».",
+        "en": "The participle of a pronominal verb agrees with the direct object placed before it. When the pronoun « se » is an indirect object — the verb taking « à »: succéder à, parler à, nuire à, plaire à — there is no direct object and the participle stays invariable: « ils se sont succédé », « elles se sont parlé », « elles se sont nui »."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-05",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "___ soient les contraintes budgétaires auxquelles la direction générale devra faire face, les services au public continueront d'être offerts dans les deux langues officielles, conformément aux obligations du Ministère.",
+        "en": "___ the budgetary constraints the branch will have to face, services to the public will continue to be offered in both official languages, in keeping with the Department's obligations."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Quelles que",
+          "rationale": {
+            "fr": "Devant le verbe être au subjonctif, « quel que » s'écrit en deux mots et s'accorde avec le sujet du verbe, ici « les contraintes », féminin pluriel.",
+            "en": "Before the verb être in the subjunctive, « quel que » is written as two words and agrees with the subject of the verb, here « les contraintes », feminine plural."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Quelque",
+          "rationale": {
+            "fr": "« Quelque » en un mot s'emploie devant un nom ou un adjectif (« quelque mesure qu'on prenne ») ; devant le verbe être, il faut « quel que » en deux mots.",
+            "en": "One-word « quelque » goes before a noun or an adjective (« quelque mesure qu'on prenne »); before the verb être, two-word « quel que » is required."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Quels que",
+          "rationale": {
+            "fr": "La forme en deux mots convient, mais le masculin pluriel ne s'accorde pas avec « contraintes », qui est féminin.",
+            "en": "The two-word form fits, but the masculine plural does not agree with « contraintes », which is feminine."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Quelques",
+          "rationale": {
+            "fr": "Ce déterminant pluriel signifie « un certain nombre de » et ne peut précéder directement un verbe.",
+            "en": "This plural determiner means « a certain number of » and cannot come directly before a verb."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Quel que » (deux mots) se place devant un verbe au subjonctif, généralement être, et s'accorde comme un adjectif avec le sujet de ce verbe : quel que soit le coût, quelle que soit la décision, quels que soient les risques, quelles que soient les contraintes. « Quelque » (un mot) précède un nom (« quelque décision qu'il prenne ») ou, invariable, un adjectif ou un nombre.",
+        "en": "« Quel que » (two words) comes before a verb in the subjunctive, usually être, and agrees like an adjective with that verb's subject: quel que soit le coût, quelle que soit la décision, quels que soient les risques, quelles que soient les contraintes. « Quelque » (one word) precedes a noun (« quelque décision qu'il prenne ») or, invariable, an adjective or a number."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-06",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "La séance de formation obligatoire sur le secourisme en milieu de travail durera deux heures et ___ ; un dîner sera ensuite servi dans la salle polyvalente.",
+        "en": "The mandatory workplace first-aid training session will last two and a ___ hours; lunch will then be served in the multipurpose room."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "demi",
+          "rationale": {
+            "fr": "La forme invariable s'emploie devant le nom, avec un trait d'union (« une demi-heure ») ; après « et », l'accord en genre est obligatoire.",
+            "en": "The invariable form is used before the noun, with a hyphen (« une demi-heure »); after « et », gender agreement is required."
+          }
+        },
+        {
+          "id": "b",
+          "text": "demies",
+          "rationale": {
+            "fr": "« Demi » ne prend jamais la marque du pluriel après le nom : il s'agit d'une seule demi-heure, même si « heures » est au pluriel.",
+            "en": "« Demi » never takes a plural ending after the noun: it is a single half-hour, even though « heures » is plural."
+          }
+        },
+        {
+          "id": "c",
+          "text": "demie",
+          "rationale": {
+            "fr": "Placé après le nom et relié par « et », « demi » s'accorde en genre seulement avec ce nom : « heure » est féminin, d'où « demie ».",
+            "en": "Placed after the noun and joined by « et », « demi » agrees in gender only with that noun: « heure » is feminine, hence « demie »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "demis",
+          "rationale": {
+            "fr": "Ce masculin pluriel cumule deux fautes : « heure » est féminin et « demi » ne se met pas au pluriel dans cette construction.",
+            "en": "This masculine plural combines two errors: « heure » is feminine and « demi » is not made plural in this construction."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Demi » est invariable devant le nom, auquel il est lié par un trait d'union : une demi-heure, deux demi-journées. Après le nom, dans « et demi », il s'accorde en genre avec ce nom, mais jamais en nombre : deux heures et demie, trois jours et demi.",
+        "en": "« Demi » is invariable before the noun, to which it is joined by a hyphen: une demi-heure, deux demi-journées. After the noun, in « et demi », it agrees in gender with that noun but never in number: deux heures et demie, trois jours et demi."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-07",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Pour des raisons de sécurité, il est interdit de circuler pieds ___ dans l'entrepôt, même pendant les travaux de rénovation de la fin de semaine.",
+        "en": "For safety reasons, walking ___ in the warehouse is prohibited, even during the weekend renovation work."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "nu",
+          "rationale": {
+            "fr": "La forme invariable n'existe que devant le nom, avec un trait d'union (« nu-pieds ») ; après le nom, l'adjectif s'accorde.",
+            "en": "The invariable form exists only before the noun, with a hyphen (« nu-pieds »); after the noun, the adjective agrees."
+          }
+        },
+        {
+          "id": "b",
+          "text": "nues",
+          "rationale": {
+            "fr": "Le féminin ne convient pas : « pied » est masculin.",
+            "en": "The feminine does not fit: « pied » is masculine."
+          }
+        },
+        {
+          "id": "c",
+          "text": "nue",
+          "rationale": {
+            "fr": "Le féminin singulier ne correspond ni au genre ni au nombre de « pieds ».",
+            "en": "The feminine singular matches neither the gender nor the number of « pieds »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "nus",
+          "rationale": {
+            "fr": "Placé après le nom, « nu » est un adjectif ordinaire qui s'accorde avec « pieds », masculin pluriel.",
+            "en": "Placed after the noun, « nu » is an ordinary adjective that agrees with « pieds », masculine plural."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Nu » suit la même logique que « demi » : invariable devant le nom, auquel il est joint par un trait d'union (nu-pieds, nu-tête), il s'accorde normalement en genre et en nombre lorsqu'il est placé après le nom (pieds nus, tête nue).",
+        "en": "« Nu » follows the same logic as « demi »: invariable before the noun, to which it is joined by a hyphen (nu-pieds, nu-tête), it agrees normally in gender and number when it follows the noun (pieds nus, tête nue)."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-08",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "La nouvelle agente des communications était ___ fière de présenter au comité de direction le premier bulletin interne qu'elle avait rédigé seule.",
+        "en": "The new communications officer was ___ proud to present to the management committee the first internal newsletter she had written on her own."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "tout",
+          "rationale": {
+            "fr": "La forme invariable s'emploie devant un adjectif masculin ou devant un adjectif féminin commençant par une voyelle ou un h muet (« tout heureuse ») ; « fière » commence par une consonne.",
+            "en": "The invariable form is used before a masculine adjective or before a feminine adjective beginning with a vowel or a mute h (« tout heureuse »); « fière » begins with a consonant."
+          }
+        },
+        {
+          "id": "b",
+          "text": "toute",
+          "rationale": {
+            "fr": "Adverbe signifiant « tout à fait », « tout » varie devant un adjectif féminin commençant par une consonne ou un h aspiré : « toute fière ».",
+            "en": "As an adverb meaning « entirely », « tout » changes form before a feminine adjective beginning with a consonant or an aspirated h: « toute fière »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "toutes",
+          "rationale": {
+            "fr": "Le pluriel ne s'accorde pas avec le sujet « la nouvelle agente », qui est singulier.",
+            "en": "The plural does not agree with the subject « la nouvelle agente », which is singular."
+          }
+        },
+        {
+          "id": "d",
+          "text": "tous",
+          "rationale": {
+            "fr": "Le masculin pluriel ne peut renvoyer à aucun mot de la phrase ; le sujet est féminin singulier.",
+            "en": "The masculine plural cannot refer to any word in the sentence; the subject is feminine singular."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Tout » adverbe (au sens de « entièrement, tout à fait ») est en principe invariable : « ils sont tout surpris », « elle est tout émue ». Il prend toutefois le genre et le nombre de l'adjectif féminin qui suit lorsque celui-ci commence par une consonne ou un h aspiré : « elle est toute fière », « elles sont toutes honteuses ».",
+        "en": "« Tout » as an adverb (meaning « entirely, quite ») is in principle invariable: « ils sont tout surpris », « elle est tout émue ». It does, however, take the gender and number of a following feminine adjective that begins with a consonant or an aspirated h: « elle est toute fière », « elles sont toutes honteuses »."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-09",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Selon le rapport financier trimestriel, le Ministère a traité ___ demandes de remboursement au cours de l'exercice, soit une augmentation notable par rapport à l'exercice précédent.",
+        "en": "According to the quarterly financial report, the Department processed ___ reimbursement claims during the fiscal year, a notable increase over the previous fiscal year."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "deux cents mille",
+          "rationale": {
+            "fr": "Le « s » de « cents » serait requis en fin de nombre ou devant un nom comme « millions » ; devant l'adjectif numéral « mille », il ne convient pas.",
+            "en": "The « s » on « cents » would be required at the end of the number or before a noun such as « millions »; before the numeral adjective « mille », it does not fit."
+          }
+        },
+        {
+          "id": "b",
+          "text": "deux cents milles",
+          "rationale": {
+            "fr": "Double faute : « cent » ne prend pas de « s » devant « mille », et « mille » numéral est invariable (« milles » désigne l'unité de distance).",
+            "en": "Two errors: « cent » takes no « s » before « mille », and the numeral « mille » is invariable (« milles » is the unit of distance)."
+          }
+        },
+        {
+          "id": "c",
+          "text": "deux cent milles",
+          "rationale": {
+            "fr": "« Mille », adjectif numéral, ne prend jamais de « s » ; « milles » est le nom de l'unité de mesure de distance.",
+            "en": "« Mille », as a numeral adjective, never takes an « s »; « milles » is the noun for the unit of distance."
+          }
+        },
+        {
+          "id": "d",
+          "text": "deux cent mille",
+          "rationale": {
+            "fr": "« Cent » multiplié ne prend la marque du pluriel que s'il termine le nombre ; suivi de « mille », adjectif numéral, il reste invariable. « Mille » est toujours invariable.",
+            "en": "A multiplied « cent » takes the plural only if it ends the number; followed by the numeral adjective « mille », it stays invariable. « Mille » is always invariable."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Vingt » et « cent » prennent un « s » lorsqu'ils sont multipliés et terminent l'adjectif numéral : quatre-vingts, deux cents. Ils restent invariables s'ils sont suivis d'un autre numéral, y compris « mille » : quatre-vingt-trois, deux cent cinq, deux cent mille. « Mille » est toujours invariable. En revanche, « million » et « milliard » sont des noms : deux cents millions.",
+        "en": "« Vingt » and « cent » take an « s » when they are multiplied and end the numeral: quatre-vingts, deux cents. They stay invariable if followed by another numeral, including « mille »: quatre-vingt-trois, deux cent cinq, deux cent mille. « Mille » is always invariable. By contrast, « million » and « milliard » are nouns: deux cents millions."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-10",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Lors de la consultation sur le nouveau cadre de gouvernance des données, plus d'un gestionnaire ___ des réserves quant à la protection des renseignements personnels hébergés dans le nuage.",
+        "en": "During the consultation on the new data governance framework, more than one manager ___ reservations about the protection of personal information hosted in the cloud."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "a exprimé",
+          "rationale": {
+            "fr": "Après « plus d'un », le verbe se met au singulier, car il s'accorde avec « un » ; le participe reste invariable, son COD « des réserves » étant placé après.",
+            "en": "After « plus d'un », the verb is singular because it agrees with « un »; the participle stays invariable, since its direct object « des réserves » comes after it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ont exprimé",
+          "rationale": {
+            "fr": "Le pluriel suit le sens (« plusieurs ») plutôt que la grammaire ; avec « plus d'un » suivi d'un nom singulier, l'usage normatif exige le singulier.",
+            "en": "The plural follows the meaning (« several ») rather than the grammar; with « plus d'un » followed by a singular noun, standard usage requires the singular."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ont exprimés",
+          "rationale": {
+            "fr": "Au pluriel fautif du verbe s'ajoute un accord du participe impossible : le COD « des réserves » suit le verbe.",
+            "en": "The wrong plural verb is compounded by an impossible participle agreement: the direct object « des réserves » follows the verb."
+          }
+        },
+        {
+          "id": "d",
+          "text": "a exprimés",
+          "rationale": {
+            "fr": "Le verbe est bien au singulier, mais le participe ne peut s'accorder : avec avoir, il ne varie que si le COD le précède.",
+            "en": "The verb is properly singular, but the participle cannot agree: with avoir it varies only if the direct object precedes it."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Malgré son sens pluriel, « plus d'un » commande le singulier : « plus d'un employé a demandé… ». Le pluriel n'est de mise que si l'expression est répétée ou si le verbe exprime une réciprocité (« plus d'un collègue se sont consultés »). Inversement, « moins de deux » commande le pluriel : « moins de deux semaines se sont écoulées ».",
+        "en": "Despite its plural meaning, « plus d'un » takes the singular: « plus d'un employé a demandé… ». The plural is used only if the expression is repeated or the verb expresses reciprocity (« plus d'un collègue se sont consultés »). Conversely, « moins de deux » takes the plural: « moins de deux semaines se sont écoulées »."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-11",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Les deux soumissions reçues en réponse à la demande de propositions respectent toutes les exigences obligatoires ; ___ seront donc soumises à l'évaluation technique détaillée.",
+        "en": "The two bids received in response to the request for proposals meet all the mandatory requirements; ___ will therefore undergo the detailed technical evaluation."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "l'un et l'autre",
+          "rationale": {
+            "fr": "Le masculin ne s'accorde pas avec l'antécédent « soumissions », qui est féminin.",
+            "en": "The masculine does not agree with the antecedent « soumissions », which is feminine."
+          }
+        },
+        {
+          "id": "b",
+          "text": "l'une ou l'autre",
+          "rationale": {
+            "fr": "« Ou » marque l'alternative : il ne s'agirait que d'une des deux soumissions, ce qui contredit « donc » (les deux sont conformes) et s'accorde mal avec le pluriel « seront soumises ».",
+            "en": "« Ou » marks an alternative: only one of the two bids would be meant, which contradicts « donc » (both comply) and sits badly with the plural « seront soumises »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "l'une et l'autre",
+          "rationale": {
+            "fr": "« L'une et l'autre » reprend les deux soumissions, au féminin comme leur antécédent, et commande le pluriel « seront soumises ».",
+            "en": "« L'une et l'autre » refers back to both bids, in the feminine like its antecedent, and takes the plural « seront soumises »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "chacune",
+          "rationale": {
+            "fr": "« Chacune » est singulier et exigerait « sera soumise » ; il ne s'accorde pas avec le verbe au pluriel de la phrase.",
+            "en": "« Chacune » is singular and would require « sera soumise »; it does not agree with the plural verb in the sentence."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« L'un et l'autre » prend le genre de ce qu'il représente : deux soumissions donnent « l'une et l'autre ». Employé comme sujet, il est le plus souvent suivi d'un verbe au pluriel. Il ne faut pas le confondre avec « l'un ou l'autre », qui exprime un choix entre deux, ni avec « chacun », qui commande le singulier.",
+        "en": "« L'un et l'autre » takes the gender of what it stands for: two bids (« soumissions ») give « l'une et l'autre ». As a subject, it is usually followed by a plural verb. Do not confuse it with « l'un ou l'autre », which expresses a choice between two, or with « chacun », which takes the singular."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-12",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Pendant les trois heures qu'a ___ la panne du réseau ministériel, les agents du centre de services ont consigné manuellement l'ensemble des demandes d'assistance.",
+        "en": "During the three hours that the departmental network outage ___, the service centre agents logged all assistance requests manually."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "durées",
+          "rationale": {
+            "fr": "Cet accord traite « que » (les trois heures) comme un COD ; or on ne « dure » pas quelque chose : il s'agit d'un complément circonstanciel de temps.",
+            "en": "This agreement treats « que » (the three hours) as a direct object; but one does not « last » something: it is an adverbial complement of time."
+          }
+        },
+        {
+          "id": "b",
+          "text": "duré",
+          "rationale": {
+            "fr": "« Durer » est intransitif : « les trois heures » n'en est pas un COD mais un complément de durée, et le participe reste invariable.",
+            "en": "« Durer » is intransitive: « les trois heures » is not its direct object but a complement of duration, and the participle stays invariable."
+          }
+        },
+        {
+          "id": "c",
+          "text": "durée",
+          "rationale": {
+            "fr": "L'accord avec le sujet « la panne » applique à tort la règle de l'auxiliaire être ; avec avoir, le sujet ne commande jamais l'accord.",
+            "en": "Agreeing with the subject « la panne » wrongly applies the être rule; with avoir, the subject never governs agreement."
+          }
+        },
+        {
+          "id": "d",
+          "text": "durés",
+          "rationale": {
+            "fr": "Le masculin pluriel ne correspond à aucun mot de la phrase ; le participe de « durer » est invariable.",
+            "en": "The masculine plural matches no word in the sentence; the participle of « durer » is invariable."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Avec avoir, seul un complément d'objet direct antéposé entraîne l'accord. Les verbes comme durer, vivre, dormir, coûter ou peser (au sens propre) sont suivis de compléments de mesure ou de durée, non de COD : « les trois heures qu'a duré la panne », « les 500 dollars que l'appareil a coûté ». Le participe reste donc invariable.",
+        "en": "With avoir, only a preceding direct object triggers agreement. Verbs such as durer, vivre, dormir, coûter or peser (in the literal sense) take complements of measure or duration, not direct objects: « les trois heures qu'a duré la panne », « les 500 dollars que l'appareil a coûté ». The participle therefore stays invariable."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-13",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Après avoir pris connaissance des conclusions de l'analyse d'impact de la réglementation, la sous-ministre adjointe…",
+        "en": "After reviewing the conclusions of the regulatory impact analysis, the assistant deputy minister…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "s'est laissée convaincre de reporter l'entrée en vigueur du règlement.",
+          "rationale": {
+            "fr": "Selon la règle traditionnelle, l'accord ne se justifierait que si le sujet faisait lui-même l'action de l'infinitif (« elle s'est laissée tomber ») ; ici, ce sont d'autres qui la convainquent.",
+            "en": "Under the traditional rule, agreement would be justified only if the subject itself performed the action of the infinitive (« elle s'est laissée tomber »); here, others are doing the convincing."
+          }
+        },
+        {
+          "id": "b",
+          "text": "s'est laissée convaincue de reporter l'entrée en vigueur du règlement.",
+          "rationale": {
+            "fr": "« Laisser » se construit avec un infinitif, non avec un participe ; « convaincue » rend la tournure agrammaticale, et l'accord de « laissée » n'est pas justifié.",
+            "en": "« Laisser » takes an infinitive, not a participle; « convaincue » makes the construction ungrammatical, and the agreement of « laissée » is not justified."
+          }
+        },
+        {
+          "id": "c",
+          "text": "s'est laissé convaincre de reporter l'entrée en vigueur du règlement.",
+          "rationale": {
+            "fr": "« Se » ne fait pas l'action de convaincre : la sous-ministre est convaincue par d'autres. Le participe « laissé » reste donc invariable, selon la règle traditionnelle comme selon l'orthographe rectifiée.",
+            "en": "« Se » does not perform the convincing: the assistant deputy minister is convinced by others. The participle « laissé » therefore stays invariable, under the traditional rule and the revised spelling alike."
+          }
+        },
+        {
+          "id": "d",
+          "text": "s'est laissé convaincue de reporter l'entrée en vigueur du règlement.",
+          "rationale": {
+            "fr": "Le participe « laissé » est bien invariable, mais il doit être suivi de l'infinitif « convaincre » et non d'un participe passé.",
+            "en": "The participle « laissé » is properly invariable, but it must be followed by the infinitive « convaincre », not a past participle."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le participe « laissé » suivi d'un infinitif est invariable lorsque le complément placé avant lui subit l'action de l'infinitif : « elle s'est laissé convaincre » (on l'a convaincue). La règle traditionnelle admettait l'accord seulement quand ce complément fait lui-même l'action (« elle s'est laissée tomber ») ; les rectifications de l'orthographe recommandent l'invariabilité dans tous les cas, comme pour « fait » suivi d'un infinitif.",
+        "en": "The participle « laissé » followed by an infinitive is invariable when the object placed before it undergoes the action of the infinitive: « elle s'est laissé convaincre » (someone convinced her). The traditional rule allowed agreement only when that object itself performs the action (« elle s'est laissée tomber »); the spelling reform recommends invariability in every case, as with « fait » followed by an infinitive."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-14",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Selon le registre de présence transmis par l'équipe de l'apprentissage, la plupart des employés de la direction générale…",
+        "en": "According to the attendance record sent by the learning team, most of the branch's employees…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "a assisté à la séance d'information sur le nouveau régime de congés.",
+          "rationale": {
+            "fr": "Le singulier suit à tort « la plupart » ; avec cette expression, le verbe s'accorde avec le complément, ici « employés », au pluriel.",
+            "en": "The singular wrongly follows « la plupart »; with this expression the verb agrees with the complement, here the plural « employés »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ont assistés à la séance d'information sur le nouveau régime de congés.",
+          "rationale": {
+            "fr": "Le verbe est bien au pluriel, mais « assister à » n'a pas de COD : le participe reste invariable.",
+            "en": "The verb is properly plural, but « assister à » has no direct object: the participle stays invariable."
+          }
+        },
+        {
+          "id": "c",
+          "text": "a assistés à la séance d'information sur le nouveau régime de congés.",
+          "rationale": {
+            "fr": "Le singulier du verbe est fautif après « la plupart des employés », et le participe ne peut s'accorder faute de COD placé avant.",
+            "en": "The singular verb is wrong after « la plupart des employés », and the participle cannot agree since no direct object precedes it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ont assisté à la séance d'information sur le nouveau régime de congés.",
+          "rationale": {
+            "fr": "Après « la plupart des employés », le verbe s'accorde au pluriel avec le complément ; « assister à » n'ayant pas de COD, le participe reste invariable.",
+            "en": "After « la plupart des employés », the verb agrees in the plural with the complement; since « assister à » has no direct object, the participle stays invariable."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Après « la plupart de », le verbe s'accorde avec le complément du nom : « la plupart des employés ont… », mais « la plupart du personnel a… ». Employé seul, « la plupart » commande le pluriel (« la plupart sont d'accord »). Quant au participe d'« assister à », verbe à complément indirect, il reste invariable avec avoir.",
+        "en": "After « la plupart de », the verb agrees with the noun complement: « la plupart des employés ont… », but « la plupart du personnel a… ». Used alone, « la plupart » takes the plural (« la plupart sont d'accord »). As for the participle of « assister à », a verb with an indirect object, it stays invariable with avoir."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-15",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "D'après le rapport d'étape sur le plan d'accessibilité, le peu de ressources dont disposait l'équipe des services numériques…",
+        "en": "According to the progress report on the accessibility plan, the scant resources available to the digital services team…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "a nui à la mise en conformité des formulaires en ligne.",
+          "rationale": {
+            "fr": "Le sens est celui de l'insuffisance : c'est le manque de ressources, et non les ressources elles-mêmes, qui a nui. « Le peu » commande alors l'accord au singulier ; « nui » est invariable.",
+            "en": "The meaning is insufficiency: it is the lack of resources, not the resources themselves, that did harm. « Le peu » then governs singular agreement; « nui » is invariable."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ont nui à la mise en conformité des formulaires en ligne.",
+          "rationale": {
+            "fr": "Le pluriel ferait des ressources elles-mêmes la cause du retard ; or ce n'est pas leur présence qui nuit, mais leur insuffisance, exprimée par « le peu ».",
+            "en": "The plural would make the resources themselves the cause of the delay; but it is not their presence that did harm, it is their insufficiency, expressed by « le peu »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ont nuis à la mise en conformité des formulaires en ligne.",
+          "rationale": {
+            "fr": "Au pluriel fautif s'ajoute un accord impossible : « nuire » se construit avec « à », n'a jamais de COD, et son participe est invariable.",
+            "en": "The wrong plural is compounded by an impossible agreement: « nuire » takes « à », never has a direct object, and its participle is invariable."
+          }
+        },
+        {
+          "id": "d",
+          "text": "a nuie à la mise en conformité des formulaires en ligne.",
+          "rationale": {
+            "fr": "Le singulier du verbe convient, mais le participe de « nuire », verbe intransitif, ne s'accorde jamais.",
+            "en": "The singular verb fits, but the participle of the intransitive verb « nuire » never agrees."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Avec « le peu de » suivi d'un nom pluriel, l'accord dépend du sens. Si « le peu » exprime l'insuffisance, le manque, c'est lui qui commande l'accord : « le peu de ressources a nui au projet ». S'il désigne une petite quantité qui existe bel et bien, l'accord se fait avec le complément : « le peu de ressources obtenues ont suffi ». Ici, ce sont des ressources trop rares qui ont freiné le travail : singulier.",
+        "en": "With « le peu de » followed by a plural noun, agreement depends on meaning. If « le peu » expresses insufficiency, a lack, it governs agreement: « le peu de ressources a nui au projet ». If it designates a small quantity that does exist, agreement is with the complement: « le peu de ressources obtenues ont suffi ». Here, resources that were too scarce held the work back: singular."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-16",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Selon la procédure du centre d'appels, lorsqu'on est…",
+        "en": "According to the call centre's procedure, when one is…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "affectés à la ligne prioritaire, on doit consigner chaque appel dans le système de suivi.",
+          "rationale": {
+            "fr": "Le pluriel ne se justifie que lorsque « on » remplace nettement « nous » et désigne un groupe précis ; dans une consigne générale, l'accord se fait au masculin singulier.",
+            "en": "The plural is justified only when « on » clearly replaces « nous » and refers to a specific group; in a general instruction, agreement is masculine singular."
+          }
+        },
+        {
+          "id": "b",
+          "text": "affecté à la ligne prioritaire, on doit consigner chaque appel dans le système de suivi.",
+          "rationale": {
+            "fr": "Le pronom « on » a ici une valeur indéterminée (toute personne affectée à ce poste) : le participe se met au masculin singulier, et le verbe à la troisième personne du singulier.",
+            "en": "Here « on » is indefinite (anyone assigned to this post): the participle is masculine singular, and the verb third-person singular."
+          }
+        },
+        {
+          "id": "c",
+          "text": "affecté à la ligne prioritaire, on doivent consigner chaque appel dans le système de suivi.",
+          "rationale": {
+            "fr": "« On » commande toujours un verbe à la troisième personne du singulier, quel que soit son sens.",
+            "en": "« On » always takes a third-person singular verb, whatever its meaning."
+          }
+        },
+        {
+          "id": "d",
+          "text": "affectés à la ligne prioritaire, on doivent consigner chaque appel dans le système de suivi.",
+          "rationale": {
+            "fr": "Double faute : « on » indéterminé exige le singulier pour le participe comme pour le verbe.",
+            "en": "Two errors: indefinite « on » requires the singular for both the participle and the verb."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« On » est toujours suivi d'un verbe à la troisième personne du singulier. L'attribut ou le participe qui s'y rapporte se met au masculin singulier lorsque « on » est indéterminé (« quand on est nommé gestionnaire… ») ; ce n'est que lorsque « on » remplace nettement « nous » que l'accord peut se faire selon le sens (« ma collègue et moi, on est satisfaites »).",
+        "en": "« On » is always followed by a third-person singular verb. An attribute or participle referring to it is masculine singular when « on » is indefinite (« quand on est nommé gestionnaire… »); only when « on » clearly replaces « nous » can agreement follow the meaning (« ma collègue et moi, on est satisfaites »)."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-17",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Les vérifications de la qualité de l'air que la direction des installations a…",
+        "en": "The air quality inspections that the facilities directorate…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "faites effectuer l'an dernier ont confirmé la conformité des immeubles aux normes environnementales.",
+          "rationale": {
+            "fr": "La direction n'a pas « fait » les vérifications : elle les a fait effectuer. Le COD dépend de l'infinitif, et « fait » ne s'accorde jamais dans cette tournure.",
+            "en": "The directorate did not « do » the inspections: it had them carried out. The direct object belongs to the infinitive, and « fait » never agrees in this construction."
+          }
+        },
+        {
+          "id": "b",
+          "text": "fait effectuer l'an dernier ont confirmé la conformité des immeubles aux normes environnementales.",
+          "rationale": {
+            "fr": "Le participe « fait » suivi d'un infinitif est toujours invariable : « que » est le complément de l'infinitif « effectuer ». Le verbe principal s'accorde avec « les vérifications ».",
+            "en": "The participle « fait » followed by an infinitive is always invariable: « que » is the object of the infinitive « effectuer ». The main verb agrees with « les vérifications »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "fait effectuer l'an dernier a confirmé la conformité des immeubles aux normes environnementales.",
+          "rationale": {
+            "fr": "Le participe est bien invariable, mais le verbe principal doit s'accorder avec son sujet pluriel « les vérifications ».",
+            "en": "The participle is properly invariable, but the main verb must agree with its plural subject « les vérifications »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "faite effectuer l'an dernier ont confirmé la conformité des immeubles aux normes environnementales.",
+          "rationale": {
+            "fr": "Le féminin singulier ne correspond pas même à « vérifications », et « fait » suivi d'un infinitif est invariable.",
+            "en": "The feminine singular does not even match « vérifications », and « fait » followed by an infinitive is invariable."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le participe passé « fait » immédiatement suivi d'un infinitif forme avec lui une seule unité verbale : il est toujours invariable, avec avoir comme à la forme pronominale (« les travaux qu'elle a fait réaliser », « elles se sont fait rembourser »). Il ne faut pas confondre avec « les vérifications qu'elle a faites », sans infinitif, où l'accord avec le COD antéposé s'applique.",
+        "en": "The past participle « fait » immediately followed by an infinitive forms a single verbal unit with it: it is always invariable, with avoir as in the pronominal form (« les travaux qu'elle a fait réaliser », « elles se sont fait rembourser »). Do not confuse this with « les vérifications qu'elle a faites », with no infinitive, where agreement with the preceding direct object applies."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-18",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Madame la Présidente, à titre de responsable du comité consultatif sur les communications internes, vous êtes…",
+        "en": "Madam Chair, as head of the advisory committee on internal communications, you are…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "invitées à prononcer le mot d'ouverture de la conférence annuelle.",
+          "rationale": {
+            "fr": "Le pluriel suit la forme du pronom « vous », mais celui-ci ne désigne qu'une destinataire ; l'accord se fait selon le sens.",
+            "en": "The plural follows the form of the pronoun « vous », but it refers to only one addressee; agreement follows the meaning."
+          }
+        },
+        {
+          "id": "b",
+          "text": "invité à prononcer le mot d'ouverture de la conférence annuelle.",
+          "rationale": {
+            "fr": "Le masculin ne convient pas : la destinataire est une femme, comme l'indique l'appel « Madame la Présidente ».",
+            "en": "The masculine does not fit: the addressee is a woman, as the salutation « Madame la Présidente » shows."
+          }
+        },
+        {
+          "id": "c",
+          "text": "invités à prononcer le mot d'ouverture de la conférence annuelle.",
+          "rationale": {
+            "fr": "Le masculin pluriel cumule deux fautes : la destinataire est unique et c'est une femme.",
+            "en": "The masculine plural combines two errors: there is one addressee and she is a woman."
+          }
+        },
+        {
+          "id": "d",
+          "text": "invitée à prononcer le mot d'ouverture de la conférence annuelle.",
+          "rationale": {
+            "fr": "Le « vous » de politesse désigne une seule personne, ici une femme (« Madame la Présidente ») : le participe se met au féminin singulier.",
+            "en": "The polite « vous » refers to a single person, here a woman (« Madame la Présidente »): the participle is feminine singular."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Avec le « vous » de politesse, le verbe se conjugue au pluriel (« vous êtes »), mais l'adjectif ou le participe s'accorde avec la personne réelle : « Madame, vous êtes invitée », « Monsieur, vous êtes invité ». Le pluriel n'est de mise que si l'on s'adresse à plusieurs personnes.",
+        "en": "With the polite « vous », the verb is conjugated in the plural (« vous êtes »), but the adjective or participle agrees with the actual person: « Madame, vous êtes invitée », « Monsieur, vous êtes invité ». The plural is used only when addressing several people."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-19",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "La direction des services linguistiques rappelle que les réviseurs contractuels,…",
+        "en": "The linguistic services directorate reminds everyone that contract revisers,…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "quelques expérimentés qu'ils soient, doivent se conformer au lexique ministériel.",
+          "rationale": {
+            "fr": "Le « s » ferait de « quelque » un déterminant pluriel, alors qu'il modifie ici l'adjectif « expérimentés » et reste invariable.",
+            "en": "The « s » would make « quelque » a plural determiner, whereas here it modifies the adjective « expérimentés » and stays invariable."
+          }
+        },
+        {
+          "id": "b",
+          "text": "quelque expérimentés qu'ils soient, doit se conformer au lexique ministériel.",
+          "rationale": {
+            "fr": "L'adverbe est bien employé, mais le verbe principal doit s'accorder avec le sujet pluriel « les réviseurs contractuels ».",
+            "en": "The adverb is properly used, but the main verb must agree with the plural subject « les réviseurs contractuels »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "quelque expérimentés qu'ils soient, doivent se conformer au lexique ministériel.",
+          "rationale": {
+            "fr": "Devant un adjectif, « quelque » est un adverbe signifiant « si » : il est invariable. Le verbe principal s'accorde avec « les réviseurs ».",
+            "en": "Before an adjective, « quelque » is an adverb meaning « however »: it is invariable. The main verb agrees with « les réviseurs »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "quels que expérimentés qu'ils soient, doivent se conformer au lexique ministériel.",
+          "rationale": {
+            "fr": "« Quel que », en deux mots, ne s'emploie que devant le verbe être (« quels que soient leurs titres ») ; devant un adjectif, il faut « quelque » adverbe.",
+            "en": "Two-word « quel que » is used only before the verb être (« quels que soient leurs titres »); before an adjective, the adverb « quelque » is required."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Quelque… que » suivi d'un adjectif et du subjonctif exprime la concession ; « quelque » y est adverbe et invariable : « quelque compétents qu'ils soient ». Devant un nom, « quelque » est déterminant et s'accorde (« quelques erreurs »). Devant le verbe être, on écrit « quel que » en deux mots, accordé avec le sujet (« quelles que soient les exigences »).",
+        "en": "« Quelque… que » followed by an adjective and the subjunctive expresses concession; « quelque » is then an invariable adverb: « quelque compétents qu'ils soient ». Before a noun, « quelque » is a determiner and agrees (« quelques erreurs »). Before the verb être, two-word « quel que » is used, agreeing with the subject (« quelles que soient les exigences »)."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-20",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Pour donner l'exemple aux équipes, les directeurs généraux…",
+        "en": "To set an example for the teams, the directors general…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "ont eux-mêmes suivi la formation sur l'accessibilité des documents numériques.",
+          "rationale": {
+            "fr": "Joint à un pronom personnel par un trait d'union, « même » est adjectif et s'accorde avec ce pronom : « eux-mêmes ». Le participe « suivi » reste invariable, son COD étant placé après.",
+            "en": "Joined to a personal pronoun by a hyphen, « même » is an adjective and agrees with that pronoun: « eux-mêmes ». The participle « suivi » stays invariable, its direct object coming after it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ont eux-même suivi la formation sur l'accessibilité des documents numériques.",
+          "rationale": {
+            "fr": "Après un pronom pluriel, « même » prend la marque du pluriel : « eux-mêmes », « nous-mêmes ».",
+            "en": "After a plural pronoun, « même » takes the plural ending: « eux-mêmes », « nous-mêmes »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ont eux-mêmes suivis la formation sur l'accessibilité des documents numériques.",
+          "rationale": {
+            "fr": "« Eux-mêmes » est bien accordé, mais le participe « suivi » ne s'accorde pas : avec avoir, le COD « la formation » vient après.",
+            "en": "« Eux-mêmes » agrees properly, but the participle « suivi » does not agree: with avoir, the direct object « la formation » comes after it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ont elles-mêmes suivi la formation sur l'accessibilité des documents numériques.",
+          "rationale": {
+            "fr": "Le pronom féminin ne renvoie pas à « les directeurs généraux », masculin pluriel.",
+            "en": "The feminine pronoun does not refer back to « les directeurs généraux », which is masculine plural."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Même » placé après un pronom personnel, auquel il est lié par un trait d'union, s'accorde avec lui : moi-même, elle-même, nous-mêmes, eux-mêmes. Il est aussi adjectif variable devant le nom (« les mêmes critères »), mais adverbe invariable au sens de « aussi, jusqu'à » (« même les gestionnaires l'ont suivie »).",
+        "en": "« Même » placed after a personal pronoun, to which it is joined by a hyphen, agrees with it: moi-même, elle-même, nous-mêmes, eux-mêmes. It is also a variable adjective before a noun (« les mêmes critères »), but an invariable adverb meaning « even » (« même les gestionnaires l'ont suivie »)."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-21",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Lors de la consultation interministérielle sur le projet de politique, les deux sous-ministres adjointes…",
+        "en": "During the interdepartmental consultation on the draft policy, the two assistant deputy ministers…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "se sont permises de remettre en question l'échéancier proposé par le secrétariat.",
+          "rationale": {
+            "fr": "L'accord avec le sujet féminin pluriel appliquerait la règle de l'auxiliaire être ; or « se » n'est pas COD de « permettre ».",
+            "en": "Agreement with the feminine plural subject would apply the être rule; but « se » is not the direct object of « permettre »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "se sont permise de remettre en question l'échéancier proposé par le secrétariat.",
+          "rationale": {
+            "fr": "Le féminin singulier ne s'accorde ni avec le sujet pluriel ni avec un quelconque COD ; le participe reste invariable.",
+            "en": "The feminine singular agrees neither with the plural subject nor with any direct object; the participle stays invariable."
+          }
+        },
+        {
+          "id": "c",
+          "text": "s'est permis de remettre en question l'échéancier proposé par le secrétariat.",
+          "rationale": {
+            "fr": "Le verbe au singulier ne s'accorde pas avec le sujet pluriel « les deux sous-ministres adjointes ».",
+            "en": "The singular verb does not agree with the plural subject « les deux sous-ministres adjointes »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "se sont permis de remettre en question l'échéancier proposé par le secrétariat.",
+          "rationale": {
+            "fr": "On permet quelque chose « à » quelqu'un : « se » est complément indirect et le COD est l'infinitif qui suit. Le participe reste donc invariable.",
+            "en": "One permits something « to » someone: « se » is an indirect object and the direct object is the infinitive that follows. The participle therefore stays invariable."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Dans un verbe pronominal, le participe s'accorde avec le COD placé avant lui. Avec permettre, demander, rendre compte, succéder, plaire ou parler, le pronom « se » est complément indirect (permettre à soi) : il n'y a pas de COD antéposé, et le participe ne varie pas : « elles se sont permis de… », « elles se sont rendu compte que… ».",
+        "en": "In a pronominal verb, the participle agrees with the direct object placed before it. With permettre, demander, rendre compte, succéder, plaire or parler, the pronoun « se » is an indirect object (permit to oneself): there is no preceding direct object, and the participle does not change: « elles se sont permis de… », « elles se sont rendu compte que… »."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-22",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle correction faut-il apporter à la phrase suivante, tirée d'un rapport de vérification interne ? « Lors de l'examen des pièces justificatives, les analystes se sont rendues compte que plusieurs factures n'avaient pas été approuvées par une personne détenant l'autorisation de dépenser. »",
+        "en": "Which correction does the following sentence, taken from an internal audit report, need? « Lors de l'examen des pièces justificatives, les analystes se sont rendues compte que plusieurs factures n'avaient pas été approuvées par une personne détenant l'autorisation de dépenser. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « approuvées » par « approuvé »",
+          "rationale": {
+            "fr": "Ce participe, employé avec être au passif, s'accorde avec le sujet « factures » ; « approuvées » est déjà conforme.",
+            "en": "This participle, used with être in the passive, agrees with the subject « factures »; « approuvées » is already as it should be."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « avaient » par « avait »",
+          "rationale": {
+            "fr": "Le sujet « plusieurs factures » est pluriel ; le verbe doit le rester.",
+            "en": "The subject « plusieurs factures » is plural; the verb must stay plural."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « rendues » par « rendu »",
+          "rationale": {
+            "fr": "Dans « se rendre compte », « compte » est le COD et « se » un complément indirect : aucun COD ne précède le participe, qui reste invariable.",
+            "en": "In « se rendre compte », « compte » is the direct object and « se » an indirect object: no direct object precedes the participle, which stays invariable."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « détenant » par « détenante »",
+          "rationale": {
+            "fr": "Le participe présent est invariable ; « détenante » n'existe pas comme adjectif verbal.",
+            "en": "The present participle is invariable; « détenante » does not exist as a verbal adjective."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Se rendre compte » ne s'accorde jamais : « compte » est le complément d'objet direct, placé après le participe, et « se » est indirect (rendre compte à soi). On écrit donc « elles se sont rendu compte ». Les autres accords de la phrase — participe passif « approuvées », verbe « avaient » — sont conformes.",
+        "en": "« Se rendre compte » never agrees: « compte » is the direct object, placed after the participle, and « se » is indirect (to render account to oneself). So one writes « elles se sont rendu compte ». The other agreements in the sentence — the passive participle « approuvées », the verb « avaient » — are as they should be."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-23",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Repérez l'erreur dans ce passage d'un courriel et choisissez la correction appropriée : « Ni la coordonnatrice des langues officielles ni moi ne pourront assister à la rencontre de jeudi ; nous vous transmettrons toutefois nos commentaires écrits d'ici vendredi. »",
+        "en": "Find the error in this passage from an email and choose the appropriate correction: « Ni la coordonnatrice des langues officielles ni moi ne pourront assister à la rencontre de jeudi ; nous vous transmettrons toutefois nos commentaires écrits d'ici vendredi. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « pourront » par « pourrons »",
+          "rationale": {
+            "fr": "Lorsque les sujets coordonnés sont de personnes différentes, le verbe se met au pluriel et prend la personne prioritaire : la première l'emporte (« elle et moi » donnent « nous »).",
+            "en": "When the coordinated subjects are of different persons, the verb goes into the plural and takes the dominant person: the first person prevails (« elle et moi » give « nous »)."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « pourront » par « pourra »",
+          "rationale": {
+            "fr": "Le singulier à la troisième personne ignorerait « moi » ; avec des sujets de personnes différentes, l'accord se fait au pluriel de la personne prioritaire.",
+            "en": "A third-person singular would ignore « moi »; with subjects of different persons, the verb takes the plural of the dominant person."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « transmettrons » par « transmettront »",
+          "rationale": {
+            "fr": "Le sujet de ce verbe est « nous » : la première personne du pluriel « transmettrons » est déjà conforme.",
+            "en": "The subject of this verb is « nous »: the first-person plural « transmettrons » is already as it should be."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « écrits » par « écrites »",
+          "rationale": {
+            "fr": "« Commentaires » est masculin ; l'adjectif « écrits » est déjà bien accordé.",
+            "en": "« Commentaires » is masculine; the adjective « écrits » already agrees properly."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Avec « ni… ni », lorsque les sujets sont de personnes différentes, le verbe se met au pluriel et à la personne prioritaire : la 1re l'emporte sur la 2e, qui l'emporte sur la 3e. « Ni elle ni moi ne pourrons », « ni toi ni lui ne pourrez ». On peut vérifier en remplaçant les sujets par le pronom qui les résume : « nous », « vous ».",
+        "en": "With « ni… ni », when the subjects are of different persons, the verb goes into the plural and takes the dominant person: the 1st prevails over the 2nd, which prevails over the 3rd. « Ni elle ni moi ne pourrons », « ni toi ni lui ne pourrez ». You can check by replacing the subjects with the pronoun that sums them up: « nous », « vous »."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-24",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "La consigne suivante, extraite d'un guide de projet, contient une faute d'accord. Quelle modification s'impose ? « Veuillez classer les livrables approuvés dans les chemises bleues foncées et les livrables en attente dans les chemises jaunes. »",
+        "en": "The following instruction, taken from a project guide, contains an agreement error. Which change is required? « Veuillez classer les livrables approuvés dans les chemises bleues foncées et les livrables en attente dans les chemises jaunes. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « jaunes » par « jaune »",
+          "rationale": {
+            "fr": "« Jaune » est un adjectif de couleur simple : il s'accorde avec « chemises », et le pluriel est déjà conforme.",
+            "en": "« Jaune » is a simple colour adjective: it agrees with « chemises », and the plural is already as it should be."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « bleues foncées » par « bleu foncé »",
+          "rationale": {
+            "fr": "Un adjectif de couleur composé de deux mots (couleur et nuance) reste invariable : « des chemises bleu foncé ».",
+            "en": "A colour adjective made of two words (colour plus shade) stays invariable: « des chemises bleu foncé »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « approuvés » par « approuvées »",
+          "rationale": {
+            "fr": "« Livrables » est masculin ; « approuvés » est déjà bien accordé.",
+            "en": "« Livrables » is masculine; « approuvés » already agrees properly."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « en attente » par « en attentes »",
+          "rationale": {
+            "fr": "La locution « en attente » est invariable.",
+            "en": "The phrase « en attente » is invariable."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Les adjectifs de couleur simples s'accordent : des chemises jaunes, vertes. Lorsque la couleur est exprimée par deux mots — un adjectif de couleur précisé par un autre adjectif ou par un nom (bleu foncé, vert pâle, gris acier) —, l'ensemble reste invariable : des chemises bleu foncé. Restent aussi invariables les noms employés comme couleur, comme marron ou crème.",
+        "en": "Simple colour adjectives agree: des chemises jaunes, vertes. When the colour is expressed in two words — a colour adjective qualified by another adjective or a noun (bleu foncé, vert pâle, gris acier) — the whole stays invariable: des chemises bleu foncé. Nouns used as colours, such as marron or crème, also stay invariable."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-25",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase tirée d'un bulletin interne contient une faute. Laquelle des corrections suivantes s'impose ? « Quelques deux cents fonctionnaires ont participé à la journée de nettoyage des berges organisée par le comité ministériel de développement durable. »",
+        "en": "This sentence from an internal newsletter contains an error. Which of the following corrections is required? « Quelques deux cents fonctionnaires ont participé à la journée de nettoyage des berges organisée par le comité ministériel de développement durable. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « deux cents » par « deux cent »",
+          "rationale": {
+            "fr": "« Cent » multiplié et terminant le nombre prend un « s » : « deux cents » est déjà conforme.",
+            "en": "A multiplied « cent » that ends the number takes an « s »: « deux cents » is already as it should be."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « organisée » par « organisées »",
+          "rationale": {
+            "fr": "Le participe se rapporte à « la journée », féminin singulier ; « organisée » est déjà bien accordé.",
+            "en": "The participle refers to « la journée », feminine singular; « organisée » already agrees properly."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « participé » par « participés »",
+          "rationale": {
+            "fr": "« Participer à » n'a pas de COD ; avec avoir, le participe reste invariable.",
+            "en": "« Participer à » has no direct object; with avoir, the participle stays invariable."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « Quelques » par « Quelque »",
+          "rationale": {
+            "fr": "Devant un adjectif numéral, « quelque » signifie « environ » : c'est un adverbe, donc invariable.",
+            "en": "Before a numeral, « quelque » means « about »: it is an adverb and therefore invariable."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Devant un nombre, « quelque » a le sens d'« environ, à peu près » : il est adverbe et invariable (« quelque deux cents fonctionnaires », « quelque 50 dollars »). Il ne faut pas le confondre avec le déterminant « quelques » (un petit nombre de), qui précède un nom pluriel : « quelques fonctionnaires ».",
+        "en": "Before a number, « quelque » means « about, approximately »: it is an invariable adverb (« quelque deux cents fonctionnaires », « quelque 50 dollars »). Do not confuse it with the determiner « quelques » (a small number of), which precedes a plural noun: « quelques fonctionnaires »."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-26",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Lisez cette phrase extraite d'une note de service et indiquez la correction nécessaire : « Près de quatre-vingt employés ont présenté une demande de congé de perfectionnement, mais seulement vingt et une demandes ont été acceptées. »",
+        "en": "Read this sentence from a memo and indicate the necessary correction: « Près de quatre-vingt employés ont présenté une demande de congé de perfectionnement, mais seulement vingt et une demandes ont été acceptées. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « quatre-vingt » par « quatre-vingts »",
+          "rationale": {
+            "fr": "« Vingt » multiplié par quatre prend un « s » lorsqu'il termine le nombre : « quatre-vingts employés ».",
+            "en": "« Vingt » multiplied by four takes an « s » when it ends the number: « quatre-vingts employés »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « vingt et une » par « vingt et un »",
+          "rationale": {
+            "fr": "Le numéral « un » s'accorde en genre avec le nom qui suit : « vingt et une demandes » est déjà conforme.",
+            "en": "The numeral « un » agrees in gender with the following noun: « vingt et une demandes » is already as it should be."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « acceptées » par « acceptés »",
+          "rationale": {
+            "fr": "Le participe passif s'accorde avec le sujet « demandes », féminin pluriel ; « acceptées » est déjà bien accordé.",
+            "en": "The passive participle agrees with the subject « demandes », feminine plural; « acceptées » already agrees properly."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « ont présenté » par « ont présentés »",
+          "rationale": {
+            "fr": "Le COD « une demande » suit le participe : celui-ci reste invariable.",
+            "en": "The direct object « une demande » follows the participle, which stays invariable."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Vingt » et « cent » prennent un « s » quand ils sont multipliés et ne sont suivis d'aucun autre numéral : quatre-vingts employés, mais quatre-vingt-deux employés et quatre-vingt mille dollars. Le numéral « un » varie en genre : vingt et une demandes.",
+        "en": "« Vingt » and « cent » take an « s » when they are multiplied and followed by no other numeral: quatre-vingts employés, but quatre-vingt-deux employés and quatre-vingt mille dollars. The numeral « un » varies in gender: vingt et une demandes."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-27",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle correction doit-on apporter à ce message de l'équipe de soutien informatique ? « Les nouveaux employés n'ont pas encore reçu leurs identifiants ; nous leurs avons transmis un lien temporaire pour qu'ils puissent ouvrir une session dès lundi. »",
+        "en": "Which correction should be made to this message from the IT support team? « Les nouveaux employés n'ont pas encore reçu leurs identifiants ; nous leurs avons transmis un lien temporaire pour qu'ils puissent ouvrir une session dès lundi. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « leurs identifiants » par « leur identifiants »",
+          "rationale": {
+            "fr": "Le déterminant possessif s'accorde avec le nom qui suit : devant le pluriel « identifiants », il prend un « s ».",
+            "en": "The possessive determiner agrees with the following noun: before the plural « identifiants », it takes an « s »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « reçu » par « reçus »",
+          "rationale": {
+            "fr": "Le COD « leurs identifiants » est placé après le participe, qui reste invariable.",
+            "en": "The direct object « leurs identifiants » comes after the participle, which stays invariable."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « leurs avons » par « leur avons »",
+          "rationale": {
+            "fr": "Devant un verbe, « leur » est un pronom personnel complément (« à eux ») : il est toujours invariable.",
+            "en": "Before a verb, « leur » is an object personal pronoun (« to them »): it is always invariable."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « puissent » par « puisse »",
+          "rationale": {
+            "fr": "Le sujet « ils » est pluriel : le verbe doit l'être aussi.",
+            "en": "The subject « ils » is plural: the verb must be too."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Leur » placé devant un verbe est le pluriel de « lui » (nous leur avons transmis = nous avons transmis à eux) et ne prend jamais de « s ». Placé devant un nom, c'est un déterminant possessif qui s'accorde avec ce nom : leur gestionnaire, leurs identifiants.",
+        "en": "« Leur » before a verb is the plural of « lui » (nous leur avons transmis = we sent to them) and never takes an « s ». Before a noun, it is a possessive determiner that agrees with that noun: leur gestionnaire, leurs identifiants."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-28",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase, tirée du compte rendu d'une réunion de coordination, renferme une erreur d'accord. Quelle correction convient ? « Avant la diffusion du communiqué, les deux directrices des communications se sont parlées longuement afin d'harmoniser les messages principaux destinés aux médias régionaux. »",
+        "en": "This sentence, taken from the minutes of a coordination meeting, contains an agreement error. Which correction fits? « Avant la diffusion du communiqué, les deux directrices des communications se sont parlées longuement afin d'harmoniser les messages principaux destinés aux médias régionaux. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « destinés » par « destinées »",
+          "rationale": {
+            "fr": "« Destinés » se rapporte à « messages », masculin pluriel ; il est déjà bien accordé.",
+            "en": "« Destinés » refers to « messages », masculine plural; it already agrees properly."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « harmoniser » par « harmonisé »",
+          "rationale": {
+            "fr": "Après la locution « afin de », il faut l'infinitif ; « harmonisé » serait fautif.",
+            "en": "After « afin de », the infinitive is required; « harmonisé » would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « parlées » par « parlé »",
+          "rationale": {
+            "fr": "On parle « à » quelqu'un : « se » est complément indirect, le verbe n'a pas de COD, et le participe reste invariable.",
+            "en": "One speaks « to » someone: « se » is an indirect object, the verb has no direct object, and the participle stays invariable."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « régionaux » par « régionales »",
+          "rationale": {
+            "fr": "« Médias » est masculin : « régionaux » est déjà conforme.",
+            "en": "« Médias » is masculine: « régionaux » is already as it should be."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le participe d'un verbe pronominal s'accorde avec le COD placé avant lui. Pour les verbes qui se construisent avec « à » — parler à, téléphoner à, sourire à, succéder à, nuire à —, le pronom « se » est indirect : faute de COD, le participe est invariable (« elles se sont parlé », « ils se sont téléphoné »).",
+        "en": "The participle of a pronominal verb agrees with the direct object placed before it. For verbs that take « à » — parler à, téléphoner à, sourire à, succéder à, nuire à — the pronoun « se » is indirect: with no direct object, the participle is invariable (« elles se sont parlé », « ils se sont téléphoné »)."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-29",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Indiquez quelle correction apporter à cette phrase d'un courriel de service : « Les deux conseillères en accessibilité se sont absenté hier après-midi pour assister à l'atelier sur les technologies d'assistance offert par la direction générale. »",
+        "en": "Indicate which correction to make to this sentence from a work email: « Les deux conseillères en accessibilité se sont absenté hier après-midi pour assister à l'atelier sur les technologies d'assistance offert par la direction générale. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « absenté » par « absentés »",
+          "rationale": {
+            "fr": "L'accord avec le sujet est requis, mais le masculin ne convient pas : « conseillères » est féminin.",
+            "en": "Agreement with the subject is required, but the masculine does not fit: « conseillères » is feminine."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « absenté » par « absentées »",
+          "rationale": {
+            "fr": "« S'absenter » est essentiellement pronominal : son participe s'accorde avec le sujet, ici « les deux conseillères », féminin pluriel.",
+            "en": "« S'absenter » exists only in pronominal form: its participle agrees with the subject, here « les deux conseillères », feminine plural."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « offert » par « offerts »",
+          "rationale": {
+            "fr": "« Offert » se rapporte à « l'atelier », masculin singulier ; il est déjà bien accordé.",
+            "en": "« Offert » refers to « l'atelier », masculine singular; it already agrees properly."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « assister » par « assisté »",
+          "rationale": {
+            "fr": "Après la préposition « pour », le verbe se met à l'infinitif.",
+            "en": "After the preposition « pour », the verb is in the infinitive."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Les verbes essentiellement pronominaux — qui n'existent qu'à la forme pronominale, comme s'absenter, s'évanouir, se souvenir, s'abstenir — s'accordent avec le sujet : « elles se sont absentées », « ils se sont abstenus ». Il ne faut pas les confondre avec les pronominaux dont le « se » est indirect, comme « se parler », qui restent invariables.",
+        "en": "Inherently pronominal verbs — which exist only in pronominal form, such as s'absenter, s'évanouir, se souvenir, s'abstenir — agree with the subject: « elles se sont absentées », « ils se sont abstenus ». Do not confuse them with pronominal verbs whose « se » is indirect, such as « se parler », which stay invariable."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-30",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Ce paragraphe d'un rapport annuel sur la santé et la sécurité au travail comporte une faute. Quelle rectification faut-il effectuer ? « À la suite de l'incident survenu dans l'entrepôt, l'équipe régionale s'est consacrée toute entière à la révision des procédures d'intervention, si bien que les nouvelles consignes ont été diffusées en moins de deux semaines. »",
+        "en": "This paragraph from an annual occupational health and safety report contains an error. Which fix needs to be made? « À la suite de l'incident survenu dans l'entrepôt, l'équipe régionale s'est consacrée toute entière à la révision des procédures d'intervention, si bien que les nouvelles consignes ont été diffusées en moins de deux semaines. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « consacrée » par « consacré »",
+          "rationale": {
+            "fr": "Dans « se consacrer », le pronom « se », mis pour « l'équipe » et placé avant, est COD : le participe s'accorde au féminin singulier, comme il l'est déjà.",
+            "en": "In « se consacrer », the pronoun « se », standing for « l'équipe » and placed before, is the direct object: the participle agrees in the feminine singular, as it already does."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « survenu » par « survenue »",
+          "rationale": {
+            "fr": "« Survenu » se rapporte à « l'incident », masculin singulier ; il est déjà bien accordé.",
+            "en": "« Survenu » refers to « l'incident », masculine singular; it already agrees properly."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « diffusées » par « diffusés »",
+          "rationale": {
+            "fr": "Le participe passif s'accorde avec le sujet « les nouvelles consignes », féminin pluriel ; « diffusées » est déjà conforme.",
+            "en": "The passive participle agrees with the subject « les nouvelles consignes », feminine plural; « diffusées » is already as it should be."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « toute entière » par « tout entière »",
+          "rationale": {
+            "fr": "« Tout », adverbe au sens de « entièrement », reste invariable devant un adjectif féminin commençant par une voyelle : « tout entière ».",
+            "en": "« Tout », as an adverb meaning « entirely », stays invariable before a feminine adjective beginning with a vowel: « tout entière »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Tout » adverbe ne varie devant un adjectif féminin que si celui-ci commence par une consonne ou un h aspiré (« toute seule », « toute honteuse »). Devant une voyelle ou un h muet, il reste invariable : « tout entière », « tout heureuse ». La graphie « toute entière », que l'on rencontre souvent, est à éviter dans un texte soigné.",
+        "en": "The adverb « tout » changes before a feminine adjective only if that adjective begins with a consonant or an aspirated h (« toute seule », « toute honteuse »). Before a vowel or a mute h, it stays invariable: « tout entière », « tout heureuse ». The spelling « toute entière », often seen, should be avoided in careful writing."
+      },
+      "subSkill": "agreement",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-31",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Choisissez la correction que demande cette phrase d'un courriel adressé à un fournisseur : « C'est moi qui a préparé les documents d'appel d'offres ; vous pouvez donc m'adresser directement toutes vos questions concernant les exigences techniques. »",
+        "en": "Choose the correction this sentence from an email to a supplier calls for: « C'est moi qui a préparé les documents d'appel d'offres ; vous pouvez donc m'adresser directement toutes vos questions concernant les exigences techniques. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « toutes vos questions » par « tous vos questions »",
+          "rationale": {
+            "fr": "« Questions » est féminin : « toutes » est déjà bien accordé.",
+            "en": "« Questions » is feminine: « toutes » already agrees properly."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « qui a préparé » par « qui ai préparé »",
+          "rationale": {
+            "fr": "Le pronom relatif « qui » prend la personne de son antécédent, ici « moi » : le verbe se conjugue à la première personne, « ai ».",
+            "en": "The relative pronoun « qui » takes the person of its antecedent, here « moi »: the verb is conjugated in the first person, « ai »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « pouvez » par « pouvons »",
+          "rationale": {
+            "fr": "Le sujet est « vous » ; « pouvez » est déjà conforme.",
+            "en": "The subject is « vous »; « pouvez » is already as it should be."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « concernant » par « concernantes »",
+          "rationale": {
+            "fr": "Employé comme préposition, « concernant » est invariable.",
+            "en": "Used as a preposition, « concernant » is invariable."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Après « c'est… qui », le verbe s'accorde en personne et en nombre avec l'antécédent du relatif : « c'est moi qui ai préparé », « c'est nous qui avons préparé », « c'est vous qui avez préparé ». La troisième personne n'est de mise que si l'antécédent est un nom ou un pronom de la troisième personne.",
+        "en": "After « c'est… qui », the verb agrees in person and number with the antecedent of the relative pronoun: « c'est moi qui ai préparé », « c'est nous qui avons préparé », « c'est vous qui avez préparé ». The third person is used only if the antecedent is a third-person noun or pronoun."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-32",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase d'une lettre adressée à un demandeur renferme une faute. Quelle correction s'impose ? « Nous avons bien reçu votre demande ; pour que nous puissions la traiter, veuillez remplir les deux formulaires ci-joint et nous les retourner au plus tard le 15 mars. »",
+        "en": "This sentence from a letter to an applicant contains an error. Which correction is required? « Nous avons bien reçu votre demande ; pour que nous puissions la traiter, veuillez remplir les deux formulaires ci-joint et nous les retourner au plus tard le 15 mars. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « ci-joint » par « ci-joints »",
+          "rationale": {
+            "fr": "Placé après le nom auquel il se rapporte, « ci-joint » s'accorde comme un adjectif : « les formulaires ci-joints ».",
+            "en": "Placed after the noun it refers to, « ci-joint » agrees like an adjective: « les formulaires ci-joints »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « reçu » par « reçue »",
+          "rationale": {
+            "fr": "Le COD « votre demande » suit le participe : avec avoir, celui-ci reste invariable.",
+            "en": "The direct object « votre demande » follows the participle: with avoir, it stays invariable."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « retourner » par « retournés »",
+          "rationale": {
+            "fr": "Coordonné à « remplir », ce verbe est lui aussi à l'infinitif, complément de « veuillez ».",
+            "en": "Coordinated with « remplir », this verb is also in the infinitive, as a complement of « veuillez »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « nous les retourner » par « nous leur retourner »",
+          "rationale": {
+            "fr": "Le pronom remplace « les formulaires », COD de « retourner » : il faut le pronom direct « les », non le pronom indirect « leur ».",
+            "en": "The pronoun stands for « les formulaires », the direct object of « retourner »: the direct pronoun « les » is needed, not the indirect « leur »."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Ci-joint », « ci-inclus » et « ci-annexé » sont invariables en tête de phrase et devant un nom sans déterminant (« Ci-joint copie de la lettre »). Placés après le nom, ils s'accordent avec lui comme des adjectifs : « les formulaires ci-joints », « la lettre ci-jointe ».",
+        "en": "« Ci-joint », « ci-inclus » and « ci-annexé » are invariable at the start of a sentence and before a noun with no determiner (« Ci-joint copie de la lettre »). Placed after the noun, they agree with it like adjectives: « les formulaires ci-joints », « la lettre ci-jointe »."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-agreement-33",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Trouvez la faute dans ce passage d'un compte rendu et sélectionnez la correction voulue : « À l'issue de la séance d'information sur le projet de règlement, la sous-ministre s'est déclarée satisfait des progrès accomplis et a demandé que le prochain bilan lui soit présenté en juin. »",
+        "en": "Find the error in this passage from a record of discussion and select the required correction: « À l'issue de la séance d'information sur le projet de règlement, la sous-ministre s'est déclarée satisfait des progrès accomplis et a demandé que le prochain bilan lui soit présenté en juin. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « déclarée » par « déclaré »",
+          "rationale": {
+            "fr": "Dans « se déclarer », le pronom « se », mis pour la sous-ministre et placé avant, est COD : le participe s'accorde, et « déclarée » est déjà conforme.",
+            "en": "In « se déclarer », the pronoun « se », standing for the deputy minister and placed before, is the direct object: the participle agrees, and « déclarée » is already as it should be."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « accomplis » par « accomplies »",
+          "rationale": {
+            "fr": "« Progrès » est masculin ; « accomplis » est déjà bien accordé.",
+            "en": "« Progrès » is masculine; « accomplis » already agrees properly."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « satisfait » par « satisfaite »",
+          "rationale": {
+            "fr": "L'attribut se rapporte à « la sous-ministre », féminin singulier : le titre au féminin commande « satisfaite ».",
+            "en": "The attribute refers to « la sous-ministre », feminine singular: the feminine title requires « satisfaite »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « présenté » par « présentée »",
+          "rationale": {
+            "fr": "Le participe s'accorde avec « le prochain bilan », masculin singulier.",
+            "en": "The participle agrees with « le prochain bilan », masculine singular."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Les titres et fonctions au féminin (la sous-ministre, la directrice générale, la présidente) commandent l'accord au féminin de tout ce qui s'y rapporte : adjectifs, attributs et participes. « La sous-ministre s'est déclarée satisfaite. » Avec un verbe pronominal comme « se déclarer », le « se » est COD et entraîne lui aussi l'accord du participe.",
+        "en": "Feminine titles and positions (la sous-ministre, la directrice générale, la présidente) require feminine agreement of everything that refers to them: adjectives, attributes and participles. « La sous-ministre s'est déclarée satisfaite. » With a pronominal verb such as « se déclarer », « se » is the direct object and also triggers agreement of the participle."
+      },
+      "subSkill": "agreement",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ]
+}

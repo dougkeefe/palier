@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useId, useState } from "react";
 
 import type { Container } from "../../lib/container";
-import { REPORT_REASONS, type ReportReason, reportIssueUrl } from "../../lib/report";
+import { REPORT_REASONS, type ReportReason, provenanceLine, reportIssueUrl } from "../../lib/report";
 
 /**
  * The one-tap report control on every feedback panel (product-requirements.md §13.0),
@@ -40,7 +40,7 @@ export function ReportItem({ item, container }: { item: Item; container: Contain
       </Button>
       {open ? (
         <div id={panelId} className="app-stack">
-          <p className="app-muted">{t(`provenance_${item.provenance.origin}`)}</p>
+          <p className="app-muted">{t(`provenance_${provenanceLine(item)}`)}</p>
           <fieldset className="app-fieldset">
             <legend>{t("legend")}</legend>
             {REPORT_REASONS.map((r) => (

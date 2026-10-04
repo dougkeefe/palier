@@ -1,0 +1,63 @@
+{
+  "bandCuts": [
+    {
+      "band": "X",
+      "max": 10,
+      "min": 0
+    },
+    {
+      "band": "A",
+      "max": 16,
+      "min": 11
+    },
+    {
+      "band": "B",
+      "max": 23,
+      "min": 17
+    },
+    {
+      "band": "C",
+      "max": 30,
+      "min": 24
+    }
+  ],
+  "id": "fr-writing-unsupervised-v4",
+  "itemIds": [
+    "claude-w-verb-tense-and-mood-20",
+    "claude-w-agreement-20",
+    "claude-w-prepositions-and-government-08",
+    "claude-w-pronouns-30",
+    "claude-w-connectors-and-discourse-markers-07",
+    "claude-w-register-and-formality-06",
+    "claude-w-word-choice-precision-05",
+    "claude-w-false-friends-and-anglicisms-08",
+    "claude-w-punctuation-and-mechanics-06",
+    "claude-w-sentence-structure-19",
+    "claude-w-verb-tense-and-mood-16",
+    "claude-w-agreement-30",
+    "claude-w-prepositions-and-government-20",
+    "claude-w-pronouns-02",
+    "claude-w-connectors-and-discourse-markers-12",
+    "claude-w-register-and-formality-32",
+    "claude-w-word-choice-precision-24",
+    "claude-w-false-friends-and-anglicisms-09",
+    "claude-w-punctuation-and-mechanics-30",
+    "claude-w-sentence-structure-11",
+    "claude-w-verb-tense-and-mood-17",
+    "claude-w-agreement-33",
+    "claude-w-prepositions-and-government-12",
+    "claude-w-pronouns-27",
+    "claude-w-connectors-and-discourse-markers-11",
+    "claude-w-register-and-formality-22",
+    "claude-w-word-choice-precision-14",
+    "claude-w-false-friends-and-anglicisms-01",
+    "claude-w-punctuation-and-mechanics-07",
+    "claude-w-sentence-structure-03"
+  ],
+  "lang": "fr",
+  "mode": "unsupervised",
+  "pilotItemIds": [],
+  "skill": "writing",
+  "timeLimitMinutes": 45,
+  "version": 4
+}

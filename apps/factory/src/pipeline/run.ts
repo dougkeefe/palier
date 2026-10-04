@@ -20,8 +20,8 @@ import { constructPassages } from "./passages.js";
 import { draftItems } from "./draft.js";
 import type { WritingPlanRow } from "./draft.js";
 import { reviewItems } from "./review.js";
-import { constructScenarios } from "./scenarios.js";
-import type { ScenarioStageResult } from "./scenarios.js";
+import { checkScenario, constructScenarios } from "./scenarios.js";
+import type { ScenarioRejection, ScenarioStageResult } from "./scenarios.js";
 import { FormShortfallError, assembleForms } from "./forms.js";
 import { checkForms, validateBank } from "./validate.js";
 import type { ValidationReport } from "./validate.js";
@@ -79,11 +79,14 @@ export type CarriedBank = {
 /**
  * Hand-authored contributions, from `content/authored/` (content-factory.md §5). They
  * enter at stage 4: review, then validation and the bank build, unchanged, and are not
- * exempt from any gate. An item that fails review is discarded whoever wrote it.
+ * exempt from any gate. An item that fails review is discarded whoever wrote it. An
+ * authored scenario is held to the scenario stage's checks, against the session lengths
+ * in the oral plan, and joins the bank after the carried ones (progress.md D203).
  */
 export type AuthoredContent = {
   readonly items: readonly Item[];
   readonly passages: readonly Passage[];
+  readonly scenarios?: readonly OralScenario[];
 };
 
 export type RunInput = {
@@ -112,6 +115,12 @@ export type RunInput = {
   readonly oralPlan?: OralSessionPlan;
   /** Hand-authored items and passages, joining the drafted ones at stage 4. Absent, none. */
   readonly authored?: AuthoredContent;
+  /**
+   * Draft nothing (progress.md D203): no passage, item or scenario is generated, so the
+   * batch is the carried bank and the authored content alone, and the provider is asked
+   * only to review. The oral plan still gives authored scenarios their session lengths.
+   */
+  readonly authoredOnly?: boolean;
 };
 
 export type RunOutput = {
@@ -132,15 +141,41 @@ export type RunOutput = {
   readonly report: BatchReport;
 };
 
+/**
+ * The scenario stage's result with the authored scenarios held to its checks and joined
+ * after the generated ones: discarded, never repaired, on a schema fault, phases that do
+ * not fill the session's planned length, a phase with nowhere to escalate or de-escalate,
+ * or a duplicate. A session type the oral plan gives no length cannot be checked, so it is
+ * discarded too.
+ */
+export const withAuthoredScenarios = (
+  stage: ScenarioStageResult,
+  authored: readonly OralScenario[],
+  plan: OralSessionPlan | undefined,
+): ScenarioStageResult => {
+  const scenarios = [...stage.scenarios];
+  const rejected: ScenarioRejection[] = [...stage.rejected];
+  for (const scenario of authored) {
+    const minutes = plan?.sessions.find((s) => s.sessionType === scenario.sessionType)?.minutes;
+    const reasons =
+      minutes === undefined ? [`no session length is planned for ${scenario.sessionType}`] : checkScenario(scenario, minutes);
+    if (scenarios.some((kept) => kept.id === scenario.id)) reasons.push(`duplicate of ${scenario.id}`);
+    if (reasons.length > 0) rejected.push({ id: scenario.id, reasons });
+    else scenarios.push(scenario);
+  }
+  return { ...stage, scenarios, rejected };
+};
+
 export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
   const lang: Lang = input.lang ?? "fr";
   const bands: readonly TargetBand[] = input.bands ?? ["B", "C"];
   const readingSubSkills = input.readingSubSkills ?? input.profile.subSkills.reading;
-  const writingPlan = input.writingPlan ?? defaultWritingPlan(input.profile, bands);
+  const generating = input.authoredOnly !== true;
+  const writingPlan = generating ? (input.writingPlan ?? defaultWritingPlan(input.profile, bands)) : [];
 
   const metered = meterProvider(input.provider);
 
-  const harvested = harvest(input.sources, input.now);
+  const harvested = harvest(generating ? input.sources : [], input.now);
 
   const passageStage = await constructPassages(harvested.queue, metered.provider, {
     lang,
@@ -176,10 +211,11 @@ export const runPipeline = async (input: RunInput): Promise<RunOutput> => {
   // The item stages' model, taken before the scenario stage calls its own.
   const itemModel = metered.provider.lastUsage()?.model ?? "scripted";
 
-  const scenarioStage: ScenarioStageResult =
-    input.oralPlan === undefined
+  const generated: ScenarioStageResult =
+    input.oralPlan === undefined || !generating
       ? { scenarios: [], rejected: [], failedCalls: 0 }
       : await constructScenarios(input.oralPlan, metered.provider, input.profile.topics);
+  const scenarioStage = withAuthoredScenarios(generated, input.authored?.scenarios ?? [], input.oralPlan);
 
   // Carried items go first, so a new draft that duplicates one is the item dropped,
   // and the id users already hold survives.

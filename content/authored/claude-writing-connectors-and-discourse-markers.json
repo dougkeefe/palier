@@ -1,0 +1,2197 @@
+{
+  "items": [
+    {
+      "id": "claude-w-connectors-and-discourse-markers-01",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "___ le poste de Mme Lavoie a été reclassifié à un niveau supérieur, elle recevra un rajustement salarial rétroactif à la date de la décision.",
+        "en": "___ Ms. Lavoie's position was reclassified to a higher level, she will receive a salary adjustment retroactive to the date of the decision."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Même si",
+          "rationale": {
+            "fr": "« Même si » exprime une concession : il faudrait que la reclassification fasse normalement obstacle au rajustement, ce qui est l'inverse de la situation.",
+            "en": "« Même si » expresses concession: the reclassification would have to be an obstacle to the adjustment, which is the reverse of the situation."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Puisque",
+          "rationale": {
+            "fr": "La reclassification est la cause du rajustement ; « puisque » présente cette cause comme un fait connu et se construit avec l'indicatif « a été ».",
+            "en": "The reclassification is the cause of the adjustment; « puisque » presents that cause as a known fact and takes the indicative « a été »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Alors que",
+          "rationale": {
+            "fr": "« Alors que » marque une opposition entre deux faits ; or la reclassification et le rajustement vont dans le même sens, l'un entraînant l'autre.",
+            "en": "« Alors que » marks an opposition between two facts; but the reclassification and the adjustment point the same way, one bringing about the other."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pour que",
+          "rationale": {
+            "fr": "« Pour que » exprime un but et exige le subjonctif ; la reclassification n'est pas le but du rajustement, et « a été » est à l'indicatif.",
+            "en": "« Pour que » expresses purpose and requires the subjunctive; the reclassification is not the purpose of the adjustment, and « a été » is indicative."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour introduire une cause, on emploie « puisque », « parce que », « comme » ou « étant donné que », tous suivis de l'indicatif. « Puisque » présente la cause comme évidente ou déjà connue du lecteur. Il ne faut pas le confondre avec les connecteurs de concession (« même si », « bien que »), qui posent un obstacle sans effet, ni avec ceux de but (« pour que », « afin que »), qui demandent le subjonctif.",
+        "en": "To introduce a cause, French uses « puisque », « parce que », « comme » or « étant donné que », all followed by the indicative. « Puisque » presents the cause as obvious or already known to the reader. It must not be confused with concessive connectors (« même si », « bien que »), which set out an obstacle that has no effect, nor with purpose connectors (« pour que », « afin que »), which take the subjunctive."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-02",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "La direction générale a obtenu des fonds supplémentaires en cours d'exercice ; ___, l'embauche des deux analystes financiers prévue au plan pourra aller de l'avant.",
+        "en": "The branch obtained additional funds during the fiscal year; ___, the hiring of the two financial analysts set out in the plan can go ahead."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "en revanche",
+          "rationale": {
+            "fr": "« En revanche » oppose deux faits contrastés ; rien ne s'oppose ici, puisque les fonds et l'embauche vont dans le même sens.",
+            "en": "« En revanche » sets two contrasting facts against each other; nothing is opposed here, since the funds and the hiring point the same way."
+          }
+        },
+        {
+          "id": "b",
+          "text": "pourtant",
+          "rationale": {
+            "fr": "« Pourtant » annonce un fait inattendu au regard du premier ; or l'embauche est précisément ce que les fonds supplémentaires laissent prévoir.",
+            "en": "« Pourtant » announces a fact that is unexpected given the first; but the hiring is exactly what the extra funds would lead one to expect."
+          }
+        },
+        {
+          "id": "c",
+          "text": "autrement dit",
+          "rationale": {
+            "fr": "« Autrement dit » introduit une reformulation de la même idée ; l'embauche n'est pas une autre façon de dire que des fonds ont été obtenus, c'en est le résultat.",
+            "en": "« Autrement dit » introduces a rewording of the same idea; the hiring is not another way of saying that funds were obtained, it is the result of it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "par conséquent",
+          "rationale": {
+            "fr": "Les fonds obtenus permettent l'embauche : la seconde proposition est la conséquence de la première, ce que « par conséquent » exprime.",
+            "en": "The funds obtained make the hiring possible: the second clause is the consequence of the first, which is what « par conséquent » expresses."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Par conséquent », « donc », « ainsi » et « c'est pourquoi » introduisent la conséquence de ce qui précède. Avant de choisir un connecteur, on se demande quel lien unit les deux propositions : cause et effet (conséquence), contraste (« en revanche »), fait inattendu (« pourtant ») ou simple reformulation (« autrement dit »). Ici, les fonds rendent l'embauche possible : c'est un lien de conséquence.",
+        "en": "« Par conséquent », « donc », « ainsi » and « c'est pourquoi » introduce the consequence of what precedes. Before choosing a connector, ask what link joins the two clauses: cause and effect (consequence), contrast (« en revanche »), an unexpected fact (« pourtant ») or a mere rewording (« autrement dit »). Here, the funds make the hiring possible: the link is one of consequence."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-03",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "___ la nouvelle directive sur la gestion des risques ne soit en vigueur qu'à compter du premier avril, les directions générales sont invitées à en appliquer dès maintenant les principales exigences.",
+        "en": "___ the new directive on risk management only comes into force on April 1, branches are invited to apply its main requirements right away."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Bien que",
+          "rationale": {
+            "fr": "La phrase oppose une entrée en vigueur tardive à une application immédiate : c'est une concession, et « bien que » se construit avec le subjonctif « soit ».",
+            "en": "The sentence contrasts a later coming into force with immediate application: this is concession, and « bien que » takes the subjunctive « soit »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Même si",
+          "rationale": {
+            "fr": "Le sens concessif conviendrait, mais « même si » exige l'indicatif (« même si la directive n'est en vigueur ») ; devant le subjonctif « soit », il est fautif.",
+            "en": "The concessive meaning would fit, but « même si » requires the indicative (« même si la directive n'est en vigueur »); before the subjunctive « soit » it is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Malgré que",
+          "rationale": {
+            "fr": "Tentant, car le sens est concessif et le subjonctif suit ; mais la locution « malgré que » est critiquée par la norme et à écarter dans un texte administratif soigné.",
+            "en": "Tempting, since the meaning is concessive and the subjunctive follows; but « malgré que » is criticised by the norm and should be avoided in careful administrative writing."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Puisque",
+          "rationale": {
+            "fr": "« Puisque » introduit une cause à l'indicatif ; une entrée en vigueur tardive ne peut justifier une application anticipée, et le subjonctif « soit » est exclu après ce connecteur.",
+            "en": "« Puisque » introduces a cause in the indicative; a later coming into force cannot justify early application, and the subjunctive « soit » is ruled out after this connector."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "La concession pose un fait qui pourrait empêcher le second sans l'empêcher réellement. « Bien que » et « quoique » sont suivis du subjonctif, même si le fait est avéré ; « même si » est suivi de l'indicatif. La locution « malgré que », bien que répandue, est critiquée et à éviter dans la langue administrative ; on lui préfère « bien que » ou la préposition « malgré » suivie d'un nom.",
+        "en": "Concession states a fact that could prevent the second without actually preventing it. « Bien que » and « quoique » are followed by the subjunctive, even when the fact is real; « même si » is followed by the indicative. The phrase « malgré que », though widespread, is criticised and avoided in administrative French; « bien que », or the preposition « malgré » followed by a noun, is preferred."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-04",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "___ soumissions conformes reçues avant la date de clôture, l'autorité contractante devra relancer la demande de propositions en assouplissant certains critères d'admissibilité.",
+        "en": "___ compliant bids received before the closing date, the contracting authority will have to reissue the request for proposals with some eligibility criteria relaxed."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "En raison de",
+          "rationale": {
+            "fr": "« En raison de » introduit une cause positive : la phrase dirait que des soumissions conformes ont été reçues et que c'est pour cela qu'il faut relancer, ce qui est illogique.",
+            "en": "« En raison de » introduces a positive cause: the sentence would say that compliant bids were received and that this is why the call must be reissued, which is illogical."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Sous réserve de",
+          "rationale": {
+            "fr": "« Sous réserve de » pose une condition ou une restriction ; on ne relance pas une demande de propositions à condition d'avoir reçu des soumissions conformes.",
+            "en": "« Sous réserve de » sets a condition or a restriction; one does not reissue a request for proposals on condition of having received compliant bids."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Faute de",
+          "rationale": {
+            "fr": "« Faute de » exprime une cause par manque : c'est l'absence de soumissions conformes qui oblige à relancer l'appel en assouplissant les critères.",
+            "en": "« Faute de » expresses a cause through lack: it is the absence of compliant bids that forces the call to be reissued with relaxed criteria."
+          }
+        },
+        {
+          "id": "d",
+          "text": "En vue de",
+          "rationale": {
+            "fr": "« En vue de » exprime un but ; il ne s'accorde pas avec des soumissions déjà « reçues avant la date de clôture », qui ne peuvent être un objectif à atteindre.",
+            "en": "« En vue de » expresses purpose; it does not fit bids already « received before the closing date », which cannot be a goal still to be reached."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Faute de » (ou « à défaut de ») introduit une cause négative : le manque de quelque chose entraîne la conséquence. Elle se construit sans article devant le nom (« faute de soumissions », « faute de temps ») ou avec un infinitif. On la distingue d'« en raison de », qui présente une cause existante, de « sous réserve de », qui exprime une condition, et d'« en vue de », qui exprime un but.",
+        "en": "« Faute de » (or « à défaut de ») introduces a negative cause: the lack of something brings about the consequence. It takes no article before the noun (« faute de soumissions », « faute de temps ») or is followed by an infinitive. It is distinct from « en raison de », which presents an existing cause, from « sous réserve de », which expresses a condition, and from « en vue de », which expresses purpose."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-05",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "L'ancien système exigeait une ouverture de session distincte pour chaque application, ___ la nouvelle plateforme permet d'accéder à tous les outils avec un seul mot de passe.",
+        "en": "The old system required a separate log-in for each application, ___ the new platform gives access to all the tools with a single password."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "puisque",
+          "rationale": {
+            "fr": "« Puisque » ferait de l'ancien système la cause des avantages de la nouvelle plateforme, ce qui n'a pas de sens.",
+            "en": "« Puisque » would make the old system the cause of the new platform's advantages, which makes no sense."
+          }
+        },
+        {
+          "id": "b",
+          "text": "de sorte que",
+          "rationale": {
+            "fr": "Avec l'indicatif, « de sorte que » introduit une conséquence ; la nouvelle plateforme n'est pas le résultat des multiples ouvertures de session de l'ancien système.",
+            "en": "With the indicative, « de sorte que » introduces a consequence; the new platform is not the result of the old system's multiple log-ins."
+          }
+        },
+        {
+          "id": "c",
+          "text": "alors que",
+          "rationale": {
+            "fr": "La phrase met en parallèle deux situations opposées, l'ancien et le nouveau système ; « alors que » + indicatif exprime cette opposition.",
+            "en": "The sentence sets two opposite situations side by side, the old system and the new; « alors que » + indicative expresses that opposition."
+          }
+        },
+        {
+          "id": "d",
+          "text": "à moins que",
+          "rationale": {
+            "fr": "« À moins que » pose une condition négative et exige le subjonctif ; ni le sens ni l'indicatif « permet » ne conviennent.",
+            "en": "« À moins que » sets a negative condition and requires the subjunctive; neither the meaning nor the indicative « permet » fits."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour opposer deux faits simultanés ou deux situations comparables, on emploie « alors que » ou « tandis que », suivis de l'indicatif. Le contraste se repère aux couples d'éléments opposés : ici « l'ancien système » et « la nouvelle plateforme », « une ouverture de session distincte pour chaque application » et « un seul mot de passe ».",
+        "en": "To contrast two simultaneous facts or two comparable situations, French uses « alors que » or « tandis que », followed by the indicative. The contrast shows in the paired opposites: here « l'ancien système » and « la nouvelle plateforme », « a separate log-in for each application » and « a single password »."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-06",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le bureau régional pourra prolonger ses heures d'ouverture pendant la période de pointe des déclarations, ___ l'administration centrale lui fournisse le personnel temporaire nécessaire.",
+        "en": "The regional office will be able to extend its opening hours during the peak filing period, ___ headquarters provides it with the necessary temporary staff."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "à condition que",
+          "rationale": {
+            "fr": "Le personnel temporaire est la condition qui rend la prolongation possible ; « à condition que » exprime cette condition et appelle le subjonctif « fournisse ».",
+            "en": "The temporary staff is the condition that makes the extension possible; « à condition que » expresses that condition and calls for the subjunctive « fournisse »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "si bien que",
+          "rationale": {
+            "fr": "« Si bien que » introduit une conséquence et se construit toujours avec l'indicatif ; le subjonctif « fournisse » et le sens sont fautifs.",
+            "en": "« Si bien que » introduces a consequence and always takes the indicative; both the subjunctive « fournisse » and the meaning are wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "à moins que",
+          "rationale": {
+            "fr": "La construction est grammaticale, mais « à moins que » pose une condition négative : la prolongation n'aurait lieu que si le personnel n'était pas fourni, ce qui inverse la logique.",
+            "en": "The construction is grammatical, but « à moins que » sets a negative condition: the extension would happen only if the staff were not provided, which reverses the logic."
+          }
+        },
+        {
+          "id": "d",
+          "text": "bien que",
+          "rationale": {
+            "fr": "La construction est grammaticale, mais « bien que » exprime une concession ; l'arrivée de personnel n'est pas un obstacle à la prolongation, c'en est la condition.",
+            "en": "The construction is grammatical, but « bien que » expresses concession; the arrival of staff is not an obstacle to the extension, it is its condition."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« À condition que » et « pourvu que » expriment une condition nécessaire et sont suivis du subjonctif. « À moins que » exprime la condition inverse (« sauf si ») et demande aussi le subjonctif, souvent avec un « ne » explétif. Pour choisir, on vérifie dans quel sens joue la condition : ici, sans personnel temporaire, pas de prolongation.",
+        "en": "« À condition que » and « pourvu que » express a necessary condition and are followed by the subjunctive. « À moins que » expresses the opposite condition (« unless ») and also takes the subjunctive, often with an expletive « ne ». To choose, check which way the condition works: here, without temporary staff there is no extension."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-07",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Les gestionnaires doivent afficher le plan d'évacuation à chaque étage ___ tous les employés puissent le consulter rapidement en cas d'urgence.",
+        "en": "Managers must post the evacuation plan on every floor ___ all employees can consult it quickly in an emergency."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "parce que",
+          "rationale": {
+            "fr": "« Parce que » introduit une cause à l'indicatif ; la consultation par les employés n'est pas la cause de l'affichage, et « puissent » est exclu après ce connecteur.",
+            "en": "« Parce que » introduces a cause in the indicative; consultation by employees is not the cause of the posting, and « puissent » is ruled out after this connector."
+          }
+        },
+        {
+          "id": "b",
+          "text": "si bien que",
+          "rationale": {
+            "fr": "« Si bien que » introduit une conséquence constatée, toujours à l'indicatif ; il ne peut précéder « puissent », et l'obligation d'afficher appelle plutôt un but.",
+            "en": "« Si bien que » introduces an observed consequence, always in the indicative; it cannot precede « puissent », and the duty to post calls for a purpose instead."
+          }
+        },
+        {
+          "id": "c",
+          "text": "alors que",
+          "rationale": {
+            "fr": "« Alors que » oppose deux faits et demande l'indicatif ; il n'y a aucune opposition entre l'affichage et la consultation.",
+            "en": "« Alors que » contrasts two facts and requires the indicative; there is no opposition between posting the plan and consulting it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "afin que",
+          "rationale": {
+            "fr": "L'affichage vise à permettre la consultation : c'est un but, et « afin que » se construit avec le subjonctif « puissent ».",
+            "en": "The posting is meant to allow consultation: that is a purpose, and « afin que » takes the subjunctive « puissent »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le but s'exprime par « afin que » ou « pour que » suivis du subjonctif, ou par « afin de » / « pour » suivis de l'infinitif quand le sujet est le même. On distingue le but (ce que l'on cherche à obtenir, au subjonctif) de la conséquence (ce qui se produit effectivement, à l'indicatif, avec « si bien que ») et de la cause (« parce que », à l'indicatif).",
+        "en": "Purpose is expressed by « afin que » or « pour que » followed by the subjunctive, or by « afin de » / « pour » followed by the infinitive when the subject is the same. Purpose (what one seeks to bring about, in the subjunctive) is distinct from consequence (what actually happens, in the indicative, with « si bien que ») and from cause (« parce que », in the indicative)."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-08",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le plan de communication prévoyait la diffusion du communiqué le lundi matin. ___, la traduction n'a été approuvée que le mardi après-midi, ce qui a retardé l'annonce de vingt-quatre heures.",
+        "en": "The communications plan provided for the news release to go out on Monday morning. ___, the translation was not approved until Tuesday afternoon, which delayed the announcement by twenty-four hours."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Ainsi",
+          "rationale": {
+            "fr": "« Ainsi » introduit une conséquence ou une illustration ; l'approbation tardive ne découle pas du plan de communication, elle le contrarie.",
+            "en": "« Ainsi » introduces a consequence or an illustration; the late approval does not follow from the communications plan, it thwarts it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Or",
+          "rationale": {
+            "fr": "« Or » introduit un fait nouveau qui vient contrarier ce qui était prévu et fait progresser le raisonnement vers sa conclusion (le retard) ; c'est exactement le mouvement de ce texte.",
+            "en": "« Or » introduces a new fact that runs against what was planned and moves the reasoning towards its conclusion (the delay); that is exactly how this text moves."
+          }
+        },
+        {
+          "id": "c",
+          "text": "En effet",
+          "rationale": {
+            "fr": "« En effet » introduit une justification de ce qui précède ; l'approbation tardive n'explique pas pourquoi la diffusion était prévue le lundi.",
+            "en": "« En effet » introduces a justification of what precedes; the late approval does not explain why the release was planned for Monday."
+          }
+        },
+        {
+          "id": "d",
+          "text": "De plus",
+          "rationale": {
+            "fr": "« De plus » ajoute un argument allant dans le même sens ; or le second fait s'oppose au premier au lieu de le compléter.",
+            "en": "« De plus » adds an argument pointing the same way; but the second fact runs against the first rather than adding to it."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Or » est un connecteur du raisonnement : placé en tête de phrase et suivi d'une virgule, il introduit un élément nouveau, souvent en opposition avec ce qui était prévu ou attendu, d'où l'on tire ensuite une conclusion (« Le communiqué devait sortir lundi. Or la traduction n'était pas prête. Il a donc été reporté. »). Il ne faut le confondre ni avec « ainsi » (conséquence), ni avec « en effet » (justification), ni avec « de plus » (addition).",
+        "en": "« Or » is a connector of reasoning: placed at the start of a sentence and followed by a comma, it introduces a new element, often at odds with what was planned or expected, from which a conclusion is then drawn (« The release was due Monday. Now, the translation was not ready. So it was postponed. »). It must not be confused with « ainsi » (consequence), « en effet » (justification) or « de plus » (addition)."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-09",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le chargé de projet a présenté l'échéancier révisé au comité de gouvernance. ___, il a proposé de réduire la portée de la deuxième phase afin de respecter l'enveloppe budgétaire.",
+        "en": "The project lead presented the revised schedule to the governance committee. ___, he proposed reducing the scope of the second phase in order to stay within the budget envelope."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "De plus",
+          "rationale": {
+            "fr": "La seconde phrase ajoute une deuxième intervention du chargé de projet à la première ; « de plus » marque cette addition.",
+            "en": "The second sentence adds a second action by the project lead to the first; « de plus » marks that addition."
+          }
+        },
+        {
+          "id": "b",
+          "text": "En revanche",
+          "rationale": {
+            "fr": "« En revanche » oppose deux faits contrastés ; présenter un échéancier et proposer une réduction de portée ne s'opposent pas.",
+            "en": "« En revanche » sets two contrasting facts against each other; presenting a schedule and proposing a scope reduction are not opposed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Autrement dit",
+          "rationale": {
+            "fr": "« Autrement dit » annonce une reformulation ; la réduction de portée est une nouvelle proposition, pas une autre façon de décrire l'échéancier.",
+            "en": "« Autrement dit » announces a rewording; the scope reduction is a new proposal, not another way of describing the schedule."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Faute de quoi",
+          "rationale": {
+            "fr": "« Faute de quoi » signifie « sinon » : la proposition n'aurait été faite que si l'échéancier n'avait pas été présenté, ce qui est illogique.",
+            "en": "« Faute de quoi » means « otherwise »: the proposal would have been made only if the schedule had not been presented, which is illogical."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour ajouter une information ou un argument qui va dans le même sens, on emploie « de plus », « en outre », « par ailleurs » ou « également ». Ces connecteurs d'addition ne doivent pas être remplacés par des connecteurs d'opposition (« en revanche »), de condition négative (« faute de quoi », c'est-à-dire « sinon ») ou de reformulation (« autrement dit »), qui imposent au lecteur un rapport logique absent du texte.",
+        "en": "To add a piece of information or an argument pointing the same way, French uses « de plus », « en outre », « par ailleurs » or « également ». These connectors of addition must not be replaced by connectors of opposition (« en revanche »), negative condition (« faute de quoi », that is « otherwise ») or rewording (« autrement dit »), which force on the reader a logical relation the text does not contain."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-10",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le recours à la traduction automatique demeure acceptable pour les documents internes de travail ___ ceux-ci ne sont jamais diffusés à l'extérieur du Ministère sans révision professionnelle.",
+        "en": "Using machine translation remains acceptable for internal working documents ___ these are never released outside the department without professional revision."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "même si",
+          "rationale": {
+            "fr": "« Même si » introduit une concession ; or l'absence de diffusion externe n'est pas un obstacle à l'usage de la traduction automatique, c'est ce qui le justifie.",
+            "en": "« Même si » introduces concession; but the absence of outside release is not an obstacle to using machine translation, it is what justifies it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "si bien que",
+          "rationale": {
+            "fr": "« Si bien que » introduit une conséquence : l'acceptabilité de la traduction automatique n'a pas pour effet que les documents restent internes, c'est l'inverse.",
+            "en": "« Si bien que » introduces a consequence: machine translation being acceptable does not cause the documents to stay internal; it is the other way round."
+          }
+        },
+        {
+          "id": "c",
+          "text": "à moins que",
+          "rationale": {
+            "fr": "« À moins que » exige le subjonctif (« ne soient ») et pose une condition inverse qui rendrait la phrase absurde : l'usage serait acceptable sauf si les documents restaient internes.",
+            "en": "« À moins que » requires the subjunctive (« ne soient ») and sets an opposite condition that would make the sentence absurd: use would be acceptable except if the documents stayed internal."
+          }
+        },
+        {
+          "id": "d",
+          "text": "dans la mesure où",
+          "rationale": {
+            "fr": "L'acceptabilité dépend du fait que les documents ne sortent pas sans révision ; « dans la mesure où » (au sens de « pour autant que », « puisque ») se construit avec l'indicatif « sont ».",
+            "en": "Acceptability depends on the documents never leaving without revision; « dans la mesure où » (meaning « insofar as », « since ») takes the indicative « sont »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Dans la mesure où » se construit avec l'indicatif et a deux valeurs proches : la condition restrictive (« pour autant que ») et la cause (« puisque »). Il convient quand une affirmation n'est valable qu'à l'intérieur d'une limite donnée. « À moins que » et « à condition que » expriment aussi une condition, mais ils demandent le subjonctif et ne jouent pas dans le même sens : « à moins que » signifie « sauf si ».",
+        "en": "« Dans la mesure où » takes the indicative and has two close values: a restrictive condition (« insofar as ») and a cause (« since »). It fits when a statement holds only within a given limit. « À moins que » and « à condition que » also express a condition, but they take the subjunctive and do not work the same way: « à moins que » means « unless »."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-11",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Avant de rédiger le plan sur l'accessibilité du Ministère, l'équipe a tenu des consultations auprès d'employés en situation de handicap ___ recenser les obstacles qu'ils rencontrent au quotidien.",
+        "en": "Before drafting the department's accessibility plan, the team held consultations with employees with disabilities ___ identify the barriers they encounter every day."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "faute de",
+          "rationale": {
+            "fr": "« Faute de » + infinitif exprime une cause par manque ; on ne consulte pas des employés parce qu'on n'a pas recensé les obstacles, mais pour les recenser.",
+            "en": "« Faute de » + infinitive expresses a cause through lack; one does not consult employees because the barriers were not identified, but in order to identify them."
+          }
+        },
+        {
+          "id": "b",
+          "text": "en vue de",
+          "rationale": {
+            "fr": "Les consultations ont pour objectif de recenser les obstacles : « en vue de » + infinitif exprime ce but.",
+            "en": "The consultations aim to identify the barriers: « en vue de » + infinitive expresses that purpose."
+          }
+        },
+        {
+          "id": "c",
+          "text": "quitte à",
+          "rationale": {
+            "fr": "« Quitte à » introduit un inconvénient que l'on accepte ; recenser les obstacles n'est pas un risque assumé, c'est l'objectif même des consultations.",
+            "en": "« Quitte à » introduces a drawback one is prepared to accept; identifying barriers is not an accepted risk, it is the very aim of the consultations."
+          }
+        },
+        {
+          "id": "d",
+          "text": "afin que",
+          "rationale": {
+            "fr": "Le sens de but conviendrait, mais « afin que » doit être suivi d'une proposition au subjonctif, jamais d'un infinitif ; devant « recenser », il faudrait « afin de ».",
+            "en": "The meaning of purpose would fit, but « afin que » must be followed by a clause in the subjunctive, never by an infinitive; before « recenser », « afin de » would be needed."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le but se marque par une locution prépositive suivie de l'infinitif quand le sujet est le même (« pour », « afin de », « en vue de ») et par une locution conjonctive suivie du subjonctif quand le sujet change (« pour que », « afin que »). On ne mélange pas les deux constructions. « Faute de » (manque) et « quitte à » (risque accepté) se construisent aussi avec l'infinitif, mais n'expriment pas un but.",
+        "en": "Purpose is marked by a prepositional phrase followed by the infinitive when the subject is the same (« pour », « afin de », « en vue de ») and by a conjunction followed by the subjunctive when the subject changes (« pour que », « afin que »). The two constructions are not mixed. « Faute de » (lack) and « quitte à » (accepted risk) also take the infinitive, but they do not express purpose."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-12",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Certes, le parc de véhicules du Ministère a réduit ses émissions de douze pour cent depuis la mise en œuvre de la stratégie d'écologisation ; ___ la cible fixée pour la fin de l'exercice demeure hors de portée sans investissements additionnels.",
+        "en": "Admittedly, the department's vehicle fleet has cut its emissions by twelve per cent since the greening strategy was implemented; ___ the target set for the end of the fiscal year remains out of reach without additional investment."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "c'est pourquoi",
+          "rationale": {
+            "fr": "« C'est pourquoi » présenterait la réduction des émissions comme la cause de l'échec annoncé, ce qui est illogique, et laisserait « certes » sans contrepartie.",
+            "en": "« C'est pourquoi » would present the emissions cut as the cause of the predicted shortfall, which is illogical, and would leave « certes » with no counterpart."
+          }
+        },
+        {
+          "id": "b",
+          "text": "autrement dit",
+          "rationale": {
+            "fr": "« Autrement dit » annonce une reformulation ; une cible hors de portée n'est pas une autre façon de dire que les émissions ont baissé.",
+            "en": "« Autrement dit » announces a rewording; a target out of reach is not another way of saying that emissions have fallen."
+          }
+        },
+        {
+          "id": "c",
+          "text": "il n'en reste pas moins que",
+          "rationale": {
+            "fr": "« Certes » concède un progrès ; la suite doit le nuancer par une restriction. « Il n'en reste pas moins que » + indicatif introduit ce contrepoids.",
+            "en": "« Certes » concedes some progress; what follows must qualify it with a restriction. « Il n'en reste pas moins que » + indicative introduces that counterweight."
+          }
+        },
+        {
+          "id": "d",
+          "text": "d'ailleurs",
+          "rationale": {
+            "fr": "« D'ailleurs » ajoute un argument à l'appui du premier ; or la seconde proposition s'oppose au progrès concédé au lieu de le renforcer.",
+            "en": "« D'ailleurs » adds an argument supporting the first; but the second clause runs against the progress conceded instead of reinforcing it."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "La structure « certes… toutefois / néanmoins / il n'en reste pas moins que » permet de concéder un point avant d'affirmer ce qui compte davantage. « Certes » annonce toujours une restriction à venir : la seconde partie doit donc s'introduire par un connecteur d'opposition ou de concession, jamais par un connecteur de conséquence, de reformulation ou d'addition. « Il n'en reste pas moins que » et « il n'en demeure pas moins que » se construisent avec l'indicatif.",
+        "en": "The pattern « certes… toutefois / néanmoins / il n'en reste pas moins que » lets the writer concede a point before asserting what matters more. « Certes » always announces a restriction to come: the second part must therefore open with a connector of opposition or concession, never with one of consequence, rewording or addition. « Il n'en reste pas moins que » and « il n'en demeure pas moins que » take the indicative."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-13",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "___ plusieurs membres du comité de sélection seront en congé en juillet, les entrevues auront lieu au cours de la dernière semaine de juin.",
+        "en": "___ several members of the selection board will be on leave in July, the interviews will take place during the last week of June."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Bien que",
+          "rationale": {
+            "fr": "« Bien que » exprime une concession et exige le subjonctif ; or les congés ne sont pas un obstacle surmonté, ils motivent la décision.",
+            "en": "« Bien que » expresses concession and requires the subjunctive; but the leave is not an obstacle overcome, it is the reason for the decision."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Afin que",
+          "rationale": {
+            "fr": "« Afin que » exprime un but et demande le subjonctif ; les congés des membres ne sont pas l'objectif visé par le calendrier des entrevues.",
+            "en": "« Afin que » expresses purpose and requires the subjunctive; the members' leave is not the goal of the interview schedule."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Tandis que",
+          "rationale": {
+            "fr": "« Tandis que » oppose deux faits simultanés ; il n'y a ni opposition ni simultanéité entre les congés de juillet et les entrevues de juin.",
+            "en": "« Tandis que » contrasts two simultaneous facts; there is neither opposition nor simultaneity between July leave and June interviews."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Étant donné que",
+          "rationale": {
+            "fr": "Les congés de juillet expliquent le choix de la date ; « étant donné que » introduit cette cause et se construit avec l'indicatif « seront ».",
+            "en": "The July leave explains the choice of date; « étant donné que » introduces that cause and takes the indicative « seront »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Étant donné que », « vu que », « puisque » et « comme » introduisent une cause suivie de l'indicatif, généralement placée en tête de phrase pour justifier la décision qui suit. Le temps du verbe (ici le futur « seront ») n'a pas d'incidence sur le choix du connecteur : seul compte le rapport logique entre les deux propositions.",
+        "en": "« Étant donné que », « vu que », « puisque » and « comme » introduce a cause followed by the indicative, usually placed at the start of the sentence to justify the decision that follows. The tense of the verb (here the future « seront ») has no bearing on the choice of connector: only the logical relation between the two clauses matters."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-14",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le transfert de crédits entre les deux programmes est approuvé en principe ; il sera toutefois effectué ___ l'avis favorable du dirigeant principal des finances, qui examinera le dossier la semaine prochaine.",
+        "en": "The transfer of appropriations between the two programs is approved in principle; it will however be carried out ___ the favourable opinion of the chief financial officer, who will review the file next week."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "sous réserve de",
+          "rationale": {
+            "fr": "L'avis n'a pas encore été donné : le transfert est conditionnel à cet avis. « Sous réserve de » exprime précisément une condition restrictive.",
+            "en": "The opinion has not yet been given: the transfer depends on it. « Sous réserve de » expresses exactly that kind of restrictive condition."
+          }
+        },
+        {
+          "id": "b",
+          "text": "en dépit de",
+          "rationale": {
+            "fr": "« En dépit de » marque une concession (« malgré ») : effectuer un transfert malgré un avis favorable n'a aucun sens.",
+            "en": "« En dépit de » marks concession (« despite »): carrying out a transfer despite a favourable opinion makes no sense."
+          }
+        },
+        {
+          "id": "c",
+          "text": "en raison de",
+          "rationale": {
+            "fr": "« En raison de » présente une cause déjà acquise ; or l'avis n'existe pas encore, puisque le dossier sera examiné la semaine prochaine, et « toutefois » annonce une restriction, non une cause.",
+            "en": "« En raison de » presents a cause already in place; but the opinion does not exist yet, since the file will be reviewed next week, and « toutefois » announces a restriction, not a cause."
+          }
+        },
+        {
+          "id": "d",
+          "text": "au lieu de",
+          "rationale": {
+            "fr": "« Au lieu de » exprime une substitution ; le transfert ne remplace pas l'avis du dirigeant principal des finances, il en dépend.",
+            "en": "« Au lieu de » expresses substitution; the transfer does not replace the chief financial officer's opinion, it depends on it."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Sous réserve de » + nom exprime une condition ou une restriction : l'action n'aura lieu que si l'élément nommé se réalise ou est respecté (« sous réserve de l'approbation », « sous réserve des fonds disponibles »). C'est une locution typique des textes administratifs et juridiques. On la distingue de la cause (« en raison de »), de la concession (« en dépit de ») et de la substitution (« au lieu de »).",
+        "en": "« Sous réserve de » + noun expresses a condition or restriction: the action will take place only if the named element comes about or is respected (« subject to approval », « subject to available funds »). It is a phrase typical of administrative and legal texts. It is distinct from cause (« en raison de »), concession (« en dépit de ») and substitution (« au lieu de »)."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-15",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Les délais de traitement des demandes de prestations ont nettement diminué depuis février. ___, le centre de services avait embauché six agents supplémentaires en janvier.",
+        "en": "Processing times for benefit applications have dropped sharply since February. ___, the service centre had hired six additional agents in January."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Par conséquent",
+          "rationale": {
+            "fr": "« Par conséquent » inverse la logique : l'embauche, survenue avant, ne peut être la conséquence de la baisse des délais ; elle en est la cause.",
+            "en": "« Par conséquent » reverses the logic: the hiring, which came first, cannot be the consequence of the drop in processing times; it is the cause."
+          }
+        },
+        {
+          "id": "b",
+          "text": "En effet",
+          "rationale": {
+            "fr": "La seconde phrase explique la première : l'embauche de janvier justifie la baisse des délais. « En effet » introduit cette explication.",
+            "en": "The second sentence explains the first: the January hiring accounts for the drop in processing times. « En effet » introduces that explanation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "En revanche",
+          "rationale": {
+            "fr": "« En revanche » oppose deux faits ; l'embauche d'agents et la baisse des délais vont dans le même sens.",
+            "en": "« En revanche » contrasts two facts; hiring agents and shorter processing times point the same way."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pourtant",
+          "rationale": {
+            "fr": "« Pourtant » présente un fait comme inattendu ; or l'embauche d'agents rend la baisse des délais tout à fait prévisible.",
+            "en": "« Pourtant » presents a fact as unexpected; but hiring agents makes the drop in processing times entirely predictable."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« En effet » introduit une explication ou une justification de ce qui vient d'être affirmé : l'effet est énoncé d'abord, la cause ensuite. Le plus-que-parfait « avait embauché » confirme que l'embauche est antérieure et explique la situation. Si l'ordre était inversé (la cause d'abord), on emploierait un connecteur de conséquence comme « par conséquent » ou « c'est pourquoi ».",
+        "en": "« En effet » introduces an explanation or justification of what has just been stated: the effect comes first, the cause second. The pluperfect « avait embauché » confirms that the hiring came earlier and explains the situation. If the order were reversed (cause first), a connector of consequence such as « par conséquent » or « c'est pourquoi » would be used."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-16",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Pour respecter l'échéance de la fin de l'exercice, la gestionnaire de l'approvisionnement a décidé de publier la demande de propositions dès cette semaine…",
+        "en": "To meet the year-end deadline, the procurement manager decided to publish the request for proposals this very week…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "faute de diffuser certaines annexes techniques dans un addenda ultérieur.",
+          "rationale": {
+            "fr": "« Faute de » exprime une cause par manque ; la publication rapide n'est pas due au fait de ne pas diffuser d'addenda.",
+            "en": "« Faute de » expresses a cause through lack; the early publication is not due to failing to issue an addendum."
+          }
+        },
+        {
+          "id": "b",
+          "text": "de manière à diffuser certaines annexes techniques dans un addenda ultérieur.",
+          "rationale": {
+            "fr": "« De manière à » exprime un but ; publier un addenda n'est pas l'objectif recherché, c'est un inconvénient que la gestionnaire accepte.",
+            "en": "« De manière à » expresses purpose; issuing an addendum is not the goal sought, it is a drawback the manager accepts."
+          }
+        },
+        {
+          "id": "c",
+          "text": "quitte à diffuser certaines annexes techniques dans un addenda ultérieur.",
+          "rationale": {
+            "fr": "« Quitte à » + infinitif introduit l'inconvénient accepté pour atteindre l'objectif : publier vite, au prix d'un addenda pour les annexes. Le rapport logique est exactement celui du contexte.",
+            "en": "« Quitte à » + infinitive introduces the drawback accepted to reach the goal: publish quickly, at the cost of an addendum for the annexes. The logical relation is exactly that of the context."
+          }
+        },
+        {
+          "id": "d",
+          "text": "bien qu'elle diffusera certaines annexes techniques dans un addenda ultérieur.",
+          "rationale": {
+            "fr": "Tentant, car une concession n'est pas absurde ici ; mais « bien que » exige le subjonctif, et le futur de l'indicatif « diffusera » est fautif.",
+            "en": "Tempting, since a concession is not absurd here; but « bien que » requires the subjunctive, and the future indicative « diffusera » is wrong."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Quitte à » + infinitif signifie « au risque de », « en acceptant l'inconvénient de » : on accepte une conséquence fâcheuse pour atteindre un objectif jugé prioritaire. C'est une nuance propre à la langue soignée, distincte du but (« de manière à », « afin de ») et de la cause par manque (« faute de »). Quant à « bien que », il est toujours suivi du subjonctif.",
+        "en": "« Quitte à » + infinitive means « at the risk of », « accepting the drawback of »: one accepts an unwelcome consequence to reach a goal judged to come first. It is a nuance of careful French, distinct from purpose (« de manière à », « afin de ») and from cause through lack (« faute de »). As for « bien que », it is always followed by the subjunctive."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-17",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le communiqué annonçant le nouvel horaire des bureaux n'a pas encore été traduit vers l'anglais…",
+        "en": "The news release announcing the offices' new hours has not yet been translated into English…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "si bien que sa diffusion est reportée à demain matin.",
+          "rationale": {
+            "fr": "L'absence de traduction entraîne le report : « si bien que » introduit cette conséquence réelle, à l'indicatif « est reportée ».",
+            "en": "The missing translation leads to the postponement: « si bien que » introduces that actual consequence, in the indicative « est reportée »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "si bien que sa diffusion soit reportée à demain matin.",
+          "rationale": {
+            "fr": "Le rapport de conséquence est le bon, mais « si bien que » se construit toujours avec l'indicatif ; le subjonctif « soit » est fautif.",
+            "en": "The relation of consequence fits, but « si bien que » always takes the indicative; the subjunctive « soit » is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "bien que sa diffusion soit reportée à demain matin.",
+          "rationale": {
+            "fr": "« Bien que » exprime une concession ; le report n'est pas un obstacle à la traduction, c'en est le résultat.",
+            "en": "« Bien que » expresses concession; the postponement is not an obstacle to the translation, it is its result."
+          }
+        },
+        {
+          "id": "d",
+          "text": "afin que sa diffusion soit reportée à demain matin.",
+          "rationale": {
+            "fr": "« Afin que » ferait du report un but recherché, comme si l'on avait volontairement retardé la traduction pour retarder la diffusion.",
+            "en": "« Afin que » would make the postponement a goal, as if the translation had been held back on purpose to delay the release."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Si bien que » introduit une conséquence qui s'est produite ou se produira effectivement ; il est toujours suivi de l'indicatif. Il ne faut pas le confondre avec « bien que » (concession, subjonctif) malgré la ressemblance de forme, ni avec « afin que » (but, subjonctif). En contexte de langues officielles, rappelons qu'un communiqué destiné au public est diffusé simultanément dans les deux langues.",
+        "en": "« Si bien que » introduces a consequence that has actually happened or will happen; it is always followed by the indicative. Despite the similar form, it must not be confused with « bien que » (concession, subjunctive), nor with « afin que » (purpose, subjunctive). In an official-languages context, a release for the public goes out in both languages at the same time."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-18",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "La politique sur la gestion de l'information s'appliquera à l'ensemble des directions générales dès le premier avril…",
+        "en": "The policy on information management will apply to all branches as of April 1…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "même si certaines d'entre elles aient obtenu un délai supplémentaire pour la migration de leurs dossiers.",
+          "rationale": {
+            "fr": "Le sens concessif convient, mais « même si » n'admet jamais le subjonctif ; « aient obtenu » est fautif.",
+            "en": "The concessive meaning fits, but « même si » never takes the subjunctive; « aient obtenu » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "bien que certaines d'entre elles ont obtenu un délai supplémentaire pour la migration de leurs dossiers.",
+          "rationale": {
+            "fr": "Le sens concessif convient, mais « bien que » exige le subjonctif (« aient obtenu ») ; l'indicatif « ont obtenu » est fautif.",
+            "en": "The concessive meaning fits, but « bien que » requires the subjunctive (« aient obtenu »); the indicative « ont obtenu » is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "puisque certaines d'entre elles ont obtenu un délai supplémentaire pour la migration de leurs dossiers.",
+          "rationale": {
+            "fr": "« Puisque » ferait du délai accordé la raison de l'application générale, alors qu'il va plutôt à son encontre.",
+            "en": "« Puisque » would make the extra time granted the reason for general application, whereas it rather runs against it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "même si certaines d'entre elles ont obtenu un délai supplémentaire pour la migration de leurs dossiers.",
+          "rationale": {
+            "fr": "La concession est logique (le délai accordé à certaines ne suspend pas l'application générale) et « même si » se construit avec l'indicatif « ont obtenu ».",
+            "en": "The concession is logical (the extra time granted to some does not suspend general application) and « même si » takes the indicative « ont obtenu »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les deux grands connecteurs de concession n'ont pas la même construction : « même si » + indicatif, « bien que » (ou « quoique ») + subjonctif. Le croisement des deux (« même si » + subjonctif, « bien que » + indicatif) est une faute fréquente à l'écrit. Un truc : « si » n'est jamais suivi du subjonctif ni du conditionnel, qu'il soit seul ou dans « même si ».",
+        "en": "The two main concessive connectors do not share the same construction: « même si » + indicative, « bien que » (or « quoique ») + subjunctive. Crossing them (« même si » + subjunctive, « bien que » + indicative) is a frequent written error. A tip: « si » is never followed by the subjunctive or the conditional, whether alone or in « même si »."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-19",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "La mise à jour du logiciel de gestion des congés sera installée pendant la fin de semaine…",
+        "en": "The update to the leave management software will be installed over the weekend…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "afin que le travail des employés n'est pas perturbé.",
+          "rationale": {
+            "fr": "Le but est le bon, mais « afin que » exige le subjonctif (« ne soit pas perturbé ») ; l'indicatif « n'est » est fautif.",
+            "en": "The purpose fits, but « afin que » requires the subjunctive (« ne soit pas perturbé »); the indicative « n'est » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "afin de ne pas perturber le travail des employés.",
+          "rationale": {
+            "fr": "L'installation en fin de semaine vise à éviter de déranger les employés : « afin de » + infinitif exprime ce but.",
+            "en": "Installing it over the weekend is meant to avoid disrupting employees: « afin de » + infinitive expresses that purpose."
+          }
+        },
+        {
+          "id": "c",
+          "text": "si bien que le travail des employés ne soit pas perturbé.",
+          "rationale": {
+            "fr": "« Si bien que » exprime une conséquence et n'admet que l'indicatif ; le subjonctif « soit » est fautif, et l'idée à exprimer est un but.",
+            "en": "« Si bien que » expresses a consequence and takes only the indicative; the subjunctive « soit » is wrong, and the idea to express is a purpose."
+          }
+        },
+        {
+          "id": "d",
+          "text": "faute de perturber le travail des employés.",
+          "rationale": {
+            "fr": "« Faute de » exprime un manque qui cause quelque chose ; « faute de perturber » n'a aucun sens ici.",
+            "en": "« Faute de » expresses a lack that causes something; « faute de perturber » makes no sense here."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le but s'exprime par « afin de » / « pour » + infinitif lorsque le sujet des deux actions est le même ou implicite, et par « afin que » / « pour que » + subjonctif lorsqu'il change. La conséquence, elle, s'exprime par « si bien que » + indicatif. À la forme négative, l'infinitif se construit avec « ne pas » placé devant : « afin de ne pas perturber ».",
+        "en": "Purpose is expressed by « afin de » / « pour » + infinitive when the subject of both actions is the same or implied, and by « afin que » / « pour que » + subjunctive when it changes. Consequence, for its part, is expressed by « si bien que » + indicative. In the negative, the infinitive takes « ne pas » placed before it: « afin de ne pas perturber »."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-20",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le plancher du hall d'entrée était encore mouillé ce matin après le lavage hebdomadaire…",
+        "en": "The lobby floor was still wet this morning after the weekly washing…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "pourtant des panneaux d'avertissement ont été placés près des ascenseurs.",
+          "rationale": {
+            "fr": "« Pourtant » présente le second fait comme inattendu ; or placer des panneaux est la réaction attendue devant un plancher mouillé.",
+            "en": "« Pourtant » presents the second fact as unexpected; but putting up signs is the expected response to a wet floor."
+          }
+        },
+        {
+          "id": "b",
+          "text": "c'est pourquoi des panneaux d'avertissement ont été placés près des ascenseurs.",
+          "rationale": {
+            "fr": "Le plancher mouillé est la cause, les panneaux la conséquence : « c'est pourquoi » relie les deux.",
+            "en": "The wet floor is the cause, the signs the consequence: « c'est pourquoi » links the two."
+          }
+        },
+        {
+          "id": "c",
+          "text": "faute de quoi des panneaux d'avertissement ont été placés près des ascenseurs.",
+          "rationale": {
+            "fr": "« Faute de quoi » signifie « sinon » et annonce ce qui arrivera si une condition n'est pas remplie ; il ne convient pas pour relier une cause et sa conséquence.",
+            "en": "« Faute de quoi » means « otherwise » and announces what will happen if a condition is not met; it does not fit to link a cause and its consequence."
+          }
+        },
+        {
+          "id": "d",
+          "text": "autrement dit, des panneaux d'avertissement ont été placés près des ascenseurs.",
+          "rationale": {
+            "fr": "« Autrement dit » annonce une reformulation ; la pose de panneaux n'est pas une autre façon de dire que le plancher était mouillé.",
+            "en": "« Autrement dit » announces a rewording; putting up signs is not another way of saying the floor was wet."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« C'est pourquoi », « donc », « par conséquent » introduisent la conséquence d'un fait énoncé avant. « Faute de quoi » signifie « sinon » et suit généralement une consigne (« Signalez tout déversement, faute de quoi un accident pourrait survenir »). « Pourtant » marque un fait inattendu, et « autrement dit » une reformulation.",
+        "en": "« C'est pourquoi », « donc », « par conséquent » introduce the consequence of a fact stated earlier. « Faute de quoi » means « otherwise » and generally follows an instruction (« Report any spill, otherwise an accident could occur »). « Pourtant » marks an unexpected fact, and « autrement dit » a rewording."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-21",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Certes, les dépenses de déplacement de la direction générale ont diminué de quinze pour cent au cours du dernier exercice…",
+        "en": "Admittedly, the branch's travel expenditures decreased by fifteen per cent over the last fiscal year…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "en effet, les frais d'accueil ont progressé au point d'annuler presque entièrement cette économie.",
+          "rationale": {
+            "fr": "« En effet » introduit une justification ; la hausse des frais d'accueil n'explique pas la baisse des déplacements, elle la contrebalance.",
+            "en": "« En effet » introduces a justification; the rise in hospitality costs does not explain the drop in travel, it offsets it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "de même, les frais d'accueil ont progressé au point d'annuler presque entièrement cette économie.",
+          "rationale": {
+            "fr": "« De même » établit un parallèle entre deux faits semblables ; une hausse n'est pas semblable à une baisse, et « certes » resterait sans contrepartie.",
+            "en": "« De même » draws a parallel between two similar facts; a rise is not similar to a fall, and « certes » would be left with no counterpart."
+          }
+        },
+        {
+          "id": "c",
+          "text": "toutefois, les frais d'accueil ont progressé au point d'annuler presque entièrement cette économie.",
+          "rationale": {
+            "fr": "« Certes » concède un point et appelle une restriction ; « toutefois » introduit le fait qui nuance l'économie réalisée.",
+            "en": "« Certes » concedes a point and calls for a restriction; « toutefois » introduces the fact that qualifies the savings achieved."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ainsi, les frais d'accueil ont progressé au point d'annuler presque entièrement cette économie.",
+          "rationale": {
+            "fr": "« Ainsi » introduit une conséquence ou un exemple ; la hausse des frais d'accueil ne découle pas de la baisse des déplacements.",
+            "en": "« Ainsi » introduces a consequence or an example; the rise in hospitality costs does not follow from the drop in travel."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Certes » ouvre une concession : on reconnaît un fait avant de le relativiser. La seconde partie doit donc commencer par un connecteur d'opposition ou de restriction (« toutefois », « néanmoins », « mais », « il n'en reste pas moins que »). Un connecteur de justification (« en effet »), de comparaison (« de même ») ou de conséquence (« ainsi ») trahit le raisonnement.",
+        "en": "« Certes » opens a concession: a fact is acknowledged before being put in perspective. The second part must therefore start with a connector of opposition or restriction (« toutefois », « néanmoins », « mais », « il n'en reste pas moins que »). A connector of justification (« en effet »), comparison (« de même ») or consequence (« ainsi ») betrays the reasoning."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-22",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Conformément à la politique ministérielle, la période de stage de la nouvelle analyste prendra fin le 30 septembre…",
+        "en": "In accordance with departmental policy, the new analyst's probationary period will end on September 30…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "à moins que sa gestionnaire fait une demande motivée de prolongation.",
+          "rationale": {
+            "fr": "Le rapport de condition est le bon, mais « à moins que » exige le subjonctif ; l'indicatif « fait » est fautif.",
+            "en": "The relation of condition fits, but « à moins que » requires the subjunctive; the indicative « fait » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "pourvu que sa gestionnaire fasse une demande motivée de prolongation.",
+          "rationale": {
+            "fr": "La construction est grammaticale, mais « pourvu que » pose une condition positive : le stage ne prendrait fin à la date prévue que si l'on demandait de le prolonger, ce qui est contradictoire.",
+            "en": "The construction is grammatical, but « pourvu que » sets a positive condition: the probation would end on the set date only if an extension were requested, which is contradictory."
+          }
+        },
+        {
+          "id": "c",
+          "text": "si bien que sa gestionnaire fait une demande motivée de prolongation.",
+          "rationale": {
+            "fr": "« Si bien que » ferait de la demande de prolongation une conséquence de la fin du stage, ce qui est illogique.",
+            "en": "« Si bien que » would make the extension request a consequence of the probation ending, which is illogical."
+          }
+        },
+        {
+          "id": "d",
+          "text": "à moins que sa gestionnaire ne fasse une demande motivée de prolongation.",
+          "rationale": {
+            "fr": "La date est la règle, la prolongation l'exception : « à moins que » (« sauf si ») exprime cette condition négative et se construit avec le subjonctif « fasse », accompagné du « ne » explétif.",
+            "en": "The date is the rule, the extension the exception: « à moins que » (« unless ») expresses that negative condition and takes the subjunctive « fasse », with the expletive « ne »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« À moins que » équivaut à « sauf si » : il introduit la seule circonstance qui empêcherait le fait principal. Il est suivi du subjonctif, souvent précédé d'un « ne » explétif qui n'a pas de valeur négative. Il ne faut pas le confondre avec « pourvu que » ou « à condition que », qui posent la condition nécessaire à la réalisation du fait principal.",
+        "en": "« À moins que » is equivalent to « sauf si » (« unless »): it introduces the only circumstance that would prevent the main fact. It is followed by the subjunctive, often preceded by an expletive « ne » that carries no negative meaning. It must not be confused with « pourvu que » or « à condition que », which set the condition needed for the main fact to happen."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-23",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Les immeubles de la région de l'Est ont atteint leur cible de réduction des déchets dès le premier semestre…",
+        "en": "The buildings in the Eastern region reached their waste reduction target in the first half of the year…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "tandis que ceux de la région de l'Ouest accusent encore un retard important.",
+          "rationale": {
+            "fr": "Les deux régions sont comparées et leurs résultats s'opposent : « tandis que » + indicatif exprime ce contraste.",
+            "en": "The two regions are compared and their results are opposed: « tandis que » + indicative expresses that contrast."
+          }
+        },
+        {
+          "id": "b",
+          "text": "puisque ceux de la région de l'Ouest accusent encore un retard important.",
+          "rationale": {
+            "fr": "« Puisque » ferait du retard de l'Ouest la cause du succès de l'Est, ce qui n'a aucun sens.",
+            "en": "« Puisque » would make the West's delay the cause of the East's success, which makes no sense."
+          }
+        },
+        {
+          "id": "c",
+          "text": "de sorte que ceux de la région de l'Ouest accusent encore un retard important.",
+          "rationale": {
+            "fr": "« De sorte que » + indicatif introduit une conséquence ; le retard de l'Ouest ne résulte pas du succès de l'Est.",
+            "en": "« De sorte que » + indicative introduces a consequence; the West's delay does not result from the East's success."
+          }
+        },
+        {
+          "id": "d",
+          "text": "pour que ceux de la région de l'Ouest accusent encore un retard important.",
+          "rationale": {
+            "fr": "« Pour que » exprime un but ; l'Est n'a évidemment pas atteint sa cible dans le but de mettre l'Ouest en retard.",
+            "en": "« Pour que » expresses purpose; the East obviously did not reach its target in order to put the West behind."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Tandis que » et « alors que » servent à opposer deux faits comparables, ici les résultats de deux régions. Ils sont suivis de l'indicatif. Le pronom « ceux » reprend « les immeubles », ce qui souligne le parallèle entre les deux propositions et confirme le rapport d'opposition.",
+        "en": "« Tandis que » and « alors que » are used to contrast two comparable facts, here the results of two regions. They are followed by the indicative. The pronoun « ceux » refers back to « les immeubles », which underlines the parallel between the two clauses and confirms the relation of opposition."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-24",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Conformément aux recommandations du comité consultatif sur l'accessibilité, les salles de réunion du troisième étage ont été entièrement réaménagées…",
+        "en": "In accordance with the recommendations of the accessibility advisory committee, the meeting rooms on the third floor have been completely redesigned…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "si bien qu'elles soient désormais accessibles aux personnes qui se déplacent en fauteuil roulant.",
+          "rationale": {
+            "fr": "Le rapport de conséquence est le bon, mais « si bien que » n'admet que l'indicatif ; le subjonctif « soient » est fautif.",
+            "en": "The relation of consequence fits, but « si bien que » takes only the indicative; the subjunctive « soient » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "à moins qu'elles ne soient désormais accessibles aux personnes qui se déplacent en fauteuil roulant.",
+          "rationale": {
+            "fr": "La construction est grammaticale, mais « à moins que » pose une condition (« sauf si ») qui ne peut porter sur des travaux déjà achevés.",
+            "en": "The construction is grammatical, but « à moins que » sets a condition (« unless ») that cannot apply to work already completed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "si bien qu'elles sont désormais accessibles aux personnes qui se déplacent en fauteuil roulant.",
+          "rationale": {
+            "fr": "L'accessibilité est le résultat effectif des travaux : « si bien que » introduit cette conséquence et se construit avec l'indicatif « sont ».",
+            "en": "Accessibility is the actual result of the work: « si bien que » introduces that consequence and takes the indicative « sont »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "bien qu'elles soient désormais accessibles aux personnes qui se déplacent en fauteuil roulant.",
+          "rationale": {
+            "fr": "La construction est grammaticale, mais « bien que » exprime une concession ; l'accessibilité n'est pas un obstacle aux travaux, c'en est l'aboutissement.",
+            "en": "The construction is grammatical, but « bien que » expresses concession; accessibility is not an obstacle to the work, it is its outcome."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Si bien que » exprime une conséquence réalisée et se construit toujours avec l'indicatif. Malgré leur ressemblance, « si bien que » et « bien que » n'ont rien en commun : le second exprime la concession et demande le subjonctif. Quant à « à moins que », il pose une condition et ne s'applique pas à un résultat déjà constaté.",
+        "en": "« Si bien que » expresses a consequence that has come about and always takes the indicative. Despite their resemblance, « si bien que » and « bien que » have nothing in common: the latter expresses concession and requires the subjunctive. As for « à moins que », it sets a condition and does not apply to a result already observed."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-25",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Les réunions hebdomadaires de l'équipe se déroulent généralement en français…",
+        "en": "The team's weekly meetings are generally held in French…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "bien que chaque employé peut intervenir dans la langue officielle de son choix.",
+          "rationale": {
+            "fr": "Le sens concessif convient, mais « bien que » exige le subjonctif ; l'indicatif « peut » est fautif.",
+            "en": "The concessive meaning fits, but « bien que » requires the subjunctive; the indicative « peut » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "si bien que chaque employé peut intervenir dans la langue officielle de son choix.",
+          "rationale": {
+            "fr": "« Si bien que » ferait du libre choix de la langue une conséquence de l'usage du français, ce qui est illogique.",
+            "en": "« Si bien que » would make the free choice of language a consequence of French being used, which is illogical."
+          }
+        },
+        {
+          "id": "c",
+          "text": "puisque chaque employé peut intervenir dans la langue officielle de son choix.",
+          "rationale": {
+            "fr": "« Puisque » présenterait le libre choix de la langue comme la raison pour laquelle les réunions se tiennent en français, ce qui ne tient pas.",
+            "en": "« Puisque » would present the free choice of language as the reason the meetings are held in French, which does not hold up."
+          }
+        },
+        {
+          "id": "d",
+          "text": "bien que chaque employé puisse intervenir dans la langue officielle de son choix.",
+          "rationale": {
+            "fr": "La phrase nuance une pratique générale par un droit qui va dans l'autre sens : c'est une concession, et « bien que » se construit avec le subjonctif « puisse ».",
+            "en": "The sentence qualifies a general practice with a right that points the other way: this is concession, and « bien que » takes the subjunctive « puisse »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Bien que » introduit une concession et se construit avec le subjonctif, même lorsque le fait est réel : « bien que chaque employé puisse ». La concession sert à nuancer une affirmation générale par un fait qui va en sens contraire sans l'annuler. Il ne faut pas la confondre avec la conséquence (« si bien que ») ni avec la cause (« puisque »), toutes deux à l'indicatif.",
+        "en": "« Bien que » introduces concession and takes the subjunctive, even when the fact is real: « bien que chaque employé puisse ». Concession qualifies a general statement with a fact pointing the other way without cancelling it. It must not be confused with consequence (« si bien que ») or cause (« puisque »), both in the indicative."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-26",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le comité directeur a approuvé le report de la deuxième phase du projet à l'exercice suivant…",
+        "en": "The steering committee approved postponing the second phase of the project to the following fiscal year…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "autrement dit, aucun livrable de cette phase ne sera produit avant le mois d'avril.",
+          "rationale": {
+            "fr": "La seconde proposition reformule la décision en termes concrets : reporter la phase à l'exercice suivant, c'est n'en livrer aucun élément avant avril. « Autrement dit » introduit cette reformulation.",
+            "en": "The second clause restates the decision in concrete terms: postponing the phase to the next fiscal year means delivering none of it before April. « Autrement dit » introduces that restatement."
+          }
+        },
+        {
+          "id": "b",
+          "text": "en revanche, aucun livrable de cette phase ne sera produit avant le mois d'avril.",
+          "rationale": {
+            "fr": "« En revanche » annonce un contraste ; or l'absence de livrables avant avril va dans le même sens que le report, elle ne s'y oppose pas.",
+            "en": "« En revanche » announces a contrast; but having no deliverables before April points the same way as the postponement, it does not oppose it."
+          }
+        },
+        {
+          "id": "c",
+          "text": "faute de quoi, aucun livrable de cette phase ne sera produit avant le mois d'avril.",
+          "rationale": {
+            "fr": "« Faute de quoi » signifie « sinon » ; la phrase dirait que, sans le report, aucun livrable ne serait produit, ce qui inverse la logique.",
+            "en": "« Faute de quoi » means « otherwise »; the sentence would say that without the postponement no deliverable would be produced, which reverses the logic."
+          }
+        },
+        {
+          "id": "d",
+          "text": "pourtant, aucun livrable de cette phase ne sera produit avant le mois d'avril.",
+          "rationale": {
+            "fr": "« Pourtant » présente le second fait comme inattendu ; or l'absence de livrables est la suite prévisible d'un report.",
+            "en": "« Pourtant » presents the second fact as unexpected; but having no deliverables is the predictable result of a postponement."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Autrement dit », « c'est-à-dire » et « en d'autres termes » introduisent une reformulation : on redit la même chose sous une forme plus claire ou plus concrète. Dans un compte rendu de gouvernance, ce connecteur sert à traduire une décision abstraite (un report à l'exercice suivant) en conséquence pratique (aucun livrable avant avril). Il ne marque ni contraste (« en revanche ») ni fait inattendu (« pourtant »).",
+        "en": "« Autrement dit », « c'est-à-dire » and « en d'autres termes » introduce a rewording: the same thing is said again in clearer or more concrete form. In a governance record, this connector translates an abstract decision (a postponement to the next fiscal year) into a practical consequence (no deliverables before April). It marks neither contrast (« en revanche ») nor an unexpected fact (« pourtant »)."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-27",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le nombre d'appels reçus au centre de contact a augmenté de vingt pour cent depuis l'entrée en vigueur des nouvelles exigences d'admissibilité, alors que l'effectif est demeuré inchangé…",
+        "en": "The number of calls received at the contact centre has risen by twenty per cent since the new eligibility requirements came into force, while staffing has remained unchanged…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "malgré une hausse marquée du temps d'attente moyen.",
+          "rationale": {
+            "fr": "« Malgré » marque une concession ; la hausse de l'attente n'est pas un obstacle à l'augmentation des appels, elle en découle.",
+            "en": "« Malgré » marks concession; the longer wait is not an obstacle to the rise in calls, it follows from it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "d'où une hausse marquée du temps d'attente moyen.",
+          "rationale": {
+            "fr": "Plus d'appels avec le même effectif entraîne une attente plus longue : « d'où » + nom introduit cette conséquence de façon concise.",
+            "en": "More calls with the same staff means longer waits: « d'où » + noun introduces that consequence concisely."
+          }
+        },
+        {
+          "id": "c",
+          "text": "à savoir une hausse marquée du temps d'attente moyen.",
+          "rationale": {
+            "fr": "« À savoir » introduit une précision ou une énumération de ce qui vient d'être nommé ; la hausse de l'attente ne précise pas le nombre d'appels, elle en est l'effet.",
+            "en": "« À savoir » introduces a specification or list of what has just been named; the longer wait does not specify the number of calls, it is its effect."
+          }
+        },
+        {
+          "id": "d",
+          "text": "grâce à une hausse marquée du temps d'attente moyen.",
+          "rationale": {
+            "fr": "« Grâce à » introduit une cause au résultat favorable ; la hausse de l'attente n'est ni la cause de l'augmentation des appels ni un effet heureux.",
+            "en": "« Grâce à » introduces a cause with a favourable result; the longer wait is neither the cause of the rise in calls nor a welcome effect."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« D'où » suivi d'un nom (ou « d'où le fait que ») introduit une conséquence de manière ramassée, très fréquente dans les rapports : « hausse des appels, effectif stable, d'où une attente accrue ». On le distingue de « malgré » (concession), de « grâce à » (cause favorable) et d'« à savoir » (précision), qui se construisent eux aussi avec un nom mais expriment d'autres rapports.",
+        "en": "« D'où » followed by a noun (or « d'où le fait que ») introduces a consequence in compact form, very common in reports: « more calls, stable staffing, hence longer waits ». It is distinct from « malgré » (concession), « grâce à » (favourable cause) and « à savoir » (specification), which are also followed by a noun but express other relations."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-28",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle correction faut-il apporter à la phrase suivante, tirée du compte rendu d'un comité de santé et de sécurité ? « Bien que l'inspection n'a relevé aucune anomalie majeure, le comité recommande de remplacer les extincteurs du sous-sol avant la fin de l'exercice. »",
+        "en": "Which correction does the following sentence, taken from the minutes of a health and safety committee, need? « Bien que l'inspection n'a relevé aucune anomalie majeure, le comité recommande de remplacer les extincteurs du sous-sol avant la fin de l'exercice. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « Bien que » par « Puisque »",
+          "rationale": {
+            "fr": "Ce changement transforme la concession en cause : l'absence d'anomalie deviendrait la raison de remplacer les extincteurs, ce qui est illogique.",
+            "en": "This change turns the concession into a cause: the absence of problems would become the reason for replacing the extinguishers, which is illogical."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « de remplacer » par « à remplacer »",
+          "rationale": {
+            "fr": "« Recommander » se construit avec « de » + infinitif ; « recommande à remplacer » est fautif.",
+            "en": "« Recommander » takes « de » + infinitive; « recommande à remplacer » is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « aucune anomalie majeure » par « aucunes anomalies majeures »",
+          "rationale": {
+            "fr": "« Aucun » ne se met au pluriel que devant un nom sans singulier ; « aucune anomalie majeure » est déjà conforme.",
+            "en": "« Aucun » goes into the plural only before a noun with no singular; « aucune anomalie majeure » is already as it should be."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « n'a relevé » par « n'ait relevé »",
+          "rationale": {
+            "fr": "« Bien que » exige le subjonctif ; le passé composé de l'indicatif doit devenir le subjonctif passé « n'ait relevé ».",
+            "en": "« Bien que » requires the subjunctive; the indicative passé composé must become the past subjunctive « n'ait relevé »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "La concession introduite par « bien que » appelle toujours le subjonctif, même si le fait est avéré (l'inspection a bel et bien eu lieu). Au passé, on emploie le subjonctif passé : « bien que l'inspection n'ait relevé ». Changer le connecteur pour « puisque » rétablirait l'indicatif, mais au prix du sens : la phrase oppose un constat rassurant à une recommandation de prudence.",
+        "en": "Concession introduced by « bien que » always calls for the subjunctive, even when the fact is real (the inspection did take place). For a past event, the past subjunctive is used: « bien que l'inspection n'ait relevé ». Switching the connector to « puisque » would restore the indicative, but at the cost of meaning: the sentence contrasts a reassuring finding with a precautionary recommendation."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-29",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Un gestionnaire a rédigé ce message à l'intention de son équipe. Quelle modification s'impose ? « Même si le réseau soit plus lent ce matin en raison d'une mise à jour, les employés peuvent continuer à utiliser leurs applications habituelles. »",
+        "en": "A manager wrote this message to their team. Which change is needed? « Même si le réseau soit plus lent ce matin en raison d'une mise à jour, les employés peuvent continuer à utiliser leurs applications habituelles. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « Même si » par « Puisque »",
+          "rationale": {
+            "fr": "La lenteur du réseau ne peut être la raison pour laquelle les employés continuent de travailler ; de plus, « puisque » refuse lui aussi le subjonctif « soit ».",
+            "en": "The slow network cannot be the reason employees keep working; moreover, « puisque » does not take the subjunctive « soit » either."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « peuvent » par « puissent »",
+          "rationale": {
+            "fr": "La proposition principale énonce un fait et reste à l'indicatif ; « puissent » serait fautif et laisserait l'erreur en place.",
+            "en": "The main clause states a fact and stays in the indicative; « puissent » would be wrong and would leave the error in place."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « soit » par « est »",
+          "rationale": {
+            "fr": "« Même si » se construit avec l'indicatif ; le subjonctif « soit » doit devenir « est ».",
+            "en": "« Même si » takes the indicative; the subjunctive « soit » must become « est »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « en raison d' » par « grâce à »",
+          "rationale": {
+            "fr": "« Grâce à » introduit une cause au résultat favorable ; un réseau plus lent n'est pas un effet heureux, et l'erreur de mode demeurerait.",
+            "en": "« Grâce à » introduces a cause with a favourable result; a slower network is not a welcome effect, and the error of mood would remain."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Même si » exprime la concession et est toujours suivi de l'indicatif : « même si le réseau est plus lent ». Le subjonctif est réservé à « bien que » et « quoique ». « En raison de » convient pour une cause neutre ou défavorable ; « grâce à » se réserve aux causes dont le résultat est heureux.",
+        "en": "« Même si » expresses concession and is always followed by the indicative: « même si le réseau est plus lent ». The subjunctive belongs to « bien que » and « quoique ». « En raison de » suits a neutral or unfavourable cause; « grâce à » is kept for causes with a welcome result."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-30",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase tirée d'un rapport d'inspection contient une faute. Laquelle des modifications suivantes s'impose ? « Quoi que le fournisseur ait livré le matériel dans les délais prévus, l'autorité contractante a retenu une partie du paiement en raison de défauts constatés lors de l'inspection. »",
+        "en": "This sentence taken from an inspection report contains an error. Which of the following changes is required? « Quoi que le fournisseur ait livré le matériel dans les délais prévus, l'autorité contractante a retenu une partie du paiement en raison de défauts constatés lors de l'inspection. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « Quoi que » par « Quoique »",
+          "rationale": {
+            "fr": "La phrase exprime une concession (livraison à temps, paiement pourtant retenu) : il faut la conjonction « quoique », en un mot, synonyme de « bien que ».",
+            "en": "The sentence expresses concession (on-time delivery, payment withheld all the same): it needs the conjunction « quoique », in one word, a synonym of « bien que »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « ait livré » par « a livré »",
+          "rationale": {
+            "fr": "La concession exprimée par « quoique » exige le subjonctif ; « ait livré » est déjà conforme, et l'erreur d'orthographe sur le connecteur resterait.",
+            "en": "Concession expressed with « quoique » requires the subjunctive; « ait livré » is already as it should be, and the spelling error in the connector would remain."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « en raison de » par « faute de »",
+          "rationale": {
+            "fr": "« Faute de » signale un manque ; or ce sont des défauts bien présents qui justifient la retenue, et « en raison de » les présente déjà comme cause.",
+            "en": "« Faute de » signals a lack; but it is defects actually found that justify the holdback, and « en raison de » already presents them as the cause."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « lors de » par « malgré »",
+          "rationale": {
+            "fr": "Les défauts ont été relevés pendant l'inspection, ce que « lors de » exprime ; « malgré l'inspection » n'a pas de sens ici et l'erreur principale demeurerait.",
+            "en": "The defects were found during the inspection, which « lors de » expresses; « malgré l'inspection » makes no sense here and the main error would remain."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Quoique » en un mot est une conjonction de concession (« bien que ») suivie du subjonctif. « Quoi que » en deux mots signifie « quelle que soit la chose que » (« quoi que vous décidiez ») et doit être suivi d'un verbe dont il est le complément. Ici, le verbe « ait livré » a déjà un complément (« le matériel ») : seul « quoique » convient.",
+        "en": "« Quoique » in one word is a concessive conjunction (« although ») followed by the subjunctive. « Quoi que » in two words means « whatever » (« quoi que vous décidiez ») and must be followed by a verb of which it is the object. Here the verb « ait livré » already has an object (« le matériel »): only « quoique » fits."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-31",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Repérez l'erreur dans ce passage d'une note de service et choisissez la modification appropriée : « Le nouveau guide de rédaction impose l'usage du langage clair dans toutes les publications destinées au public. En revanche, il exige que chaque texte soit validé par un réviseur avant sa mise en ligne. »",
+        "en": "Find the error in this passage from a memo and choose the appropriate change: « Le nouveau guide de rédaction impose l'usage du langage clair dans toutes les publications destinées au public. En revanche, il exige que chaque texte soit validé par un réviseur avant sa mise en ligne. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « soit validé » par « est validé »",
+          "rationale": {
+            "fr": "« Exiger que » est suivi du subjonctif ; « soit validé » est déjà conforme, et l'indicatif serait fautif.",
+            "en": "« Exiger que » is followed by the subjunctive; « soit validé » is already as it should be, and the indicative would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « En revanche » par « En outre »",
+          "rationale": {
+            "fr": "Les deux phrases énoncent deux exigences du même guide, sans aucun contraste : il faut un connecteur d'addition comme « en outre ».",
+            "en": "The two sentences set out two requirements of the same guide, with no contrast at all: a connector of addition such as « en outre » is needed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « En revanche » par « Par conséquent »",
+          "rationale": {
+            "fr": "Le connecteur visé est bien le problème, mais la révision obligatoire ne découle pas de l'usage du langage clair : un lien de conséquence serait tout aussi fautif.",
+            "en": "The connector targeted is indeed the problem, but mandatory revision does not follow from the use of plain language: a link of consequence would be just as wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « destinées » par « destinés »",
+          "rationale": {
+            "fr": "Le participe se rapporte à « publications », nom féminin pluriel ; « destinées » est déjà conforme.",
+            "en": "The participle refers to « publications », a feminine plural noun; « destinées » is already as it should be."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« En revanche » exige un véritable contraste entre deux faits (« le guide impose le langage clair ; en revanche, il laisse libre le choix des illustrations »). Quand la seconde phrase ajoute une exigence qui va dans le même sens, on emploie un connecteur d'addition : « en outre », « de plus », « par ailleurs ». Choisir un connecteur, c'est nommer le rapport logique ; un connecteur d'opposition sans opposition égare le lecteur.",
+        "en": "« En revanche » requires a genuine contrast between two facts (« the guide requires plain language; on the other hand, it leaves the choice of illustrations open »). When the second sentence adds a requirement pointing the same way, a connector of addition is used: « en outre », « de plus », « par ailleurs ». Choosing a connector means naming the logical relation; a connector of opposition with no opposition misleads the reader."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-32",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Une erreur s'est glissée dans ce courriel adressé à l'équipe du projet. Quelle modification faut-il apporter ? « Le chargé de projet a envoyé l'ordre du jour la veille afin que tous les participants peuvent préparer leurs questions. »",
+        "en": "An error slipped into this email sent to the project team. Which change needs to be made? « Le chargé de projet a envoyé l'ordre du jour la veille afin que tous les participants peuvent préparer leurs questions. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « afin que » par « afin de »",
+          "rationale": {
+            "fr": "« Afin de » doit être suivi d'un infinitif, pas d'une proposition avec sujet ; « afin de tous les participants peuvent » est agrammatical.",
+            "en": "« Afin de » must be followed by an infinitive, not a clause with a subject; « afin de tous les participants peuvent » is ungrammatical."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « a envoyé » par « ait envoyé »",
+          "rationale": {
+            "fr": "Le verbe principal énonce un fait et reste à l'indicatif ; c'est le verbe de la subordonnée de but qui demande le subjonctif.",
+            "en": "The main verb states a fact and stays in the indicative; it is the verb of the purpose clause that calls for the subjunctive."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « leurs questions » par « leur questions »",
+          "rationale": {
+            "fr": "Chaque participant prépare plusieurs questions : le déterminant pluriel « leurs » s'accorde avec « questions » et est déjà conforme.",
+            "en": "Each participant prepares several questions: the plural determiner « leurs » agrees with « questions » and is already as it should be."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « peuvent » par « puissent »",
+          "rationale": {
+            "fr": "« Afin que » exprime un but et exige le subjonctif : « afin que tous les participants puissent ».",
+            "en": "« Afin que » expresses purpose and requires the subjunctive: « afin que tous les participants puissent »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le but introduit par « afin que » ou « pour que » se met toujours au subjonctif, puisqu'il s'agit d'un résultat visé et non d'un fait constaté. Si le sujet était le même dans les deux propositions, on emploierait « afin de » + infinitif ; ici, les sujets diffèrent (le chargé de projet, les participants), d'où la subordonnée au subjonctif.",
+        "en": "Purpose introduced by « afin que » or « pour que » is always in the subjunctive, since it is an intended result and not an observed fact. If the subject were the same in both clauses, « afin de » + infinitive would be used; here the subjects differ (the project lead, the participants), hence the subjunctive clause."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-connectors-and-discourse-markers-33",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cet extrait d'une politique ministérielle comporte une seule faute. Quelle correction y apporter ? « Le Ministère compensera les émissions liées aux déplacements aériens de ses employés, pourvu que ces déplacements sont approuvés au préalable par la haute direction. »",
+        "en": "This excerpt from a departmental policy contains a single error. What correction should be made? « Le Ministère compensera les émissions liées aux déplacements aériens de ses employés, pourvu que ces déplacements sont approuvés au préalable par la haute direction. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « pourvu que » par « bien que »",
+          "rationale": {
+            "fr": "« Bien que » transformerait la condition en concession, ce qui fausse le sens de la politique, et il exigerait lui aussi le subjonctif : l'erreur de mode demeurerait.",
+            "en": "« Bien que » would turn the condition into a concession, distorting the policy's meaning, and it too would require the subjunctive: the error of mood would remain."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « liées » par « liés »",
+          "rationale": {
+            "fr": "Le participe « liées » se rapporte à « émissions », nom féminin pluriel ; il est déjà conforme.",
+            "en": "The participle « liées » refers to « émissions », a feminine plural noun; it is already as it should be."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « sont approuvés » par « soient approuvés »",
+          "rationale": {
+            "fr": "« Pourvu que » exprime une condition nécessaire et exige le subjonctif : « pourvu que ces déplacements soient approuvés ».",
+            "en": "« Pourvu que » expresses a necessary condition and requires the subjunctive: « pourvu que ces déplacements soient approuvés »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « compensera » par « compenserait »",
+          "rationale": {
+            "fr": "Une politique énonce un engagement ferme au futur ; le conditionnel l'affaiblirait sans toucher à l'erreur de mode après « pourvu que ».",
+            "en": "A policy states a firm commitment in the future tense; the conditional would weaken it without touching the error of mood after « pourvu que »."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Pourvu que » et « à condition que » introduisent une condition nécessaire et sont suivis du subjonctif ; « dans la mesure où » et « si », de sens voisin, se construisent au contraire avec l'indicatif. Dans un texte normatif, le connecteur choisi détermine la portée de l'engagement : remplacer une condition par une concession changerait la règle elle-même.",
+        "en": "« Pourvu que » and « à condition que » introduce a necessary condition and are followed by the subjunctive; « dans la mesure où » and « si », close in meaning, take the indicative instead. In a normative text, the connector chosen sets the scope of the commitment: replacing a condition with a concession would change the rule itself."
+      },
+      "subSkill": "connectors-and-discourse-markers",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ]
+}

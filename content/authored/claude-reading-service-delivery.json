@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-service-delivery-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-1",
+      "stem": {
+        "fr": "Quel est l'objet principal du bulletin publié au sujet du comptoir de service de Rivière-Claire ?",
+        "en": "What is the main purpose of the bulletin published about the Rivière-Claire service counter?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer que le comptoir de service sera fermé le vendredi à partir du 3 novembre.",
+          "rationale": {
+            "fr": "Généralisation abusive : le comptoir reste ouvert le vendredi matin, de 8 h 30 à 12 h ; seul l'après-midi change de vocation.",
+            "en": "Overgeneralisation: the counter stays open on Friday mornings, 8:30 to 12:00; only the afternoon is repurposed."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Présenter les résultats de l'analyse de la fréquentation des six derniers mois.",
+          "rationale": {
+            "fr": "L'analyse n'est mentionnée que pour justifier le changement ; un seul chiffre en est tiré, ce qui en fait un détail et non l'objet du bulletin.",
+            "en": "The analysis is mentioned only to justify the change; a single figure is drawn from it, so it is a detail, not the bulletin's purpose."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Faire connaître le nouvel horaire du comptoir et les solutions offertes aux clients qui ne peuvent pas s'y présenter.",
+          "rationale": {
+            "fr": "C'est l'ensemble du bulletin : le nouvel horaire, sa justification, puis les rendez-vous, les plages du mardi soir et les services en ligne comme solutions de rechange.",
+            "en": "This covers the whole bulletin: the new schedule, its rationale, then appointments, Tuesday evening slots and online services as alternatives."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Annoncer le lancement de nouveaux services en ligne offerts en tout temps.",
+          "rationale": {
+            "fr": "Le bulletin dit que les services en ligne « demeurent » accessibles : ils existent déjà, rien n'est lancé.",
+            "en": "The bulletin says online services 'remain' available: they already exist, nothing is being launched."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour dégager l'idée principale, vérifiez que la réponse couvre tout le texte. Ici, chaque paragraphe se rattache au nouvel horaire : ce qu'il est, pourquoi il change, et comment obtenir un service en dehors des heures d'ouverture. Une réponse qui ne reprend qu'un paragraphe, ou qui déforme un détail, est trop étroite.",
+        "en": "To find the main idea, check that the answer covers the whole text. Here every paragraph ties back to the new schedule: what it is, why it changes, and how to get service outside opening hours. An answer that reflects only one paragraph, or distorts a detail, is too narrow."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-1",
+      "stem": {
+        "fr": "D'après le bulletin, à quoi le personnel consacrera-t-il désormais l'après-midi du vendredi ?",
+        "en": "According to the bulletin, what will staff now devote Friday afternoons to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Au traitement des dossiers en attente et à la formation du personnel.",
+          "rationale": {
+            "fr": "Le bulletin le dit expressément : l'après-midi du vendredi est « réservé au traitement des dossiers en attente et à la formation du personnel ».",
+            "en": "The bulletin says so explicitly: Friday afternoon is 'reserved for processing pending files and for staff training'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À des rencontres sur rendez-vous avec les clients dont le dossier est en attente.",
+          "rationale": {
+            "fr": "Le texte parle de traiter les dossiers en attente, non de recevoir les clients ; les rendez-vous servent à ceux qui ne peuvent venir pendant les heures d'ouverture.",
+            "en": "The text speaks of processing pending files, not of meeting clients; appointments are for those who cannot come during opening hours."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À l'accueil des clients qui ont réservé une plage en soirée.",
+          "rationale": {
+            "fr": "Les plages en soirée sont offertes le mardi, jusqu'à 19 h, et non le vendredi après-midi.",
+            "en": "Evening slots are offered on Tuesdays, until 7 p.m., not on Friday afternoons."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À la mise à jour des services offerts en ligne.",
+          "rationale": {
+            "fr": "Le bulletin ne mentionne aucune mise à jour des services en ligne ; il précise seulement qu'ils restent accessibles.",
+            "en": "The bulletin mentions no update to online services; it only says they remain available."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Une question de détail se règle en retrouvant la phrase exacte du texte qui y répond. Méfiez-vous des réponses qui combinent des éléments réels du texte (dossiers en attente, rendez-vous, soirée) mais les associent au mauvais jour ou à la mauvaise activité.",
+        "en": "A detail question is settled by finding the exact sentence that answers it. Beware of answers that combine real elements of the text (pending files, appointments, evenings) but attach them to the wrong day or activity."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-1",
+      "stem": {
+        "fr": "Qu'a révélé l'analyse de la fréquentation sur laquelle repose le nouvel horaire ?",
+        "en": "What did the attendance analysis behind the new schedule reveal?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Moins de 5 % des visites avaient lieu le vendredi, toute la journée confondue.",
+          "rationale": {
+            "fr": "Le chiffre de 5 % porte sur le seul vendredi après-midi, et non sur l'ensemble de la journée ; le matin reste d'ailleurs ouvert.",
+            "en": "The 5% figure concerns Friday afternoon only, not the whole day; the morning in fact stays open."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La fréquentation du comptoir avait baissé de 5 % au cours des six derniers mois.",
+          "rationale": {
+            "fr": "Le texte ne parle d'aucune baisse : il donne la part des visites qui tombaient le vendredi après-midi.",
+            "en": "The text mentions no decline: it gives the share of visits that fell on Friday afternoons."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Environ 5 % des clients prenaient déjà rendez-vous en ligne ou par téléphone.",
+          "rationale": {
+            "fr": "Le chiffre de 5 % n'a aucun lien avec les rendez-vous ; il mesure la fréquentation du vendredi après-midi.",
+            "en": "The 5% figure has nothing to do with appointments; it measures Friday afternoon attendance."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Moins d'une visite sur vingt avait lieu le vendredi après-midi.",
+          "rationale": {
+            "fr": "Le bulletin indique que « moins de 5 % des visites avaient lieu le vendredi après-midi » ; 5 %, c'est une visite sur vingt.",
+            "en": "The bulletin says 'fewer than 5% of visits took place on Friday afternoon'; 5% is one visit in twenty."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Devant un chiffre, demandez-vous toujours ce qu'il mesure exactement : une part, une variation ou un total, et sur quelle période. Ici, 5 % est une proportion des visites, limitée au vendredi après-midi. Les distracteurs gardent le chiffre mais changent ce qu'il mesure.",
+        "en": "Faced with a figure, always ask exactly what it measures: a share, a change or a total, and over what period. Here 5% is a proportion of visits, limited to Friday afternoons. The distractors keep the number but change what it measures."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-1",
+      "stem": {
+        "fr": "Dans la phrase « les services en ligne demeurent accessibles en tout temps », que signifie l'expression « en tout temps » ?",
+        "en": "In the sentence 'les services en ligne demeurent accessibles en tout temps', what does the expression 'en tout temps' mean?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Pendant les heures d'ouverture du comptoir seulement.",
+          "rationale": {
+            "fr": "C'est l'inverse : la phrase oppose justement les services en ligne, toujours accessibles, au comptoir et à son horaire limité.",
+            "en": "It is the reverse: the sentence precisely contrasts online services, always available, with the counter and its limited hours."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À n'importe quelle heure, jour et nuit.",
+          "rationale": {
+            "fr": "« En tout temps » signifie à tout moment, sans restriction d'horaire, par opposition au comptoir qui a des heures d'ouverture.",
+            "en": "'En tout temps' means at any time, with no time restriction, as opposed to the counter, which has opening hours."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Pour une durée limitée, pendant la transition.",
+          "rationale": {
+            "fr": "Le verbe « demeurent » indique la continuité ; rien ne laisse croire à un accès temporaire.",
+            "en": "The verb 'demeurent' indicates continuity; nothing suggests temporary access."
+          }
+        },
+        {
+          "id": "d",
+          "text": "De temps à autre, selon la disponibilité du système.",
+          "rationale": {
+            "fr": "« En tout temps » n'exprime pas une fréquence irrégulière ; il veut dire « toujours ».",
+            "en": "'En tout temps' does not express an irregular frequency; it means 'always'."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« En tout temps » est l'expression courante en français canadien administratif pour dire « à toute heure, en permanence ». Le contexte confirme le sens : la phrase, introduite par « Par ailleurs », présente les services en ligne comme une solution qui ne dépend pas de l'horaire du comptoir.",
+        "en": "'En tout temps' is the usual expression in Canadian administrative French for 'at any hour, at all times'. The context confirms it: the sentence, introduced by 'Par ailleurs', presents online services as an option that does not depend on the counter's hours."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-1",
+      "stem": {
+        "fr": "Au début du deuxième paragraphe, à quoi renvoie l'expression « Ce changement » ?",
+        "en": "At the start of the second paragraph, what does the expression 'Ce changement' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À l'ajout de plages en soirée le mardi.",
+          "rationale": {
+            "fr": "Les plages du mardi sont présentées après « Ce changement » ; un démonstratif de ce type reprend ce qui précède, pas ce qui suit.",
+            "en": "Tuesday slots are presented after 'Ce changement'; a demonstrative like this one refers back to what precedes, not to what follows."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Au nouvel horaire, qui réduit les heures d'ouverture du vendredi.",
+          "rationale": {
+            "fr": "« Ce changement » reprend ce que décrit le premier paragraphe : le nouvel horaire, qui libère l'après-midi du vendredi. La justification qui suit (peu de visites le vendredi après-midi) le confirme.",
+            "en": "'Ce changement' takes up what the first paragraph describes: the new schedule, which frees Friday afternoons. The justification that follows (few visits on Friday afternoon) confirms it."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À la formation offerte au personnel du comptoir.",
+          "rationale": {
+            "fr": "La formation n'est qu'une des activités prévues le vendredi après-midi ; ce n'est pas elle que l'analyse de fréquentation justifie.",
+            "en": "Training is only one of the activities planned for Friday afternoons; it is not what the attendance analysis justifies."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Au passage des clients vers les services en ligne.",
+          "rationale": {
+            "fr": "Le texte ne décrit aucun passage obligé vers le numérique ; les services en ligne ne sont mentionnés qu'à la fin.",
+            "en": "The text describes no forced shift to digital service; online services are mentioned only at the end."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Un groupe nominal introduit par un démonstratif (« ce changement », « cette mesure ») résume en général l'idée exposée juste avant. Pour l'identifier, remontez au paragraphe précédent et vérifiez que la suite de la phrase (ici, la justification par la fréquentation) s'applique bien à l'élément choisi.",
+        "en": "A noun phrase introduced by a demonstrative ('ce changement', 'cette mesure') generally sums up the idea set out just before. To identify it, go back to the previous paragraph and check that the rest of the sentence (here, the attendance-based justification) fits the element chosen."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-2",
+      "stem": {
+        "fr": "Pourquoi Martine Lavoie écrit-elle à son équipe ?",
+        "en": "Why is Martine Lavoie writing to her team?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Pour féliciter l'équipe d'avoir respecté la norme de service l'an dernier.",
+          "rationale": {
+            "fr": "Le taux de 84 % n'est pas présenté comme un succès : il sert à montrer qu'il faudra revoir la répartition des dossiers.",
+            "en": "The 84% rate is not presented as a success: it shows that the distribution of files will need to be reviewed."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Pour annoncer une formation sur les documents exigés des clients.",
+          "rationale": {
+            "fr": "Aucune formation n'est annoncée ; la rencontre de jeudi est une discussion sur la façon de répartir les dossiers.",
+            "en": "No training is announced; Thursday's meeting is a discussion about how to distribute files."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Pour signaler que trop de clients envoient des demandes incomplètes.",
+          "rationale": {
+            "fr": "Les demandes incomplètes sont évoquées pour préciser quand le délai commence, non comme un problème à signaler.",
+            "en": "Incomplete applications are mentioned to clarify when the time limit starts, not as a problem being reported."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pour présenter une norme de traitement plus exigeante et préparer une discussion sur l'organisation du travail.",
+          "rationale": {
+            "fr": "Le courriel expose la nouvelle norme, montre que l'équipe devra s'améliorer, puis convoque une discussion et demande à chacun de s'y préparer.",
+            "en": "The email sets out the new standard, shows that the team will need to improve, then calls a discussion and asks everyone to prepare for it."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le but d'un courriel se trouve souvent dans le mouvement d'ensemble : ici, une information (la nouvelle norme), une conséquence (« il nous faudra donc… ») et une demande d'action (la rencontre de jeudi). La réponse doit réunir ces éléments, pas en isoler un seul.",
+        "en": "An email's purpose often lies in its overall movement: here, a piece of information (the new standard), a consequence ('il nous faudra donc…') and a call to action (Thursday's meeting). The answer must bring these together, not isolate one of them."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-2",
+      "stem": {
+        "fr": "Selon le courriel, à partir de quand le délai de traitement d'une demande de permis est-il calculé ?",
+        "en": "According to the email, from when is the processing time for a permit application counted?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À partir du jour où le dernier document exigé est reçu.",
+          "rationale": {
+            "fr": "Le délai commence lorsque la demande est complète, c'est-à-dire lorsque « tous les documents exigés ont été reçus », « et non à la date du premier envoi ».",
+            "en": "The clock starts when the application is complete, that is, when 'all required documents have been received', 'and not on the date of the first submission'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À partir du jour où le client envoie sa demande pour la première fois.",
+          "rationale": {
+            "fr": "Le courriel écarte expressément cette date : le délai court « non à la date du premier envoi ».",
+            "en": "The email explicitly rules out this date: the clock does not start 'on the date of the first submission'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À partir du jour où l'agent avise le client qu'un document manque.",
+          "rationale": {
+            "fr": "L'avis au client fait l'objet d'un délai distinct de cinq jours ; il ne marque pas le début du délai de traitement.",
+            "en": "Notifying the client has its own separate five-day limit; it does not mark the start of the processing time."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À partir du 1er décembre pour toutes les demandes en cours.",
+          "rationale": {
+            "fr": "Le 1er décembre est la date d'entrée en vigueur de la norme, pas le point de départ du calcul pour chaque demande.",
+            "en": "1 December is when the standard takes effect, not the starting point of the count for each application."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le courriel distingue plusieurs dates : l'entrée en vigueur de la norme, le premier envoi, l'avis d'un document manquant et la réception du dernier document. Une question de détail exige de rattacher la bonne date au bon calcul ; les mots « donc » et « et non » signalent ici la précision attendue.",
+        "en": "The email distinguishes several dates: when the standard takes effect, the first submission, notice of a missing document and receipt of the last document. A detail question requires linking the right date to the right count; the words 'donc' and 'et non' signal the precision expected here."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-2",
+      "stem": {
+        "fr": "En quoi la norme qui entre en vigueur le 1er décembre diffère-t-elle de l'ancienne ?",
+        "en": "How does the standard taking effect on 1 December differ from the old one?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La proportion de demandes à traiter dans les délais passe de 84 % à 90 %.",
+          "rationale": {
+            "fr": "Le taux de 84 % est le résultat obtenu l'an dernier, non une ancienne cible ; ce qui change, c'est le nombre de jours.",
+            "en": "The 84% rate is last year's result, not a former target; what changes is the number of days."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Toutes les demandes, complètes ou non, devront être traitées en 20 jours ouvrables.",
+          "rationale": {
+            "fr": "La norme vise 90 % des demandes, et seulement les demandes complètes.",
+            "en": "The standard covers 90% of applications, and only complete ones."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le délai visé passe de 30 à 20 jours ouvrables pour 90 % des demandes complètes.",
+          "rationale": {
+            "fr": "Le courriel dit qu'il faudra traiter 90 % des demandes complètes « en 20 jours ouvrables, alors que la norme était jusqu'ici de 30 jours ».",
+            "en": "The email says 90% of complete applications must be processed 'in 20 working days, whereas the standard until now was 30 days'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le délai pour aviser un client d'un document manquant passe de 20 à 5 jours ouvrables.",
+          "rationale": {
+            "fr": "Le délai de cinq jours pour aviser le client est mentionné, mais rien n'indique qu'il remplace un délai de 20 jours.",
+            "en": "The five-day limit for notifying the client is mentioned, but nothing says it replaces a 20-day limit."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Lorsqu'un texte contient plusieurs chiffres (90 %, 20 jours, 30 jours, cinq jours, 84 %), associez chacun à ce qu'il mesure avant de répondre. Une norme de service comporte ici deux paramètres : une cible (90 % des demandes complètes) et un délai (20 jours, contre 30 auparavant). Seul le délai change.",
+        "en": "When a text contains several figures (90%, 20 days, 30 days, five days, 84%), match each one to what it measures before answering. Here a service standard has two parameters: a target (90% of complete applications) and a time limit (20 days, against 30 before). Only the time limit changes."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-2",
+      "stem": {
+        "fr": "Quel rôle joue, dans le courriel, la phrase qui rappelle que l'ancienne norme a été respectée dans 84 % des cas ?",
+        "en": "What role does the sentence recalling that the old standard was met in 84% of cases play in the email?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle introduit la nouvelle norme annoncée par le Ministère.",
+          "rationale": {
+            "fr": "La nouvelle norme est présentée dans le premier paragraphe ; cette phrase vient après et en tire les conséquences.",
+            "en": "The new standard is presented in the first paragraph; this sentence comes afterwards and draws the consequences."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle souligne les bons résultats de l'équipe pour l'encourager.",
+          "rationale": {
+            "fr": "Le chiffre n'est pas présenté comme un succès : il précède un « donc » qui annonce un effort à faire.",
+            "en": "The figure is not presented as a success: it precedes a 'donc' announcing an effort to be made."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle fait le lien entre la nouvelle norme et la rencontre proposée, en montrant qu'un changement de méthode s'impose.",
+          "rationale": {
+            "fr": "La phrase se termine par « il nous faudra donc revoir notre façon de répartir les dossiers », ce qui mène directement à la proposition de discussion du jeudi.",
+            "en": "The sentence ends with 'il nous faudra donc revoir notre façon de répartir les dossiers', which leads straight to the proposed Thursday discussion."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle conclut le courriel en résumant les obligations de chacun.",
+          "rationale": {
+            "fr": "Elle ne conclut pas : elle est suivie de l'invitation à la rencontre et de la demande de noter les étapes.",
+            "en": "It does not conclude: it is followed by the meeting invitation and the request to note the steps."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour juger du rôle d'une phrase, regardez ce qui la précède et ce qui la suit, et repérez les connecteurs. Ici, « donc » transforme un constat chiffré en justification : la phrase sert de charnière entre l'information (la norme) et l'action (la rencontre).",
+        "en": "To judge a sentence's role, look at what precedes and follows it, and spot the connectors. Here 'donc' turns a figure into a justification: the sentence is the hinge between the information (the standard) and the action (the meeting)."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-2",
+      "stem": {
+        "fr": "Comment peut-on qualifier l'attitude de la gestionnaire envers son équipe dans ce courriel ?",
+        "en": "How can the manager's attitude towards her team in this email be described?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle est collaborative : elle annonce une exigence nouvelle et sollicite l'expérience de son équipe pour y répondre.",
+          "rationale": {
+            "fr": "Elle propose d'« en discuter », invite chacun à noter les étapes qui font perdre du temps et remercie l'équipe de sa « collaboration habituelle ».",
+            "en": "She proposes to 'discuss it', asks everyone to note the steps that waste time and thanks the team for its 'usual cooperation'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle est réprobatrice : elle reproche à son équipe de ne pas avoir atteint l'ancienne norme.",
+          "rationale": {
+            "fr": "Le taux de 84 % est donné sans blâme ; il sert à justifier une réorganisation, pas à reprocher quoi que ce soit.",
+            "en": "The 84% rate is given without blame; it justifies a reorganisation, not a reproach."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle est strictement informative : elle transmet la norme sans attendre de réaction.",
+          "rationale": {
+            "fr": "Elle attend au contraire une participation : une discussion jeudi et des notes préparées par chacun.",
+            "en": "On the contrary, she expects participation: a discussion on Thursday and notes prepared by each person."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle est inquiète : elle craint que la nouvelle norme soit impossible à respecter.",
+          "rationale": {
+            "fr": "Rien dans le courriel n'exprime de crainte ; elle constate un écart et propose une démarche pour le combler.",
+            "en": "Nothing in the email expresses fear; she notes a gap and proposes a way to close it."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le ton se lit dans les choix de verbes et de formules : « Je vous propose », « je vous invite », « Merci de votre collaboration habituelle » relèvent d'une gestion participative. Une lecture qui prête à l'auteure un reproche ou une crainte ajoute une émotion que le texte n'exprime pas.",
+        "en": "Tone shows in the choice of verbs and phrases: 'Je vous propose', 'je vous invite', 'Merci de votre collaboration habituelle' belong to participative management. A reading that attributes reproach or fear to the author adds an emotion the text does not express."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-3",
+      "stem": {
+        "fr": "Quel objectif principal poursuit l'auteur de cette note consacrée à l'arriéré des demandes de rappel du centre d'appels ?",
+        "en": "What main objective does the author of this memo on the call centre's callback backlog pursue?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Expliquer en détail les défaillances techniques du nouveau système de gestion des appels.",
+          "rationale": {
+            "fr": "Les anomalies ne sont évoquées qu'en passant, et la note précise qu'elles sont pour la plupart corrigées ; ce n'est pas son propos.",
+            "en": "The glitches are mentioned only in passing, and the memo states that most are fixed; this is not its point."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Soumettre une démarche en trois volets pour éliminer un retard que la seule correction des problèmes techniques ne suffira pas à combler.",
+          "rationale": {
+            "fr": "La note établit que l'arriéré « ne se résorbera pas de lui-même » malgré les correctifs, puis expose les trois mesures proposées et leurs effets attendus.",
+            "en": "The memo establishes that the backlog 'will not clear itself' despite the fixes, then sets out the three proposed measures and their expected effects."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Annoncer que l'arriéré sera entièrement résorbé à la mi-décembre.",
+          "rationale": {
+            "fr": "Cette échéance est conditionnelle : elle suppose la mise en œuvre des mesures dès le 20 octobre et l'approbation des renforts.",
+            "en": "This deadline is conditional: it assumes the measures start on 20 October and that the reinforcements are approved."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Recommander l'abandon du nouveau système au profit de l'ancien.",
+          "rationale": {
+            "fr": "La note ne remet jamais en cause le système lui-même ; elle propose des mesures d'organisation pour absorber le retard.",
+            "en": "The memo never questions the system itself; it proposes organisational measures to absorb the backlog."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "L'idée principale d'une note de service se trouve souvent à la jonction du constat et de la proposition. Ici, « Bien que… » concède que la cause technique est réglée, puis la note pose le problème restant et y répond par un plan. Écartez les réponses qui transforment une hypothèse en certitude ou qui grossissent un détail.",
+        "en": "A memo's main idea often lies where the finding meets the proposal. Here 'Bien que…' concedes that the technical cause is fixed, then the memo states the remaining problem and answers it with a plan. Rule out answers that turn a hypothesis into a certainty or inflate a detail."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-3",
+      "stem": {
+        "fr": "En affirmant que le centre d'appels traite « à peine plus de demandes qu'il n'en entre chaque jour », que laisse entendre l'auteur au sujet de l'évolution prévisible de l'arriéré ?",
+        "en": "In stating that the call centre processes 'barely more requests than come in each day', what does the author imply about how the backlog is likely to evolve?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Que l'arriéré continue de s'alourdir malgré la correction des anomalies.",
+          "rationale": {
+            "fr": "Contresens : « à peine plus » signifie que le centre en traite légèrement plus qu'il n'en reçoit, donc que l'arriéré baisse, si peu que ce soit.",
+            "en": "Misreading: 'à peine plus' means the centre processes slightly more than it receives, so the backlog is falling, however little."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Que le nombre d'appels reçus a diminué depuis la mise en service du système.",
+          "rationale": {
+            "fr": "La note ne compare jamais le volume d'appels avant et après ; elle compare seulement les entrées et les sorties actuelles.",
+            "en": "The memo never compares call volumes before and after; it compares only current inflow and outflow."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Que le personnel actuel suffirait à rattraper le retard avant la fin de l'année.",
+          "rationale": {
+            "fr": "La note dit le contraire : sans renforts, l'arriéré ne serait pas résorbé avant le printemps.",
+            "en": "The memo says the opposite: without reinforcements, the backlog would not be cleared before spring."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Qu'avec les seules ressources actuelles, le nombre de demandes en attente ne diminuerait que très lentement.",
+          "rationale": {
+            "fr": "Traiter un peu plus de demandes qu'il n'en arrive fait baisser l'arriéré, mais de très peu chaque jour ; c'est pourquoi, « faute de renforts », il ne serait pas résorbé avant le printemps.",
+            "en": "Processing slightly more requests than arrive reduces the backlog, but only very slightly each day; hence, 'without reinforcements', it would not be cleared before spring."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une inférence prolonge le texte sans le contredire. « À peine plus… que » exprime un écart positif mais minime : l'arriéré baisse, lentement. La fin de la note (« Faute de renforts… pas avant le printemps ») confirme cette lecture. Attention à la locution « à peine », qui atténue sans nier.",
+        "en": "An inference extends the text without contradicting it. 'À peine plus… que' expresses a positive but tiny gap: the backlog is falling, slowly. The end of the memo ('Faute de renforts… pas avant le printemps') confirms this reading. Watch the phrase 'à peine', which softens without negating."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-3",
+      "stem": {
+        "fr": "Si les mesures débutent à la date prévue, comment la durée de l'affectation des renforts s'articule-t-elle avec l'échéance de résorption avancée dans la note ?",
+        "en": "If the measures begin on the planned date, how does the length of the reinforcements' assignment line up with the backlog-clearing deadline given in the memo?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "L'affectation des agents prendrait fin à peu près au moment où l'arriéré devrait être éliminé.",
+          "rationale": {
+            "fr": "Huit semaines à compter du 20 octobre mènent à la mi-décembre, soit précisément l'échéance avancée pour la résorption de l'arriéré.",
+            "en": "Eight weeks from 20 October brings us to mid-December, precisely the date given for clearing the backlog."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les renforts repartiraient plus d'un mois avant l'échéance visée.",
+          "rationale": {
+            "fr": "Huit semaines après le 20 octobre, on arrive à la mi-décembre, et non à la mi-novembre ; il n'y a pas d'écart d'un mois.",
+            "en": "Eight weeks after 20 October is mid-December, not mid-November; there is no one-month gap."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les 25 agents resteraient affectés au centre jusqu'au printemps.",
+          "rationale": {
+            "fr": "L'affectation est limitée à huit semaines ; le printemps est l'échéance du scénario sans renforts.",
+            "en": "The assignment is limited to eight weeks; spring is the deadline in the scenario without reinforcements."
+          }
+        },
+        {
+          "id": "d",
+          "text": "L'arriéré serait résorbé au printemps, bien après le départ des agents.",
+          "rationale": {
+            "fr": "Le printemps correspond au cas où les renforts ne seraient pas accordés, non au plan proposé.",
+            "en": "Spring corresponds to the case where reinforcements are not granted, not to the proposed plan."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Certaines questions chiffrées demandent de croiser deux données : une date de départ (le 20 octobre) et une durée (huit semaines) pour les comparer à une échéance (la mi-décembre). Prenez soin aussi de distinguer les scénarios : la note en présente deux, avec et sans renforts, et chacun a son échéance.",
+        "en": "Some numerical questions require combining two pieces of data: a start date (20 October) and a duration (eight weeks), to compare them with a deadline (mid-December). Also take care to separate the scenarios: the memo presents two, with and without reinforcements, each with its own deadline."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-3",
+      "stem": {
+        "fr": "Dans la phrase « Faute de renforts, en revanche, il ne le serait pas avant le printemps », que reprennent respectivement les pronoms « il » et « le » ?",
+        "en": "In the sentence 'Faute de renforts, en revanche, il ne le serait pas avant le printemps', what do the pronouns 'il' and 'le' respectively refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "« Il » désigne le plan proposé et « le » reprend l'idée qu'il soit mis en œuvre.",
+          "rationale": {
+            "fr": "Ce qui serait « mis en œuvre », ce sont « ces mesures », un nom féminin pluriel ; et la phrase oppose deux échéances de résorption, pas deux dates de lancement.",
+            "en": "What would be 'mis en œuvre' is 'ces mesures', a feminine plural noun; and the sentence contrasts two clearing deadlines, not two launch dates."
+          }
+        },
+        {
+          "id": "b",
+          "text": "« Il » désigne le délai moyen d'attente et « le » reprend la durée de 27 minutes.",
+          "rationale": {
+            "fr": "Le délai d'attente est mentionné au premier paragraphe, trop loin pour être repris ici ; de plus, « le » neutre reprend un attribut ou une idée, non une quantité.",
+            "en": "Waiting time is mentioned in the first paragraph, too far back to be taken up here; moreover, neuter 'le' takes up an attribute or an idea, not a quantity."
+          }
+        },
+        {
+          "id": "c",
+          "text": "« Il » désigne le tableau de bord et « le » reprend l'idée qu'il soit en place.",
+          "rationale": {
+            "fr": "Le tableau de bord n'apparaît qu'à la phrase suivante ; un pronom ne peut pas reprendre un élément qui n'a pas encore été mentionné.",
+            "en": "The dashboard appears only in the next sentence; a pronoun cannot take up something not yet mentioned."
+          }
+        },
+        {
+          "id": "d",
+          "text": "« Il » désigne l'arriéré et « le » reprend l'idée qu'il soit résorbé.",
+          "rationale": {
+            "fr": "La phrase précédente se termine par « l'arriéré devrait être résorbé » : « il » reprend le nom masculin « arriéré » et le pronom neutre « le » reprend l'attribut « résorbé ».",
+            "en": "The previous sentence ends with 'l'arriéré devrait être résorbé': 'il' takes up the masculine noun 'arriéré' and the neuter pronoun 'le' takes up the attribute 'résorbé'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le pronom neutre « le » peut reprendre un adjectif ou un participe attribut (« résorbé ») : « l'arriéré devrait être résorbé… il ne le serait pas » évite de répéter le participe. Pour identifier un pronom, cherchez dans la phrase qui précède un nom de même genre et nombre et une structure parallèle ; « en revanche » signale justement ce parallèle entre deux scénarios.",
+        "en": "The neuter pronoun 'le' can take up an attributive adjective or participle ('résorbé'): 'l'arriéré devrait être résorbé… il ne le serait pas' avoids repeating the participle. To identify a pronoun, look in the preceding sentence for a noun of the same gender and number and a parallel structure; 'en revanche' signals precisely this parallel between two scenarios."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-3",
+      "stem": {
+        "fr": "À la fin de la note, le tableau de bord hebdomadaire doit permettre, « le cas échéant, d'ajuster le plan ». Quel sens l'expression « le cas échéant » a-t-elle dans ce contexte ?",
+        "en": "At the end of the memo, the weekly dashboard is meant to allow the plan to be adjusted 'le cas échéant'. What does the expression 'le cas échéant' mean in this context?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À la date d'échéance du plan.",
+          "rationale": {
+            "fr": "Faux rapprochement avec « échéance » ou « échéancier » : l'expression n'a rien à voir avec une date limite.",
+            "en": "A false link with 'échéance' or 'échéancier': the expression has nothing to do with a deadline."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Dans tous les cas, de façon systématique.",
+          "rationale": {
+            "fr": "C'est presque le contraire : l'expression introduit une possibilité conditionnelle, non une obligation systématique.",
+            "en": "This is almost the opposite: the expression introduces a conditional possibility, not a systematic obligation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Si la situation l'exige.",
+          "rationale": {
+            "fr": "« Le cas échéant » signifie « si le cas se présente », « s'il y a lieu » : le plan ne sera ajusté que si le suivi montre que c'est nécessaire.",
+            "en": "'Le cas échéant' means 'if the case arises', 'where applicable': the plan will be adjusted only if monitoring shows it is necessary."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Une fois l'arriéré entièrement résorbé.",
+          "rationale": {
+            "fr": "Ajuster le plan après la résorption n'aurait aucun sens ; le suivi hebdomadaire sert à corriger le tir en cours de route.",
+            "en": "Adjusting the plan after the backlog is cleared would make no sense; weekly monitoring is for correcting course along the way."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Le cas échéant » est une locution figée du français administratif qui signifie « si cela se produit, s'il y a lieu ». Elle vient de l'ancien verbe « échoir » (arriver, survenir) et ne désigne pas une échéance au sens de date limite. Le contexte, un suivi hebdomadaire, confirme qu'il s'agit d'ajustements conditionnels.",
+        "en": "'Le cas échéant' is a fixed phrase in administrative French meaning 'if this happens, where applicable'. It comes from the old verb 'échoir' (to occur, to fall due) and does not denote an 'échéance' in the sense of a deadline. The context, weekly monitoring, confirms that it concerns conditional adjustments."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-4",
+      "stem": {
+        "fr": "Selon l'extrait, qu'est-ce que les clients ayant eu recours au centre d'appels reprochent principalement au service téléphonique ?",
+        "en": "According to the excerpt, what do clients who used the call centre mainly criticise about the telephone service?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le temps qu'il faut pour parvenir à parler à quelqu'un, davantage que la teneur des réponses.",
+          "rationale": {
+            "fr": "Ils « déplorent surtout la difficulté de joindre un agent, bien plus que la qualité des renseignements obtenus », qu'ils jugent exacts.",
+            "en": "They 'mainly deplore the difficulty of reaching an agent, far more than the quality of the information obtained', which they consider accurate."
+          }
+        },
+        {
+          "id": "b",
+          "text": "L'inexactitude des renseignements fournis par les agents.",
+          "rationale": {
+            "fr": "Contresens : les répondants jugent les renseignements « généralement exacts » ; ce n'est pas leur grief principal.",
+            "en": "Misreading: respondents consider the information 'generally accurate'; it is not their main grievance."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le manque de courtoisie des agents au téléphone.",
+          "rationale": {
+            "fr": "L'extrait ne dit rien de la courtoisie des agents ; ce reproche n'est pas dans le texte.",
+            "en": "The excerpt says nothing about agents' courtesy; this complaint is not in the text."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La formulation peu claire des questions du sondage.",
+          "rationale": {
+            "fr": "La modification de certaines questions est une limite méthodologique relevée par les analystes, non une plainte des clients.",
+            "en": "The rewording of some questions is a methodological limitation noted by the analysts, not a client complaint."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Une question de détail au niveau C exige souvent de repérer une hiérarchie dans la phrase : « surtout… bien plus que… » distingue le grief principal (joindre un agent) d'un aspect secondaire jugé satisfaisant (l'exactitude). Vérifiez aussi qui parle : clients ou analystes.",
+        "en": "A level C detail question often requires spotting a hierarchy within the sentence: 'surtout… bien plus que…' separates the main grievance (reaching an agent) from a secondary aspect judged satisfactory (accuracy). Also check who is speaking: clients or analysts."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-4",
+      "stem": {
+        "fr": "Que peut-on déduire de l'extrait quant à la légère hausse de la satisfaction globale par rapport à l'exercice précédent ?",
+        "en": "What can be inferred from the excerpt about the slight rise in overall satisfaction compared with the previous fiscal year?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle s'explique par une amélioration de l'accès au service téléphonique.",
+          "rationale": {
+            "fr": "L'extrait présente justement l'accès au téléphone comme le point faible et ne relie la hausse à aucune cause.",
+            "en": "The excerpt presents telephone access as the weak point and links the rise to no cause at all."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle tient à un taux de réponse plus élevé que l'année précédente.",
+          "rationale": {
+            "fr": "Le taux de réponse de l'année précédente n'est pas donné ; rien ne permet de faire ce lien.",
+            "en": "The previous year's response rate is not given; nothing supports this link."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle ne peut être tenue pour établie, puisque certaines questions ont été reformulées entre les deux sondages.",
+          "rationale": {
+            "fr": "Les analystes signalent que la reformulation de questions « limite la comparabilité avec les résultats antérieurs » : une comparaison d'une année à l'autre, comme cette hausse, est donc fragile.",
+            "en": "The analysts note that rewording questions 'limits comparability with previous results': a year-over-year comparison such as this rise is therefore fragile."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle démontre que la formation des agents a porté ses fruits.",
+          "rationale": {
+            "fr": "Aucune formation passée n'est évoquée, et l'équipe recommande précisément de ne pas miser d'abord sur la formation.",
+            "en": "No past training is mentioned, and the team in fact recommends not focusing first on training."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une inférence consiste à appliquer une information du texte à un autre de ses éléments. La mise en garde sur la comparabilité ne nomme pas la hausse, mais elle la vise nécessairement, puisque cette hausse est une comparaison avec un résultat antérieur. Les distracteurs proposent des causes que le texte n'avance pas.",
+        "en": "An inference applies one piece of information in the text to another of its elements. The caveat on comparability does not name the rise, but it necessarily applies to it, since the rise is a comparison with an earlier result. The distractors offer causes the text does not put forward."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-4",
+      "stem": {
+        "fr": "Quelle attitude les auteurs du rapport adoptent-ils à l'égard des résultats du sondage qu'ils analysent ?",
+        "en": "What attitude do the report's authors take towards the survey results they are analysing?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Un optimisme sans réserve devant la hausse de la satisfaction globale.",
+          "rationale": {
+            "fr": "La hausse est qualifiée de « légère » et aussitôt nuancée par les écarts entre modes de prestation et par les limites méthodologiques.",
+            "en": "The rise is described as 'slight' and immediately qualified by the gaps between service channels and by methodological limitations."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une prudence méthodique : ils formulent une recommandation tout en exposant les limites des données qui la fondent.",
+          "rationale": {
+            "fr": "Ils appellent à « interpréter ces données avec prudence », détaillent deux limites, puis recommandent « sous ces réserves » : la recommandation est assumée mais nuancée.",
+            "en": "They call for 'interpreting these data with caution', detail two limitations, then recommend 'subject to these reservations': the recommendation is made, but qualified."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Un scepticisme tel qu'ils refusent d'en tirer la moindre conclusion.",
+          "rationale": {
+            "fr": "Excès de lecture : malgré leurs réserves, les auteurs tirent bel et bien une conclusion et formulent une recommandation.",
+            "en": "Overreading: despite their reservations, the authors do draw a conclusion and make a recommendation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Une attitude défensive face aux critiques visant le centre d'appels.",
+          "rationale": {
+            "fr": "Les auteurs rapportent les critiques sans les contester et recommandent même d'y répondre en améliorant l'accès au téléphone.",
+            "en": "The authors report the criticisms without disputing them and even recommend addressing them by improving telephone access."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans un rapport d'analyse, l'intention de l'auteur se lit dans les modalisateurs : « Il convient néanmoins », « rien ne permet d'exclure », « Sous ces réserves ». Ils marquent une prudence qui n'empêche pas de conclure. Au niveau C, distinguez la nuance (réserve assortie d'une conclusion) des positions extrêmes (adhésion totale ou refus de conclure).",
+        "en": "In an analytical report, the author's intent shows in the hedging devices: 'Il convient néanmoins', 'rien ne permet d'exclure', 'Sous ces réserves'. They mark a caution that does not prevent a conclusion. At level C, distinguish nuance (a reservation paired with a conclusion) from extreme positions (full endorsement or refusal to conclude)."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-4",
+      "stem": {
+        "fr": "Comment l'argumentation de cet extrait de rapport sur la satisfaction de la clientèle est-elle organisée ?",
+        "en": "How is the argument in this excerpt from the client-satisfaction report organised?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Un problème, ses causes, puis les mesures déjà mises en œuvre pour le régler.",
+          "rationale": {
+            "fr": "Aucune mesure n'a encore été prise : le dernier paragraphe recommande une orientation pour l'avenir.",
+            "en": "No measure has yet been taken: the last paragraph recommends a direction for the future."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une recommandation d'abord, puis les données qui la justifient.",
+          "rationale": {
+            "fr": "C'est l'ordre inverse : la recommandation arrive à la fin, après les résultats et les réserves.",
+            "en": "It is the reverse order: the recommendation comes at the end, after the results and the reservations."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une comparaison détaillée des résultats de plusieurs années successives.",
+          "rationale": {
+            "fr": "Une seule comparaison avec l'exercice précédent est mentionnée, et elle est d'ailleurs fragilisée ; ce n'est pas le fil conducteur.",
+            "en": "Only one comparison with the previous year is mentioned, and it is undermined; it is not the common thread."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Des résultats chiffrés, suivis de leurs limites méthodologiques, puis d'une recommandation formulée sous réserve.",
+          "rationale": {
+            "fr": "Le premier paragraphe donne les résultats, le deuxième (« Il convient néanmoins… ») en expose les limites, le troisième (« Sous ces réserves… ») recommande.",
+            "en": "The first paragraph gives the results, the second ('Il convient néanmoins…') sets out their limitations, the third ('Sous ces réserves…') recommends."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour dégager la structure d'un texte, repérez la phrase d'ouverture de chaque paragraphe et ses connecteurs. « Il convient néanmoins » annonce une concession ; « Sous ces réserves » reprend cette concession pour conclure. Ce schéma (constat, limites, recommandation) est typique des rapports d'évaluation.",
+        "en": "To identify a text's structure, find each paragraph's opening sentence and its connectors. 'Il convient néanmoins' announces a concession; 'Sous ces réserves' takes up that concession in order to conclude. This pattern (findings, limitations, recommendation) is typical of evaluation reports."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-4",
+      "stem": {
+        "fr": "Dans la phrase consacrée aux limites méthodologiques du sondage, « plus enclins à répondre ou, à l'inverse, moins enclins à le faire », quel élément l'expression « le faire » reprend-elle ?",
+        "en": "In the sentence on the survey's methodological limitations, 'more inclined to respond or, conversely, less inclined to do so', what does the expression 'le faire' take up?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le fait de se déclarer insatisfait du service.",
+          "rationale": {
+            "fr": "« Insatisfaits » qualifie les clients dont on parle ; ce n'est pas l'action reprise par « le faire ».",
+            "en": "'Insatisfaits' describes the clients in question; it is not the action taken up by 'le faire'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le fait de remplir le questionnaire.",
+          "rationale": {
+            "fr": "« Le faire » reprend le verbe « répondre » de la même phrase : les clients insatisfaits ont pu être plus, ou moins, enclins à participer au sondage.",
+            "en": "'Le faire' takes up the verb 'répondre' in the same sentence: dissatisfied clients may have been more, or less, inclined to take part in the survey."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le fait de joindre un agent du centre d'appels.",
+          "rationale": {
+            "fr": "Joindre un agent est évoqué au paragraphe précédent ; « le faire » reprend un verbe beaucoup plus proche.",
+            "en": "Reaching an agent is mentioned in the previous paragraph; 'le faire' takes up a much closer verb."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le fait d'interpréter les données avec prudence.",
+          "rationale": {
+            "fr": "Ce sont les analystes et les lecteurs qui interprètent les données, pas les clients dont il est question ici.",
+            "en": "It is analysts and readers who interpret the data, not the clients being discussed here."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Le faire » est un substitut verbal : il évite de répéter un verbe d'action déjà employé, en général tout près. Ici, la structure parallèle « plus enclins à répondre… moins enclins à le faire » rend la reprise transparente. Vérifiez toujours que le sujet du verbe repris (les clients insatisfaits) peut accomplir l'action proposée.",
+        "en": "'Le faire' is a verbal substitute: it avoids repeating an action verb already used, usually close by. Here the parallel structure 'plus enclins à répondre… moins enclins à le faire' makes the reference transparent. Always check that the subject of the verb (dissatisfied clients) can perform the proposed action."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-5",
+      "stem": {
+        "fr": "Quel est l'objet principal de cette lettre adressée par la directrice des opérations régionales à une cliente mécontente ?",
+        "en": "What is the main purpose of this letter from the regional operations director to a dissatisfied client?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Informer la cliente que sa demande de prestation a été refusée.",
+          "rationale": {
+            "fr": "Contresens : la prestation a été versée le 30 septembre, de façon rétroactive.",
+            "en": "Misreading: the benefit was paid on 30 September, retroactively."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Réclamer à la cliente un document manquant pour terminer l'examen de son dossier.",
+          "rationale": {
+            "fr": "Le document manquant appartient au passé : il explique le retard, et la demande est déjà réglée.",
+            "en": "The missing document belongs to the past: it explains the delay, and the application is already settled."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Contester le bien-fondé de l'ensemble de la plainte.",
+          "rationale": {
+            "fr": "La directrice reconnaît au contraire le dépassement de la norme et présente des excuses ; elle ne conteste rien.",
+            "en": "On the contrary, the director acknowledges that the standard was exceeded and apologises; she disputes nothing."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Répondre à chacun des griefs de la cliente, reconnaître la part de responsabilité du Ministère et l'informer de son recours.",
+          "rationale": {
+            "fr": "La lettre traite tour à tour le retard (avec excuses) et les renseignements contradictoires, fait le point sur la prestation, puis indique la possibilité d'un réexamen.",
+            "en": "The letter deals in turn with the delay (with an apology) and the contradictory information, gives the status of the benefit, then points to the possibility of a review."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une lettre de réponse à une plainte suit les griefs du plaignant. L'idée principale doit en rendre compte globalement : reconnaissance, explication, réparation et recours. Les distracteurs isolent un détail (le document manquant) ou inversent l'issue (refus, contestation).",
+        "en": "A reply to a complaint follows the complainant's grievances. The main idea must account for them as a whole: acknowledgement, explanation, remedy and recourse. The distractors isolate a detail (the missing document) or reverse the outcome (refusal, dispute)."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-5",
+      "stem": {
+        "fr": "Quelle position la directrice adopte-t-elle, implicitement, à l'égard des renseignements contradictoires que la cliente affirme avoir obtenus auprès des agents du Ministère ?",
+        "en": "What position does the director implicitly take regarding the contradictory information the client says she obtained from the department's agents?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le Ministère reconnaît que ses agents lui ont donné de faux renseignements.",
+          "rationale": {
+            "fr": "La lettre ne reconnaît rien sur ce point ; le rappel des consignes au personnel est préventif, non un aveu.",
+            "en": "The letter admits nothing on this point; reminding staff of the guidelines is preventive, not an admission."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le Ministère estime que la cliente a mal compris les explications reçues.",
+          "rationale": {
+            "fr": "Aucun reproche n'est adressé à la cliente ; la lettre ne propose aucune explication de ce genre.",
+            "en": "No reproach is made to the client; the letter offers no explanation of that kind."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le Ministère ne confirme ni ne dément ses dires, n'ayant trouvé aucune trace des échanges.",
+          "rationale": {
+            "fr": "Le conditionnel « que vous auriez reçue » marque une affirmation rapportée sans la reprendre à son compte, et la lettre précise que les échanges n'ont pu être retracés.",
+            "en": "The conditional 'que vous auriez reçue' marks a reported claim without endorsing it, and the letter states that the exchanges could not be traced."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le Ministère a pris des mesures disciplinaires contre les agents en cause.",
+          "rationale": {
+            "fr": "Les agents en cause n'ont même pas été identifiés, puisque les échanges n'ont pu être retracés.",
+            "en": "The agents involved have not even been identified, since the exchanges could not be traced."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le conditionnel journalistique ou de prudence (« l'information que vous auriez reçue ») sert à rapporter une affirmation sans la valider. Combiné à « nous n'avons pu retracer les échanges » et à « néanmoins », il permet de déduire une position neutre : le Ministère prend une mesure préventive sans admettre ni nier la faute.",
+        "en": "The conditional of reported speech or caution ('l'information que vous auriez reçue') is used to report a claim without validating it. Combined with 'nous n'avons pu retracer les échanges' and 'néanmoins', it allows a neutral position to be inferred: the department takes a preventive step without admitting or denying fault."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-5",
+      "stem": {
+        "fr": "Comment qualifier le ton de la directrice lorsqu'elle explique le dépassement de la norme de service dans le traitement de la demande ?",
+        "en": "How would you describe the director's tone when she explains why the service standard was exceeded in processing the application?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Franc et conciliant : elle reconnaît une omission précise du Ministère et s'en excuse sans détour.",
+          "rationale": {
+            "fr": "Elle admet le retard (« effectivement »), en nomme la cause (« que nous aurions dû vous réclamer ») et présente des excuses en dégageant la cliente de toute responsabilité.",
+            "en": "She admits the delay ('effectivement'), names its cause ('que nous aurions dû vous réclamer') and apologises while clearing the client of any responsibility."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Défensif : elle attribue l'essentiel du retard à la cliente.",
+          "rationale": {
+            "fr": "Contresens : elle précise que l'oubli « ne relève en rien de votre responsabilité ».",
+            "en": "Misreading: she states that the oversight 'is in no way your responsibility'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Évasif : elle évite de se prononcer sur la cause du retard.",
+          "rationale": {
+            "fr": "Elle se prononce clairement : le document manquant aurait dû être réclamé dès la réception.",
+            "en": "She is clear on the cause: the missing document should have been requested on receipt."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Familier : elle s'adresse à la cliente comme dans un échange informel.",
+          "rationale": {
+            "fr": "La lettre reste dans un registre administratif soutenu, jusqu'à la formule « Veuillez agréer… ».",
+            "en": "The letter stays in a formal administrative register, down to the closing 'Veuillez agréer…'."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le ton d'une lettre administrative se mesure à la façon dont elle traite la faute : le conditionnel passé « nous aurions dû » exprime un regret et reconnaît une obligation non remplie. Au niveau C, distinguez la franchise (nommer l'erreur) de la simple politesse, et ne confondez pas courtoisie formelle et familiarité.",
+        "en": "The tone of an administrative letter is measured by how it handles fault: the past conditional 'nous aurions dû' expresses regret and acknowledges an unmet obligation. At level C, distinguish candour (naming the mistake) from mere politeness, and do not confuse formal courtesy with familiarity."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-5",
+      "stem": {
+        "fr": "Quel principe d'organisation la directrice suit-elle pour structurer le corps de sa réponse à la plainte ?",
+        "en": "What organising principle does the director follow to structure the body of her reply to the complaint?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle suit l'ordre chronologique du dossier, du dépôt de la demande jusqu'au versement.",
+          "rationale": {
+            "fr": "La lettre ne retrace pas les étapes du dossier dans l'ordre : elle s'organise autour des deux griefs.",
+            "en": "The letter does not trace the file's steps in order: it is organised around the two grievances."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle reprend les deux griefs dans l'ordre où elle les a résumés, puis fait le point sur le dossier et indique le recours possible.",
+          "rationale": {
+            "fr": "Le premier paragraphe nomme le délai puis l'information contradictoire ; les deux paragraphes suivants les traitent dans le même ordre, avant le versement et le réexamen.",
+            "en": "The first paragraph names the delay and then the contradictory information; the next two paragraphs deal with them in the same order, before the payment and the review."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle traite d'abord les renseignements contradictoires, puis le retard.",
+          "rationale": {
+            "fr": "C'est l'ordre inverse : le retard est traité avant les renseignements contradictoires, conformément au résumé initial.",
+            "en": "This is the reverse order: the delay is dealt with before the contradictory information, as in the opening summary."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle annonce d'abord la décision sur la prestation, puis en expose les motifs.",
+          "rationale": {
+            "fr": "Le versement de la prestation n'est mentionné qu'en fin de lettre, après le traitement des griefs.",
+            "en": "The benefit payment is mentioned only towards the end of the letter, after the grievances have been dealt with."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une réponse bien construite à une plainte annonce les griefs, puis les traite un à un dans le même ordre ; des marqueurs comme « Après examen » et « Quant à » signalent le passage d'un point à l'autre. Repérer ce parallélisme permet de comprendre la structure sans relire chaque phrase.",
+        "en": "A well-built reply to a complaint states the grievances, then deals with them one by one in the same order; markers such as 'Après examen' and 'Quant à' signal the move from one point to the next. Spotting this parallelism reveals the structure without rereading every sentence."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-service-delivery-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-service-delivery-5",
+      "stem": {
+        "fr": "Dans la lettre, la directrice qualifie l'oubli du Ministère comme ne relevant « en rien de votre responsabilité ». Que signifie cette expression dans ce contexte ?",
+        "en": "In the letter, the director describes the department's oversight as being 'in no way your responsibility'. What does this expression mean in this context?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Que la cliente n'est pas pour autant libérée de ses obligations.",
+          "rationale": {
+            "fr": "Contresens : « en rien » est une négation totale qui dégage la cliente, au lieu de lui laisser une part d'obligation.",
+            "en": "Misreading: 'en rien' is a total negation that clears the client, rather than leaving her some obligation."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Que la plainte de la cliente n'est pas du ressort du bureau de la directrice.",
+          "rationale": {
+            "fr": "« Relever de » peut signifier « être de la compétence de », mais ici le complément est « votre responsabilité » : il s'agit de la faute, non de la compétence d'un bureau.",
+            "en": "'Relever de' can mean 'fall within the jurisdiction of', but here the complement is 'your responsibility': the issue is fault, not an office's jurisdiction."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Que la cliente ne peut aucunement en être tenue pour fautive.",
+          "rationale": {
+            "fr": "« Ne relever en rien de la responsabilité de quelqu'un » signifie que la faute ne peut d'aucune façon lui être imputée : l'oubli incombe entièrement au Ministère.",
+            "en": "'Ne relever en rien de la responsabilité de quelqu'un' means the fault cannot in any way be attributed to that person: the oversight lies entirely with the department."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Que l'oubli n'a eu aucune conséquence sur le traitement du dossier.",
+          "rationale": {
+            "fr": "L'oubli a bien eu des conséquences : il explique en partie le retard de trois semaines.",
+            "en": "The oversight did have consequences: it partly explains the three-week delay."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Relever de » a plusieurs sens selon son complément : « relever de la compétence de » (être du ressort de), « relever de la responsabilité de » (être imputable à). Avec « en rien », la négation est totale. Au niveau C, le sens d'une locution se détermine par son complément et par la phrase qui l'entoure, ici des excuses.",
+        "en": "'Relever de' has several meanings depending on its complement: 'relever de la compétence de' (to fall within the jurisdiction of), 'relever de la responsabilité de' (to be attributable to). With 'en rien', the negation is total. At level C, a phrase's meaning is determined by its complement and the surrounding sentence, here an apology."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-service-delivery-1",
+      "lang": "fr",
+      "docType": "bulletin",
+      "title": "Nouvel horaire du comptoir de service de Rivière-Claire",
+      "body": "À compter du lundi 3 novembre, le comptoir de service du centre régional de Rivière-Claire adoptera un nouvel horaire. Il sera ouvert du lundi au jeudi de 8 h 30 à 16 h 30, et le vendredi de 8 h 30 à 12 h. L'après-midi du vendredi sera désormais réservé au traitement des dossiers en attente et à la formation du personnel.\n\nCe changement fait suite à l'analyse de la fréquentation des six derniers mois : moins de 5 % des visites avaient lieu le vendredi après-midi. Les clients qui ne peuvent pas se présenter pendant les heures d'ouverture pourront prendre rendez-vous en ligne ou par téléphone. Des plages en soirée seront aussi offertes le mardi, jusqu'à 19 h, sur rendez-vous seulement.\n\nPar ailleurs, les services en ligne demeurent accessibles en tout temps. Pour toute question, veuillez communiquer avec l'équipe du comptoir par courriel ou par téléphone.",
+      "wordCount": 147,
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 18.38,
+        "rareWordRatio": 0.252
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-service-delivery-2",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Nouvelles normes de service pour les demandes de permis",
+      "body": "Bonjour à toutes et à tous,\n\nComme annoncé à la réunion de mardi, le Ministère a publié ses nouvelles normes de service pour les demandes de permis d'exploitation. À partir du 1er décembre, nous devrons traiter 90 % des demandes complètes en 20 jours ouvrables, alors que la norme était jusqu'ici de 30 jours. Une demande est jugée complète lorsque tous les documents exigés ont été reçus ; le délai commence donc à cette date, et non à la date du premier envoi. Si un document manque, l'agent doit en aviser le client dans les cinq jours ouvrables.\n\nL'an dernier, nous avons respecté l'ancienne norme dans 84 % des cas : il nous faudra donc revoir notre façon de répartir les dossiers. Je vous propose d'en discuter jeudi à 10 h. D'ici là, je vous invite à noter les étapes du traitement qui vous font perdre le plus de temps.\n\nMerci de votre collaboration habituelle,\n\nMartine Lavoie\nGestionnaire, Délivrance des permis",
+      "wordCount": 161,
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 20.13,
+        "rareWordRatio": 0.149
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-service-delivery-3",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Plan de rétablissement du centre d'appels",
+      "body": "Depuis la mise en service du nouveau système de gestion des appels, le 8 septembre, le délai moyen d'attente est passé de 6 à 27 minutes, et quelque 14 000 demandes de rappel demeurent sans suite. Bien que la plupart des anomalies techniques aient été corrigées, l'arriéré ne se résorbera pas de lui-même : au rythme actuel, nous traitons à peine plus de demandes qu'il n'en entre chaque jour.\n\nLe plan proposé repose sur trois mesures. D'abord, 25 agents d'autres directions seraient affectés temporairement au centre pendant huit semaines, sous réserve de l'approbation des sous-ministres adjoints concernés. Ensuite, les demandes de rappel seraient traitées par ordre de priorité, celles qui touchent un paiement interrompu passant avant les simples demandes de renseignements. Enfin, un message d'accueil inviterait les appelants à consulter en ligne les réponses aux questions les plus fréquentes.\n\nSi ces mesures sont mises en œuvre dès le 20 octobre, l'arriéré devrait être résorbé d'ici la mi-décembre. Faute de renforts, en revanche, il ne le serait pas avant le printemps. Un tableau de bord hebdomadaire permettra de suivre les progrès et, le cas échéant, d'ajuster le plan.",
+      "wordCount": 187,
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 20.78,
+        "rareWordRatio": 0.241
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-service-delivery-4",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Sondage sur la satisfaction de la clientèle : extrait du rapport d'analyse",
+      "body": "Le sondage, mené auprès des clients ayant obtenu un service au cours du dernier trimestre, fait état d'un taux de satisfaction globale de 78 %, en légère hausse par rapport à l'exercice précédent. Ce résultat d'ensemble masque toutefois des écarts marqués selon le mode de prestation : les clients servis en personne se disent satisfaits dans une proportion de 86 %, contre 71 % pour ceux qui ont eu recours au centre d'appels. Les répondants de ce second groupe déplorent surtout la difficulté de joindre un agent, bien plus que la qualité des renseignements obtenus, qu'ils jugent généralement exacts.\n\nIl convient néanmoins d'interpréter ces données avec prudence. Le taux de réponse n'a atteint que 19 %, et rien ne permet d'exclure que les clients insatisfaits aient été plus enclins à répondre ou, à l'inverse, moins enclins à le faire. Par ailleurs, la formulation de certaines questions a été modifiée cette année, ce qui limite la comparabilité avec les résultats antérieurs.\n\nSous ces réserves, l'équipe recommande de concentrer les efforts sur l'accessibilité du service téléphonique plutôt que sur la formation des agents, dans la mesure où c'est l'attente, et non l'exactitude des réponses, qui pèse sur la satisfaction.",
+      "wordCount": 197,
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 28.14,
+        "rareWordRatio": 0.213
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-service-delivery-5",
+      "lang": "fr",
+      "docType": "letter",
+      "title": "Réponse à une plainte concernant le traitement d'une demande de prestation",
+      "body": "Madame,\n\nNous accusons réception de votre lettre du 12 septembre, dans laquelle vous exprimez votre mécontentement quant au délai de traitement de votre demande de prestation et à l'information contradictoire que vous auriez reçue de nos agents.\n\nAprès examen de votre dossier, nous constatons que votre demande a effectivement été traitée en neuf semaines, alors que notre norme de service est de six. Ce retard tient en partie à un document manquant, que nous aurions dû vous réclamer dès la réception de votre demande plutôt que trois semaines plus tard. Nous vous présentons nos excuses pour cet oubli, qui ne relève en rien de votre responsabilité.\n\nQuant aux renseignements contradictoires, nous n'avons pu retracer les échanges en cause. Nous avons néanmoins rappelé à notre personnel les consignes en vigueur, afin que pareille situation ne se reproduise pas.\n\nVotre prestation vous a été versée le 30 septembre, de façon rétroactive à la date de votre admissibilité. Si vous estimez que la présente réponse ne règle pas votre plainte, vous pouvez en demander le réexamen auprès du Bureau de la qualité du service dans les 30 jours.\n\nVeuillez agréer, Madame, l'expression de nos sentiments distingués.\n\nLa directrice des opérations régionales",
+      "wordCount": 198,
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "readability": {
+        "sentences": 10,
+        "avgSentenceLength": 19.8,
+        "rareWordRatio": 0.222
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

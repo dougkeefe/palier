@@ -1,0 +1,1207 @@
+{
+  "items": [],
+  "scenarios": [
+    {
+      "sessionType": "warmup",
+      "targetBand": "B",
+      "lang": "fr",
+      "topic": "human-resources",
+      "phases": [
+        {
+          "name": "Présentation",
+          "minutes": 2,
+          "intent": "Probes a basic self-introduction: position, team and main duties. A strong B answer links several sentences with common connectors and adds a concrete detail or two rather than a bare list.",
+          "seedQuestions": [
+            "Pour commencer, pourriez-vous vous présenter et me décrire le poste que vous occupez ?",
+            "Dans quelle équipe travaillez-vous, et comment cette équipe est-elle organisée ?"
+          ],
+          "escalation": [
+            "Comment votre rôle a-t-il évolué depuis votre arrivée dans votre équipe actuelle ?",
+            "Qu'est-ce qui vous a amené à choisir la fonction publique ?"
+          ],
+          "deescalation": [
+            "Quel est le titre de votre poste ?",
+            "Combien de personnes y a-t-il dans votre équipe ?",
+            "Où se trouve votre bureau ?"
+          ]
+        },
+        {
+          "name": "Votre parcours",
+          "minutes": 3,
+          "intent": "Elicits a short narrative about arriving in the job and training received. A strong B answer narrates past events clearly in the passé composé and imparfait, in a logical order, with a simple evaluation of what helped.",
+          "seedQuestions": [
+            "Racontez-moi comment s'est passée votre arrivée dans votre poste actuel : comment vous a-t-on accueilli ?",
+            "Quelles formations avez-vous suivies depuis que vous travaillez dans votre milieu actuel, et qu'est-ce qu'elles vous ont apporté ?"
+          ],
+          "escalation": [
+            "Si vous deviez accueillir un nouvel employé demain, qu'est-ce que vous feriez différemment de ce que vous avez vécu ?",
+            "Quels conseils donneriez-vous à quelqu'un qui souhaite postuler à un poste comme le vôtre ?"
+          ],
+          "deescalation": [
+            "Qui vous a aidé pendant vos premières semaines ?",
+            "Qu'avez-vous fait lors de votre première journée de travail ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "warmup",
+      "targetBand": "B",
+      "lang": "fr",
+      "topic": "official-languages",
+      "phases": [
+        {
+          "name": "Présentation",
+          "minutes": 2,
+          "intent": "Opens with the candidate's role and a typical working day. A strong B answer describes routine tasks in the present tense with sequencing words (d'abord, ensuite, en général) and some concrete examples.",
+          "seedQuestions": [
+            "Parlez-moi un peu de vous : quel poste occupez-vous, et depuis combien de temps ?",
+            "Décrivez-moi une journée typique dans votre milieu de travail."
+          ],
+          "escalation": [
+            "Quelle partie de votre travail vous demande le plus d'organisation, et pourquoi ?",
+            "Comment votre journée change-t-elle pendant les périodes les plus occupées de l'année ?"
+          ],
+          "deescalation": [
+            "À quelle heure commencez-vous votre journée ?",
+            "Quelle est votre tâche principale ?"
+          ]
+        },
+        {
+          "name": "Les langues au travail",
+          "minutes": 3,
+          "intent": "Explores how the candidate uses French at work and how they learned it. A strong B answer gives specific situations, uses past tenses to tell how they learned, and offers a simple suggestion with a reason.",
+          "seedQuestions": [
+            "Dans votre milieu de travail, dans quelles situations utilisez-vous le français ?",
+            "Comment avez-vous appris le français, et qu'est-ce qui vous a le plus aidé ?"
+          ],
+          "escalation": [
+            "Racontez-moi une situation où vous avez dû expliquer quelque chose de compliqué en français. Comment vous y êtes-vous pris ?",
+            "Qu'est-ce que votre équipe pourrait faire pour que les employés utilisent davantage les deux langues officielles ?"
+          ],
+          "deescalation": [
+            "Avec qui parlez-vous français au travail ?",
+            "Quelle langue utilisez-vous pendant les réunions d'équipe ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "warmup",
+      "targetBand": "C",
+      "lang": "fr",
+      "topic": "communications",
+      "phases": [
+        {
+          "name": "Présentation",
+          "minutes": 2,
+          "intent": "Asks the candidate to situate their role within the team's mandate and to explain it to an outsider. A strong C answer is fluent and precise, reformulates jargon in plain terms, and conveys the purpose of the work rather than listing tasks.",
+          "seedQuestions": [
+            "Pourriez-vous vous présenter et me décrire le mandat de votre équipe, ainsi que votre contribution à ce mandat ?",
+            "Comment expliqueriez-vous votre travail à quelqu'un qui ne connaît pas du tout la fonction publique ?"
+          ],
+          "escalation": [
+            "En quoi votre rôle diffère-t-il de ce que vous imaginiez avant d'occuper ce poste ?",
+            "Selon vous, quelle part de votre travail est la moins visible, et pourquoi mériterait-elle d'être mieux connue ?"
+          ],
+          "deescalation": [
+            "Quelles sont vos principales tâches au quotidien ?",
+            "Avec qui travaillez-vous le plus souvent ?"
+          ]
+        },
+        {
+          "name": "Communiquer au travail",
+          "minutes": 3,
+          "intent": "Moves from describing internal communication to evaluating it. A strong C answer weighs advantages and drawbacks with nuanced connectors (dans la mesure où, bien que), uses the conditional for proposed changes, and anticipates a downside of its own proposal.",
+          "seedQuestions": [
+            "Dans votre milieu de travail, comment l'information circule-t-elle entre la direction et les employés ?",
+            "Quels moyens de communication privilégiez-vous avec vos collègues, et pour quelles raisons ?"
+          ],
+          "escalation": [
+            "Si vous pouviez changer une seule chose à la façon dont votre organisation communique avec ses employés, que choisiriez-vous, et quels en seraient les risques ?",
+            "Certains estiment que le courriel nuit plus qu'il n'aide à la collaboration. Dans quelle mesure partagez-vous cet avis ?"
+          ],
+          "deescalation": [
+            "Comment apprenez-vous les nouvelles importantes de votre organisation ?",
+            "Préférez-vous le courriel ou le téléphone, et pourquoi ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "warmup",
+      "targetBand": "C",
+      "lang": "fr",
+      "topic": "environment",
+      "phases": [
+        {
+          "name": "Présentation",
+          "minutes": 2,
+          "intent": "Covers career path and motivation. A strong C answer reflects on the path rather than reciting it, links past experience to current practice, and handles a past-conditional hypothetical without hesitation.",
+          "seedQuestions": [
+            "Pour commencer, présentez-vous et décrivez-moi brièvement votre parcours professionnel.",
+            "Qu'est-ce qui vous motive le plus dans le travail que vous faites actuellement ?"
+          ],
+          "escalation": [
+            "Si vous n'aviez pas choisi votre domaine actuel, vers quel autre secteur de la fonction publique vous seriez-vous orienté, et pourquoi ?",
+            "Comment votre parcours antérieur influence-t-il votre façon d'aborder votre travail aujourd'hui ?"
+          ],
+          "deescalation": [
+            "Depuis combien de temps travaillez-vous dans votre équipe ?",
+            "Qu'est-ce que vous aimez dans votre travail ?"
+          ]
+        },
+        {
+          "name": "Votre milieu de travail",
+          "minutes": 3,
+          "intent": "Uses workplace environmental practices and hybrid work as a low-stakes entry into evaluation. A strong C answer describes concrete measures, then takes and justifies a position on shared responsibility, using the conditional and nuanced connectors.",
+          "seedQuestions": [
+            "Dans votre milieu de travail, quelles mesures a-t-on prises pour réduire l'empreinte environnementale des activités ?",
+            "Comment le travail hybride a-t-il changé vos habitudes, notamment en matière de déplacements ?"
+          ],
+          "escalation": [
+            "À votre avis, les initiatives écologiques en milieu de travail relèvent-elles davantage de la responsabilité individuelle ou de celle de l'employeur ? Justifiez votre réponse.",
+            "Si votre gestionnaire vous confiait la tâche de rendre votre bureau plus écologique, par quoi commenceriez-vous, et comment convaincriez-vous vos collègues ?"
+          ],
+          "deescalation": [
+            "Comment vous rendez-vous au travail ?",
+            "Que fait-on du papier et des contenants dans votre bureau ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "work",
+      "targetBand": "B",
+      "lang": "fr",
+      "topic": "service-delivery",
+      "phases": [
+        {
+          "name": "Votre travail",
+          "minutes": 3,
+          "intent": "Probes a description of duties and the people served. A strong B answer is an organized description in the present tense, walks through a process step by step with connectors, and gives an example.",
+          "seedQuestions": [
+            "Décrivez-moi vos principales responsabilités et les personnes à qui vous offrez des services, à l'interne ou à l'externe.",
+            "Comment une demande typique est-elle traitée dans votre équipe, du début à la fin ?"
+          ],
+          "escalation": [
+            "Quelles étapes de ce processus prennent le plus de temps, et pourquoi ?",
+            "Comment votre équipe sait-elle si les clients sont satisfaits du service ?"
+          ],
+          "deescalation": [
+            "Qui sont vos clients ?",
+            "Quelle tâche faites-vous le plus souvent ?"
+          ]
+        },
+        {
+          "name": "Un changement récent",
+          "minutes": 4,
+          "intent": "Elicits a narrative about a recent change or improvement to a service. A strong B answer tells what happened in a clear sequence using past tenses, names an obstacle and how it was handled, and states a concrete result.",
+          "seedQuestions": [
+            "Parlez-moi d'un changement apporté récemment à la façon dont votre équipe offre ses services. Comment cela s'est-il passé ?",
+            "Racontez-moi comment vous avez participé à l'amélioration d'un service ou d'un processus."
+          ],
+          "escalation": [
+            "Quels obstacles avez-vous rencontrés pendant la mise en œuvre de ce changement, et comment les avez-vous surmontés ?",
+            "Quels résultats concrets avez-vous observés depuis ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce qui a changé exactement ?",
+            "Qu'en ont pensé vos collègues ?"
+          ]
+        },
+        {
+          "name": "Un problème résolu",
+          "minutes": 3,
+          "intent": "Asks for a specific problem the candidate solved. A strong B answer explains the problem, the actions taken and the outcome in order, and draws a simple lesson from it.",
+          "seedQuestions": [
+            "Décrivez-moi une situation où un client ou un collègue était insatisfait. Qu'avez-vous fait ?",
+            "Racontez-moi un problème que vous avez réglé récemment au travail."
+          ],
+          "escalation": [
+            "Qu'est-ce que cette expérience vous a appris, et qu'est-ce que vous referiez de la même façon ?",
+            "Comment avez-vous fait pour éviter que le problème se reproduise ?"
+          ],
+          "deescalation": [
+            "Quel était le problème ?",
+            "Qui vous a aidé à le régler ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "work",
+      "targetBand": "B",
+      "lang": "fr",
+      "topic": "it-and-digital",
+      "phases": [
+        {
+          "name": "Vos tâches",
+          "minutes": 3,
+          "intent": "Probes a description of daily work and the digital tools it relies on. A strong B answer describes routine tasks and explains what each tool is used for, with examples, in connected sentences.",
+          "seedQuestions": [
+            "Expliquez-moi en quoi consiste votre travail au quotidien.",
+            "Quels outils informatiques utilisez-vous le plus dans votre travail, et à quoi vous servent-ils ?"
+          ],
+          "escalation": [
+            "Comment ces outils ont-ils changé votre façon de travailler au cours des dernières années ?",
+            "Quel outil vous manque, et à quoi vous servirait-il ?"
+          ],
+          "deescalation": [
+            "Quel logiciel utilisez-vous tous les jours ?",
+            "Comment commence votre journée de travail ?"
+          ]
+        },
+        {
+          "name": "Un projet",
+          "minutes": 4,
+          "intent": "Elicits the story of a new system or tool being introduced, or another project. A strong B answer narrates the steps and the candidate's own role, using past tenses accurately, and says what worked and what did not.",
+          "seedQuestions": [
+            "Parlez-moi de la mise en place d'un nouveau système ou d'un nouvel outil dans votre milieu de travail. Comment s'est déroulée la transition ?",
+            "Décrivez-moi un projet auquel vous avez participé et votre rôle dans ce projet."
+          ],
+          "escalation": [
+            "Comment a-t-on formé les employés, et qu'est-ce qui a bien ou moins bien fonctionné ?",
+            "Quelles difficultés l'équipe a-t-elle rencontrées, et comment les a-t-elle réglées ?"
+          ],
+          "deescalation": [
+            "Quel était le but de ce projet ?",
+            "Combien de temps a duré le projet ?"
+          ]
+        },
+        {
+          "name": "Un problème résolu",
+          "minutes": 3,
+          "intent": "Asks how the candidate handled a technical problem or helped a colleague. A strong B answer describes the situation and the steps taken in order, and can say what they would do next time.",
+          "seedQuestions": [
+            "Racontez-moi une panne ou un problème technique qui a nui à votre travail. Comment l'avez-vous géré ?",
+            "Décrivez-moi une situation où vous avez dû aider un collègue à utiliser un outil numérique."
+          ],
+          "escalation": [
+            "Qu'auriez-vous pu faire pour être mieux préparé à ce genre de situation ?",
+            "Quelles mesures votre équipe a-t-elle prises ensuite pour limiter les conséquences d'une prochaine panne ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce qui s'est passé ce jour-là ?",
+            "Qui avez-vous appelé pour obtenir de l'aide ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "work",
+      "targetBand": "C",
+      "lang": "fr",
+      "topic": "project-management",
+      "phases": [
+        {
+          "name": "Votre rôle",
+          "minutes": 3,
+          "intent": "Asks the candidate to situate their role within organizational priorities and explain how they arbitrate competing demands. A strong C answer is abstract and structured, explains the reasoning behind choices, and handles a hypothetical in the conditional.",
+          "seedQuestions": [
+            "Pourriez-vous situer votre rôle dans l'ensemble des priorités de votre direction générale ?",
+            "Comment conciliez-vous les demandes souvent concurrentes qui vous parviennent ?"
+          ],
+          "escalation": [
+            "Dans quelle mesure votre travail influence-t-il les décisions prises à des niveaux supérieurs ?",
+            "Si les priorités de votre direction changeaient radicalement demain, quelles compétences vous permettraient de vous adapter ?"
+          ],
+          "deescalation": [
+            "Quelles sont vos priorités cette année ?",
+            "Comment organisez-vous votre semaine de travail ?"
+          ]
+        },
+        {
+          "name": "Un projet d'envergure",
+          "minutes": 4,
+          "intent": "Probes a complex project with attention to planning, monitoring and risk. A strong C answer goes beyond narration to analysis, uses the past conditional to say what should have been done differently, and takes a nuanced position on a counter-argument.",
+          "seedQuestions": [
+            "Décrivez-moi un projet complexe auquel vous avez participé, en insistant sur la façon dont il a été planifié et suivi.",
+            "Comment les risques étaient-ils cernés et gérés dans ce projet ?"
+          ],
+          "escalation": [
+            "Qu'auriez-vous fait autrement si vous aviez été responsable de ce projet dès le départ ?",
+            "Certains affirment qu'une planification trop détaillée nuit à la souplesse d'un projet. Qu'en pensez-vous, à la lumière de votre expérience ?"
+          ],
+          "deescalation": [
+            "Quel était l'objectif principal du projet ?",
+            "Quelles étaient les grandes étapes ?"
+          ]
+        },
+        {
+          "name": "Une difficulté surmontée",
+          "minutes": 3,
+          "intent": "Asks about a project that slipped or a reluctant stakeholder. A strong C answer evaluates the decision taken, weighs alternatives that could have been considered, and draws a lesson that generalizes beyond the case.",
+          "seedQuestions": [
+            "Parlez-moi d'un moment où un projet a pris du retard ou dépassé son budget. Comment la situation a-t-elle été redressée ?",
+            "Racontez-moi une situation où vous avez dû convaincre des intervenants réticents."
+          ],
+          "escalation": [
+            "Avec le recul, comment jugez-vous la décision qui a été prise, et quelles autres options auraient pu être envisagées ?",
+            "Quelles leçons votre organisation devrait-elle en tirer pour ses projets futurs ?"
+          ],
+          "deescalation": [
+            "Pourquoi le projet a-t-il pris du retard ?",
+            "Qui a pris la décision finale ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "work",
+      "targetBand": "C",
+      "lang": "fr",
+      "topic": "procurement",
+      "phases": [
+        {
+          "name": "Vos responsabilités",
+          "minutes": 3,
+          "intent": "Probes the candidate's responsibilities and how their organization relies on external suppliers or resources. A strong C answer links duties to the mandate, and weighs the trade-off between external and internal expertise with justification.",
+          "seedQuestions": [
+            "Décrivez-moi vos responsabilités actuelles et la façon dont elles s'inscrivent dans le mandat de votre organisation.",
+            "Dans votre milieu de travail, comment fait-on appel à des fournisseurs ou à des ressources externes, et quel rôle y jouez-vous, directement ou indirectement ?"
+          ],
+          "escalation": [
+            "Selon vous, quels sont les avantages et les inconvénients de recourir à des ressources externes plutôt qu'à l'expertise interne ?",
+            "Comment s'assure-t-on, dans votre milieu, que les fonds publics sont dépensés de façon judicieuse ?"
+          ],
+          "deescalation": [
+            "Quelles sont vos tâches principales ?",
+            "Comment commandez-vous du matériel ou des services pour votre équipe ?"
+          ]
+        },
+        {
+          "name": "Un dossier marquant",
+          "minutes": 4,
+          "intent": "Elicits a decision among several options, such as an acquisition. A strong C answer explains the criteria and their weighting, adapts the account to a hypothetical constraint in the past conditional, and reconciles fairness with speed.",
+          "seedQuestions": [
+            "Parlez-moi d'un dossier où il a fallu acquérir un bien ou un service, ou choisir entre plusieurs options. Comment la décision a-t-elle été prise ?",
+            "Quels critères ont été retenus, et comment ont-ils été pondérés ?"
+          ],
+          "escalation": [
+            "Si le budget avait été réduit de moitié en cours de route, comment auriez-vous réorganisé le dossier ?",
+            "Comment conciliez-vous l'exigence d'équité envers les fournisseurs avec la nécessité d'agir rapidement ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce qu'il fallait acheter ou choisir ?",
+            "Qui a participé à la décision ?"
+          ]
+        },
+        {
+          "name": "Un problème résolu",
+          "minutes": 3,
+          "intent": "Asks about a partner who failed to deliver, or an administrative problem solved. A strong C answer explains the approach and reasoning, critiques it with hindsight, and proposes preventive measures in the conditional.",
+          "seedQuestions": [
+            "Racontez-moi une situation où un fournisseur ou un partenaire n'a pas respecté ses engagements. Comment a-t-on réagi ?",
+            "Décrivez un problème administratif que vous avez contribué à résoudre et la démarche que vous avez suivie."
+          ],
+          "escalation": [
+            "Qu'auriez-vous fait autrement, sachant ce que vous savez aujourd'hui ?",
+            "Quelles mesures préventives proposeriez-vous pour qu'une telle situation ne se reproduise pas ?"
+          ],
+          "deescalation": [
+            "Quel était le problème exactement ?",
+            "Comment la situation s'est-elle terminée ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "opinion",
+      "targetBand": "B",
+      "lang": "fr",
+      "topic": "health-and-safety",
+      "phases": [
+        {
+          "name": "Mise en contexte",
+          "minutes": 3,
+          "intent": "Grounds the discussion in concrete workplace health and safety practices. A strong B answer describes existing measures clearly and says which ones are useful and why.",
+          "seedQuestions": [
+            "Dans votre milieu de travail, comment informe-t-on les employés des règles de santé et de sécurité ?",
+            "Décrivez-moi les mesures prises dans votre bureau pour assurer le bien-être des employés."
+          ],
+          "escalation": [
+            "Lesquelles de ces mesures vous semblent les plus utiles, et pourquoi ?",
+            "Comment ces mesures ont-elles évolué depuis votre arrivée ?"
+          ],
+          "deescalation": [
+            "Qui s'occupe de la sécurité dans votre édifice ?",
+            "Que faut-il faire en cas d'alarme d'incendie ?"
+          ]
+        },
+        {
+          "name": "Votre point de vue",
+          "minutes": 5,
+          "intent": "Asks for an opinion on workplace well-being. A strong B answer states a clear opinion, supports it with one or two reasons and a concrete example, and can respond simply to an opposing view.",
+          "seedQuestions": [
+            "Selon vous, quels sont les avantages et les inconvénients du télétravail pour la santé des employés ?",
+            "À votre avis, que devrait faire un employeur pour aider les employés à mieux gérer le stress ?"
+          ],
+          "escalation": [
+            "Certains pensent que le bien-être au travail est surtout la responsabilité de chaque employé. Qu'en pensez-vous ? Donnez un exemple.",
+            "Quelle mesure faudrait-il adopter en premier, et pourquoi celle-là plutôt qu'une autre ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce qui vous aide à rester en forme au travail ?",
+            "Où préférez-vous travailler, au bureau ou à la maison, et pourquoi ?"
+          ]
+        },
+        {
+          "name": "Et si…",
+          "minutes": 4,
+          "intent": "Introduces simple hypotheticals. A strong B answer uses the present conditional correctly to propose concrete improvements or reactions, with a short justification.",
+          "seedQuestions": [
+            "Si vous étiez responsable de la santé et de la sécurité dans votre équipe, quelles améliorations proposeriez-vous ?",
+            "Imaginez qu'un collègue se blesse au bureau. Comment devrait-on réagir, selon vous ?"
+          ],
+          "escalation": [
+            "Comment convaincriez-vous votre gestionnaire de financer ces améliorations ?",
+            "Que feriez-vous si vos collègues ne respectaient pas les nouvelles consignes ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce que vous changeriez dans votre espace de travail ?",
+            "Qui faudrait-il prévenir en premier ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "opinion",
+      "targetBand": "B",
+      "lang": "fr",
+      "topic": "accessibility",
+      "phases": [
+        {
+          "name": "Mise en contexte",
+          "minutes": 3,
+          "intent": "Grounds the topic in what the candidate's workplace already does for accessibility. A strong B answer describes specific arrangements or tools and how they were introduced.",
+          "seedQuestions": [
+            "Dans votre milieu de travail, comment tient-on compte des besoins des employés ou des clients en matière d'accessibilité ?",
+            "Décrivez-moi un aménagement ou un outil qui facilite le travail de certaines personnes dans votre bureau."
+          ],
+          "escalation": [
+            "Comment ces mesures ont-elles été mises en place, et qui a été consulté ?",
+            "Quels progrès avez-vous remarqués ces dernières années ?"
+          ],
+          "deescalation": [
+            "Comment entre-t-on dans votre édifice ?",
+            "Quels outils sont offerts aux employés qui en ont besoin ?"
+          ]
+        },
+        {
+          "name": "Votre point de vue",
+          "minutes": 5,
+          "intent": "Asks why accessibility matters and what makes it hard. A strong B answer gives a clear opinion with reasons and examples, and can answer a simple counter-argument such as cost.",
+          "seedQuestions": [
+            "À votre avis, pourquoi est-il important que les documents et les sites Web d'une organisation publique soient accessibles à tous ?",
+            "Selon vous, quelles sont les principales difficultés pour rendre un milieu de travail plus accessible ?"
+          ],
+          "escalation": [
+            "Certains disent que l'accessibilité coûte cher. Comment répondriez-vous à cet argument ?",
+            "Selon vous, qu'est-ce qui est le plus efficace : former les employés ou changer les outils ? Expliquez votre choix."
+          ],
+          "deescalation": [
+            "Que fait votre équipe pour que ses documents soient faciles à lire ?",
+            "Qu'est-ce qui rend une réunion facile à suivre pour tout le monde ?"
+          ]
+        },
+        {
+          "name": "Et si…",
+          "minutes": 4,
+          "intent": "Puts the candidate in simple hypothetical situations. A strong B answer uses the conditional to plan concrete steps and explains them in a sensible order.",
+          "seedQuestions": [
+            "Si vous deviez organiser une réunion accessible à tous les participants, que prévoiriez-vous ?",
+            "Imaginez qu'un nouveau collègue ait besoin d'un aménagement particulier. Comment l'aideriez-vous à s'intégrer à l'équipe ?"
+          ],
+          "escalation": [
+            "Que feriez-vous si l'aménagement demandé prenait plusieurs mois à obtenir ?",
+            "Comment expliqueriez-vous l'importance de ces mesures à un collègue sceptique ?"
+          ],
+          "deescalation": [
+            "Quelles questions poseriez-vous aux participants avant la réunion ?",
+            "Comment l'accueilleriez-vous le premier jour ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "opinion",
+      "targetBand": "C",
+      "lang": "fr",
+      "topic": "policy-and-legislation",
+      "phases": [
+        {
+          "name": "Entrée en matière",
+          "minutes": 3,
+          "intent": "Elicits how rules and policies shape everyday decisions, then shifts to what makes a policy well designed. A strong C answer moves from example to principle and distinguishes the purpose of a rule from its wording.",
+          "seedQuestions": [
+            "Dans votre milieu de travail, comment les politiques et les directives encadrent-elles vos décisions au quotidien ?",
+            "Selon vous, à quoi reconnaît-on une politique bien conçue ?"
+          ],
+          "escalation": [
+            "Dans quelle mesure une règle claire peut-elle devenir un obstacle lorsque les circonstances changent ?",
+            "Comment distingueriez-vous l'esprit d'une politique de sa lettre ?"
+          ],
+          "deescalation": [
+            "Quelle directive utilisez-vous le plus souvent dans votre travail ?",
+            "Comment apprenez-vous qu'une règle a changé ?"
+          ]
+        },
+        {
+          "name": "Prise de position",
+          "minutes": 5,
+          "intent": "The C discriminator: the candidate must take and defend a position on a governance trade-off. A strong C answer states a clear stance, anticipates and rebuts counter-arguments, qualifies the position with conditions (à condition que, à moins que), and sustains abstract argument without falling back on anecdote.",
+          "seedQuestions": [
+            "Certains soutiennent que l'administration publique devrait laisser plus de latitude aux gestionnaires, quitte à accepter davantage de risques. Quelle est votre position ?",
+            "Selon vous, faut-il privilégier des règles uniformes pour tous ou des règles adaptées aux réalités régionales ? Défendez votre point de vue."
+          ],
+          "escalation": [
+            "Quels arguments un défenseur de la position contraire pourrait-il vous opposer, et comment y répondriez-vous ?",
+            "À quelles conditions accepteriez-vous de nuancer votre position ?",
+            "Si une politique produisait des effets imprévus et injustes, qui devrait en assumer la responsabilité, selon vous ?"
+          ],
+          "deescalation": [
+            "Donnez-moi un exemple de règle qui vous semble utile dans votre travail.",
+            "Que se passe-t-il quand une règle n'est pas claire ?"
+          ]
+        },
+        {
+          "name": "Hypothèse",
+          "minutes": 4,
+          "intent": "Tests sustained hypothetical reasoning. A strong C answer lays out a method in the conditional, reconciles simplification with accountability, and handles a past-conditional variant (what would you have proposed) with precision.",
+          "seedQuestions": [
+            "Imaginez qu'on vous demande de revoir une politique interne que les employés jugent trop lourde. Comment vous y prendriez-vous ?",
+            "Si vous aviez pu participer à l'élaboration d'une directive qui touche votre travail, qu'auriez-vous proposé ?"
+          ],
+          "escalation": [
+            "Comment concilieriez-vous la simplification demandée avec l'obligation de rendre des comptes ?",
+            "Qu'auriez-vous fait si les intervenants consultés avaient exprimé des avis diamétralement opposés ?"
+          ],
+          "deescalation": [
+            "Qui consulteriez-vous en premier ?",
+            "Quelle partie de la politique changeriez-vous d'abord ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "opinion",
+      "targetBand": "C",
+      "lang": "fr",
+      "topic": "finance-and-budgets",
+      "phases": [
+        {
+          "name": "Entrée en matière",
+          "minutes": 3,
+          "intent": "Opens on how budget constraints shape priorities and the role of non-financial staff in stewardship. A strong C answer generalizes from experience and discusses the value and limits of budget transparency.",
+          "seedQuestions": [
+            "Dans votre milieu de travail, comment les contraintes budgétaires influencent-elles les priorités de votre équipe ?",
+            "Selon vous, quel rôle les employés qui ne travaillent pas en finances jouent-ils dans la saine gestion des fonds publics ?"
+          ],
+          "escalation": [
+            "Dans quelle mesure la transparence budgétaire envers les employés est-elle souhaitable, à votre avis ?",
+            "Comment expliqueriez-vous à un nouvel employé pourquoi certaines dépenses sont plus surveillées que d'autres ?"
+          ],
+          "deescalation": [
+            "Comment votre équipe obtient-elle le matériel dont elle a besoin ?",
+            "Qui décide des dépenses dans votre équipe ?"
+          ]
+        },
+        {
+          "name": "Prise de position",
+          "minutes": 5,
+          "intent": "The C discriminator: a resource-allocation trade-off the candidate must defend. A strong C answer commits to a position, weighs consequences for staff and the public, rebuts the charge of short-termism, and states what would change their mind.",
+          "seedQuestions": [
+            "Imaginez que votre organisation doive réduire ses dépenses de dix pour cent. Vaudrait-il mieux réduire tous les programmes de façon égale ou éliminer certaines activités ? Défendez votre position.",
+            "Selon vous, comment une organisation publique devrait-elle arbitrer entre les besoins immédiats et les investissements dont les bénéfices ne se feront sentir que dans plusieurs années ?"
+          ],
+          "escalation": [
+            "Quelles seraient les conséquences de votre choix pour les employés et pour la population, et comment les atténueriez-vous ?",
+            "On pourrait vous reprocher de sacrifier le long terme au profit du court terme. Que répondriez-vous ?",
+            "À quelles conditions changeriez-vous d'avis ?"
+          ],
+          "deescalation": [
+            "Si vous deviez économiser de l'argent dans votre équipe, par quoi commenceriez-vous ?",
+            "Quelle dépense vous semble la plus importante dans votre milieu de travail ?"
+          ]
+        },
+        {
+          "name": "Retour sur expérience",
+          "minutes": 4,
+          "intent": "Combines hindsight and hypothesis. A strong C answer uses the past conditional to critique a real decision, sets explicit criteria for allocating new funds, and defends them against a doubtful committee with measurable indicators.",
+          "seedQuestions": [
+            "Pensez à une décision budgétaire qui a touché votre milieu de travail. Qu'auriez-vous fait autrement si vous en aviez été responsable ?",
+            "Si vous disposiez d'un budget supplémentaire pour votre équipe, comment le répartiriez-vous, et selon quels critères ?"
+          ],
+          "escalation": [
+            "Comment justifieriez-vous ces choix devant un comité qui doute de leur pertinence ?",
+            "Quels indicateurs utiliseriez-vous pour démontrer que l'argent a été bien dépensé ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce qui a changé après cette décision ?",
+            "Quel achat ferait la plus grande différence pour votre équipe ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "situation",
+      "targetBand": "B",
+      "lang": "fr",
+      "topic": "procurement",
+      "phases": [
+        {
+          "name": "Mise en situation",
+          "minutes": 2,
+          "intent": "Sets up the role play: the candidate ordered equipment for the team and the supplier has announced a three-week delay. A strong B answer summarizes the facts clearly and plans what to tell the manager and what to ask the supplier.",
+          "seedQuestions": [
+            "Imaginez que vous êtes chargé de commander du nouveau matériel pour votre équipe. Le fournisseur vient de vous informer que la livraison aura trois semaines de retard. Comment présenteriez-vous la situation à votre gestionnaire ?",
+            "Quels renseignements aimeriez-vous obtenir du fournisseur avant de parler à votre gestionnaire ?"
+          ],
+          "escalation": [
+            "Comment expliqueriez-vous les conséquences de ce retard sur le travail de l'équipe ?",
+            "Quelles solutions de rechange pourriez-vous proposer ?"
+          ],
+          "deescalation": [
+            "Que diriez-vous en premier à votre gestionnaire ?",
+            "Quelle question poseriez-vous au fournisseur ?"
+          ]
+        },
+        {
+          "name": "L'échange",
+          "minutes": 4,
+          "intent": "The examiner plays the displeased manager. A strong B answer explains what happened in past tenses, stays courteous, and proposes practical interim solutions with reasons.",
+          "seedQuestions": [
+            "Je joue maintenant le rôle de votre gestionnaire. Je suis mécontent de ce retard et je veux savoir ce qui s'est passé. Que me répondez-vous ?",
+            "Expliquez-moi ce que vous proposez pour que l'équipe puisse continuer à travailler en attendant."
+          ],
+          "escalation": [
+            "Je vous demande de trouver un autre fournisseur d'ici vendredi. Comment réagissez-vous, et qu'est-ce que cela impliquerait ?",
+            "Comment me convaincriez-vous que ce retard ne se reproduira pas ?"
+          ],
+          "deescalation": [
+            "Quand le matériel va-t-il arriver ?",
+            "Qu'est-ce que l'équipe peut utiliser en attendant ?"
+          ]
+        },
+        {
+          "name": "Suivi",
+          "minutes": 2,
+          "intent": "Closes on informing the team and preventing a repeat. A strong B answer describes a clear message to colleagues and one or two concrete lessons for future orders.",
+          "seedQuestions": [
+            "Comment informeriez-vous ensuite vos collègues du nouveau délai ?",
+            "Que feriez-vous la prochaine fois pour éviter ce genre de situation ?"
+          ],
+          "escalation": [
+            "Dites-moi ce que contiendrait le courriel que vous enverriez à l'équipe.",
+            "Quelles leçons tireriez-vous de cette expérience pour vos prochaines commandes ?"
+          ],
+          "deescalation": [
+            "À qui enverriez-vous un courriel ?",
+            "Que diriez-vous à vos collègues ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "situation",
+      "targetBand": "B",
+      "lang": "fr",
+      "topic": "communications",
+      "phases": [
+        {
+          "name": "Mise en situation",
+          "minutes": 2,
+          "intent": "Sets up the role play: the candidate is leaving on two weeks' vacation and must brief a colleague who will replace them. A strong B answer plans the handover concretely: when, what documents, which files first.",
+          "seedQuestions": [
+            "Imaginez que vous partez en vacances pour deux semaines et qu'un collègue doit vous remplacer. Il connaît peu vos dossiers. Comment organiseriez-vous la rencontre avec lui ?",
+            "Quels documents ou renseignements prépareriez-vous pour lui ?"
+          ],
+          "escalation": [
+            "Comment choisiriez-vous les dossiers à lui présenter en priorité ?",
+            "Comment vous assureriez-vous qu'il a bien compris ?"
+          ],
+          "deescalation": [
+            "Quand le rencontreriez-vous ?",
+            "Quel dossier lui présenteriez-vous en premier ?"
+          ]
+        },
+        {
+          "name": "Les consignes",
+          "minutes": 4,
+          "intent": "The examiner plays the replacing colleague. A strong B answer gives clear instructions in a logical order, explains who to contact and what to do in an urgent case, and reassures the colleague courteously.",
+          "seedQuestions": [
+            "Je suis votre collègue. Expliquez-moi le dossier le plus important que je devrai suivre pendant votre absence.",
+            "Que dois-je faire si un client important m'appelle avec une question urgente ?"
+          ],
+          "escalation": [
+            "Et si une décision devait être prise pendant votre absence, qui devrais-je consulter, et comment ?",
+            "Je trouve que c'est beaucoup de travail en plus du mien. Comment me rassureriez-vous ?"
+          ],
+          "deescalation": [
+            "Quelles sont les tâches à faire chaque jour ?",
+            "Qui peut m'aider si j'ai une question ?"
+          ]
+        },
+        {
+          "name": "Au retour",
+          "minutes": 2,
+          "intent": "Closes on the follow-up after the vacation. A strong B answer describes how they would catch up, raise a problem tactfully, and improve their instructions next time.",
+          "seedQuestions": [
+            "À votre retour, comment feriez-vous le point avec votre collègue ?",
+            "Comment le remercieriez-vous pour son aide ?"
+          ],
+          "escalation": [
+            "Si vous découvriez à votre retour qu'une erreur a été commise dans un dossier, comment en parleriez-vous avec lui ?",
+            "Qu'amélioreriez-vous dans vos consignes pour un prochain remplacement ?"
+          ],
+          "deescalation": [
+            "Quelles questions lui poseriez-vous à votre retour ?",
+            "Que lui diriez-vous en arrivant ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "situation",
+      "targetBand": "C",
+      "lang": "fr",
+      "topic": "human-resources",
+      "phases": [
+        {
+          "name": "Mise en situation",
+          "minutes": 2,
+          "intent": "Sets up the role play: the candidate leads a small team and must decline, as asked, a valued employee's request for three weeks of training during the busiest period. A strong C answer identifies the competing interests and plans a tactful conversation, anticipating its effect on team climate.",
+          "seedQuestions": [
+            "Imaginez que vous dirigez une petite équipe. Une employée très appréciée vous demande de suivre une formation de trois semaines pendant la période la plus chargée de l'année, et vous ne pouvez pas accepter sa demande telle quelle. Comment prépareriez-vous cette conversation ?",
+            "Quels éléments devriez-vous prendre en considération avant de lui répondre ?"
+          ],
+          "escalation": [
+            "Comment concilieriez-vous les besoins opérationnels et le développement professionnel de cette employée ?",
+            "Quels risques une réponse mal formulée ferait-elle courir au climat de l'équipe ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce que l'employée vous demande exactement ?",
+            "Pourquoi ne pouvez-vous pas accepter ?"
+          ]
+        },
+        {
+          "name": "L'entretien",
+          "minutes": 4,
+          "intent": "The examiner plays the employee and pushes back. A strong C answer declines diplomatically with appropriate register, handles the comparison with a colleague and the implicit threat to leave without making promises it cannot keep, and negotiates a conditional compromise.",
+          "seedQuestions": [
+            "Je joue le rôle de l'employée. Je viens d'entrer dans votre bureau et j'attends votre réponse. Qu'est-ce que vous me dites ?",
+            "Je vous fais remarquer qu'un collègue a obtenu une formation semblable l'an dernier. Que me répondez-vous ?"
+          ],
+          "escalation": [
+            "Je vous dis que, faute de cette formation, je risque de chercher un poste ailleurs. Comment réagissez-vous, sans faire de promesse que vous ne pourriez tenir ?",
+            "Quelle solution de compromis me proposeriez-vous, et à quelles conditions ?"
+          ],
+          "deescalation": [
+            "Comment commenceriez-vous la conversation ?",
+            "Quand pourrais-je suivre cette formation ?"
+          ]
+        },
+        {
+          "name": "Retour sur la situation",
+          "minutes": 2,
+          "intent": "Steps out of the role play to reflect and generalize. A strong C answer critiques its own handling, uses the past conditional, and takes a reasoned position on rules versus managerial discretion.",
+          "seedQuestions": [
+            "Avec le recul, comment jugez-vous la façon dont vous avez mené cet entretien ?",
+            "Qu'auriez-vous fait autrement si cette demande vous avait été présentée plus tôt dans l'année ?"
+          ],
+          "escalation": [
+            "Selon vous, vaut-il mieux encadrer ce genre de demandes par des règles fixes ou laisser la décision au jugement des gestionnaires ? Défendez votre position.",
+            "Comment éviteriez-vous qu'une telle décision soit perçue comme injuste par le reste de l'équipe ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce qui s'est bien passé pendant la conversation ?",
+            "Qu'est-ce que vous diriez différemment ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "situation",
+      "targetBand": "C",
+      "lang": "fr",
+      "topic": "service-delivery",
+      "phases": [
+        {
+          "name": "Mise en situation",
+          "minutes": 2,
+          "intent": "Sets up the role play: after a system change, a client's file is two months late and the client, upset, wants to speak to the candidate. A strong C answer plans the call and reasons about how much internal detail to share, balancing transparency and discretion.",
+          "seedQuestions": [
+            "Imaginez que vous êtes responsable du traitement des demandes dans un bureau de services. À la suite d'un changement de système, le dossier d'un client accuse un retard de deux mois. Le client, très mécontent, demande à vous parler. Comment vous prépareriez-vous à cet appel ?",
+            "Quels renseignements jugeriez-vous indispensables d'avoir en main avant de lui parler ?"
+          ],
+          "escalation": [
+            "Jusqu'où iriez-vous dans l'explication des causes internes du retard, et pourquoi ?",
+            "Comment concilieriez-vous la transparence envers le client et la discrétion envers votre organisation ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce qui a causé le retard ?",
+            "Que voulez-vous dire au client en premier ?"
+          ]
+        },
+        {
+          "name": "L'appel",
+          "minutes": 4,
+          "intent": "The examiner plays the angry client. A strong C answer acknowledges the harm without admitting more than is warranted, de-escalates in a courteous register, refuses queue-jumping on grounds of fairness, and commits only to what it can deliver.",
+          "seedQuestions": [
+            "Je suis le client. J'attends depuis deux mois et personne ne m'a prévenu. Expliquez-moi ce qui se passe.",
+            "Je vous dis que ce retard me cause un préjudice financier. Que me proposez-vous ?"
+          ],
+          "escalation": [
+            "Je vous annonce que je vais déposer une plainte officielle. Comment désamorcez-vous la situation sans prendre d'engagement que vous ne pourriez respecter ?",
+            "Je vous demande de traiter mon dossier en priorité, avant ceux des autres. Comment me répondez-vous, en tenant compte de l'équité envers les autres clients ?"
+          ],
+          "deescalation": [
+            "Dans combien de temps mon dossier sera-t-il traité ?",
+            "Comment allez-vous me tenir informé ?"
+          ]
+        },
+        {
+          "name": "Suivi et leçons",
+          "minutes": 2,
+          "intent": "Steps out of the call to internal follow-up and organizational lessons. A strong C answer critiques how the transition was managed, recommends changes in the conditional with their costs, and takes a nuanced position on warning clients of risks in advance.",
+          "seedQuestions": [
+            "Une fois l'appel terminé, quelles mesures prendriez-vous à l'interne ?",
+            "Selon vous, qu'est-ce que votre organisation aurait dû faire autrement au moment du changement de système ?"
+          ],
+          "escalation": [
+            "Si vous deviez recommander à la direction une façon de mieux gérer ce genre de transition, que proposeriez-vous, et quels en seraient les coûts ?",
+            "Dans quelle mesure faut-il informer les clients d'un risque de retard avant même qu'il se concrétise ?"
+          ],
+          "deescalation": [
+            "À qui parleriez-vous après l'appel ?",
+            "Que noteriez-vous dans le dossier ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "full",
+      "targetBand": "B",
+      "lang": "fr",
+      "topic": "project-management",
+      "phases": [
+        {
+          "name": "Présentation",
+          "minutes": 3,
+          "intent": "A short warm-up on role and team. A strong B answer gives a connected self-introduction with some detail about the team and the candidate's place in it.",
+          "seedQuestions": [
+            "Pour commencer, présentez-vous et décrivez-moi votre poste.",
+            "Comment votre équipe est-elle organisée, et avec qui travaillez-vous le plus ?"
+          ],
+          "escalation": [
+            "Comment votre poste a-t-il changé depuis votre arrivée ?",
+            "Qu'est-ce qui vous plaît le plus dans votre travail, et pourquoi ?"
+          ],
+          "deescalation": [
+            "Depuis combien de temps occupez-vous ce poste ?",
+            "Dans quelle ville travaillez-vous ?"
+          ]
+        },
+        {
+          "name": "Votre travail",
+          "minutes": 6,
+          "intent": "Work discussion centred on a project seen from start to finish. A strong B answer narrates the main stages and the candidate's role in past tenses, explains how deadlines were tracked, and names a difficulty and its resolution.",
+          "seedQuestions": [
+            "Parlez-moi d'un projet auquel vous avez participé du début à la fin. Quelles en étaient les grandes étapes ?",
+            "Comment votre équipe suit-elle l'avancement de ses travaux et respecte-t-elle ses échéances ?"
+          ],
+          "escalation": [
+            "Quelles difficultés avez-vous rencontrées pendant ce projet, et comment l'équipe les a-t-elle réglées ?",
+            "Qu'est-ce que vous referiez de la même façon dans un prochain projet ?"
+          ],
+          "deescalation": [
+            "Quel était le but du projet ?",
+            "Quel était votre rôle ?"
+          ]
+        },
+        {
+          "name": "Mise en situation",
+          "minutes": 6,
+          "intent": "Role play: a key team member falls ill a week before an important deadline, and the examiner plays the manager. A strong B answer explains the situation clearly, proposes a practical redistribution of tasks, and adapts when the deadline is held firm.",
+          "seedQuestions": [
+            "Imaginez que vous coordonnez un projet et qu'un membre clé de l'équipe tombe malade une semaine avant une échéance importante. Que faites-vous d'abord ?",
+            "Je suis votre gestionnaire. Expliquez-moi la situation et ce que vous proposez."
+          ],
+          "escalation": [
+            "Je vous réponds que l'échéance ne peut pas être reportée. Comment réorganisez-vous le travail ?",
+            "Comment présenteriez-vous la nouvelle répartition des tâches à l'équipe ?"
+          ],
+          "deescalation": [
+            "Qui prévenez-vous en premier ?",
+            "Quelles tâches sont les plus urgentes ?"
+          ]
+        },
+        {
+          "name": "Votre opinion",
+          "minutes": 7,
+          "intent": "Opinion phase on teamwork and project leadership. A strong B answer states clear opinions with reasons and concrete examples, and uses the conditional for a simple hypothetical.",
+          "seedQuestions": [
+            "Selon vous, quelles sont les qualités d'un bon gestionnaire de projet ?",
+            "À votre avis, vaut-il mieux travailler sur plusieurs projets à la fois ou sur un seul ? Expliquez pourquoi."
+          ],
+          "escalation": [
+            "Si vous deviez diriger un projet demain, qu'est-ce que vous feriez pour que l'équipe reste motivée ?",
+            "Certains pensent que les réunions de suivi font perdre du temps. Qu'en pensez-vous ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce qui rend un projet réussi, selon vous ?",
+            "Quel outil vous aide le plus à vous organiser ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "full",
+      "targetBand": "B",
+      "lang": "fr",
+      "topic": "finance-and-budgets",
+      "phases": [
+        {
+          "name": "Présentation",
+          "minutes": 3,
+          "intent": "A short warm-up on career path and workplace. A strong B answer narrates the path in past tenses and describes the current team in connected sentences.",
+          "seedQuestions": [
+            "Pourriez-vous vous présenter et me parler de votre parcours dans la fonction publique ?",
+            "Décrivez-moi votre milieu de travail et votre équipe."
+          ],
+          "escalation": [
+            "Pourquoi avez-vous choisi ce type de travail ?",
+            "Qu'avez-vous appris dans vos postes précédents qui vous sert aujourd'hui ?"
+          ],
+          "deescalation": [
+            "Où travaillez-vous ?",
+            "Combien de collègues avez-vous ?"
+          ]
+        },
+        {
+          "name": "Votre travail",
+          "minutes": 6,
+          "intent": "Work discussion on how spending is planned and how the candidate once requested resources. A strong B answer explains a routine process clearly and narrates a specific request and its outcome.",
+          "seedQuestions": [
+            "Expliquez-moi comment les dépenses sont planifiées et approuvées dans votre équipe, même si vous n'y participez qu'indirectement.",
+            "Racontez-moi une fois où vous avez dû préparer ou justifier une demande de ressources, d'argent ou de matériel."
+          ],
+          "escalation": [
+            "Comment avez-vous convaincu la personne qui devait approuver la demande ?",
+            "Que se passe-t-il dans votre équipe vers la fin de l'exercice financier ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce que vous avez demandé ?",
+            "Qui approuve les dépenses dans votre équipe ?"
+          ]
+        },
+        {
+          "name": "Mise en situation",
+          "minutes": 6,
+          "intent": "Role play: the team's training budget has been cut in half and the candidate must propose a plan, then explain it to a disappointed colleague played by the examiner. A strong B answer sets simple priorities, explains the decision courteously, and offers lower-cost alternatives.",
+          "seedQuestions": [
+            "Imaginez qu'on vient de vous annoncer que le budget de formation de votre équipe est réduit de moitié cette année. Votre gestionnaire vous demande de proposer un plan. Par quoi commencez-vous ?",
+            "Je suis un collègue déçu parce que ma formation est annulée. Expliquez-moi la décision."
+          ],
+          "escalation": [
+            "Quels critères utiliseriez-vous pour choisir les formations à garder ?",
+            "Quelles solutions moins coûteuses pourriez-vous proposer à l'équipe ?"
+          ],
+          "deescalation": [
+            "Quelle formation est la plus importante pour l'équipe ?",
+            "Comment annonceriez-vous la nouvelle ?"
+          ]
+        },
+        {
+          "name": "Votre opinion",
+          "minutes": 7,
+          "intent": "Opinion phase on public money and individual contribution. A strong B answer gives a clear opinion supported by reasons and examples from the workplace, and answers a simple counter-argument.",
+          "seedQuestions": [
+            "Selon vous, pourquoi est-il important de bien gérer l'argent public ?",
+            "À votre avis, comment un employé peut-il contribuer à réduire les dépenses dans son milieu de travail ?"
+          ],
+          "escalation": [
+            "Si vous pouviez dépenser plus d'argent dans un seul domaine de votre milieu de travail, lequel choisiriez-vous, et pourquoi ?",
+            "Certains disent que les économies faites sur la formation coûtent cher plus tard. Qu'en pensez-vous ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce qui coûte cher dans votre milieu de travail ?",
+            "Comment économisez-vous du papier ou du matériel au bureau ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "full",
+      "targetBand": "C",
+      "lang": "fr",
+      "topic": "official-languages",
+      "phases": [
+        {
+          "name": "Présentation",
+          "minutes": 2,
+          "intent": "A brief warm-up situating the role and the place of both official languages in it. A strong C answer is fluent from the first sentence and reflects on, rather than lists, the candidate's language use.",
+          "seedQuestions": [
+            "Pour commencer, présentez-vous et situez votre poste dans le mandat de votre organisation.",
+            "Quelle place les deux langues officielles occupent-elles dans votre quotidien professionnel ?"
+          ],
+          "escalation": [
+            "En quoi votre usage du français a-t-il évolué au fil de votre carrière ?",
+            "Comment décririez-vous la culture linguistique de votre milieu de travail ?"
+          ],
+          "deescalation": [
+            "Quelles sont vos principales tâches ?",
+            "Dans quelle langue travaillez-vous le plus souvent ?"
+          ]
+        },
+        {
+          "name": "Votre travail",
+          "minutes": 5,
+          "intent": "Work discussion on a project the candidate is proud of and on how bilingual service is ensured. A strong C answer analyzes tensions between deadlines and equal-quality bilingual products and critiques its own project with hindsight.",
+          "seedQuestions": [
+            "Décrivez-moi un dossier ou un projet dont vous êtes particulièrement fier, et la façon dont vous y avez contribué.",
+            "Comment veille-t-on, dans votre milieu de travail, à ce que les services et les documents soient offerts dans les deux langues officielles ?"
+          ],
+          "escalation": [
+            "Quelles tensions avez-vous observées entre les échéances serrées et l'exigence de produire des documents de qualité égale dans les deux langues ?",
+            "Avec le recul, qu'auriez-vous fait autrement dans ce projet ?"
+          ],
+          "deescalation": [
+            "Quel était votre rôle dans ce projet ?",
+            "Qui s'occupe de la traduction dans votre équipe ?"
+          ]
+        },
+        {
+          "name": "Mise en situation",
+          "minutes": 5,
+          "intent": "Role play: the candidate chairs a meeting where French-speaking colleagues stay silent, and the examiner objects that switching languages slows things down. A strong C answer intervenes tactfully, answers the objection with balanced reasoning, and proposes lasting measures.",
+          "seedQuestions": [
+            "Imaginez que vous présidez une réunion où la majorité des participants s'expriment uniquement en anglais, alors que plusieurs collègues francophones restent silencieux. Comment intervenez-vous ?",
+            "Je suis un participant qui vous dit qu'alterner les langues ralentit la réunion. Que me répondez-vous ?"
+          ],
+          "escalation": [
+            "Comment concilieriez-vous l'efficacité de la réunion et le droit de chacun de s'exprimer dans la langue officielle de son choix ?",
+            "Quelles mesures durables proposeriez-vous pour que la situation ne se reproduise pas ?"
+          ],
+          "deescalation": [
+            "Que diriez-vous au début de la réunion ?",
+            "Comment encourageriez-vous vos collègues francophones à parler ?"
+          ]
+        },
+        {
+          "name": "Prise de position",
+          "minutes": 6,
+          "intent": "The C discriminator: an abstract trade-off on who carries responsibility for bilingualism and where resources should go. A strong C answer defends a clear position, anticipates objections, and qualifies it by context (organization size, technology) without losing the thread.",
+          "seedQuestions": [
+            "Selon vous, le bilinguisme des employés devrait-il relever surtout de la responsabilité individuelle ou de celle de l'organisation ? Défendez votre position.",
+            "Certains estiment qu'il vaudrait mieux concentrer les ressources sur la traduction plutôt que sur la formation linguistique. Qu'en pensez-vous ?"
+          ],
+          "escalation": [
+            "Quels arguments pourrait-on vous opposer, et comment y répondriez-vous ?",
+            "Dans quelle mesure votre position changerait-elle s'il s'agissait d'une petite organisation régionale ?",
+            "À quelles conditions les outils de traduction automatique pourraient-ils faciliter le travail dans les deux langues sans nuire à la qualité ?"
+          ],
+          "deescalation": [
+            "Qu'est-ce qui vous a le plus aidé à apprendre le français ?",
+            "Quel est l'avantage de parler les deux langues au travail ?"
+          ]
+        },
+        {
+          "name": "Hypothèse",
+          "minutes": 4,
+          "intent": "Closes on a sustained hypothetical: improving French use across a branch. A strong C answer sets priorities in the conditional, argues for investment persuasively, and identifies how success would be measured and what could make the plan fail.",
+          "seedQuestions": [
+            "Si vous étiez chargé d'améliorer l'usage du français dans votre direction générale, quelles seraient vos trois priorités ?",
+            "Imaginez que vous deviez convaincre un comité de direction d'investir davantage dans la formation linguistique. Quels arguments avanceriez-vous ?"
+          ],
+          "escalation": [
+            "Comment mesureriez-vous le succès de ces initiatives, et dans quel délai ?",
+            "Qu'est-ce qui pourrait faire échouer votre plan, et comment l'éviteriez-vous ?"
+          ],
+          "deescalation": [
+            "Quelle serait la première chose que vous feriez ?",
+            "Qui aimeriez-vous consulter ?"
+          ]
+        }
+      ]
+    },
+    {
+      "sessionType": "full",
+      "targetBand": "C",
+      "lang": "fr",
+      "topic": "it-and-digital",
+      "phases": [
+        {
+          "name": "Présentation",
+          "minutes": 3,
+          "intent": "A short warm-up on the candidate's contribution and how digital tools have changed their work. A strong C answer links role to results and evaluates change rather than describing it.",
+          "seedQuestions": [
+            "Présentez-vous et expliquez-moi en quoi votre travail contribue aux résultats de votre organisation.",
+            "Comment le numérique a-t-il transformé votre façon de travailler depuis le début de votre carrière ?"
+          ],
+          "escalation": [
+            "Quelles compétences vous semblent aujourd'hui indispensables dans votre domaine, alors qu'elles ne l'étaient pas il y a dix ans ?",
+            "Dans quelle mesure cette transformation a-t-elle été bénéfique, selon vous ?"
+          ],
+          "deescalation": [
+            "Quels outils informatiques utilisez-vous chaque jour ?",
+            "Depuis combien de temps travaillez-vous dans votre équipe ?"
+          ]
+        },
+        {
+          "name": "Votre travail",
+          "minutes": 5,
+          "intent": "Work discussion on a transition to a new tool or system and how users were considered. A strong C answer analyzes the change management, uses the past conditional to critique it, and distinguishes delivery on schedule from real success.",
+          "seedQuestions": [
+            "Parlez-moi d'une transition vers un nouvel outil ou un nouveau système dans votre milieu de travail, en insistant sur la gestion du changement.",
+            "Comment les besoins des utilisateurs ont-ils été pris en compte dans ce projet ?"
+          ],
+          "escalation": [
+            "Qu'auriez-vous fait autrement si vous aviez dirigé cette transition ?",
+            "Comment peut-on évaluer si un tel projet a réellement atteint ses objectifs, au-delà du respect de l'échéancier ?"
+          ],
+          "deescalation": [
+            "Quel était le nouvel outil ?",
+            "Comment avez-vous appris à l'utiliser ?"
+          ]
+        },
+        {
+          "name": "Mise en situation",
+          "minutes": 6,
+          "intent": "Role play: the night before launching an online service, a defect blocks some users, and the examiner plays the director. A strong C answer lays out the options and their consequences, makes and defends a recommendation under pressure about credibility, and plans communication to affected users.",
+          "seedQuestions": [
+            "Imaginez que vous êtes responsable du lancement d'un service en ligne destiné à la population. La veille du lancement, on découvre un problème qui empêche certains utilisateurs d'accéder au service. Je suis votre directeur : que me recommandez-vous ?",
+            "Expliquez-moi les conséquences de chacune des options possibles."
+          ],
+          "escalation": [
+            "Je vous fais remarquer que le lancement a été annoncé publiquement et qu'un report nuirait à notre crédibilité. Que me répondez-vous ?",
+            "Comment communiqueriez-vous la décision aux utilisateurs touchés, quelle qu'elle soit ?"
+          ],
+          "deescalation": [
+            "Quel est le problème exactement ?",
+            "Qui faudrait-il avertir en premier ?"
+          ]
+        },
+        {
+          "name": "Prise de position",
+          "minutes": 8,
+          "intent": "The C discriminator: digital versus in-person service, and privacy versus innovation. A strong C answer takes and defends a nuanced position, identifies who could be left behind and how to remedy it, and argues where human judgment must remain.",
+          "seedQuestions": [
+            "Selon vous, l'administration publique devrait-elle viser des services entièrement numériques ou maintenir des services en personne ? Défendez votre position.",
+            "Certains affirment que la protection des renseignements personnels freine l'innovation numérique. Dans quelle mesure partagez-vous cet avis ?"
+          ],
+          "escalation": [
+            "Quels groupes risqueraient d'être laissés pour compte selon l'approche que vous défendez, et comment y remédieriez-vous ?",
+            "Si l'automatisation permettait de traiter la majorité des demandes courantes, quelles tâches devraient, selon vous, rester entre des mains humaines, et pourquoi ?",
+            "À quelles conditions accepteriez-vous de revoir votre position ?"
+          ],
+          "deescalation": [
+            "Préférez-vous faire vos démarches en ligne ou en personne, et pourquoi ?",
+            "Qu'est-ce qui rend un site Web facile à utiliser, selon vous ?"
+          ]
+        }
+      ]
+    }
+  ]
+}

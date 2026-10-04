@@ -1,0 +1,2194 @@
+{
+  "items": [
+    {
+      "id": "claude-w-verb-tense-and-mood-01",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Hier, au moment où la gestionnaire m'a téléphoné, ___ justement le rapport d'évaluation de rendement d'une employée ; j'ai donc pu répondre à ses questions sur-le-champ.",
+        "en": "Yesterday, at the moment the manager phoned me, ___ an employee's performance evaluation report at that very time; so I was able to answer her questions on the spot."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "j'ai rédigé",
+          "rationale": {
+            "fr": "Le passé composé présenterait la rédaction comme une action achevée qui suit l'appel, ce qui contredit « au moment où » et « justement ».",
+            "en": "The passé composé would present the writing as a completed action following the call, which contradicts « au moment où » and « justement »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "je rédige",
+          "rationale": {
+            "fr": "Le présent ne s'accorde pas avec le cadre passé fixé par « hier » et « m'a téléphoné ».",
+            "en": "The present tense does not fit the past frame set by « hier » and « m'a téléphoné »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "je rédigeais",
+          "rationale": {
+            "fr": "L'imparfait présente l'action en cours de déroulement au moment où survient une autre action, exprimée au passé composé (« m'a téléphoné ») : c'est la forme attendue.",
+            "en": "The imparfait presents the action as in progress at the moment another action, expressed in the passé composé (« m'a téléphoné »), occurs: this is the expected form."
+          }
+        },
+        {
+          "id": "d",
+          "text": "je rédigerai",
+          "rationale": {
+            "fr": "Le futur est incompatible avec un événement situé hier.",
+            "en": "The future tense is incompatible with an event that took place yesterday."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Dans un récit au passé, l'imparfait décrit l'action de fond, en cours de déroulement, et le passé composé l'événement ponctuel qui vient l'interrompre : « je rédigeais (action en cours) quand elle m'a téléphoné (événement) ». Des marqueurs comme « au moment où » ou « justement » signalent cette simultanéité.",
+        "en": "In a past narrative, the imparfait describes the background action in progress and the passé composé the one-off event that interrupts it: « je rédigeais (action in progress) quand elle m'a téléphoné (event) ». Markers such as « au moment où » or « justement » signal this simultaneity."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-02",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "La directrice générale a approuvé la nomination intérimaire de M. Tremblay au poste de gestionnaire de la rémunération…",
+        "en": "The director general approved Mr. Tremblay's acting appointment to the position of compensation manager…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "bien que le processus de dotation ne soit pas encore terminé.",
+          "rationale": {
+            "fr": "« Bien que » exprime la concession et commande le subjonctif : « ne soit pas encore terminé ».",
+            "en": "« Bien que » expresses concession and requires the subjunctive: « ne soit pas encore terminé »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "bien que le processus de dotation n'est pas encore terminé.",
+          "rationale": {
+            "fr": "Tentant parce que le fait est bien réel, mais « bien que » exige le subjonctif même devant un fait avéré ; l'indicatif est fautif.",
+            "en": "Tempting because the fact is real, but « bien que » requires the subjunctive even before an established fact; the indicative is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "malgré que le processus de dotation n'est pas encore terminé.",
+          "rationale": {
+            "fr": "« Malgré que » est critiqué dans la langue soignée et, de toute façon, il se construit avec le subjonctif ; l'indicatif ajoute une faute de mode.",
+            "en": "« Malgré que » is frowned upon in careful writing and, in any case, takes the subjunctive; the indicative adds an error of mood."
+          }
+        },
+        {
+          "id": "d",
+          "text": "même si le processus de dotation ne soit pas encore terminé.",
+          "rationale": {
+            "fr": "« Même si » se construit avec l'indicatif ; le subjonctif après « si » est fautif.",
+            "en": "« Même si » takes the indicative; the subjunctive after « si » is wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Les conjonctions de concession « bien que », « quoique » et « encore que » sont suivies du subjonctif, même lorsque le fait est réel. « Même si », de sens voisin, demande au contraire l'indicatif. Dans un texte administratif, on évite « malgré que », jugé fautif ou familier par la norme.",
+        "en": "The concessive conjunctions « bien que », « quoique » and « encore que » are followed by the subjunctive, even when the fact is real. « Même si », close in meaning, takes the indicative instead. In administrative writing, « malgré que » is avoided, as the norm treats it as incorrect or informal."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-03",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle correction faut-il apporter à la phrase suivante, tirée d'un courriel de présentation ? « Mme Gagnon a travaillé au sein de notre équipe depuis cinq ans et elle connaît très bien nos dossiers de dotation. »",
+        "en": "Which correction does the following sentence, taken from an introductory email, need? « Mme Gagnon a travaillé au sein de notre équipe depuis cinq ans et elle connaît très bien nos dossiers de dotation. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « a travaillé » par « avait travaillé »",
+          "rationale": {
+            "fr": "Le plus-que-parfait ne règle rien : avec « depuis », une situation toujours en cours demande le présent, et ce temps du passé ne s'accorde pas avec « connaît ».",
+            "en": "The plus-que-parfait fixes nothing: with « depuis », an ongoing situation needs the present, and this past tense does not fit « connaît »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « connaît » par « connaissait »",
+          "rationale": {
+            "fr": "« Connaît » est juste, puisque la connaissance des dossiers est actuelle ; modifier ce verbe laisse intacte la faute « a travaillé… depuis ».",
+            "en": "« Connaît » is fine, since her knowledge of the files is current; changing this verb leaves the error « a travaillé… depuis » untouched."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « connaît » par « a connu »",
+          "rationale": {
+            "fr": "« A connu » situerait la connaissance dans le passé, ce qui fausse le sens, et la construction fautive avec « depuis » demeure.",
+            "en": "« A connu » would place the knowledge in the past, which distorts the meaning, and the faulty construction with « depuis » remains."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « a travaillé » par « travaille »",
+          "rationale": {
+            "fr": "Avec « depuis » suivi d'une durée, une action commencée dans le passé et qui se poursuit au moment où l'on parle se met au présent : « travaille depuis cinq ans ».",
+            "en": "With « depuis » followed by a length of time, an action that began in the past and is still going on is put in the present: « travaille depuis cinq ans »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le français emploie le présent avec « depuis » + durée pour une action commencée dans le passé et qui dure encore : « elle travaille ici depuis cinq ans ». Le calque de l'anglais « has worked for five years » pousse à tort vers le passé composé.",
+        "en": "French uses the present with « depuis » + a length of time for an action that began in the past and is still continuing: « elle travaille ici depuis cinq ans ». Copying the English « has worked for five years » wrongly leads to the passé composé."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-04",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Selon des renseignements encore non vérifiés, l'erreur de saisie survenue lors du dernier cycle de paiement ___ des paiements en double à quelque trois cents fournisseurs ; la Direction des finances procède actuellement à une vérification approfondie.",
+        "en": "According to information not yet verified, the data-entry error that occurred during the last payment cycle ___ duplicate payments to some three hundred suppliers; the Finance Directorate is currently conducting a thorough review."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "ait entraîné",
+          "rationale": {
+            "fr": "Le subjonctif n'a ici aucun déclencheur : le verbe est celui de la proposition principale, sans expression de doute ni conjonction qui l'exige.",
+            "en": "The subjunctive has no trigger here: this is the main-clause verb, with no expression of doubt or conjunction requiring it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "aurait entraîné",
+          "rationale": {
+            "fr": "Le conditionnel passé présente un fait passé comme non confirmé, ce qu'annoncent « selon » et « non vérifiés » : c'est l'emploi journalistique et administratif du conditionnel.",
+            "en": "The past conditional presents a past fact as unconfirmed, as « selon » and « non vérifiés » signal: this is the journalistic and administrative use of the conditional."
+          }
+        },
+        {
+          "id": "c",
+          "text": "avait entraîné",
+          "rationale": {
+            "fr": "Le plus-que-parfait marque l'antériorité par rapport à un autre repère passé, absent ici, et il présenterait l'information comme certaine.",
+            "en": "The plus-que-parfait marks a time before another past reference point, which is absent here, and it would present the information as certain."
+          }
+        },
+        {
+          "id": "d",
+          "text": "entraînera",
+          "rationale": {
+            "fr": "Le futur projette les paiements en double dans l'avenir, alors que l'erreur et ses effets ont déjà eu lieu ; il affirme en outre comme sûr ce qui n'est pas vérifié.",
+            "en": "The future projects the duplicate payments into the future, whereas the error and its effects have already happened; it also asserts as certain what has not been verified."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour rapporter une information qui n'est pas encore confirmée, la langue administrative et journalistique emploie le conditionnel : présent pour un fait actuel (« le dépassement atteindrait… »), passé pour un fait accompli (« l'erreur aurait entraîné… »). Ce conditionnel n'exprime pas une hypothèse, mais une réserve sur la fiabilité de l'information.",
+        "en": "To report information that is not yet confirmed, administrative and journalistic French uses the conditional: present for a current fact (« le dépassement atteindrait… »), past for a completed fact (« l'erreur aurait entraîné… »). This conditional expresses not a hypothesis but a reservation about how reliable the information is."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-05",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Si la demande de financement est approuvée d'ici vendredi, l'équipe des finances…",
+        "en": "If the funding request is approved by Friday, the finance team…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "verserait les fonds aux organismes bénéficiaires dès le début du mois prochain.",
+          "rationale": {
+            "fr": "Le conditionnel répond à « si » + imparfait ; après « si » + présent (« est approuvée »), la concordance l'exclut.",
+            "en": "The conditional pairs with « si » + imparfait; after « si » + present (« est approuvée »), the sequence of tenses rules it out."
+          }
+        },
+        {
+          "id": "b",
+          "text": "versera les fonds aux organismes bénéficiaires dès le début du mois prochain.",
+          "rationale": {
+            "fr": "Après « si » + présent (condition réalisable), la principale se met au futur : « versera ».",
+            "en": "After « si » + present (a condition that can be met), the main clause goes in the future: « versera »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "aurait versé les fonds aux organismes bénéficiaires dès le début du mois prochain.",
+          "rationale": {
+            "fr": "Le conditionnel passé correspond à « si » + plus-que-parfait, pour une hypothèse passée non réalisée ; ici la condition porte sur l'avenir.",
+            "en": "The past conditional pairs with « si » + plus-que-parfait, for an unrealised past hypothesis; here the condition concerns the future."
+          }
+        },
+        {
+          "id": "d",
+          "text": "versait les fonds aux organismes bénéficiaires dès le début du mois prochain.",
+          "rationale": {
+            "fr": "L'imparfait situe l'action dans le passé, ce qui contredit « d'ici vendredi » et « le mois prochain ».",
+            "en": "The imparfait places the action in the past, which contradicts « d'ici vendredi » and « le mois prochain »."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Concordance des temps avec « si » : si + présent → futur (condition réalisable) ; si + imparfait → conditionnel présent ; si + plus-que-parfait → conditionnel passé. Le choix de la principale dépend donc du temps qui suit « si ».",
+        "en": "Sequence of tenses with « si »: si + present → future (a condition that can be met); si + imparfait → present conditional; si + plus-que-parfait → past conditional. The tense of the main clause therefore depends on the tense after « si »."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-06",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase tirée d'une note d'information contient une faute. Laquelle des corrections suivantes s'impose ? « Après que le comité de gouvernance financière ait approuvé la présentation, le Ministère pourra engager les fonds prévus pour la modernisation du système de paie. »",
+        "en": "This sentence from a briefing note contains an error. Which of the following corrections is required? « Après que le comité de gouvernance financière ait approuvé la présentation, le Ministère pourra engager les fonds prévus pour la modernisation du système de paie. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « ait approuvé » par « eût approuvé »",
+          "rationale": {
+            "fr": "Le plus-que-parfait du subjonctif reste un subjonctif : il conserve l'erreur de mode après « après que » et ajoute un registre littéraire déplacé.",
+            "en": "The pluperfect subjunctive is still a subjunctive: it keeps the error of mood after « après que » and adds an out-of-place literary register."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « pourra » par « pourrait »",
+          "rationale": {
+            "fr": "Le futur de la principale est juste, puisque la phrase annonce une suite prévue ; le conditionnel affaiblirait l'énoncé sans toucher à la faute de mode.",
+            "en": "The future in the main clause is fine, since the sentence announces a planned next step; the conditional would weaken the statement without touching the error of mood."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « pourra » par « puisse »",
+          "rationale": {
+            "fr": "Un subjonctif dans cette principale est agrammatical, et la faute sur « ait approuvé » demeure.",
+            "en": "A subjunctive in this main clause is ungrammatical, and the error in « ait approuvé » remains."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « ait approuvé » par « aura approuvé »",
+          "rationale": {
+            "fr": "« Après que » introduit un fait présenté comme accompli et se construit avec l'indicatif ; comme la principale est au futur, l'antériorité s'exprime par le futur antérieur.",
+            "en": "« Après que » introduces a fact presented as completed and takes the indicative; since the main clause is in the future, prior completion is expressed with the futur antérieur."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Contrairement à « avant que », qui exige le subjonctif, « après que » se construit avec l'indicatif, car le fait est présenté comme accompli. L'emploi du subjonctif est très répandu, mais la norme le condamne. Le temps dépend de la principale : futur antérieur devant un futur (« après que le comité aura approuvé, le Ministère pourra »), plus-que-parfait devant un imparfait.",
+        "en": "Unlike « avant que », which requires the subjunctive, « après que » takes the indicative because the fact is presented as completed. The subjunctive is widespread here, but the norm condemns it. The tense depends on the main clause: futur antérieur before a future (« après que le comité aura approuvé, le Ministère pourra »), plus-que-parfait before an imparfait."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-07",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Avis à tout le personnel : le serveur de fichiers ___ redémarré dans dix minutes ; veuillez enregistrer dès maintenant les documents que vous avez ouverts.",
+        "en": "Notice to all staff: the file server ___ restarted in ten minutes; please save the documents you have open right now."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "va être",
+          "rationale": {
+            "fr": "Le futur proche (« va être redémarré ») exprime une action imminente, ce que confirme « dans dix minutes ».",
+            "en": "The near future (« va être redémarré ») expresses an imminent action, as « dans dix minutes » confirms."
+          }
+        },
+        {
+          "id": "b",
+          "text": "a été",
+          "rationale": {
+            "fr": "Le passé composé présente le redémarrage comme déjà fait, ce qui contredit « dans dix minutes » et la consigne d'enregistrer ses documents.",
+            "en": "The passé composé presents the restart as already done, which contradicts « dans dix minutes » and the instruction to save documents."
+          }
+        },
+        {
+          "id": "c",
+          "text": "était",
+          "rationale": {
+            "fr": "L'imparfait situe l'action dans le passé et ne peut se combiner avec « dans dix minutes ».",
+            "en": "The imparfait places the action in the past and cannot be combined with « dans dix minutes »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "serait",
+          "rationale": {
+            "fr": "Le conditionnel présenterait le redémarrage comme hypothétique ou non confirmé ; un avis de service annonce au contraire un fait prévu.",
+            "en": "The conditional would present the restart as hypothetical or unconfirmed; a service notice, on the contrary, announces a scheduled fact."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour une action imminente et certaine, on emploie le futur proche (aller + infinitif) ou le futur simple. Les marqueurs de temps (« dans dix minutes », « dès maintenant ») guident le choix : ils excluent les temps du passé et le conditionnel.",
+        "en": "For an imminent and certain action, French uses the near future (aller + infinitive) or the simple future. Time markers (« dans dix minutes », « dès maintenant ») guide the choice: they rule out past tenses and the conditional."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-08",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Avant la migration des applications ministérielles vers la nouvelle plateforme infonuagique, il est essentiel que chaque direction générale…",
+        "en": "Before departmental applications are migrated to the new cloud platform, it is essential that each branch…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "fait l'inventaire de ses données sensibles et en désigne les responsables.",
+          "rationale": {
+            "fr": "« Fait » est un indicatif ; après une expression de nécessité, il est fautif, même si « désigne » a la même forme aux deux modes.",
+            "en": "« Fait » is an indicative; after an expression of necessity it is wrong, even though « désigne » has the same form in both moods."
+          }
+        },
+        {
+          "id": "b",
+          "text": "fera l'inventaire de ses données sensibles et en désignera les responsables.",
+          "rationale": {
+            "fr": "Le futur de l'indicatif ne peut suivre « il est essentiel que », qui exige le subjonctif même pour une action à venir.",
+            "en": "The future indicative cannot follow « il est essentiel que », which requires the subjunctive even for a future action."
+          }
+        },
+        {
+          "id": "c",
+          "text": "fasse l'inventaire de ses données sensibles et en désigne les responsables.",
+          "rationale": {
+            "fr": "« Il est essentiel que » exprime une nécessité et commande le subjonctif : « fasse » et « désigne ».",
+            "en": "« Il est essentiel que » expresses necessity and requires the subjunctive: « fasse » and « désigne »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ferait l'inventaire de ses données sensibles et en désignerait les responsables.",
+          "rationale": {
+            "fr": "Le conditionnel est à écarter : l'expression de nécessité impose le subjonctif, et la phrase énonce une exigence, non une hypothèse.",
+            "en": "The conditional must be ruled out: the expression of necessity imposes the subjunctive, and the sentence states a requirement, not a hypothesis."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Les tournures impersonnelles de nécessité ou d'importance (il faut que, il est essentiel que, il est nécessaire que, il importe que) sont suivies du subjonctif. Les verbes du premier groupe ont souvent la même forme aux deux modes (« désigne ») ; un verbe irrégulier comme « faire » révèle le mode (« fasse »).",
+        "en": "Impersonal expressions of necessity or importance (il faut que, il est essentiel que, il est nécessaire que, il importe que) are followed by the subjunctive. First-group verbs often have the same form in both moods (« désigne »); an irregular verb such as « faire » reveals the mood (« fasse »)."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-09",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Repérez l'erreur dans ce passage d'un courriel adressé à la gestionnaire des installations et choisissez la correction appropriée : « Hier, l'équipe des opérations environnementales constata un déversement mineur d'huile hydraulique dans le stationnement et a confiné la zone en moins d'une heure. »",
+        "en": "Find the error in this passage from an email to the facilities manager and choose the appropriate correction: « Hier, l'équipe des opérations environnementales constata un déversement mineur d'huile hydraulique dans le stationnement et a confiné la zone en moins d'une heure. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « constata » par « a constaté »",
+          "rationale": {
+            "fr": "Le passé simple, temps du récit littéraire ou historique, détonne dans un courriel, se marie mal avec « hier » et rompt l'unité de temps avec « a confiné » ; le passé composé s'impose.",
+            "en": "The passé simple, a tense of literary or historical narrative, clashes in an email, sits badly with « hier » and breaks the tense consistency with « a confiné »; the passé composé is required."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « a confiné » par « confinait »",
+          "rationale": {
+            "fr": "L'imparfait présenterait le confinement comme une action en cours ou habituelle, alors qu'il s'agit d'une action achevée « en moins d'une heure » ; le passé simple fautif demeure.",
+            "en": "The imparfait would present the containment as ongoing or habitual, whereas it is an action completed « en moins d'une heure »; the faulty passé simple remains."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « a confiné » par « avait confiné »",
+          "rationale": {
+            "fr": "Le plus-que-parfait placerait le confinement avant le constat du déversement, ce qui est illogique, et laisse « constata » en place.",
+            "en": "The plus-que-parfait would place the containment before the spill was noticed, which is illogical, and leaves « constata » in place."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « constata » par « constatait »",
+          "rationale": {
+            "fr": "L'imparfait ne convient pas à un constat ponctuel suivi d'une action achevée ; il ne rétablit pas un récit cohérent au passé composé.",
+            "en": "The imparfait does not suit a one-off observation followed by a completed action; it does not restore a consistent narrative in the passé composé."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans la correspondance et les comptes rendus administratifs, on relate les faits passés au passé composé, l'imparfait servant aux descriptions. Le passé simple appartient au récit écrit détaché du moment présent (histoire, littérature) ; il s'accorde mal avec un repère comme « hier » et ne se mêle pas au passé composé dans une même phrase.",
+        "en": "In correspondence and administrative reports, past facts are related in the passé composé, with the imparfait for descriptions. The passé simple belongs to written narrative cut off from the present moment (history, literature); it sits badly with a reference such as « hier » and is not mixed with the passé composé in the same sentence."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-10",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Depuis le début du mois, le centre de service régional ___ ouvert le samedi matin, ce qui réduit l'attente des clients en semaine.",
+        "en": "Since the beginning of the month, the regional service centre ___ open on Saturday mornings, which reduces client wait times during the week."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "a été",
+          "rationale": {
+            "fr": "Calque de l'anglais « has been open » : avec « depuis » et une situation toujours en cours, le passé composé est fautif.",
+            "en": "A copy of the English « has been open »: with « depuis » and a situation still in progress, the passé composé is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "est",
+          "rationale": {
+            "fr": "Avec « depuis », une situation qui dure encore se met au présent : « est ouvert depuis le début du mois ».",
+            "en": "With « depuis », a situation that is still going on is put in the present: « est ouvert depuis le début du mois »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "était",
+          "rationale": {
+            "fr": "L'imparfait situerait la situation dans un passé révolu, ce qui contredit « ce qui réduit », au présent.",
+            "en": "The imparfait would place the situation in a finished past, which contradicts « ce qui réduit », in the present."
+          }
+        },
+        {
+          "id": "d",
+          "text": "sera",
+          "rationale": {
+            "fr": "Le futur ne peut se combiner avec « depuis le début du mois », qui renvoie à une période déjà entamée.",
+            "en": "The future cannot be combined with « depuis le début du mois », which refers to a period already under way."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour une situation commencée dans le passé et toujours vraie au moment où l'on parle, le français emploie le présent avec « depuis » : « le centre est ouvert le samedi depuis le début du mois ». Le passé composé ne s'emploie guère avec « depuis » qu'à la forme négative (« le centre n'a pas fermé depuis lundi »).",
+        "en": "For a situation that began in the past and is still true at the time of speaking, French uses the present with « depuis »: « le centre est ouvert le samedi depuis le début du mois ». The passé composé is hardly used with « depuis » except in the negative (« le centre n'a pas fermé depuis lundi »)."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-11",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Nous avons simplifié le formulaire de demande en ligne…",
+        "en": "We have simplified the online application form…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "pour que les clients peuvent le remplir sans l'aide d'un agent.",
+          "rationale": {
+            "fr": "« Peuvent » est un indicatif ; après une conjonction de but, il est fautif.",
+            "en": "« Peuvent » is an indicative; after a conjunction of purpose it is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "pour que les clients pourront le remplir sans l'aide d'un agent.",
+          "rationale": {
+            "fr": "Le futur de l'indicatif est exclu après « pour que », même si le but concerne l'avenir.",
+            "en": "The future indicative is ruled out after « pour que », even when the purpose concerns the future."
+          }
+        },
+        {
+          "id": "c",
+          "text": "pour que les clients pourraient le remplir sans l'aide d'un agent.",
+          "rationale": {
+            "fr": "Le conditionnel est à écarter après une conjonction de but, qui exige le subjonctif.",
+            "en": "The conditional must be ruled out after a conjunction of purpose, which requires the subjunctive."
+          }
+        },
+        {
+          "id": "d",
+          "text": "pour que les clients puissent le remplir sans l'aide d'un agent.",
+          "rationale": {
+            "fr": "« Pour que » exprime le but et commande le subjonctif : « puissent ».",
+            "en": "« Pour que » expresses purpose and requires the subjunctive: « puissent »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les conjonctions de but (pour que, afin que, de crainte que) sont toujours suivies du subjonctif, puisque le but n'est pas encore atteint. Le subjonctif présent de « pouvoir » se conjugue ainsi : que je puisse, que nous puissions, qu'ils puissent.",
+        "en": "Conjunctions of purpose (pour que, afin que, de crainte que) are always followed by the subjunctive, since the goal has not yet been reached. The present subjunctive of « pouvoir » is: que je puisse, que nous puissions, qu'ils puissent."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-12",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Lisez cette phrase d'une proposition de l'équipe verte du Ministère et indiquez la correction nécessaire : « Si nous recevrions des bacs de compostage supplémentaires, nous pourrions réduire de moitié les déchets envoyés au site d'enfouissement. »",
+        "en": "Read this sentence from a proposal by the department's green team and indicate the correction needed: « Si nous recevrions des bacs de compostage supplémentaires, nous pourrions réduire de moitié les déchets envoyés au site d'enfouissement. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « pourrions » par « pourrons »",
+          "rationale": {
+            "fr": "Le futur dans la principale correspond à « si » + présent ; ce changement laisse en place le conditionnel fautif après « si ».",
+            "en": "The future in the main clause pairs with « si » + present; this change leaves the faulty conditional after « si » in place."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « pourrions » par « pouvions »",
+          "rationale": {
+            "fr": "« Pourrions » est juste dans la principale ; le remplacer par l'imparfait crée une seconde faute sans régler la première.",
+            "en": "« Pourrions » is fine in the main clause; replacing it with the imparfait creates a second error without fixing the first."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « recevrions » par « recevions »",
+          "rationale": {
+            "fr": "Après le « si » de condition, on ne met jamais le conditionnel : l'hypothèse se met à l'imparfait (« recevions ») et la conséquence au conditionnel (« pourrions »).",
+            "en": "After a conditional « si », the conditional is never used: the hypothesis goes in the imparfait (« recevions ») and the consequence in the conditional (« pourrions »)."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « recevrions » par « recevrons »",
+          "rationale": {
+            "fr": "Le futur est lui aussi exclu après le « si » de condition, et il ne s'accorde pas avec « pourrions ».",
+            "en": "The future is also ruled out after a conditional « si », and it does not match « pourrions »."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Règle de base : « si » + imparfait → conditionnel présent (« si nous recevions…, nous pourrions… »). La forme « si nous recevrions » est une faute fréquente à l'oral ; le conditionnel et le futur ne suivent jamais directement le « si » qui introduit une condition.",
+        "en": "The basic rule: « si » + imparfait → present conditional (« si nous recevions…, nous pourrions… »). The form « si nous recevrions » is a common spoken error; the conditional and the future never directly follow the « si » that introduces a condition."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-13",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "En mars dernier, la sous-ministre adjointe avait annoncé que la nouvelle directive sur la réduction des plastiques à usage unique ___ en vigueur dès le mois de juin ; or, sa mise en œuvre a finalement été reportée à l'automne.",
+        "en": "Last March, the assistant deputy minister had announced that the new directive on reducing single-use plastics ___ into force as early as June; however, its implementation was ultimately postponed to the fall."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "entrera",
+          "rationale": {
+            "fr": "Le futur ne se maintient après un verbe introducteur au passé que si le fait reste à venir ; or l'entrée en vigueur prévue en juin n'a pas eu lieu, puisqu'elle a été reportée.",
+            "en": "The future can only be kept after a past introducing verb if the fact is still to come; but the June entry into force did not happen, since it was postponed."
+          }
+        },
+        {
+          "id": "b",
+          "text": "entre",
+          "rationale": {
+            "fr": "Le présent rompt la concordance avec « avait annoncé » et ne situe pas le fait dans l'avenir par rapport à cette annonce.",
+            "en": "The present breaks the sequence of tenses with « avait annoncé » and does not place the fact in the future relative to that announcement."
+          }
+        },
+        {
+          "id": "c",
+          "text": "entrerait",
+          "rationale": {
+            "fr": "Dans un discours rapporté au passé, le futur de l'énoncé initial devient un conditionnel présent, appelé futur dans le passé : « avait annoncé que la directive entrerait en vigueur ».",
+            "en": "In reported speech in the past, the future of the original statement becomes a present conditional, the so-called future-in-the-past: « avait annoncé que la directive entrerait en vigueur »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "soit entrée",
+          "rationale": {
+            "fr": "Le subjonctif n'a aucun déclencheur : « annoncer que » introduit un fait présenté comme réel et se construit avec l'indicatif.",
+            "en": "The subjunctive has no trigger: « annoncer que » introduces a fact presented as real and takes the indicative."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Concordance des temps au discours indirect : lorsque le verbe introducteur est au passé, le présent devient imparfait, le passé composé devient plus-que-parfait et le futur devient conditionnel présent. « Elle a annoncé : La directive entrera en vigueur en juin » devient « Elle a annoncé que la directive entrerait en vigueur en juin ».",
+        "en": "Sequence of tenses in indirect speech: when the introducing verb is in the past, the present becomes imparfait, the passé composé becomes plus-que-parfait and the future becomes present conditional. « Elle a annoncé : La directive entrera en vigueur en juin » becomes « Elle a annoncé que la directive entrerait en vigueur en juin »."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-14",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "La nouvelle politique sur la conservation des documents électroniques s'appliquera à l'ensemble des directions générales dès sa publication…",
+        "en": "The new policy on the retention of electronic records will apply to all branches as soon as it is published…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "à moins que le comité de gestion ne prend une décision contraire.",
+          "rationale": {
+            "fr": "« Prend » est un indicatif ; après « à moins que », il est fautif.",
+            "en": "« Prend » is an indicative; after « à moins que » it is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "à moins que le comité de gestion ne prenne une décision contraire.",
+          "rationale": {
+            "fr": "« À moins que » exprime une condition négative et exige le subjonctif : « prenne », accompagné du « ne » explétif propre à la langue soignée.",
+            "en": "« À moins que » expresses a negative condition and requires the subjunctive: « prenne », with the expletive « ne » typical of careful writing."
+          }
+        },
+        {
+          "id": "c",
+          "text": "à moins que le comité de gestion ne prendra une décision contraire.",
+          "rationale": {
+            "fr": "Le futur de l'indicatif est exclu après « à moins que », même pour une éventualité à venir.",
+            "en": "The future indicative is ruled out after « à moins que », even for a future possibility."
+          }
+        },
+        {
+          "id": "d",
+          "text": "à moins que le comité de gestion ne prendrait une décision contraire.",
+          "rationale": {
+            "fr": "Le conditionnel est à écarter : « à moins que » commande le subjonctif, quelle que soit la probabilité de l'éventualité.",
+            "en": "The conditional must be ruled out: « à moins que » requires the subjunctive, however likely or unlikely the possibility."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« À moins que », comme « avant que » et « de crainte que », est suivi du subjonctif, souvent accompagné d'un « ne » explétif sans valeur négative (« à moins qu'il ne pleuve »). Ce « ne » est facultatif ; le subjonctif, lui, ne l'est pas.",
+        "en": "« À moins que », like « avant que » and « de crainte que », is followed by the subjunctive, often with an expletive « ne » that has no negative meaning (« à moins qu'il ne pleuve »). The « ne » is optional; the subjunctive is not."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-15",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Une analyste vous demande de relire cette phrase d'un compte rendu. Quelle modification la rend conforme à la norme ? « Au terme de son examen, la Direction des politiques stratégiques croit que le projet de règlement soit prêt à être soumis à la consultation publique dès l'automne. »",
+        "en": "An analyst asks you to proofread this sentence from a record of discussion. Which change makes it conform to the norm? « Au terme de son examen, la Direction des politiques stratégiques croit que le projet de règlement soit prêt à être soumis à la consultation publique dès l'automne. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « soit » par « est »",
+          "rationale": {
+            "fr": "À la forme affirmative, « croire que » présente le fait comme tenu pour vrai et se construit avec l'indicatif : « croit que le projet est prêt ».",
+            "en": "In the affirmative, « croire que » presents the fact as held to be true and takes the indicative: « croit que le projet est prêt »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « croit » par « croie »",
+          "rationale": {
+            "fr": "Le verbe de la principale doit être à l'indicatif ; le subjonctif « croie » y est fautif et ne règle pas le mode de la subordonnée.",
+            "en": "The main-clause verb must be in the indicative; the subjunctive « croie » is wrong there and does not fix the mood of the subordinate clause."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « croit » par « croyait »",
+          "rationale": {
+            "fr": "Changer le temps de la principale ne change pas la règle : « croire que » affirmatif demande toujours l'indicatif, et « soit » reste fautif.",
+            "en": "Changing the tense of the main clause does not change the rule: affirmative « croire que » still requires the indicative, and « soit » remains wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « soit » par « fût »",
+          "rationale": {
+            "fr": "L'imparfait du subjonctif, littéraire, demeure un subjonctif : il conserve l'erreur de mode et ajoute un registre désuet.",
+            "en": "The imperfect subjunctive, a literary form, is still a subjunctive: it keeps the error of mood and adds an outdated register."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Les verbes d'opinion (croire, penser, estimer, trouver) prennent l'indicatif à la forme affirmative. À la forme négative ou interrogative, le doute apparaît et le subjonctif devient l'usage courant (« elle ne croit pas que le projet soit prêt »), l'indicatif restant possible pour insister sur la réalité du fait.",
+        "en": "Verbs of opinion (croire, penser, estimer, trouver) take the indicative in the affirmative. In the negative or interrogative, doubt comes in and the subjunctive becomes the usual choice (« elle ne croit pas que le projet soit prêt »), though the indicative remains possible to stress that the fact is real."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-16",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Conformément à la procédure de cadenassage, il faut que le technicien ___ l'alimentation électrique et apposé son cadenas personnel avant toute intervention sur le tableau de distribution.",
+        "en": "In accordance with the lockout procedure, it is required that the technician ___ off the electrical power and put on his personal padlock before any work on the distribution panel."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "a coupé",
+          "rationale": {
+            "fr": "Passé composé de l'indicatif : après « il faut que », le subjonctif est obligatoire.",
+            "en": "Passé composé of the indicative: after « il faut que », the subjunctive is mandatory."
+          }
+        },
+        {
+          "id": "b",
+          "text": "aura coupé",
+          "rationale": {
+            "fr": "Le futur antérieur est un temps de l'indicatif ; il ne peut suivre « il faut que ».",
+            "en": "The futur antérieur is an indicative tense; it cannot follow « il faut que »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "aurait coupé",
+          "rationale": {
+            "fr": "Le conditionnel passé exprime un fait hypothétique ou non confirmé ; il est à écarter après une expression d'obligation.",
+            "en": "The past conditional expresses a hypothetical or unconfirmed fact; it must be ruled out after an expression of obligation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ait coupé",
+          "rationale": {
+            "fr": "« Il faut que » commande le subjonctif ; le subjonctif passé « ait coupé » marque que la coupure doit être accomplie avant l'intervention, et son auxiliaire régit aussi « apposé ».",
+            "en": "« Il faut que » requires the subjunctive; the past subjunctive « ait coupé » shows that the power must be cut before the work begins, and its auxiliary also governs « apposé »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Après « il faut que », on emploie le subjonctif : présent pour une action simultanée ou à venir, passé (auxiliaire au subjonctif + participe passé) pour une action qui doit être achevée avant un repère, ici « avant toute intervention ».",
+        "en": "After « il faut que », the subjunctive is used: present for a simultaneous or future action, past (auxiliary in the subjunctive + past participle) for an action that must be completed before a reference point, here « avant toute intervention »."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-17",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "D'après le rapport d'enquête, au moment de l'incident, le plancher de l'entrepôt…",
+        "en": "According to the investigation report, at the time of the incident, the warehouse floor…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "était mouillé et aucun panneau d'avertissement n'avait été installé.",
+          "rationale": {
+            "fr": "L'imparfait décrit l'état des lieux au moment de l'incident, et le plus-que-parfait l'omission survenue avant ce moment.",
+            "en": "The imparfait describes the state of the premises at the time of the incident, and the plus-que-parfait the omission that occurred before then."
+          }
+        },
+        {
+          "id": "b",
+          "text": "a été mouillé et aucun panneau d'avertissement n'a été installé.",
+          "rationale": {
+            "fr": "Le passé composé présente l'état du plancher comme un événement ponctuel ; il ne convient pas à la description d'une situation au moment d'un fait passé.",
+            "en": "The passé composé presents the state of the floor as a one-off event; it does not suit the description of a situation at the time of a past event."
+          }
+        },
+        {
+          "id": "c",
+          "text": "fut mouillé et aucun panneau d'avertissement ne fut installé.",
+          "rationale": {
+            "fr": "Le passé simple est un temps d'événement ; employé pour une description, il fausse l'aspect et paraît en outre trop littéraire pour un rapport d'enquête.",
+            "en": "The passé simple is a tense for events; used for a description, it gets the aspect wrong and also sounds too literary for an investigation report."
+          }
+        },
+        {
+          "id": "d",
+          "text": "sera mouillé et aucun panneau d'avertissement ne sera installé.",
+          "rationale": {
+            "fr": "Le futur est incompatible avec un incident déjà survenu.",
+            "en": "The future is incompatible with an incident that has already occurred."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour décrire les circonstances d'un événement passé, on emploie l'imparfait pour l'état (« le plancher était mouillé ») et le plus-que-parfait pour ce qui s'était produit, ou non, auparavant (« aucun panneau n'avait été installé »).",
+        "en": "To describe the circumstances of a past event, French uses the imparfait for the state (« le plancher était mouillé ») and the plus-que-parfait for what had, or had not, happened beforehand (« aucun panneau n'avait été installé »)."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-18",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Dans son rapport d'inspection trimestriel, le comité local de santé et de sécurité recommande de réaménager l'atelier d'entretien de sorte que les employés ___ évacuer intégralement les lieux en moins de deux minutes en cas d'alarme.",
+        "en": "In its quarterly inspection report, the local health and safety committee recommends reorganising the maintenance workshop so that employees ___ fully evacuate the premises in under two minutes when the alarm sounds."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "peuvent",
+          "rationale": {
+            "fr": "L'indicatif après « de sorte que » marque une conséquence réalisée ; or le réaménagement n'est qu'une recommandation, et le résultat visé n'est pas encore acquis.",
+            "en": "The indicative after « de sorte que » marks a consequence that has come about; but the reorganisation is only a recommendation, and the intended result has not yet been achieved."
+          }
+        },
+        {
+          "id": "b",
+          "text": "puissent",
+          "rationale": {
+            "fr": "Lorsque « de sorte que » exprime un but, ce que vise le réaménagement recommandé, il commande le subjonctif : « puissent ».",
+            "en": "When « de sorte que » expresses a purpose, what the recommended reorganisation aims at, it requires the subjunctive: « puissent »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "pouvaient",
+          "rationale": {
+            "fr": "L'imparfait de l'indicatif situe le résultat dans le passé et le présente comme une conséquence, ce qui contredit à la fois « recommande » et l'idée de but.",
+            "en": "The imperfect indicative places the result in the past and presents it as a consequence, which contradicts both « recommande » and the idea of purpose."
+          }
+        },
+        {
+          "id": "d",
+          "text": "pussent",
+          "rationale": {
+            "fr": "Le mode convient, mais l'imparfait du subjonctif, très littéraire, ne s'emploie qu'après une principale au passé ; après « recommande », il est déplacé dans un rapport administratif.",
+            "en": "The mood fits, but the imperfect subjunctive, a highly literary form, is only used after a main clause in the past; after « recommande » it is out of place in an administrative report."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« De sorte que » (comme « de façon que » et « de manière que ») prend l'indicatif quand il introduit une conséquence constatée (« l'atelier a été réaménagé, de sorte que les employés peuvent évacuer rapidement ») et le subjonctif quand il exprime un but recherché (« réaménager l'atelier de sorte que les employés puissent évacuer »).",
+        "en": "« De sorte que » (like « de façon que » and « de manière que ») takes the indicative when it introduces an observed consequence (« l'atelier a été réaménagé, de sorte que les employés peuvent évacuer rapidement ») and the subjunctive when it expresses an intended purpose (« réaménager l'atelier de sorte que les employés puissent évacuer »)."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-19",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Si l'agente d'approvisionnement avait vérifié l'heure de clôture de la demande de propositions, la soumission arrivée en retard ___ d'emblée, conformément aux instructions uniformisées aux soumissionnaires.",
+        "en": "If the procurement officer had checked the closing time of the request for proposals, the late bid ___ outright, in accordance with the standard instructions to bidders."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "avait été rejetée",
+          "rationale": {
+            "fr": "Le plus-que-parfait dans la principale reprend simplement le temps de la subordonnée ; il ne permet pas d'exprimer la conséquence irréelle d'une hypothèse.",
+            "en": "The plus-que-parfait in the main clause merely repeats the tense of the subordinate clause; it cannot express the unreal consequence of a hypothesis."
+          }
+        },
+        {
+          "id": "b",
+          "text": "aura été rejetée",
+          "rationale": {
+            "fr": "Le futur antérieur situe l'action dans l'avenir ; il ne convient pas à une conséquence qui ne s'est pas produite dans le passé.",
+            "en": "The futur antérieur places the action in the future; it does not suit a consequence that did not happen in the past."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ait été rejetée",
+          "rationale": {
+            "fr": "Le subjonctif n'a aucun déclencheur dans la principale d'un système hypothétique.",
+            "en": "The subjunctive has no trigger in the main clause of a conditional sentence."
+          }
+        },
+        {
+          "id": "d",
+          "text": "aurait été rejetée",
+          "rationale": {
+            "fr": "Avec « si » + plus-que-parfait (hypothèse passée non réalisée), la principale se met au conditionnel passé : « aurait été rejetée ».",
+            "en": "With « si » + plus-que-parfait (an unrealised past hypothesis), the main clause goes in the past conditional: « aurait été rejetée »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Système hypothétique au passé : si + plus-que-parfait → conditionnel passé (« si elle avait vérifié, la soumission aurait été rejetée »). C'est l'irréel du passé : la condition ne s'est pas réalisée, la conséquence non plus.",
+        "en": "Past conditional sentences: si + plus-que-parfait → past conditional (« si elle avait vérifié, la soumission aurait été rejetée »). This is the unreal past: the condition was not met, and neither was the consequence."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-20",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Veuillez noter que, dans dix jours ouvrables, la période réservée aux questions des soumissionnaires…",
+        "en": "Please note that, in ten business days, the period set aside for bidders' questions…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "prenait fin et aucune demande de précisions n'était acceptée par la suite.",
+          "rationale": {
+            "fr": "L'imparfait renvoie au passé et contredit « dans dix jours ouvrables ».",
+            "en": "The imparfait refers to the past and contradicts « dans dix jours ouvrables »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "aurait pris fin et aucune demande de précisions n'aurait été acceptée par la suite.",
+          "rationale": {
+            "fr": "Le conditionnel passé exprime un irréel du passé ou un fait non confirmé ; il ne convient pas à un avis qui annonce une échéance future.",
+            "en": "The past conditional expresses an unreal past or an unconfirmed fact; it does not suit a notice announcing a future deadline."
+          }
+        },
+        {
+          "id": "c",
+          "text": "prendra fin et aucune demande de précisions ne sera acceptée par la suite.",
+          "rationale": {
+            "fr": "Le futur simple convient à un fait à venir, annoncé par « dans dix jours ouvrables », et au ton d'un avis officiel.",
+            "en": "The simple future suits a future fact, signalled by « dans dix jours ouvrables », and the tone of an official notice."
+          }
+        },
+        {
+          "id": "d",
+          "text": "a pris fin et aucune demande de précisions n'a été acceptée par la suite.",
+          "rationale": {
+            "fr": "Le passé composé présente la fermeture comme déjà survenue, ce qui contredit le repère futur « dans dix jours ouvrables ».",
+            "en": "The passé composé presents the closing as having already happened, which contradicts the future reference « dans dix jours ouvrables »."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Un repère temporel tourné vers l'avenir (« dans dix jours », « la semaine prochaine ») commande un futur. Dans un avis officiel, le futur simple est préféré au futur proche, qui convient mieux à une action imminente ou à la langue parlée.",
+        "en": "A time reference pointing to the future (« dans dix jours », « la semaine prochaine ») calls for a future tense. In an official notice, the simple future is preferred to the near future, which better suits an imminent action or spoken language."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-21",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Indiquez la correction que demande ce passage d'un rapport d'évaluation des soumissions : « Lorsque nous avons reçu les soumissions, nous remarquions immédiatement qu'il manquait l'attestation de sécurité dans deux d'entre elles. »",
+        "en": "Indicate the correction this passage from a bid evaluation report requires: « Lorsque nous avons reçu les soumissions, nous remarquions immédiatement qu'il manquait l'attestation de sécurité dans deux d'entre elles. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « manquait » par « a manqué »",
+          "rationale": {
+            "fr": "« Manquait » décrit un état au moment du constat, et l'imparfait y est juste ; le passé composé serait maladroit et ne règle pas « remarquions ».",
+            "en": "« Manquait » describes a state at the time of the observation, and the imparfait is fine there; the passé composé would be awkward and does not fix « remarquions »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « remarquions » par « avons remarqué »",
+          "rationale": {
+            "fr": "Le constat est une action ponctuelle et achevée, déclenchée par la réception des soumissions ; le passé composé s'impose, comme pour « avons reçu ».",
+            "en": "The observation is a one-off, completed action triggered by receipt of the bids; the passé composé is required, as with « avons reçu »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « avons reçu » par « aurons reçu »",
+          "rationale": {
+            "fr": "Le futur antérieur projetterait la réception dans l'avenir, ce qui contredit le récit au passé, et l'imparfait fautif demeure.",
+            "en": "The futur antérieur would project the receipt into the future, which contradicts the past narrative, and the faulty imparfait remains."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « manquait » par « manque »",
+          "rationale": {
+            "fr": "Le présent rompt la concordance avec le récit au passé et laisse « remarquions » inchangé.",
+            "en": "The present breaks the sequence of tenses with the past narrative and leaves « remarquions » unchanged."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans un récit au passé, l'imparfait sert aux descriptions et aux états (« il manquait »), le passé composé aux actions ponctuelles qui font avancer le récit (« nous avons reçu », « nous avons remarqué »). L'adverbe « immédiatement » souligne ici le caractère ponctuel de l'action.",
+        "en": "In a past narrative, the imparfait is used for descriptions and states (« il manquait »), the passé composé for one-off actions that move the narrative forward (« nous avons reçu », « nous avons remarqué »). The adverb « immédiatement » underlines here that the action is a one-off."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-22",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le communiqué n'est pas encore diffusé : la conseillère en communications ___ à l'approbation de la directrice demain matin.",
+        "en": "The news release has not yet been issued: the communications advisor ___ for the director's approval tomorrow morning."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "va le soumettre",
+          "rationale": {
+            "fr": "Le futur proche (aller + infinitif) exprime une action à venir, ce que confirment « pas encore diffusé » et « demain matin ».",
+            "en": "The near future (aller + infinitive) expresses an action still to come, as « pas encore diffusé » and « demain matin » confirm."
+          }
+        },
+        {
+          "id": "b",
+          "text": "vient de le soumettre",
+          "rationale": {
+            "fr": "Le passé récent (venir de + infinitif) désigne une action qui vient d'avoir lieu ; il est incompatible avec « demain matin ».",
+            "en": "The recent past (venir de + infinitive) refers to an action that has just happened; it is incompatible with « demain matin »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "est allée le soumettre",
+          "rationale": {
+            "fr": "Le passé composé d'« aller » exprime un déplacement déjà accompli, pas un futur ; il contredit « demain matin ».",
+            "en": "The passé composé of « aller » expresses a movement already made, not a future; it contradicts « demain matin »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "venait de le soumettre",
+          "rationale": {
+            "fr": "Le passé récent à l'imparfait situe l'action juste avant un moment passé ; il ne s'accorde ni avec « n'est pas encore diffusé » ni avec « demain matin ».",
+            "en": "The recent past in the imparfait places the action just before a past moment; it fits neither « n'est pas encore diffusé » nor « demain matin »."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Aller » au présent + infinitif forme le futur proche (« elle va soumettre ») ; « venir de » + infinitif forme le passé récent (« elle vient de soumettre »). Les marqueurs de temps, comme « demain matin », indiquent lequel convient.",
+        "en": "« Aller » in the present + infinitive forms the near future (« elle va soumettre »); « venir de » + infinitive forms the recent past (« elle vient de soumettre »). Time markers such as « demain matin » show which one fits."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-23",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Sans l'intervention rapide de l'équipe des médias sociaux, qui a publié une mise au point officielle dès samedi matin, la rumeur concernant la fermeture des bureaux régionaux…",
+        "en": "Without the swift intervention of the social media team, which published an official clarification first thing Saturday morning, the rumour about the closure of regional offices…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "avait circulé sans démenti pendant toute la fin de semaine dernière.",
+          "rationale": {
+            "fr": "Le plus-que-parfait affirme que la rumeur a réellement circulé sans démenti, ce que contredit l'intervention mentionnée ; il n'exprime pas l'irréel.",
+            "en": "The plus-que-parfait asserts that the rumour actually circulated unchallenged, which the intervention mentioned contradicts; it does not express the unreal."
+          }
+        },
+        {
+          "id": "b",
+          "text": "aura circulé sans démenti pendant toute la fin de semaine dernière.",
+          "rationale": {
+            "fr": "Le futur antérieur ne peut exprimer la conséquence d'une hypothèse non réalisée dans le passé et se heurte à « dernière ».",
+            "en": "The futur antérieur cannot express the consequence of an unrealised past hypothesis and clashes with « dernière »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "aurait circulé sans démenti pendant toute la fin de semaine dernière.",
+          "rationale": {
+            "fr": "« Sans » + nom équivaut ici à une hypothèse passée non réalisée (« si l'équipe n'était pas intervenue ») ; la conséquence irréelle se met au conditionnel passé.",
+            "en": "« Sans » + noun is equivalent here to an unrealised past hypothesis (« si l'équipe n'était pas intervenue »); the unreal consequence goes in the past conditional."
+          }
+        },
+        {
+          "id": "d",
+          "text": "circulerait sans démenti pendant toute la fin de semaine dernière.",
+          "rationale": {
+            "fr": "Le conditionnel présent porte sur le présent ou l'avenir ; avec « la fin de semaine dernière », il ne situe pas la conséquence dans le passé.",
+            "en": "The present conditional concerns the present or future; with « la fin de semaine dernière », it does not place the consequence in the past."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "L'hypothèse peut s'exprimer sans « si » : « sans + nom », « en cas de », un gérondif. Quand elle porte sur le passé et ne s'est pas réalisée, la conséquence se met au conditionnel passé : « sans votre aide, nous aurions manqué l'échéance ».",
+        "en": "A hypothesis can be expressed without « si »: « sans + noun », « en cas de », a gerund. When it concerns the past and did not come about, the consequence goes in the past conditional: « sans votre aide, nous aurions manqué l'échéance »."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-24",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Dans ce paragraphe d'une revue de presse interne, une seule forme verbale est fautive. Quelle correction faut-il retenir ? « Lors de la conférence de presse du mois dernier, la porte-parole a affirmé que le Ministère publiera le rapport d'évaluation la semaine suivante, ce qu'il a d'ailleurs fait. »",
+        "en": "In this paragraph from an internal media review, only one verb form is wrong. Which correction should be chosen? « Lors de la conférence de presse du mois dernier, la porte-parole a affirmé que le Ministère publiera le rapport d'évaluation la semaine suivante, ce qu'il a d'ailleurs fait. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « a affirmé » par « affirme »",
+          "rationale": {
+            "fr": "Le présent contredit « du mois dernier » et ne règle pas la concordance avec « la semaine suivante ».",
+            "en": "The present contradicts « du mois dernier » and does not fix the sequence of tenses with « la semaine suivante »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « publiera » par « publie »",
+          "rationale": {
+            "fr": "Le présent rompt la concordance avec « a affirmé » et ne situe pas la publication dans l'avenir par rapport à l'annonce.",
+            "en": "The present breaks the sequence of tenses with « a affirmé » and does not place the publication in the future relative to the announcement."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « publiera » par « ait publié »",
+          "rationale": {
+            "fr": "« Affirmer que » introduit un fait présenté comme réel et exige l'indicatif ; le subjonctif passé est fautif.",
+            "en": "« Affirmer que » introduces a fact presented as real and requires the indicative; the past subjunctive is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « publiera » par « publierait »",
+          "rationale": {
+            "fr": "Après un verbe introducteur au passé, le futur de l'énoncé initial devient conditionnel présent ; la publication étant de surcroît déjà faite, le futur est exclu.",
+            "en": "After a past introducing verb, the future of the original statement becomes a present conditional; since the publication has moreover already happened, the future is ruled out."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Au discours indirect introduit par un verbe au passé, le futur devient conditionnel présent (futur dans le passé) : « Nous publierons le rapport » devient « elle a affirmé que le Ministère publierait le rapport ». Les repères changent aussi : « la semaine prochaine » devient « la semaine suivante ».",
+        "en": "In indirect speech introduced by a past verb, the future becomes a present conditional (future-in-the-past): « Nous publierons le rapport » becomes « elle a affirmé que le Ministère publierait le rapport ». Time references change too: « la semaine prochaine » becomes « la semaine suivante »."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-25",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Dès que l'équipe ___ l'analyse des risques, le chargé de projet présentera l'échéancier révisé au comité directeur pour approbation.",
+        "en": "As soon as the team ___ the risk analysis, the project lead will present the revised schedule to the steering committee for approval."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "ait terminé",
+          "rationale": {
+            "fr": "« Dès que » est une conjonction de temps qui introduit un fait réel ; elle se construit avec l'indicatif, non avec le subjonctif.",
+            "en": "« Dès que » is a conjunction of time introducing a real fact; it takes the indicative, not the subjunctive."
+          }
+        },
+        {
+          "id": "b",
+          "text": "aurait terminé",
+          "rationale": {
+            "fr": "Le conditionnel passé exprime un fait hypothétique ou non confirmé ; il ne s'emploie pas après « dès que » devant une principale au futur.",
+            "en": "The past conditional expresses a hypothetical or unconfirmed fact; it is not used after « dès que » before a main clause in the future."
+          }
+        },
+        {
+          "id": "c",
+          "text": "avait terminé",
+          "rationale": {
+            "fr": "Le plus-que-parfait marque l'antériorité par rapport à un passé ; il ne s'accorde pas avec le futur « présentera ».",
+            "en": "The plus-que-parfait marks a time before a past reference; it does not fit the future « présentera »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "aura terminé",
+          "rationale": {
+            "fr": "Après « dès que », quand la principale est au futur et que l'action subordonnée doit être achevée d'abord, on emploie le futur antérieur.",
+            "en": "After « dès que », when the main clause is in the future and the subordinate action must be completed first, the futur antérieur is used."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le futur antérieur exprime une action future achevée avant une autre action future : « dès que (quand, lorsque, une fois que) l'équipe aura terminé…, il présentera… ». L'anglais emploie ici le present perfect (« as soon as the team has finished »), d'où la tentation, fautive en français, du passé composé ou du subjonctif.",
+        "en": "The futur antérieur expresses a future action completed before another future action: « dès que (quand, lorsque, une fois que) l'équipe aura terminé…, il présentera… ». English uses the present perfect here (« as soon as the team has finished »), hence the temptation, wrong in French, to use the passé composé or the subjunctive."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-26",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Nous pourrons affecter les ressources nécessaires à la deuxième phase du projet…",
+        "en": "We will be able to assign the necessary resources to the second phase of the project…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "dès que le comité directeur approuvera la charte de projet.",
+          "rationale": {
+            "fr": "Après « dès que », un fait à venir se met au futur, en concordance avec « pourrons ».",
+            "en": "After « dès que », a future fact goes in the future tense, consistent with « pourrons »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "dès que le comité directeur approuverait la charte de projet.",
+          "rationale": {
+            "fr": "Le conditionnel est à écarter après une conjonction de temps qui introduit un fait prévu ; il ne s'accorde pas avec le futur « pourrons ».",
+            "en": "The conditional must be ruled out after a conjunction of time introducing a planned fact; it does not fit the future « pourrons »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "dès que le comité directeur approuvait la charte de projet.",
+          "rationale": {
+            "fr": "L'imparfait situe l'approbation dans le passé, ce qui contredit le futur de la principale.",
+            "en": "The imparfait places the approval in the past, which contradicts the future in the main clause."
+          }
+        },
+        {
+          "id": "d",
+          "text": "dès que le comité directeur ait approuvé la charte de projet.",
+          "rationale": {
+            "fr": "« Dès que » se construit avec l'indicatif ; le subjonctif est fautif.",
+            "en": "« Dès que » takes the indicative; the subjunctive is wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Contrairement à l'anglais (« as soon as the committee approves »), le français emploie le futur après quand, lorsque, dès que et aussitôt que si l'action est à venir : « nous pourrons agir dès que le comité approuvera ». Le futur antérieur convient aussi si l'on insiste sur l'achèvement (« dès que le comité aura approuvé »).",
+        "en": "Unlike English (« as soon as the committee approves »), French uses the future after quand, lorsque, dès que and aussitôt que when the action is still to come: « nous pourrons agir dès que le comité approuvera ». The futur antérieur also works if completion is stressed (« dès que le comité aura approuvé »)."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-27",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Relevez la faute dans cet extrait du bulletin de projet et choisissez la correction qui convient : « La semaine prochaine, l'équipe de projet a présenté le rapport d'étape au comité directeur et va répondre aux questions de ses membres. »",
+        "en": "Spot the error in this excerpt from the project newsletter and choose the right correction: « La semaine prochaine, l'équipe de projet a présenté le rapport d'étape au comité directeur et va répondre aux questions de ses membres. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « va répondre » par « a répondu »",
+          "rationale": {
+            "fr": "Mettre le second verbe au passé composé étend le conflit avec « la semaine prochaine » au lieu de le régler.",
+            "en": "Putting the second verb in the passé composé spreads the clash with « la semaine prochaine » instead of resolving it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « a présenté » par « avait présenté »",
+          "rationale": {
+            "fr": "Le plus-que-parfait reste un temps du passé, incompatible avec « la semaine prochaine ».",
+            "en": "The plus-que-parfait is still a past tense, incompatible with « la semaine prochaine »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « a présenté » par « va présenter »",
+          "rationale": {
+            "fr": "« La semaine prochaine » situe l'action dans l'avenir ; le futur proche « va présenter » convient et s'harmonise avec « va répondre ».",
+            "en": "« La semaine prochaine » places the action in the future; the near future « va présenter » fits and matches « va répondre »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « a présenté » par « présentait »",
+          "rationale": {
+            "fr": "L'imparfait est lui aussi un temps du passé ; il ne règle pas la contradiction avec le repère futur.",
+            "en": "The imparfait is also a past tense; it does not resolve the contradiction with the future reference."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le temps du verbe doit concorder avec les indicateurs temporels : « la semaine prochaine » commande un futur, simple ou proche. Dans une même phrase, on harmonise de préférence les verbes coordonnés : « va présenter… et va répondre ».",
+        "en": "The verb tense must match the time markers: « la semaine prochaine » calls for a future, simple or near. Within one sentence, coordinated verbs are preferably kept in the same tense: « va présenter… et va répondre »."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-28",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Quand ___ à la fonction publique, il y a une dizaine d'années, les réunions bilingues étaient beaucoup plus rares qu'aujourd'hui.",
+        "en": "When ___ the public service, about ten years ago, bilingual meetings were much rarer than they are today."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "j'entrais",
+          "rationale": {
+            "fr": "L'imparfait présenterait l'entrée comme une action en cours ou habituelle ; or il s'agit d'un événement unique et daté.",
+            "en": "The imparfait would present joining as an ongoing or habitual action; but it is a single, dated event."
+          }
+        },
+        {
+          "id": "b",
+          "text": "je suis entrée",
+          "rationale": {
+            "fr": "Le passé composé convient à un événement ponctuel et achevé (l'entrée en fonction), daté par « il y a une dizaine d'années ».",
+            "en": "The passé composé suits a one-off, completed event (joining the service), dated by « il y a une dizaine d'années »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "j'étais entrée",
+          "rationale": {
+            "fr": "Le plus-que-parfait suppose un repère passé postérieur ; ici, l'entrée est le repère lui-même, et « il y a » la situe par rapport au présent.",
+            "en": "The plus-que-parfait assumes a later past reference point; here, joining is itself the reference point, and « il y a » locates it relative to the present."
+          }
+        },
+        {
+          "id": "d",
+          "text": "j'entrerai",
+          "rationale": {
+            "fr": "Le futur contredit « il y a une dizaine d'années ».",
+            "en": "The future contradicts « il y a une dizaine d'années »."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le passé composé relate un événement ponctuel et achevé (« je suis entrée il y a dix ans »), tandis que l'imparfait décrit le contexte de l'époque (« les réunions étaient plus rares »). Le verbe « entrer » se conjugue avec l'auxiliaire « être ».",
+        "en": "The passé composé relates a one-off, completed event (« je suis entrée il y a dix ans »), while the imparfait describes the context of the time (« les réunions étaient plus rares »). The verb « entrer » takes the auxiliary « être »."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-29",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "La championne des langues officielles du Ministère espère que les nouvelles séances de conversation, qui commenceront en janvier,…",
+        "en": "The department's official languages champion hopes that the new conversation sessions, which will begin in January,…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "permettront aux employés de maintenir leur niveau de compétence en seconde langue.",
+          "rationale": {
+            "fr": "À la forme affirmative, « espérer que » se construit avec l'indicatif ; le futur convient à des séances qui n'ont pas encore commencé.",
+            "en": "In the affirmative, « espérer que » takes the indicative; the future suits sessions that have not yet begun."
+          }
+        },
+        {
+          "id": "b",
+          "text": "puissent permettre aux employés de maintenir leur niveau de compétence en seconde langue.",
+          "rationale": {
+            "fr": "Le subjonctif tente parce qu'« espérer » exprime un souhait, mais à la forme affirmative ce verbe exige l'indicatif.",
+            "en": "The subjunctive is tempting because « espérer » expresses a wish, but in the affirmative this verb requires the indicative."
+          }
+        },
+        {
+          "id": "c",
+          "text": "aient permis aux employés de maintenir leur niveau de compétence en seconde langue.",
+          "rationale": {
+            "fr": "Subjonctif passé : le mode est fautif après « espérer que » affirmatif, et l'aspect accompli ne convient pas à des séances encore à venir.",
+            "en": "Past subjunctive: the mood is wrong after affirmative « espérer que », and the completed aspect does not suit sessions that are still to come."
+          }
+        },
+        {
+          "id": "d",
+          "text": "permettaient aux employés de maintenir leur niveau de compétence en seconde langue.",
+          "rationale": {
+            "fr": "L'imparfait situe l'effet dans le passé, alors que les séances commenceront en janvier.",
+            "en": "The imparfait places the effect in the past, whereas the sessions will begin in January."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Contrairement à « souhaiter que » et « vouloir que », qui demandent le subjonctif, « espérer que » à la forme affirmative est suivi de l'indicatif, le plus souvent au futur : « j'espère qu'elle viendra ». Le subjonctif n'apparaît qu'à la forme négative ou interrogative (« je n'espère pas qu'il vienne »).",
+        "en": "Unlike « souhaiter que » and « vouloir que », which require the subjunctive, affirmative « espérer que » is followed by the indicative, most often in the future: « j'espère qu'elle viendra ». The subjunctive appears only in the negative or interrogative (« je n'espère pas qu'il vienne »)."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-30",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase, extraite d'un rapport annuel sur la langue de travail, renferme une erreur. Quelle correction s'impose ? « Quoique la politique ministérielle sur la langue de travail est en vigueur depuis plusieurs années, certains employés ne connaissent pas encore leurs droits en la matière. »",
+        "en": "This sentence, taken from an annual report on language of work, contains an error. Which correction is required? « Quoique la politique ministérielle sur la langue de travail est en vigueur depuis plusieurs années, certains employés ne connaissent pas encore leurs droits en la matière. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « est » par « a été »",
+          "rationale": {
+            "fr": "Le passé composé reste un indicatif ; il conserve l'erreur de mode et, avec « depuis », contredit une situation toujours en cours.",
+            "en": "The passé composé is still an indicative; it keeps the error of mood and, with « depuis », contradicts a situation still in progress."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « connaissent » par « connaissaient »",
+          "rationale": {
+            "fr": "La principale est juste au présent, puisque la méconnaissance est actuelle ; l'imparfait fausse le sens et laisse l'indicatif fautif après « quoique ».",
+            "en": "The main clause is fine in the present, since the lack of awareness is current; the imparfait distorts the meaning and leaves the faulty indicative after « quoique »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « Quoique » par « Quoi que »",
+          "rationale": {
+            "fr": "« Quoi que » en deux mots signifie « quelle que soit la chose que » et n'a aucun sens ici ; la faute de mode demeure en outre.",
+            "en": "« Quoi que » in two words means « whatever » and makes no sense here; the error of mood also remains."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « est » par « soit »",
+          "rationale": {
+            "fr": "« Quoique » exprime la concession et exige le subjonctif : « quoique la politique soit en vigueur ».",
+            "en": "« Quoique » expresses concession and requires the subjunctive: « quoique la politique soit en vigueur »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Quoique » en un mot, synonyme de « bien que », introduit une concession et se construit avec le subjonctif. Il ne faut pas le confondre avec « quoi que » en deux mots (« quoi que vous fassiez »), qui demande aussi le subjonctif mais a un autre sens.",
+        "en": "« Quoique » in one word, a synonym of « bien que », introduces a concession and takes the subjunctive. It must not be confused with « quoi que » in two words (« quoi que vous fassiez »), which also takes the subjunctive but has a different meaning."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-31",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Il faudra tester le nouveau formulaire avec plusieurs lecteurs d'écran avant qu'il ___ en ligne sur le site ministériel, afin de garantir sa conformité aux normes d'accessibilité.",
+        "en": "The new form will have to be tested with several screen readers before it ___ online on the departmental site, to ensure that it complies with accessibility standards."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "est mis",
+          "rationale": {
+            "fr": "Indicatif présent : après « avant que », il est fautif, même si la mise en ligne est certaine.",
+            "en": "Present indicative: after « avant que » it is wrong, even if going online is certain."
+          }
+        },
+        {
+          "id": "b",
+          "text": "sera mis",
+          "rationale": {
+            "fr": "Le futur de l'indicatif est exclu après « avant que », bien que l'action soit à venir.",
+            "en": "The future indicative is ruled out after « avant que », even though the action is still to come."
+          }
+        },
+        {
+          "id": "c",
+          "text": "soit mis",
+          "rationale": {
+            "fr": "« Avant que » exige le subjonctif : « avant qu'il soit mis en ligne ».",
+            "en": "« Avant que » requires the subjunctive: « avant qu'il soit mis en ligne »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "serait mis",
+          "rationale": {
+            "fr": "Le conditionnel est à écarter : « avant que » commande le subjonctif.",
+            "en": "The conditional must be ruled out: « avant que » requires the subjunctive."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Avant que » est toujours suivi du subjonctif, avec un « ne » explétif facultatif (« avant qu'il ne soit mis en ligne »). À l'inverse, « après que » prend l'indicatif. Quand les deux sujets sont identiques, on préfère « avant de » + infinitif.",
+        "en": "« Avant que » is always followed by the subjunctive, with an optional expletive « ne » (« avant qu'il ne soit mis en ligne »). Conversely, « après que » takes the indicative. When both subjects are the same, « avant de » + infinitive is preferred."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-32",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Si les documents étaient produits dans un format accessible dès le départ, l'équipe des publications…",
+        "en": "If documents were produced in an accessible format from the outset, the publications team…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "n'aura pas besoin de les corriger après coup.",
+          "rationale": {
+            "fr": "Le futur répond à « si » + présent ; il ne s'accorde pas avec l'imparfait « étaient produits ».",
+            "en": "The future pairs with « si » + present; it does not match the imparfait « étaient produits »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "n'aurait pas besoin de les corriger après coup.",
+          "rationale": {
+            "fr": "Avec « si » + imparfait, la principale se met au conditionnel présent : « n'aurait pas besoin ».",
+            "en": "With « si » + imparfait, the main clause goes in the present conditional: « n'aurait pas besoin »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "n'a pas besoin de les corriger après coup.",
+          "rationale": {
+            "fr": "Le présent de l'indicatif affirme un fait réel ; il ne peut exprimer la conséquence d'une hypothèse à l'imparfait.",
+            "en": "The present indicative asserts a real fact; it cannot express the consequence of a hypothesis in the imparfait."
+          }
+        },
+        {
+          "id": "d",
+          "text": "n'ait pas besoin de les corriger après coup.",
+          "rationale": {
+            "fr": "Le subjonctif n'a aucun déclencheur dans la principale d'un système hypothétique.",
+            "en": "The subjunctive has no trigger in the main clause of a conditional sentence."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Avec « si » + imparfait, on exprime une hypothèse sur le présent ou l'avenir ; la conséquence se met au conditionnel présent : « si les documents étaient accessibles dès le départ, l'équipe n'aurait pas besoin de les corriger ».",
+        "en": "With « si » + imparfait, French expresses a hypothesis about the present or future; the consequence goes in the present conditional: « si les documents étaient accessibles dès le départ, l'équipe n'aurait pas besoin de les corriger »."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-verb-tense-and-mood-33",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Un conseiller en accessibilité vous soumet cette phrase avant sa diffusion. Quelle correction est nécessaire ? « Les employés pourront obtenir un logiciel de dictée vocale à condition que leur gestionnaire approuve la demande et que l'évaluation ergonomique a été réalisée au préalable. »",
+        "en": "An accessibility advisor submits this sentence to you before it is distributed. Which correction is needed? « Les employés pourront obtenir un logiciel de dictée vocale à condition que leur gestionnaire approuve la demande et que l'évaluation ergonomique a été réalisée au préalable. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « a été réalisée » par « ait été réalisée »",
+          "rationale": {
+            "fr": "« À condition que » exige le subjonctif, et cette exigence vaut aussi pour la seconde subordonnée reprise par « que » ; le subjonctif passé marque l'antériorité.",
+            "en": "« À condition que » requires the subjunctive, and this also applies to the second subordinate clause picked up by « que »; the past subjunctive marks prior completion."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « approuve » par « approuvera »",
+          "rationale": {
+            "fr": "« Approuve » est ici un subjonctif présent, juste après « à condition que » ; le futur de l'indicatif y serait fautif.",
+            "en": "« Approuve » is a present subjunctive here, and is fine after « à condition que »; the future indicative would be wrong there."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « pourront » par « pourraient »",
+          "rationale": {
+            "fr": "Le futur de la principale est juste ; le conditionnel ne règle pas le mode fautif de la seconde subordonnée.",
+            "en": "The future in the main clause is fine; the conditional does not fix the faulty mood of the second subordinate clause."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « a été réalisée » par « sera réalisée »",
+          "rationale": {
+            "fr": "Le futur reste un indicatif ; il conserve l'erreur de mode et contredit « au préalable ».",
+            "en": "The future is still an indicative; it keeps the error of mood and contradicts « au préalable »."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« À condition que », « pourvu que » et « à moins que » commandent le subjonctif. Quand deux subordonnées sont coordonnées et que la conjonction est reprise par un simple « que », le second verbe garde le mode imposé par la conjonction : « à condition que… et que l'évaluation ait été réalisée ».",
+        "en": "« À condition que », « pourvu que » and « à moins que » require the subjunctive. When two subordinate clauses are coordinated and the conjunction is picked up by a simple « que », the second verb keeps the mood the conjunction imposes: « à condition que… et que l'évaluation ait été réalisée »."
+      },
+      "subSkill": "verb-tense-and-mood",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ]
+}

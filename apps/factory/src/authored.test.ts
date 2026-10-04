@@ -5,8 +5,8 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { DEFAULT_BANK_VERSION } from "./cli.js";
-import { AUTHORED_DIR, loadAuthored, loadProfile, loadPublishedBank } from "./io.js";
-import { authoredIssues } from "./__tests__/authored-checks.js";
+import { AUTHORED_DIR, loadAuthored, loadOralSessions, loadProfile, loadPublishedBank } from "./io.js";
+import { authoredIssues } from "./pipeline/authored.js";
 import {
   anAuthoredComprehensionItem,
   anAuthoredItem,
@@ -17,12 +17,14 @@ import {
  * The contributions under `content/authored/` (content-factory.md §5, CONTRIBUTING.md). This
  * is the check a contributor's `pnpm verify` runs on their file: it parses with the domain
  * schemas, is clean by the domain's `validate()` and stage 5's per-item rules, is credited,
- * and takes no id the committed bank already holds. Passing it is not acceptance: the model
- * review at the next bank build still decides.
+ * and takes no id the committed bank holds for anything else. A contribution stays here once
+ * published (D207), so the bank holding it under its own id is expected. Passing it is not
+ * acceptance: the review at the next bank build still decides.
  */
 
 const REPO = process.cwd();
 const profile = loadProfile(REPO);
+const oralPlan = loadOralSessions(REPO);
 
 const committedBank = () => {
   const bank = loadPublishedBank(REPO, DEFAULT_BANK_VERSION);
@@ -43,8 +45,8 @@ describe("the committed contributions (content/authored)", () => {
     expect(() => loadAuthored(REPO)).not.toThrow();
   });
 
-  it("credits every item and passage, is validate()-clean, and takes no id the bank holds", () => {
-    expect(authoredIssues(loadAuthored(REPO), committedBank(), profile)).toEqual([]);
+  it("credits every item and passage, is validate()-clean, and takes no id the bank holds for something else", () => {
+    expect(authoredIssues(loadAuthored(REPO), committedBank(), profile, oralPlan)).toEqual([]);
   });
 });
 
@@ -87,6 +89,68 @@ describe("authoredIssues, the checks a contribution must pass", () => {
     );
     expect(issues).toContain(`item ${taken}: the id is already in the committed bank; choose another`);
     expect(issues).toContain(`passage ${takenPassage}: the id is already in the committed bank; choose another`);
+  });
+
+  it("passes a contribution the bank already publishes under its own id, retired or with statistics or not (D207)", () => {
+    const item = anAuthoredItem();
+    const passage = anAuthoredPassage();
+    const published = {
+      items: [...bank.items, { ...item, status: "retired" as const, stats: { responses: 1, proportionCorrect: 1, pointBiserial: null, updatedAt: "x" } }],
+      passages: [...bank.passages, passage],
+    };
+    expect(authoredIssues({ items: [item], passages: [passage] }, published, profile)).toEqual([]);
+  });
+
+  it("flags a contribution whose id the bank publishes for a different record", () => {
+    const item = anAuthoredItem();
+    const published = { items: [...bank.items, { ...item, stem: { fr: "Autre chose.", en: "Something else." } }], passages: bank.passages };
+    expect(authoredIssues({ items: [item], passages: [] }, published, profile)).toEqual([
+      `item ${item.id}: the id is already in the committed bank; choose another`,
+    ]);
+  });
+
+  it("holds a passage to the drafted passages' rules (D203)", () => {
+    const short = anAuthoredPassage({ body: "Les bureaux ouvrent à huit heures.", wordCount: 6, readability: { sentences: 1, avgSentenceLength: 6, rareWordRatio: 0 } });
+    const issues = authoredIssues({ items: [anAuthoredComprehensionItem()], passages: [short] }, bank, profile);
+    expect(issues).toContain(`passage ${short.id}: word count 6 is outside [40, 170] for band B`);
+    expect(issues).toContain(`passage ${short.id}: fewer than three sentences`);
+  });
+
+  it("flags a passage whose word count or readability is not the body's", () => {
+    const passage = anAuthoredPassage({ wordCount: 60, readability: { sentences: 3, avgSentenceLength: 20, rareWordRatio: 0.235 } });
+    const issues = authoredIssues({ items: [anAuthoredComprehensionItem()], passages: [passage] }, bank, profile);
+    expect(issues).toEqual([
+      `passage ${passage.id}: wordCount is 60, and the body has 51`,
+      `passage ${passage.id}: readability should be {"sentences":3,"avgSentenceLength":17,"rareWordRatio":0.235}`,
+    ]);
+  });
+
+  it("holds an authored scenario to the scenario stage's checks against the oral plan", () => {
+    const phase = { name: "Accueil", minutes: 5, intent: "Warm up.", seedQuestions: ["Parlez-moi de votre poste."], escalation: ["Et ensuite ?"], deescalation: ["Votre équipe ?"] };
+    const fits = { id: "s-fits", lang: "fr", sessionType: "warmup", targetBand: "B", topic: "human-resources", phases: [phase] } as const;
+    const long = { ...fits, id: "s-long", phases: [{ ...phase, minutes: 6 }] };
+    const flat = { ...fits, id: "s-flat", phases: [{ ...phase, escalation: [] }] };
+    const issues = authoredIssues({ items: [], passages: [], scenarios: [fits, long, flat] as never }, bank, profile, oralPlan);
+    expect(issues).toEqual([
+      "scenario s-long: phases last 6 minutes, the warmup session 5",
+      'scenario s-flat: phase "Accueil" has no harder follow-up',
+    ]);
+  });
+
+  it("flags an authored scenario when no oral plan gives its session a length", () => {
+    const phase = { name: "Accueil", minutes: 5, intent: "Warm up.", seedQuestions: ["Q ?"], escalation: ["E ?"], deescalation: ["D ?"] };
+    const scenario = { id: "s-1", lang: "fr", sessionType: "warmup", targetBand: "B", topic: "human-resources", phases: [phase] };
+    expect(authoredIssues({ items: [], passages: [], scenarios: [scenario] as never }, bank, profile)).toEqual([
+      "scenario s-1: no session length is planned for warmup",
+    ]);
+  });
+
+  it("flags a stem stage 5 would drop as a near-duplicate of an earlier one", () => {
+    const first = anAuthoredItem();
+    const second = anAuthoredItem({ id: "authored-octocat-9" as never, stem: { ...first.stem, fr: `${first.stem.fr} Merci.` } });
+    expect(authoredIssues({ items: [first, second], passages: [] }, bank, profile)).toEqual([
+      "item authored-octocat-9: near-duplicate of authored-octocat-1 (similarity 0.93); reword its stem",
+    ]);
   });
 
   it("flags two contributions that use the same id", () => {

@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-project-management-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-1",
+      "stem": {
+        "fr": "Quel est l'objet principal du courriel de Marc-André Fortin ?",
+        "en": "What is the main purpose of Marc-André Fortin's email?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Demander au personnel de choisir l'immeuble qui accueillera les deux bureaux.",
+          "rationale": {
+            "fr": "Le courriel ne demande aucun choix d'immeuble ; il annonce que le regroupement est lancé.",
+            "en": "The email asks for no choice of building; it announces that the consolidation has been launched."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Annoncer le démarrage du projet et préciser le rôle de chacun.",
+          "rationale": {
+            "fr": "C'est l'objet du message : il confirme le lancement, donne la date de la rencontre de démarrage et présente les rôles convenus.",
+            "en": "This is the message's purpose: it confirms the launch, gives the kickoff meeting date and sets out the agreed roles."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Rappeler aux responsables de volet de remettre leur premier rapport d'étape.",
+          "rationale": {
+            "fr": "Les rapports d'étape sont mentionnés, mais comme un détail du fonctionnement, non comme le but du courriel.",
+            "en": "Progress reports are mentioned, but as a detail of how the project will run, not as the email's purpose."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Soumettre la charte de projet à l'approbation de l'équipe d'ici jeudi.",
+          "rationale": {
+            "fr": "L'équipe doit lire la charte et poser ses questions, pas l'approuver ; et ce n'est qu'une partie du message.",
+            "en": "The team must read the charter and ask questions, not approve it; and this is only one part of the message."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour dégager l'idée principale, cherchez la réponse qui couvre l'ensemble du message (ici le lancement et la répartition des rôles) plutôt qu'un seul détail, comme les rapports ou la charte.",
+        "en": "To find the main idea, look for the answer that covers the whole message (here the launch and the allocation of roles) rather than a single detail such as the reports or the charter."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-1",
+      "stem": {
+        "fr": "Que doivent faire les membres de l'équipe avant la rencontre du 14 octobre ?",
+        "en": "What must team members do before the October 14 meeting?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Préparer un rapport d'étape sur le volet dont ils sont responsables.",
+          "rationale": {
+            "fr": "Les rapports d'étape sont remis tous les deux vendredis par les responsables de volet ; ils ne sont pas demandés avant la rencontre.",
+            "en": "Progress reports are submitted every second Friday by the component leads; they are not requested before the meeting."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Confirmer leur présence auprès de la directrice générale.",
+          "rationale": {
+            "fr": "Le courriel ne demande pas de confirmer sa présence, ni auprès de Mme Caron ni de quelqu'un d'autre.",
+            "en": "The email does not ask anyone to confirm attendance, whether with Ms. Caron or anyone else."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Proposer des ajustements au budget de 2,4 millions de dollars.",
+          "rationale": {
+            "fr": "Le budget est simplement indiqué ; aucune proposition de modification n'est sollicitée.",
+            "en": "The budget is simply stated; no proposed changes are requested."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Lire la charte jointe et transmettre leurs questions d'ici jeudi.",
+          "rationale": {
+            "fr": "C'est ce que demande le courriel : « veuillez lire la charte de projet ci-jointe et me faire part de vos questions d'ici jeudi ».",
+            "en": "This is what the email asks: 'please read the attached project charter and send me your questions by Thursday'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une question de détail se règle en repérant la phrase exacte du texte : ici, celle qui commence par « Avant la rencontre ». Les autres options reprennent des éléments réels du courriel, mais rattachés à la mauvaise consigne.",
+        "en": "A detail question is settled by finding the exact sentence in the text: here, the one that begins 'Before the meeting'. The other options reuse real elements of the email but attach them to the wrong instruction."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-1",
+      "stem": {
+        "fr": "Quelles sont la durée et l'enveloppe budgétaire prévues pour le projet de regroupement ?",
+        "en": "What duration and budget are planned for the consolidation project?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "18 mois et 2,4 millions de dollars.",
+          "rationale": {
+            "fr": "Ce sont les chiffres du courriel : le projet « doit durer 18 mois et dispose d'un budget de 2,4 millions de dollars ».",
+            "en": "These are the email's figures: the project 'is to last 18 months and has a budget of $2.4 million'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "14 mois et 2,4 millions de dollars.",
+          "rationale": {
+            "fr": "Le nombre 14 est la date de la rencontre de démarrage (le 14 octobre), non la durée du projet.",
+            "en": "The number 14 is the date of the kickoff meeting (October 14), not the project's duration."
+          }
+        },
+        {
+          "id": "c",
+          "text": "18 mois et 1,4 million de dollars.",
+          "rationale": {
+            "fr": "La durée est exacte, mais le budget indiqué est de 2,4 millions, non de 1,4 million.",
+            "en": "The duration is accurate, but the stated budget is $2.4 million, not $1.4 million."
+          }
+        },
+        {
+          "id": "d",
+          "text": "24 mois et 1,8 million de dollars.",
+          "rationale": {
+            "fr": "Ces deux chiffres inversent ou déforment ceux du courriel ; aucun n'y figure.",
+            "en": "Both figures reverse or distort those in the email; neither appears in it."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Quand un texte contient plusieurs nombres (dates, heures, durées, montants), associez chaque nombre à ce qu'il mesure avant de répondre : le 14 désigne un jour, le 18 une durée en mois.",
+        "en": "When a text contains several numbers (dates, times, durations, amounts), match each number to what it measures before answering: 14 is a day, 18 a duration in months."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-1",
+      "stem": {
+        "fr": "Dans le passage « et Sophie Lavoie celui des technologies », à quoi renvoie le pronom « celui » ?",
+        "en": "In the passage 'and Sophie Lavoie the one for technology', what does the pronoun 'celui' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Au projet de regroupement des bureaux.",
+          "rationale": {
+            "fr": "Sophie Lavoie ne dirige pas l'ensemble du projet : c'est Marc-André Fortin qui en assure la gestion quotidienne.",
+            "en": "Sophie Lavoie does not lead the whole project: Marc-André Fortin handles its day-to-day management."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Au mandat de l'équipe de projet.",
+          "rationale": {
+            "fr": "« Mandat » apparaît plus haut, mais il ne peut pas se combiner avec « des technologies » dans cette phrase.",
+            "en": "'Mandate' appears earlier, but it cannot combine with 'for technology' in this sentence."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À un volet du projet, comme celui des installations confié à Karim Diallo.",
+          "rationale": {
+            "fr": "« Celui » reprend le nom masculin le plus proche dans la même phrase, « le volet » : Sophie Lavoie dirigera le volet des technologies.",
+            "en": "'Celui' picks up the nearest masculine noun in the same sentence, 'le volet': Sophie Lavoie will lead the technology component."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Au rapport d'étape remis tous les deux vendredis.",
+          "rationale": {
+            "fr": "Le rapport d'étape est mentionné dans la phrase suivante ; un pronom démonstratif renvoie à un nom déjà exprimé.",
+            "en": "The progress report is mentioned in the next sentence; a demonstrative pronoun refers back to a noun already used."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le pronom démonstratif « celui » (« celle », « ceux ») évite de répéter un nom déjà employé et s'accorde avec lui. Cherchez, juste avant, un nom masculin singulier qui a du sens avec le complément : « le volet des installations… celui des technologies ».",
+        "en": "The demonstrative pronoun 'celui' ('celle', 'ceux') avoids repeating a noun already used and agrees with it. Look just before it for a masculine singular noun that makes sense with the complement: 'the facilities component… the one for technology'."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-1",
+      "stem": {
+        "fr": "Dans le courriel, que signifie le verbe « trancher » dans « c'est elle qui tranchera les questions qui dépassent le mandat de l'équipe » ?",
+        "en": "In the email, what does the verb 'trancher' mean in 'she is the one who will settle the questions that go beyond the team's mandate'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Prendre la décision finale sur ces questions.",
+          "rationale": {
+            "fr": "Dans ce contexte, « trancher une question » veut dire la régler de façon définitive : c'est le rôle d'une promotrice de projet.",
+            "en": "In this context, 'trancher une question' means to settle it definitively: that is the role of a project sponsor."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Répartir ces questions entre les responsables de volet.",
+          "rationale": {
+            "fr": "Ce sens imite le sens concret de « trancher » (couper en morceaux), mais il ne convient pas ici : rien n'est distribué.",
+            "en": "This meaning imitates the literal sense of 'trancher' (to cut into pieces), but it does not fit here: nothing is being distributed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Écarter ces questions pour qu'elles ne ralentissent pas le projet.",
+          "rationale": {
+            "fr": "Le texte ne dit pas que ces questions seront mises de côté, mais qu'elles seront réglées par la directrice générale.",
+            "en": "The text does not say these questions will be set aside, but that the director general will settle them."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Transmettre ces questions au gestionnaire de projet.",
+          "rationale": {
+            "fr": "C'est l'inverse : les questions qui dépassent le mandat de l'équipe montent vers la promotrice, elles ne redescendent pas vers le gestionnaire.",
+            "en": "It is the reverse: questions beyond the team's mandate go up to the sponsor; they do not come back down to the manager."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un mot courant peut avoir un sens figuré en contexte administratif. « Trancher une question, un différend » signifie décider de façon définitive ; le sens concret (couper) est un piège fréquent.",
+        "en": "A common word can have a figurative meaning in an administrative context. 'Trancher une question, un différend' means to decide definitively; the literal sense (to cut) is a frequent trap."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-2",
+      "stem": {
+        "fr": "De quoi traite principalement ce bulletin sur le portail de réservation ?",
+        "en": "What is this bulletin about the booking portal mainly about?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Du choix d'un nouveau fournisseur pour remplacer celui du portail.",
+          "rationale": {
+            "fr": "Le fournisseur n'est pas remplacé : il s'est engagé à corriger les anomalies.",
+            "en": "The supplier is not being replaced: it has committed to fixing the defects."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Des étapes à suivre pour réserver une salle dans le nouveau portail.",
+          "rationale": {
+            "fr": "Le bulletin n'explique pas comment réserver une salle ; il porte sur le calendrier du projet.",
+            "en": "The bulletin does not explain how to book a room; it is about the project's schedule."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Du report de la mise en service du portail et de la façon dont la transition sera gérée.",
+          "rationale": {
+            "fr": "C'est le sujet d'ensemble : la nouvelle date, sa cause, le projet pilote, le maintien de l'outil actuel et l'absence de coût supplémentaire.",
+            "en": "This is the overall subject: the new date, its cause, the pilot, keeping the current tool and the absence of extra cost."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Des coûts supplémentaires causés par les anomalies relevées.",
+          "rationale": {
+            "fr": "Le bulletin dit précisément le contraire : le report n'entraîne aucun coût supplémentaire.",
+            "en": "The bulletin says precisely the opposite: the postponement entails no additional cost."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "L'idée principale d'un bulletin est souvent annoncée dans la première phrase (ici, le report) puis développée. Écartez les options qui contredisent le texte ou qui en retiennent un aspect absent.",
+        "en": "A bulletin's main idea is often announced in its first sentence (here, the postponement) and then developed. Rule out options that contradict the text or pick an aspect it does not contain."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-2",
+      "stem": {
+        "fr": "D'après le bulletin, comment les employés des directions générales qui ne participent pas au projet pilote réserveront-ils leurs salles en décembre ?",
+        "en": "According to the bulletin, how will employees of branches not taking part in the pilot book their rooms in December?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "En adressant leurs demandes par courriel à l'équipe du projet.",
+          "rationale": {
+            "fr": "L'adresse de l'équipe du projet sert aux questions, non aux réservations.",
+            "en": "The project team's address is for questions, not for bookings."
+          }
+        },
+        {
+          "id": "b",
+          "text": "En continuant de se servir de l'outil de réservation actuel.",
+          "rationale": {
+            "fr": "Le bulletin précise que, d'ici le lancement, « l'outil actuel demeure en service ».",
+            "en": "The bulletin states that until the launch 'the current tool remains in service'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "En utilisant le nouveau portail dans sa version d'essai.",
+          "rationale": {
+            "fr": "Seules deux directions générales utiliseront le portail en décembre, dans le cadre du projet pilote.",
+            "en": "Only two branches will use the portal in December, as part of the pilot."
+          }
+        },
+        {
+          "id": "d",
+          "text": "En saisissant de nouveau, dans le portail, les réservations déjà faites.",
+          "rationale": {
+            "fr": "Les réservations existantes seront transférées automatiquement ; personne n'aura à les saisir de nouveau.",
+            "en": "Existing bookings will be transferred automatically; no one will have to re-enter them."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour une question de détail, repérez l'information qui s'applique au bon groupe de personnes et à la bonne période : le projet pilote vise deux directions générales, tandis que « d'ici là » s'applique à tous les autres.",
+        "en": "For a detail question, find the information that applies to the right group of people and the right period: the pilot covers two branches, while 'until then' applies to everyone else."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-2",
+      "stem": {
+        "fr": "Quels chiffres le bulletin donne-t-il au sujet des anomalies relevées pendant les essais d'acceptation ?",
+        "en": "What figures does the bulletin give about the defects found during acceptance testing?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "27 anomalies, toutes jugées critiques.",
+          "rationale": {
+            "fr": "Le total de 27 est exact, mais seules 9 de ces anomalies sont jugées critiques.",
+            "en": "The total of 27 is accurate, but only 9 of these defects are considered critical."
+          }
+        },
+        {
+          "id": "b",
+          "text": "12 anomalies, corrigées avant le 3 novembre.",
+          "rationale": {
+            "fr": "Le 12 et le 3 sont des dates (12 janvier, 3 novembre) ; les corrections sont promises pour la fin novembre.",
+            "en": "12 and 3 are dates (January 12, November 3); the fixes are promised for the end of November."
+          }
+        },
+        {
+          "id": "c",
+          "text": "9 anomalies au total, dont 2 jugées critiques.",
+          "rationale": {
+            "fr": "Le 9 correspond aux anomalies critiques, et le 2 au nombre de directions générales du projet pilote.",
+            "en": "9 is the number of critical defects, and 2 is the number of branches in the pilot."
+          }
+        },
+        {
+          "id": "d",
+          "text": "27 anomalies, dont 9 jugées critiques.",
+          "rationale": {
+            "fr": "C'est ce que dit le bulletin : « 27 anomalies, dont 9 jugées critiques ».",
+            "en": "This is what the bulletin says: '27 defects, 9 of them considered critical'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Dont » introduit une partie d'un ensemble : « 27 anomalies, dont 9 critiques » signifie que 9 des 27 sont critiques. Vérifiez aussi que chaque nombre de l'option mesure bien ce que le texte lui attribue.",
+        "en": "'Dont' introduces part of a whole: '27 defects, of which 9 critical' means 9 of the 27 are critical. Also check that each number in the option measures what the text attributes to it."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-2",
+      "stem": {
+        "fr": "Que peut-on déduire de la décision de limiter le projet pilote à deux directions générales ?",
+        "en": "What can be inferred from the decision to limit the pilot to two branches?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les autres directions générales ont refusé d'y participer.",
+          "rationale": {
+            "fr": "Le bulletin ne mentionne aucun refus ; la limite est présentée comme un choix de l'équipe.",
+            "en": "The bulletin mentions no refusal; the limit is presented as the team's choice."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le fournisseur n'a pas les moyens de soutenir plus de deux directions générales.",
+          "rationale": {
+            "fr": "Rien dans le texte ne porte sur la capacité du fournisseur à soutenir les utilisateurs.",
+            "en": "Nothing in the text concerns the supplier's capacity to support users."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le portail ne sera jamais offert aux autres directions générales.",
+          "rationale": {
+            "fr": "Le portail sera offert « à l'ensemble du Ministère » une fois les corrections vérifiées.",
+            "en": "The portal will be offered 'to the whole Department' once the fixes are verified."
+          }
+        },
+        {
+          "id": "d",
+          "text": "L'équipe veut que d'éventuels problèmes non résolus touchent peu d'employés.",
+          "rationale": {
+            "fr": "Le bulletin dit que le pilote vise à « limiter les inconvénients » et à vérifier les corrections : un essai restreint réduit le nombre de personnes touchées si des anomalies subsistent.",
+            "en": "The bulletin says the pilot aims to 'limit inconvenience' and verify the fixes: a small trial reduces the number of people affected if defects remain."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une inférence s'appuie sur des indices du texte sans être écrite telle quelle. Ici, « pour limiter les inconvénients » et « vérifier les corrections » permettent de comprendre pourquoi le pilote reste restreint ; les autres options ajoutent des faits absents.",
+        "en": "An inference rests on clues in the text without being written as such. Here, 'to limit inconvenience' and 'verify the fixes' explain why the pilot stays small; the other options add facts that are not there."
+      },
+      "subSkill": "inference",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-2",
+      "stem": {
+        "fr": "Dans la phrase « Leurs commentaires permettront de vérifier les corrections », à qui renvoie le déterminant « leurs » ?",
+        "en": "In the sentence 'Their comments will make it possible to verify the fixes', who does the determiner 'leurs' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux deux directions générales qui participent au projet pilote.",
+          "rationale": {
+            "fr": "« Leurs » reprend le groupe nominal pluriel de la phrase précédente, « deux directions générales », qui testeront le portail en décembre.",
+            "en": "'Leurs' picks up the plural noun phrase in the previous sentence, 'two branches', which will test the portal in December."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aux responsables de l'entreprise qui fournit le portail.",
+          "rationale": {
+            "fr": "Le fournisseur corrige les anomalies ; ce sont d'autres personnes qui vérifieront ses corrections.",
+            "en": "The supplier fixes the defects; other people will verify its fixes."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Aux membres de l'équipe chargée du projet.",
+          "rationale": {
+            "fr": "L'équipe du projet n'est mentionnée qu'à la fin du bulletin, pour les questions ; elle n'est pas le référent de « leurs ».",
+            "en": "The project team is mentioned only at the end of the bulletin, for questions; it is not what 'leurs' refers to."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À l'ensemble des employés du Ministère.",
+          "rationale": {
+            "fr": "L'ensemble du Ministère n'aura accès au portail qu'après la vérification ; il ne peut donc pas fournir ces commentaires.",
+            "en": "The Department as a whole will get the portal only after verification; it therefore cannot provide these comments."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un possessif comme « leur » ou « leurs » renvoie généralement au groupe pluriel le plus proche qui a du sens dans la phrase. Vérifiez la logique : seuls ceux qui utilisent le portail en décembre peuvent commenter les corrections.",
+        "en": "A possessive such as 'leur' or 'leurs' generally refers to the nearest plural group that makes sense in the sentence. Check the logic: only those using the portal in December can comment on the fixes."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-3",
+      "stem": {
+        "fr": "Quelle attitude le comité directeur adopte-t-il à l'égard de la demande de modification présentée par l'équipe de projet ?",
+        "en": "What attitude does the steering committee take toward the change request submitted by the project team?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Un enthousiasme sans réserve, qui le conduit à approuver l'ajout dans son intégralité.",
+          "rationale": {
+            "fr": "Le comité n'approuve la demande qu'« en partie » et reporte le reste du module ; son appui n'est donc pas sans réserve.",
+            "en": "The committee approves the request only 'in part' and defers the rest of the module; its support is therefore not unreserved."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une adhésion au principe de l'ajout, tempérée par la prudence quant à son incidence financière immédiate.",
+          "rationale": {
+            "fr": "Le comité « reconnaît la valeur du module » mais juge « imprudent » d'épuiser la réserve : il concilie l'intérêt du projet et la prudence budgétaire.",
+            "en": "The committee 'recognizes the module's value' but finds it 'unwise' to drain the reserve: it balances the project's interest with budgetary caution."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Un scepticisme marqué quant à l'utilité réelle du module proposé.",
+          "rationale": {
+            "fr": "Le comité ne doute pas de l'utilité du module ; il reconnaît au contraire qu'il allégerait le traitement manuel.",
+            "en": "The committee does not doubt the module's usefulness; on the contrary, it acknowledges that it would lighten manual processing."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Une neutralité administrative qui laisse à l'équipe de projet le soin de trancher.",
+          "rationale": {
+            "fr": "Le comité ne délègue rien : il prend lui-même une décision précise et fixe des conditions.",
+            "en": "The committee delegates nothing: it makes a specific decision itself and sets conditions."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le ton se lit dans les mots évaluatifs : « reconnaît la valeur » marque l'adhésion, « toutefois imprudent » marque la réserve. Une attitude nuancée combine les deux ; méfiez-vous des options qui n'en retiennent qu'un.",
+        "en": "Tone shows in evaluative words: 'recognizes the value' signals support, 'however unwise' signals reservation. A nuanced attitude combines both; beware of options that keep only one."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-3",
+      "stem": {
+        "fr": "Que peut-on déduire de la façon dont le comité a circonscrit les travaux autorisés pour la phase actuelle ?",
+        "en": "What can be inferred from the way the committee limited the work authorized for the current phase?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La mise en service sera retardée de six semaines, conformément à l'estimation de l'équipe.",
+          "rationale": {
+            "fr": "Le retard de six semaines concernait le module complet ; la partie approuvée est réalisée « sans incidence sur l'échéancier ».",
+            "en": "The six-week delay applied to the full module; the approved portion is carried out 'with no impact on the schedule'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La réserve pour éventualités sera entièrement épuisée avant la mise en service.",
+          "rationale": {
+            "fr": "C'est précisément ce que le comité veut éviter en refusant de puiser l'essentiel de la réserve.",
+            "en": "This is precisely what the committee wants to avoid by refusing to draw on most of the reserve."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le comité tient à préserver la date de mise en service prévue.",
+          "rationale": {
+            "fr": "En ne retenant que la partie du module qui n'a aucune incidence sur l'échéancier, et en invoquant la proximité de la mise en service, le comité montre que cette date est une priorité.",
+            "en": "By keeping only the part of the module with no impact on the schedule, and by citing how close go-live is, the committee shows that this date is a priority."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La phase 2 commencera dans moins de huit mois.",
+          "rationale": {
+            "fr": "Les huit mois désignent le délai avant la mise en service de la phase actuelle ; le texte ne date pas la phase 2.",
+            "en": "The eight months refer to the time left before go-live of the current phase; the text does not date phase 2."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une inférence relie plusieurs indices : ici, le refus d'un ajout qui causerait six semaines de retard, l'insistance sur l'absence d'incidence sur l'échéancier et l'argument des huit mois. Aucun de ces éléments ne dit à lui seul que la date est prioritaire ; c'est leur convergence qui le montre.",
+        "en": "An inference links several clues: here, rejecting an addition that would cause a six-week delay, insisting on no schedule impact, and the eight-month argument. None of these alone says the date is a priority; their convergence shows it."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-3",
+      "stem": {
+        "fr": "Comment la note de décision du comité directeur est-elle organisée ?",
+        "en": "How is the steering committee's decision note organized?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle expose l'objet de la demande, justifie une approbation partielle, puis énonce une exigence applicable aux demandes futures.",
+          "rationale": {
+            "fr": "C'est la progression du texte : premier paragraphe sur la demande et ses estimations, deuxième sur la décision et ses motifs, troisième sur une règle pour l'avenir.",
+            "en": "This is how the text progresses: first paragraph on the request and its estimates, second on the decision and its reasons, third on a rule for the future."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle oppose les arguments favorables et défavorables, puis renvoie la décision à la haute direction.",
+          "rationale": {
+            "fr": "Le comité tranche lui-même ; aucune décision n'est renvoyée à une autorité supérieure.",
+            "en": "The committee decides itself; no decision is referred to a higher authority."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle annonce d'abord la décision, puis résume les objections formulées par l'équipe de projet.",
+          "rationale": {
+            "fr": "La décision n'arrive qu'au deuxième paragraphe, et l'équipe de projet ne formule aucune objection dans la note.",
+            "en": "The decision only comes in the second paragraph, and the project team raises no objection in the note."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle compare plusieurs demandes de modification avant de les classer par ordre de priorité.",
+          "rationale": {
+            "fr": "La note porte sur une seule demande, la nº 7 ; le dernier paragraphe vise les demandes futures en général, sans les comparer.",
+            "en": "The note deals with a single request, no. 7; the last paragraph addresses future requests in general without comparing them."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour décrire la structure d'un texte, résumez la fonction de chaque paragraphe (présenter, décider et justifier, établir une règle) avant de lire les options. Les connecteurs « donc » et « enfin » balisent ici le passage d'une étape à l'autre.",
+        "en": "To describe a text's structure, summarize the function of each paragraph (present, decide and justify, set a rule) before reading the options. The connectors 'donc' and 'enfin' mark the move from one step to the next here."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-3",
+      "stem": {
+        "fr": "Dans la dernière phrase de la note, par quelle expression pourrait-on remplacer « faute de quoi » sans modifier le sens de l'exigence formulée par le comité ?",
+        "en": "In the note's last sentence, which expression could replace 'faute de quoi' without changing the meaning of the requirement set by the committee?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "« malgré quoi »",
+          "rationale": {
+            "fr": "« Malgré quoi » exprime une concession (en dépit de cela) ; la phrase dirait alors que la demande serait écartée même accompagnée d'une évaluation.",
+            "en": "'Malgré quoi' expresses concession (despite that); the sentence would then say the request is excluded even with an assessment."
+          }
+        },
+        {
+          "id": "b",
+          "text": "« à la suite de quoi »",
+          "rationale": {
+            "fr": "« À la suite de quoi » marque une conséquence chronologique : l'évaluation des risques entraînerait le refus, ce qui inverse le sens.",
+            "en": "'À la suite de quoi' marks a chronological consequence: the risk assessment would lead to refusal, which reverses the meaning."
+          }
+        },
+        {
+          "id": "c",
+          "text": "« en plus de quoi »",
+          "rationale": {
+            "fr": "« En plus de quoi » ajoute une information ; il ferait du refus une mesure supplémentaire plutôt que la sanction d'un manquement.",
+            "en": "'En plus de quoi' adds information; it would make refusal an extra measure rather than the penalty for an omission."
+          }
+        },
+        {
+          "id": "d",
+          "text": "« à défaut de quoi »",
+          "rationale": {
+            "fr": "« Faute de quoi » et « à défaut de quoi » signifient tous deux « si cette condition n'est pas remplie » : sans évaluation des risques, la demande n'est pas inscrite.",
+            "en": "'Faute de quoi' and 'à défaut de quoi' both mean 'if this condition is not met': without a risk assessment, the request is not placed on the agenda."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Faute de quoi » (comme « à défaut de quoi » ou « sans quoi ») introduit ce qui arrivera si la condition énoncée juste avant n'est pas respectée. Ne le confondez pas avec les connecteurs de concession ou de conséquence.",
+        "en": "'Faute de quoi' (like 'à défaut de quoi' or 'sans quoi') introduces what will happen if the condition stated just before is not met. Do not confuse it with connectors of concession or consequence."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-3",
+      "stem": {
+        "fr": "Selon la note, quelle portion du module sera réalisée pendant la phase actuelle, et dans quelles conditions financières et temporelles ?",
+        "en": "According to the note, what portion of the module will be carried out in the current phase, and under what financial and schedule conditions?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le module complet, pour 340 000 $ et un retard de six semaines.",
+          "rationale": {
+            "fr": "Ce sont les estimations de l'équipe pour le module complet, que le comité n'a pas retenu en entier.",
+            "en": "These are the team's estimates for the full module, which the committee did not approve in full."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une vérification limitée aux critères de base, pour 120 000 $, sans repousser l'échéancier.",
+          "rationale": {
+            "fr": "La note précise : « seule la vérification des critères de base […] pour un coût de 120 000 $ et sans incidence sur l'échéancier ».",
+            "en": "The note states: 'only the verification of basic criteria […] at a cost of $120,000 and with no impact on the schedule'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une vérification limitée aux critères de base, pour 340 000 $ et un retard de six semaines.",
+          "rationale": {
+            "fr": "La portion décrite correspond au texte, mais les chiffres sont ceux du module complet, non de la partie approuvée.",
+            "en": "The portion described matches the text, but the figures are those of the full module, not of the approved part."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le reste du module, financé par les 410 000 $ de la réserve pour éventualités.",
+          "rationale": {
+            "fr": "Le reste du module est reporté à la phase 2, et 410 000 $ est le solde de la réserve, non un coût autorisé.",
+            "en": "The rest of the module is deferred to phase 2, and $410,000 is the reserve's balance, not an authorized cost."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Lorsqu'un texte présente une estimation initiale puis une décision révisée, distinguez les chiffres proposés, les chiffres de référence (le solde de la réserve) et les chiffres retenus. Seuls ces derniers décrivent ce qui sera fait.",
+        "en": "When a text presents an initial estimate and then a revised decision, distinguish the proposed figures, the reference figures (the reserve's balance) and the approved figures. Only the latter describe what will be done."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-4",
+      "stem": {
+        "fr": "Laquelle des affirmations suivantes résume le mieux la conclusion de l'équipe d'examen sur l'état de préparation du projet ?",
+        "en": "Which of the following statements best summarizes the review team's conclusion on the project's readiness?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le projet devrait être abandonné en raison de défauts techniques persistants.",
+          "rationale": {
+            "fr": "L'équipe d'examen juge au contraire le projet prêt sur le plan technique, et aucune anomalie restante n'est bloquante.",
+            "en": "On the contrary, the review team finds the project technically ready, and no remaining defect is blocking."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le déploiement peut avoir lieu à la date prévue, puisque les essais sont concluants.",
+          "rationale": {
+            "fr": "Les essais sont concluants, mais l'équipe recommande justement de ne pas déployer à la date prévue.",
+            "en": "The tests are conclusive, but the team specifically recommends not deploying on the planned date."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le système est solide, mais le déploiement devrait attendre une meilleure préparation des utilisateurs et des mesures de repli.",
+          "rationale": {
+            "fr": "C'est la synthèse de l'extrait : prêt sur le plan technique, pas sur le plan organisationnel (formation, retour en arrière), d'où un court report.",
+            "en": "This is the excerpt's synthesis: ready technically, not organizationally (training, rollback), hence a short postponement."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La stratégie de déploiement devrait être revue afin d'abaisser le seuil de formation exigé.",
+          "rationale": {
+            "fr": "L'équipe veut rehausser le taux de formation pour atteindre le seuil, non abaisser ce seuil.",
+            "en": "The team wants to raise the training rate to meet the threshold, not lower the threshold."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "La conclusion d'un rapport d'examen réunit souvent un constat contrasté (« prêt sur le plan technique, mais non sur le plan organisationnel ») et une recommandation. La bonne synthèse conserve les deux volets du contraste.",
+        "en": "A review report's conclusion often combines a contrasting finding ('technically ready, but not organizationally') and a recommendation. The right summary keeps both sides of the contrast."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-4",
+      "stem": {
+        "fr": "Que peut-on raisonnablement déduire, quant aux conséquences opérationnelles, du constat selon lequel le plan de retour en arrière n'a jamais été expérimenté ?",
+        "en": "What can reasonably be inferred, as to the operational consequences, from the finding that the rollback plan has never been tried out?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "En cas de panne grave, la durée de l'interruption de service serait impossible à prévoir.",
+          "rationale": {
+            "fr": "Puisque l'équipe « ignorerait combien de temps il lui faudrait pour rétablir l'ancien système », elle ne pourrait pas estimer la durée d'une interruption.",
+            "en": "Since the team 'would not know how long it would take to restore the old system', it could not estimate how long an outage would last."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le plan de retour en arrière n'a pas encore été rédigé.",
+          "rationale": {
+            "fr": "Le texte précise que le plan est « rédigé » ; c'est sa mise à l'épreuve qui manque.",
+            "en": "The text specifies that the plan is 'written'; what is missing is testing it."
+          }
+        },
+        {
+          "id": "c",
+          "text": "L'ancien système a déjà été mis hors service.",
+          "rationale": {
+            "fr": "Rien ne l'indique ; le texte parle au contraire de « rétablir l'ancien système » au besoin.",
+            "en": "Nothing indicates this; the text instead speaks of 'restoring the old system' if needed."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Une défaillance majeure s'est produite pendant les essais d'intégration.",
+          "rationale": {
+            "fr": "Le texte évoque une défaillance seulement comme hypothèse (« advenant ») ; les essais ont été concluants.",
+            "en": "The text mentions a failure only as a hypothesis ('should there be'); the tests were conclusive."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le conditionnel (« ignorerait », « faudrait ») et « advenant » signalent une hypothèse, non un fait survenu. L'inférence juste tire la conséquence de cette hypothèse sans la transformer en événement réel.",
+        "en": "The conditional ('would not know', 'would take') and 'advenant' signal a hypothesis, not an actual event. The right inference draws the consequence of that hypothesis without turning it into a real event."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-4",
+      "stem": {
+        "fr": "Quelle fonction remplit, dans l'organisation de l'extrait, la phrase « Il en va autrement de la préparation des utilisateurs » ?",
+        "en": "What function does the sentence 'It is a different matter for user readiness' serve in the excerpt's organization?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle résume les résultats des essais d'intégration présentés juste avant.",
+          "rationale": {
+            "fr": "Les essais ont déjà été décrits ; la phrase ne les résume pas, elle annonce un autre sujet.",
+            "en": "The tests have already been described; the sentence does not summarize them but announces another topic."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle introduit un exemple supplémentaire de réussite du projet.",
+          "rationale": {
+            "fr": "« Autrement » annonce un contraste : ce qui suit est une lacune, non une réussite.",
+            "en": "'Autrement' announces a contrast: what follows is a gap, not a success."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle annonce la recommandation finale formulée par l'équipe d'examen.",
+          "rationale": {
+            "fr": "La recommandation n'arrive qu'à la fin du dernier paragraphe, introduite par « donc ».",
+            "en": "The recommendation comes only at the end of the last paragraph, introduced by 'donc'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle marque la transition entre les points forts du projet et ses faiblesses.",
+          "rationale": {
+            "fr": "Placée après les résultats positifs des essais, cette phrase ouvre l'exposé des lacunes (formation, retour en arrière) : c'est une charnière de contraste.",
+            "en": "Placed after the positive test results, this sentence opens the account of the gaps (training, rollback): it is a contrastive pivot."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Certaines phrases servent de charnière entre deux parties d'un texte. « Il en va autrement de… » signifie « la situation est différente pour… » et annonce un contraste avec ce qui précède.",
+        "en": "Some sentences act as a pivot between two parts of a text. 'Il en va autrement de…' means 'the situation is different for…' and announces a contrast with what precedes."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-4",
+      "stem": {
+        "fr": "Dans quelle intention l'équipe d'examen précise-t-elle que les lacunes relevées « ne remettent pas en cause la qualité du travail accompli » ?",
+        "en": "With what intention does the review team specify that the gaps identified 'do not call into question the quality of the work done'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Pour revenir sur son constat et recommander finalement un déploiement à la date prévue.",
+          "rationale": {
+            "fr": "L'équipe maintient sa recommandation de report ; la phrase suivante commence d'ailleurs par « néanmoins ».",
+            "en": "The team maintains its recommendation to postpone; the next sentence in fact begins with 'nevertheless'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Pour nuancer son constat et éviter que la recommandation de report soit perçue comme un blâme envers l'équipe de projet.",
+          "rationale": {
+            "fr": "En saluant la rigueur des essais avant d'enchaîner par « néanmoins », l'équipe d'examen ménage l'équipe de projet tout en maintenant sa recommandation.",
+            "en": "By praising the rigour of the tests before continuing with 'nevertheless', the review team spares the project team while maintaining its recommendation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Pour reprocher implicitement aux directions clientes leur faible participation à la formation.",
+          "rationale": {
+            "fr": "Le texte ne blâme personne pour le taux de formation ; les directions clientes sont évoquées comme celles qui supporteraient le risque.",
+            "en": "The text blames no one for the training rate; the client branches are mentioned as those who would bear the risk."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pour justifier que la formation obligatoire ne soit plus exigée avant la mise en service.",
+          "rationale": {
+            "fr": "L'équipe veut au contraire rehausser le taux de formation avant le passage.",
+            "en": "On the contrary, the team wants to raise the training rate before the gate decision."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une concession placée avant une critique (« ne remettent pas en cause… néanmoins… ») sert souvent à adoucir le message et à préserver la relation avec le destinataire, sans changer la recommandation.",
+        "en": "A concession placed before a criticism ('do not call into question… nevertheless…') often serves to soften the message and preserve the relationship with the recipient, without changing the recommendation."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-4",
+      "stem": {
+        "fr": "Selon l'extrait, quelles mesures l'équipe d'examen souhaite-t-elle voir accomplies pendant le report de la décision de passage ?",
+        "en": "According to the excerpt, what measures does the review team want carried out during the postponement of the gate decision?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La correction des anomalies bloquantes relevées pendant les essais.",
+          "rationale": {
+            "fr": "Aucune anomalie restante n'est jugée bloquante ; leur correction n'est pas l'objet du report.",
+            "en": "No remaining defect is considered blocking; fixing them is not the purpose of the postponement."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La rédaction d'un plan de retour en arrière plus complet.",
+          "rationale": {
+            "fr": "Le plan existe déjà ; l'équipe demande de le simuler, non de le réécrire.",
+            "en": "The plan already exists; the team asks for it to be simulated, not rewritten."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une hausse du nombre d'employés formés et un essai du retour à l'ancien système.",
+          "rationale": {
+            "fr": "C'est ce que prévoit la recommandation : reporter « le temps de rehausser le taux de formation et de simuler le retour en arrière ».",
+            "en": "This is what the recommendation provides: postpone 'long enough to raise the training rate and simulate the rollback'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "L'obtention de l'accord formel des directions clientes pour qu'elles assument le risque.",
+          "rationale": {
+            "fr": "Le texte constate que les directions clientes n'ont pas accepté le risque, mais ne recommande pas de chercher leur accord.",
+            "en": "The text notes that the client branches have not accepted the risk, but does not recommend seeking their agreement."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour une question de détail dans un texte de niveau C, la bonne réponse reformule souvent le texte (« rehausser le taux de formation » devient « hausse du nombre d'employés formés »). Comparez le sens, pas les mots.",
+        "en": "For a detail question in a level C text, the right answer often rephrases the text ('raise the training rate' becomes 'increase in the number of trained employees'). Compare the meaning, not the words."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-5",
+      "stem": {
+        "fr": "D'après l'analyse du Centre d'expertise, à quoi tiennent le plus souvent les dépassements d'échéancier observés dans les projets clos ?",
+        "en": "According to the Centre of Expertise's analysis, what most often explains the schedule overruns observed in the closed projects?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À des difficultés techniques que les équipes n'avaient pas prévues.",
+          "rationale": {
+            "fr": "Le texte affirme l'inverse : « les difficultés techniques expliquent rarement ces retards ».",
+            "en": "The text says the opposite: 'technical difficulties rarely explain these delays'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À des dépassements budgétaires qui ont forcé les équipes à ralentir les travaux.",
+          "rationale": {
+            "fr": "Un seul projet a dépassé son budget de plus de 10 %, et le texte ne lie pas les retards à l'argent.",
+            "en": "Only one project exceeded its budget by more than 10%, and the text does not link the delays to money."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À l'ampleur des projets, plus difficiles à coordonner lorsqu'ils sont vastes.",
+          "rationale": {
+            "fr": "L'envergure est évoquée seulement pour nuancer l'effet de la cartographie, non comme cause principale des retards.",
+            "en": "Scope is mentioned only to qualify the effect of mapping, not as the main cause of delays."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À une participation tardive des intervenants, qui a fait surgir des exigences en fin de parcours.",
+          "rationale": {
+            "fr": "Le texte désigne « l'engagement tardif des intervenants » comme cause la plus fréquente : des exigences exprimées à l'étape des essais ont forcé la reprise de travaux.",
+            "en": "The text names 'late stakeholder engagement' as the most frequent cause: requirements raised at the testing stage forced work to be redone."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les tournures « contrairement à une idée répandue » et « tient plutôt à » opposent une explication écartée à l'explication retenue. Repérez laquelle le texte retient avant de comparer les options.",
+        "en": "The phrases 'contrary to a widespread belief' and 'rather stems from' contrast a rejected explanation with the accepted one. Identify which one the text accepts before comparing the options."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-5",
+      "stem": {
+        "fr": "Quelle position les auteurs adoptent-ils à l'égard de l'écart de retard observé entre les projets ayant cartographié leurs intervenants et les autres ?",
+        "en": "What position do the authors take regarding the difference in delay observed between projects that mapped their stakeholders and the others?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Ils le présentent comme la preuve que la cartographie réduit les retards.",
+          "rationale": {
+            "fr": "Les auteurs refusent justement d'y voir un lien de cause à effet ; ils ne parlent pas de preuve.",
+            "en": "The authors specifically refuse to see a cause-and-effect link; they do not speak of proof."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Ils le jugent digne d'intérêt, mais se gardent d'en tirer une conclusion causale.",
+          "rationale": {
+            "fr": "Ils relèvent l'écart et en tirent une recommandation, tout en jugant « hâtif » d'y voir une cause : c'est une réserve méthodologique.",
+            "en": "They note the gap and draw a recommendation from it, while finding it 'hasty' to treat it as a cause: this is a methodological reservation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Ils le considèrent comme sans intérêt, vu la petite taille de l'échantillon.",
+          "rationale": {
+            "fr": "S'ils le jugeaient sans intérêt, ils ne recommanderaient pas d'intégrer la cartographie à la charte de projet.",
+            "en": "If they found it of no interest, they would not recommend adding mapping to the project charter."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Ils l'expliquent entièrement par la taille plus modeste des projets concernés.",
+          "rationale": {
+            "fr": "La taille est une explication concurrente possible, mais les auteurs disent que l'échantillon « ne permet pas de conclure » ; ils ne tranchent pas en sa faveur.",
+            "en": "Size is a possible competing explanation, but the authors say the sample 'does not allow a conclusion'; they do not settle in its favour."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans un texte de recherche, les marqueurs de prudence (« il serait hâtif », « ne permet pas de conclure ») indiquent que l'auteur distingue une corrélation d'une cause. Évitez les options qui durcissent ou annulent cette nuance.",
+        "en": "In a research text, hedging markers ('it would be hasty', 'does not allow a conclusion') show the author distinguishing a correlation from a cause. Avoid options that harden or cancel this nuance."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-5",
+      "stem": {
+        "fr": "Compte tenu du raisonnement méthodologique des auteurs, quel sens faut-il donner à l'adjectif « hâtif » lorsqu'ils écartent provisoirement l'existence d'un lien de causalité ?",
+        "en": "Given the authors' methodological reasoning, what meaning should be given to the adjective 'hâtif' when they provisionally set aside the existence of a causal link?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Tardif, parce que l'analyse arrive après la clôture des projets.",
+          "rationale": {
+            "fr": "« Hâtif » signifie au contraire trop rapide ; le confondre avec « tardif » inverse le sens.",
+            "en": "'Hâtif' means the opposite, too quick; confusing it with 'late' reverses the meaning."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Audacieux, mais justifié par la netteté des écarts observés.",
+          "rationale": {
+            "fr": "Les auteurs ne jugent pas la conclusion justifiée ; « toutefois » et la suite du texte expriment une réserve.",
+            "en": "The authors do not consider the conclusion justified; 'toutefois' and the rest of the text express a reservation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Prématuré, faute d'éléments suffisants pour l'établir.",
+          "rationale": {
+            "fr": "« Hâtif » qualifie ici une conclusion tirée trop vite : l'envergure des projets et la taille de l'échantillon empêchent de l'établir pour l'instant.",
+            "en": "'Hâtif' here describes a conclusion drawn too quickly: project scope and sample size prevent establishing it for now."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Superflu, puisque la recommandation finale serait la même dans tous les cas.",
+          "rationale": {
+            "fr": "Le texte ne dit pas que la question est inutile ; il dit qu'on ne peut pas encore y répondre.",
+            "en": "The text does not say the question is pointless; it says it cannot yet be answered."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le contexte précise le sens d'un adjectif : « hâtif » est suivi d'une justification (« ces projets étaient aussi… de moindre envergure ») qui montre que les preuves manquent. Il signifie donc « prématuré », non « tardif » ni « inutile ».",
+        "en": "Context pins down an adjective's meaning: 'hâtif' is followed by a justification ('these projects were also… smaller in scope') showing that evidence is lacking. It therefore means 'premature', not 'late' or 'pointless'."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-5",
+      "stem": {
+        "fr": "Lorsque les auteurs évoquent des projets « de moindre envergure », quels projets le démonstratif « ces projets » désigne-t-il précisément ?",
+        "en": "When the authors mention projects 'smaller in scope', which projects exactly does the demonstrative 'these projects' designate?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Ceux qui avaient dressé une cartographie des intervenants dès le démarrage.",
+          "rationale": {
+            "fr": "Le démonstratif reprend le sujet de la phrase précédente : les projets ayant fait une cartographie, dont le faible retard pourrait s'expliquer par leur taille.",
+            "en": "The demonstrative picks up the subject of the previous sentence: the projects that did mapping, whose short delay might be explained by their size."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les neuf projets qui ont dépassé leur échéancier initial.",
+          "rationale": {
+            "fr": "Les neuf projets en retard sont mentionnés au premier paragraphe ; la phrase discute ici l'explication d'un retard plus court.",
+            "en": "The nine late projects are mentioned in the first paragraph; this sentence discusses the explanation for a shorter delay."
+          }
+        },
+        {
+          "id": "c",
+          "text": "L'ensemble des 14 projets analysés par le Centre.",
+          "rationale": {
+            "fr": "Si tous les projets étaient de moindre envergure, la taille ne pourrait pas expliquer l'écart entre deux groupes.",
+            "en": "If all projects were smaller in scope, size could not explain the gap between two groups."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les projets dont les exigences n'ont été exprimées qu'à l'étape des essais.",
+          "rationale": {
+            "fr": "Ces projets illustrent la cause des retards au premier paragraphe ; ils ne sont pas le référent de la phrase sur l'envergure.",
+            "en": "These projects illustrate the cause of delays in the first paragraph; they are not the referent of the sentence about scope."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour identifier le référent d'un démonstratif comme « ces projets », regardez la phrase précédente et vérifiez la logique de l'argument : la taille réduite ne peut nuancer le lien observé que si elle caractérise le groupe qui a fait la cartographie.",
+        "en": "To identify the referent of a demonstrative like 'these projects', look at the previous sentence and check the logic of the argument: smaller size can qualify the observed link only if it characterizes the group that did the mapping."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-project-management-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-project-management-5",
+      "stem": {
+        "fr": "Quelle progression l'extrait suit-il pour présenter les résultats de l'analyse des rapports de clôture ?",
+        "en": "What progression does the excerpt follow to present the results of the analysis of closure reports?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il décrit un problème technique, propose une solution, puis en évalue le coût.",
+          "rationale": {
+            "fr": "Le texte écarte justement la piste technique ; il ne propose pas de solution technique et n'en chiffre pas le coût.",
+            "en": "The text specifically rules out the technical explanation; it proposes no technical solution and does not cost one."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il étudie un projet en détail, puis généralise ses conclusions à l'ensemble du Ministère.",
+          "rationale": {
+            "fr": "L'analyse porte d'emblée sur 14 projets, et les auteurs se gardent de généraliser.",
+            "en": "The analysis covers 14 projects from the outset, and the authors refrain from generalizing."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il formule d'abord une recommandation, puis présente les données qui la justifient.",
+          "rationale": {
+            "fr": "La recommandation vient à la fin, introduite par « Cela dit » ; les constats la précèdent.",
+            "en": "The recommendation comes at the end, introduced by 'That said'; the findings precede it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il établit des constats, relativise l'un d'eux, puis formule une recommandation peu risquée.",
+          "rationale": {
+            "fr": "C'est la progression du texte : constats sur les retards et leur cause, nuance sur la corrélation observée, puis recommandation justifiée par un faible coût.",
+            "en": "This is how the text progresses: findings on delays and their cause, a caveat on the observed correlation, then a recommendation justified by its low cost."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les connecteurs balisent la structure : « toutefois » introduit une réserve, « cela dit » marque le retour à une conclusion pratique malgré cette réserve. Suivez-les pour reconstituer le plan d'un texte.",
+        "en": "Connectors mark the structure: 'toutefois' introduces a reservation, 'cela dit' marks the return to a practical conclusion despite that reservation. Follow them to reconstruct a text's plan."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-project-management-1",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Lancement du projet de regroupement des bureaux régionaux",
+      "body": "Bonjour à toutes et à tous,\n\nJe vous confirme que le projet de regroupement de nos deux bureaux régionaux dans un seul immeuble est officiellement lancé. La rencontre de démarrage aura lieu le mardi 14 octobre, de 9 h à 11 h, dans la grande salle du troisième étage. Le projet doit durer 18 mois et dispose d'un budget de 2,4 millions de dollars.\n\nVoici les rôles convenus. Mme Hélène Caron, directrice générale, est la promotrice du projet : c'est elle qui tranchera les questions qui dépassent le mandat de l'équipe. J'assumerai la gestion quotidienne du projet. Karim Diallo dirigera le volet des installations, et Sophie Lavoie celui des technologies. Chaque responsable de volet me remettra un rapport d'étape tous les deux vendredis.\n\nAvant la rencontre, veuillez lire la charte de projet ci-jointe et me faire part de vos questions d'ici jeudi. Je les regrouperai afin d'y répondre pendant la rencontre.\n\nMerci,\n\nMarc-André Fortin\nGestionnaire de projet",
+      "wordCount": 157,
+      "targetBand": "B",
+      "topic": "project-management",
+      "readability": {
+        "sentences": 11,
+        "avgSentenceLength": 14.27,
+        "rareWordRatio": 0.21
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-project-management-2",
+      "lang": "fr",
+      "docType": "bulletin",
+      "title": "Portail de réservation des salles : nouvel échéancier",
+      "body": "Le lancement du nouveau portail de réservation des salles de réunion, prévu pour le 3 novembre, est reporté au 12 janvier. Lors des essais d'acceptation, l'équipe a relevé 27 anomalies, dont 9 jugées critiques parce qu'elles empêchent d'annuler une réservation. Le fournisseur s'est engagé à les corriger d'ici la fin novembre.\n\nPour limiter les inconvénients, un projet pilote se déroulera en décembre auprès de deux directions générales seulement. Leurs commentaires permettront de vérifier les corrections avant que le portail soit offert à l'ensemble du Ministère. D'ici là, l'outil actuel demeure en service, et les réservations déjà faites seront transférées automatiquement dans le nouveau portail.\n\nLe report n'entraîne aucun coût supplémentaire, puisque le contrat prévoit que le fournisseur assume les travaux de correction. Pour toute question, écrivez à l'équipe du projet à l'adresse indiquée dans l'intranet.",
+      "wordCount": 135,
+      "targetBand": "B",
+      "topic": "project-management",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 16.88,
+        "rareWordRatio": 0.259
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-project-management-3",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Décision du comité directeur sur la demande de modification nº 7",
+      "body": "Le comité directeur s'est réuni le 22 septembre pour examiner la demande de modification nº 7, qui vise à intégrer au portail des subventions un module de vérification automatique de l'admissibilité. L'équipe de projet estimait le coût de cet ajout à 340 000 $ et le retard qu'il causerait à six semaines.\n\nLe comité reconnaît la valeur du module, qui allégerait considérablement le traitement manuel des demandes. Il juge toutefois imprudent de puiser l'essentiel de la réserve pour éventualités, dont il ne reste que 410 000 $, à moins de huit mois de la mise en service. Il approuve donc la demande en partie : seule la vérification des critères de base sera réalisée dans la phase actuelle, pour un coût de 120 000 $ et sans incidence sur l'échéancier. Le reste du module est reporté à la phase 2, sous réserve qu'une analyse de rentabilité soit présentée d'ici la fin de l'exercice.\n\nLe comité rappelle enfin que toute demande de modification touchant la portée du projet devra désormais être accompagnée d'une évaluation des risques, faute de quoi elle ne sera pas inscrite à l'ordre du jour.\n\nLa secrétaire du comité directeur,\nLouise Gagnon",
+      "wordCount": 194,
+      "targetBand": "C",
+      "topic": "project-management",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 24.25,
+        "rareWordRatio": 0.206
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-project-management-4",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Examen de la porte 4 : état de préparation au déploiement",
+      "body": "L'équipe d'examen conclut que le projet de gestion électronique des documents est prêt sur le plan technique, mais non sur le plan organisationnel. Les essais d'intégration sont concluants : 96 % des scénarios ont été réussis, et aucune des anomalies restantes n'est jugée bloquante.\n\nIl en va autrement de la préparation des utilisateurs. À ce jour, à peine 40 % des quelque 1 200 employés visés ont suivi la formation obligatoire, alors que la stratégie de déploiement en exigeait 80 % avant la mise en service. Par ailleurs, le plan de retour en arrière, bien que rédigé, n'a jamais été mis à l'épreuve ; advenant une défaillance majeure, l'équipe ignorerait combien de temps il lui faudrait pour rétablir l'ancien système.\n\nCes lacunes ne remettent pas en cause la qualité du travail accompli, et l'équipe d'examen tient à souligner la rigueur des essais. Elle estime néanmoins qu'un déploiement à la date prévue ferait porter aux directions clientes un risque qu'elles n'ont pas accepté. Elle recommande donc de reporter la décision de passage d'au plus quatre semaines, le temps de rehausser le taux de formation et de simuler le retour en arrière.",
+      "wordCount": 190,
+      "targetBand": "C",
+      "topic": "project-management",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 23.75,
+        "rareWordRatio": 0.205
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-project-management-5",
+      "lang": "fr",
+      "docType": "research",
+      "title": "Leçons tirées des projets clos : ce que révèlent les rapports de clôture",
+      "body": "Le Centre d'expertise en gestion de projet a analysé les rapports de clôture de 14 projets terminés au cours des trois derniers exercices. Neuf d'entre eux ont dépassé leur échéancier initial, alors qu'un seul a excédé son budget de plus de 10 %. Contrairement à une idée répandue, les difficultés techniques expliquent rarement ces retards. La cause la plus fréquente tient plutôt à l'engagement tardif des intervenants : dans plusieurs cas, des exigences essentielles n'ont été exprimées qu'à l'étape des essais, ce qui a obligé les équipes à reprendre des travaux jugés terminés.\n\nLes projets qui avaient dressé une cartographie des intervenants dès la phase de démarrage affichent un retard moyen de trois semaines, contre onze pour les autres. Il serait toutefois hâtif d'y voir un lien de cause à effet : ces projets étaient aussi, en général, de moindre envergure. L'échantillon, par ailleurs restreint, ne permet pas de conclure.\n\nCela dit, le Centre recommande d'intégrer cette cartographie au gabarit de la charte de projet, puisqu'elle coûte peu et que rien n'indique qu'elle nuise.",
+      "wordCount": 174,
+      "targetBand": "C",
+      "topic": "project-management",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 21.75,
+        "rareWordRatio": 0.213
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

@@ -1,0 +1,2195 @@
+{
+  "items": [
+    {
+      "id": "claude-w-prepositions-and-government-01",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Lors de son entrevue de départ, l'employée a affirmé qu'elle ___ surtout l'accueil chaleureux que lui avait réservé son équipe à son arrivée.",
+        "en": "During her exit interview, the employee stated that she ___ above all the warm welcome her team had given her when she arrived."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "se rappelait de",
+          "rationale": {
+            "fr": "« Se rappeler » est transitif direct : on se rappelle quelque chose. La construction « se rappeler de » devant un nom, calquée sur « se souvenir de », est fautive dans la langue soignée.",
+            "en": "« Se rappeler » takes a direct object: one « se rappelle quelque chose ». The construction « se rappeler de » before a noun, modelled on « se souvenir de », is faulty in careful writing."
+          }
+        },
+        {
+          "id": "b",
+          "text": "se souvenait de",
+          "rationale": {
+            "fr": "« Se souvenir » introduit son complément par « de » : « elle se souvenait de l'accueil ». C'est la construction attendue.",
+            "en": "« Se souvenir » introduces its complement with « de »: « elle se souvenait de l'accueil ». This is the expected construction."
+          }
+        },
+        {
+          "id": "c",
+          "text": "se souvenait",
+          "rationale": {
+            "fr": "Il manque la préposition « de » qu'exige « se souvenir » ; « se souvenir l'accueil » est agrammatical.",
+            "en": "The preposition « de » required by « se souvenir » is missing; « se souvenir l'accueil » is ungrammatical."
+          }
+        },
+        {
+          "id": "d",
+          "text": "se souvenait à",
+          "rationale": {
+            "fr": "« Se souvenir » ne se construit jamais avec « à » ; la préposition est fautive.",
+            "en": "« Se souvenir » is never constructed with « à »; the preposition is wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Deux verbes de sens voisin, deux constructions différentes : « se souvenir de quelque chose » (complément introduit par « de ») et « se rappeler quelque chose » (complément direct, sans préposition). On écrira donc « elle se souvenait de l'accueil » ou « elle se rappelait l'accueil », mais non « elle se rappelait de l'accueil ».",
+        "en": "Two verbs with similar meanings, two different constructions: « se souvenir de quelque chose » (complement introduced by « de ») and « se rappeler quelque chose » (direct object, no preposition). So write « elle se souvenait de l'accueil » or « elle se rappelait l'accueil », but not « elle se rappelait de l'accueil »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-02",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Depuis sa nomination au poste de gestionnaire intérimaire de l'unité, Mme Gagnon…",
+        "en": "Since her appointment as acting manager of the unit, Ms. Gagnon…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "est en charge de la dotation des postes vacants.",
+          "rationale": {
+            "fr": "« En charge de » est un calque de l'anglais « in charge of » que les guides de rédaction fédéraux recommandent d'éviter ; la tournure est à écarter.",
+            "en": "« En charge de » is a calque of the English \"in charge of\" that federal writing guides advise against; the phrasing should be rejected."
+          }
+        },
+        {
+          "id": "b",
+          "text": "est responsable pour la dotation des postes vacants.",
+          "rationale": {
+            "fr": "« Responsable pour » calque l'anglais « responsible for » ; l'adjectif « responsable » se construit avec « de ».",
+            "en": "« Responsable pour » copies the English \"responsible for\"; the adjective « responsable » is constructed with « de »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "est chargée à la dotation des postes vacants.",
+          "rationale": {
+            "fr": "« Être chargé » introduit la tâche par « de », non par « à » ; la préposition est fautive.",
+            "en": "« Être chargé » introduces the task with « de », not « à »; the preposition is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "est chargée de la dotation des postes vacants.",
+          "rationale": {
+            "fr": "« Être chargé de » (avoir la responsabilité de) est la construction idiomatique, et le participe s'accorde avec « Mme Gagnon ».",
+            "en": "« Être chargé de » (to be responsible for) is the idiomatic construction, and the participle agrees with « Mme Gagnon »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour attribuer une responsabilité, on écrit « être chargé de », « être responsable de » ou « s'occuper de », toujours avec « de ». « En charge de » (calque de « in charge of ») et « responsable pour » (calque de « responsible for ») sont des anglicismes que la rédaction administrative soignée évite.",
+        "en": "To assign a responsibility, write « être chargé de », « être responsable de » or « s'occuper de », always with « de ». « En charge de » (a calque of \"in charge of\") and « responsable pour » (a calque of \"responsible for\") are anglicisms that careful administrative writing avoids."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-03",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Repérez l'erreur dans ce passage d'un courriel et choisissez la correction appropriée : « Suite à la réorganisation de la direction générale, les descriptions de travail de l'ensemble des postes de soutien administratif seront révisées d'ici le 31 mars, conformément aux exigences de classification. »",
+        "en": "Find the error in this passage from an email and choose the appropriate correction: « Suite à la réorganisation de la direction générale, les descriptions de travail de l'ensemble des postes de soutien administratif seront révisées d'ici le 31 mars, conformément aux exigences de classification. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « Suite à » par « À la suite de »",
+          "rationale": {
+            "fr": "« Suite à » est une locution critiquée, issue de la correspondance commerciale ; « à la suite de » est la tournure attendue dans un texte administratif soigné.",
+            "en": "« Suite à » is a criticized phrase from commercial correspondence; « à la suite de » is the expected form in careful administrative writing."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « d'ici le 31 mars » par « avant ou le 31 mars »",
+          "rationale": {
+            "fr": "« D'ici le 31 mars » est bien construit ; « avant ou le », calqué sur l'anglais « on or before », introduirait une faute.",
+            "en": "« D'ici le 31 mars » is already well formed; « avant ou le », a calque of \"on or before\", would introduce an error."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « seront révisées » par « seront révisés »",
+          "rationale": {
+            "fr": "Le participe s'accorde avec « les descriptions », nom féminin pluriel ; « révisées » est déjà juste, et le masculin serait fautif.",
+            "en": "The participle agrees with « les descriptions », a feminine plural noun; « révisées » is already right, and the masculine would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « conformément aux exigences » par « conformément avec les exigences »",
+          "rationale": {
+            "fr": "« Conformément » se construit avec « à » ; « conformément avec » est fautif, et la phrase était juste sur ce point.",
+            "en": "« Conformément » is constructed with « à »; « conformément avec » is wrong, and the sentence was fine on this point."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Suite à », né dans la correspondance commerciale, est critiqué par les ouvrages de référence. Pour exprimer ce qui vient après un événement ou en découle, on écrit « à la suite de », « par suite de » ou simplement « après ». Dans la même phrase, « d'ici le 31 mars » (échéance) et « conformément aux exigences » sont bien construits.",
+        "en": "« Suite à », born in commercial correspondence, is criticized by reference works. To express what follows an event or results from it, write « à la suite de », « par suite de » or simply « après ». In the same sentence, « d'ici le 31 mars » (deadline) and « conformément aux exigences » are correctly built."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-04",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Après examen des différents scénarios budgétaires, la mesure d'économie retenue par le comité de gestion financière ___ une réduction progressive des dépenses de fonctionnement non essentielles, échelonnée sur trois exercices.",
+        "en": "After reviewing the various budget scenarios, the savings measure adopted by the financial management committee ___ a gradual reduction of non-essential operating expenditures, phased over three fiscal years."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "consiste à",
+          "rationale": {
+            "fr": "« Consister à » s'emploie devant un infinitif (« consiste à réduire ») ; devant le nom « une réduction », il ne convient pas.",
+            "en": "« Consister à » is used before an infinitive (« consiste à réduire »); before the noun « une réduction » it does not fit."
+          }
+        },
+        {
+          "id": "b",
+          "text": "consiste de",
+          "rationale": {
+            "fr": "« Consister de » est un calque de l'anglais « to consist of » ; la construction est fautive.",
+            "en": "« Consister de » is a calque of the English \"to consist of\"; the construction is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "consiste en",
+          "rationale": {
+            "fr": "Devant un nom, « consister en » indique en quoi la chose se résume : « la mesure consiste en une réduction ». C'est la construction attendue.",
+            "en": "Before a noun, « consister en » states what the thing amounts to: « la mesure consiste en une réduction ». This is the expected construction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "consiste sur",
+          "rationale": {
+            "fr": "« Consister » ne se construit pas avec « sur » ; la préposition est fautive.",
+            "en": "« Consister » is not constructed with « sur »; the preposition is wrong."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le verbe « consister » change de préposition selon ce qui suit : « consister en » devant un nom (« consiste en une réduction ») et « consister à » devant un infinitif (« consiste à réduire »). « Consister de », calqué sur l'anglais « to consist of », est à proscrire.",
+        "en": "The verb « consister » changes preposition depending on what follows: « consister en » before a noun (« consiste en une réduction ») and « consister à » before an infinitive (« consiste à réduire »). « Consister de », a calque of \"to consist of\", must be avoided."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-05",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le dernier rapport financier trimestriel révèle que le Ministère a réalisé des économies substantielles…",
+        "en": "The latest quarterly financial report reveals that the Department achieved substantial savings…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "au chapitre des frais de déplacement, grâce à la généralisation des réunions virtuelles.",
+          "rationale": {
+            "fr": "« Au chapitre de » (dans le domaine de, en ce qui concerne) est courant et admis dans la langue administrative canadienne ; la phrase est idiomatique.",
+            "en": "« Au chapitre de » (in the area of, as regards) is common and accepted in Canadian administrative French; the sentence is idiomatic."
+          }
+        },
+        {
+          "id": "b",
+          "text": "au niveau des frais de déplacement, grâce à la généralisation des réunions virtuelles.",
+          "rationale": {
+            "fr": "La phrase est grammaticale, mais « au niveau de » employé au sens de « en ce qui concerne » est critiqué ; il devrait être réservé à une idée de niveau réel.",
+            "en": "The sentence is grammatical, but « au niveau de » used to mean \"as regards\" is criticized; it should be kept for an actual level."
+          }
+        },
+        {
+          "id": "c",
+          "text": "au chapitre aux frais de déplacement, grâce à la généralisation des réunions virtuelles.",
+          "rationale": {
+            "fr": "La locution est « au chapitre de » ; « au chapitre aux » est fautif.",
+            "en": "The phrase is « au chapitre de »; « au chapitre aux » is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "en termes de frais de déplacement, grâce à la généralisation des réunions virtuelles.",
+          "rationale": {
+            "fr": "« En termes de », calqué sur l'anglais « in terms of », est critiqué dans ce sens ; la tournure est à éviter dans un rapport soigné.",
+            "en": "« En termes de », a calque of \"in terms of\", is criticized in this sense; it should be avoided in a careful report."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour situer un domaine, la langue administrative dispose de plusieurs locutions correctes : « au chapitre de », « sur le plan de », « en ce qui concerne », « en matière de ». « Au niveau de » ne devrait s'employer que pour un niveau véritable (hiérarchique, géographique), et « en termes de », calque de « in terms of », est à éviter.",
+        "en": "To specify an area, administrative French has several correct phrases: « au chapitre de », « sur le plan de », « en ce qui concerne », « en matière de ». « Au niveau de » should be used only for a real level (hierarchical, geographic), and « en termes de », a calque of \"in terms of\", is to be avoided."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-06",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase tirée d'un compte rendu contient une faute. Laquelle des corrections suivantes s'impose ? « Plusieurs analystes financiers ont assisté la séance d'information sur le nouveau cadre de reddition de comptes, qui s'est tenue mardi dernier. »",
+        "en": "This sentence from a meeting summary contains an error. Which of the following corrections is required? « Plusieurs analystes financiers ont assisté la séance d'information sur le nouveau cadre de reddition de comptes, qui s'est tenue mardi dernier. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « qui s'est tenue » par « qui s'est tenu »",
+          "rationale": {
+            "fr": "Le pronom « qui » reprend « la séance », féminin ; « tenue » est déjà juste, et le masculin serait fautif.",
+            "en": "The pronoun « qui » refers to « la séance », which is feminine; « tenue » is already right, and the masculine would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « sur le nouveau cadre » par « au nouveau cadre »",
+          "rationale": {
+            "fr": "On dit « une séance d'information sur un sujet » ; « au nouveau cadre » ne convient pas.",
+            "en": "One says « une séance d'information sur un sujet »; « au nouveau cadre » does not fit."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « ont assisté la séance » par « ont assisté à la séance »",
+          "rationale": {
+            "fr": "Au sens de « être présent à », « assister » exige « à » : « ils ont assisté à la séance ».",
+            "en": "In the sense of \"to attend\", « assister » requires « à »: « ils ont assisté à la séance »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « mardi dernier » par « au mardi dernier »",
+          "rationale": {
+            "fr": "« Mardi dernier » s'emploie sans préposition ; « au mardi dernier » est fautif.",
+            "en": "« Mardi dernier » is used without a preposition; « au mardi dernier » is wrong."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Assister à » signifie « être présent à » une réunion, une séance, un événement. Sans préposition, « assister quelqu'un » veut dire « l'aider, le seconder » (« assister le directeur dans ses fonctions ») : « assister la séance » n'a donc pas de sens. On écrit « assister à la séance ».",
+        "en": "« Assister à » means \"to attend\" a meeting, session or event. Without a preposition, « assister quelqu'un » means \"to help, to assist someone\" (« assister le directeur dans ses fonctions »): « assister la séance » therefore makes no sense. Write « assister à la séance »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-07",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Tous les membres de l'équipe des services numériques sont invités à ___ la séance de formation sur le nouveau système de gestion des dossiers, prévue jeudi matin.",
+        "en": "All members of the digital services team are invited to ___ the training session on the new records management system, scheduled for Thursday morning."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "participer dans",
+          "rationale": {
+            "fr": "« Participer dans » est un calque de l'anglais « to participate in » ; la préposition est fautive.",
+            "en": "« Participer dans » is a calque of the English \"to participate in\"; the preposition is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "participer",
+          "rationale": {
+            "fr": "Il manque la préposition : « participer la séance » est agrammatical.",
+            "en": "The preposition is missing: « participer la séance » is ungrammatical."
+          }
+        },
+        {
+          "id": "c",
+          "text": "participer de",
+          "rationale": {
+            "fr": "« Participer de » existe, mais signifie « relever de, tenir de la nature de » ; il ne peut pas exprimer la présence à une séance.",
+            "en": "« Participer de » exists, but means \"to partake of the nature of\"; it cannot express taking part in a session."
+          }
+        },
+        {
+          "id": "d",
+          "text": "participer à",
+          "rationale": {
+            "fr": "Au sens de « prendre part à », « participer » se construit avec « à » : « participer à la séance ».",
+            "en": "In the sense of \"to take part in\", « participer » is constructed with « à »: « participer à la séance »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Participer à » signifie « prendre part à » (une réunion, une formation, un projet). « Participer de », d'un emploi littéraire, signifie « tenir de la nature de » (« cette mesure participe d'une logique de prudence »). « Participer dans » est un anglicisme.",
+        "en": "« Participer à » means \"to take part in\" (a meeting, training, a project). « Participer de », a literary use, means \"to partake of the nature of\" (« cette mesure participe d'une logique de prudence »). « Participer dans » is an anglicism."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-08",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Grâce à une planification rigoureuse, l'équipe de projet a effectué la migration des données vers le nouveau serveur…",
+        "en": "Thanks to rigorous planning, the project team carried out the data migration to the new server…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "dans deux semaines, soit bien avant l'échéance prévue.",
+          "rationale": {
+            "fr": "« Dans deux semaines » situe une action future par rapport au moment présent ; c'est incompatible avec le passé composé « a effectué ».",
+            "en": "« Dans deux semaines » places an action in the future relative to now; that clashes with the past tense « a effectué »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "en deux semaines, soit bien avant l'échéance prévue.",
+          "rationale": {
+            "fr": "« En » suivi d'une durée exprime le temps nécessaire pour accomplir l'action : la migration a pris deux semaines. C'est la suite qui convient.",
+            "en": "« En » followed by a duration expresses the time needed to complete the action: the migration took two weeks. This is the continuation that fits."
+          }
+        },
+        {
+          "id": "c",
+          "text": "depuis deux semaines, soit bien avant l'échéance prévue.",
+          "rationale": {
+            "fr": "« Depuis » marque une durée qui se prolonge jusqu'au moment présent ; il ne convient pas à une action achevée.",
+            "en": "« Depuis » marks a duration continuing up to the present; it does not fit a completed action."
+          }
+        },
+        {
+          "id": "d",
+          "text": "pour deux semaines, soit bien avant l'échéance prévue.",
+          "rationale": {
+            "fr": "« Pour » suivi d'une durée indique une durée prévue (« partir pour deux semaines ») ; il ne peut exprimer le temps qu'a pris la migration.",
+            "en": "« Pour » followed by a duration indicates an intended duration (« partir pour deux semaines »); it cannot express how long the migration took."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Les prépositions de temps ne sont pas interchangeables : « en deux semaines » exprime le temps nécessaire pour accomplir une action ; « dans deux semaines », le moment futur où elle aura lieu ; « dans les deux semaines suivant… », un délai à l'intérieur duquel elle doit se produire ; « depuis deux semaines », une durée qui se poursuit.",
+        "en": "Time prepositions are not interchangeable: « en deux semaines » expresses the time needed to complete an action; « dans deux semaines », the future moment when it will happen; « dans les deux semaines suivant… », a period within which it must occur; « depuis deux semaines », a duration still running."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-09",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Ce courriel adressé à l'équipe des systèmes ministériels contient une erreur de construction. Quelle correction faut-il apporter ? « Je me rappelle de la panne qui avait paralysé le système de paie l'an dernier ; il faudrait éviter qu'une telle défaillance se reproduise lors de la migration prévue à l'automne. »",
+        "en": "This email to the departmental systems team contains a construction error. What correction is needed? « Je me rappelle de la panne qui avait paralysé le système de paie l'an dernier ; il faudrait éviter qu'une telle défaillance se reproduise lors de la migration prévue à l'automne. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « se reproduise » par « se reproduit »",
+          "rationale": {
+            "fr": "« Éviter que » commande le subjonctif ; « se reproduise » est déjà juste, et l'indicatif serait fautif.",
+            "en": "« Éviter que » requires the subjunctive; « se reproduise » is already right, and the indicative would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « l'an dernier » par « la dernière année »",
+          "rationale": {
+            "fr": "« L'an dernier » est bien employé ; « la dernière année » signifierait « l'année finale » et calque l'anglais « last year ».",
+            "en": "« L'an dernier » is properly used; « la dernière année » would mean \"the final year\" and copies the English \"last year\"."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « Je me rappelle de la panne » par « Je me rappelle la panne »",
+          "rationale": {
+            "fr": "« Se rappeler » est transitif direct : on se rappelle quelque chose. Supprimer « de » corrige la seule faute de la phrase.",
+            "en": "« Se rappeler » takes a direct object: one « se rappelle quelque chose ». Removing « de » fixes the sentence's only error."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « prévue à l'automne » par « prévue en l'automne »",
+          "rationale": {
+            "fr": "On dit « à l'automne » ou « en automne », jamais « en l'automne » ; la modification introduirait une faute.",
+            "en": "One says « à l'automne » or « en automne », never « en l'automne »; the change would introduce an error."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Se rappeler » est transitif direct : « je me rappelle la panne », « je me la rappelle ». La construction « se rappeler de » devant un nom, influencée par « se souvenir de », est critiquée dans la langue soignée. Les deux tournures correctes sont donc « je me rappelle la panne » et « je me souviens de la panne ».",
+        "en": "« Se rappeler » takes a direct object: « je me rappelle la panne », « je me la rappelle ». The construction « se rappeler de » before a noun, influenced by « se souvenir de », is criticized in careful writing. The two correct versions are therefore « je me rappelle la panne » and « je me souviens de la panne »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-10",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Compte tenu de l'augmentation saisonnière du volume de demandes, la direction ___ les délais de traitement s'allongent sensiblement au cours des prochaines semaines, malgré les heures supplémentaires autorisées.",
+        "en": "Given the seasonal increase in the volume of applications, management ___ processing times will lengthen considerably over the coming weeks, despite the overtime authorized."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "s'attend à ce que",
+          "rationale": {
+            "fr": "Devant une proposition, « s'attendre à » devient « s'attendre à ce que », suivi du subjonctif (« s'allongent ») : c'est la construction attendue.",
+            "en": "Before a clause, « s'attendre à » becomes « s'attendre à ce que », followed by the subjunctive (« s'allongent »): this is the expected construction."
+          }
+        },
+        {
+          "id": "b",
+          "text": "s'attend de ce que",
+          "rationale": {
+            "fr": "« S'attendre » se construit avec « à », jamais avec « de » ; « s'attendre de ce que » est fautif.",
+            "en": "« S'attendre » is constructed with « à », never « de »; « s'attendre de ce que » is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "s'attend à que",
+          "rationale": {
+            "fr": "La préposition « à » ne peut pas précéder directement la conjonction « que » ; il faut intercaler « ce ».",
+            "en": "The preposition « à » cannot directly precede the conjunction « que »; « ce » must be inserted."
+          }
+        },
+        {
+          "id": "d",
+          "text": "attend à ce que",
+          "rationale": {
+            "fr": "Sans le pronom « se », le verbe « attendre » signifie « patienter jusqu'à » et ne se construit pas avec « à ce que » ; la phrase devient fautive.",
+            "en": "Without the pronoun « se », the verb « attendre » means \"to wait\" and is not constructed with « à ce que »; the sentence becomes wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Lorsqu'une préposition comme « à » ou « de » doit introduire une proposition conjonctive, on intercale « ce » : « s'attendre à ce que », « veiller à ce que », « tenir à ce que ». « S'attendre à ce que » est suivi du subjonctif. (La tournure « s'attendre que » se rencontre dans la langue littéraire, mais « s'attendre à ce que » est la construction courante en rédaction administrative.)",
+        "en": "When a preposition such as « à » or « de » must introduce a clause, « ce » is inserted: « s'attendre à ce que », « veiller à ce que », « tenir à ce que ». « S'attendre à ce que » is followed by the subjunctive. (The form « s'attendre que » occurs in literary French, but « s'attendre à ce que » is the usual construction in administrative writing.)"
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-11",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le nouveau centre de traitement des demandes de prestations ouvrira ses portes ___ ; il desservira les clients de l'ensemble des provinces de l'Atlantique.",
+        "en": "The new benefits application processing centre will open its doors ___; it will serve clients across all the Atlantic provinces."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "à Moncton, en Nouveau-Brunswick",
+          "rationale": {
+            "fr": "« Nouveau-Brunswick » est un nom masculin commençant par une consonne : il prend « au », non « en ».",
+            "en": "« Nouveau-Brunswick » is a masculine name beginning with a consonant: it takes « au », not « en »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "en Moncton, au Nouveau-Brunswick",
+          "rationale": {
+            "fr": "Devant un nom de ville, on emploie « à » ; « en Moncton » est fautif.",
+            "en": "Before a city name, « à » is used; « en Moncton » is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "à Moncton, à Nouveau-Brunswick",
+          "rationale": {
+            "fr": "« À » s'emploie devant un nom de ville, non devant un nom de province masculin ; « à Nouveau-Brunswick » est fautif.",
+            "en": "« À » is used before a city name, not before a masculine province name; « à Nouveau-Brunswick » is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "à Moncton, au Nouveau-Brunswick",
+          "rationale": {
+            "fr": "« À » devant le nom de la ville et « au » devant le nom masculin de la province : les deux prépositions sont justes.",
+            "en": "« À » before the city name and « au » before the masculine province name: both prepositions are right."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Devant un nom de ville, on emploie « à » (à Moncton, à Ottawa). Devant un nom de province, le genre décide : « en » devant un nom féminin ou commençant par une voyelle (en Ontario, en Nouvelle-Écosse, en Alberta), « au » devant un nom masculin commençant par une consonne (au Nouveau-Brunswick, au Manitoba, au Québec).",
+        "en": "Before a city name, « à » is used (à Moncton, à Ottawa). Before a province name, gender decides: « en » before a feminine name or one beginning with a vowel (en Ontario, en Nouvelle-Écosse, en Alberta), « au » before a masculine name beginning with a consonant (au Nouveau-Brunswick, au Manitoba, au Québec)."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-12",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Relisez cet avis destiné au public et indiquez la correction nécessaire : « Les citoyens qui résident en Ottawa ou ailleurs en Ontario peuvent désormais prendre rendez-vous en ligne pour faire renouveler leur permis dans un centre de service. »",
+        "en": "Reread this notice to the public and indicate the necessary correction: « Les citoyens qui résident en Ottawa ou ailleurs en Ontario peuvent désormais prendre rendez-vous en ligne pour faire renouveler leur permis dans un centre de service. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « ailleurs en Ontario » par « ailleurs à l'Ontario »",
+          "rationale": {
+            "fr": "« Ontario » commence par une voyelle et prend « en » ; « en Ontario » est déjà juste, et « à l'Ontario » serait fautif.",
+            "en": "« Ontario » begins with a vowel and takes « en »; « en Ontario » is already right, and « à l'Ontario » would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « en Ottawa » par « à Ottawa »",
+          "rationale": {
+            "fr": "Devant un nom de ville, la préposition est « à » : « résider à Ottawa ». C'est la seule faute de la phrase.",
+            "en": "Before a city name the preposition is « à »: « résider à Ottawa ». This is the sentence's only error."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « faire renouveler » par « faire renouvelé »",
+          "rationale": {
+            "fr": "Après « faire », le verbe se met à l'infinitif ; « faire renouvelé » serait fautif.",
+            "en": "After « faire », the verb is in the infinitive; « faire renouvelé » would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « en ligne » par « sur la ligne »",
+          "rationale": {
+            "fr": "« En ligne » est la locution consacrée pour un service offert par Internet ; « sur la ligne » ne convient pas.",
+            "en": "« En ligne » is the established phrase for a service offered over the Internet; « sur la ligne » does not fit."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "On emploie « à » devant un nom de ville (à Ottawa, à Gatineau) et « en » devant un nom de province féminin ou commençant par une voyelle (en Ontario). « En » devant un nom de ville est fautif. Ainsi : « à Ottawa ou ailleurs en Ontario ».",
+        "en": "Use « à » before a city name (à Ottawa, à Gatineau) and « en » before a province name that is feminine or begins with a vowel (en Ontario). « En » before a city name is wrong. Hence: « à Ottawa ou ailleurs en Ontario »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-13",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Aux termes de son mandat, le rôle du comité consultatif ___ formuler des recommandations sur les modifications réglementaires proposées, sans toutefois se prononcer sur leur opportunité politique.",
+        "en": "Under its mandate, the advisory committee's role ___ making recommendations on proposed regulatory amendments, without, however, ruling on their political advisability."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "consiste en",
+          "rationale": {
+            "fr": "« Consister en » s'emploie devant un nom (« consiste en une analyse ») ; devant l'infinitif « formuler », il ne convient pas.",
+            "en": "« Consister en » is used before a noun (« consiste en une analyse »); before the infinitive « formuler » it does not fit."
+          }
+        },
+        {
+          "id": "b",
+          "text": "consiste de",
+          "rationale": {
+            "fr": "« Consister de » calque l'anglais « to consist of » ; la construction est fautive.",
+            "en": "« Consister de » copies the English \"to consist of\"; the construction is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "consiste à",
+          "rationale": {
+            "fr": "Devant un infinitif, « consister » se construit avec « à » : « le rôle consiste à formuler ». C'est la construction attendue.",
+            "en": "Before an infinitive, « consister » is constructed with « à »: « le rôle consiste à formuler ». This is the expected construction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "consiste pour",
+          "rationale": {
+            "fr": "« Consister » ne se construit pas avec « pour » ; la préposition est fautive.",
+            "en": "« Consister » is not constructed with « pour »; the preposition is wrong."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le complément de « consister » dépend de sa nature : un infinitif est introduit par « à » (« consiste à formuler des recommandations ») et un nom par « en » (« consiste en la formulation de recommandations »). « Consister de » est un anglicisme.",
+        "en": "The complement of « consister » depends on its nature: an infinitive is introduced by « à » (« consiste à formuler des recommandations ») and a noun by « en » (« consiste en la formulation de recommandations »). « Consister de » is an anglicism."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-14",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le directeur général peut déléguer ce pouvoir de signature à un gestionnaire subalterne…",
+        "en": "The director general may delegate this signing authority to a subordinate manager…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "sous l'article 7 du règlement administratif, à condition d'en aviser le sous-ministre adjoint.",
+          "rationale": {
+            "fr": "La phrase se comprend, mais « sous l'article », calqué sur l'anglais « under section », est à éviter dans la rédaction administrative et juridique.",
+            "en": "The sentence is understandable, but « sous l'article », a calque of \"under section\", is to be avoided in administrative and legal drafting."
+          }
+        },
+        {
+          "id": "b",
+          "text": "en vertu de l'article 7 du règlement administratif, à condition d'en aviser le sous-ministre adjoint.",
+          "rationale": {
+            "fr": "« En vertu de » indique le texte qui fonde un pouvoir : c'est la locution consacrée dans ce contexte.",
+            "en": "« En vertu de » indicates the text on which a power rests: it is the established phrase in this context."
+          }
+        },
+        {
+          "id": "c",
+          "text": "en vertu à l'article 7 du règlement administratif, à condition d'en aviser le sous-ministre adjoint.",
+          "rationale": {
+            "fr": "La locution est « en vertu de » ; « en vertu à » est fautif.",
+            "en": "The phrase is « en vertu de »; « en vertu à » is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "en fonction de l'article 7 du règlement administratif, à condition d'en aviser le sous-ministre adjoint.",
+          "rationale": {
+            "fr": "« En fonction de » exprime une variation (« en fonction des besoins ») ; il ne peut désigner le fondement juridique d'un pouvoir.",
+            "en": "« En fonction de » expresses variation (« en fonction des besoins »); it cannot designate the legal basis of a power."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour renvoyer au texte qui fonde un pouvoir ou une obligation, on emploie « en vertu de », « aux termes de » ou « conformément à ». « Sous l'article », calque de « under section », est à proscrire, et « en fonction de » n'a pas ce sens : il exprime ce qui fait varier quelque chose.",
+        "en": "To refer to the text on which a power or obligation rests, use « en vertu de », « aux termes de » or « conformément à ». « Sous l'article », a calque of \"under section\", is to be avoided, and « en fonction de » does not have this meaning: it expresses what makes something vary."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-15",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Ce passage d'une note d'information renferme une impropriété. Quelle modification la corrige ? « Pour obvier les retards chroniques dans l'examen des propositions réglementaires, le secrétariat a instauré un mécanisme de suivi hebdomadaire assorti d'indicateurs de rendement. »",
+        "en": "This passage from a briefing note contains an incorrect usage. Which change corrects it? « Pour obvier les retards chroniques dans l'examen des propositions réglementaires, le secrétariat a instauré un mécanisme de suivi hebdomadaire assorti d'indicateurs de rendement. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « obvier les retards » par « obvier sur les retards »",
+          "rationale": {
+            "fr": "La modification vise le bon endroit, mais « obvier » ne se construit pas avec « sur » ; la phrase resterait fautive.",
+            "en": "The change targets the right spot, but « obvier » is not constructed with « sur »; the sentence would remain wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « assorti d'indicateurs » par « assorti avec des indicateurs »",
+          "rationale": {
+            "fr": "« Assorti de » signifie « accompagné de » et est juste ; « assorti avec » évoque l'harmonie de couleurs et ne convient pas.",
+            "en": "« Assorti de » means \"accompanied by\" and is well used; « assorti avec » suggests matching colours and does not fit."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « de suivi hebdomadaire » par « de suivi hebdomadaires »",
+          "rationale": {
+            "fr": "« Hebdomadaire » qualifie « suivi » ou « mécanisme », tous deux au singulier ; le pluriel serait fautif.",
+            "en": "« Hebdomadaire » qualifies « suivi » or « mécanisme », both singular; the plural would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « obvier les retards » par « obvier aux retards »",
+          "rationale": {
+            "fr": "« Obvier » se construit avec « à » : on obvie à un inconvénient. Cette correction règle la seule faute de la phrase.",
+            "en": "« Obvier » is constructed with « à »: « on obvie à un inconvénient ». This correction fixes the sentence's only error."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Obvier à » (prendre les mesures pour prévenir un inconvénient) se construit avec « à », comme « remédier à ». C'est l'inverse de « pallier », qui est transitif direct (« pallier les retards »). Ces trois verbes voisins se confondent souvent, d'où des constructions croisées.",
+        "en": "« Obvier à » (to take steps to prevent a drawback) is constructed with « à », like « remédier à ». It is the opposite of « pallier », which takes a direct object (« pallier les retards »). These three related verbs are often confused, hence crossed constructions."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-16",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Pendant la tempête de verglas, l'équipe de gestion des installations a dû ___ plusieurs pannes d'électricité dans les immeubles du Ministère.",
+        "en": "During the ice storm, the facilities management team had to ___ several power outages in the Department's buildings."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "faire face à",
+          "rationale": {
+            "fr": "« Faire face à » (affronter, réagir à une difficulté) introduit son complément par « à » : « faire face à plusieurs pannes ».",
+            "en": "« Faire face à » (to confront, respond to a difficulty) introduces its complement with « à »: « faire face à plusieurs pannes »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "faire face",
+          "rationale": {
+            "fr": "Il manque la préposition « à » : « faire face plusieurs pannes » est agrammatical.",
+            "en": "The preposition « à » is missing: « faire face plusieurs pannes » is ungrammatical."
+          }
+        },
+        {
+          "id": "c",
+          "text": "faire face avec",
+          "rationale": {
+            "fr": "« Faire face avec » est fautif, sans doute influencé par l'anglais « to deal with ».",
+            "en": "« Faire face avec » is wrong, probably influenced by the English \"to deal with\"."
+          }
+        },
+        {
+          "id": "d",
+          "text": "faire face contre",
+          "rationale": {
+            "fr": "La locution n'admet pas « contre » ; la préposition est fautive.",
+            "en": "The phrase does not take « contre »; the preposition is wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Faire face à » se construit avec « à » : « faire face à une crise, à des pannes, à une hausse de la demande ». D'autres verbes de réaction à une difficulté prennent aussi « à » : « remédier à », « parer à », « obvier à ».",
+        "en": "« Faire face à » is constructed with « à »: « faire face à une crise, à des pannes, à une hausse de la demande ». Other verbs of responding to a difficulty also take « à »: « remédier à », « parer à », « obvier à »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-17",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Tous les entrepreneurs qui travaillent sur le chantier de rénovation de l'immeuble doivent…",
+        "en": "All contractors working on the building's renovation site must…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "se conformer avec les consignes de sécurité affichées à l'entrée du chantier.",
+          "rationale": {
+            "fr": "« Se conformer » introduit la règle par « à », non par « avec » ; la construction est fautive.",
+            "en": "« Se conformer » introduces the rule with « à », not « avec »; the construction is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "conformer aux consignes de sécurité affichées à l'entrée du chantier.",
+          "rationale": {
+            "fr": "Sans le pronom « se », « conformer » est transitif (« conformer quelque chose à ») et exige un complément direct ; la phrase est incomplète.",
+            "en": "Without the pronoun « se », « conformer » is transitive (« conformer quelque chose à ») and needs a direct object; the sentence is incomplete."
+          }
+        },
+        {
+          "id": "c",
+          "text": "se conformer aux consignes de sécurité affichées à l'entrée du chantier.",
+          "rationale": {
+            "fr": "« Se conformer à » (respecter, suivre) est la construction attendue : « se conformer aux consignes ».",
+            "en": "« Se conformer à » (to comply with) is the expected construction: « se conformer aux consignes »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "se conformer des consignes de sécurité affichées à l'entrée du chantier.",
+          "rationale": {
+            "fr": "« Se conformer de » n'existe pas ; la préposition est fautive.",
+            "en": "« Se conformer de » does not exist; the preposition is wrong."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Se conformer à » signifie « agir selon une règle, une consigne » et se construit avec « à » : « se conformer aux consignes, à la directive ». On trouve la même préposition dans « conforme à » et « conformément à ».",
+        "en": "« Se conformer à » means \"to act according to a rule or instruction\" and is constructed with « à »: « se conformer aux consignes, à la directive ». The same preposition appears in « conforme à » and « conformément à »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-18",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Trouvez la faute dans cet extrait d'un bulletin et choisissez la correction qui convient : « C'est le comité local de santé et de sécurité qui est responsable pour l'inspection mensuelle des lieux de travail et qui en consigne les résultats dans un registre. »",
+        "en": "Find the error in this excerpt from a bulletin and choose the correction that fits: « C'est le comité local de santé et de sécurité qui est responsable pour l'inspection mensuelle des lieux de travail et qui en consigne les résultats dans un registre. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « qui en consigne » par « qui y consigne »",
+          "rationale": {
+            "fr": "Le pronom « en » reprend « de l'inspection » (les résultats de l'inspection) et est juste ; « y » ne convient pas.",
+            "en": "The pronoun « en » stands for « de l'inspection » (the results of the inspection) and is well used; « y » does not fit."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « des lieux de travail » par « aux lieux de travail »",
+          "rationale": {
+            "fr": "On fait « l'inspection de quelque chose » ; « l'inspection aux lieux de travail » serait fautif.",
+            "en": "One carries out « l'inspection de quelque chose »; « l'inspection aux lieux de travail » would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « dans un registre » par « à un registre »",
+          "rationale": {
+            "fr": "On consigne des résultats « dans un registre » ; « à un registre » ne convient pas.",
+            "en": "Results are recorded « dans un registre »; « à un registre » does not fit."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « est responsable pour » par « est responsable de »",
+          "rationale": {
+            "fr": "L'adjectif « responsable » se construit avec « de » ; « responsable pour » calque l'anglais « responsible for ». C'est la seule faute de la phrase.",
+            "en": "The adjective « responsable » is constructed with « de »; « responsable pour » copies the English \"responsible for\". This is the sentence's only error."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Responsable » introduit son complément par « de » : être responsable de quelque chose ou de quelqu'un. « Responsable pour » est un calque de l'anglais « responsible for ». On peut aussi écrire « qui est chargé de l'inspection » ou « qui s'occupe de l'inspection ».",
+        "en": "« Responsable » introduces its complement with « de »: « être responsable de quelque chose ou de quelqu'un ». « Responsable pour » is a calque of \"responsible for\". One can also write « qui est chargé de l'inspection » or « qui s'occupe de l'inspection »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-19",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Toute soumission qui ne ___ l'ensemble des exigences obligatoires énoncées dans la demande de propositions sera jugée irrecevable et écartée d'office, sans évaluation technique.",
+        "en": "Any bid that does not ___ all the mandatory requirements set out in the request for proposals will be deemed non-compliant and automatically rejected, without technical evaluation."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "satisfait pas avec",
+          "rationale": {
+            "fr": "« Satisfaire » ne se construit pas avec « avec » ; la préposition est fautive.",
+            "en": "« Satisfaire » is not constructed with « avec »; the preposition is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "satisfait pas à",
+          "rationale": {
+            "fr": "Au sens de « remplir une exigence », « satisfaire » se construit avec « à » : « ne satisfait pas à l'ensemble des exigences ».",
+            "en": "In the sense of \"to meet a requirement\", « satisfaire » is constructed with « à »: « ne satisfait pas à l'ensemble des exigences »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "satisfait pas de",
+          "rationale": {
+            "fr": "« De » relève de l'adjectif « satisfait de » (content de) ; avec le verbe « satisfaire », la préposition est fautive.",
+            "en": "« De » belongs to the adjective « satisfait de » (pleased with); with the verb « satisfaire », the preposition is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "répond pas",
+          "rationale": {
+            "fr": "« Répondre » exige lui aussi « à » (« répondre à une exigence ») ; sans préposition, la construction est fautive.",
+            "en": "« Répondre » also requires « à » (« répondre à une exigence »); without a preposition the construction is wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Au sens de « remplir une obligation, respecter une condition », « satisfaire » se construit avec « à » : « satisfaire aux exigences, à une norme, à une condition ». Transitif direct, il signifie plutôt « contenter » (« satisfaire la clientèle ») ou « combler » (« satisfaire un besoin »). Son synonyme « répondre » prend aussi « à ».",
+        "en": "In the sense of \"to fulfil an obligation, to meet a condition\", « satisfaire » is constructed with « à »: « satisfaire aux exigences, à une norme, à une condition ». With a direct object it means rather \"to please\" (« satisfaire la clientèle ») or \"to fulfil\" (« satisfaire un besoin »). Its synonym « répondre » also takes « à »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-20",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le marché a été attribué au soumissionnaire ayant présenté l'offre la plus avantageuse…",
+        "en": "The contract was awarded to the bidder that submitted the most advantageous offer…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "conformément aux critères d'évaluation énoncés dans la demande de propositions.",
+          "rationale": {
+            "fr": "« Conformément à » exprime l'accord avec une règle : l'attribution a respecté les critères. C'est la suite idiomatique et exacte.",
+            "en": "« Conformément à » expresses compliance with a rule: the award respected the criteria. This is the idiomatic and accurate continuation."
+          }
+        },
+        {
+          "id": "b",
+          "text": "en lien avec les critères d'évaluation énoncés dans la demande de propositions.",
+          "rationale": {
+            "fr": "La phrase est grammaticale, mais « en lien avec » n'exprime qu'un vague rapport ; il ne dit pas que l'attribution respecte les critères, ce qui est le sens visé.",
+            "en": "The sentence is grammatical, but « en lien avec » expresses only a vague connection; it does not say the award complied with the criteria, which is the intended meaning."
+          }
+        },
+        {
+          "id": "c",
+          "text": "conformément avec les critères d'évaluation énoncés dans la demande de propositions.",
+          "rationale": {
+            "fr": "« Conformément » se construit avec « à » ; « conformément avec » est fautif.",
+            "en": "« Conformément » is constructed with « à »; « conformément avec » is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "dans le respect avec les critères d'évaluation énoncés dans la demande de propositions.",
+          "rationale": {
+            "fr": "La locution est « dans le respect de » ; « dans le respect avec » est fautif.",
+            "en": "The phrase is « dans le respect de »; « dans le respect avec » is wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Conformément à » (en accord avec une règle, un texte) se construit avec « à », comme « conforme à » et « se conformer à ». On peut aussi écrire « selon les critères » ou « dans le respect des critères ». « En lien avec » marque une simple relation et ne dit pas qu'une règle a été respectée.",
+        "en": "« Conformément à » (in accordance with a rule or text) is constructed with « à », like « conforme à » and « se conformer à ». One can also write « selon les critères » or « dans le respect des critères ». « En lien avec » marks a mere connection and does not say a rule was respected."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-21",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Une erreur s'est glissée dans cet avis aux fournisseurs. Quelle correction la rectifie ? « Les nouvelles clauses relatives aux pénalités de retard s'appliqueront à tous les contrats de services professionnels à compter le 1er avril ; les factures seront acquittées sur réception des pièces justificatives exigées. »",
+        "en": "An error has slipped into this notice to suppliers. Which correction fixes it? « Les nouvelles clauses relatives aux pénalités de retard s'appliqueront à tous les contrats de services professionnels à compter le 1er avril ; les factures seront acquittées sur réception des pièces justificatives exigées. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « relatives aux pénalités » par « relatives des pénalités »",
+          "rationale": {
+            "fr": "« Relatif » se construit avec « à » ; « relatives aux pénalités » est déjà juste, et « relatives des » serait fautif.",
+            "en": "« Relatif » is constructed with « à »; « relatives aux pénalités » is already right, and « relatives des » would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « sur réception des pièces » par « sur la réception des pièces »",
+          "rationale": {
+            "fr": "« Sur réception de » est une locution figée, sans article ; ajouter « la » la rendrait fautive.",
+            "en": "« Sur réception de » is a fixed phrase without an article; adding « la » would make it wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « à compter le 1er avril » par « à compter du 1er avril »",
+          "rationale": {
+            "fr": "« À compter de » exige « de », qui se contracte avec l'article : « à compter du 1er avril ». C'est la seule faute de la phrase.",
+            "en": "« À compter de » requires « de », which contracts with the article: « à compter du 1er avril ». This is the sentence's only error."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « s'appliqueront à tous les contrats » par « s'appliqueront sur tous les contrats »",
+          "rationale": {
+            "fr": "Une règle « s'applique à » quelque chose ; « s'appliquer sur » évoque une surface et serait fautif ici.",
+            "en": "A rule « s'applique à » something; « s'appliquer sur » suggests a surface and would be wrong here."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« À compter de », comme « à partir de », introduit son point de départ par « de », contracté avec l'article devant une date : « à compter du 1er avril ». La locution « sur réception de », sans article, signifie « dès que l'on reçoit » ; elle est correcte ici, tout comme « relatives aux » et « s'appliquer à ».",
+        "en": "« À compter de », like « à partir de », introduces its starting point with « de », contracted with the article before a date: « à compter du 1er avril ». The phrase « sur réception de », without an article, means \"upon receipt of\"; it is correct here, as are « relatives aux » and « s'appliquer à »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-22",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "___ la publication du communiqué, le service des relations avec les médias a reçu une vingtaine de demandes d'entrevue en moins de deux heures.",
+        "en": "___ the publication of the news release, the media relations service received some twenty interview requests in under two hours."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Suite à",
+          "rationale": {
+            "fr": "« Suite à » est une locution critiquée, issue de la correspondance commerciale ; elle est à écarter dans un texte soigné.",
+            "en": "« Suite à » is a criticized phrase from commercial correspondence; it should be rejected in careful writing."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Dû à",
+          "rationale": {
+            "fr": "« Dû à », calqué sur l'anglais « due to », est critiqué en tête de phrase ; de plus, il exprime une cause plutôt qu'une succession.",
+            "en": "« Dû à », a calque of \"due to\", is criticized at the start of a sentence; moreover, it expresses a cause rather than a sequence."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À la suite à",
+          "rationale": {
+            "fr": "La locution se construit avec « de » ; « à la suite à » croise deux tournures et est fautif.",
+            "en": "The phrase is built with « de »; « à la suite à » blends two forms and is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À la suite de",
+          "rationale": {
+            "fr": "« À la suite de » (après, en conséquence de) est la locution reconnue pour situer un fait après un autre.",
+            "en": "« À la suite de » (after, as a result of) is the accepted phrase for placing one fact after another."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour marquer qu'un fait suit un autre ou en découle, on écrit « à la suite de », « par suite de » ou « après ». « Suite à » est critiqué par les ouvrages de référence, et « dû à » en tête de phrase est un calque de « due to » (on écrira plutôt « en raison de » ou « à cause de » pour une cause).",
+        "en": "To show that one fact follows another or results from it, write « à la suite de », « par suite de » or « après ». « Suite à » is criticized by reference works, and « dû à » at the start of a sentence is a calque of \"due to\" (for a cause, write « en raison de » or « à cause de »)."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-23",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le plan de communication a été approuvé par le comité de direction ;…",
+        "en": "The communications plan was approved by the executive committee;…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "quant le calendrier de diffusion, il sera arrêté lors de la prochaine réunion.",
+          "rationale": {
+            "fr": "« Quant » ne s'emploie pas seul devant un nom ; il faut « quant à ». La construction est fautive.",
+            "en": "« Quant » is not used alone before a noun; « quant à » is required. The construction is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "quant au calendrier de diffusion, il sera arrêté lors de la prochaine réunion.",
+          "rationale": {
+            "fr": "« Quant à », contracté en « quant au » devant un nom masculin, introduit correctement le nouveau thème.",
+            "en": "« Quant à », contracted to « quant au » before a masculine noun, correctly introduces the new topic."
+          }
+        },
+        {
+          "id": "c",
+          "text": "en ce qui a trait le calendrier de diffusion, il sera arrêté lors de la prochaine réunion.",
+          "rationale": {
+            "fr": "La locution est « en ce qui a trait à » ; sans « à », elle est fautive.",
+            "en": "The phrase is « en ce qui a trait à »; without « à » it is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "en ce qui concerne du calendrier de diffusion, il sera arrêté lors de la prochaine réunion.",
+          "rationale": {
+            "fr": "« Concerner » est transitif direct : « en ce qui concerne le calendrier » ; « du » est fautif.",
+            "en": "« Concerner » takes a direct object: « en ce qui concerne le calendrier »; « du » is wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Les locutions qui annoncent un thème ont chacune leur construction : « quant à » (« quant au calendrier »), « en ce qui concerne » + complément direct (« en ce qui concerne le calendrier »), « en ce qui a trait à » (« en ce qui a trait au calendrier ») et « pour ce qui est de » (« pour ce qui est du calendrier »).",
+        "en": "The phrases that introduce a topic each have their own construction: « quant à » (« quant au calendrier »), « en ce qui concerne » + direct object (« en ce qui concerne le calendrier »), « en ce qui a trait à » (« en ce qui a trait au calendrier ») and « pour ce qui est de » (« pour ce qui est du calendrier »)."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-24",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Laquelle des corrections suivantes faut-il apporter à cette phrase d'un bilan de campagne ? « Le ton adopté dans cette campagne de sensibilisation est très différent que celui des publications précédentes, qui s'adressaient surtout aux gestionnaires. »",
+        "en": "Which of the following corrections must be made to this sentence from a campaign review? « Le ton adopté dans cette campagne de sensibilisation est très différent que celui des publications précédentes, qui s'adressaient surtout aux gestionnaires. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « différent que celui » par « différent de celui »",
+          "rationale": {
+            "fr": "L'adjectif « différent » introduit son complément par « de » : « différent de celui ». C'est la seule faute de la phrase.",
+            "en": "The adjective « différent » introduces its complement with « de »: « différent de celui ». This is the sentence's only error."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « s'adressaient » par « s'adressait »",
+          "rationale": {
+            "fr": "Le relatif « qui » reprend « les publications précédentes », au pluriel ; « s'adressaient » est déjà juste.",
+            "en": "The relative « qui » refers to « les publications précédentes », which is plural; « s'adressaient » is already right."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « aux gestionnaires » par « pour les gestionnaires »",
+          "rationale": {
+            "fr": "« S'adresser » se construit avec « à » ; « s'adresser pour » serait fautif.",
+            "en": "« S'adresser » is constructed with « à »; « s'adresser pour » would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « dans cette campagne » par « à cette campagne »",
+          "rationale": {
+            "fr": "Un ton est adopté « dans » une campagne ; « adopté à cette campagne » ne convient pas.",
+            "en": "A tone is adopted « dans » a campaign; « adopté à cette campagne » does not fit."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Différent » se construit avec « de » : « différent de celui-ci », « différent des précédents ». « Différent que », influencé par l'anglais « different than » ou par « autre que », est fautif. Les adjectifs de comparaison ont chacun leur préposition : « semblable à », « identique à », « pareil à », « différent de », « distinct de ».",
+        "en": "« Différent » is constructed with « de »: « différent de celui-ci », « différent des précédents ». « Différent que », influenced by the English \"different than\" or by « autre que », is wrong. Comparison adjectives each have their preposition: « semblable à », « identique à », « pareil à », « différent de », « distinct de »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-25",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Les responsables de chacun des volets du projet devront remettre leur rapport d'étape ___ 15 mars ; aucune prolongation ne sera accordée au-delà de cette échéance, sauf circonstances exceptionnelles.",
+        "en": "The leads for each component of the project must submit their progress report ___ March 15; no extension will be granted beyond this deadline, except in exceptional circumstances."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "au plus tard au",
+          "rationale": {
+            "fr": "Devant une date, l'article est « le » ; « au plus tard au 15 mars » est fautif.",
+            "en": "Before a date the article is « le »; « au plus tard au 15 mars » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "avant ou le",
+          "rationale": {
+            "fr": "« Avant ou le » est un calque de l'anglais « on or before » ; la tournure est à proscrire.",
+            "en": "« Avant ou le » is a calque of the English \"on or before\"; it must be avoided."
+          }
+        },
+        {
+          "id": "c",
+          "text": "au plus tard le",
+          "rationale": {
+            "fr": "« Au plus tard le » + date fixe une limite à ne pas dépasser : c'est la locution attendue.",
+            "en": "« Au plus tard le » + date sets a limit not to be exceeded: it is the expected phrase."
+          }
+        },
+        {
+          "id": "d",
+          "text": "pas plus tard que le",
+          "rationale": {
+            "fr": "« Pas plus tard que le », calqué sur « no later than », ne s'emploie pas pour fixer une échéance ; en français, « pas plus tard qu'hier » signifie « hier encore ».",
+            "en": "« Pas plus tard que le », a calque of \"no later than\", is not used to set a deadline; in French, « pas plus tard qu'hier » means \"only yesterday\"."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour fixer une date limite, on écrit « au plus tard le 15 mars » ou « d'ici le 15 mars ». « Avant ou le » (« on or before ») et « pas plus tard que le » (« no later than ») sont des calques de l'anglais. Devant une date, l'article « le » n'est pas précédé de « au ».",
+        "en": "To set a deadline, write « au plus tard le 15 mars » or « d'ici le 15 mars ». « Avant ou le » (\"on or before\") and « pas plus tard que le » (\"no later than\") are calques of English. Before a date, the article « le » is not preceded by « au »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-26",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "L'ordre de priorité des livrables inscrits au plan de projet sera révisé chaque trimestre…",
+        "en": "The order of priority of the deliverables in the project plan will be revised each quarter…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "dépendamment des ressources disponibles et des risques recensés par le comité de gouvernance.",
+          "rationale": {
+            "fr": "Le sens est clair, mais « dépendamment de », fréquent à l'oral au Canada, est critiqué ; il ne convient pas dans un document de gestion soigné.",
+            "en": "The meaning is clear, but « dépendamment de », frequent in Canadian speech, is criticized; it does not fit a carefully written management document."
+          }
+        },
+        {
+          "id": "b",
+          "text": "en fonction aux ressources disponibles et des risques recensés par le comité de gouvernance.",
+          "rationale": {
+            "fr": "La locution est « en fonction de » ; « en fonction aux » est fautif.",
+            "en": "The phrase is « en fonction de »; « en fonction aux » is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "en relation des ressources disponibles et des risques recensés par le comité de gouvernance.",
+          "rationale": {
+            "fr": "« En relation » se construit avec « avec » et exprime un lien, non une variation ; « en relation des » est fautif.",
+            "en": "« En relation » is built with « avec » and expresses a connection, not a variation; « en relation des » is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "en fonction des ressources disponibles et des risques recensés par le comité de gouvernance.",
+          "rationale": {
+            "fr": "« En fonction de » (selon les variations de) exprime exactement que les priorités suivront l'évolution des ressources et des risques.",
+            "en": "« En fonction de » (according to variations in) expresses exactly that priorities will follow changes in resources and risks."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« En fonction de » signifie « selon, d'après les variations de » : « réviser les priorités en fonction des ressources ». « Dépendamment de », répandu à l'oral au Canada, est critiqué ; dans un texte soigné, on écrit « selon », « suivant » ou « en fonction de ».",
+        "en": "« En fonction de » means \"according to, depending on variations in\": « réviser les priorités en fonction des ressources ». « Dépendamment de », widespread in Canadian speech, is criticized; in careful writing, use « selon », « suivant » or « en fonction de »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-27",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le rapport annuel sur les langues officielles fait état d'une nette progression du nombre de titulaires qui satisfont aux exigences linguistiques de leur poste ___ l'exercice précédent, ce qui témoigne de l'efficacité des mesures adoptées.",
+        "en": "The annual report on official languages notes a clear increase in the number of incumbents who meet the language requirements of their position ___ the previous fiscal year, which shows the effectiveness of the measures adopted."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "en rapport avec",
+          "rationale": {
+            "fr": "« En rapport avec » exprime un lien, une correspondance (« un poste en rapport avec ses compétences »), non une comparaison ; il ne convient pas ici.",
+            "en": "« En rapport avec » expresses a connection or match (« un poste en rapport avec ses compétences »), not a comparison; it does not fit here."
+          }
+        },
+        {
+          "id": "b",
+          "text": "par rapport à",
+          "rationale": {
+            "fr": "« Par rapport à » introduit le terme de comparaison : la progression est mesurée par rapport à l'exercice précédent.",
+            "en": "« Par rapport à » introduces the term of comparison: the increase is measured against the previous fiscal year."
+          }
+        },
+        {
+          "id": "c",
+          "text": "rapport à",
+          "rationale": {
+            "fr": "« Rapport à », sans « par », est familier et ne s'emploie pas dans un rapport officiel.",
+            "en": "« Rapport à », without « par », is colloquial and is not used in an official report."
+          }
+        },
+        {
+          "id": "d",
+          "text": "en rapport à",
+          "rationale": {
+            "fr": "« En rapport à » croise « par rapport à » et « en rapport avec » ; la locution est fautive.",
+            "en": "« En rapport à » blends « par rapport à » and « en rapport avec »; the phrase is wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Par rapport à » sert à comparer (« une hausse par rapport à l'exercice précédent ») ; « en rapport avec » exprime un lien ou une correspondance (« une formation en rapport avec ses fonctions »). « Rapport à » est familier et « en rapport à » est un croisement fautif. Pour comparer, on peut aussi écrire « comparativement à ».",
+        "en": "« Par rapport à » is used to compare (« une hausse par rapport à l'exercice précédent »); « en rapport avec » expresses a link or match (« une formation en rapport avec ses fonctions »). « Rapport à » is colloquial and « en rapport à » is a faulty blend. To compare, one can also write « comparativement à »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-28",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "La politique ministérielle rappelle que chaque gestionnaire a des obligations précises…",
+        "en": "The departmental policy reminds readers that each manager has specific obligations…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "vis-à-vis les employés qui souhaitent travailler dans la langue officielle de leur choix.",
+          "rationale": {
+            "fr": "Le sens est clair, mais « vis-à-vis » sans « de » devant un nom est critiqué ; la langue soignée exige « vis-à-vis des employés ».",
+            "en": "The meaning is clear, but « vis-à-vis » without « de » before a noun is criticized; careful usage requires « vis-à-vis des employés »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "à l'égard aux employés qui souhaitent travailler dans la langue officielle de leur choix.",
+          "rationale": {
+            "fr": "La locution est « à l'égard de » ; « à l'égard aux » est fautif.",
+            "en": "The phrase is « à l'égard de »; « à l'égard aux » is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "à l'égard des employés qui souhaitent travailler dans la langue officielle de leur choix.",
+          "rationale": {
+            "fr": "« À l'égard de » (envers, en ce qui concerne) est la locution juste pour désigner ceux envers qui l'on a des obligations.",
+            "en": "« À l'égard de » (towards, regarding) is the right phrase to designate those to whom obligations are owed."
+          }
+        },
+        {
+          "id": "d",
+          "text": "au niveau des employés qui souhaitent travailler dans la langue officielle de leur choix.",
+          "rationale": {
+            "fr": "« Au niveau de » ne devrait s'employer que pour un niveau réel ; ici, il est critiqué et rend le sens flou (obligations envers les employés ou situées à leur échelon ?).",
+            "en": "« Au niveau de » should be used only for a real level; here it is criticized and blurs the meaning (obligations towards the employees, or at their level?)."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour désigner la personne ou la chose envers laquelle on a une attitude ou une obligation, on emploie « à l'égard de », « envers » ou « vis-à-vis de » : « des obligations à l'égard des employés ». « Vis-à-vis » doit être suivi de « de » dans la langue soignée, et « au niveau de » ne convient qu'à un niveau véritable.",
+        "en": "To designate the person or thing towards which one has an attitude or obligation, use « à l'égard de », « envers » or « vis-à-vis de »: « des obligations à l'égard des employés ». In careful usage « vis-à-vis » must be followed by « de », and « au niveau de » fits only a real level."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-29",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "En application de la directive ministérielle, toute demande de mesures d'adaptation présentée par un fonctionnaire doit recevoir une réponse écrite ___ suivant sa réception par la direction des ressources humaines.",
+        "en": "Under the departmental directive, any request for workplace accommodation submitted by a public servant must receive a written response ___ following its receipt by the human resources branch."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "dans les dix jours ouvrables",
+          "rationale": {
+            "fr": "« Dans les » + durée + « suivant » fixe un délai à l'intérieur duquel la réponse doit être donnée, compté à partir de la réception : c'est le sens visé.",
+            "en": "« Dans les » + duration + « suivant » sets a period within which the response must be given, counted from receipt: this is the intended meaning."
+          }
+        },
+        {
+          "id": "b",
+          "text": "en dix jours ouvrables",
+          "rationale": {
+            "fr": "« En » + durée exprime le temps que prend une action ; il ne peut se combiner avec « suivant sa réception » pour fixer un délai.",
+            "en": "« En » + duration expresses how long an action takes; it cannot combine with « suivant sa réception » to set a deadline."
+          }
+        },
+        {
+          "id": "c",
+          "text": "dans dix jours ouvrables",
+          "rationale": {
+            "fr": "Sans article, « dans dix jours » désigne un moment précis dans l'avenir (le dixième jour), et non un délai maximal ; le sens est faussé.",
+            "en": "Without the article, « dans dix jours » refers to a precise future moment (the tenth day), not a maximum period; the meaning is distorted."
+          }
+        },
+        {
+          "id": "d",
+          "text": "en dedans de dix jours ouvrables",
+          "rationale": {
+            "fr": "« En dedans de » au sens temporel est un tour familier et calqué sur l'anglais « within » ; il est à écarter dans une directive.",
+            "en": "« En dedans de » in a temporal sense is colloquial and modelled on the English \"within\"; it should be rejected in a directive."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour exprimer un délai maximal, on écrit « dans les dix jours suivant… » ou « dans un délai de dix jours » : l'article « les » est indispensable. « Dans dix jours » (sans article) désigne un moment futur précis, « en dix jours » le temps que prend une action. « En dedans de », calque de « within », est familier.",
+        "en": "To express a maximum period, write « dans les dix jours suivant… » or « dans un délai de dix jours »: the article « les » is essential. « Dans dix jours » (no article) refers to a precise future moment, « en dix jours » to how long an action takes. « En dedans de », a calque of \"within\", is colloquial."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-30",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Voici un extrait d'un message adressé à toute l'équipe. Quelle correction faut-il y apporter ? « La gestionnaire s'est dite très fière pour le travail accompli par son équipe, qui a rendu conformes aux normes d'accessibilité plus de deux cents documents publiés en ligne. »",
+        "en": "Here is an excerpt from a message to the whole team. What correction must be made? « La gestionnaire s'est dite très fière pour le travail accompli par son équipe, qui a rendu conformes aux normes d'accessibilité plus de deux cents documents publiés en ligne. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « s'est dite » par « s'est dit »",
+          "rationale": {
+            "fr": "Dans « se dire fière », le participe s'accorde avec le sujet féminin « la gestionnaire » ; « dite » est déjà juste.",
+            "en": "In « se dire fière », the participle agrees with the feminine subject « la gestionnaire »; « dite » is already right."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « rendu conformes » par « rendu conforme »",
+          "rationale": {
+            "fr": "L'adjectif attribut « conformes » qualifie « documents », au pluriel ; le singulier serait fautif.",
+            "en": "The attributive adjective « conformes » qualifies « documents », which is plural; the singular would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « aux normes » par « avec les normes »",
+          "rationale": {
+            "fr": "« Conforme » se construit avec « à » ; « conforme avec » serait fautif.",
+            "en": "« Conforme » is constructed with « à »; « conforme avec » would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « fière pour le travail » par « fière du travail »",
+          "rationale": {
+            "fr": "L'adjectif « fier » se construit avec « de » : « fière du travail accompli ». C'est la seule faute de la phrase.",
+            "en": "The adjective « fier » is constructed with « de »: « fière du travail accompli ». This is the sentence's only error."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Fier » introduit son complément par « de » : être fier de quelque chose, de quelqu'un (« fière du travail accompli »). « Fier pour », calqué sur l'anglais, ne convient pas. Dans la même phrase, « conforme à » prend bien « à ».",
+        "en": "« Fier » introduces its complement with « de »: « être fier de quelque chose, de quelqu'un » (« fière du travail accompli »). « Fier pour », modelled on English, does not fit. In the same sentence, « conforme à » correctly takes « à »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-31",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Afin de ___ la hausse des émissions attribuables aux déplacements professionnels, le comité ministériel de développement durable recommande de privilégier systématiquement les réunions virtuelles.",
+        "en": "In order to ___ the rise in emissions attributable to business travel, the departmental sustainable development committee recommends systematically favouring virtual meetings."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "remédier",
+          "rationale": {
+            "fr": "Il manque la préposition : « remédier » n'admet pas de complément direct, et « remédier la hausse » est fautif.",
+            "en": "The preposition is missing: « remédier » does not take a direct object, and « remédier la hausse » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remédier sur",
+          "rationale": {
+            "fr": "« Remédier » ne se construit pas avec « sur » ; la préposition est fautive.",
+            "en": "« Remédier » is not constructed with « sur »; the preposition is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remédier à",
+          "rationale": {
+            "fr": "« Remédier à » (apporter une solution à un problème) introduit son complément par « à » : « remédier à la hausse ».",
+            "en": "« Remédier à » (to remedy a problem) introduces its complement with « à »: « remédier à la hausse »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "pallier à",
+          "rationale": {
+            "fr": "« Pallier » est transitif direct (« pallier la hausse ») ; « pallier à » est une construction critiquée par les ouvrages de référence.",
+            "en": "« Pallier » takes a direct object (« pallier la hausse »); « pallier à » is a construction criticized by reference works."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Remédier » se construit avec « à » (remédier à un problème, à une situation), comme « obvier à ». À l'inverse, « pallier » est transitif direct : on pallie un problème. Le croisement des deux constructions produit la faute fréquente « pallier à ».",
+        "en": "« Remédier » is constructed with « à » (« remédier à un problème, à une situation »), like « obvier à ». Conversely, « pallier » takes a direct object: « on pallie un problème ». Crossing the two constructions produces the frequent error « pallier à »."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-32",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Pour estimer l'empreinte carbone de leurs déplacements professionnels, les fonctionnaires peuvent désormais…",
+        "en": "To estimate the carbon footprint of their business travel, public servants can now…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "se fier sur le calculateur mis à leur disposition dans l'intranet ministériel.",
+          "rationale": {
+            "fr": "Le sens est compris, mais « se fier sur », très répandu à l'oral au Canada, est critiqué ; il ne convient pas dans une communication administrative.",
+            "en": "The meaning is understood, but « se fier sur », very widespread in Canadian speech, is criticized; it does not fit an administrative communication."
+          }
+        },
+        {
+          "id": "b",
+          "text": "se fier au calculateur mis à leur disposition dans l'intranet ministériel.",
+          "rationale": {
+            "fr": "« Se fier à » (faire confiance à) est la construction de la langue soignée : « se fier au calculateur ».",
+            "en": "« Se fier à » (to rely on) is the construction of careful usage: « se fier au calculateur »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "se confier au calculateur mis à leur disposition dans l'intranet ministériel.",
+          "rationale": {
+            "fr": "La phrase est grammaticale, mais « se confier à » signifie « faire des confidences à » ; le sens ne convient pas.",
+            "en": "The sentence is grammatical, but « se confier à » means \"to confide in\"; the meaning does not fit."
+          }
+        },
+        {
+          "id": "d",
+          "text": "se fier du calculateur mis à leur disposition dans l'intranet ministériel.",
+          "rationale": {
+            "fr": "« Se fier » ne se construit pas avec « de » ; la préposition est fautive.",
+            "en": "« Se fier » is not constructed with « de »; the preposition is wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Se fier » se construit avec « à » : se fier à quelqu'un, à un outil, à ses calculs. « Se fier sur », très courant à l'oral au Canada, est à éviter dans un texte administratif. On peut aussi écrire « compter sur » ou « s'en remettre à ». « Se confier à » a un autre sens : « faire des confidences à ».",
+        "en": "« Se fier » is constructed with « à »: « se fier à quelqu'un, à un outil, à ses calculs ». « Se fier sur », very common in Canadian speech, is to be avoided in an administrative text. One can also write « compter sur » or « s'en remettre à ». « Se confier à » has another meaning: \"to confide in\"."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-prepositions-and-government-33",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase d'une note de service comporte une faute de construction. Choisissez la correction qui s'impose : « Afin de pallier au manque de bacs de recyclage dans les aires communes, la Direction des installations procédera, d'ici la fin du mois, à l'installation de nouveaux points de collecte. »",
+        "en": "This sentence from an internal memo contains a construction error. Choose the required correction: « Afin de pallier au manque de bacs de recyclage dans les aires communes, la Direction des installations procédera, d'ici la fin du mois, à l'installation de nouveaux points de collecte. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « pallier au manque » par « pallier le manque »",
+          "rationale": {
+            "fr": "« Pallier » est transitif direct : on pallie un manque. Supprimer la préposition corrige la seule faute de la phrase.",
+            "en": "« Pallier » takes a direct object: « on pallie un manque ». Removing the preposition fixes the sentence's only error."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « à l'installation » par « de l'installation »",
+          "rationale": {
+            "fr": "« Procéder à » (exécuter une opération) est juste ; « procéder de » signifie « découler de » et ne convient pas ici.",
+            "en": "« Procéder à » (to carry out an operation) is well used; « procéder de » means \"to stem from\" and does not fit here."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « pallier au manque » par « pallier aux manques »",
+          "rationale": {
+            "fr": "La modification touche le bon endroit, mais conserve la préposition fautive ; « pallier aux » reste critiqué.",
+            "en": "The change targets the right spot but keeps the faulty preposition; « pallier aux » remains criticized."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « manque de bacs » par « manque en bacs »",
+          "rationale": {
+            "fr": "Le nom « manque » se construit avec « de » ; « manque en bacs » n'est pas idiomatique, et la faute de construction resterait.",
+            "en": "The noun « manque » is constructed with « de »; « manque en bacs » is not idiomatic, and the construction error would remain."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Pallier » est transitif direct : on pallie un manque, une insuffisance, une difficulté. « Pallier à », formé par analogie avec « remédier à » ou « obvier à », est critiqué par les ouvrages de référence. Dans la même phrase, « procéder à » prend bien « à », et « d'ici la fin du mois » est correct.",
+        "en": "« Pallier » takes a direct object: « on pallie un manque, une insuffisance, une difficulté ». « Pallier à », formed by analogy with « remédier à » or « obvier à », is criticized by reference works. In the same sentence, « procéder à » correctly takes « à », and « d'ici la fin du mois » is correct."
+      },
+      "subSkill": "prepositions-and-government",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ]
+}

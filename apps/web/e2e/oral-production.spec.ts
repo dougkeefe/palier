@@ -1,5 +1,8 @@
+import { readFileSync } from "node:fs";
+
 import { expect, test } from "@playwright/test";
 
+import { bankVersionFrom } from "../scripts/prepare-public.mjs";
 import { onboard } from "./helpers";
 import { EXAMINER_QUESTION, SENTINEL, idsAtRest, promptOf, stubOpenAi } from "./leak-guard";
 
@@ -13,6 +16,23 @@ import { EXAMINER_QUESTION, SENTINEL, idsAtRest, promptOf, stubOpenAi } from "./
 
 const START = new Date("2026-10-01T14:00:00.000Z");
 const MIN = 60_000;
+
+type Scenario = { sessionType: string; targetBand: string; status?: string; phases: { name: string; minutes: number }[] };
+
+/**
+ * The warm-up the picker offers at level C: the bank's first published one at C, in id order, as
+ * `oralSessionChoices` takes it. Read from the committed bank rather than written here, so a bank
+ * that retires or replaces its scenarios (D205) moves the expectation with it (D207).
+ */
+const offeredWarmup = (): Scenario => {
+  const version = bankVersionFrom(readFileSync(new URL("../src/lib/bank-version.ts", import.meta.url), "utf8"));
+  const scenarios = JSON.parse(
+    readFileSync(new URL(`../../../content/bank/v${String(version)}/oral/scenarios.json`, import.meta.url), "utf8"),
+  ) as Scenario[];
+  const warmup = scenarios.find((s) => s.sessionType === "warmup" && s.targetBand === "C" && s.status !== "retired");
+  if (warmup === undefined) throw new Error("the committed bank offers no warm-up at C");
+  return warmup;
+};
 
 test("the screen's timer moves the session into its next phase, and the examiner asks in it", async ({ page, context }) => {
   test.setTimeout(90_000);
@@ -33,18 +53,22 @@ test("the screen's timer moves the session into its next phase, and the examiner
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByText(/^Saved on this device/)).toBeVisible();
 
-  // Level C, so the bank's C warm-up: three minutes, then two.
+  // Level C, so the bank's C warm-up, read from the committed bank.
+  const warmup = offeredWarmup();
+  const [first, second] = warmup.phases;
+  if (first === undefined || second === undefined) throw new Error("the warm-up needs two phases to cross");
+  const parts = warmup.phases.length;
   await page.goto("/en/practice/oral");
   await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Warm-up", exact: true }) }).getByRole("button", { name: "Choose" }).click();
   await page.getByRole("button", { name: "Answer by typing instead" }).click();
   await page.getByRole("button", { name: "Start the session" }).click();
   await expect(page.getByText(EXAMINER_QUESTION)).toBeVisible();
-  await expect(page.getByText("Part 1 of 2")).toBeVisible();
+  await expect(page.getByText(`Part 1 of ${String(parts)}`)).toBeVisible();
 
-  // Three and a half minutes on: the next tick crosses into the second phase. The screen's timer
+  // Half a minute past the first phase: the next tick crosses into the second phase. The screen's timer
   // updates the elapsed time and ticks the session in one callback, so once the time shown has moved,
   // a tick has seen the new clock (D121).
-  await page.clock.setFixedTime(new Date(START.getTime() + 3.5 * MIN));
+  await page.clock.setFixedTime(new Date(START.getTime() + (first.minutes + 0.5) * MIN));
   // Two moves, so the second comes from a callback that began after the clock was set.
   const timer = page.getByRole("group", { name: "Elapsed time" });
   for (let move = 0; move < 2; move++) {
@@ -53,8 +77,8 @@ test("the screen's timer moves the session into its next phase, and the examiner
   }
   await page.getByRole("textbox", { name: "Your answer" }).fill("Je travaille à la direction des finances.");
   await page.getByRole("button", { name: "Send answer" }).click();
-  await expect(page.getByText("Part 2 of 2")).toBeVisible();
-  expect(phases).toEqual(["Mise en train", "Description"]);
+  await expect(page.getByText(`Part 2 of ${String(parts)}`)).toBeVisible();
+  expect(phases).toEqual([first.name, second.name]);
 
   await page.getByRole("button", { name: "End the session" }).click();
   await expect(page.getByRole("heading", { name: "Session over" })).toBeFocused();

@@ -15,6 +15,7 @@ import {
   contributeIssueUrl,
   errorIssueUrl,
   exportFileName,
+  provenanceLine,
   reportIssueUrl,
 } from "./report";
 
@@ -165,5 +166,22 @@ describe("SELFHOST_GUIDE_URL (D192)", () => {
 
   it("links it on the repository's main branch", () => {
     expect(SELFHOST_GUIDE_URL).toBe(`${REPOSITORY_URL}/blob/main/selfhost/README.md`);
+  });
+});
+
+describe("provenanceLine (D203)", () => {
+  const generator = { model: "claude-opus-5-5", promptVersion: "authoring-brief-v4", date: "2026-10-04T00:00:00.000Z" };
+
+  it("reads an authored item that names the model that wrote it as machine-generated", () => {
+    expect(provenanceLine({ provenance: { origin: "authored", contributor: "claude-opus-5-5", generator } })).toBe("generated");
+  });
+
+  it("reads an item a person wrote as authored", () => {
+    expect(provenanceLine({ provenance: { origin: "authored", contributor: "octocat" } })).toBe("authored");
+  });
+
+  it("leaves every other origin as it is", () => {
+    expect(provenanceLine({ provenance: { origin: "generated", generator } })).toBe("generated");
+    expect(provenanceLine({ provenance: { origin: "adapted" } })).toBe("adapted");
   });
 });

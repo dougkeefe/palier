@@ -1,0 +1,63 @@
+{
+  "bandCuts": [
+    {
+      "band": "X",
+      "max": 10,
+      "min": 0
+    },
+    {
+      "band": "A",
+      "max": 16,
+      "min": 11
+    },
+    {
+      "band": "B",
+      "max": 23,
+      "min": 17
+    },
+    {
+      "band": "C",
+      "max": 30,
+      "min": 24
+    }
+  ],
+  "id": "fr-writing-unsupervised-v3",
+  "itemIds": [
+    "41BJST37AG10Q3LDGD92",
+    "87ECP42064M8RI7T5Q4D",
+    "FTENLOO9ICQB12LETVRL",
+    "1002J2L1H6VU897D17G7",
+    "9AAESSIJ4E1T9DJGK226",
+    "7HEIL9MOC0FNDMERP75D",
+    "E5FQ0CKARM0KFVHO23QP",
+    "5RSRK6UPLKKL81PLHANM",
+    "9TQUAC4P4A3NU7KCDC8V",
+    "8SIV5TQFC5HB4ORA6E8O",
+    "5AIK2VFHI8TBCCJM7M31",
+    "396UJQNJN0RES4T6AJG6",
+    "3I7153JFTOMPUSS1E5FT",
+    "4RK10RFH4KQ6PU6AS7Q2",
+    "4CLS6I7PCGNRF6P8MV3K",
+    "CA1E5AIDIK74DI3LUE3Q",
+    "63N5KJLN9R74CEH68IDF",
+    "245HE5ESQL6I5ORD7PSP",
+    "6GBFFJMGPO0E4M4F9T68",
+    "96679TQ4GD55N8PJ2A4Q",
+    "AE7V33TQTU568BVDRRB3",
+    "8LIA8104TEQRK3A71LJP",
+    "D25KK8AKB1SK8U7OOE5P",
+    "9RO9JJ738RVTJDPKI5RS",
+    "7PLD7354UCQHCF2PITJK",
+    "3KRGQUPSIBL8ORMJTK1A",
+    "6F3B38QCOFROU42IO29R",
+    "5CDDI3J7A7T8V4GD0GH1",
+    "1HU7H75H869J3OH63GFL",
+    "6DTJ4RIT60JMA2GCSJAB"
+  ],
+  "lang": "fr",
+  "mode": "unsupervised",
+  "pilotItemIds": [],
+  "skill": "writing",
+  "timeLimitMinutes": 45,
+  "version": 3
+}

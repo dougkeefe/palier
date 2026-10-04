@@ -98,6 +98,15 @@
         "accessibility",
         "environment"
       ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "published",
+        "retired"
+      ]
     }
   },
   "required": [

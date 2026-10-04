@@ -66,7 +66,7 @@ accounts so studio mode's key never reaches Palier's server. Nothing imports the
 | When you need | Read |
 | --- | --- |
 | What is built, in flight, or deliberately deviated from the plan | `docs/progress.md` — status, then deviations |
-| Why a choice was made, and what evidence would reverse it | `docs/adr/`, 23 records, each with a *revisit when*. Take the next free number |
+| Why a choice was made, and what evidence would reverse it | `docs/adr/`, 24 records, each with a *revisit when*. Take the next free number |
 | Whether something is a requirement or an opinion | `product-requirements.md` §0 and §0.1 (the 14 requirements) |
 | Exam variants, item counts, time limits, band cut tables | `product-requirements.md` §5 |
 | Screens, states, copy, visual language, accessibility commitments | `product-requirements.md` §8, §10, §11, §14 |

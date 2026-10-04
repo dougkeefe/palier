@@ -2,8 +2,8 @@ import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
-import { itemSchema, itemTypeDefinition, parseExamProfileOrThrow } from "@palier/domain";
-import type { ExamProfile, Item, ReviewRequest } from "@palier/domain";
+import { itemSchema, itemTypeDefinition, parseExamProfileOrThrow, scenarioId } from "@palier/domain";
+import type { ExamProfile, Item, OralScenario, ReviewRequest } from "@palier/domain";
 import type { AiProvider } from "@palier/adapters/openai";
 
 import { scriptedAiProvider } from "../providers/scripted-ai-provider.js";
@@ -323,6 +323,83 @@ describe("runPipeline, with hand-authored items (content-factory.md §5)", () =>
     expect(empty.bank.files).toEqual(without.bank.files);
     expect(empty.report).toEqual(without.report);
     expect(empty.report).not.toHaveProperty("authored");
+  });
+});
+
+/** A provider that counts every call it is asked to make, reviewing as the scripted one does. */
+const countingCalls = (): { provider: AiProvider; calls: string[] } => {
+  const inner = scriptedAiProvider();
+  const calls: string[] = [];
+  const counted = <K extends "generatePassage" | "generateItems" | "reviewItem" | "generateScenario">(name: K): AiProvider[K] =>
+    ((req: never) => {
+      calls.push(name);
+      return (inner[name] as (r: never) => unknown)(req);
+    }) as AiProvider[K];
+  return {
+    calls,
+    provider: {
+      ...inner,
+      generatePassage: counted("generatePassage"),
+      generateItems: counted("generateItems"),
+      reviewItem: counted("reviewItem"),
+      generateScenario: counted("generateScenario"),
+    },
+  };
+};
+
+const PHASE = { name: "Accueil", minutes: 5, intent: "Warm up.", seedQuestions: ["Q ?"], escalation: ["E ?"], deescalation: ["D ?"] };
+const anAuthoredScenario = (over: Partial<OralScenario> = {}): OralScenario => ({
+  id: scenarioId("authored-warmup-b"),
+  lang: "fr",
+  sessionType: "warmup",
+  targetBand: "B",
+  topic: "human-resources",
+  phases: [PHASE],
+  ...over,
+});
+
+describe("runPipeline, authored only (D203)", () => {
+  it("asks the provider for nothing but the review of the authored items, sources and oral plan notwithstanding", async () => {
+    const { provider, calls } = countingCalls();
+    const out = await run({ provider, oralPlan: ORAL_PLAN, authoredOnly: true, authored: { items: [anAuthoredItem()], passages: [] } });
+    expect(calls).toEqual(["reviewItem"]);
+    expect(out.report.counts).toMatchObject({ sources: 0, passages: 0, itemsDrafted: 0, itemsPassed: 0, scenarios: 0 });
+    expect(out.report.stage4Yield).toBe(0);
+    expect(out.report.authored).toEqual({ submitted: 1, passed: 1, published: 1 });
+  });
+
+  it("still carries the previous bank, so a carried item keeps its id", async () => {
+    const previous = await run();
+    const out = await run({ bankVersion: 2, authoredOnly: true, carried: { items: previous.validation.valid, passages: previous.passages } });
+    expect(out.validation.valid.map((i) => i.id)).toEqual(previous.validation.valid.map((i) => i.id));
+  });
+});
+
+describe("runPipeline, with authored scenarios (D203)", () => {
+  it("ships an authored scenario that fills its session, after the carried ones, and counts it as new", async () => {
+    const carried = { items: [], passages: [], scenarios: [anAuthoredScenario({ id: scenarioId("carried"), sessionType: "full", phases: [{ ...PHASE, minutes: 22 }] })] };
+    const out = await run({ oralPlan: ORAL_PLAN, authoredOnly: true, carried, authored: { items: [], passages: [], scenarios: [anAuthoredScenario()] } });
+    expect(out.scenarios.map((s) => s.id)).toEqual(["carried", "authored-warmup-b"]);
+    expect(out.report.counts).toMatchObject({ scenarios: 1, scenariosCarried: 1 });
+  });
+
+  it("discards an authored scenario whose phases do not fill the session, or that duplicates one kept, never repairing it", async () => {
+    const out = await run({
+      oralPlan: ORAL_PLAN,
+      authoredOnly: true,
+      authored: { items: [], passages: [], scenarios: [anAuthoredScenario(), anAuthoredScenario(), anAuthoredScenario({ id: scenarioId("short"), phases: [{ ...PHASE, minutes: 3 }] })] },
+    });
+    expect(out.scenarios.map((s) => s.id)).toEqual(["authored-warmup-b"]);
+    expect(out.scenarioStage.rejected).toEqual([
+      { id: "authored-warmup-b", reasons: ["duplicate of authored-warmup-b"] },
+      { id: "short", reasons: ["phases last 3 minutes, the warmup session 5"] },
+    ]);
+  });
+
+  it("discards an authored scenario of a session type the oral plan gives no length", async () => {
+    const out = await run({ authoredOnly: true, authored: { items: [], passages: [], scenarios: [anAuthoredScenario({ sessionType: "opinion" })] } });
+    expect(out.scenarios).toEqual([]);
+    expect(out.scenarioStage.rejected[0]?.reasons).toEqual(["no session length is planned for opinion"]);
   });
 });
 

@@ -6,10 +6,15 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import type { AiProvider } from "@palier/adapters/openai";
 
-import { DEFAULT_BANK_VERSION, buildProvider, runFactory } from "./cli.js";
+import { DEFAULT_BANK_VERSION, REVIEW_REQUESTS_PATH, buildProvider, runFactory } from "./cli.js";
 import type { CliDeps } from "./cli.js";
 import { scriptedAiProvider } from "./providers/scripted-ai-provider.js";
-import { anAuthoredItem, anAuthoredItemReviewRejects } from "./__tests__/authored-fixtures.js";
+import {
+  anAuthoredComprehensionItem,
+  anAuthoredItem,
+  anAuthoredItemReviewRejects,
+  anAuthoredPassage,
+} from "./__tests__/authored-fixtures.js";
 import {
   AUTHORED_DIR,
   BATCH_REPORT_PATH,
@@ -20,11 +25,12 @@ import {
   PRICING_PATH,
   PROFILE_PATH,
   RECORDED_COMPLETIONS_DIR,
+  REVIEWS_DIR,
   SOURCES_PATH,
 } from "./io.js";
 
 const REPO = process.cwd();
-/** What a plain `run` writes: the default version, `v3` since Phase 5 Slice 1 (D114). */
+/** What a plain `run` writes: the default version, `v4` since the authored run (D203). */
 const DEFAULT = `v${String(DEFAULT_BANK_VERSION)}`;
 // The eval reads the recorded completions too (progress.md D112), so they are inputs like the rest.
 const RECORDED = readdirSync(join(REPO, RECORDED_COMPLETIONS_DIR)).map((file) => `${RECORDED_COMPLETIONS_DIR}/${file}`);
@@ -312,20 +318,149 @@ describe("runFactory", () => {
 describe("buildProvider", () => {
   it("returns the injected provider when one is supplied", () => {
     const injected = scriptedAiProvider();
-    expect(buildProvider(false, deps({ provider: injected }))).toBe(injected);
+    expect(buildProvider("scripted", deps({ provider: injected }))).toBe(injected);
   });
 
   it("builds the scripted provider by default", () => {
-    const provider = buildProvider(false, bareDeps());
+    const provider = buildProvider("scripted", bareDeps());
     expect(provider.capabilities().generateItems).toBe(true);
   });
 
   it("builds the openai provider when a key is present", () => {
-    const provider = buildProvider(true, bareDeps({ OPENAI_API_KEY: "sk-x" }));
+    const provider = buildProvider("openai", bareDeps({ OPENAI_API_KEY: "sk-x" }));
     expect(provider.capabilities().generateItems).toBe(true);
   });
 
   it("refuses the openai provider without a key", () => {
-    expect(() => buildProvider(true, bareDeps({}))).toThrow(/OPENAI_API_KEY/);
+    expect(() => buildProvider("openai", bareDeps({}))).toThrow(/OPENAI_API_KEY/);
+  });
+});
+
+describe("buildProvider, the recorded reviewer (D204)", () => {
+  it("builds a reviewer that only reviews, from the verdicts under content/factory/reviews", () => {
+    const provider = buildProvider("recorded", bareDeps());
+    expect(provider.capabilities().reviewItem).toBe(true);
+    expect(provider.capabilities().generateItems).toBe(false);
+  });
+
+  it("refuses a provider it does not know", () => {
+    expect(() => buildProvider("gemini", bareDeps())).toThrow(/unknown provider "gemini"/);
+  });
+});
+
+type Requests = { requestHash: string; itemId: string; request: { stem: { fr: string }; passage?: unknown } }[];
+
+const contribute = (content: unknown, file = "octocat.json"): void => {
+  mkdirSync(join(root, AUTHORED_DIR), { recursive: true });
+  writeFileSync(join(root, AUTHORED_DIR, file), JSON.stringify(content));
+};
+
+const readRequests = (path = REVIEW_REQUESTS_PATH): Requests => JSON.parse(readFileSync(join(root, path), "utf8")) as Requests;
+
+/** A verdict file answering `requests`: the intended key, confidently, for every item but `reject`, which gets "d". */
+const fileVerdicts = (requests: Requests, keys: Record<string, string>, reject: readonly string[] = []): void => {
+  mkdirSync(join(root, REVIEWS_DIR), { recursive: true });
+  const verdicts = requests.map(({ requestHash, itemId }) => ({
+    requestHash,
+    itemId,
+    verdict: {
+      chosenKey: reject.includes(itemId) ? "d" : keys[itemId],
+      confidence: 0.9,
+      defensibleDistractors: [],
+      optionCases: { a: "a", b: "b", c: "c", d: "d" },
+      registerFlag: { flagged: false },
+      estimatedBand: "B",
+    },
+  }));
+  writeFileSync(join(root, REVIEWS_DIR, "pass-1.json"), JSON.stringify({ reviewer: "claude-opus-5-5", verdicts }));
+};
+
+describe("review-requests (D204)", () => {
+  it("writes each authored item's blind request, with its passage and its hash, and no key", async () => {
+    contribute({ items: [anAuthoredItem(), anAuthoredComprehensionItem()], passages: [anAuthoredPassage()] });
+    expect(await runFactory(["review-requests"], deps())).toBe(0);
+    const requests = readRequests();
+    expect(requests.map((r) => r.itemId)).toEqual([anAuthoredItem().id, anAuthoredComprehensionItem().id]);
+    expect(requests[1]?.request.passage).toEqual({ title: anAuthoredPassage().title, body: anAuthoredPassage().body });
+    expect(JSON.stringify(requests)).not.toMatch(/"key"|rationale|explanation/);
+    expect(log).toContain(`review-requests: 2 blind request(s) written to ${REVIEW_REQUESTS_PATH}`);
+  });
+
+  it("leaves out the items a recorded verdict already answers, unless asked for all", async () => {
+    contribute({ items: [anAuthoredItem()] });
+    await runFactory(["review-requests"], deps());
+    fileVerdicts(readRequests(), { [anAuthoredItem().id]: "b" });
+    await runFactory(["review-requests", "--out", "pending.json"], deps());
+    expect(readRequests("pending.json")).toEqual([]);
+    await runFactory(["review-requests", "--all", "--out", "all.json"], deps());
+    expect(readRequests("all.json")).toHaveLength(1);
+  });
+});
+
+describe("run --authored-only --provider recorded (D203)", () => {
+  const authoredRun = async (): Promise<number> => {
+    contribute({ items: [anAuthoredItem(), anAuthoredItemReviewRejects()] });
+    await runFactory(["review-requests"], deps());
+    fileVerdicts(readRequests(), { [anAuthoredItem().id]: "b" }, [anAuthoredItemReviewRejects().id]);
+    return runFactory(["run", "--authored-only", "--provider", "recorded"], bareDeps());
+  };
+
+  it("drafts nothing, reviews the contributions from the recorded verdicts, and names the reviewer", async () => {
+    await authoredRun();
+    const report = JSON.parse(readFileSync(join(root, BATCH_REPORT_PATH), "utf8")) as {
+      provider: string;
+      counts: { sources: number; passages: number; itemsDrafted: number; scenarios: number };
+      authored: unknown;
+      totalCostUsd: unknown;
+    };
+    expect(report.counts).toMatchObject({ sources: 0, passages: 0, itemsDrafted: 0, scenarios: 0 });
+    expect(report.authored).toEqual({ submitted: 2, passed: 1, published: 1 });
+    expect(report.provider).toBe("claude-opus-5-5");
+    expect(report.totalCostUsd).toBeNull();
+  });
+
+  it("does not hold a batch that drafted nothing to the drafter's yield band", async () => {
+    await authoredRun();
+    expect(log).toContain("no items drafted: stage-4 yield does not apply");
+    expect(log.join(" ")).not.toMatch(/WARNING: stage-4 yield/);
+  });
+
+  it("stops on an authored item no recorded verdict answers", async () => {
+    contribute({ items: [anAuthoredItem()] });
+    await expect(runFactory(["run", "--authored-only", "--provider", "recorded"], bareDeps())).rejects.toThrow(/no recorded verdict/);
+  });
+});
+
+describe("check-authored (D203)", () => {
+  it("passes a clean contribution and says what it checked", async () => {
+    contribute({ items: [anAuthoredItem(), anAuthoredComprehensionItem()], passages: [anAuthoredPassage()] });
+    expect(await runFactory(["check-authored"], deps())).toBe(0);
+    expect(log).toContain("check-authored: 2 item(s), 1 passage(s), 0 scenario(s), 0 issue(s)");
+  });
+
+  it("names every issue and returns 1", async () => {
+    contribute({ items: [anAuthoredComprehensionItem()], passages: [anAuthoredPassage({ wordCount: 9 })] });
+    expect(await runFactory(["check-authored"], deps())).toBe(1);
+    expect(log).toContain(`ISSUE: passage ${anAuthoredPassage().id}: wordCount is 9, and the body has 51`);
+  });
+
+  it("checks only the files it is given", async () => {
+    contribute({ items: [anAuthoredItem()] }, "good.json");
+    contribute({ items: [anAuthoredItem({ subSkill: "main-idea" })] }, "bad.json");
+    expect(await runFactory(["check-authored", `${AUTHORED_DIR}/good.json`], deps())).toBe(0);
+  });
+
+  it("fills a passage's word count and readability in from its body with --write-readability", async () => {
+    contribute({ items: [anAuthoredComprehensionItem()], passages: [anAuthoredPassage({ wordCount: 1, readability: { sentences: 1, avgSentenceLength: 1, rareWordRatio: 0 } })] });
+    expect(await runFactory(["check-authored", "--write-readability"], deps())).toBe(0);
+    const written = JSON.parse(readFileSync(join(root, AUTHORED_DIR, "octocat.json"), "utf8")) as { passages: unknown[] };
+    expect(written.passages[0]).toMatchObject({ wordCount: 51, readability: anAuthoredPassage().readability });
+  });
+
+  it("checks an authored scenario against the oral plan's session lengths", async () => {
+    const phase = { name: "Accueil", minutes: 4, intent: "Warm up.", seedQuestions: ["Q ?"], escalation: ["E ?"], deescalation: ["D ?"] };
+    contribute({ items: [], scenarios: [{ sessionType: "warmup", targetBand: "B", lang: "fr", topic: "human-resources", phases: [phase] }] });
+    expect(await runFactory(["check-authored"], deps())).toBe(1);
+    expect(log.join(" ")).toMatch(/ISSUE: scenario \w+: phases last 4 minutes, the warmup session 5/);
   });
 });

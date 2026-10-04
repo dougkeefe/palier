@@ -1,0 +1,2197 @@
+{
+  "items": [
+    {
+      "id": "claude-w-word-choice-precision-01",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le départ ___ de la responsable des relations avec les médias oblige l'équipe des communications à revoir la répartition des demandes des journalistes dès la semaine prochaine.",
+        "en": "The ___ departure of the media relations lead requires the communications team to rethink how journalists' requests are distributed starting next week."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "éminent",
+          "rationale": {
+            "fr": "« Éminent » signifie « remarquable, supérieur » et qualifie une personne ou un mérite (une éminente spécialiste) ; un départ n'est pas éminent. C'est le paronyme classique d'« imminent ».",
+            "en": "« Éminent » means 'distinguished, outstanding' and describes a person or a merit (une éminente spécialiste); a departure cannot be « éminent ». It is the classic paronym of « imminent »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "immanent",
+          "rationale": {
+            "fr": "Terme de philosophie qui désigne ce qui est contenu dans la nature même d'un être ; il n'a aucun sens temporel et ne convient pas pour un départ.",
+            "en": "A philosophical term for what is contained in the very nature of a being; it has no time meaning and does not fit a departure."
+          }
+        },
+        {
+          "id": "c",
+          "text": "imminent",
+          "rationale": {
+            "fr": "« Imminent » qualifie ce qui est sur le point de se produire : le départ aura lieu très bientôt, d'où la réorganisation « dès la semaine prochaine ».",
+            "en": "« Imminent » describes what is about to happen: the departure will take place very soon, hence the reorganisation « dès la semaine prochaine »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "proéminent",
+          "rationale": {
+            "fr": "« Proéminent » signifie « qui fait saillie, qui dépasse » (un menton proéminent) ; il décrit une forme physique, non un événement à venir.",
+            "en": "« Proéminent » means 'protruding, sticking out' (un menton proéminent); it describes a physical shape, not an upcoming event."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Imminent » (qui va se produire très prochainement) et « éminent » (qui se distingue par sa valeur) se ressemblent mais n'ont rien en commun : on parle d'un départ, d'une menace ou d'une échéance imminente, mais d'une éminente juriste. « Immanent » et « proéminent » sont d'autres paronymes : l'un appartient au vocabulaire philosophique, l'autre décrit ce qui fait saillie. Devant un événement à venir, c'est le sens temporel qu'il faut chercher.",
+        "en": "« Imminent » (about to happen very soon) and « éminent » (distinguished by its worth) look alike but share nothing: one speaks of an imminent departure, threat or deadline, but of « une éminente juriste ». « Immanent » and « proéminent » are further paronyms: the first belongs to philosophy, the second describes something that protrudes. For an upcoming event, the time meaning is what is needed."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-02",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Compte tenu de la ___ économique défavorable, le comité ministériel de gestion des ressources a reporté à l'exercice suivant le lancement de deux programmes de subventions.",
+        "en": "Given the unfavourable economic ___, the departmental resource management committee postponed the launch of two grant programs to the following fiscal year."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "conjoncture",
+          "rationale": {
+            "fr": "La « conjoncture » est l'ensemble des circonstances qui caractérisent une situation à un moment donné ; « la conjoncture économique » est la collocation consacrée.",
+            "en": "The « conjoncture » is the set of circumstances that characterise a situation at a given moment; « la conjoncture économique » is the established collocation."
+          }
+        },
+        {
+          "id": "b",
+          "text": "conjecture",
+          "rationale": {
+            "fr": "Une « conjecture » est une supposition, une hypothèse fondée sur des apparences ; une hypothèse ne décrit pas l'état de l'économie qui justifie un report. Paronyme fréquent de « conjoncture ».",
+            "en": "A « conjecture » is a supposition, a hypothesis based on appearances; a hypothesis does not describe the state of the economy that justifies a postponement. A frequent paronym of « conjoncture »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "conjonction",
+          "rationale": {
+            "fr": "« Conjonction » désigne la rencontre de plusieurs éléments ou, en grammaire, un mot de liaison ; le mot ne désigne pas l'état de l'économie à un moment donné.",
+            "en": "« Conjonction » means the meeting of several elements or, in grammar, a linking word; it does not refer to the state of the economy at a given time."
+          }
+        },
+        {
+          "id": "d",
+          "text": "contingence",
+          "rationale": {
+            "fr": "« Contingence » désigne le caractère de ce qui peut arriver ou non et, au pluriel, des détails secondaires ; « la contingence économique » n'est pas une expression reçue pour décrire la situation du moment.",
+            "en": "« Contingence » means the quality of what may or may not happen and, in the plural, minor details; « la contingence économique » is not an accepted expression for the current situation."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Ne pas confondre « conjoncture » (situation résultant d'un ensemble de circonstances : conjoncture économique, politique, budgétaire) et « conjecture » (supposition : se perdre en conjectures). Le contexte décrit un état de fait qui justifie un report, et non une hypothèse : seul « conjoncture » convient.",
+        "en": "Do not confuse « conjoncture » (a situation arising from a set of circumstances: economic, political, budgetary conjuncture) with « conjecture » (a supposition: se perdre en conjectures). The context describes a state of affairs that justifies a postponement, not a hypothesis, so only « conjoncture » fits."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-03",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "L'évaluation conclut que certains critères de sélection, reconduits sans examen depuis des années, ont contribué à ___ les obstacles auxquels se heurtent les candidats en situation de handicap.",
+        "en": "The evaluation concludes that certain selection criteria, renewed without review for years, have helped ___ the barriers faced by candidates with disabilities."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "perpétrer",
+          "rationale": {
+            "fr": "« Perpétrer » signifie « commettre » et s'emploie pour un crime ou un délit (perpétrer une fraude) ; on ne perpètre pas des obstacles.",
+            "en": "« Perpétrer » means 'to commit' and is used for a crime or an offence (perpétrer une fraude); barriers are not « perpétrés »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "proroger",
+          "rationale": {
+            "fr": "« Proroger » signifie prolonger par une décision la durée d'un délai, d'un mandat ou d'une échéance ; il ne s'applique pas à des obstacles qui subsistent d'eux-mêmes.",
+            "en": "« Proroger » means to extend, by a decision, the length of a deadline, a mandate or a term; it does not apply to barriers that persist on their own."
+          }
+        },
+        {
+          "id": "c",
+          "text": "réitérer",
+          "rationale": {
+            "fr": "« Réitérer » signifie refaire ou redire (réitérer une demande) ; des obstacles ne se réitèrent pas, ils persistent.",
+            "en": "« Réitérer » means to do or say again (réitérer une demande); barriers are not « réitérés », they persist."
+          }
+        },
+        {
+          "id": "d",
+          "text": "perpétuer",
+          "rationale": {
+            "fr": "« Perpétuer », c'est faire durer, maintenir dans le temps : des critères reconduits sans examen font durer les obstacles.",
+            "en": "« Perpétuer » means to make something last, to keep it going over time: criteria renewed without review keep the barriers in place."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Perpétuer » (faire durer) et « perpétrer » (commettre un acte criminel) sont des paronymes souvent confondus. Pour exprimer qu'une pratique fait durer une situation, on emploie « perpétuer » : perpétuer une inégalité, une tradition, un obstacle. « Proroger » et « réitérer » ont eux aussi un sens de durée ou de répétition, mais ils visent des actes administratifs (un délai, une demande), pas un état de fait.",
+        "en": "« Perpétuer » (to make last) and « perpétrer » (to commit a criminal act) are paronyms that are often confused. To say that a practice keeps a situation going, French uses « perpétuer »: perpétuer une inégalité, une tradition, un obstacle. « Proroger » and « réitérer » also carry an idea of duration or repetition, but they apply to administrative acts (a deadline, a request), not to a state of affairs."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-04",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Toujours ___ de conseils auprès des nouveaux employés, la gestionnaire a été désignée mentore principale du programme d'intégration de la direction générale.",
+        "en": "Always ___ with advice for new employees, the manager was designated lead mentor for the branch's onboarding program."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "prodige",
+          "rationale": {
+            "fr": "« Prodige » est un nom (un enfant prodige, un prodige de patience) ; il ne se construit pas avec « de » pour qualifier une personne qui donne beaucoup. C'est le paronyme de « prodigue ».",
+            "en": "« Prodige » is a noun (un enfant prodige, un prodige de patience); it is not built with « de » to describe someone who gives a great deal. It is the paronym of « prodigue »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "prodigue",
+          "rationale": {
+            "fr": "« Prodigue de » signifie « qui donne sans compter » : être prodigue de conseils, d'encouragements. C'est l'adjectif juste pour une gestionnaire qui partage généreusement son savoir.",
+            "en": "« Prodigue de » means 'giving freely': être prodigue de conseils, d'encouragements. It is the right adjective for a manager who generously shares her knowledge."
+          }
+        },
+        {
+          "id": "c",
+          "text": "prolixe",
+          "rationale": {
+            "fr": "« Prolixe » qualifie une personne ou un texte trop long, trop bavard ; le mot est péjoratif, ne se construit pas avec « de » et contredit l'éloge qu'implique la désignation comme mentore.",
+            "en": "« Prolixe » describes a person or text that is long-winded; the word is pejorative, does not take « de », and contradicts the praise implied by the mentoring appointment."
+          }
+        },
+        {
+          "id": "d",
+          "text": "prodigieuse",
+          "rationale": {
+            "fr": "« Prodigieux » signifie « extraordinaire » ; « prodigieuse de conseils » n'est pas une construction française, car l'adjectif ne prend pas de complément introduit par « de ».",
+            "en": "« Prodigieux » means 'extraordinary'; « prodigieuse de conseils » is not a French construction, because the adjective takes no complement introduced by « de »."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Prodigue » (adjectif : qui dépense ou donne sans compter ; être prodigue de son temps, de conseils) se distingue de « prodige » (nom : personne ou chose extraordinaire). La construction « prodigue de + nom » est la marque du sens « généreux de ». « Prolixe » et « prodigieux » ressemblent par la forme, mais aucun des deux n'exprime la générosité ni n'admet ce complément.",
+        "en": "« Prodigue » (adjective: spending or giving without counting; être prodigue de son temps, de conseils) is distinct from « prodige » (noun: an extraordinary person or thing). The construction « prodigue de + noun » signals the meaning 'generous with'. « Prolixe » and « prodigieux » look similar, but neither expresses generosity or accepts this complement."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-05",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "L'agent de sécurité a signalé une tentative d'___ dans la salle des serveurs : la serrure de la porte arrière a été forcée pendant la fin de semaine.",
+        "en": "The security officer reported an attempted ___ into the server room: the lock on the back door was forced over the weekend."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "infraction",
+          "rationale": {
+            "fr": "Une « infraction » est une violation d'une loi ou d'un règlement, quelle qu'elle soit ; le mot ne désigne pas le fait de forcer une serrure pour entrer. Paronyme d'« effraction ».",
+            "en": "An « infraction » is any breach of a law or regulation; the word does not refer to forcing a lock to get in. A paronym of « effraction »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "effraction",
+          "rationale": {
+            "fr": "L'« effraction » est le bris d'une clôture ou d'une serrure pour s'introduire dans un lieu : une serrure forcée signale précisément une tentative d'effraction.",
+            "en": "« Effraction » is breaking a fence or a lock to get into a place: a forced lock points precisely to an attempted break-in."
+          }
+        },
+        {
+          "id": "c",
+          "text": "éruption",
+          "rationale": {
+            "fr": "Une « éruption » est un jaillissement soudain (volcanique, cutané) ; on la confond parfois avec « irruption », mais aucun des deux mots ne désigne le bris d'une serrure.",
+            "en": "An « éruption » is a sudden outburst (volcanic, of the skin); it is sometimes confused with « irruption », but neither word refers to breaking a lock."
+          }
+        },
+        {
+          "id": "d",
+          "text": "extraction",
+          "rationale": {
+            "fr": "L'« extraction » est l'action de retirer quelque chose (extraction de données) ; elle ne décrit pas une entrée forcée dans une salle.",
+            "en": "« Extraction » is the act of taking something out (extraction de données); it does not describe a forced entry into a room."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "L'« effraction » désigne le fait de forcer une serrure, une fenêtre ou une clôture pour entrer (vol avec effraction). L'« infraction » est plus générale : toute violation d'une règle. Une effraction est donc une forme d'infraction, mais quand le contexte décrit un bris pour entrer, c'est le mot précis qu'il faut employer.",
+        "en": "« Effraction » means forcing a lock, a window or a fence to get in (vol avec effraction, burglary). « Infraction » is broader: any breach of a rule. A break-in is therefore one kind of offence, but when the context describes breaking something to get in, the precise word is required."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-06",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Une fois les trop-payés établis, l'équipe des finances a entrepris de ___ les sommes dues auprès des bénéficiaires concernés, au moyen de retenues sur les versements suivants.",
+        "en": "Once the overpayments had been established, the finance team set about ___ the amounts owed from the recipients concerned, through deductions from subsequent payments."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "recouvrir",
+          "rationale": {
+            "fr": "« Recouvrir » signifie couvrir entièrement ou de nouveau (recouvrir une surface) ; c'est le paronyme fautif de « recouvrer » au sens de récupérer de l'argent.",
+            "en": "« Recouvrir » means to cover completely or again (recouvrir une surface); it is the faulty paronym of « recouvrer » in the sense of getting money back."
+          }
+        },
+        {
+          "id": "b",
+          "text": "recourir",
+          "rationale": {
+            "fr": "« Recourir » se construit avec « à » (recourir à un moyen) ; il ne peut pas avoir « les sommes » pour complément direct.",
+            "en": "« Recourir » is built with « à » (recourir à un moyen); it cannot take « les sommes » as a direct object."
+          }
+        },
+        {
+          "id": "c",
+          "text": "découvrir",
+          "rationale": {
+            "fr": "Les trop-payés sont déjà « établis » : il ne s'agit plus de découvrir les sommes, mais de les récupérer, comme l'indiquent « auprès des bénéficiaires » et les retenues.",
+            "en": "The overpayments are already « établis »: the point is no longer to discover the amounts but to get them back, as « auprès des bénéficiaires » and the deductions show."
+          }
+        },
+        {
+          "id": "d",
+          "text": "recouvrer",
+          "rationale": {
+            "fr": "« Recouvrer » signifie rentrer en possession de ce qui était dû ou perdu : on recouvre une créance, des sommes versées en trop.",
+            "en": "« Recouvrer » means to regain possession of what was owed or lost: one recovers a debt, amounts paid in excess."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Recouvrer » (récupérer : recouvrer une dette, recouvrer la santé) et « recouvrir » (couvrir de nouveau) n'ont ni la même conjugaison ni le même sens. En finances publiques, on recouvre les trop-payés auprès des bénéficiaires. Le nom « recouvrement » sert aux deux verbes, ce qui entretient la confusion, mais le verbe doit être choisi selon le sens.",
+        "en": "« Recouvrer » (to recover: recouvrer une dette, recouvrer la santé) and « recouvrir » (to cover again) differ in both conjugation and meaning. In public finance, overpayments are « recouvrés » from recipients. The noun « recouvrement » serves both verbs, which feeds the confusion, but the verb must be chosen by meaning."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-07",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "L'examen des soumissions a révélé une ___ entre deux soumissionnaires, qui s'étaient secrètement entendus sur leurs prix avant la date de clôture de la demande de propositions.",
+        "en": "The bid evaluation revealed ___ between two bidders, who had secretly agreed on their prices before the closing date of the request for proposals."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "collusion",
+          "rationale": {
+            "fr": "La « collusion » est une entente secrète entre des parties au détriment d'un tiers ; dans un marché public, s'entendre en secret sur les prix en est l'exemple type.",
+            "en": "« Collusion » is a secret agreement between parties to the detriment of a third party; in public procurement, secretly agreeing on prices is the textbook case."
+          }
+        },
+        {
+          "id": "b",
+          "text": "collision",
+          "rationale": {
+            "fr": "Une « collision » est un choc entre deux corps ou, au figuré, un heurt entre des intérêts opposés ; or les soumissionnaires agissent ici de concert, ils ne s'opposent pas.",
+            "en": "A « collision » is an impact between two bodies or, figuratively, a clash of opposing interests; here, however, the bidders act in concert rather than against each other."
+          }
+        },
+        {
+          "id": "c",
+          "text": "allusion",
+          "rationale": {
+            "fr": "Une « allusion » est une manière d'évoquer quelque chose sans le nommer ; le mot ne désigne aucune entente.",
+            "en": "An « allusion » is a way of referring to something without naming it; the word refers to no agreement at all."
+          }
+        },
+        {
+          "id": "d",
+          "text": "collation",
+          "rationale": {
+            "fr": "La « collation » est un léger repas ou l'action de comparer des textes ou de conférer un grade ; elle n'a rien d'une entente frauduleuse.",
+            "en": "A « collation » is a light meal, or the act of comparing texts or conferring a degree; it has nothing to do with a fraudulent agreement."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Collusion » et « collision » ne diffèrent que d'une voyelle, mais leurs sens s'opposent presque : la collusion réunit des parties dans une entente secrète et illicite (collusion entre soumissionnaires, truquage des offres), alors que la collision est un heurt. Le contexte – une entente secrète sur les prix – appelle sans ambiguïté « collusion ».",
+        "en": "« Collusion » and « collision » differ by a single vowel, yet their meanings are almost opposite: collusion brings parties together in a secret, unlawful agreement (collusion between bidders, bid-rigging), whereas a collision is a clash. The context, a secret agreement on prices, unambiguously calls for « collusion »."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-08",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Dans le guide de rédaction du Ministère, le terme « intervenant » est pris dans son ___ la plus large et désigne toute personne ou organisation concernée par une communication publique.",
+        "en": "In the Department's writing guide, the term « intervenant » is taken in its broadest ___ and refers to any person or organisation affected by a public communication."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "acceptation",
+          "rationale": {
+            "fr": "L'« acceptation » est le fait d'accepter, de consentir (l'acceptation d'une offre) ; un terme n'est pas « pris dans son acceptation ». C'est le paronyme fautif d'« acception ».",
+            "en": "« Acceptation » is the act of accepting, of consenting (l'acceptation d'une offre); a term is not « pris dans son acceptation ». It is the faulty paronym of « acception »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "exception",
+          "rationale": {
+            "fr": "« Exception » désigne ce qui échappe à la règle ; « dans son exception la plus large » n'a pas de sens et contredit l'idée d'extension maximale.",
+            "en": "« Exception » means what falls outside the rule; « dans son exception la plus large » makes no sense and contradicts the idea of the widest scope."
+          }
+        },
+        {
+          "id": "c",
+          "text": "acception",
+          "rationale": {
+            "fr": "L'« acception » est le sens particulier dans lequel un mot est employé : prendre un terme dans son acception la plus large, c'est lui donner son sens le plus étendu.",
+            "en": "An « acception » is the particular sense in which a word is used: taking a term in its broadest « acception » means giving it its widest meaning."
+          }
+        },
+        {
+          "id": "d",
+          "text": "affectation",
+          "rationale": {
+            "fr": "« Affectation » désigne l'attribution d'un poste ou de fonds, ou encore un manque de naturel ; le mot ne renvoie pas au sens d'un terme.",
+            "en": "« Affectation » means the assignment of a position or of funds, or a lack of naturalness; it does not refer to the meaning of a word."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Acception » appartient au vocabulaire de la langue : c'est chacun des sens d'un mot (dans toutes les acceptions du terme). « Acceptation » vient du verbe « accepter » et désigne un consentement. La locution figée est « dans son acception la plus large », ou « au sens large ».",
+        "en": "« Acception » belongs to the vocabulary of language: it is each of the senses of a word (dans toutes les acceptions du terme). « Acceptation » comes from the verb « accepter » and means consent. The fixed phrase is « dans son acception la plus large », or « au sens large »."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-09",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Après l'évaluation ergonomique du poste de travail, la conseillère a recommandé de modifier l'___ de l'écran afin de réduire les tensions dans le cou de l'employé.",
+        "en": "After the ergonomic assessment of the workstation, the advisor recommended changing the ___ of the screen to reduce strain in the employee's neck."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "inclination",
+          "rationale": {
+            "fr": "L'« inclination » est un penchant, une disposition affective (avoir de l'inclination pour un domaine) ; elle ne décrit pas la position d'un objet.",
+            "en": "« Inclination » is a leaning, an emotional disposition (avoir de l'inclination pour un domaine); it does not describe the position of an object."
+          }
+        },
+        {
+          "id": "b",
+          "text": "déclinaison",
+          "rationale": {
+            "fr": "La « déclinaison » désigne en grammaire les formes d'un mot ou, par extension, les variantes d'un produit ; elle ne désigne pas l'angle d'un écran.",
+            "en": "« Déclinaison » refers in grammar to the forms of a word or, by extension, to the variants of a product; it does not refer to the angle of a screen."
+          }
+        },
+        {
+          "id": "c",
+          "text": "inclinaison",
+          "rationale": {
+            "fr": "L'« inclinaison » est l'état de ce qui est penché, l'angle par rapport à l'horizontale ou à la verticale : c'est ce qu'on règle sur un écran.",
+            "en": "« Inclinaison » is the state of being tilted, the angle relative to the horizontal or vertical: it is what one adjusts on a screen."
+          }
+        },
+        {
+          "id": "d",
+          "text": "inclusion",
+          "rationale": {
+            "fr": "L'« inclusion » est le fait d'inclure ou d'intégrer ; le mot ne désigne pas un angle et n'a pas de sens ici.",
+            "en": "« Inclusion » is the act of including or integrating; the word does not refer to an angle and makes no sense here."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Inclinaison » (angle, pente : l'inclinaison d'un toit, d'un dossier de chaise, d'un écran) et « inclination » (penchant moral ou affectif, ou mouvement de la tête pour saluer) sont des paronymes. Pour un objet physique dont on règle l'angle, seul « inclinaison » convient.",
+        "en": "« Inclinaison » (angle, slope: the tilt of a roof, a chair back, a screen) and « inclination » (a moral or emotional leaning, or a nod of the head in greeting) are paronyms. For a physical object whose angle is adjusted, only « inclinaison » fits."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-10",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Pour justifier l'attribution du contrat à un fournisseur unique sans appel à la concurrence, la direction a officiellement ___ l'exception d'urgence prévue par la politique sur les marchés, pièces justificatives à l'appui.",
+        "en": "To justify awarding the contract to a sole supplier without competition, the branch formally ___ the emergency exception provided for in the contracting policy, with supporting documents."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "invoqué",
+          "rationale": {
+            "fr": "« Invoquer » signifie s'appuyer sur un texte, un droit ou une exception comme fondement d'une décision : c'est exactement ce que fait la direction pour justifier le fournisseur unique.",
+            "en": "« Invoquer » means to rely on a text, a right or an exception as the basis for a decision: this is exactly what the branch does to justify the sole supplier."
+          }
+        },
+        {
+          "id": "b",
+          "text": "évoqué",
+          "rationale": {
+            "fr": "« Évoquer » signifie rappeler à l'esprit ou mentionner ; on ne se contente pas d'évoquer une exception dont on se prévaut officiellement pour justifier une décision, pièces à l'appui : on l'invoque.",
+            "en": "« Évoquer » means to call to mind or to mention; one does not merely mention an exception that is formally relied on, with supporting documents, to justify a decision: one invokes it."
+          }
+        },
+        {
+          "id": "c",
+          "text": "révoqué",
+          "rationale": {
+            "fr": "« Révoquer » signifie annuler (révoquer une délégation, un permis) ; annuler l'exception priverait justement la direction de la justification qu'elle cherche.",
+            "en": "« Révoquer » means to cancel (révoquer une délégation, un permis); cancelling the exception would deprive the branch of the very justification it seeks."
+          }
+        },
+        {
+          "id": "d",
+          "text": "provoqué",
+          "rationale": {
+            "fr": "« Provoquer » signifie causer, susciter ; une direction ne provoque pas une exception prévue par une politique.",
+            "en": "« Provoquer » means to cause, to bring about; a branch does not cause an exception provided for in a policy."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Invoquer » (faire appel à un texte, un droit ou une exception comme fondement : invoquer un article de loi, invoquer la force majeure) et « évoquer » (rappeler, mentionner, faire allusion) se confondent souvent. Lorsqu'on s'appuie sur une règle pour justifier une décision, on l'invoque ; quand on se contente d'en parler, on l'évoque.",
+        "en": "« Invoquer » (to call on a text, right or exception as a basis: invoquer un article de loi, invoquer la force majeure) and « évoquer » (to recall, mention, allude to) are often confused. When a rule is relied on to justify a decision, it is « invoquée »; when it is merely talked about, it is « évoquée »."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-11",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Afin de protéger les renseignements personnels, la nouvelle directive sur la sécurité informatique ___ formellement l'utilisation de clés de mémoire non chiffrées sur les postes du Ministère.",
+        "en": "To protect personal information, the new IT security directive formally ___ the use of unencrypted memory sticks on departmental workstations."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "prescrit",
+          "rationale": {
+            "fr": "« Prescrire » signifie ordonner, imposer : une directive qui prescrirait l'utilisation de clés non chiffrées imposerait la pratique même qui menace les renseignements personnels. C'est le contresens classique avec « proscrire ».",
+            "en": "« Prescrire » means to order, to require: a directive requiring unencrypted memory sticks would impose the very practice that threatens personal information. This is the classic misreading of « proscrire »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "inscrit",
+          "rationale": {
+            "fr": "« Inscrire » signifie écrire, enregistrer ; « inscrire formellement l'utilisation » n'exprime ni obligation ni interdiction et ne convient pas à une mesure de protection.",
+            "en": "« Inscrire » means to write down, to register; « inscrire formellement l'utilisation » expresses neither an obligation nor a ban and does not fit a protective measure."
+          }
+        },
+        {
+          "id": "c",
+          "text": "souscrit",
+          "rationale": {
+            "fr": "« Souscrire » se construit avec « à » au sens d'approuver (souscrire à une proposition) ou s'emploie pour un engagement financier ; il ne peut avoir ce complément direct ni exprimer une interdiction.",
+            "en": "« Souscrire » takes « à » in the sense of approving (souscrire à une proposition) or is used for a financial commitment; it cannot take this direct object or express a ban."
+          }
+        },
+        {
+          "id": "d",
+          "text": "proscrit",
+          "rationale": {
+            "fr": "« Proscrire » signifie interdire formellement : la directive interdit les clés non chiffrées pour protéger les renseignements personnels.",
+            "en": "« Proscrire » means to forbid formally: the directive bans unencrypted memory sticks to protect personal information."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Proscrire » (interdire, bannir) et « prescrire » (ordonner, recommander expressément) sont des paronymes de sens presque contraire. Le but annoncé – protéger les renseignements personnels – exige une interdiction : la directive proscrit les clés non chiffrées et prescrit, au besoin, l'emploi de clés chiffrées.",
+        "en": "« Proscrire » (to forbid, to ban) and « prescrire » (to order, to expressly require) are paronyms with almost opposite meanings. The stated goal, protecting personal information, calls for a ban: the directive « proscrit » unencrypted sticks and, where needed, « prescrit » encrypted ones."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-12",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Au terme de l'enquête administrative, la gestionnaire déléguée peut ___ une sanction disciplinaire à l'employé qui a contrevenu au code de valeurs et d'éthique.",
+        "en": "At the end of the administrative investigation, the delegated manager may ___ a disciplinary measure on the employee who breached the code of values and ethics."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "affliger",
+          "rationale": {
+            "fr": "« Affliger » signifie causer une profonde peine (la nouvelle l'a affligée) ; on n'afflige pas une sanction à quelqu'un. Paronyme fréquent d'« infliger ».",
+            "en": "« Affliger » means to cause deep sorrow (la nouvelle l'a affligée); one does not « affliger » a penalty on someone. A frequent paronym of « infliger »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "infliger",
+          "rationale": {
+            "fr": "« Infliger » signifie faire subir une peine, une sanction : infliger une amende, une sanction disciplinaire à quelqu'un.",
+            "en": "« Infliger » means to make someone undergo a penalty: infliger une amende, une sanction disciplinaire à quelqu'un."
+          }
+        },
+        {
+          "id": "c",
+          "text": "enfreindre",
+          "rationale": {
+            "fr": "« Enfreindre » signifie violer une règle (enfreindre le code) ; c'est l'employé qui enfreint, pas la gestionnaire, et une sanction ne s'enfreint pas.",
+            "en": "« Enfreindre » means to break a rule (enfreindre le code); it is the employee who breaks rules, not the manager, and a penalty cannot be broken."
+          }
+        },
+        {
+          "id": "d",
+          "text": "afficher",
+          "rationale": {
+            "fr": "« Afficher » signifie rendre public par une affiche ou montrer ostensiblement ; le verbe ne décrit pas le fait d'imposer une sanction et ne se construit pas avec « à l'employé » dans ce sens.",
+            "en": "« Afficher » means to post publicly or to display ostentatiously; the verb does not describe imposing a penalty and is not built with « à l'employé » in that sense."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Infliger » se dit d'une peine qu'on fait subir à quelqu'un (infliger une sanction, une amende, une réprimande) ; « affliger » se dit d'une douleur morale qu'on cause (être affligé par une nouvelle). La ressemblance des deux verbes entretient la confusion, mais seul « infliger » a pour complément une sanction.",
+        "en": "« Infliger » is used for a penalty imposed on someone (infliger une sanction, une amende, une réprimande); « affliger » is used for the moral pain one causes (être affligé par une nouvelle). The two verbs look alike, which feeds the confusion, but only « infliger » takes a penalty as its object."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-13",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Jugeant ___ de reporter la consultation publique à l'automne, le comité a fixé une nouvelle date afin que les documents soient d'abord traduits et révisés dans les deux langues officielles.",
+        "en": "Judging it ___ to postpone the public consultation to the fall, the committee set a new date so that the documents could first be translated and revised in both official languages."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "opportun",
+          "rationale": {
+            "fr": "« Opportun » qualifie ce qui vient à propos, au moment convenable : le comité juge le report bienvenu et fixe effectivement une nouvelle date.",
+            "en": "« Opportun » describes what comes at the right time, what is appropriate: the committee judges the postponement fitting and does set a new date."
+          }
+        },
+        {
+          "id": "b",
+          "text": "importun",
+          "rationale": {
+            "fr": "« Importun » qualifie ce qui dérange, ce qui ennuie (un visiteur importun) ; le mot s'applique surtout à une personne ou à une intervention gênante, et le contexte présente le report comme une mesure souhaitable.",
+            "en": "« Importun » describes what bothers or annoys (un visiteur importun); it applies mainly to a troublesome person or intrusion, and the context presents the postponement as desirable."
+          }
+        },
+        {
+          "id": "c",
+          "text": "inopportun",
+          "rationale": {
+            "fr": "« Inopportun » contredit la suite de la phrase : le comité fixe une nouvelle date pour que les documents soient traduits, il a donc jugé le report à propos, et non malvenu.",
+            "en": "« Inopportun » contradicts the rest of the sentence: the committee sets a new date so the documents can be translated, so it judged the postponement appropriate, not ill-timed."
+          }
+        },
+        {
+          "id": "d",
+          "text": "opportuniste",
+          "rationale": {
+            "fr": "« Opportuniste » qualifie une personne qui profite des circonstances sans égard aux principes ; appliqué à une mesure, il est péjoratif et ne s'emploie pas dans la tournure « juger opportuniste de ».",
+            "en": "« Opportuniste » describes a person who exploits circumstances without regard for principles; applied to a measure it is pejorative, and it is not used in the phrase « juger opportuniste de »."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Opportun » (qui convient au moment, à propos) a pour contraire « inopportun » ; « importun » (qui dérange, qui ennuie) est un paronyme sans rapport de sens. La tournure « juger opportun de + infinitif » est figée dans la langue administrative pour dire qu'une mesure est indiquée dans les circonstances. Ici, le comité fixe une nouvelle date : il a donc jugé le report à propos.",
+        "en": "« Opportun » (timely, appropriate) has « inopportun » as its opposite; « importun » (bothersome, annoying) is an unrelated paronym. The phrase « juger opportun de + infinitive » is fixed in administrative French to say that a measure is advisable in the circumstances. Here the committee sets a new date, so it judged the postponement appropriate."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-14",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "La nouvelle formation obligatoire vise à ___ les lacunes relevées lors de la dernière inspection en matière de santé et de sécurité au travail.",
+        "en": "The new mandatory training aims to ___ the gaps identified during the last occupational health and safety inspection."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "remplir",
+          "rationale": {
+            "fr": "« Remplir une lacune » est une impropriété ; on remplit un formulaire ou un contenant, mais une lacune, qui est un manque, se comble.",
+            "en": "« Remplir une lacune » is an impropriety; one fills in a form or fills a container, but a gap, being a lack, is « comblée »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "compléter",
+          "rationale": {
+            "fr": "« Compléter » signifie ajouter ce qui manque à un ensemble (compléter un dossier) ; il ne forme pas de collocation avec « lacune » pour dire qu'on fait disparaître un manque.",
+            "en": "« Compléter » means to add what is missing to a whole (compléter un dossier); it does not collocate with « lacune » to say that a lack is eliminated."
+          }
+        },
+        {
+          "id": "c",
+          "text": "combler",
+          "rationale": {
+            "fr": "La collocation consacrée est « combler une lacune » : faire disparaître un manque.",
+            "en": "The established collocation is « combler une lacune »: to make a shortfall disappear."
+          }
+        },
+        {
+          "id": "d",
+          "text": "fermer",
+          "rationale": {
+            "fr": "On ferme une porte ou un dossier, pas une lacune ; « fermer les lacunes » calque l'anglais « to close the gaps ».",
+            "en": "One closes a door or a file, not a « lacune »; « fermer les lacunes » is a calque of the English 'to close the gaps'."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le nom « lacune » appelle le verbe « combler » : combler une lacune, un écart, un retard, un déficit. On peut aussi « pallier » une lacune (en atténuer les effets) ou « remédier à » une lacune, mais « remplir » ou « fermer » une lacune sont des impropriétés ou des calques à éviter dans un texte administratif.",
+        "en": "The noun « lacune » calls for the verb « combler »: combler une lacune, un écart, un retard, un déficit. One can also « pallier » a gap (lessen its effects) or « remédier à » it, but « remplir » or « fermer » une lacune are improprieties or calques to avoid in administrative writing."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-15",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Lors de sa réunion trimestrielle, le conseil de gestion a ___ les recommandations du comité d'examen, qui s'appliqueront donc dès le prochain exercice financier.",
+        "en": "At its quarterly meeting, the management board ___ the review committee's recommendations, which will therefore apply as of the next fiscal year."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "émis",
+          "rationale": {
+            "fr": "Les recommandations ont été formulées par le comité d'examen ; le conseil ne les émet pas, il se prononce sur elles. « Émettre » ne rend pas l'idée d'approbation qu'exige « s'appliqueront donc ».",
+            "en": "The recommendations were made by the review committee; the board does not issue them, it rules on them. « Émettre » does not convey the approval that « s'appliqueront donc » requires."
+          }
+        },
+        {
+          "id": "b",
+          "text": "étayé",
+          "rationale": {
+            "fr": "« Étayer » signifie appuyer par des preuves ou des arguments ; étayer des recommandations ne leur donne pas force exécutoire, alors que la phrase annonce leur application.",
+            "en": "« Étayer » means to support with evidence or arguments; supporting recommendations does not make them binding, whereas the sentence announces that they will apply."
+          }
+        },
+        {
+          "id": "c",
+          "text": "enterré",
+          "rationale": {
+            "fr": "« Enterrer » un projet, au figuré, c'est l'abandonner ; c'est le contraire de ce qu'annonce la suite de la phrase. Paronyme trompeur d'« entériner ».",
+            "en": "Figuratively, to « enterrer » a project is to abandon it, the opposite of what the rest of the sentence announces. A misleading paronym of « entériner »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "entériné",
+          "rationale": {
+            "fr": "« Entériner » signifie approuver officiellement, rendre valide ce qui a été proposé : une fois entérinées, les recommandations prennent effet.",
+            "en": "« Entériner » means to approve officially, to validate what was proposed: once ratified, the recommendations take effect."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Entériner » appartient à la langue administrative et juridique : c'est ratifier, confirmer officiellement une décision ou une recommandation déjà formulée (le conseil a entériné le rapport). Il se distingue d'« émettre » (produire, formuler), d'« étayer » (appuyer par des arguments) et, malgré la ressemblance, d'« enterrer » (abandonner).",
+        "en": "« Entériner » belongs to administrative and legal language: it means to ratify, to confirm officially a decision or recommendation already made (le conseil a entériné le rapport). It differs from « émettre » (to produce, to issue), « étayer » (to support with arguments) and, despite the resemblance, « enterrer » (to abandon)."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-16",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le Centre des services de paye vous remercie de votre courriel du 3 mai et…",
+        "en": "The Pay Services Centre thanks you for your email of May 3 and…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "en reconnaît la réception ; votre demande sera traitée dans un délai de dix jours ouvrables.",
+          "rationale": {
+            "fr": "« Reconnaître la réception » calque l'anglais « to acknowledge receipt » ; en français administratif, la locution consacrée est « accuser réception ».",
+            "en": "« Reconnaître la réception » is a calque of the English 'to acknowledge receipt'; in administrative French, the established phrase is « accuser réception »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "en accuse réception ; votre demande sera traitée dans un délai de dix jours ouvrables.",
+          "rationale": {
+            "fr": "« Accuser réception de quelque chose » est la locution figée pour confirmer qu'on a reçu un envoi ; « en » reprend « votre courriel ».",
+            "en": "« Accuser réception de quelque chose » is the fixed phrase for confirming that something sent has been received; « en » stands for « votre courriel »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "en accuse récépissé ; votre demande sera traitée dans un délai de dix jours ouvrables.",
+          "rationale": {
+            "fr": "Un « récépissé » est le document écrit qui atteste une réception ; on délivre un récépissé, mais on n'« accuse » pas récépissé.",
+            "en": "A « récépissé » is the written document attesting receipt; one issues a « récépissé », but one does not « accuser récépissé »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "en avise réception ; votre demande sera traitée dans un délai de dix jours ouvrables.",
+          "rationale": {
+            "fr": "« Aviser » signifie informer quelqu'un (aviser quelqu'un de quelque chose) ; « aviser réception » n'existe pas et croise deux tournures.",
+            "en": "« Aviser » means to inform someone (aviser quelqu'un de quelque chose); « aviser réception » does not exist and blends two expressions."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "La locution « accuser réception de » (sans article) signifie confirmer qu'on a bien reçu un envoi : nous accusons réception de votre demande ; nous en accusons réception. Le nom correspondant est « accusé de réception ». Les tournures calquées sur l'anglais (reconnaître la réception) ou les croisements avec d'autres mots du même champ (récépissé, aviser) sont à éviter.",
+        "en": "The phrase « accuser réception de » (without an article) means to confirm that something sent has been received: nous accusons réception de votre demande; nous en accusons réception. The corresponding noun is « accusé de réception ». Calques of English (reconnaître la réception) and blends with other words from the same field (récépissé, aviser) should be avoided."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-17",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Avant la publication du projet de règlement, la Direction des services juridiques sera invitée à…",
+        "en": "Before the draft regulation is published, the Legal Services Directorate will be asked to…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "émaner un avis sur sa conformité à la loi habilitante.",
+          "rationale": {
+            "fr": "« Émaner » est intransitif : un avis émane d'une autorité (il en provient), mais on n'« émane » pas un avis. Le paronyme séduit parce que les deux verbes évoquent une origine.",
+            "en": "« Émaner » is intransitive: an opinion « émane » from an authority (comes from it), but one cannot « émaner » an opinion. The paronym tempts because both verbs suggest an origin."
+          }
+        },
+        {
+          "id": "b",
+          "text": "omettre un avis sur sa conformité à la loi habilitante.",
+          "rationale": {
+            "fr": "« Omettre » signifie négliger de faire ou de dire ; inviter un service à omettre un avis contredirait le but même de la consultation préalable.",
+            "en": "« Omettre » means to neglect to do or say; asking a directorate to omit an opinion would contradict the very purpose of prior consultation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "émettre un avis sur sa conformité à la loi habilitante.",
+          "rationale": {
+            "fr": "« Émettre un avis » est la collocation administrative usuelle : formuler et communiquer une opinion motivée, ici sur la conformité du règlement.",
+            "en": "« Émettre un avis » is the usual administrative collocation: to formulate and communicate a reasoned opinion, here on the regulation's compliance."
+          }
+        },
+        {
+          "id": "d",
+          "text": "admettre un avis sur sa conformité à la loi habilitante.",
+          "rationale": {
+            "fr": "« Admettre » signifie reconnaître pour vrai ou accepter ; on admet l'avis d'autrui, on ne produit pas son propre avis en l'admettant.",
+            "en": "« Admettre » means to acknowledge as true or to accept; one accepts someone else's opinion, one does not produce one's own by « admettre » it."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour dire qu'une autorité formule une opinion officielle, la langue administrative emploie « émettre un avis » (ou « formuler », « donner », « rendre un avis »). « Émaner » s'emploie dans l'autre sens : l'avis émane de la direction. Les verbes en -mettre (omettre, admettre) ressemblent à « émettre », mais en changent complètement le sens.",
+        "en": "To say that an authority issues an official opinion, administrative French uses « émettre un avis » (or « formuler », « donner », « rendre un avis »). « Émaner » works the other way round: l'avis émane de la direction. The other -mettre verbs (omettre, admettre) look like « émettre » but change its meaning completely."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-18",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Lors de la consultation sur le plan d'accessibilité, plusieurs employés…",
+        "en": "During the consultation on the accessibility plan, several employees…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "ont soulevé la question de la compatibilité des formulaires en ligne avec les lecteurs d'écran.",
+          "rationale": {
+            "fr": "« Soulever une question » signifie la poser, la faire surgir dans la discussion : c'est la collocation consacrée.",
+            "en": "« Soulever une question » means to raise it, to bring it up in discussion: it is the established collocation."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ont levé la question de la compatibilité des formulaires en ligne avec les lecteurs d'écran.",
+          "rationale": {
+            "fr": "« Lever » signifie faire disparaître un obstacle (lever une restriction, lever un doute) ; « lever la question » suggérerait qu'on l'écarte, l'inverse de ce que font les employés consultés.",
+            "en": "« Lever » means to remove an obstacle (lever une restriction, lever un doute); « lever la question » would suggest dismissing it, the opposite of what the consulted employees do."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ont prélevé la question de la compatibilité des formulaires en ligne avec les lecteurs d'écran.",
+          "rationale": {
+            "fr": "« Prélever » signifie retirer une partie d'un tout (prélever un échantillon, prélever des frais) ; le verbe ne s'emploie pas avec « question ».",
+            "en": "« Prélever » means to take a portion from a whole (prélever un échantillon, prélever des frais); the verb is not used with « question »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ont enlevé la question de la compatibilité des formulaires en ligne avec les lecteurs d'écran.",
+          "rationale": {
+            "fr": "« Enlever la question » voudrait dire la retirer, par exemple de l'ordre du jour, ce qui contredit le rôle des employés consultés et ne correspond à aucune collocation.",
+            "en": "« Enlever la question » would mean removing it, for instance from the agenda, which contradicts the role of the consulted employees and matches no collocation."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "On « soulève » une question, un problème, une objection : on les fait apparaître dans le débat. Les autres verbes de la famille de « lever » ont des sens bien distincts : « lever » une difficulté la supprime, « prélever » retire une partie d'un tout, « enlever » ôte quelque chose. Dans un compte rendu de consultation, c'est « soulever » qu'on attend.",
+        "en": "One « soulève » a question, a problem, an objection: one brings them into the discussion. The other verbs built on « lever » have quite distinct meanings: « lever » a difficulty removes it, « prélever » takes part of a whole, « enlever » takes something away. In a consultation report, « soulever » is the verb expected."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-19",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Au terme de la première année de mise en œuvre, l'équipe du projet…",
+        "en": "At the end of the first year of implementation, the project team…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "redressera un bilan des réalisations et des écarts par rapport à l'échéancier.",
+          "rationale": {
+            "fr": "« Redresser » signifie remettre droit ou rétablir (redresser une situation financière) ; « redresser un bilan » suggérerait qu'on le rectifie, non qu'on l'établit.",
+            "en": "« Redresser » means to straighten or to restore (redresser une situation financière); « redresser un bilan » would suggest adjusting a review, not drawing one up."
+          }
+        },
+        {
+          "id": "b",
+          "text": "érigera un bilan des réalisations et des écarts par rapport à l'échéancier.",
+          "rationale": {
+            "fr": "« Ériger » signifie élever, construire (ériger un monument) ou instituer ; il ne forme pas de collocation avec « bilan ».",
+            "en": "« Ériger » means to erect, to build (ériger un monument) or to establish; it does not collocate with « bilan »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "dessinera un bilan des réalisations et des écarts par rapport à l'échéancier.",
+          "rationale": {
+            "fr": "« Dessiner » s'emploie pour un tracé ou, au figuré, pour une tendance qui se dessine ; « dessiner un bilan » n'est pas une collocation française.",
+            "en": "« Dessiner » is used for a drawing or, figuratively, for a trend that takes shape; « dessiner un bilan » is not a French collocation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "dressera un bilan des réalisations et des écarts par rapport à l'échéancier.",
+          "rationale": {
+            "fr": "« Dresser un bilan », comme dresser une liste, un inventaire ou un procès-verbal, signifie établir un état complet et ordonné : c'est la collocation attendue.",
+            "en": "« Dresser un bilan », like dresser une liste, un inventaire or un procès-verbal, means to draw up a complete, orderly account: it is the expected collocation."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le verbe « dresser » s'emploie avec les documents qu'on établit de façon méthodique : dresser un bilan, une liste, un inventaire, un constat, un procès-verbal. On dit aussi « faire » ou « établir » le bilan. « Redresser », « ériger » ou « dessiner » ressemblent par la forme ou par l'image, mais ne forment pas cette collocation.",
+        "en": "The verb « dresser » is used with documents drawn up methodically: dresser un bilan, une liste, un inventaire, un constat, un procès-verbal. One can also « faire » or « établir » le bilan. « Redresser », « ériger » and « dessiner » resemble it in form or image but do not form this collocation."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-20",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Faute de personnel suffisant au sein de l'équipe des solutions numériques, la direction générale ne pourra pas…",
+        "en": "For lack of sufficient staff in the digital solutions team, the branch will not be able to…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "rencontrer l'échéancier fixé pour la migration des données vers la nouvelle plateforme.",
+          "rationale": {
+            "fr": "« Rencontrer un échéancier » calque l'anglais « to meet a schedule » et est rejeté par les guides de rédaction ; en français, on rencontre des personnes ou des obstacles.",
+            "en": "« Rencontrer un échéancier » is a calque of the English 'to meet a schedule' and is rejected by style guides; in French, one « rencontre » people or obstacles."
+          }
+        },
+        {
+          "id": "b",
+          "text": "atteindre l'échéancier fixé pour la migration des données vers la nouvelle plateforme.",
+          "rationale": {
+            "fr": "On atteint une date ou un objectif, mais l'échéancier est un calendrier d'étapes ; « atteindre l'échéancier » ne dit pas qu'on s'y conforme.",
+            "en": "One reaches a date or a target, but an « échéancier » is a schedule of milestones; « atteindre l'échéancier » does not say that it is complied with."
+          }
+        },
+        {
+          "id": "c",
+          "text": "rejoindre l'échéancier fixé pour la migration des données vers la nouvelle plateforme.",
+          "rationale": {
+            "fr": "« Rejoindre » signifie retrouver une personne ou regagner un lieu ; il n'exprime pas la conformité à un calendrier.",
+            "en": "« Rejoindre » means to meet up with someone or to get back to a place; it does not express compliance with a schedule."
+          }
+        },
+        {
+          "id": "d",
+          "text": "respecter l'échéancier fixé pour la migration des données vers la nouvelle plateforme.",
+          "rationale": {
+            "fr": "« Respecter l'échéancier » signifie se conformer aux dates prévues : c'est la collocation idiomatique.",
+            "en": "« Respecter l'échéancier » means to keep to the planned dates: it is the idiomatic collocation."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Avec « échéancier », « délai » ou « échéance », le verbe juste est « respecter » (on peut aussi dire « tenir les délais »). « Rencontrer » est le calque de « to meet » ; « atteindre » et « rejoindre » expriment une arrivée, et non le fait de se conformer à un calendrier.",
+        "en": "With « échéancier », « délai » or « échéance », the right verb is « respecter » (one can also say « tenir les délais »). « Rencontrer » is the calque of 'to meet'; « atteindre » and « rejoindre » express arrival, not keeping to a schedule."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-21",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "En vertu du nouveau programme d'appui aux communautés de langue officielle en situation minoritaire, le Ministère pourra…",
+        "en": "Under the new support program for official language minority communities, the Department will be able to…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "décerner des subventions pluriannuelles aux organismes qui offrent des services de proximité.",
+          "rationale": {
+            "fr": "« Décerner » s'emploie pour un prix, une distinction ou un titre qu'on remet solennellement ; une subvention n'est pas une récompense honorifique.",
+            "en": "« Décerner » is used for a prize, an honour or a title formally bestowed; a grant is not an honorary award."
+          }
+        },
+        {
+          "id": "b",
+          "text": "octroyer des subventions pluriannuelles aux organismes qui offrent des services de proximité.",
+          "rationale": {
+            "fr": "« Octroyer » signifie accorder en vertu d'un pouvoir : on octroie une subvention, un permis, un délai. C'est le verbe consacré dans les programmes de financement.",
+            "en": "« Octroyer » means to grant by virtue of an authority: one « octroie » a grant, a permit, an extension. It is the established verb in funding programs."
+          }
+        },
+        {
+          "id": "c",
+          "text": "délivrer des subventions pluriannuelles aux organismes qui offrent des services de proximité.",
+          "rationale": {
+            "fr": "« Délivrer » s'emploie pour un document officiel (délivrer un permis, un certificat) ; employé avec « subvention », il calque l'anglais « to deliver ».",
+            "en": "« Délivrer » is used for an official document (délivrer un permis, un certificat); used with « subvention », it is a calque of the English 'to deliver'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "édicter des subventions pluriannuelles aux organismes qui offrent des services de proximité.",
+          "rationale": {
+            "fr": "« Édicter » signifie établir par voie d'autorité une loi ou une règle ; on édicte un règlement, pas une subvention.",
+            "en": "« Édicter » means to lay down a law or rule by authority; one « édicte » a regulation, not a grant."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Octroyer une subvention » (ou « accorder », « attribuer ») est la collocation propre au financement public. Chacun des autres verbes a son domaine : on décerne un prix, on délivre un permis ou un certificat, on édicte une règle. Choisir le verbe que le nom appelle est une marque de précision attendue au niveau C.",
+        "en": "« Octroyer une subvention » (or « accorder », « attribuer ») is the collocation proper to public funding. Each of the other verbs has its own domain: one « décerne » a prize, « délivre » a permit or certificate, « édicte » a rule. Choosing the verb the noun calls for is a mark of the precision expected at level C."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-22",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Conformément aux exigences de sa loi constitutive, l'organisme de réglementation environnementale…",
+        "en": "In accordance with the requirements of its enabling statute, the environmental regulatory agency…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "tablera son rapport d'étape sur la stratégie de développement durable devant les deux chambres du Parlement.",
+          "rationale": {
+            "fr": "« Tabler un rapport » calque l'anglais « to table a report » ; en français, « tabler sur » signifie compter sur quelque chose.",
+            "en": "« Tabler un rapport » is a calque of the English 'to table a report'; in French, « tabler sur » means to count on something."
+          }
+        },
+        {
+          "id": "b",
+          "text": "apposera son rapport d'étape sur la stratégie de développement durable devant les deux chambres du Parlement.",
+          "rationale": {
+            "fr": "« Apposer » signifie appliquer, poser sur (apposer une signature, un sceau) ; on n'appose pas un rapport devant une chambre.",
+            "en": "« Apposer » means to affix (apposer une signature, un sceau); a report is not « apposé » before a chamber."
+          }
+        },
+        {
+          "id": "c",
+          "text": "déposera son rapport d'étape sur la stratégie de développement durable devant les deux chambres du Parlement.",
+          "rationale": {
+            "fr": "« Déposer un rapport » devant le Parlement, c'est le soumettre officiellement à l'assemblée : c'est le terme parlementaire consacré.",
+            "en": "To « déposer un rapport » before Parliament is to submit it formally to the House: it is the established parliamentary term."
+          }
+        },
+        {
+          "id": "d",
+          "text": "disposera son rapport d'étape sur la stratégie de développement durable devant les deux chambres du Parlement.",
+          "rationale": {
+            "fr": "« Disposer » signifie arranger ou, avec « de », avoir à sa disposition ; « disposer son rapport devant les chambres » n'a aucun sens parlementaire.",
+            "en": "« Disposer » means to arrange or, with « de », to have at one's disposal; « disposer son rapport devant les chambres » has no parliamentary meaning."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Dans la langue parlementaire, on « dépose » un rapport, un projet de loi ou un document devant une assemblée (le dépôt d'un rapport). « Tabler » est un faux ami : en français, il ne s'emploie que dans « tabler sur » (compter sur). Les paronymes « apposer » et « disposer » partagent la racine, mais pas le sens.",
+        "en": "In parliamentary language, one « dépose » a report, a bill or a document before an assembly (le dépôt d'un rapport). « Tabler » is a false friend: in French it is used only in « tabler sur » (to count on). The paronyms « apposer » and « disposer » share the root but not the meaning."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-23",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Après plusieurs mois de négociations difficiles, l'employeur et l'agent négociateur…",
+        "en": "After several months of difficult negotiations, the employer and the bargaining agent…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "ont fini par conclure une entente de principe ; la nouvelle convention collective entrera en vigueur dès sa ratification.",
+          "rationale": {
+            "fr": "« Finir par » exprime l'aboutissement d'un long processus, ce qu'annoncent « plusieurs mois de négociations » ; la suite confirme que l'entente est acquise.",
+            "en": "« Finir par » expresses the outcome of a long process, as « plusieurs mois de négociations » leads one to expect; the rest of the sentence confirms the agreement is reached."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ont éventuellement conclu une entente de principe ; la nouvelle convention collective entrera en vigueur dès sa ratification.",
+          "rationale": {
+            "fr": "« Éventuellement » signifie « le cas échéant, peut-être », non « finalement » ; l'emploi au sens de l'anglais « eventually » est un anglicisme sémantique, et le sens hypothétique contredit l'entrée en vigueur annoncée.",
+            "en": "« Éventuellement » means 'if need be, possibly', not 'finally'; using it in the sense of the English 'eventually' is a semantic anglicism, and the hypothetical meaning contradicts the announced entry into force."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ont possiblement conclu une entente de principe ; la nouvelle convention collective entrera en vigueur dès sa ratification.",
+          "rationale": {
+            "fr": "« Possiblement » présente la conclusion de l'entente comme incertaine, ce que contredit l'annonce ferme de l'entrée en vigueur de la convention.",
+            "en": "« Possiblement » presents the agreement as uncertain, which the firm announcement of the collective agreement's entry into force contradicts."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ont actuellement conclu une entente de principe ; la nouvelle convention collective entrera en vigueur dès sa ratification.",
+          "rationale": {
+            "fr": "« Actuellement » signifie « en ce moment » ; il ne s'accorde pas avec un passé composé qui marque l'aboutissement, et il calque ici l'anglais « actually ».",
+            "en": "« Actuellement » means 'at present'; it does not sit with a passé composé marking an outcome, and here it is a calque of the English 'actually'."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Éventuel » et « éventuellement » expriment la possibilité : une éventuelle grève est une grève qui pourrait survenir. Ils ne signifient jamais « finalement, à terme », sens de l'anglais « eventually ». Pour marquer l'aboutissement, on dit « finir par », « finalement » ou « au bout du compte ». De même, « actuellement » veut dire « en ce moment », et non « en fait ».",
+        "en": "« Éventuel » and « éventuellement » express possibility: une éventuelle grève is a strike that might happen. They never mean 'finally, in the end', the sense of the English 'eventually'. To mark an outcome, French uses « finir par », « finalement » or « au bout du compte ». Likewise, « actuellement » means 'at present', not 'in fact'."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-24",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Selon l'analyse des écarts du troisième trimestre, le dépassement de coûts constaté dans le projet de modernisation est…",
+        "en": "According to the third-quarter variance analysis, the cost overrun observed in the modernization project is…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "conséquent et exigera une demande de financement supplémentaire auprès des organismes centraux.",
+          "rationale": {
+            "fr": "Employé au sens de « important, considérable », « conséquent » est critiqué par les ouvrages de référence et relève de la langue familière ; son sens propre est « logique, cohérent » (être conséquent avec soi-même).",
+            "en": "Used to mean 'large, considerable', « conséquent » is criticised by reference works and belongs to informal speech; its proper meaning is 'logical, consistent' (être conséquent avec soi-même)."
+          }
+        },
+        {
+          "id": "b",
+          "text": "considérable et exigera une demande de financement supplémentaire auprès des organismes centraux.",
+          "rationale": {
+            "fr": "« Considérable » qualifie précisément une grandeur importante ; il est neutre et de registre soutenu, comme l'exige une analyse financière.",
+            "en": "« Considérable » precisely describes a large magnitude; it is neutral and formal, as a financial analysis requires."
+          }
+        },
+        {
+          "id": "c",
+          "text": "conséquentiel et exigera une demande de financement supplémentaire auprès des organismes centraux.",
+          "rationale": {
+            "fr": "« Conséquentiel », rare et calqué sur l'anglais « consequential », signifie au mieux « qui découle d'autre chose » ; il n'exprime pas l'idée de grandeur.",
+            "en": "« Conséquentiel », rare and modelled on the English 'consequential', means at most 'resulting from something else'; it does not express size."
+          }
+        },
+        {
+          "id": "d",
+          "text": "substantif et exigera une demande de financement supplémentaire auprès des organismes centraux.",
+          "rationale": {
+            "fr": "« Substantif » est un terme de grammaire, synonyme de « nom » ; c'est « substantiel » qui signifie « important », et la confusion des deux suffixes est fautive.",
+            "en": "« Substantif » is a grammatical term meaning 'noun'; it is « substantiel » that means 'significant', and confusing the two suffixes is an error."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Conséquent » signifie « qui agit avec logique » (être conséquent dans ses choix) ; on le retrouve dans la locution « par conséquent ». Son emploi au sens d'« important » (une somme conséquente) est jugé familier ou fautif par les ouvrages de référence et doit être évité dans un texte administratif : on écrit « considérable », « important » ou « substantiel ». Méfiez-vous aussi des paronymes comme « substantif ».",
+        "en": "« Conséquent » means 'acting logically' (être conséquent dans ses choix); it also appears in the phrase « par conséquent ». Using it to mean 'large' (une somme conséquente) is judged informal or wrong by reference works and should be avoided in administrative writing: write « considérable », « important » or « substantiel ». Beware too of paronyms such as « substantif »."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-25",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Conformément aux procédures de contrôle financier, les frais de déplacement liés aux ateliers de démarrage du projet seront…",
+        "en": "In accordance with financial control procedures, travel costs related to the project's kick-off workshops will be…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "amputés au code financier du projet, et non au budget de fonctionnement de la direction.",
+          "rationale": {
+            "fr": "« Amputer » signifie retrancher une partie (amputer un budget de dix pour cent) ; on ampute un budget, on ne lui ampute pas une dépense. Paronyme d'« imputer ».",
+            "en": "« Amputer » means to cut off a part (amputer un budget de dix pour cent); one cuts a budget, one does not « amputer » an expense to it. A paronym of « imputer »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "chargés au code financier du projet, et non au budget de fonctionnement de la direction.",
+          "rationale": {
+            "fr": "« Charger une dépense à un compte » calque l'anglais « to charge to » ; en français administratif, on impute la dépense.",
+            "en": "« Charger une dépense à un compte » is a calque of the English 'to charge to'; in administrative French, the expense is « imputée »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "imputés au code financier du projet, et non au budget de fonctionnement de la direction.",
+          "rationale": {
+            "fr": "« Imputer une dépense à un compte » signifie l'y porter en comptabilité : c'est le verbe technique attendu.",
+            "en": "« Imputer une dépense à un compte » means to record it against that account: it is the expected technical verb."
+          }
+        },
+        {
+          "id": "d",
+          "text": "réputés au code financier du projet, et non au budget de fonctionnement de la direction.",
+          "rationale": {
+            "fr": "« Réputé » signifie « considéré comme » (être réputé conforme) ; il ne décrit pas l'inscription d'une dépense dans un compte.",
+            "en": "« Réputé » means 'deemed' (être réputé conforme); it does not describe recording an expense in an account."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "En gestion financière, « imputer » une dépense à un poste budgétaire ou à un code financier, c'est l'y inscrire (d'où l'imputation budgétaire). « Charger » est un anglicisme dans ce sens, « amputer » signifie réduire et « réputé » signifie « tenu pour ». Le verbe précis évite toute ambiguïté dans un document de contrôle.",
+        "en": "In financial management, to « imputer » an expense to a budget line or financial code is to record it there (hence « l'imputation budgétaire »). « Charger » is an anglicism in this sense, « amputer » means to reduce, and « réputé » means 'deemed'. The precise verb removes any ambiguity in a control document."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-26",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle correction faut-il apporter à la phrase suivante ? « La sous-ministre prononcera une brève allocation d'ouverture lors du forum sur les langues officielles, qui se tiendra dans la grande salle de conférence. »",
+        "en": "Which correction does the following sentence need? « La sous-ministre prononcera une brève allocation d'ouverture lors du forum sur les langues officielles, qui se tiendra dans la grande salle de conférence. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « prononcera » par « fera »",
+          "rationale": {
+            "fr": "« Prononcer » est le verbe qui convient à un discours ; le remplacer par « fera » appauvrit la phrase et laisse intacte la confusion entre « allocation » et « allocution ».",
+            "en": "« Prononcer » is the right verb for a speech; replacing it with « fera » weakens the sentence and leaves the « allocation »/« allocution » mix-up untouched."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « d'ouverture » par « inaugurale »",
+          "rationale": {
+            "fr": "« D'ouverture » est tout à fait juste ; « allocation inaugurale » conserverait le mauvais nom, qui désigne une somme d'argent.",
+            "en": "« D'ouverture » is perfectly fine; « allocation inaugurale » would keep the wrong noun, which refers to a sum of money."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « se tiendra » par « aura lieu »",
+          "rationale": {
+            "fr": "« Se tiendra » est idiomatique pour un forum ; ce changement ne touche pas au mot fautif.",
+            "en": "« Se tiendra » is idiomatic for a forum; this change leaves the faulty word in place."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « allocation » par « allocution »",
+          "rationale": {
+            "fr": "Une « allocution » est un discours bref ; une « allocation » est une somme versée (allocation de départ, allocation familiale). C'est le seul mot fautif.",
+            "en": "An « allocution » is a short speech; an « allocation » is a sum paid out (allocation de départ, allocation familiale). It is the only faulty word."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Allocution » (court discours prononcé en public) et « allocation » (somme d'argent attribuée, ou action d'allouer) sont des paronymes. On prononce une allocution ; on verse ou on reçoit une allocation. Le verbe « prononcer » et le contexte d'un forum indiquent clairement qu'il s'agit d'un discours.",
+        "en": "« Allocution » (a short public speech) and « allocation » (a sum of money granted, or the act of allocating) are paronyms. One delivers an « allocution »; one pays or receives an « allocation ». The verb « prononcer » and the forum setting make it clear that a speech is meant."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-27",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Repérez l'erreur dans ce passage d'un rapport de rétroaction et choisissez la modification appropriée : « L'agente du centre d'appels s'est montrée très compréhensible envers le client, qui attendait le versement de ses prestations depuis plus d'un mois. »",
+        "en": "Find the error in this passage from a feedback report and choose the appropriate change: « L'agente du centre d'appels s'est montrée très compréhensible envers le client, qui attendait le versement de ses prestations depuis plus d'un mois. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « compréhensible » par « compréhensive »",
+          "rationale": {
+            "fr": "« Compréhensif » qualifie une personne bienveillante, qui comprend autrui ; « compréhensible » qualifie ce qui peut être compris. L'agente fait preuve d'indulgence : il faut « compréhensive ».",
+            "en": "« Compréhensif » describes a sympathetic person who understands others; « compréhensible » describes what can be understood. The agent shows empathy, so « compréhensive » is needed."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « envers » par « pour »",
+          "rationale": {
+            "fr": "« Envers » introduit bien la personne visée par une attitude ; avec « pour », la phrase signifierait que l'agente est intelligible pour le client, et l'adjectif fautif resterait en place.",
+            "en": "« Envers » properly introduces the person an attitude is directed at; with « pour », the sentence would mean the agent is intelligible to the client, and the faulty adjective would remain."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « attendait » par « attendit »",
+          "rationale": {
+            "fr": "L'imparfait « attendait » exprime une attente qui dure jusqu'au moment évoqué et s'accorde avec « depuis » ; le passé simple serait incompatible avec cette durée.",
+            "en": "The imperfect « attendait » expresses a wait lasting up to the time described and fits « depuis »; the passé simple would clash with that duration."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « depuis » par « pendant »",
+          "rationale": {
+            "fr": "« Depuis » marque une action commencée dans le passé et toujours en cours au moment évoqué, ce qui convient avec l'imparfait ; « pendant » ne règle rien et rend la phrase bancale.",
+            "en": "« Depuis » marks an action begun in the past and still ongoing at the time described, which suits the imperfect; « pendant » fixes nothing and makes the sentence awkward."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Compréhensible » (qui peut être compris : une explication compréhensible) et « compréhensif » (qui comprend les autres et se montre indulgent : une gestionnaire compréhensive) sont des paronymes. Pour une personne qui fait preuve d'empathie, seul « compréhensif » convient.",
+        "en": "« Compréhensible » (understandable: une explication compréhensible) and « compréhensif » (understanding of others, lenient: une gestionnaire compréhensive) are paronyms. For a person showing empathy, only « compréhensif » fits."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-28",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase tirée d'un rapport d'évaluation contient une impropriété. Laquelle des modifications suivantes s'impose ? « Depuis l'instauration du formulaire numérique, on observe une amélioration notoire du délai de traitement des demandes de prestations, qui est passé de vingt à douze jours ouvrables. »",
+        "en": "This sentence from an evaluation report contains an impropriety. Which of the following changes is required? « Depuis l'instauration du formulaire numérique, on observe une amélioration notoire du délai de traitement des demandes de prestations, qui est passé de vingt à douze jours ouvrables. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « instauration » par « instaurement »",
+          "rationale": {
+            "fr": "« Instauration » est le nom qui convient pour la mise en place d'un dispositif ; « instaurement » n'est pas en usage, et l'adjectif impropre resterait en place.",
+            "en": "« Instauration » is the right noun for introducing a system; « instaurement » is not in use, and the improper adjective would remain."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « observe » par « constate »",
+          "rationale": {
+            "fr": "« Observer » et « constater » conviennent tous deux devant un résultat mesuré ; ce changement ne touche pas au mot fautif, « notoire ».",
+            "en": "« Observer » and « constater » both suit a measured result; this change leaves the faulty word, « notoire », untouched."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « notoire » par « notable »",
+          "rationale": {
+            "fr": "« Notoire » signifie « connu de tous » et se dit souvent d'un défaut (un retard notoire) ; pour une amélioration digne d'être remarquée, on écrit « notable ».",
+            "en": "« Notoire » means 'widely known' and is often said of a flaw (un retard notoire); for an improvement worth noting, one writes « notable »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « qui est passé » par « qui sont passées »",
+          "rationale": {
+            "fr": "Le relatif « qui » reprend « le délai de traitement », masculin singulier ; l'accord au féminin pluriel avec « demandes » ou « prestations » serait fautif.",
+            "en": "The relative « qui » refers to « le délai de traitement », masculine singular; feminine plural agreement with « demandes » or « prestations » would be wrong."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Notoire » (connu d'un grand nombre de personnes, de notoriété publique) n'est pas un synonyme de « notable » ou de « sensible » (digne d'être remarqué, appréciable). Une amélioration mesurée dans un rapport n'est pas forcément connue de tous : elle est notable, marquée ou sensible. L'emploi de « notoire » pour « considérable » est une impropriété.",
+        "en": "« Notoire » (known to many people, a matter of public knowledge) is not a synonym of « notable » or « sensible » (worth noting, appreciable). An improvement measured in a report is not necessarily known to all: it is « notable », « marquée » or « sensible ». Using « notoire » to mean 'considerable' is an impropriety."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-29",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Ce passage d'un bulletin environnemental renferme une erreur de vocabulaire. Quelle modification faut-il retenir ? « Au cours de la dernière décade, les émissions de gaz à effet de serre des immeubles fédéraux ont diminué de près de 30 %, grâce notamment à la modernisation des systèmes de chauffage. »",
+        "en": "This passage from an environmental bulletin contains a vocabulary error. Which change should be made? « Au cours de la dernière décade, les émissions de gaz à effet de serre des immeubles fédéraux ont diminué de près de 30 %, grâce notamment à la modernisation des systèmes de chauffage. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « ont diminué » par « ont été diminuées »",
+          "rationale": {
+            "fr": "« Diminuer » est ici intransitif : ce sont les émissions qui diminuent. La forme passive « ont été diminuées » est lourde et ne touche pas au mot fautif.",
+            "en": "« Diminuer » is intransitive here: the emissions themselves decrease. The passive « ont été diminuées » is clumsy and leaves the faulty word untouched."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « décade » par « décennie »",
+          "rationale": {
+            "fr": "Une « décade » est une période de dix jours ; une période de dix ans est une « décennie ». L'emploi de « décade » au sens de dix ans est un anglicisme critiqué.",
+            "en": "A « décade » is a period of ten days; a period of ten years is a « décennie ». Using « décade » to mean ten years is a criticised anglicism."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « grâce notamment à » par « dû notamment à »",
+          "rationale": {
+            "fr": "« Grâce à » introduit une cause favorable, ce qui convient à une baisse des émissions ; « dû à » s'emploie comme attribut ou complément d'un nom et serait mal construit ici.",
+            "en": "« Grâce à » introduces a favourable cause, which suits a drop in emissions; « dû à » is used as a predicate or noun complement and would be badly constructed here."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « près de » par « auprès de »",
+          "rationale": {
+            "fr": "« Près de » signifie « presque » devant un nombre ; « auprès de » signifie « à côté de » ou « en s'adressant à » et rendrait la phrase fautive.",
+            "en": "« Près de » means 'almost' before a number; « auprès de » means 'next to' or 'addressed to' and would make the sentence wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Décennie » désigne une période de dix ans ; « décade », une période de dix jours (le sens de « dix ans » est critiqué, sous l'influence de l'anglais « decade »). Dans un bulletin qui mesure une tendance sur plusieurs années, il faut « décennie ».",
+        "en": "« Décennie » means a period of ten years; « décade », a period of ten days (the 'ten years' sense is criticised, as it comes from the English 'decade'). In a bulletin measuring a trend over several years, « décennie » is required."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-30",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Une seule erreur s'est glissée dans cet extrait d'un avis de consultation réglementaire. Choisissez la modification nécessaire : « À la demande de plusieurs intervenants, le Ministère a consenti un prolongement du délai de consultation jusqu'au 30 juin, sous réserve que les observations soient transmises par écrit. »",
+        "en": "A single error has crept into this excerpt from a regulatory consultation notice. Choose the necessary change: « À la demande de plusieurs intervenants, le Ministère a consenti un prolongement du délai de consultation jusqu'au 30 juin, sous réserve que les observations soient transmises par écrit. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « sous réserve que » par « à condition que »",
+          "rationale": {
+            "fr": "« Sous réserve que » et « à condition que » sont deux locutions valables suivies du subjonctif ; cet échange ne touche pas au nom fautif.",
+            "en": "« Sous réserve que » and « à condition que » are both valid conjunctions followed by the subjunctive; swapping them leaves the faulty noun in place."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « a consenti » par « a accordé »",
+          "rationale": {
+            "fr": "On peut « consentir » ou « accorder » un délai supplémentaire ; remplacer un verbe juste par un autre ne règle pas l'impropriété de « prolongement ».",
+            "en": "One can « consentir » or « accorder » an extension; swapping one sound verb for another does not fix the misuse of « prolongement »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « soient transmises » par « sont transmises »",
+          "rationale": {
+            "fr": "« Sous réserve que » exige le subjonctif ; l'indicatif « sont transmises » introduirait une faute.",
+            "en": "« Sous réserve que » requires the subjunctive; the indicative « sont transmises » would introduce an error."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « un prolongement » par « une prolongation »",
+          "rationale": {
+            "fr": "Pour une durée, on emploie « prolongation » ; « prolongement » s'applique à l'espace ou, au figuré, à une suite (le prolongement d'une route, d'une réflexion).",
+            "en": "For a length of time, French uses « prolongation »; « prolongement » applies to space or, figuratively, to a continuation (le prolongement d'une route, d'une réflexion)."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Prolongation » se dit de l'allongement dans le temps : prolongation d'un délai, d'un contrat, d'un mandat. « Prolongement » se dit de l'allongement dans l'espace (prolongement d'une ligne de métro) ou d'une suite, d'une conséquence (les prolongements d'une affaire). Un délai étant une durée, il fait l'objet d'une prolongation.",
+        "en": "« Prolongation » refers to lengthening in time: the extension of a deadline, a contract, a mandate. « Prolongement » refers to lengthening in space (prolongement d'une ligne de métro) or to a continuation or consequence (les prolongements d'une affaire). A deadline being a length of time, it receives a « prolongation »."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-31",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Lisez cette phrase extraite d'une note de service sur les mesures d'adaptation et indiquez la modification qui s'impose : « Les employés en situation de handicap peuvent obtenir un remboursement partial du coût de leurs aides techniques, sur présentation des reçus originaux. »",
+        "en": "Read this sentence from a memo on workplace accommodation and indicate the change required: « Les employés en situation de handicap peuvent obtenir un remboursement partial du coût de leurs aides techniques, sur présentation des reçus originaux. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « sur présentation » par « en présentation »",
+          "rationale": {
+            "fr": "« Sur présentation de » est la locution consacrée pour une pièce exigée ; « en présentation » n'existe pas dans ce sens.",
+            "en": "« Sur présentation de » is the established phrase for a required document; « en présentation » does not exist in that sense."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « originaux » par « originals »",
+          "rationale": {
+            "fr": "Le pluriel de « original » est « originaux » ; « originals » serait fautif.",
+            "en": "The plural of « original » is « originaux »; « originals » would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « partial » par « partiel »",
+          "rationale": {
+            "fr": "« Partiel » signifie « qui ne porte que sur une partie » ; « partial » signifie « qui prend parti, injuste ». Un remboursement d'une partie du coût est partiel.",
+            "en": "« Partiel » means 'covering only part'; « partial » means 'biased, unfair'. A refund of part of the cost is « partiel »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « obtenir » par « bénéficier »",
+          "rationale": {
+            "fr": "« Bénéficier » se construit avec « de » (bénéficier d'un remboursement) ; ce remplacement introduirait une erreur de construction et laisserait « partial » en place.",
+            "en": "« Bénéficier » takes « de » (bénéficier d'un remboursement); this replacement would introduce a construction error and leave « partial » in place."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Partiel » (incomplet, qui ne concerne qu'une partie : un remboursement partiel, un congé partiel) et « partial » (qui manque d'impartialité : un jugement partial) sont des paronymes. Dans une note sur le remboursement d'une portion des coûts, seul « partiel » convient.",
+        "en": "« Partiel » (incomplete, concerning only a part: un remboursement partiel, un congé partiel) and « partial » (lacking impartiality: un jugement partial) are paronyms. In a memo about refunding a portion of costs, only « partiel » fits."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-32",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Le comité directeur a relevé une impropriété dans le rapport d'étape. Quelle modification faut-il y apporter ? « L'analyse des écarts n'a pas permis de décerner avec certitude les causes du retard accusé par le projet, faute de données fiables sur la charge de travail des ressources affectées. »",
+        "en": "The steering committee spotted an impropriety in the progress report. What change should be made? « L'analyse des écarts n'a pas permis de décerner avec certitude les causes du retard accusé par le projet, faute de données fiables sur la charge de travail des ressources affectées. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « décerner » par « discerner »",
+          "rationale": {
+            "fr": "« Discerner » signifie distinguer, percevoir avec netteté : on discerne les causes d'un retard. « Décerner » signifie attribuer solennellement (un prix).",
+            "en": "« Discerner » means to make out, to perceive clearly: one « discerne » the causes of a delay. « Décerner » means to award formally (a prize)."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « accusé » par « essuyé »",
+          "rationale": {
+            "fr": "« Accuser un retard » est la collocation idiomatique ; « essuyer » s'emploie pour un échec ou des pertes, et ce changement laisserait le verbe fautif en place.",
+            "en": "« Accuser un retard » is the idiomatic collocation; « essuyer » is used for a setback or losses, and this change would leave the faulty verb in place."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « faute de » par « faute des »",
+          "rationale": {
+            "fr": "La locution « faute de » se construit sans article devant un nom pris au sens général ; « faute des données fiables » serait fautif.",
+            "en": "The phrase « faute de » takes no article before a noun used in a general sense; « faute des données fiables » would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « affectées » par « affectés »",
+          "rationale": {
+            "fr": "Le participe « affectées » s'accorde avec « ressources », féminin pluriel ; le masculin serait une faute d'accord.",
+            "en": "The participle « affectées » agrees with « ressources », feminine plural; the masculine would be an agreement error."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Discerner » (percevoir, distinguer par l'esprit : discerner les causes, discerner le vrai du faux) et « décerner » (attribuer une récompense : décerner un prix, une mention) sont des paronymes. Une analyse cherche à discerner des causes ; un jury décerne une distinction.",
+        "en": "« Discerner » (to perceive, to distinguish mentally: discerner les causes, discerner le vrai du faux) and « décerner » (to award: décerner un prix, une mention) are paronyms. An analysis seeks to « discerner » causes; a jury « décerne » an honour."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-word-choice-precision-33",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Ce compte rendu d'exercice de confinement contient un mot impropre. Quel remplacement faut-il effectuer ? « Pendant l'exercice, un comédien jouant le rôle d'un intrus a fait éruption dans l'aire ouverte du troisième étage, ce qui a permis de mesurer le temps de réaction des agents de sécurité et des responsables d'étage. »",
+        "en": "This lockdown drill report contains an improper word. Which replacement should be made? « Pendant l'exercice, un comédien jouant le rôle d'un intrus a fait éruption dans l'aire ouverte du troisième étage, ce qui a permis de mesurer le temps de réaction des agents de sécurité et des responsables d'étage. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « a permis » par « a permise »",
+          "rationale": {
+            "fr": "Le participe « permis », employé avec « avoir », reste invariable : le complément d'objet (« de mesurer… ») suit le verbe. Le féminin serait fautif.",
+            "en": "The participle « permis », used with « avoir », stays invariable: its object (« de mesurer… ») follows the verb. The feminine would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « éruption » par « irruption »",
+          "rationale": {
+            "fr": "« Faire irruption » signifie entrer brusquement et sans y être invité : c'est exactement ce que fait l'intrus simulé. Une « éruption » est un jaillissement (volcan, boutons).",
+            "en": "« Faire irruption » means to burst in uninvited: exactly what the simulated intruder does. An « éruption » is an outburst (volcano, rash)."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « temps de réaction » par « temps de réactivité »",
+          "rationale": {
+            "fr": "« Temps de réaction » est l'expression consacrée pour le délai avant d'intervenir ; « réactivité » désigne une qualité, non une durée, et ce changement laisserait le nom fautif en place.",
+            "en": "« Temps de réaction » is the established expression for the delay before responding; « réactivité » refers to a quality, not a duration, and this change would leave the faulty noun in place."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « jouant le rôle d'un intrus » par « jouant un intrus »",
+          "rationale": {
+            "fr": "« Jouer le rôle de » est une tournure idiomatique et « jouer un intrus » se dit aussi ; ce changement de style ne touche pas au mot impropre.",
+            "en": "« Jouer le rôle de » is idiomatic and « jouer un intrus » is also said; this stylistic change leaves the improper word untouched."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Irruption » (entrée soudaine et brutale dans un lieu : faire irruption dans une salle) et « éruption » (sortie brusque, jaillissement : éruption volcanique, éruption cutanée) sont des paronymes. Le mouvement vers l'intérieur d'un lieu appelle « irruption » ; le jaillissement vers l'extérieur, « éruption ».",
+        "en": "« Irruption » (a sudden, forceful entry into a place: faire irruption dans une salle) and « éruption » (a sudden outward burst: volcanic eruption, skin rash) are paronyms. Movement into a place calls for « irruption »; an outward burst, « éruption »."
+      },
+      "subSkill": "word-choice-precision",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ]
+}

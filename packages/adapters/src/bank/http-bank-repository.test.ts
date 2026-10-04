@@ -371,4 +371,36 @@ describe("httpBankRepository — the committed Phase-5 bank, with its scenarios"
     expect(await at(1).scenarios()).toEqual([]);
     expect(await at(2).scenarios()).toEqual([]);
   });
+
+  // The committed authored bank (content/bank/v4/, progress.md D203), the version the app reads.
+  // It carries v3 whole, with v3's synthetic items and scenarios retired (D205): still there under
+  // the same ids, so attempts, forms and past sessions resolve, but no longer served.
+  describe("the committed authored bank (v4)", () => {
+    it("holds every item v3 published, under the same id, retired and otherwise unchanged", async () => {
+      const v3Items = await at(3).query({});
+      const v4Items = await at(4).byIds(v3Items.map((i) => i.id));
+      expect(v4Items).toEqual(v3Items.map((item) => ({ ...item, status: "retired" })));
+    });
+
+    it("holds every form v3 published, exactly as published, so an exam sat on one still rescores", async () => {
+      const v4Forms = await at(4).forms();
+      for (const form of await at(3).forms()) expect(v4Forms).toContainEqual(form);
+    });
+
+    it("holds every scenario v3 published, retired, and a published one for every session type at B and at C", async () => {
+      const v4 = await at(4).scenarios();
+      for (const scenario of await at(3).scenarios()) expect(v4).toContainEqual({ ...scenario, status: "retired" });
+      const offered = new Set(v4.filter((s) => s.status !== "retired").map((s) => `${s.sessionType}-${s.targetBand}`));
+      expect([...offered].sort()).toEqual(
+        ["full", "opinion", "situation", "warmup", "work"].flatMap((type) => [`${type}-B`, `${type}-C`]).sort(),
+      );
+    });
+
+    it("serves published items of its own in both skills", async () => {
+      const items = await at(4).query({});
+      for (const skill of ["reading", "writing"] as const) {
+        expect(items.filter((i) => i.skill === skill && i.status === "published").length).toBeGreaterThan(0);
+      }
+    });
+  });
 });

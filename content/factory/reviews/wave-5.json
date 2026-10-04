@@ -1,0 +1,2516 @@
+{
+  "reviewer": "claude-opus-5-5",
+  "verdicts": [
+    {
+      "requestHash": "79a4b79d930952726da164a6",
+      "itemId": "claude-w-connectors-and-discourse-markers-01",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Concessive 'même si' contradicts the cause-effect link between reclassification and the salary adjustment.",
+          "b": "Causal 'puisque' with the indicative correctly presents the reclassification as the known reason for the adjustment.",
+          "c": "'Alors que' marks contrast or simultaneity, which does not fit a cause-effect relation.",
+          "d": "'Pour que' expresses purpose and would require the subjunctive; illogical here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "123eef1ad78943cc58419d25",
+      "itemId": "claude-w-connectors-and-discourse-markers-02",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'En revanche' signals contrast, but obtaining funds and proceeding with hiring are not opposed.",
+          "b": "'Pourtant' signals an unexpected contrast, which is illogical here.",
+          "c": "'Autrement dit' introduces a reformulation, not a consequence.",
+          "d": "'Par conséquent' correctly introduces the hiring as the consequence of the additional funds."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The stem's 'l'embauche ... pourra aller de l'avant' uses 'aller de l'avant' in the sense of 'proceed / go ahead', a calque that Quebec and federal usage guides (OQLF, Clefs du français pratique) criticise; 'pourra avoir lieu' or 'pourra se faire' would be the idiomatic administrative wording."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "b1aaa8152005907f5a54d7ad",
+      "itemId": "claude-w-connectors-and-discourse-markers-03",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Bien que' + subjunctive is the standard concessive in formal administrative French and fits the meaning.",
+          "b": "'Même si' takes the indicative, so it cannot be followed by 'ne soit'.",
+          "c": "'Malgré que' + subjunctive is widespread in speech but is criticised by usage guides in formal writing, so it is the register trap rather than the best answer.",
+          "d": "'Puisque' is causal and takes the indicative; both meaning and mood are wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "4d215558f7337828ff3cbaee",
+      "itemId": "claude-w-connectors-and-discourse-markers-04",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'En raison de soumissions conformes' would make compliant bids the cause of relaunching, which is illogical.",
+          "b": "'Sous réserve de' expresses a condition, which makes no sense with relaunching the RFP.",
+          "c": "'Faute de' correctly expresses that the absence of compliant bids forces the relaunch.",
+          "d": "'En vue de' expresses purpose, which is illogical here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "dd02bdaff3e99e59a57dd220",
+      "itemId": "claude-w-connectors-and-discourse-markers-05",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Puisque' is causal; the old system's requirement does not cause the new platform's single log-in.",
+          "b": "'De sorte que' marks a consequence, which misrepresents the relation between the two systems.",
+          "c": "'Alors que' correctly sets up the contrast between the old and new systems.",
+          "d": "'À moins que' is a restrictive condition requiring the subjunctive; wrong meaning and mood."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "2406381d490e8f9d9f6646b7",
+      "itemId": "claude-w-connectors-and-discourse-markers-06",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'À condition que' + subjunctive correctly makes the extended hours conditional on HQ supplying staff.",
+          "b": "'Si bien que' marks a consequence and takes the indicative; wrong on both counts.",
+          "c": "'À moins que' would mean 'unless HQ provides staff', inverting the logic.",
+          "d": "'Bien que' is concessive, which contradicts the dependency between staff and extended hours."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8e45fa30d4fcab0c08f4c5e2",
+      "itemId": "claude-w-connectors-and-discourse-markers-07",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Parce que' is causal and takes the indicative, not 'puissent'.",
+          "b": "'Si bien que' marks consequence and takes the indicative.",
+          "c": "'Alors que' marks contrast and takes the indicative.",
+          "d": "'Afin que' + subjunctive correctly expresses the purpose of posting the plan."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "8a613437cc6597364491ba1f",
+      "itemId": "claude-w-connectors-and-discourse-markers-08",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Ainsi' introduces a consequence or illustration, but the late approval does not follow from the plan.",
+          "b": "'Or' correctly introduces a fact that runs counter to the plan just stated.",
+          "c": "'En effet' introduces a justification, which does not fit a contradicting fact.",
+          "d": "'De plus' adds a similar point, missing the opposition between plan and reality."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "afb6559e22ededbf84f4a837",
+      "itemId": "claude-w-connectors-and-discourse-markers-09",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'De plus' correctly adds a second action by the project lead.",
+          "b": "'En revanche' signals contrast, but presenting a schedule and proposing a scope cut are not opposed.",
+          "c": "'Autrement dit' introduces a reformulation, and the proposal is not a restatement of the presentation.",
+          "d": "'Faute de quoi' means 'otherwise' and is illogical here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "ebcd4d9135555ead04568264",
+      "itemId": "claude-w-connectors-and-discourse-markers-10",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Même si' would make the restriction concessive ('even if never released'), which is illogical.",
+          "b": "'Si bien que' would make non-release a consequence of acceptability, inverting the logic.",
+          "c": "'À moins que' requires the subjunctive and would invert the condition.",
+          "d": "'Dans la mesure où' + indicative correctly sets the condition or extent under which machine translation is acceptable."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8966a14f77b281706b397a8d",
+      "itemId": "claude-w-connectors-and-discourse-markers-11",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Faute de recenser' would mean 'for lack of identifying', which is illogical.",
+          "b": "'En vue de' + infinitive correctly expresses the purpose of the consultations.",
+          "c": "'Quitte à' means 'even if it means', which does not fit.",
+          "d": "'Afin que' must be followed by a conjugated subjunctive clause, not an infinitive."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "7f27122e6c7c57f5b0548c62",
+      "itemId": "claude-w-connectors-and-discourse-markers-12",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'C'est pourquoi' would make the emissions cut the cause of the target being out of reach, which is illogical.",
+          "b": "'Autrement dit' introduces a reformulation, not a counterpoint.",
+          "c": "'Il n'en reste pas moins que' correctly answers 'Certes' with a concessive counterpoint.",
+          "d": "'D'ailleurs' adds a supporting point and misses the concession."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6c4f53f85c48367e6623f0fb",
+      "itemId": "claude-w-connectors-and-discourse-markers-13",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Bien que' is concessive and needs the subjunctive; the relation here is causal.",
+          "b": "'Afin que' expresses purpose and needs the subjunctive; illogical.",
+          "c": "'Tandis que' marks contrast or simultaneity, not cause.",
+          "d": "'Étant donné que' + indicative correctly gives the leave as the reason for the June scheduling."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "2a9215ac066dec7b0c78a348",
+      "itemId": "claude-w-connectors-and-discourse-markers-14",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Sous réserve de' correctly makes execution conditional on the CFO's favourable opinion, still to come.",
+          "b": "'En dépit de' ('despite') contradicts the favourable opinion being a prerequisite.",
+          "c": "'En raison de' presents the opinion as an existing cause, but the CFO has not yet reviewed the file.",
+          "d": "'Au lieu de' ('instead of') is illogical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "f31d99ea55c79fc6f9d8553d",
+      "itemId": "claude-w-connectors-and-discourse-markers-15",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Par conséquent' reverses causality: the January hiring explains the drop, not the reverse.",
+          "b": "'En effet' correctly introduces the explanation (pluperfect) for the shorter processing times.",
+          "c": "'En revanche' signals a contrast that does not exist.",
+          "d": "'Pourtant' signals an unexpected contrast, which is illogical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "44b3168b2818bc98e9219692",
+      "itemId": "claude-w-connectors-and-discourse-markers-16",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Faute de diffuser' ('for lack of releasing') is illogical.",
+          "b": "'De manière à' would make releasing annexes later the purpose of publishing early, which is illogical.",
+          "c": "'Quitte à' correctly expresses the accepted trade-off of releasing some annexes in a later addendum.",
+          "d": "'Bien que' takes the subjunctive, so 'diffusera' is ungrammatical, and the concession is off."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "d6fba9aea0ce683810f9b1b5",
+      "itemId": "claude-w-connectors-and-discourse-markers-17",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Si bien que' + indicative correctly states the consequence: the release is postponed.",
+          "b": "'Si bien que' expressing an actual consequence takes the indicative, not the subjunctive.",
+          "c": "'Bien que' is concessive, but the postponement follows from the missing translation.",
+          "d": "'Afin que' expresses purpose, which is illogical here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "8dfb6ecfab5dd58b583c693c",
+      "itemId": "claude-w-connectors-and-discourse-markers-18",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Même si' takes the indicative, not the subjunctive 'aient obtenu'.",
+          "b": "'Bien que' requires the subjunctive, so 'ont obtenu' is ungrammatical.",
+          "c": "'Puisque' is causal, but an extension for some branches does not explain the policy applying to all.",
+          "d": "'Même si' + indicative correctly concedes the extensions while keeping the policy's universal application."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "9085eabac7c1d6f8c5351f37",
+      "itemId": "claude-w-connectors-and-discourse-markers-19",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Afin que' requires the subjunctive, so 'n'est pas' is ungrammatical.",
+          "b": "'Afin de ne pas perturber' correctly expresses the purpose of a weekend installation.",
+          "c": "'Si bien que' marks a consequence and does not take the subjunctive here.",
+          "d": "'Faute de perturber' ('for lack of disrupting') is illogical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "096c5b19acd44b5d44a89697",
+      "itemId": "claude-w-connectors-and-discourse-markers-20",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Pourtant' signals an unexpected contrast, but the signs follow logically from the wet floor.",
+          "b": "'C'est pourquoi' correctly presents the warning signs as a consequence of the wet floor.",
+          "c": "'Faute de quoi' ('otherwise') is illogical here.",
+          "d": "'Autrement dit' introduces a reformulation, which the signs are not."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "5c7329a6a3fb541684f5c654",
+      "itemId": "claude-w-connectors-and-discourse-markers-21",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'En effet' introduces a justification, but higher hospitality costs do not justify lower travel costs.",
+          "b": "'De même' signals a parallel, but the costs moved in opposite directions.",
+          "c": "'Toutefois' correctly answers 'Certes' with the opposing development.",
+          "d": "'Ainsi' introduces a consequence, which is illogical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "722f86182d30bfdf0b409f90",
+      "itemId": "claude-w-connectors-and-discourse-markers-22",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'À moins que' requires the subjunctive, so 'fait' is ungrammatical.",
+          "b": "'Pourvu que' would make the probation end only if an extension is requested, inverting the logic.",
+          "c": "'Si bien que' marks consequence, which is illogical.",
+          "d": "'À moins que ... ne fasse' (subjunctive with optional expletive ne) correctly states the exception."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "aff846ada1abf01c1da2f1d6",
+      "itemId": "claude-w-connectors-and-discourse-markers-23",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Tandis que' correctly contrasts the Eastern buildings' success with the Western delay.",
+          "b": "'Puisque' presents the Western delay as the cause of the Eastern success, which is illogical.",
+          "c": "'De sorte que' presents the delay as a consequence, which is illogical.",
+          "d": "'Pour que' expresses purpose, needs the subjunctive and is absurd here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f838a0d0fe85f89539b13c76",
+      "itemId": "claude-w-connectors-and-discourse-markers-24",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Si bien que' expressing an actual result takes the indicative, not 'soient'.",
+          "b": "'À moins que' ('unless') is illogical after a completed redesign.",
+          "c": "'Si bien que' + indicative correctly states the result of the redesign.",
+          "d": "'Bien que' is concessive, but accessibility is the purpose and result of the redesign, not a contrast."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "728022bdce37d8643230c128",
+      "itemId": "claude-w-connectors-and-discourse-markers-25",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Bien que' requires the subjunctive, so 'peut' is ungrammatical.",
+          "b": "'Si bien que' presents the right to choose a language as a consequence of meetings being in French, which is illogical.",
+          "c": "'Puisque' presents the right to choose as the cause of meetings being in French, which is illogical.",
+          "d": "'Bien que' + subjunctive correctly concedes that anyone may speak either official language although meetings are usually in French."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "3719fb4d0017a15daabb6248",
+      "itemId": "claude-w-connectors-and-discourse-markers-26",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Autrement dit' correctly spells out the implication: deferral to the next fiscal year means nothing before April.",
+          "b": "'En revanche' signals a contrast that does not exist.",
+          "c": "'Faute de quoi' ('otherwise') is illogical after an approved deferral.",
+          "d": "'Pourtant' signals an unexpected contrast, but no deliverables is the expected outcome."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "49e75116dc551def935ebc9e",
+      "itemId": "claude-w-connectors-and-discourse-markers-27",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Malgré' ('despite') is illogical, because the rise in wait times follows from the stated facts.",
+          "b": "'D'où' correctly introduces the resulting rise in wait times.",
+          "c": "'À savoir' introduces a specification of what precedes, which a longer wait time is not.",
+          "d": "'Grâce à' carries a positive causal meaning that is inappropriate for a worse outcome."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "d607aa90699536bde596f68d",
+      "itemId": "claude-w-connectors-and-discourse-markers-28",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Puisque' would fix the mood but break the logic: finding no anomaly is not a reason to replace extinguishers.",
+          "b": "'Recommander de + infinitive' is correct, and 'à remplacer' would be wrong.",
+          "c": "'Aucun' stays singular here; 'aucunes anomalies majeures' is wrong.",
+          "d": "'Bien que' requires the subjunctive, so 'n'ait relevé' is the needed correction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "c2353a251d6bb8877bdd9211",
+      "itemId": "claude-w-connectors-and-discourse-markers-29",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Puisque le réseau soit' would still be ungrammatical, and the causal meaning does not fit.",
+          "b": "'Peuvent' in the main clause is correct; the subjunctive would be wrong.",
+          "c": "'Même si' takes the indicative, so 'soit' must become 'est'.",
+          "d": "'Grâce à' has a positive meaning that is wrong for a slowdown; 'en raison d'' is correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "790dbd25ff1534f56cc1f0dd",
+      "itemId": "claude-w-connectors-and-discourse-markers-30",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Concessive 'quoique' (one word, 'although') is needed; 'quoi que' means 'whatever'.",
+          "b": "Even with 'quoique', the subjunctive 'ait livré' is required, so this change introduces an error.",
+          "c": "'Faute de défauts' ('for lack of defects') is illogical.",
+          "d": "'Malgré l'inspection' would distort the meaning; 'lors de' is correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c4fd04d85b809f53d09f8969",
+      "itemId": "claude-w-connectors-and-discourse-markers-31",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.86,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Exiger que' requires the subjunctive, so 'soit validé' is correct.",
+          "b": "'En outre' correctly adds a second requirement; 'en revanche' wrongly signals a contrast.",
+          "c": "'Par conséquent' implies a causal link between plain language and reviewer validation that the text does not establish; the second sentence is an additional rule.",
+          "d": "'Publications' is feminine, so 'destinées' is correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "3509b4e61db1a8bc1adb880a",
+      "itemId": "claude-w-connectors-and-discourse-markers-32",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Afin de' cannot be followed by a conjugated clause with a subject.",
+          "b": "The main clause states a fact and correctly uses the indicative 'a envoyé'.",
+          "c": "Each participant has several questions, so 'leurs' is correct.",
+          "d": "'Afin que' requires the subjunctive, so 'peuvent' must become 'puissent'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "b6a73373da7d0ddd5b81e469",
+      "itemId": "claude-w-connectors-and-discourse-markers-33",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Bien que' would distort the meaning and still leave the indicative error.",
+          "b": "'Émissions' is feminine, so 'liées' is correct.",
+          "c": "'Pourvu que' requires the subjunctive, so 'sont approuvés' must become 'soient approuvés'.",
+          "d": "The future 'compensera' is correct in a policy statement; the conditional does not fix the error."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "b524870057305339700e02ea",
+      "itemId": "claude-w-false-friends-and-anglicisms-01",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Appliquer sur le poste' is a calque of 'apply for the job', rejected in formal usage.",
+          "b": "'Poser sa candidature à un poste' is the correct idiomatic expression.",
+          "c": "'Faire application' is an anglicism.",
+          "d": "'S'appliquer' means 'to apply oneself / be applicable', not to apply for a job."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "001f6d8d55f866bd1970ce1c",
+      "itemId": "claude-w-false-friends-and-anglicisms-02",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Cédulé' is an anglicism derived from 'schedule'.",
+          "b": "'Booké' is an anglicism.",
+          "c": "One books a room, not a meeting, so 'réserver la réunion pour mardi' is unidiomatic.",
+          "d": "'Prévoir une réunion pour mardi' is the correct idiomatic expression for scheduling."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "8e81adbcfd8c5cd65b8d3148",
+      "itemId": "claude-w-false-friends-and-anglicisms-03",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Relever de la compétence provinciale' is the correct term for constitutional jurisdiction.",
+          "b": "'Juridiction' in the sense of legislative or administrative jurisdiction is an anglicism; 'compétence' is correct.",
+          "c": "'Jurisprudence' means case law, not jurisdiction.",
+          "d": "'Expertise' means know-how or an expert assessment, not jurisdiction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6dd8719b14d34d0693b010f2",
+      "itemId": "claude-w-false-friends-and-anglicisms-04",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Agenda' for a meeting's list of items is an anglicism; in French an agenda is a diary.",
+          "b": "'Cédule' is an anglicism for 'schedule'.",
+          "c": "'L'ordre du jour' is the correct term for a meeting agenda.",
+          "d": "'Items' is an anglicism; 'points' would be used."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f1091c1ba39c9bd757c07d33",
+      "itemId": "claude-w-false-friends-and-anglicisms-05",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Balance' for a remaining amount is an anglicism; in accounting French 'balance' is a different concept.",
+          "b": "'Bilan' means a balance sheet or assessment, not the unspent amount of an appropriation.",
+          "c": "'Le solde' is the correct term for the remaining balance of an appropriation.",
+          "d": "'L'équilibre' means equilibrium or balance in a figurative sense; wrong here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "846a14e128f83fb4f165a5ea",
+      "itemId": "claude-w-false-friends-and-anglicisms-06",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Exercice d'évacuation' is the standard term for a fire or evacuation drill.",
+          "b": "'Pratique d'évacuation' is a calque of 'practice' and is criticised by usage guides.",
+          "c": "'Drill' is an English loanword, not acceptable in formal French.",
+          "d": "'Entraînement d'évacuation' is unidiomatic; 'entraînement' refers to training."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "b7225bc1fca6ccd7b03e9f3c",
+      "itemId": "claude-w-false-friends-and-anglicisms-07",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Référer quelqu'un à' in the sense of 'refer to' is an anglicism; correct forms are 'diriger vers' or 'adresser à'.",
+          "b": "'Introduire' means to insert or introduce, not to refer a client.",
+          "c": "'Rapporter' means to bring back or report, not to refer.",
+          "d": "'Diriger vers le bureau régional' is the correct idiomatic wording."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "5aa026a040b0c78ac93b4c34",
+      "itemId": "claude-w-false-friends-and-anglicisms-08",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Compléter un formulaire' is widespread, but federal and Quebec usage guides criticise it as a semantic anglicism; 'remplir' is the recommended verb in administrative writing.",
+          "b": "'Remplir un formulaire' is the standard, recommended expression.",
+          "c": "'Combler' means to fill a gap or void, not a form.",
+          "d": "'Accomplir' means to carry out a task, not to fill in a form."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e004969d3177f15df0b4a540",
+      "itemId": "claude-w-false-friends-and-anglicisms-09",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Détruits' correctly says the drives must be destroyed, as required by information-security directives.",
+          "b": "'Disposer' in the sense of 'dispose of' is an anglicism; the French is 'se défaire de' or 'éliminer'.",
+          "c": "'Dispensés' means exempted, which is illogical.",
+          "d": "'Déposés' means deposited or put down, not destroyed."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "edb108af476faa33495d0755",
+      "itemId": "claude-w-false-friends-and-anglicisms-10",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Éligible' in the sense of 'entitled to a benefit' is an anglicism; 'éligible' refers to being eligible for election.",
+          "b": "'Qualifié pour' in the sense of 'eligible for' is an anglicism.",
+          "c": "'Sujet à' means liable or prone to, which gives the wrong meaning.",
+          "d": "'Admissible à' is the correct term for eligibility for a benefit plan."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "a85baa727efc77b0035e21b4",
+      "itemId": "claude-w-false-friends-and-anglicisms-11",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Charger des frais' is an anglicism for 'to charge fees'.",
+          "b": "'Rencontrer des frais' is wrong; 'rencontrer' is also a false friend in 'meet requirements'.",
+          "c": "'Facturer des frais' is the correct expression.",
+          "d": "'Chiffrer' means to quantify or estimate a cost, not to bill it."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "487c7fc600a2ff285242b236",
+      "itemId": "claude-w-false-friends-and-anglicisms-12",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Confortable avec\" applied to a person's ease with software is a calque of \"comfortable with\" and is rejected by GC style guides.",
+          "b": "\"Être à l'aise avec\" is the idiomatic expression for familiarity with a tool; correct.",
+          "c": "\"Commode\" describes a thing as convenient, not a person as at ease, so it does not fit a human subject.",
+          "d": "\"Aisé\" means well-off or easy, so \"être aisé avec un logiciel\" is not idiomatic."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "254fe67061cbcb25ed36593a",
+      "itemId": "claude-w-false-friends-and-anglicisms-13",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Mettre l'accent sur\" is the standard idiom for emphasis; correct.",
+          "b": "\"Mettre l'emphase sur\" is a well-known anglicism (emphasis) that GC style guides reject.",
+          "c": "\"Mettre le focus\" is an English borrowing that is unacceptable in administrative French.",
+          "d": "\"Faire emphase\" is a non-idiomatic calque."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "5a532f394ec9233bd51646e8",
+      "itemId": "claude-w-false-friends-and-anglicisms-14",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"En autant que\" meaning \"provided that\" is a Quebec calque of \"insofar as\" that OQLF and the Translation Bureau criticize.",
+          "b": "\"Dépendamment que\" is a barbarism and is not standard French.",
+          "c": "\"Pourvu que\" followed by the subjunctive is the correct conditional connector; correct.",
+          "d": "\"Aussi longtemps que\" is temporal, not conditional (a calque of \"as long as\"), and it takes the indicative, so \"soient\" is also wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "0b827c3d3d490e38cc9c9803",
+      "itemId": "claude-w-false-friends-and-anglicisms-15",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Rappeler quelqu'un\" takes a direct object, so \"rappelez-le\" is correct.",
+          "b": "\"Retourner un appel\" is a calque of \"return a call\" that GC style guides reject.",
+          "c": "\"Rappeler\" in the sense of calling back takes a direct object, so \"rappelez-lui\" is grammatically wrong.",
+          "d": "\"Donner un retour d'appel\" is an unidiomatic calque."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "7f656485f7ae76ec7b5dd661",
+      "itemId": "claude-w-false-friends-and-anglicisms-16",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Être en devoir\" is a calque of \"on duty\"; the French is \"de service\".",
+          "b": "\"Être sur appel\" is a calque of \"on call\" (the French is \"de garde\" or \"en disponibilité\"), and it shifts the meaning away from the officer on duty.",
+          "c": "\"En charge\" is an anglicism (the French is \"responsable\"), and \"qui est en charge\" with no complement is incomplete.",
+          "d": "\"L'agent de sécurité de service\" is the idiomatic term for the officer on duty; correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "11603ed8d5b2bffaeeaf0e1d",
+      "itemId": "claude-w-false-friends-and-anglicisms-17",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.8,
+        "defensibleDistractors": [
+          "a"
+        ],
+        "optionCases": {
+          "a": "\"Prendre pour acquis\" is the traditionally criticized calque of \"take for granted\", but it is pervasive in educated Canadian French and is now treated as acceptable by some references (OQLF), so a careful native speaker could defend it.",
+          "b": "\"Tenir pour acquis\" is the unimpeachable standard form; correct.",
+          "c": "\"Assumer\" in the sense of \"suppose\" is a false friend of \"assume\"; the correct verb is \"présumer\" or \"supposer\".",
+          "d": "\"Prendre pour accordé\" is a literal calque of \"take for granted\" and is not French."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "998892113718627e582ea636",
+      "itemId": "claude-w-false-friends-and-anglicisms-18",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Définitivement\" in the sense of \"certainly\" is a false friend of \"definitely\"; in French it means \"permanently\".",
+          "b": "\"Sans aucun doute\" correctly expresses certainty; correct.",
+          "c": "\"Actuellement\" means \"currently\", which clashes with the future tense; it is a trap based on \"actually\".",
+          "d": "\"Améliorer positivement\" is a pleonasm and adds nothing."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "7308a26d55f1f8c1ab7ea991",
+      "itemId": "claude-w-false-friends-and-anglicisms-19",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Rencontrer des exigences\" is an anglicism (meet requirements) that GC style guides reject.",
+          "b": "\"Remplir\" is transitive, so \"remplir aux exigences\" is ungrammatical.",
+          "c": "The verb is \"se conformer à\", not \"avec\", so the preposition is wrong.",
+          "d": "\"Satisfaire aux exigences\" is the correct construction; correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "d75cc0ea26092969512d8bc8",
+      "itemId": "claude-w-false-friends-and-anglicisms-20",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Sur une base régulière\" is a calque of \"on a regular basis\" that GC style guides reject.",
+          "b": "\"Sur un horaire régulier\" is a calque and unidiomatic.",
+          "c": "The adverb \"régulièrement\" is the idiomatic choice; correct.",
+          "d": "\"En temps régulier\" means \"in normal time\" and does not fit the meaning."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "59fc99e67284386b1c0ba50a",
+      "itemId": "claude-w-false-friends-and-anglicisms-21",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"S'engager à remédier à ces lacunes\" is correct and idiomatic.",
+          "b": "\"Adresser\" in the sense of dealing with a problem is an anglicism (address).",
+          "c": "\"Prendre action\" is a calque of \"take action\".",
+          "d": "\"Corriger\" is transitive, so \"corriger à\" is ungrammatical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "63fdd37ba30378b21aa456ac",
+      "itemId": "claude-w-false-friends-and-anglicisms-22",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Depuis le mois dernier\" with the present tense is correct, and \"dès\" would break the meaning.",
+          "b": "\"Répondre à\" requires its preposition, so removing it is wrong.",
+          "c": "\"Être en charge de\" is the anglicism criticized in Canadian usage; \"responsable du\" fixes it; correct.",
+          "d": "\"Répondera\" is not a valid future form."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "808296ea57d388aa84b7adf9",
+      "itemId": "claude-w-false-friends-and-anglicisms-23",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Implémenter\" applied to a directive is an anglicism; \"mettre en œuvre\" is the standard term; correct.",
+          "b": "\"Bien que\" requires the subjunctive, so \"aient demandé\" is correct and the change would introduce an error.",
+          "c": "\"Délai supplémentaire\" (extra time allowed) is correct, and \"retard\" would change the meaning.",
+          "d": "\"Avant que la fin\" is ungrammatical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "695365c6156afba75d35470f",
+      "itemId": "claude-w-false-friends-and-anglicisms-24",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Dont les retombées\" is the correct relative pronoun, and \"que\" would be ungrammatical.",
+          "b": "\"Se faire sentir\" is the correct idiom for effects, and \"se sentir\" changes the meaning.",
+          "c": "\"Dès l'an prochain\" is correct for a future starting point, and \"depuis\" cannot point to the future.",
+          "d": "\"Initier\" in the sense of launching a project is an anglicism; \"lancer\" fixes it; correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "cc95a155d323b0ad756aac19",
+      "itemId": "claude-w-false-friends-and-anglicisms-25",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The direct object follows the verb, so the participle stays invariable; \"traitées\" would be wrong.",
+          "b": "\"À date\" is a calque of \"to date\"; \"À ce jour\" fixes it; correct.",
+          "c": "Before a number the form is \"plus de\", not \"plus que\".",
+          "d": "\"Liées\" agrees with \"demandes\"; \"lié\" would be wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "6fe0bba1dd6f800741165ba9",
+      "itemId": "claude-w-false-friends-and-anglicisms-26",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Correspondre à\" is correct, and \"correspondre avec\" means to exchange letters.",
+          "b": "\"Item\" for an entry in a list is an anglicism; \"article\" fixes it; correct.",
+          "c": "\"Énoncées\" agrees with \"caractéristiques\"; the masculine form would be wrong.",
+          "d": "\"Avant que d'\" is archaic and not a needed correction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "aaf12944aedcc9d2f33955f1",
+      "itemId": "claude-w-false-friends-and-anglicisms-27",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Prévue\" agrees with \"formation\"; the masculine form would be wrong.",
+          "b": "\"Dû à\" as a causal preposition is criticized; \"en raison du\" is correct as written.",
+          "c": "The past participle of \"devoir\" carries the circumflex (\"dû\"), so \"du\" would be an error.",
+          "d": "\"Canceller\" is an anglicism; \"annuler\" fixes it; correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e9724c756d8faa286c54c573",
+      "itemId": "claude-w-false-friends-and-anglicisms-28",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Assumer\" in the sense of \"suppose\" is a false friend; \"présumer\" fixes it; correct.",
+          "b": "\"Il convient\" takes the indicative here; the subjunctive would be wrong.",
+          "c": "\"Leur\" is the indirect object (to the employees) and \"un guide\" is the direct object, so \"les\" would be wrong.",
+          "d": "An adverb is needed to modify \"explique\"; the adjective \"clair\" would be wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "3ae9260d8b324d223d408221",
+      "itemId": "claude-w-false-friends-and-anglicisms-29",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Entrer en vigueur\" is correct, and \"rentrer\" would be a fault.",
+          "b": "Dropping \"ne\" in \"ne… que\" is colloquial and introduces an error.",
+          "c": "\"Être sous l'impression\" is a calque of \"be under the impression\"; \"avaient l'impression\" fixes it; correct.",
+          "d": "\"De suite\" means \"in succession\"; the correct form is \"tout de suite\", and \"immédiatement\" is already correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "4ef56a1ecd707bb33cd761a3",
+      "itemId": "claude-w-false-friends-and-anglicisms-30",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Affichés\" agrees with \"documents\" (masculine plural); \"affichées\" would be wrong.",
+          "b": "Repeating the preposition (\"en français et en anglais\") is the correct form, so the change degrades the sentence.",
+          "c": "The subject of \"exige\" is \"la politique\" (singular), so \"l'exigent\" would be wrong.",
+          "d": "\"Faites sûr que\" is a calque of \"make sure\"; \"Assurez-vous que\" fixes it; correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f180dea6d12dfb7d3a793ae1",
+      "itemId": "claude-w-false-friends-and-anglicisms-31",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Supporter\" in the sense of endorsing is an anglicism; \"appuie\" fixes it; correct.",
+          "b": "\"Pourvu que\" requires the subjunctive, so \"sont évaluées\" would be wrong.",
+          "c": "\"Au regard des\" is correct, and \"en regard aux\" is a faulty construction.",
+          "d": "\"Fixées\" agrees with \"cibles\" (feminine); \"fixés\" would be wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "496ff288f5089f4d2b649dbd",
+      "itemId": "claude-w-false-friends-and-anglicisms-32",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Respecter l'échéance\" is correct, and \"rencontrer\" would introduce an anglicism.",
+          "b": "\"Fixée\" agrees with \"échéance\" (feminine); \"fixé\" would be wrong.",
+          "c": "\"Sauver du temps\" is a calque of \"save time\"; \"gagner du temps\" fixes it; correct.",
+          "d": "With \"avoir\" and the direct object following, the participle stays invariable, so \"regroupées\" would be wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "210dd97149243775117309ed",
+      "itemId": "claude-w-false-friends-and-anglicisms-33",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"En vertu de\" is the fixed locution, and \"en vertu à\" is ungrammatical.",
+          "b": "\"Mandatoire\" is an anglicism; \"obligatoire\" fixes it; correct.",
+          "c": "\"Remise\" agrees with \"la déclaration\"; \"remis\" would be wrong.",
+          "d": "The subject \"la déclaration\" is singular, so \"doivent\" would be wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "bb2c3b577f16cb4fd563dd51",
+      "itemId": "claude-w-register-and-formality-01",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Voulions juste vous dire\" is conversational and too casual for an official letter.",
+          "b": "\"Avons le plaisir de vous informer\" is the standard formula for good news in an official letter; correct.",
+          "c": "\"Te\" uses tu with an external candidate, which is inappropriate.",
+          "d": "\"Faire assavoir\" is archaic and pompous."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "89a2cea9af5cf98a16e448fe",
+      "itemId": "claude-w-register-and-formality-02",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"En jasant\" is colloquial Quebec speech and does not even connect to \"des écarts\".",
+          "b": "\"Jeter un œil sur l'ensemble des écarts\" is familiar and too casual for a memo to an ADM.",
+          "c": "\"Eu égard à la susdite analyse\" is stilted legalese, and \"susdite\" refers to an analysis never mentioned.",
+          "d": "\"À la suite de l'examen des écarts\" is neutral, formal administrative French; correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "fce3318d6ba655075f2472df",
+      "itemId": "claude-w-register-and-formality-03",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Cordialement\" is the usual courteous close for an internal workplace email; correct.",
+          "b": "\"Bye\" is an English, overly casual close.",
+          "c": "The full formal letter formula is grossly disproportionate in an everyday internal email to close colleagues.",
+          "d": "\"À plus\" is slangy and too casual for a work email."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "8427842971c2ce8c59eee9ae",
+      "itemId": "claude-w-register-and-formality-04",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Demanderions juste\" is grammatical, but \"juste\" makes it conversational and inappropriate for an official letter.",
+          "b": "\"Supplions\" is excessively deferential (begging) for a routine administrative request.",
+          "c": "\"Nous vous saurions gré de\" is the polished formula for a courteous request; correct.",
+          "d": "\"Mettons en demeure\" is a formal legal demand and far too aggressive for a missing-document request."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "4b3a58e8b1599d3c50a6e377",
+      "itemId": "claude-w-register-and-formality-05",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Le rollout\" is an English borrowing, inappropriate for a report to the Executive Board.",
+          "b": "The filler \"comme qui dirait\" is colloquial.",
+          "c": "\"La mise en œuvre\" is the standard term for implementing a directive; correct.",
+          "d": "\"À la va-vite\" is familiar and pejorative."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "61f3bac37ac78a5cf6e6a1d2",
+      "itemId": "claude-w-register-and-formality-06",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Nous vous rappelons que\" is the standard neutral reminder formula; correct.",
+          "b": "\"Te\" with \"nous\" addressing all staff is a mismatch of person and register.",
+          "c": "\"Lâcher un petit mot\" is familiar and does not fit the structure \"que…\" well.",
+          "d": "\"Faire assavoir\" is archaic."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "2c4ef8103344b4f8c70b6ea8",
+      "itemId": "claude-w-register-and-formality-07",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Trouvons ça plate\" is Quebec colloquial and also does not take \"de vous informer\".",
+          "b": "\"Sommes au désespoir de\" is melodramatic and out of proportion for a procurement letter.",
+          "c": "\"Sommes sorry\" mixes in an English word and is unacceptable.",
+          "d": "\"Avons le regret de vous informer\" is the standard formula for bad news; correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "15b7be7fac160e29baadb0b6",
+      "itemId": "claude-w-register-and-formality-08",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Forwarde\" is an English-derived verb, unacceptable in professional writing.",
+          "b": "\"Je transmets votre demande\" is neutral and professional; correct.",
+          "c": "\"Garroche\" (to throw) is Quebec slang.",
+          "d": "\"Passe vite fait\" is familiar."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "836e7f70f08dbb9512b8b885",
+      "itemId": "claude-w-register-and-formality-09",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Nous souhaiterions obtenir votre approbation\" is a courteous conditional request suited to a DM; correct.",
+          "b": "\"On voudrait bien\" is conversational, with the informal \"on\".",
+          "c": "\"Nous exigeons d'obtenir\" is a demand addressed to a superior, which is inappropriate in tone.",
+          "d": "\"Nous osons humblement espérer\" is obsequious and overwrought."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "2226dd8a024c50a261630778",
+      "itemId": "claude-w-register-and-formality-10",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Bises\" is intimate and absurd in an official letter.",
+          "b": "\"Bonne fin de semaine!\" breaks the formal formula and is too casual.",
+          "c": "\"Très humble et très obéissante servitude\" is an antiquated, servile formula.",
+          "d": "\"L'expression de nos sentiments distingués\" completes the standard formal closing; correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "156cfc8c552d053f09c5a7e6",
+      "itemId": "claude-w-register-and-formality-11",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "This is overly formal for an instant message to a close colleague, and \"à votre meilleure convenance\" is itself a calque.",
+          "b": "A formal letter closing is out of place in an instant message.",
+          "c": "\"Dis-moi si on peut en parler cet après-midi\" matches the tutoiement and the friendly instant-message register; correct.",
+          "d": "A formal \"nous vous saurions gré\" contradicts \"Salut Marc\" and \"as-tu\"."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "73e05973b0e9b80c79f36de9",
+      "itemId": "claude-w-register-and-formality-12",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Faque\" is Quebec colloquial speech.",
+          "b": "\"Il conviendrait donc d'envisager une révision des priorités de financement\" is formal, measured and appropriate for a briefing note; correct.",
+          "c": "\"C'est clair qu'il va falloir se serrer la ceinture\" is conversational and idiomatic-familiar.",
+          "d": "\"Partant, il sied de procéder à moult retranchements\" is archaic and pompous."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "3b5aaf3c61db17b30c5c7880",
+      "itemId": "claude-w-register-and-formality-13",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Pas de trouble\" is a calque of \"no trouble\" and is familiar.",
+          "b": "\"Je communiquerai avec vous d'ici vendredi pour convenir des prochaines étapes\" is professional and keeps the vouvoiement; correct.",
+          "c": "\"Je te reviens… au plus sacrant\" switches to tu, uses a calque and is vulgar-familiar.",
+          "d": "\"Votre infortune\" is pompous and condescending toward an employee requesting accommodation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "308431094bc70234a8427b97",
+      "itemId": "claude-w-register-and-formality-14",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "This option drops the \"ne\" and uses \"on\"; it is conversational.",
+          "b": "\"Déclinons péremptoirement… irrecevable\" is formal but curt and harsh, which clashes with the courteous opening.",
+          "c": "\"Pas mal hors de nos critères, faque c'est non\" is colloquial.",
+          "d": "\"Ne sommes malheureusement pas en mesure de donner une suite favorable\" is the standard courteous refusal formula; correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c4c69ab34e242ae2ec3e986b",
+      "itemId": "claude-w-register-and-formality-15",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Nous vous remercions de votre compréhension\" is the standard neutral close for a service notice; correct.",
+          "b": "\"Avec nous autres, là!\" is colloquial.",
+          "c": "\"Sorry pour le trouble\" mixes in English and a calque.",
+          "d": "\"Daignez agréer nos plus plates excuses\" is pompous, and \"daignez\" is condescending."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "db055c2df450bbced7e3fd35",
+      "itemId": "claude-w-register-and-formality-16",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "This option uses \"on\", drops the \"ne\" and uses the familiar \"marchait pas trop bien\".",
+          "b": "\"Pis\" and \"pas mal de monde\" are colloquial.",
+          "c": "\"L'équipe a relevé plusieurs lacunes dans l'application de la politique actuelle\" is formal report French; correct.",
+          "d": "\"Il nous fut donné d'ouïr maintes doléances\" is archaic and literary."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "4dcba9ec70f565039267d047",
+      "itemId": "claude-w-register-and-formality-17",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "This option is clear, courteous and informative, which suits a client service reply; correct.",
+          "b": "\"Checkée\" and \"vous revenir là-dessus\" are an anglicism and familiar.",
+          "c": "This option uses tu with a citizen and the colloquial \"inquiète-toi pas\".",
+          "d": "\"Votre supplique chemine\" is pompous and vague."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f8a2141ce2d7952f2181ab97",
+      "itemId": "claude-w-register-and-formality-18",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Ça a passé proche, faut dire\" is colloquial.",
+          "b": "\"Une enquête a toutefois été entreprise afin d'en déterminer les causes\" is formal and factual; correct.",
+          "c": "\"Anyway, on checke\" mixes in English and is familiar.",
+          "d": "\"Nonobstant ce, d'aucuns s'emploient céans à quérir\" is archaic and pompous."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "7232046af0d54a34445eead1",
+      "itemId": "claude-w-register-and-formality-19",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Using tu with an unknown supplier representative is inappropriate.",
+          "b": "\"Au plus vite, OK ?\" is brusque and familiar.",
+          "c": "\"De votre haute bienveillance\" is obsequious and archaic.",
+          "d": "\"Pourriez-vous nous faire parvenir une soumission d'ici vendredi ?\" is courteous and professional; correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f5dcb67941520a63f5914a03",
+      "itemId": "claude-w-register-and-formality-20",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "\"Pas mal tout croche\" is colloquial and drops the \"ne\".",
+          "b": "\"Suggère fortement\" is a calque, \"ça va mal paraître\" is familiar, and the tone is too blunt toward a DG.",
+          "c": "\"Je me permettrais de suggérer une reformulation\" is tactful and appropriate for an upward recommendation; correct.",
+          "d": "\"Infirmité stylistique rédhibitoire\" is pompous and overwrought."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "7ae1c7d24c361791012c2b78",
+      "itemId": "claude-w-register-and-formality-21",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "This option uses \"on\" and \"pousser la date\", a calque of \"push the date\", which is familiar.",
+          "b": "\"Checker\" is an anglicism, and \"a comme convenu de\" is garbled.",
+          "c": "\"Il appert qu'il échet… derechef\" is archaic legalese.",
+          "d": "\"Le comité a résolu de reporter d'un mois la date d'achèvement des travaux\" is formal and precise; correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "1af55703a3e3cbb387f50a4f",
+      "itemId": "claude-w-register-and-formality-22",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "This option is neutral, informative and suits a staff email; correct.",
+          "b": "\"Venez-vous-en, ça va être le fun!\" is colloquial.",
+          "c": "\"Asap\" and \"y'a pas\" are an English acronym and familiar speech.",
+          "d": "\"Il vous sied… céans, sous peine de forclusion\" is archaic, legalistic and absurdly threatening."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "aa412d5587e6d290f8a1ce00",
+      "itemId": "claude-w-register-and-formality-23",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Colloquial Quebec slang ('ça va brasser'), inappropriate in a formal letter.",
+          "b": "Personal, threatening and familiar ('pas à peu près'), wrong register for an administrative letter.",
+          "c": "Correct: neutral, formal administrative register with a measured warning.",
+          "d": "Grandiloquent and disproportionate ('les rigueurs de la loi'), wrong in tone and substance."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "9ee30eab731489fb3047a6a3",
+      "itemId": "claude-w-register-and-formality-24",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Spoken colloquial French (dropped ne, 'y reste', 'pas mal'), unsuitable for a note to an ADM.",
+          "b": "Correct: precise, formal, and completes the concessive 'Bien que' sentence naturally.",
+          "c": "Colloquial ('faut avouer', 'genre'), wrong register.",
+          "d": "Archaic and affected ('d'aucunes', 'rebelles aux canons'), inappropriate for an administrative note."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c39013b4995849aeb725f8a9",
+      "itemId": "claude-w-register-and-formality-25",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: vouvoiement and precise financial vocabulary suit an email to an unknown manager.",
+          "b": "Tutoiement and casual wording are inappropriate with a manager he does not know.",
+          "c": "Colloquial ('faudrait', 'c'est quoi'), wrong register.",
+          "d": "Archaic, mock-courtly phrasing, absurd in a modern administrative email."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "48e79e323c2fa5d8bb14f25c",
+      "itemId": "claude-w-register-and-formality-26",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Colloquial Quebec speech ('ben', 'vous autres'), unsuitable for an official letter.",
+          "b": "Familiar ('super le fun'), wrong register.",
+          "c": "Pompous, literary optative, out of place in an administrative letter.",
+          "d": "Correct: courteous, formal and concrete, linking to the second phase."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ab1b14f0f560be77ef36f1d0",
+      "itemId": "claude-w-register-and-formality-27",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Colloquial ('regarder ça de votre bord'), wrong register for a director.",
+          "b": "Correct: polite, formal request appropriate when writing to a senior person one has never met.",
+          "c": "Formally worded but peremptory, an inappropriate tone for an employee addressing a director she does not know.",
+          "d": "Archaic, melodramatic phrasing, absurd in a workplace email."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "75220bbc44b82abf9767a049",
+      "itemId": "claude-w-register-and-formality-28",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'nous avons bien reçu' is already correct; 'on a' would lower the register.",
+          "b": "'Toutefois' is correct; 'Mais là' is colloquial.",
+          "c": "Correct: 'faque' is colloquial Quebec speech; 'de sorte que' restores the formal register.",
+          "d": "'pour l'instant' is fine; 'pour le moment présent' is redundant."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "3cba296c13af4c0e32d163ae",
+      "itemId": "claude-w-register-and-formality-29",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The conditional 'permettraient' is appropriate for proposed changes; no correction needed.",
+          "b": "'harmoniser' is correct; 'matcher' is an anglicism.",
+          "c": "'mise en œuvre' is correct; 'implémentation' is a criticized anglicism.",
+          "d": "Correct: 'pas mal plus' is familiar; 'nettement plus' suits a briefing note."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "df865b01285bfaa5215b0560",
+      "itemId": "claude-w-register-and-formality-30",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Conformément à' is correct; 'Suite à' is criticized and changes meaning.",
+          "b": "'s'assurer à ce que' is ungrammatical.",
+          "c": "Correct: 'checker' is a colloquial anglicism; 'vérifier' fits the register.",
+          "d": "Tutoiement to all managers would be inappropriate and is grammatically inconsistent with a plural audience."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "b73838a76700bd8f642d48d6",
+      "itemId": "claude-w-register-and-formality-31",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'se mettre au boulot' is familiar; 'entreprendra ses travaux' is formal.",
+          "b": "'reçue' would be a wrong agreement; 'soumission' follows the participle with avoir.",
+          "c": "'Cher ami' is far too familiar for a bidder.",
+          "d": "Adding 'promis' introduces a familiar register."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "06f38b08179b7a7c690c0c59",
+      "itemId": "claude-w-register-and-formality-32",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'joindre les publics cibles' is correct; switching to 'rejoindre' is not required.",
+          "b": "Correct: 'on va voir à ça' is colloquial; 'nous coordonnerons cette démarche' fits a note to a DG.",
+          "c": "'via' is less precise and less formal than 'par l'intermédiaire des'; it would not fix anything.",
+          "d": "'pour être sûrs d'avoir' lowers the register and is clumsy."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "29422df41b11eb5e7793858d",
+      "itemId": "claude-w-register-and-formality-33",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Malgré que' is criticized; 'Malgré' + noun is correct.",
+          "b": "'milestones' is an anglicism; 'jalons' is correct.",
+          "c": "'rencontré' for meeting deadlines is an anglicism; 'respecté' is correct.",
+          "d": "Correct: 'super avancés' is familiar; 'à un stade avancé' is appropriate in a progress report."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e6d350b98ecfcee490264610",
+      "itemId": "claude-w-word-choice-precision-01",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'éminent' means distinguished, not about to happen.",
+          "b": "'immanent' is a philosophical term meaning inherent.",
+          "c": "Correct: 'imminent' means about to happen, matching 'dès la semaine prochaine'.",
+          "d": "'proéminent' means protruding."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "a9c1c254e3a47bf57c4eead1",
+      "itemId": "claude-w-word-choice-precision-02",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'conjoncture économique' denotes the economic situation.",
+          "b": "'conjecture' means a hypothesis or guess.",
+          "c": "'conjonction' means a combination or a grammatical part of speech.",
+          "d": "'contingence' means an eventuality; 'la contingence économique défavorable' is not idiomatic."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "98b79a637134609db3bb9d49",
+      "itemId": "claude-w-word-choice-precision-03",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'perpétrer' means to commit a crime.",
+          "b": "'proroger' means to extend a deadline or prorogue a session.",
+          "c": "'réitérer' means to repeat an act or statement, not to maintain barriers.",
+          "d": "Correct: 'perpétuer les obstacles' means to make them persist."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "745866055b10a75fabcba6be",
+      "itemId": "claude-w-word-choice-precision-04",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'prodige' is a noun (a prodigy) and does not take 'de conseils'.",
+          "b": "Correct: 'prodigue de conseils' means generous with advice.",
+          "c": "'prolixe' means verbose and does not take 'de conseils'.",
+          "d": "'prodigieuse' means extraordinary and does not take 'de conseils'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6a04c1368358f88d0526d1e1",
+      "itemId": "claude-w-word-choice-precision-05",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'infraction' is a breach of law, not 'dans la salle'; 'tentative d'infraction dans' is not idiomatic.",
+          "b": "Correct: 'effraction' is a forced entry, matching the forced lock.",
+          "c": "'éruption' refers to volcanoes or rashes.",
+          "d": "'extraction' means taking something out."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "6c77c447fbfe053eeb2b0f20",
+      "itemId": "claude-w-word-choice-precision-06",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'recouvrir' means to cover.",
+          "b": "'recourir' is intransitive (recourir à) and does not fit.",
+          "c": "'découvrir' means to discover.",
+          "d": "Correct: 'recouvrer les sommes dues' means to recover amounts owed."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "13d8b884a7597d828c9c4a5d",
+      "itemId": "claude-w-word-choice-precision-07",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'collusion' is a secret agreement between parties, matching price-fixing.",
+          "b": "'collision' is a physical crash.",
+          "c": "'allusion' is an indirect reference.",
+          "d": "'collation' is a snack or a comparison of texts."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "32fc8d9a9b2312bde7a32643",
+      "itemId": "claude-w-word-choice-precision-08",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'acceptation' means approval or consent, not the sense of a word.",
+          "b": "'exception' does not fit 'la plus large' in this sense.",
+          "c": "Correct: 'acception' is the sense in which a word is taken.",
+          "d": "'affectation' means posting or affectedness."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "2c17acc1b0a9f74fc8a1e4d1",
+      "itemId": "claude-w-word-choice-precision-09",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'inclination' means a tendency or liking.",
+          "b": "'déclinaison' is a grammatical or product-variant term.",
+          "c": "Correct: 'inclinaison' is the physical tilt of the screen.",
+          "d": "'inclusion' is irrelevant."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "25f8ea66042c3f7e31b812ba",
+      "itemId": "claude-w-word-choice-precision-10",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'invoquer une exception' means to rely on it formally as justification.",
+          "b": "'évoquer' means merely to mention, weaker than formally relying on a provision.",
+          "c": "'révoquer' means to revoke, the opposite of using the exception.",
+          "d": "'provoquer' means to cause."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "9497651dd462f21000efb9bb",
+      "itemId": "claude-w-word-choice-precision-11",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'prescrit' would mean the directive requires unencrypted keys, contradicting its purpose.",
+          "b": "'inscrit' means records or enrols.",
+          "c": "'souscrit' means subscribes or agrees to.",
+          "d": "Correct: 'proscrit' means formally prohibits."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "e5b7cd9fe72358c0dd39863d",
+      "itemId": "claude-w-word-choice-precision-12",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'affliger' means to distress.",
+          "b": "Correct: 'infliger une sanction' is the standard collocation.",
+          "c": "'enfreindre' means to violate a rule.",
+          "d": "'afficher' means to display."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "71b4ed6b1ca26c0cb91fd523",
+      "itemId": "claude-w-word-choice-precision-13",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'jugeant opportun de reporter' explains why the committee postponed.",
+          "b": "'importun' describes an unwelcome person and contradicts the action.",
+          "c": "'inopportun' contradicts the committee actually postponing.",
+          "d": "'opportuniste' describes a person, not an action."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "3d6b4c668602f5e27d5b3f62",
+      "itemId": "claude-w-word-choice-precision-14",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'remplir les lacunes' is not the idiomatic collocation.",
+          "b": "'compléter les lacunes' is not idiomatic.",
+          "c": "Correct: 'combler les lacunes' is the standard collocation.",
+          "d": "'fermer les lacunes' is a calque of 'close the gaps'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "bb46d87404c40ad953f1fed3",
+      "itemId": "claude-w-word-choice-precision-15",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'émis' would mean the board issued the committee's recommendations.",
+          "b": "'étayé' means supported with evidence, which does not make them apply.",
+          "c": "'enterré' means shelved, contradicting 'qui s'appliqueront'.",
+          "d": "Correct: 'entériné' means formally ratified."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "4fd598f346ea89735482e950",
+      "itemId": "claude-w-word-choice-precision-16",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'reconnaître la réception' is a calque of 'acknowledge receipt'.",
+          "b": "Correct: 'en accuse réception' is the fixed expression.",
+          "c": "'accuser récépissé' is not an expression; 'récépissé' is the receipt document.",
+          "d": "'aviser réception' does not exist."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "91a9a9b49b186d66fb589d6e",
+      "itemId": "claude-w-word-choice-precision-17",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'émaner' is intransitive (emanate from) and cannot take a direct object.",
+          "b": "'omettre un avis' means to omit it, illogical.",
+          "c": "Correct: 'émettre un avis' means to issue an opinion.",
+          "d": "'admettre un avis' does not fit."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "776228353a54a05c2ab0d5a4",
+      "itemId": "claude-w-word-choice-precision-18",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'soulever une question' means to raise an issue.",
+          "b": "'lever la question' is not the idiomatic collocation; 'lever' suggests removing an obstacle.",
+          "c": "'prélever' means to take a sample or deduct.",
+          "d": "'enlever' means to remove."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "a4f26e489abdc1d0b6b80096",
+      "itemId": "claude-w-word-choice-precision-19",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'redresser' means to straighten or recover.",
+          "b": "'ériger' means to erect.",
+          "c": "'dessiner un bilan' is not idiomatic.",
+          "d": "Correct: 'dresser un bilan' is the standard collocation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "366624cafc4ed43f70884681",
+      "itemId": "claude-w-word-choice-precision-20",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'rencontrer l'échéancier' is a well-known anglicism.",
+          "b": "'atteindre l'échéancier' is not idiomatic.",
+          "c": "'rejoindre l'échéancier' is not idiomatic.",
+          "d": "Correct: 'respecter l'échéancier' is the standard collocation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "a776ed1ed6d1d6d8590dd2bd",
+      "itemId": "claude-w-word-choice-precision-21",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'décerner' is used for prizes and honours, not grants.",
+          "b": "Correct: 'octroyer des subventions' is the standard administrative collocation.",
+          "c": "'délivrer' is used for permits and certificates.",
+          "d": "'édicter' is used for rules and laws."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c3ba5695f251f1e110559889",
+      "itemId": "claude-w-word-choice-precision-22",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'tabler' means to count on; 'tablera son rapport' is an anglicism of 'table'.",
+          "b": "'apposer' is used for a signature or seal.",
+          "c": "Correct: 'déposer un rapport devant le Parlement' is the parliamentary term.",
+          "d": "'disposer' does not fit."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "88be3d157c300a3c62fde4a0",
+      "itemId": "claude-w-word-choice-precision-23",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'ont fini par conclure' expresses 'eventually' correctly.",
+          "b": "'éventuellement' means possibly in French, a false friend of 'eventually'.",
+          "c": "'possiblement' expresses uncertainty, contradicting the confirmed agreement.",
+          "d": "'actuellement' means currently and is illogical with the passé composé."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "5503a905d6fb4a49226cdeab",
+      "itemId": "claude-w-word-choice-precision-24",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'conséquent' in the sense of 'important' is a criticized familiar usage, unsuitable in a formal report.",
+          "b": "Correct: 'considérable' is the standard word for a large overrun.",
+          "c": "'conséquentiel' is an anglicism and not standard French.",
+          "d": "'substantif' is a grammatical noun, not an adjective for size."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "95e685dfb5780ed741e019d3",
+      "itemId": "claude-w-word-choice-precision-25",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'amputés' means cut off, nonsensical here.",
+          "b": "'chargés au code' is an anglicism of 'charged to'.",
+          "c": "Correct: 'imputer des frais à un code financier' is the accounting term.",
+          "d": "'réputés' means deemed and does not fit."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "bf6e5dd703a2726fec898d3f",
+      "itemId": "claude-w-word-choice-precision-26",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'prononcer une allocution' is correct; changing the verb fixes nothing.",
+          "b": "'d'ouverture' is correct.",
+          "c": "'se tiendra' is correct.",
+          "d": "Correct: 'allocation' is a payment; 'allocution' is a speech."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "5b6daee68505e72895a053e2",
+      "itemId": "claude-w-word-choice-precision-27",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'compréhensible' means understandable; 'compréhensive' means understanding toward someone.",
+          "b": "'envers' is correct with 'compréhensive'.",
+          "c": "The passé simple is unnecessary and the imperfect is correct.",
+          "d": "'depuis' is correct with an ongoing wait."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "4dc90cd43686a530f2392c7d",
+      "itemId": "claude-w-word-choice-precision-28",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'instaurement' is not a standard word; 'instauration' is correct.",
+          "b": "'observe' is correct; the change is optional.",
+          "c": "Correct: 'notoire' means widely known; 'notable' means significant.",
+          "d": "'qui est passé' correctly agrees with 'délai'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "108b32debf6fa29f1ae9424c",
+      "itemId": "claude-w-word-choice-precision-29",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'ont diminué' is correct; the passive is unnecessary.",
+          "b": "Correct: 'décade' strictly means ten days; 'décennie' means ten years.",
+          "c": "'dû à' is criticized and loses the positive nuance of 'grâce à'.",
+          "d": "'auprès de' does not mean approximately."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "4bf7e9426e12f7461d5b2405",
+      "itemId": "claude-w-word-choice-precision-30",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'sous réserve que' is correct.",
+          "b": "'consentir une prolongation' is correct; no change needed.",
+          "c": "'sous réserve que' requires the subjunctive.",
+          "d": "Correct: a time extension is a 'prolongation'; 'prolongement' is a spatial extension."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c6e7cacd95ed47759b98c582",
+      "itemId": "claude-w-word-choice-precision-31",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'sur présentation' is the correct expression.",
+          "b": "'originals' is an incorrect plural.",
+          "c": "Correct: 'partial' means biased; 'partiel' means partial.",
+          "d": "'bénéficier' would require 'd'un remboursement'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "de7853810155785dd29853c5",
+      "itemId": "claude-w-word-choice-precision-32",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'décerner' means to award; 'discerner' means to discern.",
+          "b": "'accuser un retard' is correct.",
+          "c": "'faute de données' is correct.",
+          "d": "'ressources' is feminine, so 'affectées' is correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "1348c757aa179c61c2fe5a8c",
+      "itemId": "claude-w-word-choice-precision-33",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'a permis' is invariable here.",
+          "b": "Correct: 'faire irruption' means to burst in; 'éruption' is volcanic or medical.",
+          "c": "'temps de réaction' is correct.",
+          "d": "'jouant le rôle d'un intrus' is correct and clearer."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    }
+  ]
+}

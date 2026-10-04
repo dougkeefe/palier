@@ -1,0 +1,1392 @@
+{
+  "reviewer": "claude-opus-5-5",
+  "verdicts": [
+    {
+      "requestHash": "8660f1f7dcce2b0f8cbb0628",
+      "itemId": "claude-r-accessibility-1-1",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: a chair is cited only as an example of a routine need; nobody is promised one.",
+          "b": "Correct: the email announces a single intranet form and lighter requirements for requesting an accommodation.",
+          "c": "Wrong: managers have 10 working days to approve or meet; there is no meeting with every employee before 1 December.",
+          "d": "Wrong: the information sessions are optional, weekly and only mentioned at the end."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "4ff6cdfc2ec9dc09eea2a58c",
+      "itemId": "claude-r-accessibility-1-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: describing the obstacle is still required.",
+          "b": "Wrong: manager approval still follows the request.",
+          "c": "Wrong: proposing a solution is still required.",
+          "d": "Correct: a medical certificate is no longer needed for routine needs such as screen-reading software."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "8c2358130a6c03355f46331d",
+      "itemId": "claude-r-accessibility-1-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the manager has 10 working days to approve or meet.",
+          "b": "Wrong: about four weeks is the delivery time for purchased equipment.",
+          "c": "Wrong: the text says working days, not calendar days.",
+          "d": "Wrong: thirty is the length in minutes of the information sessions, not a deadline."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "6e84f5e89904499669870137",
+      "itemId": "claude-r-accessibility-1-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'courant' can mean 'current', but the examples (ergonomic chair, screen reader) show routine needs, not present-moment ones.",
+          "b": "Wrong: nothing suggests urgency.",
+          "c": "Correct: 'courants' here means ordinary, common needs that are easy to meet, as the examples show.",
+          "d": "Wrong: purchases are treated separately; 'courants' does not mean costly."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "940c8b9190a683615224b4bc",
+      "itemId": "claude-r-accessibility-1-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'ce' sums up the preceding clause, that the accommodation file follows the employee.",
+          "b": "Wrong: changing jobs does not itself spare anyone the steps; the portability of the file does.",
+          "c": "Wrong: the form is in an earlier, unrelated sentence.",
+          "d": "Wrong: the delivery time is in a different sentence."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "9d6a735d138bde0c09d95f97",
+      "itemId": "claude-r-accessibility-2-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: virtual meetings continue, now with captioning.",
+          "b": "Wrong: no survey results are reported.",
+          "c": "Wrong: the checklist will be published next week; it is not already available.",
+          "d": "Correct: the bulletin sets out three practices to make meetings and documents accessible."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "9a6c1e3fda059b9c09410f24",
+      "itemId": "claude-r-accessibility-2-2",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the evening before is not enough under the two-day rule.",
+          "b": "Correct: agenda and documents are to be sent at least two working days in advance.",
+          "c": "Wrong: captioning is a separate measure; documents go out in advance.",
+          "d": "Wrong: the text says two days, not two hours."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "96ab220164eb614772db223d",
+      "itemId": "claude-r-accessibility-2-3",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: cost is never mentioned.",
+          "b": "Wrong: graphics need alternative text in an editable format; image scans are no longer accepted.",
+          "c": "Correct: employees reported trouble reading scanned documents, and the rules are framed around screen-reader users.",
+          "d": "Wrong: no law is mentioned; this is an internal practice."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "0b865b9aabf630759e3adb0b",
+      "itemId": "claude-r-accessibility-2-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the sentence widens the benefit; it does not downplay the needs of persons with disabilities.",
+          "b": "Correct: stressing that everyone benefits encourages all staff to adopt the practices.",
+          "c": "Wrong: there is no reproach in the sentence.",
+          "d": "Wrong: the practices are mandatory ('devront', 'ne seront plus acceptés')."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "874f8471dad39a53361e889c",
+      "itemId": "claude-r-accessibility-2-5",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: there is no chronology of meetings.",
+          "b": "Wrong: no options are compared.",
+          "c": "Wrong: it is not set out as questions and answers.",
+          "d": "Correct: a reported problem, three ordered measures (D'abord, Ensuite, Enfin), then support (checklist, review)."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e85a48563f90e80ffd4940bc",
+      "itemId": "claude-r-accessibility-3-1",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the built environment progresses clearly, while the digital component lags (40% against 75%).",
+          "b": "Wrong: 14 of 22 commitments are done and nothing is said to be abandoned.",
+          "c": "Wrong: the digital target was missed; the survey response rate actually rose.",
+          "d": "Wrong: nothing says digital becomes the only priority."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "b60689d9a6811c2cb5d96f86",
+      "itemId": "claude-r-accessibility-3-2",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the figures are reversed; 75% was the target and 40% the result.",
+          "b": "Wrong: six in ten remain non-compliant and the target was missed.",
+          "c": "Correct: 40% (four in ten) are compliant against a 75% (three-quarters) target.",
+          "d": "Wrong: 18% to 31% is the survey response rate."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "d9a6257a51b13c34d21d767d",
+      "itemId": "claude-r-accessibility-3-3",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the text says the renewals cannot be accelerated; nothing is said of terminating contracts.",
+          "b": "Wrong: the products can only be modified at renewal; no refusal is reported.",
+          "c": "Wrong: only non-urgent purchases may be deferred.",
+          "d": "Correct: 'quitte à reporter certains achats non urgents' shows a willingness to delay non-pressing purchases so as to secure accessible products."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "62703960ced556bfccb6f97c",
+      "itemId": "claude-r-accessibility-3-4",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'sensible' here means notable or appreciable, as the 40% against 75% gap confirms.",
+          "b": "Wrong: this is the false-friend reading, 'sensitive'.",
+          "c": "Wrong: this confuses 'sensible' with 'sensoriel'.",
+          "d": "Wrong: this is the English 'sensible'; the delay is not described as reasonable."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "9e458239f1e019809ac931ea",
+      "itemId": "claude-r-accessibility-3-5",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: it is directly about the digital delay ('Ce retard').",
+          "b": "Correct: it explains the delay (supplier dependence), which sets up the RFP proposal in the next sentence ('Faute de pouvoir accélérer ces renouvellements').",
+          "c": "Wrong: it is not the conclusion and does not sum up.",
+          "d": "Wrong: the qualification of the progress is made by the earlier 'En revanche' sentence."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8b82c5bd821811da737ba369",
+      "itemId": "claude-r-accessibility-4-1",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the audit is complete; no confirmation is needed.",
+          "b": "Wrong: next year's maintenance covers the 25 other obstacles.",
+          "c": "Correct: 'sous réserve de l'approbation des fonds par le comité des immeubles'.",
+          "d": "Wrong: the management committee will receive the overall upgrade plan; it is not the condition for these two fixes."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c616c9b9eb858a6880fe1887",
+      "itemId": "claude-r-accessibility-4-2",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.86,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 25 of the 37 obstacles, a majority, will be dealt with in next year's maintenance work.",
+          "b": "Wrong: only two of the 12 priority obstacles are said to be fixed by year-end.",
+          "c": "Wrong: 12 of 37 is a minority.",
+          "d": "Wrong: 'notamment' makes signage one example, not all of them."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ed4e38cdc7117cb13ea58a9d",
+      "itemId": "claude-r-accessibility-4-3",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the other directorate is the site's manager, not what is to become a priority.",
+          "b": "Wrong: the form is mentioned only afterwards, as an aggravating factor ('d'autant que').",
+          "c": "Wrong: the counter belongs to the building component, not the website paragraph.",
+          "d": "Correct: 'en' points back to the website and its correction, which is to become a shared priority."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "273bb67fb43caca603806b7c",
+      "itemId": "claude-r-accessibility-4-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the tone is not accusatory toward the other directorate.",
+          "b": "Correct: he stresses the urgency and the booking form's importance to win commitment despite the other directorate's ownership.",
+          "c": "Wrong: the building fixes are kept, not minimised.",
+          "d": "Wrong: he is seeking comments before the plan goes to the management committee."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "9890de26b26ce9672a7c401f",
+      "itemId": "claude-r-accessibility-4-5",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: no client proportion is given.",
+          "b": "Wrong: 23 pages are unusable without a mouse.",
+          "c": "Correct: the booking form is among the pages that cannot be used by keyboard.",
+          "d": "Wrong: there is no mention of consulting these users."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "fbe1ba452b099bb4543cfade",
+      "itemId": "claude-r-accessibility-5-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'lettre morte' is about having no effect, not confidentiality.",
+          "b": "Wrong: this is a literal misreading of 'lettre'.",
+          "c": "Wrong: it is not about contesting the findings.",
+          "d": "Correct: 'rester lettre morte' means to remain without effect or follow-up."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "d840e87cc5c24ed9a2737ef8",
+      "itemId": "claude-r-accessibility-5-2",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the measures are announced elsewhere; 'elles' sits inside the relative clause about the committee's recommendations.",
+          "b": "Wrong: members are not mentioned, and 'retenues' fits recommendations.",
+          "c": "Correct: 'dont les recommandations seront rendues publiques, qu'elles soient retenues ou non'.",
+          "d": "Wrong: the training is in the previous sentence."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ccecc2c1938858707102511d",
+      "itemId": "claude-r-accessibility-5-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: she admits the measures will not be enough on their own and commits to reporting on their effects within a year.",
+          "b": "Wrong: she calls them a starting point and commits to them.",
+          "c": "Wrong: she takes the responsibility herself ('je m'engage').",
+          "d": "Wrong: she acknowledged the testimony was hard to hear; she does not minimise it."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "961aeb84b12a7a0e4f84c63a",
+      "itemId": "claude-r-accessibility-5-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the measures come after the findings, and no statistics are given.",
+          "b": "Correct: thanks, the participants' findings, the measures, then the acknowledgement of limits and the commitment.",
+          "c": "Wrong: there is only one consultation.",
+          "d": "Wrong: there are no questions and answers."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "f9bf7799dd8fda2891c48878",
+      "itemId": "claude-r-accessibility-5-5",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the training is mandatory.",
+          "b": "Wrong: nothing says the committee delivers the training.",
+          "c": "Correct: the training was 'conçue avec les participants eux-mêmes', the focus-group participants.",
+          "d": "Wrong: the stated focus is inclusion, and the obstacles are described as attitudinal rather than physical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8e846a4d371d455b30838300",
+      "itemId": "claude-r-environment-1-1",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the audit is cited in one sentence as justification.",
+          "b": "Wrong: the ambassadors are already in place; no one is being recruited.",
+          "c": "Correct: the bulletin announces the new sorting system and explains how it works.",
+          "d": "Wrong: the program is new, not a reminder."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "76827936566a82b05bbf0884",
+      "itemId": "claude-r-environment-1-2",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: near the elevators and in every kitchenette.",
+          "b": "Wrong: the under-desk bins are being removed.",
+          "c": "Wrong: meeting rooms and printers are not mentioned.",
+          "d": "Wrong: the main entrance is not mentioned."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "09615a65a26dbaf5cdfde5a8",
+      "itemId": "claude-r-environment-1-3",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: half is the landfill-reduction target.",
+          "b": "Wrong: 40% is the remainder, not the share stated.",
+          "c": "Wrong: this is unsupported.",
+          "d": "Correct: 'près de 60 %'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e396e724fe395396517c7f08",
+      "itemId": "claude-r-environment-1-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: that is recycling, which is the opposite of landfill.",
+          "b": "Correct: 'enfouissement' means landfill, waste buried in the ground.",
+          "c": "Wrong: that is composting.",
+          "d": "Wrong: that is deposit return."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "6a957efbd637bc30db294e80",
+      "itemId": "claude-r-environment-1-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'Ceux-ci' picks up 'Des ambassadeurs du tri' from the previous sentence.",
+          "b": "Wrong: the facilities team is mentioned later and is not the antecedent.",
+          "c": "Wrong: the occupants are 'vous', not 'ceux-ci'.",
+          "d": "Wrong: the stations cannot wear armbands, and they are not the antecedent."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "bdf624f87dba8f07e79ea6db",
+      "itemId": "claude-r-environment-2-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the existing printers are reconfigured, not replaced.",
+          "b": "Wrong: printing is reduced, not banned, and exceptions are possible.",
+          "c": "Wrong: last year's figures are only context.",
+          "d": "Correct: the email informs staff of three measures to reduce printing."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "c280be85cb542b40188cfa0d",
+      "itemId": "claude-r-environment-2-2",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: manager authorisation concerns exceptions for paper annotation.",
+          "b": "Correct: documents print only once the ID card is swiped on the reader.",
+          "c": "Wrong: duplex is the default setting.",
+          "d": "Wrong: no one-hour limit is mentioned."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "ce2ae6993ddcca729ea4333c",
+      "itemId": "claude-r-environment-2-3",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 1.2 million is the directorate's total.",
+          "b": "Wrong: this number does not appear.",
+          "c": "Correct: 'près de 2 400 pages par employé'.",
+          "d": "Wrong: this is ten times the stated figure."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "020568ea4ba837fa4644dee1",
+      "itemId": "claude-r-environment-2-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: management committee documents are a separate measure.",
+          "b": "Wrong: destruction is not mentioned.",
+          "c": "Correct: the card-release measure exists to avoid forgotten printouts, so they are waste today.",
+          "d": "Wrong: colour is not linked to forgotten printouts."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "5a7067866fd5d475794268c7",
+      "itemId": "claude-r-environment-2-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: she acknowledges the preference ('Je sais que…') but allows an exception only when the work truly requires it.",
+          "b": "Wrong: she shows no disapproval.",
+          "c": "Wrong: an exception is possible through the manager.",
+          "d": "Wrong: she shows no hesitation about the measures."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "77ab3fab2f023e16db14a4e5",
+      "itemId": "claude-r-environment-3-1",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: personal use is never suggested.",
+          "b": "Correct: earlier decisions relied on estimates for lack of reliable data, and the log is meant to provide observed use.",
+          "c": "Wrong: hybrids are favoured in some regions.",
+          "d": "Wrong: no vehicle in good condition will be retired early."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "96b505d5d597da88832a7ec9",
+      "itemId": "claude-r-environment-3-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'savoir gré' expresses gratitude, not reproach.",
+          "b": "Wrong: it is a polite request with a deadline, not a permission.",
+          "c": "Wrong: the logs have not yet been sent.",
+          "d": "Correct: 'savoir gré' means to be grateful, so this is a polite request."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "7cbb68742d4432f36add05d5",
+      "itemId": "claude-r-environment-3-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'les' takes up 'Elles' and therefore 'les craintes… quant à l'autonomie… en hiver'.",
+          "b": "Wrong: the estimates are in the previous paragraph.",
+          "c": "Wrong: the logs cannot be 'dissipated', and they are not the antecedent.",
+          "d": "Wrong: regions are not the antecedent."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "44b67ca08639c8286e525ef4",
+      "itemId": "claude-r-environment-3-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The memo proposes no three options and asks managers to choose nothing of the kind.",
+          "b": "It does not retrace past purchases chronologically; it sets out a forward-looking approach.",
+          "c": "Correct: general principle (gradual replacement), regional nuance, response to the winter-range concern, then the request for logs.",
+          "d": "There is no detailed comparison of hybrids and EVs, no single model, and no delivery dates."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "80b7dcd02cc92231fd55f66f",
+      "itemId": "claude-r-environment-3-5",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "He calls the fears legitimate, not exaggerated.",
+          "b": "He does not dismiss them, and the shift to electric is not presented as settled.",
+          "c": "He does not question the transition as a whole.",
+          "d": "Correct: 'Elles sont légitimes' and the first purchases will confirm or dispel them."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c5f64d957fc86e20bdbf1162",
+      "itemId": "claude-r-environment-4-1",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 52 of 80 files include a criterion, but in most it is not in the evaluation grid and has no effect on supplier choice.",
+          "b": "Contradicted: 52 of 80 files do include at least one criterion.",
+          "c": "The report says the data do not support a reduction in competition.",
+          "d": "Agents lack knowledge and fear less competition; they are not said to refuse."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "720683a8b89c6593513718f6",
+      "itemId": "claude-r-environment-4-2",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The statement of requirements is only where the mention appears; the subject carried over is the criterion.",
+          "b": "'Ce résultat' is in an earlier sentence and is not the subject of the coordinated clauses.",
+          "c": "Correct: 'il' continues the subject 'le critère' that 'se limitait' and 'n'était pas repris'.",
+          "d": "The sample is not what had no effect on supplier choice."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "5aa5a1eb67387db309f6b9f0",
+      "itemId": "claude-r-environment-4-3",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The data show the same average number of bids, not a drop.",
+          "b": "Correct: the fear is 'compréhensible' but 'pas étayée par les données'.",
+          "c": "The fear is one of two obstacles; the text does not say it alone explains anything.",
+          "d": "Management is asked to produce a guide and training, not to abandon the criteria."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c3a21c22f007eef3d7d197cb",
+      "itemId": "claude-r-environment-4-4",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "They say the result must be qualified, not that practices are exemplary.",
+          "b": "No disciplinary measures are mentioned; the recommendation is a guide and training.",
+          "c": "Nothing in the text mocks the agents' efforts.",
+          "d": "Correct: 'encourageant en apparence, doit cependant être nuancé'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "3690407fcfbf4b9d6644c939",
+      "itemId": "claude-r-environment-4-5",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "It adds no third obstacle; it assesses the second one.",
+          "b": "Correct: it sets the agents' interview-reported fear against the file data on bid counts.",
+          "c": "It is about the evidence on competition, not a lead-in to the recommendation.",
+          "d": "No response from management is reported in the excerpt."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8058b6fd55e8606e7b0144f7",
+      "itemId": "claude-r-environment-5-1",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Parking reimbursement is not mentioned.",
+          "b": "Mid-day errands explain the second phenomenon (other car trips), not the switch away from transit.",
+          "c": "Correct: 'faute de service fréquent en dehors des heures de pointe'.",
+          "d": "Office hours are not said to have been extended."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "44472cb8ce3bacb7db74710c",
+      "itemId": "claude-r-environment-5-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Reverses the figures: 45% was the actual drop and 60% the expected one.",
+          "b": "The figures differ: 45% against 60%.",
+          "c": "The drop was smaller, and the errands added car trips rather than avoiding them.",
+          "d": "Correct: about 45% actual, compared with the 60% the drop in office days predicted."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "3feb2ab300ddba150df5337b",
+      "itemId": "claude-r-environment-5-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'au profit de' means in favour of, so the car replaced transit.",
+          "b": "No financial gain is involved; 'profit' here is not monetary.",
+          "c": "'Délaissé' means giving up transit, not combining both modes.",
+          "d": "The reason was transit frequency, not a problem with the car."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "d15bd352d5665047cdf487a3",
+      "itemId": "claude-r-environment-5-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Overstates the caveat: the overall result 'pourrait s'avérer moins favorable', not that emissions go up.",
+          "b": "Correct: home energy use was not counted, so the observed drop does not settle the overall effect.",
+          "c": "No limit of one day a week is recommended.",
+          "d": "Home energy use was explicitly not taken into account."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "fd74bbca1fc17144e4194af0",
+      "itemId": "claude-r-environment-5-5",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Method and sample are described in the first paragraph.",
+          "b": "Recommendations come in the third paragraph.",
+          "c": "Correct: the second paragraph gives the 45% result, the gap with 60%, and two explanations.",
+          "d": "Limitations appear in the third paragraph, and no future research is suggested."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "3b7e82322371d936f8f6574d",
+      "itemId": "claude-r-official-languages-1-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Date of receipt orders the waiting list, not the priority for places.",
+          "b": "Lunchtime courses have not started yet and are unrelated to priority.",
+          "c": "Priority went to employees who already hold bilingual positions.",
+          "d": "Correct: as stated in the email."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "21b58dd6adf3d445b3056edb",
+      "itemId": "claude-r-official-languages-1-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.99,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'Les 28 autres demandes ont été inscrites sur une liste d'attente'.",
+          "b": "20 is the number of places.",
+          "c": "48 is the total number of requests.",
+          "d": "12 is the start date of the part-time courses (12 January)."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "A"
+      }
+    },
+    {
+      "requestHash": "42c6a87967d103fde1dd548e",
+      "itemId": "claude-r-official-languages-1-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Se libérer' has nothing to do with cost.",
+          "b": "No place is created by management; an existing place becomes vacant.",
+          "c": "Correct: a place becomes available, typically because someone gives it up.",
+          "d": "Postponement is not the meaning."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "d4be26d99e5256ee4f983c91",
+      "itemId": "claude-r-official-languages-1-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 48 requests minus the 20 places allocated leaves the other 28.",
+          "b": "Nothing says requests were received after the deadline.",
+          "c": "The lunchtime courses are separate and come later in the email.",
+          "d": "Non-retained requests are not defined by position type, only by not getting one of the 20 places."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "fdbdb4da9f8f793e8e52a286",
+      "itemId": "claude-r-official-languages-2-2",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.99,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Explicitly forbidden: 'Ne demandez jamais au client de revenir plus tard'.",
+          "b": "Correct: ask the client to wait a few moments and call on a bilingual colleague.",
+          "c": "The client chooses the language, not the employee.",
+          "d": "The posters are not yet installed and are not presented as a way of handling this situation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "7fb37409fe14dec565d49be8",
+      "itemId": "claude-r-official-languages-2-3",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The bulletin assumes bilingual colleagues exist and can be called on.",
+          "b": "The problem concerns in-person welcome at the counter, not the telephone.",
+          "c": "The posters are still to come ('la semaine prochaine').",
+          "d": "Correct: complaints arose 'Depuis le déménagement', so the problem appeared after the move."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "92686ba229cc43de5951a7d9",
+      "itemId": "claude-r-official-languages-2-4",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: firm rules ('doit', 'Ne demandez jamais') in a polite tone with thanks and support.",
+          "b": "No sanctions are announced.",
+          "c": "The rule is mandatory ('doit être accueilli'), not a suggestion.",
+          "d": "There is no suggestion that the centre might close."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f03fa4be9ac39c5a4912d0ac",
+      "itemId": "claude-r-official-languages-2-5",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "No statistics are given, and the measures come last.",
+          "b": "The old and new premises are not compared.",
+          "c": "The bulletin does not answer client questions one by one.",
+          "d": "Correct: problem reported, then rule and procedure, then upcoming measures (posters, session)."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "91d80cfed14ad22c5038c072",
+      "itemId": "claude-r-official-languages-3-1",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: meetings are 'officiellement bilingues', English takes over in practice, and new practices aim to change that.",
+          "b": "The memo explicitly says no one will be made to use a language; francophones are not obliged to speak French.",
+          "c": "Languages alternate within the same meeting; meetings are not split.",
+          "d": "A report goes to the executive committee; renewing the survey is not mentioned."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "d6d5aa59588aab560762d84c",
+      "itemId": "claude-r-official-languages-3-2",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The text does not say documents are currently always two days late.",
+          "b": "Postponed items are not said to be handled in English only, which would contradict the memo's aim.",
+          "c": "Correct: making bilingual documents a condition for discussing the item shows they are a prerequisite, not a formality.",
+          "d": "Nothing says chairs must translate documents themselves."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "3110b155de84439746a3785a",
+      "itemId": "claude-r-official-languages-3-3",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Vider de son sens' does not mean formally ending the commitment.",
+          "b": "Correct: emptying the commitment of meaning leaves it as an empty declaration.",
+          "c": "Explaining the commitment to new employees is unrelated.",
+          "d": "The legality of past meetings is not at issue."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8f75a0cdb2eb5f9a6fdce348",
+      "itemId": "claude-r-official-languages-3-4",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "That is 'une langue qu'il maîtrise mal', which is set against 'la sienne'.",
+          "b": "Chairing is unrelated to the possessive.",
+          "c": "'La sienne' replaces a feminine noun 'langue', not an opinion.",
+          "d": "Correct: 'la sienne' stands for 'sa langue', the official language each person prefers to use."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "2fc02f33bd9530718d14748e",
+      "itemId": "claude-r-official-languages-3-5",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "No anglophone employees are blamed.",
+          "b": "Mandatory training for managers is not mentioned.",
+          "c": "Correct: the sentence heads off a reading of the measures as a linguistic constraint and reassures staff.",
+          "d": "The sentence does not concede that the measures may fail."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "97aec87ce57175c72fadda73",
+      "itemId": "claude-r-official-languages-4-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Informal meetings generally take place in the employee's language.",
+          "b": "Onboarding sessions are not described; the issue there is that the question is rarely raised.",
+          "c": "Exchanges between branches are not discussed.",
+          "d": "Correct: written documents such as performance agreements are often in English by default."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ec5d25b490de65234707587c",
+      "itemId": "claude-r-official-languages-4-2",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 91% of managers against only 64% of francophones getting their evaluation in French.",
+          "b": "88% refers to anglophone employees, not managers.",
+          "c": "91% refers to managers, not francophone employees.",
+          "d": "These are sample sizes and show no gap in perception."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "61f6b148e5967144cd4e82cc",
+      "itemId": "claude-r-official-languages-4-3",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Recommendations come last, not first.",
+          "b": "Results are not broken down by branch.",
+          "c": "Correct: objective and method, figures, qualitative findings, then recommendations that follow from them.",
+          "d": "The team takes a position and makes recommendations."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "0c51bedeb5e797112055b870",
+      "itemId": "claude-r-official-languages-4-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Nothing says new employees are mostly francophone or prefer English.",
+          "b": "Correct: they 'supposent qu'il leur revient d'en faire la demande', while the recommendation puts the duty on managers.",
+          "c": "They are not said to refuse to choose.",
+          "d": "Templates are out of date, and no templates are said to be handed to new employees."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "b3903229e1ab75685b6602c3",
+      "itemId": "claude-r-official-languages-4-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the report sets out data and specific corrective measures without blaming individuals.",
+          "b": "It reports a gap in perception, not deliberate deception.",
+          "c": "No sanctions are announced.",
+          "d": "It identifies gaps and recommends measures."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "108861df23b61f596e08ae54",
+      "itemId": "claude-r-official-languages-5-1",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Nearly two-thirds is roughly the share who kept their level, not those who lost it.",
+          "b": "Correct: 'près d'un sur trois' is nearly one-third.",
+          "c": "Half is not supported.",
+          "d": "The figure applies to those reassessed, and only about one-third lost their level."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e5ec654803783d92208e15bc",
+      "itemId": "claude-r-official-languages-5-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Consentir' does not mean recovering costs.",
+          "b": "It is the organisation that committed the investment; employee written consent is a misreading of 'consentir'.",
+          "c": "'A déjà consenti' refers to something already done, not planned budgeting.",
+          "d": "Correct: to agree to make an investment by committing resources ('consentir un investissement' = to make or commit it)."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "4f516ffaf36a0c934972ab82",
+      "itemId": "claude-r-official-languages-5-3",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Or' does not introduce a consequence of the number trained.",
+          "b": "What follows shows a problem, not a success.",
+          "c": "Correct: 'Or' brings in a new fact (loss of level) that qualifies the first statement.",
+          "d": "Conclusions and requests come in the third paragraph, introduced by 'Par conséquent'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c8753aa320b5f77efd069bac",
+      "itemId": "claude-r-official-languages-5-4",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: it quantifies the problem, describes the habits of those who avoid it, then makes requests and justifies them.",
+          "b": "There is no history and no comparison with other departments.",
+          "c": "The requests come after the data, not before.",
+          "d": "The note does not cite testimony and does end with measures."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "9ecfeb515fe5b09510a8eec5",
+      "itemId": "claude-r-official-languages-5-5",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The training is not called ineffective; what follows it is the issue.",
+          "b": "Correct: the decline is 'loin d'être inévitable' and can be prevented by regular practice with the manager's support.",
+          "c": "Retraining is not proposed.",
+          "d": "The measure is an hour a week for maintenance after training, not a lighter workload during training."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    }
+  ]
+}
