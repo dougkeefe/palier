@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-official-languages-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-1",
+      "stem": {
+        "fr": "Pourquoi Martin Gagnon écrit-il ce courriel sur la formation linguistique à temps plein ?",
+        "en": "Why does Martin Gagnon write this email about full-time language training?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer l'ouverture des inscriptions à la formation linguistique de la session d'hiver.",
+          "rationale": {
+            "fr": "L'inscription n'ouvre pas : elle « a pris fin vendredi ». Le courriel rend compte de ce qui s'est passé après sa clôture.",
+            "en": "Registration is not opening: it 'ended on Friday'. The email reports what happened after it closed."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Expliquer comment les places ont été réparties et ce qu'il advient des demandes non retenues.",
+          "rationale": {
+            "fr": "C'est l'objet du courriel : il explique la règle de priorité, puis le sort des 28 autres demandes (liste d'attente, cours du dîner).",
+            "en": "This is the email's purpose: it explains the priority rule, then what happens to the other 28 requests (waiting list, lunchtime courses)."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Inviter l'ensemble du personnel à s'inscrire aux cours à temps partiel offerts à l'heure du dîner.",
+          "rationale": {
+            "fr": "Les cours du dîner ne sont qu'une solution proposée à ceux qui ne veulent pas attendre ; ce n'est pas le sujet de tout le message.",
+            "en": "The lunchtime courses are only an option offered to those who do not want to wait; they are not the subject of the whole message."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Demander aux employés de confirmer leur participation dans un délai de cinq jours ouvrables.",
+          "rationale": {
+            "fr": "Ce délai ne vise que la personne jointe lorsqu'une place se libère ; c'est un détail, non le but du courriel.",
+            "en": "That deadline applies only to the person contacted when a place opens up; it is a detail, not the email's purpose."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le but d'un message se trouve en considérant l'ensemble du texte : une bonne réponse résume toutes les parties (répartition, liste d'attente, solution de rechange), alors qu'un détail n'en couvre qu'une seule.",
+        "en": "A message's purpose is found by considering the whole text: a good answer sums up every part (allocation, waiting list, alternative), whereas a detail covers only one."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-1",
+      "stem": {
+        "fr": "Selon le courriel, à quels employés a-t-on accordé la priorité pour les places à temps plein ?",
+        "en": "According to the email, which employees were given priority for the full-time places?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux employés dont la demande a été reçue en premier.",
+          "rationale": {
+            "fr": "La date de réception sert à ordonner la liste d'attente, non à attribuer les 20 places.",
+            "en": "The date of receipt is used to order the waiting list, not to allocate the 20 places."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aux employés qui suivent déjà les cours offerts à l'heure du dîner.",
+          "rationale": {
+            "fr": "Le courriel ne lie pas la priorité aux cours du dîner ; ceux-ci sont présentés comme une solution de rechange.",
+            "en": "The email does not link priority to the lunchtime courses; those are presented as an alternative."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Aux employés qui n'occupent pas encore de poste bilingue.",
+          "rationale": {
+            "fr": "C'est l'inverse : la priorité va aux employés qui occupent déjà un poste bilingue.",
+            "en": "It is the reverse: priority goes to employees who already hold a bilingual position."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aux employés en poste bilingue qui doivent atteindre le niveau requis d'ici un an.",
+          "rationale": {
+            "fr": "Le courriel le dit en toutes lettres : les places « ont été attribuées en priorité » à ces employés.",
+            "en": "The email says so explicitly: the places 'were allocated as a priority' to these employees."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour une question de détail, repérez le passage qui répond exactement à la question posée (ici « en priorité ») et méfiez-vous des autres critères du texte, comme la date de réception, qui servent à autre chose.",
+        "en": "For a detail question, find the passage that answers exactly what is asked (here 'as a priority') and beware of other criteria in the text, such as the date of receipt, which serve another purpose."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-1",
+      "stem": {
+        "fr": "Combien de demandes de formation à temps plein ont été inscrites sur la liste d'attente ?",
+        "en": "How many requests for full-time training were put on the waiting list?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "28 demandes",
+          "rationale": {
+            "fr": "Le courriel indique que « les 28 autres demandes » ont été inscrites sur la liste d'attente, soit celles qui n'ont pas obtenu l'une des 20 places.",
+            "en": "The email states that 'the other 28 requests' were put on the waiting list, that is, those that did not get one of the 20 places."
+          }
+        },
+        {
+          "id": "b",
+          "text": "20 demandes",
+          "rationale": {
+            "fr": "Le nombre 20 correspond aux places offertes, et donc aux demandes acceptées, non à celles mises en attente.",
+            "en": "The figure 20 is the number of places available, and therefore the accepted requests, not those put on hold."
+          }
+        },
+        {
+          "id": "c",
+          "text": "48 demandes",
+          "rationale": {
+            "fr": "Le nombre 48 est le total des demandes reçues ; il inclut les 20 demandes qui ont obtenu une place.",
+            "en": "The figure 48 is the total number of requests received; it includes the 20 that obtained a place."
+          }
+        },
+        {
+          "id": "d",
+          "text": "12 demandes",
+          "rationale": {
+            "fr": "Le nombre 12 est la date de début des cours du dîner (le 12 janvier), sans lien avec la liste d'attente.",
+            "en": "The figure 12 is the start date of the lunchtime courses (January 12), unrelated to the waiting list."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Lorsqu'un texte contient plusieurs nombres, associez chacun à ce qu'il mesure (demandes reçues, places offertes, demandes en attente, date) avant de répondre.",
+        "en": "When a text contains several figures, match each one to what it measures (requests received, places available, requests on hold, date) before answering."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-1",
+      "stem": {
+        "fr": "Dans la phrase « Si une place se libère, la personne suivante sur la liste sera jointe par courriel », que veut dire « se libère » ?",
+        "en": "In the sentence 'If a place se libère, the next person on the list will be contacted by email', what does 'se libère' mean?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Devient gratuite pour l'employé.",
+          "rationale": {
+            "fr": "« Libre » peut évoquer la gratuité, mais rien dans le texte ne parle du coût de la formation.",
+            "en": "'Libre' can suggest 'free of charge', but nothing in the text is about the cost of training."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Est ajoutée par la direction au groupe.",
+          "rationale": {
+            "fr": "Le verbe ne désigne pas la création d'une nouvelle place, mais une place existante qui n'est plus occupée.",
+            "en": "The verb does not refer to creating a new place, but to an existing place that is no longer taken."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Devient disponible parce que quelqu'un y renonce.",
+          "rationale": {
+            "fr": "Dans ce contexte, une place qui « se libère » est une place qui redevient disponible, par exemple après un désistement ; on peut alors l'offrir à la personne suivante.",
+            "en": "In this context, a place that 'se libère' becomes available again, for example after a withdrawal; it can then be offered to the next person."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Est reportée à une session ultérieure.",
+          "rationale": {
+            "fr": "Le texte ne parle pas de reporter des places ; la personne jointe doit confirmer pour la session en cours.",
+            "en": "The text says nothing about postponing places; the person contacted must confirm for the current session."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour deviner le sens d'un mot, appuyez-vous sur la suite de la phrase : si l'on joint la personne suivante, c'est qu'une place occupée est devenue disponible.",
+        "en": "To work out a word's meaning, rely on the rest of the sentence: if the next person is contacted, a taken place must have become available."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-1",
+      "stem": {
+        "fr": "Dans l'expression « Les 28 autres demandes », à quelles demandes le mot « autres » fait-il référence ?",
+        "en": "In the phrase 'the other 28 requests', which requests does the word 'other' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux demandes qui n'ont pas obtenu l'une des 20 places offertes.",
+          "rationale": {
+            "fr": "« Autres » oppose ces demandes à celles qui viennent d'être mentionnées, c'est-à-dire celles qui ont obtenu une place : 48 moins 20.",
+            "en": "'Other' sets these requests against those just mentioned, that is, the ones that obtained a place: 48 minus 20."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aux demandes reçues après la fin de l'inscription, vendredi.",
+          "rationale": {
+            "fr": "Le texte ne parle pas de demandes tardives ; les 28 demandes font partie des 48 reçues pendant l'inscription.",
+            "en": "The text does not mention late requests; the 28 are part of the 48 received during registration."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Aux demandes présentées pour les cours offerts à l'heure du dîner.",
+          "rationale": {
+            "fr": "Les cours du dîner sont mentionnés plus loin et sont une option distincte ; « autres » renvoie à ce qui précède.",
+            "en": "The lunchtime courses are mentioned later and are a separate option; 'other' refers back to what comes before."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aux demandes d'employés qui n'occupent pas de poste bilingue.",
+          "rationale": {
+            "fr": "Le texte ne dit pas que toutes ces demandes viennent d'employés sans poste bilingue ; certaines peuvent simplement ne pas répondre au critère de délai.",
+            "en": "The text does not say that all these requests come from employees without a bilingual position; some may simply not meet the time criterion."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un mot comme « autres » relie une phrase à la précédente : il désigne ce qui reste une fois exclu ce qui vient d'être nommé. Relisez la phrase d'avant pour savoir de quoi on parle.",
+        "en": "A word like 'other' links a sentence to the previous one: it refers to what remains once what was just named is excluded. Reread the previous sentence to see what is meant."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-2",
+      "stem": {
+        "fr": "Que vise surtout le rappel adressé au personnel du comptoir d'accueil ?",
+        "en": "What is the reminder to the reception counter staff mainly about?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer le déménagement du centre de services dans de nouveaux locaux.",
+          "rationale": {
+            "fr": "Le déménagement a déjà eu lieu ; il sert de contexte au problème, il n'est pas le sujet du bulletin.",
+            "en": "The move has already happened; it is the background to the problem, not the subject of the bulletin."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Présenter les nouvelles affiches bilingues qui seront installées au-dessus des guichets.",
+          "rationale": {
+            "fr": "Les affiches ne sont mentionnées qu'en une phrase, parmi les mesures annoncées à la fin.",
+            "en": "The signs are mentioned in a single sentence, among the measures announced at the end."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Rappeler au personnel du comptoir comment accueillir les clients dans les deux langues officielles.",
+          "rationale": {
+            "fr": "C'est le cœur du bulletin : « Nous rappelons donc… », suivi de la façon d'accueillir le client et de la marche à suivre.",
+            "en": "This is the heart of the bulletin: 'We therefore remind…', followed by how to greet clients and what to do."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Inviter le personnel de l'accueil à s'inscrire à une formation linguistique.",
+          "rationale": {
+            "fr": "Le bulletin annonce une séance de sensibilisation, et non une formation linguistique.",
+            "en": "The bulletin announces an awareness session, not language training."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le mot « donc » signale souvent l'idée principale : il introduit ce que l'auteur veut obtenir à partir du problème qu'il vient d'exposer.",
+        "en": "The word 'donc' (therefore) often signals the main idea: it introduces what the writer wants to achieve from the problem just described."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-2",
+      "stem": {
+        "fr": "D'après le bulletin, que doit faire un employé du comptoir qui ne maîtrise pas assez la langue choisie par le client ?",
+        "en": "According to the bulletin, what should a counter employee do if they do not have a sufficient command of the language the client chose?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Inviter le client à revenir lorsqu'un collègue bilingue sera disponible.",
+          "rationale": {
+            "fr": "Le bulletin l'interdit expressément : « Ne demandez jamais au client de revenir plus tard. »",
+            "en": "The bulletin expressly forbids it: 'Never ask the client to come back later.'"
+          }
+        },
+        {
+          "id": "b",
+          "text": "Demander au client d'attendre un moment et faire venir un collègue bilingue.",
+          "rationale": {
+            "fr": "C'est la consigne donnée : demander poliment au client de patienter et faire appel à un collègue bilingue.",
+            "en": "This is the instruction given: politely ask the client to wait and call on a bilingual colleague."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Poursuivre la conversation dans la langue qu'il maîtrise le mieux.",
+          "rationale": {
+            "fr": "Le bulletin précise que c'est le client, et non l'employé, qui choisit la langue de la conversation.",
+            "en": "The bulletin states that the client, not the employee, chooses the language of the conversation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Diriger le client vers les affiches bilingues installées au-dessus des guichets.",
+          "rationale": {
+            "fr": "Les affiches ne sont pas encore installées et ne remplacent pas le service dans la langue choisie.",
+            "en": "The signs are not yet installed and do not replace service in the chosen language."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une consigne précise se trouve souvent dans une phrase qui commence par « Si… » ; vérifiez aussi les interdictions qui la suivent pour éliminer les options contraires.",
+        "en": "A specific instruction is often found in a sentence starting with 'If…'; also check any prohibitions that follow, to rule out contrary options."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-2",
+      "stem": {
+        "fr": "Que peut-on conclure du bulletin au sujet du problème signalé par les clients ?",
+        "en": "What can be concluded from the bulletin about the problem reported by clients?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il s'explique par l'absence d'employés bilingues au centre de services.",
+          "rationale": {
+            "fr": "Le bulletin suppose au contraire qu'il y a des collègues bilingues à qui faire appel.",
+            "en": "On the contrary, the bulletin assumes there are bilingual colleagues to call on."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il touche surtout les clients qui joignent le centre par téléphone.",
+          "rationale": {
+            "fr": "Le bulletin parle de l'accueil au comptoir ; le téléphone n'y est pas mentionné.",
+            "en": "The bulletin is about greeting at the counter; the telephone is not mentioned."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il a déjà été réglé grâce aux nouvelles affiches bilingues.",
+          "rationale": {
+            "fr": "Les affiches ne seront installées que la semaine prochaine ; le problème n'est donc pas encore réglé.",
+            "en": "The signs will only be installed next week, so the problem has not yet been solved."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il est apparu après l'installation du centre dans ses nouveaux locaux.",
+          "rationale": {
+            "fr": "La première phrase situe les signalements « depuis le déménagement » : on peut en déduire que le problème est lié à cette période.",
+            "en": "The first sentence places the reports 'since the move': one can infer the problem dates from that period."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une inférence s'appuie sur un indice du texte sans le répéter : ici, « Depuis le déménagement… » permet de situer le problème dans le temps.",
+        "en": "An inference relies on a clue in the text without repeating it: here, 'Since the move…' makes it possible to place the problem in time."
+      },
+      "subSkill": "inference",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-2",
+      "stem": {
+        "fr": "Quel ton l'auteur du bulletin adopte-t-il envers le personnel de l'accueil ?",
+        "en": "What tone does the writer of the bulletin take towards the reception staff?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Ferme sur les règles à suivre, mais courtois et constructif.",
+          "rationale": {
+            "fr": "Le bulletin donne des consignes claires (« doit », « Ne demandez jamais ») tout en remerciant le personnel et en annonçant du soutien.",
+            "en": "The bulletin gives clear instructions ('must', 'Never ask') while thanking staff and announcing support."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Sévère et menaçant, en annonçant des sanctions pour les fautifs.",
+          "rationale": {
+            "fr": "Aucune sanction n'est évoquée ; le bulletin se termine par des remerciements.",
+            "en": "No penalty is mentioned; the bulletin ends with thanks."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Détendu, en présentant l'accueil bilingue comme une simple suggestion.",
+          "rationale": {
+            "fr": "L'accueil bilingue est présenté comme une obligation (« doit être accueilli »), non comme une suggestion.",
+            "en": "Bilingual greeting is presented as an obligation ('must be greeted'), not as a suggestion."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Inquiet, en laissant entendre que le centre risque de fermer.",
+          "rationale": {
+            "fr": "Rien dans le texte n'évoque une fermeture du centre.",
+            "en": "Nothing in the text suggests the centre might close."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour juger du ton, observez à la fois le vocabulaire des consignes (obligation, interdiction) et les formules de politesse ou de soutien : un texte peut être ferme et cordial à la fois.",
+        "en": "To judge tone, look at both the wording of the instructions (obligation, prohibition) and the expressions of courtesy or support: a text can be both firm and cordial."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-2",
+      "stem": {
+        "fr": "Comment les idées du bulletin sur l'accueil au comptoir sont-elles organisées ?",
+        "en": "How are the ideas in the bulletin about counter service organised?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il présente d'abord des mesures, puis les justifie à l'aide de statistiques.",
+          "rationale": {
+            "fr": "Le bulletin ne contient aucune statistique, et les mesures viennent à la fin.",
+            "en": "The bulletin contains no statistics, and the measures come at the end."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il compare point par point les anciens et les nouveaux locaux.",
+          "rationale": {
+            "fr": "Les locaux ne sont mentionnés qu'en introduction ; il n'y a pas de comparaison.",
+            "en": "The premises are mentioned only in the introduction; there is no comparison."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il répond, une à une, à des questions posées par des clients.",
+          "rationale": {
+            "fr": "Le bulletin s'adresse au personnel et ne suit pas une forme de questions et réponses.",
+            "en": "The bulletin is addressed to staff and does not follow a question-and-answer format."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il part d'un problème constaté, rappelle la règle et la marche à suivre, puis annonce des mesures à venir.",
+          "rationale": {
+            "fr": "C'est l'ordre du texte : les signalements des clients, la règle de l'accueil bilingue, la conduite à tenir, puis les affiches et la séance.",
+            "en": "This is the order of the text: client reports, the bilingual greeting rule, what to do, then the signs and the session."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour décrire la structure d'un texte, résumez chaque partie en quelques mots dans l'ordre où elle apparaît, puis comparez ce plan aux options.",
+        "en": "To describe a text's structure, sum up each part in a few words in the order it appears, then compare that outline with the options."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-3",
+      "stem": {
+        "fr": "Quel message essentiel la directrice générale cherche-t-elle à transmettre aux gestionnaires et au personnel dans cette note de service ?",
+        "en": "What essential message is the director general trying to convey to managers and staff in this memo?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le bilinguisme des réunions existe surtout sur papier, et de nouvelles pratiques visent à le rendre réel.",
+          "rationale": {
+            "fr": "C'est la synthèse du texte : un écart entre le statut officiel et la pratique, suivi de mesures concrètes pour le combler.",
+            "en": "This sums up the text: a gap between official status and practice, followed by concrete measures to close it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les employés francophones devront désormais s'exprimer en français pendant les réunions.",
+          "rationale": {
+            "fr": "La note dit l'inverse : il ne s'agit d'imposer aucune langue à personne, mais de permettre à chacun d'utiliser la sienne.",
+            "en": "The memo says the opposite: no language is imposed on anyone; everyone should be able to use their own."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les réunions seront dorénavant tenues séparément en français et en anglais.",
+          "rationale": {
+            "fr": "La note prévoit d'alterner les langues au sein d'une même réunion, non de tenir des réunions distinctes.",
+            "en": "The memo provides for alternating languages within the same meeting, not holding separate meetings."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le sondage auprès du personnel sera reconduit à la fin de chaque trimestre.",
+          "rationale": {
+            "fr": "La note annonce un bilan au comité de direction, et non la reprise du sondage ; c'est de plus un détail secondaire.",
+            "en": "The memo announces a report to the management committee, not a repeat of the survey; it is also a minor detail."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "L'idée principale d'une note de service relie souvent un constat à une décision. Une option qui ne reprend qu'une mesure, ou qui en déforme l'esprit, n'est pas l'idée principale.",
+        "en": "The main idea of a memo often links a finding to a decision. An option that repeats only one measure, or distorts its spirit, is not the main idea."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-3",
+      "stem": {
+        "fr": "Que révèle la décision de reporter un point lorsque les documents de présentation ne sont pas diffusés à temps dans les deux langues ?",
+        "en": "What does the decision to postpone an item when presentation documents are not circulated in both languages on time reveal?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les documents sont actuellement toujours traduits avec deux jours de retard.",
+          "rationale": {
+            "fr": "Le délai de deux jours ouvrables est une exigence nouvelle ; la note ne dit rien de la durée actuelle des retards.",
+            "en": "The two-working-day period is a new requirement; the memo says nothing about how long current delays are."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les points reportés seront ensuite traités uniquement en anglais.",
+          "rationale": {
+            "fr": "Rien ne l'indique, et ce serait contraire à l'objectif de la note.",
+            "en": "Nothing indicates this, and it would run counter to the memo's purpose."
+          }
+        },
+        {
+          "id": "c",
+          "text": "La direction tient les documents bilingues pour une condition préalable à la discussion, et non pour une formalité.",
+          "rationale": {
+            "fr": "En faisant dépendre la tenue du débat de la diffusion bilingue, la direction montre qu'elle y voit une exigence incontournable ; c'est ce qu'il faut déduire de « faute de quoi ».",
+            "en": "By making the discussion depend on bilingual circulation, management shows it sees this as a non-negotiable requirement; this is what 'failing which' implies."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les présidents de réunion devront désormais traduire eux-mêmes les documents.",
+          "rationale": {
+            "fr": "La note confie aux présidents l'alternance des langues, non la traduction des documents.",
+            "en": "The memo gives chairs responsibility for alternating languages, not for translating documents."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une sanction révèle la valeur qu'on accorde à une règle : « faute de quoi le point sera reporté » signifie que, sans documents bilingues, la discussion n'a pas lieu. Déduire, c'est tirer cette conséquence sans ajouter de faits absents du texte.",
+        "en": "A penalty reveals how much a rule matters: 'failing which the item will be postponed' means that without bilingual documents the discussion does not take place. Inferring means drawing that consequence without adding facts absent from the text."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-3",
+      "stem": {
+        "fr": "Dans la phrase « Cette situation, si elle devait persister, viderait de son sens notre engagement », que signifie l'expression « viderait de son sens » ?",
+        "en": "In the sentence 'This situation, if it were to persist, viderait de son sens our commitment', what does 'viderait de son sens' mean?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Mettrait officiellement fin à l'engagement de la direction générale.",
+          "rationale": {
+            "fr": "Lecture trop littérale : l'engagement continuerait d'exister formellement ; c'est sa portée réelle qui disparaîtrait.",
+            "en": "Too literal a reading: the commitment would still formally exist; it is its real effect that would vanish."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le réduirait à une déclaration sans portée réelle.",
+          "rationale": {
+            "fr": "« Vider de son sens » signifie priver une chose de sa substance tout en la laissant subsister en apparence : l'engagement resterait affiché, mais ne correspondrait plus à rien dans les faits.",
+            "en": "'Vider de son sens' means stripping something of its substance while leaving it apparently intact: the commitment would still be stated but would no longer match anything in practice."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Rendrait l'engagement plus difficile à expliquer aux nouveaux employés.",
+          "rationale": {
+            "fr": "L'expression ne porte pas sur la difficulté de communiquer l'engagement, mais sur sa valeur effective.",
+            "en": "The expression is not about how hard the commitment is to communicate, but about its actual value."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Remettrait en cause la légalité des réunions tenues jusqu'ici.",
+          "rationale": {
+            "fr": "Le texte ne soulève aucune question juridique ; l'expression ne vise pas la validité des réunions.",
+            "en": "The text raises no legal question; the expression does not concern the validity of the meetings."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une expression figurée se comprend par le contexte : ici, le texte oppose un statut « officiellement bilingue » à une pratique unilingue. « Vider de son sens », c'est laisser la forme et perdre le fond.",
+        "en": "A figurative expression is understood through context: here the text contrasts an 'officially bilingual' status with unilingual practice. 'Vider de son sens' means keeping the form and losing the substance."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-3",
+      "stem": {
+        "fr": "Dans la phrase « mais de faire en sorte que personne n'ait à renoncer à la sienne », quel élément précédemment mentionné le pronom possessif « la sienne » représente-t-il ?",
+        "en": "In the sentence 'but to ensure that no one has to give up la sienne', which previously mentioned element does the possessive pronoun 'la sienne' stand for?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À la langue que le participant maîtrise mal.",
+          "rationale": {
+            "fr": "Piège de proximité : cette langue est mentionnée juste avant, mais on ne « renonce » pas à une langue qu'on maîtrise mal ; l'opposition « Il ne s'agit pas… mais… » vise l'autre langue.",
+            "en": "A proximity trap: this language is mentioned just before, but one does not 'give up' a language one barely masters; the contrast 'It is not… but…' targets the other language."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À la présidence de la réunion, confiée à chaque participant.",
+          "rationale": {
+            "fr": "La présidence n'est pas confiée à chaque participant, et le pronom féminin renvoie ici à une langue.",
+            "en": "Chairing is not assigned to each participant, and the feminine pronoun here refers to a language."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À l'opinion que chaque participant souhaite exprimer en réunion.",
+          "rationale": {
+            "fr": "Le mot « opinion » n'apparaît pas dans la phrase ; le pronom doit reprendre un nom déjà exprimé.",
+            "en": "The word 'opinion' does not appear in the sentence; the pronoun must pick up a noun already used."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À la langue officielle dans laquelle chacun préfère s'exprimer.",
+          "rationale": {
+            "fr": "« La sienne » reprend le nom « langue » et désigne la langue propre à chacun, celle de son choix, que la note veut protéger.",
+            "en": "'La sienne' picks up the noun 'langue' and means each person's own language, the one they choose, which the memo seeks to protect."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour trouver le référent d'un pronom possessif (le sien, la sienne), cherchez le nom qu'il reprend, puis vérifiez que le sens tient dans la phrase. Le nom le plus proche n'est pas toujours le bon référent.",
+        "en": "To find what a possessive pronoun (le sien, la sienne) refers to, look for the noun it picks up, then check that the meaning works in the sentence. The nearest noun is not always the referent."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-3",
+      "stem": {
+        "fr": "Quelle intention la directrice générale poursuit-elle en précisant qu'« il ne s'agit pas d'imposer à quiconque une langue qu'il maîtrise mal » ?",
+        "en": "What is the director general's intention in specifying that 'it is not a matter of imposing on anyone a language they barely master'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Reprocher aux employés anglophones leur manque d'efforts en français.",
+          "rationale": {
+            "fr": "La phrase ne vise aucun groupe et ne contient aucun reproche ; elle limite au contraire la portée des mesures.",
+            "en": "The sentence targets no group and contains no reproach; on the contrary, it limits the scope of the measures."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Annoncer que la formation linguistique deviendra obligatoire pour les gestionnaires.",
+          "rationale": {
+            "fr": "La note ne parle pas de formation linguistique ; les gestionnaires sont seulement invités à montrer l'exemple.",
+            "en": "The memo says nothing about language training; managers are only asked to set an example."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Prévenir une lecture des mesures comme une contrainte linguistique, afin de rassurer le personnel.",
+          "rationale": {
+            "fr": "En écartant d'avance une interprétation coercitive, la directrice désamorce les réticences et recentre les mesures sur le libre choix de la langue.",
+            "en": "By ruling out a coercive reading in advance, the director defuses resistance and refocuses the measures on free choice of language."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Reconnaître que les nouvelles mesures risquent de ne pas donner de résultats.",
+          "rationale": {
+            "fr": "Rien n'exprime un doute sur l'efficacité des mesures ; un bilan est simplement prévu.",
+            "en": "Nothing expresses doubt about the measures' effectiveness; a review is simply planned."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "La tournure « Il ne s'agit pas de… mais de… » sert souvent à prévenir une objection : l'auteur nomme l'interprétation qu'il rejette pour mieux affirmer son intention véritable.",
+        "en": "The construction 'It is not a matter of… but of…' is often used to forestall an objection: the writer names the reading they reject to assert their true intention more clearly."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-4",
+      "stem": {
+        "fr": "D'après les entrevues réalisées par l'équipe d'examen, quel volet de la supervision des titulaires de postes bilingues échappe le plus fréquemment à la langue officielle choisie ?",
+        "en": "According to the interviews carried out by the review team, which aspect of the supervision of incumbents of bilingual positions most frequently fails to take place in the chosen official language?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les rencontres informelles entre l'employé et son gestionnaire.",
+          "rationale": {
+            "fr": "Inversion : ces rencontres se déroulent « généralement dans la langue de l'employé ».",
+            "en": "Reversal: these meetings take place 'generally in the employee's language'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les séances d'accueil organisées pour les nouveaux employés.",
+          "rationale": {
+            "fr": "Le texte dit que la langue de supervision est rarement abordée à l'arrivée, non que les séances d'accueil se tiennent dans la mauvaise langue.",
+            "en": "The text says the language of supervision is rarely raised on arrival, not that orientation sessions are held in the wrong language."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les échanges entre les quatre directions générales visées.",
+          "rationale": {
+            "fr": "Les quatre directions générales délimitent l'échantillon ; leurs échanges ne sont pas examinés.",
+            "en": "The four branches define the sample; communications between them are not examined."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La production des documents écrits, comme les ententes de rendement.",
+          "rationale": {
+            "fr": "Les entrevues révèlent que l'écrit, notamment les ententes de rendement, est souvent rédigé en anglais par défaut, contrairement aux échanges oraux.",
+            "en": "The interviews reveal that written material, notably performance agreements, is often drafted in English by default, unlike oral exchanges."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Lorsque le texte oppose deux éléments avec « mais », la question porte souvent sur l'un d'eux : identifiez de quel côté de l'opposition se trouve le problème.",
+        "en": "When a text contrasts two elements with 'mais' (but), the question often bears on one of them: identify which side of the contrast holds the problem."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-4",
+      "stem": {
+        "fr": "Quelle comparaison de données illustre le décalage entre la perception des gestionnaires et l'expérience vécue par les employés francophones ?",
+        "en": "Which comparison of figures illustrates the gap between managers' perception and francophone employees' experience?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "91 % des gestionnaires pensent superviser dans la langue choisie, mais 64 % seulement des francophones reçoivent leur évaluation en français.",
+          "rationale": {
+            "fr": "Ces deux chiffres opposent précisément ce que croient les gestionnaires (91 %) à ce que vivent les francophones (64 %).",
+            "en": "These two figures set exactly what managers believe (91%) against what francophones experience (64%)."
+          }
+        },
+        {
+          "id": "b",
+          "text": "88 % des gestionnaires pensent superviser dans la langue choisie, mais 64 % seulement des francophones reçoivent leur évaluation en français.",
+          "rationale": {
+            "fr": "Le taux de 88 % concerne les employés anglophones supervisés en anglais, non la perception des gestionnaires.",
+            "en": "The 88% rate concerns anglophone employees supervised in English, not managers' perception."
+          }
+        },
+        {
+          "id": "c",
+          "text": "91 % des employés francophones se disent supervisés en français, contre 88 % des anglophones en anglais.",
+          "rationale": {
+            "fr": "Le taux de 91 % est celui des gestionnaires ; les francophones ne sont que 64 % à recevoir leur évaluation en français.",
+            "en": "The 91% rate belongs to managers; only 64% of francophones receive their evaluation in French."
+          }
+        },
+        {
+          "id": "d",
+          "text": "62 gestionnaires ont été interrogés, contre 410 employés sondés.",
+          "rationale": {
+            "fr": "Ces nombres décrivent la taille de l'échantillon, non un écart entre perception et expérience.",
+            "en": "These numbers describe the sample size, not a gap between perception and experience."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans un texte riche en chiffres, rattachez chaque pourcentage au groupe et à la réalité qu'il mesure. Une option peut citer de vrais chiffres tout en les attribuant au mauvais groupe.",
+        "en": "In a figure-heavy text, link each percentage to the group and the thing it measures. An option can quote real figures while attributing them to the wrong group."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-4",
+      "stem": {
+        "fr": "Laquelle des descriptions suivantes rend le mieux compte de l'organisation de cet extrait du rapport d'examen interne ?",
+        "en": "Which of the following descriptions best accounts for the organisation of this excerpt from the internal review report?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il formule d'abord des recommandations, puis les justifie par des données d'enquête.",
+          "rationale": {
+            "fr": "L'ordre est inverse : les recommandations viennent à la fin, après les constats.",
+            "en": "The order is reversed: the recommendations come at the end, after the findings."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il compare successivement les résultats de chacune des quatre directions générales.",
+          "rationale": {
+            "fr": "Les résultats sont présentés globalement ; aucune direction générale n'est examinée séparément.",
+            "en": "The results are presented as a whole; no branch is examined separately."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il expose l'objectif et la méthode, présente des constats chiffrés puis qualitatifs, et conclut par des recommandations qui en découlent.",
+          "rationale": {
+            "fr": "C'est la progression de l'extrait : objet et échantillon, pourcentages, observations tirées des entrevues, puis trois recommandations liées à ces constats.",
+            "en": "This is how the excerpt progresses: purpose and sample, percentages, observations from interviews, then three recommendations tied to those findings."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il présente deux points de vue opposés sans prendre position.",
+          "rationale": {
+            "fr": "L'extrait prend clairement position en formulant des recommandations.",
+            "en": "The excerpt clearly takes a position by making recommendations."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Un extrait de rapport d'évaluation suit souvent le plan objectif, méthode, constatations, recommandations. Repérez les marqueurs (« visait à », « révèlent », « Recommandations : ») pour reconnaître chaque partie.",
+        "en": "An evaluation report excerpt often follows the plan purpose, method, findings, recommendations. Look for markers ('aimed to', 'reveal', 'Recommendations:') to identify each part."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-4",
+      "stem": {
+        "fr": "Que laisse entendre l'extrait au sujet des employés nouvellement entrés en fonction et de la langue de leur supervision ?",
+        "en": "What does the excerpt imply about newly hired employees and the language of their supervision?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Ils sont majoritairement francophones et préfèrent être supervisés en anglais.",
+          "rationale": {
+            "fr": "Le texte ne donne ni la langue des nouveaux employés ni leur préférence.",
+            "en": "The text gives neither the new employees' language nor their preference."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Beaucoup ignorent que c'est à l'organisation, et non à eux, de soulever la question.",
+          "rationale": {
+            "fr": "Ils « supposent qu'il leur revient d'en faire la demande », et la recommandation confie cette démarche au gestionnaire : leur supposition est donc erronée.",
+            "en": "They 'assume it is up to them to ask', and the recommendation assigns this step to the manager: their assumption is therefore mistaken."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Ils refusent en général de choisir leur langue de supervision.",
+          "rationale": {
+            "fr": "Il n'est pas question de refus : la question est simplement rarement abordée.",
+            "en": "There is no question of refusal: the matter is simply seldom raised."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Ils reçoivent dès leur arrivée des modèles d'ententes de rendement à jour.",
+          "rationale": {
+            "fr": "Les modèles bilingues ne sont justement pas à jour, d'où la recommandation de les mettre à jour d'ici six mois.",
+            "en": "The bilingual templates are precisely not up to date, hence the recommendation to update them within six months."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour inférer, croisez deux passages : un constat (« ils supposent… ») et la mesure qui y répond (le gestionnaire confirme par écrit). Ensemble, ils montrent ce que le texte ne dit pas en toutes lettres.",
+        "en": "To infer, cross-reference two passages: a finding ('they assume…') and the measure responding to it (the manager confirms in writing). Together they show what the text does not spell out."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-4",
+      "stem": {
+        "fr": "Quel ton l'équipe d'examen adopte-t-elle dans la présentation de ses constatations et de ses recommandations ?",
+        "en": "What tone does the review team take in presenting its findings and recommendations?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Factuel et mesuré : elle documente les lacunes et propose des correctifs précis sans mettre en cause les personnes.",
+          "rationale": {
+            "fr": "Le texte s'appuie sur des données, explique les causes (« faute de modèles bilingues à jour ») et recommande des mesures datées, sans blâmer quiconque.",
+            "en": "The text relies on data, explains causes ('for lack of up-to-date bilingual templates') and recommends time-bound measures, without blaming anyone."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Accusateur : elle reproche aux gestionnaires d'avoir délibérément trompé l'organisation.",
+          "rationale": {
+            "fr": "L'écart entre perception et réalité est constaté, mais rien ne suggère une tromperie volontaire.",
+            "en": "The gap between perception and reality is noted, but nothing suggests deliberate deception."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Alarmiste : elle annonce des sanctions immédiates contre les directions générales en défaut.",
+          "rationale": {
+            "fr": "Aucune sanction n'est mentionnée ; les recommandations prévoient des correctifs et un suivi.",
+            "en": "No penalty is mentioned; the recommendations call for corrective action and follow-up."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Complaisant : elle juge la situation satisfaisante et estime qu'aucune mesure ne s'impose.",
+          "rationale": {
+            "fr": "L'équipe relève un écart notable et formule trois recommandations, ce qui contredit cette lecture.",
+            "en": "The team identifies a notable gap and makes three recommendations, which contradicts this reading."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le ton d'un rapport se juge à son vocabulaire : des verbes neutres (« constate », « révèlent ») et des recommandations concrètes signalent un ton mesuré, même lorsque les constats sont défavorables.",
+        "en": "A report's tone is judged by its wording: neutral verbs ('notes', 'reveal') and concrete recommendations signal a measured tone, even when the findings are unfavourable."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-5",
+      "stem": {
+        "fr": "D'après les données présentées, quelle proportion des employés réévalués après leur retour n'avait pas maintenu le niveau obtenu en formation ?",
+        "en": "According to the figures presented, what proportion of the employees reassessed after returning had not maintained the level obtained in training?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Près des deux tiers",
+          "rationale": {
+            "fr": "Inversion : près des deux tiers représentent plutôt ceux qui ont conservé leur niveau.",
+            "en": "Reversal: nearly two thirds are rather those who kept their level."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Près du tiers",
+          "rationale": {
+            "fr": "« Près d'un sur trois » n'avait pas conservé son niveau, soit près du tiers des employés réévalués.",
+            "en": "'Nearly one in three' had not kept their level, that is, nearly a third of those reassessed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Près de la moitié",
+          "rationale": {
+            "fr": "Aucune donnée du texte n'évoque la moitié des employés.",
+            "en": "No figure in the text points to half of the employees."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La totalité des 140 employés formés",
+          "rationale": {
+            "fr": "Le nombre 140 désigne les employés ayant terminé la formation, non ceux qui ont perdu leur niveau.",
+            "en": "The figure 140 refers to employees who completed training, not to those who lost their level."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une proportion peut être exprimée sous diverses formes (« un sur trois », « le tiers », « environ 33 % ») : reconnaître ces équivalences est essentiel pour lire les données d'un texte.",
+        "en": "A proportion can be expressed in various forms ('one in three', 'a third', 'about 33%'): recognising these equivalents is essential to reading a text's figures."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-5",
+      "stem": {
+        "fr": "Dans l'expression « un investissement que l'organisation a déjà consenti », quel sens le verbe « consentir » prend-il dans cette note destinée aux gestionnaires ?",
+        "en": "In the phrase 'an investment the organisation has already consenti', what meaning does the verb 'consentir' take in this note to managers?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Récupérer grâce aux gains de productivité réalisés après la formation.",
+          "rationale": {
+            "fr": "Le verbe ne désigne pas un gain obtenu, mais un effort accordé ; la note parle d'ailleurs de protéger, non de récupérer.",
+            "en": "The verb does not refer to a gain obtained but to an effort granted; the note speaks of protecting, not recovering."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Obtenir avec l'accord écrit des employés concernés.",
+          "rationale": {
+            "fr": "Ce sens est suggéré par « consentement », mais ici le sujet est l'organisation : c'est elle qui consent l'investissement, et l'accord des employés n'est pas en cause.",
+            "en": "This meaning is suggested by 'consent', but here the subject is the organisation: it is the one making the investment, and employees' agreement is not at issue."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Prévoir au budget pour les années à venir.",
+          "rationale": {
+            "fr": "L'adverbe « déjà » indique un investissement passé, non à venir.",
+            "en": "The adverb 'already' indicates a past investment, not a future one."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Accepter d'engager, en y affectant des ressources.",
+          "rationale": {
+            "fr": "« Consentir un investissement, un effort, un prêt », c'est accepter de le faire et d'y mettre les ressources nécessaires : ici, le coût de la formation à temps plein.",
+            "en": "'Consentir un investissement, un effort, un prêt' means agreeing to make it and committing the necessary resources: here, the cost of full-time training."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Un même verbe change de sens selon sa construction : « consentir à quelque chose » veut dire donner son accord, alors que « consentir quelque chose » (un prêt, un effort, un investissement) veut dire l'accorder ou l'engager.",
+        "en": "The same verb changes meaning with its construction: 'consentir à quelque chose' means to agree to something, whereas 'consentir quelque chose' (a loan, an effort, an investment) means to grant or commit it."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-5",
+      "stem": {
+        "fr": "Quelle relation logique le connecteur « Or », au début de la deuxième phrase, établit-il avec l'information qui le précède ?",
+        "en": "What logical relationship does the connector 'Or', at the start of the second sentence, establish with the information before it?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il introduit la conséquence directe du nombre d'employés formés.",
+          "rationale": {
+            "fr": "Le recul n'est pas présenté comme une conséquence du nombre de diplômés ; « or » n'exprime pas la cause et l'effet.",
+            "en": "The decline is not presented as a consequence of the number of graduates; 'or' does not express cause and effect."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il ajoute un exemple qui illustre le succès de la formation.",
+          "rationale": {
+            "fr": "Le fait introduit montre au contraire une faiblesse : un employé sur trois perd son niveau.",
+            "en": "On the contrary, the fact introduced shows a weakness: one employee in three loses their level."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il amène un fait nouveau qui nuance le premier constat en faisant apparaître un problème.",
+          "rationale": {
+            "fr": "« Or » introduit un élément qui vient infléchir le raisonnement : après un chiffre plutôt positif, il signale le recul qui justifie la note.",
+            "en": "'Or' introduces an element that shifts the reasoning: after a fairly positive figure, it signals the decline that justifies the note."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il annonce la conclusion finale et les demandes adressées aux gestionnaires.",
+          "rationale": {
+            "fr": "La conclusion est annoncée plus loin par « Par conséquent », non par « Or ».",
+            "en": "The conclusion is introduced later by 'Par conséquent' (consequently), not by 'Or'."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Or » ne signifie pas « donc » : il introduit un fait qui s'ajoute au précédent en le nuançant ou en le contredisant, souvent pour faire avancer une argumentation.",
+        "en": "'Or' does not mean 'therefore': it introduces a fact that adds to the previous one while qualifying or contradicting it, often to move an argument forward."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-5",
+      "stem": {
+        "fr": "Comment la note est-elle construite pour amener les gestionnaires à accepter les mesures demandées ?",
+        "en": "How is the note constructed to lead managers to accept the measures requested?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle chiffre un problème, décrit les pratiques de ceux qui l'évitent, puis en tire des demandes et les justifie.",
+          "rationale": {
+            "fr": "C'est la progression du texte : le recul chiffré, les habitudes des employés qui maintiennent leur niveau, puis « Par conséquent » et l'argument de l'investissement.",
+            "en": "This is how the text progresses: the quantified decline, the habits of employees who keep their level, then 'Consequently' and the investment argument."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle retrace l'historique de la formation, compare l'organisation à d'autres ministères, puis recommande des mesures.",
+          "rationale": {
+            "fr": "La note ne fait aucune comparaison avec d'autres ministères ni d'historique.",
+            "en": "The note makes no comparison with other departments and gives no history."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle formule d'abord ses demandes, puis les appuie sur des statistiques.",
+          "rationale": {
+            "fr": "Les demandes n'arrivent qu'au troisième paragraphe, après les données.",
+            "en": "The requests come only in the third paragraph, after the data."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle rapporte des témoignages d'employés et se termine sans proposer de mesures.",
+          "rationale": {
+            "fr": "La note ne cite aucun témoignage et se termine par des demandes précises.",
+            "en": "The note quotes no testimony and ends with specific requests."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un texte persuasif va souvent du constat à l'explication, puis à l'action. Les connecteurs (« Or », « Par conséquent ») marquent le passage d'une étape à l'autre.",
+        "en": "A persuasive text often moves from finding to explanation, then to action. Connectors ('Or', 'Par conséquent') mark the shift from one stage to the next."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-official-languages-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-official-languages-5",
+      "stem": {
+        "fr": "Quelle idée maîtresse se dégage de cette note sur le maintien des acquis linguistiques après la formation ?",
+        "en": "What central idea emerges from this note on maintaining language skills after training?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La formation à temps plein est inefficace et devrait être remplacée par du tutorat.",
+          "rationale": {
+            "fr": "La note ne remet pas la formation en cause ; elle cherche à en protéger les acquis.",
+            "en": "The note does not question the training; it seeks to protect its gains."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le recul après la formation peut être évité si l'employé pratique régulièrement la langue au travail, avec l'appui de son gestionnaire.",
+          "rationale": {
+            "fr": "C'est la synthèse : le recul n'est « pas inévitable », il tient au manque de pratique, et les gestionnaires peuvent y remédier.",
+            "en": "This is the synthesis: the decline is 'not inevitable', it stems from lack of practice, and managers can address it."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les employés réévalués devront reprendre une formation à temps plein.",
+          "rationale": {
+            "fr": "La note propose une heure de maintien par semaine, non une nouvelle formation à temps plein.",
+            "en": "The note proposes one hour of maintenance a week, not a new full-time training course."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les gestionnaires doivent réduire la charge de travail des employés en formation.",
+          "rationale": {
+            "fr": "La note vise les employés revenus de formation et leur demande au contraire de traiter des dossiers dans leur langue seconde.",
+            "en": "The note concerns employees back from training and, on the contrary, asks that they handle files in their second language."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "L'idée maîtresse réunit le problème, sa cause et la solution proposée. Une option qui contredit le ton de la note (remplacer la formation) ou n'en retient qu'une mesure déformée est à écarter.",
+        "en": "The central idea brings together the problem, its cause and the proposed solution. An option that contradicts the note's tone (replacing training) or keeps only a distorted measure should be ruled out."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-official-languages-1",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Formation linguistique à temps plein : places attribuées et liste d'attente",
+      "body": "Bonjour à toutes et à tous,\n\nL'inscription à la formation linguistique à temps plein pour la session d'hiver a pris fin vendredi. Nous avons reçu 48 demandes pour seulement 20 places. Les places ont été attribuées en priorité aux employés qui occupent un poste bilingue et qui doivent atteindre le niveau requis d'ici un an. Les 28 autres demandes ont été inscrites sur une liste d'attente, selon leur date de réception. Si une place se libère, la personne suivante sur la liste sera jointe par courriel et disposera de cinq jours ouvrables pour confirmer sa participation. Par ailleurs, les employés qui ne souhaitent pas attendre peuvent s'inscrire dès maintenant aux cours à temps partiel offerts à l'heure du dîner, qui commenceront le 12 janvier. Pour toute question, n'hésitez pas à communiquer avec moi.\n\nMartin Gagnon\nConseiller, Apprentissage et perfectionnement",
+      "wordCount": 139,
+      "targetBand": "B",
+      "topic": "official-languages",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 17.38,
+        "rareWordRatio": 0.259
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-official-languages-2",
+      "lang": "fr",
+      "docType": "bulletin",
+      "title": "Rappel : l'offre active au comptoir d'accueil",
+      "body": "Depuis le déménagement du centre de services dans ses nouveaux locaux, plusieurs clients nous ont signalé qu'ils avaient été accueillis uniquement en anglais. Nous rappelons donc à tout le personnel du comptoir que chaque client doit être accueilli dans les deux langues officielles, par exemple par « Bonjour, Hello ». C'est ensuite le client qui choisit la langue de la conversation, et non l'employé. Si vous ne maîtrisez pas suffisamment la langue choisie, demandez poliment au client de patienter quelques instants et faites appel à un collègue bilingue. Ne demandez jamais au client de revenir plus tard. De nouvelles affiches bilingues seront installées au-dessus des guichets la semaine prochaine. Une courte séance de sensibilisation sera aussi offerte au personnel de l'accueil mardi matin. Merci de votre collaboration : un accueil soigné est la première image que le public garde de nos services.",
+      "wordCount": 142,
+      "targetBand": "B",
+      "topic": "official-languages",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 17.75,
+        "rareWordRatio": 0.254
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-official-languages-3",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Déroulement bilingue des réunions de la direction générale",
+      "body": "Un sondage mené auprès du personnel a révélé que, bien que nos réunions soient officiellement bilingues, le français y cède presque toujours la place à l'anglais après les premières minutes. Plusieurs employés francophones disent s'abstenir d'intervenir dans leur langue, de crainte de ralentir les échanges ou de ne pas être compris. Cette situation, si elle devait persister, viderait de son sens notre engagement envers un milieu de travail propice à l'usage des deux langues officielles.\n\nÀ compter du prochain trimestre, la personne qui préside chaque réunion veillera donc à alterner les langues d'un point à l'autre de l'ordre du jour et à inviter explicitement les participants à s'exprimer dans la langue de leur choix. Les documents de présentation seront diffusés dans les deux langues au moins deux jours ouvrables à l'avance, faute de quoi le point sera reporté. Il ne s'agit pas d'imposer à quiconque une langue qu'il maîtrise mal, mais de faire en sorte que personne n'ait à renoncer à la sienne.\n\nJe compte sur les gestionnaires pour montrer l'exemple. Un bilan sera présenté au comité de direction à la fin du trimestre.\n\nLa directrice générale,\nHélène Tremblay",
+      "wordCount": 189,
+      "targetBand": "C",
+      "topic": "official-languages",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 21,
+        "rareWordRatio": 0.238
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-official-languages-4",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Examen interne de la supervision dans les deux langues officielles (extrait)",
+      "body": "L'examen visait à déterminer si les employés occupant des postes désignés bilingues sont supervisés dans la langue officielle de leur choix. L'équipe a interrogé 62 gestionnaires et sondé 410 employés de quatre directions générales.\n\nSi 91 % des gestionnaires estiment offrir la supervision dans la langue choisie par leurs employés, seulement 64 % des employés francophones affirment recevoir leur évaluation de rendement en français. L'écart est moindre chez les employés anglophones, dont 88 % se disent supervisés en anglais. Les entrevues révèlent que les rencontres informelles se déroulent généralement dans la langue de l'employé, mais que les documents écrits, notamment les ententes de rendement, sont souvent rédigés en anglais par défaut, faute de modèles bilingues à jour.\n\nL'équipe constate en outre que la question de la langue de supervision est rarement abordée à l'arrivée d'un nouvel employé ; nombre d'entre eux supposent qu'il leur revient d'en faire la demande.\n\nRecommandations : que chaque gestionnaire confirme par écrit, dès l'entrée en fonction, la langue de supervision choisie par l'employé ; que les modèles d'ententes de rendement soient mis à jour dans les deux langues d'ici six mois ; que les résultats fassent l'objet d'un suivi lors du prochain cycle d'évaluation.",
+      "wordCount": 199,
+      "targetBand": "C",
+      "topic": "official-languages",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 28.43,
+        "rareWordRatio": 0.281
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-official-languages-5",
+      "lang": "fr",
+      "docType": "note",
+      "title": "Note à l'intention des gestionnaires : le maintien de la langue seconde",
+      "body": "Au cours des trois dernières années, 140 employés de la direction générale ont terminé une formation linguistique à temps plein. Or, parmi ceux qui ont été réévalués dans les deux ans suivant leur retour, près d'un sur trois n'avait pas conservé le niveau atteint à la fin de la formation. Ce recul, loin d'être inévitable, s'explique surtout par le peu d'occasions de pratiquer la langue seconde une fois de retour au poste.\n\nLes employés qui ont maintenu leur niveau partagent quelques habitudes : ils participent à au moins une activité hebdomadaire dans leur langue seconde, qu'il s'agisse d'un groupe de conversation, d'un tutorat ou de la rédaction de documents de travail ; de plus, leur gestionnaire leur confie régulièrement des dossiers à traiter dans cette langue.\n\nPar conséquent, nous vous demandons d'intégrer un objectif de maintien linguistique aux ententes de rendement des employés concernés et de leur accorder, sous réserve des besoins opérationnels, une heure par semaine pendant les heures de travail pour des activités de maintien. Ce temps ne saurait être perçu comme une perte de productivité : il protège un investissement que l'organisation a déjà consenti.\n\nÉquipe de l'apprentissage et du perfectionnement",
+      "wordCount": 194,
+      "targetBand": "C",
+      "topic": "official-languages",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 27.71,
+        "rareWordRatio": 0.242
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

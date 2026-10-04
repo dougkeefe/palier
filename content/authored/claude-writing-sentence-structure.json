@@ -1,0 +1,2190 @@
+{
+  "items": [
+    {
+      "id": "claude-w-sentence-structure-01",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Avant de confirmer les dates d'entrée en fonction, la gestionnaire m'a demandé ___ leur lettre d'offre signée.",
+        "en": "Before confirming the start dates, the manager asked me ___ their signed letter of offer."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "est-ce que les candidats retenus avaient renvoyé",
+          "rationale": {
+            "fr": "« Est-ce que » appartient à l'interrogation directe ; il n'a pas sa place après un verbe comme « demander », qui introduit une interrogation indirecte.",
+            "en": "« Est-ce que » belongs to direct questions; it has no place after a verb such as « demander », which introduces an indirect question."
+          }
+        },
+        {
+          "id": "b",
+          "text": "si les candidats retenus avaient renvoyé",
+          "rationale": {
+            "fr": "L'interrogation indirecte totale (réponse par oui ou non) est introduite par « si », suivi de l'ordre sujet-verbe : c'est la construction attendue.",
+            "en": "A yes/no indirect question is introduced by « si », followed by subject-verb order: this is the expected construction."
+          }
+        },
+        {
+          "id": "c",
+          "text": "qu'est-ce que les candidats retenus avaient renvoyé",
+          "rationale": {
+            "fr": "« Qu'est-ce que » est une forme de l'interrogation directe ; de plus, il porte sur un complément (quoi ?), alors que la question attend un oui ou un non.",
+            "en": "« Qu'est-ce que » is a direct-question form; moreover, it asks about an object (what?), whereas the question expects a yes or a no."
+          }
+        },
+        {
+          "id": "d",
+          "text": "si les candidats retenus avaient-ils renvoyé",
+          "rationale": {
+            "fr": "« Si » convient, mais l'inversion du pronom (« avaient-ils ») est propre à l'interrogation directe ; dans une interrogation indirecte, le sujet précède le verbe.",
+            "en": "« Si » fits, but the pronoun inversion (« avaient-ils ») belongs to direct questions; in an indirect question, the subject comes before the verb."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Lorsqu'une question est rapportée après un verbe comme « demander », « savoir » ou « se demander », elle devient une interrogation indirecte : on supprime « est-ce que » et l'inversion, et on introduit la question totale par « si ». Ainsi, « Les candidats ont-ils renvoyé leur lettre ? » devient « Elle m'a demandé si les candidats avaient renvoyé leur lettre. »",
+        "en": "When a question is reported after a verb such as « demander », « savoir » or « se demander », it becomes an indirect question: « est-ce que » and inversion are dropped, and a yes/no question is introduced by « si ». So « Les candidats ont-ils renvoyé leur lettre ? » becomes « Elle m'a demandé si les candidats avaient renvoyé leur lettre. »"
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-02",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase tirée d'une note sur les prévisions budgétaires contient une faute. Laquelle des corrections suivantes s'impose ? « Aucune des directions générales n'a pas présenté de prévisions révisées avant la clôture du trimestre, si bien que le comité ne pourra guère ajuster les autorisations de dépenser d'ici la mise à jour budgétaire. »",
+        "en": "This sentence taken from a note on budget forecasts contains an error. Which of the following corrections is required? « Aucune des directions générales n'a pas présenté de prévisions révisées avant la clôture du trimestre, si bien que le comité ne pourra guère ajuster les autorisations de dépenser d'ici la mise à jour budgétaire. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « Aucune des directions générales » par « Aucunes des directions générales »",
+          "rationale": {
+            "fr": "« Aucun » ne se met au pluriel qu'avec des noms sans singulier (aucuns frais). Ici, il reste au singulier : la modification introduirait une faute.",
+            "en": "« Aucun » is only plural with nouns that have no singular (aucuns frais). Here it stays singular: the change would introduce an error."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « ne pourra guère » par « ne pourra pas guère »",
+          "rationale": {
+            "fr": "« Guère » est lui-même un mot négatif qui s'emploie avec « ne » seul ; lui ajouter « pas » crée une double négation fautive.",
+            "en": "« Guère » is itself a negative word used with « ne » alone; adding « pas » creates a faulty double negation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "supprimer « ne » dans « ne pourra guère »",
+          "rationale": {
+            "fr": "Sans « ne », la négation devient familière ; à l'écrit administratif, « ne… guère » est la forme attendue, et la vraie faute resterait.",
+            "en": "Without « ne », the negation becomes informal; in administrative writing « ne… guère » is the expected form, and the real error would remain."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « n'a pas présenté » par « n'a présenté »",
+          "rationale": {
+            "fr": "« Aucune » porte déjà la valeur négative et se construit avec « ne » seul ; « pas » est de trop. C'est la correction nécessaire.",
+            "en": "« Aucune » already carries the negative meaning and takes « ne » alone; « pas » is superfluous. This is the required correction."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les mots négatifs comme « aucun », « personne », « rien », « jamais » ou « guère » forment la négation avec « ne » seul. Leur ajouter « pas » produit une double négation fautive : on écrit « Aucune direction n'a présenté de prévisions », et non « n'a pas présenté ».",
+        "en": "Negative words such as « aucun », « personne », « rien », « jamais » or « guère » form the negation with « ne » alone. Adding « pas » to them produces a faulty double negation: write « Aucune direction n'a présenté de prévisions », not « n'a pas présenté »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-03",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans son avis aux employés, le service de dépannage informatique précise que, en redémarrant votre poste de travail avant 17 h, …",
+        "en": "In its notice to employees, the IT help desk specifies that, by restarting your workstation before 5 p.m., …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "vous recevrez automatiquement la mise à jour de sécurité.",
+          "rationale": {
+            "fr": "Le sujet de la principale, « vous », est bien celui qui redémarre le poste : le gérondif se rattache au bon sujet.",
+            "en": "The subject of the main clause, « vous », is indeed the one restarting the workstation: the gerund attaches to the right subject."
+          }
+        },
+        {
+          "id": "b",
+          "text": "la mise à jour de sécurité sera installée automatiquement.",
+          "rationale": {
+            "fr": "Le gérondif aurait pour sujet « la mise à jour » : c'est elle qui redémarrerait le poste. La construction est fautive (gérondif mal rattaché).",
+            "en": "The gerund would take « la mise à jour » as its subject: the update would be doing the restarting. The construction is wrong (dangling gerund)."
+          }
+        },
+        {
+          "id": "c",
+          "text": "l'installation de la mise à jour se fera automatiquement.",
+          "rationale": {
+            "fr": "Même défaut : le sujet « l'installation » ne peut pas accomplir l'action de redémarrer. Le gérondif est mal rattaché.",
+            "en": "Same flaw: the subject « l'installation » cannot perform the action of restarting. The gerund dangles."
+          }
+        },
+        {
+          "id": "d",
+          "text": "la mise à jour de sécurité s'installera automatiquement.",
+          "rationale": {
+            "fr": "La tournure pronominale tente, mais le sujet reste « la mise à jour », qui ne redémarre rien : gérondif mal rattaché.",
+            "en": "The pronominal form is tempting, but the subject is still « la mise à jour », which restarts nothing: dangling gerund."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le gérondif (en + participe présent) n'a pas de sujet propre : il prend celui du verbe principal. Le sujet de la principale doit donc être l'auteur de l'action exprimée par le gérondif. « En redémarrant votre poste, vous recevrez la mise à jour » est bien construit ; « En redémarrant votre poste, la mise à jour sera installée » fait de la mise à jour l'auteur du redémarrage.",
+        "en": "The gerund (en + present participle) has no subject of its own: it takes that of the main verb. The subject of the main clause must therefore be the one performing the gerund's action. « En redémarrant votre poste, vous recevrez la mise à jour » is well built; « En redémarrant votre poste, la mise à jour sera installée » makes the update the one doing the restarting."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-04",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Repérez l'erreur dans ce passage d'un courriel adressé à la Direction des services aux clients et choisissez la correction appropriée : « Pourriez-vous nous indiquer à quelle date le nouveau formulaire de demande en ligne sera accessible, et quand est-ce que les agents du centre de contact recevront-ils la formation prévue ? »",
+        "en": "Find the error in this excerpt from an email to the Client Services Directorate and choose the appropriate correction: « Pourriez-vous nous indiquer à quelle date le nouveau formulaire de demande en ligne sera accessible, et quand est-ce que les agents du centre de contact recevront-ils la formation prévue ? »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « à quelle date le nouveau formulaire » par « à quelle date est-ce que le nouveau formulaire »",
+          "rationale": {
+            "fr": "« À quelle date… » dépend de « nous indiquer » : c'est une interrogation indirecte, où « est-ce que » n'a pas sa place. La modification ajouterait une faute.",
+            "en": "« À quelle date… » depends on « nous indiquer »: it is an indirect question, where « est-ce que » has no place. The change would add an error."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « sera accessible » par « sera-t-il accessible »",
+          "rationale": {
+            "fr": "L'inversion appartient à l'interrogation directe ; dans l'interrogation indirecte « à quelle date le formulaire sera accessible », l'ordre sujet-verbe est requis.",
+            "en": "Inversion belongs to direct questions; in the indirect question « à quelle date le formulaire sera accessible », subject-verb order is required."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « quand est-ce que les agents du centre de contact recevront-ils » par « quand les agents du centre de contact recevront »",
+          "rationale": {
+            "fr": "La seconde question dépend elle aussi de « nous indiquer » : elle est indirecte. Il faut supprimer à la fois « est-ce que » et l'inversion. C'est la correction qui s'impose.",
+            "en": "The second question also depends on « nous indiquer »: it is indirect. Both « est-ce que » and the inversion must go. This is the required correction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « recevront-ils » par « recevront »",
+          "rationale": {
+            "fr": "La modification supprime l'inversion mais laisse « est-ce que », qui demeure fautif dans une interrogation indirecte. Elle reste donc insuffisante.",
+            "en": "The change removes the inversion but leaves « est-ce que », which is still wrong in an indirect question. It therefore falls short."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une question qui dépend d'un verbe comme « indiquer », « préciser » ou « savoir » est indirecte, même lorsqu'elle est coordonnée à une autre. Elle se construit avec le mot interrogatif suivi de l'ordre sujet-verbe : « Pourriez-vous nous indiquer quand les agents recevront la formation ? ». « Est-ce que » et l'inversion sont réservés à l'interrogation directe, et leur cumul est fautif même dans une question directe.",
+        "en": "A question that depends on a verb such as « indiquer », « préciser » or « savoir » is indirect, even when it is coordinated with another. It is built with the question word followed by subject-verb order: « Pourriez-vous nous indiquer quand les agents recevront la formation ? ». « Est-ce que » and inversion are reserved for direct questions, and combining them is wrong even in a direct question."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-05",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "La nouvelle directive sur la gestion des documents entre en vigueur le 1er avril ; ___ revoir leurs procédures internes d'ici là.",
+        "en": "The new directive on records management comes into force on April 1; ___ review their internal procedures before then."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "aussi est-ce que les directions doivent",
+          "rationale": {
+            "fr": "Après « aussi » en tête de proposition, on fait l'inversion du sujet, mais « est-ce que » n'est pas une inversion : il marque une question, et la phrase n'est pas interrogative.",
+            "en": "After « aussi » at the head of a clause, the subject is inverted, but « est-ce que » is not an inversion: it marks a question, and this sentence is not a question."
+          }
+        },
+        {
+          "id": "b",
+          "text": "aussi doivent les directions",
+          "rationale": {
+            "fr": "L'inversion simple d'un sujet nom n'est pas possible ici, devant un infinitif complément ; on reprend le nom par un pronom (inversion complexe).",
+            "en": "Simple inversion of a noun subject is not possible here, before an infinitive complement; the noun must be picked up by a pronoun (complex inversion)."
+          }
+        },
+        {
+          "id": "c",
+          "text": "aussi les directions doivent-elles",
+          "rationale": {
+            "fr": "« Aussi » au sens de « c'est pourquoi », placé en tête de proposition, entraîne l'inversion ; avec un sujet nom, on emploie l'inversion complexe : « les directions doivent-elles ». C'est la forme attendue.",
+            "en": "« Aussi » meaning « therefore », at the head of a clause, triggers inversion; with a noun subject, complex inversion is used: « les directions doivent-elles ». This is the expected form."
+          }
+        },
+        {
+          "id": "d",
+          "text": "aussi les directions, elles doivent",
+          "rationale": {
+            "fr": "La reprise du sujet par « elles » après une virgule relève de l'oral familier ; elle ne remplace pas l'inversion qu'exige « aussi ».",
+            "en": "Picking up the subject with « elles » after a comma is informal speech; it does not replace the inversion that « aussi » requires."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "En tête de proposition, « aussi » signifie « c'est pourquoi, par conséquent » et commande, dans la langue soignée, l'inversion du sujet : « Aussi faut-il… », « Aussi les directions doivent-elles… ». Avec un sujet nom, on emploie l'inversion complexe : le nom, puis le verbe suivi d'un pronom de rappel. Placé ailleurs qu'en tête, « aussi » signifie « également ».",
+        "en": "At the head of a clause, « aussi » means « therefore, consequently » and, in careful usage, requires subject inversion: « Aussi faut-il… », « Aussi les directions doivent-elles… ». With a noun subject, complex inversion is used: the noun, then the verb followed by a pronoun referring back to it. Anywhere other than at the head, « aussi » means « also »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-06",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Conformément aux exigences en matière de santé et de sécurité au travail, les travaux de désamiantage du troisième étage se dérouleront pendant la fin de semaine, …",
+        "en": "In accordance with occupational health and safety requirements, the asbestos removal work on the third floor will take place over the weekend, …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "sans que les employés aient à être réinstallés temporairement.",
+          "rationale": {
+            "fr": "« Sans que » a déjà une valeur négative et se construit avec le subjonctif, sans « pas » : c'est la construction juste.",
+            "en": "« Sans que » already has a negative meaning and takes the subjunctive, without « pas »: this is the right construction."
+          }
+        },
+        {
+          "id": "b",
+          "text": "sans que les employés n'aient pas à être réinstallés temporairement.",
+          "rationale": {
+            "fr": "« Pas » ajoute une seconde négation : la phrase dirait le contraire de ce qu'on veut (les employés devraient être réinstallés). Construction fautive.",
+            "en": "« Pas » adds a second negation: the sentence would say the opposite of what is meant (employees would have to be relocated). Faulty construction."
+          }
+        },
+        {
+          "id": "c",
+          "text": "sans que les employés ont à être réinstallés temporairement.",
+          "rationale": {
+            "fr": "« Sans que » exige le subjonctif ; l'indicatif « ont » est fautif.",
+            "en": "« Sans que » requires the subjunctive; the indicative « ont » is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "sans que les employés aient pas à être réinstallés temporairement.",
+          "rationale": {
+            "fr": "Le « pas » isolé, sans « ne », est familier, et il crée ici une double négation avec « sans que ». La forme est à écarter.",
+            "en": "A lone « pas », without « ne », is informal, and here it creates a double negation with « sans que ». The form must be rejected."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "La locution « sans que » exprime déjà la négation et se construit avec le subjonctif : « sans que les employés aient à… ». On n'y ajoute jamais « pas ». Le « ne » explétif après « sans que » est par ailleurs critiqué par plusieurs ouvrages de référence ; à l'écrit administratif, la forme la plus sûre ne comporte ni « ne » ni « pas ».",
+        "en": "The locution « sans que » already expresses negation and takes the subjunctive: « sans que les employés aient à… ». « Pas » is never added to it. The expletive « ne » after « sans que » is also criticized by several reference works; in administrative writing, the safest form has neither « ne » nor « pas »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-07",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle correction faut-il apporter à cette phrase extraite d'un rapport d'évaluation des soumissions ? « Ayant examiné les trois soumissions recevables, le contrat a été attribué au fournisseur dont la proposition offrait le meilleur rapport qualité-prix, conformément aux critères énoncés dans la demande de propositions. »",
+        "en": "Which correction must be made to this sentence taken from a bid evaluation report? « Ayant examiné les trois soumissions recevables, le contrat a été attribué au fournisseur dont la proposition offrait le meilleur rapport qualité-prix, conformément aux critères énoncés dans la demande de propositions. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « Ayant examiné » par « En ayant examiné »",
+          "rationale": {
+            "fr": "Le gérondif pose le même problème que le participe : son sujet implicite serait toujours « le contrat ». La phrase reste fautive.",
+            "en": "The gerund raises the same problem as the participle: its implied subject would still be « le contrat ». The sentence remains wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « dont la proposition offrait » par « que la proposition offrait »",
+          "rationale": {
+            "fr": "« Dont » convient : il remplace un complément du nom (la proposition du fournisseur). « Que » serait fautif, et l'erreur principale demeurerait.",
+            "en": "« Dont » fits: it stands for a noun complement (the supplier's proposal). « Que » would be wrong, and the main error would remain."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « recevables » par « recevable »",
+          "rationale": {
+            "fr": "L'adjectif s'accorde avec « soumissions », au féminin pluriel : la forme « recevables » est juste et la modification créerait une faute.",
+            "en": "The adjective agrees with « soumissions », feminine plural: the form « recevables » is sound and the change would create an error."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « le contrat a été attribué » par « le comité d'évaluation a attribué le contrat »",
+          "rationale": {
+            "fr": "Le participe « ayant examiné » se rattache au sujet de la principale ; ce sujet doit donc être celui qui a examiné les soumissions, le comité. C'est la correction nécessaire.",
+            "en": "The participle « ayant examiné » attaches to the subject of the main clause; that subject must therefore be whoever examined the bids, the committee. This is the required correction."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Un participe ou un gérondif placé en tête de phrase a pour sujet implicite le sujet du verbe principal. Si ce sujet ne peut pas accomplir l'action (un contrat n'examine pas de soumissions), la phrase est fautive. On corrige en donnant à la principale le bon sujet (« le comité a attribué le contrat ») ou en remplaçant le participe par une subordonnée (« Après que le comité eut examiné les soumissions, le contrat a été attribué… »).",
+        "en": "A participle or gerund at the start of a sentence takes the subject of the main verb as its implied subject. If that subject cannot perform the action (a contract does not examine bids), the sentence is wrong. It is fixed by giving the main clause the right subject (« le comité a attribué le contrat ») or by replacing the participle with a subordinate clause (« Après que le comité eut examiné les soumissions, le contrat a été attribué… »)."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-08",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Pour la diffusion du communiqué sur le nouveau programme de bourses, l'équipe des communications est chargée de rédiger le texte, …",
+        "en": "For the release of the news release on the new scholarship program, the communications team is responsible for drafting the text, …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "de sa traduction et de le publier sur l'intranet.",
+          "rationale": {
+            "fr": "La série mélange un nom (« sa traduction ») et des infinitifs (« rédiger », « publier ») : la construction n'est pas parallèle.",
+            "en": "The series mixes a noun (« sa traduction ») with infinitives (« rédiger », « publier »): the construction is not parallel."
+          }
+        },
+        {
+          "id": "b",
+          "text": "de le faire traduire et de le publier sur l'intranet.",
+          "rationale": {
+            "fr": "Trois infinitifs, chacun introduit par « de » comme l'exige « être chargé de » : la série est parallèle et bien construite.",
+            "en": "Three infinitives, each introduced by « de » as « être chargé de » requires: the series is parallel and well built."
+          }
+        },
+        {
+          "id": "c",
+          "text": "de le faire traduire et sa publication sur l'intranet.",
+          "rationale": {
+            "fr": "Le dernier élément devient un nom (« sa publication ») après deux infinitifs : rupture de construction.",
+            "en": "The last element becomes a noun (« sa publication ») after two infinitives: a break in construction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "de le faire traduire et qu'il soit publié sur l'intranet.",
+          "rationale": {
+            "fr": "Une subordonnée (« qu'il soit publié ») ne peut pas être coordonnée à des infinitifs qui dépendent de « chargée de » : la série est boiteuse.",
+            "en": "A subordinate clause (« qu'il soit publié ») cannot be coordinated with infinitives depending on « chargée de »: the series is lopsided."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Les éléments coordonnés dans une énumération doivent avoir la même nature grammaticale : des noms avec des noms, des infinitifs avec des infinitifs. Après « être chargé de », on répète « de » devant chaque infinitif : « chargée de rédiger le texte, de le faire traduire et de le publier ».",
+        "en": "Elements coordinated in a list must be of the same grammatical kind: nouns with nouns, infinitives with infinitives. After « être chargé de », « de » is repeated before each infinitive: « chargée de rédiger le texte, de le faire traduire et de le publier »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-09",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Selon le dernier rapport d'étape, la migration des données vers la nouvelle plateforme exigera beaucoup plus de ressources ___, ce qui obligera le comité de gouvernance à revoir l'échéancier.",
+        "en": "According to the latest progress report, migrating the data to the new platform will require far more resources ___, which will force the governance committee to revise the schedule."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "que ne le prévoyait la planification initiale",
+          "rationale": {
+            "fr": "Après un comparatif d'inégalité, la langue soignée emploie le « ne » explétif, sans valeur négative ; l'inversion du sujet nom est permise dans la comparative. C'est la construction attendue.",
+            "en": "After a comparative of inequality, careful usage employs the expletive « ne », which has no negative value; inverting the noun subject is allowed in the comparative clause. This is the expected construction."
+          }
+        },
+        {
+          "id": "b",
+          "text": "que la planification initiale ne le prévoyait pas",
+          "rationale": {
+            "fr": "Avec « pas », la négation devient réelle : la phrase dirait que la planification ne prévoyait pas ces ressources, ce qui brouille la comparaison. Le « ne » de la comparative est explétif et ne prend pas « pas ».",
+            "en": "With « pas », the negation becomes real: the sentence would say the plan did not foresee these resources, which muddles the comparison. The « ne » in a comparative is expletive and does not take « pas »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "que ne le prévoyait pas la planification initiale",
+          "rationale": {
+            "fr": "Même défaut : « pas » transforme le « ne » explétif en négation véritable. La forme est fautive.",
+            "en": "Same flaw: « pas » turns the expletive « ne » into a real negation. The form is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "que la planification initiale prévoyait-elle",
+          "rationale": {
+            "fr": "L'inversion complexe (« prévoyait-elle ») est propre à l'interrogation et à certains adverbes en tête de proposition ; elle est fautive dans une comparative.",
+            "en": "Complex inversion (« prévoyait-elle ») belongs to questions and to certain adverbs at the head of a clause; it is wrong in a comparative clause."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans une comparaison d'inégalité (plus… que, moins… que, autre… que), la proposition comparative peut recevoir un « ne » explétif, sans valeur négative, souvent accompagné du pronom neutre « le » : « plus de ressources que ne le prévoyait la planification ». Ce « ne » n'est jamais suivi de « pas », qui en ferait une vraie négation.",
+        "en": "In a comparison of inequality (plus… que, moins… que, autre… que), the comparative clause may take an expletive « ne », with no negative value, often with the neuter pronoun « le »: « plus de ressources que ne le prévoyait la planification ». This « ne » is never followed by « pas », which would make it a real negation."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-10",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Ce passage d'un message de la coordonnatrice des langues officielles comporte une erreur. Quelle correction faut-il faire ? « Pour l'instant, le guide de l'utilisateur n'est offert qu'en anglais, et aucun traducteur n'a pas encore été affecté au dossier. »",
+        "en": "This excerpt from a message by the official languages coordinator contains an error. Which correction should be made? « Pour l'instant, le guide de l'utilisateur n'est offert qu'en anglais, et aucun traducteur n'a pas encore été affecté au dossier. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « n'est offert qu'en anglais » par « est offert qu'en anglais »",
+          "rationale": {
+            "fr": "Supprimer « ne » rend la restriction familière ; à l'écrit, « ne… que » est requis, et la vraie faute resterait.",
+            "en": "Dropping « ne » makes the restriction informal; in writing, « ne… que » is required, and the real error would remain."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « qu'en anglais » par « que en anglais »",
+          "rationale": {
+            "fr": "« Que » s'élide devant une voyelle : « qu'en » est la forme attendue, et la modification créerait une faute.",
+            "en": "« Que » elides before a vowel: « qu'en » is the expected form, and the change would create an error."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « aucun traducteur n'a pas encore été affecté » par « aucun traducteur n'a encore été affecté »",
+          "rationale": {
+            "fr": "« Aucun » se construit avec « ne » seul ; « pas » crée une double négation. C'est la correction nécessaire.",
+            "en": "« Aucun » takes « ne » alone; « pas » creates a double negation. This is the required correction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « aucun traducteur n'a pas encore été affecté » par « aucun traducteur n'a pas encore été affectée »",
+          "rationale": {
+            "fr": "Le participe s'accorde avec « traducteur », masculin : « affecté » convient. La modification ajoute une faute et laisse la double négation.",
+            "en": "The participle agrees with « traducteur », masculine: « affecté » fits. The change adds an error and leaves the double negation."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Ne… que » exprime la restriction (= seulement) et n'est pas une négation : « n'est offert qu'en anglais ». Les déterminants et pronoms négatifs comme « aucun » forment la négation avec « ne » seul : « aucun traducteur n'a été affecté ». Leur ajouter « pas » est une faute de double négation.",
+        "en": "« Ne… que » expresses restriction (= only) and is not a negation: « n'est offert qu'en anglais ». Negative determiners and pronouns such as « aucun » form the negation with « ne » alone: « aucun traducteur n'a été affecté ». Adding « pas » to them is a double-negation error."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-11",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le rapport de vérification sur l'accessibilité numérique conclut que, dans leur forme actuelle, …",
+        "en": "The audit report on digital accessibility concludes that, in their current form, …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "ni les gabarits de présentation ni le site intranet respectent les normes applicables.",
+          "rationale": {
+            "fr": "Avec « ni… ni », le verbe doit être précédé de « ne » ; son omission est fautive à l'écrit.",
+            "en": "With « ni… ni », the verb must be preceded by « ne »; omitting it is wrong in writing."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ni les gabarits de présentation ni le site intranet ne respectent pas les normes applicables.",
+          "rationale": {
+            "fr": "« Ni » porte déjà la négation : l'ajout de « pas » est une double négation fautive.",
+            "en": "« Ni » already carries the negation: adding « pas » is a faulty double negation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ni les gabarits de présentation et le site intranet ne respectent les normes applicables.",
+          "rationale": {
+            "fr": "La coordination négative exige « ni » devant chaque élément ; « et » rompt la construction.",
+            "en": "Negative coordination requires « ni » before each element; « et » breaks the construction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ni les gabarits de présentation ni le site intranet ne respectent les normes applicables.",
+          "rationale": {
+            "fr": "« Ni » devant chaque sujet, « ne » devant le verbe et aucun « pas » : la construction est juste.",
+            "en": "« Ni » before each subject, « ne » before the verb and no « pas »: the construction is right."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour nier deux éléments coordonnés, on répète « ni » devant chacun et on place « ne » devant le verbe, sans « pas » : « Ni les gabarits ni le site ne respectent les normes. » Lorsque les sujets sont joints par « ni… ni » et que l'action peut s'appliquer aux deux, le verbe se met généralement au pluriel.",
+        "en": "To negate two coordinated elements, « ni » is repeated before each and « ne » is placed before the verb, without « pas »: « Ni les gabarits ni le site ne respectent les normes. » When subjects are joined by « ni… ni » and the action can apply to both, the verb generally goes in the plural."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-12",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le directeur conclut son courriel à l'équipe de la gestion des matières résiduelles par une question : …",
+        "en": "The director ends his email to the waste management team with a question: …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Pourquoi est-ce que les bacs de compostage ont-ils été retirés du deuxième étage ?",
+          "rationale": {
+            "fr": "« Est-ce que » et l'inversion sont deux façons de marquer la question ; les cumuler est fautif.",
+            "en": "« Est-ce que » and inversion are two ways of marking a question; combining them is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Pourquoi les bacs de compostage ont-ils été retirés du deuxième étage ?",
+          "rationale": {
+            "fr": "Avec un sujet nom, la question directe soignée se fait par inversion complexe : le nom, puis l'auxiliaire suivi du pronom « ils ». C'est la forme juste.",
+            "en": "With a noun subject, a careful direct question uses complex inversion: the noun, then the auxiliary followed by the pronoun « ils ». This is the right form."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Pourquoi ont les bacs de compostage été retirés du deuxième étage ?",
+          "rationale": {
+            "fr": "L'inversion simple d'un sujet nom entre l'auxiliaire et le participe est impossible en français.",
+            "en": "Simple inversion of a noun subject between the auxiliary and the participle is impossible in French."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pourquoi les bacs de compostage ont été retirés-ils du deuxième étage ?",
+          "rationale": {
+            "fr": "Aux temps composés, le pronom inversé se place après l'auxiliaire (« ont-ils été »), jamais après le participe.",
+            "en": "In compound tenses, the inverted pronoun comes after the auxiliary (« ont-ils été »), never after the participle."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "À l'écrit, la question directe se marque soit par « est-ce que » sans inversion, soit par l'inversion, jamais par les deux. Avec un sujet nom, on emploie l'inversion complexe : « Pourquoi les bacs ont-ils été retirés ? ». Aux temps composés, le pronom de reprise suit l'auxiliaire et précède le participe.",
+        "en": "In writing, a direct question is marked either by « est-ce que » without inversion, or by inversion, never by both. With a noun subject, complex inversion is used: « Pourquoi les bacs ont-ils été retirés ? ». In compound tenses, the resumptive pronoun follows the auxiliary and precedes the participle."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-13",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Contrairement à ce qu'indiquait la note de service, c'est à la gestionnaire déléguée ___ de statuer sur les demandes de congé non payé de plus de trois mois, et non à la conseillère en ressources humaines.",
+        "en": "Contrary to what the memo stated, it is the delegated manager ___ to rule on requests for leave without pay of more than three months, not the human resources advisor."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "à qui il revient",
+          "rationale": {
+            "fr": "La préposition « à » est déjà exprimée dans « c'est à la gestionnaire » ; la répéter dans « à qui » crée un pléonasme fautif.",
+            "en": "The preposition « à » is already expressed in « c'est à la gestionnaire »; repeating it in « à qui » creates a faulty pleonasm."
+          }
+        },
+        {
+          "id": "b",
+          "text": "qu'il revient",
+          "rationale": {
+            "fr": "Quand l'élément mis en relief porte déjà sa préposition (« c'est à la gestionnaire »), on le reprend par « que » : « c'est à elle qu'il revient de statuer ». C'est la construction attendue.",
+            "en": "When the highlighted element already carries its preposition (« c'est à la gestionnaire »), it is picked up by « que »: « c'est à elle qu'il revient de statuer ». This is the expected construction."
+          }
+        },
+        {
+          "id": "c",
+          "text": "dont il revient",
+          "rationale": {
+            "fr": "« Dont » contient la préposition « de », qui ne correspond pas à « revenir à quelqu'un » ; il marque en outre la fonction une seconde fois.",
+            "en": "« Dont » contains the preposition « de », which does not match « revenir à quelqu'un »; it also marks the function a second time."
+          }
+        },
+        {
+          "id": "d",
+          "text": "où il revient",
+          "rationale": {
+            "fr": "« Où » exprime le lieu ou le temps ; il ne peut pas reprendre une personne mise en relief.",
+            "en": "« Où » expresses place or time; it cannot pick up a highlighted person."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans la mise en relief « c'est… que », lorsque l'élément détaché est un complément introduit par une préposition, cette préposition se place après « c'est » et l'on termine par « que » : « c'est à la gestionnaire qu'il revient de statuer ». Répéter la préposition dans le relatif (« à qui », « dont », « auquel ») est un pléonasme fautif : la fonction ne se marque qu'une fois.",
+        "en": "In the highlighting construction « c'est… que », when the element brought forward is a complement introduced by a preposition, that preposition goes after « c'est » and the construction ends with « que »: « c'est à la gestionnaire qu'il revient de statuer ». Repeating the preposition in the relative (« à qui », « dont », « auquel ») is a faulty pleonasm: the function is marked only once."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-14",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Le courriel suivant, envoyé par l'équipe des finances, contient une erreur de construction. Comment faut-il le corriger ? « Veuillez soumettre vos demandes de remboursement de frais de voyage au plus tard le 15 mars. Puisque le système financier sera fermé pendant les deux dernières semaines de l'exercice. »",
+        "en": "The following email, sent by the finance team, contains a construction error. How should it be corrected? « Veuillez soumettre vos demandes de remboursement de frais de voyage au plus tard le 15 mars. Puisque le système financier sera fermé pendant les deux dernières semaines de l'exercice. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « le 15 mars. Puisque » par « le 15 mars, puisque »",
+          "rationale": {
+            "fr": "La proposition introduite par « puisque » est subordonnée : elle ne peut pas former une phrase à elle seule. En la rattachant à la principale par une virgule, on supprime ce fragment. C'est la correction nécessaire.",
+            "en": "The clause introduced by « puisque » is subordinate: it cannot form a sentence on its own. Attaching it to the main clause with a comma removes the fragment. This is the required correction."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « Veuillez soumettre » par « Veuillez de soumettre »",
+          "rationale": {
+            "fr": "« Veuillez » se construit directement avec l'infinitif ; « de » est fautif.",
+            "en": "« Veuillez » takes the infinitive directly; « de » is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « sera fermé » par « soit fermé »",
+          "rationale": {
+            "fr": "« Puisque » présente une cause comme réelle et se construit avec l'indicatif ; le subjonctif est fautif, et le fragment resterait.",
+            "en": "« Puisque » presents a cause as real and takes the indicative; the subjunctive is wrong, and the fragment would remain."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « Puisque » par « Parce que »",
+          "rationale": {
+            "fr": "Changer de conjonction ne règle rien : « Parce que… » reste une subordonnée isolée, sans proposition principale.",
+            "en": "Changing the conjunction fixes nothing: « Parce que… » is still an isolated subordinate clause with no main clause."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Une phrase complète contient au moins une proposition principale. Une subordonnée introduite par « puisque », « parce que », « bien que » ou « afin que » ne peut pas se tenir seule entre un point et une majuscule : c'est un fragment. On la rattache à la principale, généralement par une virgule : « …au plus tard le 15 mars, puisque le système sera fermé… ».",
+        "en": "A complete sentence contains at least one main clause. A subordinate clause introduced by « puisque », « parce que », « bien que » or « afin que » cannot stand alone between a period and a capital letter: it is a fragment. It is attached to the main clause, usually with a comma: « …au plus tard le 15 mars, puisque le système sera fermé… »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-15",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "L'origine de la panne du réseau privé virtuel survenue lundi n'est toujours pas établie ; d'après l'équipe de l'infrastructure technologique, …",
+        "en": "The cause of Monday's virtual private network outage has still not been established; according to the technology infrastructure team, …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "peut-être le correctif installé la semaine dernière est en cause.",
+          "rationale": {
+            "fr": "Placé en tête de proposition, « peut-être » commande l'inversion du sujet à l'écrit ; sans inversion, la phrase relève de la langue familière.",
+            "en": "At the head of a clause, « peut-être » requires subject inversion in writing; without it, the sentence is informal."
+          }
+        },
+        {
+          "id": "b",
+          "text": "peut-être que le correctif installé la semaine dernière est-il en cause.",
+          "rationale": {
+            "fr": "« Peut-être que » se construit sans inversion ; cumuler « que » et l'inversion est fautif.",
+            "en": "« Peut-être que » takes no inversion; combining « que » with inversion is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "peut-être est le correctif installé la semaine dernière en cause.",
+          "rationale": {
+            "fr": "L'inversion simple d'un sujet nom n'est pas possible ici ; il faut reprendre le nom par un pronom.",
+            "en": "Simple inversion of a noun subject is not possible here; the noun must be picked up by a pronoun."
+          }
+        },
+        {
+          "id": "d",
+          "text": "peut-être le correctif installé la semaine dernière est-il en cause.",
+          "rationale": {
+            "fr": "En tête de proposition, « peut-être » entraîne l'inversion ; avec un sujet nom, c'est l'inversion complexe : « le correctif… est-il ». C'est la forme soignée attendue.",
+            "en": "At the head of a clause, « peut-être » triggers inversion; with a noun subject, it is complex inversion: « le correctif… est-il ». This is the expected careful form."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Lorsque « peut-être » ouvre la proposition, la langue écrite exige soit l'inversion du sujet (« peut-être le correctif est-il en cause »), soit « peut-être que » suivi de l'ordre normal (« peut-être que le correctif est en cause »), mais jamais les deux. Placé après le verbe (« le correctif est peut-être en cause »), il n'entraîne aucune inversion.",
+        "en": "When « peut-être » opens the clause, written French requires either subject inversion (« peut-être le correctif est-il en cause ») or « peut-être que » followed by normal word order (« peut-être que le correctif est en cause »), but never both. Placed after the verb (« le correctif est peut-être en cause »), it triggers no inversion."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-16",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Dans ce compte rendu de réunion, une faute s'est glissée. Quelle modification permet de la corriger ? « Lors de la rencontre d'hier, c'est de la refonte du portail de services en ligne dont la sous-ministre adjointe a parlé le plus longuement, bien que l'ordre du jour ait prévu plusieurs autres points. »",
+        "en": "An error has slipped into this meeting summary. Which change corrects it? « Lors de la rencontre d'hier, c'est de la refonte du portail de services en ligne dont la sous-ministre adjointe a parlé le plus longuement, bien que l'ordre du jour ait prévu plusieurs autres points. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « bien que l'ordre du jour ait prévu » par « bien que l'ordre du jour avait prévu »",
+          "rationale": {
+            "fr": "« Bien que » exige le subjonctif ; « ait prévu » convient et l'indicatif serait fautif.",
+            "en": "« Bien que » requires the subjunctive; « ait prévu » fits and the indicative would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « c'est de la refonte » par « ce sont de la refonte »",
+          "rationale": {
+            "fr": "« Ce sont » ne s'emploie que devant un nom pluriel ; « la refonte » est au singulier, et la vraie faute demeurerait.",
+            "en": "« Ce sont » is only used before a plural noun; « la refonte » is singular, and the real error would remain."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « dont la sous-ministre adjointe » par « que la sous-ministre adjointe »",
+          "rationale": {
+            "fr": "La préposition « de » figure déjà dans « c'est de la refonte » ; « dont » la répète. La mise en relief se termine donc par « que ». C'est la correction nécessaire.",
+            "en": "The preposition « de » already appears in « c'est de la refonte »; « dont » repeats it. The highlighting construction therefore ends with « que ». This is the required correction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « a parlé le plus longuement » par « a parlée le plus longuement »",
+          "rationale": {
+            "fr": "« Parler de » n'a pas de complément direct : le participe reste invariable. La modification ajoute une faute.",
+            "en": "« Parler de » has no direct object: the participle stays invariable. The change adds an error."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« C'est de la refonte dont… » est un pléonasme : la préposition « de » est exprimée deux fois, devant le nom et dans « dont ». Il faut choisir : soit « c'est de la refonte que la sous-ministre adjointe a parlé », soit « c'est la refonte dont elle a parlé ». Dans la mise en relief, « que » reprend un complément déjà introduit par sa préposition.",
+        "en": "« C'est de la refonte dont… » is a pleonasm: the preposition « de » is expressed twice, before the noun and in « dont ». One must choose: either « c'est de la refonte que la sous-ministre adjointe a parlé » or « c'est la refonte dont elle a parlé ». In the highlighting construction, « que » picks up a complement already introduced by its preposition."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-17",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Plusieurs gestionnaires veulent savoir ___ concrètement pour l'approbation des dossiers de leurs équipes.",
+        "en": "Several managers want to know ___ in practical terms for the approval of their teams' files."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "ce que la nouvelle politique changera",
+          "rationale": {
+            "fr": "Dans une interrogation indirecte, « qu'est-ce que » devient « ce que », suivi de l'ordre sujet-verbe : c'est la forme juste.",
+            "en": "In an indirect question, « qu'est-ce que » becomes « ce que », followed by subject-verb order: this is the right form."
+          }
+        },
+        {
+          "id": "b",
+          "text": "qu'est-ce que la nouvelle politique changera",
+          "rationale": {
+            "fr": "« Qu'est-ce que » appartient à l'interrogation directe ; après « savoir », il faut « ce que ».",
+            "en": "« Qu'est-ce que » belongs to direct questions; after « savoir », « ce que » is needed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ce que la nouvelle politique changera-t-elle",
+          "rationale": {
+            "fr": "« Ce que » convient, mais l'inversion « changera-t-elle » est propre à l'interrogation directe et fautive ici.",
+            "en": "« Ce que » fits, but the inversion « changera-t-elle » belongs to direct questions and is wrong here."
+          }
+        },
+        {
+          "id": "d",
+          "text": "quoi la nouvelle politique changera",
+          "rationale": {
+            "fr": "« Quoi » ne peut pas introduire une interrogation indirecte portant sur un complément direct suivie d'un sujet et d'un verbe conjugué ; le tour est fautif.",
+            "en": "« Quoi » cannot introduce an indirect question about a direct object followed by a subject and a finite verb; the construction is wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour rapporter une question portant sur une chose, on remplace « qu'est-ce que » par « ce que » (complément) et « qu'est-ce qui » par « ce qui » (sujet), puis on garde l'ordre sujet-verbe : « Que changera la politique ? » devient « Ils veulent savoir ce que la politique changera. »",
+        "en": "To report a question about a thing, « qu'est-ce que » is replaced by « ce que » (object) and « qu'est-ce qui » by « ce qui » (subject), and subject-verb order is kept: « Que changera la politique ? » becomes « Ils veulent savoir ce que la politique changera. »"
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-18",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Malgré les rappels répétés du comité local de santé et de sécurité au travail concernant l'éclairage insuffisant de l'entrepôt, …",
+        "en": "Despite repeated reminders from the local occupational health and safety committee about the inadequate lighting in the warehouse, …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "les employés ne signalent pas guère les incidents qui y surviennent.",
+          "rationale": {
+            "fr": "« Guère » remplace « pas » dans la négation ; les cumuler crée une double négation fautive.",
+            "en": "« Guère » replaces « pas » in the negation; combining them creates a faulty double negation."
+          }
+        },
+        {
+          "id": "b",
+          "text": "les employés signalent guère les incidents qui y surviennent.",
+          "rationale": {
+            "fr": "Sans « ne », la négation relève de la langue familière ; elle est à écarter à l'écrit administratif.",
+            "en": "Without « ne », the negation is informal; it must be rejected in administrative writing."
+          }
+        },
+        {
+          "id": "c",
+          "text": "les employés ne guère signalent les incidents qui y surviennent.",
+          "rationale": {
+            "fr": "Aux temps simples, « guère » se place après le verbe conjugué, et non entre « ne » et le verbe.",
+            "en": "In simple tenses, « guère » comes after the conjugated verb, not between « ne » and the verb."
+          }
+        },
+        {
+          "id": "d",
+          "text": "les employés ne signalent guère les incidents qui y surviennent.",
+          "rationale": {
+            "fr": "« Ne » devant le verbe, « guère » après, sans « pas » : la négation est bien construite et le sens (presque jamais) s'accorde avec « malgré ».",
+            "en": "« Ne » before the verb, « guère » after it, without « pas »: the negation is well built and the meaning (hardly ever) fits with « malgré »."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Ne… guère » signifie « pas beaucoup, presque pas ». Comme « jamais » ou « plus », « guère » remplace « pas » : on ne les cumule pas. Aux temps simples, « ne » précède le verbe et « guère » le suit ; l'omission de « ne » relève de la langue familière.",
+        "en": "« Ne… guère » means « not much, hardly ». Like « jamais » or « plus », « guère » replaces « pas »: they are not combined. In simple tenses, « ne » precedes the verb and « guère » follows it; leaving out « ne » is informal."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-19",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Indiquez la correction que nécessite cette phrase d'une procédure d'approvisionnement : « L'agente d'approvisionnement doit vérifier les soumissions reçues, consigner les résultats dans le système et qu'elle informe les soumissionnaires non retenus. »",
+        "en": "Indicate the correction this sentence from a procurement procedure needs: « L'agente d'approvisionnement doit vérifier les soumissions reçues, consigner les résultats dans le système et qu'elle informe les soumissionnaires non retenus. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « doit vérifier » par « doit de vérifier »",
+          "rationale": {
+            "fr": "« Devoir » se construit directement avec l'infinitif ; « de » est fautif.",
+            "en": "« Devoir » takes the infinitive directly; « de » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « les soumissions reçues » par « les soumissions reçus »",
+          "rationale": {
+            "fr": "Le participe employé comme adjectif s'accorde avec « soumissions », au féminin pluriel ; « reçues » convient.",
+            "en": "The participle used as an adjective agrees with « soumissions », feminine plural; « reçues » fits."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « et qu'elle informe » par « et informer »",
+          "rationale": {
+            "fr": "Les trois tâches dépendent de « doit » : elles doivent toutes être des infinitifs. « Et informer » rétablit le parallélisme. C'est la correction nécessaire.",
+            "en": "All three tasks depend on « doit »: they must all be infinitives. « Et informer » restores parallelism. This is the required correction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « consigner les résultats » par « qu'elle consigne les résultats »",
+          "rationale": {
+            "fr": "On aligne le deuxième élément sur le troisième, qui est fautif, au lieu de l'inverse : une subordonnée ne peut pas dépendre de « doit », et la faute s'étend.",
+            "en": "This aligns the second element with the faulty third one instead of the reverse: a subordinate clause cannot depend on « doit », and the error spreads."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Dans une énumération, chaque élément doit avoir la même construction que les autres et pouvoir se rattacher au même mot. Ici, « doit » appelle trois infinitifs : « doit vérifier…, consigner… et informer… ». Une subordonnée comme « qu'elle informe » rompt le parallélisme et ne peut pas compléter « doit ».",
+        "en": "In a list, each element must have the same construction as the others and be able to attach to the same word. Here, « doit » calls for three infinitives: « doit vérifier…, consigner… et informer… ». A subordinate clause such as « qu'elle informe » breaks the parallelism and cannot complete « doit »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-20",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Madame Tremblay, afin que votre demande d'entrevue avec la porte-parole du Ministère puisse être traitée dans les meilleurs délais, …",
+        "en": "Ms. Tremblay, so that your request for an interview with the Department's spokesperson can be processed as quickly as possible, …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "je joins le formulaire à ce courriel que vous devrez remplir et nous renvoyer.",
+          "rationale": {
+            "fr": "La relative « que vous devrez remplir » suit « ce courriel » : grammaticalement, c'est le courriel qu'il faudrait remplir. La relative doit suivre immédiatement son antécédent.",
+            "en": "The relative clause « que vous devrez remplir » follows « ce courriel »: grammatically, it is the email that would have to be filled in. A relative clause must immediately follow its antecedent."
+          }
+        },
+        {
+          "id": "b",
+          "text": "je joins à ce courriel le formulaire que vous devrez remplir et nous renvoyer.",
+          "rationale": {
+            "fr": "Le complément « à ce courriel » est déplacé avant le nom, et la relative suit directement son antécédent, « le formulaire » : la phrase est claire et bien construite.",
+            "en": "The complement « à ce courriel » is moved before the noun, and the relative clause directly follows its antecedent, « le formulaire »: the sentence is clear and well built."
+          }
+        },
+        {
+          "id": "c",
+          "text": "je joins le formulaire à ce courriel, que vous devrez remplir et nous renvoyer.",
+          "rationale": {
+            "fr": "La virgule ne change pas le rattachement : la relative se rapporte encore à « ce courriel », le nom le plus proche.",
+            "en": "The comma does not change the attachment: the relative clause still refers to « ce courriel », the nearest noun."
+          }
+        },
+        {
+          "id": "d",
+          "text": "je joins à ce courriel le formulaire que vous devrez le remplir et nous renvoyer.",
+          "rationale": {
+            "fr": "Le pronom relatif « que » est déjà complément de « remplir » ; « le » le reprend une seconde fois. Construction fautive.",
+            "en": "The relative pronoun « que » is already the object of « remplir »; « le » repeats it a second time. Faulty construction."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une proposition relative se place immédiatement après son antécédent. Si un autre nom s'intercale, le lecteur rattache la relative au nom le plus proche, ce qui crée une ambiguïté ou un contresens : « je joins le formulaire à ce courriel que vous devrez remplir » dit qu'il faut remplir le courriel. On déplace le complément (« je joins à ce courriel le formulaire que… ») pour placer la relative contre son antécédent.",
+        "en": "A relative clause goes immediately after its antecedent. If another noun comes in between, the reader attaches the relative clause to the nearest noun, which creates ambiguity or a misreading: « je joins le formulaire à ce courriel que vous devrez remplir » says the email must be filled in. The complement is moved (« je joins à ce courriel le formulaire que… ») so that the relative clause sits right against its antecedent."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-21",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Au lancement du projet, le nouveau gestionnaire a insisté : à ses yeux, la qualité des livrables compte ___ le respect de l'échéancier.",
+        "en": "At the project launch, the new manager insisted: in his view, the quality of the deliverables matters ___ meeting the schedule."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "autant que",
+          "rationale": {
+            "fr": "Après un verbe (« compte »), la comparaison d'égalité se fait avec « autant que » : c'est la construction juste.",
+            "en": "After a verb (« compte »), a comparison of equality uses « autant que »: this is the right construction."
+          }
+        },
+        {
+          "id": "b",
+          "text": "autant comme",
+          "rationale": {
+            "fr": "« Autant comme » est un tour populaire ou régional ; la comparaison d'égalité avec « autant » se construit avec « que ».",
+            "en": "« Autant comme » is a colloquial or regional turn; a comparison of equality with « autant » is built with « que »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "aussi que",
+          "rationale": {
+            "fr": "« Aussi » s'emploie devant un adjectif ou un adverbe (aussi important que) ; après un verbe, on emploie « autant ».",
+            "en": "« Aussi » is used before an adjective or adverb (aussi important que); after a verb, « autant » is used."
+          }
+        },
+        {
+          "id": "d",
+          "text": "autant de",
+          "rationale": {
+            "fr": "« Autant de » se place devant un nom pour exprimer une quantité (autant de ressources que) ; ici, il ne peut pas introduire le second terme de la comparaison.",
+            "en": "« Autant de » goes before a noun to express a quantity (autant de ressources que); here it cannot introduce the second term of the comparison."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "La comparaison d'égalité se construit avec « aussi… que » devant un adjectif ou un adverbe (« aussi important que »), avec « autant que » après un verbe (« compte autant que ») et avec « autant de… que » devant un nom (« autant de ressources que »). Le second terme est toujours introduit par « que », jamais par « comme ».",
+        "en": "A comparison of equality is built with « aussi… que » before an adjective or adverb (« aussi important que »), with « autant que » after a verb (« compte autant que ») and with « autant de… que » before a noun (« autant de ressources que »). The second term is always introduced by « que », never by « comme »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-22",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Relisez cette phrase tirée du procès-verbal du comité consultatif des langues officielles et choisissez la correction nécessaire : « Le comité se demande qu'est-ce que les gestionnaires pourraient faire de plus pour que les réunions se déroulent dans les deux langues officielles et que chacun se sente libre d'employer celle de son choix. »",
+        "en": "Reread this sentence taken from the minutes of the official languages advisory committee and choose the necessary correction: « Le comité se demande qu'est-ce que les gestionnaires pourraient faire de plus pour que les réunions se déroulent dans les deux langues officielles et que chacun se sente libre d'employer celle de son choix. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « se déroulent » par « se déroulaient »",
+          "rationale": {
+            "fr": "« Pour que » exige le subjonctif ; « se déroulent » est ici un subjonctif présent, et l'imparfait de l'indicatif serait fautif.",
+            "en": "« Pour que » requires the subjunctive; « se déroulent » is a present subjunctive here, and the imperfect indicative would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « celle de son choix » par « celui de son choix »",
+          "rationale": {
+            "fr": "« Celle » reprend « langue », sous-entendu dans « langues officielles », au féminin ; « celui » ne renverrait à rien dans la phrase.",
+            "en": "« Celle » refers back to « langue », understood from « langues officielles », in the feminine; « celui » would refer to nothing in the sentence."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « qu'est-ce que » par « ce que »",
+          "rationale": {
+            "fr": "Après « se demander », la question est indirecte : « qu'est-ce que » doit devenir « ce que ». C'est la correction nécessaire.",
+            "en": "After « se demander », the question is indirect: « qu'est-ce que » must become « ce que ». This is the required correction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « pourraient faire » par « pourraient-ils faire »",
+          "rationale": {
+            "fr": "Ajouter l'inversion à « qu'est-ce que » aggrave la faute : l'interrogation indirecte n'admet ni « est-ce que » ni l'inversion.",
+            "en": "Adding inversion to « qu'est-ce que » makes the error worse: an indirect question allows neither « est-ce que » nor inversion."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Après « se demander », « savoir » ou « ignorer », la question est indirecte. « Qu'est-ce que » devient « ce que », et le sujet précède le verbe : « Le comité se demande ce que les gestionnaires pourraient faire de plus. » On réserve « qu'est-ce que » à la question directe : « Qu'est-ce que les gestionnaires pourraient faire de plus ? ».",
+        "en": "After « se demander », « savoir » or « ignorer », the question is indirect. « Qu'est-ce que » becomes « ce que », and the subject precedes the verb: « Le comité se demande ce que les gestionnaires pourraient faire de plus. » « Qu'est-ce que » is reserved for the direct question: « Qu'est-ce que les gestionnaires pourraient faire de plus ? »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-23",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Conçue en collaboration avec des employés qui utilisent un lecteur d'écran, …",
+        "en": "Designed in collaboration with employees who use a screen reader, …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "les employés pourront consulter la nouvelle version du formulaire de congé dès lundi.",
+          "rationale": {
+            "fr": "Le participe « conçue » se rattacherait à « les employés », au masculin pluriel : ni l'accord ni le sens ne tiennent. Participe mal rattaché.",
+            "en": "The participle « conçue » would attach to « les employés », masculine plural: neither the agreement nor the meaning holds. Dangling participle."
+          }
+        },
+        {
+          "id": "b",
+          "text": "nous avons publié hier la nouvelle version du formulaire de congé.",
+          "rationale": {
+            "fr": "Le sujet « nous » n'est pas ce qui a été conçu ; le participe en tête de phrase reste sans support. Construction fautive.",
+            "en": "The subject « nous » is not what was designed; the participle at the head of the sentence is left without support. Faulty construction."
+          }
+        },
+        {
+          "id": "c",
+          "text": "la Direction des services numériques a publié la nouvelle version du formulaire de congé.",
+          "rationale": {
+            "fr": "L'accord féminin tente, mais c'est la version du formulaire, et non la direction, qui a été conçue avec les employés : le participe se rattache au mauvais sujet.",
+            "en": "The feminine agreement is tempting, but it is the version of the form, not the directorate, that was designed with employees: the participle attaches to the wrong subject."
+          }
+        },
+        {
+          "id": "d",
+          "text": "la nouvelle version du formulaire de congé sera accessible dès lundi sur l'intranet.",
+          "rationale": {
+            "fr": "Le sujet « la nouvelle version » est bien ce qui a été conçu : le participe se rattache au bon sujet et s'accorde avec lui.",
+            "en": "The subject « la nouvelle version » is indeed what was designed: the participle attaches to the right subject and agrees with it."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Un participe placé en tête de phrase, comme « Conçue en collaboration avec… », qualifie le sujet du verbe principal. Ce sujet doit donc être ce dont parle le participe : ici, la nouvelle version du formulaire. Un accord grammaticalement possible (« la direction ») ne suffit pas : il faut aussi que le sens soit le bon.",
+        "en": "A participle at the head of a sentence, such as « Conçue en collaboration avec… », describes the subject of the main verb. That subject must therefore be what the participle is about: here, the new version of the form. A grammatically possible agreement (« la direction ») is not enough: the meaning must also be right."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-24",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le stationnement sud sera fermé du 3 au 7 juin pour l'installation de bornes de recharge pour véhicules électriques…",
+        "en": "The south parking lot will be closed from June 3 to 7 for the installation of electric vehicle charging stations…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": ". Ce qui obligera les employés à utiliser le stationnement nord pendant cette période.",
+          "rationale": {
+            "fr": "« Ce qui obligera… » n'a pas de verbe principal : c'est un fragment, qu'il faudrait rattacher à la phrase précédente par une virgule.",
+            "en": "« Ce qui obligera… » has no main verb: it is a fragment, which should be attached to the previous sentence with a comma."
+          }
+        },
+        {
+          "id": "b",
+          "text": "; les employés devront donc utiliser le stationnement nord pendant cette période.",
+          "rationale": {
+            "fr": "Le point-virgule relie deux propositions indépendantes étroitement liées, et chacune est complète : la phrase est bien construite.",
+            "en": "The semicolon links two closely related independent clauses, and each is complete: the sentence is well built."
+          }
+        },
+        {
+          "id": "c",
+          "text": "les employés devront donc utiliser le stationnement nord pendant cette période.",
+          "rationale": {
+            "fr": "Sans ponctuation, deux propositions indépendantes se suivent sans aucune séparation : c'est une phrase soudée, fautive.",
+            "en": "Without punctuation, two independent clauses run together with no separation: it is a run-on sentence, which is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": ", et que les employés devront donc utiliser le stationnement nord pendant cette période.",
+          "rationale": {
+            "fr": "« Et que » annonce une subordonnée coordonnée à une autre ; or aucune subordonnée ne précède. La phrase est bancale.",
+            "en": "« Et que » announces a subordinate clause coordinated with another; yet no subordinate clause comes before it. The sentence is lopsided."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Deux propositions indépendantes ne se suivent pas sans ponctuation : on les sépare par un point ou un point-virgule, ou on les relie par une conjonction. À l'inverse, une proposition sans verbe principal, comme « Ce qui obligera… » ou « Parce que… », ne peut pas former une phrase à elle seule : on la rattache à la principale par une virgule.",
+        "en": "Two independent clauses do not follow each other without punctuation: they are separated by a period or a semicolon, or joined by a conjunction. Conversely, a clause without a main verb, such as « Ce qui obligera… » or « Parce que… », cannot form a sentence on its own: it is attached to the main clause with a comma."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-25",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Faute de dossiers satisfaisant à l'ensemble des qualifications essentielles, le comité de sélection ___ deux candidatures sur les quarante reçues.",
+        "en": "For lack of files meeting all of the essential qualifications, the selection board ___ two applications out of the forty received."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "a retenu que",
+          "rationale": {
+            "fr": "Sans « ne », la restriction relève de la langue familière ; à l'écrit, « ne… que » est requis.",
+            "en": "Without « ne », the restriction is informal; in writing, « ne… que » is required."
+          }
+        },
+        {
+          "id": "b",
+          "text": "n'a retenu seulement que",
+          "rationale": {
+            "fr": "« Ne… que » signifie déjà « seulement » : ajouter « seulement » crée un pléonasme à écarter.",
+            "en": "« Ne… que » already means « only »: adding « seulement » creates a pleonasm to be avoided."
+          }
+        },
+        {
+          "id": "c",
+          "text": "n'a retenu que",
+          "rationale": {
+            "fr": "« Ne » devant l'auxiliaire, « que » devant l'élément restreint (« deux candidatures ») : la restriction est bien construite et cadre avec « faute de dossiers ».",
+            "en": "« Ne » before the auxiliary, « que » before the restricted element (« deux candidatures »): the restriction is well built and fits « faute de dossiers »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "n'a pas retenu que",
+          "rationale": {
+            "fr": "« Ne… pas que » signifie « pas seulement » : la phrase dirait que le comité a retenu plus de deux candidatures, ce qui contredit « faute de dossiers ».",
+            "en": "« Ne… pas que » means « not only »: the sentence would say the board kept more than two applications, which contradicts « faute de dossiers »."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Ne… que » exprime la restriction et équivaut à « seulement ». « Ne » se place devant le verbe (ou l'auxiliaire), « que » devant l'élément restreint : « n'a retenu que deux candidatures ». Ce n'est pas une négation : on n'y ajoute ni « pas » (« ne… pas que » veut dire « pas seulement »), ni « seulement », qui ferait double emploi.",
+        "en": "« Ne… que » expresses restriction and is equivalent to « seulement » (only). « Ne » goes before the verb (or auxiliary), « que » before the restricted element: « n'a retenu que deux candidatures ». It is not a negation: neither « pas » (« ne… pas que » means « not only ») nor « seulement », which would be redundant, is added to it."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-26",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase d'un rapport financier trimestriel renferme une erreur. Laquelle des modifications suivantes la corrige ? « Jusqu'à présent, nous n'avons jamais pas dépassé l'enveloppe budgétaire allouée, et aucune dépense imprévue n'a été engagée sans approbation. »",
+        "en": "This sentence from a quarterly financial report contains an error. Which of the following changes fixes it? « Jusqu'à présent, nous n'avons jamais pas dépassé l'enveloppe budgétaire allouée, et aucune dépense imprévue n'a été engagée sans approbation. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « n'avons jamais pas dépassé » par « n'avons jamais dépassé »",
+          "rationale": {
+            "fr": "« Jamais » remplace « pas » dans la négation ; les cumuler est fautif. C'est la correction nécessaire.",
+            "en": "« Jamais » replaces « pas » in the negation; combining them is wrong. This is the required correction."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « aucune dépense imprévue n'a été engagée » par « aucune dépense imprévue n'a pas été engagée »",
+          "rationale": {
+            "fr": "« Aucune » se construit avec « ne » seul ; ajouter « pas » crée une seconde double négation au lieu de supprimer la première.",
+            "en": "« Aucune » takes « ne » alone; adding « pas » creates a second double negation instead of removing the first."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « l'enveloppe budgétaire allouée » par « l'enveloppe budgétaire alloué »",
+          "rationale": {
+            "fr": "Le participe s'accorde avec « enveloppe », féminin : « allouée » convient, et la modification créerait une faute.",
+            "en": "The participle agrees with « enveloppe », feminine: « allouée » fits, and the change would create an error."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « sans approbation » par « sans pas d'approbation »",
+          "rationale": {
+            "fr": "« Sans » a déjà une valeur négative et n'admet pas « pas ». La modification ajoute une faute.",
+            "en": "« Sans » already has a negative value and does not allow « pas ». The change adds an error."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Jamais » remplace « pas » dans la négation : « nous n'avons jamais dépassé ». Il en va de même de « plus », « rien », « personne », « aucun » et « guère ». La préposition « sans » a elle aussi une valeur négative et n'admet pas « pas ».",
+        "en": "« Jamais » replaces « pas » in the negation: « nous n'avons jamais dépassé ». The same goes for « plus », « rien », « personne », « aucun » and « guère ». The preposition « sans » also has a negative value and does not allow « pas »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-27",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Rappel de la dirigeante principale de l'information à l'équipe de cybersécurité : en cas d'incident touchant les systèmes ministériels, …",
+        "en": "Reminder from the chief information officer to the cybersecurity team: in the event of an incident affecting departmental systems, …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "c'est vous qui doivent aviser sans délai le centre des opérations de sécurité.",
+          "rationale": {
+            "fr": "Le verbe de la relative s'accorde avec l'antécédent de « qui », « vous » : la troisième personne du pluriel est fautive.",
+            "en": "The verb in the relative clause agrees with the antecedent of « qui », « vous »: the third person plural is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "c'est vous qui devez aviser sans délai le centre des opérations de sécurité.",
+          "rationale": {
+            "fr": "« Vous » est sujet de « devoir » : on le met en relief avec « c'est… qui », et le verbe s'accorde à la deuxième personne du pluriel. C'est la forme juste.",
+            "en": "« Vous » is the subject of « devoir »: it is highlighted with « c'est… qui », and the verb agrees in the second person plural. This is the right form."
+          }
+        },
+        {
+          "id": "c",
+          "text": "c'est vous que devez aviser sans délai le centre des opérations de sécurité.",
+          "rationale": {
+            "fr": "« Vous » est sujet de « devez » : la mise en relief d'un sujet se fait avec « qui », non avec « que ».",
+            "en": "« Vous » is the subject of « devez »: a subject is highlighted with « qui », not « que »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "c'est à vous qui revient d'aviser sans délai le centre des opérations de sécurité.",
+          "rationale": {
+            "fr": "Avec « c'est à vous », la mise en relief se termine par « qu'il revient » ; « qui revient » est agrammatical.",
+            "en": "With « c'est à vous », the highlighting construction ends with « qu'il revient »; « qui revient » is ungrammatical."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans « c'est… qui », le verbe de la relative s'accorde en personne et en nombre avec l'élément mis en relief, antécédent de « qui » : « c'est moi qui dois », « c'est vous qui devez », « ce sont eux qui doivent ». On emploie « qui » pour mettre en relief un sujet, « que » pour un complément.",
+        "en": "In « c'est… qui », the verb in the relative clause agrees in person and number with the highlighted element, the antecedent of « qui »: « c'est moi qui dois », « c'est vous qui devez », « ce sont eux qui doivent ». « Qui » is used to highlight a subject, « que » for a complement."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-28",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Un agent du centre de services a rédigé la réponse suivante. Quelle correction doit-il y apporter ? « Madame, nous avons bien reçu votre demande de prestations. Quand votre employeur a-t-il délivré le relevé d'emploi, et pourquoi est-ce que ce document n'a-t-il pas été joint à votre dossier ? »",
+        "en": "A service centre agent wrote the following reply. Which correction must he make to it? « Madame, nous avons bien reçu votre demande de prestations. Quand votre employeur a-t-il délivré le relevé d'emploi, et pourquoi est-ce que ce document n'a-t-il pas été joint à votre dossier ? »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « Quand votre employeur a-t-il délivré » par « Quand votre employeur a délivré »",
+          "rationale": {
+            "fr": "L'inversion complexe convient dans cette question directe ; la supprimer donnerait un tour familier, et la vraie faute resterait.",
+            "en": "Complex inversion fits this direct question; removing it would give an informal turn, and the real error would remain."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « nous avons bien reçu » par « avons-nous bien reçu »",
+          "rationale": {
+            "fr": "La première phrase est une affirmation : l'inversion en ferait une question et serait fautive.",
+            "en": "The first sentence is a statement: inversion would turn it into a question and would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « a-t-il délivré » par « a-il délivré »",
+          "rationale": {
+            "fr": "Entre un verbe terminé par une voyelle et « il », on intercale le « t » euphonique : « a-t-il » convient.",
+            "en": "Between a verb ending in a vowel and « il », the euphonic « t » is inserted: « a-t-il » fits."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « pourquoi est-ce que ce document n'a-t-il pas été joint » par « pourquoi ce document n'a-t-il pas été joint »",
+          "rationale": {
+            "fr": "La seconde question cumule « est-ce que » et l'inversion. En supprimant « est-ce que », on obtient une inversion complexe régulière. C'est la correction nécessaire.",
+            "en": "The second question combines « est-ce que » with inversion. Removing « est-ce que » leaves a regular complex inversion. This is the required correction."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une question directe écrite se construit soit avec l'inversion (« pourquoi ce document n'a-t-il pas été joint ? »), soit avec « est-ce que » et l'ordre normal (« pourquoi est-ce que ce document n'a pas été joint ? »). Les deux procédés ne se cumulent jamais. Avec un sujet nom, l'inversion est complexe : le nom reste devant le verbe et un pronom le reprend après l'auxiliaire.",
+        "en": "A written direct question is built either with inversion (« pourquoi ce document n'a-t-il pas été joint ? ») or with « est-ce que » and normal word order (« pourquoi est-ce que ce document n'a pas été joint ? »). The two devices are never combined. With a noun subject, inversion is complex: the noun stays before the verb and a pronoun picks it up after the auxiliary."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-29",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "L'analyse d'impact de la réglementation démontre que les modifications proposées entraîneront des coûts de conformité nettement moins élevés ___ les associations sectorielles consultées.",
+        "en": "The regulatory impact analysis shows that the proposed amendments will lead to compliance costs considerably lower ___ the industry associations consulted."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "que ne le craignaient pas",
+          "rationale": {
+            "fr": "« Pas » transforme le « ne » explétif en vraie négation : la phrase dirait que les associations ne craignaient pas ces coûts, ce qui brouille la comparaison.",
+            "en": "« Pas » turns the expletive « ne » into a real negation: the sentence would say the associations did not fear these costs, which muddles the comparison."
+          }
+        },
+        {
+          "id": "b",
+          "text": "que le craignaient-elles",
+          "rationale": {
+            "fr": "L'inversion avec pronom de reprise (« craignaient-elles ») est propre à l'interrogation ; elle est fautive dans une comparative, d'autant que le sujet nom suit déjà le verbe.",
+            "en": "Inversion with a resumptive pronoun (« craignaient-elles ») belongs to questions; it is wrong in a comparative clause, all the more since the noun subject already follows the verb."
+          }
+        },
+        {
+          "id": "c",
+          "text": "que ne le craignaient",
+          "rationale": {
+            "fr": "Après « moins… », le second terme est introduit par « que » ; la comparative reçoit le « ne » explétif et le pronom « le », et le sujet nom peut suivre le verbe. C'est la forme soignée attendue.",
+            "en": "After « moins… », the second term is introduced by « que »; the comparative clause takes the expletive « ne » and the pronoun « le », and the noun subject may follow the verb. This is the expected careful form."
+          }
+        },
+        {
+          "id": "d",
+          "text": "comme le craignaient",
+          "rationale": {
+            "fr": "« Comme » sert à la comparaison d'égalité ou de manière ; après « moins », le second terme est obligatoirement introduit par « que ».",
+            "en": "« Comme » is used for comparisons of equality or manner; after « moins », the second term must be introduced by « que »."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Après un comparatif d'inégalité (plus, moins, mieux, autre), le second terme est introduit par « que ». Si ce second terme est une proposition, la langue soignée y place souvent un « ne » explétif, sans valeur négative, et le pronom « le » qui reprend l'idée : « moins élevés que ne le craignaient les associations ». Ce « ne » n'est jamais accompagné de « pas ».",
+        "en": "After a comparative of inequality (plus, moins, mieux, autre), the second term is introduced by « que ». If that second term is a clause, careful usage often adds an expletive « ne », with no negative value, and the pronoun « le » standing for the idea: « moins élevés que ne le craignaient les associations ». This « ne » is never accompanied by « pas »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-30",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Lors de l'exercice d'évacuation de mardi, le responsable d'étage a constaté avec satisfaction que …",
+        "en": "During Tuesday's evacuation drill, the floor warden noted with satisfaction that …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "personne n'avait laissé de matériel dans les escaliers de secours.",
+          "rationale": {
+            "fr": "« Personne », sujet, forme la négation avec « ne » seul, et le partitif devient « de » : la phrase est bien construite et s'accorde avec « avec satisfaction ».",
+            "en": "« Personne », as subject, forms the negation with « ne » alone, and the partitive becomes « de »: the sentence is well built and fits « avec satisfaction »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "personne n'avait pas laissé de matériel dans les escaliers de secours.",
+          "rationale": {
+            "fr": "« Personne » remplace « pas » ; les cumuler crée une double négation fautive.",
+            "en": "« Personne » replaces « pas »; combining them creates a faulty double negation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "personne avait laissé du matériel dans les escaliers de secours.",
+          "rationale": {
+            "fr": "L'omission de « ne » relève de la langue parlée, et le partitif « du » devrait devenir « de » dans une phrase négative.",
+            "en": "Leaving out « ne » is spoken usage, and the partitive « du » should become « de » in a negative sentence."
+          }
+        },
+        {
+          "id": "d",
+          "text": "aucun employé n'avait pas laissé de matériel dans les escaliers de secours.",
+          "rationale": {
+            "fr": "« Aucun » se construit avec « ne » seul ; « pas » crée une double négation fautive.",
+            "en": "« Aucun » takes « ne » alone; « pas » creates a faulty double negation."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le pronom « personne », employé comme sujet, forme la négation avec « ne » seul : « personne n'avait laissé de matériel ». Ajouter « pas » crée une double négation, et omettre « ne » relève de la langue parlée. Dans une phrase négative, l'article partitif « du » devient « de ».",
+        "en": "The pronoun « personne », used as a subject, forms the negation with « ne » alone: « personne n'avait laissé de matériel ». Adding « pas » creates a double negation, and leaving out « ne » is spoken usage. In a negative sentence, the partitive article « du » becomes « de »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-31",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Ce passage d'un rapport de vérification contient une erreur de syntaxe. Quelle correction convient ? « Le vérificateur interne cherche à déterminer est-ce que les critères d'évaluation ont été appliqués de façon uniforme et si les motifs du rejet de chaque soumission ont été consignés au dossier. »",
+        "en": "This excerpt from an audit report contains a syntax error. Which correction is appropriate? « Le vérificateur interne cherche à déterminer est-ce que les critères d'évaluation ont été appliqués de façon uniforme et si les motifs du rejet de chaque soumission ont été consignés au dossier. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « et si les motifs » par « et est-ce que les motifs »",
+          "rationale": {
+            "fr": "La modification étend la faute au second membre : l'interrogation indirecte n'admet pas « est-ce que ».",
+            "en": "The change extends the error to the second part: an indirect question does not allow « est-ce que »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « ont été appliqués » par « aient été appliqués »",
+          "rationale": {
+            "fr": "Après « déterminer si », l'interrogation indirecte se construit à l'indicatif ; le subjonctif est fautif.",
+            "en": "After « déterminer si », the indirect question takes the indicative; the subjunctive is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « cherche à déterminer » par « cherche de déterminer »",
+          "rationale": {
+            "fr": "« Chercher à » + infinitif est la construction usuelle ; « chercher de » est vieilli, et la faute principale resterait.",
+            "en": "« Chercher à » + infinitive is the usual construction; « chercher de » is dated, and the main error would remain."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « est-ce que les critères » par « si les critères »",
+          "rationale": {
+            "fr": "L'interrogation indirecte totale s'introduit par « si » ; cette correction rétablit aussi le parallélisme avec « et si les motifs… ». C'est la correction nécessaire.",
+            "en": "A yes/no indirect question is introduced by « si »; this correction also restores parallelism with « et si les motifs… ». This is the required correction."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une question fermée (réponse oui ou non) rapportée après « déterminer », « vérifier » ou « se demander » s'introduit par « si », jamais par « est-ce que ». Quand deux interrogations indirectes sont coordonnées, chacune commence par « si » : « déterminer si les critères ont été appliqués et si les motifs ont été consignés ».",
+        "en": "A yes/no question reported after « déterminer », « vérifier » or « se demander » is introduced by « si », never by « est-ce que ». When two indirect questions are coordinated, each begins with « si »: « déterminer si les critères ont été appliqués et si les motifs ont été consignés »."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-32",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Pour annoncer la fermeture temporaire du centre de services, le plan de communication prévoit la rédaction d'un avis public, …",
+        "en": "To announce the temporary closure of the service centre, the communications plan provides for the drafting of a public notice, …"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "la mise à jour du site Web et de publier un message dans les médias sociaux.",
+          "rationale": {
+            "fr": "Le dernier élément devient un infinitif (« de publier ») après deux noms : le parallélisme est rompu.",
+            "en": "The last element becomes an infinitive (« de publier ») after two nouns: parallelism is broken."
+          }
+        },
+        {
+          "id": "b",
+          "text": "la mise à jour du site Web et la publication d'un message dans les médias sociaux.",
+          "rationale": {
+            "fr": "Trois noms compléments de « prévoit » (la rédaction, la mise à jour, la publication) : l'énumération est parallèle et bien construite.",
+            "en": "Three nouns as objects of « prévoit » (la rédaction, la mise à jour, la publication): the list is parallel and well built."
+          }
+        },
+        {
+          "id": "c",
+          "text": "mettre à jour le site Web et la publication d'un message dans les médias sociaux.",
+          "rationale": {
+            "fr": "Un infinitif (« mettre à jour ») s'intercale entre deux noms : la série n'est pas homogène.",
+            "en": "An infinitive (« mettre à jour ») is wedged between two nouns: the series is not uniform."
+          }
+        },
+        {
+          "id": "d",
+          "text": "la mise à jour du site Web et que l'on publie un message dans les médias sociaux.",
+          "rationale": {
+            "fr": "Une subordonnée (« que l'on publie ») est coordonnée à des noms : la construction est boiteuse.",
+            "en": "A subordinate clause (« que l'on publie ») is coordinated with nouns: the construction is lopsided."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Les éléments d'une énumération doivent être de même nature. Comme le premier complément de « prévoit » est un nom (« la rédaction d'un avis »), les suivants doivent aussi être des noms : « la mise à jour du site Web et la publication d'un message ». Un infinitif ou une subordonnée glissés dans la liste rompent le parallélisme.",
+        "en": "The elements of a list must be of the same kind. Since the first object of « prévoit » is a noun (« la rédaction d'un avis »), the following ones must also be nouns: « la mise à jour du site Web et la publication d'un message ». An infinitive or a subordinate clause slipped into the list breaks the parallelism."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-sentence-structure-33",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Avant de diffuser cette mise à jour sur l'avancement du projet, la gestionnaire doit corriger une faute. Laquelle des corrections suivantes s'impose ? « Le fournisseur n'a pas encore livré le module de rapports ; peut-être que le comité directeur devra-t-il reporter la mise en production prévue en novembre, quitte à prolonger le contrat de quelques semaines. »",
+        "en": "Before circulating this project status update, the manager must fix an error. Which of the following corrections is required? « Le fournisseur n'a pas encore livré le module de rapports ; peut-être que le comité directeur devra-t-il reporter la mise en production prévue en novembre, quitte à prolonger le contrat de quelques semaines. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « quitte à prolonger » par « quitte de prolonger »",
+          "rationale": {
+            "fr": "La locution est « quitte à » + infinitif ; « quitte de » est fautif.",
+            "en": "The locution is « quitte à » + infinitive; « quitte de » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « n'a pas encore livré » par « n'a pas encore livrée »",
+          "rationale": {
+            "fr": "Avec « avoir », le participe s'accorde avec un complément direct placé avant ; ici, « le module » suit le verbe : « livré » reste invariable.",
+            "en": "With « avoir », the participle agrees with a direct object placed before it; here « le module » follows the verb: « livré » stays invariable."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « le comité directeur devra-t-il » par « le comité directeur devra »",
+          "rationale": {
+            "fr": "« Peut-être que » se construit sans inversion : on supprime le pronom de reprise. C'est la correction nécessaire.",
+            "en": "« Peut-être que » takes no inversion: the resumptive pronoun is removed. This is the required correction."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « prévue en novembre » par « prévu en novembre »",
+          "rationale": {
+            "fr": "Le participe se rapporte à « la mise en production », au féminin : « prévue » convient.",
+            "en": "The participle refers to « la mise en production », feminine: « prévue » fits."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Peut-être » en tête de proposition admet deux constructions à l'écrit : l'inversion (« peut-être le comité devra-t-il reporter… ») ou « peut-être que » suivi de l'ordre normal (« peut-être que le comité devra reporter… »). Cumuler « que » et l'inversion est fautif.",
+        "en": "« Peut-être » at the head of a clause allows two constructions in writing: inversion (« peut-être le comité devra-t-il reporter… ») or « peut-être que » followed by normal word order (« peut-être que le comité devra reporter… »). Combining « que » with inversion is wrong."
+      },
+      "subSkill": "sentence-structure",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ]
+}

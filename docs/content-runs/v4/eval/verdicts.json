@@ -1,0 +1,1209 @@
+{
+  "reviewer": "claude-opus-5-5",
+  "verdicts": [
+    {
+      "requestHash": "eval-real-01",
+      "itemId": "eval-real-01",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the ADM's approval is required in addition to, not instead of, the director's.",
+          "b": "Wrong: the memo never mentions a finance team or a funds check.",
+          "c": "Wrong: for travel abroad the director alone is not enough; the three-week rule is a submission deadline, not an approval condition.",
+          "d": "Right: the memo says travel abroad also requires the ADM's approval 'en plus de celle de la directrice'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-02",
+      "itemId": "eval-real-02",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: ordering equipment by the facilities team is the last step, and it is done by that team, not the employee.",
+          "b": "Wrong: the form goes to the manager, and no written request to facilities is mentioned.",
+          "c": "Right: employees 'doivent d'abord remplir le formulaire d'auto-évaluation'.",
+          "d": "Wrong: the occupational therapist contacts the employee, and only after needs are identified."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-03",
+      "itemId": "eval-real-03",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong in careful usage: 'pallier à' is the classic criticised indirect construction; pallier is transitive direct.",
+          "b": "Wrong: 'des' makes the object indefinite/partitive and does not fit 'les lacunes relevées par...'.",
+          "c": "Right: pallier takes a direct object, 'pallier les lacunes'.",
+          "d": "Wrong: remédier is indirect transitive ('remédier aux lacunes'), so 'remédier les' is ungrammatical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-04",
+      "itemId": "eval-real-04",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.45,
+        "defensibleDistractors": [
+          "b"
+        ],
+        "optionCases": {
+          "a": "Wrong: 'même si' takes the indicative, so it cannot precede 'ait été réduit'.",
+          "b": "Equally correct: 'quoique' is a standard concessive conjunction taking the subjunctive, synonymous with 'bien que' in this sentence.",
+          "c": "Correct: 'bien que' + subjunctive is the standard concessive construction.",
+          "d": "Weaker: 'malgré que' is criticised in careful writing, though widely used in Quebec and tolerated by some references."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "Two options (Quoique, Bien que) are fully standard, interchangeable concessive conjunctions with the subjunctive; the item has no single correct answer."
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-05",
+      "itemId": "eval-real-05",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'recueillies' correctly agrees with the preceding direct object 'que' (données, fem. pl.).",
+          "b": "Wrong: the subject 'Les données' is plural, so 'ont été' is correct.",
+          "c": "Right: in the passive the participle agrees with the subject 'données' (feminine plural): 'transmises'.",
+          "d": "Wrong: 'transmise' is feminine singular, but 'données' is plural."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-06",
+      "itemId": "eval-real-06",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: with être the participle agrees with the plural subject 'nous': 'allés'.",
+          "b": "Wrong: 'la réunion' is feminine, so 'à la' is correct.",
+          "c": "Wrong: aller takes être in compound tenses.",
+          "d": "Wrong: 'demain' clashes with the passé composé; this is not a correction at all."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "A"
+      }
+    },
+    {
+      "requestHash": "eval-real-07",
+      "itemId": "eval-real-07",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: after the gerund 'En vous remerciant' (subject = writer), the imperative 'veuillez' makes the reader the subject, a dangling construction condemned by usage guides.",
+          "b": "Wrong: agréer is transitive here; 'agréer à l'expression' is ungrammatical.",
+          "c": "Right: 'je vous prie d'agréer...' keeps the writer as subject, consistent with the gerund, in the expected formal register.",
+          "d": "Wrong: far too familiar for a letter to an ADM of another department."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-08",
+      "itemId": "eval-real-08",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.5,
+        "defensibleDistractors": [
+          "d"
+        ],
+        "optionCases": {
+          "a": "Wrong: 'continuer par' means 'to go on to do X next', not to keep doing it.",
+          "b": "Correct: 'continuer de traiter' is standard.",
+          "c": "Wrong: 'continuer pour' expresses purpose and is not the verb's construction.",
+          "d": "Equally correct: 'continuer à' and 'continuer de' are both accepted by all reference grammars with no difference in meaning here."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "'continuer à' and 'continuer de' are both standard; the item has two correct answers."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-09",
+      "itemId": "eval-real-09",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.5,
+        "defensibleDistractors": [
+          "c"
+        ],
+        "optionCases": {
+          "a": "Plausible: if 'que' refers to 'candidates' (the committee retained the candidates), the participle is 'retenues'.",
+          "b": "Wrong: no possible antecedent is feminine singular.",
+          "c": "Also defensible: if 'que' refers to 'dossiers' (the committee retained the files), the participle is 'retenus', and the files are what gets forwarded.",
+          "d": "Wrong: the preceding direct object is plural, so the participle must agree."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The antecedent of 'que' is ambiguous between 'dossiers' (masc. pl.) and 'candidates' (fem. pl.); both 'retenus' and 'retenues' are defensible."
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-10",
+      "itemId": "eval-real-10",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: an infinitive cannot follow the auxiliary avoir.",
+          "b": "Wrong: the participle must agree with the preceding direct object 'que' (dossiers, masc. pl.).",
+          "c": "Wrong: 'dossiers' is masculine.",
+          "d": "Right: 'envoyés' agrees with the masculine plural preceding direct object."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The stem uses France-specific 'par mail' and 'week-end'; Canadian federal French uses 'par courriel' and 'fin de semaine'."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-11",
+      "itemId": "eval-real-11",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.35,
+        "defensibleDistractors": [
+          "a",
+          "d"
+        ],
+        "optionCases": {
+          "a": "Defensible: the memo mentions that last year's drafts needed many revisions, which suggests an earlier deadline to allow revision time.",
+          "b": "Defensible: the memo says the management committee meets at the end of the month, which suggests reviewing the contributions before then.",
+          "c": "Wrong: no central agency requirement is mentioned.",
+          "d": "Defensible: the memo notes that several team members will be on leave from July, which is also a reason to move up the deadline."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The passage lists three circumstances side by side (committee meeting, July leave, past revisions) without saying which one caused the change; options a, b and d are all supported, so the passage does not settle the question."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-12",
+      "itemId": "eval-real-12",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'rappeler que de + infinitive' is ungrammatical; it would be 'rappeler de présenter' without 'que'.",
+          "b": "Wrong: 'rappeler que' states a fact and takes the indicative, not the subjunctive.",
+          "c": "Right: indicative 'doit' after 'nous vous rappelons que', with correct agreement.",
+          "d": "Wrong: the dislocation with a resumptive 'il' is colloquial and ungrammatical in writing."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-13",
+      "itemId": "eval-real-13",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: remote regions are where replacements were postponed, so the target is not met there.",
+          "b": "Wrong: the target is conditional on pending deliveries, so it is not guaranteed.",
+          "c": "Right: the target 'demeure atteignable, à condition que les livraisons en attente soient effectuées', and those deliveries depend on manufacturers.",
+          "d": "Wrong: the target has not been abandoned; charging-station costs only delayed some replacements."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-14",
+      "itemId": "eval-real-14",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.75,
+        "defensibleDistractors": [
+          "d"
+        ],
+        "optionCases": {
+          "a": "Wrong: 'amélioré' has a following direct object ('l'accès') and must not agree.",
+          "b": "Wrong: 'mesures d'adaptation' is the standard term; the complement stays singular.",
+          "c": "Right: the participle agrees with the preceding direct object 'que' (mesures, fem. pl.): 'adoptées'.",
+          "d": "Also defensible: rewriting as 'adoptées par la direction' produces a fully correct sentence and removes the error, so it is a valid correction too, though not the minimal one."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-15",
+      "itemId": "eval-real-15",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: être takes avoir as its auxiliary; 'soit été' does not exist.",
+          "b": "Right: 'bien que' requires the subjunctive, and the past subjunctive is 'ait été'.",
+          "c": "Wrong: indicative after 'bien que'.",
+          "d": "Wrong: pluperfect indicative after 'bien que'."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The stem's own French uses 'cédulée', an anglicism ('scheduled') that GC style guides reject; it should be 'prévue' or 'fixée'."
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-16",
+      "itemId": "eval-real-16",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.8,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the author does leave the decision to the committee but does not just report facts; 'appellent néanmoins à la prudence' is an evaluative stance.",
+          "b": "Right: the author calls the results only partly encouraging and 'appellent néanmoins à la prudence' before any extension.",
+          "c": "Wrong: the note never expresses support for the project.",
+          "d": "Wrong: the note weighs both sides and never says the drawbacks clearly outweigh the benefits."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-17",
+      "itemId": "eval-real-17",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'à le' must contract to 'au'.",
+          "b": "Wrong: 'en deuxième étage' is not the idiom for location on a floor.",
+          "c": "Right: 'au deuxième étage' is the standard expression.",
+          "d": "Wrong: 'dans' without an article is ungrammatical, and 'dans' is not used for a floor."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "A"
+      }
+    },
+    {
+      "requestHash": "eval-real-18",
+      "itemId": "eval-real-18",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the assessors handle interviews; nothing says they replace managers in the whole process.",
+          "b": "Right: delays should drop 'sensiblement' but not return to their level before the rise in applications.",
+          "c": "Wrong: the passage explicitly says delays will not return to the earlier level.",
+          "d": "Wrong: the pool aims to cut delays, not to reduce the number of applicants."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The passage contains anglicisms GC style guides reject: 'appliqué sur les postes' (postuler / poser sa candidature) and 'céduler les entrevues' (fixer / planifier); 'en charge des processus' is also a criticised calque (responsables des processus)."
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-19",
+      "itemId": "eval-real-19",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: they 'ne seront traitées que le lundi suivant, à la reprise des activités normales'.",
+          "b": "Wrong: the notice says resubmitting is not necessary.",
+          "c": "Wrong: the portal comes back at 2 p.m. Saturday, but processing waits until Monday.",
+          "d": "Wrong: requests sent after 6 p.m. Friday are held, not processed that evening."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-20",
+      "itemId": "eval-real-20",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.35,
+        "defensibleDistractors": [
+          "a",
+          "c",
+          "d"
+        ],
+        "optionCases": {
+          "a": "Defensible: lengthening announced processing times is a natural, grammatical consequence of lacking resources.",
+          "b": "Plausible: 'a dû réaffecter' fits the constraint expressed by 'faute de', but it is not uniquely right.",
+          "c": "Defensible: considering casual staff is a coherent, grammatical response to lacking resources.",
+          "d": "Defensible: suspending non-essential services is a coherent, grammatical consequence of lacking resources."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "All four continuations are grammatical, idiomatic and logically consistent with 'Faute de ressources suffisantes...'; nothing in the stem singles one out, and the item does not test connectors or discourse markers as its subSkill claims."
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-21",
+      "itemId": "eval-real-21",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.5,
+        "defensibleDistractors": [
+          "d"
+        ],
+        "optionCases": {
+          "a": "Wrong: 'en revanche' marks contrast, but the recommendation follows from the success.",
+          "b": "Wrong: 'pourtant' marks concession, which is illogical here.",
+          "c": "Correct: 'c'est pourquoi' introduces the logical consequence.",
+          "d": "Equally correct: 'par conséquent' after a semicolon also introduces the consequence, and is equally idiomatic and formal."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "'c'est pourquoi' and 'par conséquent' are interchangeable consequence markers here; two options are correct."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-22",
+      "itemId": "eval-real-22",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.99,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: first person plural, which does not match 'je'.",
+          "b": "Wrong: third person plural, which does not match 'je'.",
+          "c": "Right: 'je lis', present indicative.",
+          "d": "Wrong: an infinitive cannot be the conjugated verb."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "A"
+      }
+    },
+    {
+      "requestHash": "eval-real-23",
+      "itemId": "eval-real-23",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.78,
+        "defensibleDistractors": [
+          "b"
+        ],
+        "optionCases": {
+          "a": "Right: after a superlative ('le plus ambitieux que'), the relative clause normally takes the subjunctive, 'ait adopté'.",
+          "b": "Defensible: reference grammars (Grevisse, OQLF) also accept the indicative after a superlative when the fact is presented as real, and 'à ce jour' supports that factual reading.",
+          "c": "Wrong: the pluperfect subjunctive 'eût' is literary and out of place in administrative French.",
+          "d": "Wrong: the conditional has no hypothetical basis here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-24",
+      "itemId": "eval-real-24",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'savoir gré de' takes 'de'.",
+          "b": "Right: 'à moins que' requires the subjunctive, 'ayez obtenu'.",
+          "c": "Wrong: 'faute de quoi' introduces a main-clause consequence in the indicative.",
+          "d": "Wrong: 'manquants' correctly agrees with 'documents'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-25",
+      "itemId": "eval-real-25",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: the restrictive 'ne ... qu'une fois' correctly means 'only once'.",
+          "b": "Wrong: 'ne ... pas ... que' changes the meaning to 'not only' and is criticised here.",
+          "c": "Wrong: 'ne ... seulement que' is a pleonasm.",
+          "d": "Wrong: it contradicts the 'toutefois' that introduces a reservation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-26",
+      "itemId": "eval-real-26",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: the main clause in the indicative expresses a restriction consistent with the concession.",
+          "b": "Wrong: a main clause cannot be in the subjunctive here.",
+          "c": "Wrong: 'donc' expresses consequence, which contradicts the concessive 'bien que'.",
+          "d": "Wrong: 'mais' after a 'bien que' clause is a redundant double concession, criticised in careful writing."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-27",
+      "itemId": "eval-real-27",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.99,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: an infinitive cannot be the main verb.",
+          "b": "Wrong: third person plural present, which does not match 'Marie' or 'Hier'.",
+          "c": "Wrong: first person plural, which does not match 'Marie'.",
+          "d": "Right: passé composé 'a envoyé', matching 'Hier'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "A"
+      }
+    },
+    {
+      "requestHash": "eval-real-28",
+      "itemId": "eval-real-28",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'tous' correctly agrees with the plural 'reçus'.",
+          "b": "Right: the possessive determiner must agree with 'reçus': 'leurs'.",
+          "c": "Wrong: 'joindre à' is the correct construction.",
+          "d": "Wrong: the subject 'Les employés' is plural."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-29",
+      "itemId": "eval-real-29",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the memo says francophones hesitated, not that chairs prevented them from speaking French.",
+          "b": "Right: meetings were mostly in English and francophones hesitated to speak their language.",
+          "c": "Wrong: the new requirement to distribute documents in both languages implies this was not already done.",
+          "d": "Wrong: the minutes are already written in both official languages ('comme c'est déjà le cas')."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-30",
+      "itemId": "eval-real-30",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: authorisation must be obtained in advance by email, not on arrival.",
+          "b": "Wrong: the underground lot is closed from Friday 6 p.m. to Monday 6 a.m.",
+          "c": "Wrong: the Friday 4 p.m. deadline applies to bicycles, not cars.",
+          "d": "Right: employees may park in the outdoor lot 'à condition d'avoir obtenu au préalable une autorisation' from security."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The passage uses France-specific 'parking', 'week-end' and 'par mail' (Canadian federal usage: stationnement, fin de semaine, courriel), inconsistently with the options' 'stationnement'."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-31",
+      "itemId": "eval-real-31",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.55,
+        "defensibleDistractors": [
+          "d"
+        ],
+        "optionCases": {
+          "a": "The joint agreement in the passage concerns the reporting calendar, not who presents the budget.",
+          "b": "The most likely reading of 'elle lui a indiqué qu'elle devrait présenter elle-même' is that the director told the finance manager to present it herself, but the text does not settle it.",
+          "c": "No committee representative is mentioned as presenting anything.",
+          "d": "Defensible: the second 'elle' can just as grammatically refer back to the director (the subject of 'a indiqué'), and 'elle-même' fits a director saying she would present it personally rather than delegate."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The pronoun chain 'elle lui a indiqué qu'elle devrait présenter elle-même' is genuinely ambiguous between the two women; the passage does not resolve the reference the item tests. 'Devrait' also does not support the stem's certain 'présentera'."
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-32",
+      "itemId": "eval-real-32",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'À midi' is correct as written; 'au midi' is not the standard time expression.",
+          "b": "'Cafétéria' is feminine, so 'au cafétéria' introduces an error.",
+          "c": "'Manges' is the second-person singular form and does not agree with 'les employés'.",
+          "d": "Correct: the plural subject 'les employés' needs 'mangent'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "A"
+      }
+    },
+    {
+      "requestHash": "eval-real-33",
+      "itemId": "eval-real-33",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.85,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'les employés' needs the plural 'commencent' (a subjunctive after 'avant que').",
+          "b": "'Après que' changes the meaning and does not fix the agreement error.",
+          "c": "'Commencer à travailler' is the normal construction; 'de' is not required.",
+          "d": "'J'aie demandé' is a subjunctive form that makes no sense in a main clause."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The quoted sentence has a second error: 'adresser le problème' is an anglicism (to address a problem) that GC style guides reject in favour of 'régler'/'traiter'. That breaks the claim that the sentence contains exactly one error, and it appears in the email the candidate is told to correct."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-34",
+      "itemId": "eval-real-34",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.5,
+        "defensibleDistractors": [
+          "a"
+        ],
+        "optionCases": {
+          "a": "Defensible: the passage states equally that they 'doivent remplir le formulaire d'exception et le joindre à leur demande'; that is also an obligation.",
+          "b": "Writing to HR is for questions about the procedure, not for getting an exception.",
+          "c": "Supported: they must submit a request to their manager by March 15. But option a is an equally required step.",
+          "d": "Waiting for the decision is what follows; it is not what they must do."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "Two options state obligations the passage gives in the same terms ('doivent en faire la demande...' and 'Ils doivent remplir le formulaire...'), so the stem 'que doivent faire' has two correct answers."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-35",
+      "itemId": "eval-real-35",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.3,
+        "defensibleDistractors": [
+          "b",
+          "c",
+          "d"
+        ],
+        "optionCases": {
+          "a": "Grammatical, idiomatic and logical: until publication, no comment to the media.",
+          "b": "Equally grammatical and logical; 'adresser leurs questions à' is correct French, not an anglicism.",
+          "c": "'En attendant' is a valid connector and the sentence is grammatical; a provisional version on the intranet is unusual but not impossible.",
+          "d": "'Entre-temps' is a valid connector and preparing action plans before publication is entirely logical."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "All four continuations use interchangeable connectors (d'ici là / en attendant / entre-temps) and are grammatical and plausible; nothing in the stem picks one as the best completion, so the item does not test connectors."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-36",
+      "itemId": "eval-real-36",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The infinitive cannot follow the auxiliary 'se sont'.",
+          "b": "Correct: 'succéder à' takes an indirect object, so the reflexive 'se' is indirect and the past participle stays invariable ('se sont succédé').",
+          "c": "Agreeing with the subject is the classic error; 'se' is an indirect object here.",
+          "d": "A feminine plural agreement has no possible antecedent."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-37",
+      "itemId": "eval-real-37",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Illogical: you cannot make photocopies on a broken photocopier.",
+          "b": "Correct: 'téléphoner à quelqu'un' and a logical follow-on.",
+          "c": "'Je téléphonons' is a conjugation error.",
+          "d": "'Téléphoner' takes 'à' before the person; a direct object is wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "A"
+      }
+    },
+    {
+      "requestHash": "eval-real-38",
+      "itemId": "eval-real-38",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Leur gestionnaire' correctly refers back to the plural 'employés'.",
+          "b": "Correct: the relative pronoun is the subject of 'sera remis', so it must be 'qui' ('qui leur sera remis').",
+          "c": "'Doive' is a singular subjunctive and agrees with neither the subject nor the context.",
+          "d": "'Leur' correctly stands for the plural employees."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "'Portable personnel' for a cell phone is France usage; in Canadian French 'portable' usually means a laptop and the GC term is 'cellulaire'/'appareil mobile'. That is odd next to 'passer des appels'."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-39",
+      "itemId": "eval-real-39",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'impossible ... avant lundi matin' is the idiomatic French construction.",
+          "b": "'Ne ... pas ... jusqu'à' calques English 'not until' and is condemned by usage guides; 'pas avant' is required.",
+          "c": "'Avant que' must introduce a clause, not a noun phrase.",
+          "d": "'Dès lundi matin' inverts the meaning: impossible starting on Monday."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-40",
+      "itemId": "eval-real-40",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The restaurant across the street is not mentioned.",
+          "b": "The meeting room is not mentioned.",
+          "c": "The cafeteria is closed on Friday.",
+          "d": "Correct: employees can eat in the break room on the first floor."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "A"
+      }
+    },
+    {
+      "requestHash": "eval-real-41",
+      "itemId": "eval-real-41",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.25,
+        "defensibleDistractors": [
+          "b",
+          "d",
+          "c"
+        ],
+        "optionCases": {
+          "a": "Grammatical and plausible, but nothing in the sentence favours acceptance over the other outcomes.",
+          "b": "Equally grammatical and plausible: a committee may refer a request to a higher authority.",
+          "c": "Equally grammatical and plausible: a request can be put on hold.",
+          "d": "Equally grammatical and plausible: a refusal is as likely as an acceptance."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The stem gives no context that selects among the four outcomes; all are idiomatic, agree correctly and fit the formal letter. The item has no single key and does not test word-choice precision."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-42",
+      "itemId": "eval-real-42",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.7,
+        "defensibleDistractors": [
+          "c"
+        ],
+        "optionCases": {
+          "a": "The passage never says the old spreadsheet is faster.",
+          "b": "Best-supported answer: in three regions, staff who did not receive training keep using the old spreadsheet.",
+          "c": "Defensible: the passage ties the gains to regions that 'fully adopted' the system and speaks of adoption remaining 'partielle', so partial adoption is a reason the text itself gives.",
+          "d": "The team explicitly advises against investing in new features; missing features are not the stated cause."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-43",
+      "itemId": "eval-real-43",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "He mentions the financial close only to acknowledge its inconvenience, not as a threat.",
+          "b": "He explicitly dwells on the inconvenience to staff.",
+          "c": "He allows urgent interventions through the service centre.",
+          "d": "Correct: 'Je mesure bien les désagréments ... je vous remercie d'avance de votre patience'."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The passage uses France-specific terms: 'week-end' (Canadian: 'fin de semaine') and 'mél' (Canadian/GC: 'courriel'). 'Portable professionnel' for a phone is also France usage."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-44",
+      "itemId": "eval-real-44",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.7,
+        "defensibleDistractors": [
+          "c"
+        ],
+        "optionCases": {
+          "a": "Correct: 'bien que' requires the subjunctive, so 'ait terminé'.",
+          "b": "'Déposer' takes a direct object; 'la' (l'évaluation) is correct.",
+          "c": "Defensible: 'Même si' takes the indicative, so 'Même si l'analyste a terminé...' is also a fully correct, same-meaning fix of the sentence.",
+          "d": "The main clause needs the indicative; 'n'ait pas pu' is wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-45",
+      "itemId": "eval-real-45",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Se conformer avec' is a non-standard government that usage guides reject.",
+          "b": "'Se conformer de' is not a French construction.",
+          "c": "'Se conformer par' is not a French construction.",
+          "d": "Correct: 'se conformer à', contracted to 'aux exigences'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-46",
+      "itemId": "eval-real-46",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The subjunctive after 'après que' is a widespread error that normative grammar condemns; the indicative is required.",
+          "b": "The simple future does not show that the review is complete before the communication.",
+          "c": "Correct: 'après que' takes the indicative, and the futur antérieur marks an action completed before the future 'communiquera'.",
+          "d": "The imperfect does not fit the future time frame."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-47",
+      "itemId": "eval-real-47",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "She asks Marc to start the meeting without her; she does not cancel it.",
+          "b": "Correct: her train is late and she will arrive at 9:30.",
+          "c": "She knows where the documents are: on her desk.",
+          "d": "Illness is not mentioned."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "A"
+      }
+    },
+    {
+      "requestHash": "eval-real-48",
+      "itemId": "eval-real-48",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'À moins que' requires the subjunctive, not the indicative 'met'.",
+          "b": "The conditional is not used after 'à moins que'.",
+          "c": "The future is not used after 'à moins que'.",
+          "d": "Correct: present subjunctive 'mette', with the optional ne explétif already in the stem."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-49",
+      "itemId": "eval-real-49",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.6,
+        "defensibleDistractors": [
+          "b"
+        ],
+        "optionCases": {
+          "a": "Nothing calls for a plural 'plans'.",
+          "b": "Defensible: reference grammars (Grevisse, BDL) hold that 'ainsi que' set off by commas is comparative and takes singular agreement, so adding the commas makes 'a approuvé' correct.",
+          "c": "'Plan de mise en œuvre de la politique' is the correct complement.",
+          "d": "Correct: without commas, 'ainsi que' has additive value and the verb agrees in the plural ('ont approuvé')."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "Two options each correct the sentence by a recognised rule (plural verb, or commas making 'ainsi que' comparative with a singular verb), so the item has two valid corrections."
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-50",
+      "itemId": "eval-real-50",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'inviter quelqu'un à faire quelque chose'.",
+          "b": "'Inviter de' is the wrong preposition.",
+          "c": "'Inviter que' + subjunctive is not a French construction with this verb.",
+          "d": "'Inviter pour' + infinitive is wrong."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The stem uses France-specific terms GC style rejects: 'mail' (Canadian: 'courriel') and 'parking' (Canadian: 'stationnement')."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-51",
+      "itemId": "eval-real-51",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.65,
+        "defensibleDistractors": [
+          "b"
+        ],
+        "optionCases": {
+          "a": "'Bénéficier à' means to benefit someone; the agent benefits from telework, so 'de' is needed.",
+          "b": "Defensible: 'de sorte que' + indicative expresses an achieved result ('so that, as a result, each agent can'), which is grammatical and natural after a completed reorganisation.",
+          "c": "The imperfect subjunctive is literary and out of register in an administrative text.",
+          "d": "Correct for the purpose reading: 'de sorte que' + subjunctive, with the right preposition 'de'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-52",
+      "itemId": "eval-real-52",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.4,
+        "defensibleDistractors": [
+          "a"
+        ],
+        "optionCases": {
+          "a": "Defensible: 'bien vouloir me transmettre' is just as grammatical and idiomatic as option d.",
+          "b": "'Bien vouloir' takes a bare infinitive; 'de' is wrong.",
+          "c": "'Bien vouloir que vous...' is ungrammatical here.",
+          "d": "Correct: 'bien vouloir me faire parvenir', a bare infinitive after 'vouloir'."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "Options a and d are both grammatical, idiomatic and in register ('me transmettre' vs 'me faire parvenir'), so the item has two correct keys."
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-53",
+      "itemId": "eval-real-53",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wednesday is not mentioned.",
+          "b": "Correct: 'La réunion d'équipe est mardi à 10 h'.",
+          "c": "Monday is the reply deadline, not the meeting.",
+          "d": "Lunch at the restaurant follows the meeting; the meeting is at 10."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "A"
+      }
+    },
+    {
+      "requestHash": "eval-real-54",
+      "itemId": "eval-real-54",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Quoique' is concessive (wrong meaning) and requires the subjunctive.",
+          "b": "'À moins que' reverses the meaning and requires the subjunctive.",
+          "c": "Correct: 'dans la mesure où' expresses the condition and takes the indicative 'est'.",
+          "d": "'Pourvu que' fits the meaning but requires the subjunctive 'soit', not 'est'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-55",
+      "itemId": "eval-real-55",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Illogical: being sick does not lead to going to the office.",
+          "b": "'Je restes' is a conjugation error.",
+          "c": "Correct: a logical consequence connector and a correct conjugation.",
+          "d": "'Mais' marks a contrast that does not exist here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "A"
+      }
+    },
+    {
+      "requestHash": "eval-real-56",
+      "itemId": "eval-real-56",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Exiger que' requires the subjunctive, not the future.",
+          "b": "Mood is correct: 'exiger que' + subjunctive 'prenne'.",
+          "c": "The indicative is wrong after 'exiger que'.",
+          "d": "The conditional is wrong after 'exiger que'."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The key produces 'prenne action', a calque of 'take action' that GC and OQLF style guides reject ('agisse', 'prenne des mesures'). The item models an anglicism in its correct answer."
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-57",
+      "itemId": "eval-real-57",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.65,
+        "defensibleDistractors": [
+          "d"
+        ],
+        "optionCases": {
+          "a": "The phrase sets a condition; it does not concern fixing an amount.",
+          "b": "Correct: 'sous réserve de' means subject to, i.e. on condition that the funds are available.",
+          "c": "'Malgré' is concessive and contradicts the conditional meaning.",
+          "d": "Defensible: 'dans la mesure où les fonds requis pourront être dégagés' also expresses the condition (the contract proceeds if the funds are made available), close to a paraphrase of b."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-58",
+      "itemId": "eval-real-58",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: people returning from extended leave have 30 days from their return, which runs to about June 14.",
+          "b": "The May 31 deadline does not apply to returning employees, who get the 30-day rule.",
+          "c": "The June verification of certificates is not a deadline for her.",
+          "d": "The extension applies to managers held up by other obligations, and she is covered by the 30-day rule anyway."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eval-real-59",
+      "itemId": "eval-real-59",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Coordinators gather and summarise comments; they are not being appointed to draft the policy.",
+          "b": "Retention periods are mentioned only as one consultation topic.",
+          "c": "The policy is a draft and has not come into force.",
+          "d": "Correct: the memo gathers the affected branches' comments before the policy goes to the management committee."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "eval-real-60",
+      "itemId": "eval-real-60",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Changing the main clause leaves the conditional after 'si', which is the error.",
+          "b": "Correct: 'si' + imperfect ('était') with a conditional in the main clause.",
+          "c": "The subjunctive is not used after 'si'.",
+          "d": "'Présenter' takes the report as a direct object ('le'); 'lui' is wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    }
+  ]
+}

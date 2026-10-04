@@ -1,0 +1,149 @@
+{
+  "counts": {
+    "forms": 12,
+    "items": 868,
+    "passages": 84,
+    "scenarios": 30
+  },
+  "forms": [
+    {
+      "hash": "71db31e8c499cb56",
+      "id": "fr-reading-supervised-v2",
+      "path": "bank/v4/forms/fr-reading-supervised-v2.json"
+    },
+    {
+      "hash": "f88a2b4a857d87ac",
+      "id": "fr-reading-supervised-v3",
+      "path": "bank/v4/forms/fr-reading-supervised-v3.json"
+    },
+    {
+      "hash": "6cc88120710539f9",
+      "id": "fr-reading-supervised-v4",
+      "path": "bank/v4/forms/fr-reading-supervised-v4.json"
+    },
+    {
+      "hash": "e2958d396106ae72",
+      "id": "fr-reading-unsupervised-v2",
+      "path": "bank/v4/forms/fr-reading-unsupervised-v2.json"
+    },
+    {
+      "hash": "b2e29277ea04e440",
+      "id": "fr-reading-unsupervised-v3",
+      "path": "bank/v4/forms/fr-reading-unsupervised-v3.json"
+    },
+    {
+      "hash": "25d174593d7aaf1c",
+      "id": "fr-reading-unsupervised-v4",
+      "path": "bank/v4/forms/fr-reading-unsupervised-v4.json"
+    },
+    {
+      "hash": "017963360039b450",
+      "id": "fr-writing-supervised-v2",
+      "path": "bank/v4/forms/fr-writing-supervised-v2.json"
+    },
+    {
+      "hash": "fdc715d0b323aa87",
+      "id": "fr-writing-supervised-v3",
+      "path": "bank/v4/forms/fr-writing-supervised-v3.json"
+    },
+    {
+      "hash": "31d13bcf9b15efd7",
+      "id": "fr-writing-supervised-v4",
+      "path": "bank/v4/forms/fr-writing-supervised-v4.json"
+    },
+    {
+      "hash": "eed57e1b0a3d3a12",
+      "id": "fr-writing-unsupervised-v2",
+      "path": "bank/v4/forms/fr-writing-unsupervised-v2.json"
+    },
+    {
+      "hash": "6d2d216ac51a2cb4",
+      "id": "fr-writing-unsupervised-v3",
+      "path": "bank/v4/forms/fr-writing-unsupervised-v3.json"
+    },
+    {
+      "hash": "397c54bb15043c8a",
+      "id": "fr-writing-unsupervised-v4",
+      "path": "bank/v4/forms/fr-writing-unsupervised-v4.json"
+    }
+  ],
+  "passageShards": [
+    {
+      "count": 84,
+      "hash": "e4c850ee033c1aa1",
+      "lang": "*",
+      "path": "bank/v4/passages/e4c850ee033c1aa1.json",
+      "skill": "passage"
+    }
+  ],
+  "scenarios": {
+    "hash": "3c49744152af3cb2",
+    "path": "bank/v4/oral/scenarios.json"
+  },
+  "shards": [
+    {
+      "count": 100,
+      "hash": "b08b5ec0c17bd195",
+      "lang": "fr",
+      "path": "bank/v4/fr/reading/b08b5ec0c17bd195.json",
+      "skill": "reading"
+    },
+    {
+      "count": 100,
+      "hash": "9284036b19a3e1b9",
+      "lang": "fr",
+      "path": "bank/v4/fr/reading/9284036b19a3e1b9.json",
+      "skill": "reading"
+    },
+    {
+      "count": 100,
+      "hash": "53b54f558d61b4bc",
+      "lang": "fr",
+      "path": "bank/v4/fr/reading/53b54f558d61b4bc.json",
+      "skill": "reading"
+    },
+    {
+      "count": 89,
+      "hash": "fc9f53b85e82b167",
+      "lang": "fr",
+      "path": "bank/v4/fr/reading/fc9f53b85e82b167.json",
+      "skill": "reading"
+    },
+    {
+      "count": 100,
+      "hash": "85bcee66cf778c4e",
+      "lang": "fr",
+      "path": "bank/v4/fr/writing/85bcee66cf778c4e.json",
+      "skill": "writing"
+    },
+    {
+      "count": 100,
+      "hash": "87d03dd2ad07891b",
+      "lang": "fr",
+      "path": "bank/v4/fr/writing/87d03dd2ad07891b.json",
+      "skill": "writing"
+    },
+    {
+      "count": 100,
+      "hash": "9934e1f3815afada",
+      "lang": "fr",
+      "path": "bank/v4/fr/writing/9934e1f3815afada.json",
+      "skill": "writing"
+    },
+    {
+      "count": 100,
+      "hash": "18aa90aff2a1bc0f",
+      "lang": "fr",
+      "path": "bank/v4/fr/writing/18aa90aff2a1bc0f.json",
+      "skill": "writing"
+    },
+    {
+      "count": 79,
+      "hash": "eb0c0d27a7c5548d",
+      "lang": "fr",
+      "path": "bank/v4/fr/writing/eb0c0d27a7c5548d.json",
+      "skill": "writing"
+    }
+  ],
+  "version": 4
+}

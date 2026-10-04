@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-procurement-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-1",
+      "stem": {
+        "fr": "Quel est le but du courriel que Nadia Bélanger envoie à son équipe ?",
+        "en": "What is the purpose of the email Nadia Bélanger sends to her team?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer que le contrat de mobilier a été attribué à un fournisseur.",
+          "rationale": {
+            "fr": "Le contrat n'est pas encore attribué : son attribution est prévue à la mi-janvier, au terme du processus.",
+            "en": "The contract has not been awarded yet: the award is planned for mid-January, at the end of the process."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Présenter les étapes et les dates prévues de l'appel d'offres pour le mobilier.",
+          "rationale": {
+            "fr": "C'est l'objet du courriel : elle « transmet le calendrier » et énumère la publication, la séance d'information, l'évaluation et l'attribution.",
+            "en": "This is the email's purpose: she 'sends the schedule' and lists publication, the information session, evaluation and award."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Inviter les fournisseurs à la séance d'information virtuelle du 10 novembre.",
+          "rationale": {
+            "fr": "La séance n'est qu'une étape parmi d'autres, et le courriel s'adresse aux collègues, non aux fournisseurs.",
+            "en": "The session is only one step among several, and the email is addressed to colleagues, not to suppliers."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Expliquer en détail la méthode de notation de l'évaluation financière.",
+          "rationale": {
+            "fr": "Le courriel mentionne la note de passage technique, mais ne décrit pas la méthode de l'évaluation financière.",
+            "en": "The email mentions the technical pass mark but does not describe how the financial evaluation works."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour trouver le but d'un message, repérez la phrase d'annonce (ici « Je vous transmets le calendrier… ») et vérifiez que la réponse couvre l'ensemble du texte, et non un seul détail.",
+        "en": "To find a message's purpose, locate the announcing sentence (here 'I am sending you the schedule…') and check that the answer covers the whole text, not a single detail."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-1",
+      "stem": {
+        "fr": "Selon le courriel, comment l'équipe doit-elle communiquer avec les fournisseurs pendant la période de soumission ?",
+        "en": "According to the email, how must the team communicate with suppliers during the bidding period?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Directement par courriel, en mettant la chef d'équipe en copie.",
+          "rationale": {
+            "fr": "Le courriel interdit justement les échanges directs : tout doit passer par une seule personne désignée.",
+            "en": "The email specifically rules out direct exchanges: everything must go through one designated person."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Uniquement pendant la séance d'information virtuelle.",
+          "rationale": {
+            "fr": "La séance est une occasion d'information pour les fournisseurs, pas le seul canal permis à l'équipe.",
+            "en": "The session is an information opportunity for suppliers, not the only channel allowed to the team."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Par écrit, mais seulement jusqu'au 20 novembre.",
+          "rationale": {
+            "fr": "La date du 20 novembre s'applique aux questions écrites des fournisseurs, non aux échanges de l'équipe.",
+            "en": "The 20 November date applies to suppliers' written questions, not to the team's exchanges."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Par l'intermédiaire de l'autorité contractante.",
+          "rationale": {
+            "fr": "Le texte précise que « tout échange avec les fournisseurs doit passer par l'autorité contractante ».",
+            "en": "The text states that 'any exchange with suppliers must go through the contracting authority'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une question de détail se règle en retrouvant la phrase exacte du texte. Méfiez-vous des options qui reprennent une date ou un élément réel du courriel, mais l'associent à la mauvaise règle.",
+        "en": "A detail question is settled by finding the exact sentence in the text. Beware of options that reuse a real date or element from the email but attach it to the wrong rule."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-1",
+      "stem": {
+        "fr": "Dans le courriel, que veut dire l'expression « attribuer le contrat » ?",
+        "en": "In the email, what does the expression 'attribuer le contrat' (award the contract) mean?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Accorder le contrat au fournisseur retenu.",
+          "rationale": {
+            "fr": "En approvisionnement, « attribuer » un contrat signifie l'accorder officiellement au soumissionnaire choisi, ce qui conclut le processus à la mi-janvier.",
+            "en": "In procurement, to 'attribuer' a contract means to formally grant it to the chosen bidder, which closes the process in mid-January."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Rédiger les clauses du contrat.",
+          "rationale": {
+            "fr": "La rédaction des clauses précède la publication ; « attribuer » désigne une décision en faveur d'un fournisseur.",
+            "en": "Drafting the clauses comes before publication; 'attribuer' refers to a decision in favour of a supplier."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Publier le contrat sur le site des appels d'offres.",
+          "rationale": {
+            "fr": "La publication concerne la demande de propositions, prévue le 3 novembre, et non l'étape finale.",
+            "en": "Publication concerns the request for proposals, set for 3 November, not the final step."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Estimer la valeur totale du contrat.",
+          "rationale": {
+            "fr": "La valeur estimée de 450 000 $ figure dans la même phrase, ce qui peut induire en erreur, mais « attribuer » ne signifie pas « évaluer ».",
+            "en": "The estimated value of $450,000 appears in the same sentence, which can mislead, but 'attribuer' does not mean 'estimate'."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour déduire le sens d'un terme, situez-le dans la suite logique du texte : l'attribution vient après les évaluations technique et financière, elle consiste donc à accorder le contrat au gagnant.",
+        "en": "To work out a term's meaning, place it in the text's logical sequence: the award comes after the technical and financial evaluations, so it means granting the contract to the winner."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-1",
+      "stem": {
+        "fr": "Combien de temps les fournisseurs auront-ils pour déposer leur soumission une fois la demande de propositions publiée ?",
+        "en": "How much time will suppliers have to submit their bid once the request for proposals is published?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Environ trois semaines.",
+          "rationale": {
+            "fr": "Trois semaines, c'est la durée prévue de l'évaluation technique, non le délai accordé aux fournisseurs.",
+            "en": "Three weeks is the planned length of the technical evaluation, not the time given to suppliers."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Jusqu'au 20 novembre.",
+          "rationale": {
+            "fr": "Le 20 novembre est la date limite des questions écrites, pas celle du dépôt des soumissions.",
+            "en": "20 November is the deadline for written questions, not for submitting bids."
+          }
+        },
+        {
+          "id": "c",
+          "text": "30 jours civils.",
+          "rationale": {
+            "fr": "Le courriel indique que « les fournisseurs auront 30 jours civils pour déposer leur soumission ».",
+            "en": "The email states that 'suppliers will have 30 calendar days to submit their bid'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Jusqu'à la mi-janvier.",
+          "rationale": {
+            "fr": "La mi-janvier correspond à l'attribution prévue du contrat, bien après la fin de la période de soumission.",
+            "en": "Mid-January is the planned contract award, well after the bidding period ends."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Un texte de calendrier contient plusieurs dates et durées voisines. Associez chaque chiffre à l'étape qu'il qualifie avant de répondre : délai de soumission, questions, évaluation, attribution.",
+        "en": "A schedule text contains several neighbouring dates and durations. Match each figure to the step it qualifies before answering: bidding period, questions, evaluation, award."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-1",
+      "stem": {
+        "fr": "Dans la phrase « seules celles qui obtiendront au moins 70 points passeront à l'évaluation financière », à quoi renvoie le pronom « celles » ?",
+        "en": "In the sentence 'only those that obtain at least 70 points will move on to the financial evaluation', what does the pronoun 'celles' (those) refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux soumissions.",
+          "rationale": {
+            "fr": "« Celles » reprend « Chaque soumission », sujet du début de la même phrase : ce sont les soumissions qui sont notées sur 100 points.",
+            "en": "'Celles' picks up 'Chaque soumission' (each bid), the subject at the start of the same sentence: it is the bids that are scored out of 100."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aux questions écrites.",
+          "rationale": {
+            "fr": "Les questions écrites apparaissent dans une phrase précédente et ne reçoivent aucune note.",
+            "en": "Written questions appear in an earlier sentence and receive no score."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Aux trois semaines d'évaluation technique.",
+          "rationale": {
+            "fr": "Des semaines ne peuvent pas « obtenir des points » ; le pronom désigne ce qui est évalué.",
+            "en": "Weeks cannot 'obtain points'; the pronoun refers to what is being evaluated."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aux disponibilités des membres du comité.",
+          "rationale": {
+            "fr": "Les disponibilités sont mentionnées à la fin du courriel, sans lien avec la notation.",
+            "en": "Availability is mentioned at the end of the email, with no link to scoring."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un pronom démonstratif comme « celles » reprend un nom féminin pluriel déjà mentionné, le plus souvent dans la même phrase. Vérifiez aussi le sens : seul un élément qui peut être noté peut « obtenir des points ».",
+        "en": "A demonstrative pronoun such as 'celles' refers back to a feminine plural noun already mentioned, usually in the same sentence. Check the meaning too: only something that can be scored can 'obtain points'."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-2",
+      "stem": {
+        "fr": "Quel est le principal objectif de cette note sur les fournitures informatiques ?",
+        "en": "What is the main objective of this note about IT supplies?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer la résiliation du contrat avec le fournisseur.",
+          "rationale": {
+            "fr": "La note n'annonce aucune résiliation ; elle évoque seulement, au conditionnel, l'examen de recours si la situation persiste.",
+            "en": "The note announces no termination; it only mentions examining remedies if the situation persists."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Expliquer comment installer les postes de travail des nouveaux employés.",
+          "rationale": {
+            "fr": "L'installation des postes est une conséquence des retards, pas le sujet de la note.",
+            "en": "Setting up workstations is a consequence of the delays, not the subject of the note."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Informer le personnel des retards du fournisseur et des mesures à prendre en attendant.",
+          "rationale": {
+            "fr": "La note expose le problème, les démarches faites et les consignes au personnel : c'est son objectif d'ensemble.",
+            "en": "The note sets out the problem, the steps taken and the instructions to staff: that is its overall objective."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Reprocher aux équipes de commander leurs fournitures trop tard.",
+          "rationale": {
+            "fr": "La note demande de commander plus tôt pour compenser les retards du fournisseur, sans blâmer les équipes.",
+            "en": "The note asks staff to order earlier to offset the supplier's delays, without blaming the teams."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "L'idée principale rassemble toutes les parties du texte. Une option qui ne reprend qu'une conséquence (les postes de travail) ou qui exagère une éventualité (la résiliation) est trop étroite ou trop forte.",
+        "en": "The main idea brings together all parts of the text. An option that picks up only one consequence (workstations) or inflates a possibility (termination) is too narrow or too strong."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-2",
+      "stem": {
+        "fr": "Que laisse entendre la dernière phrase de la note au sujet du contrat conclu avec le fournisseur ?",
+        "en": "What does the last sentence of the note suggest about the contract with the supplier?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le contrat prendra fin à la fin du mois.",
+          "rationale": {
+            "fr": "La fin du mois est la date du retour à la normale annoncé par le fournisseur, pas l'échéance du contrat.",
+            "en": "The end of the month is when the supplier expects things to return to normal, not when the contract ends."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le contrat contient des dispositions que l'organisation pourrait invoquer en cas de manquement.",
+          "rationale": {
+            "fr": "Parler de « recours prévus au contrat » suppose que le contrat comporte des clauses applicables si le fournisseur ne respecte pas ses obligations.",
+            "en": "Referring to 'remedies provided for in the contract' implies that the contract contains clauses that apply if the supplier fails to meet its obligations."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le contrat ne permet aucun recours contre le fournisseur.",
+          "rationale": {
+            "fr": "C'est l'inverse de ce que dit la note, qui mentionne précisément des recours prévus au contrat.",
+            "en": "This is the reverse of what the note says, since it specifically mentions remedies in the contract."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le fabricant du fournisseur sera tenu responsable des retards.",
+          "rationale": {
+            "fr": "Le fabricant n'est pas partie au contrat ; la note n'envisage aucune démarche contre lui.",
+            "en": "The manufacturer is not a party to the contract; the note considers no action against it."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une inférence s'appuie sur ce que le texte suppose sans le dire : on ne peut « examiner les recours prévus au contrat » que si le contrat en prévoit. Écartez les options qui contredisent le texte ou qui confondent deux dates.",
+        "en": "An inference rests on what the text assumes without saying it: one can only 'examine the remedies in the contract' if the contract provides for them. Rule out options that contradict the text or confuse two dates."
+      },
+      "subSkill": "inference",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-2",
+      "stem": {
+        "fr": "Quel ton la note adopte-t-elle lorsqu'elle évoque le fournisseur et ses retards de livraison ?",
+        "en": "What tone does the note take when it discusses the supplier and its delivery delays?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Accusateur, puisqu'elle attribue les retards à la négligence du fournisseur.",
+          "rationale": {
+            "fr": "La note rapporte au contraire l'explication du fournisseur (une pénurie chez son fabricant) sans parler de négligence.",
+            "en": "On the contrary, the note reports the supplier's explanation (a shortage at its manufacturer) without mentioning negligence."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Indifférent, puisqu'elle ne propose aucune mesure concrète.",
+          "rationale": {
+            "fr": "La note propose des mesures précises : commander trois semaines à l'avance et signaler tout retard.",
+            "en": "The note proposes specific measures: order three weeks ahead and report any delay."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Enthousiaste, puisqu'elle salue la rapidité de la réponse du fournisseur.",
+          "rationale": {
+            "fr": "Rien dans la note ne félicite le fournisseur ; elle se contente de rapporter sa réponse.",
+            "en": "Nothing in the note praises the supplier; it merely reports its reply."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Mesuré, puisqu'elle rapporte les faits et l'explication du fournisseur tout en évoquant d'éventuels recours.",
+          "rationale": {
+            "fr": "La note reste factuelle, donne la version du fournisseur et mentionne des recours seulement « si la situation ne s'améliore pas ».",
+            "en": "The note stays factual, gives the supplier's account and mentions remedies only 'if the situation does not improve'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le ton se juge sur les choix du rédacteur : faits rapportés sans jugement, explication de l'autre partie, menace formulée à la condition. Ces indices révèlent un ton mesuré, ni hostile ni complaisant.",
+        "en": "Tone is judged from the writer's choices: facts reported without judgement, the other party's explanation, a warning stated as a condition. These clues reveal a measured tone, neither hostile nor indulgent."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-2",
+      "stem": {
+        "fr": "Comment l'information est-elle organisée dans cette note sur les retards de livraison ?",
+        "en": "How is the information organised in this note about delivery delays?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle présente d'abord la solution retenue, puis les causes du problème.",
+          "rationale": {
+            "fr": "L'ordre est inverse : le problème et ses causes viennent avant les consignes.",
+            "en": "The order is reversed: the problem and its causes come before the instructions."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle compare les offres de plusieurs fournisseurs avant d'en recommander un.",
+          "rationale": {
+            "fr": "La note ne parle que d'un seul fournisseur et ne compare aucune offre.",
+            "en": "The note deals with only one supplier and compares no offers."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle énumère des règles générales d'approvisionnement sans exemple concret.",
+          "rationale": {
+            "fr": "La note part au contraire d'une situation concrète, les retards de cet automne.",
+            "en": "On the contrary, the note starts from a concrete situation, this autumn's delays."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle décrit le problème et ses effets, les démarches faites, puis les consignes au personnel et la suite possible.",
+          "rationale": {
+            "fr": "C'est bien l'ordre du texte : retards et conséquences, appel et avis écrit, réponse du fournisseur, consignes, puis recours éventuels.",
+            "en": "This is the order of the text: delays and consequences, phone call and written notice, supplier's reply, instructions, then possible remedies."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour dégager la structure, repérez les marqueurs de progression : « Depuis », « d'abord… puis », « En attendant », « Si ». Ils signalent ici un enchaînement problème, démarches, consignes, suite.",
+        "en": "To identify the structure, spot the progression markers: 'Depuis', 'd'abord… puis', 'En attendant', 'Si'. Here they signal a sequence of problem, steps, instructions, next steps."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-2",
+      "stem": {
+        "fr": "Quelle démarche l'équipe a-t-elle entreprise après avoir joint le fournisseur par téléphone ?",
+        "en": "What step did the team take after reaching the supplier by phone?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle lui a envoyé un avis écrit demandant un plan de redressement.",
+          "rationale": {
+            "fr": "Le texte dit : « d'abord… par téléphone, puis nous lui avons envoyé un avis écrit lui demandant un plan de redressement ».",
+            "en": "The text says: 'first… by phone, then we sent it a written notice asking for a recovery plan'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle a lancé un nouvel appel d'offres.",
+          "rationale": {
+            "fr": "Aucun nouvel appel d'offres n'est mentionné ; seuls des recours sont envisagés plus tard.",
+            "en": "No new call for tenders is mentioned; only remedies are considered later."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle a communiqué directement avec le fabricant.",
+          "rationale": {
+            "fr": "Le fabricant est cité uniquement dans l'explication du fournisseur ; l'équipe ne l'a pas contacté.",
+            "en": "The manufacturer appears only in the supplier's explanation; the team did not contact it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle a imposé une pénalité financière au fournisseur.",
+          "rationale": {
+            "fr": "Aucune pénalité n'a été imposée ; les recours ne seront examinés que si la situation ne s'améliore pas.",
+            "en": "No penalty has been imposed; remedies will only be examined if the situation does not improve."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Les connecteurs « d'abord… puis » ordonnent les démarches. Une question sur ce qui s'est passé « après » se règle en lisant l'élément introduit par « puis ».",
+        "en": "The connectors 'd'abord… puis' (first… then) order the steps. A question about what happened 'after' is answered by reading the element introduced by 'puis'."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-3",
+      "stem": {
+        "fr": "Que laisse supposer la mise en garde contre le fractionnement d'un besoin en plusieurs marchés distincts ?",
+        "en": "What does the warning against splitting a requirement into several separate contracts suggest?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Que le fractionnement était jusqu'ici permis pour les marchés supérieurs à 100 000 $.",
+          "rationale": {
+            "fr": "Le texte dit que l'interdiction « demeure » : elle existait déjà, sans exception pour les gros marchés.",
+            "en": "The text says the prohibition 'remains': it already existed, with no exception for large contracts."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Que la direction juge possible que certains découpent un achat pour échapper à un palier d'approbation plus élevé.",
+          "rationale": {
+            "fr": "Rappeler l'interdiction de fractionner « afin de rester sous un seuil » montre que la direction anticipe ce risque, que le relèvement des seuils rend d'autant plus tentant.",
+            "en": "Restating the ban on splitting 'in order to stay under a threshold' shows management anticipates that risk, which raised thresholds make all the more tempting."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Que tous les achats courants devront désormais être regroupés en un seul marché annuel.",
+          "rationale": {
+            "fr": "Interdire le fractionnement abusif n'oblige pas à regrouper tous les achats ; cette conclusion va bien au-delà du texte.",
+            "en": "Banning improper splitting does not require grouping all purchases; this conclusion goes well beyond the text."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Que plusieurs cas de fractionnement ont déjà fait l'objet d'un examen l'an dernier.",
+          "rationale": {
+            "fr": "Le conditionnel « si elle était constatée » présente le fractionnement comme une hypothèse ; aucun cas passé n'est mentionné.",
+            "en": "The conditional 'if it were detected' presents splitting as a hypothesis; no past case is mentioned."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une mise en garde révèle une crainte de l'auteur. Pour l'inférence, demandez-vous pourquoi le rédacteur juge utile d'écrire la phrase, et vérifiez le mode verbal : un conditionnel signale une hypothèse, non un fait établi.",
+        "en": "A warning reveals a concern on the writer's part. For an inference, ask why the writer thought the sentence worth including, and check the verb mood: a conditional signals a hypothesis, not an established fact."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-3",
+      "stem": {
+        "fr": "Dans la note de service sur les seuils d'approbation, quel sens faut-il donner au substantif « relèvement » employé dans la phrase « Ce relèvement vise à alléger le fardeau administratif » ?",
+        "en": "In the memo on approval thresholds, what meaning should be given to the noun 'relèvement' as used in the sentence 'Ce relèvement vise à alléger le fardeau administratif' (This … aims to lighten the administrative burden)?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le remplacement des gestionnaires responsables des achats.",
+          "rationale": {
+            "fr": "Aucun changement de personnel n'est annoncé ; « relèvement » au sens de « relever quelqu'un de ses fonctions » ne convient pas ici.",
+            "en": "No staffing change is announced; 'relèvement' in the sense of relieving someone of duties does not fit here."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le contrôle accru des dossiers d'achat.",
+          "rationale": {
+            "fr": "Le texte insiste sur le maintien de la reddition de comptes, mais « relèvement » ne désigne pas un contrôle.",
+            "en": "The text stresses that accountability is maintained, but 'relèvement' does not denote oversight."
+          }
+        },
+        {
+          "id": "c",
+          "text": "L'augmentation du montant que les gestionnaires peuvent approuver.",
+          "rationale": {
+            "fr": "« Ce relèvement » reprend la hausse du seuil, qui passe de 25 000 $ à 40 000 $ : relever un seuil, c'est le hausser.",
+            "en": "'Ce relèvement' refers back to the threshold rising from $25,000 to $40,000: to 'relever' a threshold is to raise it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La correction d'une erreur dans les seuils antérieurs.",
+          "rationale": {
+            "fr": "Rien n'indique que les anciens seuils étaient erronés ; il s'agit d'une décision issue d'un examen, non d'une rectification.",
+            "en": "Nothing indicates the former thresholds were mistaken; this is a decision arising from a review, not a rectification."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Un mot polysémique comme « relèvement » prend son sens du contexte. Le démonstratif « Ce » renvoie à ce qui précède, soit la hausse des montants : en administration, on parle du relèvement d'un seuil, d'un plafond ou d'un taux.",
+        "en": "A word with several meanings such as 'relèvement' takes its sense from context. The demonstrative 'Ce' points back to what precedes, the increase in amounts: in administration one speaks of raising (relèvement) a threshold, ceiling or rate."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-3",
+      "stem": {
+        "fr": "Dans la phrase qui justifie la modification des seuils, à quel élément renvoie le pronom relatif « lesquels » ?",
+        "en": "In the sentence that justifies changing the thresholds, what does the relative pronoun 'lesquels' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux achats courants.",
+          "rationale": {
+            "fr": "« Lesquels » reprend « achats courants », juste avant lui : ce sont ces achats qui représentaient près de 60 % des dossiers.",
+            "en": "'Lesquels' picks up 'achats courants' (routine purchases), just before it: these purchases made up nearly 60% of files."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aux seuils d'approbation.",
+          "rationale": {
+            "fr": "Les seuils sont masculins pluriels, mais ils ne peuvent pas représenter une part des dossiers traités ; le sens les exclut.",
+            "en": "Thresholds are masculine plural, but they cannot make up a share of files processed; the meaning rules them out."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Aux gestionnaires de centre de coûts.",
+          "rationale": {
+            "fr": "Les gestionnaires sont mentionnés dans une phrase antérieure et ne constituent pas des dossiers.",
+            "en": "Managers are mentioned in an earlier sentence and are not files."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aux marchés supérieurs à 100 000 $.",
+          "rationale": {
+            "fr": "Ces marchés relèvent du comité d'examen ; la phrase porte au contraire sur les achats de faible valeur.",
+            "en": "These contracts go to the review committee; the sentence is about low-value purchases instead."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le relatif composé « lesquels », placé après une virgule, reprend le plus souvent le groupe nominal qui le précède immédiatement. Confirmez par l'accord (masculin pluriel) et par le sens du verbe qui suit.",
+        "en": "The compound relative 'lesquels', placed after a comma, usually refers to the noun phrase immediately before it. Confirm with agreement (masculine plural) and with the meaning of the verb that follows."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-3",
+      "stem": {
+        "fr": "D'après la note de service, quelle autorité devra approuver un marché de services professionnels évalué à 75 000 $ lorsque les nouveaux seuils d'approbation entreront en vigueur ?",
+        "en": "According to the memo, which authority will have to approve a professional services contract valued at $75,000 once the new approval thresholds take effect?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le service des finances, qui consigne chaque approbation dans le système financier.",
+          "rationale": {
+            "fr": "Le système financier sert à consigner les approbations ; il ne confère aucun pouvoir d'approbation.",
+            "en": "The financial system is used to record approvals; it confers no approval authority."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le comité d'examen des marchés.",
+          "rationale": {
+            "fr": "Le comité n'intervient qu'au-delà de 100 000 $ ; un marché de 75 000 $ reste sous ce plafond.",
+            "en": "The committee only steps in above $100,000; a $75,000 contract stays below that ceiling."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le gestionnaire de centre de coûts, s'il a suivi la formation obligatoire.",
+          "rationale": {
+            "fr": "Même formé, le gestionnaire ne peut approuver que jusqu'à 40 000 $ ; 75 000 $ dépasse son nouveau seuil.",
+            "en": "Even when trained, the manager can only approve up to $40,000; $75,000 exceeds the new threshold."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le directeur général.",
+          "rationale": {
+            "fr": "Entre 40 000 $ et 100 000 $, « l'approbation du directeur général demeurera requise » ; 75 000 $ se situe dans cette tranche.",
+            "en": "Between $40,000 and $100,000, 'the director general's approval will still be required'; $75,000 falls within that band."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour une question de seuils, reconstituez les tranches avant de placer le montant : jusqu'à 40 000 $ (gestionnaire), de 40 000 $ à 100 000 $ (directeur général), plus de 100 000 $ (comité). Attention à l'ancien seuil, cité seulement pour comparaison.",
+        "en": "For a threshold question, rebuild the bands before placing the amount: up to $40,000 (manager), $40,000 to $100,000 (director general), over $100,000 (committee). Watch out for the old threshold, cited only for comparison."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-3",
+      "stem": {
+        "fr": "Quelle intention l'auteur exprime-t-il en précisant que le relèvement « ne saurait toutefois être interprété comme un assouplissement des exigences de reddition de comptes » ?",
+        "en": "What intention does the writer express by stating that the increase 'cannot, however, be interpreted as a relaxation of accountability requirements'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il reconnaît que les contrôles seront allégés pour l'ensemble des marchés.",
+          "rationale": {
+            "fr": "C'est le contresens : la formule « ne saurait » nie précisément tout assouplissement des exigences.",
+            "en": "This is the misreading: the phrase 'ne saurait' precisely denies any relaxation of requirements."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il avertit les gestionnaires que leur marge de manœuvre accrue ne les dispense pas de rendre des comptes.",
+          "rationale": {
+            "fr": "Le connecteur « toutefois » et la tournure « ne saurait » posent une limite ferme, aussitôt illustrée par la consignation obligatoire et la formation exigée.",
+            "en": "The connector 'toutefois' and the phrase 'ne saurait' set a firm limit, immediately illustrated by mandatory recording and required training."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il s'excuse auprès des gestionnaires de la lourdeur des nouvelles exigences.",
+          "rationale": {
+            "fr": "Le rédacteur ne présente aucune excuse ; il énonce des obligations sur un ton normatif.",
+            "en": "The writer offers no apology; he states obligations in a prescriptive tone."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il exprime des doutes sur l'utilité de l'examen mené par la direction générale.",
+          "rationale": {
+            "fr": "L'examen est présenté comme l'origine de la mesure, sans aucune réserve sur son utilité.",
+            "en": "The review is presented as the source of the measure, with no reservation about its usefulness."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Ne saurait » (conditionnel de savoir à la forme négative) est une négation soutenue et catégorique, fréquente dans les textes administratifs. Associée à « toutefois », elle sert à prévenir une interprétation abusive : c'est une mise en garde.",
+        "en": "'Ne saurait' (negative conditional of savoir) is a formal, categorical negation common in administrative texts. Combined with 'toutefois', it serves to head off a misreading: it is a warning."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-4",
+      "stem": {
+        "fr": "Quelle est l'idée principale de cette observation de vérification portant sur les marchés modifiés ?",
+        "en": "What is the main idea of this audit observation on amended contracts?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les vérificateurs ont découvert plusieurs cas de fraude liés aux modifications de marchés.",
+          "rationale": {
+            "fr": "Le texte affirme au contraire que l'équipe « n'a relevé aucun indice de fraude ».",
+            "en": "The text states the opposite: the team 'found no indication of fraud'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La plupart des marchés examinés ont été attribués sans appel d'offres.",
+          "rationale": {
+            "fr": "Le mode d'attribution initial n'est pas évalué ; l'observation porte sur ce qui se passe après l'attribution.",
+            "en": "The original award method is not assessed; the observation is about what happens after award."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Toute modification d'un marché devrait être interdite après son attribution.",
+          "rationale": {
+            "fr": "La recommandation encadre les modifications importantes, elle ne les interdit pas ; la plupart sont d'ailleurs jugées justifiées.",
+            "en": "The recommendation regulates major amendments, it does not ban them; most are in fact judged justified."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Des modifications postérieures à l'attribution n'ont pas toujours été justifiées ni approuvées à temps, ce qui expose le Ministère à des risques.",
+          "rationale": {
+            "fr": "Cette option réunit les constats (modifications non analysées, signatures tardives), leur portée (risque de contestation) et justifie la recommandation finale.",
+            "en": "This option brings together the findings (unanalysed amendments, late signatures), their significance (risk of challenge) and supports the final recommendation."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Dans un extrait de rapport, l'idée principale relie les constats au risque qu'ils créent et à la recommandation. Écartez les options qui contredisent un constat explicite (la fraude) ou qui durcissent la recommandation (l'interdiction).",
+        "en": "In a report excerpt, the main idea links the findings to the risk they create and to the recommendation. Rule out options that contradict an explicit finding (fraud) or harden the recommendation (a ban)."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-4",
+      "stem": {
+        "fr": "Quelle progression suit cet extrait de rapport consacré aux modifications de marchés ?",
+        "en": "What progression does this report excerpt on contract amendments follow?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il expose des constats chiffrés, en interprète les causes et les risques, puis formule une recommandation.",
+          "rationale": {
+            "fr": "C'est la structure classique d'une observation de vérification, et celle du texte : échantillon et chiffres, causes probables, risque, recommandation.",
+            "en": "This is the classic structure of an audit observation, and that of the text: sample and figures, likely causes, risk, recommendation."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il formule d'abord une recommandation, puis la justifie par des exemples.",
+          "rationale": {
+            "fr": "La recommandation arrive à la fin de l'extrait, non au début.",
+            "en": "The recommendation comes at the end of the excerpt, not the beginning."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il compare deux exercices pour montrer une amélioration de la conformité.",
+          "rationale": {
+            "fr": "Les deux exercices forment un seul échantillon ; aucune comparaison entre eux n'est faite.",
+            "en": "The two fiscal years form a single sample; no comparison between them is made."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il résume les plaintes des fournisseurs écartés avant de conclure.",
+          "rationale": {
+            "fr": "Les fournisseurs écartés ne sont évoqués que comme source d'un risque éventuel ; aucune plainte n'est rapportée.",
+            "en": "Unsuccessful suppliers are mentioned only as a source of possible risk; no complaint is reported."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Les rapports de vérification suivent souvent le schéma constat, cause, effet (ou risque), recommandation. Repérer ces étapes aide à lire vite et à situer chaque information.",
+        "en": "Audit reports often follow the pattern finding, cause, effect (or risk), recommendation. Spotting these stages helps you read quickly and place each piece of information."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-4",
+      "stem": {
+        "fr": "Selon les vérificateurs, à quoi tiennent vraisemblablement les lacunes relevées dans la gestion des modifications contractuelles ?",
+        "en": "According to the auditors, what are the shortcomings found in the management of contract amendments probably due to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À une volonté délibérée de contourner les règles.",
+          "rationale": {
+            "fr": "L'absence d'« indice de fraude » et le mot « méconnaissance » écartent toute intention délibérée.",
+            "en": "The absence of any 'indication of fraud' and the word 'lack of knowledge' rule out deliberate intent."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À la pression exercée par les fournisseurs.",
+          "rationale": {
+            "fr": "Les fournisseurs ne sont jamais présentés comme une cause ; seuls les fournisseurs écartés sont cités, comme source de risque.",
+            "en": "Suppliers are never presented as a cause; only unsuccessful suppliers are cited, as a source of risk."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À une méconnaissance des règles et à l'absence d'une liste de contrôle commune.",
+          "rationale": {
+            "fr": "Le texte le dit en toutes lettres : les lacunes « semblent plutôt tenir à une méconnaissance des règles et à l'absence d'une liste de contrôle commune ».",
+            "en": "The text says so explicitly: the shortcomings 'seem rather to stem from a lack of knowledge of the rules and the absence of a common checklist'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À un manque de personnel dans les équipes d'approvisionnement.",
+          "rationale": {
+            "fr": "Ce motif est vraisemblable dans la réalité, mais le texte ne le mentionne pas.",
+            "en": "This cause is plausible in real life, but the text does not mention it."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "L'expression « tenir à » signifie « avoir pour cause ». Une question de détail exige l'information du texte, pas une explication plausible tirée de l'expérience : l'option sur le manque de personnel est séduisante, mais absente du texte.",
+        "en": "The expression 'tenir à' means 'to be due to'. A detail question requires the information in the text, not a plausible explanation from experience: the staffing option is appealing but absent from the text."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-4",
+      "stem": {
+        "fr": "Que peut-on déduire du constat selon lequel quatre modifications contractuelles ont été signées après l'exécution des travaux qu'elles autorisaient ?",
+        "en": "What can be inferred from the finding that four contract amendments were signed after the work they authorised had been carried out?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les fournisseurs concernés devront rembourser les sommes reçues.",
+          "rationale": {
+            "fr": "Le texte n'envisage aucun remboursement ; il signale un manquement à un principe, sans en tirer de conséquence financière.",
+            "en": "The text considers no reimbursement; it points to a breach of principle without drawing a financial consequence."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le Ministère s'est engagé envers des fournisseurs avant d'avoir obtenu l'approbation requise.",
+          "rationale": {
+            "fr": "Si les travaux ont été exécutés avant la signature, l'engagement a précédé l'approbation, ce qui explique le renvoi au principe enfreint.",
+            "en": "If the work was done before signature, the commitment preceded approval, which explains the reference to the principle that was breached."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Ces quatre modifications font partie des sept qui ont plus que doublé la valeur des marchés.",
+          "rationale": {
+            "fr": "Le texte ne dit pas si les deux groupes se recoupent ; rien ne permet de le conclure.",
+            "en": "The text does not say whether the two groups overlap; nothing allows that conclusion."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les travaux visés n'étaient pas nécessaires à la réalisation des marchés.",
+          "rationale": {
+            "fr": "Le problème relevé tient au moment de la signature, non à l'utilité des travaux.",
+            "en": "The problem identified concerns the timing of the signature, not the usefulness of the work."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une bonne inférence découle nécessairement du texte : travaux faits, puis autorisation signée, donc engagement avant approbation. Une option qui pourrait être vraie mais que rien n'établit (recoupement des cas, remboursement) est à écarter.",
+        "en": "A sound inference follows necessarily from the text: work done, then authorisation signed, therefore commitment before approval. An option that might be true but that nothing establishes (overlap of cases, reimbursement) should be rejected."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-4",
+      "stem": {
+        "fr": "D'après la recommandation formulée à la fin de l'extrait, laquelle des modifications suivantes nécessiterait une justification écrite approuvée avant tout engagement ?",
+        "en": "According to the recommendation at the end of the excerpt, which of the following amendments would require a written justification approved before any commitment?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Toute modification touchant un marché d'une valeur supérieure à 50 000 $.",
+          "rationale": {
+            "fr": "Le seuil de la recommandation est un pourcentage d'augmentation (50 %), non un montant en dollars.",
+            "en": "The recommendation's threshold is a percentage increase (50%), not a dollar amount."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une modification faisant passer un marché de 100 000 $ à 140 000 $.",
+          "rationale": {
+            "fr": "Cette hausse est de 40 %, donc inférieure au seuil de 50 % fixé par la recommandation.",
+            "en": "This increase is 40%, below the 50% threshold set by the recommendation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une modification faisant passer un marché de 100 000 $ à 160 000 $.",
+          "rationale": {
+            "fr": "La hausse est de 60 % : elle dépasse les 50 % visés par la recommandation.",
+            "en": "The increase is 60%: it exceeds the 50% set by the recommendation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Seulement une modification qui porterait la valeur du marché à plus du double.",
+          "rationale": {
+            "fr": "Le doublement correspond aux sept cas constatés, mais la recommandation vise toute hausse de plus de 50 %.",
+            "en": "Doubling matches the seven cases found, but the recommendation covers any increase over 50%."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Dans un rapport, distinguez les chiffres des constats (48 marchés, 19 modifiés, sept doublements) de ceux de la recommandation (plus de 50 %). Un seuil exprimé en pourcentage s'applique à l'augmentation relative, quelle que soit la valeur du marché.",
+        "en": "In a report, distinguish the figures in the findings (48 contracts, 19 amended, seven doublings) from those in the recommendation (over 50%). A threshold expressed as a percentage applies to the relative increase, whatever the contract's value."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-5",
+      "stem": {
+        "fr": "Quel est l'objet principal de cette lettre adressée au fournisseur de services de maintenance ?",
+        "en": "What is the main purpose of this letter to the maintenance services supplier?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Proposer une prolongation du contrat sous certaines conditions et solliciter une réponse du fournisseur.",
+          "rationale": {
+            "fr": "La lettre confirme l'intention de prolonger, énonce deux conditions et fixe une date de réponse : c'est son objet d'ensemble.",
+            "en": "The letter confirms the intention to extend, sets out two conditions and gives a reply date: that is its overall purpose."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Annoncer la résiliation du contrat en raison des retards d'intervention.",
+          "rationale": {
+            "fr": "Les retards sont une condition à régler, non un motif de résiliation ; la lettre vise au contraire à prolonger le contrat.",
+            "en": "The delays are a condition to be remedied, not grounds for termination; the letter aims instead to extend the contract."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Inviter le fournisseur à participer au nouvel appel d'offres.",
+          "rationale": {
+            "fr": "Le nouvel appel d'offres est mentionné pour justifier la prolongation, sans invitation à y soumissionner.",
+            "en": "The new call for tenders is mentioned to justify the extension, with no invitation to bid on it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Accepter la hausse des taux horaires demandée par le fournisseur.",
+          "rationale": {
+            "fr": "Aucune hausse n'a été demandée ni acceptée ; les taux restent inchangés sauf preuve d'une hausse des coûts.",
+            "en": "No increase has been requested or accepted; rates remain unchanged unless a rise in costs is proven."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "L'objet d'une lettre administrative se dégage de la phrase d'ouverture et de la demande finale. Une option qui transforme une condition (les retards, les taux) en décision prise est un contresens.",
+        "en": "The purpose of an administrative letter emerges from the opening sentence and the closing request. An option that turns a condition (delays, rates) into a decision already made is a misreading."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-5",
+      "stem": {
+        "fr": "Dans la lettre de l'autorité contractante, quel sens prend la formule « Nous vous saurions gré de » employée dans la phrase qui fixe l'échéance du 15 octobre ?",
+        "en": "In the contracting authority's letter, what does the phrase 'Nous vous saurions gré de' mean as used in the sentence that sets the 15 October deadline?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Nous vous permettons de",
+          "rationale": {
+            "fr": "La formule n'accorde aucune permission ; elle exprime une demande polie adressée au fournisseur.",
+            "en": "The phrase grants no permission; it expresses a polite request to the supplier."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Nous vous déconseillons de",
+          "rationale": {
+            "fr": "C'est l'inverse : l'autorité contractante souhaite recevoir la réponse, elle ne la déconseille pas.",
+            "en": "It is the reverse: the contracting authority wants to receive the reply; it does not discourage it."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Nous vous mettons en demeure de",
+          "rationale": {
+            "fr": "La suite « faute de quoi » peut tromper, mais « savoir gré » reste une formule de courtoisie ; une mise en demeure relève d'un registre juridique contraignant que la lettre n'adopte pas.",
+            "en": "The following 'faute de quoi' may mislead, but 'savoir gré' remains a courtesy formula; a formal notice belongs to a binding legal register the letter does not adopt."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Nous vous serions reconnaissants de",
+          "rationale": {
+            "fr": "« Savoir gré à quelqu'un de quelque chose », c'est lui en être reconnaissant ; au conditionnel, la formule exprime une demande courtoise.",
+            "en": "'Savoir gré à quelqu'un de quelque chose' means to be grateful to someone for something; in the conditional, it expresses a courteous request."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Savoir gré » appartient au registre soutenu de la correspondance officielle et signifie « être reconnaissant ». Le conditionnel (« saurions ») adoucit la demande. Ne confondez pas la fermeté de l'échéance avec le sens de la formule elle-même.",
+        "en": "'Savoir gré' belongs to the formal register of official correspondence and means 'to be grateful'. The conditional ('saurions') softens the request. Do not confuse the firmness of the deadline with the meaning of the phrase itself."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-5",
+      "stem": {
+        "fr": "Dans la phrase « Elle demeure toutefois assujettie à certaines conditions », à quoi renvoie le pronom personnel « Elle » ?",
+        "en": "In the sentence 'Elle demeure toutefois assujettie à certaines conditions' (It nevertheless remains subject to certain conditions), what does the personal pronoun 'Elle' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À la rencontre du 14 septembre.",
+          "rationale": {
+            "fr": "La rencontre est un événement passé ; elle ne peut pas être soumise à des conditions futures.",
+            "en": "The meeting is a past event; it cannot be subject to future conditions."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À la prolongation de six mois du contrat.",
+          "rationale": {
+            "fr": "« Elle » reprend « Cette prolongation », sujet de la phrase précédente ; les conditions qui suivent portent bien sur la prolongation.",
+            "en": "'Elle' picks up 'Cette prolongation', the subject of the previous sentence; the conditions that follow do concern the extension."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À la continuité du service.",
+          "rationale": {
+            "fr": "C'est le nom féminin le plus proche, ce qui peut tromper, mais la continuité est le but visé, non ce qui est soumis à conditions.",
+            "en": "It is the nearest feminine noun, which can mislead, but continuity is the aim, not what is made subject to conditions."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À l'équipe du fournisseur.",
+          "rationale": {
+            "fr": "L'équipe n'est évoquée que plus loin, pour souligner la qualité de la collaboration.",
+            "en": "The team is only mentioned later, to highlight the quality of the collaboration."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Un pronom sujet en début de phrase reprend souvent le sujet de la phrase précédente plutôt que le dernier nom lu. Vérifiez votre choix en remplaçant le pronom : « La prolongation demeure assujettie à certaines conditions » a du sens, « La continuité demeure assujettie… » n'en a pas ici.",
+        "en": "A subject pronoun at the start of a sentence often picks up the subject of the previous sentence rather than the last noun read. Check your choice by substituting: 'The extension remains subject to certain conditions' makes sense; 'Continuity remains subject…' does not here."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-5",
+      "stem": {
+        "fr": "Quel ton l'autorité contractante adopte-t-elle envers le fournisseur dans l'ensemble de cette correspondance officielle ?",
+        "en": "What tone does the contracting authority take towards the supplier throughout this official correspondence?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Hostile, car elle menace de résilier immédiatement le contrat.",
+          "rationale": {
+            "fr": "Aucune résiliation immédiate n'est évoquée ; la lettre propose au contraire de prolonger le contrat.",
+            "en": "No immediate termination is mentioned; on the contrary, the letter proposes extending the contract."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Familier, car elle s'adresse au fournisseur comme à un collègue.",
+          "rationale": {
+            "fr": "« Madame », « Nous vous saurions gré » et « Veuillez agréer » relèvent d'un registre soutenu, pas familier.",
+            "en": "'Madame', 'Nous vous saurions gré' and 'Veuillez agréer' belong to a formal register, not a familiar one."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Courtois mais ferme, car elle salue la collaboration tout en posant des conditions précises.",
+          "rationale": {
+            "fr": "La lettre conjugue formules de politesse et éloge de la collaboration avec des exigences nettes (« devront avoir été corrigés », « ne saurions », « faute de quoi »).",
+            "en": "The letter combines courtesy formulas and praise for the collaboration with clear requirements ('must have been remedied', 'ne saurions', 'faute de quoi')."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Hésitant, car elle n'est pas certaine de vouloir prolonger le contrat.",
+          "rationale": {
+            "fr": "La lettre « confirme » une intention ; les conditions encadrent la décision sans traduire d'hésitation.",
+            "en": "The letter 'confirms' an intention; the conditions frame the decision without showing hesitation."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le ton d'une lettre se lit dans l'équilibre de ses formules : « néanmoins » introduit un compliment après des exigences, et « faute de quoi » rappelle les conséquences. Courtoisie et fermeté coexistent souvent dans la correspondance administrative.",
+        "en": "A letter's tone shows in the balance of its wording: 'néanmoins' introduces a compliment after requirements, and 'faute de quoi' recalls the consequences. Courtesy and firmness often coexist in administrative correspondence."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-procurement-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-procurement-5",
+      "stem": {
+        "fr": "Comment la lettre organise-t-elle les exigences relatives à la prolongation du contrat de maintenance ?",
+        "en": "How does the letter organise the requirements relating to the extension of the maintenance contract?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle annonce l'existence de conditions, puis les présente en deux volets introduits par « D'une part » et « D'autre part ».",
+          "rationale": {
+            "fr": "La phrase « Elle demeure toutefois assujettie à certaines conditions » annonce les exigences, que les deux locutions détaillent ensuite.",
+            "en": "The sentence 'It nevertheless remains subject to certain conditions' announces the requirements, which the two phrases then set out."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle les classe par ordre chronologique, de la plus ancienne à la plus récente.",
+          "rationale": {
+            "fr": "Les deux conditions ne sont pas datées ni ordonnées dans le temps ; elles sont simplement juxtaposées.",
+            "en": "The two conditions are neither dated nor ordered in time; they are simply set side by side."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle les répartit entre les obligations du Ministère et celles du fournisseur.",
+          "rationale": {
+            "fr": "Les deux conditions visent le fournisseur (justifier une hausse, corriger les retards) ; aucune n'impose d'obligation à l'organisation.",
+            "en": "Both conditions concern the supplier (justify an increase, remedy delays); neither places an obligation on the organisation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle les regroupe dans la formule de salutation finale.",
+          "rationale": {
+            "fr": "La formule finale est purement protocolaire ; les exigences figurent au milieu de la lettre.",
+            "en": "The closing formula is purely ceremonial; the requirements appear in the middle of the letter."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Les locutions corrélatives « D'une part… d'autre part » structurent une énumération en deux éléments de même niveau. Repérer une phrase d'annonce suivie de ces marqueurs permet de dégager rapidement le plan d'un texte.",
+        "en": "The paired phrases 'D'une part… d'autre part' (on the one hand… on the other) structure a two-item list of equal weight. Spotting an announcing sentence followed by these markers lets you quickly identify a text's plan."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-procurement-1",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Calendrier de l'appel d'offres pour le mobilier de bureau",
+      "body": "Bonjour à toutes et à tous,\n\nJe vous transmets le calendrier de l'appel d'offres pour le remplacement du mobilier de nos bureaux régionaux. La demande de propositions sera publiée le 3 novembre, et les fournisseurs auront 30 jours civils pour déposer leur soumission. Une séance d'information virtuelle aura lieu le 10 novembre ; les questions écrites seront acceptées jusqu'au 20 novembre. L'évaluation technique durera environ trois semaines. Chaque soumission sera notée sur 100 points, et seules celles qui obtiendront au moins 70 points passeront à l'évaluation financière. Nous prévoyons attribuer le contrat à la mi-janvier, pour une valeur estimée à 450 000 $. Je vous rappelle que, pendant la période de soumission, tout échange avec les fournisseurs doit passer par l'autorité contractante. Merci de me signaler dès maintenant vos disponibilités pour le comité d'évaluation.\n\nNadia Bélanger\nChef d'équipe, Approvisionnement",
+      "wordCount": 139,
+      "targetBand": "B",
+      "topic": "procurement",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 15.44,
+        "rareWordRatio": 0.266
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-procurement-2",
+      "lang": "fr",
+      "docType": "note",
+      "title": "Retards de livraison des fournitures informatiques",
+      "body": "Depuis le début de l'automne, notre fournisseur de fournitures informatiques a livré plusieurs commandes en retard, parfois de plus de deux semaines. Ces retards ont obligé certaines équipes à reporter l'installation des postes de travail de nouveaux employés. Nous avons d'abord communiqué avec le fournisseur par téléphone, puis nous lui avons envoyé un avis écrit lui demandant un plan de redressement. Il nous a répondu qu'une pénurie de pièces chez son propre fabricant expliquait la situation et qu'il prévoyait un retour à la normale d'ici la fin du mois. En attendant, nous vous demandons de passer vos commandes au moins trois semaines avant la date de besoin et de signaler tout nouveau retard à l'équipe de l'approvisionnement. Si la situation ne s'améliore pas, nous examinerons les recours prévus au contrat.",
+      "wordCount": 130,
+      "targetBand": "B",
+      "topic": "procurement",
+      "readability": {
+        "sentences": 6,
+        "avgSentenceLength": 21.67,
+        "rareWordRatio": 0.231
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-procurement-3",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Révision des seuils d'approbation des marchés",
+      "body": "À compter du 1er avril, les seuils d'approbation des marchés de biens et de services seront modifiés à la suite de l'examen mené par la Direction générale des services ministériels. Les gestionnaires de centre de coûts pourront désormais approuver les marchés d'une valeur maximale de 40 000 $, contre 25 000 $ actuellement ; au-delà de ce montant et jusqu'à 100 000 $, l'approbation du directeur général demeurera requise. Tout marché supérieur à 100 000 $ continuera d'être soumis au comité d'examen des marchés. Ce relèvement vise à alléger le fardeau administratif lié aux achats courants, lesquels représentaient près de 60 % des dossiers traités l'an dernier. Il ne saurait toutefois être interprété comme un assouplissement des exigences de reddition de comptes : chaque approbation devra être consignée dans le système financier, et les gestionnaires qui n'auront pas suivi, d'ici le 31 mars, la formation obligatoire sur la délégation des pouvoirs ne pourront exercer ce nouveau pouvoir. Par ailleurs, il demeure interdit de fractionner un besoin en plusieurs marchés afin de rester sous un seuil ; une telle pratique, si elle était constatée, donnerait lieu à un examen.",
+      "wordCount": 188,
+      "targetBand": "C",
+      "topic": "procurement",
+      "readability": {
+        "sentences": 6,
+        "avgSentenceLength": 31.33,
+        "rareWordRatio": 0.239
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-procurement-4",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Observation 3 : modifications apportées aux marchés après leur attribution",
+      "body": "L'équipe de vérification a examiné un échantillon de 48 marchés attribués au cours des deux derniers exercices. Dans 19 de ces dossiers, soit près de 40 %, le marché a fait l'objet d'au moins une modification après son attribution. Si la plupart de ces modifications étaient justifiées par des besoins imprévus, sept d'entre elles ont porté la valeur du marché à plus du double de sa valeur initiale, sans que le dossier contienne une analyse démontrant qu'un nouvel appel d'offres n'était pas préférable. Dans quatre cas, la modification a été signée après l'exécution des travaux qu'elle devait autoriser, ce qui contrevient au principe selon lequel aucun engagement ne doit précéder l'approbation. L'équipe n'a relevé aucun indice de fraude ; les lacunes observées semblent plutôt tenir à une méconnaissance des règles et à l'absence d'une liste de contrôle commune. Elles n'en exposent pas moins le Ministère à un risque de contestation de la part des fournisseurs écartés. Recommandation : que la Direction de l'approvisionnement exige, pour toute modification qui ferait augmenter la valeur d'un marché de plus de 50 %, une justification écrite approuvée avant tout engagement.",
+      "wordCount": 186,
+      "targetBand": "C",
+      "topic": "procurement",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 26.57,
+        "rareWordRatio": 0.215
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-procurement-5",
+      "lang": "fr",
+      "docType": "letter",
+      "title": "Proposition de modification au contrat de maintenance",
+      "body": "Madame,\n\nComme suite à notre rencontre du 14 septembre, nous vous confirmons notre intention de prolonger de six mois le contrat de maintenance des systèmes de ventilation de nos immeubles, qui doit prendre fin le 31 décembre. Cette prolongation, que nous souhaitons conclure par voie de modification, permettrait d'assurer la continuité du service le temps que le nouvel appel d'offres soit mené à terme. Elle demeure toutefois assujettie à certaines conditions. D'une part, les taux horaires prévus au contrat resteraient inchangés, à moins que vous ne puissiez démontrer, pièces justificatives à l'appui, une hausse de vos propres coûts. D'autre part, les retards d'intervention constatés au printemps devront avoir été corrigés : nous ne saurions prolonger une entente dont les modalités ne seraient pas respectées. Nous tenons néanmoins à souligner la qualité de la collaboration établie avec votre équipe depuis le début du contrat. Nous vous saurions gré de nous faire part de votre réponse au plus tard le 15 octobre, faute de quoi nous devrons envisager d'autres options.\n\nVeuillez agréer, Madame, l'expression de nos sentiments distingués.\n\nL'autorité contractante",
+      "wordCount": 178,
+      "targetBand": "C",
+      "topic": "procurement",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 19.78,
+        "rareWordRatio": 0.264
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

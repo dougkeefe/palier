@@ -1,0 +1,58 @@
+{
+  "bandCuts": [
+    {
+      "band": "X",
+      "max": 8,
+      "min": 0
+    },
+    {
+      "band": "A",
+      "max": 13,
+      "min": 9
+    },
+    {
+      "band": "B",
+      "max": 18,
+      "min": 14
+    },
+    {
+      "band": "C",
+      "max": 25,
+      "min": 19
+    }
+  ],
+  "id": "fr-reading-unsupervised-v4",
+  "itemIds": [
+    "claude-r-environment-1-1",
+    "claude-r-environment-1-4",
+    "claude-r-finance-and-budgets-1-2",
+    "claude-r-finance-and-budgets-1-4",
+    "claude-r-environment-2-4",
+    "claude-r-environment-2-5",
+    "claude-r-policy-and-legislation-1-4",
+    "claude-r-policy-and-legislation-1-3",
+    "claude-r-procurement-2-3",
+    "claude-r-communications-2-5",
+    "claude-r-human-resources-4-2",
+    "claude-r-environment-5-1",
+    "claude-r-official-languages-3-2",
+    "claude-r-health-and-safety-5-3",
+    "claude-r-health-and-safety-5-5",
+    "claude-r-finance-and-budgets-5-4",
+    "claude-r-official-languages-4-3",
+    "claude-r-communications-5-1",
+    "claude-r-project-management-1-1",
+    "claude-r-finance-and-budgets-2-2",
+    "claude-r-project-management-2-4",
+    "claude-r-human-resources-1-5",
+    "claude-r-health-and-safety-2-5",
+    "claude-r-service-delivery-1-3",
+    "claude-r-policy-and-legislation-5-5"
+  ],
+  "lang": "fr",
+  "mode": "unsupervised",
+  "pilotItemIds": [],
+  "skill": "reading",
+  "timeLimitMinutes": 45,
+  "version": 4
+}

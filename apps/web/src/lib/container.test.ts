@@ -517,11 +517,13 @@ describe("createContainer in production", () => {
     expect(await c.items.bankVersion()).toBe(BANK_VERSION);
   });
 
-  it("reads an oral scenario for every session type at B and C from the committed bank (D114)", async () => {
+  // v4 carries v3's scenarios, retired, beside the authored ones (D205), so this asks what the picker
+  // needs: a published scenario for every type and band (D207).
+  it("reads a published oral scenario for every session type at B and C from the committed bank (D114)", async () => {
     const c = createContainer({ hermetic: false });
-    const scenarios = await c.items.scenarios();
+    const scenarios = (await c.items.scenarios()).filter((s) => s.status !== "retired");
 
-    expect(scenarios.map((s) => `${s.sessionType}-${s.targetBand}`).sort()).toEqual(
+    expect([...new Set(scenarios.map((s) => `${s.sessionType}-${s.targetBand}`))].sort()).toEqual(
       ["full", "opinion", "situation", "warmup", "work"].flatMap((type) => [`${type}-B`, `${type}-C`]).sort(),
     );
     expect(requested).toContain(`${BANK_BASE_PATH}/bank/v${String(BANK_VERSION)}/oral/scenarios.json`);

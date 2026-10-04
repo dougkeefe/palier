@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-environment-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-1",
+      "stem": {
+        "fr": "Quel est l'objet principal de ce bulletin destiné aux occupants de l'édifice ?",
+        "en": "What is the main purpose of this bulletin addressed to the building's occupants?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Présenter en détail les résultats de l'audit des déchets réalisé au printemps.",
+          "rationale": {
+            "fr": "L'audit n'est cité que pour justifier le programme : le bulletin n'en donne qu'un seul chiffre.",
+            "en": "The audit is cited only to justify the program: the bulletin gives a single figure from it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Recruter des employés volontaires pour agir comme ambassadeurs du tri à chaque étage.",
+          "rationale": {
+            "fr": "Les ambassadeurs sont déjà prévus ; le bulletin ne lance aucun appel de volontaires.",
+            "en": "The ambassadors are already in place; the bulletin issues no call for volunteers."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Annoncer la mise en place d'un nouveau système de tri et expliquer comment il fonctionnera.",
+          "rationale": {
+            "fr": "C'est l'objet du bulletin : il annonce le programme dès la première phrase, puis décrit les îlots, l'objectif et le soutien offert.",
+            "en": "This is the bulletin's purpose: it announces the program in the first sentence, then describes the stations, the goal and the support offered."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Rappeler aux occupants les règles de recyclage qui sont déjà en vigueur dans l'édifice.",
+          "rationale": {
+            "fr": "Le programme est présenté comme nouveau ; il ne s'agit pas d'un rappel de règles existantes.",
+            "en": "The program is presented as new; it is not a reminder of existing rules."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour dégager l'idée principale d'un bulletin, repérez la phrase d'annonce (souvent la première) et vérifiez que la réponse couvre l'ensemble du texte plutôt qu'un seul détail, comme l'audit ou les ambassadeurs.",
+        "en": "To find a bulletin's main idea, locate the announcing sentence (often the first) and check that the answer covers the whole text rather than a single detail, such as the audit or the ambassadors."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-1",
+      "stem": {
+        "fr": "Où les nouveaux îlots de tri à quatre bacs seront-ils installés ?",
+        "en": "Where will the new four-bin sorting stations be installed?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Près des ascenseurs et dans chacune des cuisinettes.",
+          "rationale": {
+            "fr": "Le bulletin précise que les îlots seront « installés près des ascenseurs et dans chaque cuisinette ».",
+            "en": "The bulletin states that the stations will be 'installed near the elevators and in each kitchenette'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Sous chaque bureau, à la place des petites poubelles.",
+          "rationale": {
+            "fr": "Ce sont les petites poubelles qui se trouvaient sous les bureaux ; elles sont retirées, et les îlots sont installés ailleurs.",
+            "en": "The small bins were the ones under the desks; they are being removed, and the stations go elsewhere."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Dans les salles de réunion et près des imprimantes.",
+          "rationale": {
+            "fr": "Ces emplacements sont plausibles, mais le bulletin ne les mentionne pas.",
+            "en": "These locations are plausible, but the bulletin does not mention them."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À l'entrée principale de l'édifice seulement.",
+          "rationale": {
+            "fr": "Le bulletin parle d'îlots répartis près des ascenseurs et dans les cuisinettes, pas d'un emplacement unique à l'entrée.",
+            "en": "The bulletin speaks of stations near the elevators and in the kitchenettes, not of a single spot at the entrance."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour une question de détail, retrouvez la phrase qui contient l'information demandée et méfiez-vous des éléments voisins : ici, les petites poubelles sous les bureaux sont ce qui disparaît, non ce qui est installé.",
+        "en": "For a detail question, find the sentence that holds the information and beware of nearby elements: here, the small bins under the desks are what is removed, not what is installed."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-1",
+      "stem": {
+        "fr": "Selon l'audit réalisé au printemps, quelle part du contenu des poubelles aurait pu être recyclée ou compostée ?",
+        "en": "According to the audit conducted in the spring, what share of the bins' contents could have been recycled or composted?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Environ la moitié du contenu.",
+          "rationale": {
+            "fr": "« La moitié » renvoie à l'objectif de réduction des déchets envoyés à l'enfouissement, non au résultat de l'audit.",
+            "en": "'Half' refers to the target for reducing waste sent to landfill, not to the audit's finding."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Environ 40 % du contenu.",
+          "rationale": {
+            "fr": "Ce chiffre n'apparaît pas dans le bulletin ; il correspond à la part qui reste si l'on soustrait 60 % du total.",
+            "en": "This figure does not appear in the bulletin; it is what remains when 60% is subtracted from the total."
+          }
+        },
+        {
+          "id": "c",
+          "text": "La totalité, sauf les contenants consignés.",
+          "rationale": {
+            "fr": "Le bulletin ne dit rien de tel ; les contenants consignés sont simplement l'une des quatre catégories de bacs.",
+            "en": "The bulletin says nothing of the kind; deposit containers are simply one of the four bin categories."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Près de 60 % du contenu.",
+          "rationale": {
+            "fr": "Le bulletin indique que « près de 60 % du contenu de nos poubelles aurait pu être recyclé ou composté ».",
+            "en": "The bulletin states that 'nearly 60% of the contents of our bins could have been recycled or composted'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Quand un texte contient plusieurs chiffres, associez chacun à ce qu'il mesure : 60 % décrit le constat de l'audit, alors que « de moitié » exprime l'objectif à atteindre d'ici un an.",
+        "en": "When a text contains several figures, match each one to what it measures: 60% describes the audit's finding, whereas 'by half' expresses the target to reach within a year."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-1",
+      "stem": {
+        "fr": "Dans le bulletin, que signifie l'expression « déchets envoyés à l'enfouissement » ?",
+        "en": "In the bulletin, what does the expression 'déchets envoyés à l'enfouissement' mean?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Des déchets expédiés vers un centre de tri pour y être recyclés.",
+          "rationale": {
+            "fr": "Le recyclage est justement ce que le programme veut favoriser à la place de l'enfouissement ; les deux s'opposent.",
+            "en": "Recycling is precisely what the program wants to promote instead of landfill; the two are opposites."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Des déchets transportés vers un site où ils sont enterrés.",
+          "rationale": {
+            "fr": "« Enfouir », c'est mettre sous terre : l'enfouissement désigne l'élimination des déchets dans un site d'enfouissement.",
+            "en": "'Enfouir' means to bury: 'enfouissement' refers to disposing of waste in a landfill site."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Des déchets transformés en compost.",
+          "rationale": {
+            "fr": "Le compostage est l'une des solutions de rechange à l'enfouissement, non un synonyme.",
+            "en": "Composting is one of the alternatives to landfill, not a synonym for it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Des déchets retournés au fournisseur contre un remboursement.",
+          "rationale": {
+            "fr": "Cette idée évoque les contenants consignés, qui forment une catégorie distincte.",
+            "en": "This idea evokes deposit containers, which form a separate category."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le contexte aide à préciser le sens : l'équipe veut réduire les déchets « envoyés à l'enfouissement » en augmentant le recyclage et le compostage. L'enfouissement est donc ce qui arrive aux déchets qui ne sont ni recyclés ni compostés : ils sont enterrés.",
+        "en": "Context narrows the meaning: the team wants to reduce waste 'sent to landfill' by increasing recycling and composting. Landfill is therefore what happens to waste that is neither recycled nor composted: it is buried."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-1",
+      "stem": {
+        "fr": "Dans la phrase « Ceux-ci porteront un brassard vert », à qui renvoie le pronom « Ceux-ci » ?",
+        "en": "In the sentence 'Ceux-ci porteront un brassard vert', who does the pronoun 'Ceux-ci' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux ambassadeurs du tri présents à chaque étage.",
+          "rationale": {
+            "fr": "« Ceux-ci » reprend le nom masculin pluriel le plus proche qui désigne des personnes : les ambassadeurs du tri, mentionnés dans la phrase précédente.",
+            "en": "'Ceux-ci' picks up the nearest masculine plural noun designating people: the sorting ambassadors, mentioned in the previous sentence."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aux membres de l'équipe des installations.",
+          "rationale": {
+            "fr": "L'équipe des installations n'est pas mentionnée dans la phrase qui précède ; le pronom reprend un nom tout proche.",
+            "en": "The facilities team is not mentioned in the preceding sentence; the pronoun picks up a noun close by."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Aux occupants qui ont des questions sur le tri.",
+          "rationale": {
+            "fr": "Ce sont les ambassadeurs qui répondent aux questions ; rien n'indique que les occupants porteront un brassard.",
+            "en": "The ambassadors are the ones answering questions; nothing indicates that occupants will wear an armband."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aux îlots de tri installés près des ascenseurs.",
+          "rationale": {
+            "fr": "Des îlots ne peuvent pas porter de brassard, et ils sont mentionnés bien plus haut dans le texte.",
+            "en": "Stations cannot wear an armband, and they are mentioned much earlier in the text."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le pronom démonstratif « celui-ci / ceux-ci » renvoie au dernier nom mentionné qui s'accorde avec lui en genre et en nombre et qui convient au sens. Ici, seuls les ambassadeurs peuvent porter un brassard.",
+        "en": "The demonstrative pronoun 'celui-ci / ceux-ci' refers to the last mentioned noun that agrees with it in gender and number and fits the meaning. Here, only the ambassadors can wear an armband."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-2",
+      "stem": {
+        "fr": "Quel est le principal objectif du courriel d'Hélène Tremblay ?",
+        "en": "What is the main purpose of Hélène Tremblay's email?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer l'achat de nouvelles imprimantes pour la direction générale.",
+          "rationale": {
+            "fr": "Le courriel parle de régler les imprimantes existantes, non d'en acheter de nouvelles.",
+            "en": "The email speaks of setting up the existing printers, not of buying new ones."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Demander aux employés de cesser complètement d'imprimer.",
+          "rationale": {
+            "fr": "Le but est de réduire l'impression, non de l'interdire : le recto verso et les exceptions montrent que l'on continuera d'imprimer.",
+            "en": "The goal is to reduce printing, not ban it: double-sided printing and exceptions show that printing will continue."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Présenter le bilan de la consommation de papier de l'an dernier.",
+          "rationale": {
+            "fr": "Le chiffre de l'an dernier sert seulement d'introduction ; l'essentiel du courriel porte sur les mesures à venir.",
+            "en": "Last year's figure only serves as an introduction; most of the email is about the upcoming measures."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Informer le personnel des mesures qui visent à réduire l'impression.",
+          "rationale": {
+            "fr": "C'est l'objet du courriel : il annonce « trois mesures » et les décrit l'une après l'autre.",
+            "en": "This is the email's purpose: it announces 'three measures' and describes them one after the other."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "L'idée principale correspond à ce qui occupe la plus grande partie du message. Ici, le chiffre de l'an dernier n'est qu'un point de départ ; le cœur du courriel est l'annonce des trois mesures.",
+        "en": "The main idea is what takes up most of the message. Here, last year's figure is only a starting point; the heart of the email is the announcement of the three measures."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-2",
+      "stem": {
+        "fr": "Que devra faire un employé pour obtenir un document qu'il a envoyé à l'imprimante ?",
+        "en": "What will an employee have to do to get a document they have sent to the printer?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Obtenir l'autorisation préalable de son gestionnaire.",
+          "rationale": {
+            "fr": "L'autorisation du gestionnaire concerne seulement les exceptions pour ceux qui doivent annoter sur papier.",
+            "en": "The manager's authorization concerns only exceptions for those who need to annotate on paper."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Passer sa carte d'identité sur le lecteur de l'imprimante.",
+          "rationale": {
+            "fr": "Le courriel précise que les documents ne sortiront qu'une fois la carte d'identité passée sur le lecteur.",
+            "en": "The email states that documents will be released only once the ID card has been passed over the reader."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Choisir lui-même le mode recto verso dans les paramètres.",
+          "rationale": {
+            "fr": "Le recto verso sera réglé par défaut ; l'employé n'aura pas à le choisir.",
+            "en": "Double-sided will be the default setting; the employee will not have to choose it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aller le chercher dans le bac dans l'heure qui suit.",
+          "rationale": {
+            "fr": "Le courriel ne fixe aucun délai ; il mentionne le bac seulement pour parler des impressions oubliées.",
+            "en": "The email sets no time limit; it mentions the tray only in connection with forgotten printouts."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Repérez le connecteur qui introduit chaque mesure (« D'abord », « Ensuite », « Enfin ») : la deuxième décrit la condition à remplir pour qu'un document sorte de l'imprimante.",
+        "en": "Find the connector that introduces each measure ('First', 'Next', 'Finally'): the second describes the condition for a document to come out of the printer."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-2",
+      "stem": {
+        "fr": "D'après le courriel, combien de pages chaque employé a-t-il imprimées en moyenne l'an dernier ?",
+        "en": "According to the email, how many pages did each employee print on average last year?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Environ 1,2 million de pages.",
+          "rationale": {
+            "fr": "Ce chiffre correspond au total de la direction générale, non à la moyenne par employé.",
+            "en": "This figure is the total for the branch, not the average per employee."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Environ 1 200 pages.",
+          "rationale": {
+            "fr": "Ce chiffre confond « 1,2 million » avec mille deux cents ; il ne figure pas dans le courriel.",
+            "en": "This figure confuses '1.2 million' with one thousand two hundred; it does not appear in the email."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Près de 2 400 pages.",
+          "rationale": {
+            "fr": "Le courriel indique « soit près de 2 400 pages par employé ».",
+            "en": "The email states 'that is, nearly 2,400 pages per employee'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Près de 24 000 pages.",
+          "rationale": {
+            "fr": "Ce chiffre multiplie par dix la moyenne indiquée dans le courriel.",
+            "en": "This figure is ten times the average given in the email."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Distinguez le total d'un groupe et la moyenne par personne. Ici, « soit » introduit une reformulation du total (1,2 million) sous forme de moyenne par employé (2 400).",
+        "en": "Distinguish a group total from a per-person average. Here, 'soit' introduces a restatement of the total (1.2 million) as an average per employee (2,400)."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-2",
+      "stem": {
+        "fr": "Que peut-on déduire au sujet des impressions oubliées dans le bac de l'imprimante ?",
+        "en": "What can be inferred about printouts left behind in the printer tray?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elles proviennent surtout des documents des comités de gestion.",
+          "rationale": {
+            "fr": "Rien ne relie les impressions oubliées aux comités de gestion ; ce sont deux mesures distinctes.",
+            "en": "Nothing links forgotten printouts to the management committees; these are two separate measures."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elles seront désormais détruites à la fin de chaque journée.",
+          "rationale": {
+            "fr": "Le courriel n'annonce aucune procédure de destruction ; il cherche à éviter que ces impressions existent.",
+            "en": "The email announces no shredding procedure; it seeks to prevent such printouts from existing."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elles constituent actuellement un gaspillage que la nouvelle mesure doit éliminer.",
+          "rationale": {
+            "fr": "Si la carte doit « éviter les impressions oubliées », c'est que ces pages imprimées pour rien posent problème aujourd'hui.",
+            "en": "If the card is meant to 'prevent forgotten printouts', it means that these pages printed for nothing are a problem today."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elles concernent uniquement les impressions en couleur.",
+          "rationale": {
+            "fr": "Le courriel ne fait aucun lien entre la couleur et les impressions oubliées.",
+            "en": "The email makes no link between colour and forgotten printouts."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une inférence part de ce que le texte dit pour en tirer ce qu'il suppose. Une mesure conçue pour « éviter » quelque chose dans le cadre d'une réduction du papier suppose que ce phénomène existe et qu'il gaspille du papier.",
+        "en": "An inference starts from what the text says to work out what it assumes. A measure designed to 'prevent' something as part of a paper-reduction effort assumes that the phenomenon exists and wastes paper."
+      },
+      "subSkill": "inference",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-2",
+      "stem": {
+        "fr": "Quel ton la directrice adopte-t-elle envers les employés qui préfèrent annoter leurs documents sur papier ?",
+        "en": "What tone does the director adopt toward employees who prefer to annotate their documents on paper?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Compréhensif, tout en maintenant les nouvelles règles.",
+          "rationale": {
+            "fr": "Elle reconnaît leur préférence (« Je sais que… ») et offre une voie d'exception, sans renoncer aux mesures.",
+            "en": "She acknowledges their preference ('I know that…') and offers a route to an exception, without dropping the measures."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Réprobateur, car elle juge cette habitude dépassée.",
+          "rationale": {
+            "fr": "Aucun mot du courriel ne critique cette habitude.",
+            "en": "No word in the email criticizes this habit."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Indifférent, puisqu'aucune exception n'est possible.",
+          "rationale": {
+            "fr": "Elle prévoit au contraire qu'un gestionnaire « pourra autoriser une exception ».",
+            "en": "On the contrary, she provides that a manager 'may authorize an exception'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Hésitant, car elle n'est pas certaine de maintenir les mesures.",
+          "rationale": {
+            "fr": "Les mesures sont annoncées avec assurance (« entreront en vigueur ») ; rien n'indique une hésitation.",
+            "en": "The measures are announced with confidence ('will come into effect'); nothing suggests hesitation."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour juger du ton, observez les marques d'attitude : « Je sais que » montre de l'écoute, et l'offre d'une exception confirme une attitude compréhensive, alors que le reste du courriel maintient fermement les mesures.",
+        "en": "To judge tone, look at markers of attitude: 'I know that' shows attentiveness, and the offer of an exception confirms an understanding stance, while the rest of the email firmly maintains the measures."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-3",
+      "stem": {
+        "fr": "Que peut-on déduire de l'exigence du directeur, qui demande à chaque gestionnaire régional de faire remplir un registre de déplacements pendant trois mois ?",
+        "en": "What can be inferred from the director's requirement that each regional manager have a trip log filled out for three months?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le Ministère soupçonne que certains véhicules sont utilisés à des fins personnelles.",
+          "rationale": {
+            "fr": "La note ne parle jamais d'usage abusif ; le registre est lié au manque de données pour choisir les véhicules.",
+            "en": "The memo never mentions misuse; the log is tied to the lack of data for choosing vehicles."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le Ministère veut que les prochains choix de véhicules s'appuient sur l'usage observé plutôt que sur des approximations.",
+          "rationale": {
+            "fr": "La phrase relie le manque de « données fiables » et les décisions fondées sur des « estimations » à la demande de registre (« c'est pourquoi ») : le registre doit fournir une base réelle aux choix à venir.",
+            "en": "The sentence links the lack of 'reliable data' and decisions based on 'estimates' to the request for a log ('that is why'): the log is meant to give future choices a real basis."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le Ministère a déjà décidé d'acheter uniquement des véhicules électriques dans toutes les régions.",
+          "rationale": {
+            "fr": "La note prévoit au contraire des véhicules hybrides dans certaines régions ; la transition « ne se fera pas de manière uniforme ».",
+            "en": "On the contrary, the memo provides for hybrids in some regions; the transition 'will not be uniform'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le Ministère souhaite repérer les véhicules peu utilisés afin de les retirer dès maintenant.",
+          "rationale": {
+            "fr": "La note affirme qu'aucun véhicule en bon état ne sera retiré prématurément.",
+            "en": "The memo states that no vehicle in good condition will be withdrawn early."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le connecteur « c'est pourquoi » signale que ce qui suit est la conséquence de ce qui précède. Pour inférer le but d'une demande, cherchez la cause que le texte lui associe : ici, l'absence de données fiables.",
+        "en": "The connector 'c'est pourquoi' signals that what follows is a consequence of what comes before. To infer the purpose of a request, look for the cause the text attaches to it: here, the lack of reliable data."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-3",
+      "stem": {
+        "fr": "Dans la conclusion de la note, que signifie la formule « Je vous saurais gré de transmettre vos registres » ?",
+        "en": "In the memo's closing, what does the formula 'Je vous saurais gré de transmettre vos registres' mean?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Je vous reprocherais de ne pas transmettre vos registres à temps.",
+          "rationale": {
+            "fr": "« Savoir gré » exprime la reconnaissance, non le reproche ; c'est même le contraire.",
+            "en": "'Savoir gré' expresses gratitude, not reproach; it is in fact the opposite."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Je vous autorise, si vous le jugez utile, à transmettre vos registres.",
+          "rationale": {
+            "fr": "La formule est une demande polie, non une simple permission laissée à la discrétion des gestionnaires ; le registre est explicitement demandé plus haut.",
+            "en": "The formula is a polite request, not a mere permission left to managers' discretion; the log is explicitly requested earlier."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Je vous confirme que vos registres ont bien été reçus.",
+          "rationale": {
+            "fr": "Les registres restent à remplir pendant trois mois ; ils ne peuvent pas déjà avoir été reçus.",
+            "en": "The logs are still to be filled out over three months; they cannot already have been received."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Je vous serais reconnaissant de bien vouloir envoyer vos registres.",
+          "rationale": {
+            "fr": "« Savoir gré à quelqu'un de quelque chose » signifie lui en être reconnaissant ; au conditionnel, la formule exprime une demande courtoise.",
+            "en": "'Savoir gré à quelqu'un de quelque chose' means being grateful to them for it; in the conditional, the formula expresses a courteous request."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Je vous saurais gré de… » est une formule administrative soutenue : le conditionnel de « savoir gré » (être reconnaissant) atténue une demande qui reste néanmoins attendue. Elle équivaut à « Je vous serais reconnaissant de… ».",
+        "en": "'Je vous saurais gré de…' is a formal administrative formula: the conditional of 'savoir gré' (to be grateful) softens a request that is nonetheless expected. It is equivalent to 'I would be grateful if you would…'."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-3",
+      "stem": {
+        "fr": "Dans le passage « les premiers achats nous permettront précisément de les confirmer ou de les dissiper », à quoi renvoie le pronom « les » ?",
+        "en": "In the passage 'les premiers achats nous permettront précisément de les confirmer ou de les dissiper', what does the pronoun 'les' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux craintes relatives à l'autonomie des véhicules électriques en hiver.",
+          "rationale": {
+            "fr": "« Elles sont légitimes » reprend « les craintes », et « les » poursuit la même chaîne : on confirme ou on dissipe des craintes.",
+            "en": "'Elles sont légitimes' picks up 'the fears', and 'les' continues the same chain: one confirms or dispels fears."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aux estimations sur lesquelles reposaient les décisions antérieures.",
+          "rationale": {
+            "fr": "On pourrait confirmer des estimations, mais elles figurent dans le paragraphe précédent ; la chaîne « craintes… Elles… les » se poursuit dans la même phrase.",
+            "en": "Estimates could be confirmed, but they appear in the previous paragraph; the chain 'fears… they… them' continues within the same sentence."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Aux registres de déplacements que doivent remplir les régions.",
+          "rationale": {
+            "fr": "Les registres sont mentionnés après le pronom et servent à une autre fin ; on ne « dissipe » pas un registre.",
+            "en": "The logs are mentioned after the pronoun and serve another purpose; one does not 'dispel' a log."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aux régions dépourvues de bornes de recharge suffisantes.",
+          "rationale": {
+            "fr": "Ces régions sont évoquées dans le paragraphe précédent, et le sens (« confirmer ou dissiper ») ne leur convient pas.",
+            "en": "These regions are mentioned in the previous paragraph, and the meaning ('confirm or dispel') does not fit them."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour identifier le référent d'un pronom, suivez la chaîne de reprises (« les craintes » → « Elles » → « les ») et vérifiez que le verbe convient : on « dissipe » une crainte, pas un registre ni une région.",
+        "en": "To identify a pronoun's referent, follow the chain of references ('the fears' → 'They' → 'them') and check that the verb fits: one 'dispels' a fear, not a log or a region."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-3",
+      "stem": {
+        "fr": "Comment le directeur organise-t-il sa note sur le renouvellement graduel du parc automobile ?",
+        "en": "How does the director organize his memo on the gradual renewal of the vehicle fleet?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il expose d'abord un problème budgétaire, propose ensuite trois options, puis invite les gestionnaires à choisir l'une d'elles.",
+          "rationale": {
+            "fr": "La note n'offre pas d'options à choisir ; elle annonce une approche déjà arrêtée.",
+            "en": "The memo offers no options to choose from; it announces an approach already settled."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il retrace chronologiquement les achats déjà effectués, en dresse le bilan, puis annonce le calendrier des prochaines acquisitions.",
+          "rationale": {
+            "fr": "Aucun achat n'est encore fait : les « premiers achats » sont à venir, et la note ne présente pas de bilan.",
+            "en": "No purchase has been made yet: the 'first purchases' are still to come, and the memo presents no review."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il énonce le principe général de la transition, en nuance l'application selon les régions, puis répond à une préoccupation avant de formuler une demande.",
+          "rationale": {
+            "fr": "Le premier paragraphe pose le principe, le deuxième l'adapte aux régions, le troisième répond aux craintes sur l'hiver et se termine par la demande de registres.",
+            "en": "The first paragraph sets out the principle, the second adapts it to the regions, and the third answers the concerns about winter and ends with the request for logs."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il compare en détail les véhicules hybrides et électriques, justifie le choix d'un modèle unique, puis précise les dates de livraison.",
+          "rationale": {
+            "fr": "La note ne compare pas les modèles en détail et refuse précisément une solution uniforme ; aucune date de livraison n'est donnée.",
+            "en": "The memo does not compare models in detail and specifically rejects a uniform solution; no delivery date is given."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour décrire la structure d'un texte, résumez la fonction de chaque paragraphe, puis vérifiez que chaque étape de l'option retenue correspond bien au texte. Une option qui contient un seul élément inexact (« options », « bilan », « modèle unique ») est à écarter.",
+        "en": "To describe a text's structure, summarize what each paragraph does, then check that every step of the chosen option matches the text. An option containing a single inaccurate element ('options', 'review', 'single model') must be ruled out."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-3",
+      "stem": {
+        "fr": "Quelle attitude le directeur manifeste-t-il à l'égard des réserves formulées par certains gestionnaires sur l'autonomie hivernale des véhicules électriques ?",
+        "en": "What attitude does the director show toward the reservations some managers have expressed about electric vehicles' winter range?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il les juge exagérées et invite les gestionnaires à faire confiance à la direction.",
+          "rationale": {
+            "fr": "Il qualifie ces craintes de « légitimes » ; il ne les minimise pas.",
+            "en": "He calls these fears 'legitimate'; he does not minimize them."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il les écarte, puisque le passage à l'électrique est déjà définitivement acquis.",
+          "rationale": {
+            "fr": "La note prévoit des véhicules hybrides dans certaines régions ; le passage à l'électrique n'est donc pas imposé partout.",
+            "en": "The memo provides for hybrids in some regions, so the switch to electric is not imposed everywhere."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il les partage au point de remettre en question l'ensemble de la transition.",
+          "rationale": {
+            "fr": "Il reconnaît ces craintes, mais la transition est maintenue ; rien n'indique qu'il la remette en cause.",
+            "en": "He acknowledges these fears, but the transition goes ahead; nothing indicates that he questions it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il les prend au sérieux et compte sur l'expérience des premiers achats pour en évaluer le bien-fondé.",
+          "rationale": {
+            "fr": "« J'entends », « Elles sont légitimes » et « de les confirmer ou de les dissiper » montrent une écoute réelle, sans conclusion prématurée.",
+            "en": "'I hear', 'They are legitimate' and 'to confirm or dispel them' show genuine attentiveness, without a premature conclusion."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le ton se lit dans les choix de mots : « légitimes » reconnaît la valeur d'une inquiétude, et « confirmer ou dissiper » laisse la question ouverte. Le directeur n'est ni dédaigneux ni alarmé : il est à l'écoute et pragmatique.",
+        "en": "Tone shows in word choice: 'legitimate' acknowledges a concern's validity, and 'confirm or dispel' leaves the question open. The director is neither dismissive nor alarmed: he is attentive and pragmatic."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-4",
+      "stem": {
+        "fr": "Quelle conclusion principale les évaluateurs tirent-ils de leur examen des dossiers d'approvisionnement ?",
+        "en": "What main conclusion do the evaluators draw from their review of the procurement files?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les critères environnementaux figurent souvent dans les dossiers, mais restent le plus souvent sans effet sur la sélection du fournisseur.",
+          "rationale": {
+            "fr": "C'est le sens de la constatation : 52 dossiers sur 80 mentionnent un critère, mais le plus souvent sans le reprendre dans la grille d'évaluation, donc sans effet réel.",
+            "en": "This is the finding's meaning: 52 of 80 files mention a criterion, but most often without carrying it into the evaluation grid, so with no real effect."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La plupart des dossiers d'approvisionnement ne comportent aucun critère environnemental.",
+          "rationale": {
+            "fr": "C'est l'inverse : la majorité des dossiers (52 sur 80) en comportent au moins un.",
+            "en": "The reverse is true: most files (52 of 80) include at least one."
+          }
+        },
+        {
+          "id": "c",
+          "text": "L'ajout de critères environnementaux réduit sensiblement la concurrence entre les soumissionnaires.",
+          "rationale": {
+            "fr": "Il s'agit de la crainte des agents, que le rapport juge précisément non étayée par les données.",
+            "en": "This is the agents' fear, which the report specifically finds unsupported by the data."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les agents d'approvisionnement refusent d'appliquer les critères environnementaux qui leur sont imposés.",
+          "rationale": {
+            "fr": "Le rapport parle d'un manque de connaissances et d'une crainte, non d'un refus ; et aucun critère n'est dit imposé.",
+            "en": "The report speaks of a lack of knowledge and a fear, not a refusal; and no criterion is said to be imposed."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans un rapport d'évaluation, le titre de la constatation (« intégrés de façon inégale ») et le connecteur de nuance (« doit cependant être nuancé ») orientent vers l'idée principale : la présence formelle des critères ne garantit pas leur effet.",
+        "en": "In an evaluation report, the finding's heading ('unevenly integrated') and the qualifying connector ('must however be qualified') point to the main idea: the formal presence of criteria does not guarantee their effect."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-4",
+      "stem": {
+        "fr": "Dans la proposition « il n'avait donc, en pratique, aucune incidence sur le choix du fournisseur », quel élément le pronom « il » reprend-il ?",
+        "en": "In the clause 'il n'avait donc, en pratique, aucune incidence sur le choix du fournisseur', which element does the pronoun 'il' refer back to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "L'énoncé des besoins rédigé pour chaque dossier.",
+          "rationale": {
+            "fr": "« L'énoncé des besoins » est bien masculin et proche, mais c'est le critère qui n'est pas repris dans la grille ; la conséquence (« donc ») porte sur lui.",
+            "en": "'The statement of requirements' is masculine and close by, but it is the criterion that is not carried into the grid; the consequence ('therefore') concerns it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le résultat jugé encourageant en apparence.",
+          "rationale": {
+            "fr": "Ce résultat appartient à une phrase antérieure ; un pourcentage de dossiers n'a pas d'incidence sur le choix d'un fournisseur.",
+            "en": "That result belongs to an earlier sentence; a share of files has no bearing on the choice of a supplier."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le critère environnemental mentionné de façon générale.",
+          "rationale": {
+            "fr": "Le sujet de la phrase précédente est « le critère », qui n'était « pas repris dans la grille d'évaluation » ; « il » le reprend, et « donc » en tire la conséquence.",
+            "en": "The subject of the preceding clause is 'the criterion', which was 'not carried into the evaluation grid'; 'il' picks it up, and 'therefore' draws the consequence."
+          }
+        },
+        {
+          "id": "d",
+          "text": "L'échantillon de dossiers examiné par les évaluateurs.",
+          "rationale": {
+            "fr": "L'échantillon est l'objet de l'examen, non ce qui pourrait influer sur le choix du fournisseur.",
+            "en": "The sample is the object of the review, not something that could influence the choice of supplier."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Quand plusieurs noms masculins précèdent un pronom, privilégiez le sujet de la proposition coordonnée et vérifiez la logique : « donc » relie l'absence du critère dans la grille à son absence d'effet sur la sélection.",
+        "en": "When several masculine nouns precede a pronoun, favour the subject of the coordinated clause and check the logic: 'therefore' links the criterion's absence from the grid to its lack of effect on selection."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-4",
+      "stem": {
+        "fr": "Que laisse entendre le rapport au sujet de la crainte, exprimée par les agents, de voir diminuer la concurrence ?",
+        "en": "What does the report imply about the agents' fear that competition would decline?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle est confirmée par une baisse marquée du nombre de soumissions reçues.",
+          "rationale": {
+            "fr": "Les données montrent l'inverse : les dossiers à critères pondérés ont reçu autant de soumissions que les autres.",
+            "en": "The data show the opposite: files with weighted criteria received as many bids as the others."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle relève davantage de la perception que de la réalité observée.",
+          "rationale": {
+            "fr": "Le rapport la juge « compréhensible » mais « pas étayée par les données » : c'est une impression que les faits ne confirment pas.",
+            "en": "The report calls it 'understandable' but 'not supported by the data': it is an impression the facts do not bear out."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle explique à elle seule l'absence de critères pondérés dans les grilles.",
+          "rationale": {
+            "fr": "Le rapport cite deux obstacles, dont le manque de connaissances techniques ; la crainte n'est donc pas la seule explication.",
+            "en": "The report cites two obstacles, including the lack of technical knowledge, so the fear is not the only explanation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle a amené la direction générale à renoncer aux critères environnementaux.",
+          "rationale": {
+            "fr": "Aucune renonciation n'est mentionnée ; la recommandation va au contraire dans le sens d'un renforcement des critères.",
+            "en": "No abandonment is mentioned; the recommendation instead points to strengthening the criteria."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Quoique compréhensible » concède un point avant de le contredire : le rapport admet que la crainte se comprend, puis montre par les données qu'elle n'est pas fondée. Le lecteur doit en déduire qu'il s'agit d'une perception.",
+        "en": "'Quoique compréhensible' concedes a point before contradicting it: the report grants that the fear is understandable, then shows with data that it is unfounded. The reader must infer that it is a perception."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-4",
+      "stem": {
+        "fr": "Quel ton les évaluateurs adoptent-ils lorsqu'ils commentent la proportion de 52 dossiers sur 80 comportant un critère environnemental ?",
+        "en": "What tone do the evaluators adopt when commenting on the proportion of 52 files out of 80 that include an environmental criterion?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Enthousiaste : ils y voient la preuve que les pratiques actuelles sont exemplaires.",
+          "rationale": {
+            "fr": "« Encourageant en apparence » et « doit cependant être nuancé » excluent tout enthousiasme sans réserve.",
+            "en": "'Encouraging on the surface' and 'must however be qualified' rule out unreserved enthusiasm."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Alarmiste : ils estiment que la situation exige des mesures disciplinaires immédiates.",
+          "rationale": {
+            "fr": "Le rapport recommande un guide et une formation, non des sanctions ; rien n'est dramatisé.",
+            "en": "The report recommends a guide and training, not sanctions; nothing is dramatized."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Ironique : ils tournent en dérision les efforts consentis par les agents.",
+          "rationale": {
+            "fr": "Le texte reste neutre et respectueux ; il juge même la crainte des agents « compréhensible ».",
+            "en": "The text remains neutral and respectful; it even calls the agents' fear 'understandable'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Mesuré : ils reconnaissent un progrès apparent tout en en relativisant la portée.",
+          "rationale": {
+            "fr": "« Encourageant en apparence » admet un aspect positif, et « doit cependant être nuancé » en limite aussitôt la valeur.",
+            "en": "'Encouraging on the surface' grants a positive aspect, and 'must however be qualified' immediately limits its value."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les marqueurs de modalisation (« en apparence », « cependant », « nuancé ») signalent un ton prudent et équilibré, typique des rapports d'évaluation, qui reconnaissent un acquis tout en en marquant les limites.",
+        "en": "Modality markers ('on the surface', 'however', 'qualified') signal a careful, balanced tone, typical of evaluation reports, which acknowledge a gain while marking its limits."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-4",
+      "stem": {
+        "fr": "Quel rôle joue la phrase commençant par « Cette crainte, quoique compréhensible » dans l'argumentation du deuxième paragraphe ?",
+        "en": "What role does the sentence beginning 'Cette crainte, quoique compréhensible' play in the argument of the second paragraph?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle introduit un troisième obstacle, distinct des deux qui viennent d'être énumérés.",
+          "rationale": {
+            "fr": "« Cette crainte » reprend le deuxième obstacle ; la phrase n'en ajoute pas un nouveau.",
+            "en": "'This fear' refers back to the second obstacle; the sentence does not add a new one."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle confronte une opinion recueillie en entrevue aux données tirées de l'examen des dossiers.",
+          "rationale": {
+            "fr": "La phrase reprend la crainte exprimée par les agents en entrevue et la met à l'épreuve des données sur le nombre de soumissions.",
+            "en": "The sentence takes the fear expressed by agents in interviews and tests it against the data on the number of bids."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle annonce la recommandation qui figure à la fin de l'extrait.",
+          "rationale": {
+            "fr": "La recommandation porte sur un guide et une formation, qui répondent plutôt au manque de connaissances ; la phrase ne l'annonce pas.",
+            "en": "The recommendation concerns a guide and training, which rather address the lack of knowledge; the sentence does not announce it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle rapporte la réponse de la direction générale aux constatations de l'évaluation.",
+          "rationale": {
+            "fr": "Ce sont les évaluateurs qui parlent ; aucune réponse de la direction générale n'est citée.",
+            "en": "It is the evaluators speaking; no response from the branch is quoted."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans un rapport, une concession (« quoique compréhensible ») suivie des deux-points et d'un fait chiffré marque le passage du témoignage à la preuve : l'évaluateur confronte ce que les gens disent à ce que montrent les données.",
+        "en": "In a report, a concession ('though understandable') followed by a colon and a factual finding marks the shift from testimony to evidence: the evaluator sets what people say against what the data show."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-5",
+      "stem": {
+        "fr": "Selon les chercheurs, pourquoi certains employés ont-ils renoncé au transport en commun pour se rendre au bureau pendant la période de télétravail ?",
+        "en": "According to the researchers, why did some employees give up public transit to get to the office during the telework period?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Parce que le Ministère leur remboursait désormais leurs frais de stationnement.",
+          "rationale": {
+            "fr": "Le résumé ne mentionne aucun remboursement ; cette explication est plausible mais absente du texte.",
+            "en": "The summary mentions no reimbursement; this explanation is plausible but absent from the text."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Parce qu'ils devaient faire des courses en milieu de journée.",
+          "rationale": {
+            "fr": "Les courses expliquent le second phénomène (des trajets de remplacement), non l'abandon du transport en commun.",
+            "en": "Errands explain the second phenomenon (replacement trips), not the switch away from public transit."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Parce que la fréquence du service était insuffisante hors des heures de pointe.",
+          "rationale": {
+            "fr": "Le texte attribue ce changement au manque de « service fréquent en dehors des heures de pointe », c'est-à-dire aux heures où ces employés se déplaçaient.",
+            "en": "The text attributes this change to the lack of 'frequent service outside peak hours', that is, at the times these employees travelled."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Parce que leurs heures de présence au bureau avaient été prolongées.",
+          "rationale": {
+            "fr": "Rien n'indique un allongement des journées au bureau ; le texte parle seulement du nombre de jours.",
+            "en": "Nothing indicates longer office days; the text speaks only of the number of days."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Faute de » introduit une cause par manque : « faute de service fréquent » signifie « parce que le service n'était pas fréquent ». Ne confondez pas les deux phénomènes que le texte distingue par « D'abord » et « Ensuite ».",
+        "en": "'Faute de' introduces a cause through lack: 'faute de service fréquent' means 'because service was not frequent'. Do not confuse the two phenomena the text separates with 'First' and 'Next'."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-5",
+      "stem": {
+        "fr": "Comment la diminution réelle des émissions se compare-t-elle à celle que laissait prévoir la réduction du nombre de jours de présence au bureau ?",
+        "en": "How does the actual decrease in emissions compare with the one the reduction in office days would have predicted?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle est plus forte, puisqu'elle atteint 60 % alors qu'on en attendait 45 %.",
+          "rationale": {
+            "fr": "Les chiffres sont inversés : 45 % est la baisse observée, 60 % la baisse attendue.",
+            "en": "The figures are reversed: 45% is the observed drop, 60% the expected one."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle est équivalente, les deux s'établissant à environ 45 %.",
+          "rationale": {
+            "fr": "Le texte souligne précisément un « écart » entre les deux valeurs.",
+            "en": "The text specifically points to a 'gap' between the two values."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle est légèrement plus forte, grâce aux courses qui ont été évitées.",
+          "rationale": {
+            "fr": "Les courses en voiture ont au contraire ajouté des trajets, ce qui a réduit la baisse.",
+            "en": "On the contrary, errands by car added trips, which reduced the decrease."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle est plus faible : environ 45 %, alors que l'on pouvait s'attendre à 60 %.",
+          "rationale": {
+            "fr": "Le résumé indique une baisse d'environ 45 %, « inférieure » aux 60 % que laissait prévoir la réduction des jours au bureau.",
+            "en": "The summary reports a drop of about 45%, 'lower' than the 60% predicted by the reduction in office days."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Quand un texte compare deux pourcentages, identifiez ce que chacun représente (observé ou attendu) et le mot qui exprime la comparaison (« inférieure »). L'erreur classique consiste à intervertir les deux valeurs.",
+        "en": "When a text compares two percentages, identify what each represents (observed or expected) and the word expressing the comparison ('lower'). The classic mistake is swapping the two values."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-5",
+      "stem": {
+        "fr": "Dans la phrase « certains employés ont délaissé le transport en commun au profit de la voiture », quel sens la locution « au profit de » prend-elle ?",
+        "en": "In the sentence 'certains employés ont délaissé le transport en commun au profit de la voiture', what meaning does the phrase 'au profit de' have?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "En faveur de : la voiture a remplacé le transport en commun.",
+          "rationale": {
+            "fr": "« Délaisser A au profit de B » signifie abandonner A pour choisir B ; c'est bien le sens ici.",
+            "en": "'Délaisser A au profit de B' means abandoning A in favour of B; that is the meaning here."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Dans le but d'en retirer un avantage financier.",
+          "rationale": {
+            "fr": "Le mot « profit » évoque un gain, mais la locution exprime ici une substitution, non un intérêt pécuniaire.",
+            "en": "The word 'profit' suggests a gain, but the phrase here expresses a substitution, not a financial interest."
+          }
+        },
+        {
+          "id": "c",
+          "text": "En complément de : les employés combinaient les deux modes de transport.",
+          "rationale": {
+            "fr": "« Délaisser » indique un abandon, ce qui exclut l'idée d'une combinaison des deux modes.",
+            "en": "'Délaisser' indicates abandonment, which rules out combining the two modes."
+          }
+        },
+        {
+          "id": "d",
+          "text": "En raison d'un problème lié à la voiture.",
+          "rationale": {
+            "fr": "La cause du changement est le manque de service fréquent, non un problème de voiture ; la locution n'exprime pas la cause.",
+            "en": "The cause of the change is the lack of frequent service, not a car problem; the phrase does not express cause."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "La locution « au profit de » signifie « en faveur de » ou « à l'avantage de » ; avec un verbe comme « délaisser » ou « abandonner », elle marque ce qui remplace l'élément abandonné. Le sens littéral de « profit » est ici un piège.",
+        "en": "The phrase 'au profit de' means 'in favour of' or 'to the benefit of'; with a verb such as 'délaisser' or 'abandonner', it marks what replaces the abandoned element. The literal meaning of 'profit' is a trap here."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-5",
+      "stem": {
+        "fr": "Que peut-on déduire de la réserve formulée par les auteurs au sujet de la consommation d'énergie des domiciles ?",
+        "en": "What can be inferred from the authors' caveat about household energy consumption?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les auteurs considèrent que le télétravail augmente globalement les émissions des employés.",
+          "rationale": {
+            "fr": "Les auteurs disent seulement que le bilan « pourrait s'avérer moins favorable » ; ils n'affirment pas qu'il devient négatif.",
+            "en": "The authors only say the overall result 'could prove less favourable'; they do not claim it becomes negative."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La baisse observée ne suffit pas, à elle seule, à établir l'effet environnemental global du télétravail.",
+          "rationale": {
+            "fr": "Puisqu'une source d'émissions n'a pas été mesurée, la baisse de 45 % ne donne qu'une partie du bilan ; d'où la prudence des auteurs.",
+            "en": "Since one source of emissions was not measured, the 45% drop gives only part of the picture; hence the authors' caution."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les auteurs recommandent de limiter le télétravail à un seul jour par semaine.",
+          "rationale": {
+            "fr": "Ils recommandent d'intégrer le télétravail à une stratégie plus large, non d'en réduire la fréquence.",
+            "en": "They recommend integrating telework into a broader strategy, not reducing its frequency."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La consommation d'énergie des domiciles a été mesurée, mais jugée négligeable.",
+          "rationale": {
+            "fr": "Le texte précise au contraire que l'étude « ne tient pas compte » de cette consommation.",
+            "en": "On the contrary, the text states that the study 'does not take into account' this consumption."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une limite méthodologique (« ne tient pas compte de ») invite à la prudence, sans renverser le résultat. Le conditionnel « pourrait s'avérer » exprime une possibilité : il faut éviter les options qui transforment cette possibilité en certitude.",
+        "en": "A methodological limitation ('does not take into account') calls for caution without reversing the result. The conditional 'could prove' expresses a possibility: avoid options that turn that possibility into a certainty."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-environment-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-environment-5",
+      "stem": {
+        "fr": "Quelle fonction remplit le deuxième paragraphe dans l'organisation de ce résumé de recherche sur le télétravail ?",
+        "en": "What function does the second paragraph serve in the organization of this research summary on telework?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il décrit la méthode employée et la composition de l'échantillon.",
+          "rationale": {
+            "fr": "La méthode et l'échantillon (deux périodes, 1 150 employés) sont présentés dans le premier paragraphe.",
+            "en": "The method and sample (two periods, 1,150 employees) are presented in the first paragraph."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il formule les recommandations des auteurs à l'intention des ministères.",
+          "rationale": {
+            "fr": "Les recommandations se trouvent dans le dernier paragraphe.",
+            "en": "The recommendations are in the last paragraph."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il présente le résultat principal, puis propose des explications à l'écart constaté.",
+          "rationale": {
+            "fr": "Le paragraphe donne la baisse de 45 %, la compare aux 60 % attendus, puis avance « deux phénomènes » pour expliquer l'écart.",
+            "en": "The paragraph gives the 45% drop, compares it with the expected 60%, then puts forward 'two phenomena' to explain the gap."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il expose les limites de l'étude et suggère des pistes de recherche futures.",
+          "rationale": {
+            "fr": "La limite de l'étude (l'énergie des domiciles) figure au dernier paragraphe, et aucune piste de recherche n'est proposée.",
+            "en": "The study's limitation (household energy) appears in the last paragraph, and no avenue for future research is proposed."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Un résumé de recherche suit souvent l'ordre objectif et méthode, résultats et interprétation, puis limites et recommandations. Pour situer un paragraphe, repérez ses mots clés : ici, « ont diminué », « écart » et « expliqueraient ».",
+        "en": "A research summary often follows the order aim and method, results and interpretation, then limitations and recommendations. To place a paragraph, find its key words: here, 'decreased', 'gap' and 'would explain'."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-environment-1",
+      "lang": "fr",
+      "docType": "bulletin",
+      "title": "Nouveau programme de tri des déchets à l'édifice du 300, rue Principale",
+      "body": "À compter du lundi 2 février, l'édifice du 300, rue Principale adoptera un nouveau programme de tri des déchets. Les petites poubelles placées sous les bureaux seront retirées. Elles seront remplacées par des îlots de tri à quatre bacs, installés près des ascenseurs et dans chaque cuisinette : matières recyclables, matières compostables, contenants consignés et déchets.\n\nUn audit réalisé au printemps a révélé que près de 60 % du contenu de nos poubelles aurait pu être recyclé ou composté. L'objectif de l'équipe des installations est de réduire de moitié, d'ici un an, la quantité de déchets envoyés à l'enfouissement.\n\nDes ambassadeurs du tri, un par étage, répondront à vos questions pendant les deux premières semaines. Ceux-ci porteront un brassard vert. Si vous avez un doute, consultez l'affiche placée au-dessus de chaque îlot ou écrivez à la boîte de courriel générique de l'équipe des installations.\n\nMerci de contribuer à rendre notre milieu de travail plus écologique.",
+      "wordCount": 155,
+      "targetBand": "B",
+      "topic": "environment",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 17.22,
+        "rareWordRatio": 0.245
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-environment-2",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Réduction de l'impression dans la direction générale",
+      "body": "Bonjour à toutes et à tous,\n\nComme vous le savez, notre direction générale s'est engagée à réduire sa consommation de papier. L'an dernier, nous avons imprimé environ 1,2 million de pages, soit près de 2 400 pages par employé.\n\nDès le mois prochain, trois mesures entreront en vigueur. D'abord, toutes les imprimantes seront réglées par défaut en mode recto verso et en noir et blanc. Ensuite, les documents ne sortiront de l'imprimante qu'une fois que vous aurez passé votre carte d'identité sur le lecteur, ce qui évitera les impressions oubliées dans le bac. Enfin, les documents des comités de gestion seront dorénavant transmis uniquement en version électronique.\n\nJe sais que certains d'entre vous préfèrent annoter leurs documents sur papier. Si votre travail l'exige vraiment, parlez-en à votre gestionnaire, qui pourra autoriser une exception.\n\nMerci de votre collaboration.\n\nHélène Tremblay\nDirectrice, Services administratifs",
+      "wordCount": 142,
+      "targetBand": "B",
+      "topic": "environment",
+      "readability": {
+        "sentences": 10,
+        "avgSentenceLength": 14.2,
+        "rareWordRatio": 0.211
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-environment-3",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Transition du parc de véhicules vers des modèles à faibles émissions",
+      "body": "Destinataires : gestionnaires régionaux\nObjet : Transition du parc de véhicules vers des modèles à faibles émissions\n\nLe Ministère remplacera graduellement les véhicules à essence de son parc par des véhicules hybrides ou électriques, au fur et à mesure que les véhicules actuels arriveront en fin de vie utile. Aucun véhicule en bon état ne sera donc retiré prématurément. Cette approche, moins spectaculaire qu'un remplacement massif, a l'avantage de respecter les cycles budgétaires existants.\n\nLa transition ne se fera toutefois pas de manière uniforme. Dans les régions où les déplacements sont longs et où les bornes de recharge sont rares, les véhicules hybrides seront privilégiés, à moins qu'une analyse de vos besoins ne démontre qu'un modèle entièrement électrique conviendrait. Faute de données fiables sur l'utilisation réelle des véhicules, plusieurs décisions antérieures reposaient sur des estimations ; c'est pourquoi nous vous demandons de faire remplir un registre de déplacements pendant trois mois.\n\nJ'entends les craintes exprimées par certains d'entre vous quant à l'autonomie des véhicules électriques en hiver. Elles sont légitimes, et les premiers achats nous permettront précisément de les confirmer ou de les dissiper. Je vous saurais gré de transmettre vos registres d'ici la fin du trimestre.\n\nLe directeur, Gestion du parc automobile",
+      "wordCount": 203,
+      "targetBand": "C",
+      "topic": "environment",
+      "readability": {
+        "sentences": 10,
+        "avgSentenceLength": 20.3,
+        "rareWordRatio": 0.32
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-environment-4",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Évaluation des pratiques d'approvisionnement écologique : constatation 3",
+      "body": "Constatation 3 : Les critères environnementaux sont intégrés de façon inégale aux processus d'achat.\n\nL'examen d'un échantillon de 80 dossiers d'approvisionnement a permis de constater que 52 d'entre eux comportaient au moins un critère environnemental, qu'il s'agisse de l'efficacité énergétique, de l'emballage ou de la durabilité des biens. Ce résultat, encourageant en apparence, doit cependant être nuancé. Dans la majorité de ces dossiers, le critère se limitait à une mention générale dans l'énoncé des besoins et n'était pas repris dans la grille d'évaluation des soumissions ; il n'avait donc, en pratique, aucune incidence sur le choix du fournisseur.\n\nLes entrevues menées auprès des agents d'approvisionnement font ressortir deux obstacles. D'une part, nombre d'entre eux estiment ne pas disposer des connaissances techniques nécessaires pour formuler des critères mesurables. D'autre part, ils craignent que l'ajout de tels critères ne réduise le nombre de soumissionnaires et, partant, la concurrence. Cette crainte, quoique compréhensible, n'est pas étayée par les données : les dossiers assortis de critères pondérés ont reçu en moyenne autant de soumissions que les autres.\n\nRecommandation : Que la direction générale élabore, d'ici la fin du prochain exercice, un guide de critères environnementaux types et offre une formation ciblée aux agents d'approvisionnement.",
+      "wordCount": 200,
+      "targetBand": "C",
+      "topic": "environment",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 22.22,
+        "rareWordRatio": 0.295
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-environment-5",
+      "lang": "fr",
+      "docType": "research",
+      "title": "Télétravail et émissions liées aux déplacements domicile-travail : résumé de recherche",
+      "body": "La présente étude visait à estimer l'effet du télétravail sur les émissions de gaz à effet de serre attribuables aux déplacements domicile-travail des employés d'un ministère fédéral. Les chercheurs ont comparé deux périodes de six mois auprès de 1 150 employés : l'une où le travail sur place était la norme, l'autre où la plupart des employés travaillaient de la maison trois jours par semaine.\n\nLes émissions liées aux déplacements ont diminué d'environ 45 % entre les deux périodes. Cette baisse est toutefois inférieure à celle que laissait prévoir la seule réduction du nombre de jours de présence au bureau, qui s'établissait à 60 %. Deux phénomènes expliqueraient cet écart. D'abord, certains employés ont délaissé le transport en commun au profit de la voiture les jours où ils se rendaient au bureau, faute de service fréquent en dehors des heures de pointe. Ensuite, une partie des déplacements évités a été remplacée par d'autres trajets en voiture, notamment pour des courses effectuées en milieu de journée.\n\nLes auteurs soulignent que l'étude ne tient pas compte de la consommation d'énergie accrue des domiciles, si bien que le bilan global pourrait s'avérer moins favorable. Ils recommandent donc de ne pas présenter le télétravail comme une mesure environnementale en soi, mais de l'intégrer à une stratégie plus large.",
+      "wordCount": 214,
+      "targetBand": "C",
+      "topic": "environment",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 23.78,
+        "rareWordRatio": 0.22
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

@@ -1,0 +1,2191 @@
+{
+  "items": [
+    {
+      "id": "claude-w-register-and-formality-01",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Dans une lettre officielle adressée à une candidate externe, la conseillère en dotation écrit : « Nous ___ que votre candidature a été retenue pour la prochaine étape du processus de sélection. »",
+        "en": "In an official letter to an external candidate, the staffing advisor writes: « Nous ___ que votre candidature a été retenue pour la prochaine étape du processus de sélection. » (We ___ that your application has been retained for the next stage of the selection process.)"
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "voulions juste vous dire",
+          "rationale": {
+            "fr": "L'imparfait d'atténuation et l'adverbe « juste » appartiennent à la langue parlée familière ; ils ne conviennent pas dans une lettre officielle adressée à une personne de l'extérieur.",
+            "en": "The softening imperfect and the adverb « juste » belong to familiar spoken French; they do not fit an official letter to someone outside the organization."
+          }
+        },
+        {
+          "id": "b",
+          "text": "avons le plaisir de vous informer",
+          "rationale": {
+            "fr": "Formule consacrée de la correspondance administrative pour annoncer une nouvelle favorable : neutre, courtoise et adaptée à une candidate externe.",
+            "en": "The set formula of administrative correspondence for announcing good news: neutral, courteous and suited to an external candidate."
+          }
+        },
+        {
+          "id": "c",
+          "text": "te confirmons",
+          "rationale": {
+            "fr": "Le tutoiement est exclu dans une lettre officielle : on emploie le « vous » de politesse avec une candidate qu'on ne connaît pas.",
+            "en": "« tu » is ruled out in an official letter: the polite « vous » is used with a candidate one does not know."
+          }
+        },
+        {
+          "id": "d",
+          "text": "désirons par la présente vous faire assavoir",
+          "rationale": {
+            "fr": "« Faire assavoir » est une tournure archaïque, issue des anciens actes juridiques ; elle rend la phrase guindée et vieillie.",
+            "en": "« Faire assavoir » is an archaic turn taken from old legal deeds; it makes the sentence stilted and dated."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans une lettre officielle, on annonce une décision favorable avec une formule neutre et courtoise comme « Nous avons le plaisir de vous informer que… », toujours avec le « vous » de politesse. Il faut éviter à la fois les marques de l'oral familier (« juste », imparfait d'atténuation) et les tournures archaïques (« faire assavoir ») : la formalité administrative est sobre, non vieillie.",
+        "en": "In an official letter, a favourable decision is announced with a neutral, courteous formula such as « Nous avons le plaisir de vous informer que… », always with the polite « vous ». Avoid both the marks of familiar speech (« juste », the softening imperfect) and archaic turns (« faire assavoir »): administrative formality is plain, not antiquated."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-02",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Dans une note de service adressée au sous-ministre adjoint, le directeur des finances écrit : « ___ des écarts relevés au troisième trimestre, la Direction générale recommande de réaffecter les fonds non engagés vers les priorités ministérielles. »",
+        "en": "In a memo to the assistant deputy minister, the director of finance writes: « ___ des écarts relevés au troisième trimestre, la Direction générale recommande de réaffecter les fonds non engagés vers les priorités ministérielles. » (___ the variances identified in the third quarter, the Branch recommends reallocating uncommitted funds to departmental priorities.)"
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "En jasant",
+          "rationale": {
+            "fr": "Le verbe « jaser » relève de la conversation familière au Québec ; il évoque une discussion informelle, incompatible avec une note adressée au sous-ministre adjoint.",
+            "en": "The verb « jaser » belongs to familiar Quebec conversation; it suggests an informal chat, which is out of place in a memo to the assistant deputy minister."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Après avoir jeté un œil sur l'ensemble",
+          "rationale": {
+            "fr": "« Jeter un œil » est une expression familière qui suggère un examen superficiel ; elle ne convient ni au registre ni au sérieux d'une recommandation budgétaire.",
+            "en": "« Jeter un œil » is a familiar expression suggesting a cursory look; it fits neither the register nor the seriousness of a budget recommendation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Eu égard à la susdite analyse",
+          "rationale": {
+            "fr": "« Susdite » est un archaïsme juridique qui renvoie à une analyse déjà mentionnée, alors qu'aucune ne l'a été ; la tournure est à la fois guindée et inexacte.",
+            "en": "« Susdite » is a legal archaism referring back to an analysis already mentioned, when none has been; the phrasing is both stilted and inaccurate."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À la suite de l'examen",
+          "rationale": {
+            "fr": "Locution prépositive neutre suivie d'un nom d'action : c'est le style nominal attendu dans une note à la haute direction.",
+            "en": "A neutral prepositional phrase followed by an action noun: this is the nominal style expected in a memo to senior management."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le style administratif privilégie les constructions nominales (« à la suite de l'examen de », « après analyse de ») qui condensent l'information. Dans une note à la haute direction, on écarte autant le vocabulaire familier (« jaser », « jeter un œil ») que les archaïsmes juridiques (« susdit »). On écrit d'ailleurs « à la suite de » plutôt que « suite à », que plusieurs ouvrages de référence déconseillent.",
+        "en": "Administrative style favours nominal constructions (« à la suite de l'examen de », « après analyse de ») that condense information. In a memo to senior management, familiar vocabulary (« jaser », « jeter un œil ») is ruled out just as much as legal archaisms (« susdit »). Note too that « à la suite de » is preferred to « suite à », which several reference works advise against."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-03",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Une analyste conclut un courriel interne adressé à l'équipe du soutien informatique, avec qui elle travaille tous les jours, pour signaler une panne du réseau : « Merci de votre intervention rapide. ___ Julie »",
+        "en": "An analyst ends an internal email to the IT support team, whom she works with every day, reporting a network outage: « Merci de votre intervention rapide. ___ Julie » (Thank you for your quick response. ___ Julie)"
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Cordialement,",
+          "rationale": {
+            "fr": "Formule de salutation neutre et courtoise, courante dans les courriels internes entre collègues : ni familière ni cérémonieuse.",
+            "en": "A neutral, courteous sign-off, common in internal emails between colleagues: neither familiar nor ceremonious."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Bye,",
+          "rationale": {
+            "fr": "Emprunt à l'anglais et marque de la conversation familière ; il ne convient pas à un courriel de travail, même interne.",
+            "en": "A borrowing from English and a mark of familiar conversation; it does not fit a work email, even an internal one."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Je vous prie d'agréer, chers collègues, l'expression de mes sentiments les plus distingués,",
+          "rationale": {
+            "fr": "Cette formule appartient à la lettre officielle ; dans un courriel interne à des collègues côtoyés chaque jour, elle paraît guindée et disproportionnée.",
+            "en": "This formula belongs to the official letter; in an internal email to colleagues one sees every day, it sounds stilted and out of proportion."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À plus,",
+          "rationale": {
+            "fr": "Salutation familière de l'oral ou des messages personnels ; elle détonne dans un courriel professionnel adressé à une équipe.",
+            "en": "A familiar sign-off from speech or personal messages; it jars in a professional email sent to a team."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "La salutation finale s'adapte au destinataire et au support. Pour un courriel interne entre collègues, « Cordialement » ou « Merci et bonne journée » suffisent ; les formules longues du type « Je vous prie d'agréer… » sont réservées aux lettres officielles, et les salutations familières (« Bye », « À plus ») aux échanges personnels.",
+        "en": "The closing adapts to the recipient and the medium. For an internal email between colleagues, « Cordialement » or « Merci et bonne journée » is enough; long formulas such as « Je vous prie d'agréer… » are reserved for official letters, and familiar sign-offs (« Bye », « À plus ») for personal exchanges."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-04",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Dans une lettre adressée à un demandeur dont le dossier est incomplet, l'agente de prestation des services écrit : « Afin que nous puissions traiter votre demande dans les délais prévus, nous vous ___ de nous transmettre les pièces justificatives manquantes. »",
+        "en": "In a letter to an applicant whose file is incomplete, the service delivery officer writes: « Afin que nous puissions traiter votre demande dans les délais prévus, nous vous ___ de nous transmettre les pièces justificatives manquantes. » (So that we can process your application within the expected time frame, we ___ you to send us the missing supporting documents.)"
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "demanderions juste",
+          "rationale": {
+            "fr": "L'adverbe « juste », au sens de « seulement », est familier ; il affaiblit le ton officiel de la lettre.",
+            "en": "The adverb « juste », meaning “only”, is familiar; it weakens the official tone of the letter."
+          }
+        },
+        {
+          "id": "b",
+          "text": "supplions",
+          "rationale": {
+            "fr": "« Supplier » exprime une demande pressante et émotive, disproportionnée pour une simple demande de documents ; le ton paraît servile.",
+            "en": "« Supplier » expresses an urgent, emotional plea, out of proportion for a simple request for documents; the tone sounds servile."
+          }
+        },
+        {
+          "id": "c",
+          "text": "saurions gré",
+          "rationale": {
+            "fr": "« Savoir gré à quelqu'un de » suivi de l'infinitif est la formule soutenue de la demande polie ; le conditionnel atténue la demande, ce qui convient à une lettre adressée à un demandeur.",
+            "en": "« Savoir gré à quelqu'un de » followed by an infinitive is the formal phrasing of a polite request; the conditional softens the request, which suits a letter to an applicant."
+          }
+        },
+        {
+          "id": "d",
+          "text": "mettons en demeure",
+          "rationale": {
+            "fr": "Une mise en demeure est une sommation juridique qui précède une poursuite ; ce ton comminatoire ne convient pas à une simple demande de pièces manquantes.",
+            "en": "A « mise en demeure » is a formal legal notice preceding a lawsuit; this threatening tone does not fit a simple request for missing documents."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour formuler une demande dans une lettre officielle, on emploie des formules de politesse consacrées : « Nous vous saurions gré de… », « Nous vous serions reconnaissants de… », « Nous vous prions de bien vouloir… ». Le conditionnel de politesse adoucit la demande. On évite la familiarité (« juste »), mais aussi l'excès inverse : le ton suppliant ou menaçant fausse le rapport entre l'administration et le public.",
+        "en": "To make a request in an official letter, use the established courtesy formulas: « Nous vous saurions gré de… », « Nous vous serions reconnaissants de… », « Nous vous prions de bien vouloir… ». The conditional of politeness softens the request. Avoid familiarity (« juste »), but also the opposite excess: a pleading or threatening tone distorts the relationship between the administration and the public."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-05",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Dans un résumé destiné au Conseil de direction, l'analyste principale écrit : « ___ de la nouvelle directive sur la gestion de l'information exigera la mise à jour de tous les gabarits ministériels d'ici la fin de l'exercice. »",
+        "en": "In a summary prepared for the Executive Board, the senior analyst writes: « ___ de la nouvelle directive sur la gestion de l'information exigera la mise à jour de tous les gabarits ministériels d'ici la fin de l'exercice. » (___ of the new directive on information management will require all departmental templates to be updated by the end of the fiscal year.)"
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Le rollout",
+          "rationale": {
+            "fr": "Anglicisme de jargon : « rollout » n'a pas sa place dans un document adressé à la haute direction, alors que le français dispose de termes précis.",
+            "en": "Jargon anglicism: « rollout » has no place in a document for senior management when French has precise terms."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La mise en application, comme qui dirait,",
+          "rationale": {
+            "fr": "Le tic oral « comme qui dirait » introduit une hésitation de conversation dans un texte écrit officiel ; la phrase perd sa tenue.",
+            "en": "The verbal tic « comme qui dirait » brings a conversational hesitation into an official written text; the sentence loses its composure."
+          }
+        },
+        {
+          "id": "c",
+          "text": "La mise en œuvre",
+          "rationale": {
+            "fr": "Terme administratif consacré pour l'application concrète d'une directive ou d'une politique ; il s'intègre naturellement au style nominal du résumé.",
+            "en": "The established administrative term for putting a directive or policy into practice; it fits naturally into the nominal style of the summary."
+          }
+        },
+        {
+          "id": "d",
+          "text": "L'application à la va-vite",
+          "rationale": {
+            "fr": "« À la va-vite » est familier et péjoratif : il suggère une exécution bâclée, ce qui ne correspond ni au registre ni à l'intention du résumé.",
+            "en": "« À la va-vite » is familiar and pejorative: it suggests sloppy execution, which matches neither the register nor the intent of the summary."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Les textes destinés à la haute direction privilégient le style nominal et le vocabulaire administratif établi : « la mise en œuvre de », « l'application de », « l'entrée en vigueur de ». Les anglicismes de jargon (« rollout »), les tics de l'oral (« comme qui dirait ») et les expressions familières (« à la va-vite ») sont à proscrire.",
+        "en": "Texts for senior management favour nominal style and established administrative vocabulary: « la mise en œuvre de », « l'application de », « l'entrée en vigueur de ». Jargon anglicisms (« rollout »), verbal tics (« comme qui dirait ») and familiar expressions (« à la va-vite ») are to be avoided."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-06",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Dans un courriel envoyé à l'ensemble du personnel, la coordonnatrice de la santé et de la sécurité au travail écrit : « Nous ___ que l'exercice d'évacuation de l'immeuble aura lieu jeudi à 10 h. »",
+        "en": "In an email sent to all staff, the occupational health and safety coordinator writes: « Nous ___ que l'exercice d'évacuation de l'immeuble aura lieu jeudi à 10 h. » (We ___ that the building evacuation drill will take place on Thursday at 10 a.m.)"
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "vous rappelons",
+          "rationale": {
+            "fr": "Formule neutre et directe, adaptée à un avis adressé à tout le personnel ; le « vous » s'adresse à l'ensemble des destinataires.",
+            "en": "A neutral, direct formula suited to a notice sent to all staff; « vous » addresses all the recipients."
+          }
+        },
+        {
+          "id": "b",
+          "text": "te rappelons",
+          "rationale": {
+            "fr": "Le tutoiement ne convient pas à un avis officiel envoyé à tout le personnel ; il est en outre singulier alors que le message s'adresse à un groupe.",
+            "en": "« tu » does not fit an official notice sent to all staff; it is also singular, whereas the message is addressed to a group."
+          }
+        },
+        {
+          "id": "c",
+          "text": "vous lâchons un petit mot pour dire",
+          "rationale": {
+            "fr": "« Lâcher un petit mot » est une tournure familière de l'oral ; elle banalise un avis de sécurité.",
+            "en": "« Lâcher un petit mot » is a familiar spoken turn; it trivializes a safety notice."
+          }
+        },
+        {
+          "id": "d",
+          "text": "vous faisons assavoir",
+          "rationale": {
+            "fr": "« Faire assavoir » est un archaïsme ; dans un courriel au personnel, la tournure paraît vieillie et affectée.",
+            "en": "« Faire assavoir » is an archaism; in an email to staff it sounds dated and affected."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un avis adressé à tout le personnel emploie un registre neutre : « Nous vous rappelons que… », « Nous vous informons que… ». Le « vous » est de mise, à la fois parce qu'il s'adresse à plusieurs personnes et parce qu'il marque la politesse. On évite les tournures familières comme les archaïsmes.",
+        "en": "A notice to all staff uses a neutral register: « Nous vous rappelons que… », « Nous vous informons que… ». « vous » is required, both because it addresses several people and because it marks politeness. Familiar turns and archaisms are both avoided."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-07",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Dans une lettre adressée à un soumissionnaire dont la proposition n'a pas été retenue, l'agente principale d'approvisionnement écrit : « Après une analyse approfondie, nous ___ de vous informer que votre proposition ne satisfait pas à l'ensemble des exigences obligatoires énoncées dans la demande de propositions. »",
+        "en": "In a letter to a bidder whose proposal was not selected, the senior procurement officer writes: « Après une analyse approfondie, nous ___ de vous informer que votre proposition ne satisfait pas à l'ensemble des exigences obligatoires énoncées dans la demande de propositions. » (After a thorough analysis, we ___ to inform you that your proposal does not meet all the mandatory requirements set out in the request for proposals.)"
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "trouvons ça plate",
+          "rationale": {
+            "fr": "« Plate » (ennuyeux, regrettable) est un québécisme familier, et « ça » appartient à l'oral ; le ton ne convient pas à une communication officielle avec une entreprise.",
+            "en": "« Plate » (dull, too bad) is a familiar Quebec word, and « ça » belongs to speech; the tone does not suit official communication with a company."
+          }
+        },
+        {
+          "id": "b",
+          "text": "sommes au désespoir",
+          "rationale": {
+            "fr": "Expression hyperbolique et littéraire : elle dramatise une décision administrative courante et sonne faux dans une lettre d'affaires.",
+            "en": "A hyperbolic, literary expression: it dramatizes a routine administrative decision and rings false in a business letter."
+          }
+        },
+        {
+          "id": "c",
+          "text": "sommes sorry",
+          "rationale": {
+            "fr": "Emprunt à l'anglais propre à la conversation familière ; il est exclu d'une lettre officielle.",
+            "en": "A borrowing from English typical of familiar conversation; it is ruled out in an official letter."
+          }
+        },
+        {
+          "id": "d",
+          "text": "avons le regret",
+          "rationale": {
+            "fr": "Formule consacrée pour annoncer une décision défavorable : elle exprime la courtoisie sans excès, comme l'exige une lettre à un soumissionnaire.",
+            "en": "The established formula for announcing an unfavourable decision: it expresses courtesy without excess, as a letter to a bidder requires."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour annoncer un refus dans une lettre officielle, on emploie une formule de regret mesurée : « Nous avons le regret de vous informer que… » ou « Nous sommes au regret de vous informer que… ». Le refus est poli mais sans emphase ; il exclut la familiarité (« plate », « sorry ») comme l'exagération dramatique (« au désespoir »).",
+        "en": "To announce a refusal in an official letter, use a measured formula of regret: « Nous avons le regret de vous informer que… » or « Nous sommes au regret de vous informer que… ». The refusal is polite but without emphasis; it excludes familiarity (« plate », « sorry ») as well as dramatic exaggeration (« au désespoir »)."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-08",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Dans un courriel adressé à une journaliste qui sollicite une entrevue, la conseillère en communications écrit : « Je ___ votre demande au porte-parole du Ministère et je communiquerai avec vous dès que possible. »",
+        "en": "In an email to a journalist requesting an interview, the communications advisor writes: « Je ___ votre demande au porte-parole du Ministère et je communiquerai avec vous dès que possible. » (I am ___ your request to the Department's spokesperson and will contact you as soon as possible.)"
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "forwarde",
+          "rationale": {
+            "fr": "Anglicisme familier tiré de « to forward » ; dans un courriel à une journaliste, il donne une image négligée du Ministère.",
+            "en": "A familiar anglicism from « to forward »; in an email to a journalist it gives a careless image of the Department."
+          }
+        },
+        {
+          "id": "b",
+          "text": "transmets",
+          "rationale": {
+            "fr": "Verbe neutre et précis pour l'acheminement d'une demande ou d'un document ; il convient parfaitement à un courriel professionnel.",
+            "en": "A neutral, precise verb for passing on a request or document; it suits a professional email perfectly."
+          }
+        },
+        {
+          "id": "c",
+          "text": "garroche",
+          "rationale": {
+            "fr": "« Garrocher » (lancer) est un québécisme familier ; il suggère un geste désinvolte et ne convient pas à l'écrit professionnel.",
+            "en": "« Garrocher » (to toss) is a familiar Quebec word; it suggests an offhand gesture and does not suit professional writing."
+          }
+        },
+        {
+          "id": "d",
+          "text": "passe vite fait",
+          "rationale": {
+            "fr": "« Vite fait » est une locution familière de l'oral ; elle donne un ton désinvolte à un échange avec les médias.",
+            "en": "« Vite fait » is a familiar spoken phrase; it gives an offhand tone to an exchange with the media."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans la correspondance professionnelle, on préfère les verbes neutres et précis : « transmettre », « faire parvenir », « acheminer » plutôt que « envoyer », et à plus forte raison plutôt que des anglicismes (« forwarder ») ou des mots familiers (« garrocher », « vite fait »).",
+        "en": "In professional correspondence, neutral and precise verbs are preferred: « transmettre », « faire parvenir », « acheminer » rather than « envoyer », and all the more so rather than anglicisms (« forwarder ») or familiar words (« garrocher », « vite fait »)."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-09",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Dans une note adressée à la sous-ministre, le gestionnaire de projet écrit : « Compte tenu des retards accumulés par le fournisseur, ___ obtenir votre approbation afin de reporter la date de livraison du deuxième livrable. »",
+        "en": "In a memo to the deputy minister, the project manager writes: « Compte tenu des retards accumulés par le fournisseur, ___ obtenir votre approbation afin de reporter la date de livraison du deuxième livrable. » (Given the delays accumulated by the supplier, ___ obtain your approval to postpone the delivery date of the second deliverable.)"
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "nous souhaiterions",
+          "rationale": {
+            "fr": "Le conditionnel de politesse atténue la demande : il exprime le souhait avec la déférence attendue envers la sous-ministre, sans servilité.",
+            "en": "The conditional of politeness softens the request: it expresses the wish with the deference expected towards the deputy minister, without servility."
+          }
+        },
+        {
+          "id": "b",
+          "text": "on voudrait bien",
+          "rationale": {
+            "fr": "Le pronom « on » à la place de « nous » et la tournure « voudrait bien » relèvent de l'oral familier ; ils ne conviennent pas à une note à la sous-ministre.",
+            "en": "The pronoun « on » instead of « nous » and the phrase « voudrait bien » belong to familiar speech; they do not suit a memo to the deputy minister."
+          }
+        },
+        {
+          "id": "c",
+          "text": "nous exigeons d'",
+          "rationale": {
+            "fr": "« Exiger » est un verbe de commande : adressé à une supérieure hiérarchique qui doit autoriser le report, il est déplacé et discourtois.",
+            "en": "« Exiger » is a verb of command: addressed to a superior who must authorize the postponement, it is out of place and discourteous."
+          }
+        },
+        {
+          "id": "d",
+          "text": "nous osons humblement espérer",
+          "rationale": {
+            "fr": "L'accumulation de marques d'humilité rend la phrase obséquieuse et vieillie ; une note administrative demande de la déférence, non de la servilité.",
+            "en": "Piling up marks of humility makes the sentence obsequious and dated; an administrative memo calls for deference, not servility."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour présenter une demande à la haute direction, le conditionnel de politesse (« nous souhaiterions », « nous aimerions », « pourriez-vous ») atténue la demande tout en restant direct. Le ton doit être déférent mais sobre : ni familier (« on voudrait bien »), ni impératif (« nous exigeons »), ni obséquieux (« nous osons humblement espérer »).",
+        "en": "To put a request to senior management, the conditional of politeness (« nous souhaiterions », « nous aimerions », « pourriez-vous ») softens it while remaining direct. The tone should be deferential but restrained: neither familiar (« on voudrait bien »), nor peremptory (« nous exigeons »), nor obsequious (« nous osons humblement espérer »)."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-10",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Une gestionnaire répond par lettre à un citoyen qui a déposé une plainte concernant la langue de service offerte dans un bureau régional. Elle conclut ainsi : « Nous vous remercions d'avoir porté cette situation à notre attention et vous prions d'agréer, Monsieur, … »",
+        "en": "A manager replies by letter to a citizen who filed a complaint about the language of service offered in a regional office. She closes as follows: « Nous vous remercions d'avoir porté cette situation à notre attention et vous prions d'agréer, Monsieur, … » (We thank you for bringing this situation to our attention and ask you to accept, Sir, …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "nos plus sincères bises.",
+          "rationale": {
+            "fr": "Les « bises » appartiennent à la correspondance intime ; elles sont incompatibles avec la formule « vous prions d'agréer » et avec une lettre adressée à un plaignant.",
+            "en": "« Bises » (kisses) belong to intimate correspondence; they are incompatible with « vous prions d'agréer » and with a letter to a complainant."
+          }
+        },
+        {
+          "id": "b",
+          "text": "nos salutations, et bonne fin de semaine!",
+          "rationale": {
+            "fr": "Ce souhait amical, ponctué d'un point d'exclamation, mêle le registre familier à une formule de clôture officielle ; le mélange est maladroit.",
+            "en": "This friendly wish, with an exclamation mark, mixes a familiar register into an official closing formula; the mixture is clumsy."
+          }
+        },
+        {
+          "id": "c",
+          "text": "l'hommage de notre très humble et très obéissante servitude.",
+          "rationale": {
+            "fr": "Formule archaïque de l'ancienne correspondance de cour ; elle paraît ridicule et affectée dans une lettre administrative moderne.",
+            "en": "An archaic formula from old courtly correspondence; it sounds ridiculous and affected in a modern administrative letter."
+          }
+        },
+        {
+          "id": "d",
+          "text": "l'expression de nos sentiments distingués.",
+          "rationale": {
+            "fr": "Complément consacré de la formule « Veuillez agréer » ou « Nous vous prions d'agréer » dans une lettre officielle à un particulier : sobre et courtois.",
+            "en": "The established object of « Veuillez agréer » or « Nous vous prions d'agréer » in an official letter to a member of the public: restrained and courteous."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "La formule finale d'une lettre officielle suit un moule : un verbe de prière (« Veuillez agréer », « Nous vous prions d'agréer »), le titre de civilité entre virgules (« Monsieur »), puis l'objet d'agréer (« l'expression de nos sentiments distingués », « nos salutations distinguées »). On ne mélange pas cette formule avec des souhaits familiers, et on évite les formules archaïques de déférence.",
+        "en": "The closing of an official letter follows a template: a verb of request (« Veuillez agréer », « Nous vous prions d'agréer »), the courtesy title between commas (« Monsieur »), then the object of agréer (« l'expression de nos sentiments distingués », « nos salutations distinguées »). This formula is not mixed with familiar wishes, and archaic formulas of deference are avoided."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-11",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans un message instantané envoyé à un collègue de son équipe avec qui elle travaille depuis des années, une conseillère en ressources humaines écrit : « Salut Marc, as-tu eu le temps de regarder le dossier de dotation ? … »",
+        "en": "In an instant message to a colleague on her team whom she has worked with for years, a human resources advisor writes: « Salut Marc, as-tu eu le temps de regarder le dossier de dotation ? … » (Hi Marc, have you had time to look at the staffing file? …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Je vous prie de bien vouloir m'en faire part à votre meilleure convenance.",
+          "rationale": {
+            "fr": "Formule de lettre officielle, guindée entre collègues proches ; le « vous » contredit en outre le « tu » du début du message, et « à votre meilleure convenance » est un calque de l'anglais.",
+            "en": "An official-letter formula, stilted between close colleagues; the « vous » also contradicts the « tu » at the start of the message, and « à votre meilleure convenance » is calqued on English."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Veuillez agréer mes salutations distinguées.",
+          "rationale": {
+            "fr": "Formule de clôture de lettre officielle : elle est absurde dans une messagerie instantanée entre collègues qui se tutoient.",
+            "en": "An official-letter closing: it is absurd in an instant message between colleagues on « tu » terms."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Dis-moi si on peut en parler cet après-midi.",
+          "rationale": {
+            "fr": "Le ton direct et le tutoiement s'accordent avec le support (messagerie instantanée) et la relation (collègue proche) : le registre reste cohérent avec « Salut Marc ».",
+            "en": "The direct tone and « tu » match the medium (instant messaging) and the relationship (close colleague): the register stays consistent with « Salut Marc »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Nous vous saurions gré de nous transmettre vos commentaires.",
+          "rationale": {
+            "fr": "Formule de demande officielle propre aux lettres ; le « nous » institutionnel et le « vous » sont déplacés dans un échange amical déjà engagé au tutoiement.",
+            "en": "A formal request formula typical of letters; the institutional « nous » and the « vous » are out of place in a friendly exchange already on « tu » terms."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le registre dépend du destinataire et du support. Entre collègues proches, dans une messagerie instantanée, un ton direct et le tutoiement sont acceptables ; l'essentiel est la cohérence : un message commencé par « Salut Marc, as-tu… » ne peut pas se poursuivre avec une formule de lettre officielle. À l'inverse, une note à la sous-ministre exigerait le « vous » et des formules soutenues.",
+        "en": "Register depends on the recipient and the medium. Between close colleagues, in instant messaging, a direct tone and « tu » are acceptable; what matters is consistency: a message that opens with « Salut Marc, as-tu… » cannot continue with an official-letter formula. Conversely, a note to the deputy minister would require « vous » and formal phrasing."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-12",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans une note d'information destinée au sous-ministre, la dirigeante principale des finances écrit : « Les pressions budgétaires prévues pour le prochain exercice demeurent considérables ; … »",
+        "en": "In a briefing note to the deputy minister, the chief financial officer writes: « Les pressions budgétaires prévues pour le prochain exercice demeurent considérables ; … » (The budget pressures forecast for the next fiscal year remain considerable; …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "faque on va devoir couper quelque part.",
+          "rationale": {
+            "fr": "« Faque » (donc) est une contraction de l'oral québécois, et « on va devoir couper » est familier ; le tout est exclu d'une note au sous-ministre.",
+            "en": "« Faque » (so) is a spoken Quebec contraction, and « on va devoir couper » is familiar; all of it is ruled out in a note to the deputy minister."
+          }
+        },
+        {
+          "id": "b",
+          "text": "il conviendrait donc d'envisager une révision des priorités de financement.",
+          "rationale": {
+            "fr": "Le conditionnel « il conviendrait » formule une recommandation avec la retenue attendue, et le groupe nominal « une révision des priorités » relève du style administratif.",
+            "en": "The conditional « il conviendrait » makes a recommendation with the expected restraint, and the noun phrase « une révision des priorités » belongs to administrative style."
+          }
+        },
+        {
+          "id": "c",
+          "text": "c'est clair qu'il va falloir se serrer la ceinture.",
+          "rationale": {
+            "fr": "Construction de l'oral (« c'est clair que ») et expression imagée familière (« se serrer la ceinture ») : le ton ne convient pas à une note d'information.",
+            "en": "A spoken construction (« c'est clair que ») and a familiar figurative expression (« se serrer la ceinture »): the tone does not suit a briefing note."
+          }
+        },
+        {
+          "id": "d",
+          "text": "partant, il sied de procéder à moult retranchements.",
+          "rationale": {
+            "fr": "« Partant », « il sied » et « moult » sont des archaïsmes ; la phrase devient affectée et peu claire pour un lecteur de la haute direction.",
+            "en": "« Partant », « il sied » and « moult » are archaisms; the sentence becomes affected and unclear for a senior reader."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une note d'information à la haute direction formule ses recommandations avec retenue : conditionnel (« il conviendrait de », « il y aurait lieu de »), verbes d'analyse (« envisager », « examiner ») et noms d'action (« une révision », « un réaménagement »). Le registre familier comme les archaïsmes nuisent à la crédibilité du conseil.",
+        "en": "A briefing note to senior management makes its recommendations with restraint: the conditional (« il conviendrait de », « il y aurait lieu de »), analytical verbs (« envisager », « examiner ») and action nouns (« une révision », « un réaménagement »). Both familiar register and archaisms undermine the credibility of the advice."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-13",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans un courriel adressé à une employée qui a demandé une mesure d'adaptation, son gestionnaire écrit : « J'ai bien reçu votre demande concernant un clavier ergonomique et un logiciel de lecture d'écran. … »",
+        "en": "In an email to an employee who requested a workplace accommodation, her manager writes: « J'ai bien reçu votre demande concernant un clavier ergonomique et un logiciel de lecture d'écran. … » (I have received your request for an ergonomic keyboard and screen-reading software. …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Pas de trouble, je m'en occupe.",
+          "rationale": {
+            "fr": "« Pas de trouble » est un calque familier de l'anglais « no trouble » ; il ne convient pas à une réponse écrite à une demande officielle.",
+            "en": "« Pas de trouble » is a familiar calque of English « no trouble »; it does not suit a written reply to a formal request."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Je communiquerai avec vous d'ici vendredi pour convenir des prochaines étapes.",
+          "rationale": {
+            "fr": "Phrase neutre et précise : elle engage le gestionnaire sur un délai et emploie le vocabulaire attendu (« communiquer avec », « convenir de »).",
+            "en": "A neutral, precise sentence: it commits the manager to a time frame and uses the expected vocabulary (« communiquer avec », « convenir de »)."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Je te reviens là-dessus au plus sacrant.",
+          "rationale": {
+            "fr": "Tutoiement, calque de l'anglais (« revenir à quelqu'un ») et expression familière québécoise (« au plus sacrant ») : trois marques incompatibles avec un courriel professionnel.",
+            "en": "« tu », a calque of English (« revenir à quelqu'un ») and a familiar Quebec expression (« au plus sacrant »): three marks incompatible with a professional email."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Soyez assurée que votre requête sera traitée avec toute la diligence que commande votre infortune.",
+          "rationale": {
+            "fr": "Tournure guindée et condescendante : parler de l'« infortune » de l'employée est déplacé, et le ton paraît à la fois archaïque et blessant.",
+            "en": "A stilted, condescending turn: speaking of the employee's « infortune » (misfortune) is out of place, and the tone is both archaic and hurtful."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une réponse à une demande de mesure d'adaptation doit être respectueuse, claire et neutre : on accuse réception, on indique la suite et un délai. On évite les calques (« revenir à quelqu'un », « pas de trouble »), le tutoiement et toute formulation qui dramatise ou infantilise la situation de la personne.",
+        "en": "A reply to an accommodation request must be respectful, clear and neutral: acknowledge receipt, state the next step and a time frame. Avoid calques (« revenir à quelqu'un », « pas de trouble »), « tu », and any wording that dramatizes or patronizes the person's situation."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-14",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans une lettre adressée à un organisme communautaire qui sollicitait une subvention pour un projet de verdissement urbain, la directrice régionale écrit : « Malgré l'intérêt indéniable de votre initiative, … »",
+        "en": "In a letter to a community organization that had applied for a grant for an urban greening project, the regional director writes: « Malgré l'intérêt indéniable de votre initiative, … » (Despite the undeniable merit of your initiative, …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "on peut pas vous donner d'argent cette année, désolée.",
+          "rationale": {
+            "fr": "Omission du « ne », pronom « on » et formule d'excuse orale : la phrase relève de la conversation familière.",
+            "en": "Dropped « ne », the pronoun « on » and a spoken apology: the sentence belongs to familiar conversation."
+          }
+        },
+        {
+          "id": "b",
+          "text": "nous déclinons péremptoirement votre requête, laquelle est irrecevable.",
+          "rationale": {
+            "fr": "« Péremptoirement » et « irrecevable » donnent un ton cassant et juridique qui contredit la reconnaissance exprimée au début de la phrase ; le refus manque de tact.",
+            "en": "« Péremptoirement » and « irrecevable » give a curt, legalistic tone that contradicts the appreciation expressed at the start of the sentence; the refusal lacks tact."
+          }
+        },
+        {
+          "id": "c",
+          "text": "votre projet est pas mal hors de nos critères, faque c'est non.",
+          "rationale": {
+            "fr": "« Pas mal », « faque » et « c'est non » appartiennent à l'oral familier ; ce refus abrupt ne convient pas à une lettre officielle.",
+            "en": "« Pas mal », « faque » and « c'est non » belong to familiar speech; this abrupt refusal does not suit an official letter."
+          }
+        },
+        {
+          "id": "d",
+          "text": "nous ne sommes malheureusement pas en mesure de donner une suite favorable à votre demande cette année.",
+          "rationale": {
+            "fr": "Formule de refus courtoise et mesurée : « ne pas être en mesure de » et « donner une suite favorable » atténuent la décision sans l'obscurcir.",
+            "en": "A courteous, measured refusal: « ne pas être en mesure de » and « donner une suite favorable » soften the decision without obscuring it."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Un refus officiel s'exprime avec tact : on reconnaît l'intérêt de la demande, puis on annonce la décision par une formule atténuée (« nous ne sommes pas en mesure de donner suite favorablement à votre demande », « nous regrettons de ne pouvoir… »). Le ton ne doit être ni familier ni cassant.",
+        "en": "An official refusal is expressed with tact: acknowledge the merit of the request, then announce the decision with a softened formula (« nous ne sommes pas en mesure de donner suite favorablement à votre demande », « nous regrettons de ne pouvoir… »). The tone must be neither familiar nor curt."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-15",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans un courriel envoyé à tout le personnel, l'équipe des services numériques annonce une interruption du système de gestion des dossiers : « Le système sera inaccessible samedi de 8 h à 14 h en raison de travaux de maintenance. … »",
+        "en": "In an email sent to all staff, the digital services team announces an outage of the case management system: « Le système sera inaccessible samedi de 8 h à 14 h en raison de travaux de maintenance. … » (The system will be unavailable on Saturday from 8 a.m. to 2 p.m. due to maintenance work. …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Nous vous remercions de votre compréhension.",
+          "rationale": {
+            "fr": "Formule de clôture usuelle dans un avis d'interruption de service : polie, neutre et adaptée à un envoi collectif.",
+            "en": "The usual closing in a service outage notice: polite, neutral and suited to a message sent to everyone."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Merci d'être patients avec nous autres, là!",
+          "rationale": {
+            "fr": "« Nous autres » et le « là » final sont des marques de l'oral familier québécois ; elles ne conviennent pas à un avis officiel.",
+            "en": "« Nous autres » and the final « là » are marks of familiar spoken Quebec French; they do not suit an official notice."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Sorry pour le trouble!",
+          "rationale": {
+            "fr": "Emprunt anglais et calque (« le trouble ») : la formule est familière et fautive dans un courriel professionnel.",
+            "en": "An English borrowing and a calque (« le trouble »): the phrase is familiar and faulty in a professional email."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Daignez agréer nos plus plates excuses pour ce désagrément.",
+          "rationale": {
+            "fr": "« Daignez » appartient à une langue cérémonieuse, voire ironique, et « plates excuses » est une expression vieillie et servile ; le ton détonne dans un avis technique.",
+            "en": "« Daignez » belongs to ceremonious or even ironic language, and « plates excuses » is a dated, servile expression; the tone jars in a technical notice."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un avis d'interruption de service adressé à tout le personnel se termine par une formule simple et polie : « Nous vous remercions de votre compréhension » ou « Veuillez nous excuser de ce contretemps ». On évite l'anglicisme et l'oral familier, mais aussi les formules emphatiques ou vieillies.",
+        "en": "A service outage notice to all staff ends with a simple, polite formula: « Nous vous remercions de votre compréhension » or « Veuillez nous excuser de ce contretemps ». Avoid anglicisms and familiar speech, but also emphatic or dated formulas."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-16",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans un rapport destiné au comité ministériel de gouvernance, l'équipe des politiques stratégiques résume les résultats de la consultation : « Au terme des consultations menées auprès des intervenants régionaux, … »",
+        "en": "In a report for the departmental governance committee, the strategic policy team summarizes the consultation results: « Au terme des consultations menées auprès des intervenants régionaux, … » (At the end of the consultations held with regional stakeholders, …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "on s'est rendu compte que la politique marchait pas trop bien.",
+          "rationale": {
+            "fr": "Pronom « on », omission du « ne » et verbe familier « marcher » : la formulation relève de la conversation, non d'un rapport.",
+            "en": "The pronoun « on », a dropped « ne » and the familiar verb « marcher »: the wording belongs to conversation, not to a report."
+          }
+        },
+        {
+          "id": "b",
+          "text": "nous avons constaté, pis ça nous a surpris, que pas mal de monde trouvait la politique compliquée.",
+          "rationale": {
+            "fr": "Le début est soutenu, mais l'incise « pis ça nous a surpris » et « pas mal de monde » basculent dans l'oral familier : le mélange des registres est fautif.",
+            "en": "The opening is formal, but the aside « pis ça nous a surpris » and « pas mal de monde » slide into familiar speech: mixing registers is a fault."
+          }
+        },
+        {
+          "id": "c",
+          "text": "l'équipe a relevé plusieurs lacunes dans l'application de la politique actuelle.",
+          "rationale": {
+            "fr": "Vocabulaire administratif précis (« relever des lacunes », « l'application de ») et ton neutre : la phrase convient à un rapport destiné à un comité de gouvernance.",
+            "en": "Precise administrative vocabulary (« relever des lacunes », « l'application de ») and a neutral tone: the sentence suits a report for a governance committee."
+          }
+        },
+        {
+          "id": "d",
+          "text": "il nous fut donné d'ouïr maintes doléances quant à ladite politique.",
+          "rationale": {
+            "fr": "Passé simple solennel, « ouïr », « maintes doléances » et « ladite » : la phrase est archaïque et affectée, sans gain de précision.",
+            "en": "A solemn passé simple, « ouïr », « maintes doléances » and « ladite »: the sentence is archaic and affected, with no gain in precision."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Un rapport administratif présente ses constats dans un registre neutre et précis : « constater », « relever des lacunes », « dégager des tendances ». Le registre doit rester le même d'un bout à l'autre de la phrase : un début soutenu suivi d'une incise orale est aussi fautif qu'une phrase entièrement familière. L'archaïsme n'est pas une marque de formalité, mais un défaut de clarté.",
+        "en": "An administrative report presents its findings in a neutral, precise register: « constater », « relever des lacunes », « dégager des tendances ». The register must stay the same from one end of the sentence to the other: a formal opening followed by a spoken aside is as faulty as an entirely familiar sentence. Archaism is not a mark of formality but a lapse in clarity."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-17",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Une agente du centre de contact répond par courriel à une citoyenne qui veut savoir où en est sa demande de prestations : « Madame, j'ai pris connaissance de votre message du 3 mars. … »",
+        "en": "A contact centre agent replies by email to a citizen who wants to know the status of her benefits application: « Madame, j'ai pris connaissance de votre message du 3 mars. … » (Madam, I have read your message of March 3. …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Votre dossier est actuellement à l'étude et une décision vous sera communiquée d'ici deux semaines.",
+          "rationale": {
+            "fr": "Information claire, ton neutre et passif administratif (« vous sera communiquée ») : la réponse convient à une citoyenne.",
+            "en": "Clear information, a neutral tone and the administrative passive (« vous sera communiquée »): the reply suits a member of the public."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Votre affaire est en train d'être checkée, on va vous revenir là-dessus.",
+          "rationale": {
+            "fr": "« Checker » est un anglicisme familier, et « revenir à quelqu'un » un calque de l'anglais ; la réponse manque de tenue.",
+            "en": "« Checker » is a familiar anglicism, and « revenir à quelqu'un » a calque of English; the reply lacks polish."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Ton dossier avance bien, inquiète-toi pas.",
+          "rationale": {
+            "fr": "Tutoiement et impératif négatif sans « ne » : le message est familier et trop personnel pour un échange avec une citoyenne.",
+            "en": "« tu » and a negative imperative without « ne »: the message is familiar and too personal for an exchange with a member of the public."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Sachez que votre supplique chemine vers une issue que nous espérons heureuse.",
+          "rationale": {
+            "fr": "« Supplique » est vieilli et assimile la demande à une prière ; l'ensemble est ampoulé et ne donne aucune information concrète.",
+            "en": "« Supplique » is dated and likens the application to a plea; the whole is pompous and gives no concrete information."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans un courriel à un citoyen, on vise un ton courtois et informatif : on fait le point sur le dossier et on donne un délai. La formule « prendre connaissance de » donne le ton ; la suite doit rester neutre, sans anglicismes ni familiarités, et sans formules ampoulées qui masquent l'information.",
+        "en": "In an email to a member of the public, aim for a courteous, informative tone: give the status of the file and a time frame. The phrase « prendre connaissance de » sets the tone; what follows must stay neutral, without anglicisms or familiarity, and without pompous formulas that obscure the information."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-18",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans une note d'information destinée à la sous-ministre à la suite d'un incident survenu dans un entrepôt régional, le directeur de la santé et de la sécurité au travail écrit : « Aucun employé n'a été blessé lors de l'incident ; … »",
+        "en": "In a briefing note to the deputy minister following an incident in a regional warehouse, the director of occupational health and safety writes: « Aucun employé n'a été blessé lors de l'incident ; … » (No employee was injured in the incident; …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "mais ça a passé proche, faut dire.",
+          "rationale": {
+            "fr": "« Passer proche » et « faut dire » relèvent de l'oral familier ; le commentaire est déplacé dans une note à la sous-ministre.",
+            "en": "« Passer proche » and « faut dire » belong to familiar speech; the comment is out of place in a note to the deputy minister."
+          }
+        },
+        {
+          "id": "b",
+          "text": "une enquête a toutefois été entreprise afin d'en déterminer les causes.",
+          "rationale": {
+            "fr": "Phrase neutre, passive et factuelle, liée par un connecteur administratif (« toutefois ») : elle rend compte de la mesure prise comme l'exige une note d'information.",
+            "en": "A neutral, passive, factual sentence linked by an administrative connector (« toutefois »): it reports the action taken, as a briefing note requires."
+          }
+        },
+        {
+          "id": "c",
+          "text": "anyway, on checke ce qui s'est passé.",
+          "rationale": {
+            "fr": "« Anyway » et « checker » sont des anglicismes familiers, et « on » remplace le sujet institutionnel : le registre est inadéquat.",
+            "en": "« Anyway » and « checker » are familiar anglicisms, and « on » replaces the institutional subject: the register is inappropriate."
+          }
+        },
+        {
+          "id": "d",
+          "text": "nonobstant ce, d'aucuns s'emploient céans à quérir les causes du sinistre.",
+          "rationale": {
+            "fr": "« Nonobstant ce », « céans » et « quérir » sont des archaïsmes ; « sinistre » exagère en outre la gravité d'un incident sans blessé.",
+            "en": "« Nonobstant ce », « céans » and « quérir » are archaisms; « sinistre » also exaggerates the seriousness of an incident with no injuries."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une note d'information à la sous-ministre rapporte les faits et les mesures prises, sans commentaire personnel : phrases factuelles, voix passive au besoin (« une enquête a été entreprise »), connecteurs sobres (« toutefois », « par ailleurs »). « Nonobstant » existe en français administratif, mais combiné à « céans » et à « quérir », il produit un pastiche archaïque.",
+        "en": "A briefing note to the deputy minister reports facts and actions taken, without personal comment: factual sentences, the passive where useful (« une enquête a été entreprise »), restrained connectors (« toutefois », « par ailleurs »). « Nonobstant » exists in administrative French, but combined with « céans » and « quérir » it produces an archaic pastiche."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-19",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans un premier courriel adressé à la représentante d'un fournisseur avec qui le Ministère n'a jamais fait affaire, l'agent d'approvisionnement écrit : « Bonjour Madame, … »",
+        "en": "In a first email to the representative of a supplier the Department has never done business with, the procurement officer writes: « Bonjour Madame, … » (Hello Madam, …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "pourrais-tu m'envoyer ta soumission avant vendredi ?",
+          "rationale": {
+            "fr": "Le tutoiement est déplacé dans un premier contact professionnel avec une personne inconnue.",
+            "en": "« tu » is out of place in a first professional contact with someone one does not know."
+          }
+        },
+        {
+          "id": "b",
+          "text": "envoyez-moi votre prix au plus vite, OK ?",
+          "rationale": {
+            "fr": "L'impératif sec, « au plus vite » et le « OK ? » final donnent un ton brusque et familier, incompatible avec un premier contact d'affaires.",
+            "en": "The blunt imperative, « au plus vite » and the final « OK ? » give a brusque, familiar tone, incompatible with a first business contact."
+          }
+        },
+        {
+          "id": "c",
+          "text": "je me permets de solliciter respectueusement de votre haute bienveillance la communication d'un devis.",
+          "rationale": {
+            "fr": "« De votre haute bienveillance » est une formule de déférence vieillie, réservée autrefois aux suppliques adressées aux autorités ; elle est disproportionnée envers une représentante commerciale.",
+            "en": "« De votre haute bienveillance » is a dated formula of deference, once reserved for petitions to the authorities; it is out of proportion towards a sales representative."
+          }
+        },
+        {
+          "id": "d",
+          "text": "pourriez-vous nous faire parvenir une soumission d'ici vendredi ?",
+          "rationale": {
+            "fr": "Le conditionnel de politesse (« pourriez-vous ») et le verbe neutre « faire parvenir » conviennent à un premier courriel d'affaires.",
+            "en": "The conditional of politeness (« pourriez-vous ») and the neutral verb « faire parvenir » suit a first business email."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une demande écrite à une personne qu'on ne connaît pas se formule avec le « vous » de politesse, idéalement au conditionnel (« pourriez-vous », « auriez-vous l'obligeance de »). Ce conditionnel adoucit la demande sans la rendre obséquieuse. « Faire parvenir » et « transmettre » sont plus soutenus que « envoyer ».",
+        "en": "A written request to someone one does not know uses the polite « vous », ideally in the conditional (« pourriez-vous », « auriez-vous l'obligeance de »). The conditional softens the request without making it obsequious. « Faire parvenir » and « transmettre » are more formal than « envoyer »."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-20",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans un courriel adressé à la directrice générale des communications, une conseillère principale propose de modifier un communiqué avant sa diffusion : « Après relecture attentive du projet de communiqué, … »",
+        "en": "In an email to the director general of communications, a senior advisor proposes changing a news release before it goes out: « Après relecture attentive du projet de communiqué, … » (After a careful rereading of the draft news release, …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "j'ai trouvé que le deuxième paragraphe était pas mal tout croche.",
+          "rationale": {
+            "fr": "« Pas mal » (assez) et « tout croche » (de travers) sont des expressions familières québécoises, déplacées dans un courriel à une directrice générale.",
+            "en": "« Pas mal » (quite) and « tout croche » (crooked) are familiar Quebec expressions, out of place in an email to a director general."
+          }
+        },
+        {
+          "id": "b",
+          "text": "je vous suggère fortement de changer le deuxième paragraphe, sinon ça va mal paraître.",
+          "rationale": {
+            "fr": "Le début est poli, mais « sinon ça va mal paraître » est une tournure orale et vaguement alarmiste ; « suggérer fortement » est en outre un calque de « strongly suggest ».",
+            "en": "The opening is polite, but « sinon ça va mal paraître » is a spoken, vaguely alarmist turn; « suggérer fortement » is also a calque of « strongly suggest »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "je me permettrais de suggérer une reformulation du deuxième paragraphe, dont le ton pourrait prêter à confusion.",
+          "rationale": {
+            "fr": "Le conditionnel de politesse (« je me permettrais ») et le style nominal (« une reformulation ») présentent la critique avec déférence et précision, comme il convient face à une supérieure.",
+            "en": "The conditional of politeness (« je me permettrais ») and nominal style (« une reformulation ») present the criticism with deference and precision, as befits writing to a superior."
+          }
+        },
+        {
+          "id": "d",
+          "text": "j'ose avancer que le deuxième paragraphe souffre d'une infirmité stylistique rédhibitoire.",
+          "rationale": {
+            "fr": "Vocabulaire pompeux et hyperbolique (« infirmité stylistique rédhibitoire ») : la critique devient affectée et presque blessante pour l'auteur du texte.",
+            "en": "Pompous, hyperbolic vocabulary (« infirmité stylistique rédhibitoire »): the criticism becomes affected and almost hurtful to the text's author."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour proposer une modification à une supérieure hiérarchique, on atténue la critique par le conditionnel de politesse (« je me permettrais de suggérer », « il serait peut-être préférable de ») et on reste précis sur l'objet. Les tournures orales, les calques (« suggérer fortement ») et l'emphase pompeuse sont à éviter.",
+        "en": "To propose a change to a superior, soften the criticism with the conditional of politeness (« je me permettrais de suggérer », « il serait peut-être préférable de ») and stay precise about what is concerned. Spoken turns, calques (« suggérer fortement ») and pompous emphasis are to be avoided."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-21",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans un courriel adressé aux membres du comité directeur, la gestionnaire de projet résume les décisions prises lors de la dernière réunion : « À la lumière des échanges de mardi, … »",
+        "en": "In an email to the members of the steering committee, the project manager summarizes the decisions made at the last meeting: « À la lumière des échanges de mardi, … » (In light of Tuesday's discussions, …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "on a décidé de pousser la date de fin d'un mois.",
+          "rationale": {
+            "fr": "« Pousser une date » est un calque de « to push back », et « on a décidé » relève de l'oral ; le compte rendu perd sa précision.",
+            "en": "« Pousser une date » is a calque of « to push back », and « on a décidé » belongs to speech; the summary loses its precision."
+          }
+        },
+        {
+          "id": "b",
+          "text": "le comité a comme convenu de checker l'échéancier.",
+          "rationale": {
+            "fr": "Le « comme » explétif est un tic oral, et « checker » un anglicisme familier ; la phrase ne dit d'ailleurs pas clairement ce qui a été décidé.",
+            "en": "The filler « comme » is a verbal tic, and « checker » a familiar anglicism; besides, the sentence does not say clearly what was decided."
+          }
+        },
+        {
+          "id": "c",
+          "text": "il appert qu'il échet de reporter derechef la date butoir.",
+          "rationale": {
+            "fr": "« Il appert », « il échet » et « derechef » sont des archaïsmes juridiques ; la phrase devient obscure pour des membres de comité.",
+            "en": "« Il appert », « il échet » and « derechef » are legal archaisms; the sentence becomes obscure for committee members."
+          }
+        },
+        {
+          "id": "d",
+          "text": "le comité a résolu de reporter d'un mois la date d'achèvement des travaux.",
+          "rationale": {
+            "fr": "« Résoudre de » (décider formellement), le verbe « reporter » et le groupe nominal « la date d'achèvement des travaux » donnent un compte rendu net et formel.",
+            "en": "« Résoudre de » (to formally decide), the verb « reporter » and the noun phrase « la date d'achèvement des travaux » give a clear, formal summary."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Un compte rendu de décisions s'écrit dans un registre neutre et précis : « Le comité a résolu de… », « Il a été convenu de… », « reporter une échéance ». On évite les calques (« pousser une date »), les tics oraux et les archaïsmes juridiques, qui nuisent tous à la clarté.",
+        "en": "A record of decisions is written in a neutral, precise register: « Le comité a résolu de… », « Il a été convenu de… », « reporter une échéance ». Avoid calques (« pousser une date »), verbal tics and legal archaisms, all of which harm clarity."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-22",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans un courriel envoyé aux employés de sa direction générale, la championne des langues officielles écrit : « Je vous invite à participer aux ateliers de conversation en français offerts sur l'heure du midi. … »",
+        "en": "In an email to the employees of her branch, the official languages champion writes: « Je vous invite à participer aux ateliers de conversation en français offerts sur l'heure du midi. … » (I invite you to take part in the French conversation workshops offered over the lunch hour. …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les inscriptions sont ouvertes jusqu'au 15 avril sur le site intranet.",
+          "rationale": {
+            "fr": "Information pratique formulée de façon neutre : le ton convient à un courriel adressé à l'ensemble d'une direction générale.",
+            "en": "Practical information stated neutrally: the tone suits an email to an entire branch."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Venez-vous-en, ça va être le fun!",
+          "rationale": {
+            "fr": "« Venez-vous-en » et « le fun » sont des marques de la langue familière québécoise ; elles ne conviennent pas à un courriel de la direction.",
+            "en": "« Venez-vous-en » and « le fun » are marks of familiar Quebec French; they do not suit an email from management."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Inscrivez-vous asap, y'a pas beaucoup de places!",
+          "rationale": {
+            "fr": "« Asap » est un sigle anglais et « y'a pas » une transcription de l'oral : le message devient familier et négligé.",
+            "en": "« Asap » is an English abbreviation and « y'a pas » a transcription of speech: the message becomes familiar and sloppy."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il vous sied de vous y inscrire céans, sous peine de forclusion.",
+          "rationale": {
+            "fr": "« Il vous sied », « céans » et « sous peine de forclusion » appartiennent à une langue juridique archaïque ; le ton menaçant contredit en outre l'invitation.",
+            "en": "« Il vous sied », « céans » and « sous peine de forclusion » belong to archaic legal language; the threatening tone also contradicts the invitation."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un courriel d'invitation adressé à un groupe d'employés reste neutre et informatif, même quand le sujet est convivial : on donne les modalités (date limite, lieu d'inscription) sans familiarité ni archaïsme. La chaleur du message passe par le contenu (« Je vous invite »), pas par des expressions familières.",
+        "en": "An invitation email to a group of employees stays neutral and informative, even when the subject is friendly: give the practical details (deadline, where to register) without familiarity or archaism. Warmth comes through the content (« Je vous invite »), not through familiar expressions."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-23",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans une lettre adressée à un employé au sujet d'absences non autorisées, la gestionnaire écrit : « Je vous rappelle que toute absence doit être approuvée au préalable par votre superviseur ; … »",
+        "en": "In a letter to an employee about unauthorized absences, the manager writes: « Je vous rappelle que toute absence doit être approuvée au préalable par votre superviseur ; … » (I remind you that any absence must be approved in advance by your supervisor; …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "si ça se reproduit, ça va brasser.",
+          "rationale": {
+            "fr": "« Ça va brasser » est une expression familière québécoise et vague ; une lettre administrative doit nommer clairement les conséquences possibles.",
+            "en": "« Ça va brasser » is a vague, familiar Quebec expression; an administrative letter must name the possible consequences clearly."
+          }
+        },
+        {
+          "id": "b",
+          "text": "sinon, je vais devoir sévir, et pas à peu près.",
+          "rationale": {
+            "fr": "L'intensif oral « et pas à peu près » et le ton personnel (« je vais devoir sévir ») transforment l'avertissement en menace familière.",
+            "en": "The spoken intensifier « et pas à peu près » and the personal tone (« je vais devoir sévir ») turn the warning into a familiar threat."
+          }
+        },
+        {
+          "id": "c",
+          "text": "à défaut, des mesures administratives pourraient être envisagées.",
+          "rationale": {
+            "fr": "« À défaut » introduit la conséquence avec sobriété, et le conditionnel « pourraient être envisagées » énonce la possibilité de mesures sans menace excessive.",
+            "en": "« À défaut » introduces the consequence soberly, and the conditional « pourraient être envisagées » states the possibility of measures without excessive threat."
+          }
+        },
+        {
+          "id": "d",
+          "text": "faute de quoi l'administration se verrait contrainte de vous faire subir les rigueurs de la loi.",
+          "rationale": {
+            "fr": "Le connecteur « faute de quoi » est acceptable, mais « les rigueurs de la loi » est une formule emphatique et inexacte : il s'agit d'un manquement administratif, non d'une infraction ; le ton dramatique est déplacé.",
+            "en": "The connector « faute de quoi » is acceptable, but « les rigueurs de la loi » is emphatic and inaccurate: this is an administrative breach, not an offence; the dramatic tone is out of place."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une lettre d'avertissement doit être ferme, factuelle et mesurée. On énonce la règle, puis la conséquence possible avec un connecteur sobre (« à défaut », « faute de quoi ») et, souvent, le conditionnel (« pourraient être envisagées »). Le ton personnel ou familier, comme l'emphase dramatique, compromet l'équité perçue de la démarche.",
+        "en": "A warning letter must be firm, factual and measured. State the rule, then the possible consequence with a restrained connector (« à défaut », « faute de quoi ») and, often, the conditional (« pourraient être envisagées »). A personal or familiar tone, like dramatic emphasis, undermines the perceived fairness of the process."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-24",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans une note destinée au sous-ministre adjoint, la responsable de l'accessibilité présente les résultats d'une vérification des sites Web du Ministère : « Bien que des progrès notables aient été réalisés depuis l'an dernier, … »",
+        "en": "In a note to the assistant deputy minister, the accessibility lead presents the results of an audit of the Department's websites: « Bien que des progrès notables aient été réalisés depuis l'an dernier, … » (Although notable progress has been made since last year, …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "y reste encore pas mal de pages qui sont pas accessibles.",
+          "rationale": {
+            "fr": "« Y reste » (il reste), « pas mal » et l'omission du « ne » reproduisent l'oral familier ; la phrase est inadmissible dans une note à la haute direction.",
+            "en": "« Y reste » (il reste), « pas mal » and the dropped « ne » reproduce familiar speech; the sentence is unacceptable in a note to senior management."
+          }
+        },
+        {
+          "id": "b",
+          "text": "certaines pages, notamment les formulaires en ligne, ne satisfont pas encore aux normes d'accessibilité.",
+          "rationale": {
+            "fr": "Constat précis et neutre ; « notamment » introduit l'exemple et « satisfaire aux normes » est la construction administrative attendue.",
+            "en": "A precise, neutral finding; « notamment » introduces the example and « satisfaire aux normes » is the expected administrative construction."
+          }
+        },
+        {
+          "id": "c",
+          "text": "faut avouer que plusieurs pages laissent encore à désirer, genre les formulaires.",
+          "rationale": {
+            "fr": "« Faut avouer » sans « il » et le tic « genre » pour introduire un exemple relèvent de l'oral familier.",
+            "en": "« Faut avouer » without « il » and the tic « genre » to introduce an example belong to familiar speech."
+          }
+        },
+        {
+          "id": "d",
+          "text": "d'aucunes pages demeurent, hélas, rebelles aux canons de l'accessibilité.",
+          "rationale": {
+            "fr": "« D'aucunes », « hélas » et « rebelles aux canons » donnent un ton littéraire et affecté qui ne convient pas à une note de vérification.",
+            "en": "« D'aucunes », « hélas » and « rebelles aux canons » give a literary, affected tone that does not suit an audit note."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "La note à la haute direction présente un constat nuancé : la concession (« bien que » suivi du subjonctif) est suivie d'un constat factuel. On introduit les exemples par « notamment » ou « par exemple », jamais par le tic oral « genre », et on préfère le vocabulaire normatif précis (« satisfaire aux normes ») aux tournures littéraires.",
+        "en": "The note to senior management presents a nuanced finding: the concession (« bien que » with the subjunctive) is followed by a factual statement. Examples are introduced with « notamment » or « par exemple », never with the verbal tic « genre », and precise normative vocabulary (« satisfaire aux normes ») is preferred to literary turns."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-25",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans un courriel adressé à la gestionnaire d'une autre direction, qu'il ne connaît pas personnellement, un agent des finances écrit : « Madame, à la suite de la clôture de fin d'exercice, … »",
+        "en": "In an email to a manager in another directorate whom he does not know personally, a finance officer writes: « Madame, à la suite de la clôture de fin d'exercice, … » (Madam, following the year-end close, …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "pourriez-vous me confirmer le montant des fonds inutilisés de votre direction ?",
+          "rationale": {
+            "fr": "Le conditionnel de politesse et le « vous » conviennent à une gestionnaire inconnue ; « fonds inutilisés » est le vocabulaire financier attendu.",
+            "en": "The conditional of politeness and « vous » suit a manager one does not know; « fonds inutilisés » is the expected financial vocabulary."
+          }
+        },
+        {
+          "id": "b",
+          "text": "pourrais-tu me dire combien d'argent il te reste ?",
+          "rationale": {
+            "fr": "Le tutoiement est déplacé avec une gestionnaire qu'on ne connaît pas, et « combien d'argent il te reste » est trop familier pour un échange financier.",
+            "en": "« tu » is out of place with a manager one does not know, and « combien d'argent il te reste » is too familiar for a financial exchange."
+          }
+        },
+        {
+          "id": "c",
+          "text": "faudrait que vous me disiez c'est quoi votre surplus.",
+          "rationale": {
+            "fr": "« Faudrait » sans « il » et l'interrogation orale « c'est quoi » relèvent de la langue parlée ; la demande est maladroite à l'écrit.",
+            "en": "« Faudrait » without « il » and the spoken question form « c'est quoi » belong to speech; the request is clumsy in writing."
+          }
+        },
+        {
+          "id": "d",
+          "text": "plaise à Madame de m'éclairer sur l'état de ses deniers.",
+          "rationale": {
+            "fr": "« Plaise à Madame » et « ses deniers » appartiennent à une langue cérémonieuse et vieillie, déplacée dans un courriel administratif.",
+            "en": "« Plaise à Madame » and « ses deniers » belong to ceremonious, dated language, out of place in an administrative email."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour adresser une demande à une collègue qu'on ne connaît pas, on emploie le « vous » de politesse et, de préférence, le conditionnel (« pourriez-vous », « auriez-vous l'amabilité de »). Le vocabulaire reste précis (« fonds inutilisés », « solde ») sans être familier ni archaïque.",
+        "en": "To make a request of a colleague one does not know, use the polite « vous » and, preferably, the conditional (« pourriez-vous », « auriez-vous l'amabilité de »). Vocabulary stays precise (« fonds inutilisés », « solde ») without being familiar or archaic."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-26",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans une lettre adressée à une municipalité partenaire au sujet d'un projet conjoint de restauration de milieux humides, le directeur régional écrit : « Nous vous remercions de votre collaboration soutenue tout au long de la première phase ; … »",
+        "en": "In a letter to a partner municipality about a joint wetland restoration project, the regional director writes: « Nous vous remercions de votre collaboration soutenue tout au long de la première phase ; … » (We thank you for your sustained cooperation throughout the first phase; …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "on a ben hâte de continuer avec vous autres.",
+          "rationale": {
+            "fr": "« Ben » et « vous autres » sont des marques de l'oral québécois familier, et « on » remplace le « nous » institutionnel.",
+            "en": "« Ben » and « vous autres » are marks of familiar spoken Quebec French, and « on » replaces the institutional « nous »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "c'est vraiment super le fun de travailler ensemble.",
+          "rationale": {
+            "fr": "Intensifs familiers (« vraiment super ») et anglicisme « le fun » : c'est le ton d'une conversation amicale, non d'une lettre entre institutions.",
+            "en": "Familiar intensifiers (« vraiment super ») and the anglicism « le fun »: this is the tone of a friendly chat, not of a letter between institutions."
+          }
+        },
+        {
+          "id": "c",
+          "text": "puisse notre commune entreprise prospérer sous les plus heureux auspices.",
+          "rationale": {
+            "fr": "Souhait au subjonctif littéraire (« puisse… ») et vocabulaire solennel : la formule appartient au discours de cérémonie, non à une lettre de suivi de projet.",
+            "en": "A wish in the literary subjunctive (« puisse… ») and solemn vocabulary: the phrase belongs to a ceremonial speech, not to a project follow-up letter."
+          }
+        },
+        {
+          "id": "d",
+          "text": "nous comptons sur votre appui continu pour mener à bien la deuxième phase.",
+          "rationale": {
+            "fr": "Ton cordial mais institutionnel ; « mener à bien » et « appui continu » appartiennent à la langue administrative courante.",
+            "en": "A cordial but institutional tone; « mener à bien » and « appui continu » belong to everyday administrative language."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Dans une lettre entre institutions partenaires, la cordialité s'exprime par des formules sobres : « nous comptons sur votre appui », « nous nous réjouissons de poursuivre notre collaboration ». On évite la familiarité, même amicale, et la solennité littéraire, qui sonne faux dans une correspondance de travail.",
+        "en": "In a letter between partner institutions, cordiality is expressed through restrained formulas: « nous comptons sur votre appui », « nous nous réjouissons de poursuivre notre collaboration ». Avoid familiarity, however friendly, and literary solemnity, which rings false in working correspondence."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-27",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans un courriel adressé au directeur des services numériques, qu'elle n'a jamais rencontré, une employée signale un problème d'authentification : « Monsieur, depuis la mise à jour effectuée lundi, je n'arrive plus à me connecter au portail ministériel des ressources humaines. … »",
+        "en": "In an email to the director of digital services, whom she has never met, an employee reports a sign-in problem: « Monsieur, depuis la mise à jour effectuée lundi, je n'arrive plus à me connecter au portail ministériel des ressources humaines. … » (Sir, since Monday's update, I can no longer log in to the departmental human resources portal. …)"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Est-ce que vous pourriez regarder ça de votre bord ?",
+          "rationale": {
+            "fr": "« De votre bord » (de votre côté) est un québécisme familier, et « regarder ça » est vague et oral ; malgré le « vous », la demande est trop familière pour un directeur.",
+            "en": "« De votre bord » (on your end) is a familiar Quebec expression, and « regarder ça » is vague and spoken; despite the « vous », the request is too familiar for a director."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Pourriez-vous m'indiquer à qui je dois m'adresser pour régler ce problème ?",
+          "rationale": {
+            "fr": "Le conditionnel de politesse et la demande d'orientation respectent la position du directeur : on ne lui demande pas de régler lui-même le problème, mais d'orienter l'employée.",
+            "en": "The conditional of politeness and the request for direction respect the director's position: he is not asked to fix the problem himself, but to point the employee in the right direction."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Je vous demande de régler ce problème immédiatement.",
+          "rationale": {
+            "fr": "Le ton est formel mais injonctif : exiger d'un directeur une intervention immédiate est discourtois, et aucune atténuation n'adoucit la demande.",
+            "en": "The tone is formal but peremptory: demanding immediate action from a director is discourteous, and nothing softens the request."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Daignerez-vous, Monsieur, prêter l'oreille à mon infortune ?",
+          "rationale": {
+            "fr": "« Daigner », « prêter l'oreille » et « infortune » forment une tournure cérémonieuse et dramatique, ridicule pour un problème de connexion.",
+            "en": "« Daigner », « prêter l'oreille » and « infortune » make a ceremonious, dramatic turn, ridiculous for a login problem."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Écrire à un supérieur qu'on ne connaît pas suppose une demande atténuée : conditionnel de politesse (« pourriez-vous »), formulation qui laisse le choix au destinataire, vocabulaire neutre. La formalité ne suffit pas : une injonction au « vous » reste impolie, et l'emphase cérémonieuse est aussi déplacée que la familiarité.",
+        "en": "Writing to a superior one does not know calls for a softened request: the conditional of politeness (« pourriez-vous »), wording that leaves the recipient a choice, neutral vocabulary. Formality alone is not enough: an order phrased with « vous » is still impolite, and ceremonious emphasis is as out of place as familiarity."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-28",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Repérez l'erreur de registre dans ce passage d'un courriel adressé à une cliente et choisissez la correction appropriée : « Madame, nous avons bien reçu votre formulaire de renouvellement. Toutefois, la signature manque à la page 2, faque nous ne pouvons pas traiter votre demande pour l'instant. »",
+        "en": "Find the register error in this excerpt from an email to a client and choose the appropriate correction: « Madame, nous avons bien reçu votre formulaire de renouvellement. Toutefois, la signature manque à la page 2, faque nous ne pouvons pas traiter votre demande pour l'instant. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « nous avons bien reçu » par « on a bien reçu »",
+          "rationale": {
+            "fr": "Cette modification introduit le « on » familier de l'oral à la place du « nous » institutionnel ; elle crée une faute de registre au lieu d'en corriger une.",
+            "en": "This change brings in the familiar spoken « on » instead of the institutional « nous »; it creates a register error instead of fixing one."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « Toutefois » par « Mais là »",
+          "rationale": {
+            "fr": "« Mais là » est une tournure orale ; le connecteur « Toutefois » est approprié et doit être conservé.",
+            "en": "« Mais là » is a spoken turn; the connector « Toutefois » is appropriate and should be kept."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « faque » par « de sorte que »",
+          "rationale": {
+            "fr": "« Faque » est une contraction familière de « ça fait que » ; « de sorte que », suivi de l'indicatif pour exprimer une conséquence réelle, rétablit le registre écrit.",
+            "en": "« Faque » is a familiar contraction of « ça fait que »; « de sorte que », followed by the indicative to express an actual consequence, restores the written register."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « pour l'instant » par « pour le moment présent »",
+          "rationale": {
+            "fr": "Cette modification ajoute un pléonasme sans toucher à la vraie faute : « faque » demeurerait dans la phrase.",
+            "en": "This change adds a redundancy without touching the real error: « faque » would remain in the sentence."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Les connecteurs de l'oral familier (« faque », « ça fait que », « pis ») n'ont pas leur place à l'écrit professionnel. Pour exprimer une conséquence, on emploie « de sorte que », « par conséquent », « c'est pourquoi » ou « donc ». Avec « de sorte que », l'indicatif marque une conséquence constatée.",
+        "en": "Familiar spoken connectors (« faque », « ça fait que », « pis ») have no place in professional writing. To express a consequence, use « de sorte que », « par conséquent », « c'est pourquoi » or « donc ». With « de sorte que », the indicative marks an observed consequence."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-29",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase tirée d'une note d'information destinée à la sous-ministre contient une faute de registre. Laquelle des corrections suivantes s'impose ? « Les modifications réglementaires proposées permettraient d'harmoniser les exigences fédérales et provinciales, mais leur mise en œuvre risque d'être pas mal plus coûteuse que prévu. »",
+        "en": "This sentence from a briefing note to the deputy minister contains a register error. Which of the following corrections is required? « Les modifications réglementaires proposées permettraient d'harmoniser les exigences fédérales et provinciales, mais leur mise en œuvre risque d'être pas mal plus coûteuse que prévu. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « permettraient » par « permettront »",
+          "rationale": {
+            "fr": "Le conditionnel est approprié ici : il présente l'effet attendu d'une proposition qui n'est pas encore adoptée. Le futur affirmerait un résultat certain sans corriger la faute de registre.",
+            "en": "The conditional is appropriate here: it presents the expected effect of a proposal not yet adopted. The future would assert a certain result without fixing the register error."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « harmoniser » par « matcher »",
+          "rationale": {
+            "fr": "« Matcher » est un anglicisme familier ; il remplacerait un verbe juste par une faute de registre.",
+            "en": "« Matcher » is a familiar anglicism; it would replace an apt verb with a register error."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « mise en œuvre » par « implémentation »",
+          "rationale": {
+            "fr": "« Implémentation » est un anglicisme critiqué dans ce sens ; « mise en œuvre » est le terme administratif à conserver.",
+            "en": "« Implémentation » is a criticized anglicism in this sense; « mise en œuvre » is the administrative term to keep."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « pas mal plus » par « nettement plus »",
+          "rationale": {
+            "fr": "« Pas mal », au sens de « beaucoup », est un intensif familier ; « nettement » ou « sensiblement » conviennent à une note d'information.",
+            "en": "« Pas mal », meaning « a lot », is a familiar intensifier; « nettement » or « sensiblement » suits a briefing note."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les intensifs familiers (« pas mal », « super », « vraiment trop ») trahissent l'oral dans une note destinée à la haute direction. Pour marquer le degré, on emploie des adverbes neutres : « nettement », « sensiblement », « considérablement », « beaucoup ». Le reste de la phrase respecte déjà le registre administratif, y compris le conditionnel qui présente une mesure proposée.",
+        "en": "Familiar intensifiers (« pas mal », « super », « vraiment trop ») betray speech in a note to senior management. To mark degree, use neutral adverbs: « nettement », « sensiblement », « considérablement », « beaucoup ». The rest of the sentence already respects administrative register, including the conditional that presents a proposed measure."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-30",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Dans ce courriel adressé à l'ensemble des gestionnaires, une seule expression détonne par rapport au registre attendu. Quelle correction faut-il apporter ? « Conformément à la politique ministérielle sur la santé et la sécurité au travail, chaque gestionnaire doit s'assurer que les inspections mensuelles des lieux de travail sont effectuées ; je vous demande donc de checker vos registres d'inspection d'ici la fin du mois. »",
+        "en": "In this email to all managers, a single expression clashes with the expected register. Which correction is needed? « Conformément à la politique ministérielle sur la santé et la sécurité au travail, chaque gestionnaire doit s'assurer que les inspections mensuelles des lieux de travail sont effectuées ; je vous demande donc de checker vos registres d'inspection d'ici la fin du mois. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « Conformément à » par « Suite à »",
+          "rationale": {
+            "fr": "« Suite à » est une locution critiquée qui exprime en outre la succession, non la conformité ; la modification dénaturerait le sens.",
+            "en": "« Suite à » is a criticized phrase that also expresses sequence, not compliance; the change would distort the meaning."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « s'assurer que » par « s'assurer à ce que »",
+          "rationale": {
+            "fr": "« S'assurer à ce que » est une construction fautive ; « s'assurer que » est la forme à conserver.",
+            "en": "« S'assurer à ce que » is a faulty construction; « s'assurer que » is the form to keep."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « checker » par « vérifier »",
+          "rationale": {
+            "fr": "« Checker » est un anglicisme familier ; « vérifier » est le verbe neutre attendu dans une consigne adressée aux gestionnaires.",
+            "en": "« Checker » is a familiar anglicism; « vérifier » is the neutral verb expected in an instruction to managers."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « je vous demande » par « je te demande »",
+          "rationale": {
+            "fr": "Le tutoiement est exclu dans un courriel adressé à l'ensemble des gestionnaires ; « vous » y est à la fois pluriel et poli.",
+            "en": "« tu » is ruled out in an email to all managers; « vous » is both plural and polite here."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Les anglicismes familiers comme « checker », « canceller » ou « booker » sont courants à l'oral, mais l'écrit professionnel exige leurs équivalents français : « vérifier », « annuler », « réserver ». Le reste de la phrase illustre le style attendu : « conformément à », « s'assurer que », « je vous demande de ».",
+        "en": "Familiar anglicisms such as « checker », « canceller » or « booker » are common in speech, but professional writing requires their French equivalents: « vérifier », « annuler », « réserver ». The rest of the sentence illustrates the expected style: « conformément à », « s'assurer que », « je vous demande de »."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-31",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle correction faut-il apporter au courriel suivant, qu'une agente d'approvisionnement adresse à un soumissionnaire ? « Monsieur, nous avons bien reçu votre soumission. Notre comité d'évaluation se mettra au boulot dès la semaine prochaine, et nous vous communiquerons les résultats d'ici la fin du mois. »",
+        "en": "What correction does the following email, sent by a procurement officer to a bidder, need? « Monsieur, nous avons bien reçu votre soumission. Notre comité d'évaluation se mettra au boulot dès la semaine prochaine, et nous vous communiquerons les résultats d'ici la fin du mois. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « se mettra au boulot » par « entreprendra ses travaux »",
+          "rationale": {
+            "fr": "« Boulot » est un mot familier, surtout employé en France ; « entreprendre ses travaux » est la formulation neutre qui convient à un comité d'évaluation.",
+            "en": "« Boulot » is a familiar word, used mainly in France; « entreprendre ses travaux » is the neutral wording that suits an evaluation committee."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « nous avons bien reçu » par « nous avons bien reçue »",
+          "rationale": {
+            "fr": "Le participe ne s'accorde pas ici : le complément « votre soumission » est placé après l'auxiliaire avoir. Cette modification créerait une faute d'accord.",
+            "en": "The participle does not agree here: the object « votre soumission » comes after the auxiliary avoir. This change would create an agreement error."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « Monsieur » par « Cher ami »",
+          "rationale": {
+            "fr": "« Cher ami » est une formule d'appel familière, déplacée envers un soumissionnaire.",
+            "en": "« Cher ami » is a familiar salutation, out of place with a bidder."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « d'ici la fin du mois » par « d'ici la fin du mois, promis »",
+          "rationale": {
+            "fr": "L'ajout « promis » est une marque de l'oral familier ; il crée une faute sans corriger « boulot ».",
+            "en": "Adding « promis » is a mark of familiar speech; it creates an error without fixing « boulot »."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le registre d'un message se juge mot à mot : un seul terme familier (« boulot », « job », « jaser ») suffit à rompre la tenue d'un courriel d'affaires. On le remplace par un équivalent neutre : « travail », « travaux », « tâche », « s'entretenir ».",
+        "en": "The register of a message is judged word by word: a single familiar term (« boulot », « job », « jaser ») is enough to break the composure of a business email. Replace it with a neutral equivalent: « travail », « travaux », « tâche », « s'entretenir »."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-32",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Ce passage d'une note adressée au directeur général des communications contient une seule faute de registre. Quelle correction s'impose ? « Le plan de communication proposé vise à joindre les publics cibles par l'intermédiaire des médias sociaux ; on va voir à ça avec l'équipe des relations avec les médias afin d'assurer la cohérence des messages. »",
+        "en": "This excerpt from a note to the director general of communications contains a single register error. Which correction is required? « Le plan de communication proposé vise à joindre les publics cibles par l'intermédiaire des médias sociaux ; on va voir à ça avec l'équipe des relations avec les médias afin d'assurer la cohérence des messages. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « vise à joindre » par « vise à rejoindre »",
+          "rationale": {
+            "fr": "« Joindre les publics cibles » est la formulation recommandée ; « rejoindre » en ce sens est souvent critiqué comme calque de « to reach », et la vraie faute demeurerait.",
+            "en": "« Joindre les publics cibles » is the recommended wording; « rejoindre » in this sense is often criticized as a calque of « to reach », and the real error would remain."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « on va voir à ça » par « nous coordonnerons cette démarche »",
+          "rationale": {
+            "fr": "« On va voir à ça » combine le « on » familier, le futur proche de l'oral et le pronom « ça » ; « nous coordonnerons cette démarche » rétablit le registre écrit de la note.",
+            "en": "« On va voir à ça » combines the familiar « on », the spoken near future and the pronoun « ça »; « nous coordonnerons cette démarche » restores the written register of the note."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « par l'intermédiaire des » par « via les »",
+          "rationale": {
+            "fr": "« Via » désigne d'abord un lieu de passage ; son emploi au sens de « par l'intermédiaire de » est critiqué, et la modification ne touche pas la faute réelle.",
+            "en": "« Via » primarily denotes a route through a place; its use to mean « by means of » is criticized, and the change does not touch the real error."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « afin d'assurer » par « pour être sûrs d'avoir »",
+          "rationale": {
+            "fr": "« Pour être sûrs d'avoir » est une tournure lâche de l'oral ; elle introduit une faute de registre au lieu d'en corriger une.",
+            "en": "« Pour être sûrs d'avoir » is a loose spoken turn; it introduces a register error instead of fixing one."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Les constructions de l'oral comme « on va voir à ça » (pronom « on », futur proche, « ça ») sont à remplacer à l'écrit par une formulation précise au futur simple avec « nous » : « nous coordonnerons », « nous veillerons à ». Dans une note à la direction, le pronom « ça » cède la place à « cela » ou, mieux, à un nom précis.",
+        "en": "Spoken constructions such as « on va voir à ça » (the pronoun « on », the near future, « ça ») are replaced in writing by precise wording in the simple future with « nous »: « nous coordonnerons », « nous veillerons à ». In a note to management, the pronoun « ça » gives way to « cela » or, better, to a precise noun."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-register-and-formality-33",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Lisez cet extrait d'un rapport d'étape transmis au comité de gouvernance du projet et indiquez la correction nécessaire : « Malgré un léger retard dans la livraison du module de paiement, l'équipe a respecté l'ensemble des jalons du deuxième trimestre. Les tests d'intégration sont super avancés, et l'échéancier global demeure réaliste. »",
+        "en": "Read this excerpt from a progress report sent to the project governance committee and indicate the necessary correction: « Malgré un léger retard dans la livraison du module de paiement, l'équipe a respecté l'ensemble des jalons du deuxième trimestre. Les tests d'intégration sont super avancés, et l'échéancier global demeure réaliste. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « Malgré » par « Malgré que »",
+          "rationale": {
+            "fr": "« Malgré que » introduit une proposition au subjonctif, non un nom ; la modification rendrait la phrase agrammaticale.",
+            "en": "« Malgré que » introduces a clause in the subjunctive, not a noun; the change would make the sentence ungrammatical."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « l'ensemble des jalons » par « tous les milestones »",
+          "rationale": {
+            "fr": "« Milestones » est un anglicisme de jargon ; « jalons » est le terme français de gestion de projet à conserver.",
+            "en": "« Milestones » is a jargon anglicism; « jalons » is the French project-management term to keep."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « respecté » par « rencontré »",
+          "rationale": {
+            "fr": "« Rencontrer » des jalons ou des échéances est un calque de « to meet » ; « respecter » est le verbe juste.",
+            "en": "« Rencontrer » milestones or deadlines is a calque of « to meet »; « respecter » is the apt verb."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « super avancés » par « à un stade avancé »",
+          "rationale": {
+            "fr": "« Super » employé comme intensif est familier ; « à un stade avancé » convient au registre d'un rapport d'étape.",
+            "en": "« Super » used as an intensifier is familiar; « à un stade avancé » suits the register of a progress report."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Super » comme adverbe intensif (« super avancé », « super important ») appartient à la langue familière. Dans un rapport, on exprime le degré par des formulations neutres et souvent plus informatives : « à un stade avancé », « presque terminés », « achevés à 80 % ». Les termes de gestion de projet comme « jalons », « échéancier » et « respecter une échéance » sont les équivalents français à privilégier.",
+        "en": "« Super » as an intensifying adverb (« super avancé », « super important ») belongs to familiar language. In a report, degree is expressed with neutral, often more informative wording: « à un stade avancé », « presque terminés », « achevés à 80 % ». Project-management terms such as « jalons », « échéancier » and « respecter une échéance » are the French equivalents to prefer."
+      },
+      "subSkill": "register-and-formality",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ]
+}

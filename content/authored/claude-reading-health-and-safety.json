@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-health-and-safety-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-1",
+      "stem": {
+        "fr": "Quel est l'objet principal de cette note de service du Service de la gestion des installations ?",
+        "en": "What is the main purpose of this memo from the Facilities Management Service?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer la nomination de deux nouveaux surveillants à chaque étage de l'immeuble.",
+          "rationale": {
+            "fr": "La note mentionne les surveillants d'étage pour expliquer leur rôle pendant l'exercice; elle n'annonce aucune nomination.",
+            "en": "The memo mentions floor wardens to explain their role during the drill; it announces no appointment."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Informer le personnel de la tenue d'un exercice d'évacuation et des consignes à respecter.",
+          "rationale": {
+            "fr": "C'est l'objet de la note : elle annonce l'exercice du 16 octobre, puis précise ce que chacun doit faire avant, pendant et après.",
+            "en": "This is the memo's purpose: it announces the 16 October drill, then sets out what everyone must do before, during and after it."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Reprocher au personnel la lenteur de l'évacuation de l'an dernier.",
+          "rationale": {
+            "fr": "Le temps de l'an dernier sert à fixer un objectif; la note ne formule aucun reproche, et ce n'est qu'un détail du texte.",
+            "en": "Last year's time is used to set a target; the memo makes no reproach, and this is only one detail of the text."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Demander aux employés de remettre leur plan personnalisé d'évacuation avant le 10 octobre.",
+          "rationale": {
+            "fr": "Seuls les employés qui ont besoin d'aide sont visés, et ils doivent prévenir leur gestionnaire, qui fera préparer le plan; ce n'est pas l'objet principal.",
+            "en": "Only employees who need help are concerned, and they must inform their manager, who will have a plan prepared; this is not the main purpose."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "L'idée principale d'une note de service couvre l'ensemble du texte. Écartez les réponses qui ne reprennent qu'un détail (les surveillants, le plan personnalisé) ou qui prêtent à l'auteur une intention absente du texte.",
+        "en": "A memo's main idea covers the whole text. Rule out answers that pick up a single detail (the wardens, the personal plan) or that attribute to the author an intention absent from the text."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-1",
+      "stem": {
+        "fr": "Selon la note, que doivent faire les employés au moment où l'alarme se déclenche ?",
+        "en": "According to the memo, what must employees do when the alarm goes off?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Attendre à leur bureau que le surveillant d'étage vienne leur donner le signal de sortir.",
+          "rationale": {
+            "fr": "La note demande de quitter son poste « sans délai »; les surveillants vérifient les salles, ils ne donnent pas le signal de départ.",
+            "en": "The memo asks people to leave their workstation 'without delay'; the wardens check rooms, they do not give the signal to leave."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Prendre l'ascenseur le plus proche afin d'atteindre rapidement le rez-de-chaussée.",
+          "rationale": {
+            "fr": "C'est l'inverse de la consigne : la note précise qu'il est interdit d'utiliser les ascenseurs.",
+            "en": "This is the opposite of the instruction: the memo states that using the elevators is forbidden."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Rejoindre leur gestionnaire, qui les conduira ensuite jusqu'au point de rassemblement.",
+          "rationale": {
+            "fr": "La note ne confie pas ce rôle aux gestionnaires; ceux-ci interviennent seulement pour les plans personnalisés.",
+            "en": "The memo gives managers no such role; they are involved only in personal evacuation plans."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Quitter immédiatement leur poste et descendre par l'escalier jusqu'au stationnement est.",
+          "rationale": {
+            "fr": "C'est la consigne donnée : quitter son poste sans délai, emprunter l'escalier le plus proche et se rendre au point de rassemblement du stationnement est.",
+            "en": "This is the instruction given: leave one's workstation without delay, take the nearest stairs and go to the assembly point in the east parking lot."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour une question de détail, retrouvez la phrase qui répond exactement à la question (« Lorsque l'alarme retentira… ») et vérifiez chaque élément de l'option : moment, moyen et destination.",
+        "en": "For a detail question, find the sentence that answers it exactly ('When the alarm sounds…') and check every element of the option: timing, means and destination."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-1",
+      "stem": {
+        "fr": "Quel résultat le Service vise-t-il pour l'évacuation complète de l'immeuble cette année ?",
+        "en": "What result is the Service aiming for in the full evacuation of the building this year?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Une évacuation complète réalisée en quatre minutes de moins que l'an dernier.",
+          "rationale": {
+            "fr": "L'an dernier, l'évacuation avait pris 14 minutes; l'objectif est maintenant de 10 minutes, soit quatre minutes de moins.",
+            "en": "Last year the evacuation took 14 minutes; the target is now 10 minutes, that is, four minutes less."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une évacuation complète en 14 minutes, comme l'an dernier.",
+          "rationale": {
+            "fr": "Le chiffre de 14 minutes est le résultat de l'an dernier, que la note cherche justement à améliorer.",
+            "en": "14 minutes is last year's result, which the memo is precisely trying to improve on."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une évacuation de chacun des huit étages en dix minutes.",
+          "rationale": {
+            "fr": "L'objectif de 10 minutes porte sur l'évacuation complète de l'immeuble, et non sur chaque étage pris séparément.",
+            "en": "The 10-minute target concerns the full evacuation of the building, not each floor taken separately."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Une réduction de dix minutes du temps d'évacuation de l'an dernier.",
+          "rationale": {
+            "fr": "Ce choix confond la durée visée (10 minutes) avec l'écart à combler, qui n'est que de quatre minutes.",
+            "en": "This confuses the target duration (10 minutes) with the gap to close, which is only four minutes."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Quand un texte donne deux chiffres (un résultat passé et un objectif), demandez-vous à quoi chacun se rapporte avant de les comparer : ici, 14 minutes l'an dernier et 10 minutes visées pour l'immeuble entier.",
+        "en": "When a text gives two figures (a past result and a target), ask what each one refers to before comparing them: here, 14 minutes last year and 10 minutes targeted for the whole building."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-1",
+      "stem": {
+        "fr": "Dans la phrase « Ceux-ci vérifieront que les salles de réunion et les toilettes sont vides », à qui renvoie le pronom « Ceux-ci » ?",
+        "en": "In the sentence 'Ceux-ci vérifieront que les salles de réunion et les toilettes sont vides' ('These will check that meeting rooms and washrooms are empty'), who does the pronoun 'Ceux-ci' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux employés qui quittent leur poste au moment de l'alarme.",
+          "rationale": {
+            "fr": "Les employés doivent sortir sans délai; ce ne sont pas eux qui inspectent les salles avant de faire rapport.",
+            "en": "Employees must leave without delay; they are not the ones who inspect rooms before reporting."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aux visiteurs accompagnés par la personne qui les reçoit.",
+          "rationale": {
+            "fr": "Les visiteurs sont mentionnés au paragraphe précédent; le pronom reprend un nom de la phrase qui le précède immédiatement.",
+            "en": "Visitors are mentioned in the previous paragraph; the pronoun takes up a noun from the sentence immediately before it."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Aux surveillants d'étage qui portent un dossard orange.",
+          "rationale": {
+            "fr": "« Ceux-ci » reprend le groupe nominal le plus proche qui puisse accomplir l'action : les deux surveillants d'étage au dossard orange, qui font ensuite rapport au chef d'évacuation.",
+            "en": "'Ceux-ci' takes up the nearest noun phrase able to perform the action: the two floor wardens in orange vests, who then report to the evacuation chief."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aux chefs d'évacuation désignés pour chaque étage.",
+          "rationale": {
+            "fr": "Il n'y a qu'un chef d'évacuation, et c'est à lui que l'on transmet le rapport; il ne peut donc pas être l'antécédent.",
+            "en": "There is only one evacuation chief, and the report is sent to him; he therefore cannot be the antecedent."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Ceux-ci » reprend un nom masculin pluriel récemment mentionné. Cherchez dans la phrase précédente le groupe qui s'accorde en genre et en nombre et qui a du sens comme sujet du verbe « vérifieront ».",
+        "en": "'Ceux-ci' takes up a recently mentioned masculine plural noun. Look in the previous sentence for the group that agrees in gender and number and makes sense as the subject of 'will check'."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-1",
+      "stem": {
+        "fr": "Dans la note, l'expression « sans délai », employée pour décrire la façon dont les employés quittent leur poste, signifie :",
+        "en": "In the memo, the expression 'sans délai', used to describe how employees leave their workstation, means:"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "sur-le-champ, sans attendre",
+          "rationale": {
+            "fr": "« Sans délai » signifie « immédiatement » : dès que l'alarme retentit, on quitte son poste.",
+            "en": "'Sans délai' means 'immediately': as soon as the alarm sounds, one leaves one's workstation."
+          }
+        },
+        {
+          "id": "b",
+          "text": "sans dépasser l'heure prévue de l'exercice",
+          "rationale": {
+            "fr": "Ce sens confond « délai » avec une échéance fixée d'avance; l'expression ne renvoie pas à l'heure de 10 h 30.",
+            "en": "This reading confuses 'délai' with a deadline set in advance; the expression does not refer to the 10:30 start time."
+          }
+        },
+        {
+          "id": "c",
+          "text": "sans demander l'autorisation de leur gestionnaire",
+          "rationale": {
+            "fr": "L'expression porte sur le moment du départ, non sur une permission; la note ne parle d'autorisation que pour le retour dans l'immeuble.",
+            "en": "The expression concerns the timing of departure, not permission; the memo mentions authorization only for re-entering the building."
+          }
+        },
+        {
+          "id": "d",
+          "text": "dans le délai fixé par le chef d'évacuation",
+          "rationale": {
+            "fr": "C'est presque l'inverse : « sans délai » exclut toute période d'attente, alors que cette option en suppose une.",
+            "en": "This is almost the opposite: 'sans délai' rules out any waiting period, whereas this option assumes one."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans la langue administrative, « délai » désigne le temps accordé ou écoulé avant une action. « Sans délai » veut donc dire « immédiatement », et non « dans les délais » (à temps).",
+        "en": "In administrative French, 'délai' means the time allowed or elapsed before an action. 'Sans délai' therefore means 'immediately', not 'dans les délais' (on time)."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-2",
+      "stem": {
+        "fr": "Pourquoi Sophie Tremblay écrit-elle ce courriel à ses collègues ?",
+        "en": "Why is Sophie Tremblay writing this email to her colleagues?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Pour annoncer que le programme d'évaluation ergonomique prendra fin le 3 novembre.",
+          "rationale": {
+            "fr": "Le courriel dit l'inverse : le programme « reprend » le 3 novembre.",
+            "en": "The email says the opposite: the program 'resumes' on 3 November."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Pour présenter le bilan détaillé des évaluations réalisées depuis le printemps.",
+          "rationale": {
+            "fr": "Le bilan (62 évaluations) n'occupe qu'une phrase; il sert d'introduction et n'est pas détaillé.",
+            "en": "The results (62 assessments) take up only one sentence; they serve as an introduction and are not detailed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Pour rappeler aux gestionnaires qu'ils doivent approuver le matériel de plus de 600 $.",
+          "rationale": {
+            "fr": "C'est la directrice, et non le gestionnaire, qui approuve les achats de plus de 600 $; de plus, le courriel s'adresse à tous les employés.",
+            "en": "It is the director, not the manager, who approves purchases over $600; moreover, the email is addressed to all employees."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pour expliquer aux employés comment obtenir une évaluation ergonomique et ce qu'elle comprend.",
+          "rationale": {
+            "fr": "C'est le cœur du message : la reprise du programme, la marche à suivre, le déroulement du rendez-vous et le matériel payé.",
+            "en": "This is the core of the message: the program's resumption, the steps to follow, how the appointment works and the equipment covered."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour dégager le but d'un courriel, demandez-vous ce que le lecteur doit savoir ou faire après l'avoir lu. Une réponse qui ne reprend qu'une phrase, ou qui inverse une information, est à écarter.",
+        "en": "To identify an email's purpose, ask what the reader must know or do after reading it. An answer that picks up only one sentence, or that reverses a fact, should be ruled out."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-2",
+      "stem": {
+        "fr": "Selon le courriel, quelle démarche l'employé doit-il accomplir avant que l'ergonome communique avec lui ?",
+        "en": "According to the email, what step must the employee complete before the ergonomist contacts them?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Prendre rendez-vous directement avec l'ergonome par courriel.",
+          "rationale": {
+            "fr": "C'est l'ergonome qui communique avec l'employé pour fixer le rendez-vous, une fois la demande approuvée.",
+            "en": "It is the ergonomist who contacts the employee to set the appointment, once the request has been approved."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Remplir le formulaire en ligne et le faire approuver par son gestionnaire.",
+          "rationale": {
+            "fr": "C'est la démarche décrite : formulaire en ligne, approbation du gestionnaire, puis appel de l'ergonome (« ensuite »).",
+            "en": "This is the process described: online form, manager's approval, then the ergonomist's call ('then')."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Acheter le matériel dont il a besoin et en demander le remboursement.",
+          "rationale": {
+            "fr": "Le matériel est recommandé par l'ergonome après la visite et payé par la direction générale; rien n'indique qu'il faille l'acheter d'abord.",
+            "en": "The equipment is recommended by the ergonomist after the visit and paid for by the branch; nothing says it must be bought first."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Signaler à la directrice toute douleur ressentie au travail.",
+          "rationale": {
+            "fr": "Les employés qui ont de la douleur doivent en parler à leur gestionnaire, et non à la directrice; ce n'est pas non plus une étape obligatoire pour tous.",
+            "en": "Employees in pain must speak to their manager, not the director; nor is this a required step for everyone."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Les connecteurs de temps comme « ensuite » indiquent l'ordre des étapes. Repérez ce qui vient avant « ensuite » pour savoir ce que l'employé doit faire en premier.",
+        "en": "Time connectors such as 'ensuite' (then) show the order of steps. Look at what comes before 'ensuite' to find what the employee must do first."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-2",
+      "stem": {
+        "fr": "L'ergonome recommande à un employé du matériel d'une valeur totale de 750 $. Que prévoit le courriel dans ce cas ?",
+        "en": "The ergonomist recommends equipment worth $750 in total to an employee. What does the email provide for in this case?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La direction générale paiera la totalité du montant, sans autre formalité.",
+          "rationale": {
+            "fr": "La prise en charge automatique s'arrête à 600 $; au-delà, une approbation supplémentaire est exigée.",
+            "en": "Automatic coverage stops at $600; beyond that, an additional approval is required."
+          }
+        },
+        {
+          "id": "b",
+          "text": "L'employé devra payer lui-même la totalité du matériel recommandé.",
+          "rationale": {
+            "fr": "Le courriel prévoit que la direction générale paie le matériel; rien ne laisse l'achat entièrement à la charge de l'employé.",
+            "en": "The email states that the branch pays for the equipment; nothing leaves the purchase entirely to the employee."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Comme le montant dépasse 600 $, la directrice devra approuver l'achat.",
+          "rationale": {
+            "fr": "750 $ dépasse le plafond de 600 $; le courriel précise qu'« au-delà de ce montant, l'approbation de la directrice sera nécessaire ».",
+            "en": "$750 exceeds the $600 ceiling; the email states that 'beyond this amount, the director's approval will be required'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La direction générale paiera 600 $ et l'employé paiera les 150 $ restants.",
+          "rationale": {
+            "fr": "Le calcul est juste, mais le courriel ne dit pas que l'employé paie la différence : il exige seulement l'approbation de la directrice.",
+            "en": "The arithmetic holds, but the email does not say the employee pays the difference: it only requires the director's approval."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Jusqu'à concurrence de » fixe un plafond. Comparez le montant donné au plafond, puis lisez ce que le texte prévoit au-delà, sans ajouter une règle qu'il n'énonce pas.",
+        "en": "'Jusqu'à concurrence de' sets a ceiling. Compare the amount given with the ceiling, then read what the text provides for beyond it, without adding a rule it does not state."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-2",
+      "stem": {
+        "fr": "Quel ton Sophie Tremblay adopte-t-elle envers les employés qui ressentent déjà de la douleur ?",
+        "en": "What tone does Sophie Tremblay take towards employees who are already in pain?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Un ton bienveillant qui les encourage à agir sans tarder.",
+          "rationale": {
+            "fr": "Elle les rassure (ils « seront vus en priorité ») et les invite à en parler « dès maintenant », puis conclut par « Merci de prendre soin de votre santé ».",
+            "en": "She reassures them (they 'will be seen first') and invites them to speak up 'right away', then closes with 'Thank you for taking care of your health'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Un ton sévère qui leur reproche de ne pas avoir signalé leur douleur plus tôt.",
+          "rationale": {
+            "fr": "Aucun reproche n'apparaît; l'invitation à agir rapidement est formulée pour leur bien.",
+            "en": "No reproach appears; the invitation to act quickly is made for their benefit."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Un ton indifférent qui les renvoie à la liste d'attente habituelle.",
+          "rationale": {
+            "fr": "C'est l'inverse : ces employés passent en priorité, sans attendre leur tour.",
+            "en": "This is the opposite: these employees are given priority, without waiting their turn."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Un ton alarmiste qui les prévient que leur état risque de s'aggraver gravement.",
+          "rationale": {
+            "fr": "Le courriel ne mentionne aucun risque d'aggravation; il reste calme et pratique.",
+            "en": "The email mentions no risk of worsening; it stays calm and practical."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le ton se lit dans les choix de mots : « en priorité », « n'attendez pas », « prendre soin de votre santé ». Ces formules expriment le souci des employés, sans reproche ni dramatisation.",
+        "en": "Tone is read in word choice: 'as a priority', 'don't wait', 'take care of your health'. These phrases express concern for employees, with no reproach or dramatisation."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-2",
+      "stem": {
+        "fr": "Dans quel ordre les informations du courriel sur l'évaluation ergonomique sont-elles présentées ?",
+        "en": "In what order is the information in the email about the ergonomic assessment presented?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Un problème est exposé, puis plusieurs solutions sont proposées au choix des employés.",
+          "rationale": {
+            "fr": "Le courriel ne pose pas de problème à résoudre et n'offre pas de choix entre des solutions; il décrit un programme existant.",
+            "en": "The email sets out no problem to solve and offers no choice between solutions; it describes an existing program."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La marche à suivre vient d'abord, puis les résultats obtenus depuis le printemps.",
+          "rationale": {
+            "fr": "L'ordre est inversé : les résultats (62 évaluations) figurent dans le premier paragraphe, avant la marche à suivre.",
+            "en": "The order is reversed: the results (62 assessments) appear in the first paragraph, before the steps to follow."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Des règles sont énumérées, puis les sanctions prévues en cas de non-respect.",
+          "rationale": {
+            "fr": "Le courriel ne prévoit aucune sanction; sa dernière partie traite des cas prioritaires.",
+            "en": "The email provides for no penalties; its last part deals with priority cases."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La reprise et le bilan du programme, puis la marche à suivre, enfin le cas des employés prioritaires.",
+          "rationale": {
+            "fr": "C'est l'ordre des paragraphes : annonce et bilan, démarche et matériel payé, puis consigne pour les employés qui ont déjà de la douleur.",
+            "en": "This is the order of the paragraphs: announcement and results, process and equipment covered, then the instruction for employees already in pain."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour décrire la structure d'un texte, résumez chaque paragraphe en quelques mots, puis comparez cette suite aux options. Méfiez-vous des options qui reprennent les bons éléments dans le mauvais ordre.",
+        "en": "To describe a text's structure, sum up each paragraph in a few words, then compare that sequence with the options. Beware of options that contain the right elements in the wrong order."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-3",
+      "stem": {
+        "fr": "Quel constat d'ensemble se dégage de cet extrait du rapport d'inspection trimestrielle ?",
+        "en": "What overall finding emerges from this excerpt of the quarterly inspection report?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "L'ensemble des locaux présente désormais des risques immédiats qui exigent une intervention d'urgence.",
+          "rationale": {
+            "fr": "Le rapport précise au contraire qu'aucune non-conformité des bureaux ne présente de risque immédiat; cette généralisation est abusive.",
+            "en": "On the contrary, the report states that none of the office non-conformities poses an immediate risk; this generalisation is unwarranted."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les aires de bureaux concentrent la majorité des problèmes, malgré l'instauration des tournées mensuelles.",
+          "rationale": {
+            "fr": "C'est une inversion : l'entrepôt regroupe 29 des 37 non-conformités, et les bureaux sont présentés comme en progrès.",
+            "en": "This is a reversal: the warehouse accounts for 29 of the 37 non-conformities, and the offices are presented as improving."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Si les bureaux progressent, l'entrepôt reste un point faible récurrent qui appelle une prise en charge durable.",
+          "rationale": {
+            "fr": "Cette option rend les deux volets du texte (amélioration des bureaux, problèmes persistants de l'entrepôt) et la conclusion qu'en tire le comité : désigner un responsable plutôt que multiplier les mesures ponctuelles.",
+            "en": "This option captures both strands of the text (improvement in the offices, persistent problems in the warehouse) and the committee's conclusion: designate someone accountable rather than pile up one-off measures."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La gestion a corrigé l'essentiel des lacunes signalées lors de l'inspection du printemps.",
+          "rationale": {
+            "fr": "Seules les aires de bureaux se sont améliorées; les problèmes de l'entrepôt persistent d'un trimestre à l'autre, ce qui contredit cette conclusion générale.",
+            "en": "Only the office areas have improved; the warehouse problems persist from one quarter to the next, which contradicts this general conclusion."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Au niveau C, l'idée principale d'un rapport réunit souvent deux constats opposés et la conclusion qui en découle. Une option qui ne retient qu'un des constats, ou qui l'étend à tout le texte, est incomplète ou fautive.",
+        "en": "At level C, a report's main idea often combines two contrasting findings and the conclusion drawn from them. An option that keeps only one finding, or extends it to the whole text, is incomplete or wrong."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-3",
+      "stem": {
+        "fr": "Que peut-on déduire de l'avertissement selon lequel les mêmes constats risquent de figurer « pour la troisième fois » dans le prochain rapport ?",
+        "en": "What can be inferred from the warning that the same findings may appear 'for the third time' in the next report?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les lacunes de l'entrepôt avaient déjà été signalées lors d'au moins une inspection antérieure.",
+          "rationale": {
+            "fr": "Si le prochain rapport serait le troisième à les relever, le rapport actuel est le deuxième; le texte le confirme en parlant d'une « tendance déjà observée au trimestre précédent ».",
+            "en": "If the next report would be the third to note them, the current report is the second; the text confirms this by referring to a 'trend already observed in the previous quarter'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le comité a déjà mené trois inspections de suivi dans l'entrepôt, sans résultat.",
+          "rationale": {
+            "fr": "Le texte ne mentionne aucune inspection de suivi passée; il en recommande une pour l'avenir.",
+            "en": "The text mentions no past follow-up inspection; it recommends one for the future."
+          }
+        },
+        {
+          "id": "c",
+          "text": "La gestion a refusé à deux reprises de désigner un responsable de l'entrepôt.",
+          "rationale": {
+            "fr": "Rien n'indique un refus de la gestion; le texte constate seulement qu'aucun responsable n'est désigné.",
+            "en": "Nothing indicates a refusal by management; the text only notes that no one has been designated."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les aires de bureaux risquent de connaître une nouvelle détérioration au trimestre suivant.",
+          "rationale": {
+            "fr": "L'avertissement porte sur l'entrepôt, dont il est question dans la phrase précédente; les bureaux, eux, sont en nette amélioration.",
+            "en": "The warning concerns the warehouse, discussed in the previous sentence; the offices, for their part, are clearly improving."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Une inférence s'appuie sur des indices du texte sans les dépasser. Ici, « pour la troisième fois » et « tendance déjà observée » permettent de conclure à des signalements antérieurs, mais pas à un refus ou à des inspections que le texte ne mentionne pas.",
+        "en": "An inference rests on clues in the text without going beyond them. Here, 'for the third time' and 'trend already observed' support concluding there were earlier reports, but not a refusal or inspections the text does not mention."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-3",
+      "stem": {
+        "fr": "Quelle progression argumentative l'auteur adopte-t-il d'un paragraphe à l'autre dans cet extrait du rapport d'inspection du comité ?",
+        "en": "What line of argument does the author follow from one paragraph to the next in this excerpt of the committee's inspection report?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il formule d'abord une recommandation, puis expose les constats qui la justifient, et termine par un échéancier.",
+          "rationale": {
+            "fr": "L'ordre est inversé : la recommandation n'arrive qu'au dernier paragraphe, après les constats.",
+            "en": "The order is reversed: the recommendation comes only in the last paragraph, after the findings."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il expose les lacunes de l'entrepôt, les met en contraste avec l'amélioration des bureaux, puis en tire une recommandation.",
+          "rationale": {
+            "fr": "C'est bien la progression : constats sur l'entrepôt, contraste marqué par « en revanche », puis recommandation introduite par « donc ».",
+            "en": "This is the progression: findings on the warehouse, contrast marked by 'en revanche' (by contrast), then a recommendation introduced by 'donc' (therefore)."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il compare deux inspections successives et conclut que la situation est stable dans tous les locaux.",
+          "rationale": {
+            "fr": "Le texte ne conclut pas à la stabilité : il oppose l'amélioration des bureaux à la persistance des problèmes de l'entrepôt.",
+            "en": "The text does not conclude that things are stable: it contrasts the offices' improvement with the warehouse's persistent problems."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il décrit la méthode d'inspection du comité, puis analyse les causes de chaque non-conformité.",
+          "rationale": {
+            "fr": "Le texte ne décrit aucune méthode et n'analyse pas les causes une à une; il regroupe les constats par catégorie.",
+            "en": "The text describes no method and does not analyse causes one by one; it groups findings by category."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Les connecteurs balisent la structure : « en revanche » signale une opposition, « donc » une conséquence. Suivez-les pour reconstituer le plan d'un rapport.",
+        "en": "Connectors signpost structure: 'en revanche' signals a contrast, 'donc' a consequence. Follow them to reconstruct a report's outline."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-3",
+      "stem": {
+        "fr": "Quelle conclusion les données chiffrées du rapport permettent-elles de tirer au sujet des aires de bureaux ?",
+        "en": "What conclusion do the report's figures support about the office areas?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elles représentent un peu plus des trois quarts des non-conformités relevées ce trimestre.",
+          "rationale": {
+            "fr": "C'est l'entrepôt qui compte 29 des 37 non-conformités, soit près de 80 %; les bureaux n'en comptent que huit.",
+            "en": "It is the warehouse that has 29 of the 37 non-conformities, close to 80%; the offices have only eight."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le nombre de non-conformités y a augmenté de huit depuis l'inspection du printemps.",
+          "rationale": {
+            "fr": "Huit est le total actuel, pas une hausse; le nombre a en fait baissé par rapport aux vingt et une du printemps.",
+            "en": "Eight is the current total, not an increase; the number has in fact fallen from twenty-one in the spring."
+          }
+        },
+        {
+          "id": "c",
+          "text": "On y a relevé vingt et une non-conformités, dont aucune ne présente de risque immédiat.",
+          "rationale": {
+            "fr": "Vingt et une est le chiffre du printemps; ce trimestre, les bureaux n'en comptent plus que huit.",
+            "en": "Twenty-one is the spring figure; this quarter, the offices have only eight."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Leurs non-conformités ont été réduites de plus de moitié depuis le printemps.",
+          "rationale": {
+            "fr": "On passe de vingt et une à huit non-conformités, soit une baisse de treize, ce qui dépasse la moitié du total initial.",
+            "en": "The count goes from twenty-one to eight, a drop of thirteen, which is more than half of the initial total."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Dans un texte riche en chiffres, associez chaque nombre à son objet (entrepôt ou bureaux) et à sa période (printemps ou troisième trimestre) avant de comparer. La plupart des pièges reposent sur ces associations.",
+        "en": "In a figure-heavy text, link each number to what it describes (warehouse or offices) and its period (spring or third quarter) before comparing. Most traps rely on these links."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-3",
+      "stem": {
+        "fr": "Dans la dernière phrase de l'extrait, à quelle éventualité renvoie la locution « Faute de quoi » ?",
+        "en": "In the last sentence of the excerpt, what eventuality does the phrase 'Faute de quoi' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À l'absence de fiches de données de sécurité pour certains produits de nettoyage.",
+          "rationale": {
+            "fr": "Ces fiches manquantes font partie des constats du premier paragraphe; la locution reprend ce qui la précède immédiatement.",
+            "en": "These missing sheets are among the findings in the first paragraph; the phrase takes up what immediately precedes it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Au cas où la recommandation du comité ne serait pas mise en œuvre.",
+          "rationale": {
+            "fr": "« Faute de quoi » signifie « si cela ne se fait pas » et renvoie à la phrase précédente : la désignation d'un responsable et l'inspection de suivi.",
+            "en": "'Faute de quoi' means 'if this is not done' and refers to the previous sentence: designating someone accountable and the follow-up inspection."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Au manque de progrès constaté dans les aires de bureaux.",
+          "rationale": {
+            "fr": "Les bureaux sont au contraire en progrès; la locution ne peut donc pas renvoyer à un manque de progrès de leur part.",
+            "en": "The offices are, on the contrary, improving; the phrase therefore cannot refer to a lack of progress there."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À l'insuffisance des tournées mensuelles des représentants d'étage.",
+          "rationale": {
+            "fr": "Le texte présente ces tournées comme la cause du progrès des bureaux, et non comme insuffisantes.",
+            "en": "The text presents these rounds as the reason the offices improved, not as insufficient."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Faute de quoi » (« sinon ») reprend l'action recommandée juste avant et annonce la conséquence de son absence. Pour l'interpréter, remontez à la phrase qui précède.",
+        "en": "'Faute de quoi' ('otherwise') takes up the action recommended just before and introduces the consequence of not taking it. To interpret it, go back to the preceding sentence."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-4",
+      "stem": {
+        "fr": "Que laisse entendre la note d'information au sujet du traitement réservé à la demande de réparation de l'éclairage ?",
+        "en": "What does the briefing note imply about how the request to repair the lighting was handled?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Une évaluation plus juste de son urgence aurait probablement permis d'éviter la chute.",
+          "rationale": {
+            "fr": "La demande avait été jugée non urgente, et les enquêteurs estiment qu'un traitement urgent des pannes d'éclairage « aurait vraisemblablement suffi à prévenir l'accident ».",
+            "en": "The request had been rated non-urgent, and the investigators consider that treating lighting failures as urgent 'would probably have been enough to prevent the accident'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La demande n'avait jamais été transmise au service chargé de la réparation.",
+          "rationale": {
+            "fr": "C'est une inversion : la note précise que la demande « avait bien été transmise ».",
+            "en": "This is a reversal: the note states that the request 'had indeed been submitted'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le superviseur avait délibérément retardé la réparation afin de limiter les dépenses.",
+          "rationale": {
+            "fr": "Rien ne prête une intention à quiconque; le texte constate un classement « non urgent », sans en désigner l'auteur ni le motif.",
+            "en": "Nothing attributes an intention to anyone; the text notes a 'non-urgent' rating without naming who made it or why."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La réparation avait été faite, mais l'éclairage est retombé en panne le jour de l'accident.",
+          "rationale": {
+            "fr": "La note indique que l'éclairage était défectueux depuis près de deux semaines, ce qui exclut une réparation dans l'intervalle.",
+            "en": "The note says the lighting had been faulty for nearly two weeks, which rules out a repair in the meantime."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour inférer, rapprochez deux passages : le classement « non urgent » au deuxième paragraphe et le jugement des enquêteurs sur la « première mesure » au dernier. La conclusion qui s'impose relie les deux sans rien ajouter.",
+        "en": "To infer, bring two passages together: the 'non-urgent' rating in the second paragraph and the investigators' view of the 'first measure' in the last. The conclusion that follows links the two without adding anything."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-4",
+      "stem": {
+        "fr": "Dans la conclusion des enquêteurs « il n'y a donc pas lieu de lui imputer la responsabilité de l'incident », quelle signification prend le verbe « imputer » ?",
+        "en": "In the investigators' conclusion 'il n'y a donc pas lieu de lui imputer la responsabilité de l'incident', what meaning does the verb 'imputer' take?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La lui confier, en le chargeant d'un nouveau rôle en prévention.",
+          "rationale": {
+            "fr": "« Confier une responsabilité » signifie donner une tâche; or le contexte porte sur la faute à l'origine de l'accident, non sur une affectation.",
+            "en": "'Confier une responsabilité' means to assign a task; the context, however, is about blame for the accident, not an assignment."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La lui expliquer, en lui rappelant les consignes de travail applicables.",
+          "rationale": {
+            "fr": "« Imputer » n'a pas le sens d'expliquer; la phrase conclut un raisonnement sur la cause de l'accident.",
+            "en": "'Imputer' does not mean to explain; the sentence concludes a line of reasoning about the cause of the accident."
+          }
+        },
+        {
+          "id": "c",
+          "text": "La lui attribuer, en le désignant comme fautif.",
+          "rationale": {
+            "fr": "« Imputer » une faute ou une responsabilité à quelqu'un, c'est la lui attribuer; la phrase conclut que l'employé, qui a respecté les méthodes établies, n'est pas en faute.",
+            "en": "To 'imputer' a fault or responsibility to someone is to attribute it to them; the sentence concludes that the employee, who followed established methods, is not at fault."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La lui retirer, en le déchargeant de certaines de ses tâches.",
+          "rationale": {
+            "fr": "Ce sens est presque contraire; rien dans la note n'évoque un retrait de tâches.",
+            "en": "This meaning is almost the opposite; nothing in the note mentions removing duties."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le contexte fixe le sens : la phrase précédente établit que l'employé n'a pas dérogé aux méthodes, et « donc » en tire une conclusion sur la faute. « Imputer quelque chose à quelqu'un », c'est le lui attribuer, souvent pour l'en tenir responsable.",
+        "en": "The context fixes the meaning: the previous sentence establishes that the employee did not depart from established methods, and 'donc' draws a conclusion about blame. 'Imputer quelque chose à quelqu'un' means to attribute it to them, often to hold them responsible."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-4",
+      "stem": {
+        "fr": "Quelle attitude les enquêteurs adoptent-ils à l'égard de l'employé blessé dans leurs conclusions ?",
+        "en": "What attitude do the investigators take towards the injured employee in their conclusions?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Une attitude accusatrice : ils lui reprochent d'avoir transporté une charge excessive.",
+          "rationale": {
+            "fr": "Les enquêteurs expliquent la charge par l'absence de chariot et concluent qu'il n'y a pas lieu de lui imputer la responsabilité; il n'y a aucun reproche.",
+            "en": "The investigators explain the load by the lack of a cart and conclude there is no reason to hold him responsible; there is no reproach."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une attitude indulgente par principe, qui les dispense d'examiner sa conduite.",
+          "rationale": {
+            "fr": "Ils examinent bel et bien sa conduite (« Rien n'indique qu'il ait dérogé… »); leur conclusion repose sur cet examen, non sur un principe.",
+            "en": "They do examine his conduct ('Nothing indicates that he departed…'); their conclusion rests on that examination, not on a principle."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une attitude compatissante, au point d'atténuer les faits qu'ils ont relevés.",
+          "rationale": {
+            "fr": "Les faits sont rapportés sans détour (chute, entorse, six jours d'absence, boîtes qui masquaient les marches); rien n'est atténué.",
+            "en": "The facts are reported plainly (fall, sprain, six days' absence, boxes blocking the view of the steps); nothing is played down."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Une attitude factuelle et non culpabilisante : ils examinent sa conduite et la jugent conforme aux méthodes établies.",
+          "rationale": {
+            "fr": "La note décrit les faits avec neutralité, vérifie si l'employé a dérogé aux méthodes et conclut qu'il n'est pas en faute : c'est une analyse objective, sans blâme.",
+            "en": "The note describes the facts neutrally, checks whether the employee departed from established methods and concludes he is not at fault: an objective analysis, without blame."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une enquête sur une situation comportant des risques cherche les causes, non des coupables. Pour juger du ton, distinguez l'examen des faits (présent ici) du reproche ou de la complaisance (absents).",
+        "en": "An investigation into a hazardous occurrence looks for causes, not culprits. To judge tone, distinguish examining the facts (present here) from reproach or leniency (both absent)."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-4",
+      "stem": {
+        "fr": "Selon les enquêteurs, quelle circonstance explique que le commis ait transporté les boîtes à la main ce matin-là ?",
+        "en": "According to the investigators, what circumstance explains why the clerk carried the boxes by hand that morning?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le règlement interne interdisait l'usage des chariots dans l'escalier de service.",
+          "rationale": {
+            "fr": "La note ne mentionne aucune interdiction; elle recommande même l'achat d'un second chariot.",
+            "en": "The note mentions no prohibition; it even recommends buying a second cart."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aucun chariot n'était libre au moment où il devait effectuer le transport.",
+          "rationale": {
+            "fr": "C'est ce qu'exprime « faute de chariot disponible ce matin-là » : il n'a pas pu se servir d'un chariot parce qu'aucun n'était libre, d'où la recommandation d'en acquérir un second.",
+            "en": "This is what 'for lack of an available cart that morning' expresses: he could not use a cart because none was free, hence the recommendation to buy a second one."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il cherchait à gagner du temps en évitant le monte-charge du quai de chargement.",
+          "rationale": {
+            "fr": "Le texte ne parle ni de monte-charge ni de volonté de gagner du temps; c'est une explication plausible, mais non attestée.",
+            "en": "The text mentions neither a freight elevator nor a wish to save time; this explanation is plausible but unsupported."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Son superviseur lui avait demandé de livrer le courrier de toute urgence.",
+          "rationale": {
+            "fr": "Aucune consigne d'urgence n'est mentionnée; le superviseur n'apparaît qu'à titre d'enquêteur.",
+            "en": "No urgent instruction is mentioned; the supervisor appears only as one of the investigators."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "La locution « faute de » introduit une cause par manque (« parce qu'il n'y avait pas de »). Repérez-la pour retrouver l'explication donnée par le texte et écartez les causes vraisemblables qu'il ne mentionne pas.",
+        "en": "The phrase 'faute de' introduces a cause through absence ('because there was no'). Spot it to find the explanation the text gives, and rule out plausible causes it does not mention."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-4",
+      "stem": {
+        "fr": "Quelle fonction remplit le dernier paragraphe dans l'économie générale de la note d'information ?",
+        "en": "What function does the last paragraph serve in the overall organisation of the briefing note?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il rappelle le cadre réglementaire dans lequel l'enquête a été menée.",
+          "rationale": {
+            "fr": "Le cadre réglementaire (enquête conjointe) est évoqué au premier paragraphe, non au dernier.",
+            "en": "The regulatory framework (joint investigation) is mentioned in the first paragraph, not the last."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il établit la chronologie détaillée des événements du 9 septembre.",
+          "rationale": {
+            "fr": "Les faits du 9 septembre sont résumés au début de la note; le dernier paragraphe regarde vers l'avenir.",
+            "en": "The events of 9 September are summarised at the start of the note; the last paragraph looks to the future."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il propose des mesures correctives et précise laquelle aurait été déterminante.",
+          "rationale": {
+            "fr": "Le dernier paragraphe formule deux recommandations (traiter les pannes d'éclairage comme urgentes, acquérir un chariot) et indique que la première aurait sans doute suffi.",
+            "en": "The last paragraph makes two recommendations (treat lighting failures as urgent, buy a cart) and states that the first would probably have been enough."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il nuance la conclusion de l'enquête en attribuant finalement l'accident à l'employé.",
+          "rationale": {
+            "fr": "C'est contraire au texte : l'employé est mis hors de cause au deuxième paragraphe, et le dernier ne revient pas sur ce point.",
+            "en": "This contradicts the text: the employee is cleared in the second paragraph, and the last paragraph does not revisit the point."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Un rapport d'enquête suit en général l'ordre faits, analyse des causes, recommandations. Situer chaque paragraphe dans ce schéma aide à en reconnaître la fonction.",
+        "en": "An investigation report generally follows the order facts, analysis of causes, recommendations. Placing each paragraph in that pattern helps identify its function."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-5",
+      "stem": {
+        "fr": "Quelle idée maîtresse ce bulletin consacré à la future stratégie ministérielle cherche-t-il à transmettre ?",
+        "en": "What central idea does this bulletin on the future departmental strategy seek to convey?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le programme d'aide aux employés sera remplacé par des sondages anonymes menés dans chaque direction générale.",
+          "rationale": {
+            "fr": "Le bulletin ne remplace rien : il juge les mesures existantes « utiles » et veut les compléter par une démarche préventive.",
+            "en": "The bulletin replaces nothing: it calls the existing measures 'useful' and wants to complement them with a preventive approach."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les gestionnaires seront désormais évalués en fonction du bien-être psychologique de leurs équipes.",
+          "rationale": {
+            "fr": "C'est l'inverse de ce qu'affirme le texte : les résultats « ne serviront en aucun cas » à évaluer le rendement des gestionnaires.",
+            "en": "This is the opposite of what the text says: the results 'will in no case be used' to assess managers' performance."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les séances de sensibilisation se sont révélées inefficaces et seront abandonnées.",
+          "rationale": {
+            "fr": "Le bulletin qualifie ces séances d'« utiles »; il leur reproche seulement d'être réactives, sans annoncer leur abandon.",
+            "en": "The bulletin calls these sessions 'useful'; its only criticism is that they are reactive, and it announces no discontinuation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le Ministère entend passer d'une approche réactive à une démarche qui s'attaque aux causes organisationnelles de la détresse.",
+          "rationale": {
+            "fr": "C'est le fil du texte : constat des limites des mesures réactives, objectif de repérer les facteurs organisationnels « en amont », puis conditions de la démarche.",
+            "en": "This is the thread of the text: the limits of reactive measures, the aim of identifying organisational factors 'upstream', then the conditions of the approach."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "L'idée maîtresse d'un texte argumenté se lit souvent dans l'opposition qu'il construit (ici réactif / en amont). Écartez les options qui inversent une affirmation du texte ou qui transforment une nuance (« utiles, toutefois réactives ») en condamnation.",
+        "en": "The central idea of an argued text is often found in the contrast it builds (here reactive / upstream). Rule out options that reverse a statement in the text or turn a nuance ('useful, but reactive') into a condemnation."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-5",
+      "stem": {
+        "fr": "Que peut-on déduire de la condition dont le bulletin assortit le portrait établi par chaque direction générale ?",
+        "en": "What can be inferred from the condition the bulletin attaches to the profile drawn up by each branch?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Dans une unité trop petite, les réponses pourraient permettre de reconnaître les personnes qui les ont données.",
+          "rationale": {
+            "fr": "Le portrait n'est établi que si le nombre de répondants suffit « pour préserver la confidentialité » : on en déduit qu'un trop petit nombre de réponses rendrait les répondants identifiables.",
+            "en": "The profile is drawn up only if the number of respondents is enough 'to preserve confidentiality': it follows that too few responses would make respondents identifiable."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les directions générales où peu d'employés répondront s'exposeront à des mesures disciplinaires.",
+          "rationale": {
+            "fr": "Le texte ne prévoit aucune sanction; la condition vise la protection des répondants, non le contrôle de la participation.",
+            "en": "The text provides for no penalty; the condition aims to protect respondents, not to police participation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le sondage sera obligatoire pour l'ensemble des employés du Ministère.",
+          "rationale": {
+            "fr": "Le bulletin « invite » le personnel à participer; rien ne rend le sondage obligatoire.",
+            "en": "The bulletin 'invites' staff to take part; nothing makes the survey mandatory."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les gestionnaires pourront consulter les réponses individuelles de leurs employés.",
+          "rationale": {
+            "fr": "C'est contraire au caractère anonyme du sondage et à la volonté de préserver la confidentialité.",
+            "en": "This contradicts the survey's anonymity and the stated aim of preserving confidentiality."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Sous réserve que » introduit une condition. Pour en tirer une inférence, demandez-vous ce qui se passerait si la condition n'était pas remplie, en vous fondant sur le but qu'en donne le texte (« pour préserver la confidentialité »).",
+        "en": "'Sous réserve que' introduces a condition. To draw an inference from it, ask what would happen if the condition were not met, based on the purpose the text gives ('to preserve confidentiality')."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-5",
+      "stem": {
+        "fr": "Dans le segment « quitte à revoir l'échéancier de projets jugés prioritaires », quelle nuance la locution « quitte à » exprime-t-elle ?",
+        "en": "In the segment 'quitte à revoir l'échéancier de projets jugés prioritaires', what nuance does the phrase 'quitte à' express?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Une condition préalable à toute remise en question des pratiques existantes.",
+          "rationale": {
+            "fr": "« Quitte à » n'introduit pas une condition à remplir d'abord; il présente un prix à payer éventuel.",
+            "en": "'Quitte à' does not introduce a condition to be met first; it presents a possible price to pay."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une conséquence que la haute direction cherche à éviter à tout prix.",
+          "rationale": {
+            "fr": "C'est l'inverse : la locution signale que l'on accepte cette conséquence, non qu'on la refuse.",
+            "en": "This is the opposite: the phrase signals that the consequence is accepted, not rejected."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Un inconvénient éventuel que la haute direction se dit prête à assumer.",
+          "rationale": {
+            "fr": "« Quitte à » signifie « au risque de, en acceptant de » : revoir des échéanciers est un coût possible que la direction accepte pour remettre en question certaines pratiques.",
+            "en": "'Quitte à' means 'even if it means, accepting that': revising timelines is a possible cost management accepts in order to question certain practices."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Une décision déjà arrêtée de reporter les projets jugés prioritaires.",
+          "rationale": {
+            "fr": "La locution évoque une éventualité, non une décision prise; aucun report n'est annoncé.",
+            "en": "The phrase evokes a possibility, not a decision already taken; no postponement is announced."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Quitte à » + infinitif présente une conséquence possible, souvent désagréable, que l'on accepte d'avance (« même si cela oblige à »). Ne le confondez pas avec une condition (« à condition de ») ni avec un refus.",
+        "en": "'Quitte à' + infinitive presents a possible, often unwelcome, consequence that one accepts in advance ('even if it means'). Do not confuse it with a condition ('à condition de') or a refusal."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-5",
+      "stem": {
+        "fr": "Dans le segment « sans agir sur les facteurs organisationnels qui y contribuent », quel antécédent le pronom « y » reprend-il dans le premier paragraphe ?",
+        "en": "In the segment 'sans agir sur les facteurs organisationnels qui y contribuent', what antecedent does the pronoun 'y' take up in the first paragraph?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux séances de sensibilisation offertes jusqu'ici par le Ministère.",
+          "rationale": {
+            "fr": "Les facteurs organisationnels ne contribuent pas aux séances de sensibilisation; ce rapprochement n'a pas de sens dans la phrase.",
+            "en": "Organisational factors do not contribute to the awareness sessions; this link makes no sense in the sentence."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À la détresse que vivent les employés.",
+          "rationale": {
+            "fr": "« Y » reprend un complément introduit par « à » (contribuer à quelque chose) : les facteurs cités (charge de travail, manque de reconnaissance, ambiguïté des rôles) contribuent à la détresse mentionnée juste avant.",
+            "en": "'Y' takes up a complement introduced by 'à' (contribuer à something): the factors listed (workload, lack of recognition, role ambiguity) contribute to the distress mentioned just before."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Au programme d'aide aux employés.",
+          "rationale": {
+            "fr": "Le programme est une mesure de soutien; les facteurs énumérés ne « contribuent » pas à ce programme.",
+            "en": "The program is a support measure; the factors listed do not 'contribute' to it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aux mesures réactives adoptées par le Ministère.",
+          "rationale": {
+            "fr": "Le texte reproche justement à ces mesures de ne pas agir sur les facteurs; ceux-ci ne contribuent pas aux mesures, mais au problème qu'elles traitent.",
+            "en": "The text's very criticism is that these measures do not act on the factors; the factors contribute not to the measures but to the problem they address."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le pronom « y » remplace un complément introduit par « à ». Reconstituez la construction (« contribuer à quoi ? ») et choisissez l'antécédent le plus proche qui donne un sens logique à la phrase.",
+        "en": "The pronoun 'y' replaces a complement introduced by 'à'. Rebuild the construction ('contribute to what?') and choose the nearest antecedent that makes the sentence logical."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-health-and-safety-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-health-and-safety-5",
+      "stem": {
+        "fr": "Quelle intention la haute direction poursuit-elle dans la dernière phrase du bulletin, consacrée aux consultations ?",
+        "en": "What is senior management's intention in the bulletin's last sentence, which concerns the consultations?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Reprocher au personnel la faible participation observée lors de consultations antérieures.",
+          "rationale": {
+            "fr": "Le bulletin ne mentionne aucune consultation passée ni aucun taux de participation; il n'y a pas de reproche.",
+            "en": "The bulletin mentions no past consultation and no participation rate; there is no reproach."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Menacer les équipes peu participatives de voir leurs projets prioritaires reportés.",
+          "rationale": {
+            "fr": "Ce choix amalgame deux idées distinctes : la révision possible des échéanciers ne dépend pas de la participation et n'est présentée comme une sanction pour personne.",
+            "en": "This option merges two separate ideas: a possible revision of timelines does not depend on participation and is presented as a penalty for no one."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Rassurer les gestionnaires quant à l'usage qui sera fait des résultats du sondage.",
+          "rationale": {
+            "fr": "Cette assurance figure au deuxième paragraphe (« ne serviront en aucun cas… »), non dans la dernière phrase.",
+            "en": "This reassurance appears in the second paragraph ('will in no case be used…'), not in the last sentence."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Mobiliser le personnel en faisant valoir que son apport est nécessaire pour que la stratégie corresponde au vécu des équipes.",
+          "rationale": {
+            "fr": "La direction « invite » à participer et justifie cet appel par un risque qu'elle reconnaît elle-même : une stratégie fondée sur ses seules perceptions. L'intention est de mobiliser.",
+            "en": "Management 'invites' participation and justifies the appeal by a risk it acknowledges itself: a strategy based on its own perceptions alone. The intention is to mobilise."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour cerner l'intention, observez le verbe principal (« invite ») et le rôle de « sans quoi », qui présente la conséquence d'une faible participation comme un argument, non comme une menace.",
+        "en": "To identify the intention, look at the main verb ('invites') and at the role of 'sans quoi', which presents the consequence of low participation as an argument, not a threat."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-health-and-safety-1",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Exercice d'évacuation du 16 octobre",
+      "body": "Destinataires : tout le personnel de l'immeuble\n\nUn exercice d'évacuation aura lieu le 16 octobre à 10 h 30. Lorsque l'alarme retentira, tous les employés devront quitter leur poste sans délai, emprunter l'escalier le plus proche et se rendre au point de rassemblement situé dans le stationnement est. Il est interdit d'utiliser les ascenseurs. Les visiteurs doivent être accompagnés par la personne qui les reçoit.\n\nChacun des huit étages compte deux surveillants d'étage, reconnaissables à leur dossard orange. Ceux-ci vérifieront que les salles de réunion et les toilettes sont vides, puis transmettront leur rapport au chef d'évacuation. L'an dernier, l'évacuation complète avait pris 14 minutes; cette année, notre objectif est de la réaliser en 10 minutes.\n\nLes employés qui auraient besoin d'aide pour évacuer sont priés d'en informer leur gestionnaire d'ici le 10 octobre, afin qu'un plan personnalisé soit préparé. Personne ne pourra retourner dans l'immeuble sans l'autorisation du chef d'évacuation.\n\nService de la gestion des installations",
+      "wordCount": 157,
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "readability": {
+        "sentences": 10,
+        "avgSentenceLength": 15.7,
+        "rareWordRatio": 0.242
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-health-and-safety-2",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Reprise du programme d'évaluation ergonomique",
+      "body": "Bonjour à toutes et à tous,\n\nLe programme d'évaluation ergonomique reprend le 3 novembre. Depuis son lancement au printemps, 62 employés ont reçu la visite d'une ergonome, et la plupart ont obtenu le matériel recommandé en moins de trois semaines.\n\nPour faire une demande, remplissez le formulaire en ligne et faites-le approuver par votre gestionnaire. L'ergonome communiquera ensuite avec vous pour fixer un rendez-vous d'environ 45 minutes, au bureau ou à domicile si vous êtes en télétravail. Le matériel recommandé, comme une chaise ou un clavier, sera payé par la direction générale jusqu'à concurrence de 600 $ par personne; au-delà de ce montant, l'approbation de la directrice sera nécessaire.\n\nVeuillez noter que les employés qui ressentent déjà de la douleur seront vus en priorité. Si c'est votre cas, n'attendez pas : parlez-en à votre gestionnaire dès maintenant.\n\nMerci de prendre soin de votre santé,\n\nSophie Tremblay\nCoordonnatrice, Santé et sécurité au travail",
+      "wordCount": 152,
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 19,
+        "rareWordRatio": 0.276
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-health-and-safety-3",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Comité local de santé et de sécurité : constats de l'inspection du troisième trimestre",
+      "body": "Lors de l'inspection du troisième trimestre, le comité a visité les quatre étages occupés par la Direction générale des services ministériels ainsi que l'entrepôt du sous-sol. Sur les 37 non-conformités relevées, 29 concernent l'entrepôt, ce qui confirme une tendance déjà observée au trimestre précédent. Il s'agit surtout de charges empilées au-delà de la hauteur permise, d'extincteurs dont l'accès est obstrué et de fiches de données de sécurité introuvables pour plusieurs produits de nettoyage.\n\nDans les aires de bureaux, en revanche, la situation s'est nettement améliorée : on n'y compte plus que huit non-conformités, contre vingt et une au printemps, et aucune ne présente de risque immédiat. Le comité attribue ce progrès à la tournée mensuelle instaurée par les représentants d'étage.\n\nBien que la correction des lacunes relève de la gestion, le comité estime que des mesures ponctuelles ne suffiront pas tant que l'entrepôt n'aura pas de responsable désigné. Il recommande donc qu'un gestionnaire en assume la responsabilité d'ici la fin de l'exercice et qu'une inspection de suivi y soit menée dans les 30 jours. Faute de quoi, les mêmes constats risquent de figurer, pour la troisième fois, dans le prochain rapport.",
+      "wordCount": 191,
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 23.88,
+        "rareWordRatio": 0.267
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-health-and-safety-4",
+      "lang": "fr",
+      "docType": "note",
+      "title": "Note d'information : enquête sur la situation comportant des risques survenue au quai de chargement",
+      "body": "Le 9 septembre, un commis au courrier a fait une chute dans l'escalier de service qui relie le quai de chargement à la salle du courrier. Il a subi une entorse à la cheville et s'est absenté six jours. Conformément à la réglementation, l'enquête a été menée conjointement par le superviseur et un membre du comité de santé et de sécurité.\n\nL'enquête conclut que l'accident résulte d'un concours de facteurs plutôt que d'une cause unique. L'éclairage de l'escalier était défectueux depuis près de deux semaines; une demande de réparation avait bien été transmise, mais elle avait été classée comme non urgente. De plus, faute de chariot disponible ce matin-là, l'employé transportait à la main une pile de boîtes qui lui masquait les marches. Rien n'indique qu'il ait dérogé aux méthodes de travail établies : il n'y a donc pas lieu de lui imputer la responsabilité de l'incident.\n\nLes enquêteurs recommandent que toute défectuosité d'éclairage dans une issue ou un escalier soit désormais traitée comme urgente, et qu'un second chariot soit acquis. Ils soulignent que la première mesure, peu coûteuse, aurait vraisemblablement suffi à prévenir l'accident.",
+      "wordCount": 185,
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 20.56,
+        "rareWordRatio": 0.238
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-health-and-safety-5",
+      "lang": "fr",
+      "docType": "bulletin",
+      "title": "Vers une stratégie ministérielle de santé et de sécurité psychologiques",
+      "body": "Le Ministère amorcera cet automne l'élaboration de sa première stratégie de santé et de sécurité psychologiques. Jusqu'ici, les initiatives en la matière se limitaient pour l'essentiel à des séances de sensibilisation et au programme d'aide aux employés. Utiles, ces mesures demeurent toutefois réactives : elles interviennent une fois la détresse installée, sans agir sur les facteurs organisationnels qui y contribuent, comme la charge de travail, le manque de reconnaissance ou l'ambiguïté des rôles.\n\nLa stratégie visera donc à repérer ces facteurs en amont. Dans la mesure où ils varient d'une équipe à l'autre, chaque direction générale sera invitée à dresser son propre portrait à partir d'un sondage anonyme, sous réserve que le nombre de répondants soit suffisant pour préserver la confidentialité. Les résultats ne serviront en aucun cas à évaluer le rendement des gestionnaires.\n\nLa haute direction reconnaît que certaines pratiques bien ancrées devront être remises en question, quitte à revoir l'échéancier de projets jugés prioritaires. Elle invite le personnel à participer en grand nombre aux consultations, sans quoi la stratégie risquerait de refléter davantage les perceptions de la haute direction que la réalité des équipes.",
+      "wordCount": 186,
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 23.25,
+        "rareWordRatio": 0.29
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

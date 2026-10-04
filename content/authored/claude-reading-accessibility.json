@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-accessibility-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-1",
+      "stem": {
+        "fr": "Quel est le but principal du courriel de Martine Gagnon ?",
+        "en": "What is the main purpose of Martine Gagnon's email?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer que tous les employés recevront un siège ergonomique dès le 1er décembre.",
+          "rationale": {
+            "fr": "Le siège ergonomique n'est qu'un exemple de besoin courant ; le courriel n'annonce aucune distribution générale d'équipement.",
+            "en": "The ergonomic chair is only an example of a common need; the email announces no general distribution of equipment."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Informer le personnel d'une façon simplifiée de demander une mesure d'adaptation.",
+          "rationale": {
+            "fr": "C'est l'objet du courriel : un formulaire unique, moins de pièces à fournir, des délais connus et un dossier qui suit l'employé.",
+            "en": "This is the email's purpose: a single form, fewer documents to supply, known timelines and a file that follows the employee."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Rappeler aux gestionnaires qu'ils doivent rencontrer chaque employé avant le 1er décembre.",
+          "rationale": {
+            "fr": "Le courriel s'adresse à l'ensemble du personnel ; la rencontre avec le gestionnaire n'est qu'une suite possible à une demande.",
+            "en": "The email is addressed to all staff; a meeting with the manager is only one possible follow-up to a request."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Inviter le personnel à une séance d'information obligatoire sur l'intranet.",
+          "rationale": {
+            "fr": "Les séances du mardi sont offertes, non imposées, et elles ne sont mentionnées qu'en fin de message.",
+            "en": "The Tuesday sessions are offered, not required, and they are only mentioned at the end of the message."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour dégager le but d'un message, cherchez ce qui relie toutes ses phrases : ici, chacune décrit une étape ou un avantage de la nouvelle marche à suivre. Une réponse qui ne reprend qu'un exemple ou qu'un détail final est trop étroite.",
+        "en": "To find a message's purpose, look for what links all its sentences: here, each one describes a step or a benefit of the new procedure. An answer that picks up only one example or the closing detail is too narrow."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-1",
+      "stem": {
+        "fr": "Selon le courriel, que n'aura-t-on plus à fournir pour obtenir un logiciel de lecture d'écran ?",
+        "en": "According to the email, what will no longer have to be provided to obtain screen-reading software?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Une description de l'obstacle rencontré.",
+          "rationale": {
+            "fr": "Cette description reste exigée : « Il vous suffira de décrire l'obstacle que vous rencontrez ».",
+            "en": "This description is still required: 'All you will need to do is describe the barrier you face'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "L'approbation du gestionnaire.",
+          "rationale": {
+            "fr": "Le gestionnaire doit toujours approuver la demande, dans un délai de 10 jours ouvrables.",
+            "en": "The manager must still approve the request, within 10 working days."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une proposition de solution.",
+          "rationale": {
+            "fr": "Le courriel demande précisément de décrire « la solution que vous proposez » ; elle demeure nécessaire.",
+            "en": "The email specifically asks you to describe 'the solution you propose'; it is still needed."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Un certificat médical.",
+          "rationale": {
+            "fr": "Le courriel l'indique : « Vous n'aurez plus à fournir de certificat médical pour les besoins courants », et le logiciel de lecture d'écran est cité comme exemple de besoin courant.",
+            "en": "The email states it: 'You will no longer have to provide a medical certificate for common needs', and screen-reading software is given as an example of a common need."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une question de détail demande de retrouver l'information exacte. Repérez la tournure négative « n'aurez plus à » : elle sépare ce qui disparaît (le certificat) de ce qui reste exigé (la description, la solution, l'approbation).",
+        "en": "A detail question asks you to find the exact information. Spot the negative phrasing 'will no longer have to': it separates what disappears (the certificate) from what is still required (the description, the solution, the approval)."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-1",
+      "stem": {
+        "fr": "Combien de temps le gestionnaire aura-t-il pour donner suite à une demande ?",
+        "en": "How much time will the manager have to respond to a request?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Dix jours ouvrables.",
+          "rationale": {
+            "fr": "Le courriel précise que le gestionnaire « disposera ensuite de 10 jours ouvrables pour approuver la demande ou pour vous rencontrer ».",
+            "en": "The email specifies that the manager 'will then have 10 working days to approve the request or to meet with you'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Environ quatre semaines.",
+          "rationale": {
+            "fr": "Ce délai concerne la livraison de l'équipement acheté, non la réponse du gestionnaire.",
+            "en": "This timeline concerns delivery of purchased equipment, not the manager's response."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Dix jours civils.",
+          "rationale": {
+            "fr": "Le nombre concorde, mais l'unité ne convient pas : le courriel parle de jours ouvrables, ce qui exclut les fins de semaine.",
+            "en": "The number matches, but the unit does not fit: the email speaks of working days, which excludes weekends."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Trente jours ouvrables.",
+          "rationale": {
+            "fr": "Le nombre 30 renvoie à la durée en minutes des séances d'information, non au délai de réponse.",
+            "en": "The number 30 refers to the length in minutes of the information sessions, not to the response time."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Quand un texte contient plusieurs chiffres, associez chacun à ce qu'il mesure : 10 jours ouvrables (réponse du gestionnaire), quatre semaines (livraison), 30 minutes (séances). Vérifiez aussi l'unité : jours ouvrables et jours civils ne sont pas équivalents.",
+        "en": "When a text contains several figures, match each to what it measures: 10 working days (manager's response), four weeks (delivery), 30 minutes (sessions). Check the unit too: working days and calendar days are not equivalent."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-1",
+      "stem": {
+        "fr": "Dans l'expression « les besoins courants », que signifie l'adjectif « courants » ?",
+        "en": "In the expression 'les besoins courants', what does the adjective 'courants' mean?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Actuels, propres au moment présent.",
+          "rationale": {
+            "fr": "Ce sens existe (« l'année courante »), mais ici les exemples donnés, un siège ou un logiciel, montrent qu'il s'agit du type de besoin, non de sa date.",
+            "en": "This meaning exists ('the current year'), but here the examples given, a chair or software, show that it is about the kind of need, not its timing."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Urgents, à régler sans délai.",
+          "rationale": {
+            "fr": "Rien n'indique l'urgence ; au contraire, la livraison peut prendre environ quatre semaines.",
+            "en": "Nothing suggests urgency; on the contrary, delivery can take about four weeks."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Habituels, fréquents et simples à satisfaire.",
+          "rationale": {
+            "fr": "Les exemples (siège ergonomique, logiciel de lecture d'écran) sont des demandes ordinaires et fréquentes : c'est le sens de « courants » ici.",
+            "en": "The examples (ergonomic chair, screen-reading software) are ordinary, frequent requests: that is the meaning of 'courants' here."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Coûteux, qui exigent un achat.",
+          "rationale": {
+            "fr": "Le coût n'est pas évoqué par l'adjectif ; l'achat n'est mentionné que plus loin, comme une possibilité.",
+            "en": "Cost is not conveyed by the adjective; a purchase is only mentioned later, as a possibility."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour un mot qui a plusieurs sens, appuyez-vous sur les exemples qui l'entourent. Après « comme », le texte illustre ce qu'il entend par « besoins courants » : des demandes habituelles. Méfiez-vous de l'anglais « current », qui pousse vers le sens « actuel ».",
+        "en": "For a word with several meanings, rely on the examples around it. After 'comme', the text illustrates what it means by 'besoins courants': usual requests. Beware of the English 'current', which pulls toward the meaning 'present'."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-1",
+      "stem": {
+        "fr": "Dans la phrase sur le changement de poste, à quoi renvoie « ce » dans « ce qui vous évitera de répéter les mêmes démarches » ?",
+        "en": "In the sentence about changing positions, what does 'ce' refer to in 'ce qui vous évitera de répéter les mêmes démarches'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Au fait que le dossier de mesures d'adaptation accompagne l'employé dans son nouveau poste.",
+          "rationale": {
+            "fr": "« Ce » reprend toute la proposition qui précède : le dossier vous suit lorsque vous changez de poste, et c'est cela qui évite de recommencer.",
+            "en": "'Ce' takes up the whole preceding clause: the file follows you when you change positions, and that is what saves you from starting over."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Au changement de poste lui-même.",
+          "rationale": {
+            "fr": "Changer de poste n'évite aucune démarche ; c'est plutôt ce qui, autrefois, obligeait à les recommencer.",
+            "en": "Changing positions does not save any steps; it is rather what used to force people to repeat them."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Au formulaire unique offert dans l'intranet.",
+          "rationale": {
+            "fr": "Le formulaire est présenté au début du courriel ; « ce » renvoie à ce qui vient juste avant lui, dans la même phrase.",
+            "en": "The form is introduced at the start of the email; 'ce' refers to what comes just before it, in the same sentence."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Au délai de livraison de l'équipement.",
+          "rationale": {
+            "fr": "Le délai de livraison figure dans la phrase précédente et n'a aucun rapport avec les démarches à répéter.",
+            "en": "The delivery time appears in the previous sentence and has nothing to do with repeating steps."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Ce qui » reprend généralement toute l'idée exprimée juste avant, et non un seul nom. Relisez la proposition qui précède la virgule pour trouver ce qui « évitera » quelque chose.",
+        "en": "'Ce qui' usually takes up the whole idea expressed just before it, not a single noun. Reread the clause before the comma to find what 'will save' you something."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-2",
+      "stem": {
+        "fr": "Quel est l'objet principal de ce bulletin ?",
+        "en": "What is the main subject of this bulletin?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer l'abandon des réunions virtuelles dans la direction générale.",
+          "rationale": {
+            "fr": "Les réunions virtuelles continuent ; le bulletin veut seulement les rendre plus faciles à suivre, notamment grâce au sous-titrage.",
+            "en": "Virtual meetings continue; the bulletin only aims to make them easier to follow, notably through captioning."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Faire connaître les résultats d'un sondage sur l'usage des lecteurs d'écran.",
+          "rationale": {
+            "fr": "Le bulletin évoque des signalements d'employés, mais ne présente aucun sondage ni aucun résultat chiffré.",
+            "en": "The bulletin mentions reports from employees but presents no survey and no figures."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Présenter la liste de vérification déjà offerte dans l'intranet.",
+          "rationale": {
+            "fr": "La liste n'est pas encore offerte : elle « sera publiée » la semaine prochaine, et ce n'est qu'un outil d'appui.",
+            "en": "The checklist is not yet available: it 'will be published' next week, and it is only a support tool."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Présenter de nouvelles pratiques pour rendre les réunions et les documents plus accessibles.",
+          "rationale": {
+            "fr": "C'est l'essentiel du bulletin : un problème signalé, puis trois pratiques adoptées pour y remédier.",
+            "en": "This is the core of the bulletin: a reported problem, then three practices adopted to remedy it."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "L'idée principale est celle que développe la plus grande partie du texte. Ici, le bulletin consacre l'essentiel de ses phrases aux trois pratiques ; le problème initial et la liste de vérification n'en sont que le cadre.",
+        "en": "The main idea is the one most of the text develops. Here, the bulletin devotes most of its sentences to the three practices; the initial problem and the checklist are only the frame."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-2",
+      "stem": {
+        "fr": "Selon le bulletin, quand faudra-t-il transmettre l'ordre du jour d'une réunion ?",
+        "en": "According to the bulletin, when will a meeting's agenda have to be sent?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La veille de la réunion, en fin de journée.",
+          "rationale": {
+            "fr": "Un seul jour ne respecte pas l'exigence : le bulletin demande au moins deux jours ouvrables.",
+            "en": "A single day does not meet the requirement: the bulletin asks for at least two working days."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Au moins deux jours ouvrables avant la rencontre.",
+          "rationale": {
+            "fr": "Le bulletin le précise : les documents « devront être envoyés au moins deux jours ouvrables à l'avance ».",
+            "en": "The bulletin specifies it: the documents 'must be sent at least two working days in advance'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Au début de la réunion, en même temps que le sous-titrage.",
+          "rationale": {
+            "fr": "Le sous-titrage s'active pendant la réunion ; l'ordre du jour, lui, doit arriver bien avant.",
+            "en": "Captioning is turned on during the meeting; the agenda, by contrast, must arrive well before."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Au plus tard deux heures avant la réunion.",
+          "rationale": {
+            "fr": "Le chiffre deux est repris, mais l'unité est fautive : il s'agit de jours ouvrables, non d'heures.",
+            "en": "The number two is reused, but the unit is wrong: it is working days, not hours."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Lisez attentivement les expressions de délai : « au moins » fixe un minimum, et l'unité (jours ouvrables) compte autant que le chiffre.",
+        "en": "Read time expressions carefully: 'au moins' sets a minimum, and the unit (working days) matters as much as the number."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-2",
+      "stem": {
+        "fr": "Que laisse entendre le bulletin au sujet des documents numérisés sous forme d'image ?",
+        "en": "What does the bulletin imply about documents scanned as images?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Ils coûtent plus cher à produire que les documents modifiables.",
+          "rationale": {
+            "fr": "Le coût n'est jamais évoqué ; le problème décrit est la difficulté de lecture.",
+            "en": "Cost is never mentioned; the problem described is difficulty reading them."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Ils resteront acceptés pour les graphiques seulement.",
+          "rationale": {
+            "fr": "Le texte prévoit au contraire un texte de remplacement pour les graphiques, dans un document modifiable.",
+            "en": "On the contrary, the text calls for alternative text for graphics, within an editable document."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Certains employés, notamment ceux qui utilisent un lecteur d'écran, ont du mal à les lire.",
+          "rationale": {
+            "fr": "Le bulletin relie les plaintes sur les documents numérisés aux utilisateurs de lecteurs d'écran ; on en déduit que ces images leur sont peu lisibles.",
+            "en": "The bulletin links complaints about scanned documents to screen-reader users; one infers that these images are hard for them to read."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Ils sont désormais interdits par une nouvelle loi fédérale.",
+          "rationale": {
+            "fr": "Le bulletin parle d'une pratique adoptée par la direction générale, non d'une loi.",
+            "en": "The bulletin speaks of a practice adopted by the branch, not of a law."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une inférence relie deux informations du texte sans dépasser ce qu'il permet de conclure. Ici : des employés ont du mal à lire les documents numérisés, et la mesure prévoit des formats modifiables avec titres et textes de remplacement. Le lien avec les lecteurs d'écran s'impose ; le coût ou une loi n'apparaissent nulle part.",
+        "en": "An inference links two pieces of information in the text without going beyond what it supports. Here: employees struggle to read scanned documents, and the measure calls for editable formats with headings and alternative text. The link to screen readers follows; cost or a law appear nowhere."
+      },
+      "subSkill": "inference",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-2",
+      "stem": {
+        "fr": "Quand le bulletin précise que ces pratiques « facilitent le travail de tout le monde », quelle est l'intention de l'auteur ?",
+        "en": "When the bulletin states that these practices 'make everyone's work easier', what is the author's intent?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Laisser entendre que les besoins des personnes en situation de handicap sont secondaires.",
+          "rationale": {
+            "fr": "Le texte dit que les pratiques ne visent « pas seulement » ces personnes, ce qui les inclut pleinement ; il ne relègue pas leurs besoins au second plan.",
+            "en": "The text says the practices are 'not only' for these people, which fully includes them; it does not push their needs into the background."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Encourager tout le personnel à adopter les pratiques en montrant qu'elles profitent à chacun.",
+          "rationale": {
+            "fr": "En soulignant un avantage pour tous, l'auteur cherche l'adhésion de l'ensemble des employés, et pas seulement de ceux qui sont directement touchés.",
+            "en": "By pointing out a benefit for all, the author seeks buy-in from all employees, not only those directly affected."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Reprocher aux employés de ne pas avoir respecté les règles jusqu'ici.",
+          "rationale": {
+            "fr": "Le ton est positif et explicatif ; aucun reproche n'est adressé au personnel.",
+            "en": "The tone is positive and explanatory; no reproach is directed at staff."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Préciser que les pratiques seront facultatives pour la plupart des employés.",
+          "rationale": {
+            "fr": "Rien ne rend les pratiques facultatives ; les verbes « devront » et « ne seront plus acceptés » montrent qu'elles s'imposent.",
+            "en": "Nothing makes the practices optional; the verbs 'must' and 'will no longer be accepted' show they are mandatory."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour saisir l'intention, demandez-vous ce que la phrase ajoute à l'information et à qui elle s'adresse. Une remarque sur les bénéfices pour tous sert souvent à convaincre ceux qui ne se sentent pas concernés.",
+        "en": "To grasp intent, ask what the sentence adds to the information and whom it addresses. A remark about benefits for all often serves to persuade those who do not feel concerned."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-2",
+      "stem": {
+        "fr": "Comment l'information est-elle organisée dans ce bulletin ?",
+        "en": "How is the information organized in this bulletin?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Une chronologie des réunions tenues depuis le printemps.",
+          "rationale": {
+            "fr": "Le printemps n'est qu'un point de départ ; le bulletin ne retrace aucune suite de réunions.",
+            "en": "Spring is only a starting point; the bulletin does not trace any series of meetings."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une comparaison entre deux options, suivie d'une recommandation.",
+          "rationale": {
+            "fr": "Aucune option n'est comparée : les trois pratiques sont toutes adoptées.",
+            "en": "No options are compared: all three practices are adopted."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une liste de questions fréquentes accompagnées de leurs réponses.",
+          "rationale": {
+            "fr": "Le bulletin ne pose aucune question ; il expose un problème et des mesures.",
+            "en": "The bulletin asks no questions; it sets out a problem and measures."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Un problème signalé, puis trois mesures annoncées dans l'ordre, et enfin le soutien offert.",
+          "rationale": {
+            "fr": "Les marqueurs « D'abord », « Ensuite », « Enfin » encadrent les trois pratiques, entre le problème du début et les outils de la fin.",
+            "en": "The markers 'First', 'Next', 'Finally' frame the three practices, between the opening problem and the closing tools."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les connecteurs d'énumération (« D'abord », « Ensuite », « Enfin ») révèlent la charpente d'un texte. Repérez aussi ce qui les précède (le problème) et ce qui les suit (l'aide offerte).",
+        "en": "Listing connectors ('D'abord', 'Ensuite', 'Enfin') reveal a text's framework. Also note what precedes them (the problem) and what follows them (the help offered)."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-3",
+      "stem": {
+        "fr": "Quel constat d'ensemble se dégage de cet extrait du rapport d'étape consacré au plan ministériel sur l'accessibilité ?",
+        "en": "What overall finding emerges from this excerpt of the progress report on the departmental accessibility plan?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le plan avance de façon inégale : les aménagements matériels progressent bien, alors que le numérique reste en deçà des attentes.",
+          "rationale": {
+            "fr": "L'extrait oppose nettement les « progrès les plus nets » de l'environnement bâti au « retard sensible » du volet numérique : c'est le fil conducteur du texte.",
+            "en": "The excerpt clearly contrasts the 'clearest progress' in the built environment with the 'significant delay' in the digital component: that is the text's common thread."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La majorité des engagements du plan ont été abandonnés faute de financement.",
+          "rationale": {
+            "fr": "La majorité des engagements ont au contraire été réalisés (14 sur 22), et le financement n'est jamais évoqué.",
+            "en": "On the contrary, most commitments have been met (14 of 22), and funding is never mentioned."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le Ministère a atteint l'ensemble de ses cibles, à l'exception de celle qui portait sur le sondage.",
+          "rationale": {
+            "fr": "La cible ratée est celle des applications internes ; le sondage, lui, montre plutôt une amélioration du taux de réponse.",
+            "en": "The missed target is the one for internal applications; the survey, if anything, shows an improved response rate."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le numérique devient la seule priorité du Ministère, au détriment des immeubles.",
+          "rationale": {
+            "fr": "Le texte propose une mesure pour le numérique, mais n'annonce ni l'abandon ni la mise en veilleuse des travaux sur les immeubles.",
+            "en": "The text proposes a measure for the digital side but announces neither the abandonment nor the shelving of work on buildings."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans un rapport d'étape, l'idée maîtresse se trouve souvent dans un contraste signalé par un connecteur (« En revanche »). Une bonne synthèse rend compte des deux volets sans exagérer l'un ni l'autre.",
+        "en": "In a progress report, the key idea often lies in a contrast signalled by a connector ('En revanche'). A good synthesis accounts for both sides without overstating either."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-3",
+      "stem": {
+        "fr": "Quel énoncé rend fidèlement compte des résultats chiffrés du volet numérique présentés dans le rapport ?",
+        "en": "Which statement faithfully reflects the figures for the digital component presented in the report?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les trois quarts des applications internes sont conformes, alors qu'on en visait quatre sur dix.",
+          "rationale": {
+            "fr": "L'énoncé inverse les deux chiffres : 40 % est le résultat obtenu et 75 % la cible.",
+            "en": "The statement reverses the two figures: 40% is the result achieved and 75% the target."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Quatre applications sur dix demeurent non conformes, ce qui respecte la cible annuelle.",
+          "rationale": {
+            "fr": "Ce sont 40 % des applications qui satisfont aux normes, et la cible n'est pas atteinte.",
+            "en": "It is 40% of applications that meet the standards, and the target has not been reached."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Quatre applications internes sur dix sont conformes, alors qu'on en visait les trois quarts.",
+          "rationale": {
+            "fr": "Le rapport indique que 40 % des applications satisfont aux normes, contre une cible de 75 % : c'est exactement ce que dit l'énoncé, sous une autre forme.",
+            "en": "The report states that 40% of applications meet the standards, against a 75% target: that is exactly what the statement says, in another form."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La proportion d'applications conformes est passée de 18 % à 31 % en un an.",
+          "rationale": {
+            "fr": "Ces pourcentages concernent le taux de réponse au sondage auprès des employés, non les applications.",
+            "en": "These percentages concern the response rate to the employee survey, not the applications."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Quand un texte juxtapose un résultat et une cible, notez lequel est lequel (« satisfont » pour le résultat, « la cible fixée » pour l'objectif). Ne confondez pas non plus des chiffres qui portent sur des réalités différentes.",
+        "en": "When a text sets a result beside a target, note which is which ('meet' for the result, 'the target set' for the goal). Also do not confuse figures that measure different things."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-3",
+      "stem": {
+        "fr": "Que peut-on déduire de la proposition d'intégrer des exigences d'accessibilité à toute nouvelle demande de propositions ?",
+        "en": "What can be inferred from the proposal to build accessibility requirements into every new request for proposals?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le Ministère entend résilier sans attendre les contrats actuellement en vigueur.",
+          "rationale": {
+            "fr": "Le texte dit au contraire qu'on ne peut pas accélérer les renouvellements ; rien n'évoque une résiliation.",
+            "en": "The text says on the contrary that renewals cannot be accelerated; nothing points to termination."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les fournisseurs actuels ont refusé de rendre leurs produits accessibles.",
+          "rationale": {
+            "fr": "Le texte attribue le retard au calendrier des contrats, non à un refus des fournisseurs.",
+            "en": "The text attributes the delay to the contract schedule, not to a refusal by suppliers."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les achats urgents seront eux aussi reportés jusqu'à ce que les produits soient accessibles.",
+          "rationale": {
+            "fr": "Le report ne vise que « certains achats non urgents » ; l'énoncé généralise abusivement.",
+            "en": "The postponement covers only 'certain non-urgent purchases'; the statement overgeneralizes."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La direction générale préfère retarder des acquisitions non pressantes plutôt que d'acheter encore des produits inaccessibles.",
+          "rationale": {
+            "fr": "« Quitte à reporter certains achats non urgents » signifie qu'on accepte ce coût pour éviter d'acquérir de nouveaux produits non conformes.",
+            "en": "'Even if it means postponing certain non-urgent purchases' means accepting that cost to avoid acquiring new non-compliant products."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Quitte à » introduit un inconvénient que l'on accepte pour atteindre un but. Il permet d'inférer la priorité de l'auteur, mais dans les limites exactes du texte (« certains », « non urgents »).",
+        "en": "'Quitte à' introduces a drawback one accepts to achieve a goal. It lets you infer the author's priority, but within the text's exact limits ('certain', 'non-urgent')."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-3",
+      "stem": {
+        "fr": "Dans le rapport, que signifie l'adjectif « sensible » dans le passage « le volet numérique accuse un retard sensible » ?",
+        "en": "In the report, what does the adjective 'sensible' mean in the passage 'the digital component shows a sensible delay'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Notable, d'une ampleur appréciable.",
+          "rationale": {
+            "fr": "Le contexte (40 % atteints contre 75 % visés) montre un retard important : « sensible » a ici le sens de « notable ».",
+            "en": "The context (40% achieved against 75% targeted) shows a large delay: 'sensible' here means 'notable'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Délicat, susceptible de provoquer des réactions.",
+          "rationale": {
+            "fr": "Ce sens s'applique à un « sujet sensible » ; appliqué à un retard mesuré en chiffres, il ne convient pas.",
+            "en": "This meaning applies to a 'sensitive subject'; applied to a delay measured in figures, it does not fit."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Qui touche les personnes ayant une déficience sensorielle.",
+          "rationale": {
+            "fr": "Le thème de l'accessibilité rend ce sens tentant, mais l'adjectif qualifie l'ampleur du retard, non les personnes concernées.",
+            "en": "The accessibility theme makes this meaning tempting, but the adjective describes the size of the delay, not the people concerned."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Raisonnable, compte tenu des circonstances.",
+          "rationale": {
+            "fr": "C'est le faux ami anglais « sensible » ; en français, l'adjectif n'a pas ce sens.",
+            "en": "This is the English false friend 'sensible'; in French the adjective does not have this meaning."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Sensible » a plusieurs sens en français ; devant un nom qui exprime une quantité ou un écart (retard, hausse, baisse), il signifie « notable, appréciable ». Il ne veut jamais dire « raisonnable », contrairement à l'anglais « sensible ».",
+        "en": "'Sensible' has several meanings in French; before a noun expressing a quantity or gap (delay, increase, decrease), it means 'notable, appreciable'. It never means 'reasonable', unlike the English 'sensible'."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-3",
+      "stem": {
+        "fr": "Quel rôle joue la phrase commençant par « Ce retard s'explique en partie » dans l'organisation de l'extrait ?",
+        "en": "What role does the sentence beginning 'This delay is partly explained' play in the organization of the excerpt?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle ouvre un nouveau sujet, sans lien avec le volet numérique.",
+          "rationale": {
+            "fr": "« Ce retard » reprend directement le retard numérique décrit juste avant ; la phrase prolonge le même sujet.",
+            "en": "'This delay' directly takes up the digital delay described just before; the sentence continues the same subject."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle avance une cause au retard constaté, ce qui prépare la mesure proposée dans la phrase suivante.",
+          "rationale": {
+            "fr": "La phrase explique le retard par la dépendance envers les fournisseurs, et la phrase suivante (« Faute de pouvoir accélérer ces renouvellements ») y répond par une proposition.",
+            "en": "The sentence explains the delay through dependence on suppliers, and the next sentence ('Unable to accelerate these renewals') responds with a proposal."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle conclut l'extrait en résumant l'ensemble des résultats.",
+          "rationale": {
+            "fr": "Elle se trouve au milieu du texte et ne porte que sur le numérique ; la conclusion annonce plutôt le prochain rapport.",
+            "en": "It sits in the middle of the text and concerns only the digital side; the conclusion instead announces the next report."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle nuance les progrès obtenus dans l'environnement bâti.",
+          "rationale": {
+            "fr": "L'environnement bâti n'est pas concerné ; le contraste avec lui a déjà été posé par « En revanche ».",
+            "en": "The built environment is not concerned; the contrast with it was already set up by 'En revanche'."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour situer une phrase dans un texte, observez ses reprises (« Ce retard ») et ce que la phrase suivante en fait (« Faute de… »). Le schéma constat, cause, solution est fréquent dans les rapports.",
+        "en": "To place a sentence within a text, look at what it takes up ('This delay') and what the following sentence does with it ('Faute de…'). The pattern finding, cause, solution is common in reports."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-4",
+      "stem": {
+        "fr": "Selon la note de service, à quelle condition la rampe et le comptoir d'accueil seront-ils réaménagés avant la fin de l'exercice financier ?",
+        "en": "According to the memo, on what condition will the ramp and reception counter be modified before the end of the fiscal year?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Que la firme indépendante confirme les résultats de son audit.",
+          "rationale": {
+            "fr": "L'audit est déjà terminé et ses résultats sont présentés comme acquis ; aucune confirmation n'est attendue.",
+            "en": "The audit is already finished and its results are presented as settled; no confirmation is awaited."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Que les travaux d'entretien prévus l'an prochain soient devancés.",
+          "rationale": {
+            "fr": "Ces travaux concernent les 25 autres obstacles, non la rampe ni le comptoir.",
+            "en": "That work concerns the 25 other barriers, not the ramp or the counter."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Que le comité des immeubles accepte de débloquer le financement.",
+          "rationale": {
+            "fr": "La note précise que ces travaux se feront « sous réserve de l'approbation des fonds par le comité des immeubles ».",
+            "en": "The memo specifies that the work will be done 'subject to approval of the funds by the buildings committee'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Que le comité de gestion approuve le plan de mise à niveau.",
+          "rationale": {
+            "fr": "Le comité de gestion recevra le plan après le 15 novembre, mais la condition posée pour la rampe et le comptoir vise un autre comité.",
+            "en": "The management committee will receive the plan after November 15, but the condition set for the ramp and counter involves a different committee."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Sous réserve de » introduit une condition : ce qui suit doit se réaliser pour que l'action annoncée ait lieu. Lorsque plusieurs instances sont nommées, vérifiez laquelle est rattachée à la condition.",
+        "en": "'Sous réserve de' introduces a condition: what follows must happen for the announced action to take place. When several bodies are named, check which one is attached to the condition."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-4",
+      "stem": {
+        "fr": "Parmi les énoncés suivants, lequel est appuyé par les chiffres de l'audit portant sur l'immeuble ?",
+        "en": "Which of the following statements is supported by the audit figures concerning the building?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La plupart des obstacles relevés dans l'immeuble ne seront pas traités avant l'an prochain.",
+          "rationale": {
+            "fr": "Sur 37 obstacles, 25 seront traités lors des travaux d'entretien de l'an prochain : c'est bien la majorité.",
+            "en": "Of 37 barriers, 25 will be addressed during next year's maintenance work: that is indeed the majority."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les 12 obstacles prioritaires seront tous éliminés d'ici la fin de l'exercice.",
+          "rationale": {
+            "fr": "Seuls la rampe et le comptoir sont annoncés pour cet exercice ; le texte ne dit rien du calendrier des dix autres obstacles prioritaires.",
+            "en": "Only the ramp and counter are announced for this fiscal year; the text says nothing about the schedule for the other ten priority barriers."
+          }
+        },
+        {
+          "id": "c",
+          "text": "La majorité des 37 obstacles empêchent l'accès même aux services.",
+          "rationale": {
+            "fr": "Seuls 12 obstacles sur 37 sont jugés aussi graves ; ce n'est pas la majorité.",
+            "en": "Only 12 of the 37 barriers are judged that serious; that is not the majority."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les 25 obstacles non prioritaires portent tous sur la signalisation.",
+          "rationale": {
+            "fr": "La note dit « notamment » : la signalisation n'est qu'un exemple parmi ces obstacles.",
+            "en": "The memo says 'notably': signage is only one example among these barriers."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour vérifier un énoncé chiffré, rapportez chaque nombre à son total (12 et 25 sur 37) et méfiez-vous des généralisations (« tous ») que le texte n'autorise pas, surtout lorsqu'il emploie « notamment » ou « parmi ceux-ci ».",
+        "en": "To check a numerical statement, relate each number to its total (12 and 25 out of 37) and beware of generalizations ('all') the text does not allow, especially when it uses 'notably' or 'among these'."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-4",
+      "stem": {
+        "fr": "Dans la recommandation « je recommande que nous en fassions une priorité commune », à quoi renvoie le pronom « en » ?",
+        "en": "In the recommendation 'I recommend that we make it a shared priority', what does the pronoun 'en' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À l'autre direction responsable du site.",
+          "rationale": {
+            "fr": "On ne fait pas d'une direction une priorité ; la mention de l'autre direction sert seulement à justifier le mot « commune ».",
+            "en": "One does not make a branch a priority; the mention of the other branch only serves to justify the word 'shared'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Au formulaire de prise de rendez-vous.",
+          "rationale": {
+            "fr": "Le formulaire est cité ensuite comme argument (« d'autant que ») ; il fait partie du problème, mais le pronom renvoie à l'ensemble du site.",
+            "en": "The form is cited afterwards as an argument ('all the more so since'); it is part of the problem, but the pronoun refers to the whole site."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Au comptoir d'accueil trop élevé.",
+          "rationale": {
+            "fr": "Le comptoir relève du volet de l'immeuble, déjà réglé plus haut ; la phrase porte sur le site Web.",
+            "en": "The counter belongs to the building component, dealt with earlier; the sentence is about the website."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À la mise en accessibilité du site Web.",
+          "rationale": {
+            "fr": "Le pronom reprend le site mentionné dans la subordonnée qui précède, et plus précisément le problème d'accessibilité qui vient d'être décrit.",
+            "en": "The pronoun takes up the site mentioned in the preceding subordinate clause, and more precisely the accessibility problem just described."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le pronom « en » remplace un complément introduit par « de » (« faire de quelque chose une priorité »). Cherchez son antécédent dans ce qui précède immédiatement et vérifiez que la phrase reconstituée a du sens : « faire de l'accessibilité du site une priorité commune ».",
+        "en": "The pronoun 'en' replaces a complement introduced by 'de' ('faire de quelque chose une priorité'). Look for its antecedent in what immediately precedes it and check that the rebuilt sentence makes sense: 'make the site's accessibility a shared priority'."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-4",
+      "stem": {
+        "fr": "Lorsque l'auteur juge le volet du site Web « plus préoccupant », puis mentionne le formulaire de prise de rendez-vous, que cherche-t-il principalement à faire ?",
+        "en": "When the author describes the website component as 'more worrying' and then mentions the appointment-booking form, what is he mainly trying to do?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Reprocher à l'autre direction d'avoir négligé l'accessibilité du site.",
+          "rationale": {
+            "fr": "L'auteur constate le problème sans désigner de responsable ; il propose une démarche commune plutôt qu'un blâme.",
+            "en": "The author notes the problem without blaming anyone; he proposes a joint effort rather than a reproach."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Convaincre les destinataires de s'engager à corriger le site, même s'il relève d'une autre direction.",
+          "rationale": {
+            "fr": "Il souligne la gravité du problème et ajoute un argument (« d'autant que ») pour obtenir l'appui du comité malgré la concession introduite par « Bien que ».",
+            "en": "He stresses the seriousness of the problem and adds an argument ('all the more so since') to win the committee's support despite the concession introduced by 'Although'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Minimiser les obstacles de l'immeuble pour réorienter les fonds vers le site.",
+          "rationale": {
+            "fr": "L'auteur maintient le traitement des obstacles de l'immeuble ; il ne propose aucun transfert de fonds.",
+            "en": "The author maintains the plan for the building barriers; he proposes no transfer of funds."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Annoncer que la mise à niveau du site a déjà été approuvée.",
+          "rationale": {
+            "fr": "Il ne s'agit que d'une recommandation soumise aux commentaires des destinataires ; rien n'est encore approuvé.",
+            "en": "It is only a recommendation submitted for the recipients' comments; nothing has been approved yet."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "L'intention d'un auteur se lit dans ses choix argumentatifs : un adjectif évaluatif (« préoccupant »), une concession (« Bien que ») et un argument de renfort (« d'autant que ») signalent une volonté de persuader.",
+        "en": "An author's intent shows in argumentative choices: an evaluative adjective ('worrying'), a concession ('Although') and a reinforcing argument ('all the more so since') signal an intent to persuade."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-4",
+      "stem": {
+        "fr": "Que peut-on conclure, d'après la note, au sujet des personnes qui naviguent uniquement au clavier ?",
+        "en": "Based on the memo, what can be concluded about people who navigate using only a keyboard?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elles ne représentent qu'une faible part de la clientèle du centre.",
+          "rationale": {
+            "fr": "La note ne donne aucune donnée sur la proportion de ces personnes dans la clientèle.",
+            "en": "The memo gives no data on the proportion of these people among clients."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elles peuvent consulter toutes les pages du site, quoique plus lentement.",
+          "rationale": {
+            "fr": "La note dit que 23 pages sont « inutilisables » pour elles, non simplement plus lentes à parcourir.",
+            "en": "The memo says 23 pages are 'unusable' for them, not merely slower to navigate."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elles risquent de ne pas pouvoir réserver un rendez-vous en ligne au centre.",
+          "rationale": {
+            "fr": "Les pages non navigables au clavier sont inutilisables pour elles, et le formulaire de prise de rendez-vous figure parmi ces pages : on en déduit cet obstacle.",
+            "en": "Pages that cannot be navigated by keyboard are unusable for them, and the appointment form is among those pages: this barrier follows."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elles ont été consultées par la firme pendant l'audit.",
+          "rationale": {
+            "fr": "La note ne précise pas la méthode de l'audit ; cette consultation n'est pas mentionnée.",
+            "en": "The memo does not describe the audit's method; no such consultation is mentioned."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une inférence valable combine deux énoncés du texte : ici, « inutilisables pour les personnes qui ne se servent pas d'une souris » et « le formulaire de prise de rendez-vous figure parmi les pages en cause ». Écartez les options qui ajoutent des données absentes du texte.",
+        "en": "A valid inference combines two statements in the text: here, 'unusable for people who do not use a mouse' and 'the appointment form is among the pages concerned'. Rule out options that add data absent from the text."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-5",
+      "stem": {
+        "fr": "Dans la note, que signifie l'expression « rester lettre morte » dans la phrase « Ces constats ne sauraient rester lettre morte » ?",
+        "en": "In the note, what does the expression 'rester lettre morte' mean in the sentence 'These findings cannot remain a dead letter'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Demeurer confidentiels, connus de la seule direction.",
+          "rationale": {
+            "fr": "L'expression ne concerne pas la diffusion des constats ; d'ailleurs, la note les communique à tout le personnel.",
+            "en": "The expression is not about how widely the findings are shared; besides, the note communicates them to all staff."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Être consignés par écrit dans un rapport officiel.",
+          "rationale": {
+            "fr": "Le mot « lettre » peut évoquer l'écrit, mais l'expression désigne ce qui n'a pas d'effet, non ce qui est rédigé.",
+            "en": "The word 'letter' may suggest writing, but the expression means something without effect, not something written down."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Être contestés ou remis en question par la direction.",
+          "rationale": {
+            "fr": "La sous-ministre adjointe accepte les constats ; l'expression n'exprime aucune contestation.",
+            "en": "The assistant deputy minister accepts the findings; the expression conveys no dispute."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Demeurer sans suite concrète.",
+          "rationale": {
+            "fr": "« Rester lettre morte », c'est ne produire aucun effet ; la note annonce justement des mesures pour éviter que les constats restent sans lendemain.",
+            "en": "'To remain a dead letter' means to produce no effect; the note precisely announces measures so the findings do not go nowhere."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une expression figée ne se comprend pas mot à mot. Le contexte aide : la phrase est suivie de mesures concrètes (« Dès janvier… »), ce qui montre que l'auteure refuse que les constats demeurent sans effet.",
+        "en": "A fixed expression cannot be understood word by word. The context helps: the sentence is followed by concrete measures ('From January…'), which shows the author refuses to let the findings remain without effect."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-5",
+      "stem": {
+        "fr": "Dans la phrase consacrée au comité consultatif permanent, à quoi renvoie le pronom « elles » dans « qu'elles soient retenues ou non » ?",
+        "en": "In the sentence about the standing advisory committee, what does the pronoun 'elles' refer to in 'whether or not they are adopted'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux mesures annoncées par la sous-ministre adjointe.",
+          "rationale": {
+            "fr": "Les mesures sont déjà décidées ; la phrase évoque des propositions futures qui pourront être acceptées ou rejetées.",
+            "en": "The measures have already been decided; the sentence refers to future proposals that may be accepted or rejected."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aux personnes qui siégeront au comité.",
+          "rationale": {
+            "fr": "Les membres du comité ne sont pas « retenus ou non » après coup, et aucun nom féminin pluriel les désignant n'apparaît dans la phrase.",
+            "en": "Committee members are not 'adopted or not' after the fact, and no feminine plural noun referring to them appears in the sentence."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Aux recommandations que formulera le comité.",
+          "rationale": {
+            "fr": "« Elles » reprend « les recommandations », nom féminin pluriel de la même phrase : ce sont elles qui seront publiées, retenues ou non.",
+            "en": "'Elles' takes up 'les recommandations', the feminine plural noun in the same sentence: they are what will be published, adopted or not."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aux formations destinées aux gestionnaires.",
+          "rationale": {
+            "fr": "La formation est mentionnée dans la phrase précédente, au singulier ; elle est déjà décidée et obligatoire.",
+            "en": "The training is mentioned in the previous sentence, in the singular; it has already been decided and is mandatory."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour trouver l'antécédent d'un pronom, vérifiez l'accord (féminin pluriel pour « elles ») et le sens : seul un élément susceptible d'être « retenu ou non » convient, ce qui désigne une proposition, ici une recommandation.",
+        "en": "To find a pronoun's antecedent, check agreement (feminine plural for 'elles') and meaning: only something that can be 'adopted or not' fits, which points to a proposal, here a recommendation."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-5",
+      "stem": {
+        "fr": "Quelle intention traduit la dernière phrase, où la sous-ministre adjointe affirme ne pas prétendre que ces mesures suffiront ?",
+        "en": "What intention does the last sentence convey, in which the assistant deputy minister says she does not claim these measures will be enough?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Faire preuve de lucidité sur la portée des mesures tout en s'engageant à en mesurer les résultats.",
+          "rationale": {
+            "fr": "Elle reconnaît les limites des mesures (« Je ne prétends pas ») mais les défend comme un point de départ et promet un compte rendu d'ici un an.",
+            "en": "She acknowledges the measures' limits ('I do not claim') but defends them as a starting point and promises a report within a year."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Laisser entendre que les mesures annoncées pourraient être abandonnées.",
+          "rationale": {
+            "fr": "Rien n'évoque un abandon ; « néanmoins » et l'engagement à rendre compte confirment au contraire leur maintien.",
+            "en": "Nothing suggests abandonment; 'nevertheless' and the commitment to report back confirm, on the contrary, that they will be maintained."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Faire porter aux employés la responsabilité de transformer la culture.",
+          "rationale": {
+            "fr": "La sous-ministre adjointe ne transfère aucune responsabilité ; c'est elle qui « s'engage ».",
+            "en": "The assistant deputy minister shifts no responsibility; she is the one who 'commits'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Minimiser la gravité des témoignages recueillis pendant l'été.",
+          "rationale": {
+            "fr": "Elle a au contraire reconnu que ces témoignages n'étaient « pas toujours faciles à entendre » ; sa réserve porte sur les mesures, non sur les témoignages.",
+            "en": "On the contrary, she acknowledged these accounts were 'not always easy to hear'; her reservation concerns the measures, not the accounts."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Une concession suivie de « néanmoins » sert souvent à gagner la confiance du lecteur : l'auteur admet une limite pour rendre son engagement plus crédible. Repérez à quoi s'applique la réserve exprimée.",
+        "en": "A concession followed by 'nevertheless' often serves to win the reader's trust: the writer admits a limit to make the commitment more credible. Identify what the stated reservation applies to."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-5",
+      "stem": {
+        "fr": "Comment la sous-ministre adjointe structure-t-elle son message au personnel ?",
+        "en": "How does the assistant deputy minister structure her message to staff?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle présente d'abord les mesures, puis les justifie au moyen de statistiques détaillées.",
+          "rationale": {
+            "fr": "Les mesures viennent après les constats, et la note ne contient aucune statistique détaillée.",
+            "en": "The measures come after the findings, and the note contains no detailed statistics."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle remercie les participants, rapporte leurs constats, annonce des mesures, puis en reconnaît les limites.",
+          "rationale": {
+            "fr": "C'est l'ordre exact du texte : remerciements, témoignages, phrase charnière (« Ces constats ne sauraient… »), mesures, puis réserve finale et engagement.",
+            "en": "This is the text's exact order: thanks, accounts, pivot sentence ('These findings cannot…'), measures, then a final reservation and commitment."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle compare les résultats de deux consultations successives avant de conclure.",
+          "rationale": {
+            "fr": "La note ne fait état que d'une seule consultation, celle de l'été.",
+            "en": "The note refers to only one consultation, the one held over the summer."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle répond une à une aux questions posées par les employés.",
+          "rationale": {
+            "fr": "Les employés ont décrit des expériences ; la note ne reprend aucune question pour y répondre.",
+            "en": "Employees described experiences; the note takes up no questions to answer them."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour dégager la structure d'un texte, repérez ses phrases charnières : ici, « Ces constats ne sauraient rester lettre morte » fait passer de l'écoute à l'action, et « Je ne prétends pas » ouvre la conclusion.",
+        "en": "To identify a text's structure, find its pivot sentences: here, 'These findings cannot remain a dead letter' moves from listening to action, and 'I do not claim' opens the conclusion."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-accessibility-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-accessibility-5",
+      "stem": {
+        "fr": "Selon la note, quelle caractéristique distinguera la formation obligatoire destinée aux gestionnaires ?",
+        "en": "According to the note, what feature will distinguish the mandatory training for managers?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle sera offerte aux gestionnaires sur une base volontaire à partir de janvier.",
+          "rationale": {
+            "fr": "La note la qualifie expressément d'« obligatoire » ; l'option inverse ce point.",
+            "en": "The note expressly describes it as 'mandatory'; the option reverses this point."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle sera donnée par les membres du comité consultatif permanent.",
+          "rationale": {
+            "fr": "Le comité est une mesure distincte ; la note ne dit pas qui donnera la formation.",
+            "en": "The committee is a separate measure; the note does not say who will deliver the training."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle aura été élaborée de concert avec les employés ayant pris part aux groupes de discussion.",
+          "rationale": {
+            "fr": "La note précise que la formation est « conçue avec les participants eux-mêmes », c'est-à-dire avec les employés consultés pendant l'été.",
+            "en": "The note specifies that the training is 'designed with the participants themselves', that is, with the employees consulted over the summer."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle portera principalement sur l'aménagement matériel des lieux de travail.",
+          "rationale": {
+            "fr": "La formation porte sur l'inclusion, et les témoignages insistent justement sur les obstacles d'attitude plutôt que matériels.",
+            "en": "The training is about inclusion, and the accounts stress attitudinal rather than physical barriers."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Au niveau C, la bonne option reformule souvent le texte : « conçue avec les participants eux-mêmes » devient « élaborée de concert avec les employés consultés ». Vérifiez que chaque élément de la reformulation correspond au texte.",
+        "en": "At level C, the key option often rephrases the text: 'designed with the participants themselves' becomes 'developed jointly with the employees consulted'. Check that every element of the rephrasing matches the text."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-accessibility-1",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Nouvelle façon de demander une mesure d'adaptation",
+      "body": "Bonjour à toutes et à tous,\n\nÀ compter du 1er décembre, les demandes de mesures d'adaptation en milieu de travail seront traitées au moyen d'un formulaire unique, accessible dans l'intranet. Vous n'aurez plus à fournir de certificat médical pour les besoins courants, comme un siège ergonomique ou un logiciel de lecture d'écran. Il vous suffira de décrire l'obstacle que vous rencontrez et la solution que vous proposez. Votre gestionnaire disposera ensuite de 10 jours ouvrables pour approuver la demande ou pour vous rencontrer afin d'en discuter. Si l'équipement doit être acheté, comptez environ quatre semaines avant la livraison. Par ailleurs, votre dossier de mesures d'adaptation vous suivra désormais lorsque vous changerez de poste, ce qui vous évitera de répéter les mêmes démarches auprès de votre nouvelle équipe. Pour toute question, écrivez à l'équipe du mieux-être, qui offre aussi des séances d'information de 30 minutes chaque mardi.\n\nMartine Gagnon\nConseillère, Ressources humaines",
+      "wordCount": 151,
+      "targetBand": "B",
+      "topic": "accessibility",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 18.88,
+        "rareWordRatio": 0.238
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-accessibility-2",
+      "lang": "fr",
+      "docType": "bulletin",
+      "title": "Des réunions et des documents accessibles à tous",
+      "body": "Depuis le printemps, plusieurs employés nous ont signalé qu'ils avaient du mal à suivre certaines réunions virtuelles ou à lire des documents transmis en format numérisé. Afin de corriger la situation, la Direction générale des communications adopte trois pratiques. D'abord, l'ordre du jour et les documents de toute réunion devront être envoyés au moins deux jours ouvrables à l'avance, pour que les participants qui utilisent un lecteur d'écran aient le temps de les consulter. Ensuite, le sous-titrage sera activé par défaut dans toutes les rencontres virtuelles. Enfin, les documents numérisés sous forme d'image ne seront plus acceptés : chaque rapport devra être produit dans un format modifiable, avec des titres structurés et un texte de remplacement pour les graphiques. Ces pratiques ne visent pas seulement les personnes en situation de handicap ; elles facilitent le travail de tout le monde. Une liste de vérification sera publiée dans l'intranet la semaine prochaine, et l'équipe des communications pourra réviser vos documents sur demande.",
+      "wordCount": 161,
+      "targetBand": "B",
+      "topic": "accessibility",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 23,
+        "rareWordRatio": 0.255
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-accessibility-3",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Plan sur l'accessibilité : rapport d'étape de la deuxième année (extrait)",
+      "body": "Au terme de la deuxième année de mise en œuvre, le Ministère a réalisé 14 des 22 engagements inscrits à son plan sur l'accessibilité. Les progrès les plus nets touchent l'environnement bâti : les 9 immeubles visés par l'audit initial disposent désormais d'entrées à ouverture automatique et de toilettes adaptées. En revanche, le volet numérique accuse un retard sensible. Seulement 40 % des applications internes satisfont aux normes d'accessibilité, alors que la cible fixée pour cette année était de 75 %. Ce retard s'explique en partie par la dépendance du Ministère envers des fournisseurs dont les produits ne peuvent être modifiés qu'au renouvellement des contrats. Faute de pouvoir accélérer ces renouvellements, la direction générale propose d'intégrer des exigences d'accessibilité à toute nouvelle demande de propositions, quitte à reporter certains achats non urgents. Par ailleurs, le taux de réponse au sondage annuel mené auprès des employés en situation de handicap est passé de 18 % à 31 %, ce qui confère aux résultats une fiabilité accrue, sans pour autant permettre de les généraliser à l'ensemble des unités. Le prochain rapport mesurera, outre l'avancement des engagements, leur effet concret sur l'expérience des employés.",
+      "wordCount": 191,
+      "targetBand": "C",
+      "topic": "accessibility",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 23.88,
+        "rareWordRatio": 0.298
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-accessibility-4",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Résultats de l'audit d'accessibilité du centre de services régional",
+      "body": "Destinataires : membres du comité de direction régional\n\nL'audit mené en septembre par une firme indépendante a relevé 37 obstacles, dont 12 jugés prioritaires parce qu'ils empêchent l'accès même aux services. Parmi ceux-ci figurent la rampe de l'entrée principale, dont la pente dépasse la norme, et le comptoir d'accueil, trop élevé pour une personne en fauteuil roulant. Ces deux éléments seront corrigés d'ici la fin de l'exercice, sous réserve de l'approbation des fonds par le comité des immeubles. Les 25 autres obstacles, notamment une signalisation peu contrastée, seront traités dans le cadre des travaux d'entretien prévus l'an prochain. Le volet du site Web s'avère plus préoccupant : sur les 60 pages évaluées, 23 ne peuvent être parcourues au clavier, ce qui les rend inutilisables pour les personnes qui ne se servent pas d'une souris. Bien que le site soit géré par une autre direction, je recommande que nous en fassions une priorité commune, d'autant que le formulaire de prise de rendez-vous figure parmi les pages en cause. Je vous saurais gré de me faire part de vos commentaires d'ici le 15 novembre afin que le plan de mise à niveau puisse être présenté au comité de gestion.\n\nLe directeur des installations et de l'accessibilité",
+      "wordCount": 204,
+      "targetBand": "C",
+      "topic": "accessibility",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 25.5,
+        "rareWordRatio": 0.211
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-accessibility-5",
+      "lang": "fr",
+      "docType": "note",
+      "title": "Ce que vous nous avez dit, et ce qui changera",
+      "body": "Chères collègues, chers collègues,\n\nAu cours de l'été, plus de quarante employés en situation de handicap ont participé aux groupes de discussion que nous avions organisés. Je tiens d'abord à les remercier de leur franchise, car leurs témoignages n'étaient pas toujours faciles à entendre. Plusieurs ont décrit le sentiment de devoir justifier sans cesse leurs besoins, comme si chaque demande de mesure d'adaptation était perçue comme une faveur plutôt que comme un droit. D'autres ont souligné que les obstacles les plus lourds ne sont pas matériels, mais tiennent aux attitudes : des réunions convoquées à la dernière minute, des tâches redistribuées sans consultation. Ces constats ne sauraient rester lettre morte. Dès janvier, tous les gestionnaires suivront une formation obligatoire sur l'inclusion des personnes en situation de handicap, conçue avec les participants eux-mêmes. Nous créerons également un comité consultatif permanent, dont les recommandations seront rendues publiques, qu'elles soient retenues ou non. Je ne prétends pas que ces mesures suffiront à elles seules à transformer notre culture ; elles constituent néanmoins un point de départ, et je m'engage à vous rendre compte de leurs effets d'ici un an.\n\nLa sous-ministre adjointe,\nServices ministériels",
+      "wordCount": 191,
+      "targetBand": "C",
+      "topic": "accessibility",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 21.22,
+        "rareWordRatio": 0.298
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

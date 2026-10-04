@@ -13,4 +13,4 @@
  * these two lines by pattern, so keep their shape.
  */
 export const BANK_BASE_PATH = "/content";
-export const BANK_VERSION = 3;
+export const BANK_VERSION = 4;

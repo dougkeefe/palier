@@ -1,0 +1,1354 @@
+{
+  "reviewer": "claude-opus-5-5",
+  "verdicts": [
+    {
+      "requestHash": "dfe1453c1b4c33edefa00cb0",
+      "itemId": "claude-r-human-resources-1-1",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "No candidates have been chosen yet; the process is only being launched.",
+          "b": "Correct: the email lays out the planned stages of a staffing process for two program officer positions.",
+          "c": "The assessment board is only mentioned in a closing invitation to volunteer, not the main purpose, and nothing says it marks the exam.",
+          "d": "Submitting a CV is one step mentioned; the email gives no instructions on updating CVs online."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "01b78ef1e5d1fd607430f1bf",
+      "itemId": "claude-r-human-resources-2-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "No problem or causes are set out; the bulletin simply announces rules.",
+          "b": "Correct: it opens with the 1 December effective date, lists separate rules (connected by par ailleurs, enfin), and ends by pointing to the HR intranet page.",
+          "c": "Only one rule (furniture reimbursement) contrasts with the past; there is no point-by-point comparison of old and new regimes.",
+          "d": "The rules are not sequential steps toward obtaining a right to telework."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "80b9bd22018f0fe6e6547930",
+      "itemId": "claude-r-official-languages-1-1",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Registration has already closed; the email does not announce its opening.",
+          "b": "Correct: the email explains the priority criteria used to allocate the 20 places and the waiting list for the other 28 requests.",
+          "c": "Part-time lunch courses are a secondary alternative offered to those who do not want to wait, not an invitation to all staff.",
+          "d": "The five-day confirmation applies only to the next person on the list if a place opens, a detail rather than the purpose."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "64648a3c63351b79033f1123",
+      "itemId": "claude-r-official-languages-2-1",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The move has already happened and is only the context for the complaints.",
+          "b": "The new signs are a minor detail mentioned near the end.",
+          "c": "Correct: the notice reminds counter staff of active offer — greeting in both official languages and letting the client choose.",
+          "d": "Only a short awareness session is mentioned; there is no invitation to language training."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "ae9bc9c7313c6488b5e100b5",
+      "itemId": "claude-r-service-delivery-1-1",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The counter stays open Friday mornings; only Friday afternoon is closed.",
+          "b": "The attendance analysis is cited only as the reason for the change.",
+          "c": "Correct: the bulletin announces the new hours and the alternatives (appointments, Tuesday evening slots, online services) for clients.",
+          "d": "Online services already exist and 'remain' available; nothing new is launched."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "8c31b659304b888fe5c5a221",
+      "itemId": "claude-w-punctuation-and-mechanics-01",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Commas as thousands separators are English convention.",
+          "b": "Correct: French groups thousands with spaces and puts the $ sign after the amount, separated by a space.",
+          "c": "The dollar sign precedes the amount only in English.",
+          "d": "Periods as thousands separators are not used in Canadian French."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "427d5b3e91a5c149a78671f6",
+      "itemId": "claude-w-punctuation-and-mechanics-02",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Anglicism: the article must precede the day name ('le mardi 12 mai').",
+          "b": "Day names are lowercase in French and no comma separates the day from the date.",
+          "c": "French does not insert 'de' between the date number and the month.",
+          "d": "Correct: 'le mardi 12 mai' is the standard French date format."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "22f1d0f070450f6ab07f7c57",
+      "itemId": "claude-w-punctuation-and-mechanics-03",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: Canadian federal style writes time as '18 h 30' with spaces around the h.",
+          "b": "The h must be separated by spaces in GC style.",
+          "c": "The symbol h takes no period.",
+          "d": "Mixing the colon format with 'h' is incorrect."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "357dd20b65590f56c927f672",
+      "itemId": "claude-w-punctuation-and-mechanics-04",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Both pronouns attached to an affirmative imperative must be joined by hyphens.",
+          "b": "The verb and first pronoun must be hyphenated as well.",
+          "c": "Correct: in the affirmative imperative, verb and both pronouns are linked by hyphens: 'signalez-la-nous'.",
+          "d": "No hyphens at all is wrong in the affirmative imperative."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "50f4f8e581c9a0579fe95949",
+      "itemId": "claude-w-punctuation-and-mechanics-05",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "No elision occurs before 'onze' or 'onzième'.",
+          "b": "The ordinal abbreviation is '11e', not '11ième'.",
+          "c": "Correct: 'le onzième' — no elision before onzième.",
+          "d": "Elision is wrong before onzième, and the article should not elide before a numeral."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "e3957238924557cb3039fadd",
+      "itemId": "claude-w-punctuation-and-mechanics-06",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'p. ex.' is the standard French abbreviation of 'par exemple'.",
+          "b": "Missing the space and the final period.",
+          "c": "'e.g.' is the English abbreviation.",
+          "d": "'par. ex.' is not a recognized abbreviation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "815dad757ce5b1db32c43ea8",
+      "itemId": "claude-w-punctuation-and-mechanics-07",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The pronoun requires a hyphen.",
+          "b": "'quelqu'uns' does not exist; the plural is 'quelques-uns'.",
+          "c": "'un' must agree in the plural ('uns').",
+          "d": "Correct: the indefinite pronoun is spelled 'quelques-uns'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f72cc72ed5c65c356ea7064a",
+      "itemId": "claude-w-punctuation-and-mechanics-08",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "French uses the decimal comma, not a point.",
+          "b": "Correct: decimal comma and 'million' stays singular when the quantity is under 2.",
+          "c": "'million' is singular for 1,25 (less than two).",
+          "d": "The $ symbol cannot follow 'de'; write 'de dollars'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "ecd08d41e3d806af668afab6",
+      "itemId": "claude-w-punctuation-and-mechanics-09",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'seuls' and 'les autres' make the relative clause restrictive, so no commas.",
+          "b": "Commas make the clause non-restrictive, contradicting 'seuls' and 'les autres'.",
+          "c": "An opening comma without a closing one wrongly separates the clause.",
+          "d": "A comma between the relative pronoun and its verb is wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "1c98bbe19b22c197f7abbcd0",
+      "itemId": "claude-w-punctuation-and-mechanics-10",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Courtesy titles are not abbreviated in a salutation addressed to the person.",
+          "b": "The article 'la' is required in this form of address.",
+          "c": "Correct: the formal salutation to a minister is 'Madame la Ministre,'.",
+          "d": "The surname is not included in this formal salutation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "fc169f28c1f69da1b2624fc4",
+      "itemId": "claude-w-punctuation-and-mechanics-11",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Day names are lowercase in French.",
+          "b": "The h must be separated by spaces in GC style.",
+          "c": "The symbol h takes no period.",
+          "d": "Correct: lowercase days and '8 h' / '17 h' with spaces."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "0089d52bb367f530ee7a51d7",
+      "itemId": "claude-w-punctuation-and-mechanics-12",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "French uses a decimal comma, not a point.",
+          "b": "No comma belongs between the two values of 'de… à…'.",
+          "c": "'pour cent' is two words, and the % symbol is preferred with figures.",
+          "d": "Correct: decimal comma and a space before %."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "1c37223efc4854b1917fa14a",
+      "itemId": "claude-w-punctuation-and-mechanics-13",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The explanatory relative clause lacks its opening comma, leaving a comma between subject and verb.",
+          "b": "Correct: the non-restrictive relative clause is enclosed by a pair of commas.",
+          "c": "The closing comma of the explanatory clause is missing.",
+          "d": "A comma between the verb and its direct object is wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "c5218c902ed2aa9dc8a95b04",
+      "itemId": "claude-w-punctuation-and-mechanics-14",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: '1er' for the first of the month and lowercase month names.",
+          "b": "The first day of the month is written '1er', not '1'.",
+          "c": "Month names are lowercase in French.",
+          "d": "The abbreviation is '1er', not '1ier'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "13725bc6ee410737b3f15281",
+      "itemId": "claude-w-punctuation-and-mechanics-15",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The adverb meaning 'perhaps' is hyphenated: 'peut-être'.",
+          "b": "The sentence has no finite verb; the hyphenated adverb cannot stand in for 'peut être'.",
+          "c": "Correct: 'sera peut-être prolongé' uses the hyphenated adverb with the future passive.",
+          "d": "The comma after 'sera' wrongly separates the auxiliary from the rest of the verb phrase."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "50745431b86df0aa52cbd2c2",
+      "itemId": "claude-w-punctuation-and-mechanics-16",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Language names are lowercase in French.",
+          "b": "Correct: lowercase language names and no superfluous commas.",
+          "c": "No comma before 'et' joining two simple complements.",
+          "d": "No comma between the verb and its adverbial complement."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "fdfe736679cfbfaf01ea84bb",
+      "itemId": "claude-w-punctuation-and-mechanics-17",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: lowercase title, hyphenated 'sous-ministre', 'Mme' without a period, apposition between commas.",
+          "b": "Titles are lowercase in running text: 'la sous-ministre'.",
+          "c": "'Mme' takes no period since it ends with the word's last letter.",
+          "d": "'sous-ministre' requires a hyphen."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "1c0b43300e47bee7e0e79948",
+      "itemId": "claude-w-punctuation-and-mechanics-18",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'etc.' is never followed by suspension points.",
+          "b": "French places a comma before 'etc.'",
+          "c": "'etc.' cannot follow a list closed by 'et'.",
+          "d": "Correct: comma before 'etc.' and a single period."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "5b199084f6b4850a1ceb422a",
+      "itemId": "claude-w-punctuation-and-mechanics-19",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The euphonic t is not an elided 'te'; it takes hyphens, not an apostrophe.",
+          "b": "The verb must be joined to the euphonic t by a hyphen.",
+          "c": "Correct: complex inversion with euphonic t, 'pourra-t-il'.",
+          "d": "A euphonic t is required between a vowel-final verb and 'il'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "9ee68715e91f8819e527f8b7",
+      "itemId": "claude-w-punctuation-and-mechanics-20",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.85,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "English double quotation marks are not used in French text.",
+          "b": "Correct: French guillemets with spaces, and a full-sentence quotation after a colon keeps its period inside.",
+          "c": "Double angle brackets are not guillemets.",
+          "d": "When a complete sentence is quoted after a colon, its final period goes inside the closing guillemet."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "031c2e310063c7596c1551c8",
+      "itemId": "claude-w-punctuation-and-mechanics-21",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Month names are lowercase in French.",
+          "b": "Correct: the comma separates the subject (with its restrictive relative) from its verb.",
+          "c": "Day names are lowercase in French.",
+          "d": "'le faire' is pronoun plus infinitive and takes no hyphen."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "3abb9501b1b9880b71c7053e",
+      "itemId": "claude-w-punctuation-and-mechanics-22",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'8 h 30' is already correct; removing spaces introduces an error.",
+          "b": "Capital letters keep their accents in Canadian French.",
+          "c": "Month names are lowercase.",
+          "d": "Correct: '16h' needs spaces to match GC style, '16 h'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "3c0a80bc70ee0503346aa79a",
+      "itemId": "claude-w-punctuation-and-mechanics-23",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the ordinal abbreviation is '2e', not '2ème'.",
+          "b": "'1er' is correct; '1ier' is wrong.",
+          "c": "The commas enclose an explanatory participial phrase and are correct.",
+          "d": "A common noun takes no capital."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "80c29f414b97961441500a5b",
+      "itemId": "claude-w-punctuation-and-mechanics-24",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'hésitation' has a mute h, so elision 'l'hésitation' is correct.",
+          "b": "Elision before a vowel is mandatory: 's'inquiète'.",
+          "c": "Correct: 'hausse' has an aspirated h, so no elision: 'la hausse'.",
+          "d": "A comma would wrongly separate 'gestionnaires' from its complement."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "a8ffb06ab4ad1d11dfb32abf",
+      "itemId": "claude-w-punctuation-and-mechanics-25",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: here it is the verb pouvoir plus être ('can be convened'), so no hyphen.",
+          "b": "'réévaluer' is written without a hyphen.",
+          "c": "'comité directeur' is a noun plus adjective and takes no hyphen.",
+          "d": "A common noun takes no capital."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c7e640799932618dbf36ecd5",
+      "itemId": "claude-w-punctuation-and-mechanics-26",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Country names are capitalized.",
+          "b": "'canadienne' is an adjective here and stays lowercase.",
+          "c": "No comma is needed before 'et' closing a list of adjectives.",
+          "d": "Correct: in running text it is 'le gouvernement du Canada', lowercase."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "2e20ae2063cd62cc6ba61305",
+      "itemId": "claude-w-punctuation-and-mechanics-27",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Removing only the first comma leaves a comma between subject and verb.",
+          "b": "Removing only the second comma leaves an unclosed parenthetical.",
+          "c": "Correct: 'les autres en sont dispensés' shows the clause is restrictive, so both commas go.",
+          "d": "A comma between the verb and its object is wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "2f2de55a42067a8f3045f5fd",
+      "itemId": "claude-w-punctuation-and-mechanics-28",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'10 h 30' is correct; 'min' is not added.",
+          "b": "Correct: 'Mme' takes no period because it ends with the word's last letter.",
+          "c": "Titles in apposition are lowercase.",
+          "d": "Capital letters keep their accents in Canadian French."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "cae52da9f6100f13675e8ac8",
+      "itemId": "claude-w-punctuation-and-mechanics-29",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "French uses the decimal comma; '3,5 %' is correct.",
+          "b": "No comma follows 'soit' in this construction.",
+          "c": "Correct: thousands are separated by a space in French, '12 500'.",
+          "d": "A common noun takes no capital."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "ad5104e04ef858435705104b",
+      "itemId": "claude-w-punctuation-and-mechanics-30",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: no comma between the verb and its 'que' completive clause.",
+          "b": "Commas are not thousands separators in French.",
+          "c": "Titles are lowercase in running text.",
+          "d": "A comma would split the subject from its complement."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "3ce809f2224a96fadf5b40a3",
+      "itemId": "claude-w-punctuation-and-mechanics-31",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'au-delà' is hyphenated.",
+          "b": "An adjective in a sign's running text takes no capital.",
+          "c": "A common noun complement takes no capital.",
+          "d": "Correct: capitals keep their accents in Canadian French, 'Équipement'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e2846445bbc9b3eabe403c7f",
+      "itemId": "claude-w-punctuation-and-mechanics-32",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Common nouns like 'langue officielle' take no capital inside a sentence.",
+          "b": "Correct: 'l'État' meaning the state as a political entity takes a capital E.",
+          "c": "A comma between the subject 'les obligations' and its complement would be wrong.",
+          "d": "Canadian norms (OQLF, Translation Bureau) require accents on capital letters, so 'Etat' is wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "5bfad03e29c13409d96edabe",
+      "itemId": "claude-w-punctuation-and-mechanics-33",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Presque' elides only in 'presqu'île', so 'presqu'achevés' is wrong.",
+          "b": "A comma between 'précisé' and its 'que' clause would be wrong.",
+          "c": "Correct: 'lorsque' must elide before 'il', giving 'Lorsqu'il'.",
+          "d": "'Lors qu'il' splits the conjunction and is wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "9e3eeb2959cd4adaa44b1a45",
+      "itemId": "claude-w-sentence-structure-01",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "An indirect question cannot keep the direct-question marker 'est-ce que'.",
+          "b": "Correct: a reported yes/no question is introduced by 'si' with normal word order.",
+          "c": "'Qu'est-ce que' is a direct-question form and also changes the meaning.",
+          "d": "'Si' combined with subject-verb inversion ('avaient-ils') is ungrammatical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "9c1c7d138161628ea874ef97",
+      "itemId": "claude-w-sentence-structure-02",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Aucunes' is plural, which is wrong here; 'aucune' stays singular.",
+          "b": "'Pas guère' doubles the negation and is wrong.",
+          "c": "Removing 'ne' is colloquial and wrong in written French.",
+          "d": "Correct: 'aucune' already negates, so 'pas' must go, giving 'n'a présenté'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "6c559c1f97bbae3864fc0fe4",
+      "itemId": "claude-w-sentence-structure-03",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the gerund 'en redémarrant votre poste' needs 'vous' as the subject of the main clause.",
+          "b": "Dangling gerund: the update does not do the restarting, so careful usage rejects this.",
+          "c": "Dangling gerund: the subject 'l'installation' is not the one who restarts the workstation.",
+          "d": "Dangling gerund: the update cannot be the one restarting the workstation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "7246dae5cce33ecef16efd92",
+      "itemId": "claude-w-sentence-structure-04",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "This adds 'est-ce que' to an indirect question, which is wrong.",
+          "b": "Inversion is wrong in an indirect question after 'indiquer'.",
+          "c": "Correct: the indirect question takes neither 'est-ce que' nor inversion.",
+          "d": "This leaves 'est-ce que' inside the indirect question, which is still wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "bc87db56e155c8508cfcae36",
+      "itemId": "claude-w-sentence-structure-05",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Aussi est-ce que' is a clumsy hybrid that is not acceptable in written French.",
+          "b": "Simple inversion with a noun subject ('doivent les directions') is wrong after 'aussi'.",
+          "c": "Correct: 'aussi' at the head of a clause takes complex inversion ('les directions doivent-elles').",
+          "d": "Dislocating the subject with 'elles' is colloquial and wrong here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "927601995b9f268796b6f1b9",
+      "itemId": "claude-w-sentence-structure-06",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'sans que' takes the subjunctive with no negation.",
+          "b": "'Sans que' already negates; the 'ne' may be expletive but adding 'pas' creates a double negation.",
+          "c": "The indicative 'ont' is wrong after 'sans que'.",
+          "d": "A bare 'pas' with no 'ne' is ungrammatical and also adds a negation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "1245008dfedb6a44c76614ff",
+      "itemId": "claude-w-sentence-structure-07",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'En ayant examiné' keeps the participle dangling and is clumsy.",
+          "b": "'Offrir' takes a direct object, so the relative must be 'dont' (the supplier's proposal); 'que' is wrong.",
+          "c": "'Soumissions' is plural, so 'recevables' must stay plural.",
+          "d": "Correct: this gives the participle 'Ayant examiné' a proper subject, the committee."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "0d289fdf634cb8672dc977fc",
+      "itemId": "claude-w-sentence-structure-08",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Mixing a noun ('de sa traduction') with infinitives breaks the parallel structure.",
+          "b": "Correct: three parallel infinitives after 'chargée de'.",
+          "c": "Ends with a noun phrase that breaks the parallel structure.",
+          "d": "A 'que' clause after 'chargée de' breaks the parallel structure and is ungrammatical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "426bab83f76b76269c418b1c",
+      "itemId": "claude-w-sentence-structure-09",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: an unequal comparison takes an expletive 'ne' and the neuter 'le', with stylistic inversion.",
+          "b": "'Ne... pas' makes it a real negation and contradicts the meaning.",
+          "c": "'Pas' turns the expletive 'ne' into a real negation, which is wrong.",
+          "d": "Interrogative inversion is wrong inside a comparative clause."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8922773c7f721a40a8b591d9",
+      "itemId": "claude-w-sentence-structure-10",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Removing 'ne' from 'ne... que' is colloquial and wrong.",
+          "b": "'Que' must elide before 'en', so 'que en' is wrong.",
+          "c": "Correct: 'aucun' already negates, so 'pas' must be removed.",
+          "d": "Keeps the double negation and wrongly makes the participle feminine."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "9f893fcc3fb9b31f86098dd6",
+      "itemId": "claude-w-sentence-structure-11",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Ni... ni' needs 'ne' before the verb.",
+          "b": "'Ni... ni... ne' cannot also take 'pas'.",
+          "c": "'Ni... et' breaks the correlative structure.",
+          "d": "Correct: 'ni... ni... ne' with a plural verb."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "3f1b219de7ba92e718f61f3a",
+      "itemId": "claude-w-sentence-structure-12",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Est-ce que' combined with inversion is redundant and wrong.",
+          "b": "Correct: complex inversion with a noun subject.",
+          "c": "Simple inversion with a noun subject in a compound tense is ungrammatical.",
+          "d": "The subject pronoun is attached to the participle instead of the auxiliary, which is wrong."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "0c6a74a993577488716e7211",
+      "itemId": "claude-w-sentence-structure-13",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'C'est à X à qui' marks the preposition twice; standard French uses 'que'.",
+          "b": "Correct: the cleft 'c'est à X qu'il revient de...'.",
+          "c": "'Dont' doubles the preposition and is wrong.",
+          "d": "'Où' does not fit a person or this construction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "da199f5ab57adf055792bbe5",
+      "itemId": "claude-w-sentence-structure-14",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: attaching the 'puisque' clause to the main sentence removes the fragment.",
+          "b": "'Veuillez de soumettre' is ungrammatical.",
+          "c": "'Puisque' takes the indicative, and the subjunctive does not fix the fragment.",
+          "d": "'Parce que' still leaves a sentence fragment."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "673466d1ba919e9ab644fb90",
+      "itemId": "claude-w-sentence-structure-15",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "In careful writing, 'peut-être' at the head of a clause requires inversion or 'peut-être que'.",
+          "b": "'Peut-être que' does not take inversion, so adding '-il' is wrong.",
+          "c": "Simple inversion with a noun subject is ungrammatical here.",
+          "d": "Correct: 'peut-être' at the head of the clause with complex inversion."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "af60b18dbfdaf082d5ff3813",
+      "itemId": "claude-w-sentence-structure-16",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Bien que' requires the subjunctive, so 'avait prévu' is wrong.",
+          "b": "'Ce sont de la refonte' is ungrammatical.",
+          "c": "Correct: 'c'est de X dont' marks 'de' twice; the norm is 'c'est de X que'.",
+          "d": "'Parler de' has no direct object, so the participle does not agree."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ce78b62d29c2390d3f4afa74",
+      "itemId": "claude-w-sentence-structure-17",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: an indirect question about a thing uses 'ce que' with normal word order.",
+          "b": "'Qu'est-ce que' is a direct-question form and is wrong in an indirect question.",
+          "c": "Inversion is wrong in an indirect question.",
+          "d": "'Quoi' is wrong here; written French needs 'ce que'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "a9d652a20cd389b5121f700d",
+      "itemId": "claude-w-sentence-structure-18",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Ne... pas guère' is a double negation.",
+          "b": "Leaving out 'ne' is wrong in written French.",
+          "c": "'Guère' must come after the conjugated verb.",
+          "d": "Correct: 'ne signalent guère'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "3fb167a7b7c118eab89098b8",
+      "itemId": "claude-w-sentence-structure-19",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Devoir' takes a bare infinitive, so 'doit de vérifier' is wrong.",
+          "b": "'Soumissions' is feminine, so 'reçues' is correct as written.",
+          "c": "Correct: this restores three parallel infinitives after 'doit'.",
+          "d": "This adds a second 'que' clause and makes the structure worse."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "ac00e83b49c7c7ccedacfad9",
+      "itemId": "claude-w-sentence-structure-20",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The relative 'que' follows 'courriel' and so wrongly points to the email.",
+          "b": "Correct: the relative clause comes right after its antecedent, 'le formulaire'.",
+          "c": "The comma does not resolve the ambiguity; the relative still seems to point to 'courriel'.",
+          "d": "The resumptive 'le' is redundant after 'que'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "9524138e0ac631390fb0c038",
+      "itemId": "claude-w-sentence-structure-21",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: a verb is compared with 'autant que'.",
+          "b": "'Autant comme' is non-standard.",
+          "c": "'Aussi' modifies adjectives and adverbs, not verbs.",
+          "d": "'Autant de' introduces a quantity noun and does not fit here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "2f2e63a59a3a1147d69ed3aa",
+      "itemId": "claude-w-sentence-structure-22",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The subjunctive 'se déroulent' is correct after 'pour que'.",
+          "b": "'Celle' correctly refers to 'langue'.",
+          "c": "Correct: an indirect question requires 'ce que', not 'qu'est-ce que'.",
+          "d": "Inversion is wrong in an indirect question."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "8d7e4991311e379fe047ec61",
+      "itemId": "claude-w-sentence-structure-23",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Dangling participle: 'Conçue' is feminine but the subject is 'les employés'.",
+          "b": "Dangling participle: the subject 'nous' does not fit 'Conçue'.",
+          "c": "Dangling participle: the subject is the directorate, not the form.",
+          "d": "Correct: 'la nouvelle version' is the logical and grammatical subject of 'Conçue'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "41daf8e82c1d962367c609dd",
+      "itemId": "claude-w-sentence-structure-24",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Creates a fragment beginning with 'Ce qui'.",
+          "b": "Correct: a semicolon followed by 'donc' joins the two independent clauses.",
+          "c": "A run-on: two independent clauses with no punctuation.",
+          "d": "'Et que' has no governing verb, so this is ungrammatical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "a77dfe9e3608eb5ee1269b8a",
+      "itemId": "claude-w-sentence-structure-25",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Without 'ne', 'que' does not express restriction and is ungrammatical here.",
+          "b": "'Seulement' with 'ne... que' is redundant.",
+          "c": "Correct: restrictive 'ne... que'.",
+          "d": "'N'a pas retenu que' means the opposite, or is ungrammatical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "ab2f04b6301dc64996f9a0f8",
+      "itemId": "claude-w-sentence-structure-26",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'jamais' already negates, so 'pas' must be removed.",
+          "b": "This adds a double negation.",
+          "c": "'Enveloppe' is feminine, so 'allouée' is right as written.",
+          "d": "'Sans pas d'' is ungrammatical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "9c367190dcd5bf8b008461d1",
+      "itemId": "claude-w-sentence-structure-27",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "After 'c'est vous qui', the verb must be second-person plural.",
+          "b": "Correct: the verb agrees with 'vous'.",
+          "c": "'Que' cannot be the subject.",
+          "d": "'C'est à vous qui revient' is ungrammatical; the correct form is 'c'est à vous qu'il revient'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "a20439eeaacff4e098251528",
+      "itemId": "claude-w-sentence-structure-28",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The inversion in 'Quand... a-t-il délivré' is correct as written.",
+          "b": "'Nous avons bien reçu' is a statement and must not be inverted.",
+          "c": "The euphonic '-t-' is required.",
+          "d": "Correct: 'est-ce que' cannot be combined with inversion."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "83591d99e5953894bca960d6",
+      "itemId": "claude-w-sentence-structure-29",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Pas' turns the expletive 'ne' into a real negation.",
+          "b": "Interrogative inversion is wrong here, and 'que le craignaient-elles' is ungrammatical.",
+          "c": "Correct: a comparison takes 'que', the expletive 'ne' and the neuter 'le'.",
+          "d": "'Moins élevés' requires 'que', not 'comme'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "e9c99b2a95b6f94f71f82dbe",
+      "itemId": "claude-w-sentence-structure-30",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'personne ne' with 'de' after the negation.",
+          "b": "'Personne' already negates, so 'pas' is a double negation.",
+          "c": "Leaving out 'ne' is wrong, and the meaning would be reversed.",
+          "d": "'Aucun... ne' plus 'pas' is a double negation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "11ac23275f58b9904289f61b",
+      "itemId": "claude-w-sentence-structure-31",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "This introduces the same 'est-ce que' error into the second question.",
+          "b": "An indirect question with 'si' takes the indicative.",
+          "c": "'Chercher à' is the right construction.",
+          "d": "Correct: an indirect yes/no question uses 'si', parallel to the later 'si'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f4d5a1636c83c05bedc6cc59",
+      "itemId": "claude-w-sentence-structure-32",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Mixing a noun with an infinitive breaks the parallel structure.",
+          "b": "Correct: parallel noun phrases after 'prévoit'.",
+          "c": "An infinitive among noun objects breaks the parallel structure.",
+          "d": "Mixing a 'que' clause with noun phrases breaks the parallel structure."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "dab23f14d22140c755cbe60a",
+      "itemId": "claude-w-sentence-structure-33",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The correct expression is 'quitte à', not 'quitte de'.",
+          "b": "The direct object follows the verb, so the participle does not agree.",
+          "c": "Correct: 'peut-être que' takes normal word order, so the inversion must be removed.",
+          "d": "'Prévue' correctly agrees with 'la mise en production'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    }
+  ]
+}

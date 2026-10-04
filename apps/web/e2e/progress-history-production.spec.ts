@@ -23,13 +23,13 @@ const DAY = 86_400_000;
 const WEEKS = 12;
 const BANK = bankVersionFrom(readFileSync(new URL("../src/lib/bank-version.ts", import.meta.url), "utf8"));
 
-/** The committed bank's C-level item ids for a skill, read off its shards. */
+/** The committed bank's published C-level item ids for a skill, read off its shards: never a retired one (D205). */
 const cItems = (skill: "reading" | "writing"): string[] => {
   const dir = new URL(`../../../content/bank/v${String(BANK)}/fr/${skill}/`, import.meta.url);
   return readdirSync(dir)
     .filter((name) => name.endsWith(".json"))
-    .flatMap((name) => JSON.parse(readFileSync(new URL(name, dir), "utf8")) as { id: string; targetBand: string }[])
-    .filter((item) => item.targetBand === "C")
+    .flatMap((name) => JSON.parse(readFileSync(new URL(name, dir), "utf8")) as { id: string; targetBand: string; status: string }[])
+    .filter((item) => item.targetBand === "C" && item.status === "published")
     .map((item) => item.id);
 };
 

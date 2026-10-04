@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-finance-and-budgets-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-1",
+      "stem": {
+        "fr": "Quel est l'objet principal du courriel que Julie Fortin adresse aux gestionnaires ?",
+        "en": "What is the main purpose of the email Julie Fortin sends to the managers?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer une réduction du budget de fonctionnement de la direction.",
+          "rationale": {
+            "fr": "Le courriel ne parle d'aucune réduction : il mentionne au contraire des fonds encore disponibles.",
+            "en": "The email mentions no cut: on the contrary, it refers to funds still available."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Rappeler les échéances à respecter pour que les dépenses soient comptabilisées dans l'exercice en cours.",
+          "rationale": {
+            "fr": "C'est l'objet du message : elle « rappelle les dates limites » afin que les dépenses soient inscrites au bon exercice, puis les énumère.",
+            "en": "This is the message's purpose: she 'reminds' managers of the deadlines so that spending is recorded in the right fiscal year, then lists them."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Demander aux gestionnaires de dépenser sans tarder les 85 000 $ encore disponibles.",
+          "rationale": {
+            "fr": "Ce choix inverse la demande : elle invite plutôt les gestionnaires à signaler les fonds qu'ils n'utiliseront pas.",
+            "en": "This reverses the request: she asks managers instead to report the funds they will not use."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Expliquer pourquoi les fournisseurs ont besoin de six semaines pour livrer les biens.",
+          "rationale": {
+            "fr": "Le délai de livraison n'est qu'une justification de la date du 14 février, et non le sujet du courriel.",
+            "en": "The delivery time only justifies the 14 February date; it is not the subject of the email."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour dégager l'idée principale, repérez la phrase qui annonce l'intention (« je vous rappelle les dates limites suivantes ») et vérifiez que la réponse englobe tout le message plutôt qu'un seul détail.",
+        "en": "To find the main idea, locate the sentence that announces the intention ('I remind you of the following deadlines') and check that the answer covers the whole message rather than a single detail."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-1",
+      "stem": {
+        "fr": "D'après le courriel, qu'arrivera-t-il à une facture de services rendus qui serait approuvée après le 20 mars ?",
+        "en": "According to the email, what will happen to an invoice for services rendered that is approved after 20 March?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle sera refusée et renvoyée au fournisseur.",
+          "rationale": {
+            "fr": "Le courriel ne prévoit aucun refus : la facture sera payée, mais sur un autre budget.",
+            "en": "The email does not say it will be refused: the invoice will be paid, but from another budget."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle devra être approuvée de nouveau par la directrice.",
+          "rationale": {
+            "fr": "Aucune nouvelle approbation n'est mentionnée ; ce détail n'est pas dans le texte.",
+            "en": "No second approval is mentioned; this detail is not in the text."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle sera payée en priorité au début du mois d'avril.",
+          "rationale": {
+            "fr": "Le texte ne parle ni de priorité ni de date de paiement.",
+            "en": "The text mentions neither priority nor a payment date."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle sera imputée au budget de l'exercice qui commence ensuite.",
+          "rationale": {
+            "fr": "Le texte l'indique : « Passé cette date, elles seront imputées au budget de l'exercice suivant. »",
+            "en": "The text says so: 'After that date, they will be charged to the following fiscal year's budget.'"
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Passé cette date » signifie « après cette date ». Le verbe « imputer » veut dire attribuer une dépense à un budget ou à un compte : la facture n'est pas perdue, elle change seulement d'exercice.",
+        "en": "'Passé cette date' means 'after that date'. The verb 'imputer' means to charge an expense to a budget or account: the invoice is not lost, it simply moves to another fiscal year."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-1",
+      "stem": {
+        "fr": "Quelle date un gestionnaire qui ne compte pas utiliser une partie de ses fonds doit-il retenir ?",
+        "en": "Which date must a manager who does not intend to use part of their funds keep in mind?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le 31 janvier.",
+          "rationale": {
+            "fr": "C'est la date indiquée : « veuillez m'en aviser d'ici le 31 janvier ».",
+            "en": "This is the date given: 'please let me know by 31 January'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le 14 février.",
+          "rationale": {
+            "fr": "Cette date vise les demandes d'achat de biens, non les fonds inutilisés.",
+            "en": "This date applies to requests to purchase goods, not to unused funds."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le 20 mars.",
+          "rationale": {
+            "fr": "Cette date vise l'approbation des factures de services.",
+            "en": "This date applies to the approval of service invoices."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le 31 mars.",
+          "rationale": {
+            "fr": "C'est la fin de l'exercice financier, trop tard pour redistribuer les fonds aux autres équipes.",
+            "en": "This is the end of the fiscal year, too late to redistribute funds to other teams."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Quand un texte contient plusieurs dates, associez chacune à l'action qu'elle encadre : achats (14 février), factures (20 mars), fonds inutilisés (31 janvier), fin d'exercice (31 mars).",
+        "en": "When a text contains several dates, match each one to the action it governs: purchases (14 February), invoices (20 March), unused funds (31 January), year end (31 March)."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-1",
+      "stem": {
+        "fr": "Dans le courriel, que signifie l'expression « non engagés » à propos des 85 000 $ du budget de fonctionnement ?",
+        "en": "In the email, what does the expression 'non engagés' mean regarding the $85,000 in the operating budget?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Déjà dépensés pour des biens qui ont été livrés.",
+          "rationale": {
+            "fr": "C'est le contraire : des fonds dépensés ne seraient plus disponibles pour être redistribués.",
+            "en": "It is the opposite: spent funds would no longer be available for redistribution."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Réservés à l'embauche de nouveaux employés.",
+          "rationale": {
+            "fr": "Le verbe « engager » peut vouloir dire « embaucher », mais ce sens ne convient pas ici ; le texte ne parle pas de recrutement.",
+            "en": "The verb 'engager' can mean 'to hire', but that sense does not fit here; the text says nothing about recruitment."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Qui ne sont encore réservés à aucune dépense précise.",
+          "rationale": {
+            "fr": "En gestion financière, « engager » des fonds, c'est les réserver pour une dépense ; des fonds « non engagés » sont donc encore libres.",
+            "en": "In financial management, to 'commit' funds is to set them aside for an expense; 'uncommitted' funds are therefore still free."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Retirés du budget par l'administration centrale.",
+          "rationale": {
+            "fr": "Le texte dit qu'ils « restent » dans le budget de la direction ; ils n'ont pas été retirés.",
+            "en": "The text says they 'remain' in the branch's budget; they have not been withdrawn."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "En finances publiques, « engager » une somme signifie la réserver pour une dépense prévue (contrat, commande). Le contexte — des fonds qui « restent » et peuvent être « redistribués » — confirme ce sens.",
+        "en": "In public finance, 'engager' an amount means committing it to a planned expense (contract, order). The context — funds that 'remain' and can be 'redistributed' — confirms this meaning."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-1",
+      "stem": {
+        "fr": "Dans la phrase « ces sommes pourront alors être redistribuées », à quoi renvoie l'expression « ces sommes » ?",
+        "en": "In the sentence 'these amounts can then be redistributed', what does 'these amounts' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Aux fonds que les gestionnaires auront signalés comme inutilisés.",
+          "rationale": {
+            "fr": "Le démonstratif « ces » reprend « une partie de vos fonds » que le gestionnaire ne prévoit pas utiliser et qu'il a signalée.",
+            "en": "The demonstrative 'these' refers back to 'part of your funds' that the manager does not plan to use and has reported."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Aux factures de services approuvées après le 20 mars.",
+          "rationale": {
+            "fr": "Ces factures sont mentionnées plus haut, mais elles sont imputées à l'exercice suivant, non redistribuées.",
+            "en": "These invoices are mentioned earlier, but they are charged to the next year, not redistributed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À l'ensemble du budget de fonctionnement de la direction.",
+          "rationale": {
+            "fr": "Ce choix est trop large : seule la partie non utilisée peut être redistribuée.",
+            "en": "This choice is too broad: only the unused portion can be redistributed."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Aux montants des demandes d'achat reçues avant le 14 février.",
+          "rationale": {
+            "fr": "Ces montants servent à des achats ; ils ne sont pas offerts à d'autres équipes.",
+            "en": "These amounts are for purchases; they are not offered to other teams."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un démonstratif comme « ces » reprend en général l'élément le plus proche qui convient au sens : ici, les fonds qu'on prévoit ne pas utiliser, mentionnés juste avant dans la même phrase.",
+        "en": "A demonstrative like 'ces' usually refers back to the nearest element that fits the meaning: here, the funds that will not be used, mentioned just before in the same sentence."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-2",
+      "stem": {
+        "fr": "Quel est le but principal de ce bulletin de l'équipe des finances ?",
+        "en": "What is the main purpose of this bulletin from the finance team?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer que les repas ne seront plus remboursés lors des voyages.",
+          "rationale": {
+            "fr": "Le bulletin dit que les repas sont remboursés selon des indemnités fixes ; seuls les reçus ne sont pas exigés.",
+            "en": "The bulletin says meals are reimbursed at fixed allowances; only the receipts are not required."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Inviter les employés à une séance de formation sur les voyages.",
+          "rationale": {
+            "fr": "Aucune séance n'est mentionnée ; le bulletin invite seulement à écrire en cas de question.",
+            "en": "No session is mentioned; the bulletin only invites questions by email."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Expliquer comment numériser les reçus d'hébergement et de transport.",
+          "rationale": {
+            "fr": "La numérisation des reçus est mentionnée, mais le bulletin n'explique pas comment la faire.",
+            "en": "Scanning receipts is mentioned, but the bulletin does not explain how to do it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Résumer les règles révisées qui encadrent les frais de voyage et d'accueil.",
+          "rationale": {
+            "fr": "Le bulletin présente « les principaux points à retenir » des nouvelles règles, du voyage à l'accueil.",
+            "en": "The bulletin presents 'the main points to remember' of the new rules, from travel to hospitality."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le but d'un bulletin se trouve souvent au début (« des règles révisées… Voici les principaux points à retenir »). Une réponse qui ne couvre qu'un point du texte, ou qui le déforme, n'en exprime pas le but.",
+        "en": "A bulletin's purpose is often stated at the start ('revised rules… Here are the main points to remember'). An answer covering only one point, or distorting it, does not express its purpose."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-2",
+      "stem": {
+        "fr": "Selon le bulletin, que doit obtenir un employé avant de partir pour un déplacement d'une seule journée ?",
+        "en": "According to the bulletin, what must an employee obtain before leaving on a one-day trip?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Une avance de fonds de l'équipe des finances.",
+          "rationale": {
+            "fr": "Le bulletin ne parle pas d'avance de fonds.",
+            "en": "The bulletin does not mention any travel advance."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une autorisation écrite.",
+          "rationale": {
+            "fr": "Le texte précise que tout voyage doit être « autorisé par écrit avant le départ, même lorsqu'il ne dure qu'une journée ».",
+            "en": "The text states that any trip must be 'authorized in writing before departure, even when it lasts only one day'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Rien, puisque la règle vise seulement les voyages de plusieurs jours.",
+          "rationale": {
+            "fr": "C'est l'inverse : « même lorsqu'il ne dure qu'une journée » inclut expressément les voyages d'un jour.",
+            "en": "It is the reverse: 'even when it lasts only one day' expressly includes one-day trips."
+          }
+        },
+        {
+          "id": "d",
+          "text": "L'approbation du directeur général.",
+          "rationale": {
+            "fr": "Le directeur général n'intervient que pour les frais d'accueil de plus de 25 $ par personne.",
+            "en": "The director general is involved only for hospitality costs above $25 per person."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Même lorsque » introduit un cas qu'on pourrait croire exclu et l'inclut dans la règle. Lisez ces nuances avec soin : elles servent souvent à piéger un lecteur pressé.",
+        "en": "'Même lorsque' (even when) introduces a case one might think is excluded and brings it under the rule. Read such nuances carefully: they often trip up a hasty reader."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-2",
+      "stem": {
+        "fr": "Un gestionnaire prévoit des frais d'accueil de 32 $ par personne pour une réunion de travail. D'après le bulletin, que doit-il faire ?",
+        "en": "A manager plans hospitality costs of $32 per person for a working meeting. According to the bulletin, what must he do?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Approuver lui-même la dépense, puisqu'il s'agit d'une réunion de travail.",
+          "rationale": {
+            "fr": "Un gestionnaire ne peut approuver que jusqu'à 25 $ par personne ; 32 $ dépasse ce plafond.",
+            "en": "A manager can approve only up to $25 per person; $32 exceeds that ceiling."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Présenter les reçus dans les 30 jours qui suivent la réunion.",
+          "rationale": {
+            "fr": "Le délai de 30 jours concerne les demandes de remboursement de voyage, pas l'approbation des frais d'accueil.",
+            "en": "The 30-day limit concerns travel claims, not the approval of hospitality costs."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Obtenir l'approbation du directeur général.",
+          "rationale": {
+            "fr": "Le montant dépasse 25 $ par personne ; or, « au-delà de ce montant, l'approbation du directeur général est requise ».",
+            "en": "The amount exceeds $25 per person, and 'beyond this amount, the director general's approval is required'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Ramener la dépense à 25 $, car aucun montant supérieur n'est permis.",
+          "rationale": {
+            "fr": "Le texte ne l'interdit pas : il exige seulement une approbation de plus haut niveau au-delà de 25 $.",
+            "en": "The text does not forbid it: it only requires higher-level approval above $25."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Un seuil chiffré (« jusqu'à 25 $ ») suivi de « au-delà » fixe deux régimes : en dessous, le gestionnaire décide ; au-dessus, il faut une autorisation supérieure. Un dépassement n'est donc pas une interdiction.",
+        "en": "A numerical threshold ('up to $25') followed by 'beyond' sets two regimes: below it the manager decides; above it, higher approval is needed. Exceeding it is therefore not a prohibition."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-2",
+      "stem": {
+        "fr": "Dans quel but le bulletin précise-t-il que les demandes incomplètes seront retournées à l'employé ?",
+        "en": "Why does the bulletin specify that incomplete claims will be returned to the employee?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Pour inciter les employés à remplir leurs demandes avec soin afin d'éviter des retards.",
+          "rationale": {
+            "fr": "La phrase souligne la conséquence pratique (« ce qui retardera son remboursement ») pour encourager des demandes complètes.",
+            "en": "The sentence stresses the practical consequence ('which will delay the reimbursement') to encourage complete claims."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Pour reprocher à certains employés d'avoir présenté de fausses demandes.",
+          "rationale": {
+            "fr": "Le ton reste informatif ; rien n'évoque une faute ou une fraude.",
+            "en": "The tone remains informative; nothing suggests misconduct or fraud."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Pour annoncer des mesures disciplinaires en cas de demande en retard.",
+          "rationale": {
+            "fr": "Le texte parle de demandes incomplètes, non en retard, et ne mentionne aucune sanction.",
+            "en": "The text speaks of incomplete claims, not late ones, and mentions no penalty."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pour signaler que l'équipe des finances manque de personnel.",
+          "rationale": {
+            "fr": "Rien dans le bulletin n'évoque la charge de travail de l'équipe.",
+            "en": "Nothing in the bulletin refers to the team's workload."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour saisir l'intention d'une phrase, regardez la conséquence qu'elle met en avant. Ici, « ce qui retardera son remboursement » vise à motiver l'employé, sur un ton neutre et sans menace.",
+        "en": "To grasp a sentence's intent, look at the consequence it highlights. Here, 'which will delay the reimbursement' aims to motivate the employee, in a neutral tone with no threat."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-2",
+      "stem": {
+        "fr": "Comment les règles sont-elles présentées dans le corps de ce bulletin sur les voyages et l'accueil ?",
+        "en": "How are the rules presented in the body of this bulletin on travel and hospitality?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Sous forme de récit d'un voyage récent, raconté étape par étape.",
+          "rationale": {
+            "fr": "Le bulletin ne raconte aucun voyage précis ; il énonce des règles générales.",
+            "en": "The bulletin recounts no particular trip; it sets out general rules."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Comme un problème suivi de plusieurs solutions possibles.",
+          "rationale": {
+            "fr": "Aucun problème n'est exposé, et les règles ne sont pas des options parmi lesquelles choisir.",
+            "en": "No problem is set out, and the rules are not options to choose from."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Par une comparaison entre les anciennes et les nouvelles règles.",
+          "rationale": {
+            "fr": "Le texte parle de règles « révisées », mais ne décrit jamais les anciennes.",
+            "en": "The text speaks of 'revised' rules but never describes the old ones."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Comme une suite de points introduits par « D'abord », « Ensuite » et « Enfin ».",
+          "rationale": {
+            "fr": "Après une phrase d'annonce, les règles sont énumérées à l'aide de ces marqueurs d'énumération.",
+            "en": "After an introductory sentence, the rules are listed using these sequencing markers."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les marqueurs « d'abord, ensuite, enfin » signalent une énumération : chaque point est une règle distincte. Repérer ces mots aide à découper rapidement un texte administratif.",
+        "en": "The markers 'first, next, finally' signal a list: each point is a separate rule. Spotting these words helps you quickly break down an administrative text."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-3",
+      "stem": {
+        "fr": "Quel est l'essentiel du message que la directrice générale adresse aux gestionnaires dans cette note de service sur la réaffectation budgétaire ?",
+        "en": "What is the essence of the message the director general sends to managers in this memo on the budget reallocation?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le programme de subventions communautaires est jugé moins prioritaire et sera progressivement réduit.",
+          "rationale": {
+            "fr": "La note affirme le contraire : la décision « ne remet nullement en cause la pertinence » du programme, dont l'enveloppe sera rétablie.",
+            "en": "The memo says the opposite: the decision 'in no way calls into question the relevance' of the program, whose envelope will be restored."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le programme de modernisation des services bénéficiera dorénavant d'un financement permanent plus élevé.",
+          "rationale": {
+            "fr": "La réaffectation est qualifiée de « ponctuelle » ; rien n'indique un financement permanent.",
+            "en": "The reallocation is described as 'one-time'; nothing points to permanent funding."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Des fonds qui ne pourraient être dépensés à temps sont transférés temporairement à un programme en retard, sans toucher aux engagements existants.",
+          "rationale": {
+            "fr": "Cette formulation réunit les trois éléments de la note : la cause (fonds non versables), le caractère temporaire et la garantie donnée aux partenaires.",
+            "en": "This wording combines the memo's three elements: the cause (funds that cannot be paid out), the temporary nature, and the assurance given to partners."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les bénéficiaires de subventions devront soumettre à nouveau leurs projets l'an prochain.",
+          "rationale": {
+            "fr": "La note prévoit que les projets reportés seront « financés comme prévu » ; aucune nouvelle soumission n'est exigée.",
+            "en": "The memo states that deferred projects will be 'funded as planned'; no resubmission is required."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "L'idée principale d'une note de décision réunit ce qui est décidé, pourquoi et dans quelles limites. Méfiez-vous des choix qui retiennent la décision mais en inversent la portée (permanente plutôt que ponctuelle) ou le motif.",
+        "en": "The main idea of a decision memo combines what is decided, why, and within what limits. Beware of choices that keep the decision but reverse its scope (permanent rather than one-time) or its reason."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-3",
+      "stem": {
+        "fr": "Que peut-on déduire de la note concernant le rétablissement intégral de l'enveloppe des subventions communautaires l'an prochain ?",
+        "en": "What can be inferred from the memo about the full restoration of the community grants envelope next year?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il n'est pas encore assuré, puisqu'il dépend d'une approbation qui reste à obtenir.",
+          "rationale": {
+            "fr": "« Sous réserve de l'approbation du prochain budget principal » pose une condition : le rétablissement est prévu, mais non acquis.",
+            "en": "'Subject to the approval of the next main budget' sets a condition: the restoration is planned but not secured."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il est déjà acquis, puisque le comité de gestion l'a approuvé lors de l'examen de mi-exercice.",
+          "rationale": {
+            "fr": "Le comité a approuvé la réaffectation, non le rétablissement, qui reste soumis à une approbation ultérieure.",
+            "en": "The committee approved the reallocation, not the restoration, which remains subject to a later approval."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il ne profitera qu'aux projets qui n'ont pas été reportés.",
+          "rationale": {
+            "fr": "C'est l'inverse : le rétablissement vise justement à financer les projets reportés.",
+            "en": "It is the reverse: the restoration is meant precisely to fund the deferred projects."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il sera financé par des sommes retirées au programme de modernisation.",
+          "rationale": {
+            "fr": "La note ne dit rien de la provenance des fonds l'an prochain ; ce choix ajoute une information absente.",
+            "en": "The memo says nothing about where next year's funds will come from; this choice adds information that is not there."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "La locution « sous réserve de » introduit une condition : ce qui suit n'aura lieu que si elle est remplie. Une promesse ainsi nuancée n'est donc pas une certitude, même si le ton est rassurant.",
+        "en": "The phrase 'sous réserve de' (subject to) introduces a condition: what follows will happen only if it is met. A promise qualified this way is therefore not a certainty, even if the tone is reassuring."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-3",
+      "stem": {
+        "fr": "Dans la note de service, l'affirmation selon laquelle le programme de modernisation « accuse un retard que ces sommes permettront de résorber » emploie le verbe « résorber » dans quel sens ?",
+        "en": "In the memo, the statement that the modernization program 'is behind schedule by a delay that these amounts will make it possible to résorber' uses the verb 'résorber' in what sense?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Justifier auprès des partenaires et des intervenants.",
+          "rationale": {
+            "fr": "Rien dans la phrase ne parle de justification ; les sommes servent à agir sur le retard lui-même.",
+            "en": "Nothing in the sentence concerns justification; the money acts on the delay itself."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Faire disparaître progressivement.",
+          "rationale": {
+            "fr": "« Résorber » un retard, un déficit ou un arriéré, c'est le réduire jusqu'à l'éliminer, ce que confirme « en accélérant le remplacement ».",
+            "en": "To 'résorber' a delay, deficit or backlog is to reduce it until it is gone, as confirmed by 'by speeding up the replacement'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Mesurer avec précision.",
+          "rationale": {
+            "fr": "Mesurer le retard ne demanderait pas de fonds supplémentaires ; ce sens ne s'accorde pas avec la suite de la phrase.",
+            "en": "Measuring the delay would not require additional funds; this meaning does not fit the rest of the sentence."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Reporter à un exercice ultérieur.",
+          "rationale": {
+            "fr": "Ce sens va à l'encontre du contexte : l'argent sert à accélérer les travaux, non à les repousser.",
+            "en": "This meaning runs against the context: the money is used to speed up the work, not to postpone it."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour deviner le sens d'un mot, vérifiez qu'il s'accorde avec ce qui suit : « notamment en accélérant… » montre que l'argent sert à rattraper le retard. « Résorber » s'emploie couramment avec retard, déficit, arriéré ou écart.",
+        "en": "To work out a word's meaning, check that it fits what follows: 'notably by speeding up…' shows the money is used to catch up. 'Résorber' is commonly used with delay, deficit, backlog or gap."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-3",
+      "stem": {
+        "fr": "Dans la phrase « Faute de les réaffecter, nous risquerions de les voir inutilisés », que représente le pronom « les » ?",
+        "en": "In the sentence 'Without reallocating them, we would risk seeing them unused', what does the pronoun 'them' stand for?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les bénéficiaires qui ont reporté leurs projets.",
+          "rationale": {
+            "fr": "On ne « réaffecte » pas des bénéficiaires, et l'accord « inutilisés » renvoie à des choses, non à des personnes.",
+            "en": "One does not 'reallocate' beneficiaries, and 'unused' refers to things, not people."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les projets reportés à l'an prochain.",
+          "rationale": {
+            "fr": "Ce sont les projets qui sont reportés ; ce ne sont pas eux qu'on réaffecte d'un programme à l'autre.",
+            "en": "It is the projects that are deferred; they are not what is moved from one program to another."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les systèmes de gestion des demandes à remplacer.",
+          "rationale": {
+            "fr": "Ces systèmes sont mentionnés après la phrase ; un pronom de reprise renvoie à un élément déjà cité.",
+            "en": "These systems are mentioned after the sentence; a reference pronoun points back to something already named."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les sommes qui devaient servir aux subventions durant l'exercice en cours.",
+          "rationale": {
+            "fr": "« Les » reprend « les fonds prévus » de la phrase précédente : ce sont eux qui ne pourraient être versés et risqueraient de rester inutilisés.",
+            "en": "'Them' refers back to 'the planned funds' in the previous sentence: these are what could not be paid out and might remain unused."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour identifier l'antécédent d'un pronom, cherchez dans ce qui précède le nom qui s'accorde en genre et en nombre et qui donne un sens logique avec chaque verbe : on réaffecte des fonds, et des fonds peuvent rester inutilisés.",
+        "en": "To identify a pronoun's antecedent, look back for the noun that agrees in gender and number and makes sense with each verb: funds are reallocated, and funds can remain unused."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-3",
+      "stem": {
+        "fr": "Quelle intention traduit la dernière phrase, où la directrice générale demande aux gestionnaires de rappeler aux partenaires qu'aucun engagement conclu ne sera touché ?",
+        "en": "What intention does the last sentence convey, where the director general asks managers to remind partners that no existing commitment will be affected?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Reconnaître que la décision a été prise sans consulter les gestionnaires.",
+          "rationale": {
+            "fr": "La phrase anticipe les réactions des partenaires ; elle ne porte pas sur la manière dont la décision a été prise.",
+            "en": "The sentence anticipates partners' reactions; it is not about how the decision was made."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Désamorcer l'inquiétude prévisible des partenaires en les rassurant sur leurs ententes.",
+          "rationale": {
+            "fr": "« Je sais que cette décision suscitera des questions » annonce une préoccupation, à laquelle répond la garantie qu'aucun engagement ne sera touché.",
+            "en": "'I know this decision will raise questions' anticipates a concern, which is answered by the assurance that no commitment will be affected."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Mettre en garde les partenaires contre toute nouvelle demande de financement.",
+          "rationale": {
+            "fr": "Le ton est rassurant, non dissuasif ; rien n'interdit de nouvelles demandes.",
+            "en": "The tone is reassuring, not discouraging; nothing forbids new requests."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Annoncer que de nouveaux engagements seront bientôt pris envers les partenaires.",
+          "rationale": {
+            "fr": "La phrase protège les engagements existants ; elle n'en annonce aucun nouveau.",
+            "en": "The sentence protects existing commitments; it announces no new ones."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une phrase qui commence par « Je sais que… suscitera des questions » prépare une réponse à une objection prévisible. L'intention est d'anticiper et de rassurer, sur un ton conciliant.",
+        "en": "A sentence beginning 'I know that… will raise questions' prepares an answer to a foreseeable objection. The intent is to anticipate and reassure, in a conciliatory tone."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-4",
+      "stem": {
+        "fr": "D'après les données de l'extrait, à combien s'élevaient les dépenses prévues de la Direction générale pour les deux premiers trimestres ?",
+        "en": "According to the figures in the excerpt, how much had the branch planned to spend over the first two quarters?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Environ 20,7 millions de dollars.",
+          "rationale": {
+            "fr": "Les dépenses réelles (18,6 millions) sont inférieures de 2,1 millions aux prévisions ; celles-ci atteignaient donc 20,7 millions.",
+            "en": "Actual spending ($18.6 million) is $2.1 million below forecast, so the forecast was $20.7 million."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Environ 18,6 millions de dollars.",
+          "rationale": {
+            "fr": "Ce montant correspond aux dépenses réelles, non aux prévisions.",
+            "en": "This amount is actual spending, not the forecast."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Environ 16,5 millions de dollars.",
+          "rationale": {
+            "fr": "Ce chiffre résulte d'une soustraction de l'écart, alors que les prévisions dépassaient les dépenses réelles.",
+            "en": "This figure comes from subtracting the variance, whereas the forecast was higher than actual spending."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Environ 2,1 millions de dollars.",
+          "rationale": {
+            "fr": "Ce montant est l'écart entre les prévisions et les dépenses réelles, non les prévisions elles-mêmes.",
+            "en": "This amount is the gap between forecast and actual spending, not the forecast itself."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un écart « favorable » signifie qu'on a dépensé moins que prévu : prévisions = dépenses réelles + écart. Le pourcentage donné (environ 10 %) permet de vérifier : 2,1 sur 20,7 donne bien environ 10 %.",
+        "en": "A 'favourable' variance means spending was below plan: forecast = actual spending + variance. The percentage given (about 10%) lets you check: 2.1 out of 20.7 is indeed about 10%."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-4",
+      "stem": {
+        "fr": "Que peut-on conclure de l'extrait au sujet de l'écart favorable constaté à la fin du deuxième trimestre ?",
+        "en": "What can be concluded from the excerpt about the favourable variance observed at the end of the second quarter?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il permettra de reporter des fonds inutilisés à l'exercice suivant.",
+          "rationale": {
+            "fr": "L'extrait ne parle d'aucun report de fonds ; il prévoit au contraire que les sommes seront dépensées.",
+            "en": "The excerpt mentions no carry-forward; on the contrary, it expects the money to be spent."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il découle surtout d'une baisse des frais de déplacement.",
+          "rationale": {
+            "fr": "Ce choix inverse le texte : les frais de déplacement dépassent les prévisions et réduisent l'écart.",
+            "en": "This choice reverses the text: travel costs exceed the forecast and reduce the gap."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il est en grande partie temporaire et ne devrait pas se traduire par des fonds inutilisés à la fin de l'exercice.",
+          "rationale": {
+            "fr": "Le rapport précise qu'il ne s'agit pas d'une « économie durable » : les contrats sont reportés, les postes devraient être pourvus et les dépenses de fin d'exercice sont attendues conformes au budget.",
+            "en": "The report states that this is not a 'lasting saving': the contracts are deferred, the positions should be filled, and year-end spending is expected to match the budget."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il témoigne d'une gestion plus rigoureuse des contrats de services professionnels.",
+          "rationale": {
+            "fr": "Le retard des contrats tient à une demande de propositions relancée, non à une meilleure gestion.",
+            "en": "The contract delay results from a relaunched request for proposals, not from tighter management."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Distinguez une économie (une dépense qui n'aura pas lieu) d'un décalage (une dépense qui aura lieu plus tard). Les indices « reportée », « devraient être engagées » et « seront pourvus » montrent qu'il s'agit d'un décalage.",
+        "en": "Distinguish a saving (spending that will not happen) from a timing difference (spending that will happen later). The clues 'postponed', 'should be committed' and 'will be filled' show it is a timing difference."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-4",
+      "stem": {
+        "fr": "Comment l'extrait du rapport financier est-il organisé pour rendre compte de la situation du trimestre ?",
+        "en": "How is the excerpt from the financial report organized to account for the quarter's situation?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il formule d'abord des recommandations, puis présente les données qui les justifient.",
+          "rationale": {
+            "fr": "L'unique recommandation figure à la fin ; le texte commence par les chiffres.",
+            "en": "The only recommendation comes at the end; the text begins with the figures."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il compare les résultats de la Direction générale à ceux d'autres directions.",
+          "rationale": {
+            "fr": "Aucune autre direction n'est mentionnée ; la comparaison porte sur les prévisions et les dépenses réelles.",
+            "en": "No other branch is mentioned; the comparison is between forecast and actual spending."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il retrace dans l'ordre chronologique les décisions prises par le comité de vérification.",
+          "rationale": {
+            "fr": "Le comité n'intervient qu'à la dernière phrase, pour une seule recommandation.",
+            "en": "The committee appears only in the last sentence, for a single recommendation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il présente un écart global, en analyse les causes ainsi qu'un écart inverse, puis formule une projection et une mise en garde.",
+          "rationale": {
+            "fr": "C'est l'ordre du texte : chiffres globaux, causes (contrats, salaires), dépassement des déplacements, prévision de fin d'exercice, puis recommandation.",
+            "en": "This is the text's order: overall figures, causes (contracts, salaries), the travel overrun, the year-end forecast, then a recommendation."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une analyse des écarts suit souvent ce schéma : constat chiffré, explication des causes, éléments contraires (« À l'inverse »), perspectives (« Dans la mesure où… ») et recommandation (« néanmoins »). Les connecteurs balisent chaque étape.",
+        "en": "A variance analysis often follows this pattern: figures, explanation of causes, opposing elements ('Conversely'), outlook ('Insofar as…') and recommendation ('nevertheless'). Connectors mark each stage."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-4",
+      "stem": {
+        "fr": "Selon l'extrait, pour quelle raison la signature des deux contrats de services professionnels a-t-elle été repoussée au troisième trimestre ?",
+        "en": "According to the excerpt, why was the signing of the two professional services contracts pushed back to the third quarter?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Faute de personnes qualifiées pour administrer ces contrats.",
+          "rationale": {
+            "fr": "Le manque de candidats qualifiés explique les postes vacants, non le report des contrats.",
+            "en": "The lack of qualified candidates explains the vacant positions, not the contract delay."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Parce que le processus d'appel aux fournisseurs a dû être repris.",
+          "rationale": {
+            "fr": "Le texte attribue le report à « une demande de propositions relancée », c'est-à-dire un processus recommencé.",
+            "en": "The text attributes the delay to 'a relaunched request for proposals', that is, a process that had to be restarted."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Parce que le comité de vérification a exigé un examen supplémentaire.",
+          "rationale": {
+            "fr": "Le comité ne formule qu'une recommandation sur les frais de déplacement ; il n'intervient pas dans les contrats.",
+            "en": "The committee only makes a recommendation on travel costs; it plays no role in the contracts."
+          }
+        },
+        {
+          "id": "d",
+          "text": "En raison de la reprise des activités de vérification sur le terrain.",
+          "rationale": {
+            "fr": "Cette reprise explique la hausse des frais de déplacement, non le report des contrats.",
+            "en": "This resumption explains the rise in travel costs, not the contract delay."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans un texte qui énumère plusieurs causes, rattachez chacune à l'effet qu'elle explique : demande de propositions relancée → contrats reportés ; manque de candidats → postes vacants ; vérifications sur le terrain → frais de déplacement.",
+        "en": "In a text listing several causes, link each to the effect it explains: relaunched request for proposals → deferred contracts; lack of candidates → vacant positions; field audits → travel costs."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-4",
+      "stem": {
+        "fr": "Dans l'expression « les postes vacants seront pourvus d'ici l'hiver », quelle signification prend le participe « pourvus » ?",
+        "en": "In the expression 'the vacant positions will be pourvus by winter', what meaning does the participle 'pourvus' take?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Supprimés de la structure organisationnelle.",
+          "rationale": {
+            "fr": "Ce sens contredit la projection : supprimer les postes maintiendrait les dépenses sous le budget.",
+            "en": "This meaning contradicts the outlook: abolishing the positions would keep spending below budget."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Munis d'un budget supplémentaire.",
+          "rationale": {
+            "fr": "« Pourvoir de » peut vouloir dire « munir de », mais ici aucun complément n'est exprimé et le contexte porte sur des postes vacants à combler.",
+            "en": "'Pourvoir de' can mean 'to equip with', but no complement is expressed here and the context concerns vacant positions to fill."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Occupés par des personnes nommées.",
+          "rationale": {
+            "fr": "« Pourvoir un poste », c'est y nommer quelqu'un ; le lien avec « faute de candidats qualifiés » le confirme.",
+            "en": "To 'pourvoir' a position is to appoint someone to it; the link with 'for lack of qualified candidates' confirms this."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Annoncés publiquement aux candidats.",
+          "rationale": {
+            "fr": "Annoncer un poste n'est qu'une étape ; seule une nomination ferait augmenter les dépenses salariales comme prévu.",
+            "en": "Advertising a position is only one step; only an appointment would raise salary spending as expected."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "En dotation, « pourvoir un poste » signifie y nommer une personne, par opposition à « afficher » ou « annoncer » un poste. Le sens se confirme par le contexte : un poste vacant cesse de l'être lorsqu'il est pourvu.",
+        "en": "In staffing, 'pourvoir un poste' means appointing someone to it, as opposed to 'posting' or 'advertising' it. The context confirms it: a vacant position stops being vacant once it is filled."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-5",
+      "stem": {
+        "fr": "Que laisse entendre la note d'information quant aux conséquences d'une éventuelle baisse de la participation externe ?",
+        "en": "What does the briefing note imply about the consequences of a possible drop in outside participation?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le centre serait contraint de réduire le nombre de groupes offerts.",
+          "rationale": {
+            "fr": "La note précise au contraire que la viabilité du centre ne serait pas compromise.",
+            "en": "On the contrary, the note states that the centre's viability would not be at risk."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le tarif proposé deviendrait insuffisant pour couvrir le coût des cours.",
+          "rationale": {
+            "fr": "Le tarif est fixé par participant et correspond au coût complet ; une baisse de fréquentation n'en change pas le calcul.",
+            "en": "The fee is set per participant and matches the full cost; lower attendance does not change that calculation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le projet pilote devrait être interrompu avant la fin de l'année.",
+          "rationale": {
+            "fr": "Rien dans la note ne lie la poursuite du projet pilote au niveau de fréquentation.",
+            "en": "Nothing in the note links continuing the pilot project to attendance levels."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le centre pourrait l'absorber, son fonctionnement de base ne dépendant pas des revenus externes.",
+          "rationale": {
+            "fr": "La note juge qu'une telle baisse « ne compromettrait toutefois pas la viabilité du centre », ses coûts fixes étant déjà financés par le crédit.",
+            "en": "The note judges that such a drop 'would not, however, compromise the centre's viability', since its fixed costs are already funded."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Un risque suivi de « toutefois » et d'une justification introduite par « puisque » est relativisé : l'auteur le reconnaît, puis explique pourquoi il reste acceptable. L'inférence consiste à en tirer la conséquence implicite.",
+        "en": "A risk followed by 'however' and a justification introduced by 'since' is being played down: the author acknowledges it, then explains why it remains acceptable. The inference is to draw the implied consequence."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-5",
+      "stem": {
+        "fr": "Quelle attitude les auteurs de la note d'information adoptent-ils à l'égard de la proposition qu'ils soumettent ?",
+        "en": "What attitude do the authors of the briefing note take towards the proposal they are submitting?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Favorable mais mesurée : ils la recommandent tout en exposant ses risques et en suggérant de la mettre à l'essai.",
+          "rationale": {
+            "fr": "Ils recommandent la proposition, reconnaissent qu'elle « n'est pas sans risque » et suggèrent un projet pilote d'un an.",
+            "en": "They recommend the proposal, acknowledge that it 'is not without risk', and suggest a one-year pilot."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Enthousiaste et sans réserve : ils la présentent comme dépourvue d'inconvénients.",
+          "rationale": {
+            "fr": "Les auteurs consacrent une partie de la note aux risques ; ce choix ignore cette nuance.",
+            "en": "The authors devote part of the note to the risks; this choice ignores that nuance."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Hésitante : ils laissent au lecteur le soin de trancher sans formuler de recommandation.",
+          "rationale": {
+            "fr": "La dernière phrase contient une recommandation explicite (« Nous recommandons d'approuver »).",
+            "en": "The last sentence contains an explicit recommendation ('We recommend approving')."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Critique : ils la décrivent surtout pour en démontrer les faiblesses.",
+          "rationale": {
+            "fr": "Les risques sont relativisés (« toutefois ») ; l'ensemble de la note plaide en faveur de la proposition.",
+            "en": "The risks are played down ('however'); the note as a whole argues for the proposal."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le ton d'une note d'information se lit dans l'équilibre entre arguments et réserves. Une recommandation assortie de risques reconnus et d'une mise à l'essai traduit une prudence favorable, ni enthousiaste ni réticente.",
+        "en": "The tone of a briefing note shows in the balance between arguments and reservations. A recommendation accompanied by acknowledged risks and a trial run conveys cautious support, neither enthusiastic nor reluctant."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-5",
+      "stem": {
+        "fr": "Quelle fonction remplit la phrase « Cette proposition n'est pas sans risque » dans l'organisation de la note d'information ?",
+        "en": "What role does the sentence 'This proposal is not without risk' play in the organization of the briefing note?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle clôt la note en résumant la recommandation finale.",
+          "rationale": {
+            "fr": "La phrase est au milieu du texte ; la recommandation finale vient dans la dernière phrase.",
+            "en": "The sentence is in the middle of the text; the final recommendation comes in the last sentence."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle introduit les données chiffrées qui justifient la tarification proposée.",
+          "rationale": {
+            "fr": "Les chiffres (350 $, 600 000 $) précèdent cette phrase ; ce qui suit porte sur les risques.",
+            "en": "The figures ($350, $600,000) come before this sentence; what follows deals with the risks."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle marque le passage de la présentation des avantages à l'examen des limites de la proposition.",
+          "rationale": {
+            "fr": "Avant elle, la note expose le problème et les gains attendus ; après elle, elle examine la baisse possible de fréquentation et les exigences administratives.",
+            "en": "Before it, the note sets out the problem and the expected gains; after it, it examines the possible drop in attendance and the administrative requirements."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle annonce que l'équipe des finances s'oppose à la proposition.",
+          "rationale": {
+            "fr": "L'équipe des finances estime seulement le délai de mise en place ; elle ne s'oppose à rien.",
+            "en": "The finance team only estimates the implementation time; it opposes nothing."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une phrase courte placée entre deux blocs sert souvent de charnière : elle clôt une partie et en ouvre une autre. Ici, elle fait passer la note des arguments favorables aux risques, avant la recommandation.",
+        "en": "A short sentence placed between two blocks often acts as a hinge: it closes one part and opens another. Here it moves the note from the arguments in favour to the risks, before the recommendation."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-5",
+      "stem": {
+        "fr": "Dans la phrase « Une telle baisse ne compromettrait toutefois pas la viabilité du centre », à quoi renvoie l'expression « Une telle baisse » ?",
+        "en": "In the sentence 'Such a drop would not, however, compromise the centre's viability', what does 'such a drop' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À la diminution du budget du centre au cours des trois dernières années.",
+          "rationale": {
+            "fr": "Le budget n'a pas diminué : la note dit seulement qu'il « n'a pas augmenté ».",
+            "en": "The budget has not decreased: the note only says it 'has not increased'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Au recul des inscriptions externes que la facturation pourrait entraîner.",
+          "rationale": {
+            "fr": "« Une telle » reprend la phrase précédente : des organisations qui renoncent à inscrire leurs employés, « ce qui réduirait la fréquentation ».",
+            "en": "'Such a' refers back to the previous sentence: organizations giving up on enrolling their staff, 'which would reduce attendance'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À la réduction des listes d'attente des employés du ministère.",
+          "rationale": {
+            "fr": "Une telle réduction serait souhaitable ; la phrase envisage au contraire un risque.",
+            "en": "Such a reduction would be desirable; the sentence instead considers a risk."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À la baisse des frais généraux compris dans le coût complet.",
+          "rationale": {
+            "fr": "La note ne prévoit aucune baisse des frais généraux ; ils sont seulement inclus dans le tarif.",
+            "en": "The note does not foresee any reduction in overhead; overhead is simply included in the fee."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Un tel » ou « une telle » reprend une idée qui vient d'être exprimée, souvent sous une autre forme : ici, « réduirait la fréquentation » devient « une telle baisse ». Cherchez l'antécédent dans la phrase qui précède.",
+        "en": "'Un tel' or 'une telle' (such a) takes up an idea just expressed, often in another form: here, 'would reduce attendance' becomes 'such a drop'. Look for the antecedent in the preceding sentence."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-finance-and-budgets-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-finance-and-budgets-5",
+      "stem": {
+        "fr": "Selon la note d'information, combien de temps faudrait-il pour instaurer la facturation interministérielle, et quelle durée est recommandée pour l'expérimentation ?",
+        "en": "According to the briefing note, how long would it take to set up interdepartmental billing, and what duration is recommended for the trial?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Quatre mois de mise en place, puis un projet pilote d'un an.",
+          "rationale": {
+            "fr": "L'équipe des finances estime la mise en place à « quatre mois », et la note recommande un projet pilote « d'une durée d'un an ».",
+            "en": "The finance team estimates set-up at 'four months', and the note recommends a pilot 'lasting one year'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Un an de mise en place, puis un projet pilote de quatre mois.",
+          "rationale": {
+            "fr": "Ce choix intervertit les deux durées données dans la note.",
+            "en": "This choice swaps the two durations given in the note."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Trois ans de mise en place, puis un projet pilote d'un an.",
+          "rationale": {
+            "fr": "Trois ans correspond à la durée de la pratique actuelle d'accueil gratuit, non au délai de mise en place.",
+            "en": "Three years is how long the current free-access practice has existed, not the set-up time."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Quatre mois de mise en place, puis un projet pilote de trois ans.",
+          "rationale": {
+            "fr": "La durée de trois ans renvoie au passé du centre ; le projet pilote recommandé dure un an.",
+            "en": "The three-year figure refers to the centre's past; the recommended pilot lasts one year."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Lorsqu'un texte contient plusieurs durées, associez chacune à ce qu'elle mesure : depuis quand dure la pratique (trois ans), le délai de préparation (quatre mois), la durée de l'essai (un an).",
+        "en": "When a text contains several durations, match each to what it measures: how long the practice has existed (three years), the preparation time (four months), the length of the trial (one year)."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-finance-and-budgets-1",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Dépenses de fin d'exercice : dates limites à respecter",
+      "body": "Bonjour à toutes et à tous,\n\nComme chaque année, l'exercice financier se termine le 31 mars. Afin que toutes les dépenses soient inscrites au bon exercice, je vous rappelle les dates limites suivantes. Les demandes d'achat de biens doivent parvenir à l'équipe des finances au plus tard le 14 février, car les fournisseurs ont besoin d'environ six semaines pour livrer. Les factures pour des services déjà rendus doivent être approuvées avant le 20 mars. Passé cette date, elles seront imputées au budget de l'exercice suivant. Par ailleurs, il reste environ 85 000 $ non engagés dans le budget de fonctionnement de la direction. Si vous prévoyez ne pas utiliser une partie de vos fonds, veuillez m'en aviser d'ici le 31 janvier ; ces sommes pourront alors être redistribuées aux équipes qui en ont besoin. Je vous remercie de votre collaboration.\n\nJulie Fortin\nAgente financière, Direction des services ministériels",
+      "wordCount": 148,
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 16.44,
+        "rareWordRatio": 0.216
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-finance-and-budgets-2",
+      "lang": "fr",
+      "docType": "bulletin",
+      "title": "Bulletin des finances : rappel sur les frais de voyage et d'accueil",
+      "body": "Depuis le 1er octobre, l'équipe des finances applique des règles révisées pour les frais de voyage et d'accueil. Voici les principaux points à retenir. D'abord, tout voyage doit être autorisé par écrit avant le départ, même lorsqu'il ne dure qu'une journée. Ensuite, les employés doivent soumettre leur demande de remboursement dans les 30 jours suivant leur retour, accompagnée des reçus d'hébergement et de transport numérisés. Les repas sont remboursés selon des indemnités fixes ; il n'est donc pas nécessaire de fournir de reçus pour les repas. Enfin, en ce qui concerne l'accueil, un gestionnaire peut approuver des frais allant jusqu'à 25 $ par personne pour une réunion de travail. Au-delà de ce montant, l'approbation du directeur général est requise. Les demandes incomplètes seront retournées à l'employé, ce qui retardera son remboursement. Pour toute question, écrivez à l'équipe des finances par courriel.",
+      "wordCount": 141,
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 15.67,
+        "rareWordRatio": 0.234
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-finance-and-budgets-3",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Note de service : réaffectation de fonds entre deux programmes",
+      "body": "À la suite de l'examen de mi-exercice, le comité de gestion a approuvé la réaffectation de 1,4 million de dollars du programme de subventions communautaires vers le programme de modernisation des services. Cette décision ne remet nullement en cause la pertinence du premier programme ; elle tient plutôt au fait que plusieurs bénéficiaires ont reporté leurs projets à l'an prochain, de sorte que les fonds prévus ne pourraient être versés avant la fin de l'exercice. Faute de les réaffecter, nous risquerions de les voir inutilisés. Le programme de modernisation, pour sa part, accuse un retard que ces sommes permettront de résorber, notamment en accélérant le remplacement des systèmes de gestion des demandes. Je tiens toutefois à préciser que cette réaffectation est ponctuelle. Sous réserve de l'approbation du prochain budget principal, l'enveloppe des subventions sera rétablie intégralement l'an prochain, afin que les projets reportés puissent être financés comme prévu. Les gestionnaires concernés recevront d'ici deux semaines un tableau révisé de leurs autorisations de dépenser. Je sais que cette décision suscitera des questions chez nos partenaires ; je vous invite à leur rappeler qu'aucun engagement déjà conclu ne sera touché.",
+      "wordCount": 188,
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 23.5,
+        "rareWordRatio": 0.303
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-finance-and-budgets-4",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Rapport financier trimestriel : analyse des écarts au deuxième trimestre",
+      "body": "Au terme du deuxième trimestre, les dépenses réelles de la Direction générale s'élèvent à 18,6 millions de dollars, soit 2,1 millions de moins que les prévisions établies pour la même période. Cet écart favorable, qui représente environ 10 % des dépenses prévues, ne traduit toutefois pas une économie durable. Il s'explique d'abord par le décalage de deux contrats de services professionnels, dont la signature a été reportée au troisième trimestre en raison d'une demande de propositions relancée ; ces sommes devraient donc être engagées d'ici la fin de l'exercice. Le reste de l'écart provient des dépenses salariales : une quinzaine de postes sont demeurés vacants plus longtemps que prévu, faute de candidats qualifiés. À l'inverse, les frais de déplacement dépassent de 12 % les prévisions, en raison de la reprise des activités de vérification sur le terrain. Dans la mesure où les postes vacants seront pourvus d'ici l'hiver et où les contrats reportés seront signés comme prévu, la Direction générale s'attend à des dépenses conformes à son budget à la fin de l'exercice. Le comité de vérification recommande néanmoins de suivre de près les frais de déplacement, qui pourraient, si la tendance se maintient, absorber une part des marges restantes.",
+      "wordCount": 200,
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 28.57,
+        "rareWordRatio": 0.295
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-finance-and-budgets-5",
+      "lang": "fr",
+      "docType": "note",
+      "title": "Note d'information : proposition de recouvrement des coûts pour les services de formation",
+      "body": "Depuis trois ans, notre centre de formation accueille gratuitement des participants d'autres organisations fédérales. Cette pratique, à l'origine ponctuelle, représente désormais près de 40 % des inscriptions, alors que le budget du centre n'a pas augmenté ; les listes d'attente de nos propres employés s'allongent en conséquence. Nous proposons donc de facturer aux organisations externes 350 $ par participant et par jour de formation, ce qui correspond au coût complet estimé, y compris la part des frais généraux. Selon nos projections, ces revenus atteindraient environ 600 000 $ par année et permettraient d'ajouter deux groupes par trimestre. Cette proposition n'est pas sans risque. Il se peut que certaines organisations, faute de budget, renoncent à inscrire leurs employés, ce qui réduirait la fréquentation. Une telle baisse ne compromettrait toutefois pas la viabilité du centre, puisque ses coûts fixes sont déjà couverts par le crédit actuel. Par ailleurs, la facturation exigerait une autorisation de dépenser les recettes ainsi perçues et un processus de facturation interministérielle, que l'équipe des finances estime pouvoir mettre en place en quatre mois. Nous recommandons d'approuver la proposition à titre de projet pilote d'une durée d'un an.",
+      "wordCount": 189,
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 21,
+        "rareWordRatio": 0.291
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

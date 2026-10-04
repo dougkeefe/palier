@@ -1,0 +1,3104 @@
+{
+  "reviewer": "claude-opus-5-5",
+  "verdicts": [
+    {
+      "requestHash": "03ef4798a0d16c292241de0a",
+      "itemId": "claude-r-finance-and-budgets-1-1",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "No budget reduction is announced; the email reminds of deadlines.",
+          "b": "Correct: the email's stated purpose is to remind managers of the deadlines so expenses are recorded in the right fiscal year.",
+          "c": "The email asks managers to report funds they will not use, not to spend the remaining $85,000 quickly.",
+          "d": "The six-week delivery time is a supporting detail explaining the 14 February deadline, not the purpose."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e35fe056d0b89a9de5a76d7a",
+      "itemId": "claude-r-finance-and-budgets-1-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The passage never says late invoices are refused or returned to the supplier.",
+          "b": "No re-approval by a director is mentioned.",
+          "c": "No priority payment in April is mentioned.",
+          "d": "Correct: 'Passé cette date, elles seront imputées au budget de l'exercice suivant.'"
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "6a521185d1567c92cad0d835",
+      "itemId": "claude-r-finance-and-budgets-1-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: unused funds must be reported 'd'ici le 31 janvier'.",
+          "b": "14 February is the deadline for purchase requests for goods.",
+          "c": "20 March is the deadline for approving service invoices.",
+          "d": "31 March is the end of the fiscal year, not the reporting deadline for unused funds."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "cee5d237fd29d0b48d2e7a54",
+      "itemId": "claude-r-finance-and-budgets-1-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Non engagés' means not yet committed, the opposite of already spent.",
+          "b": "Nothing links the amount to hiring.",
+          "c": "Correct: uncommitted funds are not yet earmarked for any specific expense.",
+          "d": "The funds remain in the directorate's budget; nothing says they were withdrawn."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "3b119150cdaa42410fda0981",
+      "itemId": "claude-r-finance-and-budgets-1-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'ces sommes' refers back to the portion of their funds managers report they will not use.",
+          "b": "Late service invoices are charged to the next year, not redistributed.",
+          "c": "Only the unused portion is redistributed, not the whole operating budget.",
+          "d": "Purchase request amounts are unrelated to the redistribution sentence."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "5abb519f596d2efe938ad463",
+      "itemId": "claude-r-finance-and-budgets-2-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Meals are still reimbursed, through fixed allowances.",
+          "b": "No training session is mentioned.",
+          "c": "Scanned receipts are one detail, not the purpose of the bulletin.",
+          "d": "Correct: the bulletin summarizes the main points of the revised travel and hospitality rules."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "579d0566101d1fb7c4e9c9dd",
+      "itemId": "claude-r-finance-and-budgets-2-2",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "No cash advance is mentioned.",
+          "b": "Correct: every trip, even a one-day trip, must be authorized in writing before departure.",
+          "c": "The passage explicitly says the rule applies even to one-day trips.",
+          "d": "Director general approval concerns hospitality over $25 per person, not travel."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "cb1280d4b1ad7b839122db37",
+      "itemId": "claude-r-finance-and-budgets-2-3",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "A manager may approve only up to $25 per person; $32 exceeds that.",
+          "b": "The 30-day rule concerns travel reimbursement claims, not hospitality approval.",
+          "c": "Correct: above $25 per person, director general approval is required.",
+          "d": "Higher amounts are permitted with director general approval, so they are not prohibited."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "93e36b8a94f3da9703e7c8b5",
+      "itemId": "claude-r-finance-and-budgets-2-4",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: warning that incomplete claims are returned and delay reimbursement encourages employees to complete them carefully.",
+          "b": "No accusation of false claims is made.",
+          "c": "No disciplinary measures are mentioned; the sentence concerns incomplete, not late, claims.",
+          "d": "Nothing suggests the finance team is understaffed."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "bf38409bfc2966e49e6724c7",
+      "itemId": "claude-r-finance-and-budgets-2-5",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The bulletin is not a narrative of a trip.",
+          "b": "No problem-solution structure is used.",
+          "c": "The old rules are never described, so there is no comparison.",
+          "d": "Correct: the rules are listed as points introduced by 'D'abord', 'Ensuite' and 'Enfin'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "82a8cdbbd2791328c3621636",
+      "itemId": "claude-r-finance-and-budgets-3-1",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The memo states the decision does not question the grants program's relevance, and the envelope will be restored.",
+          "b": "The reallocation is explicitly one-time ('ponctuelle'), not permanent funding.",
+          "c": "Correct: funds that could not be disbursed in time are temporarily moved to a delayed program, with existing commitments untouched.",
+          "d": "Projects were postponed by beneficiaries; nothing requires resubmission."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ba024d206075f8db32d01816",
+      "itemId": "claude-r-finance-and-budgets-3-2",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: restoration is 'sous réserve de l'approbation du prochain budget principal', so it is not yet guaranteed.",
+          "b": "The committee approved the reallocation, not next year's restoration, which still depends on the main estimates.",
+          "c": "Restoration is intended precisely so that postponed projects can be funded.",
+          "d": "Nothing says the money will come from the modernization program."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "1e91ad3955fb8d73708b8e73",
+      "itemId": "claude-r-finance-and-budgets-3-3",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Résorber un retard' does not mean justifying it to partners.",
+          "b": "Correct: to résorber a delay is to reduce it until it disappears, i.e. to catch up.",
+          "c": "Measuring the delay is not the sense of 'résorber'.",
+          "d": "Postponing is the opposite of catching up on a delay."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "e69faa7bcef60baf512692fb",
+      "itemId": "claude-r-finance-and-budgets-3-4",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Beneficiaries cannot be 'inutilisés' or reallocated; the pronoun refers to money.",
+          "b": "The projects are postponed, but it is the funds that would remain unused and be reallocated.",
+          "c": "The systems appear later and are not what would be reallocated.",
+          "d": "Correct: 'les' refers to 'les fonds prévus', the grant money that could not be paid out this year."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "5afad6b7fc7852b050f98ad7",
+      "itemId": "claude-r-finance-and-budgets-3-5",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The sentence does not concern consultation of managers.",
+          "b": "Correct: anticipating partners' questions, the DG reassures them that existing agreements are unaffected.",
+          "c": "No warning against new funding requests is given.",
+          "d": "The sentence reassures about existing commitments; it announces no new ones."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "fe8110c248e516659c6a39fb",
+      "itemId": "claude-r-finance-and-budgets-4-1",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: actual spending of 18.6 M plus the 2.1 M shortfall gives planned spending of about 20.7 M (consistent with the 10% figure).",
+          "b": "18.6 M is actual spending, not planned spending.",
+          "c": "16.5 M wrongly subtracts the variance from actual spending.",
+          "d": "2.1 M is the variance, not the planned total."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "29017403f8947b4cd9b0fa84",
+      "itemId": "claude-r-finance-and-budgets-4-2",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Nothing mentions carrying funds forward; the branch expects spending in line with budget.",
+          "b": "Travel costs are over forecast by 12%, working against the favourable variance.",
+          "c": "Correct: the variance is not a lasting saving; deferred contracts and filled positions should bring spending in line with budget by year end.",
+          "d": "The contract delay came from a relaunched RFP, not more rigorous management."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "b45c2831ee1dd35a59b8a607",
+      "itemId": "claude-r-finance-and-budgets-4-3",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The recommendation comes at the end, not the beginning.",
+          "b": "No comparison with other branches is made.",
+          "c": "The text is a variance analysis, not a chronology of committee decisions.",
+          "d": "Correct: overall variance, its causes, the opposite travel variance, a projection, then a caution."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "a25aea2d31d02188150a1e6f",
+      "itemId": "claude-r-finance-and-budgets-4-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Lack of qualified candidates explains the vacant positions, not the contract delay.",
+          "b": "Correct: signing was postponed because the request for proposals was relaunched.",
+          "c": "The audit committee only recommends monitoring travel costs.",
+          "d": "Field audit activity explains the travel overrun, not the contract delay."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ccb8c1aecff20c53ba51aa77",
+      "itemId": "claude-r-finance-and-budgets-4-5",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "'Pourvoir' a position means filling it, not abolishing it.",
+          "b": "It does not mean providing a budget.",
+          "c": "Correct: the vacant positions will be filled by appointees.",
+          "d": "Advertising a position precedes filling it; it is not the meaning of 'pourvus'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "85f40b238b8189301c8cbd52",
+      "itemId": "claude-r-finance-and-budgets-5-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Adding groups depends on revenue, but the note does not say a drop would force cutting existing groups.",
+          "b": "The rate is set at full cost per participant; fewer participants do not make it insufficient.",
+          "c": "Nothing suggests the pilot would be stopped.",
+          "d": "Correct: viability is not compromised because fixed costs are already covered by the current appropriation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "cb0f57c3336e4880e7d8d0a9",
+      "itemId": "claude-r-finance-and-budgets-5-2",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the authors recommend the proposal, acknowledge its risks, and suggest a one-year pilot.",
+          "b": "They explicitly say it is 'pas sans risque'.",
+          "c": "They make an explicit recommendation.",
+          "d": "They propose and recommend it rather than criticize it."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "937ed0e9a5dbebeb0c7b4f96",
+      "itemId": "claude-r-finance-and-budgets-5-3",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The note ends with a later sentence containing the recommendation.",
+          "b": "The figures come before this sentence.",
+          "c": "Correct: the sentence pivots from benefits to the risks and constraints of the proposal.",
+          "d": "The finance team only estimates implementation time; it does not oppose the proposal."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "c3c0c048c001f5b27347e407",
+      "itemId": "claude-r-finance-and-budgets-5-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The budget has not decreased; it has not increased.",
+          "b": "Correct: 'une telle baisse' is the drop in attendance if organizations stop enrolling because of the fees.",
+          "c": "Shorter waiting lists would be a benefit, not the drop mentioned.",
+          "d": "Overhead costs are not said to fall."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "9b1d09c511a8e094458cefca",
+      "itemId": "claude-r-finance-and-budgets-5-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: four months to set up billing, then a one-year pilot.",
+          "b": "Inverts the two durations.",
+          "c": "Three years is how long the centre has hosted outside participants.",
+          "d": "The pilot is recommended for one year, not three."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "cc1b0e90354c4e5af76a382c",
+      "itemId": "claude-r-human-resources-1-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The written exam comes later, for screened-in candidates.",
+          "b": "References are contacted after the interview; no number is given.",
+          "c": "No cover letter is mentioned.",
+          "d": "Correct: applicants submit a CV and answer online screening questions."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "03a1aa375152ffbc2c14d841",
+      "itemId": "claude-r-human-resources-1-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 14 days is two weeks.",
+          "b": "The posting is open 14 days, not three weeks.",
+          "c": "12 months is the validity of the qualified pool.",
+          "d": "One week is half of the stated period."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "5fb1984a52da869eb57bc6a0",
+      "itemId": "claude-r-human-resources-1-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The positions already exist; they are not being created.",
+          "b": "'Pourvoir' a position does not mean supplying equipment.",
+          "c": "Correct: to pourvoir a position is to find someone to fill it.",
+          "d": "Advertising is part of the process, not the meaning of the verb."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "0be82153c415cebc2cb9fe16",
+      "itemId": "claude-r-human-resources-1-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'Celles' refers to 'les personnes intéressées' who applied.",
+          "b": "Questions cannot sit an exam.",
+          "c": "References are contacted at the end, not examined.",
+          "d": "Board members assess candidates; they do not sit the exam."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "2cd50a2fd5892d558e18163f",
+      "itemId": "claude-r-human-resources-2-1",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Telework continues, with at least two office days per week.",
+          "b": "Meeting-room priority is a minor detail.",
+          "c": "Correct: the bulletin sets out harmonized telework rules for the branch from 1 December.",
+          "d": "Home furniture purchases will no longer be reimbursed; the bulletin does not encourage them."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "28f80b21968eb350f403190b",
+      "itemId": "claude-r-human-resources-2-2",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Furniture purchases will no longer be reimbursed.",
+          "b": "Correct: employees can borrow a monitor and ergonomic chair from the loan centre.",
+          "c": "Ordering new furniture through the manager is not mentioned.",
+          "d": "The 4th-floor rooms are about booking priority, not furniture."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "5723dbd922f46d58dfa9a697",
+      "itemId": "claude-r-human-resources-2-3",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "It is not prohibited; it requires prior authorization.",
+          "b": "Telling colleagues is not enough; prior authorization is required.",
+          "c": "The agreement is reviewed once a year, not monthly.",
+          "d": "Correct: working from another province requires prior authorization."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "15947a5af11b7b12c9fdf77a",
+      "itemId": "claude-r-human-resources-2-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the tone is neutral, informative and direct.",
+          "b": "No apology or regret is expressed.",
+          "c": "No sanctions are mentioned.",
+          "d": "The bulletin does not praise telework."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "de93acdf5c10babde028962f",
+      "itemId": "claude-r-human-resources-3-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The memo says 10 working days ('ouvrables'), not calendar days.",
+          "b": "Delegation is for managers supervising more than 12 employees, so 12 itself is excluded.",
+          "c": "The figure is about 40%, not 60%.",
+          "d": "Correct: about 40%, i.e. roughly two in five, had no formal feedback before the year-end evaluation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "3f7e391a45376b1608dc9287",
+      "itemId": "claude-r-human-resources-3-2",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "She does not claim year-end ratings are inaccurate; 'quelle qu'en soit la justesse' concedes they may be accurate.",
+          "b": "'Systématiquement' overstates; she speaks of perceived fairness, not contestation.",
+          "c": "Correct: even an accurate rating can feel unfair to an employee who had no warning during the year.",
+          "d": "Speed of assignment is not discussed."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6a8f3304fb6136f2d5388bd5",
+      "itemId": "claude-r-human-resources-3-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the 'additional meeting' is the mid-year review now mandatory for all employees.",
+          "b": "The year-end review already existed; it is not the additional one.",
+          "c": "Validation of agreements is mentioned later and is not a meeting added to the cycle.",
+          "d": "The internal review is past and was not a meeting with managers."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "b14ca376a5573b2d633d674a",
+      "itemId": "claude-r-human-resources-3-4",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Nothing suggests she personally disapproves or that the decision was imposed on her.",
+          "b": "The obligation is firm; only delegation and a shorter template are offered.",
+          "c": "The acknowledgement is empathetic, not reproachful.",
+          "d": "Correct: she anticipates resistance and pairs the obligation with relief measures (shorter template, delegation)."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ecd99c836f2613b2e19895fc",
+      "itemId": "claude-r-human-resources-3-5",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Delegation is expressed by 'déléguer', not 'consigner'.",
+          "b": "Correct: 'consigner' means to record formally so as to keep a trace.",
+          "c": "A false association with 'consignes'; it does not mean giving instructions.",
+          "d": "No approval by the branch head is implied."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "d464a60f8dcf86ad80820d7b",
+      "itemId": "claude-r-human-resources-4-1",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 31% of recent employees versus 43% overall see real advancement opportunities, so they are more pessimistic.",
+          "b": "43% is less than half.",
+          "c": "31% is the share of recent employees seeing opportunities, not their share of respondents.",
+          "d": "Participation rose from 54% to 68%."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "3d272fc76d0e2cf249170f8a",
+      "itemId": "claude-r-human-resources-4-2",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "The report explicitly warns that the most engaged employees may be over-represented; higher participation proves nothing about engagement.",
+          "b": "Treatment by managers is one of the most positive results (79%).",
+          "c": "Correct: broadly positive results hide career-related unease, especially among new employees, to be understood before acting.",
+          "d": "The report recommends focus groups before adopting any measure, not immediate action."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "706638565f0dc9757bd4d0d7",
+      "itemId": "claude-r-human-resources-4-3",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the last paragraph explicitly makes a recommendation.",
+          "b": "Correct: it cautions against a single-cause reading of the figures and recommends focus groups before any decision.",
+          "c": "Wrong: it follows directly from the career-related gaps just described.",
+          "d": "Wrong: the participation rate is described as higher and strengthening reliability, not insufficient."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8fdbebd4946f186f59a2f6eb",
+      "itemId": "claude-r-human-resources-4-4",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the passage says the higher rate strengthens reliability.",
+          "b": "Wrong: nothing is said about teams lacking time.",
+          "c": "Wrong: no change in questions is mentioned.",
+          "d": "Correct: the risk that the most engaged employees are overrepresented is exactly the stated reservation."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "fd0535e39b1437baa0efe6e4",
+      "itemId": "claude-r-human-resources-4-5",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: no data compares how newer employees are treated by managers.",
+          "b": "Wrong: workload is not broken down by seniority.",
+          "c": "Correct: they are twice as likely to consider leaving and the causes are not yet known, hence the focus groups.",
+          "d": "Wrong: \"twice as many as colleagues\" does not mean a majority will leave."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6a746b229783b5eaed69daa5",
+      "itemId": "claude-r-human-resources-5-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the expression sets a ceiling, not a minimum.",
+          "b": "Wrong: confuses the expression with \"concurrence\" in the sense of competition.",
+          "c": "Wrong: the amount is fixed in the letter, not negotiated.",
+          "d": "Correct: \"jusqu'à concurrence de\" means up to a maximum of."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "47af19a9926c5b31940ef43d",
+      "itemId": "claude-r-human-resources-5-2",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: \"là\" refers back to the spring, when next year's allocations will be set.",
+          "b": "Wrong: the arrangement is tied to the period before the leave can be reconsidered, not the whole programme.",
+          "c": "Wrong: the evening courses are attended during the period, not merely before fall.",
+          "d": "Wrong: the service commitment is unrelated to the schedule arrangement."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "beefe4064e6fa3f0cee41edf",
+      "itemId": "claude-r-human-resources-5-3",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the refusal is \"pour l'instant\" and the project fits the priorities.",
+          "b": "Wrong: the leave is refused; the course-success condition applies to the funding.",
+          "c": "Correct: refused for lack of credits, invited to reapply in spring, with a schedule arrangement offered meanwhile.",
+          "d": "Wrong: no reproach about timing is made."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "27c89873da1ed9579f35b7f1",
+      "itemId": "claude-r-human-resources-5-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the accepted funding comes first, the refusal afterwards.",
+          "b": "Correct: funding and conditions, then the leave refused for now, then the interim schedule arrangement.",
+          "c": "Wrong: the full-time leave is not granted.",
+          "d": "Wrong: the programme is not described before a decision."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "3d122d436f988f4889043cf8",
+      "itemId": "claude-r-human-resources-5-5",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: failing a course affects reimbursement by the department, not repayment of the totality; and repayment concerns only \"une partie\".",
+          "b": "Wrong: she must stay for twice the length of the studies.",
+          "c": "Wrong: the commitment is tied to the funding, not the leave.",
+          "d": "Correct: two years of study means a four-year commitment; leaving after one year triggers partial repayment."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8ff2291659b73f8d15ed1786",
+      "itemId": "claude-r-it-and-digital-1-1",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: remote access will not be affected.",
+          "b": "Correct: it announces a planned outage and what to do.",
+          "c": "Wrong: employees are not asked to help with the work.",
+          "d": "Wrong: the outage is planned, not unforeseen."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "431ae3ed222ae4d4ef6152e3",
+      "itemId": "claude-r-it-and-digital-1-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the manager, not the employee, sends the list to the service centre.",
+          "b": "Wrong: on-site work is allowed with notice.",
+          "c": "Wrong: the notice goes to the manager, not the infrastructure team.",
+          "d": "Correct: they must notify their manager by Wednesday 11 November."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "77fa879d27eea79f83a6728f",
+      "itemId": "claude-r-it-and-digital-1-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: Saturday 7:00 to Sunday 19:00 is 36 hours.",
+          "b": "Wrong: 12 hours is only the Sunday daytime span.",
+          "c": "Wrong: 24 hours undercounts by half a day.",
+          "d": "Wrong: 48 hours would be the whole weekend."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e0e03c3f137bb46d2a643de0",
+      "itemId": "claude-r-it-and-digital-1-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the service centre is the recipient of the list.",
+          "b": "Wrong: the employee notifies; the manager transmits.",
+          "c": "Correct: \"Celui-ci\" picks up the most recent masculine noun, \"votre gestionnaire\".",
+          "d": "Wrong: the network cannot transmit a list."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "5162efbc27aba48ccf3a041e",
+      "itemId": "claude-r-it-and-digital-1-5",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: remote access is explicitly unaffected.",
+          "b": "Wrong: departmental cell phones keep working.",
+          "c": "Correct: with the building network down, on-site workers need an alternative connection.",
+          "d": "Wrong: nothing suggests the switches require personal keys."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "cbc42547cc90936ef2093f03",
+      "itemId": "claude-r-it-and-digital-2-1",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the bulletin sets out new network access rules effective in February.",
+          "b": "Wrong: it mentions increased intrusion risk, not a specific intrusion.",
+          "c": "Wrong: the information sessions are a detail, and not described as mandatory.",
+          "d": "Wrong: only those without a phone get a physical key; no phones are distributed."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "d0a990ac48ddac7134dc1849",
+      "itemId": "claude-r-it-and-digital-2-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: no new phones are mentioned.",
+          "b": "Wrong: codes come from the phone app, not email.",
+          "c": "Wrong: MFA is mandatory for all.",
+          "d": "Correct: they will receive a physical security key."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "c3dad9a46a454bb614d1de84",
+      "itemId": "claude-r-it-and-digital-2-3",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: that is the meaning of \"compromis\", not \"compromission\" in a security context.",
+          "b": "Correct: compromise means the password may have been discovered or used by someone else.",
+          "c": "Wrong: forgetting is not compromise.",
+          "d": "Wrong: periodic expiry is being abolished, and is not compromise."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "b9e54025118155d643a08938",
+      "itemId": "claude-r-it-and-digital-2-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: password length is detailed in the second paragraph.",
+          "b": "Correct: it gives the effective date and the reason before the details.",
+          "c": "Wrong: account locking is in the last paragraph.",
+          "d": "Wrong: sessions are in the last paragraph."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "197dc93aeb42838c40f163c7",
+      "itemId": "claude-r-it-and-digital-2-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: at least 14 characters and no more 90-day expiry.",
+          "b": "Wrong: describes the current rule.",
+          "c": "Wrong: the 90-day expiry is abolished.",
+          "d": "Wrong: the minimum rises to 14."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "24f9c2c90d9c77d06af03384",
+      "itemId": "claude-r-it-and-digital-3-1",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the migration continues; the memo aims to ensure its success.",
+          "b": "Wrong: the initiatives are acknowledged but their risks are rejected.",
+          "c": "Correct: all new cloud requests must go through the architecture review committee.",
+          "d": "Wrong: existing services will not be interrupted barring serious risk."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "e58e0534f4c66205dfac1961",
+      "itemId": "claude-r-it-and-digital-3-2",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: they continue provided the inventory finds no serious risk.",
+          "b": "Wrong: they will not be interrupted unless a serious risk is found.",
+          "c": "Wrong: no automatic integration is stated.",
+          "d": "Wrong: they are subject to an inventory."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "7f9417c53557ebe04f58c7e0",
+      "itemId": "claude-r-it-and-digital-3-3",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: no sanctions are announced and the tone is measured.",
+          "b": "Wrong: she now requires central review.",
+          "c": "Wrong: she treats the risks as serious.",
+          "d": "Correct: \"Bien que ces initiatives témoignent d'un réel souci d'efficacité\" acknowledges intent while rejecting the risks."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6186ed04f76671058193e30c",
+      "itemId": "claude-r-it-and-digital-3-4",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the committee is not the subject of the inventory sentence.",
+          "b": "Wrong: contracts are not what will or will not be interrupted.",
+          "c": "Wrong: information is not the antecedent in that sentence.",
+          "d": "Correct: \"ceux-ci\" refers to \"Les services déjà acquis\"."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8fbfd9e116ba0002673eb64e",
+      "itemId": "claude-r-it-and-digital-3-5",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: \"ne saurait\" expresses impossibility, not uncertainty.",
+          "b": "Correct: literary conditional of savoir with ne means cannot under any circumstances.",
+          "c": "Wrong: no further analysis is implied.",
+          "d": "Wrong: unrelated meaning."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8f8d3eafcc621f962ad09f97",
+      "itemId": "claude-r-it-and-digital-4-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: it is not a cost-saving choice.",
+          "b": "Wrong: the language is old, not recent.",
+          "c": "Wrong: parallel operation relates to future transition, not current patches.",
+          "d": "Correct: the vendor stopped support three years ago."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e47825e6bf7cb9548969d14c",
+      "itemId": "claude-r-it-and-digital-4-2",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: outages rose by 11 and recovery time by 7 hours.",
+          "b": "Wrong: outages increased.",
+          "c": "Correct: 6 to 17 is nearly triple, 4 to 11 hours is more than double.",
+          "d": "Wrong: costs are compared with a modern solution, not with three years earlier, and are not a reliability figure."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "a7a1c04e89e564d1975c7721",
+      "itemId": "claude-r-it-and-digital-4-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: concession (investment, transition) followed by \"néanmoins\" reaffirming the need to act.",
+          "b": "Wrong: statistics are in the previous paragraph.",
+          "c": "Wrong: the recommendation is the last paragraph.",
+          "d": "Wrong: history is in the first paragraph."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "dd79f67b7fb257886285d7e2",
+      "itemId": "claude-r-it-and-digital-4-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the authors take a clear position.",
+          "b": "Wrong: they reject ad hoc patches.",
+          "c": "Correct: they use figures to argue for starting replacement analysis this fiscal year.",
+          "d": "Wrong: no reproach is made."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "81574dad8d5455f1f5a4f8f2",
+      "itemId": "claude-r-it-and-digital-4-5",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the vendor no longer supports the system.",
+          "b": "Correct: after the retirement only one employee will master the language.",
+          "c": "Wrong: replacement would take about two years.",
+          "d": "Wrong: the transition takes about two years, beyond next year."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "2e1123ac641b537c57999268",
+      "itemId": "claude-r-it-and-digital-5-1",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: \"quitte à ce que\" marks an accepted downside, even if it means slower exchanges.",
+          "b": "Wrong: the slowdown is not the goal.",
+          "c": "Wrong: it is not a precondition.",
+          "d": "Wrong: the slowdown is presented as a consequence, not avoided."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ad61ac86439d9fb3a10c841c",
+      "itemId": "claude-r-it-and-digital-5-2",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: one does not authorize the sharing of oneself; \"en\" refers to the thing managed.",
+          "b": "Correct: \"en\" stands for \"du fonds de données\" (its description, its sharing).",
+          "c": "Wrong: the branch is not mentioned in that sentence.",
+          "d": "Wrong: the retention schedule appears in the next sentence."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "The stem asks \"quel antécédent ... remplace-t-il ?\" but every option is phrased \"Au ... / À la ...\" (as if answering \"à quoi renvoie\"), so the options do not grammatically answer the question asked."
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "26f4a5a2f75a711734c399c2",
+      "itemId": "claude-r-it-and-digital-5-3",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: he defends the requirements.",
+          "b": "Wrong: no sanctions are mentioned.",
+          "c": "Wrong: he admits the workload will increase at first.",
+          "d": "Correct: concedes initial extra work then cites long-term gains."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "0b34f4aa1958a549ec728fb8",
+      "itemId": "claude-r-it-and-digital-5-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: no costs are discussed.",
+          "b": "Wrong: there are no questions.",
+          "c": "Correct: \"Trois changements\" then D'abord, Ensuite, Enfin.",
+          "d": "Wrong: no specific branch practice is contrasted."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "770ba8a03efcb8ec21d1ed4c",
+      "itemId": "claude-r-it-and-digital-5-5",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the responsible person authorizes sharing, not extended retention.",
+          "b": "Wrong: sharing agreements concern communication, not retention.",
+          "c": "Wrong: access requests are mentioned only as a benefit.",
+          "d": "Correct: only with a derogation approved in writing."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "28cdd61e26c44fb4eee08700",
+      "itemId": "claude-r-service-delivery-1-2",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: backlog processing and staff training.",
+          "b": "Wrong: no client appointments on Friday afternoons are mentioned.",
+          "c": "Wrong: evening slots are on Tuesday.",
+          "d": "Wrong: not mentioned."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "e38a38ed2727226f57f6d23d",
+      "itemId": "claude-r-service-delivery-1-3",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the figure concerns Friday afternoon, not all of Friday.",
+          "b": "Wrong: no decline in attendance is reported.",
+          "c": "Wrong: misattributes the 5% to appointments.",
+          "d": "Correct: less than 5% equals fewer than one visit in twenty, on Friday afternoons."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "423172af23b19001041252bc",
+      "itemId": "claude-r-service-delivery-1-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: contradicts \"en tout temps\".",
+          "b": "Correct: at any time, day or night.",
+          "c": "Wrong: nothing about a limited duration.",
+          "d": "Wrong: \"en tout temps\" does not mean occasionally."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f44e458a2b2591d0130cf04e",
+      "itemId": "claude-r-service-delivery-1-5",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: evening slots come later as a mitigation.",
+          "b": "Correct: the change is the new schedule cutting Friday afternoon hours.",
+          "c": "Wrong: training is a detail of the new use of Friday afternoons.",
+          "d": "Wrong: no shift to online is described as the change."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "9d4ceda5321fb4ff1e85304c",
+      "itemId": "claude-r-service-delivery-2-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the old standard was met only 84% of the time.",
+          "b": "Wrong: no training is announced.",
+          "c": "Wrong: incomplete applications are explained, not complained about.",
+          "d": "Correct: a stricter standard and a Thursday meeting on work distribution."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "12f8fa914f3b626e5f343fd9",
+      "itemId": "claude-r-service-delivery-2-2",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the clock starts when the application is complete, i.e. all documents received.",
+          "b": "Wrong: explicitly not from the first submission.",
+          "c": "Wrong: that is a separate five-day notice obligation.",
+          "d": "Wrong: 1 December is the effective date of the standard."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "0716ec5ba7ee27860a958b64",
+      "itemId": "claude-r-service-delivery-2-3",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 84% is last year's performance, not the old target.",
+          "b": "Wrong: only complete applications are covered.",
+          "c": "Correct: target time goes from 30 to 20 days for 90% of complete applications.",
+          "d": "Wrong: no prior notice deadline of 20 days is mentioned."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "115a28d8d550c23b9d756422",
+      "itemId": "claude-r-service-delivery-2-4",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the new standard is introduced in the first paragraph.",
+          "b": "Wrong: 84% under a looser standard is presented as insufficient, not praised.",
+          "c": "Correct: \"il nous faudra donc revoir notre façon de répartir les dossiers\" leads to the proposed meeting.",
+          "d": "Wrong: the sentence does not conclude the email."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "c1462797fd883c2d369c3307",
+      "itemId": "claude-r-service-delivery-2-5",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: she announces the tighter standard, proposes a Thursday discussion and invites staff to note the steps that slow them down, thanking them for their usual collaboration.",
+          "b": "Wrong: the 84% figure is stated as a fact motivating change, not as a reproach; the closing thanks contradicts a reproving tone.",
+          "c": "Wrong: she explicitly asks for input before Thursday's discussion, so she does expect a reaction.",
+          "d": "Wrong: she says the team will need to rethink file distribution, but never suggests the standard is impossible to meet."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "68c1c994d7e62b2194da0e13",
+      "itemId": "claude-r-service-delivery-3-1",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: technical anomalies are mentioned only in passing as mostly corrected; they are not explained in detail.",
+          "b": "Correct: the memo sets out a three-measure plan because fixing the technical problems will not by itself clear the backlog.",
+          "c": "Wrong: mid-December is a conditional projection dependent on reinforcements and an Oct. 20 start, not a firm announcement nor the main purpose.",
+          "d": "Wrong: nothing in the memo suggests abandoning the new system."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "40d46a2904dd7813b888b5e2",
+      "itemId": "claude-r-service-delivery-3-2",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: processing slightly more than arrives means the backlog shrinks, if only marginally; it does not grow.",
+          "b": "Wrong: the passage says nothing about a drop in incoming call volume.",
+          "c": "Wrong: the memo says without reinforcements the backlog would not be cleared before spring.",
+          "d": "Correct: 'à peine plus' implies a very slow reduction with current resources, consistent with the spring projection."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "03efdd60827c208bbd99f78b",
+      "itemId": "claude-r-service-delivery-3-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: eight weeks from October 20 ends around December 15, i.e. mid-December, the projected clearing date.",
+          "b": "Wrong: eight weeks from October 20 reaches mid-December, not a month earlier.",
+          "c": "Wrong: the assignment is for eight weeks; spring is the no-reinforcement scenario.",
+          "d": "Wrong: spring is the date without reinforcements; with them the backlog should be cleared by mid-December."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6ee619bc04051af9a53ac97b",
+      "itemId": "claude-r-service-delivery-3-4",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the previous sentence's subject is 'l'arriéré' and 'le' takes up 'résorbé', not the plan's implementation.",
+          "b": "Wrong: the waiting time is mentioned in the first paragraph and does not fit 'ne le serait pas avant le printemps'.",
+          "c": "Wrong: the dashboard is introduced only in the following sentence.",
+          "d": "Correct: 'il' resumes 'l'arriéré' and 'le' resumes the attribute 'résorbé' from the preceding sentence."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "0f1baf10e3183d6aac718ef8",
+      "itemId": "claude-r-service-delivery-3-5",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'le cas échéant' expresses a condition, not a date.",
+          "b": "Wrong: the expression means the opposite of systematically; it applies only if the case arises.",
+          "c": "Correct: 'le cas échéant' means 'if need be / should the situation arise'.",
+          "d": "Wrong: adjusting the plan after the backlog is cleared would make no sense; the expression is conditional, not temporal."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6207f0e8b726373ccd7555d1",
+      "itemId": "claude-r-service-delivery-4-1",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: respondents mainly deplore the difficulty of reaching an agent, much more than the quality of the information.",
+          "b": "Wrong: they judge the information generally accurate.",
+          "c": "Wrong: courtesy is never mentioned.",
+          "d": "Wrong: question wording is a methodological caveat raised by the analysts, not a client complaint."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "18856a033114a05c98976dde",
+      "itemId": "claude-r-service-delivery-4-2",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the passage gives no cause for the rise and identifies phone access as the current problem.",
+          "b": "Wrong: no comparison of response rates across years is given; 19% is presented as a weakness.",
+          "c": "Correct: the reworded questions limit comparability with earlier results, so the slight rise cannot be taken as established.",
+          "d": "Wrong: agent training is not credited with anything; the team recommends against focusing on it."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "8e9c9d94d57dac27760882a2",
+      "itemId": "claude-r-service-delivery-4-3",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the authors stress the overall figure masks gaps and urge caution.",
+          "b": "Correct: they lay out the data's limits ('avec prudence', 'sous ces réserves') and still make a recommendation.",
+          "c": "Wrong: they do draw a conclusion and issue a recommendation.",
+          "d": "Wrong: they report call-centre criticism plainly and recommend acting on it."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ec583051be3df3d75e5120ed",
+      "itemId": "claude-r-service-delivery-4-4",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: no measures already implemented are described.",
+          "b": "Wrong: the recommendation comes last, not first.",
+          "c": "Wrong: only a passing reference to the previous year appears, and comparability is said to be limited.",
+          "d": "Correct: paragraph 1 gives figures, paragraph 2 the methodological limits, paragraph 3 a recommendation 'sous ces réserves'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "bdaa82e37b88e2d72cf99bac",
+      "itemId": "claude-r-service-delivery-4-5",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'le faire' replaces the action verb 'répondre', not being dissatisfied (which is the subject's attribute).",
+          "b": "Correct: 'le faire' takes up 'répondre', i.e. responding to the survey questionnaire.",
+          "c": "Wrong: reaching an agent belongs to a different sentence and is unrelated to response bias.",
+          "d": "Wrong: interpreting with caution is what the analysts do, not what the clients might be inclined to do."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "1c79db19abc4c2697e828932",
+      "itemId": "claude-r-service-delivery-5-1",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the benefit was paid retroactively, not refused.",
+          "b": "Wrong: the missing document is history; the file is closed and the benefit paid.",
+          "c": "Wrong: the letter concedes the delay complaint and apologizes.",
+          "d": "Correct: it addresses each grievance in turn, admits the department's omission and informs her of the review recourse."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "5d2818b1ab95f01c187f387d",
+      "itemId": "claude-r-service-delivery-5-2",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the department could not trace the exchanges and admits nothing; the conditional 'auriez reçue' keeps the claim at a distance.",
+          "b": "Wrong: no blame is placed on the client's understanding.",
+          "c": "Correct: unable to trace the exchanges, the department neither confirms nor denies, while reminding staff of the rules as a precaution.",
+          "d": "Wrong: only a reminder of current instructions is mentioned, not disciplinary action."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "b550df2c6a45d8c048ab77b7",
+      "itemId": "claude-r-service-delivery-5-3",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: she names the specific omission (the document should have been requested at once) and apologizes outright.",
+          "b": "Wrong: she states the omission is in no way the client's responsibility.",
+          "c": "Wrong: she gives a clear cause for the delay.",
+          "d": "Wrong: the letter uses formal correspondence conventions throughout."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "56e8e0543146175baeb9cf9c",
+      "itemId": "claude-r-service-delivery-5-4",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the body is organized by grievance, not by the file's chronology.",
+          "b": "Correct: delay first, contradictory information second (the order of the opening summary), then the payment status and the review recourse.",
+          "c": "Wrong: the delay is addressed before the contradictory information.",
+          "d": "Wrong: the payment is mentioned near the end, not first, and there is no decision followed by reasons."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "b865e9a180f6779de400e4ca",
+      "itemId": "claude-r-service-delivery-5-5",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: it reverses the meaning; the phrase exonerates the client.",
+          "b": "Wrong: 'responsabilité' here is fault, not jurisdiction, and the office does handle the complaint.",
+          "c": "Correct: 'ne relève en rien de votre responsabilité' means the client cannot be held at fault in any way.",
+          "d": "Wrong: the letter says the omission contributed to the delay."
+        },
+        "registerFlag": {
+          "flagged": true,
+          "note": "Stem uses 'qualifie l'oubli du Ministère comme ne relevant…'; standard French is 'qualifier de', and 'qualifier … comme' is a construction usage guides reject. Should read e.g. 'présente l'oubli … comme ne relevant…'."
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "7f59525b6998f4d9c21d678b",
+      "itemId": "claude-w-agreement-01",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the preceding direct object 'que' (= les dossiers, masc. pl.) requires agreement.",
+          "b": "Wrong: 'dossiers' is masculine.",
+          "c": "Correct: the participle with avoir agrees with the preceding COD 'que' = 'les dossiers' (masc. pl.).",
+          "d": "Wrong: agrees with the subject 'elle', which avoir does not allow."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "c014c6a149cf56e43c9384de",
+      "itemId": "claude-w-agreement-02",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: the participle of impersonal 'falloir' is always invariable.",
+          "b": "Wrong: 'que' is not a direct object of impersonal 'il a fallu'; no agreement.",
+          "c": "Wrong: no agreement and wrong number/gender.",
+          "d": "Wrong: no agreement with 'somme' for an impersonal verb."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "03b2add67d70a125dfbb9013",
+      "itemId": "claude-w-agreement-03",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong under the standard rule: with the partitive pronoun 'en' as preceding COD, the participle stays invariable; agreement with 'demandes' is an occasional literary variant, not the accepted norm.",
+          "b": "Wrong: masculine plural matches nothing in the sentence.",
+          "c": "Wrong: feminine singular matches nothing and ignores the 'en' rule.",
+          "d": "Correct: a participle preceded by 'en' as COD generally remains invariable."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "67605fed73c59f6a6b05d549",
+      "itemId": "claude-w-agreement-04",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'se' is an indirect object (succéder à), so no agreement.",
+          "b": "Correct: 'se sont succédé' is invariable because 'se' is the indirect object.",
+          "c": "Wrong: no agreement possible, and 'gestionnaires' is not specified as feminine.",
+          "d": "Wrong: feminine singular agreement with nothing."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "64304d67a5f089bc3840a4d2",
+      "itemId": "claude-w-agreement-05",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'quel que' + être agrees with the subject 'les contraintes' (fem. pl.): 'Quelles que soient'.",
+          "b": "Wrong: 'quelque' in one word precedes an adjective or noun, not the verb être.",
+          "c": "Wrong: 'contraintes' is feminine.",
+          "d": "Wrong: 'quelques' (several) makes no sense before a verb."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "7e08621892a8a4fb87b60edb",
+      "itemId": "claude-w-agreement-06",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: after the noun, 'demi' agrees in gender with it ('heure' is feminine).",
+          "b": "Wrong: 'demi' after the noun agrees in gender only, never in number.",
+          "c": "Correct: 'deux heures et demie': gender agreement with 'heure', singular.",
+          "d": "Wrong: wrong gender and number."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "df536f70f3bd8c8018933752",
+      "itemId": "claude-w-agreement-07",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: placed after the noun, 'nu' agrees with 'pieds' (masc. pl.).",
+          "b": "Wrong: 'pieds' is masculine.",
+          "c": "Wrong: 'pieds' is masculine plural.",
+          "d": "Correct: 'pieds nus': the adjective follows the noun and agrees with it."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "568651edb4699150e8f04ace",
+      "itemId": "claude-w-agreement-08",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: adverbial 'tout' agrees before a feminine adjective beginning with a consonant.",
+          "b": "Correct: 'toute fière': 'tout' takes the feminine form before a feminine adjective starting with a consonant.",
+          "c": "Wrong: the subject is singular.",
+          "d": "Wrong: masculine plural does not fit a singular feminine subject."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "91bc6754dec58cc39f3da0a2",
+      "itemId": "claude-w-agreement-09",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'cent' takes no 's' when followed by another numeral such as 'mille'.",
+          "b": "Wrong: 'mille' is invariable and 'cent' followed by mille takes no 's'.",
+          "c": "Wrong: 'mille' (the numeral) is invariable.",
+          "d": "Correct: 'deux cent mille': cent followed by another number and mille invariable."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "61d0bdeec9da55a4d986334c",
+      "itemId": "claude-w-agreement-10",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.93,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'plus d'un' + singular noun normally takes a singular verb; the participle with avoir and a following COD is invariable.",
+          "b": "Wrong: plural after 'plus d'un' is reserved for reciprocal meaning or a repeated 'plus d'un', neither of which applies.",
+          "c": "Wrong: plural verb and an incorrect participle agreement with a following COD.",
+          "d": "Wrong: the participle cannot agree with a COD that follows it."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "5c1560848e56a73dfbb6d615",
+      "itemId": "claude-w-agreement-11",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'soumissions' is feminine.",
+          "b": "Wrong: 'l'une ou l'autre' means only one of them, which contradicts both meeting the requirements, and fits poorly with plural 'seront'.",
+          "c": "Correct: 'l'une et l'autre' (fem.) refers to both bids and takes the plural verb 'seront soumises'.",
+          "d": "Wrong: 'chacune' requires a singular verb ('sera soumise')."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "f4162e81b4fe9da5f5aeda2c",
+      "itemId": "claude-w-agreement-12",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'que' (= les trois heures) is an adverbial complement of duration, not a direct object, so no agreement.",
+          "b": "Correct: with 'durer', the duration is a circumstantial complement and the participle stays invariable.",
+          "c": "Wrong: agreement with the subject 'panne' is not possible with avoir.",
+          "d": "Wrong: no agreement, and masculine plural matches nothing."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "d373ca3a6df184ebf09d94bc",
+      "itemId": "claude-w-agreement-13",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'laissé' + infinitive is invariable under the 1990 rectifications, and also under the traditional rule here since she undergoes rather than performs the convincing.",
+          "b": "Wrong: 'laisser' takes a bare infinitive, not a participle, and the agreement is also wrong.",
+          "c": "Correct: 's'est laissé convaincre': laissé followed by an infinitive stays invariable.",
+          "d": "Wrong: 'laisser' must be followed by an infinitive, not a participle."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "39937041a8aec695b9ab101a",
+      "itemId": "claude-w-agreement-14",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'la plupart des' + plural noun takes a plural verb.",
+          "b": "Wrong: 'assister à' is intransitive, so the participle is invariable.",
+          "c": "Wrong: singular verb plus a wrong participle agreement.",
+          "d": "Correct: plural verb after 'la plupart des employés', invariable participle."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "92b3bd1431e88036a925a64a",
+      "itemId": "claude-w-agreement-15",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.86,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: when 'le peu de' expresses insufficiency (the lack is what harmed), the verb agrees with 'le peu' in the singular; 'nui' is invariable.",
+          "b": "Wrong here: plural agreement fits when 'le peu' means a small but existing quantity, whereas the context stresses that the shortage itself did the harm.",
+          "c": "Wrong: 'nuire' is intransitive, so 'nui' never agrees.",
+          "d": "Wrong: 'nui' is invariable."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "3e4d61003654a5d2908a4097",
+      "itemId": "claude-w-agreement-16",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: in a general procedure 'on' is indefinite, so the attribute stays masculine singular; plural agreement fits only when 'on' clearly stands for a specific group (= nous).",
+          "b": "Correct: indefinite 'on' takes a singular verb and a masculine singular attribute.",
+          "c": "Wrong: 'on' always takes a third-person singular verb.",
+          "d": "Wrong: plural verb with 'on' is ungrammatical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "631a8e303529cc2017748768",
+      "itemId": "claude-w-agreement-17",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'fait' followed by an infinitive is always invariable.",
+          "b": "Correct: invariable 'fait' + infinitive, and the plural subject 'vérifications' takes 'ont confirmé'.",
+          "c": "Wrong: the main verb must agree with the plural subject 'les vérifications'.",
+          "d": "Wrong: 'fait' + infinitive never agrees."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "433132d454bfea0e03085b7d",
+      "itemId": "claude-w-agreement-18",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: a polite 'vous' addressed to one person takes a singular attribute.",
+          "b": "Wrong: the person addressed is a woman ('Madame la Présidente').",
+          "c": "Wrong: singular and feminine are required.",
+          "d": "Correct: polite 'vous' for one woman, so feminine singular 'invitée'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "38ced0c5a58217e173f381b4",
+      "itemId": "claude-w-agreement-19",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'quelque' before an adjective is an adverb and invariable.",
+          "b": "Wrong: the subject 'les réviseurs' requires plural 'doivent'.",
+          "c": "Correct: invariable adverb 'quelque' + adjective + que + subjunctive, and plural 'doivent'.",
+          "d": "Wrong: 'quel que' is used only directly before être, not before an adjective."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "9120961522378937491e8e95",
+      "itemId": "claude-w-agreement-20",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'eux-mêmes' is plural like 'eux', and the participle with avoir and a following COD is invariable.",
+          "b": "Wrong: 'même' agrees in number with the plural pronoun.",
+          "c": "Wrong: the COD follows the participle, so 'suivi' is invariable.",
+          "d": "Wrong: 'directeurs généraux' is masculine."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "da0eccc9777def87d01c077b",
+      "itemId": "claude-w-agreement-21",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'se' is an indirect object (permettre à soi), so no agreement.",
+          "b": "Wrong: no agreement, and the number is wrong too.",
+          "c": "Wrong: the subject is plural.",
+          "d": "Correct: 'se sont permis de': 'se' is an indirect object, so the participle is invariable."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "4bd265666e7da2a5d5944e24",
+      "itemId": "claude-w-agreement-22",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'approuvées' is a passive participle agreeing with 'factures', correctly.",
+          "b": "Wrong: 'plusieurs factures' is plural, so 'avaient' is correct.",
+          "c": "Correct: in 'se rendre compte', 'compte' is the COD and 'se' indirect, so 'rendu' is invariable.",
+          "d": "Wrong: the present participle 'détenant' is invariable."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "a8436d131ffabffbe016c9c5",
+      "itemId": "claude-w-agreement-23",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: subjects of different persons joined by 'ni… ni' take the plural, and the first person wins: 'ni elle ni moi ne pourrons'.",
+          "b": "Wrong: third-person singular ignores the first-person 'moi'.",
+          "c": "Wrong: 'nous vous transmettrons' is already correct.",
+          "d": "Wrong: 'commentaires' is masculine, so 'écrits' is correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "88cbde46a93cc6f271d50fc9",
+      "itemId": "claude-w-agreement-24",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: a simple colour adjective agrees, so 'jaunes' is correct.",
+          "b": "Correct: compound colour adjectives ('bleu foncé') are invariable.",
+          "c": "Wrong: 'livrables' is masculine.",
+          "d": "Wrong: 'en attente' is an invariable prepositional phrase."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "25b742551c8d16e5b0e8ad76",
+      "itemId": "claude-w-agreement-25",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'cents' keeps its 's' when multiplied and not followed by another numeral.",
+          "b": "Wrong: 'organisée' correctly agrees with 'journée'.",
+          "c": "Wrong: 'participer' takes no direct object, so 'participé' is invariable.",
+          "d": "Correct: 'quelque' meaning 'about' before a numeral is an invariable adverb."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "630c89c7ea77aafe224fdfcc",
+      "itemId": "claude-w-agreement-26",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Correct: 'quatre-vingts' takes an 's' when multiplied and not followed by another numeral.",
+          "b": "Wrong: 'vingt et une' agrees with the feminine 'demandes'.",
+          "c": "Wrong: 'demandes' is feminine, so 'acceptées' is correct.",
+          "d": "Wrong: the COD follows the participle, so 'présenté' is invariable."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "b13814d211a3b7bb04be9ebc",
+      "itemId": "claude-w-agreement-27",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'leurs identifiants' correctly agrees with the plural possessor and plural noun.",
+          "b": "Wrong: with avoir and no preceding direct object, 'reçu' stays invariable.",
+          "c": "Right: the indirect object pronoun 'leur' never takes an s.",
+          "d": "Wrong: 'puissent' correctly agrees with the plural subject 'ils'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "0d4f5b68bba3bac7e863d155",
+      "itemId": "claude-w-agreement-28",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'destinés' correctly agrees with 'messages' (masculine plural).",
+          "b": "Wrong: after 'afin de' the infinitive 'harmoniser' is required.",
+          "c": "Right: in 'se parler' the pronoun is an indirect object (parler à), so the participle stays invariable: 'se sont parlé'.",
+          "d": "Wrong: 'régionaux' correctly agrees with 'médias' (masculine plural)."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "24cb9b38b5b1796c22395bb6",
+      "itemId": "claude-w-agreement-29",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: the subject 'conseillères' is feminine, so the masculine plural is still incorrect.",
+          "b": "Right: 's'absenter' is essentially pronominal, so the participle agrees with the feminine plural subject: 'absentées'.",
+          "c": "Wrong: 'offert' correctly agrees with 'l'atelier' (masculine singular).",
+          "d": "Wrong: after 'pour' the infinitive 'assister' is required."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "7a13f319d8c14ce69a52513d",
+      "itemId": "claude-w-agreement-30",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'se consacrer' has 'se' as direct object, so 'consacrée' correctly agrees with 'l'équipe'.",
+          "b": "Wrong: 'survenu' correctly agrees with 'l'incident' (masculine).",
+          "c": "Wrong: 'diffusées' correctly agrees with 'consignes' (feminine plural).",
+          "d": "Right: adverbial 'tout' (meaning 'entirely') stays invariable before a feminine adjective beginning with a vowel: 'tout entière'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "ca2b66352452e79414eb49b2",
+      "itemId": "claude-w-agreement-31",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'questions' is feminine, so 'toutes' is correct.",
+          "b": "Right: after 'c'est moi qui', the verb agrees with 'moi' in the first person: 'qui ai préparé'.",
+          "c": "Wrong: the subject is 'vous', so 'pouvez' is correct.",
+          "d": "Wrong: 'concernant' is used as an invariable preposition here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "276aff5586158de8a30f4005",
+      "itemId": "claude-w-agreement-32",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: placed after the noun it qualifies, 'ci-joint' agrees: 'les deux formulaires ci-joints'.",
+          "b": "Wrong: with avoir and the direct object 'votre demande' placed after, 'reçu' stays invariable.",
+          "c": "Wrong: after 'veuillez ... et nous les', an infinitive 'retourner' is required, not a participle.",
+          "d": "Wrong: 'les' (the forms) is the direct object of 'retourner'; 'leur' would be an incorrect indirect object."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "a5d440593588a30353980c23",
+      "itemId": "claude-w-agreement-33",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'se déclarer' has 'se' as direct object, so 'déclarée' correctly agrees with 'la sous-ministre'.",
+          "b": "Wrong: 'accomplis' correctly agrees with 'progrès' (masculine plural).",
+          "c": "Right: the attribute adjective must agree with 'la sous-ministre': 'satisfaite'.",
+          "d": "Wrong: 'présenté' correctly agrees with 'le prochain bilan' (masculine)."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "543686fb832a8a9a9d4b6853",
+      "itemId": "claude-w-prepositions-and-government-01",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'se rappeler' takes a direct object in careful usage; 'se rappeler de quelque chose' is criticized.",
+          "b": "Right: 'se souvenir de quelque chose' is the correct construction.",
+          "c": "Wrong: 'se souvenir' requires the preposition 'de' before its complement.",
+          "d": "Wrong: 'se souvenir à' is not a French construction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "c5b25d80fbe7357419b90651",
+      "itemId": "claude-w-prepositions-and-government-02",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong in the target register: 'être en charge de' is a calque of 'in charge of' that GC style guides advise against.",
+          "b": "Wrong: 'responsable pour' is an anglicism; the construction is 'responsable de'.",
+          "c": "Wrong: 'chargé' governs 'de', not 'à', for a responsibility.",
+          "d": "Right: 'être chargée de' is the standard construction for an assigned responsibility."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "571a4821642b60fb0009d342",
+      "itemId": "claude-w-prepositions-and-government-03",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: 'suite à' is a criticized usage in careful administrative writing; GC guides prescribe 'à la suite de'.",
+          "b": "Wrong: 'avant ou le' is a calque of 'on or before' and is itself an error.",
+          "c": "Wrong: 'révisées' correctly agrees with 'descriptions' (feminine plural).",
+          "d": "Wrong: the adverb is 'conformément à', not 'conformément avec'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "10c125f93a4f193c7caeef78",
+      "itemId": "claude-w-prepositions-and-government-04",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'consister à' introduces an infinitive, not a noun phrase.",
+          "b": "Wrong: 'consister de' is an anglicism (consist of).",
+          "c": "Right: 'consister en' introduces a noun phrase ('une réduction progressive').",
+          "d": "Wrong: 'consister sur' is not a French construction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "33cf8812de62db0f6d6aaf70",
+      "itemId": "claude-w-prepositions-and-government-05",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.88,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: 'au chapitre de' is the idiomatic administrative expression for 'with respect to'.",
+          "b": "Wrong in register: figurative 'au niveau de' meaning 'regarding' is criticized by GC style guides.",
+          "c": "Wrong: the locution is 'au chapitre de', not 'au chapitre à'.",
+          "d": "Wrong in register: 'en termes de' meaning 'in terms of' is a criticized anglicism."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6e2ba714f0f6ce24cbd64325",
+      "itemId": "claude-w-prepositions-and-government-06",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'qui s'est tenue' correctly agrees with 'la séance'.",
+          "b": "Wrong: 'séance d'information sur' is the correct construction.",
+          "c": "Right: 'assister' in the sense of attending requires 'à': 'ont assisté à la séance'.",
+          "d": "Wrong: 'mardi dernier' takes no preposition."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "25607bae7441180ed2d19fbc",
+      "itemId": "claude-w-prepositions-and-government-07",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'participer dans' is an anglicism.",
+          "b": "Wrong: 'participer' requires 'à' before its complement.",
+          "c": "Wrong: 'participer de' means 'to partake of the nature of', not to attend.",
+          "d": "Right: 'participer à la séance' is the correct construction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "6d51687da6fde359ab2647df",
+      "itemId": "claude-w-prepositions-and-government-08",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'dans deux semaines' refers to a point in the future, which contradicts the past action.",
+          "b": "Right: 'en deux semaines' expresses the time taken to complete the action.",
+          "c": "Wrong: 'depuis deux semaines' implies an ongoing action, inconsistent with the completed migration.",
+          "d": "Wrong: 'pour deux semaines' expresses an intended duration and is not idiomatic here."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "dc46d08115645f6dc3107b0e",
+      "itemId": "claude-w-prepositions-and-government-09",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'éviter que' requires the subjunctive 'se reproduise'.",
+          "b": "Wrong: 'la dernière année' is a calque; 'l'an dernier' is correct.",
+          "c": "Right: 'se rappeler' takes a direct object: 'Je me rappelle la panne'.",
+          "d": "Wrong: the correct form is 'à l'automne', not 'en l'automne'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "658b2162d39ef775645f3f8e",
+      "itemId": "claude-w-prepositions-and-government-10",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: 's'attendre à ce que' plus the subjunctive is the correct construction.",
+          "b": "Wrong: 's'attendre de ce que' is not standard.",
+          "c": "Wrong: 'à que' is ungrammatical; 'à ce que' is required.",
+          "d": "Wrong: 'attendre' without the pronoun has a different meaning, and 'attend à ce que' is ungrammatical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "4c55de8fddc3ba2f4920bfe3",
+      "itemId": "claude-w-prepositions-and-government-11",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: masculine provinces starting with a consonant take 'au', not 'en'.",
+          "b": "Wrong: cities take 'à', not 'en'.",
+          "c": "Wrong: provinces take 'au' or 'en', not 'à'.",
+          "d": "Right: 'à Moncton' (city) and 'au Nouveau-Brunswick' (masculine province) are both correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "4c3a085aa3480967aeab4066",
+      "itemId": "claude-w-prepositions-and-government-12",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'en Ontario' is correct (vowel-initial province).",
+          "b": "Right: cities take 'à': 'à Ottawa'.",
+          "c": "Wrong: after 'faire' the infinitive is required.",
+          "d": "Wrong: 'en ligne' is the correct expression."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "1284fed223f18e83779f532e",
+      "itemId": "claude-w-prepositions-and-government-13",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'consister en' introduces a noun phrase, not an infinitive.",
+          "b": "Wrong: 'consister de' is an anglicism.",
+          "c": "Right: 'consister à' introduces the infinitive 'formuler'.",
+          "d": "Wrong: 'consister pour' is not a French construction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "eeb1750a800da50847256177",
+      "itemId": "claude-w-prepositions-and-government-14",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'sous l'article' is a calque of 'under section'; legal French uses 'en vertu de'.",
+          "b": "Right: 'en vertu de l'article 7' is the standard legal and administrative construction.",
+          "c": "Wrong: the locution is 'en vertu de', not 'en vertu à'.",
+          "d": "Wrong: 'en fonction de' means 'depending on' and does not express legal authority."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "2dc3136739a2de139d1b18dd",
+      "itemId": "claude-w-prepositions-and-government-15",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'obvier sur' is not a French construction.",
+          "b": "Wrong: 'assorti de' is correct; 'assorti avec' is not the right construction here.",
+          "c": "Wrong: 'hebdomadaire' correctly agrees with 'suivi' (singular).",
+          "d": "Right: 'obvier' is transitive indirect: 'obvier aux retards'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "10460ced2a146d50cdb41eca",
+      "itemId": "claude-w-prepositions-and-government-16",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: 'faire face à' plus a complement is the correct construction.",
+          "b": "Wrong: 'faire face' requires 'à' before its complement.",
+          "c": "Wrong: 'faire face avec' is not a French construction.",
+          "d": "Wrong: 'faire face contre' is not a French construction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "00ce4a34173d431aa48b8f38",
+      "itemId": "claude-w-prepositions-and-government-17",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.98,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'se conformer avec' is incorrect; the verb governs 'à'.",
+          "b": "Wrong: the verb is pronominal in this sense ('se conformer').",
+          "c": "Right: 'se conformer aux consignes' is the correct construction.",
+          "d": "Wrong: 'se conformer de' is not a French construction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "4b1f4efa258a82d5802ef3ce",
+      "itemId": "claude-w-prepositions-and-government-18",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'en consigne les résultats' (the results of the inspection) is correct; 'y' would be the wrong pronoun.",
+          "b": "Wrong: 'l'inspection des lieux' is correct.",
+          "c": "Wrong: 'consigner dans un registre' is correct.",
+          "d": "Right: 'responsable pour' is an anglicism; the correct form is 'responsable de'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "c44c176ce8ffc55beae5193a",
+      "itemId": "claude-w-prepositions-and-government-19",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.94,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'satisfaire avec' is not a French construction.",
+          "b": "Right: 'satisfaire à des exigences' is the standard construction in procurement French.",
+          "c": "Wrong: 'satisfaire de' is not the construction for meeting requirements.",
+          "d": "Wrong: 'répondre' requires 'à' ('ne répond pas à'), so the bare form is ungrammatical."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "df740471ba4183b068a56d7c",
+      "itemId": "claude-w-prepositions-and-government-20",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.9,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: 'conformément aux critères' is the precise standard construction.",
+          "b": "Wrong in nuance and register: 'en lien avec' only means 'related to' and does not express compliance with the criteria.",
+          "c": "Wrong: the adverb is 'conformément à', not 'conformément avec'.",
+          "d": "Wrong: the locution is 'dans le respect des', not 'dans le respect avec'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "6bc5ade793143ef362db2cd6",
+      "itemId": "claude-w-prepositions-and-government-21",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'relatif à' is the correct construction.",
+          "b": "Wrong: 'sur réception de' is the fixed expression; adding the article is not the error being tested and is less idiomatic.",
+          "c": "Right: 'à compter de' requires 'de': 'à compter du 1er avril'.",
+          "d": "Wrong: 's'appliquer à' is the correct construction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "a9f4585201768bee01149d09",
+      "itemId": "claude-w-prepositions-and-government-22",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.92,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong in register: 'suite à' is criticized in careful administrative writing.",
+          "b": "Wrong: 'dû à' used as a prepositional locution is a criticized anglicism, and it gives a causal rather than temporal meaning.",
+          "c": "Wrong: the locution is 'à la suite de', not 'à la suite à'.",
+          "d": "Right: 'À la suite de' is the standard prepositional locution."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "7be516d74c085c00b3811e03",
+      "itemId": "claude-w-prepositions-and-government-23",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'quant' requires 'à': 'quant au'.",
+          "b": "Right: 'quant au calendrier' is correct.",
+          "c": "Wrong: 'en ce qui a trait' requires 'à': 'en ce qui a trait au'.",
+          "d": "Wrong: 'en ce qui concerne' takes a direct complement, without 'de'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "a7c23bf18cdabaa36d53eeb5",
+      "itemId": "claude-w-prepositions-and-government-24",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: 'différent' governs 'de': 'différent de celui'.",
+          "b": "Wrong: 's'adressaient' correctly agrees with 'publications' (plural).",
+          "c": "Wrong: 's'adresser à' is correct; 'pour' would be wrong.",
+          "d": "Wrong: 'adopté dans cette campagne' is correct."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "c3f75bb6742f590fdc1a98eb",
+      "itemId": "claude-w-prepositions-and-government-25",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'au plus tard au 15 mars' is not standard; the date takes 'le'.",
+          "b": "Wrong: 'avant ou le' is a calque of 'on or before'.",
+          "c": "Right: 'au plus tard le 15 mars' is the standard construction.",
+          "d": "Wrong in register: 'pas plus tard que' is a calque of 'no later than'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "f9c74e65d2a1fc7fade9847e",
+      "itemId": "claude-w-prepositions-and-government-26",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong in register: 'dépendamment de' is a criticized regionalism not used in formal writing.",
+          "b": "Wrong: the locution is 'en fonction de', not 'en fonction à'.",
+          "c": "Wrong: 'en relation des' is not a French construction.",
+          "d": "Right: 'en fonction des ressources' is the standard construction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "1928ffda3dfaf737e1e07fdb",
+      "itemId": "claude-w-prepositions-and-government-27",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong in nuance: 'en rapport avec' means 'related to', not 'compared with'.",
+          "b": "Right: 'par rapport à' expresses a comparison with the previous year.",
+          "c": "Wrong: 'rapport à' without 'par' is familiar and incorrect in this register.",
+          "d": "Wrong: 'en rapport à' is not standard."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "b6b56b5829def1f1a6e4b6c7",
+      "itemId": "claude-w-prepositions-and-government-28",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong in register: 'vis-à-vis' requires 'de' in careful writing ('vis-à-vis des').",
+          "b": "Wrong: the locution is 'à l'égard de', not 'à l'égard à'.",
+          "c": "Right: 'à l'égard des employés' is the standard construction.",
+          "d": "Wrong in register: figurative 'au niveau de' is criticized."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "d45e1331b3e5d0a8b1b31be1",
+      "itemId": "claude-w-prepositions-and-government-29",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: 'dans les dix jours ouvrables suivant' expresses a deadline window.",
+          "b": "Wrong: 'en dix jours ouvrables suivant' is not idiomatic.",
+          "c": "Wrong: 'dans dix jours' means 'ten days from now', and does not combine with 'suivant'.",
+          "d": "Wrong in register: 'en dedans de' is a familiar Quebec usage."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "d51244611afa0517732eeb53",
+      "itemId": "claude-w-prepositions-and-government-30",
+      "verdict": {
+        "chosenKey": "d",
+        "confidence": 0.96,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: in 'se dire fière', 'se' is the direct object, so 'dite' agrees with the feminine subject.",
+          "b": "Wrong: 'conformes' correctly agrees with 'documents' (plural).",
+          "c": "Wrong: 'conforme aux normes' is correct.",
+          "d": "Right: 'fier' governs 'de': 'fière du travail'."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "B"
+      }
+    },
+    {
+      "requestHash": "37ca3284ccfd42416a265b85",
+      "itemId": "claude-w-prepositions-and-government-31",
+      "verdict": {
+        "chosenKey": "c",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong: 'remédier' requires 'à' before its complement.",
+          "b": "Wrong: 'remédier sur' is not a French construction.",
+          "c": "Right: 'remédier à la hausse' is the correct construction.",
+          "d": "Wrong: 'pallier' is transitive direct; 'pallier à' is criticized."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "259ade2b3cb7eef880551276",
+      "itemId": "claude-w-prepositions-and-government-32",
+      "verdict": {
+        "chosenKey": "b",
+        "confidence": 0.95,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Wrong in register: 'se fier sur' is a regional usage that is not accepted in careful writing.",
+          "b": "Right: 'se fier au calculateur' is the standard construction.",
+          "c": "Wrong: 'se confier à' means to confide in someone.",
+          "d": "Wrong: 'se fier de' is not a French construction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    },
+    {
+      "requestHash": "5214d136aa45fe9db9fe0a37",
+      "itemId": "claude-w-prepositions-and-government-33",
+      "verdict": {
+        "chosenKey": "a",
+        "confidence": 0.97,
+        "defensibleDistractors": [],
+        "optionCases": {
+          "a": "Right: 'pallier' is transitive direct: 'pallier le manque'.",
+          "b": "Wrong: 'procéder à l'installation' is correct.",
+          "c": "Wrong: this keeps the incorrect 'pallier à' and needlessly pluralizes 'manque'.",
+          "d": "Wrong: 'manque de' is the correct construction."
+        },
+        "registerFlag": {
+          "flagged": false
+        },
+        "estimatedBand": "C"
+      }
+    }
+  ]
+}

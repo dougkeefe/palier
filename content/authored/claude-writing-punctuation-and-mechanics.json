@@ -1,0 +1,2192 @@
+{
+  "items": [
+    {
+      "id": "claude-w-punctuation-and-mechanics-01",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le budget de fonctionnement approuvé pour la Direction générale des services ministériels s'élève à ___ pour le prochain exercice.",
+        "en": "The approved operating budget for the Corporate Services Branch amounts to ___ for the next fiscal year."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "1,250,000 $",
+          "rationale": {
+            "fr": "La virgule comme séparateur de milliers est un usage anglais. En français, la virgule marque la décimale : « 1,250,000 » est donc fautif.",
+            "en": "Commas as thousands separators are English usage. In French the comma marks the decimal, so « 1,250,000 » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "1 250 000 $",
+          "rationale": {
+            "fr": "Les tranches de trois chiffres sont séparées par une espace et le symbole $ suit le nombre, précédé d'une espace. C'est la forme attendue en français canadien.",
+            "en": "Groups of three digits are separated by a space and the $ sign follows the number, preceded by a space. This is the expected form in Canadian French."
+          }
+        },
+        {
+          "id": "c",
+          "text": "$1 250 000",
+          "rationale": {
+            "fr": "Le symbole $ placé devant le nombre est un usage anglais ; en français, il se place après le nombre.",
+            "en": "Placing the $ sign before the number is English usage; in French it goes after the number."
+          }
+        },
+        {
+          "id": "d",
+          "text": "1.250.000 $",
+          "rationale": {
+            "fr": "Le point n'est pas un séparateur de milliers en français canadien ; on y emploie l'espace. Cette graphie est fautive.",
+            "en": "The period is not a thousands separator in Canadian French, which uses a space. This spelling is wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans un texte français, les grands nombres s'écrivent par tranches de trois chiffres séparées par une espace (12 500 ; 1 250 000), jamais par une virgule ni par un point, puisque la virgule est réservée à la partie décimale (3,5). Le symbole du dollar se place après le nombre, séparé de lui par une espace : 1 250 000 $.",
+        "en": "In a French text, large numbers are written in groups of three digits separated by a space (12 500; 1 250 000), never by a comma or a period, since the comma is reserved for the decimal part (3,5). The dollar sign goes after the number, separated from it by a space: 1 250 000 $."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-02",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Les entrevues pour le poste d'agente de dotation se tiendront ___, dans la salle de conférence du troisième étage.",
+        "en": "Interviews for the staffing officer position will be held ___, in the conference room on the third floor."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "mardi le 12 mai",
+          "rationale": {
+            "fr": "L'ordre « mardi le 12 mai » est un calque de l'anglais ; en français, l'article précède le nom du jour : « le mardi 12 mai ».",
+            "en": "The order « mardi le 12 mai » is a calque of English; in French the article comes before the day name: « le mardi 12 mai »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "le Mardi, 12 mai",
+          "rationale": {
+            "fr": "Le nom du jour prend une majuscule et une virgule le sépare de la date, deux usages anglais ; cette graphie est fautive.",
+            "en": "The day name is capitalised and a comma separates it from the date, two English habits; this spelling is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "le mardi 12 de mai",
+          "rationale": {
+            "fr": "La préposition « de » n'a pas sa place entre le quantième et le mois ; on écrit « le 12 mai ».",
+            "en": "The preposition « de » has no place between the day number and the month; one writes « le 12 mai »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "le mardi 12 mai",
+          "rationale": {
+            "fr": "Article, nom du jour, quantième et mois, sans virgule ni préposition et tout en minuscules : c'est la forme attendue.",
+            "en": "Article, day name, day number and month, with no comma or preposition and all in lowercase: this is the expected form."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "En français, une date complète s'écrit dans l'ordre article, nom du jour, quantième, mois : le mardi 12 mai. On ne met ni virgule entre le jour et le quantième ni préposition devant le mois, et la tournure « mardi le 12 mai » est un calque de l'anglais. Les noms de jours et de mois sont des noms communs : ils s'écrivent avec une minuscule.",
+        "en": "In French, a full date is written in the order article, day name, day number, month: le mardi 12 mai. No comma goes between the day and the number, no preposition before the month, and the turn « mardi le 12 mai » is a calque of English. Day and month names are common nouns: they are written in lowercase."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-03",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "En raison d'une mise à niveau des serveurs, le portail des employés sera inaccessible vendredi à compter de ___.",
+        "en": "Because of a server upgrade, the employee portal will be unavailable on Friday from ___ onward."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "18 h 30",
+          "rationale": {
+            "fr": "Le symbole h est séparé des chiffres par une espace de chaque côté et les minutes suivent sans autre symbole. C'est la notation prescrite dans un texte suivi.",
+            "en": "The symbol h is separated from the digits by a space on each side and the minutes follow with no further symbol. This is the prescribed notation in running text."
+          }
+        },
+        {
+          "id": "b",
+          "text": "18h30",
+          "rationale": {
+            "fr": "Graphie répandue, mais fautive selon l'usage de l'administration fédérale : le symbole h doit être séparé des chiffres par une espace de chaque côté.",
+            "en": "A widespread spelling, but wrong in federal government usage: the symbol h must be separated from the digits by a space on each side."
+          }
+        },
+        {
+          "id": "c",
+          "text": "18 h. 30",
+          "rationale": {
+            "fr": "« h » est un symbole et non une abréviation : il ne prend jamais de point.",
+            "en": "« h » is a symbol, not an abbreviation: it never takes a period."
+          }
+        },
+        {
+          "id": "d",
+          "text": "18:30 h",
+          "rationale": {
+            "fr": "Ce mélange de deux notations est fautif : le deux-points, réservé aux tableaux et aux horaires, ne se combine pas avec le symbole h.",
+            "en": "This mix of two notations is wrong: the colon, reserved for tables and schedules, is not combined with the symbol h."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans un texte suivi, l'heure s'écrit selon le système de 24 heures avec le symbole h, sans point, séparé des chiffres par une espace : 9 h, 13 h 30, 18 h 30. On n'ajoute pas « min » après les minutes et on ne combine pas le symbole h avec le deux-points, qui est réservé aux tableaux et aux horaires.",
+        "en": "In running text, the time is written on the 24-hour clock with the symbol h, without a period, separated from the digits by a space: 9 h, 13 h 30, 18 h 30. « min » is not added after the minutes, and the symbol h is not combined with the colon, which is reserved for tables and schedules."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-04",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Si vous relevez une anomalie dans le calcul de votre rémunération rétroactive, ___ dans les meilleurs délais au moyen du formulaire électronique prévu à cet effet.",
+        "en": "If you notice an anomaly in the calculation of your retroactive pay, ___ as soon as possible using the electronic form provided for that purpose."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "signalez-la nous",
+          "rationale": {
+            "fr": "Le verbe est bien relié au premier pronom, mais le trait d'union manque entre les deux pronoms compléments. À l'impératif affirmatif, chaque pronom est rattaché par un trait d'union.",
+            "en": "The verb is linked to the first pronoun, but the hyphen between the two object pronouns is missing. In the affirmative imperative, each pronoun is attached with a hyphen."
+          }
+        },
+        {
+          "id": "b",
+          "text": "signalez la-nous",
+          "rationale": {
+            "fr": "Les deux pronoms sont reliés entre eux, mais le premier n'est pas rattaché au verbe ; la graphie est incomplète et fautive.",
+            "en": "The two pronouns are linked to each other, but the first is not attached to the verb; the spelling is incomplete and wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "signalez-la-nous",
+          "rationale": {
+            "fr": "À l'impératif affirmatif, les pronoms compléments placés après le verbe s'y rattachent par des traits d'union, y compris entre eux. C'est la graphie attendue.",
+            "en": "In the affirmative imperative, object pronouns placed after the verb are attached to it with hyphens, including between themselves. This is the expected spelling."
+          }
+        },
+        {
+          "id": "d",
+          "text": "signalez la nous",
+          "rationale": {
+            "fr": "Sans aucun trait d'union, les pronoms paraissent détachés du verbe ; à l'impératif affirmatif, cette graphie est fautive.",
+            "en": "With no hyphen at all, the pronouns look detached from the verb; in the affirmative imperative this spelling is wrong."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "À l'impératif affirmatif, les pronoms personnels compléments se placent après le verbe et s'y rattachent par des traits d'union, y compris entre eux : envoyez-le-moi, transmettez-les-nous, signalez-la-nous. À l'impératif négatif, les pronoms précèdent le verbe et il n'y a aucun trait d'union : ne nous la signalez pas.",
+        "en": "In the affirmative imperative, object pronouns go after the verb and are attached to it with hyphens, including between themselves: envoyez-le-moi, transmettez-les-nous, signalez-la-nous. In the negative imperative, the pronouns precede the verb and there are no hyphens: ne nous la signalez pas."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-05",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le présent document constitue ___ rapport d'étape sur la mise en œuvre de la stratégie ministérielle de développement durable.",
+        "en": "This document constitutes ___ progress report on the implementation of the departmental sustainable development strategy."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "l'onzième",
+          "rationale": {
+            "fr": "« Onzième », comme « onze », n'entraîne pas l'élision de l'article : on écrit « le onzième », comme « le onze ». L'apostrophe est fautive.",
+            "en": "« Onzième », like « onze », does not trigger elision of the article: one writes « le onzième », like « le onze ». The apostrophe is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "le 11ième",
+          "rationale": {
+            "fr": "L'ordinal abrégé s'écrit avec un simple « e » (11e) ; la terminaison « ième » est fautive.",
+            "en": "The abbreviated ordinal is written with a single « e » (11e); the ending « ième » is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "le onzième",
+          "rationale": {
+            "fr": "L'article ne s'élide pas devant « onzième » : « le onzième rapport ». C'est la forme attendue.",
+            "en": "The article is not elided before « onzième »: « le onzième rapport ». This is the expected form."
+          }
+        },
+        {
+          "id": "d",
+          "text": "l'11e",
+          "rationale": {
+            "fr": "L'abréviation « 11e » est bien formée, mais l'article ne s'élide pas devant « onzième », qu'il soit écrit en lettres ou en chiffres.",
+            "en": "The abbreviation « 11e » is well formed, but the article is not elided before « onzième », whether written in letters or in figures."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Devant « onze » et « onzième », l'article et la préposition ne s'élident pas : le onzième rapport, du onzième rapport, la séance du onze. Par ailleurs, l'ordinal abrégé s'écrit avec « e » seulement (2e, 11e) et, pour « premier » et « première », avec « er » et « re » (1er, 1re) ; les terminaisons « ième » et « ème » sont fautives.",
+        "en": "Before « onze » and « onzième », the article and preposition are not elided: le onzième rapport, du onzième rapport, la séance du onze. Also, the abbreviated ordinal is written with « e » alone (2e, 11e) and, for « premier » and « première », with « er » and « re » (1er, 1re); the endings « ième » and « ème » are wrong."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-06",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le site Web doit offrir des solutions de rechange aux contenus non textuels (___ une description pour chaque image et des sous-titres pour chaque vidéo).",
+        "en": "The website must offer alternatives to non-text content (___ a description for each image and captions for each video)."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "p. ex.",
+          "rationale": {
+            "fr": "« Par exemple » s'abrège en « p. ex. » : un point après chaque élément abrégé et une espace entre les deux. C'est la forme attendue.",
+            "en": "« Par exemple » is abbreviated « p. ex. »: a period after each shortened element and a space between them. This is the expected form."
+          }
+        },
+        {
+          "id": "b",
+          "text": "p.ex",
+          "rationale": {
+            "fr": "Il manque l'espace entre les deux éléments ainsi que le point qui doit suivre « ex » ; l'abréviation est mal formée.",
+            "en": "The space between the two elements is missing, as is the period that must follow « ex »; the abbreviation is malformed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "e.g.",
+          "rationale": {
+            "fr": "Abréviation latine propre à l'anglais ; elle n'a pas cours dans un texte français.",
+            "en": "A Latin abbreviation specific to English; it is not used in a French text."
+          }
+        },
+        {
+          "id": "d",
+          "text": "par. ex.",
+          "rationale": {
+            "fr": "« Par » est ici un mot complet : il ne prend pas de point abréviatif. Cette graphie est fautive.",
+            "en": "« Par » is a whole word here: it takes no abbreviation period. This spelling is wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Par exemple » s'abrège en « p. ex. ». On met un point abréviatif après chaque élément tronqué et une espace entre les éléments ; un mot écrit en entier ne prend pas de point. L'abréviation anglaise « e.g. » est à proscrire en français. Dans le corps du texte, on préfère d'ailleurs écrire « par exemple » en toutes lettres et réserver « p. ex. » aux parenthèses, aux notes et aux tableaux.",
+        "en": "« Par exemple » is abbreviated « p. ex. ». A period follows each shortened element and a space separates the elements; a word written in full takes no period. The English abbreviation « e.g. » is to be avoided in French. In running text, « par exemple » is in fact preferred in full, with « p. ex. » kept for parentheses, notes and tables."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-07",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Parmi les employés qui ont réussi l'évaluation de langue seconde l'an dernier, ___ ont demandé à suivre une formation de maintien des acquis.",
+        "en": "Among the employees who passed the second language evaluation last year, ___ have asked to take language maintenance training."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "quelques uns",
+          "rationale": {
+            "fr": "Le pronom indéfini s'écrit avec un trait d'union ; sans lui, la graphie est fautive.",
+            "en": "The indefinite pronoun is written with a hyphen; without it, the spelling is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "quelqu'uns",
+          "rationale": {
+            "fr": "Cette graphie mêle le singulier « quelqu'un » et le pluriel ; le pronom pluriel est « quelques-uns ». Elle est fautive.",
+            "en": "This spelling mixes the singular « quelqu'un » with the plural; the plural pronoun is « quelques-uns ». It is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "quelques-un",
+          "rationale": {
+            "fr": "Le trait d'union est présent, mais le second élément doit lui aussi porter la marque du pluriel : « quelques-uns ».",
+            "en": "The hyphen is there, but the second element must also carry the plural ending: « quelques-uns »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "quelques-uns",
+          "rationale": {
+            "fr": "Le pronom indéfini pluriel s'écrit avec un trait d'union et un « s » à chacun de ses éléments. C'est la forme attendue.",
+            "en": "The plural indefinite pronoun is written with a hyphen and an « s » on each element. This is the expected form."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le pronom indéfini « quelques-uns » (au féminin, « quelques-unes ») s'écrit avec un trait d'union et prend la marque du pluriel à ses deux éléments. Il ne faut pas le confondre avec le singulier « quelqu'un », qui s'écrit en un seul mot, avec élision.",
+        "en": "The indefinite pronoun « quelques-uns » (feminine « quelques-unes ») is written with a hyphen and takes the plural ending on both elements. It must not be confused with the singular « quelqu'un », which is written as one word, with elision."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-08",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Compte tenu des économies réalisées au cours du dernier trimestre, l'excédent budgétaire prévu atteindrait environ ___, sous réserve de l'approbation du dirigeant principal des finances.",
+        "en": "Given the savings achieved during the last quarter, the forecast budget surplus would reach approximately ___, subject to the chief financial officer's approval."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "1.25 million de dollars",
+          "rationale": {
+            "fr": "Le point décimal est un usage anglais. En français, la partie décimale est séparée par une virgule.",
+            "en": "The decimal point is English usage. In French, the decimal part is separated by a comma."
+          }
+        },
+        {
+          "id": "b",
+          "text": "1,25 million de dollars",
+          "rationale": {
+            "fr": "Virgule décimale, « million » au singulier parce que le nombre est inférieur à deux, et « de dollars » en toutes lettres après le nom « million ». C'est la forme attendue.",
+            "en": "Decimal comma, « million » in the singular because the number is below two, and « de dollars » in full after the noun « million ». This is the expected form."
+          }
+        },
+        {
+          "id": "c",
+          "text": "1,25 millions de dollars",
+          "rationale": {
+            "fr": "« Million » est un nom qui ne prend la marque du pluriel qu'à partir de deux ; avec 1,25, il reste au singulier.",
+            "en": "« Million » is a noun that takes the plural only from two upward; with 1,25 it stays singular."
+          }
+        },
+        {
+          "id": "d",
+          "text": "1,25 million de $",
+          "rationale": {
+            "fr": "Le symbole $ ne s'emploie qu'immédiatement après un nombre ; il ne peut suivre la préposition « de ». Il faut écrire « dollars » en toutes lettres.",
+            "en": "The $ sign is used only directly after a number; it cannot follow the preposition « de ». « Dollars » must be written out."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "En français, la virgule sépare la partie décimale (1,25 ; 3,5 %). « Million » et « milliard » sont des noms : ils se construisent avec « de » et ne prennent la marque du pluriel qu'à partir de deux (1,25 million de dollars, mais 2,5 millions de dollars). Le symbole $ suit directement un nombre (1 250 000 $) ; il ne s'emploie jamais après la préposition « de ».",
+        "en": "In French, the comma separates the decimal part (1,25; 3,5 %). « Million » and « milliard » are nouns: they take « de » and become plural only from two upward (1,25 million de dollars, but 2,5 millions de dollars). The $ sign directly follows a number (1 250 000 $); it is never used after the preposition « de »."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-09",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "En vertu de la politique ministérielle sur l'apprentissage, seuls les employés ___ pourront obtenir le remboursement de leurs frais de scolarité ; les autres devront présenter une nouvelle demande à l'automne.",
+        "en": "Under the departmental learning policy, only employees ___ will be able to obtain reimbursement of their tuition fees; the others will have to submit a new request in the fall."
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "qui ont terminé leur cours avant le 31 mars",
+          "rationale": {
+            "fr": "Sans virgules, la relative est déterminative : elle délimite le groupe d'employés visés, ce qu'exigent « seuls » et « les autres ». C'est la ponctuation attendue.",
+            "en": "Without commas, the relative clause is restrictive: it delimits the group of employees concerned, which « seuls » and « les autres » require. This is the expected punctuation."
+          }
+        },
+        {
+          "id": "b",
+          "text": ", qui ont terminé leur cours avant le 31 mars,",
+          "rationale": {
+            "fr": "Entre virgules, la relative devient explicative et s'appliquerait à tous les employés, ce qui contredit « seuls » et « les autres ». La ponctuation fausse le sens.",
+            "en": "Set off by commas, the relative clause becomes non-restrictive and would apply to all employees, contradicting « seuls » and « les autres ». The punctuation distorts the meaning."
+          }
+        },
+        {
+          "id": "c",
+          "text": ", qui ont terminé leur cours avant le 31 mars",
+          "rationale": {
+            "fr": "Une virgule isolée ouvre une incise qui ne se referme pas ; elle sépare ainsi le sujet de son verbe « pourront », ce qui est fautif.",
+            "en": "A lone comma opens an aside that is never closed; it thus separates the subject from its verb « pourront », which is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "qui, ont terminé leur cours avant le 31 mars",
+          "rationale": {
+            "fr": "La virgule sépare le pronom relatif sujet « qui » de son verbe « ont terminé » ; cette ponctuation est fautive.",
+            "en": "The comma separates the subject relative pronoun « qui » from its verb « ont terminé »; this punctuation is wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Une relative déterminative restreint l'antécédent (seuls certains employés sont visés) et ne se met pas entre virgules. Une relative explicative, encadrée de deux virgules, ajoute une précision qui vaut pour tout l'antécédent. Ici, « seuls » et « les autres » montrent qu'on distingue un sous-groupe : la relative est déterminative. Par ailleurs, une virgule isolée ne doit jamais séparer un sujet de son verbe.",
+        "en": "A restrictive relative clause narrows the antecedent (only certain employees are meant) and is not set off by commas. A non-restrictive relative clause, enclosed in two commas, adds information that applies to the whole antecedent. Here, « seuls » and « les autres » show that a subgroup is being singled out: the clause is restrictive. Also, a lone comma must never separate a subject from its verb."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-10",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "cloze",
+      "stem": {
+        "fr": "Le directeur des communications ministérielles ouvre ainsi une lettre officielle destinée à la ministre : « ___ J'ai l'honneur de vous transmettre le rapport sur les consultations publiques menées auprès des intervenants régionaux. »",
+        "en": "The director of departmental communications opens a formal letter to the minister as follows: « ___ J'ai l'honneur de vous transmettre le rapport sur les consultations publiques menées auprès des intervenants régionaux. »"
+      },
+      "blankIndex": 0,
+      "options": [
+        {
+          "id": "a",
+          "text": "Mme la Ministre,",
+          "rationale": {
+            "fr": "On n'abrège jamais « Madame » dans l'appel d'une lettre, où l'on s'adresse directement à la personne ; l'abréviation est fautive ici.",
+            "en": "« Madame » is never abbreviated in the salutation of a letter, where the person is addressed directly; the abbreviation is wrong here."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Madame Ministre,",
+          "rationale": {
+            "fr": "L'appel français garde l'article devant le titre : « Madame la Ministre ». La forme sans article calque l'anglais « Madam Minister ».",
+            "en": "The French salutation keeps the article before the title: « Madame la Ministre ». The form without the article copies the English « Madam Minister »."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Madame la Ministre,",
+          "rationale": {
+            "fr": "« Madame » en toutes lettres, article en minuscule, titre avec majuscule : c'est la formule d'appel attendue.",
+            "en": "« Madame » written out, lowercase article, capitalised title: this is the expected salutation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Madame la ministre Leclerc,",
+          "rationale": {
+            "fr": "Dans l'appel, on n'ajoute pas le nom de la personne après le titre, et le titre prend la majuscule puisqu'on s'adresse à elle ; la formule est fautive.",
+            "en": "In the salutation, the person's name is not added after the title, and the title takes a capital since she is being addressed; the formula is wrong."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Dans l'appel d'une lettre, on s'adresse directement à la personne : « Madame » et « Monsieur » s'écrivent en toutes lettres et le titre de fonction prend la majuscule (Madame la Ministre, Monsieur le Président), l'article est maintenu et le nom de la personne est omis. Dans le corps du texte, en revanche, le titre s'écrit avec une minuscule et « Madame » s'abrège devant un nom : la ministre a approuvé le rapport ; Mme Roy le présentera.",
+        "en": "In the salutation of a letter, the person is addressed directly: « Madame » and « Monsieur » are written out and the title takes a capital (Madame la Ministre, Monsieur le Président), the article is kept and the person's name is left out. In running text, by contrast, the title is lowercase and « Madame » is abbreviated before a name: la ministre a approuvé le rapport; Mme Roy le présentera."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-11",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le centre d'appels de la Direction générale des services aux clients sera ouvert…",
+        "en": "The call centre of the Client Services Branch will be open…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "du Lundi au Vendredi de 8 h à 17 h.",
+          "rationale": {
+            "fr": "Les heures sont bien écrites, mais les noms de jours prennent ici une majuscule calquée sur l'anglais ; elle est fautive en français.",
+            "en": "The times are well written, but the day names take a capital copied from English; it is wrong in French."
+          }
+        },
+        {
+          "id": "b",
+          "text": "du lundi au vendredi, de 8h à 17h.",
+          "rationale": {
+            "fr": "Les jours sont en minuscule, mais le symbole h est collé aux chiffres ; l'usage fédéral exige une espace de chaque côté.",
+            "en": "The days are lowercase, but the symbol h is attached to the digits; federal usage requires a space on each side."
+          }
+        },
+        {
+          "id": "c",
+          "text": "du lundi au vendredi, de 8 h. à 17 h.",
+          "rationale": {
+            "fr": "Le symbole h ne prend jamais de point ; « 8 h. » est fautif, et le point après « 17 h » ne peut être que le point final.",
+            "en": "The symbol h never takes a period; « 8 h. » is wrong, and the period after « 17 h » can only be the sentence's final period."
+          }
+        },
+        {
+          "id": "d",
+          "text": "du lundi au vendredi, de 8 h à 17 h.",
+          "rationale": {
+            "fr": "Jours en minuscule, symbole h sans point et séparé des chiffres par des espaces : la phrase respecte toutes les conventions.",
+            "en": "Lowercase days, symbol h without a period and separated from the digits by spaces: the sentence follows every convention."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les noms de jours s'écrivent avec une minuscule (du lundi au vendredi). Pour l'heure, on emploie le symbole h, sans point et précédé et suivi d'une espace : 8 h, 17 h, 13 h 30. On n'écrit pas « 8h » ni « 8 h. ».",
+        "en": "Day names are written in lowercase (du lundi au vendredi). For times, the symbol h is used, without a period and with a space before and after it: 8 h, 17 h, 13 h 30. One does not write « 8h » or « 8 h. »."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-12",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Selon le rapport trimestriel, le taux de conformité des fournisseurs aux nouvelles clauses contractuelles…",
+        "en": "According to the quarterly report, the rate of supplier compliance with the new contract clauses…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "est passé de 87.5 % à 92 %.",
+          "rationale": {
+            "fr": "Le point décimal est un usage anglais ; en français, la partie décimale est séparée par une virgule.",
+            "en": "The decimal point is English usage; in French the decimal part is separated by a comma."
+          }
+        },
+        {
+          "id": "b",
+          "text": "est passé de 87,5 %, à 92 %.",
+          "rationale": {
+            "fr": "La virgule placée entre « de 87,5 % » et « à 92 % » coupe sans raison les deux compléments de « passer de… à… » ; elle est fautive.",
+            "en": "The comma between « de 87,5 % » and « à 92 % » needlessly splits the two complements of « passer de… à… »; it is wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "est passé de 87,5 pourcent à 92 pourcent.",
+          "rationale": {
+            "fr": "La locution s'écrit en deux mots, « pour cent » ; la graphie soudée « pourcent » est fautive.",
+            "en": "The expression is written as two words, « pour cent »; the run-together « pourcent » is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "est passé de 87,5 % à 92 %.",
+          "rationale": {
+            "fr": "Virgule décimale, espace avant le symbole % et aucune virgule entre les deux compléments : c'est la formulation attendue.",
+            "en": "Decimal comma, space before the % sign and no comma between the two complements: this is the expected wording."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "En français, la partie décimale est séparée par une virgule (87,5) et le symbole % est précédé d'une espace : 92 %. Si l'on écrit en toutes lettres, on emploie la locution « pour cent », en deux mots. Enfin, on ne met pas de virgule entre les deux compléments d'une construction comme « passer de… à… ».",
+        "en": "In French, the decimal part is separated by a comma (87,5) and the % sign is preceded by a space: 92 %. When written out, the expression « pour cent » is used, as two words. Finally, no comma goes between the two complements of a construction such as « passer de… à… »."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-13",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Selon la nouvelle structure de gouvernance des projets informatiques,…",
+        "en": "Under the new governance structure for information technology projects,…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "le dirigeant principal de l'information qui relève directement de la sous-ministre, approuvera chaque projet de migration vers le nuage.",
+          "rationale": {
+            "fr": "La virgule fermante est présente, mais pas la virgule ouvrante : l'incise n'est pas encadrée et une virgule isolée sépare le sujet de son verbe « approuvera ».",
+            "en": "The closing comma is there but not the opening one: the aside is not enclosed, and a lone comma separates the subject from its verb « approuvera »."
+          }
+        },
+        {
+          "id": "b",
+          "text": "le dirigeant principal de l'information, qui relève directement de la sous-ministre, approuvera chaque projet de migration vers le nuage.",
+          "rationale": {
+            "fr": "La relative explicative, qui précise un antécédent unique, est encadrée de deux virgules, et rien ne sépare le verbe de son complément. C'est la ponctuation attendue.",
+            "en": "The non-restrictive relative clause, which adds detail about a unique antecedent, is enclosed in two commas, and nothing separates the verb from its object. This is the expected punctuation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "le dirigeant principal de l'information, qui relève directement de la sous-ministre approuvera chaque projet de migration vers le nuage.",
+          "rationale": {
+            "fr": "L'incise s'ouvre par une virgule, mais ne se referme pas avant le verbe « approuvera » ; il manque la seconde virgule.",
+            "en": "The aside opens with a comma but is not closed before the verb « approuvera »; the second comma is missing."
+          }
+        },
+        {
+          "id": "d",
+          "text": "le dirigeant principal de l'information, qui relève directement de la sous-ministre, approuvera, chaque projet de migration vers le nuage.",
+          "rationale": {
+            "fr": "L'incise est bien encadrée, mais une virgule sépare ensuite le verbe « approuvera » de son complément direct, ce qui est fautif.",
+            "en": "The aside is properly enclosed, but a comma then separates the verb « approuvera » from its direct object, which is wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une relative explicative apporte une précision non indispensable sur un antécédent déjà bien identifié (un ministère n'a qu'un dirigeant principal de l'information). Elle s'encadre de deux virgules : l'une ouvre l'incise, l'autre la ferme. En omettre une revient à séparer le sujet de son verbe par une virgule isolée, ce qui est fautif. On ne place pas non plus de virgule entre le verbe et son complément direct.",
+        "en": "A non-restrictive relative clause adds non-essential detail about an antecedent that is already clearly identified (a department has only one chief information officer). It is enclosed in two commas: one opens the aside, the other closes it. Leaving one out amounts to separating the subject from its verb with a lone comma, which is wrong. Nor is a comma placed between the verb and its direct object."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-14",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Les inspections des postes de travail prévues au programme de santé et sécurité au travail…",
+        "en": "The workstation inspections planned under the occupational health and safety program…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "commenceront le 1er février et se termineront le 28 février.",
+          "rationale": {
+            "fr": "Le premier jour du mois s'écrit avec l'ordinal « 1er », les autres jours avec le cardinal, et les mois sont en minuscule. C'est la phrase attendue.",
+            "en": "The first day of the month is written with the ordinal « 1er », the other days with the cardinal, and the months are lowercase. This is the expected sentence."
+          }
+        },
+        {
+          "id": "b",
+          "text": "commenceront le 1 février et se termineront le 28 février.",
+          "rationale": {
+            "fr": "Le premier jour du mois s'écrit avec l'ordinal « 1er » ; le cardinal « 1 » est fautif dans une date.",
+            "en": "The first day of the month is written with the ordinal « 1er »; the cardinal « 1 » is wrong in a date."
+          }
+        },
+        {
+          "id": "c",
+          "text": "commenceront le 1er Février pour se terminer le 28 Février.",
+          "rationale": {
+            "fr": "L'ordinal est bien écrit, mais le nom du mois prend une majuscule calquée sur l'anglais ; elle est fautive en français.",
+            "en": "The ordinal is well written, but the month takes a capital copied from English; it is wrong in French."
+          }
+        },
+        {
+          "id": "d",
+          "text": "commenceront le 1ier février et se termineront le 28 février.",
+          "rationale": {
+            "fr": "L'abréviation de « premier » est « 1er » ; la forme « 1ier » est fautive.",
+            "en": "The abbreviation of « premier » is « 1er »; the form « 1ier » is wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans une date, le premier jour du mois s'écrit avec l'ordinal « 1er », alors que les autres jours s'écrivent avec le nombre cardinal : le 1er février, le 2 février, le 28 février. Les noms de mois prennent la minuscule. Les abréviations « 1ier » et « 1ière » sont fautives ; au féminin, on écrit « 1re ».",
+        "en": "In a date, the first day of the month is written with the ordinal « 1er », whereas the other days are written with the cardinal number: le 1er février, le 2 février, le 28 février. Month names take a lowercase letter. The abbreviations « 1ier » and « 1ière » are wrong; the feminine is « 1re »."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-15",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Le comité directeur n'a pas encore approuvé la demande de modification présentée par l'entrepreneur ; l'échéancier de mise en œuvre…",
+        "en": "The steering committee has not yet approved the change request submitted by the contractor; the implementation schedule…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "sera peut être prolongé de trois semaines.",
+          "rationale": {
+            "fr": "Sans trait d'union, « peut être » est le verbe « pouvoir » suivi de l'infinitif ; après « sera », il faut l'adverbe « peut-être ». La graphie est fautive.",
+            "en": "Without a hyphen, « peut être » is the verb « pouvoir » followed by the infinitive; after « sera », the adverb « peut-être » is needed. The spelling is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "peut-être prolongé de trois semaines.",
+          "rationale": {
+            "fr": "L'adverbe « peut-être » ne peut tenir lieu de verbe : la phrase reste sans verbe conjugué et devient agrammaticale.",
+            "en": "The adverb « peut-être » cannot stand in for a verb: the clause is left without a conjugated verb and becomes ungrammatical."
+          }
+        },
+        {
+          "id": "c",
+          "text": "sera peut-être prolongé de trois semaines.",
+          "rationale": {
+            "fr": "Le verbe conjugué est « sera » ; l'adverbe « peut-être », avec trait d'union, ajoute la nuance d'incertitude. C'est la forme attendue.",
+            "en": "The conjugated verb is « sera »; the adverb « peut-être », with a hyphen, adds the note of uncertainty. This is the expected form."
+          }
+        },
+        {
+          "id": "d",
+          "text": "sera, peut-être prolongé de trois semaines.",
+          "rationale": {
+            "fr": "Une virgule isolée coupe le verbe « sera » du participe « prolongé » sans fermer d'incise ; cette ponctuation est fautive.",
+            "en": "A lone comma cuts the verb « sera » off from the participle « prolongé » without closing any aside; this punctuation is wrong."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Peut-être », avec un trait d'union, est un adverbe qui signifie « possiblement » : on peut le remplacer par « sans doute ». « Peut être », en deux mots, est le verbe « pouvoir » suivi de l'infinitif « être » : on peut le remplacer par « pourrait être ». Ici, le verbe conjugué est « sera » et le mot ajoute une nuance d'incertitude : c'est l'adverbe qui convient.",
+        "en": "« Peut-être », with a hyphen, is an adverb meaning « possibly »: it can be replaced by « sans doute ». « Peut être », as two words, is the verb « pouvoir » followed by the infinitive « être »: it can be replaced by « pourrait être ». Here the conjugated verb is « sera » and the word adds a note of uncertainty: the adverb is what fits."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-16",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Conformément aux obligations linguistiques du Ministère, les avis destinés au public…",
+        "en": "In accordance with the Department's language obligations, notices intended for the public…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "doivent paraître simultanément en Français et en Anglais.",
+          "rationale": {
+            "fr": "Les noms de langues sont des noms communs en français ; la majuscule, calquée sur l'anglais, est fautive.",
+            "en": "Language names are common nouns in French; the capital, copied from English, is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "doivent être publiés simultanément en français et en anglais.",
+          "rationale": {
+            "fr": "Noms de langues en minuscule et aucune virgule parasite : c'est la phrase attendue.",
+            "en": "Language names in lowercase and no stray comma: this is the expected sentence."
+          }
+        },
+        {
+          "id": "c",
+          "text": "doivent être publiés simultanément en français, et en anglais.",
+          "rationale": {
+            "fr": "La virgule devant « et », qui relie simplement deux compléments, n'a pas lieu d'être en français ; elle est fautive.",
+            "en": "The comma before « et », which simply joins two complements, has no place in French; it is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "doivent être publiés, simultanément en français et en anglais.",
+          "rationale": {
+            "fr": "La virgule sépare le verbe de ses compléments sans ouvrir d'incise ; cette ponctuation est fautive.",
+            "en": "The comma separates the verb from its complements without opening an aside; this punctuation is wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Les noms de langues sont des noms communs : ils s'écrivent avec une minuscule (le français, en anglais). La majuscule est réservée aux noms désignant les habitants d'un pays (les Canadiens), et non à la langue ni à l'adjectif (une politique canadienne). Par ailleurs, on ne met pas de virgule devant le « et » qui relie deux compléments, ni entre un verbe et ses compléments.",
+        "en": "Language names are common nouns: they are written in lowercase (le français, en anglais). The capital is reserved for nouns naming a country's inhabitants (les Canadiens), not for the language or the adjective (une politique canadienne). Also, no comma goes before an « et » that joins two complements, nor between a verb and its complements."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "official-languages",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-17",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Lors de la séance d'information sur le plan d'accessibilité ministériel,…",
+        "en": "At the information session on the departmental accessibility plan,…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "la sous-ministre, Mme Lise Bergeron, a rappelé l'importance de consulter les personnes en situation de handicap.",
+          "rationale": {
+            "fr": "Titre en minuscule dans le corps du texte, trait d'union à « sous-ministre » et « Mme » sans point : la phrase respecte toutes les conventions.",
+            "en": "Lowercase title in running text, hyphen in « sous-ministre » and « Mme » without a period: the sentence follows every convention."
+          }
+        },
+        {
+          "id": "b",
+          "text": "la Sous-ministre Lise Bergeron a rappelé l'importance de consulter les personnes en situation de handicap.",
+          "rationale": {
+            "fr": "Dans le corps du texte, un titre de fonction s'écrit avec une minuscule ; la majuscule est réservée à l'appel et à la salutation d'une lettre.",
+            "en": "In running text, a job title is written in lowercase; the capital is reserved for a letter's salutation and closing."
+          }
+        },
+        {
+          "id": "c",
+          "text": "la sous-ministre, Mme. Lise Bergeron, a rappelé l'importance de consulter les personnes en situation de handicap.",
+          "rationale": {
+            "fr": "« Mme » se termine par la dernière lettre de « Madame » : il ne prend pas de point abréviatif.",
+            "en": "« Mme » ends with the last letter of « Madame »: it takes no abbreviation period."
+          }
+        },
+        {
+          "id": "d",
+          "text": "la sous ministre, Mme Lise Bergeron, a rappelé l'importance de consulter les personnes en situation de handicap.",
+          "rationale": {
+            "fr": "Le titre « sous-ministre » s'écrit toujours avec un trait d'union ; la graphie en deux mots est fautive.",
+            "en": "The title « sous-ministre » is always hyphenated; writing it as two words is wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans le corps d'un texte, les titres de fonction s'écrivent avec une minuscule (la sous-ministre, le directeur général, la ministre) ; la majuscule est réservée à l'appel et à la salutation d'une lettre, où l'on s'adresse à la personne. Le titre « sous-ministre » prend toujours le trait d'union. « Madame » s'abrège en « Mme », sans point, parce que l'abréviation garde la dernière lettre du mot ; « Monsieur » s'abrège en « M. », avec un point.",
+        "en": "In running text, job titles are written in lowercase (la sous-ministre, le directeur général, la ministre); the capital is reserved for a letter's salutation and closing, where the person is addressed. The title « sous-ministre » always takes a hyphen. « Madame » is abbreviated « Mme », without a period, because the abbreviation keeps the last letter of the word; « Monsieur » is abbreviated « M. », with a period."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "accessibility",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-18",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "D'ici la fin du prochain exercice, les cafétérias ministérielles cesseront d'offrir plusieurs articles en plastique à usage unique :…",
+        "en": "By the end of the next fiscal year, departmental cafeterias will stop offering several single-use plastic items:…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "ustensiles, gobelets, pailles, etc…",
+          "rationale": {
+            "fr": "« Etc. » signifie déjà « et le reste » ; le faire suivre de points de suspension répète la même idée et constitue une faute.",
+            "en": "« Etc. » already means « and the rest »; following it with an ellipsis repeats the same idea and is an error."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ustensiles, gobelets, pailles etc.",
+          "rationale": {
+            "fr": "« Etc. » se place comme un dernier élément de l'énumération : il doit être précédé d'une virgule.",
+            "en": "« Etc. » stands as the final item of the list: it must be preceded by a comma."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ustensiles, gobelets, et pailles, etc.",
+          "rationale": {
+            "fr": "« Etc. » contient déjà « et » : on ne peut pas placer un autre « et » devant « pailles ». De plus, la virgule devant ce « et » est fautive dans une énumération.",
+            "en": "« Etc. » already contains « et »: another « et » cannot be placed before « pailles ». Moreover, the comma before that « et » is wrong in a list."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ustensiles, gobelets, pailles, etc.",
+          "rationale": {
+            "fr": "Virgule devant « etc. », point abréviatif qui sert aussi de point final, aucun point de suspension : c'est la ponctuation attendue.",
+            "en": "Comma before « etc. », abbreviation period that also serves as the final period, no ellipsis: this is the expected punctuation."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Etc. » (et cetera, « et le reste ») clôt une énumération : il est précédé d'une virgule et suivi d'un point abréviatif, qui se confond avec le point final en fin de phrase. On ne le fait jamais suivre de points de suspension, qui exprimeraient la même idée une seconde fois, et on ne le combine pas avec un « et » placé devant l'élément précédent.",
+        "en": "« Etc. » (et cetera, « and the rest ») closes a list: it is preceded by a comma and followed by an abbreviation period, which merges with the final period at the end of a sentence. It is never followed by an ellipsis, which would express the same idea a second time, and it is not combined with an « et » placed before the preceding item."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "environment",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-19",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Si la directive sur la gestion des renseignements n'est pas modifiée avant l'échéance réglementaire, comment…",
+        "en": "If the directive on information management is not amended before the regulatory deadline, how…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "le Ministère pourra-t'il respecter ses obligations en matière de reddition de comptes ?",
+          "rationale": {
+            "fr": "Le « t » euphonique n'est pas une élision : il s'encadre de deux traits d'union, et l'apostrophe est fautive.",
+            "en": "The euphonic « t » is not an elision: it is enclosed in two hyphens, and the apostrophe is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "le Ministère pourra t-il respecter ses obligations en matière de reddition de comptes ?",
+          "rationale": {
+            "fr": "Il manque le trait d'union entre le verbe et le « t » euphonique ; les deux traits d'union sont obligatoires.",
+            "en": "The hyphen between the verb and the euphonic « t » is missing; both hyphens are required."
+          }
+        },
+        {
+          "id": "c",
+          "text": "le Ministère pourra-t-il respecter ses obligations en matière de reddition de comptes ?",
+          "rationale": {
+            "fr": "Le verbe terminé par une voyelle et le pronom « il » sont reliés par un « t » euphonique encadré de traits d'union. C'est la graphie attendue.",
+            "en": "The verb ending in a vowel and the pronoun « il » are linked by a euphonic « t » enclosed in hyphens. This is the expected spelling."
+          }
+        },
+        {
+          "id": "d",
+          "text": "le Ministère pourra-il respecter ses obligations en matière de reddition de comptes ?",
+          "rationale": {
+            "fr": "Le verbe se termine par une voyelle et le pronom commence par une voyelle : le « t » euphonique est obligatoire entre les deux.",
+            "en": "The verb ends in a vowel and the pronoun begins with one: the euphonic « t » is required between them."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Dans une interrogation avec inversion du pronom sujet, le verbe et le pronom sont reliés par un trait d'union. Lorsque le verbe se termine par une voyelle (a, va, pourra) et que le pronom commence par une voyelle (il, elle, on), on intercale un « t » euphonique encadré de deux traits d'union : pourra-t-il, a-t-elle, va-t-on. Ce « t » ne marque aucune élision : l'apostrophe est donc exclue.",
+        "en": "In a question with subject-pronoun inversion, the verb and the pronoun are joined by a hyphen. When the verb ends in a vowel (a, va, pourra) and the pronoun begins with one (il, elle, on), a euphonic « t » enclosed in two hyphens is inserted: pourra-t-il, a-t-elle, va-t-on. This « t » marks no elision, so the apostrophe is ruled out."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-20",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "best-completion",
+      "stem": {
+        "fr": "Dans le communiqué diffusé ce matin, la porte-parole du Ministère a déclaré :…",
+        "en": "In the news release issued this morning, the Department's spokesperson stated:…"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "\"Les consultations publiques se poursuivront jusqu'à la fin de l'automne.\"",
+          "rationale": {
+            "fr": "Les guillemets droits anglais ne conviennent pas pour une citation dans un texte français, qui emploie les guillemets français.",
+            "en": "Straight English quotation marks do not fit a quotation in a French text, which uses French guillemets."
+          }
+        },
+        {
+          "id": "b",
+          "text": "« Les consultations publiques se poursuivront jusqu'à la fin de l'automne. »",
+          "rationale": {
+            "fr": "Guillemets français et, puisque la citation est une phrase complète introduite par un deux-points, point final à l'intérieur des guillemets. C'est la ponctuation attendue.",
+            "en": "French guillemets and, since the quotation is a complete sentence introduced by a colon, the final period inside the guillemets. This is the expected punctuation."
+          }
+        },
+        {
+          "id": "c",
+          "text": "<< Les consultations publiques se poursuivront jusqu'à la fin de l'automne. >>",
+          "rationale": {
+            "fr": "Les doubles chevrons tapés au clavier imitent les guillemets français sans en être ; cette graphie est fautive.",
+            "en": "Double angle brackets typed on a keyboard imitate French guillemets without being them; this spelling is wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "« Les consultations publiques se poursuivront jusqu'à la fin de l'automne ».",
+          "rationale": {
+            "fr": "La citation est une phrase complète introduite par un deux-points : son point final se place à l'intérieur des guillemets, et non après.",
+            "en": "The quotation is a complete sentence introduced by a colon: its final period goes inside the guillemets, not after them."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Un texte français emploie les guillemets français « », séparés du texte cité par une espace. Lorsque la citation forme une phrase complète introduite par un deux-points, elle commence par une majuscule et son point final se place à l'intérieur des guillemets ; on n'ajoute pas d'autre point après le guillemet fermant. Les guillemets anglais servent seulement à marquer une citation à l'intérieur d'une autre.",
+        "en": "A French text uses French guillemets « », separated from the quoted text by a space. When the quotation is a complete sentence introduced by a colon, it starts with a capital and its final period goes inside the guillemets; no further period is added after the closing guillemet. English quotation marks serve only to mark a quotation within another."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-21",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Quelle correction faut-il apporter à la phrase suivante, tirée d'une note de service aux gestionnaires ? « Les gestionnaires qui n'ont pas encore approuvé les congés annuels de leur équipe, doivent le faire avant le vendredi 15 mars. »",
+        "en": "Which correction does the following sentence, taken from a memo to managers, need? « Les gestionnaires qui n'ont pas encore approuvé les congés annuels de leur équipe, doivent le faire avant le vendredi 15 mars. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « mars » par « Mars »",
+          "rationale": {
+            "fr": "Les noms de mois s'écrivent avec une minuscule ; cette majuscule introduirait une faute, et la vraie erreur resterait.",
+            "en": "Month names are written in lowercase; this capital would introduce an error, and the real mistake would remain."
+          }
+        },
+        {
+          "id": "b",
+          "text": "supprimer la virgule après « équipe »",
+          "rationale": {
+            "fr": "Cette virgule isolée sépare le long sujet « Les gestionnaires qui… de leur équipe » de son verbe « doivent » ; il faut la supprimer.",
+            "en": "This lone comma separates the long subject « Les gestionnaires qui… de leur équipe » from its verb « doivent »; it must be removed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « vendredi » par « Vendredi »",
+          "rationale": {
+            "fr": "Les noms de jours prennent la minuscule au milieu d'une phrase ; la majuscule serait fautive.",
+            "en": "Day names take a lowercase letter mid-sentence; the capital would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « le faire » par « le-faire »",
+          "rationale": {
+            "fr": "Le pronom placé devant un infinitif ne s'y rattache par aucun trait d'union ; le trait d'union ne s'emploie qu'à l'impératif affirmatif.",
+            "en": "A pronoun placed before an infinitive is not attached to it by a hyphen; the hyphen is used only in the affirmative imperative."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "On ne sépare jamais un sujet de son verbe par une virgule isolée, même lorsque le sujet est long. Ici, le sujet « Les gestionnaires qui n'ont pas encore approuvé les congés annuels de leur équipe » contient une relative déterminative, qui désigne seulement certains gestionnaires ; aucune virgule ne doit donc le suivre avant le verbe « doivent ».",
+        "en": "A subject is never separated from its verb by a lone comma, even when the subject is long. Here the subject « Les gestionnaires qui n'ont pas encore approuvé les congés annuels de leur équipe » contains a restrictive relative clause that designates only some managers; no comma must therefore follow it before the verb « doivent »."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-22",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Repérez l'erreur dans cet extrait d'un avis au public et choisissez la correction appropriée : « À compter du 3 juin, le bureau régional accueillera le public du lundi au jeudi, de 8 h 30 à 16h. »",
+        "en": "Find the error in this excerpt from a public notice and choose the appropriate correction: « À compter du 3 juin, le bureau régional accueillera le public du lundi au jeudi, de 8 h 30 à 16h. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « 8 h 30 » par « 8h30 »",
+          "rationale": {
+            "fr": "« 8 h 30 » est déjà la notation prescrite ; supprimer les espaces introduirait une faute.",
+            "en": "« 8 h 30 » is already the prescribed notation; removing the spaces would introduce an error."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « À compter » par « A compter »",
+          "rationale": {
+            "fr": "Les majuscules conservent leurs accents en français ; retirer l'accent de « À » serait fautif.",
+            "en": "Capitals keep their accents in French; removing the accent from « À » would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « 3 juin » par « 3 Juin »",
+          "rationale": {
+            "fr": "Les noms de mois prennent la minuscule ; cette modification introduirait une faute.",
+            "en": "Month names take a lowercase letter; this change would introduce an error."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « 16h » par « 16 h »",
+          "rationale": {
+            "fr": "Le symbole h doit être séparé des chiffres par une espace, comme dans « 8 h 30 » ; c'est la seule faute de la phrase.",
+            "en": "The symbol h must be separated from the digits by a space, as in « 8 h 30 »; this is the sentence's only error."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Dans un texte suivi, l'heure s'écrit avec le symbole h, précédé et suivi d'une espace : 8 h 30, 16 h. Les noms de mois et de jours prennent la minuscule, et les majuscules conservent leurs accents (À compter du…).",
+        "en": "In running text, the time is written with the symbol h, with a space before and after it: 8 h 30, 16 h. Month and day names take a lowercase letter, and capitals keep their accents (À compter du…)."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-23",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette phrase tirée d'un courriel de l'équipe de l'approvisionnement contient une faute. Laquelle des corrections suivantes s'impose ? « Les résultats de la 2ème demande de propositions, lancée le 1er avril, seront communiqués aux soumissionnaires au plus tard le 30 juin. »",
+        "en": "This sentence taken from an email from the procurement team contains an error. Which of the following corrections is required? « Les résultats de la 2ème demande de propositions, lancée le 1er avril, seront communiqués aux soumissionnaires au plus tard le 30 juin. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « 2ème » par « 2e »",
+          "rationale": {
+            "fr": "L'ordinal abrégé s'écrit avec un simple « e » : « 2e ». La graphie « 2ème » est fautive.",
+            "en": "The abbreviated ordinal is written with a single « e »: « 2e ». The spelling « 2ème » is wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « 1er » par « 1ier »",
+          "rationale": {
+            "fr": "« 1er » est l'abréviation régulière de « premier » ; « 1ier » serait fautif.",
+            "en": "« 1er » is the regular abbreviation of « premier »; « 1ier » would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "supprimer la virgule après « avril »",
+          "rationale": {
+            "fr": "Les deux virgules encadrent l'incise « lancée le 1er avril » ; en retirer une laisserait une virgule isolée entre le sujet et le verbe « seront communiqués ».",
+            "en": "The two commas enclose the aside « lancée le 1er avril »; removing one would leave a lone comma between the subject and the verb « seront communiqués »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « soumissionnaires » par « Soumissionnaires »",
+          "rationale": {
+            "fr": "« Soumissionnaires » est un nom commun : rien ne justifie une majuscule au milieu de la phrase.",
+            "en": "« Soumissionnaires » is a common noun: nothing justifies a capital mid-sentence."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Les nombres ordinaux abrégés s'écrivent avec la ou les dernières lettres du mot en exposant : 1er et 1re pour « premier » et « première », puis 2e, 3e, 10e pour les autres. Les graphies « 2ème », « 2ième » ou « 1ier » sont fautives.",
+        "en": "Abbreviated ordinal numbers are written with the last letter or letters of the word in superscript: 1er and 1re for « premier » and « première », then 2e, 3e, 10e for the others. The spellings « 2ème », « 2ième » or « 1ier » are wrong."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-24",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Le comité de vérification doit relire ce passage d'un rapport financier avant sa diffusion. Quelle correction est nécessaire ? « Le comité s'inquiète de l'hausse des dépenses de fonctionnement et de l'hésitation de certains gestionnaires à appliquer les nouvelles règles de contrôle budgétaire. »",
+        "en": "The audit committee must review this passage from a financial report before it is released. Which correction is necessary? « Le comité s'inquiète de l'hausse des dépenses de fonctionnement et de l'hésitation de certains gestionnaires à appliquer les nouvelles règles de contrôle budgétaire. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « l'hésitation » par « la hésitation »",
+          "rationale": {
+            "fr": "Le h de « hésitation » est muet : l'élision est obligatoire, et « la hésitation » serait fautif.",
+            "en": "The h in « hésitation » is silent: elision is required, and « la hésitation » would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « s'inquiète » par « se inquiète »",
+          "rationale": {
+            "fr": "Le pronom « se » s'élide devant une voyelle ; supprimer l'élision introduirait une faute.",
+            "en": "The pronoun « se » is elided before a vowel; removing the elision would introduce an error."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « l'hausse » par « la hausse »",
+          "rationale": {
+            "fr": "Le h de « hausse » est aspiré : il empêche l'élision. On écrit « la hausse », comme « le hasard ».",
+            "en": "The h in « hausse » is aspirated: it blocks elision. One writes « la hausse », like « le hasard »."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ajouter une virgule après « gestionnaires »",
+          "rationale": {
+            "fr": "Cette virgule séparerait le nom de son complément « à appliquer… » ; elle serait fautive.",
+            "en": "This comma would separate the noun from its complement « à appliquer… »; it would be wrong."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "L'article et les mots comme « de », « que » ou « se » s'élident devant une voyelle ou un h muet (l'hésitation, l'heure, s'inquiéter), mais pas devant un h aspiré, qui se comporte comme une consonne : la hausse, le hasard, le haut, la honte. Les dictionnaires signalent le h aspiré, souvent par un astérisque ou une apostrophe placés devant le mot.",
+        "en": "The article and words such as « de », « que » or « se » are elided before a vowel or a silent h (l'hésitation, l'heure, s'inquiéter), but not before an aspirated h, which behaves like a consonant: la hausse, le hasard, le haut, la honte. Dictionaries flag the aspirated h, often with an asterisk or an apostrophe before the word."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "finance-and-budgets",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-25",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Dans ce compte rendu de réunion du comité directeur, une seule correction s'impose. Laquelle ? « Si l'analyse des risques le justifie, le comité directeur peut-être convoqué de nouveau avant la fin du trimestre afin de réévaluer l'échéancier. »",
+        "en": "In these minutes of a steering committee meeting, only one correction is required. Which one? « Si l'analyse des risques le justifie, le comité directeur peut-être convoqué de nouveau avant la fin du trimestre afin de réévaluer l'échéancier. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « peut-être » par « peut être »",
+          "rationale": {
+            "fr": "La proposition principale a besoin d'un verbe conjugué : c'est le verbe « pouvoir » suivi de l'infinitif « être », en deux mots, et non l'adverbe.",
+            "en": "The main clause needs a conjugated verb: it is the verb « pouvoir » followed by the infinitive « être », as two words, not the adverb."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « réévaluer » par « ré-évaluer »",
+          "rationale": {
+            "fr": "Le préfixe « ré- » se soude au mot qu'il précède ; le trait d'union serait fautif.",
+            "en": "The prefix « ré- » is joined to the word it precedes; the hyphen would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ajouter un trait d'union entre « comité » et « directeur »",
+          "rationale": {
+            "fr": "« Comité directeur » est formé d'un nom et d'un adjectif : aucun trait d'union ne les relie.",
+            "en": "« Comité directeur » is made of a noun and an adjective: no hyphen joins them."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « l'échéancier » par « l'Échéancier »",
+          "rationale": {
+            "fr": "« Échéancier » est un nom commun : la majuscule n'a pas lieu d'être au milieu de la phrase.",
+            "en": "« Échéancier » is a common noun: a capital has no place mid-sentence."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Peut-être », avec un trait d'union, est un adverbe (« possiblement ») qui accompagne un verbe déjà présent : il sera peut-être convoqué. « Peut être », en deux mots, est le verbe « pouvoir » conjugué suivi de l'infinitif « être » : il peut être convoqué. Un moyen sûr de trancher : si l'on peut dire « pourrait être », il faut deux mots.",
+        "en": "« Peut-être », with a hyphen, is an adverb (« possibly ») accompanying a verb that is already there: il sera peut-être convoqué. « Peut être », as two words, is the conjugated verb « pouvoir » followed by the infinitive « être »: il peut être convoqué. A reliable test: if « pourrait être » can be substituted, two words are needed."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-26",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Une rédactrice relit l'introduction d'une stratégie numérique ministérielle. Quelle correction doit-elle apporter ? « Le Gouvernement du Canada s'est engagé à offrir à toute la population canadienne des services numériques accessibles, sûrs et faciles à utiliser. »",
+        "en": "A writer is reviewing the introduction to a departmental digital strategy. Which correction must she make? « Le Gouvernement du Canada s'est engagé à offrir à toute la population canadienne des services numériques accessibles, sûrs et faciles à utiliser. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « Canada » par « canada »",
+          "rationale": {
+            "fr": "« Canada » est un nom propre et garde toujours la majuscule ; cette modification serait fautive.",
+            "en": "« Canada » is a proper noun and always keeps its capital; this change would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « canadienne » par « Canadienne »",
+          "rationale": {
+            "fr": "« Canadienne » est ici un adjectif : il s'écrit avec une minuscule. Seul le nom désignant les habitants prend la majuscule.",
+            "en": "« Canadienne » is an adjective here: it is written in lowercase. Only the noun naming the inhabitants takes a capital."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ajouter une virgule après « sûrs »",
+          "rationale": {
+            "fr": "En français, on ne met pas de virgule devant le « et » qui introduit le dernier élément d'une énumération.",
+            "en": "In French, no comma goes before the « et » that introduces the last item of a list."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « Gouvernement » par « gouvernement »",
+          "rationale": {
+            "fr": "« Gouvernement » est un nom commun : il s'écrit avec une minuscule, même lorsqu'il désigne un gouvernement précis.",
+            "en": "« Gouvernement » is a common noun: it is written in lowercase, even when it refers to a specific government."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le mot « gouvernement » est un nom commun : il s'écrit avec une minuscule, même lorsqu'il désigne un gouvernement précis (le gouvernement du Canada, le gouvernement de la province). Seul le nom propre qui le complète prend la majuscule. De même, l'adjectif « canadien » reste en minuscule, et l'énumération française ne prend pas de virgule devant le « et » final.",
+        "en": "The word « gouvernement » is a common noun: it is written in lowercase, even when it refers to a specific government (le gouvernement du Canada, le gouvernement de la province). Only the proper noun that completes it takes a capital. Likewise, the adjective « canadien » stays lowercase, and a French list takes no comma before the final « et »."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-27",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Cette consigne diffusée par le comité de santé et sécurité au travail contient une erreur qui en fausse le sens. Quelle correction faut-il faire ? « Les employés, qui sont en télétravail plus de trois jours par semaine, doivent remplir l'autoévaluation ergonomique de leur poste de travail ; les autres en sont dispensés. »",
+        "en": "This instruction issued by the occupational health and safety committee contains an error that distorts its meaning. Which correction should be made? « Les employés, qui sont en télétravail plus de trois jours par semaine, doivent remplir l'autoévaluation ergonomique de leur poste de travail ; les autres en sont dispensés. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "supprimer la virgule après « employés »",
+          "rationale": {
+            "fr": "La virgule après « semaine » resterait seule et séparerait le sujet de son verbe « doivent » ; la phrase demeurerait fautive.",
+            "en": "The comma after « semaine » would be left on its own and would separate the subject from its verb « doivent »; the sentence would still be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "supprimer la virgule après « semaine »",
+          "rationale": {
+            "fr": "La virgule après « employés » ouvrirait une incise jamais refermée, entre le sujet et son verbe ; la phrase demeurerait fautive.",
+            "en": "The comma after « employés » would open an aside that is never closed, between the subject and its verb; the sentence would still be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "supprimer les deux virgules qui encadrent « qui sont en télétravail plus de trois jours par semaine »",
+          "rationale": {
+            "fr": "Sans virgules, la relative devient déterminative et ne vise que les employés concernés, ce qu'exige « les autres en sont dispensés ».",
+            "en": "Without commas, the relative clause becomes restrictive and targets only the employees concerned, which « les autres en sont dispensés » requires."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ajouter une virgule après « remplir »",
+          "rationale": {
+            "fr": "Cette virgule séparerait le verbe de son complément direct ; elle introduirait une faute sans régler le problème de sens.",
+            "en": "This comma would separate the verb from its direct object; it would introduce an error without solving the problem of meaning."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "La virgule peut changer le sens d'une relative. Encadrée de virgules, la relative est explicative : elle s'applique à tous les employés, comme s'ils étaient tous en télétravail. Sans virgules, elle est déterminative : elle désigne seulement les employés concernés. La suite « les autres en sont dispensés » montre qu'on vise un sous-groupe ; il faut donc supprimer les deux virgules. En retirer une seule laisserait une virgule isolée entre le sujet et son verbe.",
+        "en": "A comma can change the meaning of a relative clause. Set off by commas, the clause is non-restrictive: it applies to all employees, as if they all worked remotely. Without commas, it is restrictive: it designates only the employees concerned. The continuation « les autres en sont dispensés » shows that a subgroup is meant; both commas must therefore be removed. Removing just one would leave a lone comma between the subject and its verb."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-28",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Corrigez cet extrait de l'avis de convocation à la réunion mensuelle : quelle modification est requise ? « À 10 h 30, Mme. Lavoie, conseillère principale en communications, présentera le plan de communication relatif au lancement du nouveau portail. »",
+        "en": "Correct this excerpt from the notice convening the monthly meeting: which change is required? « À 10 h 30, Mme. Lavoie, conseillère principale en communications, présentera le plan de communication relatif au lancement du nouveau portail. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « 10 h 30 » par « 10 h 30 min »",
+          "rationale": {
+            "fr": "On n'ajoute pas « min » après les minutes dans la notation de l'heure ; cette modification serait fautive.",
+            "en": "« min » is not added after the minutes when writing the time; this change would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « Mme. » par « Mme »",
+          "rationale": {
+            "fr": "« Mme » garde la dernière lettre de « Madame » : l'abréviation ne prend donc pas de point.",
+            "en": "« Mme » keeps the last letter of « Madame »: the abbreviation therefore takes no period."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « conseillère principale » par « Conseillère principale »",
+          "rationale": {
+            "fr": "Dans le corps du texte, un titre de fonction s'écrit avec une minuscule ; la majuscule serait fautive.",
+            "en": "In running text, a job title is written in lowercase; the capital would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « À 10 h 30 » par « A 10 h 30 »",
+          "rationale": {
+            "fr": "Les majuscules conservent leurs accents en français ; retirer celui de « À » introduirait une faute.",
+            "en": "Capitals keep their accents in French; removing the one on « À » would introduce an error."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "On met un point abréviatif seulement lorsque l'abréviation s'arrête avant la dernière lettre du mot (M. pour « Monsieur », p. ex. pour « par exemple »). Quand l'abréviation conserve la dernière lettre, elle ne prend pas de point : Mme, Mmes, Dr, Dre. Par ailleurs, les titres de fonction s'écrivent en minuscule dans le corps du texte et les majuscules gardent leurs accents.",
+        "en": "An abbreviation period is used only when the abbreviation stops before the last letter of the word (M. for « Monsieur », p. ex. for « par exemple »). When the abbreviation keeps the last letter, it takes no period: Mme, Mmes, Dr, Dre. Also, job titles are lowercase in running text and capitals keep their accents."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "communications",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-29",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Le bilan annuel du centre de contact renferme une erreur de présentation. Laquelle des corrections suivantes faut-il retenir ? « Au cours du dernier exercice, les agents du centre de contact ont traité 12,500 demandes de renseignements, soit une augmentation de 3,5 % par rapport à l'exercice précédent. »",
+        "en": "The contact centre's annual report contains a presentation error. Which of the following corrections should be made? « Au cours du dernier exercice, les agents du centre de contact ont traité 12,500 demandes de renseignements, soit une augmentation de 3,5 % par rapport à l'exercice précédent. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « 3,5 % » par « 3.5 % »",
+          "rationale": {
+            "fr": "« 3,5 % » est déjà bien écrit, avec la virgule décimale française ; le point décimal serait un anglicisme typographique.",
+            "en": "« 3,5 % » is already well written, with the French decimal comma; a decimal point would be an English typographic habit."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « soit » par « soit, »",
+          "rationale": {
+            "fr": "Une virgule après « soit » couperait la locution de ce qu'elle introduit ; elle serait fautive.",
+            "en": "A comma after « soit » would cut the expression off from what it introduces; it would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « 12,500 » par « 12 500 »",
+          "rationale": {
+            "fr": "En français, la virgule est décimale : « 12,500 » se lirait « douze virgule cinq ». Les milliers se séparent par une espace.",
+            "en": "In French the comma is decimal: « 12,500 » would read as « twelve point five ». Thousands are separated by a space."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « l'exercice précédent » par « l'Exercice précédent »",
+          "rationale": {
+            "fr": "« Exercice » est un nom commun ; la majuscule au milieu de la phrase serait fautive.",
+            "en": "« Exercice » is a common noun; a capital mid-sentence would be wrong."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "En français, la virgule est le séparateur décimal : « 12,500 » désignerait un nombre décimal, douze virgule cinq. Pour séparer les tranches de trois chiffres, on emploie une espace : 12 500, 1 250 000. Les pourcentages gardent la virgule décimale et une espace avant le symbole : 3,5 %.",
+        "en": "In French the comma is the decimal separator: « 12,500 » would denote a decimal number, twelve point five. Groups of three digits are separated by a space: 12 500, 1 250 000. Percentages keep the decimal comma and a space before the sign: 3,5 %."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "service-delivery",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-30",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Avant de signer la note d'information, la directrice de l'approvisionnement y relève une faute. Quelle correction s'impose ? « Compte tenu des risques signalés lors de la vérification, le comité recommande, que tout contrat de plus de 25 000 $ soit approuvé au préalable par le dirigeant principal des finances. »",
+        "en": "Before signing the briefing note, the director of procurement spots an error in it. Which correction is required? « Compte tenu des risques signalés lors de la vérification, le comité recommande, que tout contrat de plus de 25 000 $ soit approuvé au préalable par le dirigeant principal des finances. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "supprimer la virgule après « recommande »",
+          "rationale": {
+            "fr": "La proposition « que tout contrat… » est le complément direct de « recommande » ; aucune virgule ne doit l'en séparer.",
+            "en": "The clause « que tout contrat… » is the direct object of « recommande »; no comma must separate them."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « 25 000 $ » par « 25,000 $ »",
+          "rationale": {
+            "fr": "La virgule est décimale en français ; « 25,000 » désignerait vingt-cinq et non vingt-cinq mille. La graphie actuelle est la seule admise.",
+            "en": "The comma is decimal in French; « 25,000 » would mean twenty-five, not twenty-five thousand. The current spelling is the only one accepted."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « dirigeant principal des finances » par « Dirigeant principal des finances »",
+          "rationale": {
+            "fr": "Dans le corps du texte, un titre de fonction s'écrit avec une minuscule ; la majuscule serait fautive.",
+            "en": "In running text, a job title is written in lowercase; the capital would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "ajouter une virgule après « contrat »",
+          "rationale": {
+            "fr": "Cette virgule séparerait « tout contrat » de son complément « de plus de 25 000 $ » et le sujet de son verbe ; elle serait fautive.",
+            "en": "This comma would separate « tout contrat » from its complement « de plus de 25 000 $ » and the subject from its verb; it would be wrong."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "On ne sépare pas un verbe de son complément direct par une virgule, que ce complément soit un nom ou une proposition introduite par « que » : le comité recommande que…, la directrice confirme que… En revanche, la virgule qui suit un long complément placé en tête de phrase (« Compte tenu des risques signalés lors de la vérification, ») est justifiée.",
+        "en": "A verb is not separated from its direct object by a comma, whether that object is a noun or a clause introduced by « que »: le comité recommande que…, la directrice confirme que… By contrast, the comma after a long complement placed at the head of the sentence (« Compte tenu des risques signalés lors de la vérification, ») is justified."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "procurement",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-31",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Le texte de cette affiche de sécurité doit être révisé avant l'impression. Quelle correction faut-il faire ? « Equipement de protection individuelle obligatoire au-delà de cette ligne »",
+        "en": "The text of this safety sign must be revised before printing. Which correction should be made? « Equipement de protection individuelle obligatoire au-delà de cette ligne »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « au-delà » par « au delà »",
+          "rationale": {
+            "fr": "La locution « au-delà » s'écrit toujours avec un trait d'union ; le retirer serait fautif.",
+            "en": "The expression « au-delà » is always hyphenated; removing the hyphen would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « obligatoire » par « Obligatoire »",
+          "rationale": {
+            "fr": "Seul le premier mot du texte prend la majuscule ; l'adjectif « obligatoire » reste en minuscule.",
+            "en": "Only the first word of the text takes a capital; the adjective « obligatoire » stays lowercase."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « de protection » par « de Protection »",
+          "rationale": {
+            "fr": "« Protection » est un nom commun au milieu du texte : rien ne justifie une majuscule.",
+            "en": "« Protection » is a common noun in the middle of the text: nothing justifies a capital."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « Equipement » par « Équipement »",
+          "rationale": {
+            "fr": "En français, les majuscules conservent leurs accents : « Équipement » doit garder son accent aigu.",
+            "en": "In French, capitals keep their accents: « Équipement » must keep its acute accent."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "En français, les majuscules gardent leurs accents et autres signes diacritiques (É, À, Ç, Ô), y compris sur les affiches, dans les titres et dans les textes en capitales ; leur omission est une faute et peut créer des ambiguïtés. Par ailleurs, la locution « au-delà » s'écrit toujours avec un trait d'union.",
+        "en": "In French, capitals keep their accents and other diacritics (É, À, Ç, Ô), including on signs, in titles and in text set in capitals; leaving them out is an error and can create ambiguity. Also, the expression « au-delà » is always hyphenated."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "B",
+      "topic": "health-and-safety",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-32",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Dans l'extrait suivant d'une analyse stratégique, quelle correction est requise ? « Selon les auteurs du rapport, les obligations de l'état envers les communautés de langue officielle en situation minoritaire ne se limitent pas à la prestation de services. »",
+        "en": "In the following excerpt from a policy analysis, which correction is required? « Selon les auteurs du rapport, les obligations de l'état envers les communautés de langue officielle en situation minoritaire ne se limitent pas à la prestation de services. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « langue officielle » par « Langue officielle »",
+          "rationale": {
+            "fr": "« Langue officielle » est un nom commun suivi d'un adjectif ; la majuscule serait fautive.",
+            "en": "« Langue officielle » is a common noun followed by an adjective; the capital would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "remplacer « l'état » par « l'État »",
+          "rationale": {
+            "fr": "Désignant l'entité politique, « État » prend la majuscule, avec son accent. C'est la seule faute de la phrase.",
+            "en": "Referring to the political entity, « État » takes a capital, with its accent. This is the sentence's only error."
+          }
+        },
+        {
+          "id": "c",
+          "text": "ajouter une virgule après « obligations »",
+          "rationale": {
+            "fr": "Cette virgule séparerait le nom « obligations » de son complément « de l'État » ; elle serait fautive.",
+            "en": "This comma would separate the noun « obligations » from its complement « de l'État »; it would be wrong."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « l'état » par « l'Etat »",
+          "rationale": {
+            "fr": "La majuscule est requise, mais une majuscule française garde son accent : « Etat » sans accent est fautif.",
+            "en": "The capital is required, but a French capital keeps its accent: « Etat » without the accent is wrong."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le mot « État » prend la majuscule lorsqu'il désigne l'entité politique ou la puissance publique (l'État, les obligations de l'État, un État membre). Avec une minuscule, « état » désigne une condition ou une situation (l'état des lieux, en bon état). Comme toute majuscule en français, le É conserve son accent.",
+        "en": "The word « État » takes a capital when it refers to the political entity or public authority (l'État, les obligations de l'État, un État membre). With a lowercase letter, « état » means a condition or situation (l'état des lieux, en bon état). Like every capital in French, the É keeps its accent."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-w-punctuation-and-mechanics-33",
+      "version": 1,
+      "skill": "writing",
+      "lang": "fr",
+      "type": "error-id",
+      "stem": {
+        "fr": "Ce passage d'un rapport d'étape doit être révisé. Quelle correction y apporter ? « Lorsque il a présenté le bilan du projet au comité de gouvernance, le gestionnaire a précisé que les travaux de modernisation étaient presque achevés. »",
+        "en": "This passage from a progress report must be revised. Which correction should be made? « Lorsque il a présenté le bilan du projet au comité de gouvernance, le gestionnaire a précisé que les travaux de modernisation étaient presque achevés. »"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "remplacer « presque achevés » par « presqu'achevés »",
+          "rationale": {
+            "fr": "« Presque » ne s'élide que dans « presqu'île » ; « presqu'achevés » serait fautif.",
+            "en": "« Presque » is elided only in « presqu'île »; « presqu'achevés » would be wrong."
+          }
+        },
+        {
+          "id": "b",
+          "text": "ajouter une virgule après « précisé »",
+          "rationale": {
+            "fr": "Cette virgule séparerait le verbe de sa complétive « que les travaux… » ; elle serait fautive.",
+            "en": "This comma would separate the verb from its « que » clause; it would be wrong."
+          }
+        },
+        {
+          "id": "c",
+          "text": "remplacer « Lorsque il » par « Lorsqu'il »",
+          "rationale": {
+            "fr": "« Lorsque » s'élide devant « il » : on écrit « lorsqu'il ». C'est la seule faute de la phrase.",
+            "en": "« Lorsque » is elided before « il »: one writes « lorsqu'il ». This is the sentence's only error."
+          }
+        },
+        {
+          "id": "d",
+          "text": "remplacer « Lorsque il » par « Lors qu'il »",
+          "rationale": {
+            "fr": "L'élision est bien faite, mais la conjonction « lorsque » s'écrit en un seul mot ; « lors » seul est une préposition (lors de la réunion).",
+            "en": "The elision is made, but the conjunction « lorsque » is written as one word; « lors » alone is a preposition (lors de la réunion)."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Lorsque », « puisque » et « quoique » s'élident devant « il », « elle », « on », « en », « un » et « une » : lorsqu'il, puisqu'elle, quoiqu'on. « Lorsque » s'écrit en un seul mot ; « lors » employé seul est une préposition (lors de la réunion). « Presque », en revanche, ne s'élide que dans « presqu'île » : on écrit « presque achevés », « presque entièrement ».",
+        "en": "« Lorsque », « puisque » and « quoique » are elided before « il », « elle », « on », « en », « un » and « une »: lorsqu'il, puisqu'elle, quoiqu'on. « Lorsque » is written as one word; « lors » on its own is a preposition (lors de la réunion). « Presque », by contrast, is elided only in « presqu'île »: one writes « presque achevés », « presque entièrement »."
+      },
+      "subSkill": "punctuation-and-mechanics",
+      "targetBand": "C",
+      "topic": "project-management",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ]
+}

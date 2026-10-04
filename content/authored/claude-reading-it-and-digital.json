@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-it-and-digital-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-1",
+      "stem": {
+        "fr": "Quel est le but principal du courriel envoyé par l'équipe de l'infrastructure technologique ?",
+        "en": "What is the main purpose of the email sent by the technology infrastructure team?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer que l'accès à distance sera suspendu pendant toute une fin de semaine.",
+          "rationale": {
+            "fr": "C'est l'inverse : le courriel précise que « l'accès à distance, lui, ne sera pas touché ».",
+            "en": "It is the reverse: the email states that 'remote access will not be affected'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Informer le personnel d'une interruption prévue du réseau de l'édifice et de la marche à suivre.",
+          "rationale": {
+            "fr": "C'est l'objet du message : il annonce la coupure planifiée, en précise la portée et indique ce que doivent faire ceux qui travailleront sur place.",
+            "en": "This is the message's purpose: it announces the planned outage, sets out its scope and says what those working on site must do."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Demander à des employés de venir aider au remplacement des commutateurs pendant la fin de semaine.",
+          "rationale": {
+            "fr": "Le remplacement relève de l'équipe de l'infrastructure ; le courriel ne sollicite aucune aide du personnel.",
+            "en": "The replacement is the infrastructure team's job; the email asks staff for no help."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Signaler une panne imprévue du réseau survenue le samedi 14 novembre.",
+          "rationale": {
+            "fr": "L'interruption est « planifiée » et future (« remplacera », « sera interrompu ») ; il ne s'agit pas d'une panne déjà survenue.",
+            "en": "The outage is planned and in the future ('will replace', 'will be interrupted'); it is not a failure that has already happened."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour dégager le but d'un courriel, repérez l'annonce principale (ici la coupure planifiée) et vérifiez que la réponse rend compte de l'ensemble du message, y compris les consignes, plutôt que d'un détail ou d'une information inversée.",
+        "en": "To identify an email's purpose, find the main announcement (here the planned outage) and check that the answer accounts for the whole message, including the instructions, rather than one detail or a reversed fact."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-1",
+      "stem": {
+        "fr": "Que doivent faire les employés qui prévoient travailler dans l'édifice pendant la fin de semaine de l'interruption ?",
+        "en": "What must employees who plan to work in the building during the outage weekend do?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Communiquer eux-mêmes avec le centre de services pour réserver une clé.",
+          "rationale": {
+            "fr": "Ce n'est pas l'employé qui s'adresse au centre de services : c'est le gestionnaire qui lui transmet la liste.",
+            "en": "The employee does not contact the service centre: it is the manager who sends it the list."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Travailler plutôt à distance, puisque l'accès à l'édifice sera interdit.",
+          "rationale": {
+            "fr": "Le courriel ne ferme pas l'édifice ; il prévoit au contraire que certains employés y travaillent.",
+            "en": "The email does not close the building; on the contrary, it expects some employees to work there."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Faire approuver leur présence par l'équipe de l'infrastructure technologique.",
+          "rationale": {
+            "fr": "Aucune approbation de l'équipe de l'infrastructure n'est exigée ; on demande seulement d'aviser le gestionnaire.",
+            "en": "No approval from the infrastructure team is required; staff are only asked to notify their manager."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Prévenir leur gestionnaire au plus tard le mercredi 11 novembre.",
+          "rationale": {
+            "fr": "C'est la consigne donnée : « veuillez en aviser votre gestionnaire au plus tard le mercredi 11 novembre ».",
+            "en": "This is the instruction given: 'please notify your manager no later than Wednesday, November 11'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour une question de détail, retrouvez la phrase qui s'adresse précisément au groupe visé (« Si vous devez néanmoins travailler sur place… ») et distinguez bien qui fait quoi : l'employé avise, le gestionnaire transmet, le centre prête.",
+        "en": "For a detail question, find the sentence addressed to the exact group in question ('If you must nevertheless work on site…') and keep track of who does what: the employee notifies, the manager forwards, the centre lends."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-1",
+      "stem": {
+        "fr": "Combien de temps l'interruption du réseau de l'édifice durera-t-elle au total ?",
+        "en": "How long will the building network outage last in total?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "36 heures",
+          "rationale": {
+            "fr": "Du samedi 7 h au dimanche 19 h, on compte 24 heures jusqu'au dimanche 7 h, puis 12 heures de plus : 36 heures.",
+            "en": "From Saturday 7:00 to Sunday 19:00 there are 24 hours to Sunday 7:00, then 12 more: 36 hours."
+          }
+        },
+        {
+          "id": "b",
+          "text": "12 heures",
+          "rationale": {
+            "fr": "Ce chiffre correspond à l'écart entre 7 h et 19 h d'une même journée ; il oublie que la coupure s'étend sur deux jours.",
+            "en": "This is the gap between 7:00 and 19:00 on a single day; it ignores that the outage spans two days."
+          }
+        },
+        {
+          "id": "c",
+          "text": "24 heures",
+          "rationale": {
+            "fr": "Une journée complète ne suffit pas : la coupure se poursuit jusqu'au dimanche 19 h, et non jusqu'au dimanche 7 h.",
+            "en": "One full day is not enough: the outage runs until Sunday 19:00, not Sunday 7:00."
+          }
+        },
+        {
+          "id": "d",
+          "text": "48 heures",
+          "rationale": {
+            "fr": "Ce chiffre suppose deux journées entières ; or la coupure commence à 7 h le samedi et prend fin à 19 h le dimanche.",
+            "en": "This assumes two whole days, but the outage starts at 7:00 on Saturday and ends at 19:00 on Sunday."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour calculer une durée, relevez l'heure et le jour de début et de fin, puis comptez par étapes (d'abord jusqu'à la même heure le lendemain, ensuite le reste) pour éviter de confondre une journée de 12 heures et une journée de 24 heures.",
+        "en": "To work out a duration, note the start and end day and time, then count in steps (first to the same time the next day, then the remainder) so as not to confuse a 12-hour span with a 24-hour day."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-1",
+      "stem": {
+        "fr": "Dans la phrase « Celui-ci transmettra la liste des employés concernés au centre de services », à qui renvoie « Celui-ci » ?",
+        "en": "In the sentence 'This person will send the list of affected employees to the service centre', who does 'Celui-ci' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Au centre de services.",
+          "rationale": {
+            "fr": "Le centre de services est le destinataire de la liste, pas celui qui la transmet.",
+            "en": "The service centre receives the list; it is not the one sending it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À l'employé qui doit travailler sur place.",
+          "rationale": {
+            "fr": "L'employé est désigné par « vous » dans la phrase précédente ; « Celui-ci » reprend un nom masculin singulier qui y figure.",
+            "en": "The employee is addressed as 'you' in the previous sentence; 'Celui-ci' picks up a masculine singular noun that appears there."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Au gestionnaire de l'employé.",
+          "rationale": {
+            "fr": "« Celui-ci » reprend le dernier nom masculin singulier pertinent de la phrase précédente, « votre gestionnaire », qui reçoit l'avis puis transmet la liste.",
+            "en": "'Celui-ci' picks up the last relevant masculine singular noun in the previous sentence, 'your manager', who receives the notice and then forwards the list."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Au réseau de l'édifice.",
+          "rationale": {
+            "fr": "Un réseau ne peut pas transmettre une liste d'employés ; ce nom, trop éloigné, ne convient pas au sens de la phrase.",
+            "en": "A network cannot send a list of employees; this noun is too far back and does not fit the sentence's meaning."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Le pronom démonstratif « celui-ci » reprend en général le nom le plus proche qui s'accorde avec lui (masculin singulier) et qui a du sens avec le verbe. Vérifiez l'antécédent en le substituant : « Votre gestionnaire transmettra la liste… ».",
+        "en": "The demonstrative pronoun 'celui-ci' usually refers to the nearest noun that agrees with it (masculine singular) and makes sense with the verb. Check the antecedent by substituting it: 'Your manager will send the list…'."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-1",
+      "stem": {
+        "fr": "Pourquoi, selon toute vraisemblance, le centre de services prêtera-t-il une clé de connexion cellulaire aux employés qui travailleront sur place ?",
+        "en": "Why, in all likelihood, will the service centre lend a cellular connection key to employees working on site?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Parce que l'accès à distance sera lui aussi interrompu pendant la fin de semaine.",
+          "rationale": {
+            "fr": "Le courriel affirme le contraire : l'accès à distance « ne sera pas touché ».",
+            "en": "The email says the opposite: remote access 'will not be affected'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Parce que leurs téléphones cellulaires ministériels ne fonctionneront plus.",
+          "rationale": {
+            "fr": "Le courriel précise que les téléphones cellulaires ministériels « continueront de fonctionner normalement ».",
+            "en": "The email states that departmental cell phones 'will continue to work normally'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Parce que, le réseau de l'édifice étant coupé, ils auront besoin d'un autre moyen de se connecter.",
+          "rationale": {
+            "fr": "C'est ce que le texte laisse comprendre : sur place, aucun poste branché au réseau de l'édifice ne pourra accéder aux systèmes ; la clé cellulaire offre une autre voie de connexion.",
+            "en": "This is what the text implies: on site, no workstation on the building network will reach the systems; the cellular key offers another way to connect."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Parce que les nouveaux commutateurs exigeront une clé personnelle pour chaque employé.",
+          "rationale": {
+            "fr": "Rien dans le courriel ne lie les nouveaux commutateurs à une clé personnelle ; cette explication est inventée.",
+            "en": "Nothing in the email links the new switches to a personal key; this explanation is made up."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une inférence se construit en combinant des informations explicites : ici, le réseau de l'édifice est coupé, mais l'accès à distance fonctionne. On en déduit le rôle de la clé, sans ajouter de faits que le texte ne contient pas.",
+        "en": "An inference is built by combining explicit information: here, the building network is down but remote access works. From this we deduce the key's role, without adding facts the text does not contain."
+      },
+      "subSkill": "inference",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-2",
+      "stem": {
+        "fr": "Quel est l'objet principal de ce bulletin de la Direction générale des services numériques ?",
+        "en": "What is the main subject of this bulletin from the Digital Services Branch?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Présenter les nouvelles exigences d'accès au réseau qui entreront en vigueur en février.",
+          "rationale": {
+            "fr": "C'est l'objet du bulletin : il annonce, à partir du 1er février, de nouvelles règles sur les mots de passe et l'authentification multifactorielle.",
+            "en": "This is the bulletin's subject: it announces new rules on passwords and multi-factor authentication starting February 1."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Rendre compte d'une intrusion qui a touché le réseau ministériel au cours de l'année.",
+          "rationale": {
+            "fr": "Le bulletin évoque l'augmentation du risque d'intrusion pour justifier les changements, mais ne rapporte aucune intrusion précise.",
+            "en": "The bulletin mentions the rising risk of intrusion to justify the changes, but reports no specific intrusion."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Inviter les employés à une formation obligatoire sur la cybersécurité.",
+          "rationale": {
+            "fr": "Les séances d'information sont « offertes », non obligatoires, et ne constituent qu'un point secondaire du bulletin.",
+            "en": "The information sessions are 'offered', not mandatory, and are only a secondary point of the bulletin."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Annoncer la distribution de téléphones cellulaires ministériels à tous les employés.",
+          "rationale": {
+            "fr": "Le bulletin ne prévoit pas de distribution de téléphones ; ceux qui n'en ont pas recevront plutôt une clé de sécurité.",
+            "en": "The bulletin plans no distribution of phones; those without one will receive a security key instead."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "L'idée principale d'un bulletin se trouve souvent dans la première phrase, qui annonce le changement ; les paragraphes suivants la détaillent. Écartez les options qui ne retiennent qu'un élément secondaire ou qui transforment une justification en événement.",
+        "en": "A bulletin's main idea is often in the first sentence, which announces the change; the following paragraphs detail it. Rule out options that keep only a secondary element or turn a justification into an event."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-2",
+      "stem": {
+        "fr": "Selon le bulletin, que recevront les employés qui ne disposent pas d'un téléphone cellulaire ministériel ?",
+        "en": "According to the bulletin, what will employees who do not have a departmental cell phone receive?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Un téléphone cellulaire ministériel neuf.",
+          "rationale": {
+            "fr": "Le bulletin ne prévoit pas de fournir un téléphone à ces employés ; il propose une autre solution.",
+            "en": "The bulletin does not plan to give these employees a phone; it offers another solution."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Un code envoyé à leur adresse de courriel.",
+          "rationale": {
+            "fr": "Le seul code mentionné s'affiche dans l'application installée sur le téléphone ; aucun envoi par courriel n'est prévu.",
+            "en": "The only code mentioned appears in the app installed on the phone; nothing is sent by email."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une exemption de l'authentification multifactorielle.",
+          "rationale": {
+            "fr": "L'authentification multifactorielle devient « obligatoire pour tous les employés » ; aucune exemption n'est prévue.",
+            "en": "Multi-factor authentication becomes 'mandatory for all employees'; no exemption is provided."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Une clé de sécurité physique.",
+          "rationale": {
+            "fr": "Le bulletin l'indique explicitement : « Les employés qui n'ont pas de téléphone ministériel recevront une clé de sécurité physique. »",
+            "en": "The bulletin states it explicitly: 'Employees who do not have a departmental phone will receive a physical security key.'"
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour une question de détail, repérez dans le texte le groupe précis visé par la question (ici, les employés sans téléphone ministériel) et lisez la phrase qui le concerne ; méfiez-vous des options qui reprennent des mots du texte dans une autre combinaison.",
+        "en": "For a detail question, locate the exact group the question targets (here, employees without a departmental phone) and read the sentence about it; be wary of options that reuse words from the text in a different combination."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-2",
+      "stem": {
+        "fr": "Dans l'expression « en cas de soupçon de compromission », que signifie le mot « compromission » ?",
+        "en": "In the phrase 'in case of suspected compromise', what does the word 'compromission' mean?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Un accord obtenu grâce à des concessions mutuelles.",
+          "rationale": {
+            "fr": "Ce sens appartient au mot « compromis » ; il ne convient pas à un mot de passe.",
+            "en": "That meaning belongs to the word 'compromis' (a compromise/agreement); it does not fit a password."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le fait que le mot de passe ait pu être découvert ou utilisé par une autre personne.",
+          "rationale": {
+            "fr": "Dans le contexte de la sécurité, la compromission d'un mot de passe signifie qu'il n'est plus confidentiel ; c'est alors seulement qu'il faudra le changer.",
+            "en": "In a security context, a password's compromise means it is no longer confidential; only then will it need changing."
+          }
+        },
+        {
+          "id": "c",
+          "text": "L'oubli du mot de passe par son titulaire.",
+          "rationale": {
+            "fr": "Oublier son mot de passe n'en menace pas la confidentialité ; le contexte de l'intrusion exclut ce sens.",
+            "en": "Forgetting one's password does not threaten its confidentiality; the intrusion context rules out this meaning."
+          }
+        },
+        {
+          "id": "d",
+          "text": "L'expiration normale du mot de passe au bout d'une période fixe.",
+          "rationale": {
+            "fr": "Le texte oppose justement la compromission à l'expiration périodique, qui est abolie.",
+            "en": "The text precisely contrasts compromise with periodic expiry, which is being abolished."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour deviner le sens d'un mot, appuyez-vous sur le contexte : le bulletin parle de risque d'intrusion et oppose ce cas à l'expiration périodique. Attention aux faux amis internes au français : « compromission » n'a pas le sens de « compromis ».",
+        "en": "To work out a word's meaning, rely on context: the bulletin is about intrusion risk and contrasts this case with periodic expiry. Watch for look-alikes within French: 'compromission' does not mean 'compromis'."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-2",
+      "stem": {
+        "fr": "Quel rôle joue le premier paragraphe dans l'organisation du bulletin ?",
+        "en": "What role does the first paragraph play in the organisation of the bulletin?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il décrit en détail la nouvelle règle relative à la longueur des mots de passe.",
+          "rationale": {
+            "fr": "La règle sur la longueur des mots de passe est présentée dans le deuxième paragraphe, introduit par « Premièrement ».",
+            "en": "The password-length rule is set out in the second paragraph, introduced by 'First'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il situe les changements dans le temps et en explique la raison avant de les détailler.",
+          "rationale": {
+            "fr": "Le premier paragraphe donne la date d'entrée en vigueur et le motif (réduire le risque d'intrusion) ; les paragraphes suivants énumèrent ensuite les mesures.",
+            "en": "The first paragraph gives the effective date and the reason (reducing intrusion risk); the following paragraphs then list the measures."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il précise ce qui arrivera aux comptes qui ne seront pas configurés à temps.",
+          "rationale": {
+            "fr": "Le verrouillage des comptes est mentionné à la toute fin du bulletin, et non dans le premier paragraphe.",
+            "en": "Account locking is mentioned at the very end of the bulletin, not in the first paragraph."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il présente les séances d'information offertes en janvier.",
+          "rationale": {
+            "fr": "Les séances d'information figurent dans le dernier paragraphe, introduit par « Enfin ».",
+            "en": "The information sessions appear in the last paragraph, introduced by 'Finally'."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Un bulletin administratif suit souvent le plan : annonce et justification, puis mesures introduites par des marqueurs d'énumération (« Premièrement », « Deuxièmement », « Enfin »), puis modalités pratiques. Repérer ces marqueurs permet d'attribuer à chaque paragraphe sa fonction.",
+        "en": "An administrative bulletin often follows this plan: announcement and rationale, then measures introduced by listing markers ('First', 'Second', 'Finally'), then practical arrangements. Spotting these markers lets you assign each paragraph its function."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-2",
+      "stem": {
+        "fr": "Quels chiffres décrivent fidèlement la nouvelle règle applicable aux mots de passe ?",
+        "en": "Which figures accurately describe the new password rule?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Au moins 14 caractères, sans changement périodique obligatoire.",
+          "rationale": {
+            "fr": "C'est la nouvelle règle : 14 caractères au lieu de 8, et plus d'expiration tous les 90 jours.",
+            "en": "This is the new rule: 14 characters instead of 8, and no more expiry every 90 days."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Au moins 8 caractères, avec un changement obligatoire tous les 90 jours.",
+          "rationale": {
+            "fr": "Cette combinaison décrit la règle actuelle, que le bulletin remplace.",
+            "en": "This combination describes the current rule, which the bulletin replaces."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Au moins 14 caractères, avec un changement obligatoire tous les 90 jours.",
+          "rationale": {
+            "fr": "Le minimum de 14 caractères figure bien dans le texte, mais l'expiration tous les 90 jours est précisément supprimée.",
+            "en": "The 14-character minimum does appear in the text, but expiry every 90 days is precisely what is being removed."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Au moins 8 caractères, sans changement périodique obligatoire.",
+          "rationale": {
+            "fr": "L'abandon de l'expiration figure bien dans le texte, mais le minimum de 8 caractères est l'ancienne exigence.",
+            "en": "Dropping expiry does appear in the text, but the 8-character minimum is the old requirement."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Quand un texte compare l'ancienne et la nouvelle règle (« au lieu de », « en revanche », « ne… plus »), associez chaque chiffre au bon état. Les distracteurs combinent souvent un chiffre exact avec un chiffre périmé.",
+        "en": "When a text compares the old and new rule ('instead of', 'on the other hand', 'no longer'), match each figure to the right state. Distractors often pair a correct figure with an outdated one."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-3",
+      "stem": {
+        "fr": "Quel objectif principal poursuit la dirigeante principale de l'information dans cette note de service sur la migration infonuagique ?",
+        "en": "What main objective is the chief information officer pursuing in this memo on the cloud migration?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Suspendre la migration vers le nuage jusqu'à ce que les risques relevés soient éliminés.",
+          "rationale": {
+            "fr": "La note ne suspend pas la migration ; elle souhaite au contraire que la rigueur accrue en « assure la réussite ».",
+            "en": "The memo does not suspend the migration; on the contrary, it wants the added rigour to 'ensure its success'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Remercier les directions générales d'avoir accéléré la migration par leurs propres moyens.",
+          "rationale": {
+            "fr": "L'auteure reconnaît leur souci d'efficacité, mais c'est pour mieux justifier l'encadrement de ces initiatives, non pour les saluer.",
+            "en": "The author acknowledges their concern for efficiency, but only to justify reining in these initiatives, not to praise them."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Encadrer l'acquisition de services infonuagiques en imposant un examen préalable centralisé.",
+          "rationale": {
+            "fr": "C'est l'essentiel de la note : après avoir constaté des achats non coordonnés, elle soumet toute nouvelle demande à l'approbation du comité d'examen de l'architecture.",
+            "en": "This is the core of the memo: having found uncoordinated purchases, it subjects every new request to approval by the architecture review committee."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Annoncer l'abandon des services infonuagiques que les directions générales ont déjà acquis.",
+          "rationale": {
+            "fr": "Les services existants seront inventoriés et maintenus, sauf risque grave ; leur abandon n'est pas annoncé.",
+            "en": "Existing services will be inventoried and kept, unless a serious risk is found; their abandonment is not announced."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Dans une note de service, l'idée principale apparaît souvent après le constat, à la charnière marquée par un connecteur de conséquence (« En conséquence »). Une bonne réponse reformule la décision prise, sans retenir uniquement le contexte ou une mesure secondaire.",
+        "en": "In a memo, the main idea often appears after the finding, at the hinge marked by a connector of consequence ('Consequently'). A good answer rephrases the decision taken, rather than keeping only the background or a secondary measure."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-3",
+      "stem": {
+        "fr": "Que peut-on conclure, d'après la note, au sujet des services infonuagiques que certaines directions générales ont déjà acquis ?",
+        "en": "What can be concluded from the memo about the cloud services some branches have already acquired?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Leur maintien dépendra des résultats de l'inventaire prévu d'ici la fin du trimestre.",
+          "rationale": {
+            "fr": "La formule « sous réserve qu'aucun risque grave ne soit relevé » fait du maintien une condition : si l'inventaire révèle un risque grave, ces services pourraient être interrompus.",
+            "en": "The phrase 'provided no serious risk is identified' makes their continuation conditional: if the inventory reveals a serious risk, these services could be interrupted."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Ils seront tous interrompus à la fin du trimestre, une fois l'inventaire terminé.",
+          "rationale": {
+            "fr": "La note affirme qu'ils « ne seront pas interrompus » ; seule la découverte d'un risque grave pourrait changer la donne.",
+            "en": "The memo says they 'will not be interrupted'; only the discovery of a serious risk could change that."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Ils seront automatiquement intégrés à la plateforme ministérielle.",
+          "rationale": {
+            "fr": "L'intégration à la plateforme est une condition imposée aux nouvelles demandes ; rien n'indique qu'elle s'appliquera automatiquement aux services existants.",
+            "en": "Integration with the platform is a condition for new requests; nothing says it will apply automatically to existing services."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Ils échapperont à toute vérification puisqu'ils ont été acquis avant la nouvelle règle.",
+          "rationale": {
+            "fr": "Ils feront justement l'objet d'un inventaire ; ils ne sont donc pas soustraits à toute vérification.",
+            "en": "They will in fact be inventoried, so they are not exempt from all scrutiny."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Les locutions conditionnelles comme « sous réserve que » (suivie du subjonctif) limitent une affirmation : « ne seront pas interrompus, sous réserve qu'aucun risque grave ne soit relevé » signifie que le maintien n'est pas garanti. Lisez toujours l'affirmation avec sa réserve.",
+        "en": "Conditional phrases such as 'sous réserve que' (followed by the subjunctive) limit a statement: 'will not be interrupted, provided no serious risk is identified' means continuation is not guaranteed. Always read the statement together with its proviso."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-3",
+      "stem": {
+        "fr": "Quelle attitude l'auteure adopte-t-elle envers les directions générales qui ont acquis des services infonuagiques de leur propre initiative ?",
+        "en": "What attitude does the author take toward the branches that acquired cloud services on their own initiative?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle les blâme sévèrement et annonce des sanctions contre les responsables.",
+          "rationale": {
+            "fr": "Le ton reste mesuré : elle reconnaît leur « réel souci d'efficacité » et ne mentionne aucune sanction.",
+            "en": "The tone remains measured: she acknowledges their 'genuine concern for efficiency' and mentions no sanctions."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle approuve leur démarche et souhaite qu'elle soit étendue aux autres directions.",
+          "rationale": {
+            "fr": "Elle juge au contraire que ces initiatives créent des risques inacceptables et impose un examen préalable.",
+            "en": "On the contrary, she considers these initiatives create unacceptable risks and imposes a prior review."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle s'en désintéresse, jugeant la question secondaire par rapport à l'échéancier.",
+          "rationale": {
+            "fr": "La question est au cœur de la note, qui instaure une nouvelle règle pour y répondre.",
+            "en": "The issue is at the heart of the memo, which introduces a new rule to address it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle reconnaît la bonne intention qui les animait, tout en refusant les risques que leur démarche fait courir au Ministère.",
+          "rationale": {
+            "fr": "La concession « Bien que ces initiatives témoignent d'un réel souci d'efficacité » est suivie d'un refus net (« des risques qu'il ne saurait accepter ») : l'attitude est à la fois compréhensive et ferme.",
+            "en": "The concession 'Although these initiatives reflect a genuine concern for efficiency' is followed by a clear refusal ('risks it cannot accept'): the attitude is both understanding and firm."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une structure concessive (« bien que… », suivie d'une principale négative) signale une attitude nuancée : l'auteur admet un mérite pour mieux affirmer sa position. Évitez les options qui ne retiennent qu'un des deux pôles ou qui exagèrent le ton.",
+        "en": "A concessive structure ('although…', followed by a negative main clause) signals a nuanced attitude: the writer grants a merit in order to assert their position more firmly. Avoid options that keep only one side or exaggerate the tone."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-3",
+      "stem": {
+        "fr": "Dans la phrase consacrée à l'inventaire prévu d'ici la fin du trimestre, quel antécédent le pronom démonstratif « ceux-ci » reprend-il ?",
+        "en": "In the sentence about the inventory planned by the end of the quarter, which antecedent does the demonstrative pronoun 'ceux-ci' refer back to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les membres du comité d'examen de l'architecture.",
+          "rationale": {
+            "fr": "Le comité est évoqué dans la phrase précédente, et ses membres ne sont jamais nommés ; ils ne peuvent pas être « interrompus ».",
+            "en": "The committee is mentioned in the previous sentence and its members are never named; they cannot be 'interrupted'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les contrats dédoublés mentionnés plus haut.",
+          "rationale": {
+            "fr": "Les contrats figurent dans un paragraphe antérieur ; la phrase en cause ne parle que des services et de leur inventaire.",
+            "en": "The contracts appear in an earlier paragraph; the sentence in question speaks only of the services and their inventory."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les renseignements protégés hébergés hors des environnements autorisés.",
+          "rationale": {
+            "fr": "Le nom est bien masculin pluriel, mais il est éloigné, et c'est l'utilisation d'un service, non des renseignements, que l'on peut « interrompre ».",
+            "en": "The noun is masculine plural, but it is far back, and it is the use of a service, not information, that can be 'interrupted'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les services infonuagiques que les directions générales ont déjà acquis.",
+          "rationale": {
+            "fr": "Dans la même phrase, « ceux-ci » reprend « Les services déjà acquis », seul nom masculin pluriel proche qui puisse être « interrompu ».",
+            "en": "In the same sentence, 'ceux-ci' refers back to 'The services already acquired', the only nearby masculine plural noun that can be 'interrupted'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour identifier l'antécédent d'un pronom démonstratif, croisez trois critères : l'accord (ici masculin pluriel), la proximité dans le texte et la compatibilité de sens avec le verbe (« être interrompu »). Un seul candidat satisfait aux trois.",
+        "en": "To identify a demonstrative pronoun's antecedent, combine three criteria: agreement (here masculine plural), proximity in the text, and compatibility of meaning with the verb ('be interrupted'). Only one candidate meets all three."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-3",
+      "stem": {
+        "fr": "Dans le passage « elles exposent le Ministère à des risques qu'il ne saurait accepter », quel sens prend la tournure « ne saurait accepter » ?",
+        "en": "In the passage 'they expose the Department to risks it could not accept', what meaning does the phrase 'ne saurait accepter' take on?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Ignore encore s'il pourra les accepter.",
+          "rationale": {
+            "fr": "Ce sens repose sur le verbe « savoir » pris au sens de connaître ; or, au conditionnel négatif, « ne saurait » exprime une impossibilité, non une incertitude.",
+            "en": "This reading takes 'savoir' to mean 'to know'; but in the negative conditional, 'ne saurait' expresses impossibility, not uncertainty."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Ne peut en aucun cas accepter.",
+          "rationale": {
+            "fr": "Au conditionnel et sans « pas », « ne saurait » est une tournure soutenue qui signifie « ne pourrait pas » : le Ministère refuse catégoriquement ces risques.",
+            "en": "In the conditional and without 'pas', 'ne saurait' is a formal turn meaning 'could not': the Department categorically refuses these risks."
+          }
+        },
+        {
+          "id": "c",
+          "text": "N'accepterait qu'après une analyse plus poussée.",
+          "rationale": {
+            "fr": "La tournure ne laisse aucune ouverture à une acceptation conditionnelle ; elle marque un refus.",
+            "en": "The phrase leaves no room for conditional acceptance; it marks a refusal."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Accepte sans en avoir pleinement conscience.",
+          "rationale": {
+            "fr": "C'est un contresens : le texte souligne justement que les risques sont connus et refusés.",
+            "en": "This is a misreading: the text stresses precisely that the risks are known and refused."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans la langue administrative soutenue, « ne saurait » + infinitif (sans « pas ») équivaut à « ne pourrait pas » : il exprime une impossibilité ou un refus poli mais ferme, et non une ignorance. Le contexte (« surtout, hébergement de renseignements protégés ») confirme ce sens.",
+        "en": "In formal administrative French, 'ne saurait' + infinitive (without 'pas') means 'could not': it expresses impossibility or a polite but firm refusal, not ignorance. The context ('above all, hosting protected information') confirms this meaning."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-4",
+      "stem": {
+        "fr": "Selon l'extrait, pourquoi les correctifs de sécurité du système doivent-ils être élaborés par le personnel du Ministère ?",
+        "en": "According to the excerpt, why must the system's security patches be developed by departmental staff?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Parce que le Ministère a choisi de réduire ses coûts d'entretien en internalisant le travail.",
+          "rationale": {
+            "fr": "Le texte présente des coûts d'entretien élevés, mais ne fait état d'aucun choix d'internaliser pour économiser.",
+            "en": "The text reports high maintenance costs but mentions no decision to bring the work in-house to save money."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Parce que le langage de programmation est trop récent pour les entreprises externes.",
+          "rationale": {
+            "fr": "C'est l'inverse : le système a vingt-deux ans et son langage n'est plus maîtrisé que par deux employés.",
+            "en": "It is the opposite: the system is twenty-two years old and only two employees still master its language."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Parce que l'ancien et le nouveau système devront fonctionner en parallèle.",
+          "rationale": {
+            "fr": "La coexistence des deux systèmes concerne la future période de transition, et non la situation actuelle des correctifs.",
+            "en": "The two systems running side by side concerns the future transition period, not the current patching situation."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Parce que l'entreprise qui a fourni le système a cessé d'en assurer le soutien.",
+          "rationale": {
+            "fr": "Le texte établit ce lien de cause à effet : le fournisseur « n'en assure plus le soutien depuis trois ans, si bien que » les correctifs sont conçus à l'interne.",
+            "en": "The text sets out this cause and effect: the supplier 'has not supported it for three years, so that' patches are designed in-house."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les connecteurs de conséquence comme « si bien que », « de sorte que » ou « c'est pourquoi » relient une cause à son effet. Pour répondre à une question en « pourquoi », remontez de l'effet mentionné dans la question jusqu'à la proposition qui précède le connecteur.",
+        "en": "Connectors of consequence such as 'si bien que', 'de sorte que' or 'c'est pourquoi' link a cause to its effect. To answer a 'why' question, trace back from the effect named in the question to the clause before the connector."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-4",
+      "stem": {
+        "fr": "Laquelle des affirmations suivantes rend fidèlement l'évolution chiffrée de la fiabilité du système présentée dans l'extrait ?",
+        "en": "Which of the following statements accurately reflects the figures on the system's reliability trend presented in the excerpt?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le nombre de pannes a augmenté de 6 et le délai moyen de rétablissement de 11 heures.",
+          "rationale": {
+            "fr": "Ce sont les valeurs de départ et d'arrivée prises pour des écarts : les pannes sont passées de 6 à 17, et le délai de 4 à 11 heures.",
+            "en": "These are start and end values mistaken for increases: failures went from 6 to 17, and recovery time from 4 to 11 hours."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le nombre de pannes a diminué, mais le délai moyen de rétablissement s'est allongé.",
+          "rationale": {
+            "fr": "Le nombre de pannes n'a pas diminué : il est passé de 6 à 17 en trois ans.",
+            "en": "The number of failures did not fall: it rose from 6 to 17 in three years."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le nombre de pannes a presque triplé et le délai moyen de rétablissement a plus que doublé.",
+          "rationale": {
+            "fr": "De 6 à 17 pannes, la hausse approche le triple ; de 4 à 11 heures, le délai a augmenté de plus du double. L'affirmation est conforme aux deux séries de chiffres.",
+            "en": "From 6 to 17 failures, the increase is close to threefold; from 4 to 11 hours, the delay has more than doubled. The statement matches both sets of figures."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les coûts d'entretien du système ont doublé au cours des trois dernières années.",
+          "rationale": {
+            "fr": "Le texte compare les coûts actuels (2,4 millions) à ceux d'une solution moderne, et non à ceux d'il y a trois ans.",
+            "en": "The text compares current costs (2.4 million) with those of a modern solution, not with costs three years ago."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour interpréter des données comparatives, repérez les deux points de comparaison (« contre », « est passé de… à… ») et ce qui est comparé. Une formule comme « près du double » peut porter sur deux objets différents (un coût actuel et un coût estimatif) plutôt que sur deux moments.",
+        "en": "To interpret comparative data, identify the two points of comparison ('compared with', 'went from… to…') and what is being compared. A phrase like 'nearly double' may compare two different things (a current cost and an estimated cost) rather than two points in time."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-4",
+      "stem": {
+        "fr": "Quelle fonction remplit, dans l'argumentation de l'extrait, le paragraphe introduit par l'adverbe « Certes » ?",
+        "en": "What function does the paragraph introduced by the adverb 'Certes' serve in the excerpt's argument?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il admet les inconvénients d'un remplacement avant de réaffirmer la nécessité d'agir.",
+          "rationale": {
+            "fr": "« Certes » introduit une concession (investissement, transition de deux ans), aussitôt suivie de « néanmoins », qui ramène la thèse : le statu quo n'est plus défendable.",
+            "en": "'Certes' introduces a concession (investment, two-year transition), immediately followed by 'nevertheless', which restates the thesis: the status quo is no longer defensible."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il présente de nouvelles données statistiques sur les pannes du système.",
+          "rationale": {
+            "fr": "Les données sur les pannes se trouvent dans le paragraphe précédent ; celui-ci n'en ajoute aucune.",
+            "en": "The failure data are in the previous paragraph; this one adds none."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il formule la recommandation finale de l'équipe d'évaluation.",
+          "rationale": {
+            "fr": "La recommandation est énoncée dans le dernier paragraphe, introduit par « L'équipe recommande donc ».",
+            "en": "The recommendation is stated in the last paragraph, introduced by 'The team therefore recommends'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il retrace l'historique de la mise en service du système.",
+          "rationale": {
+            "fr": "L'historique (mise en service il y a vingt-deux ans) figure dans le premier paragraphe.",
+            "en": "The history (commissioned twenty-two years ago) is in the first paragraph."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Le couple « certes… néanmoins » (ou « certes… mais ») structure une concession : l'auteur reconnaît un argument contraire pour mieux le dépasser. Repérer ce mouvement permet de distinguer, dans un rapport, le constat, la concession et la recommandation.",
+        "en": "The pair 'certes… néanmoins' (or 'certes… mais') structures a concession: the writer acknowledges a counter-argument in order to move past it. Spotting this movement helps distinguish, in a report, the finding, the concession and the recommendation."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-4",
+      "stem": {
+        "fr": "Quelle intention principale anime les auteurs de cet extrait du rapport d'évaluation ?",
+        "en": "What main intention drives the authors of this excerpt from the evaluation report?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Décrire de façon strictement neutre le fonctionnement technique du système, sans prendre position.",
+          "rationale": {
+            "fr": "Les auteurs prennent clairement position (« le statu quo n'est plus défendable ») et formulent une recommandation.",
+            "en": "The authors clearly take a position ('the status quo is no longer defensible') and make a recommendation."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Défendre le maintien du système actuel au moyen de correctifs réguliers.",
+          "rationale": {
+            "fr": "C'est l'inverse : ils recommandent de lancer l'analyse des options de remplacement « plutôt que » de prolonger le système par des correctifs.",
+            "en": "It is the reverse: they recommend launching the analysis of replacement options 'rather than' extending the system through patches."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Persuader les décideurs, chiffres à l'appui, d'amorcer sans tarder la démarche de remplacement.",
+          "rationale": {
+            "fr": "Les données, la concession suivie de « néanmoins » et l'évocation des conséquences pour les bénéficiaires servent toutes à convaincre d'agir « dès cet exercice ».",
+            "en": "The data, the concession followed by 'nevertheless' and the mention of consequences for recipients all serve to persuade readers to act 'this fiscal year'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Reprocher aux deux employés qui maîtrisent le langage de ne pas avoir formé de relève.",
+          "rationale": {
+            "fr": "Le texte mentionne ces employés pour illustrer la fragilité du système, sans leur adresser de reproche.",
+            "en": "The text mentions these employees to illustrate the system's fragility, without blaming them."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour cerner l'intention d'un auteur, observez ce que fait le texte : accumule-t-il des données convergentes, réfute-t-il une objection, conclut-il par une recommandation ? Ici, ces procédés relèvent de l'argumentation, non de la simple description.",
+        "en": "To pin down a writer's intention, look at what the text does: does it pile up converging data, rebut an objection, end with a recommendation? Here, these devices belong to argument, not mere description."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-4",
+      "stem": {
+        "fr": "Que laisse entendre la mention du départ à la retraite prochain de l'un des deux employés qui maîtrisent encore le langage de programmation ?",
+        "en": "What does the mention of the upcoming retirement of one of the two employees who still master the programming language imply?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le Ministère devra confier le soutien du système à son fournisseur d'origine.",
+          "rationale": {
+            "fr": "Le fournisseur n'assure plus le soutien depuis trois ans ; cette solution n'est pas envisageable selon le texte.",
+            "en": "The supplier has not provided support for three years; according to the text, this option is not available."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le Ministère risque bientôt de dépendre d'une seule personne pour maintenir le système.",
+          "rationale": {
+            "fr": "Si seuls deux employés maîtrisent le langage et que l'un part l'an prochain, il n'en restera qu'un : le texte suggère ainsi une dépendance accrue et une fragilité grandissante.",
+            "en": "If only two employees master the language and one leaves next year, only one will remain: the text thus suggests greater dependence and growing fragility."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le système sera mis hors service dès l'an prochain.",
+          "rationale": {
+            "fr": "Rien ne l'indique : le rapport recommande seulement de lancer l'analyse des options, et prévoit une transition d'environ deux ans.",
+            "en": "Nothing indicates this: the report only recommends starting the options analysis, and anticipates a transition of about two years."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le remplacement du système sera achevé avant ce départ.",
+          "rationale": {
+            "fr": "Avec une transition d'environ deux ans à venir, un remplacement achevé d'ici l'an prochain est exclu.",
+            "en": "With a transition of about two years still ahead, a replacement completed by next year is ruled out."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Une inférence tire la conséquence logique de faits explicites sans en ajouter : deux spécialistes, dont un part, en laissent un seul. Écartez les options qui contredisent un autre passage du texte (le fournisseur absent, la transition de deux ans).",
+        "en": "An inference draws the logical consequence of explicit facts without adding any: two specialists, one leaving, leaves just one. Rule out options that contradict another part of the text (the supplier no longer involved, the two-year transition)."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-5",
+      "stem": {
+        "fr": "Dans la phrase sur les ententes de partage, quel sens la locution « quitte à ce que » donne-t-elle à la proposition « certains échanges courants s'en trouvent ralentis » ?",
+        "en": "In the sentence about sharing agreements, what meaning does the phrase 'quitte à ce que' give to the clause 'some routine exchanges are slowed down as a result'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle présente ce ralentissement comme un inconvénient accepté d'avance.",
+          "rationale": {
+            "fr": "« Quitte à ce que » signifie « au risque que, en acceptant que » : le Ministère consent à ce ralentissement pour obtenir l'encadrement voulu.",
+            "en": "'Quitte à ce que' means 'even at the risk that, accepting that': the Department accepts this slowdown in order to secure the desired oversight."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle présente ce ralentissement comme le but recherché par la mesure.",
+          "rationale": {
+            "fr": "Ce serait le sens de « afin que » ou « pour que » ; or le ralentissement n'est pas l'objectif de l'entente de partage.",
+            "en": "That would be the meaning of 'afin que' or 'pour que'; but slowing exchanges is not the purpose of the sharing agreement."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle présente ce ralentissement comme une condition préalable à l'application de la mesure.",
+          "rationale": {
+            "fr": "Ce serait le sens de « à condition que » ; la mesure s'applique sans qu'un ralentissement soit requis.",
+            "en": "That would be the meaning of 'à condition que'; the measure applies without any slowdown being required."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle présente ce ralentissement comme un effet que la mesure permettra d'éviter.",
+          "rationale": {
+            "fr": "C'est un contresens : la locution admet le ralentissement au lieu de l'écarter, comme le ferait « de manière à éviter que ».",
+            "en": "This is a misreading: the phrase accepts the slowdown rather than ruling it out, as 'so as to avoid' would."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Quitte à » (suivi d'un infinitif) ou « quitte à ce que » (suivi du subjonctif) introduit une conséquence fâcheuse que l'on accepte d'avance. Ne la confondez pas avec les locutions de but (« afin que »), de condition (« à condition que ») ou de prévention (« de manière à éviter que »).",
+        "en": "'Quitte à' (with an infinitive) or 'quitte à ce que' (with the subjunctive) introduces an unwelcome consequence that one accepts in advance. Do not confuse it with phrases of purpose ('afin que'), condition ('à condition que') or prevention ('de manière à éviter que')."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-5",
+      "stem": {
+        "fr": "Dans le segment « chargé d'en tenir à jour la description et d'en autoriser le partage », quel antécédent le pronom adverbial « en » remplace-t-il ?",
+        "en": "In the segment 'responsible for keeping its description up to date and authorizing its sharing', which antecedent does the adverbial pronoun 'en' replace?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Au responsable désigné lui-même.",
+          "rationale": {
+            "fr": "Le responsable est le sujet sous-entendu de « chargé » ; il ne peut pas être à la fois celui qui agit et l'objet décrit.",
+            "en": "The designated person is the implied subject of 'chargé'; they cannot be both the one acting and the thing described."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Au fonds de données dont cette personne a la charge.",
+          "rationale": {
+            "fr": "« En » remplace un complément introduit par « de » : la description et le partage « du fonds de données », mentionné au début de la phrase.",
+            "en": "'En' replaces a complement introduced by 'de': the description and sharing 'of the data holding', mentioned at the start of the sentence."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À la direction générale à laquelle appartient le responsable.",
+          "rationale": {
+            "fr": "Aucune direction générale n'est nommée dans cette phrase ; l'antécédent doit s'y trouver.",
+            "en": "No branch is named in this sentence; the antecedent must be found within it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Au calendrier de conservation des données.",
+          "rationale": {
+            "fr": "Le calendrier de conservation n'apparaît que dans la phrase suivante ; il ne peut pas être l'antécédent.",
+            "en": "The retention schedule only appears in the next sentence; it cannot be the antecedent."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le pronom « en » remplace un complément introduit par « de » (« la description du fonds » devient « en tenir à jour la description »). Cherchez son antécédent en amont, dans la même phrase, et vérifiez-le en reconstituant le groupe complet.",
+        "en": "The pronoun 'en' replaces a complement introduced by 'de' ('the description of the holding' becomes 'keep its description up to date'). Look for its antecedent earlier in the same sentence and check it by rebuilding the full phrase."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-5",
+      "stem": {
+        "fr": "Quelle intention le dirigeant principal des données poursuit-il dans le troisième paragraphe de sa note, consacré à la charge de travail ?",
+        "en": "What intention is the chief data officer pursuing in the third paragraph of his note, on workload?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "S'excuser d'imposer des exigences qu'il juge lui-même superflues.",
+          "rationale": {
+            "fr": "Il reconnaît un effort supplémentaire, mais défend l'utilité des exigences ; il ne les juge nullement superflues.",
+            "en": "He acknowledges extra effort but defends the requirements' usefulness; he does not consider them superfluous at all."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Avertir les gestionnaires des sanctions prévues en cas de non-conformité.",
+          "rationale": {
+            "fr": "Aucune sanction n'est évoquée ; il offre au contraire un accompagnement personnalisé.",
+            "en": "No sanction is mentioned; on the contrary, he offers personalized support."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Minimiser l'effort demandé en affirmant que la charge de travail restera inchangée.",
+          "rationale": {
+            "fr": "Il admet au contraire que les exigences « alourdiront, dans un premier temps, la charge de travail ».",
+            "en": "On the contrary, he admits the requirements 'will, at first, increase the workload'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Admettre le surcroît de travail initial tout en faisant valoir les gains qui en découleront à terme.",
+          "rationale": {
+            "fr": "Le paragraphe reconnaît d'abord la charge accrue (« J'ai conscience que… »), puis y oppose, avec « Cela dit », les bénéfices futurs : recherches plus rapides et demandes mieux traitées.",
+            "en": "The paragraph first acknowledges the heavier load ('I am aware that…'), then counters it, with 'That said', by the future benefits: faster searches and better-handled requests."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le ton d'un gestionnaire qui annonce une contrainte est souvent conciliant : il reconnaît la difficulté, puis la relativise par un connecteur d'opposition (« cela dit », « toutefois ») et un argument d'avenir. Repérez ces deux mouvements pour qualifier l'intention.",
+        "en": "The tone of a manager announcing a constraint is often conciliatory: they acknowledge the difficulty, then put it in perspective with a contrast connector ('that said', 'however') and a forward-looking argument. Spot both moves to characterize the intention."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-5",
+      "stem": {
+        "fr": "Comment l'auteur organise-t-il, dans le deuxième paragraphe, la présentation des changements qu'apporte la directive sur la gestion des données ?",
+        "en": "How does the writer organize, in the second paragraph, the presentation of the changes brought by the data-management directive?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il les classe par ordre de coût, du plus onéreux au moins onéreux.",
+          "rationale": {
+            "fr": "Le paragraphe ne mentionne aucun coût ; l'ordre de présentation n'est pas justifié par une hiérarchie financière.",
+            "en": "The paragraph mentions no cost; the order of presentation is not based on a financial ranking."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il les présente sous la forme d'une série de questions suivies de leurs réponses.",
+          "rationale": {
+            "fr": "Le paragraphe ne contient aucune question ; il est entièrement affirmatif.",
+            "en": "The paragraph contains no questions; it is entirely declarative."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il en annonce d'abord le nombre, puis les énumère au moyen de marqueurs de succession.",
+          "rationale": {
+            "fr": "La phrase « Trois changements méritent votre attention » annonce le contenu, que « D'abord », « Ensuite » et « Enfin » déroulent ensuite un à un.",
+            "en": "The sentence 'Three changes deserve your attention' announces the content, which 'First', 'Next' and 'Finally' then set out one by one."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il oppose chacun d'eux à la pratique actuelle d'une direction générale précise.",
+          "rationale": {
+            "fr": "Les pratiques inégales des directions sont évoquées globalement dans le premier paragraphe ; aucune direction précise n'est citée.",
+            "en": "The branches' uneven practices are mentioned in general terms in the first paragraph; no specific branch is named."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une phrase d'annonce (« Trois changements… ») suivie de marqueurs d'énumération (« D'abord », « Ensuite », « Enfin ») est un procédé d'organisation fréquent dans les textes administratifs : elle prépare le lecteur et rend chaque élément facile à repérer.",
+        "en": "An announcing sentence ('Three changes…') followed by listing markers ('First', 'Next', 'Finally') is a common organizing device in administrative texts: it prepares the reader and makes each element easy to locate."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-it-and-digital-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-it-and-digital-5",
+      "stem": {
+        "fr": "Selon la note, dans quelle circonstance des données pourront-elles être conservées au-delà du délai prévu au calendrier de conservation ?",
+        "en": "According to the note, under what circumstances may data be kept beyond the period set in the retention schedule?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Lorsque le responsable désigné du fonds juge cette conservation utile.",
+          "rationale": {
+            "fr": "Le responsable tient la description à jour et autorise le partage ; la note ne lui confie pas le pouvoir de prolonger la conservation.",
+            "en": "The designated person maintains the description and authorizes sharing; the note does not give them power to extend retention."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Lorsqu'elles sont visées par une entente de partage avec un autre ministère.",
+          "rationale": {
+            "fr": "L'entente de partage encadre la communication des données, non la durée de leur conservation.",
+            "en": "The sharing agreement governs the communication of data, not how long it is kept."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Lorsqu'une demande d'accès à l'information est en cours de traitement.",
+          "rationale": {
+            "fr": "Les demandes d'accès sont mentionnées comme un bénéfice attendu de la directive, non comme un motif de conservation prolongée.",
+            "en": "Access requests are mentioned as an expected benefit of the directive, not as a reason for extended retention."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Lorsqu'une exception a été autorisée au préalable dans un document écrit.",
+          "rationale": {
+            "fr": "La note prévoit une seule exception : « à moins qu'une dérogation n'ait été approuvée par écrit ».",
+            "en": "The note provides a single exception: 'unless a derogation has been approved in writing'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "La locution « à moins que » (suivie du subjonctif, souvent avec un « ne » explétif) introduit la seule exception à une règle. Pour une question de détail, associez chaque mesure à son objet précis : le responsable, la conservation et le partage relèvent de règles distinctes.",
+        "en": "The phrase 'à moins que' (followed by the subjunctive, often with an expletive 'ne') introduces the only exception to a rule. For a detail question, match each measure to its exact object: the designated person, retention and sharing fall under separate rules."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-it-and-digital-1",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Interruption planifiée du réseau de l'édifice",
+      "body": "Bonjour à toutes et à tous,\n\nL'équipe de l'infrastructure technologique remplacera bientôt les commutateurs principaux de notre édifice. Pour ce faire, le réseau de l'édifice, filaire et sans fil, sera interrompu du samedi 14 novembre à 7 h au dimanche 15 novembre à 19 h. Pendant toute cette période, aucun poste de travail branché dans l'édifice ne pourra accéder à la messagerie, aux lecteurs partagés ou au système de gestion des dossiers. L'accès à distance, lui, ne sera pas touché.\n\nSi vous devez néanmoins travailler sur place cette fin de semaine-là, veuillez en aviser votre gestionnaire au plus tard le mercredi 11 novembre. Celui-ci transmettra la liste des employés concernés au centre de services, qui leur prêtera une clé de connexion cellulaire.\n\nLes téléphones cellulaires ministériels continueront de fonctionner normalement. Pour toute question, écrivez au centre de services.\n\nMerci de votre collaboration,\nL'équipe de l'infrastructure technologique",
+      "wordCount": 146,
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 16.22,
+        "rareWordRatio": 0.281
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-it-and-digital-2",
+      "lang": "fr",
+      "docType": "bulletin",
+      "title": "Nouvelles règles d'authentification à compter du 1er février",
+      "body": "À compter du 1er février, la Direction générale des services numériques modifie les règles d'accès au réseau ministériel. Ces changements visent à réduire le risque d'intrusion, qui a nettement augmenté au cours de la dernière année.\n\nPremièrement, les mots de passe devront compter au moins 14 caractères, au lieu de 8 actuellement. En revanche, ils n'expireront plus tous les 90 jours : vous devrez les changer seulement en cas de soupçon de compromission.\n\nDeuxièmement, l'authentification multifactorielle deviendra obligatoire pour tous les employés. À chaque connexion à distance, vous devrez confirmer votre identité au moyen d'un code affiché dans l'application d'authentification installée sur votre téléphone cellulaire ministériel. Les employés qui n'ont pas de téléphone ministériel recevront une clé de sécurité physique.\n\nEnfin, des séances d'information de 30 minutes seront offertes tous les mardis de janvier ; l'inscription se fait dans le portail de formation. Les comptes qui n'auront pas été configurés au 15 février seront temporairement verrouillés.",
+      "wordCount": 156,
+      "targetBand": "B",
+      "topic": "it-and-digital",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 17.33,
+        "rareWordRatio": 0.295
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-it-and-digital-3",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Gouvernance de la migration des applications vers le nuage",
+      "body": "Destinataires : directrices et directeurs généraux\nExpéditrice : dirigeante principale de l'information\n\nComme vous le savez, le Ministère s'est engagé à migrer vers le nuage, d'ici trois ans, la majorité des applications hébergées dans son centre de données. Or, l'examen à mi-parcours a révélé que plusieurs directions générales ont acquis des services infonuagiques de leur propre chef, sans consulter l'équipe de la sécurité ni évaluer la classification des données en cause.\n\nBien que ces initiatives témoignent d'un réel souci d'efficacité, elles exposent le Ministère à des risques qu'il ne saurait accepter : dédoublement des contrats, coûts difficiles à prévoir et, surtout, hébergement de renseignements protégés hors des environnements autorisés.\n\nEn conséquence, toute nouvelle demande de service infonuagique devra désormais être soumise au comité d'examen de l'architecture, qui se réunit toutes les deux semaines. Aucune dépense ne sera autorisée à moins que le comité n'ait confirmé que la solution respecte les exigences de sécurité et s'intègre à la plateforme ministérielle. Les services déjà acquis feront l'objet d'un inventaire d'ici la fin du trimestre ; ceux-ci ne seront pas interrompus, sous réserve qu'aucun risque grave ne soit relevé.\n\nJe compte sur votre collaboration pour que cette rigueur accrue, loin de ralentir la migration, en assure la réussite.",
+      "wordCount": 205,
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 29.29,
+        "rareWordRatio": 0.283
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-it-and-digital-4",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Évaluation du système de traitement des subventions (extrait)",
+      "body": "3.2 État du système existant\n\nLe système de traitement des subventions, mis en service il y a vingt-deux ans, repose sur un langage de programmation que seuls deux employés du Ministère maîtrisent encore, dont l'un prendra sa retraite l'an prochain. Son fournisseur n'en assure plus le soutien depuis trois ans, si bien que les correctifs de sécurité doivent être conçus à l'interne.\n\nLes données recueillies confirment cette fragilité. Le système a connu 17 pannes au cours du dernier exercice, contre 6 trois ans plus tôt, et le délai moyen de rétablissement est passé de 4 à 11 heures. Les coûts d'entretien atteignent désormais 2,4 millions de dollars par année, soit près du double du coût annuel estimatif d'une solution moderne une fois celle-ci en place.\n\nCertes, un remplacement complet exigerait un investissement initial important et une période de transition d'environ deux ans, durant laquelle les deux systèmes devraient coexister. Nous estimons néanmoins que le statu quo n'est plus défendable : faute d'agir, le Ministère s'exposerait à une interruption prolongée des paiements, dont les conséquences pour les bénéficiaires seraient considérables.\n\nL'équipe recommande donc de lancer dès cet exercice l'analyse des options de remplacement, plutôt que de prolonger la vie du système au moyen de correctifs ponctuels.",
+      "wordCount": 205,
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 22.78,
+        "rareWordRatio": 0.268
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-it-and-digital-5",
+      "lang": "fr",
+      "docType": "note",
+      "title": "Note aux gestionnaires : la nouvelle directive sur la gestion des données",
+      "body": "La nouvelle directive ministérielle sur la gestion des données entrera en vigueur le 1er avril. Elle ne crée pas d'obligations entièrement nouvelles ; elle précise plutôt des exigences qui, faute d'avoir été appliquées uniformément, ont donné lieu à des pratiques fort inégales d'une direction générale à l'autre.\n\nTrois changements méritent votre attention. D'abord, chaque fonds de données devra avoir un responsable désigné, chargé d'en tenir à jour la description et d'en autoriser le partage. Ensuite, les données ne pourront être conservées au-delà du délai fixé dans le calendrier de conservation, à moins qu'une dérogation n'ait été approuvée par écrit. Enfin, toute communication de données à un autre ministère passera par une entente de partage, quitte à ce que certains échanges courants s'en trouvent ralentis.\n\nJ'ai conscience que ces exigences alourdiront, dans un premier temps, la charge de travail de vos équipes. Cela dit, l'expérience d'autres organisations montre que la rigueur initiale se traduit, à terme, par des recherches plus rapides et des demandes d'accès à l'information mieux traitées. Mon équipe offrira un accompagnement personnalisé aux directions qui le souhaitent ; je vous invite à désigner vos responsables d'ici la fin de février.\n\nLe dirigeant principal des données",
+      "wordCount": 197,
+      "targetBand": "C",
+      "topic": "it-and-digital",
+      "readability": {
+        "sentences": 10,
+        "avgSentenceLength": 19.7,
+        "rareWordRatio": 0.254
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

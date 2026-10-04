@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-policy-and-legislation-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-1",
+      "stem": {
+        "fr": "Quel est l'objet principal de la note de service de Martine Lavoie ?",
+        "en": "What is the main purpose of Martine Lavoie's memo?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer qu'une ligne directrice sur la conservation des documents sera bientôt soumise à une consultation.",
+          "rationale": {
+            "fr": "Aucune consultation n'est annoncée : la directive est déjà adoptée et entre en vigueur le 1er février.",
+            "en": "No consultation is announced: the directive is already adopted and comes into force on February 1."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Inviter les employés intéressés à s'inscrire à une séance de formation facultative.",
+          "rationale": {
+            "fr": "La formation n'est qu'un élément de la note, et elle est « obligatoire », non facultative.",
+            "en": "The training is only one element of the memo, and it is 'mandatory', not optional."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Informer le personnel des nouvelles obligations qu'impose une directive sur le point d'entrer en vigueur.",
+          "rationale": {
+            "fr": "C'est l'objet de la note : elle annonce l'entrée en vigueur de la directive et énumère ce qu'elle exige désormais (enregistrement, formation, statut des copies).",
+            "en": "This is the memo's purpose: it announces the directive's coming into force and lists what it now requires (recording, training, status of copies)."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Expliquer aux gestionnaires comment configurer le dépôt ministériel sur les postes de travail.",
+          "rationale": {
+            "fr": "La note ne donne aucune instruction technique sur le dépôt ; elle précise plutôt que les copies sur un poste de travail ne sont plus des documents officiels.",
+            "en": "The memo gives no technical instructions on the repository; rather, it states that copies on a workstation are no longer official records."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Pour dégager l'idée principale, lisez l'objet et la première phrase, puis vérifiez que la réponse rend compte de l'ensemble du texte et non d'un seul détail comme la formation.",
+        "en": "To find the main idea, read the subject line and first sentence, then check that the answer covers the whole text and not a single detail such as the training."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-1",
+      "stem": {
+        "fr": "Selon la note, qu'advient-il des copies de documents gardées dans une boîte de courriel personnelle ?",
+        "en": "According to the memo, what happens to copies of documents kept in a personal email inbox?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elles perdent leur statut de documents officiels.",
+          "rationale": {
+            "fr": "Bonne lecture : la note précise que ces copies « ne seront plus considérées comme des documents officiels ».",
+            "en": "Accurate reading: the memo states that these copies 'will no longer be considered official records'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elles doivent être supprimées avant le 31 mars.",
+          "rationale": {
+            "fr": "Le 31 mars est l'échéance fixée aux gestionnaires pour confirmer la formation, et la note n'exige aucune suppression.",
+            "en": "March 31 is the deadline for managers to confirm training, and the memo requires no deletion."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elles sont transférées automatiquement dans le dépôt ministériel.",
+          "rationale": {
+            "fr": "Rien n'indique un transfert automatique ; c'est à l'employé d'enregistrer les documents dans le dépôt.",
+            "en": "Nothing indicates an automatic transfer; it is up to employees to record documents in the repository."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elles restent valides pendant les 10 premiers jours ouvrables.",
+          "rationale": {
+            "fr": "Ce chiffre est le délai d'enregistrement dans le dépôt ; il ne confère aucune validité temporaire aux copies personnelles.",
+            "en": "That figure is the deadline for recording in the repository; it gives personal copies no temporary validity."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour une question de détail, repérez la phrase qui traite exactement de l'élément demandé (ici les copies dans une boîte de courriel personnelle) et méfiez-vous des chiffres qui se rapportent à une autre obligation.",
+        "en": "For a detail question, find the sentence dealing with exactly the element asked about (here copies in a personal inbox) and beware of figures that relate to a different obligation."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-1",
+      "stem": {
+        "fr": "Dans quel délai un document ayant une valeur opérationnelle doit-il être enregistré dans le dépôt ministériel ?",
+        "en": "Within what time frame must a document with operational value be recorded in the departmental repository?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Avant le 1er février, date d'entrée en vigueur de la directive.",
+          "rationale": {
+            "fr": "Le 1er février est la date d'entrée en vigueur, pas un délai d'enregistrement des documents.",
+            "en": "February 1 is the coming-into-force date, not a deadline for recording documents."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Au plus tard le 31 mars de chaque année.",
+          "rationale": {
+            "fr": "Le 31 mars concerne la confirmation de la formation par les gestionnaires.",
+            "en": "March 31 concerns managers' confirmation of training."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Dans les 45 jours ouvrables suivant sa création.",
+          "rationale": {
+            "fr": "Le nombre 45 correspond à la durée en minutes de la séance de formation.",
+            "en": "The number 45 is the length of the training session in minutes."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Dans les 10 jours ouvrables suivant sa création.",
+          "rationale": {
+            "fr": "C'est le délai indiqué : le document « devra être enregistré [...] dans les 10 jours ouvrables suivant sa création ».",
+            "en": "This is the stated time frame: the document 'must be recorded [...] within 10 working days of its creation'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Un texte administratif contient souvent plusieurs chiffres (dates, durées, délais). Associez chaque chiffre à l'obligation qu'il accompagne avant de répondre.",
+        "en": "An administrative text often contains several figures (dates, durations, deadlines). Match each figure to the obligation it goes with before answering."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-1",
+      "stem": {
+        "fr": "Dans la phrase « Elle remplace l'ancienne ligne directrice », à quoi renvoie le pronom « Elle » ?",
+        "en": "In the sentence 'Elle remplace l'ancienne ligne directrice', what does the pronoun 'Elle' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À la séance de formation obligatoire.",
+          "rationale": {
+            "fr": "La formation n'est mentionnée que plus loin dans le texte ; un pronom renvoie normalement à un nom déjà cité.",
+            "en": "The training is only mentioned later in the text; a pronoun normally refers back to a noun already mentioned."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À la nouvelle directive ministérielle.",
+          "rationale": {
+            "fr": "« Elle » reprend le sujet de la phrase précédente : la nouvelle directive, qui remplace l'ancien texte.",
+            "en": "'Elle' picks up the subject of the previous sentence: the new directive, which replaces the old text."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À l'équipe de la gestion de l'information.",
+          "rationale": {
+            "fr": "Cette équipe n'apparaît qu'à la fin de la note, et ce n'est pas elle qui remplace une ligne directrice.",
+            "en": "That team only appears at the end of the memo, and it is not what replaces a guideline."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À la directrice qui signe la note.",
+          "rationale": {
+            "fr": "La signataire ne remplace pas un texte ; le pronom reprend un nom de la phrase qui précède.",
+            "en": "The signatory does not replace a text; the pronoun picks up a noun from the preceding sentence."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Un pronom sujet comme « elle » reprend en général le sujet de la phrase précédente. Vérifiez aussi le sens : seule une directive peut « remplacer une ligne directrice ».",
+        "en": "A subject pronoun such as 'elle' usually picks up the subject of the previous sentence. Check the meaning too: only a directive can 'replace a guideline'."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-1",
+      "stem": {
+        "fr": "Que cherche à faire Martine Lavoie dans la dernière phrase de sa note : « Je compte sur votre collaboration pour que cette transition se fasse sans retard » ?",
+        "en": "What is Martine Lavoie trying to do in the last sentence of her memo: 'I am counting on your cooperation so that this transition happens without delay'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Reprocher aux équipes les retards qu'elles ont accumulés par le passé.",
+          "rationale": {
+            "fr": "La phrase ne mentionne aucun retard passé ; elle porte sur la transition à venir.",
+            "en": "The sentence mentions no past delays; it is about the upcoming transition."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Exprimer des doutes sur l'utilité de la nouvelle directive.",
+          "rationale": {
+            "fr": "Rien dans la note ne remet la directive en question ; la directrice la présente comme un progrès par rapport à l'ancien texte.",
+            "en": "Nothing in the memo questions the directive; the director presents it as an improvement on the old text."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Annoncer des sanctions pour les employés qui ne respecteront pas l'échéance.",
+          "rationale": {
+            "fr": "Aucune sanction n'est évoquée ; le ton est celui d'un appel, non d'une menace.",
+            "en": "No sanctions are mentioned; the tone is that of an appeal, not a threat."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Obtenir l'adhésion du personnel pour que la directive soit appliquée dans les délais.",
+          "rationale": {
+            "fr": "« Je compte sur votre collaboration » est une formule courtoise qui sollicite la coopération des lecteurs afin de respecter le calendrier.",
+            "en": "'I am counting on your cooperation' is a courteous formula seeking readers' cooperation in order to keep to the schedule."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Les formules de clôture d'une note administrative (« Je compte sur votre collaboration », « Merci de votre appui ») servent à mobiliser les lecteurs, non à blâmer ou à menacer.",
+        "en": "The closing formulas of an administrative memo ('I am counting on your cooperation', 'Thank you for your support') serve to rally readers, not to blame or threaten them."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-2",
+      "stem": {
+        "fr": "Pourquoi Julien Tremblay écrit-il à ses collègues des bureaux régionaux ?",
+        "en": "Why is Julien Tremblay writing to his colleagues in the regional offices?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Pour solliciter leur aide afin que les exploitants de leur région soient informés de la consultation.",
+          "rationale": {
+            "fr": "C'est le cœur du courriel : « Je vous demande de faire connaître cette consultation auprès des exploitants de votre région ».",
+            "en": "This is the heart of the email: 'I am asking you to publicize this consultation among operators in your region'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Pour leur demander de commenter eux-mêmes le projet de règlement avant le 15 décembre.",
+          "rationale": {
+            "fr": "Le 15 décembre est la fin de la consultation publique, mais on ne demande pas aux collègues de soumettre leurs propres commentaires.",
+            "en": "December 15 is the end of the public consultation, but the colleagues are not asked to submit their own comments."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Pour les inviter à animer les séances virtuelles du 18 et du 25 novembre.",
+          "rationale": {
+            "fr": "Les séances sont organisées par l'équipe de l'auteur (« nous tiendrons ») ; rien n'indique que les collègues les animeront.",
+            "en": "The sessions are run by the writer's team ('we will hold'); nothing indicates the colleagues will lead them."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pour leur présenter les conclusions du rapport sommaire sur la consultation.",
+          "rationale": {
+            "fr": "Le rapport sommaire n'existe pas encore : il sera publié après la consultation.",
+            "en": "The summary report does not exist yet: it will be published after the consultation."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Dans un courriel de travail, la demande adressée au lecteur (« Je vous demande de... ») indique généralement le but du message ; le reste fournit le contexte et les suites.",
+        "en": "In a work email, the request made to the reader ('I am asking you to...') usually signals the message's purpose; the rest provides context and next steps."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-2",
+      "stem": {
+        "fr": "Que doivent faire les collègues régionaux lorsqu'un exploitant leur pose une question technique sur le projet de règlement ?",
+        "en": "What should regional colleagues do when an operator asks them a technical question about the draft regulation?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Y répondre en s'appuyant sur la trousse d'information.",
+          "rationale": {
+            "fr": "La trousse sert à faire connaître la consultation ; l'auteur précise que les collègues n'ont pas à répondre eux-mêmes aux questions techniques.",
+            "en": "The kit is for publicizing the consultation; the writer specifies that colleagues need not answer technical questions themselves."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La noter pour la soulever lors d'une séance virtuelle.",
+          "rationale": {
+            "fr": "Le courriel ne demande pas de garder les questions pour les séances ; il indique une autre marche à suivre.",
+            "en": "The email does not ask for questions to be saved for the sessions; it gives a different procedure."
+          }
+        },
+        {
+          "id": "c",
+          "text": "La transmettre à la boîte de courriel générique de l'équipe.",
+          "rationale": {
+            "fr": "C'est la consigne donnée : « dirigez-les plutôt vers notre boîte de courriel générique ».",
+            "en": "This is the instruction given: 'direct them instead to our generic email inbox'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "L'inclure dans le rapport sommaire publié l'an prochain.",
+          "rationale": {
+            "fr": "Le rapport sommaire est rédigé par l'équipe de l'auteur après la consultation ; les collègues n'y contribuent pas directement.",
+            "en": "The summary report is written by the writer's team after the consultation; colleagues do not contribute to it directly."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Repérez la consigne exacte qui vise la situation décrite dans la question. Ici, les deux-points introduisent l'instruction : ne pas répondre soi-même, mais rediriger.",
+        "en": "Find the exact instruction that covers the situation in the question. Here, the colon introduces the instruction: do not answer yourself, redirect instead."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-2",
+      "stem": {
+        "fr": "Dans la phrase « dirigez-les plutôt vers notre boîte de courriel générique, et notre équipe s'en chargera », que signifie « s'en chargera » ?",
+        "en": "In the sentence 'direct them instead to our generic email inbox, and our team s'en chargera', what does 's'en chargera' mean?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les transmettra à un autre service.",
+          "rationale": {
+            "fr": "« Se charger de » ne signifie pas confier à d'autres, mais prendre soi-même la responsabilité de quelque chose.",
+            "en": "'Se charger de' does not mean handing over to others, but taking on responsibility oneself."
+          }
+        },
+        {
+          "id": "b",
+          "text": "S'occupera d'y répondre.",
+          "rationale": {
+            "fr": "« Se charger de quelque chose », c'est en prendre la responsabilité ; « en » reprend les questions techniques.",
+            "en": "'Se charger de quelque chose' means taking responsibility for it; 'en' refers back to the technical questions."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les remettra à plus tard.",
+          "rationale": {
+            "fr": "Rien dans l'expression n'évoque un report ; elle exprime au contraire une prise en charge.",
+            "en": "Nothing in the expression suggests postponement; on the contrary, it expresses taking charge."
+          }
+        },
+        {
+          "id": "d",
+          "text": "En sera simplement informée.",
+          "rationale": {
+            "fr": "Être informé est passif ; « se charger de » implique d'agir.",
+            "en": "Being informed is passive; 'se charger de' implies acting."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "« Se charger de » signifie prendre en main, s'occuper de. Le pronom « en » remplace le complément introduit par « de » (ici, les questions techniques).",
+        "en": "'Se charger de' means to take care of, to handle. The pronoun 'en' replaces the complement introduced by 'de' (here, the technical questions)."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-2",
+      "stem": {
+        "fr": "Comment le courriel de Julien Tremblay est-il organisé ?",
+        "en": "How is Julien Tremblay's email organized?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il présente d'abord la consultation, précise ensuite ce qu'on attend des collègues, puis annonce les étapes qui suivront.",
+          "rationale": {
+            "fr": "C'est bien l'ordre des paragraphes : contexte de la consultation, demande et consignes, suites prévues.",
+            "en": "This is indeed the order of the paragraphs: background on the consultation, request and instructions, planned next steps."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il décrit d'abord le rapport sommaire, puis les séances virtuelles, puis le projet de règlement.",
+          "rationale": {
+            "fr": "Cet ordre est inversé : le rapport sommaire n'est évoqué qu'à la fin.",
+            "en": "This order is reversed: the summary report is only mentioned at the end."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il expose les arguments pour et contre le projet de règlement avant de donner son avis.",
+          "rationale": {
+            "fr": "L'auteur ne discute pas le fond du projet et ne donne aucun avis personnel.",
+            "en": "The writer does not discuss the substance of the draft and gives no personal opinion."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il répond une à une à des questions que les collègues lui ont posées.",
+          "rationale": {
+            "fr": "Le courriel ne reprend aucune question des collègues ; il les informe et leur fait une demande.",
+            "en": "The email does not take up any questions from colleagues; it informs them and makes a request."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour décrire la structure d'un texte, résumez chaque paragraphe en quelques mots, puis comparez cette suite à l'ordre proposé par chaque option.",
+        "en": "To describe a text's structure, sum up each paragraph in a few words, then compare that sequence with the order each option proposes."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-2",
+      "stem": {
+        "fr": "Pourquoi l'auteur mentionne-t-il en particulier les exploitants « qui n'ont pas facilement accès à Internet » ?",
+        "en": "Why does the writer specifically mention operators 'who do not have easy access to the Internet'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Parce qu'ils ne sont pas visés par le projet de règlement.",
+          "rationale": {
+            "fr": "Rien ne les exclut du projet ; au contraire, l'auteur veut qu'ils soient informés.",
+            "en": "Nothing excludes them from the draft; on the contrary, the writer wants them informed."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Parce qu'ils sont les seuls à devoir produire un rapport annuel.",
+          "rationale": {
+            "fr": "Le texte vise les petits exploitants en général, sans distinguer ceux qui ont accès à Internet.",
+            "en": "The text targets small operators in general, without singling out those with Internet access."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Parce que les séances virtuelles leur sont réservées.",
+          "rationale": {
+            "fr": "Des séances virtuelles se tiennent en ligne ; elles seraient justement difficiles d'accès pour ces exploitants.",
+            "en": "Virtual sessions take place online; they would precisely be hard for these operators to attend."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Parce qu'ils risquent de ne pas apprendre l'existence de la consultation par les moyens en ligne.",
+          "rationale": {
+            "fr": "On peut le déduire : une consultation annoncée et tenue surtout en ligne pourrait leur échapper, d'où le rôle des bureaux régionaux.",
+            "en": "This can be inferred: a consultation announced and held mostly online might pass them by, hence the role of the regional offices."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une inférence s'appuie sur des indices du texte : ici, la publication en ligne et les séances virtuelles expliquent pourquoi l'auteur s'inquiète des exploitants peu branchés.",
+        "en": "An inference rests on clues in the text: here, online publication and virtual sessions explain why the writer worries about operators with poor connectivity."
+      },
+      "subSkill": "inference",
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-3",
+      "stem": {
+        "fr": "Que révèlent les données tirées de l'échantillon de documents examinés quant au rendement de la politique par rapport à sa cible initiale ?",
+        "en": "What do the data from the sample of documents examined reveal about the policy's performance relative to its initial target?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Près des deux tiers des documents étaient conformes, ce qui dépasse légèrement la cible fixée.",
+          "rationale": {
+            "fr": "Le taux de 62 % avoisine bien les deux tiers, mais il reste nettement en deçà de la cible de 80 %.",
+            "en": "The 62% rate is indeed close to two thirds, but it remains well below the 80% target."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La proportion de documents conformes demeure inférieure d'environ dix-huit points à l'objectif visé.",
+          "rationale": {
+            "fr": "C'est la lecture juste : 62 % de documents conformes contre une cible de 80 %, soit un écart de dix-huit points.",
+            "en": "This is the accurate reading: 62% compliant documents against an 80% target, a gap of eighteen points."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le nombre de documents conformes a diminué d'un tiers depuis l'entrée en vigueur de la politique.",
+          "rationale": {
+            "fr": "La baisse « de près d'un tiers » concerne les demandes de clarification, et non les documents conformes.",
+            "en": "The drop of 'nearly a third' concerns requests for clarification, not compliant documents."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Quatre-vingts pour cent des 240 documents examinés satisfaisaient aux critères de lisibilité.",
+          "rationale": {
+            "fr": "Ce pourcentage est celui de la cible, et non le résultat obtenu, qui est de 62 %.",
+            "en": "That percentage is the target, not the result achieved, which is 62%."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans un rapport d'évaluation, distinguez toujours la cible (ce qui était visé), le résultat (ce qui a été mesuré) et les autres indicateurs. Une confusion entre ces trois éléments est le piège le plus fréquent.",
+        "en": "In an evaluation report, always distinguish the target (what was aimed for), the result (what was measured) and other indicators. Confusing these three is the most common trap."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-3",
+      "stem": {
+        "fr": "Que laisse entendre le rapport au sujet du lien entre la désignation d'un responsable et les résultats obtenus par les directions générales ?",
+        "en": "What does the report imply about the link between appointing a lead and the results achieved by the branches?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les directions générales dépourvues de responsable n'ont produit aucun document conforme.",
+          "rationale": {
+            "fr": "C'est une généralisation abusive : le rapport parle d'écarts et de meilleurs résultats, pas d'une absence totale de conformité ailleurs.",
+            "en": "This is an overgeneralization: the report speaks of gaps and better results, not of a total absence of compliance elsewhere."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La désignation de responsables explique à elle seule la baisse des demandes de clarification.",
+          "rationale": {
+            "fr": "Le rapport ne relie pas la baisse des demandes aux responsables ; il l'attribue à une meilleure compréhension des textes en général.",
+            "en": "The report does not link the drop in requests to the leads; it attributes it to better understanding of texts generally."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les meilleurs résultats tiennent surtout à la bonne volonté de quelques employés dévoués.",
+          "rationale": {
+            "fr": "C'est l'inverse : le dévouement de quelques employés décrit la situation des directions sans responsable.",
+            "en": "It is the reverse: the dedication of a few employees describes the situation of the branches without a lead."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La présence d'une personne chargée de l'application semble favoriser une meilleure conformité.",
+          "rationale": {
+            "fr": "Le rapport souligne que les directions ayant un responsable sont « précisément celles qui affichent les meilleurs résultats » et recommande d'en désigner partout, ce qui suppose ce lien.",
+            "en": "The report stresses that branches with a lead are 'precisely those with the best results' and recommends appointing one everywhere, which presupposes this link."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "L'inférence va au-delà de ce qui est écrit sans le contredire. Ici, le rapprochement « précisément celles qui... » et la recommandation finale permettent de conclure à un lien probable, sans autoriser de généralisation absolue.",
+        "en": "An inference goes beyond what is written without contradicting it. Here, the link drawn by 'precisely those that...' and the final recommendation support a probable connection, without licensing an absolute generalization."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-3",
+      "stem": {
+        "fr": "Dans le passage « la révision des textes repose sur la bonne volonté de quelques employés, faute de ressources réservées à cette fin », quelle valeur l'expression « faute de » prend-elle ?",
+        "en": "In the passage 'the revision of texts relies on the goodwill of a few employees, faute de resources set aside for that purpose', what meaning does the expression 'faute de' carry?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle présente un manque comme la cause de la situation décrite.",
+          "rationale": {
+            "fr": "« Faute de » signifie « en l'absence de, par manque de » : c'est parce qu'il n'y a pas de ressources réservées que la révision dépend de quelques employés.",
+            "en": "'Faute de' means 'for lack of': it is because there are no dedicated resources that revision depends on a few employees."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle signale une erreur commise par les employés chargés de la révision.",
+          "rationale": {
+            "fr": "Le nom « faute » peut désigner une erreur, mais la locution « faute de » exprime un manque et n'attribue aucun tort aux employés.",
+            "en": "The noun 'faute' can mean a mistake, but the phrase 'faute de' expresses a lack and attributes no fault to the employees."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Elle énonce une condition qui devra être remplie au prochain exercice.",
+          "rationale": {
+            "fr": "La locution décrit la situation actuelle ; la condition future relève de la recommandation, plus loin.",
+            "en": "The phrase describes the current situation; the future condition belongs to the recommendation, later on."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Elle introduit une opposition entre deux constats de l'évaluation.",
+          "rationale": {
+            "fr": "Aucune opposition n'est marquée ici ; une concession serait plutôt rendue par « bien que » ou « toutefois ».",
+            "en": "No contrast is marked here; a concession would rather be expressed by 'bien que' or 'toutefois'."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Faute de » + nom exprime la cause par le manque (« faute de temps », « faute de fonds »). Ne la confondez pas avec le nom « faute » au sens d'erreur.",
+        "en": "'Faute de' + noun expresses cause through lack ('for lack of time', 'for lack of funds'). Do not confuse it with the noun 'faute' meaning a mistake."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-3",
+      "stem": {
+        "fr": "Dans la recommandation formulée par l'équipe d'évaluation, à quel élément le pronom « elle » renvoie-t-il dans le segment « l'équipe d'évaluation estime qu'elle ne saurait atteindre sa cible » ?",
+        "en": "In the recommendation made by the evaluation team, what does the pronoun 'elle' refer to in the segment 'the evaluation team considers that elle could not reach its target'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À l'équipe d'évaluation, sujet du verbe principal.",
+          "rationale": {
+            "fr": "L'équipe d'évaluation n'a pas de cible à atteindre ; c'est elle qui juge, et le pronom désigne l'objet de son jugement.",
+            "en": "The evaluation team has no target to reach; it is the one judging, and the pronoun designates the object of its judgment."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À chacune des directions générales du Ministère.",
+          "rationale": {
+            "fr": "Les directions générales ne sont reprises qu'à la phrase suivante, et la cible de 80 % est celle de l'ensemble de la politique.",
+            "en": "The branches only come up in the following sentence, and the 80% target belongs to the policy as a whole."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À la politique ministérielle dont l'évaluation rend compte.",
+          "rationale": {
+            "fr": "Seule la politique a une « cible » à atteindre (les 80 % mentionnés plus haut) ; le pronom la reprend malgré l'intervention d'un autre nom féminin.",
+            "en": "Only the policy has a 'target' to reach (the 80% mentioned earlier); the pronoun refers to it despite another feminine noun intervening."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À la reddition de comptes jugée trop peu contraignante.",
+          "rationale": {
+            "fr": "La reddition de comptes est mentionnée après le pronom, comme moyen d'atteindre la cible, et non comme ce qui doit l'atteindre.",
+            "en": "Accountability is mentioned after the pronoun, as a means of reaching the target, not as the thing that must reach it."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Quand plusieurs noms féminins précèdent un pronom, le plus proche n'est pas forcément le bon : vérifiez lequel peut logiquement accomplir l'action (ici, « atteindre sa cible »).",
+        "en": "When several feminine nouns precede a pronoun, the nearest is not necessarily the right one: check which one can logically perform the action (here, 'reach its target')."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-3",
+      "stem": {
+        "fr": "Quelle position l'équipe d'évaluation adopte-t-elle globalement à l'égard de la politique ministérielle sur le langage clair ?",
+        "en": "What overall position does the evaluation team take toward the departmental plain-language policy?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Enthousiaste : elle estime que la politique a pleinement atteint ses objectifs.",
+          "rationale": {
+            "fr": "Le rapport qualifie les résultats d'« inégaux » et constate que la cible n'est pas atteinte.",
+            "en": "The report calls the results 'uneven' and notes the target has not been met."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Nuancée : elle reconnaît des progrès réels tout en jugeant le dispositif actuel insuffisant pour atteindre la cible.",
+          "rationale": {
+            "fr": "C'est la position exprimée : résultats « encourageants, quoique inégaux », principe non contesté, mais besoin d'une reddition de comptes plus contraignante.",
+            "en": "This is the stated position: results 'encouraging, though uneven', principle unchallenged, but a need for more binding accountability."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Sévère : elle juge la politique mal conçue et recommande d'y mettre fin.",
+          "rationale": {
+            "fr": "Le rapport précise que la politique n'est pas « remise en cause dans son principe » et propose de la renforcer, non de l'abolir.",
+            "en": "The report specifies that the policy is not 'called into question in principle' and proposes strengthening it, not abolishing it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Détachée : elle se borne à présenter des chiffres sans formuler de recommandation.",
+          "rationale": {
+            "fr": "L'équipe formule explicitement deux recommandations dans le dernier paragraphe.",
+            "en": "The team explicitly makes two recommendations in the last paragraph."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le ton d'un rapport se lit dans ses connecteurs et ses qualificatifs : « quoique », « néanmoins », « toutefois », « bien que » signalent un jugement nuancé, qui pèse les acquis et les lacunes.",
+        "en": "A report's tone shows in its connectors and qualifiers: 'quoique', 'néanmoins', 'toutefois', 'bien que' signal a nuanced judgment that weighs achievements against shortcomings."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-4",
+      "stem": {
+        "fr": "Quelle est la fonction principale de cette note d'information destinée à la haute direction du Ministère ?",
+        "en": "What is the main function of this briefing note intended for the department's senior management?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer que la politique interne sur l'échange de données a été abrogée.",
+          "rationale": {
+            "fr": "La politique n'est pas abrogée : elle arrive à échéance, et la note propose justement de la renouveler.",
+            "en": "The policy has not been repealed: it is expiring, and the note in fact proposes renewing it."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Rendre compte en détail des constatations de la vérification interne.",
+          "rationale": {
+            "fr": "La vérification n'est évoquée qu'en passant, pour justifier les faiblesses de la première option.",
+            "en": "The audit is mentioned only in passing, to explain the weaknesses of the first option."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Proposer l'élaboration d'une directive sur la gestion de l'information.",
+          "rationale": {
+            "fr": "Cette directive est déjà prévue ; la note s'en sert seulement pour évaluer la troisième option, qu'elle écarte.",
+            "en": "That directive is already planned; the note only uses it to assess the third option, which it sets aside."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Soupeser les options qui s'offrent au Ministère à l'égard d'une politique sur le point d'expirer et en recommander une.",
+          "rationale": {
+            "fr": "La note expose trois options, en évalue les avantages et les inconvénients, puis en recommande une : c'est sa raison d'être.",
+            "en": "The note sets out three options, assesses their pros and cons, then recommends one: that is its purpose."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une note d'information de ce type a une fonction décisionnelle : présenter un enjeu, comparer des options et formuler une recommandation. La bonne réponse doit embrasser ces trois volets.",
+        "en": "A briefing note of this kind serves decision-making: it presents an issue, compares options and makes a recommendation. The right answer must cover all three."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-4",
+      "stem": {
+        "fr": "Laquelle des descriptions suivantes rend le mieux compte de l'organisation de la note d'information ?",
+        "en": "Which of the following descriptions best accounts for how the briefing note is organized?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Un historique chronologique de la politique depuis son adoption jusqu'à son échéance.",
+          "rationale": {
+            "fr": "La note ne retrace pas l'histoire de la politique ; elle se tourne vers les décisions à prendre.",
+            "en": "The note does not trace the policy's history; it looks ahead to the decisions to be made."
+          }
+        },
+        {
+          "id": "b",
+          "text": "L'énoncé de l'enjeu, l'examen successif de trois options avec leurs avantages et leurs inconvénients, puis une recommandation assortie d'une solution de repli.",
+          "rationale": {
+            "fr": "C'est la structure du texte : échéance du 31 mars, un paragraphe par option, puis recommandation et prolongation provisoire au besoin.",
+            "en": "This is the text's structure: the March 31 expiry, one paragraph per option, then a recommendation and a provisional extension if needed."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une recommandation énoncée d'emblée, justifiée ensuite par un argument unique.",
+          "rationale": {
+            "fr": "La recommandation vient à la fin, après l'analyse des trois options, et non au début.",
+            "en": "The recommendation comes at the end, after the analysis of the three options, not at the start."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Une comparaison point par point entre la politique actuelle et la future directive.",
+          "rationale": {
+            "fr": "La future directive n'intervient que dans la troisième option ; la note ne compare pas systématiquement les deux textes.",
+            "en": "The future directive only comes up in the third option; the note does not systematically compare the two texts."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "La note d'information suit un plan type de l'administration fédérale : enjeu, options (chacune avec ses coûts et ses risques), recommandation. Les ordinaux « La première », « La deuxième », « La troisième » balisent cette progression.",
+        "en": "The briefing note follows a standard federal template: issue, options (each with its costs and risks), recommendation. The ordinals 'The first', 'The second', 'The third' mark the progression."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-4",
+      "stem": {
+        "fr": "Que laisse supposer la dernière phrase de la note quant à la confiance des auteurs dans le calendrier de l'option recommandée ?",
+        "en": "What does the last sentence of the note suggest about the authors' confidence in the timeline of the recommended option?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Ils tiennent pour acquis que les modifications seront approuvées avant le 31 mars.",
+          "rationale": {
+            "fr": "S'ils en étaient sûrs, ils n'auraient pas besoin de prévoir une prolongation provisoire.",
+            "en": "If they were sure, they would not need to provide for a provisional extension."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Ils préfèrent en réalité une simple prolongation de la politique actuelle.",
+          "rationale": {
+            "fr": "La prolongation n'est envisagée qu'à titre provisoire, si l'approbation tarde ; la recommandation reste la deuxième option.",
+            "en": "The extension is only considered provisionally, if approval is delayed; the recommendation remains the second option."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Ils n'excluent pas un retard dans l'approbation et prévoient une mesure pour éviter un vide juridique.",
+          "rationale": {
+            "fr": "Le conditionnel « Si les modifications ne pouvaient être approuvées » montre qu'ils envisagent ce retard, et la prolongation sert à préserver le fondement des échanges.",
+            "en": "The conditional 'If the amendments could not be approved' shows they contemplate such a delay, and the extension serves to preserve the basis for the exchanges."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Ils estiment que la troisième option finira tôt ou tard par s'imposer.",
+          "rationale": {
+            "fr": "La dernière phrase porte sur la politique actuelle et la deuxième option ; rien n'y annonce un retour à la troisième.",
+            "en": "The last sentence is about the current policy and the second option; nothing in it signals a return to the third."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une hypothèse au conditionnel (« si [...] ne pouvaient ») trahit une incertitude : l'auteur qui prévoit un plan de rechange admet implicitement que le plan principal pourrait échouer.",
+        "en": "A hypothesis in the conditional ('if [...] could not') reveals uncertainty: an author who plans a fallback implicitly admits that the main plan might fail."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-4",
+      "stem": {
+        "fr": "D'après la note, quelle faiblesse précise la vérification interne a-t-elle mise en évidence dans la politique actuelle sur l'échange de données ?",
+        "en": "According to the note, what specific weakness did the internal audit bring to light in the current data-sharing policy?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "L'insuffisance de balises encadrant la durée de garde des renseignements que les directions se transmettent.",
+          "rationale": {
+            "fr": "La note mentionne « l'absence de règles claires sur la conservation des données partagées », ce que cette option reformule.",
+            "en": "The note mentions 'the absence of clear rules on retaining shared data', which this option rephrases."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le coût élevé des procédures de mise à jour de la politique.",
+          "rationale": {
+            "fr": "Le coût de 150 000 $ est celui de la deuxième option, non une lacune relevée par la vérification.",
+            "en": "The $150,000 cost belongs to the second option, not a weakness identified by the audit."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le chevauchement entre la politique et la future directive sur la gestion de l'information.",
+          "rationale": {
+            "fr": "Le risque de chevauchement est évoqué à propos de la troisième option, sans lien avec la vérification interne.",
+            "en": "The risk of overlap is raised in connection with the third option, unrelated to the internal audit."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le manque de formation des gestionnaires appelés à appliquer la politique.",
+          "rationale": {
+            "fr": "La formation des gestionnaires fait partie des mesures de la deuxième option ; la note ne la présente pas comme une constatation de la vérification.",
+            "en": "Training managers is part of the second option's measures; the note does not present it as an audit finding."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Une question de détail au niveau C reformule souvent le texte. Retrouvez la phrase source (« notamment l'absence de règles claires... ») et écartez les éléments qui appartiennent à une autre partie de la note.",
+        "en": "A level-C detail question often paraphrases the text. Find the source sentence ('notably the absence of clear rules...') and rule out elements that belong to another part of the note."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-4",
+      "stem": {
+        "fr": "Si l'on compare les options présentées sur le plan des coûts et des délais, laquelle des affirmations suivantes est conforme aux données chiffrées de la note ?",
+        "en": "Comparing the options in terms of cost and time frames, which of the following statements is consistent with the figures in the note?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La première option coûterait environ 150 000 $, mais elle serait la plus rapide à mettre en œuvre.",
+          "rationale": {
+            "fr": "La note indique au contraire que la reconduction telle quelle « n'entraînerait aucun coût ».",
+            "en": "The note states, on the contrary, that renewal as is 'would entail no cost'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "La troisième option exigerait environ six mois de travaux et un budget de 150 000 $.",
+          "rationale": {
+            "fr": "Ces chiffres se rapportent à la deuxième option ; pour la troisième, le seul délai cité est l'arrivée de la directive dans dix-huit mois.",
+            "en": "These figures relate to the second option; for the third, the only time frame cited is the directive's arrival in eighteen months."
+          }
+        },
+        {
+          "id": "c",
+          "text": "La deuxième option est la seule pour laquelle la note chiffre une dépense, à engager sur une demi-année environ.",
+          "rationale": {
+            "fr": "Seule la deuxième option comporte un coût chiffré (quelque 150 000 $) pour environ six mois de travaux ; la première ne coûte rien et la troisième n'est pas chiffrée.",
+            "en": "Only the second option has a costed figure (some $150,000) for about six months of work; the first costs nothing and the third is not costed."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La reconduction de la politique telle quelle vaudrait pour une période de dix-huit mois.",
+          "rationale": {
+            "fr": "La reconduction vaudrait pour trois ans ; les dix-huit mois correspondent au délai d'adoption de la future directive.",
+            "en": "The renewal would be for three years; the eighteen months is the time until the future directive is adopted."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Quand un texte attribue des chiffres à plusieurs options, dressez mentalement un petit tableau (option, coût, délai) avant de lire les choix de réponse : les distracteurs déplacent un chiffre d'une ligne à l'autre.",
+        "en": "When a text assigns figures to several options, build a small mental table (option, cost, time frame) before reading the answer choices: distractors move a figure from one row to another."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-5",
+      "stem": {
+        "fr": "Dans la disposition citée, « toute activité extérieure susceptible de créer un conflit d'intérêts », quel sens l'adjectif « susceptible » prend-il, compte tenu des explications du bulletin ?",
+        "en": "In the provision quoted, 'any outside activity susceptible de creating a conflict of interest', what meaning does the adjective 'susceptible' take, given the bulletin's explanations?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Qui pourrait entraîner cette situation, sans qu'elle soit nécessairement réalisée.",
+          "rationale": {
+            "fr": "Le bulletin le confirme : « il n'est pas nécessaire que le conflit soit avéré » ; « susceptible de » exprime une possibilité.",
+            "en": "The bulletin confirms it: 'the conflict need not be proven'; 'susceptible de' expresses a possibility."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Qui a déjà provoqué cette situation de façon démontrée.",
+          "rationale": {
+            "fr": "C'est l'inverse de ce qu'explique le bulletin, pour qui un conflit avéré n'est pas exigé.",
+            "en": "This is the opposite of what the bulletin explains, since it does not require a proven conflict."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Qui est délicate et risque de froisser l'employeur.",
+          "rationale": {
+            "fr": "Ce sens (« susceptible » au sens de « qui se vexe facilement ») s'applique à une personne, non à une activité, et ne convient pas ici.",
+            "en": "This sense ('susceptible' meaning 'easily offended') applies to a person, not an activity, and does not fit here."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Qui est expressément interdite par la directive.",
+          "rationale": {
+            "fr": "Le bulletin précise au contraire que la plupart des activités déclarées sont autorisées.",
+            "en": "The bulletin specifies, on the contrary, that most declared activities are authorized."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« Être susceptible de » + infinitif signifie « pouvoir éventuellement » : la locution vise une possibilité, non une certitude. Ne la confondez pas avec l'adjectif « susceptible » appliqué à une personne (« qui s'offense facilement »).",
+        "en": "'Être susceptible de' + infinitive means 'to be liable to, potentially able to': it refers to a possibility, not a certainty. Do not confuse it with 'susceptible' applied to a person ('touchy')."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-5",
+      "stem": {
+        "fr": "Dans le paragraphe consacré aux conséquences d'une déclaration, que reprend le pronom élidé « l' » dans la proposition « le gestionnaire l'autorise, sous réserve de mesures d'atténuation » ?",
+        "en": "In the paragraph on the consequences of a declaration, what does the elided pronoun 'l'' refer to in the clause 'the manager l'autorise, subject to mitigation measures'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La déclaration remise par l'employé.",
+          "rationale": {
+            "fr": "Un gestionnaire reçoit une déclaration, il ne l'« autorise » pas ; et les mesures d'atténuation visent l'activité, non le document.",
+            "en": "A manager receives a declaration but does not 'authorize' it; and mitigation measures apply to the activity, not the document."
+          }
+        },
+        {
+          "id": "b",
+          "text": "L'employé qui a fait la déclaration.",
+          "rationale": {
+            "fr": "Au sens d'« autoriser quelqu'un », le verbe appellerait un complément (« à exercer... ») ; ici, il reprend ce qui pourrait être refusé.",
+            "en": "In the sense of 'authorizing someone', the verb would require a complement ('to carry out...'); here it refers back to what might be refused."
+          }
+        },
+        {
+          "id": "c",
+          "text": "La disposition de l'article 5.3.",
+          "rationale": {
+            "fr": "Un gestionnaire n'autorise pas une disposition de la directive ; il l'applique.",
+            "en": "A manager does not authorize a provision of the directive; he or she applies it."
+          }
+        },
+        {
+          "id": "d",
+          "text": "L'activité extérieure qui a été déclarée.",
+          "rationale": {
+            "fr": "La phrase précédente oppose ce cas au « refus de l'activité » : le gestionnaire, le plus souvent, autorise cette activité.",
+            "en": "The previous sentence contrasts this case with 'refusal of the activity': most often, the manager authorizes that activity."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Le pronom élidé « l' » ne révèle pas le genre ; il faut donc s'appuyer sur le sens et sur la phrase précédente. Ce qui peut être « refusé » peut aussi être « autorisé » : l'activité.",
+        "en": "The elided pronoun 'l'' does not show gender, so rely on meaning and on the previous sentence. What can be 'refused' can also be 'authorized': the activity."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-5",
+      "stem": {
+        "fr": "Dans quelle intention l'auteur du bulletin précise-t-il qu'une déclaration « n'équivaut nullement à un aveu de faute » ?",
+        "en": "With what intention does the author of the bulletin specify that a declaration 'is in no way equivalent to an admission of wrongdoing'?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Pour avertir que toute déclaration tardive sera considérée comme un manquement.",
+          "rationale": {
+            "fr": "Le passage ne parle pas de déclarations tardives et n'a rien d'un avertissement.",
+            "en": "The passage says nothing about late declarations and is not a warning."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Pour dissiper une crainte qui pourrait dissuader les employés de faire une déclaration.",
+          "rationale": {
+            "fr": "En dissociant déclaration et culpabilité, puis en ajoutant que la plupart des activités sont autorisées, l'auteur cherche à rassurer et à encourager la transparence.",
+            "en": "By separating declaration from guilt, then adding that most activities are authorized, the author seeks to reassure and encourage transparency."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Pour signaler que le Ministère refusera désormais la majorité des activités déclarées.",
+          "rationale": {
+            "fr": "C'est l'inverse : le bulletin affirme que le gestionnaire autorise l'activité « dans la grande majorité des cas ».",
+            "en": "It is the reverse: the bulletin states that the manager authorizes the activity 'in the vast majority of cases'."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Pour reprocher aux gestionnaires d'avoir sanctionné des employés à tort.",
+          "rationale": {
+            "fr": "Le bulletin répond aux questions des gestionnaires sans leur adresser de reproche, et ne fait état d'aucune sanction.",
+            "en": "The bulletin answers managers' questions without reproaching them and mentions no sanction."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour cerner l'intention d'une précision, demandez-vous à quelle crainte ou à quelle objection elle répond. La négation renforcée (« nullement », « pas plus que ») sert souvent à rassurer le lecteur.",
+        "en": "To identify the intent behind a clarification, ask what fear or objection it answers. Reinforced negation ('nullement', 'pas plus que') often serves to reassure the reader."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-5",
+      "stem": {
+        "fr": "Comment le développement du bulletin d'interprétation est-il structuré après le paragraphe d'introduction ?",
+        "en": "How is the body of the interpretation bulletin structured after the introductory paragraph?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il compare l'ancienne et la nouvelle formulation de l'article 5.3 pour en dégager les différences.",
+          "rationale": {
+            "fr": "Le bulletin mentionne une mise à jour de la directive, mais ne cite jamais l'ancienne formulation.",
+            "en": "The bulletin mentions an update to the directive but never quotes the former wording."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il illustre la disposition par une série de cas d'employés présentés comme exemples.",
+          "rationale": {
+            "fr": "Aucun cas concret n'est présenté ; le bulletin raisonne sur les termes de la disposition.",
+            "en": "No concrete cases are presented; the bulletin reasons on the terms of the provision."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il éclaire tour à tour deux expressions de la disposition, puis précise ce qu'une déclaration entraîne ou n'entraîne pas.",
+          "rationale": {
+            "fr": "Les marqueurs « D'abord », « Ensuite », « Enfin » introduisent « sans délai », puis « susceptible », puis les conséquences d'une déclaration.",
+            "en": "The markers 'First', 'Next', 'Finally' introduce 'sans délai', then 'susceptible', then the consequences of a declaration."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il énumère les sanctions prévues, de la plus légère à la plus grave.",
+          "rationale": {
+            "fr": "Le bulletin ne prévoit aucune sanction ; il souligne au contraire qu'une déclaration n'est pas un aveu de faute.",
+            "en": "The bulletin sets out no sanctions; on the contrary, it stresses that a declaration is not an admission of wrongdoing."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Les marqueurs d'énumération (« D'abord », « Ensuite », « Enfin ») révèlent le plan d'un texte. Identifiez ce que chacun introduit pour reconstituer la structure.",
+        "en": "Enumeration markers ('First', 'Next', 'Finally') reveal a text's plan. Identify what each one introduces to reconstruct the structure."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-policy-and-legislation-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-policy-and-legislation-5",
+      "stem": {
+        "fr": "Quelle est la raison d'être principale de ce bulletin publié à l'intention des gestionnaires et des employés du Ministère ?",
+        "en": "What is the main purpose of this bulletin issued for the department's managers and employees?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer une modification prochaine de l'article 5.3 de la directive.",
+          "rationale": {
+            "fr": "Le bulletin interprète la disposition existante ; il ne la modifie pas et n'annonce aucune révision.",
+            "en": "The bulletin interprets the existing provision; it does not amend it or announce any revision."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Clarifier la portée d'une obligation de déclaration afin d'en faciliter l'application.",
+          "rationale": {
+            "fr": "Le bulletin répond aux questions des gestionnaires en précisant le sens de deux expressions et les effets d'une déclaration : il vise à « dissiper ces incertitudes ».",
+            "en": "The bulletin answers managers' questions by clarifying two expressions and the effects of a declaration: it aims to 'dispel these uncertainties'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Rappeler aux employés qu'ils doivent déclarer immédiatement toute activité extérieure.",
+          "rationale": {
+            "fr": "Le bulletin dit précisément que « sans délai » ne signifie pas « immédiatement », et l'obligation ne vise que les activités pouvant créer un conflit.",
+            "en": "The bulletin says precisely that 'sans délai' does not mean 'immediately', and the obligation only covers activities that might create a conflict."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Dresser la liste des activités extérieures interdites aux fonctionnaires.",
+          "rationale": {
+            "fr": "Aucune liste n'est fournie, et le texte souligne que la plupart des activités déclarées sont autorisées.",
+            "en": "No list is provided, and the text stresses that most declared activities are authorized."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Le but d'un bulletin d'interprétation est souvent annoncé dans l'introduction (« Le présent bulletin vise à... »). Distinguez interpréter une règle existante, ce que fait ce texte, et la modifier.",
+        "en": "The purpose of an interpretation bulletin is often announced in the introduction ('This bulletin aims to...'). Distinguish interpreting an existing rule, which this text does, from amending it."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-policy-and-legislation-1",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Entrée en vigueur de la directive sur la conservation des documents",
+      "body": "Objet : Entrée en vigueur de la nouvelle directive ministérielle sur la conservation des documents\n\nLa nouvelle directive ministérielle sur la conservation des documents entrera en vigueur le 1er février. Elle remplace l'ancienne ligne directrice, qui datait de plus de dix ans et ne tenait pas compte du travail hybride. Désormais, tout document ayant une valeur opérationnelle devra être enregistré dans le dépôt ministériel dans les 10 jours ouvrables suivant sa création. Les copies conservées sur un poste de travail ou dans une boîte de courriel personnelle ne seront plus considérées comme des documents officiels. Les gestionnaires devront confirmer, avant le 31 mars, que tous les membres de leur équipe ont suivi la séance de formation obligatoire de 45 minutes. Si vous avez des questions sur l'application de la directive, écrivez à l'équipe de la gestion de l'information. Je compte sur votre collaboration pour que cette transition se fasse sans retard.\n\nMartine Lavoie\nDirectrice, Politiques et planification stratégique",
+      "wordCount": 158,
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 19.75,
+        "rareWordRatio": 0.253
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-policy-and-legislation-2",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Consultation sur un projet de règlement",
+      "body": "Bonjour à toutes et à tous,\n\nComme vous le savez, le Ministère a publié la semaine dernière un projet de règlement qui simplifierait les rapports annuels exigés des petits exploitants. La période de consultation publique est ouverte jusqu'au 15 décembre. Les intervenants peuvent soumettre leurs commentaires en ligne ou par écrit ; nous tiendrons aussi deux séances virtuelles, le 18 et le 25 novembre.\n\nJe vous demande de faire connaître cette consultation auprès des exploitants de votre région, en particulier ceux qui n'ont pas facilement accès à Internet. Une trousse d'information vous sera envoyée d'ici vendredi. Vous n'avez pas à répondre vous-mêmes aux questions techniques : dirigez-les plutôt vers notre boîte de courriel générique, et notre équipe s'en chargera.\n\nUne fois la consultation terminée, nous analyserons les commentaires reçus et publierons un rapport sommaire au début de l'année prochaine.\n\nMerci de votre aide,\n\nJulien Tremblay\nAnalyste principal des politiques",
+      "wordCount": 149,
+      "targetBand": "B",
+      "topic": "policy-and-legislation",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 18.63,
+        "rareWordRatio": 0.282
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-policy-and-legislation-3",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Évaluation de la politique ministérielle sur le langage clair : constatations",
+      "body": "Cinq ans après son entrée en vigueur, la politique ministérielle sur le langage clair a produit des résultats encourageants, quoique inégaux. Sur un échantillon de 240 documents publiés au cours du dernier exercice, 62 % respectaient l'ensemble des critères de lisibilité, alors que la cible fixée au départ était de 80 %. Les demandes de clarification adressées au centre de renseignements ont néanmoins diminué de près d'un tiers, ce qui donne à penser que les textes, même imparfaits, sont mieux compris qu'auparavant.\n\nLes écarts entre les secteurs demeurent toutefois marqués. Seules quatre des onze directions générales ont désigné un responsable chargé de veiller à l'application de la politique, et ce sont précisément celles qui affichent les meilleurs résultats. Ailleurs, la révision des textes repose sur la bonne volonté de quelques employés, faute de ressources réservées à cette fin.\n\nBien que la politique ne soit pas remise en cause dans son principe, l'équipe d'évaluation estime qu'elle ne saurait atteindre sa cible sans un mécanisme de reddition de comptes plus contraignant. Elle recommande donc que chaque direction générale désigne un responsable d'ici la fin du prochain exercice et que les résultats en matière de lisibilité soient intégrés au tableau de bord ministériel.",
+      "wordCount": 200,
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 25,
+        "rareWordRatio": 0.265
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-policy-and-legislation-4",
+      "lang": "fr",
+      "docType": "note",
+      "title": "Note d'information : renouvellement de la politique sur l'échange de données",
+      "body": "Objet : Renouvellement de la politique interne sur l'échange de données\n\nLa politique interne sur l'échange de données entre directions générales viendra à échéance le 31 mars. Trois options s'offrent au Ministère.\n\nLa première consisterait à la reconduire telle quelle pour trois ans. Cette option n'entraînerait aucun coût, mais laisserait sans réponse les lacunes relevées par la vérification interne, notamment l'absence de règles claires sur la conservation des données partagées.\n\nLa deuxième consisterait à la renouveler en y apportant des modifications ciblées. Il faudrait compter environ six mois de travaux et quelque 150 000 $ pour mettre à jour les procédures et former les gestionnaires visés, mais les lacunes connues seraient corrigées.\n\nLa troisième consisterait à laisser la politique expirer et à en intégrer les principes dans la future directive sur la gestion de l'information. Cette option éviterait les chevauchements ; toutefois, la directive n'étant pas attendue avant dix-huit mois, le Ministère se trouverait entre-temps sans cadre applicable.\n\nNous recommandons la deuxième option. Si les modifications ne pouvaient être approuvées avant l'échéance, la politique actuelle devrait être prolongée à titre provisoire, faute de quoi les échanges de données en cours perdraient leur fondement.",
+      "wordCount": 193,
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "readability": {
+        "sentences": 10,
+        "avgSentenceLength": 19.3,
+        "rareWordRatio": 0.316
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-policy-and-legislation-5",
+      "lang": "fr",
+      "docType": "bulletin",
+      "title": "Bulletin d'interprétation : l'article 5.3 de la directive sur les activités extérieures",
+      "body": "Depuis la mise à jour de la directive sur les activités extérieures, plusieurs gestionnaires nous ont demandé comment interpréter l'article 5.3, selon lequel tout employé doit déclarer « sans délai » toute activité extérieure « susceptible de créer un conflit d'intérêts ». Le présent bulletin vise à dissiper ces incertitudes.\n\nD'abord, l'expression « sans délai » ne signifie pas « immédiatement ». Le Ministère considère qu'une déclaration faite dans les cinq jours ouvrables suivant le moment où l'employé a pris connaissance de la situation respecte l'esprit de la disposition.\n\nEnsuite, le mot « susceptible » élargit la portée de l'obligation : il n'est pas nécessaire que le conflit soit avéré pour que la déclaration s'impose. Il suffit qu'une personne raisonnable puisse y percevoir un risque. En cas de doute, mieux vaut déclarer.\n\nEnfin, rappelons qu'une déclaration n'équivaut nullement à un aveu de faute, pas plus qu'elle n'entraîne automatiquement le refus de l'activité. Dans la grande majorité des cas, le gestionnaire l'autorise, sous réserve de mesures d'atténuation convenues avec l'employé.\n\nPour toute question, communiquez avec le bureau des valeurs et de l'éthique.",
+      "wordCount": 181,
+      "targetBand": "C",
+      "topic": "policy-and-legislation",
+      "readability": {
+        "sentences": 11,
+        "avgSentenceLength": 16.45,
+        "rareWordRatio": 0.282
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

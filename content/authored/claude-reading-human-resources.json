@@ -1,0 +1,1781 @@
+{
+  "items": [
+    {
+      "id": "claude-r-human-resources-1-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-1",
+      "stem": {
+        "fr": "Dans son courriel sur la dotation des postes d'agent de programme, que cherche principalement à faire Julie Tremblay ?",
+        "en": "In her email about staffing the program officer positions, what is Julie Tremblay mainly trying to do?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Annoncer le nom des deux candidats retenus pour les postes d'agent de programme.",
+          "rationale": {
+            "fr": "Le processus n'est pas encore lancé : l'annonce ne sera publiée que le 17 novembre.",
+            "en": "The process has not started yet: the posting will only be published on November 17."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Informer son équipe du déroulement prévu d'un processus de dotation pour deux postes.",
+          "rationale": {
+            "fr": "C'est l'objet du message : il décrit l'annonce, la présélection, l'examen, l'entrevue, les références et le bassin.",
+            "en": "This is the message's purpose: it describes the posting, screening, exam, interview, references and the pool."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Former un comité d'évaluation chargé de corriger l'examen écrit de deux heures.",
+          "rationale": {
+            "fr": "La demande de volontaires n'arrive qu'en fin de message et le rôle de correction n'est pas mentionné ; c'est un détail, non l'objet principal.",
+            "en": "The call for volunteers only comes at the end, and marking the exam is never mentioned; it is a detail, not the main purpose."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Expliquer aux employés comment mettre à jour leur curriculum vitæ en ligne.",
+          "rationale": {
+            "fr": "Le courriel mentionne le curriculum vitæ comme pièce à soumettre, sans donner de conseils pour le rédiger.",
+            "en": "The email mentions the résumé as something to submit, without giving any advice on writing it."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour dégager l'idée principale, demandez-vous ce que couvre l'ensemble du message. Une réponse qui ne reprend qu'une phrase (ici la demande finale de volontaires) décrit un détail, pas l'objet.",
+        "en": "To find the main idea, ask what the whole message covers. An answer that echoes only one sentence (here the final call for volunteers) describes a detail, not the purpose."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-1-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-1",
+      "stem": {
+        "fr": "Au moment de poser leur candidature, que doivent fournir les personnes intéressées ?",
+        "en": "When applying, what must interested people provide?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les résultats d'un examen écrit de deux heures.",
+          "rationale": {
+            "fr": "L'examen écrit est une étape ultérieure, réservée à celles qui satisferont aux critères essentiels.",
+            "en": "The written exam is a later step, reserved for those who meet the essential criteria."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Le nom et les coordonnées de trois références.",
+          "rationale": {
+            "fr": "Les références ne sont contactées qu'après l'entrevue, et le courriel ne fixe aucun nombre ni ne demande de les fournir au départ.",
+            "en": "References are only contacted after the interview, and the email sets no number and does not ask for them at the outset."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une lettre de présentation adressée à la gestionnaire.",
+          "rationale": {
+            "fr": "Aucune lettre de présentation n'est mentionnée dans le courriel.",
+            "en": "No cover letter is mentioned in the email."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Leur curriculum vitæ, ainsi que leurs réponses à des questions de présélection en ligne.",
+          "rationale": {
+            "fr": "Le courriel précise qu'elles « devront soumettre leur curriculum vitæ et répondre en ligne à des questions de présélection ».",
+            "en": "The email states that they 'must submit their résumé and answer screening questions online'."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Pour une question de détail, repérez dans le texte l'étape visée (ici la candidature) et ne retenez que ce qui s'y rattache ; les étapes suivantes du processus sont des pièges fréquents.",
+        "en": "For a detail question, locate the stage in question (here the application) and keep only what belongs to it; later steps in the process are common traps."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-1-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-1",
+      "stem": {
+        "fr": "Pendant combien de temps l'annonce de dotation restera-t-elle ouverte ?",
+        "en": "For how long will the staffing posting remain open?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Deux semaines.",
+          "rationale": {
+            "fr": "Le courriel indique qu'elle « restera ouverte pendant 14 jours », soit deux semaines.",
+            "en": "The email says it 'will remain open for 14 days', that is, two weeks."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Trois semaines, jusqu'à la semaine de l'examen écrit.",
+          "rationale": {
+            "fr": "L'examen a lieu la semaine du 8 décembre, mais cette date ne marque pas la fermeture de l'annonce.",
+            "en": "The exam is held the week of December 8, but that date does not mark the posting's closing."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Douze mois.",
+          "rationale": {
+            "fr": "Les 12 mois correspondent à la durée d'utilisation prévue du bassin de candidats, non à l'ouverture de l'annonce.",
+            "en": "The 12 months are the intended lifespan of the candidate pool, not how long the posting is open."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Une semaine.",
+          "rationale": {
+            "fr": "Cette durée ne figure pas dans le courriel ; l'annonce reste ouverte deux fois plus longtemps.",
+            "en": "This duration does not appear in the email; the posting stays open twice as long."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Quand un texte contient plusieurs durées (14 jours, deux heures, 12 mois), associez chacune à ce qu'elle mesure avant de répondre. Ici, 14 jours = deux semaines pour l'annonce.",
+        "en": "When a text contains several durations (14 days, two hours, 12 months), match each to what it measures before answering. Here, 14 days = two weeks for the posting."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-1-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-1",
+      "stem": {
+        "fr": "Dans le courriel, que veut dire « pourvoir deux postes » ?",
+        "en": "In the email, what does 'pourvoir deux postes' mean?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Créer deux nouveaux postes dans l'organigramme.",
+          "rationale": {
+            "fr": "Le courriel ne parle pas de créer des postes ; il s'agit de doter des postes existants.",
+            "en": "The email does not talk about creating positions; it is about filling existing ones."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Fournir du matériel aux deux employés déjà en poste.",
+          "rationale": {
+            "fr": "Ce sens existe pour « pourvoir quelqu'un de quelque chose », mais il ne correspond pas à un processus de dotation.",
+            "en": "This meaning exists for 'pourvoir quelqu'un de quelque chose' (to supply someone with something), but it does not fit a staffing process."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Trouver des personnes qui occuperont ces deux postes.",
+          "rationale": {
+            "fr": "En dotation, « pourvoir un poste » signifie y nommer un titulaire, ce que vise tout le processus décrit.",
+            "en": "In staffing, 'pourvoir un poste' means appointing someone to it, which is what the whole process aims at."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Afficher publiquement les deux postes.",
+          "rationale": {
+            "fr": "La publication de l'annonce est une étape du processus, non le sens du verbe.",
+            "en": "Publishing the posting is a step in the process, not the meaning of the verb."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "« Pourvoir un poste » (ou « doter un poste ») veut dire y nommer quelqu'un. Ne le confondez pas avec « pourvoir quelqu'un de quelque chose », qui signifie l'en munir : c'est le complément qui fixe le sens.",
+        "en": "'Pourvoir un poste' (or 'doter un poste') means appointing someone to a position. Do not confuse it with 'pourvoir quelqu'un de quelque chose', meaning to supply someone with something: the complement determines the meaning."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-1-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-1",
+      "stem": {
+        "fr": "Dans la phrase « Celles qui satisferont aux critères essentiels passeront ensuite un examen écrit », que représente « Celles » ?",
+        "en": "In the sentence 'Celles qui satisferont aux critères essentiels passeront ensuite un examen écrit', what does 'Celles' refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les personnes intéressées qui ont présenté leur candidature.",
+          "rationale": {
+            "fr": "« Celles » reprend « Les personnes intéressées » de la phrase précédente : ce sont elles qui passent l'examen.",
+            "en": "'Celles' picks up 'Les personnes intéressées' from the previous sentence: they are the ones who take the exam."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les questions de présélection en ligne.",
+          "rationale": {
+            "fr": "Le nom est bien féminin pluriel, mais des questions ne peuvent pas « passer un examen » ; le sens écarte ce référent.",
+            "en": "The noun is feminine plural, but questions cannot 'take an exam'; the meaning rules this referent out."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les références des candidats.",
+          "rationale": {
+            "fr": "Les références sont mentionnées plus loin et ne sont contactées qu'après l'entrevue ; elles ne passent aucun examen.",
+            "en": "References are mentioned later and only contacted after the interview; they take no exam."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les membres du comité d'évaluation.",
+          "rationale": {
+            "fr": "Le comité évalue les candidats ; ses membres ne sont pas soumis à l'examen.",
+            "en": "The committee assesses the candidates; its members do not sit the exam."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un pronom démonstratif comme « celles » reprend un nom déjà nommé, du même genre et du même nombre. Quand plusieurs noms conviennent grammaticalement, c'est le sens de la phrase (qui peut « passer un examen » ?) qui tranche.",
+        "en": "A demonstrative pronoun such as 'celles' refers back to a noun already mentioned, of the same gender and number. When several nouns fit grammatically, the meaning of the sentence (who can 'take an exam'?) decides."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-2-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-2",
+      "stem": {
+        "fr": "Quel est le message principal de ce bulletin sur le télétravail ?",
+        "en": "What is the main message of this bulletin on telework?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il annonce la fin du télétravail pour la plupart des employés.",
+          "rationale": {
+            "fr": "Le télétravail demeure possible : seule une présence minimale de deux jours par semaine est exigée.",
+            "en": "Telework remains possible: only a minimum of two days a week in the office is required."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il explique comment réserver les salles de réunion du 4e étage.",
+          "rationale": {
+            "fr": "Les salles du 4e étage ne font l'objet que d'une phrase ; c'est un détail parmi d'autres.",
+            "en": "The 4th-floor rooms take up only one sentence; this is one detail among others."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il présente les règles communes qui encadreront le télétravail dans la direction générale à partir de décembre.",
+          "rationale": {
+            "fr": "Le bulletin annonce que les modalités « seront harmonisées » et énumère les nouvelles règles qui s'appliqueront.",
+            "en": "The bulletin announces that the arrangements 'will be harmonized' and lists the new rules that will apply."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il invite les employés à acheter du mobilier ergonomique pour leur domicile.",
+          "rationale": {
+            "fr": "C'est l'inverse : le Ministère ne remboursera plus ce mobilier et propose plutôt un prêt d'équipement.",
+            "en": "It is the opposite: the department will no longer reimburse such furniture and offers equipment loans instead."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "L'idée principale d'un bulletin se trouve souvent dans la première phrase, que le reste développe. Vérifiez que votre réponse englobe toutes les mesures, et non une seule.",
+        "en": "A bulletin's main idea is often in the first sentence, which the rest develops. Check that your answer covers all the measures, not just one."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-2-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-2",
+      "stem": {
+        "fr": "Selon le bulletin, que pourront faire les employés qui ont besoin d'équipement pour travailler chez eux ?",
+        "en": "According to the bulletin, what can employees who need equipment to work at home do?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Se faire rembourser l'achat d'une chaise ergonomique.",
+          "rationale": {
+            "fr": "Le bulletin indique au contraire que le Ministère « ne remboursera plus l'achat de mobilier ».",
+            "en": "The bulletin says the opposite: the department 'will no longer reimburse furniture purchases'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Obtenir en prêt un écran et une chaise ergonomique auprès du service prévu à cet effet.",
+          "rationale": {
+            "fr": "Le bulletin précise qu'ils « pourront emprunter un écran et une chaise ergonomique au centre de prêt ».",
+            "en": "The bulletin states that they 'may borrow a monitor and an ergonomic chair from the loan centre'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Commander du mobilier neuf par l'intermédiaire de leur gestionnaire.",
+          "rationale": {
+            "fr": "Le gestionnaire intervient pour choisir les jours de présence, non pour commander du mobilier.",
+            "en": "The manager's role is to choose the in-office days, not to order furniture."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Emporter à domicile le mobilier des salles du 4e étage.",
+          "rationale": {
+            "fr": "Les salles du 4e étage sont mentionnées pour leur réservation, et non comme source d'équipement.",
+            "en": "The 4th-floor rooms are mentioned regarding bookings, not as a source of equipment."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Méfiez-vous des distracteurs qui reprennent un mot du texte (rembourser, mobilier, 4e étage) dans une phrase dont le sens est différent. Seule une reformulation fidèle de la phrase visée convient.",
+        "en": "Beware of distractors that reuse a word from the text (reimburse, furniture, 4th floor) in a sentence with a different meaning. Only a faithful rewording of the relevant sentence fits."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-2-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-2",
+      "stem": {
+        "fr": "Que peut-on déduire au sujet d'un employé qui voudrait télétravailler quelques mois depuis une autre province ?",
+        "en": "What can be inferred about an employee who would like to telework for a few months from another province?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il en serait empêché, puisque le télétravail hors province est interdit.",
+          "rationale": {
+            "fr": "Le bulletin n'interdit rien : il soumet seulement ce cas à une autorisation préalable.",
+            "en": "The bulletin bans nothing: it only makes this case subject to prior authorization."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il pourrait le faire librement, à condition d'en avertir ses collègues.",
+          "rationale": {
+            "fr": "Avertir ses collègues ne suffit pas : une autorisation est exigée avant le départ.",
+            "en": "Telling colleagues is not enough: authorization is required beforehand."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il devrait faire réviser son entente écrite chaque mois.",
+          "rationale": {
+            "fr": "L'entente écrite est révisée une fois par année ; aucune révision mensuelle n'est prévue.",
+            "en": "The written agreement is reviewed once a year; no monthly review is mentioned."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il ne pourrait le faire qu'avec une permission obtenue à l'avance.",
+          "rationale": {
+            "fr": "Le bulletin exige « une autorisation préalable » pour ce cas ; sans elle, l'employé ne peut pas le faire.",
+            "en": "The bulletin requires 'prior authorization' in this case; without it, the employee cannot do so."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une inférence applique une règle du texte à un cas qu'il ne décrit pas en détail. Ici, « autorisation préalable » signifie « permis, mais seulement avec accord donné d'avance » : ni interdiction, ni liberté totale.",
+        "en": "An inference applies a rule from the text to a case it does not describe in detail. Here, 'prior authorization' means 'allowed, but only with approval given in advance': neither a ban nor full freedom."
+      },
+      "subSkill": "inference",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-2-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-2",
+      "stem": {
+        "fr": "Comment le bulletin sur les nouvelles modalités de télétravail présente-t-il l'information ?",
+        "en": "How does the bulletin on the new telework arrangements present its information?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Un problème, ses causes, puis la solution retenue.",
+          "rationale": {
+            "fr": "Le bulletin n'expose aucun problème ni aucune cause ; il énonce des règles.",
+            "en": "The bulletin sets out no problem or causes; it states rules."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Une date d'entrée en vigueur, puis une série de règles distinctes, et enfin un renvoi vers une source d'information.",
+          "rationale": {
+            "fr": "Le bulletin s'ouvre sur « À compter du 1er décembre », enchaîne les règles (« Par ailleurs », « Enfin ») et termine par la page intranet.",
+            "en": "The bulletin opens with 'As of December 1', strings the rules together ('Par ailleurs', 'Enfin') and ends with the intranet page."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Une comparaison point par point entre l'ancien régime et le nouveau.",
+          "rationale": {
+            "fr": "Seul le remboursement du mobilier est présenté comme un changement ; les autres règles ne sont pas comparées à l'ancien régime.",
+            "en": "Only the furniture reimbursement is presented as a change; the other rules are not compared with the old arrangements."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les étapes successives à suivre pour obtenir le droit de télétravailler.",
+          "rationale": {
+            "fr": "Les règles ne forment pas une procédure ordonnée : ce sont des mesures indépendantes les unes des autres.",
+            "en": "The rules do not form an ordered procedure: they are independent measures."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour reconnaître la structure d'un texte, observez son début, sa fin et ses connecteurs. « Par ailleurs » et « Enfin » ajoutent des éléments de même nature : ils signalent une énumération, pas une démonstration ni une procédure.",
+        "en": "To identify a text's structure, look at its beginning, its end and its connectors. 'Par ailleurs' and 'Enfin' add items of the same kind: they signal a list, not an argument or a procedure."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-2-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-2",
+      "stem": {
+        "fr": "Quel ton le bulletin adopte-t-il pour annoncer les nouvelles modalités de télétravail ?",
+        "en": "What tone does the bulletin take to announce the new telework arrangements?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Un ton informatif et direct, qui énonce les règles sans les commenter longuement.",
+          "rationale": {
+            "fr": "Le bulletin aligne des faits et des obligations (« devra », « seront ») avec très peu de justification ou d'émotion.",
+            "en": "The bulletin lines up facts and obligations ('must', 'will be') with very little justification or emotion."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Un ton d'excuse, qui regrette les inconvénients causés au personnel.",
+          "rationale": {
+            "fr": "Le bulletin ne présente aucune excuse et n'évoque aucun inconvénient.",
+            "en": "The bulletin offers no apology and mentions no inconvenience."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Un ton alarmiste, qui insiste sur les sanctions prévues en cas de manquement.",
+          "rationale": {
+            "fr": "Aucune sanction n'est mentionnée dans le bulletin.",
+            "en": "No penalty is mentioned in the bulletin."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Un ton enthousiaste, qui vante les avantages du télétravail.",
+          "rationale": {
+            "fr": "Le bulletin ne fait l'éloge de rien ; il expose les règles de manière neutre.",
+            "en": "The bulletin praises nothing; it sets out the rules neutrally."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Pour juger du ton, cherchez des marques de jugement ou d'émotion (excuses, mises en garde, éloges). Leur absence, jointe à des verbes d'obligation au futur, caractérise le ton neutre et informatif des avis administratifs.",
+        "en": "To judge tone, look for signs of judgment or emotion (apologies, warnings, praise). Their absence, together with obligation verbs in the future tense, marks the neutral, informative tone of administrative notices."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "B",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-3-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-3",
+      "stem": {
+        "fr": "Lequel des énoncés suivants rend fidèlement les données chiffrées présentées dans la note de service ?",
+        "en": "Which of the following statements faithfully reflects the figures given in the memo?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les rencontres de mi-exercice devront être consignées dans les dix jours civils qui suivent leur tenue.",
+          "rationale": {
+            "fr": "La note parle de 10 jours ouvrables, et non civils : le délai réel est donc plus long que celui de l'énoncé.",
+            "en": "The memo says 10 working days, not calendar days, so the actual deadline is longer than the statement suggests."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les gestionnaires responsables d'au moins 12 employés pourront déléguer certaines rencontres.",
+          "rationale": {
+            "fr": "La note fixe le seuil à « plus de 12 » : un gestionnaire qui supervise exactement 12 employés n'est pas visé.",
+            "en": "The memo sets the threshold at 'more than 12': a manager supervising exactly 12 employees is not covered."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Selon l'examen interne, environ 60 % des employés n'avaient reçu aucune rétroaction officielle.",
+          "rationale": {
+            "fr": "C'est l'inverse : 40 % n'en avaient reçu aucune ; les 60 % restants en avaient vraisemblablement reçu.",
+            "en": "It is the reverse: 40% had received none; the remaining 60% presumably had."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Lors de l'examen interne, à peu près deux employés sur cinq n'avaient eu aucune rétroaction formelle avant leur évaluation de fin d'exercice.",
+          "rationale": {
+            "fr": "« Environ 40 % » équivaut à environ deux employés sur cinq ; et le moment visé, avant l'évaluation de fin d'exercice, est respecté.",
+            "en": "'About 40%' equals about two employees in five; and the timing, before the year-end evaluation, is preserved."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Un énoncé chiffré n'est fidèle que s'il respecte aussi les mots qui entourent le nombre : « ouvrables » n'est pas « civils », « plus de 12 » exclut 12. Vérifiez l'unité, le seuil et le groupe visé, pas seulement le nombre.",
+        "en": "A statement with figures is faithful only if it also respects the words around the number: 'working' is not 'calendar', 'more than 12' excludes 12. Check the unit, the threshold and the group concerned, not just the number."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-3-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-3",
+      "stem": {
+        "fr": "Que laisse entendre la directrice générale en affirmant qu'une cote surprenante est rarement perçue comme équitable, « quelle qu'en soit la justesse » ?",
+        "en": "What does the director general imply by stating that a surprising rating is seldom seen as fair, 'quelle qu'en soit la justesse' (however accurate it may be)?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Que les cotes attribuées en fin d'exercice sont souvent inexactes et devraient être revues.",
+          "rationale": {
+            "fr": "La directrice ne met pas en doute l'exactitude des cotes ; elle affirme au contraire que même une cote juste peut être mal reçue.",
+            "en": "The director does not question the ratings' accuracy; she says, on the contrary, that even an accurate rating can be badly received."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Que les employés contestent systématiquement les cotes qui leur sont défavorables.",
+          "rationale": {
+            "fr": "La note dit « rarement perçue comme équitable », sans parler de contestation ni de cotes défavorables en particulier.",
+            "en": "The memo says 'seldom seen as fair', with no mention of formal challenges or of unfavourable ratings specifically."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Qu'une appréciation exacte peut tout de même paraître injuste à un employé qui n'a pas été prévenu en cours d'exercice.",
+          "rationale": {
+            "fr": "« Quelle qu'en soit la justesse » signifie « même si elle est exacte » : le problème tient à la surprise, non à l'exactitude de la cote.",
+            "en": "'Quelle qu'en soit la justesse' means 'even if it is accurate': the problem lies in the surprise, not in the rating's accuracy."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Que la justesse d'une cote importe moins que la rapidité avec laquelle elle est attribuée.",
+          "rationale": {
+            "fr": "La note oppose la justesse à l'effet de surprise, non à la rapidité ; elle ne hiérarchise pas ces critères.",
+            "en": "The memo contrasts accuracy with surprise, not with speed; it does not rank these criteria."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "La locution concessive « quel que soit » (« quelle qu'en soit la justesse ») écarte une variable : le résultat vaut dans tous les cas. Inférer, c'est en tirer que la cause du problème est ailleurs — ici, dans l'absence de rétroaction préalable.",
+        "en": "The concessive phrase 'quel que soit' ('quelle qu'en soit la justesse') sets a variable aside: the outcome holds in every case. Inferring means concluding that the cause of the problem lies elsewhere — here, in the lack of earlier feedback."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-3-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-3",
+      "stem": {
+        "fr": "Dans le troisième paragraphe, à quoi l'expression « ce rendez-vous supplémentaire » fait-elle référence ?",
+        "en": "In the third paragraph, what does the expression 'ce rendez-vous supplémentaire' (this additional meeting) refer to?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "À l'entretien de mi-exercice, désormais imposé à l'ensemble du personnel.",
+          "rationale": {
+            "fr": "La nouveauté de la note est l'évaluation de mi-exercice obligatoire : c'est elle qui « s'ajoute » à la charge des gestionnaires.",
+            "en": "The memo's new element is the mandatory mid-year review: it is what is 'added' to managers' workload."
+          }
+        },
+        {
+          "id": "b",
+          "text": "À l'évaluation de fin d'exercice, qui alourdit la tâche des gestionnaires.",
+          "rationale": {
+            "fr": "L'évaluation de fin d'exercice existait déjà ; elle n'est pas « supplémentaire ».",
+            "en": "The year-end evaluation already existed; it is not 'additional'."
+          }
+        },
+        {
+          "id": "c",
+          "text": "À la validation, par le gestionnaire, des ententes consignées par un chef d'équipe.",
+          "rationale": {
+            "fr": "Cette validation est mentionnée après l'expression, comme un allègement possible, et non comme le rendez-vous visé.",
+            "en": "This validation is mentioned after the expression, as a possible relief, not as the meeting referred to."
+          }
+        },
+        {
+          "id": "d",
+          "text": "À l'examen interne mené au printemps dernier.",
+          "rationale": {
+            "fr": "L'examen interne est terminé et ne constitue pas une rencontre qui s'ajouterait à la charge actuelle.",
+            "en": "The internal review is over and is not a meeting added to the current workload."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Un démonstratif suivi d'un nom (« ce rendez-vous ») renvoie à une réalité déjà présentée, souvent reformulée. L'adjectif « supplémentaire » guide le repérage : il faut chercher ce qui est nouveau dans le texte.",
+        "en": "A demonstrative followed by a noun ('ce rendez-vous') points back to something already introduced, often reworded. The adjective 'supplémentaire' guides the search: look for what is new in the text."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-3-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-3",
+      "stem": {
+        "fr": "En reconnaissant que la nouvelle rencontre alourdit une charge déjà importante, quelle intention la directrice générale manifeste-t-elle ?",
+        "en": "By acknowledging that the new meeting adds to an already heavy workload, what intention does the director general show?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "S'excuser d'une décision qu'elle désapprouve personnellement, mais qui lui est imposée.",
+          "rationale": {
+            "fr": "Rien n'indique qu'elle désapprouve la mesure ; elle la justifie au contraire par les résultats de l'examen interne.",
+            "en": "Nothing suggests she disapproves of the measure; on the contrary, she justifies it with the internal review's findings."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Laisser entendre que l'obligation pourra être reportée si la charge de travail l'exige.",
+          "rationale": {
+            "fr": "La note ne prévoit aucun report : l'échéance du 31 octobre est ferme, seule la forme est allégée.",
+            "en": "The memo provides for no postponement: the October 31 deadline is firm; only the format is lightened."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Reprocher aux gestionnaires de ne pas avoir donné de rétroaction jusqu'ici.",
+          "rationale": {
+            "fr": "Le constat de 40 % est présenté comme un fait, sans blâme ; et la phrase visée exprime de la compréhension, non un reproche.",
+            "en": "The 40% finding is stated as a fact, without blame; and the sentence in question expresses understanding, not reproach."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Atténuer les réticences prévisibles des gestionnaires en montrant que l'obligation s'accompagne d'allègements.",
+          "rationale": {
+            "fr": "La phrase de reconnaissance est aussitôt suivie de « C'est pourquoi » et de deux mesures d'allègement : gabarit réduit et délégation possible.",
+            "en": "The acknowledgment is immediately followed by 'C'est pourquoi' (that is why) and two relief measures: a shorter template and possible delegation."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Dans un texte administratif, une concession (« Je suis consciente que… ») suivie d'une mesure (« C'est pourquoi… ») sert souvent à prévenir une objection. Pour en saisir l'intention, lisez ce qui suit la concession.",
+        "en": "In an administrative text, a concession ('I am aware that…') followed by a measure ('That is why…') often serves to forestall an objection. To grasp the intent, read what follows the concession."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-3-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-3",
+      "stem": {
+        "fr": "Dans la note, que signifie le verbe « consigner » appliqué aux rencontres et aux ententes ?",
+        "en": "In the memo, what does the verb 'consigner' mean as applied to the meetings and agreements?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les confier à une autre personne qui s'en chargera.",
+          "rationale": {
+            "fr": "Ce sens correspond à « déléguer », verbe que la note emploie séparément pour les chefs d'équipe.",
+            "en": "This meaning corresponds to 'déléguer' (delegate), a verb the memo uses separately for team leaders."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les inscrire officiellement afin d'en conserver une trace.",
+          "rationale": {
+            "fr": "Les rencontres doivent être « consignées dans l'application en ligne » : on les y enregistre pour en garder la trace.",
+            "en": "The meetings must be 'consignées dans l'application en ligne': they are recorded there so that a record is kept."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les encadrer au moyen de consignes précises données aux employés.",
+          "rationale": {
+            "fr": "Le rapprochement avec le nom « consigne » est trompeur : « consigner » ne signifie pas donner des instructions.",
+            "en": "The link with the noun 'consigne' (instruction) is misleading: 'consigner' does not mean giving instructions."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les soumettre à l'approbation de la direction générale.",
+          "rationale": {
+            "fr": "La note ne prévoit aucune approbation par la direction générale ; seule la validation par le gestionnaire est mentionnée.",
+            "en": "The memo provides for no approval by the branch; only validation by the manager is mentioned."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "En contexte administratif, « consigner » veut dire « mettre par écrit, enregistrer » (consigner une décision au procès-verbal). Ne vous laissez pas guider par la ressemblance avec « consigne » : vérifiez le sens dans la phrase.",
+        "en": "In administrative contexts, 'consigner' means 'to put in writing, to record' (to record a decision in the minutes). Do not be led by its resemblance to 'consigne' (instruction): check the meaning in the sentence."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-4-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-4",
+      "stem": {
+        "fr": "Parmi les énoncés suivants, lequel interprète correctement les pourcentages rapportés dans l'extrait du sondage ?",
+        "en": "Which of the following statements correctly interprets the percentages reported in the survey excerpt?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Les employés récents se montrent plus pessimistes que l'ensemble des répondants quant à leurs perspectives d'avancement.",
+          "rationale": {
+            "fr": "31 % des employés de moins de trois ans voient des possibilités d'avancement, contre 43 % de l'ensemble : ils sont donc plus pessimistes.",
+            "en": "31% of employees with under three years see advancement opportunities, versus 43% overall: they are therefore more pessimistic."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Plus de la moitié des répondants estiment avoir des possibilités réelles d'avancement.",
+          "rationale": {
+            "fr": "Le chiffre est de 43 %, ce qui reste sous la moitié.",
+            "en": "The figure is 43%, which is below half."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les employés de moins de trois ans de service représentent 31 % des répondants.",
+          "rationale": {
+            "fr": "Le 31 % mesure la part de ces employés qui voient des possibilités d'avancement, non leur poids parmi les répondants.",
+            "en": "The 31% measures the share of these employees who see advancement opportunities, not their weight among respondents."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La participation a reculé par rapport à l'édition précédente du sondage.",
+          "rationale": {
+            "fr": "C'est l'inverse : elle est passée de 54 % à 68 %.",
+            "en": "It is the reverse: it rose from 54% to 68%."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "Devant un pourcentage, demandez-vous toujours « pourcentage de quoi ? ». Le 31 % porte sur un sous-groupe (les employés récents) et sur une question précise (l'avancement) ; le comparer au 43 % de l'ensemble fait apparaître l'écart.",
+        "en": "With any percentage, always ask 'percentage of what?'. The 31% concerns a subgroup (recent employees) and a specific question (advancement); comparing it with the overall 43% reveals the gap."
+      },
+      "subSkill": "numerical-and-tabular-detail",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-4-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-4",
+      "stem": {
+        "fr": "Quelle conclusion d'ensemble se dégage de cet extrait du rapport consacré aux résultats du sondage ?",
+        "en": "What overall conclusion emerges from this excerpt of the report on the survey results?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "La hausse de la participation prouve que les employés sont plus mobilisés qu'auparavant.",
+          "rationale": {
+            "fr": "Les auteurs mettent justement en garde : une participation plus forte n'écarte pas le risque de surreprésenter les employés mobilisés.",
+            "en": "The authors warn precisely against this: higher participation does not rule out over-representing engaged employees."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Les gestionnaires doivent d'abord améliorer la façon dont ils traitent leur personnel.",
+          "rationale": {
+            "fr": "Le traitement respectueux est l'un des points forts (79 %) ; ce n'est pas le problème soulevé.",
+            "en": "Respectful treatment is one of the strengths (79%); it is not the problem raised."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Des résultats globalement favorables cachent un malaise lié à la carrière, surtout chez les nouveaux employés, qu'il faut mieux comprendre avant d'agir.",
+          "rationale": {
+            "fr": "L'extrait passe des résultats « encourageants » aux faiblesses relatives à la carrière, puis recommande d'en chercher les causes avant toute mesure.",
+            "en": "The excerpt moves from 'encouraging' results to career-related weaknesses, then recommends looking for causes before taking any measure."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Le Ministère doit lancer sans attendre un programme de mobilité pour retenir les nouveaux employés.",
+          "rationale": {
+            "fr": "Le rapport recommande au contraire de consulter les nouveaux employés « avant d'arrêter quelque mesure que ce soit ».",
+            "en": "The report recommends, on the contrary, consulting new employees 'before deciding on any measure whatsoever'."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "L'idée principale d'un extrait argumenté combine son constat et sa conclusion. Ici, le connecteur « toutefois » fait basculer le texte du positif au négatif, et « donc » introduit la recommandation : la réponse doit couvrir ce mouvement.",
+        "en": "The main idea of an argued excerpt combines its finding and its conclusion. Here, 'toutefois' (however) tips the text from positive to negative, and 'donc' (therefore) introduces the recommendation: the answer must cover this movement."
+      },
+      "subSkill": "main-idea",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-4-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-4",
+      "stem": {
+        "fr": "Quel rôle joue le dernier paragraphe dans l'organisation de l'extrait ?",
+        "en": "What role does the last paragraph play in the excerpt's organization?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il résume les données présentées sans formuler de recommandation.",
+          "rationale": {
+            "fr": "Le paragraphe ne résume pas les chiffres et contient une recommandation explicite (« Nous recommandons donc »).",
+            "en": "The paragraph does not summarize the figures and contains an explicit recommendation ('We therefore recommend')."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il tire des constats chiffrés une conséquence prudente, en proposant une démarche préalable à toute décision.",
+          "rationale": {
+            "fr": "Après les chiffres, le dernier paragraphe refuse de conclure trop vite (« il serait hasardeux ») et recommande des groupes de discussion avant d'agir.",
+            "en": "After the figures, the last paragraph declines to conclude too quickly ('it would be risky') and recommends focus groups before acting."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il aborde un nouveau sujet, sans lien avec les résultats sur la carrière.",
+          "rationale": {
+            "fr": "Les « écarts » et les « nouveaux employés » renvoient directement aux résultats sur la carrière du paragraphe précédent.",
+            "en": "The 'gaps' and 'new employees' point directly to the career results in the previous paragraph."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il remet en cause les résultats précédents en raison d'un taux de participation insuffisant.",
+          "rationale": {
+            "fr": "Le taux de participation a augmenté et « renforce la fiabilité des résultats » ; le dernier paragraphe ne les conteste pas.",
+            "en": "Participation increased and 'strengthens the reliability of the results'; the last paragraph does not dispute them."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Pour décrire le rôle d'un paragraphe, repérez son connecteur et sa fonction : « donc » marque une conséquence, « recommandons » une proposition d'action. Un paragraphe final de rapport passe souvent du constat à la recommandation.",
+        "en": "To describe a paragraph's role, find its connector and its function: 'donc' marks a consequence, 'recommandons' a proposed action. A report's final paragraph often moves from finding to recommendation."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-4-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-4",
+      "stem": {
+        "fr": "Selon l'extrait, quelle réserve les auteurs formulent-ils au sujet du taux de participation plus élevé ?",
+        "en": "According to the excerpt, what reservation do the authors express about the higher participation rate?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le taux demeure trop faible pour que les résultats soient fiables.",
+          "rationale": {
+            "fr": "Les auteurs affirment au contraire que la hausse « renforce la fiabilité des résultats ».",
+            "en": "The authors state, on the contrary, that the increase 'strengthens the reliability of the results'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Certaines équipes n'ont pas eu le temps de remplir le questionnaire.",
+          "rationale": {
+            "fr": "L'extrait ne mentionne aucun manque de temps pour répondre.",
+            "en": "The excerpt mentions no lack of time to respond."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les questions ayant changé depuis l'édition précédente, aucune comparaison n'est possible.",
+          "rationale": {
+            "fr": "Rien n'indique que les questions ont changé ; l'extrait compare d'ailleurs les deux éditions.",
+            "en": "Nothing indicates the questions changed; the excerpt in fact compares the two editions."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Les répondants pourraient compter une part trop importante d'employés particulièrement engagés.",
+          "rationale": {
+            "fr": "Le texte évoque « le risque que les employés les plus mobilisés soient surreprésentés » : la hausse n'élimine pas ce biais possible.",
+            "en": "The text mentions 'the risk that the most engaged employees are over-represented': the increase does not remove this possible bias."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Une réserve s'introduit souvent par une concession : « ce qui renforce… sans pour autant écarter… ». Le détail recherché se trouve après « sans pour autant », qui limite la portée de ce qui précède.",
+        "en": "A reservation is often introduced by a concession: 'which strengthens… without, however, ruling out…'. The detail sought comes after 'sans pour autant', which limits the scope of what precedes it."
+      },
+      "subSkill": "specific-detail",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-4-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-4",
+      "stem": {
+        "fr": "Que laisse supposer l'extrait au sujet de la fidélisation éventuelle des employés comptant moins de trois années de service ?",
+        "en": "What does the excerpt suggest about the potential retention of employees with less than three years of service?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Ils sont moins bien traités par leur gestionnaire que leurs collègues plus anciens.",
+          "rationale": {
+            "fr": "Les résultats sur le respect ne sont pas ventilés selon l'ancienneté ; rien ne permet cette conclusion.",
+            "en": "The results on respect are not broken down by seniority; nothing supports this conclusion."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Ils jugent leur charge de travail plus lourde que celle des autres employés.",
+          "rationale": {
+            "fr": "Le 71 % sur la charge de travail porte sur l'ensemble des répondants, sans distinction d'ancienneté.",
+            "en": "The 71% on workload concerns all respondents, with no breakdown by seniority."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Le Ministère risque d'avoir du mal à les garder s'il ne cerne pas mieux les causes de leur insatisfaction.",
+          "rationale": {
+            "fr": "Ils sont deux fois plus nombreux à envisager de partir et les causes restent inconnues ; d'où la recommandation de les consulter.",
+            "en": "They are twice as likely to consider leaving and the causes remain unknown; hence the recommendation to consult them."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La majorité d'entre eux quittera le Ministère d'ici deux ans.",
+          "rationale": {
+            "fr": "Le texte dit qu'ils sont deux fois plus nombreux à « envisager » un départ, ce qui n'indique ni une majorité ni un départ certain.",
+            "en": "The text says they are twice as likely to 'consider' leaving, which indicates neither a majority nor a certain departure."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Une bonne inférence reste prudente et s'appuie sur plusieurs indices du texte. « Envisager de quitter » n'est pas « quitter », et « deux fois plus nombreux » est une comparaison, non une proportion : méfiez-vous des réponses qui durcissent les données.",
+        "en": "A sound inference stays cautious and rests on several clues in the text. 'Considering leaving' is not 'leaving', and 'twice as many' is a comparison, not a proportion: beware of answers that harden the data."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-5-1",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-5",
+      "stem": {
+        "fr": "Dans la lettre, que signifie l'expression « jusqu'à concurrence de » appliquée à la somme de 6 000 $ ?",
+        "en": "In the letter, what does the expression 'jusqu'à concurrence de' mean as applied to the sum of $6,000?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Avec la garantie d'un montant minimal de 6 000 $.",
+          "rationale": {
+            "fr": "C'est l'inverse : l'expression marque une limite supérieure, non un minimum garanti.",
+            "en": "It is the reverse: the expression marks an upper limit, not a guaranteed minimum."
+          }
+        },
+        {
+          "id": "b",
+          "text": "En concurrence avec d'autres employés qui demandent la même somme.",
+          "rationale": {
+            "fr": "Le nom « concurrence » évoque ici la rivalité, mais la locution n'a rien à voir avec une compétition entre demandeurs.",
+            "en": "The noun 'concurrence' suggests competition here, but the phrase has nothing to do with competition between applicants."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Selon un montant que le comité négociera chaque année avec l'employée.",
+          "rationale": {
+            "fr": "La lettre ne prévoit aucune négociation ; le plafond est fixé d'avance.",
+            "en": "The letter provides for no negotiation; the ceiling is set in advance."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Sans que l'aide puisse dépasser ce plafond annuel.",
+          "rationale": {
+            "fr": "« Jusqu'à concurrence de » fixe un maximum : le Ministère paie 75 % des droits, mais jamais plus de 6 000 $ par année.",
+            "en": "'Jusqu'à concurrence de' sets a maximum: the department pays 75% of fees, but never more than $6,000 a year."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "« Jusqu'à concurrence de » est une locution figée du vocabulaire administratif et financier : elle signifie « dans la limite de, sans dépasser ». Le sens de rivalité de « concurrence » n'intervient pas ici.",
+        "en": "'Jusqu'à concurrence de' is a fixed phrase of administrative and financial vocabulary: it means 'up to a maximum of, without exceeding'. The 'competition' sense of 'concurrence' plays no part here."
+      },
+      "subSkill": "vocabulary-in-context",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-5-2",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-5",
+      "stem": {
+        "fr": "Quelle période l'expression « D'ici là », employée à propos de l'aménagement de l'horaire, désigne-t-elle ?",
+        "en": "What period does the expression 'D'ici là' (until then), used about the schedule arrangement, designate?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Le temps qui reste avant le printemps, quand les allocations budgétaires de l'année suivante seront fixées.",
+          "rationale": {
+            "fr": "« Là » reprend le moment évoqué dans la phrase précédente : « au printemps, au moment où les allocations de l'an prochain seront établies ».",
+            "en": "'Là' picks up the time mentioned in the previous sentence: 'in the spring, when next year's allocations are set'."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Toute la durée du programme de maîtrise.",
+          "rationale": {
+            "fr": "L'expression renvoie à une échéance précise de la phrase précédente, non à la durée totale des études.",
+            "en": "The expression points to a specific time in the previous sentence, not to the total length of the studies."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Les semaines qui précèdent le début des cours, à l'automne.",
+          "rationale": {
+            "fr": "L'aménagement sert justement à assister aux cours du soir ; il ne peut se terminer avant qu'ils commencent.",
+            "en": "The arrangement is precisely for attending evening courses; it cannot end before they begin."
+          }
+        },
+        {
+          "id": "d",
+          "text": "La période de service exigée en contrepartie du financement.",
+          "rationale": {
+            "fr": "Cette période est évoquée dans le paragraphe précédent et n'a pas de lien avec l'aménagement de l'horaire.",
+            "en": "That period is mentioned in the previous paragraph and has no connection with the schedule arrangement."
+          }
+        }
+      ],
+      "key": "a",
+      "explanation": {
+        "fr": "« D'ici là » signifie « entre maintenant et le moment dont on vient de parler ». Pour le comprendre, cherchez dans la phrase précédente le repère temporel le plus proche — ici, le printemps.",
+        "en": "'D'ici là' means 'between now and the time just mentioned'. To understand it, look in the previous sentence for the nearest time reference — here, the spring."
+      },
+      "subSkill": "cohesion-and-reference",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-5-3",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-5",
+      "stem": {
+        "fr": "Quelle attitude le directeur adopte-t-il à l'égard de la demande de congé d'études à temps plein ?",
+        "en": "What attitude does the director take toward the request for full-time education leave?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il rejette définitivement la demande, jugée contraire aux priorités de la direction générale.",
+          "rationale": {
+            "fr": "Le refus n'est pas définitif et le projet est au contraire jugé conforme aux priorités de perfectionnement.",
+            "en": "The refusal is not final, and the project is in fact judged consistent with development priorities."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il accepte la demande, sous réserve de la réussite de chaque cours.",
+          "rationale": {
+            "fr": "Cette condition s'applique au remboursement des droits de scolarité, non au congé, qui n'est pas accordé.",
+            "en": "This condition applies to tuition reimbursement, not to the leave, which is not granted."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il oppose un refus motivé et temporaire, tout en ménageant une autre possibilité à la destinataire.",
+          "rationale": {
+            "fr": "Le refus est justifié (« faute de crédits »), limité dans le temps (« pour l'instant ») et assorti d'une invitation à renouveler la demande ainsi que d'un horaire aménagé.",
+            "en": "The refusal is justified ('for lack of funds'), limited in time ('for now') and paired with an invitation to reapply and an adjusted schedule."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il reproche à l'employée d'avoir présenté sa demande trop tard dans l'exercice.",
+          "rationale": {
+            "fr": "La lettre attribue le refus au manque de crédits, sans aucun reproche ; le ton reste courtois.",
+            "en": "The letter attributes the refusal to a lack of funds, without any reproach; the tone remains courteous."
+          }
+        }
+      ],
+      "key": "c",
+      "explanation": {
+        "fr": "Un refus administratif bien formulé se reconnaît à ses atténuations : une raison (« faute de »), une limite dans le temps (« pour l'instant »), une ouverture (« Je vous invite néanmoins »). Ces marques indiquent l'attitude de l'auteur mieux que la décision seule.",
+        "en": "A well-phrased administrative refusal can be recognized by its softeners: a reason ('faute de'), a time limit ('pour l'instant'), an opening ('Je vous invite néanmoins'). These markers reveal the writer's attitude better than the decision alone."
+      },
+      "subSkill": "tone-and-intent",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-5-4",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-5",
+      "stem": {
+        "fr": "Selon quelle logique le directeur organise-t-il les différents éléments de sa réponse ?",
+        "en": "According to what logic does the director organize the different parts of his reply?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Il énumère d'abord les éléments refusés, puis termine sur ceux qu'il accepte.",
+          "rationale": {
+            "fr": "C'est l'ordre inverse : l'acceptation du financement vient en premier, le refus du congé ensuite.",
+            "en": "It is the reverse order: the funding approval comes first, the leave refusal afterward."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Il traite d'abord de l'aide financière accordée et de ses conditions, puis du congé, refusé pour le moment, avant d'annoncer une solution provisoire.",
+          "rationale": {
+            "fr": "Le premier et le deuxième paragraphe portent sur le financement et ses conditions ; le troisième, introduit par « Quant au congé », sur le refus et l'horaire aménagé.",
+            "en": "The first and second paragraphs deal with the funding and its conditions; the third, introduced by 'Quant au congé' (as for the leave), with the refusal and the adjusted schedule."
+          }
+        },
+        {
+          "id": "c",
+          "text": "Il accorde l'ensemble des éléments demandés, puis précise les obligations qui en découlent.",
+          "rationale": {
+            "fr": "Tout n'est pas accordé : le congé à temps plein est refusé pour l'instant.",
+            "en": "Not everything is granted: the full-time leave is refused for now."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Il décrit le programme de maîtrise avant de se prononcer sur l'admissibilité de l'employée.",
+          "rationale": {
+            "fr": "La lettre ne décrit pas le programme ; elle confirme d'emblée que le projet s'inscrit dans les priorités.",
+            "en": "The letter does not describe the program; it confirms from the outset that the project fits the priorities."
+          }
+        }
+      ],
+      "key": "b",
+      "explanation": {
+        "fr": "Dans une lettre qui répond à plusieurs demandes, les transitions comme « Quant à » signalent le passage d'un objet à l'autre. Il est courant de commencer par la décision favorable, puis d'exposer le refus en l'atténuant.",
+        "en": "In a letter answering several requests, transitions such as 'Quant à' (as for) signal the move from one subject to the next. It is common to begin with the favourable decision, then set out the refusal while softening it."
+      },
+      "subSkill": "text-structure",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    },
+    {
+      "id": "claude-r-human-resources-5-5",
+      "version": 1,
+      "skill": "reading",
+      "lang": "fr",
+      "type": "comprehension",
+      "passageId": "claude-p-human-resources-5",
+      "stem": {
+        "fr": "Que peut-on déduire de l'engagement de service que le Ministère exige en contrepartie du financement ?",
+        "en": "What can be inferred from the service commitment the department requires in return for the funding?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Elle devra rembourser la totalité des droits si elle échoue à un seul cours.",
+          "rationale": {
+            "fr": "La réussite de chaque cours conditionne le financement de ce cours ; la lettre ne prévoit pas le remboursement de la totalité.",
+            "en": "Passing each course is the condition for funding that course; the letter does not provide for repaying everything."
+          }
+        },
+        {
+          "id": "b",
+          "text": "Elle pourra quitter le Ministère sans pénalité dès la fin de ses études.",
+          "rationale": {
+            "fr": "C'est précisément ce que l'engagement interdit : elle doit rester deux fois la durée des études, faute de quoi elle rembourse une partie des sommes.",
+            "en": "This is precisely what the commitment rules out: she must stay twice the length of her studies, or else repay part of the money."
+          }
+        },
+        {
+          "id": "c",
+          "text": "L'engagement ne s'appliquera que si le congé à temps plein lui est accordé.",
+          "rationale": {
+            "fr": "L'engagement est lié au financement des droits de scolarité, déjà accordé, et non au congé.",
+            "en": "The commitment is tied to the tuition funding, already granted, not to the leave."
+          }
+        },
+        {
+          "id": "d",
+          "text": "Si les études financées durent deux ans et que l'employée part un an après les avoir terminées, elle devra rendre une partie de l'aide.",
+          "rationale": {
+            "fr": "Deux ans d'études financées entraînent quatre ans de service ; un départ après un an ne respecte pas l'engagement, d'où un remboursement partiel.",
+            "en": "Two years of funded study require four years of service; leaving after one year breaks the commitment, hence a partial repayment."
+          }
+        }
+      ],
+      "key": "d",
+      "explanation": {
+        "fr": "Inférer, c'est appliquer une règle du texte à un cas concret. Ici, « deux fois la durée des études » se calcule à partir de la durée réelle, et « à défaut » introduit la conséquence d'un manquement : un remboursement partiel.",
+        "en": "Inferring means applying a rule from the text to a concrete case. Here, 'twice the length of the studies' is calculated from the actual length, and 'à défaut' (failing that) introduces the consequence of a breach: a partial repayment."
+      },
+      "subSkill": "inference",
+      "targetBand": "C",
+      "topic": "human-resources",
+      "tags": [],
+      "provenance": {
+        "origin": "authored",
+        "contributor": "claude-opus-5-5",
+        "generator": {
+          "model": "claude-opus-5-5",
+          "promptVersion": "authoring-brief-v4",
+          "date": "2026-10-04T00:00:00.000Z"
+        }
+      },
+      "status": "published",
+      "createdAt": "2026-10-04T00:00:00.000Z",
+      "updatedAt": "2026-10-04T00:00:00.000Z"
+    }
+  ],
+  "passages": [
+    {
+      "id": "claude-p-human-resources-1",
+      "lang": "fr",
+      "docType": "email",
+      "title": "Processus de dotation : postes d'agent de programme",
+      "body": "Bonjour à tous,\n\nComme je l'ai annoncé à la réunion de lundi, nous lançons un processus de dotation afin de pourvoir deux postes d'agent de programme pour une durée indéterminée. L'annonce sera publiée le 17 novembre et restera ouverte pendant 14 jours. Les personnes intéressées devront soumettre leur curriculum vitæ et répondre en ligne à des questions de présélection. Celles qui satisferont aux critères essentiels passeront ensuite un examen écrit de deux heures, prévu la semaine du 8 décembre. Les candidats qui réussiront l'examen seront convoqués à une entrevue, puis nous communiquerons avec leurs références. Nous comptons aussi établir un bassin de candidats qualifiés qui pourra servir à doter des postes semblables au cours des 12 prochains mois. Si vous souhaitez faire partie du comité d'évaluation, faites-le-moi savoir d'ici vendredi.\n\nMerci,\n\nJulie Tremblay\nGestionnaire, Programmes régionaux",
+      "wordCount": 136,
+      "targetBand": "B",
+      "topic": "human-resources",
+      "readability": {
+        "sentences": 8,
+        "avgSentenceLength": 17,
+        "rareWordRatio": 0.279
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-human-resources-2",
+      "lang": "fr",
+      "docType": "bulletin",
+      "title": "Télétravail : nouvelles modalités à compter du 1er décembre",
+      "body": "À compter du 1er décembre, les modalités de télétravail de la Direction générale des services ministériels seront harmonisées. Chaque employé devra être présent au bureau au moins deux jours par semaine ; ces journées seront choisies avec son gestionnaire en fonction des besoins de l'équipe. Elles seront inscrites dans une entente écrite, qui sera révisée une fois par année. Les employés qui souhaitent travailler à distance depuis une autre province devront obtenir une autorisation préalable, car des règles fiscales et de sécurité s'appliquent. Par ailleurs, le Ministère ne remboursera plus l'achat de mobilier pour le domicile ; en revanche, les employés pourront emprunter un écran et une chaise ergonomique au centre de prêt. Enfin, les salles de réunion du 4e étage seront réservées en priorité aux équipes présentes le mardi et le jeudi. Pour toute question, consultez la page intranet des ressources humaines.",
+      "wordCount": 143,
+      "targetBand": "B",
+      "topic": "human-resources",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 20.43,
+        "rareWordRatio": 0.287
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-human-resources-3",
+      "lang": "fr",
+      "docType": "memo",
+      "title": "Cycle de gestion du rendement : un changement à prévoir",
+      "body": "Destinataires : gestionnaires de la Direction générale des opérations\n\nLe cycle de gestion du rendement de cette année comportera un changement important : l'évaluation de mi-exercice, jusqu'ici facultative, deviendra obligatoire pour tous les employés. Cette rencontre devra avoir lieu au plus tard le 31 octobre et être consignée dans l'application en ligne dans les 10 jours ouvrables qui suivent.\n\nCe changement fait suite à l'examen interne du printemps dernier, selon lequel environ 40 % des employés n'avaient reçu aucune rétroaction officielle avant l'évaluation de fin d'exercice. Or, une cote de rendement qui surprend l'employé en fin de cycle est rarement perçue comme équitable, quelle qu'en soit la justesse. Elle empêche en outre de mettre en place, en temps utile, un plan d'apprentissage ou des mesures de soutien.\n\nJe suis consciente que ce rendez-vous supplémentaire s'ajoute à une charge déjà lourde. C'est pourquoi le gabarit a été raccourci : il se limite désormais à trois questions, portant sur les progrès accomplis, les obstacles rencontrés et le soutien requis. Les gestionnaires qui supervisent plus de 12 employés pourront, s'ils le jugent utile, déléguer certaines rencontres à un chef d'équipe, à condition de valider eux-mêmes les ententes consignées.\n\nJe vous remercie de votre collaboration.\n\nLa directrice générale, Opérations",
+      "wordCount": 205,
+      "targetBand": "C",
+      "topic": "human-resources",
+      "readability": {
+        "sentences": 10,
+        "avgSentenceLength": 20.5,
+        "rareWordRatio": 0.298
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-human-resources-4",
+      "lang": "fr",
+      "docType": "report-excerpt",
+      "title": "Sondage auprès du personnel : faits saillants",
+      "body": "Le taux de participation au sondage a atteint 68 %, contre 54 % lors de l'édition précédente, ce qui renforce la fiabilité des résultats sans pour autant écarter le risque que les employés les plus mobilisés soient surreprésentés.\n\nDans l'ensemble, les résultats sont encourageants : 79 % des répondants affirment que leur gestionnaire immédiat les traite avec respect, et 71 % jugent leur charge de travail raisonnable. Le portrait se nuance toutefois dès que l'on examine les questions relatives à la carrière. Seulement 43 % des répondants estiment avoir des possibilités réelles d'avancement, une proportion qui chute à 31 % chez les employés comptant moins de trois ans de service. Ces derniers sont également deux fois plus nombreux que leurs collègues à envisager de quitter le Ministère au cours des deux prochaines années.\n\nFaute de données qualitatives, il serait hasardeux d'attribuer ces écarts à une cause unique. Nous recommandons donc de tenir, d'ici la fin du trimestre, des groupes de discussion auprès des nouveaux employés, avant d'arrêter quelque mesure que ce soit en matière de perfectionnement ou de mobilité.",
+      "wordCount": 179,
+      "targetBand": "C",
+      "topic": "human-resources",
+      "readability": {
+        "sentences": 7,
+        "avgSentenceLength": 25.57,
+        "rareWordRatio": 0.268
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    },
+    {
+      "id": "claude-p-human-resources-5",
+      "lang": "fr",
+      "docType": "letter",
+      "title": "Réponse à votre demande d'aide aux études",
+      "body": "Madame,\n\nJ'ai bien reçu votre demande de financement pour le programme de maîtrise en administration publique que vous souhaitez entreprendre à l'automne. Après examen par le comité d'apprentissage, je suis en mesure de vous confirmer que votre projet s'inscrit dans les priorités de perfectionnement de la Direction générale, dans la mesure où il renforcera les compétences en analyse de politiques dont votre équipe a besoin.\n\nLe Ministère assumera 75 % des droits de scolarité, jusqu'à concurrence de 6 000 $ par année, sous réserve de la réussite de chaque cours. En contrepartie, vous vous engagerez à demeurer à son service pendant une période équivalant à deux fois la durée des études financées ; à défaut, une partie des sommes versées devra être remboursée.\n\nQuant au congé d'études à temps plein que vous sollicitez, il ne peut vous être accordé pour l'instant, faute de crédits suffisants dans le budget de l'exercice en cours. Je vous invite néanmoins à présenter de nouveau cette demande au printemps, au moment où les allocations de l'an prochain seront établies. D'ici là, votre gestionnaire a accepté d'aménager votre horaire afin que vous puissiez assister aux cours offerts en soirée.\n\nVeuillez agréer, Madame, l'expression de mes sentiments distingués.\n\nLe directeur, Apprentissage et perfectionnement",
+      "wordCount": 206,
+      "targetBand": "C",
+      "topic": "human-resources",
+      "readability": {
+        "sentences": 9,
+        "avgSentenceLength": 22.89,
+        "rareWordRatio": 0.243
+      },
+      "source": {
+        "kind": "original",
+        "contributor": "claude-opus-5-5"
+      },
+      "status": "published"
+    }
+  ]
+}

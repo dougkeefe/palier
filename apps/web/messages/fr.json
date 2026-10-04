@@ -151,7 +151,7 @@
       },
       "source": {
         "q": "D’où viennent les questions?",
-        "a": "La plupart des questions sont rédigées par IA à partir de documents publics du gouvernement du Canada, puis réécrites en textes originaux qui ne citent rien. Chacune est revue par un second modèle d’IA différent et par des vérifications automatiques; une question qui échoue est écartée. Chaque question indique sa provenance, et la signaler ne prend qu’un geste."
+        "a": "Les questions sont rédigées par un modèle d’IA, Claude, sous forme de textes et de questions originaux qui ne copient rien. Chacune est revue à l’aveugle par d’autres instances du même modèle et par des vérifications automatiques; une question qui échoue est écartée. Chaque question indique sa provenance, et la signaler ne prend qu’un geste."
       },
       "privacy": {
         "q": "Mes données sont-elles privées?",
@@ -184,9 +184,8 @@
     "notPredictor": "Pas une prédiction. Il donne une estimation dont l’incertitude est affichée, jamais un résultat promis.",
     "notOfficial": "Aucun lien avec la Commission de la fonction publique du Canada, l’École de la fonction publique du Canada ni aucun ministère.",
     "bankTitle": "D’où viennent les questions",
-    "bankMachine": "La plupart des items sont rédigés par une IA à partir de documents publics du gouvernement du Canada, réécrits en textes originaux qui ne citent rien. Personne ne lit chaque item avant sa publication. Chacun passe l’examen d’un second modèle d’IA, différent du premier, et une série de vérifications automatiques; un item qui échoue est écarté, pas corrigé. Les items écrits par des personnes sont les bienvenus et passent les mêmes vérifications.",
+    "bankMachine": "Les items sont rédigés par un modèle d’IA, Claude : des textes et des questions originaux, dans le registre du milieu de travail fédéral. Rien n’est copié d’un véritable examen ni d’un document réel. Personne ne lit chaque item avant sa publication. Chacun est revu à l’aveugle par d’autres instances du même modèle, qui doivent trouver la réponse attendue et aucune autre, puis passe une série de vérifications automatiques. Un item qui échoue est écarté, pas corrigé. Les items écrits par des personnes sont les bienvenus et passent les mêmes vérifications.",
     "bankHonest": "La banque vous dit donc d’où vient chaque item. La provenance de n’importe quel item est à un geste de vous. Signaler un item se fait en un geste et ouvre un billet public, et les items qui se révèlent mauvais sont retirés. Votre estimation dit sur quoi elle repose, et elle n’est jamais ajustée en douce.",
-    "bankToday": "Pour l’instant, la banque est encore petite et en partie synthétique. Une exécution complète du processus précédera la version 1.0.",
     "whoTitle": "Qui le fait",
     "who": "Palier est un projet personnel et non gouvernemental, développé en public par Doug Keefe et les personnes qui y contribuent. Il ne détient aucune information gouvernementale et n’en accepte aucune.",
     "licenceTitle": "Licence",
@@ -394,7 +393,7 @@
     "historyShort": "Pas assez de réponses",
     "honestTitle": "Ce que ces chiffres disent, et ne disent pas",
     "honestDoes": "Ils montrent à quelle fréquence vous réussissez les items de chaque niveau, et la marge où se situe vraisemblablement votre vrai taux.",
-    "honestDoesNot": "Ce n’est pas un niveau. Les items de pratique ne sont pas un test étalonné, et cette banque est encore petite et en partie synthétique. Seul un examen simulé complet peut donner un niveau.",
+    "honestDoesNot": "Ce n’est pas un niveau. Les items de pratique ne sont pas un test étalonné, et aucun item n’a encore été étalonné sur de vraies réponses. Seul un examen simulé complet peut donner un niveau.",
     "exportTitle": "Gardez une copie",
     "exportBody": "Téléchargez tout dans un fichier JSON que vous pourrez importer plus tard, sur cet appareil ou un autre.",
     "printedOn": "Sommaire des progrès, {date}",
