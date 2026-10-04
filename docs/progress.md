@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 3 October 2026 (the app as designed, D202)
+**Last updated:** 4 October 2026 (the full content run, authored by Claude, D203–D207)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -64,7 +64,10 @@ Worker and Vercel function in `selfhost/`; the route's log exclusion written int
 switch, D193); and `docs/realtime-checklist.md` for Gate O. It merged (#60). **Phase 7 Slice 5, launch readiness, is built**
 (`dougkeefe/docs-content-development`; D198–D199): the realtime route's rate limit, refused as `throttled`; the band trend over time on `/progress`
 and its one-page printout; `robots.txt`, a sitemap and `hreflang` from one route list; and an unknown path answering 404.
-What remains before 1.0 is the human's: Gate O, then Gate M.
+**The full content run is built** (`dougkeefe/1nsv0`; D203–D207; ADR 24), by the human's decision on 4 October 2026: Claude
+wrote 630 items on 60 passages and 20 oral scenarios through the authored intake, separate Claude instances reviewed them
+blind, 626 passed, and `content/bank/v4` is served with v3's synthetic content retired. That is Gate M's full-volume bank.
+What remains before 1.0 is the human's: Gate O, then the rest of Gate M.
 
 This file is the repo's memory between agent sessions. It records **state**, not plan:
 what is done, what is in flight, what was decided along the way. It deliberately does
@@ -124,7 +127,7 @@ human for anything expensive.
 | Phase | Goal | Size | State |
 | --- | --- | --- | --- |
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
-| 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built** (D54 go-signal met; full-volume publish pending) |
+| 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built; the full-volume bank shipped** as `content/bank/v4`, written by Claude and reviewed blind by Claude, not a paid OpenAI run (human, 4 October 2026; D203, ADR 24) |
 | 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
@@ -241,23 +244,27 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 ### Next, decided
 
-Phase 7 (D132): **Slices 1–4 merged**, **Gate L passed** (D164), the repo is public (D195), and **Slice 5, launch readiness, is
-built** (`dougkeefe/docs-content-development`; D198–D199): the realtime route's rate limit, the band trend over time, robots, a sitemap and
-`hreflang`, and a true 404. **Studio mode is in 1.0** (D165): Phase 6's three slices merged (#53, #57, #60), Gate N passed
-(D174), the human's live session passed (D191), and exit criterion 1 is met on the deployed site (D190). `main` is protected,
-and a red lane blocks the merge (D177).
+Phase 7 (D132): **Slices 1–5 merged** (Slice 5 as #61), **Gate L passed** (D164), and the repo is public (D195). **Studio
+mode is in 1.0** (D165): Phase 6's three slices merged (#53, #57, #60), Gate N passed (D174), the human's live session passed
+(D191), and exit criterion 1 is met on the deployed site (D190). `main` is protected, and a red lane blocks the merge (D177).
+**The full content run is built** (`dougkeefe/1nsv0`; D203–D207; ADR 24): `content/bank/v4`, 626 items written by Claude and
+reviewed blind by Claude, with v3's synthetic content retired.
 
-What stands between the code and 1.0 is now **the human's**: **Gate O**, then **Gate M** (an outside item submission, the
-domain, the trademark check, and the full-volume bank run on a key the human funds, D54). No agent slice is left before them.
+What stands between the code and 1.0 is now **the human's**: **Gate O**, then the rest of **Gate M** (an outside item
+submission, the domain and the trademark check). No agent slice is left before them.
 
-**Next: merge Slice 5's pull request, then Gate O (human).**
+**Next: merge the content run's pull request, then the human's read of v4, then Gate O (human).**
 
-1. **Merge Slice 5** once its four lanes are green. Then, on the deployed build:
-   - `curl -sI https://palier-virid.vercel.app/en/no-such-page` answers **404**;
-   - `curl -s https://palier-virid.vercel.app/robots.txt` names `https://palier-virid.vercel.app/sitemap.xml`, and the sitemap
-     lists `https://palier-virid.vercel.app/...` URLs. If either names `localhost`, `VERCEL_PROJECT_PRODUCTION_URL` was not
-     set at build time; set `PALIER_SITE_URL` for the build and redeploy (D199).
-2. **Gate O (human)**: `docs/realtime-checklist.md` on its six browser and platform pairs (Phase 6 exit criterion 3); the
+1. **Merge the content run** once its four lanes are green. Then, on the deployed build:
+   - `curl -s https://palier-virid.vercel.app/api/health` answers `"bank":4`;
+   - `/en/about` and `/fr/about` say the items are written by Claude and reviewed blind by other Claude instances, and no
+     longer say "partly synthetic";
+   - a reading drill at C shows a real passage, and an item's report panel reads "Machine-generated…" (D203).
+2. **The human's read of v4** (ADR 24's first *revisit when*; Gate M). Read about 20 items and 3 passages chosen at random
+   from `content/authored/claude-*.json`, and one scenario of each session type. For each, say whether the key is the only
+   defensible answer and whether the French reads as federal administrative French. **Disagreement on more than two items
+   reopens ADR 24**: re-review the bank cross-family before v5 (`run --authored-only --provider openai`).
+3. **Gate O (human)**: `docs/realtime-checklist.md` on its six browser and platform pairs (Phase 6 exit criterion 3); the
    route, `apps/web/src/server/realtime-handlers.ts`, read line by line, **its rate limit included** (D195): 60 posts an hour
    per IP hash, counted before the key is read, refused as `429 throttled`, with no limit when there is no database and the
    mint let through when the store fails. The count is kept, like the sync routes', under a day's HMAC of the address, which
@@ -268,9 +275,11 @@ domain, the trademark check, and the full-volume bank run on a key the human fun
    - Slice 5's: `oral.failThrottled`, and `progress.historyTitle`, `historyNone`, `historyFigures`, `historyWeek`,
      `historyAccuracy`, `historyCell`, `historyCellPaper`, `historyShort` (D198). Print `/fr/progress` with some history
      to see the paper cells.
+   - the content run's: `about.bankMachine`, `landing.faq.source.a` and `progress.honestDoesNot`, rewritten to name Claude
+     and the same-family review, with `about.bankToday` deleted (D203).
 
    Its pass completes Phase 6. **Then Gate M.**
-3. **Beside it, whenever a smoke key is to hand** (agent, about US$0.10; carried from D194): measure the dial on `main`.
+4. **Beside it, whenever a smoke key is to hand** (agent, about US$0.10; carried from D194): measure the dial on `main`.
    Once `/api/health` answers the deployed build, run the dials-only spec on the deployed site four times, 90 s apart:
    ```
    cd apps/web && (set -a; . ../../.env.local; set +a; PALIER_LIVE=1 PALIER_LIVE_DIALS_ONLY=1 \
@@ -280,7 +289,9 @@ domain, the trademark check, and the full-volume bank run on a key the human fun
    `OPENAI_SMOKE_KEY` in `.env.local` at the repository root. This session had none (session log, 3 October 2026).
 
 If an agent session opens before Gate O is done, it has no slice to build: the remaining work is the human's, and *named, not
-scheduled* below is after 1.0. It should do no more than keep `main` green (the Dependabot queue, the nightly) and say so.
+scheduled* below is after 1.0. **Two findings from the content run wait for the human to schedule** (D206): bank v4 is about
+515 KB gzipped against architecture.md §13's 400 KB first bank fetch, because the service worker precaches every shard; and
+the review queue still serves a retired item a user already holds. It should do no more than keep `main` green (the Dependabot queue, the nightly) and say so.
 
 Budget note (D178): a change to a core package puts the fast lane near 92 s of its 120 s. On this machine `pnpm verify` took
 48 s for Slice 5. A fresh worktree needs `pnpm --filter @palier/web build` first, or the medium lane's production server
@@ -381,12 +392,9 @@ last exit criterion.
 
 **Standing human gates (do not self-direct):**
 
-- **The full-volume published bank (D54).** The real-model go-signal exists (session log, 24 September
-  2026). The remaining step is the full run to 500–700 published items on a funded key, then shipping that
-  bank as `content/bank/v{n}/`, carrying the previous version's items *and forms* forward (D82). A
-  retirement in `content/factory/item-statistics.json` takes effect at that build (D94). **Timing settled
-  (D56, reaffirmed at Gate E): sequenced to the end**, a 1.0 gate. After it, rerun the pilot's calibration
-  half on real items (D97).
+- *(Built: the full-volume published bank (D54) shipped as `content/bank/v4`, written by Claude and reviewed blind by
+  Claude, by the human's decision (D203, ADR 24). What stays the human's: a read of a sample of its French, and the
+  pilot's calibration half rerun on real items (D97).)*
 - Resolved: **Gate A** (product and UI direction), **Gate B** (the D43 `ScheduleEntry` merge, D69),
   **Gate C** (hosting and database; `docs/deploy.md`), all on 24 September 2026; **Gate D** (exam UI
   direction, D84), **Gate E** (the pilot runs on the baseline bank, D97) and **Gate F** (Phase 4 UI
@@ -435,6 +443,7 @@ computations are all real and tested; the committed sample's *French is syntheti
 real model. The numbers become meaningful at the paid run.
 
 **Deferred follow-on (not an exit criterion):** full-volume run to 500–700 published items (reading + written expression, bands B/C) **on a funded key with the real openai adapter** (`palier-factory run --provider openai`), once the model ids in `apps/factory/config/models.json` are verified. This is the run that actually tests A1/A2/A3.
+**Done differently, 4 October 2026 (D203, ADR 24):** the human chose to have Claude write the bank and Claude instances review it blind, so 626 items shipped in `content/bank/v4` with no OpenAI call. A1–A3 are judged by one model family, not two; the OpenAI route stays ready for a cross-family re-review (ADR 24, *revisit when*).
 
 **Human register check is deferred, not deleted:** the Phase 7 [R8] "both languages reviewed by a human" gate (ADR 19's revisit trigger).
 
@@ -723,8 +732,8 @@ band, a table beside the chart, and the printout still one page in both language
   **Built 3 October 2026** (`dougkeefe/docs-content-development`; D198–D199; session-log evidence): all four, the 404 by the rewrite, which
   Next 16 carries.
 - [ ] **Gate M — public (human).** ~~The repo made public~~ (**public**, confirmed 2 October 2026, D195), an outside item
-  submission [R13], the domain, §12.1's trademark check, and the full-volume bank (D54), which stays sequenced to the end
-  (D56). **It waits on Phase 6's Gate O** (D165), which waits on Slice 5 (D195).
+  submission [R13], the domain, §12.1's trademark check, and ~~the full-volume bank (D54)~~ (**built**: `content/bank/v4`,
+  written by Claude and reviewed blind by Claude, 4 October 2026, D203, ADR 24). **It waits on Phase 6's Gate O** (D165).
 
 **Exit criteria** (the actual gate)
 
@@ -833,12 +842,12 @@ From `implementation-plan.md` §8. Status is *satisfied and verified*, not *work
 | # | Requirement | Phase | Status |
 | --- | --- | --- | --- |
 | R1 | Practises all three tested skills | 2, 5, 6 | reading and written expression practised end to end (24 September 2026); **oral in practice mode** since Phase 5 (28 September 2026, Gate I, D129); **studio mode is in 1.0** (D165): Slices 1–3 built (D166–D194), its real-browser pass is Gate O |
-| R2 | Format and register match the real tests | 1 | **built, verified at the full-volume bank**: the factory's register and format gates run on every batch (Phase 1, D51–D54) and passed on the baseline bank; Gate L read the bank's register (D164). The 500–700-item run is Gate M (D54, D56) |
-| R3 | Mock exams mirror published structure and cuts | 3 | **satisfied for reading and written expression** (25 September 2026): goldens at every cut (Slice 1), a form per variant at its exact counts, time and cuts (Slice 2), and all four variants runnable and scored in the app (Slice 3). The bank's French stays synthetic until the full-volume run (D54) |
+| R2 | Format and register match the real tests | 1 | **built, verified at the full-volume bank**: the factory's register and format gates run on every batch (Phase 1, D51–D54) and passed on the baseline bank; Gate L read the bank's register (D164). **The full-volume bank, v4, is 626 items written to §13.1's register and reviewed blind for it** (D203, ADR 24); a human read of a sample is still owed |
+| R3 | Mock exams mirror published structure and cuts | 3 | **satisfied for reading and written expression** (25 September 2026): goldens at every cut (Slice 1), a form per variant at its exact counts, time and cuts (Slice 2), and all four variants runnable and scored in the app (Slice 3). Since v4 the forms are drawn from real French, authored by Claude (D203) |
 | R4 | Works with no key and offline after first load | 2 | practice and progress verified offline (journey 2 on the `offline` project, 24 September 2026); mock exams too: journey 3 finishes and submits a full exam with the network off and reads its results offline (25 September 2026) |
 | R5 | Never presents as official | 0, 7 | **satisfied and verified**: the statement in every footer since Phase 0, beside every band estimate and at the head of onboarding (Gate K, D145; Slice 3, D146), through one component, `NonAffiliation.tsx`; read in both languages at Gate L (D164) |
-| R6 | No real test items, no PSC reproduction | 1 | **built, verified at the full-volume bank**: the factory generates every item and its review gate refuses a reproduction (Phase 1, D51–D54); authored items attest originality (`CONTRIBUTING.md`, D152). The full run is Gate M |
-| R7 | Rationale per option, explanation per item | 1 | **built, verified at the full-volume bank**: the item schema requires both and the factory's deterministic checks refuse a draft without them (Phase 1); every committed item carries them. The full run is Gate M |
+| R6 | No real test items, no PSC reproduction | 1 | **built, verified at the full-volume bank**: the factory generates every item and its review gate refuses a reproduction (Phase 1, D51–D54); authored items attest originality (`CONTRIBUTING.md`, D152). **v4's 626 items are original by brief, fictional and checked for stage 5's rules** (D203) |
+| R7 | Rationale per option, explanation per item | 1 | **built, verified at the full-volume bank**: the item schema requires both and the factory's deterministic checks refuse a draft without them (Phase 1); every committed item carries them, **v4's 626 included, in both languages** (D203) |
 | R8 | Fully bilingual, equal prominence | 0, 1, 7 | **satisfied and verified**: key parity is a fast-lane gate since Phase 0, the toggle has equal prominence, and every string was read by a human at Gate L (D164). Copy added since (studio mode, the self-hosted endpoint, Slice 5) is read at Gate O |
 | R9 | WCAG 2.2 AA | 0, all | **satisfied and verified**: axe on every route and session state and the contrast test on the token set are build gates since Phase 0 (ADR 13); the VoiceOver and NVDA pass at Gate L found nothing (D164) |
 | R10 | No estimate without evidence and uncertainty | 2 | satisfied and verified (24 September 2026): below `MIN_EVIDENCE` a band shows no bar, only how many more answers it needs; above it, the Wilson interval is drawn beside the estimate (journey 1, `trend-lines.test.ts`, `BandMeter` tests) |
@@ -6939,9 +6948,178 @@ So the work is in the tokens, the primitives and the chrome, with bespoke layout
 
 ---
 
+### D203 — the full content run, authored by Claude through the intake: bank v4, and D54 resolved another way
+**Date:** 4 October 2026 · **Status:** accepted (human's decision; agent's build). Resolves D54; ADR 24 supersedes ADR 19
+
+The human asked for the full content run "if it hasn't been done yet". It had not: `content/bank/v3`'s 242 items were the
+scripted provider's placeholder French (D54). Asked how to provide a key, **the human chose: "don't use OpenAI API to create
+the content. Just create the content yourself."** So Claude wrote the bank, through the door the repo already had for content
+the pipeline did not draft: the authored intake (content-factory.md §5).
+
+- **What was written** (`content/authored/claude-*.json`; briefs in `docs/content-runs/v4/`):
+  - Reading: 12 topics × 5 original passages × 5 comprehension items, all eight sub-skills on every topic.
+  - Writing: 10 sub-skills × 33 items, mixing cloze, best-completion and error-id.
+  - Oral: 20 scenarios, 5 session types × B and C × 2 topics.
+  - Totals: 630 items (300 reading, 330 writing), 60 passages, 20 scenarios.
+  - Each author instance took one assignment and ran `check-authored` until it was clean.
+- **Credit.** `provenance: { origin: "authored", contributor: "claude-opus-5-5", generator: { model: "claude-opus-5-5",
+  promptVersion: "authoring-brief-v4", date } }`. The generator says plainly that a model wrote the item. `provenanceLine`
+  (`apps/web/src/lib/report.ts`) therefore shows it as "Machine-generated…", not "Written by hand".
+- **The factory, extended rather than bypassed** (part A, tested branch by branch):
+  - `run --authored-only` drafts nothing. Sources, the writing plan and scenario generation are skipped, the oral plan still
+    gives authored scenarios their lengths, and the yield gate does not apply to a batch that drafted nothing.
+  - The intake takes `scenarios`, with ids minted from content as the scenario stage mints them, held to `checkScenario`.
+  - `authoredIssues` moved to `pipeline/authored.ts`, so the CLI can use it. It now also holds authored passages to
+    `checkPassage`, requires each passage's numbers to equal those computed from its body, and flags stem near-duplicates.
+  - `check-authored [files] [--write-readability]` runs those checks for a contributor, and CONTRIBUTING.md names it.
+- **The run.** `PALIER_NOW=2026-10-04T00:00:00.000Z palier-factory run --authored-only --provider recorded --bank-version 4`
+  published **626 of 630** (three register flags and one defensible distractor, discarded and not repaired). v3's content is
+  carried and retired (D205), 20 scenarios are new, and four forms are v4's own beside v2's and v3's.
+- **Copy.** `about.bankToday` ("still small and partly synthetic") is deleted, as the Slice 3 note asked.
+  `about.bankMachine`, `landing.faq.source.a` and `progress.honestDoesNot` now say that Claude writes the items, that other
+  instances of the same model review them blind, and that no person reads every item. They go to Gate O's French read.
+- **What this is not.** It is not the cross-family paid run D54 described, so A1–A3 are judged by one model family (ADR 24).
+
+### D204 — the blind review by separate Claude instances, replayed from committed verdicts
+**Date:** 4 October 2026 · **Status:** accepted (human chose the reviewer; agent built the replay). ADR 24
+
+The human was offered three reviewers: OpenAI reviewing only (cross-family, about US$10–15); separate Claude instances; or no
+model review. They chose separate Claude instances.
+
+- **How the review ran.**
+  - `palier-factory review-requests` writes each authored item's blind request, exactly what stage 4 sends (`reviewRequestFor`:
+    no key, no rationale, no explanation), with its hash, to gitignored `.palier/`.
+  - Fresh instances, never an item's author, took chunks of 30–45. They worked under `docs/content-runs/v4/review-brief.md`,
+    were barred from the item files, and returned `ReviewVerdict`s, about 18 reviewer instances in all.
+- **The replay.** The verdicts are committed as `content/factory/reviews/wave-*.json` (`{ reviewer, verdicts: [{ requestHash,
+  itemId, verdict }] }`, parsed with the domain's verdict schema). `providers/recorded-review-provider.ts` answers
+  `reviewItem` from them.
+  - A verdict is keyed by the hash of the request it answers, so editing an item invalidates its verdict. The review then
+    **throws, naming the item**, rather than judge it on a stale verdict.
+  - Every other method rejects.
+  - Its usage names the reviewer and carries no cost, so the report's `provider` is `claude-opus-5-5` and its cost is `null`,
+    not a misleading 0.
+  - `committed-bank.test.ts` rebuilds v4 byte for byte with no key, as v3's scripted bank was.
+- **The gate is unchanged.** `gateReasons`, with confidence 0.7, no defensible distractor, no register flag, and a band within
+  one level.
+- **Measured on real French.** The factory's eval set is placeholder French with the key's option marked, so it cannot measure a
+  real reviewer. A separate instance, which reviewed nothing, wrote 60 real-French items, ten in each of five defect classes and
+  ten clean controls. Two fresh reviewers judged them blind (`docs/content-runs/v4/eval/`).
+
+  | Class | Caught |
+  | --- | --- |
+  | wrong key | 10/10 |
+  | two defensible keys | 10/10 |
+  | mis-tagged band | 10/10 |
+  | ambiguous | 9/10 |
+  | register | 9/10 |
+  | **All defects** | **48/50** |
+  | Clean controls passed | 10/10 |
+
+  **Said plainly:** a Claude instance wrote the defects, so this is what Claude catches in Claude's mistakes.
+- **Five stems were reworded before their verdicts counted.** All five were generic frames repeated across files (« Quel est
+  l'objet principal de ce bulletin ? »), which stage 5 would have dropped as near-duplicates. They had passed review and failed
+  nothing, so this was not a repair. The reworded items went back through blind review in wave 6, and their stale verdicts were
+  pruned.
+
+### D205 — retirement as data: v3's synthetic items and scenarios stay in v4, retired
+**Date:** 4 October 2026 · **Status:** accepted (human chose to retire them; agent built it)
+
+- **What retires them.** `content/factory/retirements.json` names `itemGeneratorModels: ["scripted"]` and v3's ten scenario ids.
+  `applyRetirements` (`pipeline/carry.ts`, pure) sets `status: "retired"` on the carried items and scenarios it names, and
+  `runInputFor` applies it after `applyStatistics`. Retirement is one-way, as D94's is.
+- **What stays.** All 242 items and 10 scenarios stay in the bank, because attempts, schedule entries, the v2 and v3 forms, and
+  past oral sessions name them. The selector serves only published items, and the form stage skips retired ones, so v4's forms
+  hold only authored items.
+- **Scenarios gained an optional `status`** (`OralScenario`, `oralScenarioShape`; absent means published, so v1–v3 still parse).
+  `oralSessionChoices` never offers a retired one.
+- **Not built, named:** `reviewQueue` resolves due entries through `byIds` with no status filter. A user who holds a synthetic
+  item in their Leitner boxes keeps reviewing it until it graduates. Filtering it changes engine behaviour, so it is left for
+  the human to schedule.
+
+### D206 — what the run did differently from content-factory.md §2, and what it found
+**Date:** 4 October 2026 · **Status:** accepted (agent), two findings for the human
+
+- **60 passages, not §2's 150–250.** Five questions per passage, across five sub-skills, is closer to the real reading test than
+  two questions per passage, and it gives 300 reading items, inside §2's 250–350.
+- **Writing: 330 items, inside §2's 250–350. Scenarios: 20, inside 15–25.** Published: 298 reading and 328 writing.
+- **Error-identification items ask for the correction** (« remplacer « X » par « Y » »), not for the faulty segment. Stage 5's
+  answer-leak rule rejects any item whose key text appears in its stem, and a quoted segment always does.
+- **Finding: the bank outgrew §13's first-fetch budget.** v4 is about 515 KB gzipped, against v3's 34 KB. Each 100-item shard is
+  40–50 KB, inside architecture.md's 40–80 KB, but `worker.ts` precaches every shard the manifest lists, and §13 says the first
+  bank fetch is under 400 KB. No test enforces the budget. The options are for the human: lazy shard fetch, precaching only the
+  study profile's skill, or an amended budget.
+- **Finding: the review queue serves retired items** (D205).
+
+### D207 — two tests whose premise the run changed, said here rather than edited quietly
+**Date:** 4 October 2026 · **Status:** accepted (agent); flagged in the pull request
+
+- **`authored.test.ts`: "takes no id the bank holds"** assumed a contribution is pending until it ships. The run's
+  contributions stay in `content/authored/`, because they are the source `committed-bank.test.ts` rebuilds v4 from. The rule is
+  now: **an id the bank holds must be this same contribution**, compared without the `status` and `stats` a bank may add (D94,
+  D205). A different record under the id is still flagged, and the existing test for that passes unchanged. **The fixture
+  passage changed too**: it had two sentences and 20 words, and the new passage rules (D203) would reject it. It now has three
+  sentences and 51 words, with its numbers computed from the body.
+- **`committed-bank.test.ts`: "exactly one scenario per type and band"** became **"a published scenario for every type and
+  band"**, plus **"every scenario the previous version published is carried"**, plus **"retirements take effect and v4's own
+  forms hold no retired item"**. v4 carries ten retired scenarios beside twenty new ones, so the old count could not hold. Its
+  rebuild recipe moved from the scripted provider to the recorded reviewer and `--authored-only`.
+  `container.test.ts`'s scenario check moved the same way.
+- **`oral-production.spec.ts`** had v3's C warm-up written into it: "three minutes, then two", phases « Mise en train » and
+  « Description ». The picker now offers an authored warm-up, so the spec reads the offered scenario from the committed bank,
+  the first published warm-up at C in id order, as `oralSessionChoices` takes it. It then crosses that scenario's first phase.
+  The behaviour under test, a timer tick moving the session into its next phase, is unchanged.
+  `progress-history-production.spec.ts` now seeds history on published items only.
+- **Shapes that grew a field:** `io.test.ts`'s `loadAuthored` expectations gained `scenarios: []`. `cli.test.ts`'s
+  `buildProvider` calls take the provider's name rather than a boolean.
+
+---
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 4 October 2026 — `dougkeefe/1nsv0` (the full content run, authored by Claude; D203–D207, ADR 24)
+
+Not *Next, decided*: the human asked for the full content run "if it hasn't been done yet". It had not. They then decided:
+Claude writes the content, not the OpenAI API; separate Claude instances review it blind; v3's synthetic content is retired;
+and about 20 oral scenarios are written too. *Next, decided* now leads with merging this, then the human's read of v4, then
+Gate O.
+
+- **Part A, the factory** (D203–D205):
+  - `run --authored-only` and the recorded reviewer (`--provider recorded`, verdicts keyed by the blind request's hash).
+  - `review-requests` and `check-authored`.
+  - Authored scenarios; authored passages held to stage 2's rules; near-duplicate stems flagged at intake.
+  - `retirements.json` and `applyRetirements`; `OralScenario.status`; the picker skips retired scenarios.
+- **Part B, the content:**
+  - 23 author instances: one pilot pair, then 21 more, one assignment each.
+  - 18 blind reviewer instances, in six waves.
+  - Results: 630 items, 60 passages, 20 scenarios; 626 items published; 4 discarded (3 register flags, 1 defensible
+    distractor).
+  - The reviewer, measured on 60 real-French items written by an instance that reviewed nothing: 48 of 50 defects caught,
+    10 of 10 clean controls passed (D204).
+- **Part C, serving it:**
+  - `BANK_VERSION = 4`.
+  - The about page, the landing FAQ and `/progress` say who writes and who reviews.
+  - An authored item that names its generator reads as machine-generated.
+  - ADR 24 supersedes ADR 19.
+- **Found:**
+  - The bank is about 515 KB gzipped, against §13's 400 KB first fetch (D206).
+  - The review queue still serves retired items (D205).
+  - One spec had v3's warm-up written in (D207).
+
+```
+PALIER_NOW=2026-10-04T00:00:00.000Z palier-factory run --authored-only --provider recorded --bank-version 4
+  → authored: 626 published / 630 submitted, 626 passed review; discard reasons {"register":3,"defensible-distractor":1}
+  → bank v4: 868 items (626 published, 242 retired), 84 passages, 30 scenarios (20 new, 10 retired), 12 forms; exit 0
+palier-factory check-authored                      → 630 item(s), 60 passage(s), 20 scenario(s), 0 issue(s)
+palier-factory review-requests                     → 0 blind request(s) (every item has a verdict)
+eval, 60 real-French items, 2 blind reviewers      → wrong-key 10/10, two-keys 10/10, band 10/10, ambiguous 9/10, register 9/10; clean 10/10 passed
+pnpm verify                                        → check-types, lint, boundaries pass; test: 259 files, 4168 passed, 8 todo; exit 0
+pnpm verify:medium (first run)                     → integration 51 passed; e2e 108 passed, 1 failed (oral-production: v3's warm-up written in); fixed
+playwright e2e/oral-production.spec.ts --project=offline → 2 passed
+gzip -9 of every file under content/bank/v{3,4}   → v3 34 223 bytes; v4 526 629 bytes
+```
 
 ### 3 October 2026 — `dougkeefe/palier-app-update-plan` (the app as designed; D202)
 

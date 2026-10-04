@@ -88,6 +88,9 @@ from disk (progress.md D154).
   schema cannot tell an authored one apart; the factory's intake check requires it of every passage under
   `content/authored/`. Anything built with `origin: "authored"` must carry a contributor, the factory's
   eval-set fixtures included (`palier-eval`), or `validate()` flags it for the wrong reason.
+- **An oral scenario may be retired** (progress.md D205). `OralScenario.status` is optional and absent means
+  published, so banks v1 to v3, which carry none, still parse. A retired scenario stays in the bank, because a
+  past session names it by id, and the app's picker never offers it.
 - **The item type registry lives here, minus `render`** (ADR 17). `ITEM_TYPE_DEFINITIONS`
   is a `Record<ItemType, ItemTypeDefinition>` (`schema`, `score`, `validate`,
   `generatePrompt`, `a11yContract`), so adding an `ItemType` is a compile error until it has

@@ -78,7 +78,8 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   once**, because the driver awaits it in its own queue; it only sets the phase and register of the next
   question. `close` aborts the wait, delivers a turn in flight, then `closed`. Any failed call closes it failed
   and `lastError` keeps the error for the screen. `startOralPracticeRun` composes it with `startOralSessionRun`,
-  and `oralSessionChoices` offers one scenario per session type at the study band (A practises at B).
+  and `oralSessionChoices` offers one scenario per session type at the study band (A practises at B), **never a
+  retired one** (`OralScenario.status`, progress.md D205); a past session still finds its scenario by id.
 - **The oral report** (`use-cases/oral-report.ts`, Phase 5 Slice 3, progress.md D122–D126). `OralSession.assessment`
   is `OralAssessment | null`, as a writing submission's is. `requestOralReport` refuses an unknown or running session,
   one with no answer, or one whose scenario is gone, **before any request**; returns a report already made without

@@ -67,26 +67,44 @@ content *schemas* with the app, never runtime. The `AiProvider` port type is imp
   runs after the item stages, so the batch report's `provider` stays the item stages' model. The manifest
   lists the file as `scenarios: { path, hash }`, or `null` with none; v1 and v2 predate the key.
 - **Hand-authored contributions enter at stage 4 and are not exempt from any gate** (content-factory.md §5).
-  `loadAuthored` reads every `*.json` under `content/authored/` (`{ items, passages? }`, parsed with the domain
+  `loadAuthored` reads every `*.json` under `content/authored/` (`{ items, passages?, scenarios? }`, parsed with the domain
   schemas; a file that does not parse throws, naming it) and `runInputFor` passes it in as `RunInput.authored`.
   Authored items are reviewed after the drafts, against this batch's passages and their own, then join them:
   validation and the bank build treat the two alike, and **an item that fails review is discarded whoever wrote
   it**. Authored passages join the bank after carried and drafted ones. They are reviewed apart so that
   `stage4Yield`, `itemsPassed` and `itemsPublished` stay the drafter's; the report counts them in an `authored`
   block, present only when the batch took some in, so a batch with none is byte-identical to one built before
-  the intake. `authored.test.ts` checks the committed contributions (schemas, stage 5's per-item rules, origin,
-  a contributor on every item and passage, no id the bank holds) and that CONTRIBUTING.md's example passes them.
+  the intake. `authored.test.ts` checks the committed contributions with `pipeline/authored.ts`'s `authoredIssues`
+  (schemas, stage 5's per-item rules, origin, a contributor on every item and passage, stem near-duplicates, stage 2's
+  `checkPassage` on every authored passage and its `wordCount`/`readability` equal to the body's, an authored scenario
+  against `checkScenario`, and no id the bank holds **for a different record**: a published contribution stays here as
+  the bank's source, D207) and that CONTRIBUTING.md's example passes them. **Authored scenarios** carry no id; it is
+  minted from the content as `assembleScenario` mints one (D203).
+- **An authored-only run drafts nothing** (D203). `run --authored-only` skips harvest's sources, the writing plan and
+  scenario generation; the oral plan still gives authored scenarios their lengths; a batch with no drafts skips the yield
+  gate. **The recorded reviewer** (`providers/recorded-review-provider.ts`, `--provider recorded`, D204) answers stage 4
+  from `content/factory/reviews/*.json`, keyed by the hash of the blind request, so an item edited after review has no
+  verdict and the run throws naming it. Every other method rejects; its usage names the reviewer with no cost.
+  `review-requests` writes the blind requests still unanswered (gitignored `.palier/`); `check-authored` runs the intake.
 - **A retirement takes effect at the next bank build** (progress.md D94). `runInputFor` applies
   `content/factory/item-statistics.json`, which the monthly job in `apps/web` writes, to the carried bank
   (`pipeline/carry.ts`): judged items gain `stats`, and an item with a reason becomes `status: "retired"`.
   It stays in the bank for the ids users hold, and the form stage skips it. A damaged report stops the
-  build. The factory never computes a statistic: it may not import the engine (§3.1).
+  build. The factory never computes a statistic: it may not import the engine (§3.1). **Retirement by decision**
+  (D205): `content/factory/retirements.json` names generator models and scenario ids, and `applyRetirements` retires
+  the carried items and scenarios it names, after the statistics. v3's scripted content is retired that way in v4.
 - **The committed bank is byte-reproducible on disk.** `committed-bank.test.ts` reruns the pipeline
   through the CLI's own `runInputFor`, at the committed report's `generatedAt`, and compares every file
   under `content/bank/v{DEFAULT_BANK_VERSION}`. A provider change therefore means a new bank version,
-  regenerated and committed in the same PR.
+  regenerated and committed in the same PR. v4's recipe is `--authored-only` with the recorded reviewer (D203–D204).
 - **Every stage has a unit test that names its behaviour** (§10), and the fast lane holds each
   file to 90% branch coverage. `index.ts` (argv/cwd/stdout wiring) is the one coverage exclusion.
+
+## Bank v4: written by Claude, reviewed blind by Claude (ADR 24)
+
+`content/bank/v4` is not a pipeline draft. Claude wrote its items, passages and scenarios into `content/authored/`, and
+separate Claude instances reviewed them blind; the verdicts are committed and replayed. The briefs and the reviewer's
+measured detection are in `docs/content-runs/v4/`. The scripted path below is unchanged and is still the default.
 
 ## Phase 1 without a funded key (progress.md D52)
 
@@ -100,11 +118,15 @@ eval set's detection rate is a real computed number, not a hardcoded one.
 ## Commands
 
 ```
-palier-factory run            # full pipeline → content/factory/ + content/bank/v3/ (DEFAULT_BANK_VERSION)
+palier-factory run            # full pipeline → content/factory/ + content/bank/v4/ (DEFAULT_BANK_VERSION)
+--authored-only               # draft nothing: the carried bank and content/authored/ only (D203)
+--provider recorded           # stage 4 from content/factory/reviews/ (D204)
+palier-factory review-requests [--all] [--out <path>]   # blind requests for unanswered authored items
+palier-factory check-authored [files] [--write-readability]   # the intake's checks on a contribution
 --bank-version <n>            # write a new version; v{n-1} is carried forward
 --per-source <n>              # passages per source (DEFAULT_PER_SOURCE, sized for form headroom)
 --force                       # rebuild a version that already exists (never a published one)
 palier-factory eval           # review-gate detection on the defect eval set, plus schema conformance on the recorded completions
-PALIER_NOW=<iso> …            # pin the batch timestamp for a reproducible commit (v3: 2026-09-27T00:00:00.000Z)
+PALIER_NOW=<iso> …            # pin the batch timestamp for a reproducible commit (v4: 2026-10-04T00:00:00.000Z)
 --provider openai             # use the real adapter (needs OPENAI_API_KEY)
 ```
