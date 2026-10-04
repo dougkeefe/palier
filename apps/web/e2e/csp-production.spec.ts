@@ -95,7 +95,7 @@ for (const locale of ["en", "fr"]) {
   });
 }
 
-test("the three self-hosted faces load from this origin under the policy (D161)", async ({ page }) => {
+test("the self-hosted serif loads from this origin under the policy, and sets the body and the headings (D161, D202)", async ({ page }) => {
   const violations = await recordViolations(page);
   const fontRequests: string[] = [];
   page.on("request", (request) => {
@@ -104,24 +104,19 @@ test("the three self-hosted faces load from this origin under the policy (D161)"
   await page.goto("/fr/about");
   await page.waitForLoadState("networkidle");
 
-  const faces = await page.evaluate(async () => {
-    const root = getComputedStyle(document.documentElement);
-    const families = ["--font-sans", "--font-display", "--font-serif"].map((name) =>
-      root.getPropertyValue(name).split(",")[0]?.trim() ?? "",
-    );
-    // A face not used on this page (the passage serif) loads when asked, as a passage would.
-    await Promise.all(families.map((family) => document.fonts.load(`16px ${family}`, "àéèçœ«»")));
-    return families.map((family) => ({ family, loaded: document.fonts.check(`16px ${family}`, "àéèçœ«»") }));
+  const face = await page.evaluate(async () => {
+    const family = getComputedStyle(document.documentElement).getPropertyValue("--font-serif").split(",")[0]?.trim() ?? "";
+    await document.fonts.load(`16px ${family}`, "àéèçœ«»");
+    return { family, loaded: document.fonts.check(`16px ${family}`, "àéèçœ«»") };
   });
-  expect(faces).toHaveLength(3);
-  for (const face of faces) expect(face.family, JSON.stringify(faces)).not.toBe("");
-  for (const face of faces) expect(face.loaded, face.family).toBe(true);
-  // Body text and headings are in the self-hosted faces, not the system's.
+  expect(face.family).not.toBe("");
+  expect(face.loaded, face.family).toBe(true);
+  // Body text and headings are in the self-hosted face, not the system's: the app has one (D202).
   const unquoted = (family: string) => family.replaceAll('"', "").replaceAll("'", "");
   const body = await page.evaluate(() => getComputedStyle(document.body).fontFamily);
   const heading = await page.evaluate(() => getComputedStyle(document.querySelector("h1") as Element).fontFamily);
-  expect(unquoted(body).startsWith(unquoted(faces[0]?.family ?? "missing"))).toBe(true);
-  expect(unquoted(heading).startsWith(unquoted(faces[1]?.family ?? "missing"))).toBe(true);
+  expect(unquoted(body).startsWith(unquoted(face.family))).toBe(true);
+  expect(unquoted(heading).startsWith(unquoted(face.family))).toBe(true);
   expect(fontRequests.length).toBeGreaterThan(0);
   expect(new Set(fontRequests)).toEqual(new Set([new URL(page.url()).origin]));
   expect(await violations()).toEqual([]);

@@ -38,6 +38,13 @@ describe("Button", () => {
     render(<Button className="mt-4">Go</Button>);
     expect(screen.getByRole("button").className).toBe("pl-btn pl-btn--primary mt-4");
   });
+
+  it("draws the arrow disc by class, so the label alone names the button", () => {
+    render(<Button arrow="next">Continue</Button>);
+    const button = screen.getByRole("button", { name: "Continue" });
+    expect(button.className).toBe("pl-btn pl-btn--primary pl-btn--arrow");
+    expect(button.textContent).toBe("Continue");
+  });
 });
 
 describe("Card", () => {
@@ -49,6 +56,11 @@ describe("Card", () => {
   it("merges a caller className", () => {
     const { container } = render(<Card className="p-8">Body</Card>);
     expect(container.firstElementChild?.className).toBe("pl-card p-8");
+  });
+
+  it("carries its tone as a modifier", () => {
+    const { container } = render(<Card tone="deep">Body</Card>);
+    expect(container.firstElementChild?.className).toBe("pl-card pl-card--deep");
   });
 });
 

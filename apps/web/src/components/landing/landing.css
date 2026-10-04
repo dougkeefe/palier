@@ -3,29 +3,16 @@
  *
  * Its palette is the design's own, scoped to `.landing` and to nothing else in the app: a teal
  * ink and a warm paper, with Source Serif 4 (`--font-serif`, self-hosted, D161) for heading and
- * body alike. Every other page keeps `@palier/ui`'s tokens. The pairs below are held to WCAG's
- * contrast minimums by `landing-contrast.test.ts`, which reads the hex values from this file.
+ * body alike. The app took the same design from D202, in `@palier/ui`'s tokens; these stay the
+ * landing page's own, scoped and tested here. The serif's metric-matched fallback is `globals.css`'s.
+ * The pairs below are held to WCAG's contrast minimums by `landing-contrast.test.ts`, which reads
+ * the hex values from this file.
  *
  * Next keeps a page's stylesheet loaded after a soft navigation away, so every rule here is
  * scoped under a `landing` class: nothing may reach an app page. No inline style (the CSP's
  * `style-src 'self'`), no transition (motion.test.ts), and every photograph is a background
  * from `./images`, bundled under `/_next/static/media/`, which the service worker precaches.
  */
-
-/*
- * The serif's stand-in while it loads. `next/font` sizes its fallback to Source Serif 4 from Times New Roman,
- * through `local()`, which Linux does not have. There the stack fell through to a wider generic serif, the French
- * hero rewrapped when the face arrived, and the layout shift cost /fr its Lighthouse budget in CI (D201). Liberation
- * Serif and Tinos are Times New Roman's metric twins, so the same overrides (next/font's, for this face) hold for them.
- */
-@font-face {
-  font-family: "Landing Serif Fallback";
-  src: local("Times New Roman"), local("Liberation Serif"), local("Tinos");
-  ascent-override: 87.45%;
-  descent-override: 28.28%;
-  line-gap-override: 0%;
-  size-adjust: 118.46%;
-}
 
 .landing {
   --landing-bg: #f3f2f2;
@@ -44,7 +31,7 @@
   --landing-on-dark-muted: #d3dfe3;
   --landing-correct: #bfe6c8;
   --landing-incorrect: #f4c6d9;
-  --landing-font: var(--font-landing-serif), "Landing Serif Fallback", Georgia, serif;
+  --landing-font: var(--font-serif), "Serif Fallback", Georgia, serif;
   --landing-gutter: clamp(20px, 4vw, 56px);
 
   position: relative;

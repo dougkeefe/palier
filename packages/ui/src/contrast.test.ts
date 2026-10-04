@@ -7,7 +7,7 @@ import {
   parseHex,
   relativeLuminance,
 } from "./contrast.js";
-import { TOKEN_SETS, type ThemeName, type TokenName, tokenValue } from "./tokens/tokens.js";
+import { TOKEN_SETS, type TokenName, tokenValue } from "./tokens/tokens.js";
 
 describe("parseHex", () => {
   it("reads the three channels of a 6-digit hex", () => {
@@ -51,46 +51,49 @@ describe("contrastRatio", () => {
 });
 
 /**
- * The contrast gate over the token set (product-requirements.md §10.2, "validated
- * in CI"; packages/ui/CLAUDE.md invariant). Pairs are chosen by how a token is
+ * The contrast gate over the token set (product-requirements.md §10.2, "validated in CI";
+ * packages/ui/CLAUDE.md invariant; progress.md D202). Pairs are chosen by how a token is
  * actually used, not by permuting every combination:
- *   - text tokens (body and secondary) and the semantic state colours, which
- *     §10.2 says always accompany a text label, must clear 4.5:1;
- *   - `primary`, used for brand and UI, must clear 3:1 (large text / UI);
- *   - the primary button paints its label in `--surface` over `--primary`, so
- *     that specific pair must clear body-text contrast.
- * `accent` is deliberately absent: §10.2 assigns it to highlights, the streak and
- * the mascot — decorative, never body text or an information-bearing UI boundary,
- * so it is not a contrast-critical foreground/background pair.
+ *   - every text token, the semantic states among them (which always carry a glyph and a
+ *     label too), and primary, must clear 4.5:1 on the paper, a card, a tinted panel and a quiet one;
+ *   - on a deep panel and on a primary button, the text and the button disc must clear 4.5:1;
+ *   - `primary` (a selection's ring, the radio dot), `accent` (the focus ring, the sync dot)
+ *     and `rule` (an input's border) must clear 3:1 against what they sit on (WCAG 1.4.11).
+ * There is one theme (D202), and both sets are held to every pair.
  */
 type Pair = { readonly fg: TokenName; readonly bg: TokenName; readonly min: number };
 
-const TEXT_TOKENS: readonly TokenName[] = ["ink", "ink-muted", "correct", "incorrect", "info", "warning"];
-const BACKGROUNDS: readonly TokenName[] = ["bg", "surface"];
+const TEXT_TOKENS: readonly TokenName[] = ["ink", "ink-soft", "ink-muted", "link", "correct", "incorrect", "info", "warning"];
+const LIGHT_SURFACES: readonly TokenName[] = ["bg", "surface", "surface-tint", "surface-quiet"];
+const DEEP_SURFACES: readonly TokenName[] = ["surface-deep", "primary"];
+const UI_TOKENS: readonly TokenName[] = ["primary", "accent", "rule"];
 
 const PAIRS: readonly Pair[] = [
-  ...TEXT_TOKENS.flatMap((fg) => BACKGROUNDS.map((bg) => ({ fg, bg, min: CONTRAST_BODY_TEXT }))),
-  ...BACKGROUNDS.map((bg) => ({ fg: "primary" as const, bg, min: CONTRAST_LARGE_TEXT_OR_UI })),
-  { fg: "surface", bg: "primary", min: CONTRAST_BODY_TEXT },
+  ...TEXT_TOKENS.flatMap((fg) => LIGHT_SURFACES.map((bg) => ({ fg, bg, min: CONTRAST_BODY_TEXT }))),
+  ...(["on-deep", "on-deep-muted"] as const).flatMap((fg) => DEEP_SURFACES.map((bg) => ({ fg, bg, min: CONTRAST_BODY_TEXT }))),
+  // A light button on a deep panel: its label and its disc's glyph are primary on white.
+  { fg: "primary", bg: "on-deep", min: CONTRAST_BODY_TEXT },
+  // A primary button under the pointer, and a danger button, carry a white label.
+  { fg: "on-deep", bg: "primary-hover", min: CONTRAST_BODY_TEXT },
+  { fg: "on-deep", bg: "incorrect", min: CONTRAST_BODY_TEXT },
+  ...UI_TOKENS.flatMap((fg) => (["bg", "surface"] as const).map((bg) => ({ fg, bg, min: CONTRAST_LARGE_TEXT_OR_UI }))),
+  // primary is body text on the light panels too (the queue's links, the inset's heading, the accent
+  // callout), which also covers a selected option's ring and dot on the tint.
+  ...LIGHT_SURFACES.map((bg) => ({ fg: "primary" as const, bg, min: CONTRAST_BODY_TEXT })),
+  // accent is the focus ring, which can land on a tinted or quiet panel.
+  ...(["surface-tint", "surface-quiet"] as const).map((bg) => ({ fg: "accent" as const, bg, min: CONTRAST_LARGE_TEXT_OR_UI })),
 ];
 
-const THEMES: readonly ThemeName[] = ["light", "dark"];
-
-// Both sets are held to the same pairs: the exam runner's muted palette is a whole
-// scheme, not a decoration, so every pair it overrides must still clear the bar.
 describe("token-set contrast gate", () => {
   it.each(
     TOKEN_SETS.flatMap((set) =>
-      THEMES.flatMap((theme) =>
-        PAIRS.map((pair) => ({
-          set,
-          theme,
-          ...pair,
-          ratio: contrastRatio(tokenValue(pair.fg, theme, set), tokenValue(pair.bg, theme, set)),
-        })),
-      ),
+      PAIRS.map((pair) => ({
+        set,
+        ...pair,
+        ratio: contrastRatio(tokenValue(pair.fg, set), tokenValue(pair.bg, set)),
+      })),
     ),
-  )("$set $theme: --$fg on --$bg clears $min:1 (is $ratio:1)", ({ ratio, min }) => {
+  )("$set: --$fg on --$bg clears $min:1 (is $ratio:1)", ({ ratio, min }) => {
     expect(ratio).toBeGreaterThanOrEqual(min);
   });
 });

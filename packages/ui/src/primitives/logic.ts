@@ -7,9 +7,30 @@
  * (product-requirements.md §10.2).
  */
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+/**
+ * `light` is the white pill a deep panel carries (progress.md D202); the other four are §10.4's.
+ */
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "light";
 
-export const buttonClass = (variant: ButtonVariant): string => `pl-btn pl-btn--${variant}`;
+/**
+ * The design's arrow disc at a button's end (D202): `next` for a step forward (→), `go` for
+ * a way into something (↗). Both are drawn by the stylesheet and hidden from assistive
+ * technology, so the label alone names the button and no glyph is a literal in JSX.
+ */
+export type ButtonArrow = "next" | "go";
+
+export const buttonClass = (variant: ButtonVariant, arrow?: ButtonArrow): string =>
+  arrow === undefined
+    ? `pl-btn pl-btn--${variant}`
+    : `pl-btn pl-btn--${variant} pl-btn--arrow${arrow === "go" ? " pl-btn--arrow-go" : ""}`;
+
+/**
+ * A card's fill (D202): `surface` is white on the paper, `tint` the light teal, `quiet` the
+ * warm grey, `deep` the dark teal with light text. Flat, with no border and no shadow.
+ */
+export type CardTone = "surface" | "tint" | "quiet" | "deep";
+
+export const cardClass = (tone: CardTone): string => (tone === "surface" ? "pl-card" : `pl-card pl-card--${tone}`);
 
 export type GlyphName = "check" | "cross" | "info" | "star" | "clock" | "flag";
 

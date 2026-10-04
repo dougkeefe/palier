@@ -1,0 +1,13 @@
+<!-- @dsCard group="Components" viewport="700x520" subtitle="Buttons, chips, nav, feature panel, FAQ" name="Core components" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><script src="https://unpkg.com/react@18/umd/react.development.js"></script><script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script><script src="https://unpkg.com/@babel/standalone/babel.min.js"></script><script src="../../_ds_bundle.js"></script><style>body{padding:20px}</style></head><body><div id="r"></div>
+<script type="text/babel">
+let NS; try { NS = Object.values(window).find(v => v && typeof v === 'object' && v.Button && v.FaqItem); } catch (e) {}
+const { Button, Chip, Eyebrow, NavPill, LangSwitch, FeatureCard, FaqItem } = NS;
+const Ph = ({ children }) => <div style={{ background: 'linear-gradient(90deg,rgba(0,42,56,.85),rgba(0,42,56,.5)),#5a8a9a', padding: 16, borderRadius: 12, display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>{children}</div>;
+ReactDOM.createRoot(document.getElementById('r')).render(<div style={{ display: 'grid', gap: 16 }}>
+  <Ph><NavPill items={[{label:'Home',href:'#',active:true},{label:'The tests',href:'#'},{label:'Questions',href:'#'}]} /><LangSwitch value="en" /><Button variant="light" size="sm">Start free</Button><Button variant="light" arrow>Try a free mock exam</Button><Chip>Levels B and C</Chip></Ph>
+  <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}><Button variant="dark" arrow>Try a free mock exam</Button><Eyebrow>How it works</Eyebrow></div>
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}><FeatureCard tone="tint" title="Open it and start" chip="No account needed">Drills run in your browser.</FeatureCard><FeatureCard tone="deep" title="An honest estimate" chip="Levels B and C">Progress shows an estimate.</FeatureCard></div>
+  <FaqItem question="Do I need an account?" defaultOpen>No. Drills and mock exams work without one.</FaqItem>
+</div>);
+</script></body></html>

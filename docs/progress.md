@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 3 October 2026 (Phase 7 Slice 5, launch readiness, built: D198–D199)
+**Last updated:** 3 October 2026 (the app as designed, D202)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -141,6 +141,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | --- | --- | --- |
 | `dougkeefe/docs-content-development` | **Phase 7 Slice 5, launch readiness** (D195): the realtime route's rate limit, the band trend over time, robots, a sitemap and `hreflang`, and a true 404. | 3 October 2026 |
 | `dougkeefe/palier-landing-page-update` | **The landing page as designed** (D201): `docs/Palier landing page` v4 becomes `/en` and `/fr`, with its own header and footer and its own scoped palette. Outside the planned slices, by the human's request. | 3 October 2026 |
+| `dougkeefe/palier-app-update-plan` | **The app as designed** (D202): `docs/Palier landing page/Palier App.dc.html` becomes every app page's look: the teal on warm paper, Source Serif 4 throughout, light only, flat panels, the header and footer as drawn. Outside the planned slices, by the human's request. | 3 October 2026 |
 
 *(The prior rows — Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -6841,11 +6842,145 @@ three tests with a live sample question, the oral banner, how it works, the FAQ 
     reference**, at the human's request. It is not source: `eslint.config.mjs` ignores `docs/Palier landing page/**`, since
     its bundled scripts fail every rule.
 
+### D202 — the app as designed: the landing page's teal and serif on every page, light only, flat panels
+**Date:** 3 October 2026 · **Status:** accepted (human's request and two rulings; agent's build). Outside the planned slices;
+deviates from PRD §10.2, §10.3 and §10.4 for the whole app
+
+The human designed the app's look in Claude Design: `docs/Palier landing page/Palier App.dc.html`, beside v4 of the
+landing page (D201). It draws the chrome, Today empty and as a dashboard, and setup's first two steps. For every other
+screen it says one thing: it "keeps its current functionality and takes the same header, ground, buttons and panels".
+So the work is in the tokens, the primitives and the chrome, with bespoke layout only where it is drawn.
+
+- **Two human rulings, asked before building.**
+  1. **Light only.** The design has no dark theme, and neither has the landing page. `@palier/ui`'s tokens lose their
+     `dark` values, `ThemeName`, the `prefers-color-scheme` and `[data-theme]` blocks (nothing ever set `data-theme`), and
+     the print block, which one light theme makes moot. `:root` says `color-scheme: light`. This departs from §10.2's
+     "in both themes".
+  2. **Exam mode keeps its own set**: the same paper, ink and serif, with charcoal (`#33373B`) and warm greys in place of
+     the teal. Motion stays off (D86, D160).
+- **The tokens.** The ten role names stay, so the 1,900 lines of CSS that read them follow: `bg` is the paper `#F3F2F2`,
+  `ink` `#201E1D`, `primary` the deep teal `#00384A`, `info` `#00607D`. Nine are new: `surface-tint`, `surface-quiet`,
+  `surface-deep`, `ink-soft`, `on-deep`, `on-deep-muted`, `primary-hover`, `link` and `rule`.
+  - **`accent` is now gated.** It was the decorative amber; it is the design's bright teal `#0088B0`, the focus ring and
+    the sync dot, held to 3:1.
+  - **`correct` darkened**, `#1F7A5C` → `#1A6B50`: on the tinted and quiet panels it was 4.48:1 and 4.22:1.
+  - **`rule`, `#6B6663`, is not in the design.** Its inputs are a fill alone, about 1.1:1 against the paper, short of WCAG
+    1.4.11's 3:1 for a component's boundary. Inputs keep the design's quiet fill and gain a 1px `rule` border. ADR 13 is a
+    floor.
+  - The contrast gate grew from 60 checks to 102: every text token, `primary` among them, on the paper, a card, a tinted
+    panel and a quiet one; the light text on a deep panel and on a primary button; and `primary`, `accent` and `rule` at
+    3:1, `accent` on the tinted and quiet panels too, as the focus ring lands there, in both sets.
+- **The type.** Source Serif 4 for everything, as the landing page had it. Inter and Figtree, their licences and their
+  `SOURCES.md` rows are removed; the serif is **preloaded on every page**, and `landing-font.ts`, D201's landing-only
+  preload of the same file, is folded into `fonts.ts`. D201's metric-matched "Serif Fallback" face moved from `landing.css`
+  to `globals.css`, so every page has it. This departs from §10.3's Figtree and Inter. Passages keep 19px and 1.65.
+- **The primitives.** Buttons are pills of regular weight; `Button`'s new `arrow` (`next` →, `go` ↗) draws the design's
+  34px disc by `::after`, with empty alternative text, so the label alone names it and no glyph is a JSX literal. A new
+  `light` variant is the white pill a deep panel carries. `Card`'s new `tone` is `surface`, `tint`, `quiet` or `deep`.
+  **Panels are flat**: a fill, a 12px radius, no border and no shadow, departing from §10.4's "two soft shadows plus a 1px
+  border". An answer option is white with the design's radio ring, tinted and ringed in primary when chosen; once
+  answered, the glyph takes the ring's place. A callout is a flat fill with a 4px rule at its start in its tone. The empty
+  state is the design's tinted banner.
+- **The chrome.** The header is the wordmark, the destinations on a quiet pill track, then sync and the language as a white
+  pill. The page you are on is the white pill **and** semibold, so the fill is not its only mark; `HeaderNav` is a client
+  component over `features/nav/nav.ts`'s `isCurrent`, and sets `aria-current="page"`. The footer is deep teal, with the
+  statement, the links and the giant "PALIER" drawn by `::before` from a `data-` attribute, as D201's is.
+- **Today and setup, as drawn.** Today takes the design's 1160px column (`.app-wide`), and the others keep 760px. Where you
+  stand is white, with the trend's invitation in a tinted inset. Today's plan is the deep panel with a light arrow pill.
+  The review queue is a quiet panel of ruled links with their arrows. Setup puts the non-affiliation statement in a quiet
+  box, adds a five-segment bar beside "Step N of 5" (`aria-hidden`, from `stepperSegments`), and draws its radios as the
+  design's rings on native inputs, so the keyboard and the names are the platform's.
+- **Tests changed, named here as the working agreement asks.**
+  - `tokens.test.ts` and `css.test.ts` pinned the plum values and the dark, toggle and print blocks; they now pin the
+    design's values, one light block and the exam block.
+  - `contrast.test.ts`'s pairs are the new ones above.
+  - `fonts.test.ts` expects the one file and its licence. `csp-production.spec.ts` held the body to `--font-sans` and the
+    `h1` to `--font-display`; it now holds both to `--font-serif`. `offline.spec.ts` expects the serif precached, not three
+    faces.
+  - New: `features/nav/nav.test.ts`, `stepperSegments`, `buttonClass`'s arrow and `light`, `cardClass`, and `Button` and
+    `Card` rendering them.
+- **What the browser suites caught, and fixed:**
+  - Axe failed the landing page's estimate card: the app's new base rule set `h3`'s colour, which beat the white the
+    landing page's deep panels pass down. The base heading and link rules are now `:where(…):not(:where(.landing *))`:
+    zero specificity, and nothing on the landing page.
+  - Ten specs could not click a footer link. The giant wordmark's glyph box reaches up over the links and took the click,
+    as it would a person's. It is `pointer-events: none`.
+- **What the review found, and fixed** (candid-review, before the pull request):
+  - **Forced colours.** The drawn radios (a gradient dot, and a transparent border that turns primary) cannot show a
+    selection under Windows High Contrast, which repaints every border, the transparent ones too, and keeps the dot's
+    dark colour. There the app's radios are the platform's again (`appearance: auto`), and a selected answer option is
+    drawn in the system's `Highlight`.
+  - **The deep panel redefines `--ink-muted` and `--accent`** to its light inks: the unlit streak flame, an outline in
+    `ink-muted`, measured 1.23:1 on today's plan.
+  - **The dialog's backdrop names its token's value as a fallback**: before Safari 17.4 and Chrome 122, `::backdrop`
+    inherits no custom property, and the dimming would have vanished.
+  - The gate's new pairs above: `primary` as text, and the focus ring on the panels.
+- **What CI's medium lane found, and fixed** (the PR's first run, on the Linux runner):
+  - **`/progress` printed on two pages.** It fit Letter at 100% and overflowed at 105% on macOS, and the Linux runner's
+    rendering tipped it over. Two print rules:
+    - the inline statement keeps its panel, but at the page's 8pt with 3pt by 6pt of padding;
+    - the empty trend's note spans the row. It had sat in the chart's narrow first column and wrapped to 97px, twice.
+      This was D198's layout, and the serif made it worse.
+
+    It now fits up to 115% on both sizes.
+  - **The key-leak journey counted 14 calls on the key, not 16. The cause was a product bug, not the test.** After "Stop
+    and send", the practice reducer set `turn: "sending"` but left `waiting: true` until the bridge spoke again. While
+    the recorder stopped, "Record your answer" came back for the question just answered. Two things followed:
+    - the helper's wait for that button passed at once, so it ended the session before the third question was asked;
+    - a user could record a second answer to the same question.
+
+    `sent` now ends the wait (`waiting: false`). A clip's `stop` only resolves, so nobody is stranded. The new reducer
+    test fails without the fix.
+- **Proved to bite:** with `correct` back at `#1F7A5C`, the contrast gate fails four pairs; with `rule` lightened to
+  `#B9B5B2`, it fails four more.
+- **For the human, not settled here:**
+  - The mascot and the streak flame are drawn in `accent`, so Coco is teal now. The design shows neither.
+  - The landing page's `--landing-*` palette now has the same values as the app's tokens. Folding it onto them is a natural
+    follow-up, left out of this slice so `landing.css` and its contrast test were not changed beyond the font.
+  - PRD §10.1 asks for "playful", and the design is quieter. The design is followed.
+
 ---
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 3 October 2026 — `dougkeefe/palier-app-update-plan` (the app as designed; D202)
+
+Not *Next, decided*: the human asked for `docs/Palier landing page/Palier App.dc.html` to become the app's look. They
+ruled on two questions first: light only, and an exam set of greys on the same paper. *Next, decided* is unchanged:
+Gate O, then Gate M.
+
+- **`@palier/ui`'s tokens are the design's** (D202): one light theme, nine new roles, `accent` gated, `correct` darkened,
+  and `rule` for inputs' borders (WCAG 1.4.11). The contrast gate checks 102 pairs.
+- **Source Serif 4 for everything**, preloaded; Inter and Figtree removed.
+- **Flat primitives**: pills with the arrow disc, `Card` tones, radio rings on answer options, the tinted empty banner.
+- **The chrome as drawn**: the pill-track nav with the current page marked (`HeaderNav`), the deep-teal footer with its
+  wordmark. **Today and setup as drawn**; every other screen takes the header, ground, buttons and panels.
+- **Found by the suites**: a base `h3` colour that reached the landing page, and a wordmark that took footer clicks (D202).
+- **Found by the review**: radios under forced colours, the flame on the deep panel, the backdrop in older Safari (D202).
+- **For the human:** Coco is teal now, and the landing page's palette could fold onto the tokens (D202).
+
+```
+pnpm verify                                        → check-types, lint, boundaries pass; test: 258 files, 4098 passed, 8 todo; exit 0 (Node 24.21.0)
+vitest contrast.test.ts, correct → #1F7A5C         → 4 failed (correct on tint and quiet, both sets); restored → 100 passed
+vitest contrast.test.ts, rule → #B9B5B2            → 4 failed (rule on bg and surface, both sets); restored
+playwright --project=chromium (first run)          → 60 passed, 14 failed (axe on the landing's h3; footer links behind the wordmark); fixed
+playwright --project=chromium                      → 74 passed
+playwright --project=offline (production build)    → 35 passed (csp-production: zero violations, the serif from this origin)
+pnpm --filter @palier/web lighthouse (19 URLs × 5) → all assertions pass; medians: performance ≥ 0.99, accessibility 1.00, CLS 0
+check-bundle-size                                  → 166.3 KB of 180.0 KB
+after the review's four fixes:
+pnpm verify                                        → 258 files, 4108 passed, 8 todo; exit 0
+playwright --project=chromium                      → 74 passed
+playwright --project=offline (production build)    → 35 passed
+forced-colors emulated, /en/start step 2           → the radios are the platform's (appearance: auto); Level C shows chosen
+CI medium lane (PR #63, first run)                 → E2E 1/2: 2 failed (progress printed on 2 pages; key-leak 14 calls of 16); fixed
+print probe, Letter and A4 at scale 1–1.2          → before: 1 page to 1.0, 2 pages at 1.05; after: 1 page to 1.15
+vitest practice-view.test.ts, the fix reverted     → 1 failed (the new sent test); restored → 44 passed
+playwright --project=chromium                      → 74 passed; key-leak and the print test, --repeat-each=3 → 6 passed
+playwright --project=offline (production build)    → 35 passed
+```
 
 ### 3 October 2026 — `dougkeefe/palier-landing-page-update` (the landing page as designed; D201)
 

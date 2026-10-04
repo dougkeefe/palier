@@ -11,14 +11,14 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/home">):
   return { title: t("title") };
 }
 
-// Today's plan and the readiness card (product-requirements.md §8.2).
+// Today's plan and the readiness card (product-requirements.md §8.2), in the design's wider column (D202).
 export default function TodayPage({ params }: PageProps<"/[locale]/home">) {
   const { locale } = use(params);
   setRequestLocale(locale);
   const t = useTranslations("today");
 
   return (
-    <section className="app-stack app-island">
+    <section className="app-stack app-island app-wide">
       <h1 className="app-hero__title">{t("title")}</h1>
       <HomeDashboard />
     </section>

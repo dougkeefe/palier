@@ -9,6 +9,7 @@ import {
   profileFrom,
   stepAfter,
   stepBefore,
+  stepperSegments,
   stepsFor,
 } from "./onboarding";
 
@@ -70,5 +71,15 @@ describe("what onboarding produces", () => {
 
   it("defaults a user who skips to C, 20 minutes, no date and no diagnostic", () => {
     expect(DEFAULT_CHOICES).toEqual({ targetBand: "C", testDate: null, placement: "skip", dailyGoalMinutes: 20 });
+  });
+});
+
+describe("stepperSegments", () => {
+  it("fills every segment up to and including the current step", () => {
+    expect(stepperSegments(1)).toEqual([true, true, false, false, false]);
+  });
+
+  it("is one segment per step, the first filled on the first step", () => {
+    expect(stepperSegments(0, 3)).toEqual([true, false, false]);
   });
 });

@@ -1,8 +1,10 @@
 /* Static styles for the @palier/ui primitives. Depends on the custom
    properties in tokens.css. Kept here rather than inline because pseudo-classes
-   (:focus-visible), media queries (prefers-reduced-motion) and elevation cannot
-   be expressed as inline styles. Layout values are product-requirements.md
-   §10.4; motion is §10.5; focus and target size are §11 (WCAG 2.4.11, 2.5.8). */
+   (:focus-visible), media queries (prefers-reduced-motion) and pseudo-elements cannot
+   be expressed as inline styles. The look is the app as designed in
+   `docs/Palier landing page/Palier App.dc.html` (progress.md D202): flat colour
+   panels with no border or shadow, pills for buttons, an arrow disc on a call to
+   action. Motion is §10.5; focus and target size are §11 (WCAG 2.4.11, 2.5.8). */
 
 /* ---- Motion tokens (§10.5: 120ms state changes, 200ms panels, 400ms moments) ---
    Every duration in this file and in apps/web's globals.css is one of these three,
@@ -19,29 +21,37 @@
 
 /* ---- Shared ---------------------------------------------------------------- */
 
+/* The design's ring: 2px of the bright teal, 2px off. On a deep panel it is white. */
 .pl-focusable:focus-visible,
 .pl-btn:focus-visible,
 .pl-option:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-/* ---- Button (§10.4: four variants; pill radius; motion §10.5) -------------- */
+.pl-card--deep .pl-focusable:focus-visible,
+.pl-card--deep .pl-btn:focus-visible {
+  outline-color: var(--on-deep);
+}
+
+/* ---- Button (§10.4 and D202: pills; an arrow disc on a call to action) ------ */
 
 .pl-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 14px;
   min-height: 44px; /* session-flow target size, §11 2.5.8 */
-  padding: 0 20px;
-  border: 1px solid transparent;
-  border-radius: 999px; /* pills and primary buttons, §10.4 */
+  padding: 0 24px;
+  border: 0;
+  border-radius: 999px;
   font: inherit;
-  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.2;
+  text-decoration: none;
   cursor: pointer;
   transition: background-color var(--pl-motion-state) var(--pl-ease),
-    border-color var(--pl-motion-state) var(--pl-ease);
+    color var(--pl-motion-state) var(--pl-ease);
 }
 
 .pl-btn:disabled {
@@ -49,71 +59,185 @@
   cursor: not-allowed;
 }
 
-.pl-btn--primary {
+/* A link drawn as a button keeps the button's colour under the pointer, not the link's. */
+.pl-btn--primary,
+.pl-btn--primary:hover {
   background-color: var(--primary);
-  color: var(--surface); /* clears 4.5:1 on --primary in both themes */
+  color: var(--on-deep);
 }
 
-.pl-btn--secondary {
-  background-color: var(--surface);
-  border-color: var(--ink-muted);
+.pl-btn--primary:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.pl-btn--secondary,
+.pl-btn--secondary:hover {
+  background-color: var(--surface-quiet);
   color: var(--ink);
 }
 
-.pl-btn--ghost {
+.pl-btn--secondary:hover:not(:disabled) {
+  background-color: var(--surface-tint);
+}
+
+/* On a quiet panel a quiet pill would vanish, so it is white there. */
+.pl-card--quiet .pl-btn--secondary:not(:hover) {
+  background-color: var(--surface);
+}
+
+.pl-btn--ghost,
+.pl-btn--ghost:hover {
   background-color: transparent;
+  color: var(--link);
+}
+
+.pl-btn--ghost:hover:not(:disabled) {
+  background-color: var(--surface-quiet);
+}
+
+.pl-btn--danger,
+.pl-btn--danger:hover {
+  background-color: var(--incorrect);
+  color: var(--on-deep);
+}
+
+/* The white pill a deep panel carries. */
+.pl-btn--light,
+.pl-btn--light:hover {
+  background-color: var(--on-deep);
+  color: var(--ink);
+}
+
+.pl-btn--light:hover:not(:disabled) {
+  background-color: var(--surface-tint);
+}
+
+/* The arrow disc (D202): the label, then a 34px disc at the pill's end. The glyph is the
+   stylesheet's, with empty alternative text, so the label alone names the button. */
+.pl-btn--arrow {
+  justify-content: space-between;
+  padding: 5px 5px 5px 24px;
+}
+
+.pl-btn--arrow::after {
+  content: "\2192";
+  content: "\2192" / "";
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--on-deep);
   color: var(--primary);
 }
 
-.pl-btn--danger {
-  background-color: var(--incorrect);
-  color: var(--surface);
+.pl-btn--arrow-go::after {
+  content: "\2197";
+  content: "\2197" / "";
 }
 
-/* ---- Card (§10.4: 12px radius; two soft shadows + 1px border) -------------- */
+/* On a light pill the disc is dark. */
+.pl-btn--light.pl-btn--arrow::after,
+.pl-btn--secondary.pl-btn--arrow::after {
+  background-color: var(--primary);
+  color: var(--on-deep);
+}
+
+/* ---- Card (D202: a flat fill, 12px radius, no border and no shadow) --------- */
 
 .pl-card {
   background-color: var(--surface);
-  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
   border-radius: 12px;
-  padding: 16px;
-  box-shadow:
-    0 1px 2px color-mix(in srgb, var(--ink) 8%, transparent),
-    0 8px 24px color-mix(in srgb, var(--ink) 6%, transparent);
+  padding: clamp(20px, 3vw, 28px);
+}
+
+.pl-card--tint {
+  background-color: var(--surface-tint);
+}
+
+.pl-card--quiet {
+  background-color: var(--surface-quiet);
+}
+
+/* On the deep fill, the light ground's muted ink and accent would vanish (1.23:1 and 2.39:1), so
+   anything drawn in them inside, the streak's flame among them, takes the panel's light inks. */
+.pl-card--deep {
+  background-color: var(--surface-deep);
+  color: var(--on-deep);
+  --ink-muted: var(--on-deep-muted);
+  --accent: var(--on-deep);
 }
 
 /* ---- OptionRow (drill answer; real radio; glyph + label, never colour) ----- */
 
+/* White on the paper, with the design's radio ring at its start (D202): the ring, 3:1 in
+   primary, is what marks it as a choice; a selection fills the ring, tints the option and
+   rings it in primary. Once answered, the glyph takes the ring's place. */
 .pl-option {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   width: 100%;
   min-height: 44px;
-  padding: 12px 16px;
+  padding: 14px 20px;
   background-color: var(--surface);
-  border: 1px solid var(--ink-muted);
-  border-radius: 8px;
+  border: 2px solid transparent;
+  border-radius: 10px;
   color: var(--ink);
+  font: inherit;
   text-align: left;
   cursor: pointer;
   transition: border-color var(--pl-motion-state) var(--pl-ease),
+    background-color var(--pl-motion-state) var(--pl-ease),
     transform var(--pl-motion-state) var(--pl-ease);
+}
+
+.pl-option::before {
+  content: "";
+  flex: none;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
 }
 
 .pl-option--selected {
   border-color: var(--primary);
-  border-width: 2px;
+  background-color: var(--surface-tint);
+}
+
+.pl-option--selected::before {
+  background: radial-gradient(circle, var(--primary) 0 4px, transparent 4.5px);
+}
+
+.pl-option--correct::before,
+.pl-option--incorrect::before {
+  display: none;
 }
 
 .pl-option--correct {
   border-color: var(--correct);
-  border-width: 2px;
 }
 
 .pl-option--incorrect {
   border-color: var(--incorrect);
-  border-width: 2px;
+}
+
+/* Under forced colours every border is repainted in a system colour, the transparent one too, and the
+   dot's gradient keeps its dark primary on a dark ground: the selection would not show. So it is drawn
+   in the system's selection colour, on the ring and on the option's edge. */
+@media (forced-colors: active) {
+  .pl-option--selected,
+  .pl-option--selected::before {
+    border-color: Highlight;
+  }
+
+  .pl-option--selected::before {
+    forced-color-adjust: none;
+    background: radial-gradient(circle, Highlight 0 4px, transparent 4.5px);
+  }
 }
 
 .pl-option[aria-disabled="true"] {
@@ -155,7 +279,7 @@
 .pl-rail {
   width: 100%;
   height: 8px;
-  background-color: color-mix(in srgb, var(--ink) 12%, transparent);
+  background-color: var(--surface-quiet);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -169,12 +293,15 @@
 
 /* ---- Callout --------------------------------------------------------------- */
 
+/* A flat panel (D202): the tone is the glyph's colour and a rule at its start, never the fill
+   alone, and the glyph and the words carry it as well (§10.2). */
 .pl-callout {
   display: flex;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 16px 20px;
   border-radius: 12px;
-  border: 1px solid transparent;
+  border-inline-start: 4px solid transparent;
+  background-color: var(--surface-quiet);
 }
 
 .pl-callout__glyph {
@@ -182,23 +309,25 @@
 }
 
 .pl-callout--info {
-  border-color: var(--info);
+  border-inline-start-color: var(--info);
+  background-color: var(--surface-tint);
   color: var(--info);
 }
 
 .pl-callout--correct {
-  border-color: var(--correct);
+  border-inline-start-color: var(--correct);
   color: var(--correct);
 }
 
 .pl-callout--incorrect {
-  border-color: var(--incorrect);
+  border-inline-start-color: var(--incorrect);
   color: var(--incorrect);
 }
 
 .pl-callout--accent {
-  border-color: var(--accent);
-  color: var(--ink);
+  border-inline-start-color: var(--primary);
+  background-color: var(--surface-tint);
+  color: var(--primary);
 }
 
 .pl-callout__body {
@@ -207,19 +336,34 @@
 
 /* ---- EmptyState ------------------------------------------------------------ */
 
+/* The design's banner: a tinted panel, its heading, a line and the way on (D202). */
 .pl-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  justify-items: start;
   gap: 12px;
-  padding: 32px 16px;
-  text-align: center;
-  color: var(--ink-muted);
+  padding: clamp(32px, 5vw, 56px);
+  border-radius: 16px;
+  background-color: var(--surface-tint);
+  color: var(--ink-soft);
 }
 
 .pl-empty__heading {
+  margin: 0;
   color: var(--ink);
-  font-weight: 600;
+  font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.pl-empty__body {
+  margin: 0;
+  max-width: 40ch;
+  font-size: 1.125rem;
+}
+
+.pl-empty > .pl-btn {
+  margin-top: 12px;
 }
 
 /* ---- BandMeter (§8.2: the point estimate solid, its interval a lighter band) --- */
@@ -237,7 +381,7 @@
 .pl-band-meter__track {
   position: relative;
   height: 12px;
-  background-color: color-mix(in srgb, var(--ink) 10%, transparent);
+  background-color: color-mix(in srgb, var(--ink) 12%, transparent);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -328,12 +472,10 @@
 .pl-sheet {
   display: grid;
   gap: 12px;
-  padding: 16px;
+  padding: clamp(20px, 3vw, 28px);
   background-color: var(--surface);
-  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
-  border-top-width: 4px;
+  border-top: 4px solid var(--rule);
   border-radius: 12px;
-  box-shadow: 0 -8px 24px color-mix(in srgb, var(--ink) 8%, transparent);
   animation: pl-sheet-in var(--pl-motion-panel) var(--pl-ease);
 }
 
@@ -355,7 +497,7 @@
 }
 
 .pl-sheet__heading:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -387,7 +529,8 @@
 
 .pl-passage {
   max-width: 66ch;
-  /* The app's self-hosted Source Serif 4 when it defines --font-serif (D161). */
+  /* The app's self-hosted Source Serif 4 when it defines --font-serif (D161), the face of
+     the whole app since D202; a passage keeps its own larger size and longer line. */
   font-family: var(--font-serif, "Source Serif 4"), "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", serif;
   font-size: 1.1875rem;
   line-height: 1.65;
@@ -480,9 +623,10 @@
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  padding: 0 12px;
-  border: 1px solid var(--ink-muted);
+  padding: 0 16px;
+  border: 2px solid transparent;
   border-radius: 999px;
+  background-color: var(--surface);
   font-variant-numeric: tabular-nums;
   font-weight: 600;
 }
@@ -506,15 +650,17 @@
 
 .pl-dialog {
   max-width: min(560px, calc(100vw - 32px));
-  padding: 16px;
-  border: 1px solid var(--ink-muted);
+  padding: clamp(20px, 3vw, 28px);
+  border: 0;
   border-radius: 12px;
   background-color: var(--surface);
   color: var(--ink);
 }
 
+/* The footer's deep teal, so the page behind reads as set aside, not as gone. Before Safari 17.4 and
+   Chrome 122, ::backdrop inherits no custom property, so the token carries its value as a fallback. */
 .pl-dialog::backdrop {
-  background-color: rgb(0 0 0 / 0.45);
+  background-color: color-mix(in srgb, var(--primary, #00384A) 60%, transparent);
 }
 
 .pl-dialog--side {
@@ -549,7 +695,9 @@
 }
 
 .pl-dialog--full .pl-dialog__heading {
-  font-size: 30px; /* §10.3's scale: a moment, not a confirmation */
+  font-size: clamp(2rem, 4vw, 3rem); /* a moment, not a confirmation */
+  font-weight: 400;
+  letter-spacing: -0.03em;
 }
 
 .pl-dialog--full .pl-dialog__actions {
@@ -558,7 +706,9 @@
 
 .pl-dialog__heading {
   margin: 0 0 12px;
-  font-size: 19px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
 }
 
 .pl-dialog__actions {

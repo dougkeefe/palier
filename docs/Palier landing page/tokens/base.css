@@ -1,0 +1,5 @@
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);font-size:var(--fs-body);line-height:var(--lh-body);text-wrap:pretty}
+a{color:var(--link);text-underline-offset:3px}a:hover{color:var(--link-hover)}
+:focus-visible{outline:var(--focus-ring);outline-offset:2px}

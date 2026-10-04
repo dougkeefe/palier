@@ -4,6 +4,7 @@ import {
   bandMeterGeometry,
   buttonClass,
   calloutState,
+  cardClass,
   dialogClass,
   mascotClass,
   streakFlameClass,
@@ -29,6 +30,27 @@ describe("buttonClass", () => {
     expect(buttonClass("secondary")).toBe("pl-btn pl-btn--secondary");
     expect(buttonClass("ghost")).toBe("pl-btn pl-btn--ghost");
     expect(buttonClass("danger")).toBe("pl-btn pl-btn--danger");
+    expect(buttonClass("light")).toBe("pl-btn pl-btn--light");
+  });
+
+  it("adds the arrow disc for a step forward", () => {
+    expect(buttonClass("primary", "next")).toBe("pl-btn pl-btn--primary pl-btn--arrow");
+  });
+
+  it("adds the arrow disc, pointing out, for a way into something", () => {
+    expect(buttonClass("light", "go")).toBe("pl-btn pl-btn--light pl-btn--arrow pl-btn--arrow-go");
+  });
+});
+
+describe("cardClass", () => {
+  it("is the bare card on the white surface", () => {
+    expect(cardClass("surface")).toBe("pl-card");
+  });
+
+  it("names any other fill as a modifier", () => {
+    expect(cardClass("tint")).toBe("pl-card pl-card--tint");
+    expect(cardClass("quiet")).toBe("pl-card pl-card--quiet");
+    expect(cardClass("deep")).toBe("pl-card pl-card--deep");
   });
 });
 

@@ -153,8 +153,11 @@ export const practice = (state: PracticeState, action: PracticeAction): Practice
           return state.waiting ? { ...state, turn: "recording" } : state;
         case "recordFailed":
           return { ...state, mode: "typed", turn: "idle" };
+        // A sent answer ends the wait at once, not when the bridge next speaks: the recorder takes a moment
+        // to stop, and while it did, "Record your answer" came back for a question already answered, so a
+        // second answer could be recorded to it, and a session ended there lost the next question (D202).
         case "sent":
-          return { ...state, turn: "sending" };
+          return { ...state, waiting: false, turn: "sending" };
         case "ending":
           return { ...state, ending: true };
         case "ended":

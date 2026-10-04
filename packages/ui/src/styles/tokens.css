@@ -3,119 +3,37 @@
    generator output. Change tokens.ts and regenerate. */
 
 :root {
-  --bg: #FBF8F4;
+  color-scheme: light;
+  --bg: #F3F2F2;
   --surface: #FFFFFF;
-  --ink: #1E1824;
-  --ink-muted: #5B5266;
-  --primary: #5B2C6F;
-  --accent: #E8913A;
-  --correct: #1F7A5C;
+  --surface-tint: #D9F1F8;
+  --surface-quiet: #E8E6E5;
+  --surface-deep: #004A61;
+  --ink: #201E1D;
+  --ink-soft: #3D3936;
+  --ink-muted: #55504D;
+  --on-deep: #FFFFFF;
+  --on-deep-muted: #D3DFE3;
+  --primary: #00384A;
+  --primary-hover: #00607D;
+  --accent: #0088B0;
+  --link: #00607D;
+  --rule: #6B6663;
+  --correct: #1A6B50;
   --incorrect: #B23A48;
-  --info: #2B6CB0;
+  --info: #00607D;
   --warning: #8A5300;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #17131C;
-    --surface: #221C29;
-    --ink: #F4EFEA;
-    --ink-muted: #B4A9BE;
-    --primary: #B388CC;
-    --accent: #F2A85B;
-    --correct: #4FBF95;
-    --incorrect: #E8788A;
-    --info: #7FB3E8;
-    --warning: #F2B35B;
-  }
-}
-
-[data-theme="light"] {
-  --bg: #FBF8F4;
-  --surface: #FFFFFF;
-  --ink: #1E1824;
-  --ink-muted: #5B5266;
-  --primary: #5B2C6F;
-  --accent: #E8913A;
-  --correct: #1F7A5C;
-  --incorrect: #B23A48;
-  --info: #2B6CB0;
-  --warning: #8A5300;
-}
-
-[data-theme="dark"] {
-  --bg: #17131C;
-  --surface: #221C29;
-  --ink: #F4EFEA;
-  --ink-muted: #B4A9BE;
-  --primary: #B388CC;
-  --accent: #F2A85B;
-  --correct: #4FBF95;
-  --incorrect: #E8788A;
-  --info: #7FB3E8;
-  --warning: #F2B35B;
-}
-
-@media print {
-  :root,
-  [data-theme] {
-    --bg: #FBF8F4;
-    --surface: #FFFFFF;
-    --ink: #1E1824;
-    --ink-muted: #5B5266;
-    --primary: #5B2C6F;
-    --accent: #E8913A;
-    --correct: #1F7A5C;
-    --incorrect: #B23A48;
-    --info: #2B6CB0;
-    --warning: #8A5300;
-  }
 }
 
 [data-mode="exam"] {
-  --bg: #F3F3F1;
-  --surface: #FFFFFF;
-  --ink: #1C1E21;
-  --ink-muted: #50555C;
-  --primary: #3D4752;
-  --accent: #8C939B;
+  --surface-tint: #E4E2E1;
+  --surface-deep: #2F3134;
+  --on-deep-muted: #D9D7D5;
+  --primary: #33373B;
+  --primary-hover: #50555C;
+  --accent: #6B6663;
+  --link: #45484C;
   --incorrect: #A8323F;
+  --info: #45484C;
   --warning: #7F4E00;
-}
-
-@media (prefers-color-scheme: dark) {
-  [data-mode="exam"] {
-    --bg: #16181B;
-    --surface: #202327;
-    --ink: #EDEEEF;
-    --ink-muted: #A9AEB5;
-    --primary: #A7B3C1;
-    --accent: #6F767E;
-    --incorrect: #E8788A;
-    --warning: #E9B062;
-  }
-}
-
-[data-theme="light"] [data-mode="exam"],
-[data-theme="light"][data-mode="exam"] {
-  --bg: #F3F3F1;
-  --surface: #FFFFFF;
-  --ink: #1C1E21;
-  --ink-muted: #50555C;
-  --primary: #3D4752;
-  --accent: #8C939B;
-  --incorrect: #A8323F;
-  --warning: #7F4E00;
-}
-
-[data-theme="dark"] [data-mode="exam"],
-[data-theme="dark"][data-mode="exam"] {
-  --bg: #16181B;
-  --surface: #202327;
-  --ink: #EDEEEF;
-  --ink-muted: #A9AEB5;
-  --primary: #A7B3C1;
-  --accent: #6F767E;
-  --incorrect: #E8788A;
-  --warning: #E9B062;
 }
