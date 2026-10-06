@@ -142,7 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/yjsi3` | **The diagnostic that gives a result** (D208–D212, ADR 25; the human's decision, 6 October 2026): an even run across bands, the score shown plainly, the plan's starting level, a written interpretation on the key, and a plan and a Today card built from it. | 6 October 2026 |
+| `dougkeefe/written-diagnostic-results-improve` | **The diagnostic that gives a result** (D208–D212, ADR 25; the human's decision, 6 October 2026): an even run across bands, the score shown plainly, the plan's starting level, a written interpretation on the key, and a plan and a Today card built from it. | 6 October 2026 |
 | `dougkeefe/content-generation-run` | **The full content run, authored by Claude** (D203–D207; the human's decision, 4 October 2026): Claude writes the items, passages and oral scenarios through the authored intake, separate Claude subagents review them blind, v3's synthetic content is retired, and `content/bank/v4` is served. | 4 October 2026 |
 
 *(The prior rows — the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
@@ -254,7 +254,7 @@ reviewed blind by Claude, with v3's synthetic content retired.
 What stands between the code and 1.0 is now **the human's**: **Gate O**, then the rest of **Gate M** (an outside item
 submission, the domain and the trademark check). No agent slice is left before them.
 
-**First: the diagnostic slice** (`dougkeefe/yjsi3`; D208–D212, ADR 25), built on the human's request of 6 October 2026.
+**First: the diagnostic slice** (`dougkeefe/written-diagnostic-results-improve`; D208–D212, ADR 25), built on the human's request of 6 October 2026.
 Merge it once its four lanes are green. Then three things, in this order:
 - **The human, on the deployed site:** take one writing diagnostic on a real key. Say whether the written result reads as
   useful, and whether the starting level matches your sense of your French.
@@ -7187,7 +7187,7 @@ This session had no `OPENAI_SMOKE_KEY`. Fixtures are recorded, never written by 
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 6 October 2026 — `dougkeefe/yjsi3` (the diagnostic that gives a result; D208–D212, ADR 25)
+### 6 October 2026 — `dougkeefe/written-diagnostic-results-improve` (the diagnostic that gives a result; D208–D212, ADR 25)
 
 Not *Next, decided*: the human took the written diagnostic and found the result "a waste of time". They decided:
 - the key is required first, and AI interprets the result;
