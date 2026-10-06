@@ -374,7 +374,6 @@
     "estimate": "{accuracy}% correct, likely between {low}% and {high}%",
     "insufficient": "{attempted} answered. {needed, plural, one {# more is needed} other {# more are needed}} before a figure is shown.",
     "toToday": "Go to today’s plan",
-    "pageTitle": "Diagnostic result",
     "scoreLine": "{correct} of {attempted} correct",
     "scoreWrong": "{wrong, plural, =0 {None wrong} one {# wrong} other {# wrong}}",
     "byLevelTitle": "By level",

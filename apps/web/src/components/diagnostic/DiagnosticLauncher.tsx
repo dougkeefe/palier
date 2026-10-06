@@ -5,14 +5,17 @@ import { SCORED_SKILLS } from "@palier/domain";
 import type { Preflight } from "@palier/engine";
 import { Button, Callout, Toast } from "@palier/ui";
 import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { skillFromQuery } from "../../features/diagnostic/result-view";
 import { estimateText } from "../../features/key/spend-view";
 import { preflightNotice } from "../../features/writing/workshop-view";
 import type { Container } from "../../lib/container";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
 import { PracticeSession } from "../practice/PracticeSession";
+import { DiagnosticResult } from "./DiagnosticResult";
 
 type Gate =
   | { readonly status: "loading" }
@@ -35,8 +38,18 @@ const loadGate = async (container: Container): Promise<Gate> => {
  * back. With a key, it says what the written result will cost before the first question, so
  * starting is the consent to pay for it. Then pick a skill and run it; one skill at a time, so a
  * user can stop after reading and come back for writing.
+ *
+ * `?result=<skill>`, from today's card, shows that skill's latest result instead, on this same
+ * page rather than a route of its own, so the e2e lanes compile, precache and police one page
+ * fewer (progress.md D213). Read through `useSearchParams`, so a soft navigation from today's card
+ * sees the new address.
  */
 export function DiagnosticLauncher() {
+  const result = useSearchParams().get("result");
+  return result === null ? <Launcher /> : <DiagnosticResult skill={skillFromQuery(result)} />;
+}
+
+function Launcher() {
   const t = useTranslations("diagnostic");
   const tSkills = useTranslations("skills");
   const tCommon = useTranslations("common");

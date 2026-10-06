@@ -53,7 +53,7 @@ const loadResult = async (container: Container, skill: ScoredSkill): Promise<Loa
 
 /**
  * The diagnostic's result (product-requirements.md §6.2, ADR 25), at the end of a run and at
- * `/diagnostic/result?skill=…`: the score, right and wrong, by level and by sub-skill; the level
+ * `/diagnostic?result=…`: the score, right and wrong, by level and by sub-skill; the level
  * the plan now starts at and what it favours; and the written interpretation, kept on this device.
  * At the run's own end (`askOnOpen`) it is asked for at once on the user's key, since starting was
  * the consent; anywhere else, or kept in the other language, it is only offered, with its cost, so

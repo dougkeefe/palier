@@ -277,7 +277,7 @@ function DiagnosticHalf({ result, skill }: { result: DiagnosticResult; skill: Sc
         </p>
       )}
       {first === undefined ? null : <p>{t("diagnosticFirst", { subSkill: tSub(first.subSkill), what: first.what })}</p>}
-      <Link href={{ pathname: "/diagnostic/result", query: { skill } }} className="app-link pl-focusable">
+      <Link href={{ pathname: "/diagnostic", query: { result: skill } }} className="app-link pl-focusable">
         {t("diagnosticLink")}
       </Link>
       {result.retakeDue ? (

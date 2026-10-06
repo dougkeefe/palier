@@ -7183,6 +7183,23 @@ This session had no `OPENAI_SMOKE_KEY`. Fixtures are recorded, never written by 
 
 **Renamed only:** `onboarding.test.ts`'s parenthetical. The assertion is unchanged.
 
+### D213 — the saved result is the diagnostic page's own, not a route, to keep E2E shard 2 inside its budget
+**Date:** 6 October 2026 · **Status:** accepted (agent)
+
+The first CI run of #67 had one E2E shard 2/2 killed at its 300-second budget. The same shard passed on the other run of the
+same commit in 4.9 minutes. On `main` that shard takes 3.8 to 4.5 minutes (55 tests, 4.5m on 4 October).
+
+Both branches split the 109 tests identically, and shard 2 holds none of the specs this slice rewrote. Its growth came
+from the new `/diagnostic/result` route:
+- the warmup compiles one more route, serially;
+- `csp-production.spec.ts` polices two more pages, one per language;
+- the precache and sitemap checks carry one more entry.
+
+So the result opened from Today is now `/diagnostic?result=<skill>`. The launcher reads it with `useSearchParams` and shows
+`DiagnosticResult` in place of the skill choice. The route, its island, its `routes.json` line, its CSP entry and the
+`diagnostic.pageTitle` message are gone. The budget is unchanged, as implementation-plan.md 6.5 asks. Shard 2 still has
+about 30 seconds of headroom on `main`, which the next slice to add a page will want to know.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
@@ -7206,7 +7223,7 @@ The slice:
 - **Testing:** the fake, the contract and the memory store.
 - **Web:**
   - the key gate and the way back;
-  - the result screen and `/diagnostic/result?skill=`;
+  - the result screen, and `/diagnostic?result=` for it again from Today (D213);
   - Today's diagnostic half and the plan's line;
   - copy in both languages.
 - **Records:** ADR 25, and the PRD's §6.2 and §8.1 notes.

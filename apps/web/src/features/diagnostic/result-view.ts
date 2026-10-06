@@ -119,6 +119,6 @@ export const interpretationFor = (result: DiagnosticResult, lang: Lang): Diagnos
  */
 export const isShortRun = (drawn: number, size: number): boolean => drawn < size;
 
-/** The skill named in `?skill=`, or reading when it names none. */
+/** The skill named in `?result=`, or reading when it names none. */
 export const skillFromQuery = (value: string | null): ScoredSkill =>
   (SCORED_SKILLS as readonly string[]).includes(value ?? "") ? (value as ScoredSkill) : "reading";

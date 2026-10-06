@@ -374,7 +374,6 @@
     "estimate": "{accuracy} % de bonnes réponses, vraisemblablement entre {low} % et {high} %",
     "insufficient": "{attempted} réponses. {needed, plural, one {Il en faut # de plus} other {Il en faut # de plus}} avant d’afficher un taux.",
     "toToday": "Voir le plan du jour",
-    "pageTitle": "Résultat du diagnostic",
     "scoreLine": "{correct} bonnes réponses sur {attempted}",
     "scoreWrong": "{wrong, plural, =0 {Aucune erreur} one {# erreur} other {# erreurs}}",
     "byLevelTitle": "Par niveau",

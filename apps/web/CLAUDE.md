@@ -250,7 +250,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     the key, so with none `DiagnosticLauncher` shows `NoKeyCard`, whose link carries `?next=diagnostic`, and the key
     screen then offers the way back (`returnAfterKey`, an allow-list, never an address from the query).
   - **The diagnostic's result** (ADR 25) is `components/diagnostic/DiagnosticResult.tsx`, at a run's end and at
-    `/diagnostic/result?skill=…` from today's card; its decisions are `features/diagnostic/result-view.ts`. The score,
+    `/diagnostic?result=…` from today's card (the launcher's own page, not a route of its own, D213); its decisions are `features/diagnostic/result-view.ts`. The score,
     right and wrong, by level and by sub-skill, and the plan's starting level are the engine's, derived from the attempts
     (ADR 16); **no question is ever shown**, and no band is named (ADR 7). The written interpretation is asked for on
     the key **only at the run's own end** (`askOnOpen`, from `PracticeSession`); opened anywhere else, or kept in the other

@@ -57,7 +57,8 @@ test("journey 1: onboarding, the key the diagnostic needs, the diagnostic, its r
 
   // And the whole result again, from the card, kept: no second call.
   await page.getByRole("link", { name: "See your full result" }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "Diagnostic result" })).toBeVisible();
+  await expect(page).toHaveURL(/\/en\/diagnostic\?result=reading$/);
+  await expect(page.getByRole("heading", { name: "Your Reading diagnostic" })).toBeVisible();
   await expect(page.getByText(INTERPRETATION_HEADLINE)).toBeVisible();
 });
 
