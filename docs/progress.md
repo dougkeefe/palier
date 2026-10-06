@@ -7217,6 +7217,11 @@ pnpm --filter @palier/web build       → exit 0
 playwright journeys, key, key-leak, content, csp-production (chromium + offline) → 35 passed (1.5m)
 ```
 
+CI's fast lane then failed on `pnpm audit --prod --audit-level=high`. A new advisory, GHSA-68fv-2mgg-jv7q, hit
+`source-map-js` 1.2.1 under `next > postcss`, on `main` too. Every parent (`postcss`, `css-tree`, `magicast`) declares
+`^1.2.1`, so the lockfile alone moves to the patched 1.2.2: six lines and the integrity. That needs no override, unlike
+D155's pinned parents. `pnpm up -r` would also have re-resolved rolldown and postcss, so it was not used.
+
 A harsh `candid-review` of the slice then found eight issues, all fixed in the same branch:
 - the result page spent on every open;
 - the privacy list missed the new store;
