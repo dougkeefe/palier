@@ -6,6 +6,7 @@ import {
   recordedCompletions,
 } from "@palier/testing";
 import type {
+  DiagnosticInterpretationRequest,
   ExaminerTurnRequest,
   GenerateItemsRequest,
   OralRequest,
@@ -91,6 +92,9 @@ const replay = (completion: RecordedCompletion): Promise<unknown> => {
       return provider.speak(completion.request as SpeechRequest);
     case "assessOral":
       return provider.assessOral(completion.request as OralRequest);
+    // Recorded by the next funded `live-smoke --record` (ADR 25); until then no completion reaches it.
+    case "interpretDiagnostic":
+      return provider.interpretDiagnostic(completion.request as DiagnosticInterpretationRequest);
   }
 };
 

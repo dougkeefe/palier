@@ -1,4 +1,4 @@
-import type { AttemptMode, SessionId } from "@palier/domain";
+import type { AttemptMode, DiagnosticRules, SessionId } from "@palier/domain";
 import type { DayPlan } from "@palier/engine";
 
 import type {
@@ -11,7 +11,7 @@ import type {
   Session,
   SessionStore,
 } from "../ports/index.js";
-import { oralFocusSubSkills } from "./oral-report.js";
+import { studyFocus } from "./diagnostic-result.js";
 import { type PlanDailySessionRequest, planDailySession } from "./plan-daily-session.js";
 
 /**
@@ -37,7 +37,9 @@ import { type PlanDailySessionRequest, planDailySession } from "./plan-daily-ses
  *   `completeSession` and consumed here, through the port.
  * - **It owns `focusSubSkills` the same way** (progress.md D124, closing D35): the latest
  *   oral report's fixes in the language the day practises (D127), read from the `OralStore`,
- *   bias the day's new items.
+ *   bias the day's new items. **And `placement`** (ADR 25): the latest complete diagnostic
+ *   run's starting band and its weakest sub-skills, both through `studyFocus`, which Today's
+ *   preview calls too.
  */
 
 export type StartSessionRequest = {
@@ -48,10 +50,10 @@ export type StartSessionRequest = {
   /**
    * The study parameters the plan needs. `lastDayCompleted` is `Omit`-ted because
    * `StartSession` derives it from `SessionStore.latest()` rather than taking it from
-   * the caller — the whole point of composing the planner here (D36, D46). So is
-   * `focusSubSkills`, from the `OralStore` (D124).
+   * the caller — the whole point of composing the planner here (D36, D46). So are
+   * `focusSubSkills` and `placement`, from the `OralStore` (D124) and the diagnostic (ADR 25).
    */
-  readonly plan: Omit<PlanDailySessionRequest, "lastDayCompleted" | "focusSubSkills">;
+  readonly plan: Omit<PlanDailySessionRequest, "lastDayCompleted" | "focusSubSkills" | "placement">;
 };
 
 export type StartSessionDeps = {
@@ -64,6 +66,8 @@ export type StartSessionDeps = {
   readonly attempts: AttemptStore;
   /** Where the latest oral report is, whose fixes bias the day (D124). */
   readonly oral: Pick<OralStore, "all">;
+  /** The profile's diagnostic rules, which say what counts as a run and where it places (ADR 25). */
+  readonly rules: DiagnosticRules;
 };
 
 export type StartSessionResult = {
@@ -85,8 +89,9 @@ export const startSession = async (
   const lastDayCompleted =
     previous === null ? undefined : previous.completedAt !== null;
 
-  const scenarioLang = new Map((await deps.items.scenarios()).map((scenario) => [scenario.id, scenario.lang]));
-  const focusSubSkills = oralFocusSubSkills(await deps.oral.all(), request.plan.lang, (id) => scenarioLang.get(id) ?? null);
+  // No report and no diagnostic yet, no focus and no placement: the plan is exactly what it
+  // was before either existed.
+  const focus = await studyFocus(request.plan, deps);
 
   const plan = await planDailySession(
     {
@@ -94,8 +99,7 @@ export const startSession = async (
       // exactOptionalPropertyTypes: spread only when present, never pass an explicit
       // `undefined` (progress.md D14). A first-ever session omits the signal entirely.
       ...(lastDayCompleted !== undefined ? { lastDayCompleted } : {}),
-      // No report yet, no focus: the plan is exactly what it was before Slice 3.
-      ...(focusSubSkills.length > 0 ? { focusSubSkills } : {}),
+      ...focus,
     },
     {
       clock: deps.clock,

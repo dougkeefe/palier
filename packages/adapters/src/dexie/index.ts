@@ -11,11 +11,13 @@ import type {
   WritingStore,
   GeneratedItemStore,
   OralStore,
+  DiagnosticReportStore,
 } from "@palier/app";
 
 import { dexieAttemptStore } from "./attempt-store.js";
 import { dexieCostLedger } from "./cost-ledger.js";
 import { PalierDb } from "./db.js";
+import { dexieDiagnosticReportStore } from "./diagnostic-report-store.js";
 import { dexieExamRunStore } from "./exam-run-store.js";
 import { dexieGeneratedItemStore } from "./generated-item-store.js";
 import { dexieKeyVault } from "./key-vault.js";
@@ -28,7 +30,7 @@ import { dexieTelemetryStore } from "./telemetry-store.js";
 import { dexieWritingStore } from "./writing-store.js";
 
 /**
- * The twelve local store ports, all bound to one `PalierDb`. This is the whole public
+ * The thirteen local store ports, all bound to one `PalierDb`. This is the whole public
  * surface of the Dexie adapter, and deliberately so: every field is a port type from
  * `@palier/app`, so **no Dexie type crosses the package boundary** (§2.4, the adapter's
  * first invariant). `PalierDb` extends `Dexie` and exposes `Table<...>` accessors, so
@@ -51,6 +53,7 @@ export type DexieStores = {
   readonly writing: WritingStore;
   readonly generated: GeneratedItemStore;
   readonly oral: OralStore;
+  readonly diagnosticReports: DiagnosticReportStore;
 };
 
 export const dexieStores = (name = "palier"): DexieStores => {
@@ -68,5 +71,6 @@ export const dexieStores = (name = "palier"): DexieStores => {
     writing: dexieWritingStore(db),
     generated: dexieGeneratedItemStore(db),
     oral: dexieOralStore(db),
+    diagnosticReports: dexieDiagnosticReportStore(db),
   };
 };

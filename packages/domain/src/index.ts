@@ -84,6 +84,11 @@ export type {
   AiFeature,
   CharacterPrice,
   CriterionAssessment,
+  DiagnosticInterpretation,
+  DiagnosticInterpretationRequest,
+  DiagnosticMiss,
+  DiagnosticPriority,
+  DiagnosticTally,
   ExaminerTurn,
   ExaminerTurnRequest,
   FeatureCall,
@@ -125,9 +130,11 @@ export type {
   WritingRequest,
 } from "./ai.js";
 export { AI_FEATURES, ORAL_CRITERIA, ORAL_NOTE_SEVERITIES, WRITING_CRITERIA } from "./ai.js";
+export { checkDiagnosticInterpretation } from "./diagnostic-interpretation.js";
 export type { BilledAmounts } from "./pricing.js";
 export { costOf } from "./pricing.js";
 export {
+  diagnosticInterpretationSchema,
   examinerTurnSchema,
   itemDraftSchema,
   oralAssessmentDraftSchema,
@@ -186,6 +193,7 @@ export { itemStatisticsReportSchema, telemetryEventSchema } from "./schemas/tele
 
 export type {
   CutRange,
+  DiagnosticRules,
   ExamProfile,
   ExamVariant,
   ItemStatisticsRules,

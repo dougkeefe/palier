@@ -4,7 +4,7 @@ import type { Band, TargetBand } from "./bands.js";
 import type { OralPhase, OralSessionType } from "./oral-scenario.js";
 import type { OralDirection, OralRegister, OralSpeaker, OralTurn } from "./oral-session.js";
 import type { DocType } from "./passage.js";
-import type { ItemType, Lang, OptionId } from "./skills.js";
+import type { ItemType, Lang, OptionId, ScoredSkill } from "./skills.js";
 import type { ReadingSubSkill, SubSkill, WritingSubSkill } from "./sub-skills.js";
 import type { Topic } from "./topics.js";
 import type { PromptSpec } from "./item-types/definition.js";
@@ -36,6 +36,7 @@ export type AiCapabilities = {
   readonly speak: boolean;
   readonly examinerTurn: boolean;
   readonly assessOral: boolean;
+  readonly interpretDiagnostic: boolean;
 };
 
 /**
@@ -409,6 +410,67 @@ export type OralAssessmentDraft = {
   readonly errors: readonly OralTurnErrorDraft[];
 };
 
+/** Right answers out of those given, at one band or in one sub-skill of a diagnostic run. */
+export type DiagnosticTally = {
+  readonly correct: number;
+  readonly attempted: number;
+};
+
+/**
+ * One item the candidate missed in a diagnostic run, sent so the model can say what the
+ * misses have in common (ADR 25). The model never quotes it back: the result screen shows no
+ * question, so a later run is not spoiled. `stem` and the options are in the item's language,
+ * `explanation` in `feedbackLang`.
+ */
+export type DiagnosticMiss = {
+  readonly subSkill: ScoredSubSkill;
+  readonly band: TargetBand;
+  readonly type: ItemType;
+  readonly stem: string;
+  readonly options: readonly { readonly id: OptionId; readonly text: string }[];
+  readonly chosen: OptionId;
+  readonly key: OptionId;
+  readonly explanation: string;
+};
+
+/**
+ * What `interpretDiagnostic` is sent (ADR 25): one complete diagnostic run's score, by band and
+ * by sub-skill, the level the plan starts at and the sub-skills it will favour, all decided by
+ * the engine, and the items missed. The model writes the words; it does not place (principle 8).
+ */
+export type DiagnosticInterpretationRequest = {
+  readonly skill: ScoredSkill;
+  readonly lang: Lang;
+  readonly feedbackLang: Lang;
+  readonly targetBand: TargetBand;
+  readonly startBand: TargetBand;
+  readonly total: DiagnosticTally;
+  readonly bands: readonly ({ readonly band: TargetBand } & DiagnosticTally)[];
+  readonly subSkills: readonly ({ readonly subSkill: ScoredSubSkill } & DiagnosticTally)[];
+  readonly focus: readonly ScoredSubSkill[];
+  readonly missed: readonly DiagnosticMiss[];
+};
+
+/** One thing to work on, most useful first: the sub-skill, what to do, and why the run says so. */
+export type DiagnosticPriority = {
+  readonly subSkill: ScoredSubSkill;
+  readonly what: string;
+  readonly why: string;
+};
+
+/**
+ * What `interpretDiagnostic` returns (ADR 25), in plain language and in `feedbackLang`: a
+ * headline, a short summary, up to three strengths, one to three priorities, and a line on what
+ * the plan will do. It names no band and quotes no question.
+ */
+export type DiagnosticInterpretation = {
+  readonly headline: string;
+  readonly summary: string;
+  readonly strengths: readonly string[];
+  readonly priorities: readonly DiagnosticPriority[];
+  readonly planNote: string;
+};
+
 /**
  * Token (and, priced, dollar) usage from the last call, for the cost ledger
  * (architecture.md §8.6). `costUsd` is absent until a `pricing.json` prices it.
@@ -433,9 +495,18 @@ export type UsageRecord = {
  * Slice 3's `oral-assessment` (D122), apart from the session, so each is shown at
  * its own cost. A key check spends nothing, so it is not a feature. Studio mode's
  * realtime conversation is `oral-studio` (Phase 6 Slice 1, D165): its audio in and
- * out, and the candidate's speech transcribed, each row stamped with its session.
+ * out, and the candidate's speech transcribed, each row stamped with its session. The written
+ * interpretation of a diagnostic run is `diagnostic-interpretation` (ADR 25), stamped with the
+ * run's session.
  */
-export const AI_FEATURES = ["writing-feedback", "item-generation", "oral-practice", "oral-assessment", "oral-studio"] as const;
+export const AI_FEATURES = [
+  "writing-feedback",
+  "item-generation",
+  "oral-practice",
+  "oral-assessment",
+  "oral-studio",
+  "diagnostic-interpretation",
+] as const;
 export type AiFeature = (typeof AI_FEATURES)[number];
 
 /**

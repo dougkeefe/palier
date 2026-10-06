@@ -15,7 +15,7 @@ import type { AttemptStore, Clock, ItemRepository, Random } from "../ports/index
  * `RunDiagnostic` decomposes into two thin sibling use cases (progress.md D47),
  * because a diagnostic spans three moments a single call cannot: this selects the
  * set, the caller records each answer through the *existing* `answerItem` with
- * `mode: "diagnostic"`, and `diagnosticReadout` reads the accuracy afterwards.
+ * `mode: "diagnostic"`, and `diagnosticResult` reads the run back afterwards (ADR 25).
  */
 
 /**
@@ -35,8 +35,14 @@ export type RunDiagnosticRequest = {
    * here rather than invented in code (progress.md D47).
    */
   readonly targetBand: TargetBand;
-  /** How many items the diagnostic presents; the caller sizes it (D34, D47). */
+  /** How many items the diagnostic presents; the caller sizes it from the profile (D34, D47, ADR 25). */
   readonly count: number;
+  /**
+   * How many of `count` to draw at each band, from the profile's `diagnostic.bandQuota`
+   * (ADR 25), so a run is even across bands rather than shaped by the bank. Absent, the
+   * draw is uniform, as it was.
+   */
+  readonly bandQuota?: Readonly<Partial<Record<TargetBand, number>>>;
 };
 
 export type RunDiagnosticDeps = {
@@ -66,6 +72,7 @@ export const runDiagnostic = async (
       targetBand: request.targetBand,
       count: request.count,
       mode: "diagnostic",
+      ...(request.bandQuota === undefined ? {} : { bandQuota: request.bandQuota }),
     },
     pool,
     attempts,

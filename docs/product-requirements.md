@@ -195,6 +195,8 @@ The plan is generated locally from the scheduler: due spaced-repetition reviews 
 
 A short placement, 30 items and about 15 minutes per skill, sampling evenly across bands and sub-skills rather than adapting. It is sized to clear the minimum evidence threshold for the practice trend in one sitting, and it doubles as the first read on which sub-skills are weak. Re-offered monthly and after any mock exam.
 
+As built (ADR 25): the run is split evenly between the bands the bank holds, by the profile's `diagnostic.bandQuota`. It ends in the score, right and wrong, by level and sub-skill, without showing a question; the level the plan starts at; and a written interpretation on the user's key. The plan then draws its new items from that level first, and favours the run's weakest sub-skills. One run still does not clear the practice trend's 30 answers at a band, so the result reads the run's own counts rather than waiting on the trend.
+
 Not adaptive, deliberately. Adaptive placement needs calibrated item difficulties to know what "harder" means, and at launch it would just be guessing in a more complicated way. Even sampling across bands gives a better first picture and takes three minutes longer.
 
 ### 6.3 The mock exam loop
@@ -247,11 +249,11 @@ Five steps, skippable after step 2, under 90 seconds.
 
 1. **Which direction.** French as a second language, or English. Large bilingual cards.
 2. **What you are aiming for.** B or C, with a plain-language description of what each means at work. Optional: "I have a test booked on [date]", which turns the dashboard into a countdown and back-plans the study schedule.
-3. **Where you are now.** Offer the diagnostic (30 items, about 15 minutes per skill, per section 6.2), or self-declare a current profile (for example ECB), or skip.
+3. **Where you are now.** Offer the diagnostic (30 items, about 15 minutes per skill, per section 6.2), or self-declare a current profile (for example ECB), or skip. The diagnostic runs on the user's key (ADR 25), so choosing it without a key leads to the key first, and back.
 4. **How you want to be pushed.** Daily goal: 10, 20 or 30 minutes. This is the only place a goal is set and it is changeable any time.
 5. **Optional key.** Explain in three lines what the key unlocks, what it costs, that it never leaves the browser, and that everything else works without it. Link to a one-page guide with screenshots of creating a key and setting a spend cap on the OpenAI dashboard.
 
-Design note: step 5 is the highest-risk drop-off in the product. It must be explicitly optional, and the app must be visibly fun before the user reaches it. Diagnostic before key, always.
+Design note: step 5 is the highest-risk drop-off in the product. It must be explicitly optional, and the app must be visibly fun before the user reaches it. ~~Diagnostic before key, always.~~ Overridden by the owner on 6 October 2026 (ADR 25): the diagnostic ends in a written result on the user's key, so on the diagnostic path the key comes first. Step 5 stays optional on the skip path, and everything but the diagnostic still works without a key.
 
 **Sync in onboarding.** There is no sign-in step. On first run the app creates an anonymous sync identity and starts syncing progress. Step 1 carries a single quiet line, "Your progress syncs across your devices. You can turn that off in settings," linking to a short plain-language explanation of exactly what does and does not leave the device. There is no sign-in later either. A second device joins by pairing code from `/settings/sync`, which is the whole of identity in v1 (ADR 5).
 

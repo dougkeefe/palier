@@ -5,12 +5,14 @@ Every concrete adapter, one directory and one subpath export each: `/dexie`, `/b
 (progress.md D48). A subpath lands with its adapter, not before — an entry resolving to an
 empty module asserts a boundary with nothing behind it (D3). **Six are live.** `./ids` →
 `webCryptoIdGenerator` (a monotonic Crockford-base32 ULID over Web Crypto, no npm dependency).
-`./dexie` → `dexieStores` (the twelve local store ports — `AttemptStore`, `ScheduleStore`,
+`./dexie` → `dexieStores` (the thirteen local store ports — `AttemptStore`, `ScheduleStore`,
 `SessionStore`, `ExamRunStore`, `SettingsStore`, `KeyVault`, `SyncStateStore`, `TelemetryStore`,
-`CostLedger`, `WritingStore`, `GeneratedItemStore`, `OralStore` — over IndexedDB via `dexie`; progress.md D49/D50, D69, D80 and D101, the last three on the
+`CostLedger`, `WritingStore`, `GeneratedItemStore`, `OralStore`, `DiagnosticReportStore` — over IndexedDB via `dexie`; progress.md D49/D50, D69, D80 and D101, the last three on the
 `syncMeta`, `examRuns` and `costLedger` tables v1 already declared). The cost ledger reads a row that is
 not a whole entry as nothing, v1's `{ ts, feature: "none" }` placeholder included. **Schema version 2** adds `telemetryQueue` and `telemetryMeta`
-(D92), and **version 3** adds `writingSubmissions` (D106). The generated-item store is over v1's own `generated` table, one row per
+(D92), **version 3** adds `writingSubmissions` (D106), and **version 4** adds `diagnosticReports`, keyed by the run's
+session (ADR 25): a row without a whole session, scored skill, language, instant and schema-valid interpretation reads
+as nothing, so the screen asks again. The generated-item store is over v1's own `generated` table, one row per
 item with `setId` and `position` beside v1's `skill` and `createdAt` indexes, and reads a row whose item is not a whole `Item` of
 the row's id and skill as nothing (D110). The oral store is over v1's own `oralSessions` and `oralAudio` tables
 (D115): a session reads only whole, with an end and a reason both set or both null and every turn a whole
@@ -31,7 +33,10 @@ uploads the clip twice; `speak` reads `/audio/speech`'s binary body as a `Blob`;
 `callValidated`. Each is on its own optional role (`transcribe`, `speech`, `examiner`). Pricing is `@palier/domain`'s
 `costOf` in each model's unit: a transcription bills the response's own `usage.seconds` when it reports duration,
 otherwise the recorder's `durationMs`, and a voice bills the characters sent. `FetchLike` takes a `FormData` body and
-may answer with `headers` and `blob()`. **`assessOral`** (Phase 5 Slice 3, D122) shares writing feedback's `assess`
+may answer with `headers` and `blob()`. **`interpretDiagnostic`** (ADR 25) is on the `assess` role too: the prompt
+gives the engine's score and placement as decided, fences the missed items as JSON data, and tells the model never to
+quote a question or name a band; a reply that `checkDiagnosticInterpretation` refuses is retried once with the reason.
+**`assessOral`** (Phase 5 Slice 3, D122) shares writing feedback's `assess`
 role: the model names a candidate's turn and quotes its words, and `@palier/domain`'s `assembleOralAssessment` places
 them per turn, so an excerpt not in its turn, an examiner's turn named, or a fix on an oral sub-skill is a malformed
 answer, retried once. The prompt numbers the turns, marks a typed one, and quotes the profile's descriptors from the

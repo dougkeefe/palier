@@ -1,5 +1,5 @@
 import type { ItemId, Lang, ScoredSkill, SubSkill, TargetBand } from "@palier/domain";
-import { type DayPlan, planDay } from "@palier/engine";
+import { type DayPlacement, type DayPlan, planDay } from "@palier/engine";
 
 import type {
   AttemptStore,
@@ -53,6 +53,11 @@ export type PlanDailySessionRequest = {
    * them are drawn as the weakest are. `StartSession` derives it from the `OralStore`.
    */
   readonly focusSubSkills?: readonly SubSkill[];
+  /**
+   * Where the latest complete diagnostic run started the plan (ADR 25): new items are drawn at
+   * its starting band first. `studyFocus` derives it, with `focusSubSkills`.
+   */
+  readonly placement?: DayPlacement;
 };
 
 export type PlanDailySessionDeps = {
@@ -96,6 +101,7 @@ export const planDailySession = async (
         ? { lastDayCompleted: request.lastDayCompleted }
         : {}),
       ...(request.focusSubSkills !== undefined ? { focusSubSkills: request.focusSubSkills } : {}),
+      ...(request.placement !== undefined ? { placement: request.placement } : {}),
     },
     () => deps.random.next(),
     now,

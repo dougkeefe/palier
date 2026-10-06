@@ -2,7 +2,7 @@
 
 import { Button, Card, Toast } from "@palier/ui";
 import { useTranslations } from "next-intl";
-import { useEffect, useId, useReducer, useRef, useState } from "react";
+import { useEffect, useId, useReducer, useRef, useState, useSyncExternalStore } from "react";
 
 import {
   INITIAL_KEY_SCREEN,
@@ -10,6 +10,7 @@ import {
   checkMessage,
   checkTone,
   keyScreen,
+  returnAfterKey,
   saveFailure,
 } from "../../features/key/key-view";
 import { Link } from "../../i18n/navigation";
@@ -28,10 +29,14 @@ import { SpendSettings } from "./SpendSettings";
  *   the way around it, the user's own endpoint (`RealtimeEndpointSettings`, D192);
  * - then the spend half, `SpendSettings` (Phase 4 Slice 2, D101–D104).
  *
+ * Reached from the diagnostic's gate (`?next=diagnostic`, ADR 25), a held key offers the way back.
+ *
  * The field is cleared as soon as the key is saved, and the key is never shown again, only
  * its last four characters (architecture.md §6.2). Focus moves to what replaced the form,
  * and back to the field when the key is removed (§11).
  */
+const noSubscription = () => () => undefined;
+
 export function KeySettings() {
   const t = useTranslations("key");
   const tCommon = useTranslations("common");
@@ -44,6 +49,12 @@ export function KeySettings() {
   const [tabOnly, setTabOnly] = useState(false);
   const [busy, setBusy] = useState(false);
   const moved = useRef(false);
+  // Read in the browser only, so the server's render and the first client render agree.
+  const back = useSyncExternalStore(
+    noSubscription,
+    () => returnAfterKey(new URLSearchParams(window.location.search).get("next")),
+    () => null,
+  );
 
   useEffect(() => {
     if (container.status !== "ready") return;
@@ -162,6 +173,11 @@ export function KeySettings() {
             </Button>
           </div>
           {state.check.kind === "checking" ? <Toast tone="info">{t("checking")}</Toast> : null}
+          {back === null ? null : (
+            <Link href={back} className="pl-btn pl-btn--primary pl-focusable">
+              {t("continueToDiagnostic")}
+            </Link>
+          )}
           {state.check.kind === "done" ? (
             <Toast tone={checkTone(state.check.result)}>
               {t(checkMessage(state.check.result), {

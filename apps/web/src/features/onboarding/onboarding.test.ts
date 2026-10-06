@@ -19,7 +19,7 @@ describe("onboarding steps", () => {
     expect(ONBOARDING_TOTAL).toBe(5);
   });
 
-  it("on the diagnostic path runs direction, target, placement, goal, and nothing after the goal (the key comes after the diagnostic)", () => {
+  it("on the diagnostic path runs direction, target, placement, goal, and nothing after the goal (the diagnostic's own gate asks for the key, ADR 25)", () => {
     expect(stepsFor("diagnostic")).toEqual(["direction", "target", "placement", "goal"]);
     expect(stepAfter("direction", "diagnostic")).toBe("target");
     expect(stepAfter("goal", "diagnostic")).toBeNull();

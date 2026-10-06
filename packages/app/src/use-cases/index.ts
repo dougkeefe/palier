@@ -73,10 +73,21 @@ export type {
 export { runDiagnostic } from "./run-diagnostic.js";
 
 export type {
-  DiagnosticReadoutDeps,
-  DiagnosticReadoutRequest,
-} from "./diagnostic-readout.js";
-export { diagnosticReadout } from "./diagnostic-readout.js";
+  DiagnosticInterpretationDeps,
+  DiagnosticInterpretationRequestInput,
+  DiagnosticResult,
+  DiagnosticResultDeps,
+  DiagnosticResultRequest,
+  StudyFocus,
+  StudyFocusDeps,
+  StudyFocusRequest,
+} from "./diagnostic-result.js";
+export {
+  NoDiagnosticRunError,
+  diagnosticResult,
+  requestDiagnosticInterpretation,
+  studyFocus,
+} from "./diagnostic-result.js";
 
 export type { ExportDocument } from "./export-document.js";
 export {

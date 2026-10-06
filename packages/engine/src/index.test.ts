@@ -48,6 +48,11 @@ describe("@palier/engine public surface", () => {
     expect(typeof engine.subSkillBreakdown).toBe("function");
   });
 
+  it("exports the diagnostic summary", () => {
+    expect(typeof engine.latestCompleteRun).toBe("function");
+    expect(typeof engine.summariseDiagnostic).toBe("function");
+  });
+
   it("exports the oral session machine", () => {
     expect(typeof engine.startOralSession).toBe("function");
     expect(typeof engine.stepOralSession).toBe("function");

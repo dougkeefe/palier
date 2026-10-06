@@ -15,6 +15,7 @@ export { memoryTelemetryCollector } from "./telemetry-collector.js";
 export type { MemoryTelemetryCollector } from "./telemetry-collector.js";
 export { memoryTelemetryStore } from "./telemetry-store.js";
 export { memoryWritingStore } from "./writing-store.js";
+export { memoryDiagnosticReportStore } from "./diagnostic-report-store.js";
 export { memoryGeneratedItemStore } from "./generated-item-store.js";
 export { memoryOralStore } from "./oral-store.js";
 export { memoryOralLiveness } from "./oral-liveness.js";

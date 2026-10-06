@@ -11,6 +11,7 @@ import {
   scoredSkillSchema,
   skillSchema,
   subSkillSchema,
+  targetBandSchema,
   topicSchema,
 } from "../schemas/primitives.js";
 
@@ -148,6 +149,30 @@ export const itemStatisticsRulesShape = z
     }
   });
 
+export const diagnosticRulesShape = z
+  .strictObject({
+    size: z.number().int().positive(),
+    bandQuota: z.partialRecord(targetBandSchema, z.number().int().positive()),
+    secureAccuracy: proportionSchema,
+    startShare: proportionSchema,
+    focusCount: z.number().int().nonnegative(),
+    retakeDays: z.number().int().positive(),
+  })
+  .check((ctx) => {
+    const rules = ctx.value;
+    // The quota is the run, split by band: a quota that does not add up to the size
+    // either leaves the run short or draws past it (PRD 6.2's "sampling evenly").
+    const quota = Object.values(rules.bandQuota).reduce<number>((sum, n) => sum + (n as number), 0);
+    if (quota !== rules.size) {
+      ctx.issues.push({
+        code: "custom",
+        input: rules,
+        path: ["bandQuota"],
+        message: `The band quota draws ${quota} items but a diagnostic is ${rules.size}; the two must agree.`,
+      });
+    }
+  });
+
 export const examProfileShape = z
   .strictObject({
     id: z.string().min(1),
@@ -164,6 +189,7 @@ export const examProfileShape = z
     oral: oralFormatShape,
     leitnerIntervalDays: z.array(z.number().int().positive()),
     itemStatistics: itemStatisticsRulesShape,
+    diagnostic: diagnosticRulesShape,
   })
   .check((ctx) => {
     const profile = ctx.value;

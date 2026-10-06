@@ -151,6 +151,13 @@ describe("runDiagnostic", () => {
     expect(second.items.map((i) => i.id)).toEqual(first.items.map((i) => i.id));
   });
 
+  it("draws each band's quota when the profile gives one (ADR 25)", async () => {
+    const result = await runDiagnostic({ ...aRequest, count: 6, bandQuota: { B: 3, C: 3 } }, depsWith());
+
+    expect(result.items.filter((item) => item.targetBand === "B")).toHaveLength(3);
+    expect(result.items.filter((item) => item.targetBand === "C")).toHaveLength(3);
+  });
+
   it("returns an empty set when the pool is empty", async () => {
     const result = await runDiagnostic(aRequest, depsWith({ items: itemsOf([]) }));
 

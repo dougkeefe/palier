@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 4 October 2026 (the full content run, authored by Claude, D203–D207)
+**Last updated:** 6 October 2026 (the diagnostic that gives a result, D208–D212, ADR 25)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/written-diagnostic-results-improve` | **The diagnostic that gives a result** (D208–D212, ADR 25; the human's decision, 6 October 2026): an even run across bands, the score shown plainly, the plan's starting level, a written interpretation on the key, and a plan and a Today card built from it. | 6 October 2026 |
 | `dougkeefe/content-generation-run` | **The full content run, authored by Claude** (D203–D207; the human's decision, 4 October 2026): Claude writes the items, passages and oral scenarios through the authored intake, separate Claude subagents review them blind, v3's synthetic content is retired, and `content/bank/v4` is served. | 4 October 2026 |
 
 *(The prior rows — the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
@@ -252,6 +253,18 @@ reviewed blind by Claude, with v3's synthetic content retired.
 
 What stands between the code and 1.0 is now **the human's**: **Gate O**, then the rest of **Gate M** (an outside item
 submission, the domain and the trademark check). No agent slice is left before them.
+
+**First: the diagnostic slice** (`dougkeefe/written-diagnostic-results-improve`; D208–D212, ADR 25), built on the human's request of 6 October 2026.
+Merge it once its four lanes are green. Then three things, in this order:
+- **The human, on the deployed site:** take one writing diagnostic on a real key. Say whether the written result reads as
+  useful, and whether the starting level matches your sense of your French.
+- **Whenever a smoke key is to hand (agent, about US$0.12):** `pnpm --filter @palier/web live-smoke --record`.
+  - It writes `packages/testing/src/recorded/openai/interpretDiagnostic.json`.
+  - Add its line to `RECORDED_RUNS`, `"interpretDiagnostic"` to the replay test's coverage set, and the method to the
+    factory's `CONFORMANCE_METHODS`.
+  - Copy the printed `diagnostic-interpretation` figures into `pricing.json` over the placeholder (D211).
+- **The French read** of the new copy goes to Gate O's read: `diagnostic.*`, `today.diagnostic*`, `today.plan*`,
+  `today.firstRunBody`, `start.placementDiagnosticHint` and `key.continueToDiagnostic`.
 
 **Next: merge the content run's pull request, then the human's read of v4, then Gate O (human).**
 
@@ -7075,9 +7088,169 @@ model review. They chose separate Claude instances.
 
 ---
 
+### D208 — the diagnostic could never show a figure, and now always gives a result
+**Date:** 6 October 2026 · **Status:** accepted (agent, on the human's request; ADR 25)
+
+The human took the written diagnostic and got three "N more are needed" rows. That was the design working as built:
+- The selector drew a run uniformly from a bank of B and C items only, about 13 and 17.
+- `MIN_EVIDENCE` is 30 per band, so §6.2's "sized to clear the minimum evidence threshold in one sitting" was never true.
+- The A row always read "0 answered", because v4 has no A items.
+
+The fix has three parts:
+- **The run is even.** `selectItems` takes a `bandQuota` (the profile's 15 B and 15 C). A band short of its quota is filled
+  from the rest.
+- **The result is the run's own counts**, not the trend: `latestCompleteRun` and `summariseDiagnostic`. A band the run
+  did not hold is absent, not "0 answered".
+- **One run still does not clear the trend**, and the result no longer waits on it. The trend's meters stay on Today, once
+  any band has an estimate.
+
+`DIAGNOSTIC_SIZE` left `lib/study.ts` for the profile's `diagnostic.size` (ADR 9). `diagnosticReadout` is deleted, along
+with its test, because nothing reads it now. The container test that drove it drives `diagnosticResult` and `studyFocus`
+instead.
+
+### D209 — the placement is derived and never stored; the interpretation is stored, on this device only
+**Date:** 6 October 2026 · **Status:** accepted (agent)
+
+**Derived.** The starting band, the focus and the score are recomputed from the attempt log on every read (ADR 16), so a
+paired device places the same way.
+
+**Stored.** The written interpretation cannot be derived again and cost money, so it is kept:
+- in a new port, `DiagnosticReportStore { put, get, clear }`, keyed by the run's session;
+- in Dexie as **schema v4**, `diagnosticReports`, and in memory;
+- never synced and never exported, and cleared by wipe and delete-everywhere.
+
+ADR 16's *revisit when* is not met, and does not need to be: this is not derived state. It is the oral report's pattern
+(D122). Another device shows the same score and asks for its own interpretation.
+
+**The rules are profile data.** A run counts once it has at least `size` **distinct** items. The starting band is the
+highest at or below the target answered at `secureAccuracy` (0.7). The plan then draws `startShare` (0.7) of its new
+items there, first. Without a placement, or with one at the target, the planner is unchanged, and no golden moved.
+
+**What biases the day.** `studyFocus` merges an oral report's fixes with the run's focus, oral first. `startSession` and
+Today's preview both read it, so the preview no longer differs from the session. Before this, the preview ignored the oral
+report's fixes.
+
+### D210 — the diagnostic is gated on the key, and the key screen leads back
+**Date:** 6 October 2026 · **Status:** accepted (human's decision, ADR 25)
+
+§8.1's "diagnostic before key, always" is overridden, and the PRD now cites ADR 25.
+- With no key, `/diagnostic` shows `NoKeyCard` (namespace `diagnostic`), whose link carries `?next=diagnostic`. The key
+  screen's `returnAfterKey` is an allow-list, so the query can never point the link elsewhere.
+- With a key, the launcher states the interpretation's estimate and the soft cap's notice before the first question.
+- The result asks for the interpretation **only at the run's own end**, joined while in flight
+  (`diagnosticInterpretationInFlight`). Opened from Today, or for a run synced from another device, or kept in the other
+  language, it is offered with its cost and never spent on opening. A run drawn short of `size` is not started: it says
+  so, since it could never place.
+- The new store joins the "Never leaves this device" list on `/privacy` and the sync settings, and the key offer names
+  the diagnostic among what a key turns on.
+- The onboarding wizard is unchanged in shape. On the diagnostic path, the diagnostic's own gate is step 5.
+- The readout's `KeyOffer` is gone, and **the "Only a full mock exam can give a band" line is deleted** in both
+  languages (`diagnostic.resultNote`).
+- The result names no band, and shows no question. The missed questions come back in the review queue, as before.
+
+### D211 — the interpretation's fixture is not recorded, and its price is a placeholder
+**Date:** 6 October 2026 · **Status:** open (agent); the recording is named in *Next, decided*
+
+This session had no `OPENAI_SMOKE_KEY`. Fixtures are recorded, never written by hand (D112). So:
+- The live smoke now makes the call: `DIAGNOSTIC_RUN`, a whole writing run with twelve misses. It also measures the
+  feature, and `--record` writes `interpretDiagnostic.json`.
+- The recorded loader, the replay switch and the recorder all know the method.
+- The coverage set, `RECORDED_RUNS` and the factory's `CONFORMANCE_METHODS` wait for the file.
+- `pricing.json`'s `diagnostic-interpretation` row (4,000 in, 900 out on `assess`) is a placeholder, and its note says so.
+- The adapter's wording, retry and refusals are unit-tested over canned responses, and the contract runs against both
+  providers.
+
+### D212 — the tests whose premise the human's decision changed, said here rather than edited quietly
+**Date:** 6 October 2026 · **Status:** accepted (agent); flagged in the pull request
+
+**Rewritten, because the behaviour they pinned is what the human asked to change:**
+- **Journey 1** asserted the "A-level / B-level / C-level items" meters and "more are needed". It is now onboarding, the
+  key at the gate, the diagnostic, the plain score, the placement, the interpretation, no question and no mock-exam
+  caveat, then Today's card and the plan's line.
+- **`key.spec.ts`'s "step 5 comes after the diagnostic, never before it (§8.1)"** asserted the old rule. It now asserts the
+  gate and the way back.
+- **`key-leak.spec.ts`** adds the key before the diagnostic. The interpretation is one more call on the key, so every
+  later `openAiAuthorizations` count is one higher: 3, 9, 17, 18. The leak guard stubs the interpretation by its prompt
+  (`completionKind`'s `diagnostic`).
+
+**Grown by one entry or one version:**
+- `AI_FEATURES` in `ai.test.ts`, `featureCosts` in `spend.test.ts` and `container-spend.test.ts`, and `pricing.test.ts`'s
+  feature table.
+- The live smoke's completion count and its recorded file list.
+- `db.verno` (3 → 4) in `migration.test.ts`, where "v2 → v3" is now "v2 → current" and "v3 → v4" is added, and in
+  `generated-item-store.test.ts`.
+- The JSON Schema snapshot of the profile.
+
+**Renamed only:** `onboarding.test.ts`'s parenthetical. The assertion is unchanged.
+
+### D213 — the saved result is the diagnostic page's own, not a route, to keep E2E shard 2 inside its budget
+**Date:** 6 October 2026 · **Status:** accepted (agent)
+
+The first CI run of #67 had one E2E shard 2/2 killed at its 300-second budget. The same shard passed on the other run of the
+same commit in 4.9 minutes. On `main` that shard takes 3.8 to 4.5 minutes (55 tests, 4.5m on 4 October).
+
+Both branches split the 109 tests identically, and shard 2 holds none of the specs this slice rewrote. Its growth came
+from the new `/diagnostic/result` route:
+- the warmup compiles one more route, serially;
+- `csp-production.spec.ts` polices two more pages, one per language;
+- the precache and sitemap checks carry one more entry.
+
+So the result opened from Today is now `/diagnostic?result=<skill>`. The launcher reads it with `useSearchParams` and shows
+`DiagnosticResult` in place of the skill choice. The route, its island, its `routes.json` line, its CSP entry and the
+`diagnostic.pageTitle` message are gone. The budget is unchanged, as implementation-plan.md 6.5 asks. Shard 2 still has
+about 30 seconds of headroom on `main`, which the next slice to add a page will want to know.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 6 October 2026 — `dougkeefe/written-diagnostic-results-improve` (the diagnostic that gives a result; D208–D212, ADR 25)
+
+Not *Next, decided*: the human took the written diagnostic and found the result "a waste of time". They decided:
+- the key is required first, and AI interprets the result;
+- the result says "Your plan starts at B";
+- the score is shown plainly without revealing the questions;
+- the mock-exam caveat goes.
+
+The slice:
+- **Engine:** an even run (`bandQuota`); `latestCompleteRun` and `summariseDiagnostic` (counts, focus, strengths,
+  starting band); the planner's `placement`.
+- **Domain:** the profile's `diagnostic` block; the interpretation's DTOs, strict schema and
+  `checkDiagnosticInterpretation`; `diagnostic-interpretation` in `AI_FEATURES`.
+- **App:** `diagnosticResult`, `requestDiagnosticInterpretation` and `studyFocus`; `DiagnosticReportStore`.
+  `startSession` reads `studyFocus`.
+- **Adapters:** `interpretDiagnostic` on `assess`; Dexie v4.
+- **Testing:** the fake, the contract and the memory store.
+- **Web:**
+  - the key gate and the way back;
+  - the result screen, and `/diagnostic?result=` for it again from Today (D213);
+  - Today's diagnostic half and the plan's line;
+  - copy in both languages.
+- **Records:** ADR 25, and the PRD's §6.2 and §8.1 notes.
+
+```
+pnpm verify (after the review fixes) → check-types, lint, boundaries (0 violations), test: 4291 passed, 8 todo; exit 0
+pnpm --filter @palier/web build       → exit 0
+playwright journeys, key, key-leak, content, csp-production (chromium + offline) → 35 passed (1.5m)
+```
+
+CI's fast lane then failed on `pnpm audit --prod --audit-level=high`. A new advisory, GHSA-68fv-2mgg-jv7q, hit
+`source-map-js` 1.2.1 under `next > postcss`, on `main` too. Every parent (`postcss`, `css-tree`, `magicast`) declares
+`^1.2.1`, so the lockfile alone moves to the patched 1.2.2: six lines and the integrity. That needs no override, unlike
+D155's pinned parents. `pnpm up -r` would also have re-resolved rolldown and postcss, so it was not used.
+
+A harsh `candid-review` of the slice then found eight issues, all fixed in the same branch:
+- the result page spent on every open;
+- the privacy list missed the new store;
+- the key offer's copy;
+- Today waited serially on `studyFocus`;
+- duplicate React keys;
+- a live region mounted with its content;
+- an interpretation stuck in its first language;
+- a short run that could never place.
+
+Screenshots of the gate, the launcher, the result and Today were taken on the hermetic lane with OpenAI stubbed. They are in
+the pull request. The interpretation was not run on a real key in this session (D211).
 
 ### 4 October 2026 — `dougkeefe/content-generation-run` (the full content run, authored by Claude; D203–D207, ADR 24)
 

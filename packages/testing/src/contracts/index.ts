@@ -18,6 +18,7 @@ export { telemetrySinkContract } from "./telemetry-sink.contract.js";
 export type { TelemetrySinkHarness } from "./telemetry-sink.contract.js";
 export { telemetryStoreContract } from "./telemetry-store.contract.js";
 export { writingStoreContract } from "./writing-store.contract.js";
+export { diagnosticReportStoreContract } from "./diagnostic-report-store.contract.js";
 export { generatedItemStoreContract } from "./generated-item-store.contract.js";
 export { oralStoreContract } from "./oral-store.contract.js";
 export { oralTransportContract, SCRIPT_END_MS } from "./oral-transport.contract.js";

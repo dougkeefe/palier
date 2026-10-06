@@ -133,6 +133,14 @@
     }
   },
   "leitnerIntervalDays": [1, 3, 7, 21],
+  "diagnostic": {
+    "size": 30,
+    "bandQuota": { "B": 15, "C": 15 },
+    "secureAccuracy": 0.7,
+    "startShare": 0.7,
+    "focusCount": 2,
+    "retakeDays": 28
+  },
   "itemStatistics": {
     "pCorrectMin": 0.15,
     "pCorrectMax": 0.95,

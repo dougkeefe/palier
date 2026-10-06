@@ -41,7 +41,18 @@ turn's `pauseMs`, which the screen measures; never the gap between turns**, whic
 (D127). **An oral report's fixes bias the plan** (D124, closing D35): `SelectionCriteria.boost` favours its sub-skills at
 `FOCUS_WEIGHT` (2), **multiplied** with `WEAKEST_WEIGHT` rather than joining the weakest set, so a weakest sub-skill stays
 ahead (D127), in practice mode only; `DayPlanInput.focusSubSkills` passes them to new items, never maintenance's rule.
-Absent or empty changes nothing, so the goldens did not move. **Engagement** (`engagement.ts`, progress.md D159):
+Absent or empty changes nothing, so the goldens did not move. **The diagnostic** (`diagnostic-summary.ts`, ADR 25):
+`selectItems` in diagnostic mode takes an optional `bandQuota`, each band's share drawn from that band alone and any
+shortfall filled from the rest, so a run is even whatever the bank's mix; `SelectionCriteria.bands` replaces the working
+set for practice. `latestCompleteRun` is the newest session of `mode: "diagnostic"` attempts at the skill with at least
+`size` **distinct** items, newest by its last answer, ties by session id in code-unit order; its attempts oldest first,
+ties by id. `summariseDiagnostic` gives **counts, never estimates**: the total and each band the run held (a band with no
+item is absent, not zero), the sub-skills weakest first, the focus (the weakest with a miss and at least
+`DIAGNOSTIC_SUB_SKILL_MIN` answers, at most `focusCount`), the strengths, and the **starting band**: the highest at or
+below the target answered at `secureAccuracy`, else the lowest the run held at or below it, else the target. It is a
+place for practice to start, never a band (ADR 7). `DayPlanInput.placement` splits new items: `round(new × startShare)`
+at the starting band first, the rest from the working set above it, only when the start is below the target. Absent,
+or at the target, the plan is unchanged, and the goldens did not move. **Engagement** (`engagement.ts`, progress.md D159):
 `localDay(at, timeZone)` is the device's calendar day, read by `Intl` part rather than a locale's separator; `streak` walks
 back from `today`, where today still to do breaks nothing, and a missed day is **frozen while fewer than the allowance are
 frozen in that day's own calendar month**. A frozen day keeps the streak but adds nothing to its length, and a freeze is kept

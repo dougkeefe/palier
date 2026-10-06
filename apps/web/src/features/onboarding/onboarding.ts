@@ -6,10 +6,11 @@ import type { DailyGoal, StudyProfile } from "../../lib/study";
  * Onboarding's shape (product-requirements.md §8.1): direction, target, placement,
  * daily goal, and step 5, the optional API key.
  *
- * "Diagnostic before key, always" (§8.1), so step 5's place depends on the placement
- * (progress.md D100). On the **diagnostic** path the wizard ends at the goal, and step 5 is
- * offered on the diagnostic's readout. On the **skip** path there is no diagnostic, and
- * step 5 is the wizard's own last step. Either way the count reads "of 5".
+ * Step 5's place depends on the placement (progress.md D100). On the **diagnostic** path the
+ * wizard ends at the goal and lands on the diagnostic, which runs on the key (ADR 25,
+ * superseding §8.1's "diagnostic before key"): with none held, the diagnostic's own gate is
+ * step 5, and the key screen leads back to it. On the **skip** path there is no diagnostic,
+ * and step 5 is the wizard's own last step. Either way the count reads "of 5".
  */
 export const ONBOARDING_STEPS = ["direction", "target", "placement", "goal", "key"] as const;
 export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];

@@ -11,7 +11,9 @@ import type {
   CompleteSessionResult,
   AnswerExamItemRequest,
   CheckpointExamRequest,
-  DiagnosticReadoutRequest,
+  DiagnosticReportStore,
+  DiagnosticResult,
+  DiagnosticResultRequest,
   ExamReport,
   ExamReportRequest,
   ExamRun,
@@ -43,6 +45,8 @@ import type {
   ReviewQueueResult,
   RunDiagnosticRequest,
   RunDiagnosticResult,
+  StudyFocus,
+  StudyFocusRequest,
   ScheduleStore,
   SessionStore,
   SettingsStore,
@@ -105,7 +109,9 @@ import {
   checkpointExam,
   completeSession,
   deleteEverywhere,
-  diagnosticReadout,
+  diagnosticResult,
+  requestDiagnosticInterpretation,
+  studyFocus,
   examForms,
   examInProgress,
   examReport,
@@ -181,6 +187,7 @@ import oralFillerLists from "@palier/content/oral/fillers.json";
 import writingPromptLibrary from "@palier/content/writing/prompts.json";
 import type {
   AiFeature,
+  DiagnosticInterpretation,
   ExamForm,
   ExamProfile,
   Lang,
@@ -208,6 +215,7 @@ import {
   memorySyncStateStore,
   memoryTelemetryStore,
   memoryWritingStore,
+  memoryDiagnosticReportStore,
   memoryGeneratedItemStore,
   memoryOralStore,
   seededRandom,
@@ -287,6 +295,7 @@ const ORAL_FILLERS: OralFillers = parseOralFillersOrThrow(oralFillerLists);
 const reportsInFlight = inFlight<SessionId, SessionId, OralAssessment>();
 const feedbackInFlight = inFlight<string, WritingFeedbackRequest, WritingSubmission>();
 const generationInFlight = inFlight<"set", GeneratePracticeSetRequest, GeneratePracticeSetResult>();
+const interpretationsInFlight = inFlight<string, DiagnosticInterpretationAsk, DiagnosticInterpretation>();
 const wipes = wipeCount();
 
 /** A wipe forgets every request still out, and drops what each would write when it settles (D143). */
@@ -295,7 +304,11 @@ const forgetInFlight = (): void => {
   reportsInFlight.clear();
   feedbackInFlight.clear();
   generationInFlight.clear();
+  interpretationsInFlight.clear();
 };
+
+/** What the diagnostic's result screen asks for (ADR 25): the latest run's interpretation, at a skill. */
+export type DiagnosticInterpretationAsk = DiagnosticResultRequest & { readonly feedbackLang: Lang };
 
 /**
  * How the browser makes an `AiProvider`: from the key, inside `KeyVault.withApiKey`, once
@@ -363,7 +376,20 @@ export type UseCases = {
   readonly answerItem: (request: AnswerItemRequest) => Promise<AnswerItemResult>;
   readonly completeSession: (request: CompleteSessionRequest) => Promise<CompleteSessionResult>;
   readonly runDiagnostic: (request: RunDiagnosticRequest) => Promise<RunDiagnosticResult>;
-  readonly diagnosticReadout: (request: DiagnosticReadoutRequest) => Promise<SkillTrend>;
+  /**
+   * The diagnostic's result (ADR 25): the latest complete run's score, by level and sub-skill, and where it starts
+   * the plan, derived from the attempts every time (ADR 16), with this device's stored interpretation, or `null`
+   * before any run is finished.
+   */
+  readonly diagnosticResult: (request: DiagnosticResultRequest) => Promise<DiagnosticResult | null>;
+  /**
+   * The latest run's written interpretation on the user's key, kept on this device; asked again, the kept one, free.
+   * One at a time per skill: asking while one is out joins it.
+   */
+  readonly requestDiagnosticInterpretation: (request: DiagnosticInterpretationAsk) => Promise<DiagnosticInterpretation>;
+  readonly diagnosticInterpretationInFlight: (request: DiagnosticResultRequest) => Promise<DiagnosticInterpretation> | null;
+  /** What biases the day's plan: the diagnostic's placement and focus, and an oral report's fixes (ADR 25, D124). */
+  readonly studyFocus: (request: StudyFocusRequest) => Promise<StudyFocus>;
   /** The readiness card's practice trend (D64). */
   readonly practiceTrend: (request: PracticeTrendRequest) => Promise<SkillTrend>;
   /** What the trend rests on, for the readiness card's disclosure (PRD §13.0, D94). */
@@ -541,6 +567,8 @@ export type Ports = {
    * delete-everywhere clear it.
    */
   readonly oral: OralStore;
+  /** The diagnostic's written interpretations, device-local: never synced, never exported (ADR 25). */
+  readonly diagnosticReports: DiagnosticReportStore;
   /**
    * Which spoken sessions a page on this device is running (D144): Web Locks in both graphs, since
    * a lock is the browser's own and needs no network. The practice controller holds its session's.
@@ -593,6 +621,7 @@ function buildUseCases(ports: Ports): UseCases {
         schedule: ports.schedule,
         attempts: ports.attempts,
         oral: ports.oral,
+        rules: PROFILE.diagnostic,
       }),
     answerItem: (request) =>
       answerItem(request, {
@@ -614,10 +643,37 @@ function buildUseCases(ports: Ports): UseCases {
         items: ports.items,
         attempts: ports.attempts,
       }),
-    diagnosticReadout: (request) =>
-      diagnosticReadout(request, {
+    diagnosticResult: (request) =>
+      diagnosticResult(request, {
+        clock: ports.clock,
         items: ports.items,
         attempts: ports.attempts,
+        reports: ports.diagnosticReports,
+        rules: PROFILE.diagnostic,
+      }),
+    requestDiagnosticInterpretation: (request) =>
+      interpretationsInFlight.join(request.skill, request, () =>
+        requestDiagnosticInterpretation(
+          { ...request, lang: "fr" },
+          {
+            vault: ports.vault,
+            aiProvider: ports.aiProvider,
+            ledger: ports.costLedger,
+            clock: ports.clock,
+            items: ports.items,
+            attempts: ports.attempts,
+            reports: writesUntilWiped(ports.diagnosticReports, "put", wipes, wipes.now()),
+            rules: PROFILE.diagnostic,
+          },
+        ),
+      ),
+    diagnosticInterpretationInFlight: (request) => interpretationsInFlight.get(request.skill)?.result ?? null,
+    studyFocus: (request) =>
+      studyFocus(request, {
+        items: ports.items,
+        attempts: ports.attempts,
+        oral: ports.oral,
+        rules: PROFILE.diagnostic,
       }),
     practiceTrend: (request) =>
       practiceTrend(request, {
@@ -698,6 +754,7 @@ function buildUseCases(ports: Ports): UseCases {
         writing: ports.writing,
         generated: ports.generated,
         oral: ports.oral,
+        diagnosticReports: ports.diagnosticReports,
       });
     },
     syncNow: (request) => syncNow(request, syncDeps(ports)),
@@ -718,6 +775,7 @@ function buildUseCases(ports: Ports): UseCases {
         writing: beforeClear(ports.writing, forgetInFlight),
         generated: beforeClear(ports.generated, forgetInFlight),
         oral: beforeClear(ports.oral, forgetInFlight),
+        diagnosticReports: beforeClear(ports.diagnosticReports, forgetInFlight),
       }),
     examForms: () => examForms({ items: ports.items }),
     examInProgress: () => examInProgress({ items: ports.items, examRuns: ports.examRuns }),
@@ -937,6 +995,7 @@ function productionPorts(): Ports {
     writing: stores.writing,
     generated: stores.generated,
     oral: stores.oral,
+    diagnosticReports: stores.diagnosticReports,
     oralLiveness: webLocksLiveness(globalThis.navigator?.locks),
   };
 }
@@ -978,6 +1037,7 @@ function hermeticPorts(): Ports {
     writing: memoryWritingStore(),
     generated: memoryGeneratedItemStore(),
     oral: memoryOralStore(),
+    diagnosticReports: memoryDiagnosticReportStore(),
     oralLiveness: webLocksLiveness(globalThis.navigator?.locks),
   };
 }

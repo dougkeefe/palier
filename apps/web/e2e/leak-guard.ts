@@ -286,13 +286,44 @@ export const oralReportAnswer = (body: string): OpenAiAnswer => {
   );
 };
 
-/** Which completion a request is: a generation draft, a review, the examiner, an oral report, or (otherwise) writing feedback. */
-export const completionKind = (body: string): "draft" | "review" | "examiner" | "oral-report" | "feedback" => {
+/** The headline the stubbed diagnostic interpretation leads with (ADR 25). */
+export const INTERPRETATION_HEADLINE = "You are steady at this level, and the next one is within reach.";
+
+/**
+ * A diagnostic run's interpretation (ADR 25), on a sub-skill of the run's own skill, as the prompt
+ * names it, and quoting no question.
+ */
+export const diagnosticAnswer = (body: string): OpenAiAnswer => {
+  const reading = promptOf(body).includes("reading comprehension diagnostic");
+  return completion(
+    {
+      headline: INTERPRETATION_HEADLINE,
+      summary: "Your misses share one pattern, and it is a learnable one.",
+      strengths: ["Recognising the register of a workplace message"],
+      priorities: [
+        {
+          subSkill: reading ? "main-idea" : "agreement",
+          what: "Practise this a little every day.",
+          why: "Most of your misses turned on it.",
+        },
+      ],
+      planNote: "Your plan starts where you are secure and adds this practice.",
+    },
+    3_900,
+    620,
+  );
+};
+
+/** Which completion a request is: a generation draft, a review, the examiner, an oral report, a diagnostic, or (otherwise) writing feedback. */
+export const completionKind = (
+  body: string,
+): "draft" | "review" | "examiner" | "oral-report" | "diagnostic" | "feedback" => {
   const prompt = promptOf(body);
   if (/Produce \d+ item\(s\)/.test(prompt)) return "draft";
   if (prompt.includes("adversarial reviewer")) return "review";
   if (prompt.includes("You are the examiner")) return "examiner";
   if (prompt.includes("assessing a rehearsal")) return "oral-report";
+  if (prompt.includes("short diagnostic")) return "diagnostic";
   return "feedback";
 };
 
@@ -303,6 +334,7 @@ export const defaultCompletion = (body: string): OpenAiAnswer => {
   if (kind === "review") return reviewAnswer(body);
   if (kind === "examiner") return examinerAnswer();
   if (kind === "oral-report") return oralReportAnswer(body);
+  if (kind === "diagnostic") return diagnosticAnswer(body);
   return feedbackAnswer();
 };
 

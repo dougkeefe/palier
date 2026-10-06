@@ -152,6 +152,18 @@ const ORAL_REPORT = {
 /** The oral report's prompt, told from writing feedback's, which shares its model. */
 const isOralReport = (body: string): boolean => body.includes("assessing a rehearsal");
 
+/** A diagnostic run's interpretation (ADR 25), on the same model again. */
+const INTERPRETATION = {
+  headline: "You are solid at B; C is within reach.",
+  summary: "Your misses share one pattern: agreement after a preceding object.",
+  strengths: ["Prepositions"],
+  priorities: [{ subSkill: "agreement", what: "Practise participle agreement.", why: "Both misses turned on it." }],
+  planNote: "Your plan starts at B and adds agreement practice.",
+};
+
+/** The diagnostic's prompt, told from the other two on the assess model. */
+const isDiagnostic = (body: string): boolean => body.includes("short diagnostic");
+
 /** Routes each call to the right envelope by the model in the request body, or to the model list. */
 const cannedFetch: FetchLike = (url, init) => {
   if (url.endsWith("/models")) return Promise.resolve(modelsResponse());
@@ -161,7 +173,9 @@ const cannedFetch: FetchLike = (url, init) => {
   if (model === MODELS.passage) return Promise.resolve(chatResponse(PASSAGE_ENVELOPE));
   if (model === MODELS.draft) return Promise.resolve(chatResponse(ITEM_ENVELOPE));
   if (model === MODELS.assess) {
-    return Promise.resolve(chatResponse(isOralReport(textOf(init.body)) ? ORAL_REPORT : FEEDBACK));
+    const body = textOf(init.body);
+    if (isDiagnostic(body)) return Promise.resolve(chatResponse(INTERPRETATION));
+    return Promise.resolve(chatResponse(isOralReport(body) ? ORAL_REPORT : FEEDBACK));
   }
   if (model === MODELS.scenario) return Promise.resolve(chatResponse(SCENARIO_PLAN));
   if (model === MODELS.examiner) return Promise.resolve(chatResponse(EXAMINER_TURN));
@@ -186,13 +200,14 @@ describe("openAiProvider", () => {
       speak: true,
       examinerTurn: true,
       assessOral: true,
+      interpretDiagnostic: true,
     });
   });
 
-  it("reports no writing feedback and no oral report when no assess model is configured, as the factory's is not", () => {
+  it("reports no writing feedback, no oral report and no diagnostic interpretation when no assess model is configured, as the factory's is not", () => {
     const { assess: _assess, ...factoryModels } = MODELS;
     const caps = makeProvider({ models: factoryModels }).capabilities();
-    expect([caps.assessWriting, caps.assessOral]).toEqual([false, false]);
+    expect([caps.assessWriting, caps.assessOral, caps.interpretDiagnostic]).toEqual([false, false, false]);
   });
 
   it("reports no scenarios when no scenario model is configured, as the browser's is not", () => {
@@ -1025,6 +1040,132 @@ describe("openAiProvider — assessOral (D122)", () => {
     await provider.reviewItem(aReview);
     await expect(provider.assessOral(aRequest)).rejects.toThrow(/models\.assess/u);
     expect(spy).toHaveBeenCalledTimes(1);
+    expect(provider.lastUsage()).toBeNull();
+  });
+});
+
+describe("openAiProvider — interpretDiagnostic (ADR 25)", () => {
+  const STEM = "Les dossiers que nous avons ___ hier sont sur votre bureau.";
+  const aRequest = {
+    skill: "writing",
+    lang: "fr",
+    feedbackLang: "en",
+    targetBand: "C",
+    startBand: "B",
+    total: { correct: 18, attempted: 30 },
+    bands: [
+      { band: "B", correct: 11, attempted: 15 },
+      { band: "C", correct: 7, attempted: 15 },
+    ],
+    subSkills: [
+      { subSkill: "agreement", correct: 1, attempted: 4 },
+      { subSkill: "pronouns", correct: 3, attempted: 3 },
+    ],
+    focus: ["agreement"],
+    missed: [
+      {
+        subSkill: "agreement",
+        band: "C",
+        type: "cloze",
+        stem: STEM,
+        options: [
+          { id: "a", text: "reçu" },
+          { id: "b", text: "reçus" },
+        ],
+        chosen: "a",
+        key: "b",
+        explanation: "The participle agrees with the preceding direct object.",
+      },
+    ],
+  } as const;
+
+  const answers = (...bodies: unknown[]): { fetchImpl: FetchLike; sent: () => string[] } => {
+    const sent: string[] = [];
+    return {
+      sent: () => sent,
+      fetchImpl: (_url, init) => {
+        sent.push(textOf(init.body));
+        const body = bodies.length > 1 ? bodies.shift() : bodies[0];
+        return Promise.resolve(chatResponse(body));
+      },
+    };
+  };
+
+  const userOf = (sent: string | undefined): string =>
+    (JSON.parse(sent ?? "{}") as { messages: { content: string }[] }).messages[1]?.content ?? "";
+
+  it("returns the interpretation the model wrote", async () => {
+    expect(await makeProvider().interpretDiagnostic(aRequest)).toEqual(INTERPRETATION);
+  });
+
+  it("sends the score by band and sub-skill, the decided placement, the misses as data and both languages", async () => {
+    const { fetchImpl, sent } = answers(INTERPRETATION);
+    await makeProvider({ fetchImpl }).interpretDiagnostic(aRequest);
+    const body = JSON.parse(sent()[0] ?? "{}") as { model: string };
+    const user = userOf(sent()[0]);
+
+    expect(body.model).toBe("m-assess");
+    expect(user).toContain("30-item written expression diagnostic in French");
+    expect(user).toContain("aiming at level C. They answered 18 of 30 correctly");
+    expect(user).toContain("level B items, 11 of 15; level C items, 7 of 15.");
+    expect(user).toContain("agreement 1 of 4; pronouns 3 of 3");
+    expect(user).toContain("starts at level B and works up to C, with extra practice on agreement.");
+    expect(user).toContain("explain it, never change it");
+    expect(user).toContain(JSON.stringify(aRequest.missed[0]));
+    expect(user.split('"""')).toHaveLength(3);
+    expect(user).toContain("Never quote a question");
+    expect(user).toContain("Write every value in English");
+    expect(user).toContain('"verb-tense-and-mood"');
+    expect(user).not.toContain('"main-idea"');
+  });
+
+  it("names reading's sub-skills for a reading run, and says nothing of working up from the target", async () => {
+    const { fetchImpl, sent } = answers({ ...INTERPRETATION, priorities: [{ subSkill: "inference", what: "w", why: "y" }] });
+    await makeProvider({ fetchImpl }).interpretDiagnostic({
+      ...aRequest,
+      skill: "reading",
+      startBand: "C",
+      subSkills: [{ subSkill: "inference", correct: 2, attempted: 3 }],
+      focus: [],
+      missed: [],
+    });
+    const user = userOf(sent()[0]);
+
+    expect(user).toContain("reading comprehension diagnostic");
+    expect(user).toContain("starts at level C.");
+    expect(user).toContain("They missed no item.");
+    expect(user).not.toContain('"""');
+    expect(user).toContain('"main-idea"');
+  });
+
+  it("retries a reply that quotes a missed question, then accepts one that does not", async () => {
+    const quoting = { ...INTERPRETATION, summary: `You missed "${STEM}".` };
+    const { fetchImpl, sent } = answers(quoting, INTERPRETATION);
+    expect(await makeProvider({ fetchImpl }).interpretDiagnostic(aRequest)).toEqual(INTERPRETATION);
+    expect(sent()).toHaveLength(2);
+    expect(sent()[1]).toContain("quotes a missed question");
+  });
+
+  it("refuses a priority on another skill's sub-skill, twice, as InvalidResponseError", async () => {
+    const wrong = { ...INTERPRETATION, priorities: [{ subSkill: "main-idea", what: "w", why: "y" }] };
+    await expect(makeProvider({ fetchImpl: answers(wrong).fetchImpl }).interpretDiagnostic(aRequest)).rejects.toThrow(
+      InvalidResponseError,
+    );
+  });
+
+  it("refuses a reply missing its priorities, twice, as InvalidResponseError", async () => {
+    const empty = { ...INTERPRETATION, priorities: [] };
+    await expect(makeProvider({ fetchImpl: answers(empty).fetchImpl }).interpretDiagnostic(aRequest)).rejects.toThrow(
+      InvalidResponseError,
+    );
+  });
+
+  it("refuses to run with no assess model, before any request and with no usage", async () => {
+    const { assess: _assess, ...factoryModels } = MODELS;
+    const spy = vi.fn(cannedFetch);
+    const provider = makeProvider({ models: factoryModels, fetchImpl: spy });
+    await expect(provider.interpretDiagnostic(aRequest)).rejects.toThrow(/models\.assess/u);
+    expect(spy).not.toHaveBeenCalled();
     expect(provider.lastUsage()).toBeNull();
   });
 });

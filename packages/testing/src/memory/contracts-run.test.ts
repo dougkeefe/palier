@@ -13,6 +13,7 @@ import {
   telemetrySinkContract,
   telemetryStoreContract,
   writingStoreContract,
+  diagnosticReportStoreContract,
   generatedItemStoreContract,
   oralStoreContract,
   oralTransportContract,
@@ -34,6 +35,7 @@ import {
   memoryTelemetryCollector,
   memoryTelemetryStore,
   memoryWritingStore,
+  memoryDiagnosticReportStore,
   memoryGeneratedItemStore,
   memoryOralStore,
   memoryOralTransport,
@@ -61,6 +63,7 @@ telemetryStoreContract("memory", () => Promise.resolve(memoryTelemetryStore()));
 telemetrySinkContract("memory", () => Promise.resolve(memoryTelemetryCollector()));
 costLedgerContract("memory", () => Promise.resolve(memoryCostLedger()));
 writingStoreContract("memory", () => Promise.resolve(memoryWritingStore()));
+diagnosticReportStoreContract("memory", () => Promise.resolve(memoryDiagnosticReportStore()));
 generatedItemStoreContract("memory", () => Promise.resolve(memoryGeneratedItemStore()));
 oralStoreContract("memory", () => Promise.resolve(memoryOralStore()));
 realtimeSecretSourceContract("memory", () =>

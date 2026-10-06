@@ -33,6 +33,7 @@ export {
   memoryTelemetryCollector,
   memoryTelemetryStore,
   memoryWritingStore,
+  memoryDiagnosticReportStore,
   memoryGeneratedItemStore,
   memoryOralStore,
   memoryRealtimeSecretSource,

@@ -18,7 +18,12 @@ and `aiProviderContract` holds every provider's assessment schema-valid with off
 no answer, billing nothing; the contract holds every provider's report to `checkOralAssessment`. `oralStoreContract`
 round-trips a report, and `costLedgerContract` an entry's `sessionId` (D125). `assessOral` is recorded (D128): the live
 smoke's one report in `assessOral.json`, and one session scored five times in `assessOral-stability.json`, which the
-factory's eval also reads for the scorer's stability (D126). Both are in `RECORDED_RUNS` and the replay gate. The
+factory's eval also reads for the scorer's stability (D126). Both are in `RECORDED_RUNS` and the replay gate. `fakeAiProvider.interpretDiagnostic` (ADR 25) makes the run's focus its priorities, or its weakest tally, or a
+sub-skill of its own skill, and the contract holds every provider's to `checkDiagnosticInterpretation`;
+`memoryDiagnosticReportStore` and `diagnosticReportStoreContract` follow the new port, and the store is in
+`./in-memory`. `RecordedCompletion.method` takes `interpretDiagnostic`, but **no fixture is recorded yet**: the next
+funded `live-smoke --record` writes `interpretDiagnostic.json`, which then needs its line in `RECORDED_RUNS` and the
+replay test's coverage set. The
 in-memory `KeyVault` keeps D98's two modes apart as the Dexie vault does. `memoryGeneratedItemStore` and
 `generatedItemStoreContract` follow the `GeneratedItemStore` port (D110). A scripted completion's `content` may be a
 function of the prompt, and `generationCompletions`, `draftsFor` and `verdictFor` use it: a draft of exactly what was asked

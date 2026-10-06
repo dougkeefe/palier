@@ -8,6 +8,7 @@ import {
   checkMessage,
   checkTone,
   keyScreen,
+  returnAfterKey,
   saveFailure,
 } from "./key-view";
 
@@ -105,5 +106,18 @@ describe("saveFailure", () => {
     expect(saveFailure(named("EmptyApiKeyError"))).toBe("blank");
     expect(saveFailure(new Error("quota"))).toBe("saveFailed");
     expect(saveFailure(undefined)).toBe("saveFailed");
+  });
+});
+
+describe("returnAfterKey (ADR 25)", () => {
+  it("offers the way back to the diagnostic, whose gate sent the user here", () => {
+    expect(returnAfterKey("diagnostic")).toBe("/diagnostic");
+  });
+
+  it("offers nothing for no next, or for any other, so the query can never point the link elsewhere", () => {
+    expect(returnAfterKey(null)).toBeNull();
+    expect(returnAfterKey("")).toBeNull();
+    expect(returnAfterKey("https://evil.example")).toBeNull();
+    expect(returnAfterKey("/diagnostic")).toBeNull();
   });
 });

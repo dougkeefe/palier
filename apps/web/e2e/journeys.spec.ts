@@ -1,6 +1,15 @@
 import { expect, test } from "@playwright/test";
 
-import { axeClean, drillThroughByKeyboard, expectStatementInMain, onboard, setSize } from "./helpers";
+import {
+  addKeyAtDiagnosticGate,
+  axeClean,
+  drillThroughByKeyboard,
+  expectStatementInMain,
+  onboard,
+  runDiagnosticByKeyboard,
+  setSize,
+} from "./helpers";
+import { INTERPRETATION_HEADLINE, SENTINEL, stubOpenAi } from "./leak-guard";
 
 /**
  * The E2E journeys Slice 1 owns (implementation-plan.md §6.2 tier 6), against the
@@ -9,32 +18,48 @@ import { axeClean, drillThroughByKeyboard, expectStatementInMain, onboard, setSi
  * result — not only on first render (tier 7, R9).
  */
 
-test("journey 1: onboarding through the diagnostic to accuracy per band, with its interval", async ({ page }) => {
+test("journey 1: onboarding, the key the diagnostic needs, the diagnostic, its result, and a plan built from it (ADR 25)", async ({
+  page,
+}) => {
+  await stubOpenAi(page.context());
   await onboard(page, "diagnostic");
   await expect(page).toHaveURL(/\/en\/diagnostic$/);
+  // The diagnostic runs on the key: with none, its gate says what the key buys and where to add it.
+  await axeClean(page);
+  await addKeyAtDiagnosticGate(page, SENTINEL);
+  // Starting is the consent to pay for the written result, so its cost is said before the first question.
+  await expect(page.getByText(/The written result at the end costs about/)).toBeVisible();
 
-  await page.getByRole("radio", { name: "Reading" }).check();
-  await page.getByRole("button", { name: "Start the Reading diagnostic" }).click();
+  const total = await runDiagnosticByKeyboard(page, "Reading");
 
-  const total = await setSize(page);
-  expect(total).toBeGreaterThan(0);
-  for (let i = 1; i <= total; i++) {
-    await expect(page.locator(".app-session__count")).toHaveText(`Item ${i} of ${total}`);
-    // Keyboard only: 1 chooses the first option, Enter confirms (§8.3).
-    await page.keyboard.press("1");
-    await page.keyboard.press("Enter");
-  }
-
-  // A diagnostic gives no feedback per item; the readout comes at the end.
-  await expect(page.getByRole("heading", { name: "Your Reading diagnostic" })).toBeVisible();
-  for (const band of ["A", "B", "C"]) {
-    await expect(page.getByText(`${band}-level items`)).toBeVisible();
-  }
-  // R10: a figure only with enough evidence; otherwise it says how much more is needed.
-  await expect(page.getByText(/more (is|are) needed|% correct, likely between/).first()).toBeVisible();
-  // Beside the readout, the statement that it is not official (R5, D145).
+  // The score, plainly, right and wrong, and by level: never "N more are needed".
+  await expect(page.getByText(new RegExp(`^\\d+ of ${String(total)} correct$`))).toBeVisible();
+  await expect(page.getByText(/^(None|\d+) wrong$/)).toBeVisible();
+  await expect(page.getByText(/^Level B questions: \d+ of \d+$/)).toBeVisible();
+  await expect(page.getByText(/more (is|are) needed/)).toHaveCount(0);
+  // Where the plan starts, a level for practice and never a band, with no mock-exam caveat.
+  await expect(page.getByText(/^Your plan starts at level [ABC]/)).toBeVisible();
+  await expect(page.getByText(/Only a full mock exam can give a band/)).toHaveCount(0);
+  // The written result, on the key, and no question shown.
+  await expect(page.getByText(INTERPRETATION_HEADLINE)).toBeVisible();
+  await expect(page.getByText(/Item d.entraînement/)).toHaveCount(0);
+  // Beside the result, the statement that it is not official (R5, D145).
   await expectStatementInMain(page);
   await axeClean(page);
+
+  // Today restates it, and the plan says where the diagnostic started it.
+  await page.getByRole("link", { name: "Go to today’s plan" }).click();
+  await expect(page.getByRole("heading", { name: "Your diagnostic" })).toBeVisible();
+  await expect(page.getByText(new RegExp(`^\\d+ of ${String(total)} correct, on `))).toBeVisible();
+  await expect(page.getByText(INTERPRETATION_HEADLINE)).toBeVisible();
+  await expect(page.getByText(/^Built from your diagnostic/)).toBeVisible();
+  await axeClean(page);
+
+  // And the whole result again, from the card, kept: no second call.
+  await page.getByRole("link", { name: "See your full result" }).click();
+  await expect(page).toHaveURL(/\/en\/diagnostic\?result=reading$/);
+  await expect(page.getByRole("heading", { name: "Your Reading diagnostic" })).toBeVisible();
+  await expect(page.getByText(INTERPRETATION_HEADLINE)).toBeVisible();
 });
 
 test("journey 2: a daily session end to end, feedback panel included, then back to today", async ({ page }) => {

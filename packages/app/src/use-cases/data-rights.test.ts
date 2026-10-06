@@ -25,6 +25,7 @@ import { wipeData } from "./wipe-data.js";
 import { examRunStore } from "./__tests__/sync-fakes.js";
 import { aCostEntry, costLedger } from "./__tests__/spend-fakes.js";
 import { aGeneratedSet, generatedStore } from "./__tests__/generated-fakes.js";
+import { aDiagnosticReport, diagnosticReportStore } from "./__tests__/diagnostic-fakes.js";
 import { anOralSession, oralStore } from "./__tests__/oral-fakes.js";
 import { aSubmission, writingStore } from "./__tests__/writing-fakes.js";
 import { telemetryStore } from "./__tests__/telemetry-fakes.js";
@@ -194,6 +195,7 @@ const aDevice = async () => {
         turns: [{ speaker: "candidate", text: "ORAL-TRANSCRIPT-MARKER", phase: 0, startMs: 0, endMs: 900 }],
       }),
     ]),
+    diagnosticReports: diagnosticReportStore([aDiagnosticReport()]),
   };
   await device.attempts.append(anAttempt("b"));
   await device.attempts.append(anAttempt("a", { skill: "writing" }));
@@ -284,6 +286,13 @@ describe("exportData", () => {
     expect(text).not.toContain(anOralSession().id);
   });
 
+  it("never carries a diagnostic's interpretation, which stays on this device (ADR 25)", async () => {
+    const device = await aDevice();
+    const text = textOf(await exportData(device));
+
+    expect(text).not.toContain(aDiagnosticReport().interpretation.headline);
+  });
+
   it("never carries the API key or the device secret", async () => {
     const device = await aDevice();
     const text = textOf(await exportData(device));
@@ -345,6 +354,13 @@ describe("wipeData", () => {
 
     expect(await device.oral.all()).toEqual([]);
     expect(await device.oral.audioIndex()).toEqual([]);
+  });
+
+  it("empties the diagnostic's interpretations, which only this device ever held (ADR 25)", async () => {
+    const device = await aDevice();
+    await wipeData(device);
+
+    expect(device.diagnosticReports.all()).toEqual([]);
   });
 
   it("keeps the device secret, which is the device's sync identity, not the user's progress", async () => {

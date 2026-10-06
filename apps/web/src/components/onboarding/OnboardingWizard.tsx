@@ -28,9 +28,9 @@ import { KeyOffer } from "../key/KeyOffer";
  * the platform. Each step's heading takes focus as it appears, so a screen-reader user
  * hears where they are (§11: focus is never lost as a flow advances).
  *
- * Step 5, the optional key, is the last step only on the skip path; on the diagnostic path
- * it is offered on the diagnostic's readout instead (§8.1: "diagnostic before key, always";
- * progress.md D100). "Add a key now" saves the profile before it leaves for the key screen.
+ * Step 5, the optional key, is the last step only on the skip path; on the diagnostic path the
+ * diagnostic's own gate asks for it, since the diagnostic runs on the key (ADR 25, progress.md
+ * D100). "Add a key now" saves the profile before it leaves for the key screen.
  */
 export function OnboardingWizard() {
   const t = useTranslations("start");

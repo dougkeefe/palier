@@ -39,6 +39,7 @@ export const fakeAiProvider = (): AiProvider => {
       speak: true,
       examinerTurn: true,
       assessOral: true,
+      interpretDiagnostic: true,
     }),
 
     generatePassage: (req) => {
@@ -188,6 +189,21 @@ export const fakeAiProvider = (): AiProvider => {
         ],
       };
       return Promise.resolve(assessment);
+    },
+
+    // A headline, the run's focus as its priorities (or its weakest sub-skill when it has no
+    // focus), and the placement restated: on the run's own sub-skills, quoting nothing (ADR 25).
+    interpretDiagnostic: (req) => {
+      bill(30);
+      const weakest = req.focus.length > 0 ? req.focus : req.subSkills.slice(0, 1).map((tally) => tally.subSkill);
+      const subSkills = weakest.length > 0 ? weakest : [req.skill === "reading" ? "main-idea" : "agreement"] as const;
+      return Promise.resolve({
+        headline: `${String(req.total.correct)} of ${String(req.total.attempted)} correct.`,
+        summary: "What the misses have in common.",
+        strengths: [],
+        priorities: subSkills.slice(0, 3).map((subSkill) => ({ subSkill, what: "what to practise", why: "why the run says so" })),
+        planNote: `The plan starts at ${req.startBand}.`,
+      });
     },
 
     // Bills nothing, and so leaves no earlier call's usage behind (D102).

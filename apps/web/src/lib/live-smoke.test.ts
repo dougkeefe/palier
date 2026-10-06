@@ -33,6 +33,15 @@ const FEEDBACK = {
 
 const DESCRIPTORS = { A: "Descriptor A.", B: "Descriptor B.", C: "Descriptor C." };
 
+/** An interpretation of the smoke's fixed diagnostic, on its own sub-skills and quoting no question (ADR 25). */
+const INTERPRETATION = {
+  headline: "h",
+  summary: "s",
+  strengths: [],
+  priorities: [{ subSkill: "agreement", what: "w", why: "y" }],
+  planNote: "p",
+};
+
 /** A report whose every excerpt is in the first answer of both fixed sessions, the smoke's and the stability's (D122, D127). */
 const ORAL_REPORT = {
   criteria: { comprehension: criterion, fluency: criterion, grammar: criterion, vocabulary: criterion, task: criterion },
@@ -105,6 +114,8 @@ const network = ({
           : verdictFor(prompt)
         : prompt.includes("You are the examiner")
           ? { text: "Parlez-moi de votre poste.", difficulty: null }
+          : prompt.includes("short diagnostic")
+            ? INTERPRETATION
           : prompt.includes("assessing a rehearsal")
             ? (reports += 1) <= refusedReports * 2
               ? { ...ORAL_REPORT, fixes: [] }
@@ -133,10 +144,12 @@ describe("runLiveSmoke", () => {
       transcribe: { calls: 0, inputTokens: 0, outputTokens: 0 },
       speak: { calls: 0, inputTokens: 0, outputTokens: 0 },
       assessOral: { calls: 1, inputTokens: 300, outputTokens: 500 },
+      interpretDiagnostic: { calls: 1, inputTokens: 300, outputTokens: 500 },
     });
     expect(result.byFeature["item-generation"].calls).toBe(3 + LIVE_SMOKE_REVIEWS);
     expect(result.byFeature["writing-feedback"].calls).toBe(2);
     expect(result.byFeature["oral-assessment"].calls).toBe(1);
+    expect(result.byFeature["diagnostic-interpretation"].calls).toBe(1);
     expect(result.byFeature["item-generation"].costUsd).toBeGreaterThan(0);
     expect(result.missingModels).toEqual([]);
   });
@@ -144,7 +157,8 @@ describe("runLiveSmoke", () => {
   it("keeps every completion with the request it answered, each accepted on the first try", async () => {
     const result = await run(network().fetchImpl);
 
-    expect(result.completions).toHaveLength(3 + LIVE_SMOKE_REVIEWS + 2 + 1);
+    // Drafts, reviews, two pieces of writing, one oral report and one diagnostic interpretation (ADR 25).
+    expect(result.completions).toHaveLength(3 + LIVE_SMOKE_REVIEWS + 2 + 1 + 1);
     expect(result.completions.every((c) => c.conformant && c.attempt === 1)).toBe(true);
     const [draft] = result.completions;
     expect(draft).toMatchObject({ method: "generateItems", model: MODELS.draft, request: { count: 5, lang: "fr" } });
@@ -401,6 +415,7 @@ describe("live-smoke.mjs", () => {
       "assessWriting.json",
       "examinerTurn.json",
       "generateItems.json",
+      "interpretDiagnostic.json",
       "reviewItem.json",
       "speak.json",
       "transcribe.json",
@@ -413,7 +428,7 @@ describe("live-smoke.mjs", () => {
     const c = capture();
     await main({ argv: [], env: { OPENAI_API_KEY: KEY, LIVE_SMOKE_RECORD: "1" }, fetchImpl: network().fetchImpl, ...c.io });
 
-    expect(c.files.size).toBe(7);
+    expect(c.files.size).toBe(8);
   });
 
   it("exits 1 when a live call fails, naming the adapter's error", async () => {
@@ -446,6 +461,7 @@ describe("measuredFeatures", () => {
       reviewItem: { calls: 5, inputTokens: 300, outputTokens: 600 },
       assessWriting: { calls: 2, inputTokens: 900, outputTokens: 800 },
       assessOral: { calls: 1, inputTokens: 2_000, outputTokens: 1_100 },
+      interpretDiagnostic: { calls: 1, inputTokens: 3_800, outputTokens: 700 },
     };
     // The report is left out: the smoke's session is short, so its report is no typical one (D127).
     expect(measuredFeatures({ byMethod })).toEqual({
@@ -454,6 +470,7 @@ describe("measuredFeatures", () => {
         { role: "draft", inputTokens: 400, outputTokens: 1_200 },
         { role: "review", inputTokens: 1_500, outputTokens: 3_000 },
       ],
+      "diagnostic-interpretation": [{ role: "assess", inputTokens: 3_800, outputTokens: 700 }],
     });
   });
 });

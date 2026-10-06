@@ -1268,6 +1268,15 @@ body {
   margin: 0;
 }
 
+/* ---- The diagnostic's result (§6.2, ADR 25) ------------------------------------- */
+
+.app-diagnostic__score {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+}
+
 /* ---- Writing workshop (§8.7, progress.md D105–D108) --------------------------- */
 
 .app-textarea {

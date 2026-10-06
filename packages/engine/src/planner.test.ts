@@ -297,3 +297,54 @@ describe("planDay, the latest oral report's fixes (D124)", () => {
     expect(focused).toEqual(plain);
   });
 });
+
+describe("planDay, a diagnostic's placement (ADR 25)", () => {
+  const SUBS: readonly SubSkill[] = ["main-idea", "inference", "tone-and-intent", "specific-detail"];
+  const mixed: Item[] = [
+    ...Array.from({ length: 20 }, (_, i) => item(`b${i}`, SUBS[i % SUBS.length] ?? "main-idea", "B")),
+    ...Array.from({ length: 20 }, (_, i) => item(`c${i}`, SUBS[i % SUBS.length] ?? "main-idea", "C")),
+  ];
+  const placed = { ...base, pool: mixed, sessionSize: 15, dueReviews: [] };
+
+  it("draws the starting share of new items at the starting band, and the rest at the target", () => {
+    const plan = planDay({ ...placed, placement: { startBand: "B", startShare: 0.7 } }, seq([0.3, 0.8, 0.5]), NOW);
+
+    expect(plan.newItems).toHaveLength(10); // round(15 * 2/3)
+    expect(plan.newItems.filter((i) => i.targetBand === "B")).toHaveLength(7); // round(10 * 0.7)
+    expect(plan.newItems.filter((i) => i.targetBand === "C")).toHaveLength(3);
+  });
+
+  it("puts the starting band's items first, so the day works up to the target", () => {
+    const plan = planDay({ ...placed, placement: { startBand: "B", startShare: 0.5 } }, seq([0.3, 0.8, 0.5]), NOW);
+
+    const bands = plan.newItems.map((i) => i.targetBand);
+    expect(bands.slice(0, 5).every((b) => b === "B")).toBe(true);
+    expect(bands.slice(5).every((b) => b === "C")).toBe(true);
+  });
+
+  it("changes nothing when the plan starts at the target", () => {
+    const random = [0.3, 0.8, 0.5];
+    const atTarget = planDay({ ...placed, placement: { startBand: "C", startShare: 0.7 } }, seq(random), NOW);
+    const plain = planDay(placed, seq(random), NOW);
+
+    expect(atTarget).toEqual(plain);
+  });
+
+  it("fills the day from the bands above when the starting band runs short", () => {
+    const thin = [...mixed.filter((i) => i.targetBand === "C"), item("b-only", "main-idea", "B")];
+    const plan = planDay({ ...placed, pool: thin, placement: { startBand: "B", startShare: 0.7 } }, seq([0.4]), NOW);
+
+    expect(plan.newItems).toHaveLength(10);
+    expect(plan.newItems.filter((i) => i.targetBand === "B")).toHaveLength(1);
+  });
+
+  it("draws no new items while tapering, placed or not", () => {
+    const plan = planDay(
+      { ...placed, testDate: ahead(2 * DAY), placement: { startBand: "B", startShare: 0.7 } },
+      seq([0.4]),
+      NOW,
+    );
+
+    expect(plan.newItems).toEqual([]);
+  });
+});

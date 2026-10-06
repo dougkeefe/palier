@@ -62,13 +62,6 @@ export const sessionSizeFor = (goalMinutes: number): number =>
 export const minutesFor = (items: number): number => Math.max(1, Math.round(items * MINUTES_PER_ITEM));
 
 /**
- * §6.2: "A short placement, 30 items and about 15 minutes per skill." The
- * diagnostic's size is the caller's to choose (D47); a bank smaller than this
- * yields every item it has.
- */
-export const DIAGNOSTIC_SIZE = 30;
-
-/**
  * The most items one review set holds. §8.8 shows the queue as "a single stack"; this
  * caps a long backlog at a sitting's worth, and the rest waits for the next set.
  */

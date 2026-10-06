@@ -2,7 +2,9 @@ import type { AiProvider } from "@palier/app";
 import {
   assembleAssessment,
   assembleOralAssessment,
+  checkDiagnosticInterpretation,
   costOf,
+  diagnosticInterpretationSchema,
   examinerTurnSchema,
   itemDraftSchema,
   oralAssessmentDraftSchema,
@@ -12,6 +14,8 @@ import {
   writingFeedbackDraftSchema,
 } from "@palier/domain";
 import type {
+  DiagnosticInterpretation,
+  DiagnosticInterpretationRequest,
   ExaminerTurn,
   ExaminerTurnRequest,
   GenerateItemsRequest,
@@ -302,6 +306,7 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
       speak: config.models.speech !== undefined,
       examinerTurn: config.models.examiner !== undefined,
       assessOral: config.models.assess !== undefined,
+      interpretDiagnostic: config.models.assess !== undefined,
     }),
 
     generatePassage: (req: GeneratePassageRequest) => {
@@ -372,6 +377,25 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
         const assembled = assembleOralAssessment(req.turns, result.data as OralAssessmentDraft);
         if (!assembled.ok) throw new Error(assembled.problem);
         return assembled.assessment;
+      });
+    },
+
+    /**
+     * A diagnostic run's written interpretation, on the `assess` model (ADR 25). A reply that
+     * names a sub-skill of the other skill, or quotes a missed question, fails the parse, so it
+     * is retried once with the reason and then becomes `InvalidResponseError`.
+     */
+    interpretDiagnostic: (req: DiagnosticInterpretationRequest) => {
+      const model = config.models.assess;
+      if (model === undefined) return refuseUnconfigured("the diagnostic's interpretation", "assess");
+      const { system, user } = buildPrompt.diagnostic(req);
+      return callValidated(model, system, user, (raw): DiagnosticInterpretation => {
+        const result = diagnosticInterpretationSchema.safeParse(raw);
+        if (!result.success) throw new Error(result.error.message);
+        const interpretation = result.data as DiagnosticInterpretation;
+        const problem = checkDiagnosticInterpretation(req, interpretation);
+        if (problem !== null) throw new Error(problem);
+        return interpretation;
       });
     },
 

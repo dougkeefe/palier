@@ -201,8 +201,19 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   treating every record already present as a concurrent edit, since a file has no causal history
   (progress.md D69, superseding D62's keep-local rule). **`wipeData` keeps the device secret** (D50).
   `deleteEverywhere` deletes the server copy *first*, and wipes nothing local if that fails.
-- **Two trend readouts, each named for its evidence.** `diagnosticReadout` reads diagnostic
-  attempts only (D47); `practiceTrend` reads drill, review and diagnostic attempts and **never exam
+- **The diagnostic's result** (`use-cases/diagnostic-result.ts`, ADR 25; it replaced `diagnosticReadout`, which could
+  never clear `MIN_EVIDENCE` from one run). `diagnosticResult` reads the latest complete run from `AttemptStore.recent`
+  (1,000), joins it to its items and calls the engine's `summariseDiagnostic` under the profile's `DiagnosticRules`,
+  which are a dep (D42); **nothing of it is stored** (ADR 16). It attaches this device's interpretation and says whether
+  `retakeDays` have passed. `requestDiagnosticInterpretation` refuses with `NoDiagnosticRunError` before any request,
+  returns a kept interpretation without spending, and otherwise makes one `withAiProvider(…,
+  "diagnostic-interpretation", …, { sessionId })` call with the run's misses, then keeps it. **`DiagnosticReportStore {
+  put, get, clear }` is device-local**, never synced or exported, cleared by `wipeData` and `deleteEverywhere`.
+  **`studyFocus` is what biases a day**: an oral report's fixes, then the run's focus, each once, and the run's
+  `placement`; `startSession` reads it in place of its oral-only derivation, and the web's preview reads the same, so the
+  plan shown is the plan opened. `runDiagnostic` passes the profile's `bandQuota` through.
+- **Two trend readouts, each named for its evidence.** `diagnosticResult` reads diagnostic
+  attempts only (D47, ADR 25); `practiceTrend` reads drill, review and diagnostic attempts and **never exam
   attempts**, because the readiness card keeps the exam result and the practice trend visually
   distinct (§8.2, progress.md D64). Do not merge them behind a flag. `progressReport` holds the
   same line over the **whole** practice record (`AttemptStore.all()`), and `reviewQueue` resolves

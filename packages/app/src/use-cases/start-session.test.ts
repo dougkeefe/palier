@@ -1,5 +1,5 @@
-import type { Item, ItemId, OralAssessment } from "@palier/domain";
-import { itemId, scenarioId, sessionId } from "@palier/domain";
+import type { Attempt, DiagnosticRules, Item, ItemId, OralAssessment } from "@palier/domain";
+import { attemptId, itemId, scenarioId, sessionId } from "@palier/domain";
 import { describe, expect, it, vi } from "vitest";
 
 import type {
@@ -17,6 +17,16 @@ import { type StartSessionDeps, type StartSessionRequest, startSession } from ".
 
 // Local stubs rather than @palier/testing: that package depends on @palier/app, so
 // importing it here would make the build graph cyclic (progress.md D37).
+
+/** The profile's diagnostic rules, as `content/profiles/psc-sle.json` holds them (ADR 25). */
+const RULES: DiagnosticRules = {
+  size: 30,
+  bandQuota: { B: 15, C: 15 },
+  secureAccuracy: 0.7,
+  startShare: 0.7,
+  focusCount: 2,
+  retakeDays: 28,
+};
 
 const NOW = "2026-03-01T00:00:00.000Z";
 
@@ -104,9 +114,9 @@ const itemsOf = (bank: readonly Item[]): ItemRepository => ({
   bankVersion: vi.fn(() => Promise.resolve(1)),
 });
 
-const attemptsOf = (): AttemptStore => ({
+const attemptsOf = (recent: readonly Attempt[] = []): AttemptStore => ({
   append: vi.fn(() => Promise.resolve(true)),
-  recent: vi.fn(() => Promise.resolve([])),
+  recent: vi.fn(() => Promise.resolve(recent)),
   since: vi.fn(() => Promise.resolve([])),
   forItem: vi.fn(() => Promise.resolve([])),
   all: vi.fn(() => Promise.resolve([])),
@@ -171,6 +181,7 @@ const depsWith = (over: Partial<StartSessionDeps> = {}): StartSessionDeps => ({
   schedule: scheduleOf(),
   attempts: attemptsOf(),
   oral: oralOf(),
+  rules: RULES,
   ...over,
 });
 
@@ -292,6 +303,42 @@ describe("startSession: the latest oral report's fixes (D124)", () => {
     );
 
     expect(unassessed.plan).toEqual(without.plan);
+  });
+});
+
+describe("startSession: the latest diagnostic's placement (ADR 25)", () => {
+  const pool = aPool();
+  const at = (band: "A" | "B") => pool.filter((item) => item.targetBand === band);
+  const run = (correct: (item: Item) => boolean): Attempt[] =>
+    [...at("A").slice(0, 2), ...at("B").slice(0, 2)].map((item, i) => ({
+      id: attemptId(`diag-${String(i)}`),
+      itemId: item.id,
+      bankVersion: 1,
+      skill: "writing",
+      sessionId: sessionId("diag"),
+      chosen: "a",
+      correct: correct(item),
+      msToFirstSelect: 1000,
+      msToConfirm: 1000,
+      changedAnswer: false,
+      mode: "diagnostic",
+      ts: `2026-02-28T10:0${String(i)}:00.000Z`,
+    }));
+  const rules = { ...RULES, size: 4 };
+
+  it("starts the day's new items a band below the target when the run was secure only there", async () => {
+    const attempts = attemptsOf(run((item) => item.targetBand === "A"));
+    const { plan } = await startSession(aRequest(), depsWith({ items: itemsOf(pool), attempts, rules }));
+
+    // Seven new items: round(7 * 0.7) = 5 at A first, then 2 at the target.
+    expect(plan.newItems.map((item) => item.targetBand)).toEqual(["A", "A", "A", "A", "A", "B", "B"]);
+  });
+
+  it("plans at the target as before when the run was secure there", async () => {
+    const attempts = attemptsOf(run(() => true));
+    const { plan } = await startSession(aRequest(), depsWith({ items: itemsOf(pool), attempts, rules }));
+
+    expect(plan.newItems.filter((item) => item.targetBand === "B").length).toBeGreaterThan(2);
   });
 });
 

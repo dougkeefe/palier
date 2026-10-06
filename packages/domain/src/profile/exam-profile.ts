@@ -1,4 +1,4 @@
-import type { Band } from "../bands.js";
+import type { Band, TargetBand } from "../bands.js";
 import type { ExamMode, ScoredSkill, Skill } from "../skills.js";
 import type { SubSkill } from "../sub-skills.js";
 import type { Topic } from "../topics.js";
@@ -70,6 +70,28 @@ export type ExamProfile = {
   readonly leitnerIntervalDays: readonly number[];
   /** The item-quality retirement rules the statistics job applies (architecture.md 7.6). */
   readonly itemStatistics: ItemStatisticsRules;
+  /** The diagnostic's size, its even draw across bands, and its placement rules (PRD 6.2, ADR 25). */
+  readonly diagnostic: DiagnosticRules;
+};
+
+/**
+ * The diagnostic (product-requirements.md 6.2, ADR 25): a fixed-length run drawn evenly across
+ * the bands the bank holds, whose score places the plan. The placement is a starting level for
+ * practice, never a band (ADR 7): a band still comes only from a mock exam's cut table.
+ */
+export type DiagnosticRules = {
+  /** Items in one run, per skill. A run with fewer answers than this never places. */
+  readonly size: number;
+  /** How many of `size` are drawn at each band. Sums to `size`. */
+  readonly bandQuota: Readonly<Partial<Record<TargetBand, number>>>;
+  /** The proportion correct at a band that counts as secure there, so the plan may start at it. */
+  readonly secureAccuracy: number;
+  /** When the plan starts below the target, the share of new items drawn at the starting band. */
+  readonly startShare: number;
+  /** How many of the run's weakest sub-skills the plan favours afterwards. */
+  readonly focusCount: number;
+  /** Days after which the diagnostic is offered again (PRD 6.2's "every four weeks"). */
+  readonly retakeDays: number;
 };
 
 /**

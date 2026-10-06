@@ -7,7 +7,7 @@ import { dexieStores } from "./index.js";
 const dbName = (): string => `palier-stores-${globalThis.crypto.randomUUID()}`;
 
 describe("dexieStores", () => {
-  it("wires all twelve ports to one named database", async () => {
+  it("wires all thirteen ports to one named database", async () => {
     const stores = dexieStores(dbName());
 
     await stores.attempts.append(anAttempt());
@@ -58,7 +58,22 @@ describe("dexieStores", () => {
     expect(await stores.costLedger.since("2026-09-01T00:00:00.000Z")).toHaveLength(1);
     expect(await stores.writing.all()).toHaveLength(1);
     expect((await stores.generated.latestSet("writing"))?.items).toHaveLength(1);
+    await stores.diagnosticReports.put({
+      sessionId: sessionId("diag-1"),
+      skill: "writing",
+      feedbackLang: "en",
+      writtenAt: "2026-10-06T10:00:00.000Z",
+      interpretation: {
+        headline: "h",
+        summary: "s",
+        strengths: [],
+        priorities: [{ subSkill: "agreement", what: "w", why: "y" }],
+        planNote: "p",
+      },
+    });
+
     expect(await stores.oral.all()).toHaveLength(1);
+    expect(await stores.diagnosticReports.get(sessionId("diag-1"))).not.toBeNull();
   });
 
   it("binds the name to a persistent database two calls share", async () => {

@@ -93,6 +93,11 @@ describe("the psc-sle profile", () => {
     });
   });
 
+  it("sizes the diagnostic at 30 items drawn evenly across B and C (PRD 6.2)", () => {
+    expect(profile.diagnostic.size).toBe(30);
+    expect(profile.diagnostic.bandQuota).toEqual({ B: 15, C: 15 });
+  });
+
   it("publishes no raw-score cut table for oral, because the PSC does not", () => {
     expect(profile.oral.cuts).toBeNull();
   });

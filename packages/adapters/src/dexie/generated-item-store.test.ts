@@ -25,7 +25,7 @@ describe("dexieGeneratedItemStore", () => {
     const db = new PalierDb(dbName());
     await dexieGeneratedItemStore(db).putSet(aSet);
 
-    expect(db.verno).toBe(3);
+    expect(db.verno).toBe(4);
     expect(await db.generated.toArray()).toEqual([aRow]);
   });
 
