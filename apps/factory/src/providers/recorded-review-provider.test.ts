@@ -75,6 +75,7 @@ describe("recordedReviewProvider (D204)", () => {
       provider.speak({} as never),
       provider.examinerTurn({} as never),
       provider.assessOral({} as never),
+      provider.interpretDiagnostic({} as never),
     ];
     for (const call of rejected) await expect(call).rejects.toThrow(/only reviews/);
     await expect(provider.verifyKey()).resolves.toBeUndefined();

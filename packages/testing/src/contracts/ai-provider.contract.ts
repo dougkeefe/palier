@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import type { AiProvider } from "@palier/app";
 import {
+  checkDiagnosticInterpretation,
   checkErrorOffsets,
   checkOralAssessment,
+  diagnosticInterpretationSchema,
   oralAssessmentSchema,
   examinerTurnSchema,
   itemDraftSchema,
@@ -13,6 +15,7 @@ import {
   writingAssessmentSchema,
 } from "@palier/domain";
 import type {
+  DiagnosticInterpretationRequest,
   ExaminerTurnRequest,
   GenerateItemsRequest,
   GenerateScenarioRequest,
@@ -91,6 +94,40 @@ const anExaminerRequest = (): ExaminerTurnRequest => ({
   transcript: [
     { speaker: "examiner", text: "Bonjour. Quel est votre poste ?" },
     { speaker: "candidate", text: "Je suis analyste des politiques." },
+  ],
+});
+
+/** A writing diagnostic placed at B, with one miss, whose stem a provider must never quote (ADR 25). */
+const aDiagnosticRequest = (): DiagnosticInterpretationRequest => ({
+  skill: "writing",
+  lang: "fr",
+  feedbackLang: "en",
+  targetBand: "C",
+  startBand: "B",
+  total: { correct: 3, attempted: 4 },
+  bands: [
+    { band: "B", correct: 2, attempted: 2 },
+    { band: "C", correct: 1, attempted: 2 },
+  ],
+  subSkills: [
+    { subSkill: "agreement", correct: 1, attempted: 2 },
+    { subSkill: "pronouns", correct: 2, attempted: 2 },
+  ],
+  focus: ["agreement"],
+  missed: [
+    {
+      subSkill: "agreement",
+      band: "C",
+      type: "cloze",
+      stem: "Les dossiers que nous avons ___ hier sont sur votre bureau.",
+      options: [
+        { id: "a", text: "reçu" },
+        { id: "b", text: "reçus" },
+      ],
+      chosen: "a",
+      key: "b",
+      explanation: "The participle agrees with the preceding direct object.",
+    },
   ],
 });
 
@@ -241,6 +278,15 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       const assessment = await provider.assessOral(request);
       expect(oralAssessmentSchema.safeParse(assessment).success).toBe(true);
       expect(checkOralAssessment(request.turns, assessment)).toBeNull();
+      expect(provider.lastUsage()).not.toBeNull();
+    });
+
+    it("interprets a diagnostic schema-valid, on the run's own sub-skills, quoting no question (ADR 25)", async () => {
+      const provider = await make();
+      const request = aDiagnosticRequest();
+      const interpretation = await provider.interpretDiagnostic(request);
+      expect(diagnosticInterpretationSchema.safeParse(interpretation).success).toBe(true);
+      expect(checkDiagnosticInterpretation(request, interpretation)).toBeNull();
       expect(provider.lastUsage()).not.toBeNull();
     });
 

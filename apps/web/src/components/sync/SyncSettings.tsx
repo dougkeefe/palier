@@ -255,6 +255,7 @@ export function SyncSettings() {
               <li>{t("neverTranscripts")}</li>
               <li>{t("neverSubmissions")}</li>
               <li>{t("neverCosts")}</li>
+              <li>{t("neverDiagnostic")}</li>
             </ul>
           </div>
         </div>

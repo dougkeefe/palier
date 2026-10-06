@@ -23,6 +23,7 @@ import {
 import { syncNow } from "./sync-now.js";
 import { aCostEntry, costLedger } from "./__tests__/spend-fakes.js";
 import { aGeneratedSet, generatedStore } from "./__tests__/generated-fakes.js";
+import { aDiagnosticReport, diagnosticReportStore } from "./__tests__/diagnostic-fakes.js";
 import { anOralSession, oralStore } from "./__tests__/oral-fakes.js";
 import { aSubmission, writingStore } from "./__tests__/writing-fakes.js";
 import { telemetryStore } from "./__tests__/telemetry-fakes.js";
@@ -77,6 +78,7 @@ const aDevice = (transport: SyncTransport) => ({
   writing: writingStore([aSubmission()]),
   generated: generatedStore([aGeneratedSet()]),
   oral: oralStore([anOralSession()]),
+  diagnosticReports: diagnosticReportStore([aDiagnosticReport()]),
 });
 
 const aRegisteredDevice = async (transport: SyncTransport) => {
@@ -448,6 +450,14 @@ describe("deleteEverywhere", () => {
     await deleteEverywhere(device);
 
     expect(await device.oral.all()).toEqual([]);
+  });
+
+  it("empties the diagnostic's interpretations with the rest of this device's data (ADR 25)", async () => {
+    const device = await aRegisteredDevice(fakeServer().transport("secret-a"));
+
+    await deleteEverywhere(device);
+
+    expect(device.diagnosticReports.all()).toEqual([]);
   });
 
   it("touches nothing local when the server cannot be reached", async () => {

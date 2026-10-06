@@ -55,7 +55,8 @@ export const waitForOfflineReady = async (page: Page) => {
 /**
  * §8.1 onboarding, placing as asked. Leaves the page wherever onboarding lands. On the skip
  * path the wizard's last step is step 5, the optional key: it is passed over unless `addKey`
- * (progress.md D100). On the diagnostic path, step 5 comes after the diagnostic instead.
+ * (progress.md D100). On the diagnostic path, the diagnostic's own gate asks for the key (ADR 25):
+ * see {@link addKeyAtDiagnosticGate}.
  */
 export const onboard = async (
   page: Page,
@@ -85,6 +86,36 @@ export const onboard = async (
     }
   }
   await page.getByRole("button", { name: "Start practising" }).click();
+};
+
+/**
+ * On `/diagnostic` with no key held (ADR 25): follow the gate to the key screen, save `key`, and
+ * come back by the key screen's own link. Leaves the page on the diagnostic's launcher.
+ */
+export const addKeyAtDiagnosticGate = async (page: Page, key: string) => {
+  await expect(page.getByRole("heading", { name: "The diagnostic needs an OpenAI key" })).toBeVisible();
+  await page.getByRole("link", { name: "Add your key" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Your API key" })).toBeVisible();
+  await page.getByLabel("OpenAI API key").fill(key);
+  await page.getByRole("button", { name: "Save the key" }).click();
+  await expect(page.getByText(`Saved on this device: the key ending in ${key.slice(-4)}.`)).toBeVisible();
+  await page.getByRole("link", { name: "Continue to the diagnostic" }).click();
+  await expect(page.getByRole("button", { name: /^Start the .* diagnostic$/ })).toBeVisible();
+};
+
+/** Run the diagnostic at `skill` by keyboard, from its launcher to its result's heading (§6.2). */
+export const runDiagnosticByKeyboard = async (page: Page, skill: "Reading" | "Written expression") => {
+  await page.getByRole("radio", { name: skill }).check();
+  await page.getByRole("button", { name: `Start the ${skill} diagnostic` }).click();
+  const total = await setSize(page);
+  for (let i = 1; i <= total; i++) {
+    await expect(page.locator(".app-session__count")).toHaveText(`Item ${String(i)} of ${String(total)}`);
+    // Keyboard only: 1 chooses the first option, Enter confirms (§8.3).
+    await page.keyboard.press("1");
+    await page.keyboard.press("Enter");
+  }
+  await expect(page.getByRole("heading", { name: `Your ${skill} diagnostic` })).toBeVisible();
+  return total;
 };
 
 /** How many items the current set holds, read off its "Item 1 of N" line. */

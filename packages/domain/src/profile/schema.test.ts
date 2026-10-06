@@ -264,6 +264,44 @@ describe("item statistics rules", () => {
   });
 });
 
+describe("diagnostic rules", () => {
+  const withRules = (rules: Record<string, unknown>): Profile =>
+    withProfile((p) => {
+      p["diagnostic"] = { ...(p["diagnostic"] as Record<string, unknown>), ...rules };
+    });
+
+  it("rejects a band quota that does not add up to the run's size", () => {
+    expect(errorsFrom(withRules({ bandQuota: { B: 15, C: 14 } }))).toMatch(
+      /band quota draws 29 items but a diagnostic is 30/,
+    );
+  });
+
+  it("rejects a quota at a band no item is tagged with", () => {
+    expect(errorsFrom(withRules({ bandQuota: { B: 15, E: 15 } }))).not.toBe("");
+  });
+
+  it("rejects a secure accuracy or a starting share outside 0 to 1", () => {
+    expect(errorsFrom(withRules({ secureAccuracy: 1.5 }))).not.toBe("");
+    expect(errorsFrom(withRules({ startShare: -0.1 }))).not.toBe("");
+  });
+
+  it("rejects a run size or a retake interval that is not a positive whole number", () => {
+    expect(errorsFrom(withRules({ size: 0, bandQuota: {} }))).not.toBe("");
+    expect(errorsFrom(withRules({ retakeDays: 27.5 }))).not.toBe("");
+  });
+
+  it("rejects an unknown rule, since the block is strict", () => {
+    expect(errorsFrom(withRules({ adaptive: true }))).not.toBe("");
+  });
+
+  it("rejects a profile with no diagnostic rules at all", () => {
+    const broken = withProfile((p) => {
+      delete p["diagnostic"];
+    });
+    expect(errorsFrom(broken)).not.toBe("");
+  });
+});
+
 describe("misfiled sub-skill messages", () => {
   it("reads naturally when several are misfiled", () => {
     const broken = withProfile((p) => {

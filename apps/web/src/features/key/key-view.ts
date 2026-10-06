@@ -118,3 +118,10 @@ export const keyScreen = (state: KeyScreenState, action: KeyScreenAction): KeySc
 /** Why saving failed, from the thrown error: a blank entry, or anything else. */
 export const saveFailure = (error: unknown): "blank" | "saveFailed" =>
   error instanceof Error && error.name === "EmptyApiKeyError" ? "blank" : "saveFailed";
+
+/**
+ * Where the key screen offers to go back to once a key is held (ADR 25), from `?next=`: only the
+ * diagnostic, which needs the key, and never an address the query names, so the link cannot be
+ * pointed anywhere else.
+ */
+export const returnAfterKey = (next: string | null): "/diagnostic" | null => (next === "diagnostic" ? "/diagnostic" : null);

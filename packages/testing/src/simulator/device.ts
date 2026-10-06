@@ -137,7 +137,13 @@ export const simulatedDevice = (options: SimulatedDeviceOptions): SimulatedDevic
     await startSession(
       { sessionId: id, mode: "drill", plan: { skill: "reading", lang: "fr", targetBand: "C", sessionSize: 5 } },
       // A simulated browser runs no spoken session, so no oral report biases its plan (D124).
-      { ...deps, items, random: seededRandom(options.idSeed), oral: { all: () => Promise.resolve([]) } },
+      {
+        ...deps,
+        items,
+        random: seededRandom(options.idSeed),
+        oral: { all: () => Promise.resolve([]) },
+        rules: profile.diagnostic,
+      },
     );
     const recorded: SyncRecord[] = [];
     for (const answer of answers) {

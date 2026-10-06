@@ -64,6 +64,7 @@ const reportingProvider = (fail: Error | null = null) => {
       speak: false,
       examinerTurn: false,
       assessOral: true,
+      interpretDiagnostic: false,
     }),
     generatePassage: unused,
     generateItems: unused,
@@ -73,6 +74,7 @@ const reportingProvider = (fail: Error | null = null) => {
     transcribe: unused,
     speak: unused,
     examinerTurn: unused,
+    interpretDiagnostic: unused,
     assessOral: (req) => {
       asked.push(req);
       usage = { model: "m-assess", inputTokens: 3_000, outputTokens: 1_200, costUsd: 0.0156 };

@@ -84,6 +84,12 @@ export const meterProvider = (inner: AiProvider): MeteredProvider => {
       account();
       return out;
     },
+    // The factory interprets no diagnostic (ADR 25); passed through and accounted the same way.
+    interpretDiagnostic: async (req) => {
+      const out = await inner.interpretDiagnostic(req);
+      account();
+      return out;
+    },
     // A key check spends no tokens, so there is nothing to account.
     verifyKey: () => inner.verifyKey(),
     lastUsage: () => inner.lastUsage(),

@@ -1,5 +1,6 @@
 import type {
   CostEntry,
+  DiagnosticReport,
   ExamRun,
   ISO,
   LedgerEntry,
@@ -49,6 +50,10 @@ import { Dexie, type Table } from "dexie";
  * without a version bump: a session keyed by its id with `scenarioId` and `startedAt` indexed
  * as v1 declared them, and a recording keyed by its session's id. Never synced and never
  * exported.
+ *
+ * **Version 4** adds `diagnosticReports` (ADR 25), the diagnostic's written interpretations,
+ * one per run, keyed by the run's session. A new table again, so the upgrade moves no data.
+ * Never synced and never exported.
  *
  * **Why getters, not `field!: Table<...>` declarations.** `tsconfig.base.json` targets
  * ES2022 and does not set `useDefineForClassFields`, so it defaults to `true`; a class
@@ -159,6 +164,9 @@ export type OralAudioRow = {
 /** A writing-workshop submission, stored as the port's `WritingSubmission` (progress.md D106). */
 export type WritingSubmissionRow = WritingSubmission;
 
+/** A `diagnosticReports` row: the port's `DiagnosticReport`, unchanged (ADR 25). */
+export type DiagnosticReportRow = DiagnosticReport;
+
 /** The one telemetry-meta row: this device's consent, never synced (progress.md D92). */
 export type TelemetryMetaRow = {
   readonly id: "consent";
@@ -198,12 +206,18 @@ export const SCHEMA_V3 = {
   writingSubmissions: "id, writtenAt",
 } as const;
 
+/** The table version 4 adds (ADR 25). */
+export const SCHEMA_V4 = {
+  diagnosticReports: "sessionId",
+} as const;
+
 export class PalierDb extends Dexie {
   constructor(name = "palier") {
     super(name);
     this.version(1).stores(SCHEMA_V1);
     this.version(2).stores(SCHEMA_V2);
     this.version(3).stores(SCHEMA_V3);
+    this.version(4).stores(SCHEMA_V4);
   }
 
   get attempts(): Table<Attempt, AttemptId> {
@@ -253,6 +267,10 @@ export class PalierDb extends Dexie {
 
   get writingSubmissions(): Table<WritingSubmissionRow, string> {
     return this.table("writingSubmissions");
+  }
+
+  get diagnosticReports(): Table<DiagnosticReportRow, SessionId> {
+    return this.table("diagnosticReports");
   }
 
   get generated(): Table<GeneratedItemRow, ItemId> {

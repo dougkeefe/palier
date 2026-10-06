@@ -44,6 +44,17 @@ export type SelectionCriteria = {
    * no item, since the skill filter is first.
    */
   readonly boost?: readonly SubSkill[];
+  /**
+   * The bands practice draws from, in place of `workingSet(targetBand)`: the planner's split
+   * when a diagnostic placed the plan below the target (ADR 25). Absent, the working set.
+   */
+  readonly bands?: readonly TargetBand[];
+  /**
+   * How many items diagnostic mode draws at each band (PRD 6.2's "sampling evenly across
+   * bands", ADR 25). A band short of its quota leaves the rest to be filled from any band, so a
+   * thin bank still gives a whole run. Absent, the draw is uniform over every band, as before.
+   */
+  readonly bandQuota?: Readonly<Partial<Record<TargetBand, number>>>;
 };
 
 /** The bands practice draws from: the target band plus the one below it (§7.2). */
@@ -97,6 +108,27 @@ const spaceBySubSkill = (items: readonly Item[]): readonly Item[] => {
   return result;
 };
 
+/**
+ * Each band's quota drawn from that band alone, lowest band first, then any shortfall filled
+ * uniformly from what is left, so the run is whole when one band runs thin (ADR 25).
+ */
+const drawByQuota = (
+  entries: readonly Weighted[],
+  quota: Readonly<Partial<Record<TargetBand, number>>>,
+  count: number,
+  random: () => number,
+): readonly Item[] => {
+  const drawn: Item[] = [];
+  for (const band of TARGET_BANDS) {
+    const wanted = quota[band] ?? 0;
+    if (wanted > 0) drawn.push(...sampleWeighted(entries.filter((e) => e.item.targetBand === band), wanted, random));
+  }
+  const taken = new Set<ItemId>(drawn.map((item) => item.id));
+  const shortfall = count - drawn.length;
+  if (shortfall > 0) drawn.push(...sampleWeighted(entries.filter((e) => !taken.has(e.item.id)), shortfall, random));
+  return drawn.slice(0, count);
+};
+
 export const selectItems = (
   criteria: SelectionCriteria,
   pool: readonly Item[],
@@ -117,10 +149,13 @@ export const selectItems = (
   if ((criteria.mode ?? "practice") === "diagnostic") {
     // Coverage, not targeting: every band, no sub-skill weighting.
     const entries = pool.filter(eligible).map((item) => ({ item, weight: 1 }));
-    return spaceBySubSkill(sampleWeighted(entries, criteria.count, random));
+    if (criteria.bandQuota === undefined) {
+      return spaceBySubSkill(sampleWeighted(entries, criteria.count, random));
+    }
+    return spaceBySubSkill(drawByQuota(entries, criteria.bandQuota, criteria.count, random));
   }
 
-  const bands = workingSet(criteria.targetBand);
+  const bands = criteria.bands ?? workingSet(criteria.targetBand);
   const weakest = new Set<SubSkill>(weakestSubSkills(criteria.skill, attempts, pool));
   const boosted = new Set<SubSkill>(criteria.boost ?? []);
   const entries = pool

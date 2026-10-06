@@ -3,7 +3,7 @@ import { attemptId, itemId, scenarioId, sessionId } from "@palier/domain";
 import { Dexie } from "dexie";
 import { describe, expect, it } from "vitest";
 
-import { PalierDb, SCHEMA_V1, SCHEMA_V2 } from "./db.js";
+import { PalierDb, SCHEMA_V1, SCHEMA_V2, SCHEMA_V3 } from "./db.js";
 import { dexieStores } from "./index.js";
 
 /**
@@ -13,7 +13,7 @@ import { dexieStores } from "./index.js";
  * `PalierDb`. Every row must survive, and the new tables must work.
  *
  * Each version keeps its own case: a v1 device upgrades straight to today's version, and
- * so does a v2 one (progress.md D106), so both paths are held.
+ * so do a v2 one (progress.md D106) and a v3 one (ADR 25), so every path is held.
  */
 const dbName = (): string => `palier-migration-${globalThis.crypto.randomUUID()}`;
 
@@ -46,7 +46,7 @@ describe("schema migration v1 → current", () => {
 
     const db = new PalierDb(name);
     await db.open();
-    expect(db.verno).toBe(3);
+    expect(db.verno).toBe(4);
     for (const [table, list] of Object.entries(rows)) {
       expect(await db.table(table).count(), table).toBe(list.length);
     }
@@ -161,14 +161,14 @@ const aVersionTwoDevice = async (name: string) => {
   return rows;
 };
 
-describe("schema migration v2 → v3", () => {
+describe("schema migration v2 → current", () => {
   it("keeps every row a v2 device held", async () => {
     const name = dbName();
     const rows = await aVersionTwoDevice(name);
 
     const db = new PalierDb(name);
     await db.open();
-    expect(db.verno).toBe(3);
+    expect(db.verno).toBe(4);
     for (const [table, list] of Object.entries(rows)) {
       expect(await db.table(table).count(), table).toBe(list.length);
     }
@@ -200,5 +200,67 @@ describe("schema migration v2 → v3", () => {
     };
     await stores.writing.put(submission);
     expect(await stores.writing.all()).toEqual([submission]);
+  });
+});
+
+/** Open `name` as the app did at schema version 3, and fill it: v2's rows plus a submission. */
+const aVersionThreeDevice = async (name: string) => {
+  const v2Rows = await aVersionTwoDevice(name);
+  const v3 = new Dexie(name);
+  v3.version(1).stores(SCHEMA_V1);
+  v3.version(2).stores(SCHEMA_V2);
+  v3.version(3).stores(SCHEMA_V3);
+  const rows = {
+    ...v2Rows,
+    writingSubmissions: [
+      {
+        id: "sub-legacy",
+        promptId: "wp-reply-01",
+        text: "Madame, je vous remercie.",
+        writtenAt: "2026-09-26T11:00:00.000Z",
+        assessment: null,
+      },
+    ],
+  } as const;
+  await v3.table("writingSubmissions").bulkAdd([...rows.writingSubmissions]);
+  v3.close();
+  return rows;
+};
+
+describe("schema migration v3 → v4 (ADR 25)", () => {
+  it("keeps every row a v3 device held", async () => {
+    const name = dbName();
+    const rows = await aVersionThreeDevice(name);
+
+    const db = new PalierDb(name);
+    await db.open();
+    expect(db.verno).toBe(4);
+    for (const [table, list] of Object.entries(rows)) {
+      expect(await db.table(table).count(), table).toBe(list.length);
+    }
+  });
+
+  it("reads the migrated submission through its port, and gives the database a working diagnostic store", async () => {
+    const name = dbName();
+    const rows = await aVersionThreeDevice(name);
+
+    const stores = dexieStores(name);
+    expect(await stores.writing.all()).toEqual(rows.writingSubmissions);
+    expect(await stores.diagnosticReports.get(sessionId("diag-1"))).toBeNull();
+    const report = {
+      sessionId: sessionId("diag-1"),
+      skill: "writing",
+      feedbackLang: "fr",
+      writtenAt: "2026-10-06T10:00:00.000Z",
+      interpretation: {
+        headline: "h",
+        summary: "s",
+        strengths: [],
+        priorities: [{ subSkill: "agreement", what: "w", why: "y" }],
+        planNote: "p",
+      },
+    } as const;
+    await stores.diagnosticReports.put(report);
+    expect(await stores.diagnosticReports.get(sessionId("diag-1"))).toEqual(report);
   });
 });

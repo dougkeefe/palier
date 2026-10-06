@@ -248,30 +248,27 @@ describe("createContainer", () => {
   });
 
   /**
-   * The diagnostic path through the assembled graph: select a diagnostic set from
-   * the fixture bank, answer every item in `mode: "diagnostic"`, then read the
-   * accuracy back. It proves the wiring — `runDiagnostic` sampled the bank,
-   * `answerItem` recorded diagnostic-mode attempts, and `diagnosticReadout` joined
-   * them to bands through the same stores — not the trend's numbers, which are
-   * @palier/engine's own suite.
+   * The diagnostic path through the assembled graph (ADR 25): select a whole run from the fixture
+   * bank at the profile's size and split, answer every item in `mode: "diagnostic"`, then read the
+   * result and the plan's placement back. It proves the wiring — `runDiagnostic` drew the run,
+   * `answerItem` recorded diagnostic-mode attempts, and `diagnosticResult` and `studyFocus` read
+   * them through the same stores — not the placement rules, which are @palier/engine's own suite.
    */
-  it("runs a diagnostic: select a set, answer it, and read accuracy per band back", async () => {
+  it("runs a diagnostic: select a whole run, answer it, and read the result and the placement back", async () => {
     const c = createContainer({ hermetic: true });
+    const { size, bandQuota } = c.profile.diagnostic;
 
-    const { items } = await c.useCases.runDiagnostic({
-      skill: "reading",
-      lang: "fr",
-      targetBand: "C",
-      count: 8,
-    });
-    expect(items.length).toBeGreaterThan(0);
+    const { items } = await c.useCases.runDiagnostic({ skill: "reading", lang: "fr", targetBand: "C", count: size, bandQuota });
+    expect(items).toHaveLength(size);
+    expect(await c.useCases.diagnosticResult({ skill: "reading", targetBand: "C" })).toBeNull();
 
     let attemptSeq = 0;
     for (const item of items) {
       await c.useCases.answerItem({
         attemptId: attemptId(`01HDIAG${String(++attemptSeq).padStart(19, "0")}`),
         itemId: item.id,
-        response: item.key,
+        // Every C-level item missed, every other one right: the plan should start below C.
+        response: item.targetBand === "C" ? (item.key === "a" ? "b" : "a") : item.key,
         sessionId: sessionId("01HSESSIONDIAGNOSTIC00001"),
         mode: "diagnostic",
         msToFirstSelect: 1_000,
@@ -281,11 +278,14 @@ describe("createContainer", () => {
       });
     }
 
-    const trend = await c.useCases.diagnosticReadout({ skill: "reading" });
-    expect(trend.skill).toBe("reading");
-    expect(trend.windowSize).toBe(items.length);
-    // A readout per target band (the numbers are the engine's own suite).
-    expect(Object.keys(trend.byBand).sort()).toEqual(["A", "B", "C"]);
+    const result = await c.useCases.diagnosticResult({ skill: "reading", targetBand: "C" });
+    expect(result?.summary.total.attempted).toBe(size);
+    expect(result?.summary.startBand).toBe("B");
+    expect(result?.interpretation).toBeNull();
+    expect((await c.useCases.studyFocus({ skill: "reading", lang: "fr", targetBand: "C" })).placement).toEqual({
+      startBand: "B",
+      startShare: c.profile.diagnostic.startShare,
+    });
   });
 
   it("draws the practice trend over time from the same record, a point per week ending today (D198)", async () => {

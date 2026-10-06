@@ -8,17 +8,19 @@ import {
 import { type FetchLike, openAiProvider } from "@palier/adapters/openai";
 import type {
   AiFeature,
+  DiagnosticInterpretationRequest,
   ExaminerTurnRequest,
   GenerateItemsRequest,
   ItemDraft,
   ModelPrice,
+  OptionId,
   OralRequest,
   ReviewRequest,
   SpeechRequest,
   WritingPrompt,
   WritingRequest,
 } from "@palier/domain";
-import { itemTypeDefinition } from "@palier/domain";
+import { OPTION_IDS, itemTypeDefinition } from "@palier/domain";
 import type { RecordedCompletion, RecordedTranscribeRequest } from "@palier/testing";
 import { memoryCostLedger, memoryKeyVault } from "@palier/testing/in-memory";
 
@@ -37,7 +39,9 @@ import { memoryCostLedger, memoryKeyVault } from "@palier/testing/in-memory";
  *   `transcribe` that same audio, so no recording of anyone's voice is needed, then three
  *   `examinerTurn`s, an opening, a follow-up, and a follow-up on a contradicted premise (D176);
  * - `assessOral` on one short fixed session, `ORAL_SESSION` (Phase 5 Slice 3, D122). `runOralStability`
- *   scores a longer one, `STABILITY_SESSION`, five times, for the stability eval (D127).
+ *   scores a longer one, `STABILITY_SESSION`, five times, for the stability eval (D127);
+ * - `interpretDiagnostic` on one fixed writing diagnostic, `DIAGNOSTIC_RUN`, a whole run's scores and its
+ *   misses, so its tokens are a typical interpretation's (ADR 25).
  *
  * Audio is never kept: a transcription is recorded with its clip described (type and size), and
  * a voice as its content type and size.
@@ -116,6 +120,70 @@ const DRAFT_REQUEST = (type: (typeof GENERATED_ITEM_TYPES)[number]): GenerateIte
   lang: "fr",
   count: GENERATED_SET_SIZE,
 });
+
+/** A missed written-expression item for the fixed diagnostic: what a run's misses look like to the prompt. */
+const missed = (
+  subSkill: DiagnosticInterpretationRequest["missed"][number]["subSkill"],
+  band: "B" | "C",
+  stem: string,
+  options: readonly [string, string, string, string],
+  chosen: "a" | "b" | "c" | "d",
+  key: "a" | "b" | "c" | "d",
+  explanation: string,
+): DiagnosticInterpretationRequest["missed"][number] => ({
+  subSkill,
+  band,
+  type: "cloze",
+  stem,
+  options: options.map((text, i) => ({ id: OPTION_IDS[i] as OptionId, text })),
+  chosen,
+  key,
+  explanation,
+});
+
+/**
+ * A whole writing diagnostic, placed at B for a C target, with its twelve misses (ADR 25): the size a real
+ * run's request is, so the smoke's tokens can price the feature.
+ */
+export const DIAGNOSTIC_RUN: DiagnosticInterpretationRequest = {
+  skill: "writing",
+  lang: "fr",
+  feedbackLang: "en",
+  targetBand: "C",
+  startBand: "B",
+  total: { correct: 18, attempted: 30 },
+  bands: [
+    { band: "B", correct: 11, attempted: 15 },
+    { band: "C", correct: 7, attempted: 15 },
+  ],
+  subSkills: [
+    { subSkill: "agreement", correct: 1, attempted: 4 },
+    { subSkill: "prepositions-and-government", correct: 1, attempted: 3 },
+    { subSkill: "verb-tense-and-mood", correct: 2, attempted: 4 },
+    { subSkill: "pronouns", correct: 2, attempted: 3 },
+    { subSkill: "connectors-and-discourse-markers", correct: 2, attempted: 3 },
+    { subSkill: "register-and-formality", correct: 2, attempted: 3 },
+    { subSkill: "word-choice-precision", correct: 2, attempted: 3 },
+    { subSkill: "false-friends-and-anglicisms", correct: 2, attempted: 2 },
+    { subSkill: "punctuation-and-mechanics", correct: 2, attempted: 2 },
+    { subSkill: "sentence-structure", correct: 2, attempted: 3 },
+  ],
+  focus: ["agreement", "prepositions-and-government"],
+  missed: [
+    missed("agreement", "C", "Les rapports que la directrice a ___ hier sont prêts.", ["lu", "lus", "lue", "lues"], "a", "b", "The past participle agrees with a preceding direct object: « que » stands for « les rapports »."),
+    missed("agreement", "B", "Les employées se sont ___ à l'heure.", ["présenté", "présentés", "présentée", "présentées"], "a", "d", "A pronominal verb's participle agrees with the subject here."),
+    missed("agreement", "C", "Quelle que soit la décision ___, nous l'appliquerons.", ["prise", "pris", "prises", "prendre"], "b", "a", "The participle agrees with « la décision »."),
+    missed("prepositions-and-government", "C", "Le comité a donné suite ___ votre demande.", ["de", "à", "sur", "pour"], "c", "b", "« Donner suite à » takes « à »."),
+    missed("prepositions-and-government", "B", "Nous comptons ___ votre collaboration.", ["avec", "sur", "pour", "à"], "a", "b", "« Compter sur » takes « sur »."),
+    missed("verb-tense-and-mood", "C", "Bien que le budget ___ réduit, le projet avance.", ["est", "soit", "sera", "était"], "a", "b", "« Bien que » takes the subjunctive."),
+    missed("verb-tense-and-mood", "C", "Si nous avions reçu les fonds, nous ___ plus tôt.", ["commencerions", "aurions commencé", "commencions", "avions commencé"], "a", "b", "The past conditional follows a pluperfect « si » clause."),
+    missed("pronouns", "C", "C'est le dossier ___ je vous ai parlé.", ["que", "dont", "lequel", "où"], "a", "b", "« Parler de » calls for « dont »."),
+    missed("connectors-and-discourse-markers", "C", "Le délai est court; ___, nous devons prioriser.", ["pourtant", "par conséquent", "toutefois", "cependant"], "c", "b", "A consequence calls for « par conséquent »."),
+    missed("register-and-formality", "C", "Veuillez ___ mes salutations distinguées.", ["recevoir", "agréer", "prendre", "accepter"], "a", "b", "The formal closing is « veuillez agréer »."),
+    missed("word-choice-precision", "C", "Le ministère a ___ une nouvelle politique.", ["fait", "adopté", "mis", "eu"], "a", "b", "« Adopter » is the precise verb for a policy."),
+    missed("sentence-structure", "C", "___ les retards, l'équipe a respecté l'échéance.", ["Malgré", "Bien que", "Même si", "Quoique"], "b", "a", "A noun follows « malgré », a clause follows « bien que »."),
+  ],
+};
 
 /** The question voiced and then transcribed back (D117): the smoke records nobody's voice. */
 const SPOKEN: SpeechRequest = {
@@ -507,6 +575,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
         "oral-practice": nothing,
         "oral-assessment": nothing,
         "oral-studio": nothing,
+        "diagnostic-interpretation": nothing,
       },
       byMethod: {
         generateItems: empty,
@@ -516,6 +585,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
         transcribe: empty,
         speak: empty,
         assessOral: empty,
+        interpretDiagnostic: empty,
       },
       missingModels,
       completions: [],
@@ -556,6 +626,9 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
   }
   const session: OralRequest = { ...ORAL_SESSION, descriptors: deps.descriptors };
   await call("oral-assessment", "assessOral", session, (p) => p.assessOral(session));
+  await call("diagnostic-interpretation", "interpretDiagnostic", DIAGNOSTIC_RUN, (p) =>
+    p.interpretDiagnostic(DIAGNOSTIC_RUN),
+  );
 
   const calls = await ledger.since(startedAt);
   const measure = (feature: AiFeature): FeatureMeasure => {
@@ -586,6 +659,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
       "oral-practice": measure("oral-practice"),
       "oral-assessment": measure("oral-assessment"),
       "oral-studio": measure("oral-studio"),
+      "diagnostic-interpretation": measure("diagnostic-interpretation"),
     },
     byMethod: {
       generateItems: average("generateItems"),
@@ -595,6 +669,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
       transcribe: average("transcribe"),
       speak: average("speak"),
       assessOral: average("assessOral"),
+      interpretDiagnostic: average("interpretDiagnostic"),
     },
     missingModels,
     completions,

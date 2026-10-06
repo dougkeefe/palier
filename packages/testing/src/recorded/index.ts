@@ -1,4 +1,5 @@
 import type {
+  DiagnosticInterpretationRequest,
   ExaminerTurnRequest,
   GenerateItemsRequest,
   Lang,
@@ -52,7 +53,15 @@ export type RecordedSpeech = { readonly contentType: string; readonly bytes: num
 
 /** One completion as OpenAI sent it. The web recorder writes this shape. */
 export type RecordedCompletion = {
-  readonly method: "generateItems" | "reviewItem" | "assessWriting" | "examinerTurn" | "transcribe" | "speak" | "assessOral";
+  readonly method:
+    | "generateItems"
+    | "reviewItem"
+    | "assessWriting"
+    | "examinerTurn"
+    | "transcribe"
+    | "speak"
+    | "assessOral"
+    | "interpretDiagnostic";
   readonly model: string;
   /** The port request the call was made with, so a replay makes the same call. */
   readonly request:
@@ -62,7 +71,8 @@ export type RecordedCompletion = {
     | ExaminerTurnRequest
     | RecordedTranscribeRequest
     | SpeechRequest
-    | OralRequest;
+    | OralRequest
+    | DiagnosticInterpretationRequest;
   /** 1 for the first completion of a call, 2 for the adapter's one retry. */
   readonly attempt: number;
   /**
@@ -84,7 +94,16 @@ export type RecordedRun = {
   readonly completions: readonly RecordedCompletion[];
 };
 
-const METHODS = new Set(["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak", "assessOral"]);
+const METHODS = new Set([
+  "generateItems",
+  "reviewItem",
+  "assessWriting",
+  "examinerTurn",
+  "transcribe",
+  "speak",
+  "assessOral",
+  "interpretDiagnostic",
+]);
 
 /** A hand edit, or a recorder that changed shape, fails here rather than as a confusing replay. */
 export const runOf = (file: string, raw: unknown): RecordedRun => {

@@ -292,6 +292,60 @@ describe("selectItems, diagnostic mode", () => {
   });
 });
 
+describe("selectItems, diagnostic mode with a band quota (ADR 25)", () => {
+  const base = { skill: "reading", lang: "fr", targetBand: "C", count: 4, mode: "diagnostic" } as const;
+  const subs: readonly SubSkill[] = ["main-idea", "inference", "tone-and-intent", "specific-detail"];
+  const band = (prefix: string, targetBand: TargetBand, n: number): Item[] =>
+    Array.from({ length: n }, (_, i) => item(`${prefix}${i}`, subs[i % subs.length] ?? "main-idea", targetBand));
+
+  it("draws each band's quota from that band, however lopsided the bank", () => {
+    const pool = [...band("b", "B", 2), ...band("c", "C", 20)];
+
+    const picked = selectItems({ ...base, bandQuota: { B: 2, C: 2 } }, pool, [], seq([0.3, 0.9, 0.5]), NOW);
+
+    expect(picked.filter((p) => p.targetBand === "B")).toHaveLength(2);
+    expect(picked.filter((p) => p.targetBand === "C")).toHaveLength(2);
+  });
+
+  it("fills a band's shortfall from what is left, so the run is still whole", () => {
+    const pool = [...band("b", "B", 1), ...band("c", "C", 10)];
+
+    const picked = selectItems({ ...base, bandQuota: { B: 2, C: 2 } }, pool, [], seq([0.3, 0.9, 0.5]), NOW);
+
+    expect(picked).toHaveLength(4);
+    expect(new Set(picked.map((p) => p.id)).size).toBe(4);
+    expect(picked.filter((p) => p.targetBand === "B")).toHaveLength(1);
+  });
+
+  it("never draws past the count, even when the quota does", () => {
+    const pool = [...band("b", "B", 5), ...band("c", "C", 5)];
+
+    expect(selectItems({ ...base, bandQuota: { B: 3, C: 3 } }, pool, [], seq([0.4]), NOW)).toHaveLength(4);
+  });
+
+  it("returns what there is when the whole bank is short", () => {
+    const pool = band("c", "C", 3);
+
+    expect(selectItems({ ...base, bandQuota: { B: 2, C: 2 } }, pool, [], seq([0.4]), NOW)).toHaveLength(3);
+  });
+});
+
+describe("selectItems, a bands override in practice mode (ADR 25)", () => {
+  it("draws only from the bands it is given, in place of the working set", () => {
+    const pool = [item("a", "main-idea", "A"), item("b", "inference", "B"), item("c", "tone-and-intent", "C")];
+
+    const picked = selectItems(
+      { skill: "reading", lang: "fr", targetBand: "C", count: 3, mode: "practice", bands: ["B"] },
+      pool,
+      [],
+      seq([0.5]),
+      NOW,
+    );
+
+    expect(picked.map((p) => p.id)).toEqual([itemId("b")]);
+  });
+});
+
 /** Found by the one-off mutation check (progress.md D77): the exclusion window's edge, exactly. */
 describe("selectItems, the 14-day edge", () => {
   const base = { skill: "reading", lang: "fr", targetBand: "C", count: 10, mode: "practice" } as const;

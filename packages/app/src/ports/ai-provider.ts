@@ -1,5 +1,7 @@
 import type {
   AiCapabilities,
+  DiagnosticInterpretation,
+  DiagnosticInterpretationRequest,
   ExaminerTurn,
   ExaminerTurnRequest,
   GenerateItemsRequest,
@@ -52,6 +54,9 @@ import type {
  *
  * `assessOral` is §3.3's own method, landed with Phase 5 Slice 3 (progress.md D122).
  *
+ * `interpretDiagnostic` is a fifth amendment (ADR 25): the diagnostic's written result, in
+ * plain language, over a run the engine has already scored and placed.
+ *
  * `verifyKey` is a third §3.3 amendment (progress.md D99, Phase 4 Slice 1): the one cheap
  * call `/settings/key` makes to report whether the user's key works (PRD §8.10).
  */
@@ -102,6 +107,14 @@ export type AiProvider = {
    * provider that cannot place its errors rejects, as `assessWriting` does.
    */
   assessOral: (req: OralRequest) => Promise<OralAssessment>;
+  /**
+   * A diagnostic run's written interpretation (ADR 25): a headline, a summary, strengths, one
+   * to three priorities on the run's own sub-skills, and a line on the plan, in
+   * `req.feedbackLang`. The score and the starting band arrive decided; the model explains them
+   * and changes neither. A provider whose answer `checkDiagnosticInterpretation` refuses, one
+   * that quotes a missed question say, rejects rather than return it.
+   */
+  interpretDiagnostic: (req: DiagnosticInterpretationRequest) => Promise<DiagnosticInterpretation>;
   /**
    * One cheap call that proves the key this provider holds is accepted. Resolves when it
    * is; otherwise rejects with the provider's own error for the reason (an invalid key, a

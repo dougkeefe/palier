@@ -1,4 +1,5 @@
 import type { Attempt, Item, ItemId, Lang, ScoredSkill, SubSkill, TargetBand } from "@palier/domain";
+import { bandRank } from "@palier/domain";
 
 import { selectItems, workingSet } from "./selector.js";
 import { weakestSubSkills } from "./weakest-sub-skills.js";
@@ -21,6 +22,10 @@ import { weakestSubSkills } from "./weakest-sub-skills.js";
  *  - **Oral-session findings bias the new items (D35, closed by D124).** The latest
  *    oral report's fixes arrive as `focusSubSkills`, favoured at `FOCUS_WEIGHT` (D127).
  *    Additive: without them the plan is exactly what it was, goldens included.
+ *  - **A diagnostic places the new items (ADR 25).** When the latest diagnostic run started
+ *    the plan below the target, `placement` draws its `startShare` of the new items at the
+ *    starting band and the rest above it. Additive the same way: absent, or at the target,
+ *    the plan is unchanged.
  *
  * `random` and `now` are primitives, not the ports (D32). Due reviews arrive
  * already resolved to items (the `@palier/app` use case reads them from the
@@ -62,6 +67,19 @@ export type DayPlanInput = {
    * or empty changes nothing.
    */
   readonly focusSubSkills?: readonly SubSkill[];
+  /**
+   * Where the latest complete diagnostic run started the plan (ADR 25): its starting band, and
+   * the share of new items drawn there when that is below the target. Absent, or at the target,
+   * changes nothing.
+   */
+  readonly placement?: DayPlacement;
+};
+
+/** A diagnostic's placement, as the planner reads it (ADR 25). */
+export type DayPlacement = {
+  readonly startBand: TargetBand;
+  /** The share of new items drawn at `startBand`, in [0, 1], from the profile. */
+  readonly startShare: number;
 };
 
 export type DayPlan = {
@@ -116,22 +134,40 @@ export const planDay = (input: DayPlanInput, random: () => number, now: string):
   // New items: practice mode already weights the three weakest sub-skills (§7.2), and
   // the oral report's, when there is one (D124). Reviews are excluded from the pool so
   // the buckets cannot overlap.
-  const newItems = tapering
-    ? []
-    : selectItems(
-        {
-          skill,
-          lang,
-          targetBand,
-          count: newCount,
-          mode: "practice",
-          ...(input.focusSubSkills === undefined ? {} : { boost: input.focusSubSkills }),
-        },
-        pool.filter((item) => !reviewIds.has(item.id)),
-        attempts,
-        random,
-        now,
-      );
+  const newPool = pool.filter((item) => !reviewIds.has(item.id));
+  const drawNew = (count: number, from: readonly Item[], bands?: readonly TargetBand[]): readonly Item[] =>
+    selectItems(
+      {
+        skill,
+        lang,
+        targetBand,
+        count,
+        mode: "practice",
+        ...(input.focusSubSkills === undefined ? {} : { boost: input.focusSubSkills }),
+        ...(bands === undefined ? {} : { bands }),
+      },
+      from,
+      attempts,
+      random,
+      now,
+    );
+  const placement = input.placement;
+  const placedBelow = placement !== undefined && bandRank(placement.startBand) < bandRank(targetBand);
+  let newItems: readonly Item[] = [];
+  if (!tapering && !placedBelow) newItems = drawNew(newCount, newPool);
+  if (!tapering && placedBelow) {
+    // The starting band's share first, then the rest from the working set's bands above it,
+    // so a starting band the bank runs short of still leaves a full day (ADR 25).
+    const atStart = drawNew(Math.round(newCount * placement.startShare), newPool, [placement.startBand]);
+    const started = new Set<ItemId>(atStart.map((item) => item.id));
+    const above = workingSet(targetBand).filter((band) => bandRank(band) > bandRank(placement.startBand));
+    const rest = drawNew(
+      newCount - atStart.length,
+      newPool.filter((item) => !started.has(item.id)),
+      above,
+    );
+    newItems = [...atStart, ...rest];
+  }
   const newIds = new Set<ItemId>(newItems.map((item) => item.id));
 
   // Maintenance: strengths are the sub-skills not among the weakest. Diagnostic

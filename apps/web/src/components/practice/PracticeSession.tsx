@@ -3,7 +3,6 @@
 import type { GeneratedSet } from "@palier/app";
 import type { Item, Passage as PassageData, ScoredSkill, SessionId } from "@palier/domain";
 import { attemptId, sessionId } from "@palier/domain";
-import type { SkillTrend } from "@palier/engine";
 import { Button, Callout, EmptyState, Passage, ProgressRail, Sheet, itemRenderers } from "@palier/ui";
 import { useLocale, useTranslations } from "next-intl";
 import { type ReactNode, type Ref, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
@@ -13,14 +12,13 @@ import { Link } from "../../i18n/navigation";
 import { ArticleLink } from "../library/ArticleLink";
 import type { Container } from "../../lib/container";
 import { isPageKey } from "../../lib/keyboard";
-import { DIAGNOSTIC_SIZE, REVIEW_SET_LIMIT, readStudyProfile, sessionSizeFor } from "../../lib/study";
+import { REVIEW_SET_LIMIT, readStudyProfile, sessionSizeFor } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
-import { KeyOffer } from "../key/KeyOffer";
-import { NonAffiliation } from "../NonAffiliation";
+import { DiagnosticResult } from "../diagnostic/DiagnosticResult";
+import { isShortRun } from "../../features/diagnostic/result-view";
 import { useSync } from "../sync/SyncRunner";
 import { GeneratedProvenance } from "./GeneratedProvenance";
 import { ReportItem } from "./ReportItem";
-import { TrendMeters } from "./TrendMeters";
 
 export type PracticeMode = "drill" | "diagnostic" | "review" | "generated";
 
@@ -33,6 +31,8 @@ type Loaded =
   | { readonly status: "loading" }
   | { readonly status: "needs-setup" }
   | { readonly status: "failed" }
+  /** A diagnostic drawn short of the profile's size, which could never place, so it is not started (ADR 25). */
+  | { readonly status: "too-few"; readonly available: number; readonly size: number }
   | {
       readonly status: "ready";
       readonly items: readonly Item[];
@@ -50,7 +50,8 @@ const TARGET_LANG = "fr" as const;
  * come from (`startSession`'s plan, `runDiagnostic`'s coverage sample, or
  * `reviewQueue`'s due stack), in whether each answer is followed by feedback (a
  * diagnostic gives none until the end, so it measures rather than teaches), and in the
- * ending (a summary, or accuracy per band with its interval, R10).
+ * ending (a summary, or the diagnostic's result: the score, the plan's starting level and the
+ * written interpretation, ADR 25).
  *
  * A generated set (architecture.md §8.3, progress.md D110–D111) is the one exception to the
  * answer loop: its items were made on this device, so it is handed in whole rather than
@@ -105,6 +106,7 @@ function LoadedSession(props: Exclude<PracticeSessionProps, { readonly mode: "ge
     return <p role="status">{t("loading")}</p>;
   }
   if (loaded.status === "needs-setup") return <NeedsSetup />;
+  if (loaded.status === "too-few") return <TooFew available={loaded.available} size={loaded.size} />;
   return (
     <Runner
       container={state.container}
@@ -141,17 +143,37 @@ const load = async (
     });
     return { status: "ready", items: started.plan.items, sessionId: started.session.id };
   }
-  // The diagnostic samples every band whatever the target (D47). The request still
-  // carries one, so a first-run diagnostic before onboarding carries C, the level
-  // this product is built for.
+  // The diagnostic draws evenly across the bands whatever the target (D47, ADR 25), sized and
+  // split by the profile. The request still carries a target, so a first-run diagnostic before
+  // onboarding carries C, the level this product is built for.
   const { items } = await container.useCases.runDiagnostic({
     skill,
     lang: TARGET_LANG,
     targetBand: profile?.targetBand ?? "C",
-    count: DIAGNOSTIC_SIZE,
+    count: container.profile.diagnostic.size,
+    bandQuota: container.profile.diagnostic.bandQuota,
   });
+  const { size } = container.profile.diagnostic;
+  if (isShortRun(items.length, size)) return { status: "too-few", available: items.length, size };
   return { status: "ready", items, sessionId: sessionId(container.ids.ulid()) };
 };
+
+function TooFew({ available, size }: { available: number; size: number }) {
+  const t = useTranslations("diagnostic");
+  const tCommon = useTranslations("common");
+  return (
+    <EmptyState
+      heading={t("tooFewTitle")}
+      action={
+        <Link href="/home" className="pl-btn pl-btn--secondary pl-focusable">
+          {tCommon("backHome")}
+        </Link>
+      }
+    >
+      {t("tooFewBody", { available, size })}
+    </EmptyState>
+  );
+}
 
 function NeedsSetup() {
   const t = useTranslations("today");
@@ -186,12 +208,10 @@ function Runner({
 }) {
   const t = useTranslations("drill");
   const tCommon = useTranslations("common");
-  const tSkills = useTranslations("skills");
   const [state, dispatch] = useReducer(drillReducer, items, (initial) => startDrill(initial, performance.now()));
   // Keyed by the item it belongs to, so a new item shows no stale passage.
   const [loadedPassage, setLoadedPassage] = useState<{ itemId: string; passage: PassageData | null } | null>(null);
   const [recordFailed, setRecordFailed] = useState(false);
-  const [trend, setTrend] = useState<SkillTrend | null>(null);
   const sync = useSync();
   const itemRef = useRef<HTMLDivElement>(null);
   const feedbackRef = useRef<HTMLHeadingElement>(null);
@@ -294,20 +314,12 @@ function Runner({
     }
   }, [state.index, state.phase]);
 
-  // The ending: close a drill's session; read a diagnostic's accuracy back.
+  // The ending: close a drill's session. A diagnostic's result reads its own run back (ADR 25).
   useEffect(() => {
     if (state.phase !== "complete" || items.length === 0) return;
-    let live = true;
-    if (mode === "drill") {
-      // A completed session is a sync trigger, debounced (architecture.md §9.4).
-      void container.useCases.completeSession({ sessionId: session }).then(() => sync.notify("session-complete"));
-    } else if (mode === "diagnostic" && skill !== null) {
-      void container.useCases.diagnosticReadout({ skill }).then((readout) => live && setTrend(readout));
-    }
-    return () => {
-      live = false;
-    };
-  }, [state.phase, mode, container, session, skill, items.length, sync]);
+    // A completed session is a sync trigger, debounced (architecture.md §9.4).
+    if (mode === "drill") void container.useCases.completeSession({ sessionId: session }).then(() => sync.notify("session-complete"));
+  }, [state.phase, mode, container, session, items.length, sync]);
 
   if (items.length === 0) {
     return (
@@ -327,7 +339,7 @@ function Runner({
   if (state.phase === "complete") {
     if (mode === "generated") return <GeneratedComplete {...summaryOf(state)} onDone={onDone} />;
     return mode === "diagnostic" && skill !== null ? (
-      <DiagnosticComplete skillName={tSkills(skill)} trend={trend} />
+      <DiagnosticResult skill={skill} askOnOpen />
     ) : (
       <DrillComplete {...summaryOf(state)} />
     );
@@ -506,52 +518,5 @@ function DrillComplete({ answered, correct }: { answered: number; correct: numbe
     >
       {t("summary", { correct, answered })}
     </EmptyState>
-  );
-}
-
-/**
- * The diagnostic's readout. On the diagnostic path it is also where onboarding's step 5,
- * the optional key, is offered: after the diagnostic, never before (§8.1, progress.md D100).
- * It is offered only while no key is held, and it is never a gate.
- */
-function DiagnosticComplete({ skillName, trend }: { skillName: string; trend: SkillTrend | null }) {
-  const t = useTranslations("diagnostic");
-  const tKey = useTranslations("key");
-  const tCommon = useTranslations("common");
-  const container = useContainer();
-  const [offerKey, setOfferKey] = useState(false);
-
-  useEffect(() => {
-    if (container.status !== "ready") return;
-    let live = true;
-    void container.container.useCases.apiKeyStatus().then(
-      (status) => live && setOfferKey(status === null),
-      () => undefined,
-    );
-    return () => {
-      live = false;
-    };
-  }, [container]);
-
-  return (
-    <section className="app-stack">
-      <h2>{t("resultTitle", { skill: skillName })}</h2>
-      {trend === null ? <p role="status">{tCommon("loading")}</p> : <TrendMeters trend={trend} />}
-      <p className="app-muted">{t("resultNote")}</p>
-      <NonAffiliation />
-      <Link href="/home" className="pl-btn pl-btn--primary pl-focusable">
-        {t("toToday")}
-      </Link>
-      {offerKey ? (
-        <KeyOffer
-          heading="h3"
-          actions={
-            <Link href="/settings/key" className="pl-btn pl-btn--secondary pl-focusable">
-              {tKey("offerAdd")}
-            </Link>
-          }
-        />
-      ) : null}
-    </section>
   );
 }

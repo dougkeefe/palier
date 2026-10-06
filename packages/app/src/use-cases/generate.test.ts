@@ -95,7 +95,7 @@ const scriptedProvider = (drafts: readonly ItemDraft[] | Error, judge: Judge = h
     maxInFlight = Math.max(maxInFlight, inFlight);
   };
   const provider: AiProvider = {
-    capabilities: () => ({ generatePassage: false, generateItems: true, reviewItem: true, assessWriting: false, generateScenario: false, transcribe: false, speak: false, examinerTurn: false, assessOral: false }),
+    capabilities: () => ({ generatePassage: false, generateItems: true, reviewItem: true, assessWriting: false, generateScenario: false, transcribe: false, speak: false, examinerTurn: false, assessOral: false, interpretDiagnostic: false }),
     generatePassage: () => Promise.reject(new Error("unused")),
     generateItems: async (req) => {
       enter();
@@ -131,6 +131,7 @@ const scriptedProvider = (drafts: readonly ItemDraft[] | Error, judge: Judge = h
     speak: () => Promise.reject(new Error("unused")),
     examinerTurn: () => Promise.reject(new Error("unused")),
     assessOral: () => Promise.reject(new Error("unused")),
+    interpretDiagnostic: () => Promise.reject(new Error("unused")),
     verifyKey: () => Promise.resolve(),
     lastUsage: () => usage,
   };

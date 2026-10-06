@@ -28,7 +28,7 @@ export { retirementBox, scheduleReview } from "./scheduler.js";
 export type { SelectionCriteria, SelectionMode } from "./selector.js";
 export { FOCUS_WEIGHT, RECENT_DAYS, WEAKEST_WEIGHT, selectItems, workingSet } from "./selector.js";
 
-export type { DayPlan, DayPlanInput } from "./planner.js";
+export type { DayPlacement, DayPlan, DayPlanInput } from "./planner.js";
 export {
   MAINTENANCE_SHARE,
   NEW_SHARE,
@@ -44,6 +44,13 @@ export {
   WEAKEST_WINDOW,
   weakestSubSkills,
 } from "./weakest-sub-skills.js";
+
+export type {
+  DiagnosticBandScore,
+  DiagnosticRun,
+  DiagnosticSummary,
+} from "./diagnostic-summary.js";
+export { DIAGNOSTIC_SUB_SKILL_MIN, latestCompleteRun, summariseDiagnostic } from "./diagnostic-summary.js";
 
 export type { SubSkillTally } from "./sub-skill-breakdown.js";
 export { examSubSkillBreakdown, subSkillBreakdown } from "./sub-skill-breakdown.js";

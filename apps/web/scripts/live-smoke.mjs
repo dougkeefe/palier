@@ -34,7 +34,8 @@ const usd = (amount) => `US$${amount.toFixed(6)}`;
 /**
  * The `pricing.json` `features` block a run measured: a typical use of each feature, as its calls.
  * `oral-assessment` is left out: the smoke's session is short, so its report is no typical one, and
- * pricing takes a real session's (docs/deploy.md; progress.md D127).
+ * pricing takes a real session's (docs/deploy.md; progress.md D127). The diagnostic's interpretation is
+ * in: the smoke's run is a whole one, so its call is a typical one (ADR 25).
  */
 export const measuredFeatures = (result) => ({
   "writing-feedback": [
@@ -48,10 +49,26 @@ export const measuredFeatures = (result) => ({
       outputTokens: result.byMethod.reviewItem.outputTokens * result.byMethod.reviewItem.calls,
     },
   ],
+  "diagnostic-interpretation": [
+    {
+      role: "assess",
+      inputTokens: result.byMethod.interpretDiagnostic.inputTokens,
+      outputTokens: result.byMethod.interpretDiagnostic.outputTokens,
+    },
+  ],
 });
 
 /** Every method the recorder keeps, the oral turn loop's three (D117) and the report (D122) included. */
-const RECORDED_METHODS = ["generateItems", "reviewItem", "assessWriting", "examinerTurn", "transcribe", "speak", "assessOral"];
+const RECORDED_METHODS = [
+  "generateItems",
+  "reviewItem",
+  "assessWriting",
+  "examinerTurn",
+  "transcribe",
+  "speak",
+  "assessOral",
+  "interpretDiagnostic",
+];
 
 /** The profile's oral level descriptors in English, which the report's prompt quotes (ADR 9). */
 export const englishDescriptors = (profile) =>

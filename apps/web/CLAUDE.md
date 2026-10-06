@@ -245,8 +245,19 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   - `/settings/key` (`components/key/KeySettings.tsx`, with its decisions in `features/key/key-view.ts`)
     saves, checks, removes and keeps a key for a tab. Every check result is a sentence mapped by error
     **name**, never the raw error. `/settings/key/guide` is static.
-  - Onboarding's step 5 is the wizard's last step on the skip path, and an offer on the diagnostic readout
-    on the diagnostic path ("diagnostic before key, always"). `components/key/KeyOffer.tsx` serves both.
+  - Onboarding's step 5 is the wizard's last step on the skip path (`components/key/KeyOffer.tsx`). On the diagnostic
+    path it is **the diagnostic's own gate** (ADR 25, superseding §8.1's "diagnostic before key"): the diagnostic runs on
+    the key, so with none `DiagnosticLauncher` shows `NoKeyCard`, whose link carries `?next=diagnostic`, and the key
+    screen then offers the way back (`returnAfterKey`, an allow-list, never an address from the query).
+  - **The diagnostic's result** (ADR 25) is `components/diagnostic/DiagnosticResult.tsx`, at a run's end and at
+    `/diagnostic/result?skill=…` from today's card; its decisions are `features/diagnostic/result-view.ts`. The score,
+    right and wrong, by level and by sub-skill, and the plan's starting level are the engine's, derived from the attempts
+    (ADR 16); **no question is ever shown**, and no band is named (ADR 7). The written interpretation is asked for on
+    the key **only at the run's own end** (`askOnOpen`, from `PracticeSession`); opened anywhere else, or kept in the other
+    language, it is **offered with its cost, never spent on opening**. It is metered as `diagnostic-interpretation`, joined while in flight
+    (`diagnosticInterpretationInFlight`) and kept in the device-local `diagnosticReports` store, cleared by wipe and
+    delete-everywhere. Today's readiness card restates the run, and the plan card says where it started the day; both
+    read `studyFocus`, which `startSession` reads too, so the preview is the session.
   - **Spend** (Phase 4 Slice 2, progress.md D101–D104). `src/lib/pricing.json` is pricing as data,
     structure-checked by `src/lib/pricing.ts` and held equal to the factory's rates by a test;
     `openAiFor` passes its `models`, so every call is priced. The container's `costLedger` is Dexie's in

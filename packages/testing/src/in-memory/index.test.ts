@@ -55,6 +55,7 @@ describe("@palier/testing/in-memory", () => {
         "isHermetic",
         "memoryAttemptStore",
         "memoryCostLedger",
+        "memoryDiagnosticReportStore",
         "memoryExamRunStore",
         "memoryGeneratedItemStore",
         "memoryItemRepository",

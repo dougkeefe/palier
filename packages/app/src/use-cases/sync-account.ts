@@ -8,6 +8,7 @@ import type {
   SyncTransport,
   TelemetryStore,
   WritingStore,
+  DiagnosticReportStore,
   GeneratedItemStore,
   OralStore,
 } from "../ports/index.js";
@@ -134,6 +135,7 @@ export type DeleteEverywhereDeps = ProgressStores &
     readonly writing: WritingStore;
     readonly generated: GeneratedItemStore;
     readonly oral: OralStore;
+    readonly diagnosticReports: DiagnosticReportStore;
   };
 
 /**

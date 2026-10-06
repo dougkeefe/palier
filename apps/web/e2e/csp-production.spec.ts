@@ -26,6 +26,7 @@ const PAGES = [
   "",
   "/about",
   "/diagnostic",
+  "/diagnostic/result",
   "/exam",
   "/exam/results",
   "/exam/run",

@@ -202,6 +202,28 @@ export const oralAssessmentShape = z.strictObject({
   ),
 });
 
+/**
+ * A diagnostic run's written interpretation (ADR 25). Whether each priority's sub-skill belongs
+ * to the run's skill, and whether any text quotes a missed question, is
+ * `checkDiagnosticInterpretation`'s, since a schema does not see the request.
+ */
+export const diagnosticInterpretationShape = z.strictObject({
+  headline: z.string().trim().min(1),
+  summary: z.string().trim().min(1),
+  strengths: z.array(z.string().trim().min(1)).max(3),
+  priorities: z
+    .array(
+      z.strictObject({
+        subSkill: z.enum([...READING_SUB_SKILLS, ...WRITING_SUB_SKILLS]),
+        what: z.string().trim().min(1),
+        why: z.string().trim().min(1),
+      }),
+    )
+    .min(1)
+    .max(3),
+  planNote: z.string().trim().min(1),
+});
+
 export const passageDraftSchema = passageDraftShape.readonly();
 export const itemDraftSchema = itemDraftShape.readonly();
 export const reviewVerdictSchema = reviewVerdictShape.readonly();
@@ -211,3 +233,4 @@ export const scenarioDraftSchema = scenarioDraftShape.readonly();
 export const examinerTurnSchema = examinerTurnShape.readonly();
 export const oralAssessmentDraftSchema = oralAssessmentDraftShape.readonly();
 export const oralAssessmentSchema = oralAssessmentShape.readonly();
+export const diagnosticInterpretationSchema = diagnosticInterpretationShape.readonly();

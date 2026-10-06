@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/privacy"
 }
 
 /** The never-synced list, in the settings' own words (architecture.md §9.4: "appears verbatim"). */
-const NEVER_KEYS = ["neverKey", "neverAudio", "neverTranscripts", "neverSubmissions", "neverCosts"] as const;
+const NEVER_KEYS = ["neverKey", "neverAudio", "neverTranscripts", "neverSubmissions", "neverCosts", "neverDiagnostic"] as const;
 
 /**
  * The privacy notice (architecture.md §12, progress.md D145): what the server holds, what

@@ -79,6 +79,14 @@ from disk (progress.md D154).
   carries an identity is **refused, not stored**: never loosen it. The retirement rules are data, the
   profile's `itemStatistics` block (ADR 9), and `ItemStats.pointBiserial` is `number | null`, because an
   item with no variance has no correlation to report.
+- **The diagnostic's rules and its written result** (ADR 25). The profile's `diagnostic` block (`DiagnosticRules`:
+  `size`, `bandQuota`, `secureAccuracy`, `startShare`, `focusCount`, `retakeDays`) is required, and its quota must add
+  up to its size. The interpretation's DTOs are in `ai.ts`, beside the oral report's: `DiagnosticInterpretationRequest`
+  (the engine's score and placement, and the items missed) and `DiagnosticInterpretation` (a headline, a summary, up to
+  three strengths, one to three priorities on a `ScoredSubSkill`, and a plan note). `diagnosticInterpretationSchema` is a
+  strict shape. **`checkDiagnosticInterpretation` holds what a schema cannot see**: every priority is on the run's own
+  skill, none repeats, and no text quotes a missed stem of 24 characters or more, whatever its case or spacing.
+  `diagnostic-interpretation` is the seventh-listed `AI_FEATURES` entry.
 - **A hand-authored item names its contributor** (content-factory.md §5). `ItemProvenance.contributor`
   and `PassageSource.contributor` are optional in the schema, so every bank published before them stays
   valid, and are a public handle shaped as a GitHub username (`contributorSchema`: 1 to 39 letters, digits

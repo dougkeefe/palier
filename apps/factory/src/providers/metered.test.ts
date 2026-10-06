@@ -6,7 +6,7 @@ import type { UsageRecord } from "@palier/domain";
 import { meterProvider } from "./metered.js";
 
 const providerWith = (usage: UsageRecord | null): AiProvider => ({
-  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true, transcribe: true, speak: true, examinerTurn: true, assessOral: true }),
+  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true, transcribe: true, speak: true, examinerTurn: true, assessOral: true, interpretDiagnostic: true }),
   generatePassage: () => Promise.resolve([]),
   generateItems: () => Promise.resolve([]),
   reviewItem: () =>
@@ -24,6 +24,7 @@ const providerWith = (usage: UsageRecord | null): AiProvider => ({
   speak: () => Promise.resolve(new Blob()),
   examinerTurn: () => Promise.resolve({ text: "q", difficulty: null }),
   assessOral: () => Promise.resolve({} as never),
+  interpretDiagnostic: () => Promise.resolve({} as never),
   verifyKey: () => Promise.resolve(),
   lastUsage: () => usage,
 });
@@ -102,6 +103,12 @@ describe("meterProvider", () => {
       descriptors: { A: "a", B: "b", C: "c" },
     });
     expect(metered.totals()).toEqual({ calls: 1, inputTokens: 900, outputTokens: 300, costUsd: 0.02 });
+  });
+
+  it("accounts a diagnostic's interpretation like any other spending call (ADR 25)", async () => {
+    const metered = meterProvider(providerWith({ model: "m", inputTokens: 400, outputTokens: 90, costUsd: 0.01 }));
+    await metered.provider.interpretDiagnostic({} as never);
+    expect(metered.totals()).toEqual({ calls: 1, inputTokens: 400, outputTokens: 90, costUsd: 0.01 });
   });
 
   it("passes a key check through and accounts nothing for it", async () => {

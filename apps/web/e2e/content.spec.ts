@@ -31,7 +31,7 @@ test("the privacy notice lists what is held, what never is, and the 180 days, in
   await expect(page).toHaveTitle("Privacy · Palier");
   await expect(page.getByText(/No name, no email, no department/)).toBeVisible();
   // The never-synced list, in the settings' own words (architecture.md §9.4).
-  for (const never of ["Your OpenAI API key", "Session audio", "Oral transcripts", "Writing workshop submissions", "The cost ledger"]) {
+  for (const never of ["Your OpenAI API key", "Session audio", "Oral transcripts", "Writing workshop submissions", "The cost ledger", "Your diagnostics’ written results"]) {
     await expect(page.getByRole("listitem").filter({ hasText: never })).toBeVisible();
   }
   await expect(page.getByText(/no activity for 180 days is deleted/)).toBeVisible();

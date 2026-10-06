@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { axeClean, onboard } from "./helpers";
+import { addKeyAtDiagnosticGate, axeClean, onboard } from "./helpers";
 import { SENTINEL, stubOpenAi } from "./leak-guard";
 
 /**
@@ -105,10 +105,17 @@ test("step 5 is the skip path's last step: three lines, the guide, and it can be
   await axeClean(page);
 });
 
-test("step 5 comes after the diagnostic on the diagnostic path, never before it (§8.1)", async ({ page }) => {
+test("on the diagnostic path, the diagnostic asks for the key first and the key screen leads back to it (ADR 25)", async ({
+  page,
+}) => {
   await onboard(page, "diagnostic");
   await expect(page).toHaveURL(/\/en\/diagnostic$/);
-  await expect(page.getByRole("heading", { name: "An OpenAI key, if you want one" })).toHaveCount(0);
+  // No question is asked before the key is held: the gate stands where the launcher would.
+  await expect(page.getByRole("button", { name: /^Start the .* diagnostic$/ })).toHaveCount(0);
+  await expect(page.getByText("Drills, mock exams and your progress all work without a key.")).toBeVisible();
+  await addKeyAtDiagnosticGate(page, SENTINEL);
+  await expect(page).toHaveURL(/\/en\/diagnostic$/);
+  await axeClean(page);
 });
 
 test("the key screen and its guide render in French too, at parity", async ({ page }) => {
