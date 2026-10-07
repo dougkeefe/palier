@@ -66,6 +66,15 @@ test("journey 2: a daily session end to end, feedback panel included, then back 
   await onboard(page, "skip");
   await expect(page).toHaveURL(/\/en\/home$/);
   await expect(page.getByRole("heading", { name: "Today’s plan" })).toBeVisible();
+  // A new user is sent to the diagnostic first, at the plan's head, and the plan still works (D214).
+  await expect(page.getByRole("heading", { name: "Start here: take the diagnostic" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Take the diagnostic" })).toHaveAttribute("href", "/en/diagnostic");
+  // The mock exam is not the lead before practice at the target is measurable: a way on, not a banner.
+  await expect(page.getByRole("heading", { name: "You’re ready for a mock exam" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Take a mock exam" })).toBeVisible();
+  // The day's grammar pointer sits beside the plan, in French whatever the screen's language (D216, D218).
+  await expect(page.getByRole("heading", { name: "Grammar pointer" })).toBeVisible();
+  await expect(page.locator(".app-home__pointer-text")).toHaveAttribute("lang", "fr");
   await axeClean(page);
 
   await page.getByRole("link", { name: /^Start, \d+ min$/ }).click();
@@ -93,7 +102,7 @@ test("journey 2: a daily session end to end, feedback panel included, then back 
   await expect(page.getByText(new RegExp(`^\\d+ of ${total} correct\\.$`))).toBeVisible();
   await page.getByRole("link", { name: "Back to today" }).click();
   await expect(page).toHaveURL(/\/en\/home$/);
-  await expect(page.getByRole("heading", { name: "Review queue" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "More ways to practise" })).toBeVisible();
 });
 
 test("the drill keeps focus on the next item's options after advancing (§11)", async ({ page }) => {

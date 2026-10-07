@@ -66,6 +66,10 @@ from disk (progress.md D154).
   library missing any sub-skill's article, or with two**, since an item's explanation links to its sub-skill's page, and
   an article related to itself. Cited target-language text in the prose is marked `_like this_` (`CITED_MARK`), which the
   page renders with the article's `lang`; an unpaired marker is refused, with its path.
+- **The grammar pointers are a content artefact** (`pointer` in `CONTENT_SCHEMAS`, `pointers.ts`, progress.md D216,
+  D218). A `Pointer` is `{ id, subSkill, lang, text }`. **The text is written in the practised language (`lang`), never
+  the interface's**, with its example marked `_like this_`. Its sub-skill is a written-expression one, never reading or oral.
+  `parsePointers` refuses a duplicate id, an unpaired `CITED_MARK`, and **a set missing any written-expression sub-skill**.
 - **The adversarial-review gate lives here** (`review-gate.ts`, progress.md D109): `gateReasons`,
   `CONFIDENCE_THRESHOLD` and the key-blind `reviewRequestFor`, pure over an `Item` and a `ReviewVerdict`.
   The factory's stage 4 and the browser's `generatePracticeSet` share it, and domain is the one package both

@@ -1,0 +1,302 @@
+[
+  {
+    "id": "verb-tense-and-mood-1",
+    "subSkill": "verb-tense-and-mood",
+    "lang": "fr",
+    "text": "Après _il faut que_, _bien que_, _pour que_ et _avant que_, employez le subjonctif : _Il faut que le rapport soit prêt._"
+  },
+  {
+    "id": "verb-tense-and-mood-2",
+    "subSkill": "verb-tense-and-mood",
+    "lang": "fr",
+    "text": "_Après que_ se construit avec l’indicatif, contrairement à _avant que_ : _après que le comité a statué_."
+  },
+  {
+    "id": "verb-tense-and-mood-3",
+    "subSkill": "verb-tense-and-mood",
+    "lang": "fr",
+    "text": "Jamais de conditionnel après le _si_ de condition : _Si nous avions le budget, nous embaucherions._"
+  },
+  {
+    "id": "verb-tense-and-mood-4",
+    "subSkill": "verb-tense-and-mood",
+    "lang": "fr",
+    "text": "Un verbe d’opinion à la forme négative appelle le subjonctif : _Je ne pense pas qu’il soit disponible._"
+  },
+  {
+    "id": "verb-tense-and-mood-5",
+    "subSkill": "verb-tense-and-mood",
+    "lang": "fr",
+    "text": "Le futur antérieur marque ce qui sera achevé avant une autre action future : _Quand vous aurez lu le rapport, nous en discuterons._"
+  },
+  {
+    "id": "agreement-1",
+    "subSkill": "agreement",
+    "lang": "fr",
+    "text": "Avec _avoir_, le participe passé s’accorde seulement avec le complément direct placé avant lui : _les notes que j’ai rédigées_."
+  },
+  {
+    "id": "agreement-2",
+    "subSkill": "agreement",
+    "lang": "fr",
+    "text": "Avec _être_, le participe passé s’accorde avec le sujet : _Les demandes ont été approuvées._"
+  },
+  {
+    "id": "agreement-3",
+    "subSkill": "agreement",
+    "lang": "fr",
+    "text": "Trouvez le vrai sujet quand il est loin du verbe : _La liste des documents exigés est jointe._"
+  },
+  {
+    "id": "agreement-4",
+    "subSkill": "agreement",
+    "lang": "fr",
+    "text": "_Ci-joint_ reste invariable en tête de phrase : _Ci-joint les pièces demandées._"
+  },
+  {
+    "id": "agreement-5",
+    "subSkill": "agreement",
+    "lang": "fr",
+    "text": "_Tout_ devant un adjectif varie seulement si l’adjectif est féminin et commence par une consonne : _Elle est toute contente_, mais _elle est tout heureuse_."
+  },
+  {
+    "id": "prepositions-and-government-1",
+    "subSkill": "prepositions-and-government",
+    "lang": "fr",
+    "text": "Certains verbes ne prennent pas la préposition de l’anglais : _participer à un projet_, _assister à une réunion_, _se fier à quelqu’un_."
+  },
+  {
+    "id": "prepositions-and-government-2",
+    "subSkill": "prepositions-and-government",
+    "lang": "fr",
+    "text": "Deux verbes ne partagent un complément que s’ils ont la même construction : _Il a contribué au projet et l’a appuyé._"
+  },
+  {
+    "id": "prepositions-and-government-3",
+    "subSkill": "prepositions-and-government",
+    "lang": "fr",
+    "text": "Employez _en_ devant une province féminine ou commençant par une voyelle, et _au_ devant une province masculine : _en Alberta_, _en Ontario_, _au Manitoba_."
+  },
+  {
+    "id": "prepositions-and-government-4",
+    "subSkill": "prepositions-and-government",
+    "lang": "fr",
+    "text": "On _se rappelle quelque chose_, mais on _se souvient de quelque chose_ : _Je me rappelle cette décision._"
+  },
+  {
+    "id": "prepositions-and-government-5",
+    "subSkill": "prepositions-and-government",
+    "lang": "fr",
+    "text": "_Pallier_ se construit sans préposition : _pallier une pénurie_, et non _pallier à une pénurie_."
+  },
+  {
+    "id": "pronouns-1",
+    "subSkill": "pronouns",
+    "lang": "fr",
+    "text": "_Leur_ devant un verbe est un pronom et ne prend jamais de s : _Je leur ai transmis les documents._"
+  },
+  {
+    "id": "pronouns-2",
+    "subSkill": "pronouns",
+    "lang": "fr",
+    "text": "Employez _dont_ pour un complément introduit par _de_ : _le dossier dont je vous ai parlé_, et non _que je vous ai parlé_."
+  },
+  {
+    "id": "pronouns-3",
+    "subSkill": "pronouns",
+    "lang": "fr",
+    "text": "Choisissez _y_ ou _en_ selon la préposition du verbe : _J’y pense_ (_penser à_), _J’en parle_ (_parler de_)."
+  },
+  {
+    "id": "pronouns-4",
+    "subSkill": "pronouns",
+    "lang": "fr",
+    "text": "Après une préposition, on emploie _qui_ pour une personne et _lequel_ pour une chose : _la collègue avec qui je travaille_, _le projet auquel je participe_."
+  },
+  {
+    "id": "pronouns-5",
+    "subSkill": "pronouns",
+    "lang": "fr",
+    "text": "À l’impératif affirmatif, le pronom suit le verbe avec un trait d’union : _Envoyez-le-moi_, mais _ne me l’envoyez pas_."
+  },
+  {
+    "id": "connectors-and-discourse-markers-1",
+    "subSkill": "connectors-and-discourse-markers",
+    "lang": "fr",
+    "text": "Choisissez le connecteur pour sa logique : _en effet_ confirme, _or_ introduit un fait nouveau, _en revanche_ marque une opposition."
+  },
+  {
+    "id": "connectors-and-discourse-markers-2",
+    "subSkill": "connectors-and-discourse-markers",
+    "lang": "fr",
+    "text": "_Par contre_ est admis, mais _en revanche_ ou _toutefois_ conviennent mieux à un écrit soigné : _Le budget augmente; toutefois, les effectifs restent stables._"
+  },
+  {
+    "id": "connectors-and-discourse-markers-3",
+    "subSkill": "connectors-and-discourse-markers",
+    "lang": "fr",
+    "text": "On évite _malgré que_ dans un texte soigné : employez _bien que_ suivi du subjonctif, ou _malgré_ suivi d’un nom."
+  },
+  {
+    "id": "connectors-and-discourse-markers-4",
+    "subSkill": "connectors-and-discourse-markers",
+    "lang": "fr",
+    "text": "_Afin de_ suivi de l’infinitif exige le même sujet dans les deux propositions : _Nous révisons le texte afin de le publier._"
+  },
+  {
+    "id": "connectors-and-discourse-markers-5",
+    "subSkill": "connectors-and-discourse-markers",
+    "lang": "fr",
+    "text": "_Quoique_ en un mot veut dire « bien que »; _quoi que_ en deux mots veut dire « quelle que soit la chose que » : _Quoi qu’il arrive, nous publierons le rapport._"
+  },
+  {
+    "id": "register-and-formality-1",
+    "subSkill": "register-and-formality",
+    "lang": "fr",
+    "text": "Dans un courriel de travail, écrivez _Pourriez-vous_ plutôt que _Peux-tu_, sauf si vous tutoyez déjà la personne."
+  },
+  {
+    "id": "register-and-formality-2",
+    "subSkill": "register-and-formality",
+    "lang": "fr",
+    "text": "Dans un écrit soigné, n’omettez jamais le _ne_ de la négation : _Nous ne pouvons pas donner suite à cette demande._"
+  },
+  {
+    "id": "register-and-formality-3",
+    "subSkill": "register-and-formality",
+    "lang": "fr",
+    "text": "L’interrogation soignée se fait par inversion : _Avez-vous reçu le document?_ plutôt que _Vous avez reçu le document?_"
+  },
+  {
+    "id": "register-and-formality-4",
+    "subSkill": "register-and-formality",
+    "lang": "fr",
+    "text": "Préférez _cela_ à _ça_ dans un texte administratif : _Cela permettra de réduire les délais._"
+  },
+  {
+    "id": "register-and-formality-5",
+    "subSkill": "register-and-formality",
+    "lang": "fr",
+    "text": "Terminez une lettre par une formule complète, comme _Veuillez agréer, Madame, mes salutations distinguées_; dans un courriel, _Cordialement_ suffit."
+  },
+  {
+    "id": "word-choice-precision-1",
+    "subSkill": "word-choice-precision",
+    "lang": "fr",
+    "text": "Distinguez _les effectifs_ (le personnel), _efficace_ (qui produit le résultat) et _efficient_ (qui le produit avec peu de ressources)."
+  },
+  {
+    "id": "word-choice-precision-2",
+    "subSkill": "word-choice-precision",
+    "lang": "fr",
+    "text": "_Suite à_ est critiqué dans un texte soigné : écrivez _à la suite de_ ou _en réponse à_."
+  },
+  {
+    "id": "word-choice-precision-3",
+    "subSkill": "word-choice-precision",
+    "lang": "fr",
+    "text": "Préférez un verbe précis à _faire_ ou _effectuer_ suivi d’un nom : _vérifier_ plutôt que _effectuer une vérification_."
+  },
+  {
+    "id": "word-choice-precision-4",
+    "subSkill": "word-choice-precision",
+    "lang": "fr",
+    "text": "_Au niveau de_ ne s’emploie qu’au sens de hauteur : écrivez _en ce qui concerne le budget_ ou _sur le plan budgétaire_."
+  },
+  {
+    "id": "word-choice-precision-5",
+    "subSkill": "word-choice-precision",
+    "lang": "fr",
+    "text": "_Davantage_ ne se place pas devant un adjectif : écrivez _plus important_, et réservez _davantage_ au verbe : _Il faut investir davantage._"
+  },
+  {
+    "id": "false-friends-and-anglicisms-1",
+    "subSkill": "false-friends-and-anglicisms",
+    "lang": "fr",
+    "text": "_Éventuellement_ signifie « le cas échéant », et _actuellement_, « en ce moment » : _Nous actualiserons éventuellement la directive._"
+  },
+  {
+    "id": "false-friends-and-anglicisms-2",
+    "subSkill": "false-friends-and-anglicisms",
+    "lang": "fr",
+    "text": "Évitez les calques : _prendre une décision_, et non _faire une décision_; _poser une question_, et non _demander une question_."
+  },
+  {
+    "id": "false-friends-and-anglicisms-3",
+    "subSkill": "false-friends-and-anglicisms",
+    "lang": "fr",
+    "text": "_Rencontrer un objectif_ est un anglicisme : on _atteint un objectif_ et on _respecte une échéance_."
+  },
+  {
+    "id": "false-friends-and-anglicisms-4",
+    "subSkill": "false-friends-and-anglicisms",
+    "lang": "fr",
+    "text": "_Appliquer pour un poste_ est un calque : on _postule un poste_ ou on _pose sa candidature à un poste_."
+  },
+  {
+    "id": "false-friends-and-anglicisms-5",
+    "subSkill": "false-friends-and-anglicisms",
+    "lang": "fr",
+    "text": "_Être en charge de_ est un anglicisme : écrivez _être responsable de_ ou _être chargé de_."
+  },
+  {
+    "id": "punctuation-and-mechanics-1",
+    "subSkill": "punctuation-and-mechanics",
+    "lang": "fr",
+    "text": "En français canadien, on met une espace avant le deux-points, mais aucune avant le point-virgule, le point d’interrogation ou le point d’exclamation : _Objet : demande de congé._"
+  },
+  {
+    "id": "punctuation-and-mechanics-2",
+    "subSkill": "punctuation-and-mechanics",
+    "lang": "fr",
+    "text": "Pas de virgule avant _et_ dans une énumération simple, et jamais entre le sujet et son verbe : _Les analystes, les agents et les gestionnaires sont invités._"
+  },
+  {
+    "id": "punctuation-and-mechanics-3",
+    "subSkill": "punctuation-and-mechanics",
+    "lang": "fr",
+    "text": "Les jours, les mois et les noms de langues s’écrivent sans majuscule : _le lundi 6 octobre_, _le français_."
+  },
+  {
+    "id": "punctuation-and-mechanics-4",
+    "subSkill": "punctuation-and-mechanics",
+    "lang": "fr",
+    "text": "L’espace sépare les milliers, la virgule marque les décimales, et le symbole du dollar suit le nombre : _12 500,75 $_."
+  },
+  {
+    "id": "punctuation-and-mechanics-5",
+    "subSkill": "punctuation-and-mechanics",
+    "lang": "fr",
+    "text": "Un long complément placé en tête de phrase est suivi d’une virgule : _Après une longue consultation, le comité a tranché._"
+  },
+  {
+    "id": "sentence-structure-1",
+    "subSkill": "sentence-structure",
+    "lang": "fr",
+    "text": "Une idée par phrase : au-delà d’environ 25 mots, coupez la phrase et reliez les deux parties par un connecteur, comme _De plus_ ou _Par conséquent_."
+  },
+  {
+    "id": "sentence-structure-2",
+    "subSkill": "sentence-structure",
+    "lang": "fr",
+    "text": "Le participe en tête de phrase doit se rapporter au sujet : _Ayant examiné le dossier, le comité a conclu_, et non _la conclusion a été_."
+  },
+  {
+    "id": "sentence-structure-3",
+    "subSkill": "sentence-structure",
+    "lang": "fr",
+    "text": "L’interrogation indirecte ne prend ni inversion ni _est-ce que_ : _Je me demande si le rapport est prêt._"
+  },
+  {
+    "id": "sentence-structure-4",
+    "subSkill": "sentence-structure",
+    "lang": "fr",
+    "text": "À l’infinitif, les deux mots de la négation précèdent le verbe : _Il est préférable de ne pas répondre._"
+  },
+  {
+    "id": "sentence-structure-5",
+    "subSkill": "sentence-structure",
+    "lang": "fr",
+    "text": "Les éléments d’une énumération ont la même construction : _analyser, rédiger et réviser_, et non _analyser, la rédaction et réviser_."
+  }
+]

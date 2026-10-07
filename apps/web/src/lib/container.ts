@@ -25,6 +25,7 @@ import type {
   ImportDataResult,
   ItemRepository,
   KeyVault,
+  LatestExamRequest,
   LatestExamResult,
   PlanDailySessionRequest,
   PracticeTrendHistoryRequest,
@@ -184,6 +185,7 @@ import { httpSyncTransport } from "@palier/adapters/sync";
 import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
 import oralFillerLists from "@palier/content/oral/fillers.json";
+import pointerList from "@palier/content/pointers/pointers.json";
 import writingPromptLibrary from "@palier/content/writing/prompts.json";
 import type {
   AiFeature,
@@ -193,12 +195,18 @@ import type {
   Lang,
   OralAssessment,
   OralFillers,
+  Pointer,
   ScenarioId,
   SessionId,
   TargetBand,
   WritingPrompt,
 } from "@palier/domain";
-import { parseExamProfileOrThrow, parseOralFillersOrThrow, parseWritingPromptsOrThrow } from "@palier/domain";
+import {
+  parseExamProfileOrThrow,
+  parseOralFillersOrThrow,
+  parsePointersOrThrow,
+  parseWritingPromptsOrThrow,
+} from "@palier/domain";
 import type { DayPlan, ExamResult, MilestoneId, Preflight, SkillTrend, TrendEvidence, TrendPoint } from "@palier/engine";
 import {
   counterIdGenerator,
@@ -285,6 +293,12 @@ const WRITING_PROMPTS: readonly WritingPrompt[] = parseWritingPromptsOrThrow(wri
  * (progress.md D123). Content data, parsed once here as the prompt library is.
  */
 const ORAL_FILLERS: OralFillers = parseOralFillersOrThrow(oralFillerLists);
+
+/**
+ * Today's quick pointers (progress.md D216), parsed once here as the prompt library is. They load
+ * with this lazily imported module, never the island's own chunk, so the first load is unchanged.
+ */
+const POINTERS: readonly Pointer[] = parsePointersOrThrow(pointerList);
 
 /**
  * Spending requests still out, and the page's wipes (progress.md D127, D143; `lib/in-flight.ts`).
@@ -432,7 +446,7 @@ export type UseCases = {
   /** And the results' half: every result is rescored from the stored run (ADR 16). */
   readonly rescoreExam: (request: RescoreExamRequest) => Promise<ExamResult>;
   readonly examReport: (request: ExamReportRequest) => Promise<ExamReport>;
-  readonly latestExamResult: () => Promise<LatestExamResult | null>;
+  readonly latestExamResult: (request?: LatestExamRequest) => Promise<LatestExamResult | null>;
   readonly queueForReview: (request: QueueForReviewRequest) => Promise<boolean>;
   /** Opt-in anonymous item telemetry (PRD §15, progress.md D92): this device's choice, and the flush. */
   readonly telemetryConsent: () => Promise<TelemetryConsent>;
@@ -583,6 +597,8 @@ export type Container = Ports & {
    * its variants (ADR 9). The same parsed value every use case receives.
    */
   readonly profile: ExamProfile;
+  /** Today's quick pointers, every reading and written-expression sub-skill covered (D216). */
+  readonly pointers: readonly Pointer[];
   /**
    * The browser's realtime peer over the studio screen's microphone and the element the examiner's voice plays in
    * (Phase 6 Slice 2, D185): native WebRTC, the same in both graphs, as the OpenAI adapter is. Here so the adapter
@@ -795,7 +811,7 @@ function buildUseCases(ports: Ports): UseCases {
     rescoreExam: (request) => rescoreExam(request, { items: ports.items, examRuns: ports.examRuns }),
     examReport: (request) =>
       examReport(request, { items: ports.items, examRuns: ports.examRuns }),
-    latestExamResult: () => latestExamResult({ items: ports.items, examRuns: ports.examRuns }),
+    latestExamResult: (request) => latestExamResult({ items: ports.items, examRuns: ports.examRuns }, request),
     queueForReview: (request) =>
       queueForReview(request, {
         clock: ports.clock,
@@ -965,6 +981,7 @@ export function createContainer(env: Env): Container {
     ...ports,
     useCases: buildUseCases(ports),
     profile: PROFILE,
+    pointers: POINTERS,
     realtimePeer: (microphone, remoteAudio) => browserRealtimePeer({ microphone, remoteAudio }),
     warmRealtime: WARM_REALTIME,
   };

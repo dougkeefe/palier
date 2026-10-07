@@ -240,7 +240,8 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   **`resumeExam` writes; `examInProgress` does not.** A resume of a run whose clock has started counts
   as a pause (`resumes + 1`, D84 ruling 1), so anything that only *looks* for a run in progress, such as
   the picker, uses `examInProgress`. `exam-report.ts` holds what the results and readiness card read
-  (`examReport`, `latestExamResult`, `examForms`) and `queueForReview`. Every result is rescored.
+  (`examReport`, `latestExamResult`, which takes an optional `skill` for Today's next step (D214), `examForms`) and
+  `queueForReview`. Every result is rescored.
   **`examReport` says nothing about the review queue**: a submit queues wrong scored answers and never a
   pilot, so anything keyed to the queue would single out the wrong pilots (D84 ruling 9, D89).
 - **Use cases live under `src/use-cases/`**, one file per use case, each a plain async

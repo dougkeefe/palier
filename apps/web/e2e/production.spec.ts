@@ -52,7 +52,7 @@ test("journey 4: wrong answers come due, the queue empties, and the empty state 
   // read two days earlier.
   await page.clock.setFixedTime(START + 2 * 24 * 60 * 60 * 1000);
   await page.getByRole("link", { name: "Today", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Review queue" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "More ways to practise" })).toBeVisible();
   await page.getByRole("link", { name: "Review", exact: true }).click();
   await expect(page.getByText(new RegExp(`^${wrong} items? due`))).toBeVisible();
   await expect(page.locator(".app-session__count")).toHaveText(`Item 1 of ${wrong}`);
@@ -68,7 +68,7 @@ test("journey 4: wrong answers come due, the queue empties, and the empty state 
 
   // The set is done; what was answered right has left the queue for now.
   await page.getByRole("link", { name: "Back to today" }).click();
-  await expect(page.getByRole("heading", { name: "Review queue" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "More ways to practise" })).toBeVisible();
   await axeClean(page);
 });
 

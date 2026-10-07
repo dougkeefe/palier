@@ -322,6 +322,18 @@ export const oralFillersShape = z.strictObject({
   fr: fillerListShape,
 });
 
+/**
+ * A quick grammar pointer (progress.md D216, D218): one grammar or usage point on a
+ * written-expression sub-skill, written in the practised language (`lang`), its examples
+ * marked `_like this_`.
+ */
+export const pointerShape = z.strictObject({
+  id: idSchema,
+  subSkill: writingSubSkillSchema,
+  lang: langSchema,
+  text: z.string().trim().min(1),
+});
+
 export const itemSchema = itemShape.readonly();
 export const passageSchema = passageShape.readonly();
 export const oralScenarioSchema = oralScenarioShape.readonly();
@@ -330,3 +342,4 @@ export const attemptSchema = attemptShape.readonly();
 export const writingPromptSchema = writingPromptShape.readonly();
 export const oralFillersSchema = oralFillersShape.readonly();
 export const libraryArticleSchema = libraryArticleShape.readonly();
+export const pointerSchema = pointerShape.readonly();

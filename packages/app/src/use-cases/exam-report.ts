@@ -1,4 +1,4 @@
-import type { ExamForm, ExamProfile, Item, ItemId, SessionId } from "@palier/domain";
+import type { ExamForm, ExamProfile, Item, ItemId, ScoredSkill, SessionId } from "@palier/domain";
 import { type ExamResult, scheduleReview } from "@palier/engine";
 
 import type { Clock, ExamRun, ExamRunStore, ItemRepository, ScheduleStore } from "../ports/index.js";
@@ -72,14 +72,22 @@ export type LatestExamResult = {
   readonly result: ExamResult;
 };
 
+export type LatestExamRequest = {
+  /** Only runs on a form at this skill; any skill when absent. */
+  readonly skill?: ScoredSkill;
+};
+
 /**
  * The most recently submitted mock exam, rescored, or null when there is none:
  * the readiness card's exam half, "C, 39 of 50. C starts at 38." (§8.2). A run
  * whose form, or any of whose items, has left the bank cannot be scored and is
  * passed over, so one such run can never take the home screen down with it (D89).
+ * Asked for a skill, it passes over runs at the other, which is how Today tells
+ * whether this skill has had its mock exam since its diagnostic (progress.md D214).
  */
 export const latestExamResult = async (
   deps: Pick<ExamReportDeps, "items" | "examRuns">,
+  request: LatestExamRequest = {},
 ): Promise<LatestExamResult | null> => {
   const submitted = (await deps.examRuns.all())
     .filter((run) => run.submittedAt !== null)
@@ -87,7 +95,7 @@ export const latestExamResult = async (
 
   for (const run of submitted) {
     const form = await deps.items.form(run.formId);
-    if (form === null) continue;
+    if (form === null || (request.skill !== undefined && form.skill !== request.skill)) continue;
     const bank = await deps.items.byIds(form.itemIds);
     if (bank.length !== form.itemIds.length) continue;
     const result = await rescoreExam({ runId: run.id }, deps);

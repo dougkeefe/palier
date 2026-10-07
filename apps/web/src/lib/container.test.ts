@@ -96,6 +96,12 @@ describe("createContainer", () => {
     ]);
   });
 
+  it("exposes the committed grammar pointers, covering every written-expression sub-skill in the profile (D216, D218)", () => {
+    const c = createContainer({ hermetic: true });
+    const covered = new Set(c.pointers.map((p) => p.subSkill));
+    expect([...covered].sort()).toEqual([...c.profile.subSkills.writing].sort());
+  });
+
   it("runs a mock exam end to end on a fixture form: start, answer, flag, pause, submit, report", async () => {
     const c = createContainer({ hermetic: true });
     const [form] = await c.useCases.examForms();
@@ -131,6 +137,9 @@ describe("createContainer", () => {
     expect(report.result).toEqual(result);
     expect(report.retake).toBe(false);
     expect((await c.useCases.latestExamResult())?.run.id).toBe(runId);
+    // Asked for a skill, the container passes the request through (D214).
+    expect((await c.useCases.latestExamResult({ skill: form.skill }))?.run.id).toBe(runId);
+    expect(await c.useCases.latestExamResult({ skill: form.skill === "reading" ? "writing" : "reading" })).toBeNull();
 
     expect(await c.useCases.queueForReview({ itemId: second })).toBe(true);
     expect((await c.schedule.get(second))?.due).not.toBeNull();

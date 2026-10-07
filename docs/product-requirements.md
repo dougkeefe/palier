@@ -275,6 +275,8 @@ If a test date is set, a countdown sits above both, and the advice line is about
 
 **Zone C, quick actions.** Oral studio, mock exam, review queue (with due count), library.
 
+As built (owner's request, 6 and 7 October 2026; progress.md D214–D218): Today is built around the next step. **The plan leads**, two-thirds of the width from 900px, and opens with that step when it is not the plan itself: the diagnostic first, a retake when it is due, then a mock exam once practice at the target is measurable (the trend has an estimate at the target band) or the test is a few days away. Zone C's quick actions moved inside the plan card as "More ways to practise", and the separate review card is gone, since the plan's first row draws on the same due items. Beside the plan, a **grammar pointer**: one grammar point a day, written in the language practised whatever the interface's, from `@palier/content/pointers`, on what the writing plan favours (D218). Zone A, **where you stand**, sits below the pointer: the diagnostic first, then the practice trend, then the last mock exam once there is one, each saying in a line what it is.
+
 ### 8.3 Reading and writing drill session
 
 Full-screen focus mode. No navigation chrome. Elements:
@@ -562,7 +564,7 @@ An item is retired automatically if calibration data shows negative discriminati
 | **Key invalid or out of credit** | Non-alarming banner with the actual API error in plain language and the exact fix. Session state is preserved so nothing is lost. |
 | **Offline** | Drills, mock exams, review and progress all work from the cached bank. A small persistent indicator. Key-gated features are visibly unavailable. |
 | **Empty review queue** | A genuine reward state. Coco asleep. "Nothing due. Come back tomorrow, or do a set anyway." |
-| **First run, no data** | Readiness card shows an invitation to take the diagnostic rather than an empty chart. |
+| **First run, no data** | Readiness card shows an invitation to take the diagnostic rather than an empty chart. As built (D214): the invitation is the plan's first step, "Start here: take the diagnostic", and Where you stand says the result will appear there once it is taken. |
 | **Mid-session abandonment** | Session state is checkpointed every item. Returning offers resume or discard, and mock exams resume with the clock as it was. |
 | **Mic permission denied** | Clear recovery instructions per browser, and an offer to use practice mode with typed answers instead. |
 | **Sync unavailable** | A quiet header indicator only. Study is never interrupted, nothing is lost, and the queue drains when the network returns. No modal, no error toast. |
