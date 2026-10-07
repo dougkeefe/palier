@@ -96,10 +96,10 @@ describe("createContainer", () => {
     ]);
   });
 
-  it("exposes the committed pointers, covering every sub-skill the profile scores (D216)", () => {
+  it("exposes the committed grammar pointers, covering every written-expression sub-skill in the profile (D216, D218)", () => {
     const c = createContainer({ hermetic: true });
     const covered = new Set(c.pointers.map((p) => p.subSkill));
-    expect([...covered].sort()).toEqual([...c.profile.subSkills.reading, ...c.profile.subSkills.writing].sort());
+    expect([...covered].sort()).toEqual([...c.profile.subSkills.writing].sort());
   });
 
   it("runs a mock exam end to end on a fixture form: start, answer, flag, pause, submit, report", async () => {

@@ -30,13 +30,14 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   client component that marks the current page `aria-current="page"` from `features/nav/nav.ts`), then sync and the
   language. The footer is deep teal with the giant wordmark, drawn by `::before` from a `data-` attribute. `.app-main`
   is 760px, and a page whose section carries `.app-wide` (today) takes 1160px. Every colour in `globals.css` is a token.
-  **Today** (D214–D216) is the plan at two-thirds of the width, with `.app-home__side` on the right holding the quick pointer
+  **Today** (D214–D218) is the plan at two-thirds of the width, with `.app-home__side` on the right holding the grammar pointer
   above Where you stand; on mobile the plan comes first. The plan opens with **one next step**, which
   `features/home/next-step.ts`'s `nextStep` decides: the diagnostic, a due retake, or a mock exam once the trend has an
   estimate at the target band or the planner advises one, once per diagnostic. Then come the rows, the start button and
-  "More ways to practise", where the review card's links went. The pointer is `features/home/pickPointer` over
-  `container.pointers` (`@palier/content/pointers/pointers.json`, parsed once in the container), on the plan's focus, and
-  it turns over with the device's local day.
+  "More ways to practise", where the review card's links went. The **grammar pointer** (D218) is
+  `features/home/pickPointer` over `container.pointers` (`@palier/content/pointers/pointers.json`, parsed once in the
+  container). It reads the writing plan's focus on either tab, and turns over with the device's local day. **It renders in
+  the pointer's own `lang`, never the screen's.**
   A screen the design does not draw takes its header, ground, buttons and panels and keeps its function.
 - **The landing page brings its own chrome and palette** (`/[locale]`, D201, as designed in `docs/Palier landing page` v4).
   - The layout wraps every page in `components/Shell.tsx`. It renders the app's header, `main#main` and footer everywhere

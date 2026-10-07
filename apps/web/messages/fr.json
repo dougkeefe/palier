@@ -349,7 +349,7 @@
     "moreReview": "{count, plural, =0 {Ouvrir la file de révision} one {Ouvrir la file de révision, # item à réviser} other {Ouvrir la file de révision, # items à réviser}}",
     "moreExamHint": "Le test complet et chronométré, corrigé comme le vrai. À faire de préférence après vous être exercé au niveau {target}.",
     "libraryAction": "Lire la bibliothèque de l’écrit",
-    "pointerTitle": "Conseil express",
+    "pointerTitle": "Point de grammaire",
     "pointerMore": "Lire l’article",
     "standEmpty": "Le résultat de votre diagnostic s’affiche ici une fois celui-ci terminé, puis votre tendance en pratique à mesure que vous suivez le plan.",
     "diagnosticWhat": "Établit votre niveau de départ et oriente votre plan.",

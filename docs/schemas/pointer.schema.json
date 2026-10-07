@@ -9,14 +9,6 @@
     "subSkill": {
       "type": "string",
       "enum": [
-        "main-idea",
-        "specific-detail",
-        "inference",
-        "vocabulary-in-context",
-        "cohesion-and-reference",
-        "tone-and-intent",
-        "text-structure",
-        "numerical-and-tabular-detail",
         "verb-tense-and-mood",
         "agreement",
         "prepositions-and-government",
@@ -37,22 +29,8 @@
       ]
     },
     "text": {
-      "type": "object",
-      "properties": {
-        "en": {
-          "type": "string",
-          "minLength": 1
-        },
-        "fr": {
-          "type": "string",
-          "minLength": 1
-        }
-      },
-      "required": [
-        "en",
-        "fr"
-      ],
-      "additionalProperties": false
+      "type": "string",
+      "minLength": 1
     }
   },
   "required": [

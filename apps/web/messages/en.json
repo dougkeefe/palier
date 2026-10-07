@@ -349,7 +349,7 @@
     "moreReview": "{count, plural, =0 {Open the review queue} one {Open the review queue, # due} other {Open the review queue, # due}}",
     "moreExamHint": "The full timed test, scored like the real one. Best once you’ve practised at level {target}.",
     "libraryAction": "Read the writing library",
-    "pointerTitle": "Quick pointer",
+    "pointerTitle": "Grammar pointer",
     "pointerMore": "Read the article",
     "standEmpty": "Your diagnostic result appears here once you’ve taken it, then your practice trend as you work through the plan.",
     "diagnosticWhat": "Finds your starting level and shapes your plan.",

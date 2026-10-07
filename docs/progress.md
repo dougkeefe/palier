@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 6 October 2026 (Today rebuilt around the next step, D214–D217)
+**Last updated:** 7 October 2026 (Today rebuilt around the next step, D214–D218)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,7 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/today-page-feedback` | **Today rebuilt around the next step** (D214–D217; the human's request, 6 October 2026): the diagnostic, then the plan, then a mock exam once practice at the target is measurable; the plan at two-thirds with the review card folded in; and a daily quick pointer from new authored content. | 6 October 2026 |
+| `dougkeefe/today-page-feedback` | **Today rebuilt around the next step** (D214–D218; the human's request, 6 October 2026): the diagnostic, then the plan, then a mock exam once practice at the target is measurable; the plan at two-thirds with the review card folded in; and a daily grammar pointer in French from new authored content. | 6 October 2026 |
 
 *(The prior rows — the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -260,7 +260,7 @@ Merge it once its four lanes are green. Then, on the deployed site, the human lo
 - with a test date two days out.
 
 At each, say whether the order reads right, and whether the mock exam's threshold (D214) feels like the right moment. The French
-read at Gate O gains `content/pointers/pointers.json` (54 pointers), the new `today.*` keys (`next*`, `more*`, `pointer*`,
+read at Gate O gains `content/pointers/pointers.json` (50 French grammar pointers, D218), the new `today.*` keys (`next*`, `more*`, `pointer*`,
 `libraryAction`, `standEmpty`, `diagnosticWhat`, `examWhat`), and the sentences added to `exam.intro` and `diagnostic.intro`.
 
 **The diagnostic slice merged** (#67; D208–D213, ADR 25). Three things still follow from it, in this order:
@@ -7291,9 +7291,43 @@ Today and PRD §8.2
   - `next-step.test.ts`, `pointer.test.ts`, `pointers.test.ts` and the committed-content test, `pointer.test-d.ts`, the
     container's pointer coverage, and `latestExamResult`'s skill filter in both the use case's tests and the container's.
 
+### D218 — the pointer is a grammar point, in the language practised (supersedes part of D216)
+**Date:** 7 October 2026 · **Status:** accepted (human's correction, on the D214–D217 pull request)
+
+The human read D216's pointers and asked for two changes: show them **in the language being practised, not the interface's**,
+and make them **quick grammar pointers**. D216's reading-strategy advice is not grammar, and its English text taught nothing
+in French.
+- **The artefact.** `Pointer.text` is one string in `lang`, French for now, no longer `Localised`. `subSkill` is a
+  written-expression one only: the taxonomy's grammar and usage points. `parsePointers` now requires every
+  written-expression sub-skill, and refuses a reading or an oral one.
+- **The content.** 50 pointers, five for each of the ten written-expression sub-skills, all in French. Each holds a rule
+  and an example marked `_like this_`, and a content test holds every pointer to having one. D216's 54 are replaced. The
+  French goes to Gate O's read.
+- **The card.** Its heading is "Grammar pointer" / "Point de grammaire". The paragraph carries `lang="fr"` whatever the
+  screen's language, and its examples are italic. It always links its sub-skill's library article, since every
+  written-expression sub-skill has one.
+- **The choice.** `pickPointer` no longer takes the skill being shown. It favours the **writing** plan's focus
+  (`studyFocus` at writing), read even on the reading tab, so the day's pointer is the same on both tabs. With no
+  grammar point in focus, it draws from all 50.
+- **Tests changed with the premise:**
+  - `pointers.test.ts`, `pointers-content.test.ts` (five per sub-skill, an example in each), `pointer.test.ts`;
+  - the container's coverage test (written-expression sub-skills);
+  - journey 2's heading, now "Grammar pointer", which also asserts the text's `lang="fr"`.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 7 October 2026 — `dougkeefe/today-page-feedback` (the pointer as a grammar point in French; D218)
+
+The human's correction on the open pull request: quick pointers are **grammar**, in **the language practised**. D218 replaces
+D216's 54 pointers with 50 French grammar pointers, five per written-expression sub-skill, and the card reads them in French
+whatever the interface's language.
+
+**Verified:**
+- `pnpm verify` was green: 267 files and 4,318 tests passed.
+- Playwright `journeys.spec.ts` on chromium: 12 passed.
+- With the interface in English, a screenshot showed the pointer in French with its example in italics.
 
 ### 6 October 2026 — `dougkeefe/today-page-feedback` (Today rebuilt around the next step; D214–D217)
 

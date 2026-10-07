@@ -72,8 +72,9 @@ test("journey 2: a daily session end to end, feedback panel included, then back 
   // The mock exam is not the lead before practice at the target is measurable: a way on, not a banner.
   await expect(page.getByRole("heading", { name: "You’re ready for a mock exam" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Take a mock exam" })).toBeVisible();
-  // The day's pointer sits beside the plan (D216).
-  await expect(page.getByRole("heading", { name: "Quick pointer" })).toBeVisible();
+  // The day's grammar pointer sits beside the plan, in French whatever the screen's language (D216, D218).
+  await expect(page.getByRole("heading", { name: "Grammar pointer" })).toBeVisible();
+  await expect(page.locator(".app-home__pointer-text")).toHaveAttribute("lang", "fr");
   await axeClean(page);
 
   await page.getByRole("link", { name: /^Start, \d+ min$/ }).click();

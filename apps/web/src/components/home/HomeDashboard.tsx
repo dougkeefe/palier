@@ -13,7 +13,6 @@ import { feedbackLangFor } from "../../features/oral/report-view";
 import { type ExamReadiness, examReadiness } from "../../features/exam/readiness";
 import { type NextStep, nextStep } from "../../features/home/next-step";
 import { pickPointer } from "../../features/home/pointer";
-import { articleHref } from "../../features/library/links";
 import { type EvidenceLine, evidenceLine } from "../../features/telemetry/telemetry";
 import { hasAnyEstimate } from "../../features/trend/trend-lines";
 import { Link } from "../../i18n/navigation";
@@ -44,7 +43,7 @@ type Dashboard =
       readonly diagnostic: DiagnosticResult | null;
       /** The one step the plan card leads with (D214). */
       readonly step: NextStep;
-      /** Today's quick pointer, on what the plan favours (D216). */
+      /** Today's quick grammar pointer, in the language practised, on what the writing plan favours (D216, D218). */
       readonly pointer: Pointer | null;
     };
 
@@ -58,8 +57,11 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
   // card never counts as having started the day. It is biased by what the session will read
   // when it opens (`studyFocus`, ADR 25, D124), and only the plan waits for that.
   const studying = container.useCases.studyFocus({ skill, lang: "fr", targetBand: profile.targetBand });
-  const [focus, plan, trend, evidence, due, latestExam, examAtSkill, diagnostic] = await Promise.all([
-    studying,
+  // The pointer is a grammar point, so it follows the writing plan's focus whichever skill is shown (D218).
+  const grammar =
+    skill === "writing" ? studying : container.useCases.studyFocus({ skill: "writing", lang: "fr", targetBand: profile.targetBand });
+  const [grammarFocus, plan, trend, evidence, due, latestExam, examAtSkill, diagnostic] = await Promise.all([
+    grammar,
     studying.then((focus) =>
       container.useCases.planDailySession({
         skill,
@@ -85,8 +87,7 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
     lastExamAt: examAtSkill?.run.submittedAt ?? null,
   });
   const pointer = pickPointer(container.pointers, {
-    skill,
-    focusSubSkills: focus.focusSubSkills ?? [],
+    focusSubSkills: grammarFocus.focusSubSkills ?? [],
     day: localDay(container.clock.now(), deviceTimeZone()),
   });
   // The whole queue, both skills: the link counts what `/review` will show.
@@ -349,26 +350,23 @@ function MorePractice({
 }
 
 /**
- * Today's quick pointer (D216): the advice in the screen's language, cited French marked with its
- * `lang`, and the library article when the sub-skill has one.
+ * Today's quick grammar pointer (D216, D218): written in the language practised, whatever the
+ * screen's, so the whole paragraph carries that `lang` and its examples are set in italics. The
+ * heading and the topic are the screen's, and it links the sub-skill's library article.
  */
 function PointerCard({ pointer }: { pointer: Pointer }) {
   const t = useTranslations("today");
   const tSub = useTranslations("subSkills");
-  const locale = useLocale();
-  const article = articleHref(pointer.subSkill);
   return (
     <Card tone="tint" className="app-home__pointer">
       <h2>{t("pointerTitle")}</h2>
       <p className="app-home__eyebrow">{t("pointerTopic", { subSkill: tSub(pointer.subSkill) })}</p>
-      <p className="app-home__pointer-text">
-        <Cited text={pointer.text[feedbackLangFor(locale)]} lang={pointer.lang} />
+      <p className="app-home__pointer-text" lang={pointer.lang}>
+        <Cited text={pointer.text} lang={pointer.lang} />
       </p>
-      {article === null ? null : (
-        <Link href={article} className="app-link pl-focusable">
-          {t("pointerMore")}
-        </Link>
-      )}
+      <Link href={`/library/${pointer.subSkill}`} className="app-link pl-focusable">
+        {t("pointerMore")}
+      </Link>
     </Card>
   );
 }

@@ -3,7 +3,7 @@ import * as z from "zod";
 import { DOC_TYPES, LICENCES } from "../passage.js";
 import { ATTEMPT_MODES } from "../attempt.js";
 import { ORAL_SESSION_TYPES } from "../oral-scenario.js";
-import { READING_SUB_SKILLS, WRITING_SUB_SKILLS } from "../sub-skills.js";
+import { WRITING_SUB_SKILLS } from "../sub-skills.js";
 import { WRITING_REGISTERS } from "../writing-prompt.js";
 import {
   bandSchema,
@@ -323,14 +323,15 @@ export const oralFillersShape = z.strictObject({
 });
 
 /**
- * A quick pointer (progress.md D216): practical advice on one reading or written-expression
- * sub-skill, in both interface languages, with practised-language text cited `_like this_`.
+ * A quick grammar pointer (progress.md D216, D218): one grammar or usage point on a
+ * written-expression sub-skill, written in the practised language (`lang`), its examples
+ * marked `_like this_`.
  */
 export const pointerShape = z.strictObject({
   id: idSchema,
-  subSkill: z.enum([...READING_SUB_SKILLS, ...WRITING_SUB_SKILLS]),
+  subSkill: writingSubSkillSchema,
   lang: langSchema,
-  text: localisedSchema,
+  text: z.string().trim().min(1),
 });
 
 export const itemSchema = itemShape.readonly();

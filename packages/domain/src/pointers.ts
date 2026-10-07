@@ -3,14 +3,14 @@ import * as z from "zod";
 import { CITED_MARK } from "./library.js";
 import type { Pointer } from "./pointer.js";
 import { pointerSchema } from "./schemas/content.js";
-import { READING_SUB_SKILLS, WRITING_SUB_SKILLS } from "./sub-skills.js";
+import { WRITING_SUB_SKILLS } from "./sub-skills.js";
 
 /**
  * Parses **already-read** pointers, as `parseLibrary` parses the articles: no I/O here, the
- * composition root imports the JSON (progress.md D216). Ids are unique, every cited-text marker
+ * composition root imports the JSON (progress.md D216, D218). Ids are unique, every example marker
  * is paired (an unpaired one would italicise the rest of the sentence, as in the library), and
- * **every reading and written-expression sub-skill has at least one pointer**, so Today always has
- * one to show for whatever the diagnostic says to work on.
+ * **every written-expression sub-skill has at least one pointer**, so Today always has one to show
+ * for whatever the writing diagnostic says to work on.
  */
 
 export type PointersParseResult =
@@ -26,13 +26,9 @@ const pointersSchema = z.array(pointerSchema).superRefine((pointers, ctx) => {
     if (ids.has(pointer.id)) ctx.addIssue({ code: "custom", path: [index, "id"], message: `"${pointer.id}" is used twice` });
     ids.add(pointer.id);
     covered.add(pointer.subSkill);
-    for (const locale of ["en", "fr"] as const) {
-      if (unpaired(pointer.text[locale])) {
-        ctx.addIssue({ code: "custom", path: [index, "text", locale], message: `an unpaired "${CITED_MARK}"` });
-      }
-    }
+    if (unpaired(pointer.text)) ctx.addIssue({ code: "custom", path: [index, "text"], message: `an unpaired "${CITED_MARK}"` });
   }
-  for (const subSkill of [...READING_SUB_SKILLS, ...WRITING_SUB_SKILLS]) {
+  for (const subSkill of WRITING_SUB_SKILLS) {
     if (!covered.has(subSkill)) ctx.addIssue({ code: "custom", path: [], message: `"${subSkill}" has no pointer` });
   }
 });
