@@ -110,7 +110,7 @@ test("journey 2 offline: after one online load, a whole daily session runs with 
   // Today still opens offline, reading the session just finished back from IndexedDB.
   await page.goto("/en/home");
   await expect(page.getByRole("heading", { name: "Today’s plan" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Review queue" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "More ways to practise" })).toBeVisible();
 });
 
 /**

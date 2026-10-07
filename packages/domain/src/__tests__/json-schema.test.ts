@@ -40,6 +40,7 @@ describe("the published JSON Schemas", () => {
       "oral-fillers",
       "oral-scenario",
       "passage",
+      "pointer",
       "writing-prompt",
     ]);
   });

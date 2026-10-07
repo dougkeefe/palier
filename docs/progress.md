@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 6 October 2026 (the diagnostic that gives a result, D208–D212, ADR 25)
+**Last updated:** 6 October 2026 (Today rebuilt around the next step, D214–D217)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,10 +142,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/written-diagnostic-results-improve` | **The diagnostic that gives a result** (D208–D212, ADR 25; the human's decision, 6 October 2026): an even run across bands, the score shown plainly, the plan's starting level, a written interpretation on the key, and a plan and a Today card built from it. | 6 October 2026 |
-| `dougkeefe/content-generation-run` | **The full content run, authored by Claude** (D203–D207; the human's decision, 4 October 2026): Claude writes the items, passages and oral scenarios through the authored intake, separate Claude subagents review them blind, v3's synthetic content is retired, and `content/bank/v4` is served. | 4 October 2026 |
+| `dougkeefe/today-page-feedback` | **Today rebuilt around the next step** (D214–D217; the human's request, 6 October 2026): the diagnostic, then the plan, then a mock exam once practice at the target is measurable; the plan at two-thirds with the review card folded in; and a daily quick pointer from new authored content. | 6 October 2026 |
 
-*(The prior rows — the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -254,8 +253,17 @@ reviewed blind by Claude, with v3's synthetic content retired.
 What stands between the code and 1.0 is now **the human's**: **Gate O**, then the rest of **Gate M** (an outside item
 submission, the domain and the trademark check). No agent slice is left before them.
 
-**First: the diagnostic slice** (`dougkeefe/written-diagnostic-results-improve`; D208–D212, ADR 25), built on the human's request of 6 October 2026.
-Merge it once its four lanes are green. Then three things, in this order:
+**First: Today rebuilt around the next step** (`dougkeefe/today-page-feedback`; D214–D217), on the human's request of 6 October 2026.
+Merge it once its four lanes are green. Then, on the deployed site, the human looks at Today three times:
+- as a new user;
+- after a diagnostic;
+- with a test date two days out.
+
+At each, say whether the order reads right, and whether the mock exam's threshold (D214) feels like the right moment. The French
+read at Gate O gains `content/pointers/pointers.json` (54 pointers), the new `today.*` keys (`next*`, `more*`, `pointer*`,
+`libraryAction`, `standEmpty`, `diagnosticWhat`, `examWhat`), and the sentences added to `exam.intro` and `diagnostic.intro`.
+
+**The diagnostic slice merged** (#67; D208–D213, ADR 25). Three things still follow from it, in this order:
 - **The human, on the deployed site:** take one writing diagnostic on a real key. Say whether the written result reads as
   useful, and whether the starting level matches your sense of your French.
 - **Whenever a smoke key is to hand (agent, about US$0.12):** `pnpm --filter @palier/web live-smoke --record`.
@@ -7200,9 +7208,118 @@ So the result opened from Today is now `/diagnostic?result=<skill>`. The launche
 `diagnostic.pageTitle` message are gone. The budget is unchanged, as implementation-plan.md 6.5 asks. Shard 2 still has
 about 30 seconds of headroom on `main`, which the next slice to add a page will want to know.
 
+### D214 — Today leads with one next step: the diagnostic, then the plan, then a mock exam once practice at the target is measurable
+**Date:** 6 October 2026 · **Status:** accepted (human's request and decision; agent's build). Outside the planned slices;
+amends PRD §8.2
+
+The human found Today unclear: the mock exam was the first thing on the page (the readiness card's exam half led, with its
+invitation always shown), and nothing said how it differs from the diagnostic. The order they expect is the diagnostic, then the
+plan, then the mock exam "after a certain point".
+
+- **`features/home/next-step.ts`, `nextStep`**, pure and tested per branch, picks the step at the skill being looked at:
+  1. `diagnostic` while no complete run has placed the plan;
+  2. `retake-diagnostic` once the profile's `retakeDays` have passed, ahead of the exam, so the exam follows a current placement;
+  3. `mock-exam` when practice at the target is measurable, which means the trend has an estimate at the target band
+     (`MIN_EVIDENCE` answers there), or when the planner advises one (`DayPlan.mockExamAdvised`, the taper, computed since Phase 2
+     and never rendered until now). **Once per diagnostic:** a mock exam at this skill submitted since the run means it was taken;
+  4. `plan` otherwise, with no banner.
+
+  No number is typed in: the threshold is the trend's, the taper the planner's, the retake the profile's. **The human chose
+  "measurable at the target"** over "measurable and at 70%" and over "right after the diagnostic".
+- **The step is a banner at the plan's head**, inside the deep panel. The diagnostic's says it runs on the key, and that the plan
+  below works meanwhile, since everything but the diagnostic works without one (ADR 25).
+- **`latestExamResult` takes an optional `skill`** (`LatestExamRequest`), so Today can ask whether *this* skill has had its exam.
+  Where you stand still shows the newest exam at either skill, as before.
+- **The difference is said where each appears**: one line under each half of Where you stand ("Finds your starting level and
+  shapes your plan" / "The full timed test, scored like the real one"), the mock exam's hint in the plan's list, and a sentence
+  added to `exam.intro` and to the head of `diagnostic.intro`.
+- PRD §6.2's "re-offered after any mock exam" is still not built: the retake follows `retakeDays` only. Re-offering a paid run
+  after every exam would cost the user money for little, and the human was not asked.
+
+### D215 — the plan takes two-thirds of Today, and the review card folds into it
+**Date:** 6 October 2026 · **Status:** accepted (human's decision on the card; the layout was left to the agent). Amends D202's
+Today and PRD §8.2
+
+- **Layout.** From 900px, `.app-home` is `minmax(0, 2fr) minmax(0, 1fr)`: the plan on the left, and `.app-home__side` on the
+  right, holding the quick pointer (D216) above Where you stand. On mobile the order is the plan, the pointer, then where you
+  stand. The side column is its own grid, as the design draws it, so a tall plan never stretches the pointer's row.
+- **The review card is gone (human).** The plan's first row, "Review", already draws on the same due items, and Review is in
+  the header. Its links became the plan's **"More ways to practise"**: the review queue with its due count, speaking, the mock
+  exam with what it is for (not repeated when it is the banner), **the library**, which §8.2 zone C asked for and was missing,
+  and the diagnostic again, **now only once there is one** (it showed to people who had never taken it).
+- **Where you stand** reorders to the diagnostic, the trend, then the exam, and shows the exam half only once an exam exists
+  (`examNone` is deleted). With no diagnostic it says the result appears there once taken. The first-run inset moved to the
+  banner (`firstRun*` deleted), and the retake line moved to the banner too.
+- The countdown moved into the plan, where the taper acts on it.
+- Keys deleted: `today.firstRunTitle`, `firstRunBody`, `firstRunAction`, `reviewTitle`, `reviewDue`, `reviewAction`,
+  `examNone`. The link names "Take a mock exam" and "Practise speaking" are unchanged, because `key-leak.spec.ts` clicks them.
+- `.app-home__inset` and `.app-home__actions` are gone from `globals.css`. `.app-home__plan` keeps its name, which
+  `engagement-production.spec.ts` selects.
+
+### D216 — the quick pointer: a new content artefact, three per scored sub-skill
+**Date:** 6 October 2026 · **Status:** accepted (human's decision: "new short pointers per sub-skill"; the agent wrote them)
+
+- **The artefact.** `content/pointers/pointers.json`, published as `@palier/content/pointers/pointers.json`. Each `Pointer` is
+  `{ id, subSkill, lang, text: Localised }`. The sub-skill is a reading or written-expression one, never oral, since no drill
+  practises those. Cited practised-language text is marked `_like this_`, the library's `CITED_MARK`, and renders through
+  `Cited` with its `lang`.
+  - `pointerSchema` is in `CONTENT_SCHEMAS`, with `docs/schemas/pointer.schema.json` generated.
+  - `parsePointers` refuses a duplicate id, an unpaired marker, and **a set missing any scored sub-skill**.
+- **The content.** 54 pointers, three for each of the 18 sub-skills, in English and French, written by the agent at PRD §13's
+  register. Federal administrative French, with Canadian typography: a space before the colon, none before the semicolon. The
+  French goes to Gate O's read with the rest. **No dependency added.**
+- **The choice.** `features/home/pointer.ts`'s `pickPointer` is pure. It draws from the focus `studyFocus` gives the plan,
+  filtered to the skill being looked at, and from all of that skill's sub-skills when there is no focus. It turns over with the
+  device's local day (`localDay`), so the pointer is the same all day.
+  - A written-expression pointer links its library article.
+  - The container parses the file once, like the prompts, and exposes `container.pointers`. It loads with the lazily imported
+    container module, so the first load is unchanged.
+
+### D217 — the tests whose premise the human's request changed, said here rather than edited quietly
+**Date:** 6 October 2026 · **Status:** accepted (agent); flagged in the pull request
+
+- **Rewritten:** four assertions used the heading **"Review queue"** to mean "Today has loaded":
+  - `journeys.spec.ts` (after the review set);
+  - `production.spec.ts` (journey 4, twice);
+  - `offline.spec.ts` (journey 2 offline).
+
+  The card is removed at the human's request, so they assert **"More ways to practise"**, the list that replaced it.
+- **Grown by one entry:** `json-schema.test.ts`'s list of published artefacts gains `pointer`.
+- **Added:**
+  - journey 2 asserts that a new user's Today leads with "Start here: take the diagnostic", shows no mock-exam banner, still
+    offers "Take a mock exam" as a way on, and shows the quick pointer, axe-clean;
+  - `next-step.test.ts`, `pointer.test.ts`, `pointers.test.ts` and the committed-content test, `pointer.test-d.ts`, the
+    container's pointer coverage, and `latestExamResult`'s skill filter in both the use case's tests and the container's.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 6 October 2026 — `dougkeefe/today-page-feedback` (Today rebuilt around the next step; D214–D217)
+
+This was not *Next, decided*. The human reviewed Today and asked for four changes:
+- make the mock exam's difference from the diagnostic clear;
+- lead with the diagnostic, then the plan, and the mock exam later;
+- give the plan much more of the page;
+- question the review card's value, and add a "quick pointer".
+
+They decided three things: the review card goes, the mock exam is recommended once practice at the target is measurable, and the
+pointers are new authored content per sub-skill. The layout was left to the agent.
+
+The slice:
+- `nextStep` and its banner (D214);
+- the two-thirds plan with the review card folded in (D215);
+- 54 pointers as a new content artefact, with their schema, parser and picker (D216);
+- `latestExamResult`'s skill filter.
+
+**Verified:**
+- `pnpm verify` was green: 267 files and 4,317 tests passed, plus lint, boundaries and both cruises.
+- After `pnpm --filter @palier/web build`, Playwright on `journeys`, `key`, `key-leak`, `production`, `offline`, `exam-offline`,
+  `engagement-production`, `csp-production` and `smoke` reported 51 passed.
+- Screenshots of a new user (desktop and mobile), and of a placed user two days from the test (the mock-exam banner), were
+  checked by eye. The first one caught a stretched side column, fixed by D215's `.app-home__side`.
+
+**Not run:** the whole medium lane, Lighthouse and the bundle-size gate locally. CI runs them.
 
 ### 6 October 2026 — `dougkeefe/written-diagnostic-results-improve` (the diagnostic that gives a result; D208–D212, ADR 25)
 

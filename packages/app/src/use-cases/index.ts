@@ -33,6 +33,7 @@ export type {
   ExamReport,
   ExamReportDeps,
   ExamReportRequest,
+  LatestExamRequest,
   LatestExamResult,
   QueueForReviewDeps,
   QueueForReviewRequest,

@@ -1,0 +1,488 @@
+[
+  {
+    "id": "main-idea-1",
+    "subSkill": "main-idea",
+    "lang": "fr",
+    "text": {
+      "en": "The main idea is rarely the first sentence. Read the whole passage, then ask what the author wants the reader to know or do.",
+      "fr": "L’idée principale est rarement la première phrase. Lisez tout le texte, puis demandez-vous ce que l’auteur veut que le lecteur sache ou fasse."
+    }
+  },
+  {
+    "id": "main-idea-2",
+    "subSkill": "main-idea",
+    "lang": "fr",
+    "text": {
+      "en": "Rule out options that are true but too narrow: a detail from one paragraph cannot be the point of the whole text.",
+      "fr": "Écartez les choix exacts mais trop étroits : un détail tiré d’un seul paragraphe ne peut pas être l’objet de tout le texte."
+    }
+  },
+  {
+    "id": "main-idea-3",
+    "subSkill": "main-idea",
+    "lang": "fr",
+    "text": {
+      "en": "In a memo or an email, the purpose is often stated near the end, after _Par conséquent_ or _Nous vous demandons de_.",
+      "fr": "Dans une note ou un courriel, l’objet est souvent énoncé vers la fin, après _Par conséquent_ ou _Nous vous demandons de_."
+    }
+  },
+  {
+    "id": "specific-detail-1",
+    "subSkill": "specific-detail",
+    "lang": "fr",
+    "text": {
+      "en": "Find the answer in the text before you read the options. Wrong options often reuse the text’s own words in the wrong order.",
+      "fr": "Repérez la réponse dans le texte avant de lire les choix. Les mauvais choix reprennent souvent les mots du texte dans le mauvais ordre."
+    }
+  },
+  {
+    "id": "specific-detail-2",
+    "subSkill": "specific-detail",
+    "lang": "fr",
+    "text": {
+      "en": "Watch qualifiers such as _seulement_, _au plus tard_ and _sauf_: one word can make a matching option wrong.",
+      "fr": "Surveillez les nuances comme _seulement_, _au plus tard_ et _sauf_ : un seul mot peut rendre faux un choix qui semblait correspondre."
+    }
+  },
+  {
+    "id": "specific-detail-3",
+    "subSkill": "specific-detail",
+    "lang": "fr",
+    "text": {
+      "en": "When a question names a date, a unit or a person, scan for it rather than rereading the whole passage.",
+      "fr": "Quand une question mentionne une date, une unité ou une personne, balayez le texte pour la repérer plutôt que de tout relire."
+    }
+  },
+  {
+    "id": "inference-1",
+    "subSkill": "inference",
+    "lang": "fr",
+    "text": {
+      "en": "An inference must follow from the text, not from what is usually true at work. If an option needs outside knowledge to hold, it is wrong.",
+      "fr": "Une inférence doit découler du texte, et non de ce qui est habituellement vrai au travail. Si un choix exige des connaissances extérieures, il est faux."
+    }
+  },
+  {
+    "id": "inference-2",
+    "subSkill": "inference",
+    "lang": "fr",
+    "text": {
+      "en": "A conditional such as _pourrait_ or _serait_ signals a possibility, not a fact: the author is not committing.",
+      "fr": "Un conditionnel comme _pourrait_ ou _serait_ signale une possibilité, pas un fait : l’auteur ne s’engage pas."
+    }
+  },
+  {
+    "id": "inference-3",
+    "subSkill": "inference",
+    "lang": "fr",
+    "text": {
+      "en": "Prefer the cautious option. Absolute words such as _toujours_ and _jamais_ are rarely supported by the text.",
+      "fr": "Privilégiez le choix prudent. Les mots absolus comme _toujours_ et _jamais_ sont rarement appuyés par le texte."
+    }
+  },
+  {
+    "id": "vocabulary-in-context-1",
+    "subSkill": "vocabulary-in-context",
+    "lang": "fr",
+    "text": {
+      "en": "Put each option in place of the word and reread the sentence: the right one keeps the meaning of the whole sentence.",
+      "fr": "Remplacez le mot par chaque choix et relisez la phrase : le bon choix conserve le sens de toute la phrase."
+    }
+  },
+  {
+    "id": "vocabulary-in-context-2",
+    "subSkill": "vocabulary-in-context",
+    "lang": "fr",
+    "text": {
+      "en": "Everyday words take special meanings in administration: to _saisir_ a committee of a matter is to refer it to them.",
+      "fr": "Des mots courants prennent un sens particulier en administration : _saisir_ un comité d’une question, c’est la lui soumettre."
+    }
+  },
+  {
+    "id": "vocabulary-in-context-3",
+    "subSkill": "vocabulary-in-context",
+    "lang": "fr",
+    "text": {
+      "en": "In administrative French, an _instance_ is a decision-making body, not an example: _les instances décisionnelles_.",
+      "fr": "En français administratif, une _instance_ est un organisme qui décide, et non un exemple : _les instances décisionnelles_."
+    }
+  },
+  {
+    "id": "cohesion-and-reference-1",
+    "subSkill": "cohesion-and-reference",
+    "lang": "fr",
+    "text": {
+      "en": "To find what a pronoun refers to, look back for the nearest noun that agrees with it in gender and number.",
+      "fr": "Pour trouver le référent d’un pronom, remontez au nom le plus proche qui s’accorde avec lui en genre et en nombre."
+    }
+  },
+  {
+    "id": "cohesion-and-reference-2",
+    "subSkill": "cohesion-and-reference",
+    "lang": "fr",
+    "text": {
+      "en": "_Celui-ci_ points to the last thing named, and _celui-là_ to the one before it.",
+      "fr": "_Celui-ci_ renvoie au dernier élément nommé, et _celui-là_ à celui qui le précède."
+    }
+  },
+  {
+    "id": "cohesion-and-reference-3",
+    "subSkill": "cohesion-and-reference",
+    "lang": "fr",
+    "text": {
+      "en": "Phrases like _ce dernier_, _ladite mesure_ and _à cet égard_ link back to the sentence before: find what they replace before you answer.",
+      "fr": "Des expressions comme _ce dernier_, _ladite mesure_ et _à cet égard_ renvoient à la phrase précédente : trouvez ce qu’elles remplacent avant de répondre."
+    }
+  },
+  {
+    "id": "tone-and-intent-1",
+    "subSkill": "tone-and-intent",
+    "lang": "fr",
+    "text": {
+      "en": "Ask why the text was written: to inform, to request, to warn or to persuade. Verbs such as _veuillez_, _nous rappelons_ and _il est essentiel_ usually tell you.",
+      "fr": "Demandez-vous pourquoi le texte a été écrit : informer, demander, mettre en garde ou convaincre. Des verbes comme _veuillez_, _nous rappelons_ et _il est essentiel_ l’indiquent souvent."
+    }
+  },
+  {
+    "id": "tone-and-intent-2",
+    "subSkill": "tone-and-intent",
+    "lang": "fr",
+    "text": {
+      "en": "Official writing is restrained. An option calling the author angry or delighted is usually too strong for a government text.",
+      "fr": "Le ton officiel est mesuré. Un choix qui décrit l’auteur comme fâché ou ravi est généralement trop fort pour un texte gouvernemental."
+    }
+  },
+  {
+    "id": "tone-and-intent-3",
+    "subSkill": "tone-and-intent",
+    "lang": "fr",
+    "text": {
+      "en": "_Toutefois_, _cependant_ and _or_ often introduce the author’s real point: weigh what follows them most.",
+      "fr": "_Toutefois_, _cependant_ et _or_ introduisent souvent le véritable propos de l’auteur : accordez le plus de poids à ce qui les suit."
+    }
+  },
+  {
+    "id": "text-structure-1",
+    "subSkill": "text-structure",
+    "lang": "fr",
+    "text": {
+      "en": "Skim the first sentence of each paragraph to map the text before you answer a question on its structure.",
+      "fr": "Survolez la première phrase de chaque paragraphe pour dresser le plan du texte avant de répondre à une question sur sa structure."
+    }
+  },
+  {
+    "id": "text-structure-2",
+    "subSkill": "text-structure",
+    "lang": "fr",
+    "text": {
+      "en": "Signal words show the plan: _d’abord_, _ensuite_ and _enfin_ for steps, _d’une part_ and _d’autre part_ for two sides.",
+      "fr": "Les mots charnières révèlent le plan : _d’abord_, _ensuite_ et _enfin_ pour des étapes, _d’une part_ et _d’autre part_ pour deux aspects."
+    }
+  },
+  {
+    "id": "text-structure-3",
+    "subSkill": "text-structure",
+    "lang": "fr",
+    "text": {
+      "en": "When asked where a sentence fits, check that its opening follows from what comes before and its ending leads into what comes after.",
+      "fr": "Quand on vous demande où placer une phrase, vérifiez que son début s’enchaîne avec ce qui précède et que sa fin annonce ce qui suit."
+    }
+  },
+  {
+    "id": "numerical-and-tabular-detail-1",
+    "subSkill": "numerical-and-tabular-detail",
+    "lang": "fr",
+    "text": {
+      "en": "Read a table’s title, headings and units before its figures. Many wrong options use the right number from the wrong column.",
+      "fr": "Lisez le titre, les en-têtes et les unités d’un tableau avant ses chiffres. Bien des mauvais choix prennent le bon nombre dans la mauvaise colonne."
+    }
+  },
+  {
+    "id": "numerical-and-tabular-detail-2",
+    "subSkill": "numerical-and-tabular-detail",
+    "lang": "fr",
+    "text": {
+      "en": "In French a comma marks the decimals and a space separates the thousands: _1 250,5_ is one thousand two hundred and fifty point five.",
+      "fr": "En français, la virgule marque les décimales et l’espace sépare les milliers : _1 250,5_ se lit « mille deux cent cinquante virgule cinq »."
+    }
+  },
+  {
+    "id": "numerical-and-tabular-detail-3",
+    "subSkill": "numerical-and-tabular-detail",
+    "lang": "fr",
+    "text": {
+      "en": "Tell _une hausse de 5 %_ from _une hausse de 5 points de pourcentage_: the first is relative, the second absolute.",
+      "fr": "Distinguez _une hausse de 5 %_ et _une hausse de 5 points de pourcentage_ : la première est relative, la seconde absolue."
+    }
+  },
+  {
+    "id": "verb-tense-and-mood-1",
+    "subSkill": "verb-tense-and-mood",
+    "lang": "fr",
+    "text": {
+      "en": "After _il faut que_, _bien que_, _pour que_ and _avant que_, use the subjunctive: _Il faut que le rapport soit prêt._",
+      "fr": "Après _il faut que_, _bien que_, _pour que_ et _avant que_, employez le subjonctif : _Il faut que le rapport soit prêt._"
+    }
+  },
+  {
+    "id": "verb-tense-and-mood-2",
+    "subSkill": "verb-tense-and-mood",
+    "lang": "fr",
+    "text": {
+      "en": "_Après que_ takes the indicative, unlike _avant que_: _après que le comité a statué_.",
+      "fr": "_Après que_ se construit avec l’indicatif, contrairement à _avant que_ : _après que le comité a statué_."
+    }
+  },
+  {
+    "id": "verb-tense-and-mood-3",
+    "subSkill": "verb-tense-and-mood",
+    "lang": "fr",
+    "text": {
+      "en": "Never use the conditional after a _si_ of condition: _Si nous avions le budget, nous embaucherions._",
+      "fr": "Jamais de conditionnel après le _si_ de condition : _Si nous avions le budget, nous embaucherions._"
+    }
+  },
+  {
+    "id": "agreement-1",
+    "subSkill": "agreement",
+    "lang": "fr",
+    "text": {
+      "en": "With _avoir_, the past participle agrees only with a direct object placed before it: _les notes que j’ai rédigées_.",
+      "fr": "Avec _avoir_, le participe passé s’accorde seulement avec le complément direct placé avant lui : _les notes que j’ai rédigées_."
+    }
+  },
+  {
+    "id": "agreement-2",
+    "subSkill": "agreement",
+    "lang": "fr",
+    "text": {
+      "en": "Find the real subject when it sits far from the verb: _La liste des documents exigés est jointe._",
+      "fr": "Trouvez le vrai sujet quand il est loin du verbe : _La liste des documents exigés est jointe._"
+    }
+  },
+  {
+    "id": "agreement-3",
+    "subSkill": "agreement",
+    "lang": "fr",
+    "text": {
+      "en": "_Ci-joint_ stays invariable at the start of a sentence: _Ci-joint les pièces demandées._",
+      "fr": "_Ci-joint_ reste invariable en tête de phrase : _Ci-joint les pièces demandées._"
+    }
+  },
+  {
+    "id": "prepositions-and-government-1",
+    "subSkill": "prepositions-and-government",
+    "lang": "fr",
+    "text": {
+      "en": "Some verbs do not take the English preposition: _participer à_, _assister à une réunion_, _se fier à_.",
+      "fr": "Certains verbes ne prennent pas la préposition de l’anglais : _participer à_, _assister à une réunion_, _se fier à_."
+    }
+  },
+  {
+    "id": "prepositions-and-government-2",
+    "subSkill": "prepositions-and-government",
+    "lang": "fr",
+    "text": {
+      "en": "Two verbs can share a complement only if they are built the same way: write _Il a contribué au projet et l’a appuyé_.",
+      "fr": "Deux verbes ne peuvent partager un complément que s’ils ont la même construction : écrivez _Il a contribué au projet et l’a appuyé_."
+    }
+  },
+  {
+    "id": "prepositions-and-government-3",
+    "subSkill": "prepositions-and-government",
+    "lang": "fr",
+    "text": {
+      "en": "Use _en_ before a feminine province or one starting with a vowel, and _au_ before a masculine one: _en Alberta_, _en Ontario_, _au Manitoba_.",
+      "fr": "Employez _en_ devant une province au féminin ou commençant par une voyelle, et _au_ devant une province au masculin : _en Alberta_, _en Ontario_, _au Manitoba_."
+    }
+  },
+  {
+    "id": "pronouns-1",
+    "subSkill": "pronouns",
+    "lang": "fr",
+    "text": {
+      "en": "_Leur_ before a verb is a pronoun and never takes an s: _Je leur ai transmis les documents._",
+      "fr": "_Leur_ devant un verbe est un pronom et ne prend jamais de s : _Je leur ai transmis les documents._"
+    }
+  },
+  {
+    "id": "pronouns-2",
+    "subSkill": "pronouns",
+    "lang": "fr",
+    "text": {
+      "en": "Use _dont_ for a complement introduced by _de_: _le dossier dont je vous ai parlé_, not _que je vous ai parlé_.",
+      "fr": "Employez _dont_ pour un complément introduit par _de_ : _le dossier dont je vous ai parlé_, et non _que je vous ai parlé_."
+    }
+  },
+  {
+    "id": "pronouns-3",
+    "subSkill": "pronouns",
+    "lang": "fr",
+    "text": {
+      "en": "Check the verb’s construction before choosing _y_ or _en_: _J’y pense_ (_penser à_), _J’en parle_ (_parler de_).",
+      "fr": "Vérifiez la construction du verbe avant de choisir _y_ ou _en_ : _J’y pense_ (_penser à_), _J’en parle_ (_parler de_)."
+    }
+  },
+  {
+    "id": "connectors-and-discourse-markers-1",
+    "subSkill": "connectors-and-discourse-markers",
+    "lang": "fr",
+    "text": {
+      "en": "Choose a connector for its logic, not for variety: _en effet_ confirms, _or_ introduces a new fact, _en revanche_ contrasts.",
+      "fr": "Choisissez un connecteur pour sa logique, pas pour varier : _en effet_ confirme, _or_ introduit un fait nouveau, _en revanche_ marque une opposition."
+    }
+  },
+  {
+    "id": "connectors-and-discourse-markers-2",
+    "subSkill": "connectors-and-discourse-markers",
+    "lang": "fr",
+    "text": {
+      "en": "_Par contre_ is accepted, but _en revanche_ or _toutefois_ reads better in formal writing.",
+      "fr": "_Par contre_ est admis, mais _en revanche_ ou _toutefois_ conviennent mieux à un écrit soigné."
+    }
+  },
+  {
+    "id": "connectors-and-discourse-markers-3",
+    "subSkill": "connectors-and-discourse-markers",
+    "lang": "fr",
+    "text": {
+      "en": "Careful writers avoid _malgré que_: use _bien que_ with the subjunctive, or _malgré_ with a noun.",
+      "fr": "On évite _malgré que_ dans un texte soigné : employez _bien que_ suivi du subjonctif, ou _malgré_ suivi d’un nom."
+    }
+  },
+  {
+    "id": "register-and-formality-1",
+    "subSkill": "register-and-formality",
+    "lang": "fr",
+    "text": {
+      "en": "In a work email, write _Pourriez-vous_ rather than _Peux-tu_, unless you already say _tu_ to that person.",
+      "fr": "Dans un courriel de travail, écrivez _Pourriez-vous_ plutôt que _Peux-tu_, sauf si vous tutoyez déjà la personne."
+    }
+  },
+  {
+    "id": "register-and-formality-2",
+    "subSkill": "register-and-formality",
+    "lang": "fr",
+    "text": {
+      "en": "In formal writing, avoid _on_ where you mean _nous_, and never drop the _ne_ of a negation.",
+      "fr": "Dans un écrit soigné, évitez _on_ quand vous voulez dire _nous_, et n’omettez jamais le _ne_ de la négation."
+    }
+  },
+  {
+    "id": "register-and-formality-3",
+    "subSkill": "register-and-formality",
+    "lang": "fr",
+    "text": {
+      "en": "End a letter with a full closing, such as _Veuillez agréer, Madame, mes salutations distinguées_; in an email, _Cordialement_ will do.",
+      "fr": "Terminez une lettre par une formule complète, comme _Veuillez agréer, Madame, mes salutations distinguées_; dans un courriel, _Cordialement_ suffit."
+    }
+  },
+  {
+    "id": "word-choice-precision-1",
+    "subSkill": "word-choice-precision",
+    "lang": "fr",
+    "text": {
+      "en": "Tell apart _les effectifs_ (staff numbers), _efficace_ (gets the result) and _efficient_ (gets it with few resources).",
+      "fr": "Distinguez _les effectifs_ (le personnel), _efficace_ (qui produit le résultat) et _efficient_ (qui le produit avec peu de ressources)."
+    }
+  },
+  {
+    "id": "word-choice-precision-2",
+    "subSkill": "word-choice-precision",
+    "lang": "fr",
+    "text": {
+      "en": "_Suite à_ is frowned on in careful writing: write _à la suite de_ or _en réponse à_.",
+      "fr": "_Suite à_ est critiqué dans un texte soigné : écrivez _à la suite de_ ou _en réponse à_."
+    }
+  },
+  {
+    "id": "word-choice-precision-3",
+    "subSkill": "word-choice-precision",
+    "lang": "fr",
+    "text": {
+      "en": "Prefer a precise verb to _faire_ or _effectuer_ with a noun: _vérifier_ rather than _effectuer une vérification_.",
+      "fr": "Préférez un verbe précis à _faire_ ou _effectuer_ suivi d’un nom : _vérifier_ plutôt que _effectuer une vérification_."
+    }
+  },
+  {
+    "id": "false-friends-and-anglicisms-1",
+    "subSkill": "false-friends-and-anglicisms",
+    "lang": "fr",
+    "text": {
+      "en": "_Éventuellement_ means if need be, and _actuellement_ means at present: neither means eventually or actually.",
+      "fr": "_Éventuellement_ signifie « le cas échéant », et _actuellement_, « en ce moment » : ni l’un ni l’autre ne veut dire « finalement » ou « en fait »."
+    }
+  },
+  {
+    "id": "false-friends-and-anglicisms-2",
+    "subSkill": "false-friends-and-anglicisms",
+    "lang": "fr",
+    "text": {
+      "en": "Avoid calques: _prendre une décision_, not _faire une décision_; _poser une question_, not _demander une question_.",
+      "fr": "Évitez les calques : _prendre une décision_, et non _faire une décision_; _poser une question_, et non _demander une question_."
+    }
+  },
+  {
+    "id": "false-friends-and-anglicisms-3",
+    "subSkill": "false-friends-and-anglicisms",
+    "lang": "fr",
+    "text": {
+      "en": "_Rencontrer un objectif_ is an anglicism: write _atteindre un objectif_, and _respecter une échéance_.",
+      "fr": "_Rencontrer un objectif_ est un anglicisme : écrivez _atteindre un objectif_, et _respecter une échéance_."
+    }
+  },
+  {
+    "id": "punctuation-and-mechanics-1",
+    "subSkill": "punctuation-and-mechanics",
+    "lang": "fr",
+    "text": {
+      "en": "In Canadian French, put a space before a colon and inside « », but none before a semicolon, a question mark or an exclamation mark.",
+      "fr": "En français canadien, on met une espace avant le deux-points et à l’intérieur des guillemets « », mais aucune avant le point-virgule, le point d’interrogation ou le point d’exclamation."
+    }
+  },
+  {
+    "id": "punctuation-and-mechanics-2",
+    "subSkill": "punctuation-and-mechanics",
+    "lang": "fr",
+    "text": {
+      "en": "No comma before _et_ in a simple list, and never one between a subject and its verb.",
+      "fr": "Pas de virgule avant _et_ dans une énumération simple, et jamais entre le sujet et son verbe."
+    }
+  },
+  {
+    "id": "punctuation-and-mechanics-3",
+    "subSkill": "punctuation-and-mechanics",
+    "lang": "fr",
+    "text": {
+      "en": "Days, months and languages take no capital in French: _le lundi 6 octobre_, _le français_.",
+      "fr": "Les jours, les mois et les noms de langues ne prennent pas de majuscule : _le lundi 6 octobre_, _le français_."
+    }
+  },
+  {
+    "id": "sentence-structure-1",
+    "subSkill": "sentence-structure",
+    "lang": "fr",
+    "text": {
+      "en": "One idea per sentence. Past about 25 words, split it and join the two with a connector.",
+      "fr": "Une idée par phrase. Au-delà d’environ 25 mots, coupez-la et reliez les deux par un connecteur."
+    }
+  },
+  {
+    "id": "sentence-structure-2",
+    "subSkill": "sentence-structure",
+    "lang": "fr",
+    "text": {
+      "en": "An opening participle must refer to the subject: _Ayant examiné le dossier, le comité a conclu_, not _la conclusion a été_.",
+      "fr": "Le participe en tête de phrase doit se rapporter au sujet : _Ayant examiné le dossier, le comité a conclu_, et non _la conclusion a été_."
+    }
+  },
+  {
+    "id": "sentence-structure-3",
+    "subSkill": "sentence-structure",
+    "lang": "fr",
+    "text": {
+      "en": "An indirect question has no inversion and no _est-ce que_: _Je me demande si le rapport est prêt._",
+      "fr": "L’interrogation indirecte ne prend ni inversion ni _est-ce que_ : _Je me demande si le rapport est prêt._"
+    }
+  }
+]

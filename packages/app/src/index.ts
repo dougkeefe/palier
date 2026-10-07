@@ -112,6 +112,7 @@ export type {
   ImportDataDeps,
   ImportDataRequest,
   ImportDataResult,
+  LatestExamRequest,
   LatestExamResult,
   PlanDailySessionDeps,
   PlanDailySessionRequest,

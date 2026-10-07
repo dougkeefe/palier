@@ -127,6 +127,16 @@ describe("latestExamResult", () => {
     expect(await latestExamResult(shrunk)).toBeNull();
   });
 
+  it("asked for a skill, passes over a later run at the other skill", async () => {
+    const writingForm = { ...FORM, id: formId("writing-form"), skill: "writing" as const };
+    const writing = submitted({ id: sessionId("writing"), formId: writingForm.id, submittedAt: LATER });
+    const both = { items: itemsOf([FORM, writingForm]), examRuns: examRunStore([writing, submitted()]) };
+
+    expect((await latestExamResult(both))?.run.id).toBe("writing");
+    expect((await latestExamResult(both, { skill: "reading" }))?.run.id).toBe(RUN_ID);
+    expect(await latestExamResult({ ...both, examRuns: examRunStore([writing]) }, { skill: "reading" })).toBeNull();
+  });
+
   it("returns null when every submitted run's form has left the bank", async () => {
     expect(await latestExamResult(deps([submitted({ formId: formId("gone") })]))).toBeNull();
   });

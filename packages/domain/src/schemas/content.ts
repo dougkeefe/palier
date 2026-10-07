@@ -3,7 +3,7 @@ import * as z from "zod";
 import { DOC_TYPES, LICENCES } from "../passage.js";
 import { ATTEMPT_MODES } from "../attempt.js";
 import { ORAL_SESSION_TYPES } from "../oral-scenario.js";
-import { WRITING_SUB_SKILLS } from "../sub-skills.js";
+import { READING_SUB_SKILLS, WRITING_SUB_SKILLS } from "../sub-skills.js";
 import { WRITING_REGISTERS } from "../writing-prompt.js";
 import {
   bandSchema,
@@ -322,6 +322,17 @@ export const oralFillersShape = z.strictObject({
   fr: fillerListShape,
 });
 
+/**
+ * A quick pointer (progress.md D216): practical advice on one reading or written-expression
+ * sub-skill, in both interface languages, with practised-language text cited `_like this_`.
+ */
+export const pointerShape = z.strictObject({
+  id: idSchema,
+  subSkill: z.enum([...READING_SUB_SKILLS, ...WRITING_SUB_SKILLS]),
+  lang: langSchema,
+  text: localisedSchema,
+});
+
 export const itemSchema = itemShape.readonly();
 export const passageSchema = passageShape.readonly();
 export const oralScenarioSchema = oralScenarioShape.readonly();
@@ -330,3 +341,4 @@ export const attemptSchema = attemptShape.readonly();
 export const writingPromptSchema = writingPromptShape.readonly();
 export const oralFillersSchema = oralFillersShape.readonly();
 export const libraryArticleSchema = libraryArticleShape.readonly();
+export const pointerSchema = pointerShape.readonly();

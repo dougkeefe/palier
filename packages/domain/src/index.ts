@@ -174,6 +174,10 @@ export { parseWritingPrompts, parseWritingPromptsOrThrow } from "./writing-promp
 export type { LibraryArticle, LibraryExample, LibrarySection } from "./library-article.js";
 export type { LibraryParseResult } from "./library.js";
 export { CITED_MARK, parseLibrary, parseLibraryOrThrow } from "./library.js";
+// Today's quick pointers, a content artefact (progress.md D216).
+export type { Pointer } from "./pointer.js";
+export type { PointersParseResult } from "./pointers.js";
+export { parsePointers, parsePointersOrThrow } from "./pointers.js";
 
 // The oral filler list, a content artefact the fluency metrics read (progress.md D123).
 export type { OralFillers, OralFillersParseResult } from "./oral-fillers.js";
@@ -219,6 +223,7 @@ export {
   oralFillersSchema,
   oralScenarioSchema,
   passageSchema,
+  pointerSchema,
   writingPromptSchema,
 } from "./schemas/content.js";
 export type { ContentSchemaName } from "./schemas/index.js";

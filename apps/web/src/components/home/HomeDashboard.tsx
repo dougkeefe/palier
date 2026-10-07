@@ -1,9 +1,9 @@
 "use client";
 
 import type { DiagnosticResult } from "@palier/app";
-import type { ScoredSkill, SubSkill } from "@palier/domain";
+import type { Pointer, ScoredSkill, SubSkill, TargetBand } from "@palier/domain";
 import { SCORED_SKILLS } from "@palier/domain";
-import type { DayPlan, SkillTrend } from "@palier/engine";
+import { type DayPlan, type SkillTrend, localDay } from "@palier/engine";
 import { Callout, Card, EmptyState, buttonClass } from "@palier/ui";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -11,13 +11,18 @@ import { useEffect, useState } from "react";
 import { focusText, interpretationFor, placementOf, scoreOf } from "../../features/diagnostic/result-view";
 import { feedbackLangFor } from "../../features/oral/report-view";
 import { type ExamReadiness, examReadiness } from "../../features/exam/readiness";
+import { type NextStep, nextStep } from "../../features/home/next-step";
+import { pickPointer } from "../../features/home/pointer";
+import { articleHref } from "../../features/library/links";
 import { type EvidenceLine, evidenceLine } from "../../features/telemetry/telemetry";
 import { hasAnyEstimate } from "../../features/trend/trend-lines";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { type StudyProfile, daysUntil, minutesFor, planRows, readStudyProfile, sessionSizeFor } from "../../lib/study";
+import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { MilestoneMoment, StreakLine, useEngagement } from "../engagement/Engagement";
+import { Cited } from "../library/Cited";
 import { NonAffiliation } from "../NonAffiliation";
 import { TrendMeters } from "../practice/TrendMeters";
 
@@ -37,6 +42,10 @@ type Dashboard =
       readonly exam: ExamReadiness | null;
       /** The latest complete diagnostic at this skill, which also placed the plan (ADR 25), or none. */
       readonly diagnostic: DiagnosticResult | null;
+      /** The one step the plan card leads with (D214). */
+      readonly step: NextStep;
+      /** Today's quick pointer, on what the plan favours (D216). */
+      readonly pointer: Pointer | null;
     };
 
 /** How far ahead of now "due" reaches for the queue count: due now, nothing later. */
@@ -48,8 +57,10 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
   // A preview, not a session: `planDailySession` records nothing, so looking at the
   // card never counts as having started the day. It is biased by what the session will read
   // when it opens (`studyFocus`, ADR 25, D124), and only the plan waits for that.
-  const [plan, trend, evidence, due, latestExam, diagnostic] = await Promise.all([
-    container.useCases.studyFocus({ skill, lang: "fr", targetBand: profile.targetBand }).then((focus) =>
+  const studying = container.useCases.studyFocus({ skill, lang: "fr", targetBand: profile.targetBand });
+  const [focus, plan, trend, evidence, due, latestExam, examAtSkill, diagnostic] = await Promise.all([
+    studying,
+    studying.then((focus) =>
       container.useCases.planDailySession({
         skill,
         lang: "fr",
@@ -63,9 +74,22 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
     container.useCases.practiceTrendEvidence({ skill }),
     container.schedule.due(container.clock.now(), DUE_LIMIT),
     container.useCases.latestExamResult(),
+    container.useCases.latestExamResult({ skill }),
     container.useCases.diagnosticResult({ skill, targetBand: profile.targetBand }),
   ]);
-  // The whole queue, both skills: the card counts what `/review` will show.
+  const step = nextStep({
+    diagnostic: diagnostic === null ? null : { takenAt: diagnostic.summary.takenAt, retakeDue: diagnostic.retakeDue },
+    trend,
+    targetBand: profile.targetBand,
+    mockExamAdvised: plan.mockExamAdvised,
+    lastExamAt: examAtSkill?.run.submittedAt ?? null,
+  });
+  const pointer = pickPointer(container.pointers, {
+    skill,
+    focusSubSkills: focus.focusSubSkills ?? [],
+    day: localDay(container.clock.now(), deviceTimeZone()),
+  });
+  // The whole queue, both skills: the link counts what `/review` will show.
   return {
     status: "ready",
     profile,
@@ -75,17 +99,25 @@ const loadDashboard = async (container: Container, skill: ScoredSkill): Promise<
     dueCount: due.length,
     exam: latestExam === null ? null : examReadiness(latestExam),
     diagnostic,
+    step,
+    pointer,
   };
 };
 
 /**
- * Home (product-requirements.md §8.2). Zone A, the readiness card: the last mock
- * exam's band against its cuts, which leads because it came from a full-length form,
- * then the latest diagnostic in plain words (ADR 25), then the practice trend per band
- * tag with its interval once there is one, or a first-run invitation to the diagnostic (§14). The two stay visually distinct, and the practice trend is
- * never a band letter (D64). Zone B, today's plan with one primary action. Zone C, the
- * review queue and the mock exam (D84 ruling 12). As designed (D202): the readiness card
- * white, the plan a deep panel, the queue a quiet one.
+ * Home (product-requirements.md §8.2, as amended by D214–D215). The page is built around what to
+ * do next, at the skill being looked at:
+ *
+ * - **Today's plan leads**, the deep panel across two-thirds of the width. It opens with the next
+ *   step when that is not the plan itself: the diagnostic first, a retake when it is due, then a
+ *   mock exam once practice at the target is measurable (`nextStep`). Then the rows and one primary
+ *   action, then the other ways on: the review queue with its due count, speaking, the mock exam
+ *   with what it is for, the library and the diagnostic again. There is no separate review card:
+ *   the plan's first row already draws on the same due items.
+ * - **A quick pointer** beside it (D216): one piece of advice a day, on what the plan favours.
+ * - **Where you stand** below the pointer: the diagnostic in plain words (ADR 25), the practice
+ *   trend per band tag (never a band letter, D64), and the last mock exam's band against its cuts
+ *   once there is one. Each says in a line what it is, so the two are not confused.
  */
 export function HomeDashboard() {
   const t = useTranslations("today");
@@ -146,51 +178,20 @@ export function HomeDashboard() {
         ))}
       </fieldset>
 
-      {dashboard.status === "loading" ? (
+      {dashboard.status === "loading" || container.status !== "ready" ? (
         <p role="status">{tCommon("loading")}</p>
       ) : (
         <div className="app-home">
-          <Card className="app-home__readiness">
-            <h2>{t("readinessCardTitle")}</h2>
-            {countdown === null ? null : <p className="app-countdown">{t("testCountdown", { days: countdown })}</p>}
-            <ExamHalf exam={dashboard.exam} />
-            {dashboard.diagnostic === null ? null : <DiagnosticHalf result={dashboard.diagnostic} skill={skill} />}
-            {hasAnyEstimate(dashboard.trend) ? (
-              <>
-                <h3>{t("readinessTitle")}</h3>
-                <TrendMeters trend={dashboard.trend} />
-                <p className="app-muted">
-                  {t("provenance", { count: dashboard.trend.windowSize, skill: tSkills(skill) })}
-                </p>
-                <p className="app-muted">{t("readinessNote")}</p>
-                {dashboard.evidence === null ? null : (
-                  <p className="app-muted">
-                    {t("trendEvidence", dashboard.evidence)}
-                  </p>
-                )}
-              </>
-            ) : dashboard.diagnostic !== null ? null : (
-              <>
-                <h3>{t("readinessTitle")}</h3>
-                <div className="app-home__inset">
-                  <p>
-                    <strong>{t("firstRunTitle")}</strong>
-                  </p>
-                  <p>{t("firstRunBody", { count: container.status === "ready" ? container.container.profile.diagnostic.size : 0 })}</p>
-                  {dashboard.trend.windowSize === 0 ? null : <TrendMeters trend={dashboard.trend} />}
-                </div>
-                <Link href="/diagnostic" className="pl-btn pl-btn--secondary pl-focusable">
-                  {t("firstRunAction")}
-                </Link>
-              </>
-            )}
-          </Card>
-
           <Card tone="deep" className="app-home__plan">
             <h2>{t("planTitle")}</h2>
-            {engagement === null || container.status !== "ready" ? null : (
-              <StreakLine streak={engagement.streak} container={container.container} />
-            )}
+            {countdown === null ? null : <p className="app-countdown">{t("testCountdown", { days: countdown })}</p>}
+            <NextStepBanner
+              step={dashboard.step}
+              targetBand={dashboard.profile.targetBand}
+              taper={dashboard.plan.mockExamAdvised}
+              diagnosticSize={container.container.profile.diagnostic.size}
+            />
+            {engagement === null ? null : <StreakLine streak={engagement.streak} container={container.container} />}
             {dashboard.diagnostic === null ? null : <PlanPlacement result={dashboard.diagnostic} />}
             {dashboard.plan.items.length === 0 ? (
               <div>
@@ -214,26 +215,38 @@ export function HomeDashboard() {
                 </Link>
               </>
             )}
+            <MorePractice
+              dueCount={dashboard.dueCount}
+              step={dashboard.step}
+              hasDiagnostic={dashboard.diagnostic !== null}
+              targetBand={dashboard.profile.targetBand}
+            />
           </Card>
 
-          <Card tone="quiet" className="app-home__actions">
-            <h2>{t("reviewTitle")}</h2>
-            <p>{t("reviewDue", { count: dashboard.dueCount })}</p>
-            <div className="app-home__links">
-              <Link href="/review" className="app-link pl-focusable">
-                {t("reviewAction")}
-              </Link>
-              <Link href="/exam" className="app-link pl-focusable">
-                {t("examAction")}
-              </Link>
-              <Link href="/practice/oral" className="app-link pl-focusable">
-                {t("oralAction")}
-              </Link>
-              <Link href="/diagnostic" className="app-link pl-focusable">
-                {t("diagnosticAgain")}
-              </Link>
-            </div>
-          </Card>
+          <div className="app-home__side">
+            {dashboard.pointer === null ? null : <PointerCard pointer={dashboard.pointer} />}
+
+            <Card className="app-home__readiness">
+              <h2>{t("readinessCardTitle")}</h2>
+              {dashboard.diagnostic === null ? (
+                <p className="app-muted">{t("standEmpty")}</p>
+              ) : (
+                <DiagnosticHalf result={dashboard.diagnostic} skill={skill} />
+              )}
+              {hasAnyEstimate(dashboard.trend) ? (
+                <>
+                  <h3>{t("readinessTitle")}</h3>
+                  <TrendMeters trend={dashboard.trend} />
+                  <p className="app-muted">
+                    {t("provenance", { count: dashboard.trend.windowSize, skill: tSkills(skill) })}
+                  </p>
+                  <p className="app-muted">{t("readinessNote")}</p>
+                  {dashboard.evidence === null ? null : <p className="app-muted">{t("trendEvidence", dashboard.evidence)}</p>}
+                </>
+              ) : null}
+              {dashboard.exam === null ? null : <ExamHalf exam={dashboard.exam} />}
+            </Card>
+          </div>
         </div>
       )}
       {engagement === null || container.status !== "ready" ? null : (
@@ -244,9 +257,126 @@ export function HomeDashboard() {
 }
 
 /**
- * The readiness card's diagnostic half (ADR 25): the latest run's score and date, where it started
- * the plan, and the interpretation's headline and first priority when this device holds it, with a
- * link to the whole result, and the monthly re-offer once it is due (§6.2).
+ * The plan's head when the next step is not the plan itself (D214): what to do, why, and one way
+ * to do it. The diagnostic's says it needs the key, and that the plan below works meanwhile.
+ */
+function NextStepBanner({
+  step,
+  targetBand,
+  taper,
+  diagnosticSize,
+}: {
+  step: NextStep;
+  targetBand: TargetBand;
+  taper: boolean;
+  diagnosticSize: number;
+}) {
+  const t = useTranslations("today");
+  if (step === "plan") return null;
+  const [title, body, href, action]: [string, string, "/diagnostic" | "/exam", string] =
+    step === "diagnostic"
+      ? [t("nextDiagnosticTitle"), t("nextDiagnosticBody", { count: diagnosticSize }), "/diagnostic", t("nextDiagnosticAction")]
+      : step === "retake-diagnostic"
+        ? [t("nextRetakeTitle"), t("diagnosticRetake"), "/diagnostic", t("diagnosticAgain")]
+        : [t("nextExamTitle"), taper ? t("nextExamTaper") : t("nextExamReady", { target: targetBand }), "/exam", t("examAction")];
+  return (
+    <section className="app-home__next" aria-labelledby="app-home-next">
+      <p className="app-home__eyebrow">{t("nextLabel")}</p>
+      <h3 id="app-home-next">{title}</h3>
+      <p>{body}</p>
+      <Link href={href} className={`${buttonClass("light", "go")} pl-focusable`}>
+        {action}
+      </Link>
+      {step === "diagnostic" ? <p className="app-muted">{t("nextDiagnosticMeanwhile")}</p> : null}
+    </section>
+  );
+}
+
+/**
+ * The plan's other ways on, where the review card was (D215): the queue with its due count,
+ * speaking, the mock exam with what it is for, the library, and the diagnostic again once there is
+ * one. A way the banner above already offers is not repeated.
+ */
+function MorePractice({
+  dueCount,
+  step,
+  hasDiagnostic,
+  targetBand,
+}: {
+  dueCount: number;
+  step: NextStep;
+  hasDiagnostic: boolean;
+  targetBand: TargetBand;
+}) {
+  const t = useTranslations("today");
+  return (
+    <section className="app-home__more" aria-labelledby="app-home-more">
+      <h3 id="app-home-more">{t("moreTitle")}</h3>
+      <ul className="app-home__links">
+        <li>
+          <Link href="/review" className="app-link pl-focusable">
+            {t("moreReview", { count: dueCount })}
+          </Link>
+        </li>
+        <li>
+          <Link href="/practice/oral" className="app-link pl-focusable">
+            {t("oralAction")}
+          </Link>
+        </li>
+        {step === "mock-exam" ? null : (
+          <li>
+            <Link href="/exam" className="app-link pl-focusable">
+              {t("examAction")}
+            </Link>
+            <p className="app-muted">{t("moreExamHint", { target: targetBand })}</p>
+          </li>
+        )}
+        <li>
+          <Link href="/library" className="app-link pl-focusable">
+            {t("libraryAction")}
+          </Link>
+        </li>
+        {hasDiagnostic && step !== "retake-diagnostic" ? (
+          <li>
+            <Link href="/diagnostic" className="app-link pl-focusable">
+              {t("diagnosticAgain")}
+            </Link>
+          </li>
+        ) : null}
+      </ul>
+    </section>
+  );
+}
+
+/**
+ * Today's quick pointer (D216): the advice in the screen's language, cited French marked with its
+ * `lang`, and the library article when the sub-skill has one.
+ */
+function PointerCard({ pointer }: { pointer: Pointer }) {
+  const t = useTranslations("today");
+  const tSub = useTranslations("subSkills");
+  const locale = useLocale();
+  const article = articleHref(pointer.subSkill);
+  return (
+    <Card tone="tint" className="app-home__pointer">
+      <h2>{t("pointerTitle")}</h2>
+      <p className="app-home__eyebrow">{t("pointerTopic", { subSkill: tSub(pointer.subSkill) })}</p>
+      <p className="app-home__pointer-text">
+        <Cited text={pointer.text[feedbackLangFor(locale)]} lang={pointer.lang} />
+      </p>
+      {article === null ? null : (
+        <Link href={article} className="app-link pl-focusable">
+          {t("pointerMore")}
+        </Link>
+      )}
+    </Card>
+  );
+}
+
+/**
+ * Where you stand's diagnostic half (ADR 25): what the diagnostic is for, the latest run's score
+ * and date, where it started the plan, and the interpretation's headline and first priority when
+ * this device holds it, with a link to the whole result. The monthly re-offer is the plan's banner.
  */
 function DiagnosticHalf({ result, skill }: { result: DiagnosticResult; skill: ScoredSkill }) {
   const t = useTranslations("today");
@@ -263,6 +393,7 @@ function DiagnosticHalf({ result, skill }: { result: DiagnosticResult; skill: Sc
   return (
     <div className="app-exam-result">
       <h3>{t("diagnosticTitle")}</h3>
+      <p className="app-muted">{t("diagnosticWhat")}</p>
       <p className="app-exam-result__line">
         {t("diagnosticScore", {
           correct: score.correct,
@@ -280,13 +411,6 @@ function DiagnosticHalf({ result, skill }: { result: DiagnosticResult; skill: Sc
       <Link href={{ pathname: "/diagnostic", query: { result: skill } }} className="app-link pl-focusable">
         {t("diagnosticLink")}
       </Link>
-      {result.retakeDue ? (
-        <p>
-          <Link href="/diagnostic" className="app-link pl-focusable">
-            {t("diagnosticRetake")}
-          </Link>
-        </p>
-      ) : null}
     </div>
   );
 }
@@ -307,30 +431,21 @@ function PlanPlacement({ result }: { result: DiagnosticResult }) {
 }
 
 /**
- * The readiness card's exam half: "C, 39 of 50. C starts at 38." (§8.2), or an
- * invitation to take one. It links to the full result.
+ * Where you stand's exam half, once a mock exam has been submitted: what a mock exam is, then
+ * "C, 39 of 50. C starts at 38." (§8.2) beside the non-affiliation statement, and the full result.
+ * Before the first, the plan's banner and its other ways on say when one is worth taking (D214).
  */
-function ExamHalf({ exam }: { exam: ExamReadiness | null }) {
+function ExamHalf({ exam }: { exam: ExamReadiness }) {
   const t = useTranslations("today");
   return (
     <div className="app-exam-result">
       <h3>{t("examTitle")}</h3>
-      {exam === null ? (
-        <>
-          <p>{t("examNone")}</p>
-          <Link href="/exam" className="pl-btn pl-btn--secondary pl-focusable">
-            {t("examAction")}
-          </Link>
-        </>
-      ) : (
-        <>
-          <p className="app-exam-result__line">{t("examResult", { ...exam })}</p>
-          <NonAffiliation />
-          <Link href={{ pathname: "/exam/results", query: { run: exam.runId } }} className="app-link pl-focusable">
-            {t("examResultLink")}
-          </Link>
-        </>
-      )}
+      <p className="app-muted">{t("examWhat")}</p>
+      <p className="app-exam-result__line">{t("examResult", { ...exam })}</p>
+      <NonAffiliation />
+      <Link href={{ pathname: "/exam/results", query: { run: exam.runId } }} className="app-link pl-focusable">
+        {t("examResultLink")}
+      </Link>
     </div>
   );
 }

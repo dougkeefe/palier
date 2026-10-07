@@ -7,11 +7,13 @@
     "./profiles/psc-sle.json": "./profiles/psc-sle.json",
     "./writing/prompts.json": "./writing/prompts.json",
     "./oral/fillers.json": "./oral/fillers.json",
-    "./library/*.json": "./library/*.json"
+    "./library/*.json": "./library/*.json",
+    "./pointers/pointers.json": "./pointers/pointers.json"
   },
   "files": [
     "library",
     "oral",
+    "pointers",
     "profiles",
     "writing"
   ]
