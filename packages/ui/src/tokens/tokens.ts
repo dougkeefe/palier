@@ -26,6 +26,8 @@ export type TokenName =
   | "surface"
   | "surface-tint"
   | "surface-quiet"
+  | "surface-mint"
+  | "surface-rose"
   | "surface-deep"
   | "ink"
   | "ink-soft"
@@ -63,6 +65,11 @@ export const TOKENS: readonly TokenDefinition[] = [
   token("surface", "#FFFFFF", "Cards, options, the language switch"),
   token("surface-tint", "#D9F1F8", "A selected option, a highlighted panel, hover on a light control"),
   token("surface-quiet", "#E8E6E5", "Secondary buttons, the nav track, a quiet panel, an input's fill"),
+  // The brand's two other light fills (`colors.css`'s ok and no backgrounds), which Today's skill
+  // cards take beside the tint (progress.md D219). Held to the inks and primary only: the state
+  // colours are never set on them.
+  token("surface-mint", "#BFE6C8", "A skill card's fill: written expression"),
+  token("surface-rose", "#F4C6D9", "A skill card's fill: oral expression"),
   token("surface-deep", "#004A61", "A deep panel: today's plan"),
   token("ink", "#201E1D", "Body text"),
   token("ink-soft", "#3D3936", "Paragraphs beside a heading"),

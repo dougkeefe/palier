@@ -354,7 +354,29 @@
     "standEmpty": "Le résultat de votre diagnostic s’affiche ici une fois celui-ci terminé, puis votre tendance en pratique à mesure que vous suivez le plan.",
     "diagnosticWhat": "Établit votre niveau de départ et oriente votre plan.",
     "examWhat": "Le test complet et chronométré, corrigé comme le vrai.",
-    "pointerTopic": "Thème : {subSkill}"
+    "pointerTopic": "Thème : {subSkill}",
+    "heroLabel": "Ces sept derniers jours",
+    "heroWeek": "{count, plural, one {Vous avez répondu à # question ces sept derniers jours} other {Vous avez répondu à # questions ces sept derniers jours}}",
+    "heroWeekEmpty": "Votre prochaine semaine de pratique commence ici",
+    "heroOral": "{count, plural, one {Et # séance à l’oral.} other {Et # séances à l’oral.}}",
+    "skillsLabel": "Pratiquer une compétence",
+    "oralName": "Expression orale",
+    "skillToday": "{done} sur {goal} faits aujourd’hui",
+    "skillRail": "Plan du jour : {skill}",
+    "oralToday": "{count, plural, one {# séance aujourd’hui} other {# séances aujourd’hui}}{minutes, plural, =0 {} other { · # min}}",
+    "oralNotYet": "Pas encore aujourd’hui",
+    "statsTitle": "Statistiques",
+    "statStreak": "{count, plural, =0 {Pratiquez aujourd’hui pour commencer une série} one {jour d’affilée} other {jours d’affilée}}",
+    "statDue": "{count, plural, one {révision due} other {révisions dues}}",
+    "statMinutes": "{count, plural, one {minute de pratique ces sept derniers jours} other {minutes de pratique ces sept derniers jours}}",
+    "calendarPrev": "Mois précédent",
+    "calendarNext": "Mois suivant",
+    "calendarPractised": "Pratiqué",
+    "calendarKept": "Série gardée",
+    "calendarTest": "Jour du test",
+    "calendarToday": "aujourd’hui",
+    "pointerViewAll": "Tous les articles",
+    "oralRail": "Pratique de l’oral aujourd’hui"
   },
   "drill": {
     "progress": "Item {current} sur {total}",
@@ -1194,7 +1216,6 @@
     "notFoundBody": "Il n’y a rien à cette adresse. La page a peut-être été déplacée ou le lien contient une erreur."
   },
   "engagement": {
-    "streak": "{count, plural, one {Série de # jour} other {Série de # jours}}",
     "freezeTitle": "Nous avons gardé votre série",
     "freezeBody": "Vous avez manqué une journée, et votre série a continué. Jusqu’à deux journées manquées par mois ne l’interrompent jamais.",
     "share": "Partager",

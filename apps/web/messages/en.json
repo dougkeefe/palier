@@ -354,7 +354,29 @@
     "standEmpty": "Your diagnostic result appears here once you’ve taken it, then your practice trend as you work through the plan.",
     "diagnosticWhat": "Finds your starting level and shapes your plan.",
     "examWhat": "The full timed test, scored like the real one.",
-    "pointerTopic": "Topic: {subSkill}"
+    "pointerTopic": "Topic: {subSkill}",
+    "heroLabel": "Last seven days",
+    "heroWeek": "{count, plural, one {You’ve answered # question in the last seven days} other {You’ve answered # questions in the last seven days}}",
+    "heroWeekEmpty": "Your next week of practice starts here",
+    "heroOral": "{count, plural, one {And # oral session.} other {And # oral sessions.}}",
+    "skillsLabel": "Practise a skill",
+    "oralName": "Oral expression",
+    "skillToday": "{done} of {goal} done today",
+    "skillRail": "Today’s plan: {skill}",
+    "oralToday": "{count, plural, one {# session today} other {# sessions today}}{minutes, plural, =0 {} other { · # min}}",
+    "oralNotYet": "Not yet today",
+    "statsTitle": "Statistics",
+    "statStreak": "{count, plural, =0 {Practise today to start a streak} one {day in a row} other {days in a row}}",
+    "statDue": "{count, plural, one {review due} other {reviews due}}",
+    "statMinutes": "{count, plural, one {minute of practice in the last seven days} other {minutes of practice in the last seven days}}",
+    "calendarPrev": "Previous month",
+    "calendarNext": "Next month",
+    "calendarPractised": "Practised",
+    "calendarKept": "Streak kept",
+    "calendarTest": "Test day",
+    "calendarToday": "today",
+    "pointerViewAll": "All articles",
+    "oralRail": "Oral practice today"
   },
   "drill": {
     "progress": "Item {current} of {total}",
@@ -1194,7 +1216,6 @@
     "notFoundBody": "There is nothing at this address. The page may have moved, or the link may be mistyped."
   },
   "engagement": {
-    "streak": "{count, plural, one {#-day streak} other {#-day streak}}",
     "freezeTitle": "We kept your streak",
     "freezeBody": "You missed a day, and your streak carried on. Up to two missed days a month never break it.",
     "share": "Share",

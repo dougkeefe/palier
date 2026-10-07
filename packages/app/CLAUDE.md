@@ -219,6 +219,9 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   same line over the **whole** practice record (`AttemptStore.all()`), and `reviewQueue` resolves
   what is due now across both skills (D66). `oralTotals` is the summary's oral line: ended sessions and
   the engine's `speakingMs` over them, from the device-local `OralStore`, so this device only (D145).
+  `practiceActivity` (D219) is Today's week: drill and review answers only (`PLAN_MODES`; a diagnostic places the plan
+  and is not part of it) since a day more than the week, and the ended oral sessions, handed to the engine's
+  `weekActivity` on the device's time zone.
 - **The streak and the milestones** (`use-cases/engagement.ts`, Phase 7 Slice 4, progress.md D159). A streak day is
   any record that means a session was done: a completed drill, a submitted exam (`submittedAt`), an ended spoken
   session (this device only) and **a review or diagnostic answer, since neither writes a `Session`**. A drill's

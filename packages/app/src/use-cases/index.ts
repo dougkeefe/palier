@@ -133,6 +133,9 @@ export type {
 } from "./progress-report.js";
 export { oralTotals, progressReport } from "./progress-report.js";
 
+export type { PracticeActivityDeps, PracticeActivityRequest } from "./practice-activity.js";
+export { PLAN_MODES, practiceActivity } from "./practice-activity.js";
+
 export type { SyncNowDeps, SyncNowRequest, SyncOutcome } from "./sync-now.js";
 export { MAX_PUSH_ROUNDS, PUSH_BATCH, syncNow } from "./sync-now.js";
 

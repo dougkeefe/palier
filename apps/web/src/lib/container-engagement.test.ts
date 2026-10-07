@@ -1,4 +1,4 @@
-import { sessionId } from "@palier/domain";
+import { attemptId, itemId, sessionId } from "@palier/domain";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createContainer } from "./container";
@@ -43,5 +43,32 @@ describe.each([
         { key: "streakFreezeNoticed", value: "2026-09-28" },
       ]),
     );
+  });
+
+  it("counts today's drill answer for the week and the streak's calendar (D219)", async () => {
+    const c = createContainer({ hermetic });
+    const now = c.clock.now();
+    await c.attempts.append({
+      id: attemptId("activity-1"),
+      itemId: itemId("q1"),
+      bankVersion: 4,
+      skill: "writing",
+      sessionId: sessionId("drill-activity"),
+      chosen: "a",
+      correct: true,
+      msToFirstSelect: 1_000,
+      msToConfirm: 25_000,
+      changedAnswer: false,
+      mode: "drill",
+      ts: now,
+    });
+    await c.sessions.create({ id: sessionId("drill-activity"), mode: "drill", startedAt: now, completedAt: null });
+    await c.sessions.complete(sessionId("drill-activity"), now);
+
+    const activity = await c.useCases.practiceActivity({ timeZone: "UTC" });
+    expect(activity.today).toMatchObject({ reading: 0, writing: 1 });
+    expect(activity.week.msByDay.at(-1)).toBe(25_000);
+    const report = await c.useCases.streakReport({ timeZone: "UTC", freezesPerMonth: 2 });
+    expect(report.activeDays).toEqual([now.slice(0, 10)]);
   });
 });

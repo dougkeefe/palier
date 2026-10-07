@@ -34,7 +34,10 @@ more; an earlier `atMs` than one already seen counts as the later. **Studio mode
 before the scenario's length, so a cap shorter than a scenario wins; practice mode has none. Property-tested, ten invariants. **Fluency**
 (`fluency.ts`, progress.md D123): `fluencyMetrics(turns, fillers)` gives words a minute, the filler count and the mean
 pause **over spoken answers only** (`input: "voice"`), each `null` rather than zero when nothing spoken measures it.
-`speakingMs(turns)` is the time those spoken answers took, the same measure, summed; the progress summary's "minutes
+`speakingMs(turns)` is the time those spoken answers took, the same measure, summed. **Today's week** (`activity.ts`,
+D219): `weekActivity` counts today's answers per scored skill, the week's (`ACTIVITY_DAYS` local days ending today)
+answers and ended oral sessions, and each day's measured time (`msToConfirm` plus spoken time, negatives as zero), a
+function of the record set, property-tested; the progress summary's "minutes
 spoken" is it over every session (progress.md D145);
 the filler list is handed in, since it is content data, and words are domain's `spokenWords`. **The pause is each spoken
 turn's `pauseMs`, which the screen measures; never the gap between turns**, which counts the time the question was heard

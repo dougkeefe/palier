@@ -160,6 +160,14 @@
   background-color: var(--surface-quiet);
 }
 
+.pl-card--mint {
+  background-color: var(--surface-mint);
+}
+
+.pl-card--rose {
+  background-color: var(--surface-rose);
+}
+
 /* On the deep fill, the light ground's muted ink and accent would vanish (1.23:1 and 2.39:1), so
    anything drawn in them inside, the streak's flame among them, takes the panel's light inks. */
 .pl-card--deep {
@@ -717,6 +725,191 @@
   justify-content: flex-end;
   gap: 8px;
   margin-top: 16px;
+}
+
+/* ---- Sparkline (D219: a small line with a soft fill; aria-hidden, the figure is in text) ---- */
+
+.pl-sparkline {
+  display: block;
+  width: 100%;
+  height: 48px;
+  overflow: visible;
+}
+
+.pl-sparkline__area {
+  fill: color-mix(in srgb, var(--primary) 14%, transparent);
+  stroke: none;
+}
+
+.pl-sparkline__line {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ---- MonthCalendar (D219: a month as a table; marks are a shape and words, never colour alone) ---- */
+
+.pl-calendar {
+  display: grid;
+  gap: 12px;
+}
+
+.pl-calendar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pl-calendar__nav {
+  display: flex;
+  gap: 4px;
+}
+
+.pl-calendar__step {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color var(--pl-motion-state) var(--pl-ease);
+}
+
+.pl-calendar__step:hover {
+  background-color: var(--surface-quiet);
+}
+
+.pl-calendar__grid {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  text-align: center;
+}
+
+.pl-calendar__grid th {
+  padding-bottom: 6px;
+  color: var(--ink-muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
+.pl-calendar__grid td {
+  padding: 3px 0;
+}
+
+.pl-calendar__day {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pl-calendar__day--outside {
+  color: var(--ink-muted);
+}
+
+/* A practised day: a dot under the number. A kept day (the streak's freeze): a ring. */
+.pl-calendar__day--practised::after,
+.pl-calendar__day--kept::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 999px;
+  box-sizing: border-box;
+}
+
+.pl-calendar__day--practised::after {
+  background-color: var(--primary);
+}
+
+.pl-calendar__day--kept::after {
+  border: 1.5px solid var(--primary);
+}
+
+/* The test date: a ring in primary round the number. */
+.pl-calendar__day--test {
+  box-shadow: inset 0 0 0 2px var(--primary);
+  font-weight: 600;
+}
+
+/* Today: the deep fill, as the design draws it. */
+.pl-calendar__day--today {
+  background-color: var(--primary);
+  color: var(--on-deep);
+  font-weight: 600;
+}
+
+.pl-calendar__day--today.pl-calendar__day--practised::after {
+  background-color: var(--on-deep);
+}
+
+.pl-calendar__day--today.pl-calendar__day--kept::after {
+  border-color: var(--on-deep);
+}
+
+.pl-calendar__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-muted);
+  font-size: 0.8125rem;
+}
+
+.pl-calendar__legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pl-calendar__swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  box-sizing: border-box;
+}
+
+.pl-calendar__swatch--practised {
+  background-color: var(--primary);
+}
+
+.pl-calendar__swatch--kept {
+  border: 1.5px solid var(--primary);
+}
+
+.pl-calendar__swatch--test {
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px var(--primary);
+}
+
+/* Under forced colours a fill is dropped, so today is outlined, and a practised day's dot keeps its ink. */
+@media (forced-colors: active) {
+  .pl-calendar__day--today {
+    outline: 2px solid Highlight;
+  }
+
+  .pl-calendar__day--practised::after,
+  .pl-calendar__swatch--practised {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
 }
 
 /* ---- Visually hidden (read by assistive technology, not drawn) --------------- */

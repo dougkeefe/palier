@@ -30,8 +30,13 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   client component that marks the current page `aria-current="page"` from `features/nav/nav.ts`), then sync and the
   language. The footer is deep teal with the giant wordmark, drawn by `::before` from a `data-` attribute. `.app-main`
   is 760px, and a page whose section carries `.app-wide` (today) takes 1160px. Every colour in `globals.css` is a token.
-  **Today** (D214–D218) is the plan at two-thirds of the width, with `.app-home__side` on the right holding the grammar pointer
-  above Where you stand; on mobile the plan comes first. The plan opens with **one next step**, which
+  **Today** (D214–D219) is the dashboard design (D219): a deep hero with the week's answers and the three skills as cards,
+  each a link to its practice with today's plan done (`features/home/today-view.ts`, over the container's
+  `practiceActivity`); then `.app-home__main` (the statistics, the plan, Where you stand) beside `.app-home__side` (the
+  practice calendar, `@palier/ui`'s `MonthCalendar` over the streak's `activeDays`, and the grammar pointer). On mobile both
+  wrappers are `display: contents` and the children take an `order`: the plan first. The hero, statistics, calendar and
+  pointer load once; the Reading/Writing switch, in the plan, reloads only the plan and Where you stand. The plan opens with
+  **one next step**, which
   `features/home/next-step.ts`'s `nextStep` decides: the diagnostic, a due retake, or a mock exam once the trend has an
   estimate at the target band or the planner advises one, once per diagnostic. Then come the rows, the start button and
   "More ways to practise", where the review card's links went. The **grammar pointer** (D218) is

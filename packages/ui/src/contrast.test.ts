@@ -57,6 +57,7 @@ describe("contrastRatio", () => {
  *   - every text token, the semantic states among them (which always carry a glyph and a
  *     label too), and primary, must clear 4.5:1 on the paper, a card, a tinted panel and a quiet one;
  *   - on a deep panel and on a primary button, the text and the button disc must clear 4.5:1;
+ *   - the skill cards' fills (D219) carry the inks and primary only, so only those are held on them;
  *   - `primary` (a selection's ring, the radio dot), `accent` (the focus ring, the sync dot)
  *     and `rule` (an input's border) must clear 3:1 against what they sit on (WCAG 1.4.11).
  * There is one theme (D202), and both sets are held to every pair.
@@ -65,11 +66,16 @@ type Pair = { readonly fg: TokenName; readonly bg: TokenName; readonly min: numb
 
 const TEXT_TOKENS: readonly TokenName[] = ["ink", "ink-soft", "ink-muted", "link", "correct", "incorrect", "info", "warning"];
 const LIGHT_SURFACES: readonly TokenName[] = ["bg", "surface", "surface-tint", "surface-quiet"];
+const SKILL_SURFACES: readonly TokenName[] = ["surface-mint", "surface-rose"];
 const DEEP_SURFACES: readonly TokenName[] = ["surface-deep", "primary"];
 const UI_TOKENS: readonly TokenName[] = ["primary", "accent", "rule"];
 
 const PAIRS: readonly Pair[] = [
   ...TEXT_TOKENS.flatMap((fg) => LIGHT_SURFACES.map((bg) => ({ fg, bg, min: CONTRAST_BODY_TEXT }))),
+  // A skill card (D219): its name, its line and its rail's fill, which is primary.
+  ...(["ink", "ink-soft", "ink-muted", "primary"] as const).flatMap((fg) =>
+    SKILL_SURFACES.map((bg) => ({ fg, bg, min: CONTRAST_BODY_TEXT })),
+  ),
   ...(["on-deep", "on-deep-muted"] as const).flatMap((fg) => DEEP_SURFACES.map((bg) => ({ fg, bg, min: CONTRAST_BODY_TEXT }))),
   // A light button on a deep panel: its label and its disc's glyph are primary on white.
   { fg: "primary", bg: "on-deep", min: CONTRAST_BODY_TEXT },

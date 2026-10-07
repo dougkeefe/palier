@@ -31,6 +31,7 @@ import type {
   PracticeTrendHistoryRequest,
   PracticeTrendRequest,
   OralTotals,
+  PracticeActivityRequest,
   Milestones,
   MilestonesRequest,
   StreakReport,
@@ -127,6 +128,7 @@ import {
   practiceTrend,
   practiceTrendEvidence,
   oralTotals,
+  practiceActivity,
   practiceTrendHistory,
   progressReport,
   markMilestoneShown,
@@ -207,7 +209,16 @@ import {
   parsePointersOrThrow,
   parseWritingPromptsOrThrow,
 } from "@palier/domain";
-import type { DayPlan, ExamResult, MilestoneId, Preflight, SkillTrend, TrendEvidence, TrendPoint } from "@palier/engine";
+import type {
+  DayPlan,
+  ExamResult,
+  MilestoneId,
+  PracticeActivity,
+  Preflight,
+  SkillTrend,
+  TrendEvidence,
+  TrendPoint,
+} from "@palier/engine";
 import {
   counterIdGenerator,
   fakeClock,
@@ -414,6 +425,8 @@ export type UseCases = {
   readonly practiceTrendHistory: (request: PracticeTrendHistoryRequest) => Promise<TrendPoint[]>;
   /** The progress summary's oral line: sessions ended and minutes spoken, on this device (§8.9). */
   readonly oralTotals: () => Promise<OralTotals>;
+  /** Today's week: what each skill has done today, and the last seven days' answers and time (D219). */
+  readonly practiceActivity: (request: PracticeActivityRequest) => Promise<PracticeActivity>;
   /** PRD §9's streak, on the device's days, and a freeze still to announce (D159). */
   readonly streakReport: (request: StreakReportRequest) => Promise<StreakReport>;
   readonly noteStreakFreeze: (request: { readonly day: string }) => Promise<void>;
@@ -720,6 +733,8 @@ function buildUseCases(ports: Ports): UseCases {
         clock: ports.clock,
       }),
     oralTotals: () => oralTotals({ oral: ports.oral }),
+    practiceActivity: (request) =>
+      practiceActivity(request, { attempts: ports.attempts, oral: ports.oral, clock: ports.clock }),
     streakReport: (request) =>
       streakReport(request, {
         sessions: ports.sessions,
