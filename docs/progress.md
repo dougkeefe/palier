@@ -142,7 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/ximj4` | **Today on the dashboard layout** (D219; the human's request, 7 October 2026): a deep hero with the week and the three skills as cards against today's plan, statistics, the plan and where you stand on the left, a practice calendar and the grammar pointer on the right. | 7 October 2026 |
+| `dougkeefe/today-page-update` | **Today on the dashboard layout** (D219; the human's request, 7 October 2026): a deep hero with the week and the three skills as cards against today's plan, statistics, the plan and where you stand on the left, a practice calendar and the grammar pointer on the right. | 7 October 2026 |
 
 *(The prior rows — Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -253,7 +253,7 @@ reviewed blind by Claude, with v3's synthetic content retired.
 What stands between the code and 1.0 is now **the human's**: **Gate O**, then the rest of **Gate M** (an outside item
 submission, the domain and the trademark check). No agent slice is left before them.
 
-**First: Today on the dashboard layout** (`dougkeefe/ximj4`; D219), on the human's request of 7 October 2026, on top of
+**First: Today on the dashboard layout** (`dougkeefe/today-page-update`; D219), on the human's request of 7 October 2026, on top of
 Today rebuilt around the next step (#68; D214–D218). Merge it once its four lanes are green. Then, on the deployed site, the
 human looks at Today three times:
 - as a new user;
@@ -7388,7 +7388,7 @@ much of today's plan is done**; and **Where you stand stays on Today**, under th
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 7 October 2026 — `dougkeefe/ximj4` (Today on the dashboard layout; D219)
+### 7 October 2026 — `dougkeefe/today-page-update` (Today on the dashboard layout; D219)
 
 This was not *Next, decided*. The human attached a dashboard design and asked for Today to take its layout in Palier's
 palette and type, with the agent deciding which Palier pieces fit where. They answered four questions (D219), and the slice
