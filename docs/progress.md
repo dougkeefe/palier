@@ -272,7 +272,7 @@ read at Gate O gains `content/pointers/pointers.json` (50 French grammar pointer
     factory's `CONFORMANCE_METHODS`.
   - Copy the printed `diagnostic-interpretation` figures into `pricing.json` over the placeholder (D211).
 - **The French read** of the new copy goes to Gate O's read: `diagnostic.*`, `today.diagnostic*`, `today.plan*`,
-  `today.firstRunBody`, `start.placementDiagnosticHint` and `key.continueToDiagnostic`.
+  `start.placementDiagnosticHint` and `key.continueToDiagnostic` (`today.firstRunBody` was deleted by D215).
 
 **Next: merge the content run's pull request, then the human's read of v4, then Gate O (human).**
 
@@ -7257,7 +7257,8 @@ Today and PRD §8.2
   `engagement-production.spec.ts` selects.
 
 ### D216 — the quick pointer: a new content artefact, three per scored sub-skill
-**Date:** 6 October 2026 · **Status:** accepted (human's decision: "new short pointers per sub-skill"; the agent wrote them)
+**Date:** 6 October 2026 · **Status:** accepted (human's decision: "new short pointers per sub-skill"; the agent wrote them);
+**superseded in part by D218**, which keeps the artefact and its picker but makes every pointer a French grammar point
 
 - **The artefact.** `content/pointers/pointers.json`, published as `@palier/content/pointers/pointers.json`. Each `Pointer` is
   `{ id, subSkill, lang, text: Localised }`. The sub-skill is a reading or written-expression one, never oral, since no drill
