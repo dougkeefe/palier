@@ -16,7 +16,8 @@ system, not the application.
 - **The look is the app as designed** (progress.md D202, `docs/Palier landing page/Palier App.dc.html`):
   a teal ink on a warm paper, Source Serif 4 throughout (the app's font, `--font-serif`), pills for
   buttons with an arrow disc on a call to action (`Button`'s `arrow`), and **flat panels: a fill, a
-  12px radius, no border and no shadow** (`Card`'s `tone`: `surface`, `tint`, `quiet`, `deep`). This
+  12px radius, no border and no shadow** (`Card`'s `tone`: `surface`, `tint`, `quiet`, `mint`, `rose`, `deep`; `mint` and
+  `rose` are the brand's two other light fills, Today's skill cards, D219, held to the inks and primary only). This
   replaced PRD §10.2's plum and amber and §10.4's "two soft shadows plus a 1px border".
 - **One theme, light** (D202, the human's ruling). There is no dark theme, no `prefers-color-scheme`
   block and no `[data-theme]`; `:root` says `color-scheme: light`. A token has one value.
@@ -44,7 +45,11 @@ system, not the application.
   assertion on their *states* — panel open, dialog focused — not the initial render alone.
 - Logic (formatters, band-meter and trend-chart geometry, timer tone classes, keyboard handling, registry
   lookups) is 90% branch; rendering has no line target on purpose (§6.3).
-- **Primitives:** Button, Card, Callout, EmptyState, Glyph, OptionRow, ProgressRail, and, from
+- **Primitives:** Button, Card, Callout, EmptyState, Glyph (its strokes the `GLYPH_PATHS` record: a new glyph is an
+  entry, never a case), OptionRow, ProgressRail, **Sparkline** and **MonthCalendar** (D219: a small `aria-hidden` line
+  whose figure the caller states in text; a month as a table, Sunday first by `monthGrid`, today `aria-current="date"`,
+  each mark read in words and repeated in a legend, the neighbouring months' days hidden from a screen reader, every
+  string a prop), and, from
   Slice 1, **BandMeter** (the estimate solid, its interval a lighter band, and no bar at all
   without an estimate, R10), **TrendChart** (Phase 7 Slice 5, D198: an SVG line per week-end, the interval
   shaded, a week without an estimate a gap, never bridged; `aria-hidden`, because the caller puts the same

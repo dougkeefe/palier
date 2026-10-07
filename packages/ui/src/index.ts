@@ -28,6 +28,12 @@ export {
   optionRowState,
   railGeometry,
   trendChartGeometry,
+  monthGrid,
+  sparklineGeometry,
+  SPARKLINE_HEIGHT,
+  SPARKLINE_WIDTH,
+  type CalendarDay,
+  type SparklineGeometry,
   TREND_CHART_HEIGHT,
   TREND_CHART_WIDTH,
   type TrendChartGeometry,
@@ -66,11 +72,13 @@ export { Button, type ButtonProps } from "./primitives/Button.js";
 export { Card, type CardProps } from "./primitives/Card.js";
 export { Callout, type CalloutProps } from "./primitives/Callout.js";
 export { EmptyState, type EmptyStateProps } from "./primitives/EmptyState.js";
-export { Glyph, type GlyphProps } from "./primitives/Glyph.js";
+export { GLYPH_PATHS, Glyph, type GlyphProps } from "./primitives/Glyph.js";
 export { OptionRow, type OptionRowProps } from "./primitives/OptionRow.js";
 export { ProgressRail, type ProgressRailProps } from "./primitives/ProgressRail.js";
 export { BandMeter, type BandMeterProps } from "./primitives/BandMeter.js";
 export { TrendChart, type TrendChartProps } from "./primitives/TrendChart.js";
+export { Sparkline, type SparklineProps } from "./primitives/Sparkline.js";
+export { MonthCalendar, type CalendarMark, type MonthCalendarProps } from "./primitives/MonthCalendar.js";
 export { Sheet, type SheetProps } from "./primitives/Sheet.js";
 export { Passage, type PassageProps } from "./primitives/Passage.js";
 export { Toast, type ToastProps } from "./primitives/Toast.js";

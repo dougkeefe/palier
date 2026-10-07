@@ -9,6 +9,8 @@ describe("design tokens", () => {
       "surface",
       "surface-tint",
       "surface-quiet",
+      "surface-mint",
+      "surface-rose",
       "surface-deep",
       "ink",
       "ink-soft",

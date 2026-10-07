@@ -47,11 +47,28 @@ export const useEngagement = (state: ContainerState): Engagement | null => {
 };
 
 /**
- * The streak on today's plan: a flame and a count, and nothing at all before there is one, since
- * an empty streak is not worth pointing out (§9: "no anxiety"). A freeze is announced once, and
- * marked as said as soon as it is on the screen.
+ * The streak's tile among Today's statistics (D219): the flame, the count, and what it counts. At
+ * zero it invites rather than reports (§9: "no anxiety"), so an empty streak is never pointed out
+ * as a failure.
  */
-export function StreakLine({ streak, container }: { streak: StreakReport; container: Container }) {
+export function StreakTile({ streak }: { streak: StreakReport }) {
+  const t = useTranslations("today");
+  return (
+    <>
+      <p className="app-home__figure pl-streak">
+        <StreakFlame lit={streak.doneToday} />
+        <span>{streak.length}</span>
+      </p>
+      <p className="app-home__figure-label">{t("statStreak", { count: streak.length })}</p>
+    </>
+  );
+}
+
+/**
+ * "We kept your streak", said once (§9, D159): marked as said as soon as it is on the screen, and
+ * nothing at all when there is no freeze to announce.
+ */
+export function StreakFreezeNotice({ streak, container }: { streak: StreakReport; container: Container }) {
   const t = useTranslations("engagement");
   const noted = useRef(false);
   const announce = streak.freezeToAnnounce;
@@ -61,19 +78,11 @@ export function StreakLine({ streak, container }: { streak: StreakReport; contai
     void container.useCases.noteStreakFreeze({ day: announce });
   }, [announce, container]);
 
-  if (streak.length === 0) return null;
+  if (announce === null) return null;
   return (
-    <>
-      <p className="pl-streak app-streak">
-        <StreakFlame lit={streak.doneToday} />
-        <span>{t("streak", { count: streak.length })}</span>
-      </p>
-      {announce === null ? null : (
-        <Callout tone="accent">
-          <strong>{t("freezeTitle")}</strong> {t("freezeBody")}
-        </Callout>
-      )}
-    </>
+    <Callout tone="accent">
+      <strong>{t("freezeTitle")}</strong> {t("freezeBody")}
+    </Callout>
   );
 }
 

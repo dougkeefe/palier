@@ -28,11 +28,22 @@ export const buttonClass = (variant: ButtonVariant, arrow?: ButtonArrow): string
  * A card's fill (D202): `surface` is white on the paper, `tint` the light teal, `quiet` the
  * warm grey, `deep` the dark teal with light text. Flat, with no border and no shadow.
  */
-export type CardTone = "surface" | "tint" | "quiet" | "deep";
+export type CardTone = "surface" | "tint" | "quiet" | "mint" | "rose" | "deep";
 
 export const cardClass = (tone: CardTone): string => (tone === "surface" ? "pl-card" : `pl-card pl-card--${tone}`);
 
-export type GlyphName = "check" | "cross" | "info" | "star" | "clock" | "flag";
+export type GlyphName =
+  | "check"
+  | "cross"
+  | "info"
+  | "star"
+  | "clock"
+  | "flag"
+  | "book"
+  | "pen"
+  | "mic"
+  | "chevron-left"
+  | "chevron-right";
 
 export type OptionOutcome = "correct" | "incorrect";
 
@@ -242,6 +253,82 @@ export const trendChartGeometry = (points: readonly (BandMeterInput | null)[]): 
     dots: groups.flat().map((p) => ({ x: p.x, y: p.y })),
     guides: [0, 0.5, 1].map(trendY),
   };
+};
+
+// ---- Sparkline (Today's minutes this week, progress.md D219) ----
+
+/** The sparkline's drawing box, in SVG user units; the SVG scales to its container's width. */
+export const SPARKLINE_WIDTH = 120;
+export const SPARKLINE_HEIGHT = 40;
+const SPARKLINE_PAD = 3;
+
+export type SparklineGeometry = {
+  /** The line, as SVG `points`. */
+  readonly line: string;
+  /** The line closed down to the baseline, for the fill beneath it. */
+  readonly area: string;
+};
+
+/**
+ * A sparkline's shapes from one value per period, oldest first. The tallest value touches the top;
+ * zero is the baseline, so a quiet period is drawn flat, never hidden. A negative value counts as
+ * zero, and a single value is drawn across the whole width.
+ */
+export const sparklineGeometry = (values: readonly number[]): SparklineGeometry => {
+  const series = (values.length === 1 ? [values[0] ?? 0, values[0] ?? 0] : values).map((v) => Math.max(0, v));
+  if (series.length === 0) return { line: "", area: "" };
+  const peak = Math.max(...series);
+  const base = SPARKLINE_HEIGHT - SPARKLINE_PAD;
+  const span = SPARKLINE_WIDTH - 2 * SPARKLINE_PAD;
+  const points = series.map((v, i): [number, number] => [
+    SPARKLINE_PAD + (i * span) / (series.length - 1),
+    peak === 0 ? base : base - (v / peak) * (SPARKLINE_HEIGHT - 2 * SPARKLINE_PAD),
+  ]);
+  const first = points[0] as [number, number];
+  const last = points[points.length - 1] as [number, number];
+  return {
+    line: svgPoints(points),
+    area: svgPoints([...points, [last[0], base], [first[0], base]]),
+  };
+};
+
+// ---- MonthCalendar (Today's practice calendar, progress.md D219) ----
+
+export type CalendarDay = {
+  /** `YYYY-MM-DD`. */
+  readonly day: string;
+  /** The day of the month, 1–31. */
+  readonly date: number;
+  /** False for the previous and next months' days that fill the first and last weeks. */
+  readonly inMonth: boolean;
+};
+
+const DAY_MS_UTC = 86_400_000;
+
+/**
+ * A month as whole weeks, Sunday first, as Canadian calendars set it in both languages: the first
+ * week opens with the previous month's last days and the last closes with the next month's first.
+ * Calendar arithmetic only, in UTC, so no time zone or daylight change can move a day.
+ */
+export const monthGrid = (year: number, month: number): readonly (readonly CalendarDay[])[] => {
+  if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12) {
+    throw new RangeError(`${String(year)}-${String(month)} is not a month.`);
+  }
+  const first = Date.UTC(year, month - 1, 1);
+  const daysIn = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  const lead = new Date(first).getUTCDay();
+  const cells = Math.ceil((lead + daysIn) / 7) * 7;
+  const weeks: CalendarDay[][] = [];
+  for (let i = 0; i < cells; i += 1) {
+    const at = new Date(first + (i - lead) * DAY_MS_UTC);
+    if (i % 7 === 0) weeks.push([]);
+    weeks[weeks.length - 1]?.push({
+      day: at.toISOString().slice(0, 10),
+      date: at.getUTCDate(),
+      inMonth: at.getUTCMonth() === month - 1,
+    });
+  }
+  return weeks;
 };
 
 // ---- Sheet (§8.3: the feedback panel that slides up after confirm) ----

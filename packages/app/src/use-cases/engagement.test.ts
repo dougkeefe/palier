@@ -92,6 +92,14 @@ describe("streakReport", () => {
     expect((await streakReport(REQUEST, deps)).length).toBe(0);
   });
 
+  it("lists every day that counted once, oldest first, on the user's clock, for the practice calendar", async () => {
+    const deps = await world({
+      sessions: [aSession("a", on(28)), aSession("b", on(28)), aSession("late", "2026-09-29T03:30:00.000Z")],
+      runs: [aRun({ id: sessionId("run-1"), submittedAt: on(20) })],
+    });
+    expect((await streakReport(REQUEST, deps)).activeDays).toEqual(["2026-09-20", "2026-09-28"]);
+  });
+
   it("counts the user's day, not UTC's: 23:30 in Toronto is the same evening", async () => {
     // 03:30Z on the 29th is 23:30 on the 28th in Toronto.
     const deps = await world({ sessions: [aSession("late", "2026-09-29T03:30:00.000Z"), aSession("d", on(27))] });

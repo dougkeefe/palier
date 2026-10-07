@@ -6,7 +6,9 @@ import { Button } from "./Button.js";
 import { Card } from "./Card.js";
 import { Callout } from "./Callout.js";
 import { EmptyState } from "./EmptyState.js";
-import { Glyph } from "./Glyph.js";
+import { GLYPH_PATHS, Glyph } from "./Glyph.js";
+import { MonthCalendar } from "./MonthCalendar.js";
+import { Sparkline } from "./Sparkline.js";
 import { OptionRow } from "./OptionRow.js";
 import { Passage } from "./Passage.js";
 import { ProgressRail } from "./ProgressRail.js";
@@ -155,6 +157,103 @@ describe("Glyph", () => {
     );
     const svgs = container.querySelectorAll("svg[aria-hidden]");
     expect(svgs).toHaveLength(6);
+  });
+});
+
+describe("Glyph's registry (D219)", () => {
+  it("draws every registered glyph, the skills' and the calendar's among them", () => {
+    const names = Object.keys(GLYPH_PATHS) as (keyof typeof GLYPH_PATHS)[];
+    expect(names).toEqual(expect.arrayContaining(["book", "pen", "mic", "chevron-left", "chevron-right"]));
+    const { container } = render(
+      <div>
+        {names.map((name) => (
+          <Glyph key={name} name={name} />
+        ))}
+      </div>,
+    );
+    expect(container.querySelectorAll("svg[aria-hidden] > *")).not.toHaveLength(0);
+    expect(container.querySelectorAll("svg[aria-hidden]")).toHaveLength(names.length);
+  });
+});
+
+describe("Sparkline", () => {
+  it("is a picture hidden from assistive tech, with its line and its fill", () => {
+    const { container } = render(<Sparkline values={[0, 3, 1]} />);
+    const svg = container.querySelector("svg.pl-sparkline");
+    expect(svg?.getAttribute("aria-hidden")).toBe("true");
+    expect(container.querySelector(".pl-sparkline__line")?.getAttribute("points")).not.toBe("");
+    expect(container.querySelector(".pl-sparkline__area")).not.toBeNull();
+  });
+});
+
+describe("MonthCalendar", () => {
+  const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => ({ short: d, long: `${d}day` }));
+  const LABELS = { practised: "Practised", kept: "Streak kept", test: "Test day" } as const;
+  const calendar = (onPrev = vi.fn(), onNext = vi.fn()) =>
+    render(
+      <MonthCalendar
+        year={2026}
+        month={10}
+        today="2026-10-07"
+        marks={
+          new Map([
+            ["2026-10-05", "practised"],
+            ["2026-10-06", "kept"],
+            ["2026-10-07", "practised"],
+            ["2026-10-20", "test"],
+            ["2026-09-30", "practised"],
+          ] as const)
+        }
+        title="October 2026"
+        heading={<h2>October 2026</h2>}
+        weekdays={WEEKDAYS}
+        markLabels={LABELS}
+        todayLabel="today"
+        previous={{ label: "Previous month", onClick: onPrev }}
+        next={{ label: "Next month", onClick: onNext }}
+      />,
+    );
+
+  it("is a table named for its month, with the weekdays as column headers", () => {
+    calendar();
+    const table = screen.getByRole("table", { name: "October 2026" });
+    expect(table.querySelectorAll("th[scope=col]")).toHaveLength(7);
+    expect(screen.getByRole("columnheader", { name: "Sun" }).getAttribute("abbr")).toBe("Sunday");
+  });
+
+  it("marks today as the current date and says so, with its mark in words", () => {
+    const { container } = calendar();
+    const today = container.querySelector('td[aria-current="date"]');
+    expect(today?.textContent).toBe("7, today, Practised");
+    expect(container.querySelectorAll('[aria-current="date"]')).toHaveLength(1);
+  });
+
+  it("names each marked day's mark, and marks nothing outside the month", () => {
+    const { container } = calendar();
+    expect(container.querySelector(".pl-calendar__day--kept")?.textContent).toBe("6, Streak kept");
+    expect(container.querySelector(".pl-calendar__day--test")?.textContent).toBe("20, Test day");
+    const outside = container.querySelectorAll(".pl-calendar__day--outside");
+    expect(outside).toHaveLength(4);
+    for (const day of outside) {
+      expect(day.getAttribute("aria-hidden")).toBe("true");
+      expect(day.className).not.toContain("practised");
+    }
+  });
+
+  it("asks for the month before and after through its two labelled buttons", () => {
+    const onPrev = vi.fn();
+    const onNext = vi.fn();
+    calendar(onPrev, onNext);
+    fireEvent.click(screen.getByRole("button", { name: "Previous month" }));
+    fireEvent.click(screen.getByRole("button", { name: "Next month" }));
+    expect(onPrev).toHaveBeenCalledTimes(1);
+    expect(onNext).toHaveBeenCalledTimes(1);
+  });
+
+  it("repeats every mark in a legend, in words", () => {
+    calendar();
+    const legend = screen.getAllByRole("listitem").map((li) => li.textContent);
+    expect(legend).toEqual(["Practised", "Streak kept", "Test day"]);
   });
 });
 

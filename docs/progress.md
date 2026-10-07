@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 7 October 2026 (Today rebuilt around the next step, D214–D218)
+**Last updated:** 7 October 2026 (Today on the dashboard layout, D219)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,9 +142,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/today-page-feedback` | **Today rebuilt around the next step** (D214–D218; the human's request, 6 October 2026): the diagnostic, then the plan, then a mock exam once practice at the target is measurable; the plan at two-thirds with the review card folded in; and a daily grammar pointer in French from new authored content. | 6 October 2026 |
+| `dougkeefe/today-page-update` | **Today on the dashboard layout** (D219; the human's request, 7 October 2026): a deep hero with the week and the three skills as cards against today's plan, statistics, the plan and where you stand on the left, a practice calendar and the grammar pointer on the right. | 7 October 2026 |
 
-*(The prior rows — the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -253,13 +253,16 @@ reviewed blind by Claude, with v3's synthetic content retired.
 What stands between the code and 1.0 is now **the human's**: **Gate O**, then the rest of **Gate M** (an outside item
 submission, the domain and the trademark check). No agent slice is left before them.
 
-**First: Today rebuilt around the next step** (`dougkeefe/today-page-feedback`; D214–D217), on the human's request of 6 October 2026.
-Merge it once its four lanes are green. Then, on the deployed site, the human looks at Today three times:
+**First: Today on the dashboard layout** (`dougkeefe/today-page-update`; D219), on the human's request of 7 October 2026, on top of
+Today rebuilt around the next step (#68; D214–D218). Merge it once its four lanes are green. Then, on the deployed site, the
+human looks at Today three times:
 - as a new user;
 - after a diagnostic;
 - with a test date two days out.
 
-At each, say whether the order reads right, and whether the mock exam's threshold (D214) feels like the right moment. The French
+At each, say whether the order reads right, whether the mock exam's threshold (D214) feels like the right moment, and whether
+the hero's skill cards, the statistics and the calendar earn their place against the design. The French read at Gate O also
+gains D219's `today.*` keys (`hero*`, `skill*`, `oral*`, `stat*`, `calendar*`, `pointerViewAll`). The French
 read at Gate O gains `content/pointers/pointers.json` (50 French grammar pointers, D218), the new `today.*` keys (`next*`, `more*`, `pointer*`,
 `libraryAction`, `standEmpty`, `diagnosticWhat`, `examWhat`), and the sentences added to `exam.intro` and `diagnostic.intro`.
 
@@ -7315,9 +7318,105 @@ in French.
   - the container's coverage test (written-expression sub-skills);
   - journey 2's heading, now "Grammar pointer", which also asserts the text's `lang="fr"`.
 
+### D219 — Today takes the dashboard layout: the week and three skills in a deep hero, statistics, a practice calendar
+**Date:** 7 October 2026 · **Status:** accepted (human's request and answers; agent's build). Amends D215's layout and PRD §8.2
+
+The human attached a dashboard design (a learning app's "My progress": a dark hero with three coloured course cards, then
+statistics, a month calendar and "Quick Pointers") and asked for Today to take its layout in Palier's palette and serif. The
+agent mapped each piece to what Palier already has and asked four questions. The human answered: the hero shows **the three
+kinds of study**; **all three cards link to their practice** and the Reading/Writing switch stays; each card's bar is **how
+much of today's plan is done**; and **Where you stand stays on Today**, under the plan.
+
+- **The hero** is the deep panel. On the left: the test countdown as its eyebrow (moved here from the plan, so it is said
+  once), else "Last seven days", over those days' answers. The window is rolling, so the copy says "the last seven days",
+  never "this week", which it is not. On the right: Reading, Written expression and Oral expression, numbered,
+  each a link to `/practice/{skill}`, with a glyph, "6 of 13 done today" and a `ProgressRail`. Oral has no plan, so its line
+  is the sessions today with the minutes actually spoken, none for a session answered by typing, and its rail, named "Oral
+  practice today", is full once one has ended.
+- **The left column** holds three things:
+  - the statistics: the streak (the freeze notice beneath it), the reviews due (a link to `/review`), and the last seven
+    days' minutes of practice with a sparkline. The streak's tile is drawn empty until the streak loads, so its arrival never
+    shifts the tiles beside it;
+  - the plan, now a white card with the switch at its head, and D214's banner and D215's "More ways to practise" unchanged
+    in behaviour;
+  - Where you stand.
+- **The right column** holds the practice calendar and the grammar pointer:
+  - the calendar marks the streak's days, the days its freeze kept, the test date and today, with a legend in words;
+  - the pointer has an "All articles" link to `/library`.
+
+  On mobile the order is the hero, the plan, the pointer, the statistics, Where you stand, then the calendar.
+- **The data.** The engine's `weekActivity` is pure and property-tested, a function of the record set. It counts today's
+  answers per skill, the week's answers, and each local day's measured time: `msToConfirm` plus spoken time, the measures
+  `/progress` sums. The app's `practiceActivity` use case feeds it drill and review answers (`PLAN_MODES`; a diagnostic is not
+  the plan) and the ended oral sessions. `StreakReport` gains `activeDays`, so the calendar marks exactly the days the streak
+  counted.
+- **The overview and the skill view load separately.** The hero, the statistics, the calendar and the pointer do not change
+  with the switch, which now reloads only the plan and Where you stand.
+- **The colours are the brand's.** Reading takes `surface-tint`. Writing and oral take two new tokens from
+  `colors.css`: `surface-mint` (#BFE6C8, its ok background) and `surface-rose` (#F4C6D9, its no background), with Card tones
+  `mint` and `rose`.
+  - Rose fails 4.5:1 for `incorrect` (3.9) and `warning` (4.2), so the two fills join a pair list of their own in the
+    contrast gate: the three inks and primary only, which are all a skill card carries.
+- **`@palier/ui` gains:**
+  - `Sparkline` (`aria-hidden`; the figure is in text beside it);
+  - `MonthCalendar` (a table, Sunday first, `aria-current="date"`, each mark read in words and repeated in a legend, the
+    neighbouring months' days hidden from a screen reader);
+  - `monthGrid` and `sparklineGeometry` in `logic.ts`.
+
+  `Glyph`'s `switch` became the `GLYPH_PATHS` record (principle 6), registering `book`, `pen`, `mic` and the two chevrons.
+- **Keys.**
+  - Added: `today.hero*`, `skillsLabel`, `oralName`, `skillToday`, `skillRail`, `oralToday`, `oralNotYet`, `stat*`,
+    `calendar*` and `pointerViewAll`.
+  - Deleted: `engagement.streak`, now the tile's `today.statStreak`.
+
+  `.app-countdown` and `.app-streak` are gone from `globals.css`. `.app-home__plan` keeps its name.
+- **Tests whose premise changed, said here rather than edited quietly:**
+  - `tokens.test.ts`'s exact token list grows by the two fills;
+  - `engagement-production.spec.ts` looked for "2-day streak" inside `.app-home__plan`, and the streak is now the statistics'
+    tile, so it asserts "days in a row" inside `.app-home__stats`, and the freeze notice there too.
+
+  Added:
+  - journey 2's checks: the hero's three links and their routes, "0 of n done today", the empty-week line, the statistics,
+    today in the calendar, and after the set, the week's count, the reading card and today marked practised, then stepping
+    a month back;
+  - the engine's `activity` unit and property tests and the app's `practice-activity` tests;
+  - `activeDays` in `engagement.test.ts`, and the container's wiring of both through each graph;
+  - the UI's `monthGrid`, `sparklineGeometry`, Glyph registry, `Sparkline` and `MonthCalendar` tests;
+  - `today-view.test.ts`.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 7 October 2026 — `dougkeefe/today-page-update` (Today on the dashboard layout; D219)
+
+This was not *Next, decided*. The human attached a dashboard design and asked for Today to take its layout in Palier's
+palette and type, with the agent deciding which Palier pieces fit where. They answered four questions (D219), and the slice
+built it:
+- the hero with the week and the three skills;
+- the statistics;
+- the practice calendar;
+- the pointer as the design's quick pointers;
+- `weekActivity` in the engine, `practiceActivity` in the app, and `activeDays` on the streak;
+- two brand fills, `Sparkline` and `MonthCalendar` in `@palier/ui`.
+
+**Verified:**
+- `pnpm verify` was green: 271 files and 4,376 tests passed.
+- After `pnpm --filter @palier/web build`, Playwright reported 40 passed on chromium (`journeys`, `key`, `key-leak`, `smoke`,
+  `content`) and 21 on offline (`offline`, `production`, `engagement-production`, `csp-production`, `key-leak-production`).
+- The bundle-size gate passed at 166.3 KB of 180 KB.
+- Screenshots of a new user (desktop and mobile) and of a user after one set were checked by eye against the design.
+  The first caught the mobile order applying to the desktop columns, which is now reset from 900px.
+
+A candid review of the branch then found six things, all fixed before the pull request:
+- the oral card claimed a minute for a session answered by typing;
+- the streak's tile shifted its neighbours when it arrived;
+- the oral rail was named after a plan that holds no oral practice;
+- `PLAN_MODES` was typed as strings;
+- the engine and the app both exported `practiceActivity` (the engine's is now `weekActivity`);
+- "this week" was a rolling seven days.
+
+**Not run:** the whole medium lane, Lighthouse, and a screenshot two days from the test. CI runs the first two.
 
 ### 7 October 2026 — `dougkeefe/today-page-feedback` (the pointer as a grammar point in French; D218)
 

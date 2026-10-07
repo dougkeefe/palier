@@ -77,5 +77,8 @@ export { startOralSession, stepOralSession } from "./oral-session.js";
 export type { FluencyMetrics } from "./fluency.js";
 export { fluencyMetrics, speakingMs } from "./fluency.js";
 
+export type { ActivityAttempt, ActivityInput, ActivityOralSession, PracticeActivity } from "./activity.js";
+export { ACTIVITY_DAYS, weekActivity } from "./activity.js";
+
 export type { LocalDay, MilestoneFacts, MilestoneId, Streak, StreakInput } from "./engagement.js";
 export { MILESTONES, localDay, milestonesReached, shiftDay, streak } from "./engagement.js";

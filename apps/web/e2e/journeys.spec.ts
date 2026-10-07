@@ -75,6 +75,17 @@ test("journey 2: a daily session end to end, feedback panel included, then back 
   // The day's grammar pointer sits beside the plan, in French whatever the screen's language (D216, D218).
   await expect(page.getByRole("heading", { name: "Grammar pointer" })).toBeVisible();
   await expect(page.locator(".app-home__pointer-text")).toHaveAttribute("lang", "fr");
+  // The hero's three skills, each a way into its practice, with today's plan not yet begun (D219).
+  const skills = page.getByRole("list", { name: "Practise a skill" });
+  await expect(skills.getByRole("link")).toHaveCount(3);
+  await expect(skills.getByRole("link", { name: /^Reading/ })).toHaveAttribute("href", "/en/practice/reading");
+  await expect(skills.getByRole("link", { name: /^Written expression/ })).toHaveAttribute("href", "/en/practice/writing");
+  await expect(skills.getByRole("link", { name: /^Oral expression/ })).toHaveAttribute("href", "/en/practice/oral");
+  await expect(skills.getByText(/^0 of \d+ done today$/)).toHaveCount(2);
+  await expect(page.getByText("Your next week of practice starts here")).toBeVisible();
+  // The statistics and the practice calendar, today marked as the current date.
+  await expect(page.getByRole("heading", { name: "Statistics" })).toBeVisible();
+  await expect(page.locator('.app-home__calendar td[aria-current="date"]')).toHaveCount(1);
   await axeClean(page);
 
   await page.getByRole("link", { name: /^Start, \d+ min$/ }).click();
@@ -103,6 +114,14 @@ test("journey 2: a daily session end to end, feedback panel included, then back 
   await page.getByRole("link", { name: "Back to today" }).click();
   await expect(page).toHaveURL(/\/en\/home$/);
   await expect(page.getByRole("heading", { name: "More ways to practise" })).toBeVisible();
+  // The set counts toward the week, today's reading card and the calendar (D219).
+  await expect(page.getByText(`You’ve answered ${String(total)} questions in the last seven days`)).toBeVisible();
+  await expect(page.getByRole("link", { name: new RegExp(`^Reading ${String(total)} of \\d+ done today`) })).toBeVisible();
+  await expect(page.locator('.app-home__calendar td[aria-current="date"] .pl-calendar__day--practised')).toHaveCount(1);
+  await expect(page.getByRole("button", { name: "Previous month" })).toBeVisible();
+  await page.getByRole("button", { name: "Previous month" }).click();
+  await expect(page.locator('.app-home__calendar td[aria-current="date"]')).toHaveCount(0);
+  await axeClean(page);
 });
 
 test("the drill keeps focus on the next item's options after advancing (§11)", async ({ page }) => {

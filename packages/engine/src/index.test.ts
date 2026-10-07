@@ -82,4 +82,9 @@ describe("@palier/engine public surface", () => {
     expect(typeof engine.milestonesReached).toBe("function");
     expect(engine.MILESTONES).toContain("first-exam");
   });
+
+  it("exports the week's practice activity", () => {
+    expect(typeof engine.weekActivity).toBe("function");
+    expect(engine.ACTIVITY_DAYS).toBe(7);
+  });
 });

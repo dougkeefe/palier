@@ -48,6 +48,8 @@ export type StreakReportDeps = {
 };
 
 export type StreakReport = Streak & {
+  /** Every local day that counted, oldest first, each once: the practice calendar's marks (D219). */
+  readonly activeDays: readonly LocalDay[];
   /** The newest frozen day not yet announced, or null when there is nothing to say. */
   readonly freezeToAnnounce: LocalDay | null;
 };
@@ -73,15 +75,16 @@ export const streakReport = async (request: StreakReportRequest, deps: StreakRep
     ...attempts.filter((a) => SESSIONLESS_MODES.has(a.mode)).map((a) => a.ts),
   ].filter((at): at is string => at !== null);
 
+  const days = instants.map((at) => localDay(at, request.timeZone));
   const result = streak({
-    days: instants.map((at) => localDay(at, request.timeZone)),
+    days,
     today: localDay(deps.clock.now(), request.timeZone),
     freezesPerMonth: request.freezesPerMonth,
   });
   const newest = result.frozen[0] ?? null;
   const announced = isLocalDay(noticed) ? noticed : null;
   const freezeToAnnounce = newest !== null && (announced === null || newest > announced) ? newest : null;
-  return { ...result, freezeToAnnounce };
+  return { ...result, activeDays: [...new Set(days)].sort(), freezeToAnnounce };
 };
 
 /** Record that the freeze on `day` has been announced, so it is said once. */

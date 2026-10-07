@@ -610,12 +610,62 @@ body {
   outline-offset: 2px;
 }
 
-/* Home (§8.2, D215): stacked on mobile, the plan first; from 900px the plan takes two-thirds on the
-   left, and the quick pointer and where you stand stack on the right. */
+/* Home (§8.2, D219): the human's dashboard design in Palier's palette. The deep hero holds the week
+   and the three skills; below it, from 900px, a wider left column (the statistics, the plan, where
+   you stand) beside the calendar and the grammar pointer. On mobile both columns dissolve into one
+   (`display: contents`) and take the order the plan first: the plan, the pointer, the statistics,
+   where you stand, then the calendar. Each column is its own grid, so a tall plan never stretches
+   the calendar's row. */
 .app-home {
   display: grid;
-  gap: 16px;
+  gap: 24px;
   align-items: start;
+}
+
+.app-home__main,
+.app-home__side {
+  display: contents;
+}
+
+.app-home__plan {
+  order: 1;
+}
+
+.app-home__pointer {
+  order: 2;
+}
+
+.app-home__stats {
+  order: 3;
+}
+
+.app-home__readiness {
+  order: 4;
+}
+
+.app-home__calendar {
+  order: 5;
+}
+
+@media (min-width: 900px) {
+  .app-home {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 32px;
+  }
+
+  .app-home__main,
+  .app-home__side {
+    display: grid;
+    gap: 24px;
+    align-content: start;
+  }
+
+  /* In two columns each keeps its source order: the statistics, the plan, where you stand; the
+     calendar, then the pointer. */
+  .app-home__main > *,
+  .app-home__side > * {
+    order: 0;
+  }
 }
 
 .app-home h2 {
@@ -629,39 +679,7 @@ body {
   font-size: 1.25rem;
 }
 
-@media (min-width: 900px) {
-  .app-home {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-  }
-}
-
-.app-home__side {
-  display: grid;
-  gap: 16px;
-}
-
-.app-home__readiness,
-.app-home__pointer {
-  display: grid;
-  gap: 1.25rem;
-  justify-items: start;
-}
-
-.app-home__readiness > *,
-.app-home__pointer > * {
-  margin: 0;
-}
-
-.app-home__readiness .pl-band-meter {
-  justify-self: stretch;
-}
-
-.app-home__readiness h2,
-.app-home__pointer h2 {
-  margin: 0;
-}
-
-/* A small label over what follows: the next step, the pointer's topic. */
+/* A small label over what follows: the hero's week, the next step, the pointer's topic. */
 .app-home__eyebrow {
   margin: 0;
   font-size: 0.8125rem;
@@ -671,15 +689,185 @@ body {
   color: var(--ink-muted);
 }
 
-.app-home__pointer-text {
-  font-size: 1.125rem;
-  line-height: 1.5;
+/* ---- The hero: the week on the left, the three skills on the right ---- */
+.app-home__hero {
+  display: grid;
+  gap: 24px;
+  align-items: center;
 }
 
-/* Today's plan, on the deep panel (its muted ink is the panel's own): its rows ruled in a fifth of white. */
+@media (min-width: 900px) {
+  .app-home__hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 32px;
+  }
+}
+
+.app-home__hero-text {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.app-home__hero-text > * {
+  margin: 0;
+}
+
+.app-home__hero-title {
+  font-size: clamp(1.75rem, 3vw, 2.375rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+.app-home__skills {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 600px) {
+  .app-home__skills {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* A skill card: a light fill on the deep panel, its ink the page's own, and its rail on white. */
+.app-home__skill {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  height: 100%;
+  box-sizing: border-box;
+  color: var(--ink);
+  --ink-muted: var(--ink-soft);
+  text-decoration: none;
+  transition: transform var(--pl-motion-state) var(--pl-ease);
+}
+
+.app-home__skill:hover {
+  transform: translateY(-2px);
+}
+
+.app-home__skill-number {
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.app-home__skill-glyph {
+  width: 36px;
+  height: 36px;
+  margin: 8px 0 4px;
+  color: var(--primary);
+}
+
+.app-home__skill-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.app-home__skill-line {
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+.app-home__skill .pl-rail {
+  margin-top: 4px;
+  background-color: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+/* ---- The statistics: three tiles, the minutes' one the widest ---- */
+.app-home__stats {
+  display: grid;
+  gap: 16px;
+}
+
+.app-home__stats > h2 {
+  margin: 0;
+}
+
+.app-home__tiles {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 600px) {
+  .app-home__tiles {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.8fr);
+  }
+}
+
+.app-home__tile {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+}
+
+.app-home__tile > p {
+  margin: 0;
+}
+
+/* The streak's tile before the streak has loaded: the height of a figure and its label, empty. */
+.app-home__tile-pending {
+  min-height: 5rem;
+}
+
+.app-home__tile--link {
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color var(--pl-motion-state) var(--pl-ease);
+}
+
+.app-home__tile--link:hover {
+  background-color: var(--surface-tint);
+}
+
+.app-home__tile--wide {
+  grid-template-columns: minmax(0, 1fr) minmax(96px, 1.2fr);
+  align-items: center;
+  gap: 16px;
+}
+
+.app-home__tile--wide p {
+  margin: 0;
+}
+
+.app-home__figure {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 2.5rem;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.app-home__figure-label {
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+
+/* ---- Today's plan, on a white card ---- */
+.app-home__plan > h2 {
+  margin-bottom: 1rem;
+}
+
+.app-home__plan .app-segmented {
+  margin-bottom: 1.25rem;
+}
+
+.app-home__plan .app-segmented__option {
+  background: var(--surface-quiet);
+}
+
+.app-home__plan .app-segmented__option:has(input:checked) {
+  background: var(--surface-tint);
+}
+
 .app-home__plan .app-plan__row {
   border-bottom: 0;
-  border-top: 1px solid color-mix(in srgb, var(--on-deep) 20%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
   padding: 14px 0;
 }
 
@@ -687,13 +875,7 @@ body {
   font-size: 1.125rem;
 }
 
-.app-home__plan h2,
-.app-home__plan p,
-.app-home__plan .app-countdown {
-  color: inherit;
-}
-
-/* The next step, an inset at the plan's head in a tenth of white (D214). */
+/* The next step, a tinted inset at the plan's head (D214). */
 .app-home__next {
   display: grid;
   gap: 0.75rem;
@@ -701,7 +883,7 @@ body {
   margin: 0 0 1.5rem;
   padding: 18px 20px;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--on-deep) 10%, transparent);
+  background: var(--surface-tint);
 }
 
 .app-home__next > * {
@@ -728,14 +910,14 @@ body {
 
 .app-home__links > li {
   padding: 4px 0 8px;
-  border-top: 1px solid color-mix(in srgb, var(--on-deep) 20%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
 }
 
 .app-home__links .app-link {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  color: var(--on-deep);
+  color: var(--primary);
   text-decoration: none;
 }
 
@@ -751,6 +933,85 @@ body {
 .app-home__links p {
   margin: 0;
   font-size: 0.9375rem;
+}
+
+/* ---- Where you stand ---- */
+.app-home__readiness {
+  display: grid;
+  gap: 1.25rem;
+  justify-items: start;
+}
+
+.app-home__readiness > * {
+  margin: 0;
+}
+
+.app-home__readiness .pl-band-meter {
+  justify-self: stretch;
+}
+
+.app-home__readiness h2 {
+  margin: 0;
+}
+
+/* ---- The calendar ---- */
+.app-home__calendar-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* ---- The grammar pointer: a heading with the way to every article, then the card ---- */
+.app-home__pointer {
+  display: grid;
+  gap: 16px;
+}
+
+.app-home__section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.app-home__section-head h2 {
+  margin: 0;
+}
+
+.app-home__pointer-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.app-home__pointer-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background-color: var(--surface-deep);
+  color: var(--on-deep);
+}
+
+.app-home__pointer-mark svg {
+  width: 26px;
+  height: 26px;
+}
+
+.app-home__pointer-body {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+}
+
+.app-home__pointer-body > * {
+  margin: 0;
+}
+
+.app-home__pointer-text {
+  font-size: 1.125rem;
+  line-height: 1.5;
 }
 
 /* The library (PRD §13.2, D162): an index of articles, then each article's examples. A cited
@@ -801,11 +1062,6 @@ body {
   font-weight: 600;
 }
 
-/* The streak on today's plan (PRD §9): a flame and a count, then a freeze's one-time note. */
-.app-streak {
-  margin: 0 0 0.75rem;
-}
-
 /* A milestone's moment (PRD §9): Coco, then a line, centred in the full-screen dialog. */
 .app-moment {
   display: grid;
@@ -817,12 +1073,6 @@ body {
 .app-moment .pl-mascot {
   width: 160px;
   height: 160px;
-}
-
-.app-countdown {
-  font-weight: 600;
-  color: var(--primary);
-  margin: 0 0 0.75rem;
 }
 
 .app-plan {

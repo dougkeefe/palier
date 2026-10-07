@@ -7,6 +7,8 @@ import {
   cardClass,
   dialogClass,
   mascotClass,
+  monthGrid,
+  sparklineGeometry,
   streakFlameClass,
   optionRowKeydown,
   optionRowState,
@@ -51,6 +53,86 @@ describe("cardClass", () => {
     expect(cardClass("tint")).toBe("pl-card pl-card--tint");
     expect(cardClass("quiet")).toBe("pl-card pl-card--quiet");
     expect(cardClass("deep")).toBe("pl-card pl-card--deep");
+  });
+});
+
+describe("cardClass, the skill cards' fills (D219)", () => {
+  it("names the mint and rose fills as modifiers too", () => {
+    expect(cardClass("mint")).toBe("pl-card pl-card--mint");
+    expect(cardClass("rose")).toBe("pl-card pl-card--rose");
+  });
+});
+
+describe("sparklineGeometry", () => {
+  const ys = (points: string): number[] => points.split(" ").map((p) => Number(p.split(",")[1]));
+  const xs = (points: string): number[] => points.split(" ").map((p) => Number(p.split(",")[0]));
+
+  it("draws the tallest value at the top and zero on the baseline", () => {
+    const geo = sparklineGeometry([0, 5, 10]);
+    expect(ys(geo.line)).toEqual([37, 20, 3]);
+    expect(xs(geo.line)).toEqual([3, 60, 117]);
+  });
+
+  it("draws a quiet week flat on the baseline, never nothing", () => {
+    expect(ys(sparklineGeometry([0, 0, 0]).line)).toEqual([37, 37, 37]);
+  });
+
+  it("counts a negative value as zero", () => {
+    expect(ys(sparklineGeometry([-4, 2]).line)).toEqual([37, 3]);
+  });
+
+  it("draws a single value across the whole width", () => {
+    const geo = sparklineGeometry([4]);
+    expect(xs(geo.line)).toEqual([3, 117]);
+    expect(ys(geo.line)).toEqual([3, 3]);
+  });
+
+  it("closes the fill down to the baseline", () => {
+    const area = sparklineGeometry([1, 2]).area.split(" ");
+    expect(area.slice(-2)).toEqual(["117.00,37.00", "3.00,37.00"]);
+  });
+
+  it("draws nothing for no values", () => {
+    expect(sparklineGeometry([])).toEqual({ line: "", area: "" });
+  });
+});
+
+describe("monthGrid", () => {
+  it("lays October 2026 out in whole weeks, Sunday first, with September's last days before it", () => {
+    const weeks = monthGrid(2026, 10);
+    expect(weeks).toHaveLength(5);
+    expect(weeks[0]?.map((d) => d.date)).toEqual([27, 28, 29, 30, 1, 2, 3]);
+    expect(weeks[0]?.[0]).toEqual({ day: "2026-09-27", date: 27, inMonth: false });
+    expect(weeks[0]?.[4]).toEqual({ day: "2026-10-01", date: 1, inMonth: true });
+    expect(weeks[4]?.map((d) => d.day)).toEqual([
+      "2026-10-25",
+      "2026-10-26",
+      "2026-10-27",
+      "2026-10-28",
+      "2026-10-29",
+      "2026-10-30",
+      "2026-10-31",
+    ]);
+  });
+
+  it("takes six weeks for a month that starts on a Saturday, and closes with the next month's days", () => {
+    const weeks = monthGrid(2026, 8);
+    expect(weeks).toHaveLength(6);
+    expect(weeks[0]?.[6]).toEqual({ day: "2026-08-01", date: 1, inMonth: true });
+    expect(weeks[5]?.at(-1)).toEqual({ day: "2026-09-05", date: 5, inMonth: false });
+  });
+
+  it("holds a leap February's 29th, and a non-leap one's 28 days in four weeks", () => {
+    expect(monthGrid(2028, 2).flat().filter((d) => d.inMonth)).toHaveLength(29);
+    const feb2026 = monthGrid(2026, 2);
+    expect(feb2026).toHaveLength(4);
+    expect(feb2026.flat().every((d) => d.inMonth)).toBe(true);
+  });
+
+  it("refuses a month that does not exist", () => {
+    expect(() => monthGrid(2026, 13)).toThrow(RangeError);
+    expect(() => monthGrid(2026, 0)).toThrow(RangeError);
+    expect(() => monthGrid(2026.5, 1)).toThrow(RangeError);
   });
 });
 

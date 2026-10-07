@@ -89,15 +89,16 @@ test("a milestone is shown once, full screen, shares only its card, and the kept
   await moment.getByRole("button", { name: "Keep going" }).click();
   await expect(moment).toBeHidden();
 
-  // The streak, with the freeze said once.
-  const plan = page.locator(".app-home__plan");
-  await expect(plan.getByText("2-day streak")).toBeVisible();
-  await expect(plan.getByText("We kept your streak")).toBeVisible();
+  // The streak, with the freeze said once, among the statistics (D219).
+  const stats = page.locator(".app-home__stats");
+  await expect(stats.locator(".app-home__figure", { hasText: "2" }).first()).toBeVisible();
+  await expect(stats.getByText("days in a row")).toBeVisible();
+  await expect(stats.getByText("We kept your streak")).toBeVisible();
   await axeClean(page);
 
   // Both were marked as said: a reload shows neither again, and the streak stays.
   await page.reload();
-  await expect(page.locator(".app-home__plan").getByText("2-day streak")).toBeVisible();
+  await expect(page.locator(".app-home__stats").getByText("days in a row")).toBeVisible();
   await expect(page.getByText("We kept your streak")).toBeHidden();
   await expect(page.getByRole("dialog")).toBeHidden();
 });
@@ -112,7 +113,7 @@ test("French: the streak and the moment read in French", async ({ page }) => {
   await expect(moment).toBeVisible();
   await axeClean(page);
   await moment.getByRole("button", { name: "Continuer" }).click();
-  await expect(page.locator(".app-home__plan").getByText("Série de 2 jours")).toBeVisible();
+  await expect(page.locator(".app-home__stats").getByText("jours d’affilée")).toBeVisible();
   await expect(page.getByText("Nous avons gardé votre série")).toBeVisible();
   await axeClean(page);
 });
