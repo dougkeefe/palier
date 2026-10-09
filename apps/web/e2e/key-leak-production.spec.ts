@@ -51,8 +51,9 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   await installFakeAudio(context);
   await context.route("**/api/telemetry", (route) => route.fulfill({ status: 202, body: "" }));
 
-  // 1. The skip path: step 5 is the wizard's last step, and "Add a key now" goes to the key screen.
-  await onboard(page, "skip", { addKey: true });
+  // 1. The skip path, with onboarding's key step passed over, then the key screen itself (D220).
+  await onboard(page, "skip");
+  await page.goto("/en/settings/key");
   await expect(page).toHaveURL(/\/en\/settings\/key$/);
   await waitForOfflineReady(page);
 

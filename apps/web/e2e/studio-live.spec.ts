@@ -266,7 +266,9 @@ test("studio mode, live: tap to first word three times, and what a minute of con
   const answers = await Promise.all(ANSWERS.map(speak));
   await page.addInitScript(instrument, { answers });
 
-  await onboard(page, "skip", { addKey: true });
+  await onboard(page, "skip");
+  // The key step is passed over, so the key is added on the key screen itself (D220).
+  await page.goto("/en/settings/key");
   await page.getByLabel("OpenAI API key").fill(KEY);
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByText(/^Saved on this device/)).toBeVisible();

@@ -125,3 +125,11 @@ export const saveFailure = (error: unknown): "blank" | "saveFailed" =>
  * pointed anywhere else.
  */
 export const returnAfterKey = (next: string | null): "/diagnostic" | null => (next === "diagnostic" ? "/diagnostic" : null);
+
+/**
+ * What follows a saved key. The key screen waits for "Check the key"; onboarding's key step checks at
+ * once (progress.md D220), so a new user learns there and then whether the key works, or whether the
+ * account still needs billing.
+ */
+export const afterSaveAction = ({ checkOnSave }: { readonly checkOnSave: boolean }): "check" | "wait" =>
+  checkOnSave ? "check" : "wait";

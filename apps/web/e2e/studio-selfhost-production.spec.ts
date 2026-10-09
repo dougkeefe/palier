@@ -40,7 +40,9 @@ test("studio mode mints on the user's own endpoint through a popup: the key neve
   const violations = await recordViolations(page);
   const before = ((await (await request.get(`${SELFHOST_ORIGIN}/fake-openai/seen`)).json()) as { authorizations: string[] }).authorizations.length;
 
-  await onboard(page, "skip", { addKey: true });
+  await onboard(page, "skip");
+  // The key step is passed over, so the key is added on the key screen itself (D220).
+  await page.goto("/en/settings/key");
   await page.getByLabel("OpenAI API key").fill(SENTINEL);
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByText(/^Saved on this device/)).toBeVisible();
@@ -101,7 +103,9 @@ test("a blocked popup ends the dial with the endpoint's own sentence, and the ke
     Object.defineProperty(window, "open", { value: () => null, configurable: true, writable: true });
   });
 
-  await onboard(page, "skip", { addKey: true });
+  await onboard(page, "skip");
+  // The key step is passed over, so the key is added on the key screen itself (D220).
+  await page.goto("/en/settings/key");
   await page.getByLabel("OpenAI API key").fill(SENTINEL);
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByText(/^Saved on this device/)).toBeVisible();

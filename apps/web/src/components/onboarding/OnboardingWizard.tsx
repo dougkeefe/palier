@@ -6,21 +6,21 @@ import { useEffect, useRef, useState } from "react";
 
 import {
   DEFAULT_CHOICES,
-  ONBOARDING_STEPS,
-  ONBOARDING_TOTAL,
   type OnboardingChoices,
   type OnboardingStep,
   canSkipFrom,
   destinationFor,
   profileFrom,
+  skipTarget,
   stepAfter,
   stepBefore,
   stepperSegments,
+  stepsFor,
 } from "../../features/onboarding/onboarding";
 import { useRouter } from "../../i18n/navigation";
 import { DAILY_GOALS, writeStudyProfile } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
-import { KeyOffer } from "../key/KeyOffer";
+import { KeyStep } from "./KeyStep";
 
 /**
  * Onboarding (product-requirements.md §8.1), as one fieldset per step with native
@@ -28,13 +28,13 @@ import { KeyOffer } from "../key/KeyOffer";
  * the platform. Each step's heading takes focus as it appears, so a screen-reader user
  * hears where they are (§11: focus is never lost as a flow advances).
  *
- * Step 5, the optional key, is the last step only on the skip path; on the diagnostic path the
- * diagnostic's own gate asks for it, since the diagnostic runs on the key (ADR 25, progress.md
- * D100). "Add a key now" saves the profile before it leaves for the key screen.
+ * Step 5, the key, is shown on both paths unless this browser already holds a key (progress.md
+ * D220): why Palier runs on the user's own key, what it costs, and how to get one, with the key
+ * taken in place. It is `KeyStep`, outside the wizard's `<form>`, since the key's own form sits in
+ * it. "Skip for now" skips the preferences, not the key step.
  */
 export function OnboardingWizard() {
   const t = useTranslations("start");
-  const tKey = useTranslations("key");
   const tCommon = useTranslations("common");
   const container = useContainer();
   const router = useRouter();
@@ -42,6 +42,8 @@ export function OnboardingWizard() {
   const [choices, setChoices] = useState<OnboardingChoices>(DEFAULT_CHOICES);
   const [saving, setSaving] = useState(false);
   const [failed, setFailed] = useState(false);
+  // Read once: a key saved in step 5 itself keeps the step, so Back and forth never loses it.
+  const [hasKey, setHasKey] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
 
@@ -53,27 +55,78 @@ export function OnboardingWizard() {
     headingRef.current?.focus();
   }, [step]);
 
-  const choose = (over: Partial<OnboardingChoices>) => setChoices((c) => ({ ...c, ...over }));
-  const index = ONBOARDING_STEPS.indexOf(step);
+  useEffect(() => {
+    if (container.status !== "ready") return;
+    let live = true;
+    void container.container.useCases.apiKeyStatus().then(
+      (status) => live && setHasKey(status !== null),
+      () => undefined,
+    );
+    return () => {
+      live = false;
+    };
+  }, [container]);
 
-  const finish = async (final: OnboardingChoices, { addKey = false }: { addKey?: boolean } = {}) => {
+  const choose = (over: Partial<OnboardingChoices>) => setChoices((c) => ({ ...c, ...over }));
+  const steps = stepsFor(hasKey);
+  const index = steps.indexOf(step);
+
+  /** `held` is whether a key is held as the wizard ends: read on mount, or saved in step 5 itself. */
+  const finish = async (final: OnboardingChoices, held: boolean = hasKey) => {
     if (container.status !== "ready") return;
     setSaving(true);
     try {
       await writeStudyProfile(container.container.settings, profileFrom(final));
-      router.push(destinationFor(final, { addKey }));
+      router.push(destinationFor(final, { hasKey: held }));
     } catch {
       setFailed(true);
       setSaving(false);
     }
   };
 
-  const after = stepAfter(step, choices.placement);
+  const after = stepAfter(step, hasKey);
   const onNext = () => {
     const next = after;
     if (next === null) void finish(choices);
     else setStep(next);
   };
+
+  const onSkip = () => {
+    const skipped: OnboardingChoices = { ...choices, placement: "skip" };
+    setChoices(skipped);
+    const target = skipTarget(hasKey);
+    if (target === null) void finish(skipped);
+    else setStep(target);
+  };
+
+  const stepper = (
+    <div className="app-stepper">
+      <p className="app-muted">{t("stepOf", { current: index + 1, total: steps.length })}</p>
+      <span className="app-stepper__bar" aria-hidden="true">
+        {stepperSegments(index, steps.length).map((done, i) => (
+          <span key={i} className={done ? "app-stepper__segment app-stepper__segment--done" : "app-stepper__segment"} />
+        ))}
+      </span>
+    </div>
+  );
+  const failure = failed ? <Callout tone="incorrect">{tCommon("loadFailed")}</Callout> : null;
+
+  if (step === "key" && container.status === "ready") {
+    return (
+      <div className="app-stack">
+        {stepper}
+        <KeyStep
+          useCases={container.container.useCases}
+          placement={choices.placement}
+          headingRef={headingRef}
+          saving={saving}
+          onBack={() => setStep(stepBefore(step) ?? step)}
+          onFinish={(held) => void finish(choices, held)}
+        />
+        {failure}
+      </div>
+    );
+  }
 
   return (
     <form
@@ -83,14 +136,7 @@ export function OnboardingWizard() {
         onNext();
       }}
     >
-      <div className="app-stepper">
-        <p className="app-muted">{t("stepOf", { current: index + 1, total: ONBOARDING_TOTAL })}</p>
-        <span className="app-stepper__bar" aria-hidden="true">
-          {stepperSegments(index).map((done, i) => (
-            <span key={i} className={done ? "app-stepper__segment app-stepper__segment--done" : "app-stepper__segment"} />
-          ))}
-        </span>
-      </div>
+      {stepper}
 
       {step === "direction" ? (
         <fieldset className="app-fieldset">
@@ -195,23 +241,7 @@ export function OnboardingWizard() {
         </fieldset>
       ) : null}
 
-      {step === "key" ? (
-        <KeyOffer
-          heading="h2"
-          headingRef={headingRef}
-          actions={
-            <Button
-              variant="secondary"
-              onClick={() => void finish(choices, { addKey: true })}
-              disabled={saving || container.status !== "ready"}
-            >
-              {tKey("offerAdd")}
-            </Button>
-          }
-        />
-      ) : null}
-
-      {failed ? <Callout tone="incorrect">{tCommon("loadFailed")}</Callout> : null}
+      {failure}
 
       <div className="app-actions">
         {stepBefore(step) === null ? null : (
@@ -220,7 +250,7 @@ export function OnboardingWizard() {
           </Button>
         )}
         {canSkipFrom(step) && after !== null ? (
-          <Button variant="ghost" onClick={() => void finish({ ...choices, placement: "skip" })} disabled={saving}>
+          <Button variant="ghost" onClick={onSkip} disabled={saving}>
             {t("placementSkip")}
           </Button>
         ) : null}

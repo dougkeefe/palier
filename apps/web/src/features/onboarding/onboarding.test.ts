@@ -7,6 +7,7 @@ import {
   canSkipFrom,
   destinationFor,
   profileFrom,
+  skipTarget,
   stepAfter,
   stepBefore,
   stepperSegments,
@@ -19,16 +20,17 @@ describe("onboarding steps", () => {
     expect(ONBOARDING_TOTAL).toBe(5);
   });
 
-  it("on the diagnostic path runs direction, target, placement, goal, and nothing after the goal (the diagnostic's own gate asks for the key, ADR 25)", () => {
-    expect(stepsFor("diagnostic")).toEqual(["direction", "target", "placement", "goal"]);
-    expect(stepAfter("direction", "diagnostic")).toBe("target");
-    expect(stepAfter("goal", "diagnostic")).toBeNull();
+  it("shows the key step whichever the placement, since the diagnostic runs on the key too (D220)", () => {
+    expect(stepsFor(false)).toEqual(ONBOARDING_STEPS);
+    expect(stepAfter("direction", false)).toBe("target");
+    expect(stepAfter("goal", false)).toBe("key");
+    expect(stepAfter("key", false)).toBeNull();
   });
 
-  it("on the skip path ends with the key step, since no diagnostic follows", () => {
-    expect(stepsFor("skip")).toEqual(ONBOARDING_STEPS);
-    expect(stepAfter("goal", "skip")).toBe("key");
-    expect(stepAfter("key", "skip")).toBeNull();
+  it("leaves the key step out when this browser already holds a key, so the goal is the last step", () => {
+    expect(stepsFor(true)).toEqual(["direction", "target", "placement", "goal"]);
+    expect(stepsFor(true)).toHaveLength(4);
+    expect(stepAfter("goal", true)).toBeNull();
   });
 
   it("goes back one step at a time, and nowhere before the first", () => {
@@ -43,6 +45,14 @@ describe("onboarding steps", () => {
     expect(canSkipFrom("placement")).toBe(true);
     expect(canSkipFrom("goal")).toBe(true);
     expect(canSkipFrom("key")).toBe(true);
+  });
+
+  it("skips past the preferences to the key step, not past it (D220)", () => {
+    expect(skipTarget(false)).toBe("key");
+  });
+
+  it("finishes on a skip when a key is already held, since there is no key step to land on", () => {
+    expect(skipTarget(true)).toBeNull();
   });
 });
 
@@ -59,14 +69,14 @@ describe("what onboarding produces", () => {
     expect(profileFrom({ ...DEFAULT_CHOICES, testDate: "" }).testDate).toBeNull();
   });
 
-  it("lands on the diagnostic when chosen, and on today's plan otherwise", () => {
-    expect(destinationFor({ ...DEFAULT_CHOICES, placement: "diagnostic" })).toBe("/diagnostic");
-    expect(destinationFor(DEFAULT_CHOICES)).toBe("/home");
+  it("lands on the diagnostic when chosen with a key held, and on today's plan otherwise", () => {
+    expect(destinationFor({ ...DEFAULT_CHOICES, placement: "diagnostic" }, { hasKey: true })).toBe("/diagnostic");
+    expect(destinationFor(DEFAULT_CHOICES, { hasKey: true })).toBe("/home");
   });
 
-  it("lands on the key screen when step 5's 'Add a key now' is chosen", () => {
-    expect(destinationFor(DEFAULT_CHOICES, { addKey: true })).toBe("/settings/key");
-    expect(destinationFor(DEFAULT_CHOICES, { addKey: false })).toBe("/home");
+  it("lands on today, not the diagnostic's gate, when the diagnostic was chosen and the key passed over", () => {
+    expect(destinationFor({ ...DEFAULT_CHOICES, placement: "diagnostic" }, { hasKey: false })).toBe("/home");
+    expect(destinationFor(DEFAULT_CHOICES, { hasKey: false })).toBe("/home");
   });
 
   it("defaults a user who skips to C, 20 minutes, no date and no diagnostic", () => {

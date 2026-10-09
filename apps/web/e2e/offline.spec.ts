@@ -54,6 +54,34 @@ test("the self-hosted serif is precached (D161, D202)", async ({
   expect(fonts.some((file) => file.startsWith("source_serif_4")), fonts.join(", ")).toBe(true);
 });
 
+test("the key guide's video is fetched in ranges through the service worker, which leaves it to the network and never caches it (D220)", async ({
+  page,
+}) => {
+  await page.goto("/en/settings/key/guide");
+  await waitForOfflineReady(page);
+
+  // A player asks for video in ranges. Through a worker that cached it, the 206 would make Cache.put throw and fail
+  // the request; this is the request a player makes, without depending on the browser's codecs.
+  const src = await page.locator("video source").getAttribute("src");
+  expect(src).toBe("/media/openai-explainer.mp4");
+  const ranged = await page.evaluate(async (url) => {
+    const response = await fetch(url, { headers: { range: "bytes=0-1023" } });
+    return { status: response.status, type: response.headers.get("content-type"), bytes: (await response.arrayBuffer()).byteLength };
+  }, src ?? "");
+  expect(ranged).toEqual({ status: 206, type: "video/mp4", bytes: 1024 });
+
+  const cached = await page.evaluate(async () => {
+    const urls: string[] = [];
+    for (const name of await caches.keys()) {
+      for (const request of await (await caches.open(name)).keys()) urls.push(new URL(request.url).pathname);
+    }
+    return urls;
+  });
+  expect(cached.filter((url) => url.startsWith("/media/"))).toEqual([]);
+  // Its poster is a bundled image, so it is precached with the page.
+  expect(cached.some((url) => /\/openai-explainer-poster\..*\.webp$/.test(url))).toBe(true);
+});
+
 test("every shard and form of the served bank is readable offline, not only the ones fetched online", async ({
   page,
   context,

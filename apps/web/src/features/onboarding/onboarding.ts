@@ -4,18 +4,17 @@ import type { DailyGoal, StudyProfile } from "../../lib/study";
 
 /**
  * Onboarding's shape (product-requirements.md §8.1): direction, target, placement,
- * daily goal, and step 5, the optional API key.
+ * daily goal, and step 5, the key.
  *
- * Step 5's place depends on the placement (progress.md D100). On the **diagnostic** path the
- * wizard ends at the goal and lands on the diagnostic, which runs on the key (ADR 25,
- * superseding §8.1's "diagnostic before key"): with none held, the diagnostic's own gate is
- * step 5, and the key screen leads back to it. On the **skip** path there is no diagnostic,
- * and step 5 is the wizard's own last step. Either way the count reads "of 5".
+ * Step 5 explains why Palier runs on the user's own key, what it costs and how to get one, and takes
+ * the key in place (progress.md D220, the owner's request, superseding D100's "skip path only"). It is
+ * shown on **both** paths, since the diagnostic runs on the key too (ADR 25), and left out only when
+ * this browser already holds a key. It stays skippable: drills, review and mock exams need none.
  */
 export const ONBOARDING_STEPS = ["direction", "target", "placement", "goal", "key"] as const;
 export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
-/** §8.1's five, whichever path shows the fifth. */
+/** §8.1's five, when the key step is shown. */
 export const ONBOARDING_TOTAL = ONBOARDING_STEPS.length;
 
 /**
@@ -27,9 +26,9 @@ export const stepperSegments = (index: number, total: number = ONBOARDING_TOTAL)
 
 export type Placement = "diagnostic" | "skip";
 
-/** The steps the wizard itself shows on a path: the key step only where no diagnostic follows. */
-export const stepsFor = (placement: Placement): readonly OnboardingStep[] =>
-  placement === "diagnostic" ? ONBOARDING_STEPS.filter((step) => step !== "key") : ONBOARDING_STEPS;
+/** The steps the wizard shows: the key step unless a key is already held, on either path. */
+export const stepsFor = (hasKey: boolean): readonly OnboardingStep[] =>
+  hasKey ? ONBOARDING_STEPS.filter((step) => step !== "key") : ONBOARDING_STEPS;
 
 export type OnboardingChoices = {
   readonly targetBand: TargetBand;
@@ -46,8 +45,8 @@ export const DEFAULT_CHOICES: OnboardingChoices = {
   dailyGoalMinutes: 20,
 };
 
-export const stepAfter = (step: OnboardingStep, placement: Placement): OnboardingStep | null => {
-  const steps = stepsFor(placement);
+export const stepAfter = (step: OnboardingStep, hasKey: boolean): OnboardingStep | null => {
+  const steps = stepsFor(hasKey);
   return steps[steps.indexOf(step) + 1] ?? null;
 };
 
@@ -58,6 +57,12 @@ export const stepBefore = (step: OnboardingStep): OnboardingStep | null =>
 export const canSkipFrom = (step: OnboardingStep): boolean =>
   ONBOARDING_STEPS.indexOf(step) >= ONBOARDING_STEPS.indexOf("placement");
 
+/**
+ * Where "Skip for now" goes from the placement or the goal (D220): past the preferences to the key
+ * step, the one worth seeing, or, with a key already held, nowhere, so the wizard finishes.
+ */
+export const skipTarget = (hasKey: boolean): "key" | null => (hasKey ? null : "key");
+
 /** What onboarding stores. The placement choice is a destination, not a setting. */
 export const profileFrom = (choices: OnboardingChoices): StudyProfile => ({
   targetBand: choices.targetBand,
@@ -66,14 +71,12 @@ export const profileFrom = (choices: OnboardingChoices): StudyProfile => ({
 });
 
 /**
- * Where onboarding lands: the key screen when step 5's "Add a key now" was chosen, else the
- * diagnostic if chosen, otherwise today's plan. The profile is written first either way, so
- * leaving for the key screen never loses it.
+ * Where onboarding lands: the diagnostic if chosen and a key is held, otherwise today's plan. The key
+ * is taken in step 5 itself (D220), so onboarding never leaves for the key screen. A diagnostic chosen
+ * with the key passed over lands on today, which leads with the diagnostic as its next step (D214),
+ * rather than on the diagnostic's gate asking for the key the user just declined.
  */
 export const destinationFor = (
   choices: OnboardingChoices,
-  { addKey = false }: { readonly addKey?: boolean } = {},
-): "/diagnostic" | "/home" | "/settings/key" => {
-  if (addKey) return "/settings/key";
-  return choices.placement === "diagnostic" ? "/diagnostic" : "/home";
-};
+  { hasKey }: { readonly hasKey: boolean },
+): "/diagnostic" | "/home" => (choices.placement === "diagnostic" && hasKey ? "/diagnostic" : "/home");

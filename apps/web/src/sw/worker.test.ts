@@ -33,6 +33,14 @@ describe("strategyFor", () => {
     expect(strategyFor({ method: "GET", url: "https://github.com/x" }, ORIGIN)).toBe("passthrough");
     expect(strategyFor(get("/api/anything"), ORIGIN)).toBe("passthrough");
   });
+
+  it("leaves video to the network, since a range's 206 cannot be cached (D220)", () => {
+    expect(strategyFor(get("/media/openai-explainer.mp4"), ORIGIN)).toBe("passthrough");
+  });
+
+  it("still serves a page whose path only begins like a passthrough prefix", () => {
+    expect(strategyFor(get("/en/media"), ORIGIN)).toBe("network-first");
+  });
 });
 
 describe("the precache lists", () => {
