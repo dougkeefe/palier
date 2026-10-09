@@ -1775,13 +1775,22 @@ body {
   margin: 0;
 }
 
+/* Why and what it costs sit closed together, so the video is in view when the step opens (D222). */
+.app-key-step__more-group {
+  display: grid;
+}
+
 /* The padding gives the 44px target, as the error states' summary does. */
-.app-key-step__steps > summary {
+.app-key-step__more > summary {
   cursor: pointer;
   width: fit-content;
   padding-block: 0.625rem;
   color: var(--link);
   font-weight: 600;
+}
+
+.app-key-step__more > .app-stack {
+  padding-block: 0.25rem 0.75rem;
 }
 
 /* ---- Print: the one-page progress summary (product-requirements.md §8.9, progress.md D145) ----

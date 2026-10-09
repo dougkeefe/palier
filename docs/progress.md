@@ -256,7 +256,7 @@ submission, the domain and the trademark check). No agent slice is left before t
 **First: onboarding's key step** (`dougkeefe/openai-api-key-onboarding`; D220, D221), on the human's request of 9 October 2026. Merge it once its
 four lanes are green. Then, on the deployed site, the human goes through `/start` as a new user, in both languages and on a
 phone:
-- read the three sections, why, what it costs and how, and say whether they read right to a non-technical person, and
+- open the two disclosures, why and what it costs (closed by default since D222), read them with how, and say whether they read right to a non-technical person, and
   whether the five estimates are the right five;
 - play the video on the deployed site in Safari and Chrome (the medium lane proves its ranges pass the worker, not that a
   given browser plays H.264);
@@ -7489,9 +7489,44 @@ key is already held**; **skippable, but framed as recommended**; and **the key p
   19), with nothing else changed. `addKeyAtDiagnosticGate` is still run by journey 1 and `key.spec.ts`.
 - `offline.spec.ts` gains the ranged fetch through the worker (D220).
 
+### D222 — step 5's why and cost open on demand, and the video is in view when the step opens
+**Date:** 9 October 2026 · **Status:** accepted (human's request; agent's build). Amends D220's presentation, not its order
+or content
+
+The human: on step 5, hide *Why your own key* and *What it costs* by default, expandable for anyone who wants more, and
+make sure the video is above the fold.
+
+- **Why and what it costs are `<details>` disclosures, closed by default**, in D220's order, above *How to get one*. Their
+  summaries are the old headings' keys (`start.keyWhyHeading`, `keyCostHeading`), as plain text, not an `h3`: a heading
+  inside a `summary` is not exposed as one. Nothing they hold changed, so there are no new strings. All three disclosures on
+  the step share `.app-key-step__more` (it was `__steps`).
+- **Closing them was not enough for "above the fold".** Below the hero title, the non-affiliation statement, the stepper,
+  the heading and the intro, the video still started at 758 px of a 1440×900 window. It fit at 1280×720 only because the
+  previous step had left the page scrolled. So **`KeyStep` scrolls the video into view as it mounts**, with
+  `block: "nearest"`: the least scroll that shows all of it, none when it already shows. This runs before the wizard focuses
+  the heading, which then stays in view, so the focus moves nothing.
+- **Tests** (the request changed the premise of one, so it is said here, as D221 did):
+  - `key.spec.ts`'s "step 5 says why a key…" no longer reads three level-3 headings. It checks that the two summaries come
+    first and are closed, the video is wholly in the viewport, and "How to get one" is the first level-3 heading. Then it
+    opens each disclosure and makes the same checks as before: the free and studio-exception sentences, and five priced
+    costs (scoped to the cost disclosure, which is no longer a named region).
+  - New: "step 5 opens with the whole video and its heading in view", at 1440×900 and 390×844.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 9 October 2026 — `dougkeefe/onboarding-why/what-hidden` (step 5's why and cost collapsed, the video in view; D222)
+
+This was not *Next, decided*. The human asked for step 5's *Why* and *What it costs* to be hidden by default and
+expandable, with the video above the fold (D222). Both are now closed disclosures, and the step scrolls the video into view
+as it opens.
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,391 tests passed (8 todo).
+- `key.spec.ts` passed in full on chromium: 13 tests, with the warmup, including the two new viewport cases.
+- Screenshots of step 5 were checked by eye: 1280×720 and 1440×900 in English, 390×844, French at 1280×720, and both
+  disclosures opened.
 
 ### 9 October 2026 — `dougkeefe/openai-api-key-onboarding` (onboarding's key step: why, what it costs, how, with the owner's video; D220, D221)
 

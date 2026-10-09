@@ -2,7 +2,7 @@
 
 import { Button } from "@palier/ui";
 import { useLocale, useTranslations } from "next-intl";
-import { type Ref, useId } from "react";
+import { type Ref, useEffect, useId, useRef } from "react";
 
 import { estimateText } from "../../features/key/spend-view";
 import { keyStepCosts, keyStepFinish } from "../../features/onboarding/key-step";
@@ -23,6 +23,9 @@ import { KeyGuideSteps } from "../key/KeyGuideSteps";
  *    from `pricing.json` (`keyStepCosts`);
  * 3. **how**: the owner's video, the same steps written out, and the key's own form (`KeyEntry`), which
  *    checks the key as soon as it is saved, so a missing billing step shows here.
+ *
+ * Why and what it costs are disclosures, closed until asked, and the step scrolls the video into view as it opens,
+ * so the video is the first thing in sight (D222).
  *
  * It is rendered outside the wizard's `<form>`, since `KeyEntry` is a form of its own, and carries its
  * own actions. It stays skippable: drills, review and mock exams need no key.
@@ -51,6 +54,13 @@ export function KeyStep({
   const held = entry.state.phase === "saved";
   const finish = keyStepFinish({ held, placement });
   const id = useId();
+  const video = useRef<HTMLDivElement>(null);
+
+  // As the step opens, the least scroll that shows the whole video, none when it already shows (D222). This runs
+  // before the wizard focuses the heading, which then stays in view and moves nothing.
+  useEffect(() => {
+    video.current?.scrollIntoView({ block: "nearest" });
+  }, []);
 
   return (
     <div className="app-stack app-key-step">
@@ -59,34 +69,42 @@ export function KeyStep({
       </h2>
       <p>{t("keyIntro")}</p>
 
-      <section className="app-stack" aria-labelledby={`${id}-why`}>
-        <h3 id={`${id}-why`}>{t("keyWhyHeading")}</h3>
-        <p>{t("keyWhyFree")}</p>
-        <p>{t("keyWhySafer")}</p>
-        <p>{tKey("offerStays")}</p>
-      </section>
+      <div className="app-key-step__more-group">
+        <details className="app-key-step__more">
+          <summary>{t("keyWhyHeading")}</summary>
+          <div className="app-stack">
+            <p>{t("keyWhyFree")}</p>
+            <p>{t("keyWhySafer")}</p>
+            <p>{tKey("offerStays")}</p>
+          </div>
+        </details>
 
-      <section className="app-stack" aria-labelledby={`${id}-cost`}>
-        <h3 id={`${id}-cost`}>{t("keyCostHeading")}</h3>
-        <p>{t("keyCostWho")}</p>
-        <ul className="app-list">
-          {costs.map((cost) => (
-            <li key={cost.feature}>
-              {t(cost.perMinute ? "keyCostMinute" : "keyCostUse", {
-                feature: tKey(`feature_${cost.feature}`),
-                amount: estimateText(cost.estimateUsd, locale),
-              })}
-            </li>
-          ))}
-        </ul>
-        <p>{t("keyCostLimit")}</p>
-        <p className="app-muted">{t("keyCostFree")}</p>
-      </section>
+        <details className="app-key-step__more">
+          <summary>{t("keyCostHeading")}</summary>
+          <div className="app-stack">
+            <p>{t("keyCostWho")}</p>
+            <ul className="app-list">
+              {costs.map((cost) => (
+                <li key={cost.feature}>
+                  {t(cost.perMinute ? "keyCostMinute" : "keyCostUse", {
+                    feature: tKey(`feature_${cost.feature}`),
+                    amount: estimateText(cost.estimateUsd, locale),
+                  })}
+                </li>
+              ))}
+            </ul>
+            <p>{t("keyCostLimit")}</p>
+            <p className="app-muted">{t("keyCostFree")}</p>
+          </div>
+        </details>
+      </div>
 
       <section className="app-stack" aria-labelledby={`${id}-how`}>
         <h3 id={`${id}-how`}>{t("keyHowHeading")}</h3>
-        <ExplainerVideo />
-        <details className="app-key-step__steps">
+        <div ref={video}>
+          <ExplainerVideo />
+        </div>
+        <details className="app-key-step__more">
           <summary>{t("keyHowRead")}</summary>
           <KeyGuideSteps pasteInto="below" />
         </details>
