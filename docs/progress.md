@@ -7512,6 +7512,35 @@ make sure the video is above the fold.
     costs (scoped to the cost disclosure, which is no longer a named region).
   - New: "step 5 opens with the whole video and its heading in view", at 1440×900 and 390×844.
 
+### D223 — E2E shard 2 back inside its budget: the production specs move to shard 1, and the warmup visits each route once
+**Date:** 9 October 2026 · **Status:** accepted (agent)
+
+CI's E2E shard 2/2 was killed at its 300-second budget three times on 9 October: on `main` after #70 (57 tests), and on both
+runs of this branch (58 tests, 52 done at the kill). Nothing failed: the traces show the tests still running at the kill
+(`sync.spec.ts`'s, each time) making steady progress. On the same day the shard passed in 3.7 minutes, so it was within a slow
+runner of its budget. D213's 30 seconds of headroom had gone. Shard 1 had been taking 3.3–4.1 minutes.
+
+Measured locally from cold, two workers per shard as on CI:
+- **The shards were uneven.** `--shard` splits the tests by count, in project order. `offline` was listed last, so all 36
+  production specs fell in shard 2, beside the last 21 hermetic tests. That was 272 s of work against shard 1's 195 s.
+  Those 21 tests also cost shard 2 the whole warmup.
+- **The warmup visited every route twice**, once per locale, though `[locale]` is a segment of one route, so the French pass
+  compiled nothing new. It was 44–54 s of a serial step that both shards run.
+
+The fixes, without raising the budget (implementation-plan.md 6.5):
+- **`offline` is listed before `chromium`** in `playwright.config.ts`. Shard 1 is now the production specs and the first 22
+  hermetic tests, and its warmup runs beside the production specs. Shard 2 is hermetic only.
+- **The warmup visits each route in English, and `/fr` once** for French messages: 29–32 s, cold.
+
+| Cold, local | Shard 1 | Shard 2 | Work, both |
+| --- | --- | --- | --- |
+| Before | 128 s (59 tests) | 148 s (58) | 467 s |
+| After | 132 s (59) | 116 s (58) | 430 s |
+
+The slowest shard is 11% shorter locally. CI runs about twice the local time, so shard 2's ~290 s should come back to about
+260 s. **Revisit when** a shard is killed at its budget again. The next lever is a third shard, which renames the required
+checks (D178, `docs/deploy.md`), so that is the human's call.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
@@ -7527,6 +7556,10 @@ as it opens.
 - `key.spec.ts` passed in full on chromium: 13 tests, with the warmup, including the two new viewport cases.
 - Screenshots of step 5 were checked by eye: 1280×720 and 1440×900 in English, 390×844, French at 1280×720, and both
   disclosures opened.
+
+**CI's E2E shard 2/2 then ran out of its 300 s budget** on both runs of the PR, as it had on `main` after #70, with no test
+failing (D223). The production specs now sort into shard 1, and the warmup visits each route once. Locally, from cold, the
+slowest shard went from 148 s to 132 s, and both shards passed in full (117 tests).
 
 ### 9 October 2026 — `dougkeefe/openai-api-key-onboarding` (onboarding's key step: why, what it costs, how, with the owner's video; D220, D221)
 

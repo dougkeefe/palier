@@ -54,15 +54,18 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${HERMETIC_PORT}` },
     },
     {
+      // Listed before `chromium` on purpose (progress.md D223). `--shard` splits the tests by count in project order, so
+      // this puts the heavy production specs in shard 1, where they run beside the warmup rather than after it, and
+      // leaves shard 2 hermetic. Listed last, they all fell in shard 2, which then took a warmup for 21 tests.
+      name: "offline",
+      testMatch: /(offline|production)\.spec\.ts/,
+      use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${PRODUCTION_PORT}` },
+    },
+    {
       name: "chromium",
       dependencies: ["warmup"],
       testIgnore: /(offline|production|live)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${HERMETIC_PORT}` },
-    },
-    {
-      name: "offline",
-      testMatch: /(offline|production)\.spec\.ts/,
-      use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${PRODUCTION_PORT}` },
     },
     // Studio mode on a real key (progress.md D189): opt-in, spending, in no lane. It exists only when asked for.
     ...(process.env.PALIER_LIVE === "1"

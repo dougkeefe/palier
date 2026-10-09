@@ -15,7 +15,10 @@ import { routesFrom } from "../scripts/prepare-public.mjs";
  * client chunks, including the lazily loaded container, before any test needs them.
  *
  * The route list is derived the way the service worker's is (`routesFrom`), so it
- * cannot drift from the app.
+ * cannot drift from the app. Each route is visited in English only: `[locale]` is a
+ * segment of the same route, so French adds nothing to compile but `request.ts`'s
+ * messages, which one visit to `/fr` loads. The French pass cost a third of the
+ * warmup, which runs in both shards (progress.md D223).
  */
 const LOCALE_DIR = join(dirname(fileURLToPath(import.meta.url)), "../src/app/[locale]");
 
@@ -28,11 +31,10 @@ const pageDirs = (dir: string): string[] =>
 
 setup("compile every route once, one at a time", async ({ page }) => {
   setup.setTimeout(180_000);
-  for (const route of routesFrom(pageDirs(LOCALE_DIR))) {
-    for (const locale of ["en", "fr"]) {
-      await page.goto(route === "" ? `/${locale}` : `/${locale}/${route}`);
-      await page.waitForLoadState("networkidle");
-    }
+  const english = routesFrom(pageDirs(LOCALE_DIR)).map((route) => (route === "" ? "/en" : `/en/${route}`));
+  for (const path of ["/fr", ...english]) {
+    await page.goto(path);
+    await page.waitForLoadState("networkidle");
   }
   // The API routes compile on first request too; each answers 401 or 400 unauthenticated
   // or empty, which is enough to build it before two journey-8 devices call it at once.
