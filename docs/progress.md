@@ -7527,6 +7527,14 @@ A candid review of the branch then found seven things, all fixed:
 After the fixes, the rebuilt app passed 51 Playwright tests on both projects (`key`, `journeys`, `key-leak`, `content`,
 `offline`, `key-leak-production`, `oral-production`, `studio-selfhost-production`, `csp-production`).
 
+**CI's audit then failed** on GHSA-cjq9-62q9-8jv4 (high: Next.js image optimization SSRF, `next` from 16.0.0 to below 16.3.8),
+published after the branch was cut, not caused by it. `next` and `eslint-config-next` went from 16.3.6 to 16.3.8. Only the
+Next family moved in the lockfile. Afterwards:
+- `pnpm audit --prod --audit-level=high` reports only D135's two ignored advisories;
+- `pnpm verify` is green;
+- the bundle is 166.4 KB of 180 KB;
+- the whole Playwright suite passed on the rebuilt app (114 passed).
+
 **Not run:** the integration lane, which this change does not touch; a real key, so "This key works." is seen only against
 the stub; and playback in Safari, which the human's look on the deployed site covers (*Next, decided*).
 
