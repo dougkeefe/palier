@@ -1752,6 +1752,38 @@ body {
   overflow-wrap: anywhere;
 }
 
+/* ---- The key explainer video and onboarding's key step (progress.md D220) ---------- */
+
+.app-video {
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+/* Its width and height attributes keep its ratio before the poster loads, so nothing below it moves. */
+.app-video video {
+  display: block;
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 12px;
+  background: var(--primary);
+}
+
+.app-key-step h3 {
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+/* The padding gives the 44px target, as the error states' summary does. */
+.app-key-step__steps > summary {
+  cursor: pointer;
+  width: fit-content;
+  padding-block: 0.625rem;
+  color: var(--link);
+  font-weight: 600;
+}
+
 /* ---- Print: the one-page progress summary (product-requirements.md §8.9, progress.md D145) ----
  * Gate K chose a print stylesheet over a PDF library. `app-print-only` is what only paper shows
  * (the second skill, the date, a skill named in a heading); `app-screen-only` is what paper

@@ -48,7 +48,9 @@ test("the screen's timer moves the session into its next phase, and the examiner
   });
   await page.clock.setFixedTime(START);
 
-  await onboard(page, "skip", { addKey: true });
+  await onboard(page, "skip");
+  // The key step is passed over, so the key is added on the key screen itself (D220).
+  await page.goto("/en/settings/key");
   await page.getByLabel("OpenAI API key").fill(SENTINEL);
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByText(/^Saved on this device/)).toBeVisible();
@@ -106,7 +108,9 @@ test("a session whose tab was closed is listed as over and can be reported on, a
         ? { status: 200, contentType: "audio/mpeg", body: "ID3-stub-voice" }
         : { status: 200, body: { object: "list", data: [] } },
   );
-  await onboard(page, "skip", { addKey: true });
+  await onboard(page, "skip");
+  // The key step is passed over, so the key is added on the key screen itself (D220).
+  await page.goto("/en/settings/key");
   await page.getByLabel("OpenAI API key").fill(SENTINEL);
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByText(/^Saved on this device/)).toBeVisible();

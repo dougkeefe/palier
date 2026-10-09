@@ -77,7 +77,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   `/exam`, `/exam/run`, `/exam/results`, `/settings/{data,sync,key}`).
   The islands' decisions live in tested `.ts` beside them (`src/features/**`, `src/lib/study.ts`); a
   `.tsx` holds rendering and effects only.
-- **`public/content/` and `public/sw.js` are generated, gitignored and never edited.**
+- **`public/content/` and `public/sw.js` are generated, gitignored and never edited.** `public/media/` is committed
+  (the explainer video, D220) and is never precached.
   `scripts/prepare-public.mjs` runs before `dev` and `build`: it copies `content/bank/` and
   compiles the service worker from `src/sw/worker.ts` (D60). Every bank version is copied, but the
   worker **precaches only `BANK_VERSION`'s**, which the script reads from `src/lib/bank-version.ts` (D140); a
@@ -257,11 +258,24 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `src/server` at one route only, `POST /api/realtime/secret` (ADR 3, D169).
   - `/settings/key` (`components/key/KeySettings.tsx`, with its decisions in `features/key/key-view.ts`)
     saves, checks, removes and keeps a key for a tab. Every check result is a sentence mapped by error
-    **name**, never the raw error. `/settings/key/guide` is static.
-  - Onboarding's step 5 is the wizard's last step on the skip path (`components/key/KeyOffer.tsx`). On the diagnostic
-    path it is **the diagnostic's own gate** (ADR 25, superseding §8.1's "diagnostic before key"): the diagnostic runs on
-    the key, so with none `DiagnosticLauncher` shows `NoKeyCard`, whose link carries `?next=diagnostic`, and the key
+    **name**, never the raw error. The form itself is `components/key/KeyEntry.tsx` (`useKeyEntry` holds the state, so
+    the key screen keeps its own loading gate), shared with onboarding. **It is a `<form>` of its own, so never put it
+    inside another.** `/settings/key/guide` is static: the owner's explainer video and `KeyGuideSteps`.
+  - **Onboarding's step 5 is the key** (D220, the owner's request, amending PRD §8.1): `components/onboarding/KeyStep.tsx`,
+    with its decisions in `features/onboarding/key-step.ts`. It says why a key (free, safer, then `key.offerStays`, the one
+    sentence carrying studio mode's exception), what it costs (`keyStepCosts` over `featureCosts`, never a typed figure),
+    and how (the video, the written steps, and `KeyEntry`, which checks the key as soon as it is saved). It is shown on
+    **both** paths unless a key is already held (`stepsFor(hasKey)`), rendered outside the wizard's `<form>`, and stays
+    skippable; "Skip for now" lands on it. On the diagnostic path, a key passed over lands on Today, never on the gate the
+    user just declined (`destinationFor`); Today leads with the diagnostic, and taking it meets **the diagnostic's own
+    gate** (ADR 25): with none `DiagnosticLauncher` shows `NoKeyCard`, whose link carries `?next=diagnostic`, and the key
     screen then offers the way back (`returnAfterKey`, an allow-list, never an address from the query).
+  - **The explainer video** is `public/media/openai-explainer.mp4`, committed (only `public/content/` and `public/sw.js`
+    are generated), rendered by `components/key/ExplainerVideo.tsx` with `preload="none"`, never autoplaying, and a poster
+    bundled from `components/key/images/`. It is silent with English captions, so the same steps are always written out
+    beside it in the page's language. **The service worker passes `/media/` straight to the network and never caches
+    it**: a player fetches video in ranges, and `Cache.put` throws on a 206 (`offline.spec.ts` proves it). Its address and
+    size are `ExplainerVideo.tsx`'s `EXPLAINER_VIDEO`, beside its only user.
   - **The diagnostic's result** (ADR 25) is `components/diagnostic/DiagnosticResult.tsx`, at a run's end and at
     `/diagnostic?result=…` from today's card (the launcher's own page, not a route of its own, D213); its decisions are `features/diagnostic/result-view.ts`. The score,
     right and wrong, by level and by sub-skill, and the plan's starting level are the engine's, derived from the attempts
@@ -393,7 +407,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   Turbopack dev server under parallel first requests can read a build file mid-write (D67);
   keep it the `chromium` project's dependency. **`chromium`** (hermetic, `next dev`) runs the
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
-  titles, **journey 5 and step 5** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
+  titles, **journey 5 and step 5 on both paths** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
   `errors.spec.ts` (the 404, a thrown route with its bundle and the key-leak sentinel, and the global view, D141–D142),
   `content.spec.ts` (the about page and privacy notice, onboarding's statement, the shortcut sheet, `/progress`
   printed to one page, D145, and the library with a drill's link into it, D162), `motion.spec.ts` (D160),

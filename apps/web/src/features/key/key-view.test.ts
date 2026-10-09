@@ -4,6 +4,7 @@ import {
   type CheckResult,
   INITIAL_KEY_SCREEN,
   type KeyScreenState,
+  afterSaveAction,
   checkFailure,
   checkMessage,
   checkTone,
@@ -119,5 +120,15 @@ describe("returnAfterKey (ADR 25)", () => {
     expect(returnAfterKey("")).toBeNull();
     expect(returnAfterKey("https://evil.example")).toBeNull();
     expect(returnAfterKey("/diagnostic")).toBeNull();
+  });
+});
+
+describe("afterSaveAction — what follows a saved key", () => {
+  it("checks the key at once on onboarding's key step (D220)", () => {
+    expect(afterSaveAction({ checkOnSave: true })).toBe("check");
+  });
+
+  it("waits for the user's own check on the key screen", () => {
+    expect(afterSaveAction({ checkOnSave: false })).toBe("wait");
   });
 });

@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 7 October 2026 (Today on the dashboard layout, D219)
+**Last updated:** 9 October 2026 (onboarding's key step: why, what it costs, how, with the owner's video; D220)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,9 +142,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/today-page-update` | **Today on the dashboard layout** (D219; the human's request, 7 October 2026): a deep hero with the week and the three skills as cards against today's plan, statistics, the plan and where you stand on the left, a practice calendar and the grammar pointer on the right. | 7 October 2026 |
+| `dougkeefe/openai-api-key-onboarding` | **Onboarding's key step** (D220; the human's request, 9 October 2026): why Palier runs on the user's own OpenAI key, what it costs, and how to get one with the owner's explainer video, the key pasted and checked in the step, on both paths unless a key is held. The service worker leaves `/media/` to the network. | 9 October 2026 |
 
-*(The prior rows — Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -253,8 +253,20 @@ reviewed blind by Claude, with v3's synthetic content retired.
 What stands between the code and 1.0 is now **the human's**: **Gate O**, then the rest of **Gate M** (an outside item
 submission, the domain and the trademark check). No agent slice is left before them.
 
-**First: Today on the dashboard layout** (`dougkeefe/today-page-update`; D219), on the human's request of 7 October 2026, on top of
-Today rebuilt around the next step (#68; D214–D218). Merge it once its four lanes are green. Then, on the deployed site, the
+**First: onboarding's key step** (`dougkeefe/openai-api-key-onboarding`; D220, D221), on the human's request of 9 October 2026. Merge it once its
+four lanes are green. Then, on the deployed site, the human goes through `/start` as a new user, in both languages and on a
+phone:
+- read the three sections, why, what it costs and how, and say whether they read right to a non-technical person, and
+  whether the five estimates are the right five;
+- play the video on the deployed site in Safari and Chrome (the medium lane proves its ranges pass the worker, not that a
+  given browser plays H.264);
+- paste a real key and see "This key works.", then take the diagnostic path once and see it lead straight to the launcher.
+
+The French read at Gate O gains D220's keys: `start.key*`, and `key.video*`, `newTab`, `guidePlatform`, `guideIntro` and
+`guideStep1`–`guideStep7` with `guideStep6Below`, and `start.keySkipDiagnostic`. **A French version of the video** is the human's to record, if wanted:
+the French captions say the video is in English.
+
+**Before it: Today on the dashboard layout** merged (#69; D219). On the deployed site, the
 human looks at Today three times:
 - as a new user;
 - after a diagnostic;
@@ -430,8 +442,8 @@ last exit criterion.
 Standing human items:
 - pointing `palier.dougkeefe.com` at the deployment;
 - §12.1's trademark and language-school check before launch (D96);
-- **the key guide's screenshots** (`/settings/key/guide`, PRD §8.1 step 5), which need a real OpenAI
-  dashboard (D100);
+- *(Done 9 October 2026: the key guide's screenshots are the owner's explainer video, on the guide and onboarding's
+  step 5, D220.)*
 - **a human read of the six workshop prompts' French** (D107), with the rest of Phase 7's R8 review.
 
 D12 is closed.
@@ -7384,9 +7396,147 @@ much of today's plan is done**; and **Where you stand stays on Today**, under th
   - the UI's `monthGrid`, `sparklineGeometry`, Glyph registry, `Sparkline` and `MonthCalendar` tests;
   - `today-view.test.ts`.
 
+### D220 — Onboarding's step 5 says why a key, what it costs and how to get one, with the owner's video, and takes the key in place
+**Date:** 9 October 2026 · **Status:** accepted (human's request and answers; agent's build). Amends PRD §8.1 step 5 and
+D100's "where step 5 goes"
+
+The human: the AI features are where Palier's value is, and an API key is new to most non-technical people. So step 5 should
+explain **why** a key (it keeps Palier free, and it is safer), **what it costs** (charged by OpenAI, with estimates), then
+**how** to get one, with the video they recorded (`docs/openai-explainer.mp4`). The agent asked four questions, and the human
+took the recommendation on each: **one step with three sections**, so the count stays "of 5"; **shown on both paths unless a
+key is already held**; **skippable, but framed as recommended**; and **the key pasted in the step itself**.
+
+- **The flow** (`features/onboarding/onboarding.ts`):
+  - `stepsFor(hasKey)` replaces `stepsFor(placement)`, so the key step is on both paths;
+  - the stepper counts the steps shown: 5, or 4 when a key is held, where the diagnostic path used to read "of 5" over four;
+  - "Skip for now" lands on the key step (`skipTarget`), since the preferences are what it skips;
+  - `destinationFor` loses `addKey`: onboarding never leaves for the key screen;
+  - **a diagnostic chosen with the key passed over lands on Today**, not on the diagnostic's gate. The user has just
+    declined a key, so being asked for one on the next screen read as being ignored. Today leads with the diagnostic as
+    its next step (D214), and the gate still asks when they take it (D210). Found by the branch's own review;
+  - the wizard reads `apiKeyStatus` once, on mount.
+- **The step** is `components/onboarding/KeyStep.tsx`, **outside the wizard's `<form>`**: the key's own form sits in it,
+  and a nested form is invalid HTML, and Enter in the field would have submitted the wizard.
+  - **Why:** "It keeps Palier free…", "It is also safer…" (no Palier account with a name, email or card; writing goes from the
+    browser to OpenAI), then `key.offerStays` unchanged. That is the one sentence carrying studio mode's exception (D186), so
+    the step cannot drift from the key screen's statement.
+  - **What it costs:** OpenAI bills the user's own card, and Palier takes no cut. Then five estimates, a diagnostic result,
+    writing feedback, a fresh set, and a minute of spoken practice and of studio, from `featureCosts` over `pricing.json`
+    (`keyStepCosts`; an unpriced feature is left out, never shown as free). No figure is typed in code. Then the monthly
+    limit, and that drills, review and mock exams cost nothing.
+  - **How:** the video, then "Read the steps instead" (`<details>`), then a link to the guide in a new tab.
+  - **The key's form** is `components/key/KeyEntry.tsx`, extracted from `KeySettings` (`useKeyEntry` holds the state, so the
+    key screen keeps its loading gate, unchanged in behaviour). On the step it **checks the key as soon as it is saved**
+    (`afterSaveAction`), so a missing billing step shows there, as "has reached its usage limit or has no credit left". The
+    key screen still waits for its own Check.
+  - **Its way on** (`keyStepFinish`): with no key, a quiet "Not now, continue without a key", or on the diagnostic path
+    "Not now: take the diagnostic later, from Today"; with one, "Start practising", or "Continue to the diagnostic" on that
+    path.
+- **The video** moved to `apps/web/public/media/openai-explainer.mp4` (74 s, 600×338 H.264, silent, English captions burned
+  in, `moov` first; 3.9 MB), committed once, not also under `docs/`.
+  - `components/key/ExplainerVideo.tsx` renders it `controls`, `preload="none"` and never autoplaying, with a 5.8 KB WebP
+    poster cut from its title frame and bundled, so the CSP's `media-src 'self'` and `img-src 'self'` need nothing new.
+  - Its caption says it is silent. In French it says the captions are English and the same steps are written in French below.
+  - Its accessible name avoids "OpenAI API key", which a screen reader would have confused with the key field's label (found
+    by the E2E's `getByLabel`).
+- **The service worker leaves `/media/` to the network and never caches it.** A player fetches video in ranges. Network-first
+  put the 206 in the cache, `Cache.put` throws on a partial response, and the request failed. **Proven to bite:** with
+  `/media/` taken out of `PASSTHROUGH_PREFIXES`, the production spec's ranged fetch failed with "Failed to fetch".
+  - The spec tests the range, not playback, because CI's Linux Chromium may have no H.264 decoder.
+  - Offline the video does not play, and the written steps still work.
+- **The guide** (`/settings/key/guide`) shows the same video and `KeyGuideSteps`, shared with the step. The steps are
+  rewritten to follow the video's six captions, plus a seventh, the monthly limit, which the video does not show.
+  OpenAI's pages open in a new tab, said to a screen reader. **This resolves D100's standing item, "the key guide's
+  screenshots".**
+- **Keys.**
+  - Added:
+    - `start.key*`;
+    - `key.videoLabel`, `videoNote`, `videoFallback`, `newTab`, `guidePlatform`, `guideStep6`, `guideStep6Below` and `guideStep7`.
+  - Rewritten: `key.guideIntro` and `guideStep1`–`guideStep5`.
+  - Deleted, with `KeyOffer.tsx`, their only user: `key.offerHeading`, `offerUnlocks`, `offerCosts` and `offerAdd`.
+
+  The French is the agent's, and goes to Gate O's French read.
+- **Not an ADR.** ADR 2 (the user's own key) and ADR 3 are unchanged. This is the product's onboarding copy and flow, so it
+  is recorded here and in the PRD, as ADR 25's change to §8.1 was.
+
+### D221 — the tests whose premise the human's request changed, said here rather than edited quietly
+**Date:** 9 October 2026 · **Status:** accepted (agent). Follows D220
+
+- `onboarding.test.ts`:
+  - "on the diagnostic path runs … nothing after the goal" and "on the skip path ends with the key step" pinned D100's
+    placement-keyed step list. They are now "shows the key step whichever the placement" and "leaves the key step out when
+    this browser already holds a key";
+  - "lands on the key screen when step 5's 'Add a key now' is chosen" is deleted with `addKey`;
+  - "lands on the diagnostic when chosen" now says "with a key held", beside a new case for the key passed over.
+- `e2e/helpers.ts`'s `onboard()` passes the key step on both paths: with `{ key }` it pastes it and waits for "This key
+  works.", otherwise it presses "Not now". **It now waits for the landing URL**, so a caller that navigates next cannot cut
+  off the profile's write.
+- **Journey 1 and `key.spec.ts`'s gate test** pass the key over on the diagnostic path, so they now land on Today and
+  reach the gate by its "Take the diagnostic" link. What each checks of the gate is unchanged.
+- **`{ addKey: true }` is gone.** Its callers (`key-leak-production`, `oral-production`, `studio-selfhost-production`,
+  `studio-live`) pass the step over and open `/en/settings/key` by `page.goto`. All are on real IndexedDB, so nothing is
+  lost, and each still saves the key on the key screen, as it did.
+- **`key.spec.ts`:**
+  - Journey 5 now starts with the key saved and checked in step 5, then reaches the key screen by the footer's link. Its
+    checks, refusals, remove, blank save, masked save, tab-only key and wipe are unchanged, reordered to begin from a held
+    key. It also asserts that the key screen's save does not check by itself.
+  - "step 5 is the skip path's last step: three lines…" became the step's own test (the three sections in order, five priced
+    costs, the video's `src` answering as `video/mp4`, the written steps, axe).
+  - New: a refusal shown at once, the diagnostic path's step leading to the launcher, "Step 4 of 4" with a key held, and the
+    guide's video and seven steps.
+- **`key-leak.spec.ts`** saves the sentinel through onboarding's step, so that new flow is under tier 11. Its count of
+  bearer tokens to OpenAI therefore starts at one, the step's check, and every later count is one higher (2, 3, 4, 10, 18,
+  19), with nothing else changed. `addKeyAtDiagnosticGate` is still run by journey 1 and `key.spec.ts`.
+- `offline.spec.ts` gains the ranged fetch through the worker (D220).
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 9 October 2026 — `dougkeefe/openai-api-key-onboarding` (onboarding's key step: why, what it costs, how, with the owner's video; D220, D221)
+
+This was not *Next, decided*. The human asked for a first-run step that explains why Palier needs an OpenAI key (it keeps
+Palier free, and it is safer), what it costs (charged by OpenAI, with estimates) and how to get one, with the video they
+recorded. They answered four questions (D220). The slice built:
+- the key step on both paths, in three sections, with the key pasted and checked in place;
+- `KeyEntry`, shared with the key screen;
+- the video on the step and the guide, with the guide's steps rewritten to follow it;
+- the service worker leaving `/media/` to the network;
+- the PRD's §8.1 step 5 amended.
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,389 tests passed (8 todo).
+- After `pnpm --filter @palier/web build`, the whole Playwright suite passed: `pnpm exec playwright test`, 114 passed (3.7 min),
+  warmup, chromium and offline.
+- The bundle-size gate passed at 166.3 KB of 180 KB, unchanged.
+- The worker fix bites: with `/media/` out of `PASSTHROUGH_PREFIXES`, `offline.spec.ts`'s ranged fetch failed with "Failed to
+  fetch". Restored, it passes.
+- Screenshots of step 5 in English at 1280 and 390 px, in French, and of the guide were checked by eye.
+- `pnpm --filter @palier/web lighthouse` passed every assertion: 19 URLs, 95 runs, `/en/start` and `/en/settings/key` among them.
+
+A candid review of the branch then found seven things, all fixed:
+- passing the key over on the diagnostic path landed on the diagnostic's gate, which asked for the key just declined. It
+  now lands on Today, which leads with the diagnostic (D220);
+- the guide's step 6 named the key screen, the wrong place for a user who opened it from onboarding;
+- the video's constant sat among OpenAI's dashboard links;
+- `keyStepFinish` copied the `Placement` union;
+- the stylesheet repeated the video's ratio;
+- `KeyEntry`'s doc comment sat on its type;
+- one French label was clumsy.
+
+After the fixes, the rebuilt app passed 51 Playwright tests on both projects (`key`, `journeys`, `key-leak`, `content`,
+`offline`, `key-leak-production`, `oral-production`, `studio-selfhost-production`, `csp-production`).
+
+**CI's audit then failed** on GHSA-cjq9-62q9-8jv4 (high: Next.js image optimization SSRF, `next` from 16.0.0 to below 16.3.8),
+published after the branch was cut, not caused by it. `next` and `eslint-config-next` went from 16.3.6 to 16.3.8. Only the
+Next family moved in the lockfile. Afterwards:
+- `pnpm audit --prod --audit-level=high` reports only D135's two ignored advisories;
+- `pnpm verify` is green;
+- the bundle is 166.4 KB of 180 KB;
+- the whole Playwright suite passed on the rebuilt app (114 passed).
+
+**Not run:** the integration lane, which this change does not touch; a real key, so "This key works." is seen only against
+the stub; and playback in Safari, which the human's look on the deployed site covers (*Next, decided*).
 
 ### 7 October 2026 — `dougkeefe/today-page-update` (Today on the dashboard layout; D219)
 

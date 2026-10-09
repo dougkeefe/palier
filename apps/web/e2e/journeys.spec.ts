@@ -22,7 +22,9 @@ test("journey 1: onboarding, the key the diagnostic needs, the diagnostic, its r
   page,
 }) => {
   await stubOpenAi(page.context());
+  // The key passed over in step 5, onboarding lands on today, whose next step is the diagnostic (D214, D220).
   await onboard(page, "diagnostic");
+  await page.getByRole("link", { name: "Take the diagnostic" }).click();
   await expect(page).toHaveURL(/\/en\/diagnostic$/);
   // The diagnostic runs on the key: with none, its gate says what the key buys and where to add it.
   await axeClean(page);

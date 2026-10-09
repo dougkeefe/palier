@@ -1,7 +1,6 @@
 import { type Browser, expect, type Page, test } from "@playwright/test";
 
 import {
-  addKeyAtDiagnosticGate,
   drillThroughByKeyboard,
   generateAndPractise,
   getOralReport,
@@ -79,23 +78,23 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   const laptop = await device(browser);
   const page = laptop.page;
 
-  // 1. Onboarding, then the diagnostic's gate: the diagnostic runs on the key, so it asks for one first (ADR 25).
-  await onboard(page, "diagnostic");
-  await addKeyAtDiagnosticGate(page, SENTINEL);
-  // After entry the key screen is gone; on it, the key was described by its last four only (§6.2).
+  // 1. Onboarding's step 5 takes the key in place and checks it at once (D220), then leads on to the diagnostic,
+  // which runs on the key (ADR 25). The key was described by its last four only (§6.2).
+  await onboard(page, "diagnostic", { key: SENTINEL });
   await expect(page.getByLabel("OpenAI API key")).toHaveCount(0);
+  // The positive control: the key really was in play, and it went to OpenAI, as a bearer token.
+  expect(laptop.watch.openAiAuthorizations()).toEqual([`Bearer ${SENTINEL}`]);
 
   // 2. The diagnostic, and its written result on the key: the run's misses go to OpenAI, and only there.
   await runDiagnosticByKeyboard(page, "Reading");
   await expect(page.getByText(INTERPRETATION_HEADLINE)).toBeVisible();
-  // The positive control: the key really was in play, and it went to OpenAI, as a bearer token.
-  expect(laptop.watch.openAiAuthorizations()).toEqual([`Bearer ${SENTINEL}`]);
+  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 2 }, () => `Bearer ${SENTINEL}`));
 
   // 2b. The key screen's own check, once more on the key.
   await openSettings(page, "Your API key", "Your API key");
   await page.getByRole("button", { name: "Check the key" }).click();
   await expect(page.getByRole("status").filter({ hasText: "This key works." })).toBeVisible();
-  expect(laptop.watch.openAiAuthorizations()).toEqual([`Bearer ${SENTINEL}`, `Bearer ${SENTINEL}`]);
+  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 3 }, () => `Bearer ${SENTINEL}`));
 
   // 3. A drill, then the writing workshop from the drill's page, then the review queue. The
   // diagnostic used up the fixture bank's reading items, so the drill is written expression.
@@ -108,7 +107,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await writeAndGetFeedback(page, `Madame, votre demande ${SUBMISSION_SENTINEL} est en cours de traitement.`);
   // The positive control for the text: it went to OpenAI, once, with the key.
   expect(laptop.watch.openAiBodies().filter((body) => body.includes(SUBMISSION_SENTINEL))).toHaveLength(1);
-  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 3 }, () => `Bearer ${SENTINEL}`));
+  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 4 }, () => `Bearer ${SENTINEL}`));
   // 3b. A fresh set from the writing drill's page: one draft and five blind reviews, all on the
   // key, then practised. Every review carries a generated stem back to OpenAI, and only there.
   await page.getByRole("link", { name: "Today", exact: true }).click();
@@ -118,7 +117,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await expect(page.getByRole("heading", { level: 1, name: "Fresh practice items" })).toBeVisible();
   expect(await generateAndPractise(page)).toBe(5);
   expect(laptop.watch.openAiBodies().filter((body) => body.includes(GENERATED_SENTINEL))).toHaveLength(5);
-  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 9 }, () => `Bearer ${SENTINEL}`));
+  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 10 }, () => `Bearer ${SENTINEL}`));
   // 3c. Spoken practice from Today, with two recorded answers. The screen makes the session's
   // recorder first (#1), then one per answer (#2, #3). Each clip goes to the transcription endpoint
   // once, with the key; the session recording goes nowhere; the transcript goes back to OpenAI only
@@ -137,12 +136,12 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(heardBack.length).toBeGreaterThan(0);
   expect(new Set(heardBack.map((request) => request.path))).toEqual(new Set(["/v1/chat/completions"]));
   // Three questions written and voiced, and two clips transcribed: 3 × 2 + 2 more calls on the key.
-  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 17 }, () => `Bearer ${SENTINEL}`));
+  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 18 }, () => `Bearer ${SENTINEL}`));
   // 3d. The session's report (D126): one more completion on the key, carrying the transcript and no audio.
   await getOralReport(page);
   await page.getByRole("region", { name: "Your report" }).getByRole("button", { expanded: false }).first().click();
   await expect(page.getByText(REPORT_SENTINEL, { exact: false })).toBeVisible();
-  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 18 }, () => `Bearer ${SENTINEL}`));
+  expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 19 }, () => `Bearer ${SENTINEL}`));
   const reportRequest = laptop.watch.openAiRequests().at(-1);
   expect(reportRequest?.path).toBe("/v1/chat/completions");
   expect(reportRequest?.body).toContain(TRANSCRIPT_SENTINEL);
@@ -159,7 +158,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(Object.keys(minted.body).sort()).toEqual(["expiresAt", "value"]);
   expect(String(minted.body.value)).toMatch(/^ek_memory_\d+$/);
   expect(laptop.watch.realtimeSecretAuthorizations()).toEqual([`Bearer ${SENTINEL}`]);
-  expect(laptop.watch.openAiAuthorizations()).toHaveLength(18);
+  expect(laptop.watch.openAiAuthorizations()).toHaveLength(19);
   // 3f. A studio conversation from the screen (D171, D188): the fake-peer half. The screen posts the key to the
   // route once, in Authorization; the call to /v1/realtime/calls carries the minted ek_ secret, never the key; the
   // conversation's recording, the page's fourth recorder, reaches no request; and no other call spends the key.
@@ -172,7 +171,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   const dialled = laptop.watch.realtimeCallAuthorizations();
   expect(dialled).toHaveLength(1);
   expect(dialled.every((authorization) => /^Bearer ek_memory_\d+$/.test(authorization))).toBe(true);
-  expect(laptop.watch.openAiAuthorizations()).toHaveLength(18);
+  expect(laptop.watch.openAiAuthorizations()).toHaveLength(19);
   expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(4)))).toBe(false);
 
   // The first return home after a spoken session shows its milestone moment once (D159); it is closed as a user would.

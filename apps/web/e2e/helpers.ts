@@ -53,16 +53,14 @@ export const waitForOfflineReady = async (page: Page) => {
 };
 
 /**
- * §8.1 onboarding, placing as asked. Leaves the page wherever onboarding lands. On the skip
- * path the wizard's last step is step 5, the optional key: it is passed over unless `addKey`
- * (progress.md D100). On the diagnostic path, the diagnostic's own gate asks for the key (ADR 25):
- * see {@link addKeyAtDiagnosticGate}.
+ * §8.1 onboarding, placing as asked. Leaves the page wherever onboarding lands. Step 5, the key, is
+ * shown on both paths (progress.md D220): given a `key`, it is pasted there, saved and checked at
+ * once (so OpenAI must be stubbed to accept it), and the wizard finishes, on the diagnostic path at
+ * the diagnostic. Otherwise the step is passed over and onboarding lands on today, whose next step is
+ * the diagnostic; from there the diagnostic's own gate asks for the key (ADR 25): see
+ * {@link addKeyAtDiagnosticGate}.
  */
-export const onboard = async (
-  page: Page,
-  placement: "diagnostic" | "skip",
-  { addKey = false }: { addKey?: boolean } = {},
-) => {
+export const onboard = async (page: Page, placement: "diagnostic" | "skip", { key }: { key?: string } = {}) => {
   await page.goto("/en/start");
   const next = page.getByRole("button", { name: "Continue" });
   await expect(next).toBeEnabled();
@@ -77,15 +75,25 @@ export const onboard = async (
   await next.click();
 
   await page.getByRole("radio", { name: "20 minutes a day" }).check();
-  if (placement === "skip") {
-    await next.click();
-    await expect(page.getByRole("heading", { name: "An OpenAI key, if you want one" })).toBeFocused();
-    if (addKey) {
-      await page.getByRole("button", { name: "Add a key now" }).click();
-      return;
-    }
+  await next.click();
+  await expect(page.getByRole("heading", { name: "Add your OpenAI key" })).toBeFocused();
+  if (key === undefined) {
+    await page
+      .getByRole("button", {
+        name: placement === "diagnostic" ? "Not now: take the diagnostic later, from Today" : "Not now, continue without a key",
+      })
+      .click();
+  } else {
+    await page.getByLabel("OpenAI API key").fill(key);
+    await page.getByRole("button", { name: "Save the key" }).click();
+    await expect(page.getByText(`Saved on this device: the key ending in ${key.slice(-4)}.`)).toBeVisible();
+    await expect(page.getByRole("status").filter({ hasText: "This key works." })).toBeVisible();
+    await page
+      .getByRole("button", { name: placement === "diagnostic" ? "Continue to the diagnostic" : "Start practising" })
+      .click();
   }
-  await page.getByRole("button", { name: "Start practising" }).click();
+  // The profile is written before the wizard leaves, so a caller may navigate once it has landed.
+  await expect(page).toHaveURL(placement === "diagnostic" && key !== undefined ? /\/en\/diagnostic$/ : /\/en\/home$/);
 };
 
 /**

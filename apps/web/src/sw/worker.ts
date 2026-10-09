@@ -21,7 +21,10 @@
  *   bank adapter's in-memory content-hash cache.
  * - **Network-first, falling back to cache** for everything else same-origin: pages
  *   and RSC payloads update whenever the network is up and still render when it is not.
- * - **Never** for non-GET, cross-origin or `/api/` requests.
+ * - **Never** for non-GET, cross-origin, `/api/` or `/media/` requests. `/media/` holds video
+ *   (progress.md D220): a player asks for it in ranges, and `Cache.put` throws on the 206 a range
+ *   answers with, which would fail the request. It is never precached either, so a video costs the
+ *   install nothing; offline, the steps written beside it still work.
  *
  * Each build gets its own cache (`palier-{build}`); `activate` deletes the others, so
  * stale chunks do not accumulate across deploys.
@@ -64,6 +67,9 @@ type FetchEventLike = ExtendableEventLike & {
 /** Paths whose content never changes at a given URL. */
 const IMMUTABLE_PREFIXES = ["/content/bank/", "/_next/static/"];
 
+/** Same-origin paths the worker leaves to the network: the API, and video, which is fetched in ranges. */
+const PASSTHROUGH_PREFIXES = ["/api/", "/media/"];
+
 const CACHE_PREFIX = "palier-";
 
 export const cacheNameFor = (build: string): string => `${CACHE_PREFIX}${build}`;
@@ -76,7 +82,7 @@ export const strategyFor = (request: RequestShape, origin: string): Strategy => 
   if (request.method !== "GET") return "passthrough";
   const url = new URL(request.url);
   if (url.origin !== origin) return "passthrough";
-  if (url.pathname.startsWith("/api/")) return "passthrough";
+  if (PASSTHROUGH_PREFIXES.some((prefix) => url.pathname.startsWith(prefix))) return "passthrough";
   if (IMMUTABLE_PREFIXES.some((prefix) => url.pathname.startsWith(prefix))) {
     return "cache-first";
   }
