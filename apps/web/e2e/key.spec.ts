@@ -104,17 +104,22 @@ test("step 5 says why a key, what it costs and how to get one, with the video, o
   await expect(page.getByText("Step 5 of 5")).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "Add your OpenAI key" })).toBeFocused();
 
-  // Why, what it costs, how: in that order.
-  const sections = page.getByRole("heading", { level: 3 });
-  await expect(sections.nth(0)).toHaveText("Why your own key");
-  await expect(sections.nth(1)).toHaveText("What it costs");
-  await expect(sections.nth(2)).toHaveText("How to get one");
+  // Why and what it costs come first, closed until asked, so the video is in view on arrival (D222).
+  const disclosures = page.locator("details > summary");
+  await expect(disclosures.nth(0)).toHaveText("Why your own key");
+  await expect(disclosures.nth(1)).toHaveText("What it costs");
+  await expect(page.getByRole("heading", { level: 3 }).first()).toHaveText("How to get one");
+  await expect(page.getByText("It keeps Palier free.", { exact: false })).toBeHidden();
+  await expect(page.locator("video")).toBeInViewport({ ratio: 1 });
+
+  await disclosures.nth(0).click();
   await expect(page.getByText("It keeps Palier free.", { exact: false })).toBeVisible();
   // Where the key goes names the one exception, studio mode's route (D173, D186).
   await expect(page.getByText("goes to OpenAI, and once to Palier’s server for each studio conversation", { exact: false })).toBeVisible();
 
   // The costs are pricing.json's, priced, never a zero and never a placeholder.
-  const costs = page.getByRole("region", { name: "What it costs" }).getByRole("listitem");
+  await disclosures.nth(1).click();
+  const costs = page.locator("details", { hasText: "What it costs" }).getByRole("listitem");
   await expect(costs).toHaveCount(5);
   await expect(costs.first()).toHaveText(/^Diagnostic result: about US\$\d+\.\d+ each$/);
   await expect(page.getByText(/^Spoken practice: about US\$\d+\.\d+ a minute$/)).toBeVisible();
@@ -149,6 +154,20 @@ test("step 5 says so at once when OpenAI refuses the key pasted there", async ({
   await expect(page.getByRole("status").filter({ hasText: "has reached its usage limit or has no credit left" })).toBeVisible();
   await axeClean(page);
 });
+
+for (const [name, size] of [
+  ["a taller window", { width: 1440, height: 900 }],
+  ["a phone", { width: 390, height: 844 }],
+] as const) {
+  test(`step 5 opens with the whole video and its heading in view on ${name} (D222)`, async ({ page }) => {
+    await page.setViewportSize(size);
+    await page.goto("/en/start");
+    await toKeyStep(page, "skip");
+    await expect(page.getByRole("heading", { level: 2, name: "Add your OpenAI key" })).toBeFocused();
+    await expect(page.getByRole("heading", { level: 2, name: "Add your OpenAI key" })).toBeInViewport();
+    await expect(page.locator("video")).toBeInViewport({ ratio: 1 });
+  });
+}
 
 test("on the diagnostic path step 5 is shown too, and a key saved there leads straight to the diagnostic (D220)", async ({
   page,

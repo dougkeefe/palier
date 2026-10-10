@@ -264,7 +264,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   - **Onboarding's step 5 is the key** (D220, the owner's request, amending PRD §8.1): `components/onboarding/KeyStep.tsx`,
     with its decisions in `features/onboarding/key-step.ts`. It says why a key (free, safer, then `key.offerStays`, the one
     sentence carrying studio mode's exception), what it costs (`keyStepCosts` over `featureCosts`, never a typed figure),
-    and how (the video, the written steps, and `KeyEntry`, which checks the key as soon as it is saved). It is shown on
+    and how (the video, the written steps, and `KeyEntry`, which checks the key as soon as it is saved). Why and cost are
+    `<details>`, closed by default, and the step scrolls the video into view as it mounts, so it is above the fold (D222). It is shown on
     **both** paths unless a key is already held (`stepsFor(hasKey)`), rendered outside the wizard's `<form>`, and stays
     skippable; "Skip for now" lands on it. On the diagnostic path, a key passed over lands on Today, never on the gate the
     user just declined (`destinationFor`); Today leads with the diagnostic, and taking it meets **the diagnostic's own
@@ -405,7 +406,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
 - Medium lane (`.github/workflows/verify.yml`): Playwright in three projects.
   **`warmup`** compiles every route once, serially, before the parallel hermetic tests. A cold
   Turbopack dev server under parallel first requests can read a build file mid-write (D67);
-  keep it the `chromium` project's dependency. **`chromium`** (hermetic, `next dev`) runs the
+  keep it the `chromium` project's dependency. It visits each route in English, and `/fr` once (D223). **`offline` is listed before `chromium`**
+  so `--shard` puts the production specs in shard 1 beside the warmup; listed last, they pushed shard 2 past its budget (D223). **`chromium`** (hermetic, `next dev`) runs the
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
   titles, **journey 5 and step 5 on both paths** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
   `errors.spec.ts` (the 404, a thrown route with its bundle and the key-leak sentinel, and the global view, D141–D142),
