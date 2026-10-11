@@ -34,8 +34,14 @@ export type ServerEnv = Record<string, string | undefined>;
 /** Where the committed migrations live: `apps/web/drizzle`, the cwd of `next dev`/`next start`. */
 export const migrationsFolder = (): string => join(process.cwd(), "drizzle");
 
-/** A fresh PGlite with the migrations applied. Shared by the hermetic server and the integration tests. */
+/**
+ * A fresh PGlite with the migrations applied. Shared by the hermetic server and the integration tests.
+ * The migrations are read before PGlite starts: its WASM boot begins in the constructor, so a missing folder found
+ * only by `migrate` left an orphaned instance booting beside the retry, which timed the health test out on CI (D228).
+ */
 export const pgliteDatabase = async (folder: string) => {
+  const { readMigrationFiles } = await import("drizzle-orm/migrator");
+  readMigrationFiles({ migrationsFolder: folder });
   const { PGlite } = await import("@electric-sql/pglite");
   const { drizzle } = await import("drizzle-orm/pglite");
   const { migrate } = await import("drizzle-orm/pglite/migrator");

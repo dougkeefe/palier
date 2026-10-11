@@ -1,6 +1,19 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
 
-import { answersWithin, databaseAnswers, realtimeRateLimitStore, resetSyncApi, syncApi, telemetryApi } from "./db";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+import { answersWithin, databaseAnswers, pgliteDatabase, realtimeRateLimitStore, resetSyncApi, syncApi, telemetryApi } from "./db";
+
+/** Counts PGlite instances: no other test in this file builds one, so the stub changes none of them. */
+const pglite = vi.hoisted(() => ({ constructed: 0 }));
+vi.mock("@electric-sql/pglite", () => ({
+  PGlite: class {
+    constructor() {
+      pglite.constructed += 1;
+    }
+  },
+}));
 
 afterEach(() => {
   resetSyncApi();
@@ -84,6 +97,13 @@ describe("databaseAnswers — the health route's database check (D140)", () => {
 
   it("is false when the configured database cannot be reached, and never throws", async () => {
     expect(await databaseAnswers({ DATABASE_URL: "postgres://palier:palier@127.0.0.1:1/palier" })).toBe(false);
+  });
+});
+
+describe("pgliteDatabase — the hermetic lane's database (D228)", () => {
+  it("rejects a missing migrations folder before PGlite starts, so no orphaned instance boots", async () => {
+    await expect(pgliteDatabase(join(tmpdir(), "palier-no-migrations"))).rejects.toThrow();
+    expect(pglite.constructed).toBe(0);
   });
 });
 

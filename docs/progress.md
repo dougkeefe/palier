@@ -7641,9 +7641,35 @@ skipping goes to Today.
   appears. `oral-stability.mjs` is run by hand, never by a lane, so it is unchanged.
 - **Not an ADR.** Operations, recorded here.
 
+### D228 — the hermetic PGlite reads its migrations before it starts, so a failed build leaves no instance booting
+**Date:** 11 October 2026 · **Status:** accepted
+
+- **What failed.** PR #75's medium integration lane timed out once in
+  `databaseAnswers, hermetic (D140) > answers false when the database cannot be built` (5,224 ms, against Vitest's 5 s
+  default). The other run of the same commit passed at 3,071 ms. It is the only such failure in the last 40 verify runs,
+  so the test was running close to its limit, and #75 did not cause it.
+- **Why it was slow.** `pgliteDatabase` constructed `PGlite` and then called `migrate`. PGlite's WASM boot starts in its
+  constructor, and drizzle finds a missing `meta/_journal.json` only inside `migrate`. So the failing build left an
+  orphaned instance booting, never closed, beside the retry's real build, on a runner already busy with the simulator.
+- **The fix is in `db.ts`, not the test's timeout.** `vitest.config.mts` keeps the 5 s default outside nightly because a
+  slow test there is a bug (D156). `pgliteDatabase` now calls drizzle's public `readMigrationFiles` first, so a missing
+  folder rejects before anything boots. The files are read twice, which costs nothing next to a WASM boot.
+- **Test.** `db.test.ts` stubs `@electric-sql/pglite` and holds that a missing folder rejects with no PGlite constructed.
+  It fails without the fix. Locally the integration test went from 0.8–1.6 s to 0.7 s.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 11 October 2026 — `dougkeefe/p3an3` (the integration lane's PGlite timeout; D228)
+
+The same branch, a second entry. PR #75's medium integration lane failed once on a test timeout. The test was not at
+fault: a failed hermetic build started PGlite before it found the migrations missing (D228).
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,393 tests passed (8 todo), with no dependency violations.
+- `pnpm run test:integration` was green: 7 files, 51 tests passed.
+- The new `db.test.ts` case fails with `db.ts` reverted and passes with the fix.
 
 ### 11 October 2026 — `dougkeefe/p3an3` (the nightly lane red on a refused smoke key; D227)
 
