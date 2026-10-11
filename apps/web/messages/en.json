@@ -974,7 +974,7 @@
   },
   "oral": {
     "title": "Spoken practice",
-    "intro": "Rehearse the oral interview in one of two modes. In practice mode the examiner asks in writing and aloud, and you answer turn by turn. In studio mode you talk with the examiner live, as in the real test.",
+    "intro": "Rehearse the oral interview with an examiner who asks in French. Choose how you want to talk, then what to talk about.",
     "practiceModeTitle": "Practice mode.",
     "practiceMode": "Each answer you record is sent to OpenAI to be written down, on your key. The recording of your answers stays on this device, and nothing here is synced or exported.",
     "studioModeTitle": "Studio mode.",

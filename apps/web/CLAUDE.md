@@ -317,7 +317,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     delete-everywhere. `components/key/NoKeyCard.tsx` is shared with the workshop, by namespace.
     `container-generate.test.ts` runs the real adapter over MSW through both graphs.
   - **Spoken practice** (Phase 5 Slice 2, progress.md D117–D119) is `/practice/oral`, linked from home's actions
-    card. `components/oral/OralPractice.tsx` renders it; its decisions are in `features/oral/`: the reducer, the
+    card. `components/oral/OralPractice.tsx` renders it, its picker in `OralPicker.tsx` (D229: the key card first, the two
+    modes side by side, the sessions as a grid); its decisions are in `features/oral/`: the reducer, the
     microphone rules, the `AnswerSource` bridge, and **`practice-controller.ts`, which owns the microphone, the
     recorders, the run and its end** and is unit-tested over fakes (D121). The `.tsx` holds none of that. The
     controller's `attach` pairs with `dispose`, because Strict Mode remounts the screen in development. The recorder and the level check are `lib/oral/`, over a
