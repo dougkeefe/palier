@@ -142,9 +142,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/sample-question-language-update` | **The landing page's sample question in the language being practised** (D226; the human's request, 11 October 2026): French on `/en`, English on `/fr`, marked with `lang`. | 11 October 2026 |
+| `dougkeefe/p3an3` | **The nightly lane green again** (D227; the human's request, 11 October 2026): the live smoke's key was refused, and the smoke now says what to do about it. | 11 October 2026 |
 
-*(The prior rows — onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — the sample question's language (#74), onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -7620,9 +7620,42 @@ skipping goes to Today.
   checks the passage's `lang="fr"`. The axe checks are unchanged.
 - **Not an ADR.** Product copy, recorded here.
 
+### D227 — the nightly lane was red for a week on a refused smoke key, and the smoke now names that fault
+**Date:** 11 October 2026 · **Status:** accepted (human request)
+
+- **What failed.** `nightly.yml` failed every night from 4 to 10 October. The property and E2E job passed each time;
+  `live-smoke` failed with `InvalidApiKeyError`, a 401 on its first call, `GET /models`. The last green run was 3 October
+  on `d481ad8`.
+- **Not the code.** The commits between that run and the first red one (`c7dd1a2`, `487ca8a`, `0a83818`) touch only the
+  realtime route's `RouteThrottledError`, nothing on the key's path. `OPENAI_SMOKE_KEY` was last set on 29 September and
+  worked for three nights, so OpenAI had stopped accepting the key itself. A scan of the public repository's history found
+  no real key, only the tests' `sk-palier-…` sentinels, so it was not a leak that OpenAI's scanner revoked.
+- **The fix is the secret's**, which only the human can replace (docs/deploy.md, live smoke step 2).
+- **What changed in code.** For a week, issue #65 said only "a live OpenAI call failed, or a configured model is no
+  longer listed". `scripts/live-smoke.mjs` now adds one line for the two faults that belong to the key, matched by the
+  error's name (D158):
+  - `InvalidApiKeyError`: replace the secret;
+  - `RateLimitError`: check the key's monthly limit, deploy.md's misleading-429 case.
+
+  Any other failure prints only what it printed before. The issue's text now points at the run summary, where that line
+  appears. `oral-stability.mjs` is run by hand, never by a lane, so it is unchanged.
+- **Not an ADR.** Operations, recorded here.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 11 October 2026 — `dougkeefe/p3an3` (the nightly lane red on a refused smoke key; D227)
+
+This was not *Next, decided*, which is unchanged. The human asked for the failing nightly to be resolved. Its `live-smoke`
+job had failed every night since 4 October with `InvalidApiKeyError`, because OpenAI refused `OPENAI_SMOKE_KEY`. The cause
+was not in the code, and the remedy is a new secret (D227). The smoke now says so when it happens, and says which limit to
+check on a 429. Issues #65 and #56 close once a dispatched nightly is green.
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,392 tests passed (8 todo), with no dependency violations.
+- The three new tests are in `src/lib/live-smoke.test.ts`: the replace-the-secret hint on a 401, the monthly-limit hint on a
+  429, and no hint on any other failure.
 
 ### 11 October 2026 — `dougkeefe/sample-question-language-update` (the landing page's sample question in the language being practised; D226)
 

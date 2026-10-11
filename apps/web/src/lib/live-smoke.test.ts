@@ -59,6 +59,8 @@ type Options = {
   malformedFirstReview?: boolean;
   status?: number;
   htmlError?: boolean;
+  /** OpenAI refuses the key itself, on the first call, as it does a revoked or deleted one. */
+  keyRefused?: boolean;
   /** How many report calls, from the first, answer with a report the adapter refuses (D127). */
   refusedReports?: number;
 };
@@ -69,6 +71,7 @@ const network = ({
   malformedFirstReview = false,
   status = 200,
   htmlError = false,
+  keyRefused = false,
   refusedReports = 0,
 }: Options = {}) => {
   const requests: { url: string; headers: Record<string, string>; body: string | FormData }[] = [];
@@ -82,6 +85,7 @@ const network = ({
   });
   const fetchImpl: FetchLike = (url, init) => {
     requests.push({ url, headers: init.headers, body: init.body ?? "" });
+    if (keyRefused) return Promise.resolve(reply(401, { error: { code: "invalid_api_key" } }));
     if (url.endsWith("/models")) return Promise.resolve(reply(200, { object: "list", data: listed.map((id) => ({ id })) }));
     if (htmlError) {
       return Promise.resolve({ ok: false, status: 502, json: () => Promise.reject(new SyntaxError("html")), text: () => Promise.resolve("<html>Bad gateway</html>") });
@@ -442,6 +446,27 @@ describe("live-smoke.mjs", () => {
     expect(await main({ argv: [], env: { OPENAI_API_KEY: KEY }, fetchImpl: network({ htmlError: true }).fetchImpl, ...c.io })).toBe(1);
     expect(c.err.join("\n")).toContain("ProviderRequestError");
     expect(c.err.join("\n")).not.toContain("SyntaxError");
+  });
+
+  it("tells the operator to replace the secret when OpenAI refuses the key", async () => {
+    const c = capture();
+    expect(await main({ argv: [], env: { OPENAI_API_KEY: KEY }, fetchImpl: network({ keyRefused: true }).fetchImpl, ...c.io })).toBe(1);
+    const printed = c.err.join("\n");
+    expect(printed).toContain("InvalidApiKeyError");
+    expect(printed).toContain("Replace the OPENAI_SMOKE_KEY Actions secret");
+    expect(printed).not.toContain(KEY);
+  });
+
+  it("tells the operator to check the key's monthly limit when OpenAI rate-limits it", async () => {
+    const c = capture();
+    expect(await main({ argv: [], env: { OPENAI_API_KEY: KEY }, fetchImpl: network({ status: 429 }).fetchImpl, ...c.io })).toBe(1);
+    expect(c.err.join("\n")).toContain("Check its monthly limit on OpenAI");
+  });
+
+  it("adds no operator hint to a failure that is not the key's", async () => {
+    const c = capture();
+    expect(await main({ argv: [], env: { OPENAI_API_KEY: KEY }, fetchImpl: network({ htmlError: true }).fetchImpl, ...c.io })).toBe(1);
+    expect(c.err).toHaveLength(1);
   });
 
   it("exits 1 when a configured model is no longer listed", async () => {

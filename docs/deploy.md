@@ -194,6 +194,9 @@ OpenAI no longer lists, fails the job and opens an issue. It never prints the ke
    with a 429 and opens a misleading issue each night.
 2. Add it as the `OPENAI_SMOKE_KEY` Actions secret, then run the nightly workflow by hand once.
 
+When the run summary says OpenAI refused the key (`InvalidApiKeyError`), the key was revoked or deleted: make a new
+one and replace the secret (step 2). The code is not at fault, and nothing else will turn the job green (D227).
+
 **Re-record the fixtures** when a prompt changes (bump `PROMPT_VERSION` in
 `packages/adapters/src/openai/prompts.ts` first), or when a model id changes. From your own terminal, so the
 key never lands in a transcript or your shell history:
