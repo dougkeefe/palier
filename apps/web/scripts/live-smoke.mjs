@@ -32,6 +32,17 @@ export const RECORDED_DIR = new URL("../../../packages/testing/src/recorded/open
 const usd = (amount) => `US$${amount.toFixed(6)}`;
 
 /**
+ * What the operator must do about a failure that is the smoke key's, not the code's, by the adapter's error name (D158).
+ * The nightly was red for a week on a refused key with only the error's name to go on.
+ */
+const OPERATOR_HINTS = {
+  InvalidApiKeyError:
+    "live-smoke: OpenAI refused the key (401), so it was revoked or deleted. Replace the OPENAI_SMOKE_KEY Actions secret (docs/deploy.md).",
+  RateLimitError:
+    "live-smoke: the key is out of quota or rate-limited (429). Check its monthly limit on OpenAI (docs/deploy.md).",
+};
+
+/**
  * The `pricing.json` `features` block a run measured: a typical use of each feature, as its calls.
  * `oral-assessment` is left out: the smoke's session is short, so its report is no typical one, and
  * pricing takes a real session's (docs/deploy.md; progress.md D127). The diagnostic's interpretation is
@@ -146,6 +157,7 @@ export const main = async ({
   } catch (failure) {
     const name = failure instanceof Error ? failure.name : "Error";
     error(`live-smoke: a live call failed with ${name}, the adapter's own name for the fault. Nothing was recorded.`);
+    if (Object.hasOwn(OPERATOR_HINTS, name)) error(OPERATOR_HINTS[name]);
     return 1;
   }
   if (result.missingModels.length > 0) {

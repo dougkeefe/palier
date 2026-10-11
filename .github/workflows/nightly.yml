@@ -121,7 +121,7 @@ jobs:
         with:
           script: |
             const cause = process.env.SMOKE_OUTCOME === 'failure'
-              ? 'A live OpenAI call failed, or a configured model is no longer listed.'
+              ? 'A live OpenAI call failed, or a configured model is no longer listed. The run summary names the fault, and whether the secret needs replacing.'
               : 'The job failed before the smoke ran (checkout, install or build).';
             const prefix = 'Nightly live smoke failed';
             const sha = context.sha.slice(0, 7);
