@@ -320,9 +320,6 @@
   },
   "today": {
     "title": "Aujourd’hui",
-    "setUpTitle": "Configurez d’abord votre pratique",
-    "setUpBody": "Deux petites questions et vous êtes prêt.",
-    "setUpAction": "Configurer",
     "readinessTitle": "Votre tendance en pratique",
     "diagnosticTitle": "Votre diagnostic",
     "diagnosticScore": "{correct} bonnes réponses sur {attempted}, le {date}.",

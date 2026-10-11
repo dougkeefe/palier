@@ -250,8 +250,8 @@ Five steps, skippable after step 2, under 90 seconds.
 Reordered by the owner on 10 October 2026 (`progress.md` D224): **direction, target, daily goal, the key, then where you are
 now**, so the placement is last and its choice is where onboarding lands: the diagnostic, taken at once (with no key held,
 its own gate asks for one and comes back), or Today. The numbered descriptions below keep their original numbers. The
-non-affiliation statement heads the first step only; the footer carries it on every page. Opening Today with no study
-profile goes straight to step 1.
+non-affiliation statement heads the first step only; the footer carries it on every page. Opening Today or a drill with no
+study profile goes straight to step 1.
 
 1. **Which direction.** French as a second language, or English. Large bilingual cards.
 2. **What you are aiming for.** B or C, with a plain-language description of what each means at work. Optional: "I have a test booked on [date]", which turns the dashboard into a countdown and back-plans the study schedule.

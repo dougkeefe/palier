@@ -320,9 +320,6 @@
   },
   "today": {
     "title": "Today",
-    "setUpTitle": "Set up your practice first",
-    "setUpBody": "Two quick questions and you’re ready.",
-    "setUpAction": "Set up",
     "readinessTitle": "Your practice trend",
     "diagnosticTitle": "Your diagnostic",
     "diagnosticScore": "{correct} of {attempted} correct, on {date}.",

@@ -264,7 +264,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     inside another.** `/settings/key/guide` is static: the owner's explainer video and `KeyGuideSteps`.
   - **Onboarding's order** (D224): direction, target, goal, the key, then the placement last, whose choice is where it lands
     (`destinationFor`: the diagnostic when chosen, key or not, else Today). There is no "Skip for now" button; each step
-    after the target has its own way past. **Today sends a user with no study profile to `/start`** with `router.replace`.
+    after the target has its own way past. **Today and a drill send a user with no study profile to `/start`** with
+    `router.replace`; there is no set-up card.
   - **Onboarding's step 4 is the key** (D220, the owner's request, amending PRD §8.1): `components/onboarding/KeyStep.tsx`,
     with its decisions in `features/onboarding/key-step.ts`. It says why a key (free, safer, then `key.offerStays`, the one
     sentence carrying studio mode's exception), what it costs (`keyStepCosts` over `featureCosts`, never a typed figure),

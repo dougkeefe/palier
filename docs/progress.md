@@ -7571,9 +7571,11 @@ skipping goes to Today.
   A key saved there survives Back from the placement, since `useKeyEntry` reads the held key as it mounts.
 - **The statement** is rendered by the wizard at the head of the first step only (`components/NonAffiliation.tsx`, still the
   one component), and no longer by `/start`'s page. R5 is unchanged: it is in every footer and at the head of onboarding.
-- **Today sends a user with no study profile to `/start`** (`HomeDashboard`, `router.replace`, so Back from the first step
-  does not bounce through Today), and shows "Loading…" meanwhile. A drill opened with no profile still shows the set-up card
-  (`PracticeSession`'s `NeedsSetup`), which was not asked about, so `today.setUp*` stay.
+- **Today, and a drill, send a user with no study profile to `/start`** (`HomeDashboard` and `PracticeSession`'s
+  `NeedsSetup`, `router.replace`, so Back from the first step does not bounce back), showing "Loading…" meanwhile. The
+  set-up card is gone from both, and with it `today.setUpTitle`, `setUpBody` ("Two quick questions and you're ready", which
+  promised two questions before five) and `setUpAction`. The drill's card was first left in place, and the human said it
+  had to go too.
 - The landing page's "Try a free mock exam" is unchanged (the human: its mention was in error).
 - **Not an ADR.** Product copy and flow, recorded here and in the PRD as D220 was.
 
@@ -7589,7 +7591,8 @@ skipping goes to Today.
   - "today asks a first-time user to set up" became "today sends a first-time user straight to onboarding", with Back
     leaving onboarding rather than returning to Today;
   - journey 6's check after "Delete everything" is the redirect;
-  - journey 1 no longer clicks Today's "Take the diagnostic": onboarding lands on the gate itself.
+  - journey 1 no longer clicks Today's "Take the diagnostic": onboarding lands on the gate itself;
+  - new: a drill opened before onboarding lands on `/start`.
 - `content.spec.ts`'s "onboarding carries the statement on every step, not only the first (R5)" pinned D146's placement. It now
   checks the statement on step 1, its absence from `main` on step 2, and the footer's statement there.
 - `key.spec.ts`: the key step is "Step 4 of 5", passing it over reaches the placement, a saved key survives Back, the
@@ -7605,7 +7608,8 @@ Newest first. One entry per session that changed something. Never edit an older 
 This was not *Next, decided*. The human asked for four changes to first run (D224):
 - Today no longer stops a new user at a card whose only action is "Set up";
 - the non-affiliation statement appears on onboarding's first step only;
-- the key step comes before "Where are you now?";
+- the key step comes before "Where are you now?" (and a drill opened before setup goes to onboarding too, with the
+  "Two quick questions" card deleted);
 - "Where are you now?" is the last step, and "Take the diagnostic" goes straight into it.
 
 The agent asked one question, and the human chose "straight into the diagnostic" even with the key passed over. The tests

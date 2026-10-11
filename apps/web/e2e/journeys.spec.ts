@@ -149,6 +149,12 @@ test("today sends a first-time user straight to onboarding, rather than an empty
   await expect(page).not.toHaveURL(/\/en\/(home|start)$/);
 });
 
+test("a drill opened before onboarding sends the user straight to it too, never to a set-up card (D224)", async ({ page }) => {
+  await page.goto("/en/practice/reading");
+  await expect(page).toHaveURL(/\/en\/start$/);
+  await expect(page.getByText("Step 1 of 5")).toBeVisible();
+});
+
 test("onboarding and today render in French too, at parity", async ({ page }) => {
   await page.goto("/fr/start");
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
