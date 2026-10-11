@@ -3,15 +3,15 @@ import type { TargetBand } from "@palier/domain";
 import type { DailyGoal, StudyProfile } from "../../lib/study";
 
 /**
- * Onboarding's shape (product-requirements.md §8.1): direction, target, placement,
- * daily goal, and step 5, the key.
+ * Onboarding's shape (product-requirements.md §8.1, in the owner's order of 10 October 2026, progress.md
+ * D224): direction, target, daily goal, the key, and last the placement, whose choice is where the
+ * wizard lands.
  *
- * Step 5 explains why Palier runs on the user's own key, what it costs and how to get one, and takes
- * the key in place (progress.md D220, the owner's request, superseding D100's "skip path only"). It is
- * shown on **both** paths, since the diagnostic runs on the key too (ADR 25), and left out only when
- * this browser already holds a key. It stays skippable: drills, review and mock exams need none.
+ * The key step explains why Palier runs on the user's own key, what it costs and how to get one, and
+ * takes the key in place (D220). It is left out only when this browser already holds a key, and stays
+ * skippable: drills, review and mock exams need none.
  */
-export const ONBOARDING_STEPS = ["direction", "target", "placement", "goal", "key"] as const;
+export const ONBOARDING_STEPS = ["direction", "target", "goal", "key", "placement"] as const;
 export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
 /** §8.1's five, when the key step is shown. */
@@ -50,18 +50,15 @@ export const stepAfter = (step: OnboardingStep, hasKey: boolean): OnboardingStep
   return steps[steps.indexOf(step) + 1] ?? null;
 };
 
-export const stepBefore = (step: OnboardingStep): OnboardingStep | null =>
-  ONBOARDING_STEPS[ONBOARDING_STEPS.indexOf(step) - 1] ?? null;
+/** Back over the steps shown, so with a key held the placement goes back to the goal, not a hidden key step. */
+export const stepBefore = (step: OnboardingStep, hasKey: boolean): OnboardingStep | null => {
+  const steps = stepsFor(hasKey);
+  return steps[steps.indexOf(step) - 1] ?? null;
+};
 
-/** §8.1: "Five steps, skippable after step 2" — so once the target is chosen. */
-export const canSkipFrom = (step: OnboardingStep): boolean =>
-  ONBOARDING_STEPS.indexOf(step) >= ONBOARDING_STEPS.indexOf("placement");
-
-/**
- * Where "Skip for now" goes from the placement or the goal (D220): past the preferences to the key
- * step, the one worth seeing, or, with a key already held, nowhere, so the wizard finishes.
- */
-export const skipTarget = (hasKey: boolean): "key" | null => (hasKey ? null : "key");
+/** The last step's button, a message key in `start`: it names the diagnostic when that is where it goes (D224). */
+export const finishLabel = (placement: Placement): "finish" | "finishDiagnostic" =>
+  placement === "diagnostic" ? "finishDiagnostic" : "finish";
 
 /** What onboarding stores. The placement choice is a destination, not a setting. */
 export const profileFrom = (choices: OnboardingChoices): StudyProfile => ({
@@ -71,12 +68,10 @@ export const profileFrom = (choices: OnboardingChoices): StudyProfile => ({
 });
 
 /**
- * Where onboarding lands: the diagnostic if chosen and a key is held, otherwise today's plan. The key
- * is taken in step 5 itself (D220), so onboarding never leaves for the key screen. A diagnostic chosen
- * with the key passed over lands on today, which leads with the diagnostic as its next step (D214),
- * rather than on the diagnostic's gate asking for the key the user just declined.
+ * Where onboarding lands (D224): the diagnostic when chosen, otherwise today's plan. The placement is
+ * the last step, so a diagnostic chosen is taken at once, key or not. With no key held, the
+ * diagnostic's own gate asks for one and comes back (ADR 25); the user chose the diagnostic after the
+ * key step, so that gate answers the choice rather than repeating a question just declined.
  */
-export const destinationFor = (
-  choices: OnboardingChoices,
-  { hasKey }: { readonly hasKey: boolean },
-): "/diagnostic" | "/home" => (choices.placement === "diagnostic" && hasKey ? "/diagnostic" : "/home");
+export const destinationFor = (choices: OnboardingChoices): "/diagnostic" | "/home" =>
+  choices.placement === "diagnostic" ? "/diagnostic" : "/home";

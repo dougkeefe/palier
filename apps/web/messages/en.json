@@ -281,6 +281,7 @@
     "back": "Back",
     "next": "Continue",
     "finish": "Start practising",
+    "finishDiagnostic": "Start the diagnostic",
     "directionHeading": "Which language are you practising?",
     "directionFrench": "French as a second language",
     "directionFrenchHint": "Reading and written expression, level C focus",
@@ -315,9 +316,7 @@
     "keyHowHeading": "How to get one",
     "keyHowRead": "Read the steps instead",
     "keyHowGuide": "Open the guide on a page of its own",
-    "keySkip": "Not now, continue without a key",
-    "keyFinishDiagnostic": "Continue to the diagnostic",
-    "keySkipDiagnostic": "Not now: take the diagnostic later, from Today"
+    "keySkip": "Not now, continue without a key"
   },
   "today": {
     "title": "Today",

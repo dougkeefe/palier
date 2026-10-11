@@ -6,7 +6,6 @@ import { type Ref, useEffect, useId, useRef } from "react";
 
 import { estimateText } from "../../features/key/spend-view";
 import { keyStepCosts, keyStepFinish } from "../../features/onboarding/key-step";
-import type { Placement } from "../../features/onboarding/onboarding";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { ExplainerVideo } from "../key/ExplainerVideo";
@@ -14,7 +13,7 @@ import { KeyEntry, useKeyEntry } from "../key/KeyEntry";
 import { KeyGuideSteps } from "../key/KeyGuideSteps";
 
 /**
- * Onboarding's step 5, the key (product-requirements.md §8.1 as amended, progress.md D220), in the order
+ * Onboarding's key step, the fourth (product-requirements.md §8.1 as amended, progress.md D220, D224), in the order
  * the owner asked for:
  * 1. **why** Palier runs on the user's own key: it keeps Palier free, and it is safer. Where the key
  *    goes is `key.offerStays`, the one sentence that carries studio mode's exception (D186), so it
@@ -28,23 +27,19 @@ import { KeyGuideSteps } from "../key/KeyGuideSteps";
  * so the video is the first thing in sight (D222).
  *
  * It is rendered outside the wizard's `<form>`, since `KeyEntry` is a form of its own, and carries its
- * own actions. It stays skippable: drills, review and mock exams need no key.
+ * own actions. It stays skippable: drills, review and mock exams need no key. Either way on leads to the
+ * placement, the last step.
  */
 export function KeyStep({
   useCases,
-  placement,
   headingRef,
-  saving,
   onBack,
-  onFinish,
+  onNext,
 }: {
   readonly useCases: Container["useCases"];
-  readonly placement: Placement;
   readonly headingRef: Ref<HTMLHeadingElement>;
-  readonly saving: boolean;
   readonly onBack: () => void;
-  /** Called with whether a key is now held, which decides where onboarding lands. */
-  readonly onFinish: (held: boolean) => void;
+  readonly onNext: () => void;
 }) {
   const t = useTranslations("start");
   const tKey = useTranslations("key");
@@ -52,7 +47,7 @@ export function KeyStep({
   const entry = useKeyEntry(useCases, { checkOnSave: true });
   const costs = keyStepCosts(useCases.featureCosts());
   const held = entry.state.phase === "saved";
-  const finish = keyStepFinish({ held, placement });
+  const finish = keyStepFinish(held);
   const id = useId();
   const video = useRef<HTMLDivElement>(null);
 
@@ -123,8 +118,7 @@ export function KeyStep({
         <Button
           variant={finish.primary ? "primary" : "ghost"}
           {...(finish.primary ? { arrow: "next" as const } : {})}
-          onClick={() => onFinish(held)}
-          disabled={saving}
+          onClick={onNext}
         >
           {t(finish.label)}
         </Button>

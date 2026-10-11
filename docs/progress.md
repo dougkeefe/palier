@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 9 October 2026 (onboarding's key step: why, what it costs, how, with the owner's video; D220)
+**Last updated:** 10 October 2026 (onboarding reordered: the key before the placement, the placement last, R5 on step 1, Today straight to onboarding; D224)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,9 +142,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/openai-api-key-onboarding` | **Onboarding's key step** (D220; the human's request, 9 October 2026): why Palier runs on the user's own OpenAI key, what it costs, and how to get one with the owner's explainer video, the key pasted and checked in the step, on both paths unless a key is held. The service worker leaves `/media/` to the network. | 9 October 2026 |
+| `dougkeefe/palier-onboarding-adjustments` | **Onboarding reordered** (D224; the human's request, 10 October 2026): direction, target, goal, the key, then "Where are you now?" last, which lands on the diagnostic or Today; the statement on step 1 only; Today sends a new user straight to `/start`. | 10 October 2026 |
 
-*(The prior rows — Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -253,17 +253,19 @@ reviewed blind by Claude, with v3's synthetic content retired.
 What stands between the code and 1.0 is now **the human's**: **Gate O**, then the rest of **Gate M** (an outside item
 submission, the domain and the trademark check). No agent slice is left before them.
 
-**First: onboarding's key step** (`dougkeefe/openai-api-key-onboarding`; D220, D221), on the human's request of 9 October 2026. Merge it once its
-four lanes are green. Then, on the deployed site, the human goes through `/start` as a new user, in both languages and on a
-phone:
-- open the two disclosures, why and what it costs (closed by default since D222), read them with how, and say whether they read right to a non-technical person, and
-  whether the five estimates are the right five;
-- play the video on the deployed site in Safari and Chrome (the medium lane proves its ranges pass the worker, not that a
-  given browser plays H.264);
-- paste a real key and see "This key works.", then take the diagnostic path once and see it lead straight to the launcher.
+**First: onboarding reordered** (`dougkeefe/palier-onboarding-adjustments`; D224, D225), on the human's request of 10 October 2026. Merge it once its
+four lanes are green. Then, on the deployed site, the human opens `/en/home` as a new user, in both languages and on a phone:
+- see it go straight to step 1, with the statement there and on no later step;
+- on the key step, now step 4 (D220, D222), open the two disclosures, read them with how, and say whether they read right to
+  a non-technical person, and whether the five estimates are the right five;
+- play the video in Safari and Chrome (the medium lane proves its ranges pass the worker, not that a given browser plays
+  H.264);
+- paste a real key and see "This key works.", then choose "Take the diagnostic" last and see it lead straight to the
+  launcher; once more with the key passed over, and see the diagnostic's gate.
 
 The French read at Gate O gains D220's keys: `start.key*`, and `key.video*`, `newTab`, `guidePlatform`, `guideIntro` and
-`guideStep1`–`guideStep7` with `guideStep6Below`, and `start.keySkipDiagnostic`. **A French version of the video** is the human's to record, if wanted:
+`guideStep1`–`guideStep7` with `guideStep6Below` (`start.keySkipDiagnostic` and `keyFinishDiagnostic` were deleted by D224,
+which adds `start.finishDiagnostic`). **A French version of the video** is the human's to record, if wanted:
 the French captions say the video is in English.
 
 **Before it: Today on the dashboard layout** merged (#69; D219). On the deployed site, the
@@ -7541,9 +7543,80 @@ The slowest shard is 11% shorter locally. CI runs about twice the local time, so
 260 s. **Revisit when** a shard is killed at its budget again. The next lever is a third shard, which renames the required
 checks (D178, `docs/deploy.md`), so that is the human's call.
 
+### D224 — onboarding asks for the key before the placement, ends on the placement, says R5 on its first step, and Today no longer stops a new user at a card
+**Date:** 10 October 2026 · **Status:** accepted (human's request and answer; agent's build). Amends PRD §8.1's order, D146's
+"`/start`, above the wizard, so every step shows it", and D220's "a key passed over on the diagnostic path lands on Today"
+
+The human, landing on `/en/home` for the first time: the card "Set up your practice first / Two quick questions and you're
+ready" promised two questions and led to five, and its only action was "Set up", so it was a click with nothing to decide.
+The non-affiliation statement sat above every step, though the footer already carries it on every page. And the order should
+be the daily goal, then the key, then "Where are you now?" last, where "Take the diagnostic" goes straight into it and
+skipping goes to Today.
+
+- **The order** (`features/onboarding/onboarding.ts`): direction, target, goal, key, placement. Five steps, or four when a key
+  is already held, as before. `stepBefore` now walks the steps shown (`stepsFor(hasKey)`), so with a key held Back from the
+  placement reaches the goal, never a hidden key step.
+- **"Skip for now" as a button is gone**, with `canSkipFrom` and `skipTarget`. In the new order it could only skip from the
+  goal to the key step, the same as Continue. Every step after the target still has its own way past it: the goal has a
+  default, the key step has "Not now", and the placement has "Skip for now" as a choice. PRD §8.1's "skippable after step 2"
+  holds.
+- **Where it lands** is the placement's choice alone (`destinationFor(choices)`): the diagnostic when chosen, key or not,
+  otherwise Today. The agent asked; the human chose "straight into the diagnostic" over Today or a disabled option. D220
+  sent a declined key to Today because the gate would have followed the key step at once; now the placement stands between
+  them, and the user has chosen the diagnostic after declining. The diagnostic's own gate asks for the key and comes back
+  (ADR 25, `returnAfterKey`). The last step's button says where it goes (`finishLabel`): "Start the diagnostic" when the
+  diagnostic is chosen, "Start practising" otherwise (`start.finishDiagnostic`, new; found by the branch's own review).
+- **The key step's way on** (`keyStepFinish(held)`) leads to the placement either way: "Continue" with a key, "Not now,
+  continue without a key" without. `start.keyFinishDiagnostic` and `start.keySkipDiagnostic` are deleted with their only use.
+  A key saved there survives Back from the placement, since `useKeyEntry` reads the held key as it mounts.
+- **The statement** is rendered by the wizard at the head of the first step only (`components/NonAffiliation.tsx`, still the
+  one component), and no longer by `/start`'s page. R5 is unchanged: it is in every footer and at the head of onboarding.
+- **Today sends a user with no study profile to `/start`** (`HomeDashboard`, `router.replace`, so Back from the first step
+  does not bounce through Today), and shows "Loading…" meanwhile. A drill opened with no profile still shows the set-up card
+  (`PracticeSession`'s `NeedsSetup`), which was not asked about, so `today.setUp*` stay.
+- The landing page's "Try a free mock exam" is unchanged (the human: its mention was in error).
+- **Not an ADR.** Product copy and flow, recorded here and in the PRD as D220 was.
+
+### D225 — the tests whose premise D224 changed, said here rather than edited quietly
+**Date:** 10 October 2026 · **Status:** accepted (agent). Follows D224, as D221 followed D220
+
+- `onboarding.test.ts`: the order, the key step before the placement, Back with a key held, and `destinationFor` without
+  `hasKey`, and the new `finishLabel`. The skip cases (`canSkipFrom`, `skipTarget`) are deleted with the functions, and "lands on today … when the
+  diagnostic was chosen and the key passed over" is replaced by D224's rule.
+- `key-step.test.ts`: `keyStepFinish` has two outcomes, not four.
+- `e2e/helpers.ts`'s `onboard()` takes the new order and **lands on `/diagnostic` whenever the diagnostic is chosen**.
+- `journeys.spec.ts`:
+  - "today asks a first-time user to set up" became "today sends a first-time user straight to onboarding", with Back
+    leaving onboarding rather than returning to Today;
+  - journey 6's check after "Delete everything" is the redirect;
+  - journey 1 no longer clicks Today's "Take the diagnostic": onboarding lands on the gate itself.
+- `content.spec.ts`'s "onboarding carries the statement on every step, not only the first (R5)" pinned D146's placement. It now
+  checks the statement on step 1, its absence from `main` on step 2, and the footer's statement there.
+- `key.spec.ts`: the key step is "Step 4 of 5", passing it over reaches the placement, a saved key survives Back, the
+  four-step case reaches the wizard by Today's redirect and goes back from the placement to the goal, and the diagnostic path
+  with no key lands on the gate directly. D222's viewport checks are unchanged.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 10 October 2026 — `dougkeefe/palier-onboarding-adjustments` (onboarding reordered, R5 on step 1, Today straight to onboarding; D224, D225)
+
+This was not *Next, decided*. The human asked for four changes to first run (D224):
+- Today no longer stops a new user at a card whose only action is "Set up";
+- the non-affiliation statement appears on onboarding's first step only;
+- the key step comes before "Where are you now?";
+- "Where are you now?" is the last step, and "Take the diagnostic" goes straight into it.
+
+The agent asked one question, and the human chose "straight into the diagnostic" even with the key passed over. The tests
+whose premise changed are listed in D225.
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,386 tests passed (8 todo), with no dependency violations.
+- The whole Playwright suite passed locally on a fresh production build: 116 tests, warmup, offline and chromium.
+- The flow was driven in a browser on the hermetic dev server. `/en/home` went to `/en/start` at "Step 1 of 5" with the
+  statement shown, and step 2 did not show it. "Not now" on step 4 led to the placement at "Step 5 of 5", and
+  "Take the diagnostic" landed on `/en/diagnostic`.
 
 ### 9 October 2026 — `dougkeefe/onboarding-why/what-hidden` (step 5's why and cost collapsed, the video in view; D222)
 

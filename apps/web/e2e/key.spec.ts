@@ -87,21 +87,26 @@ test("journey 5: onboarding's step 5 takes the key and checks it, then the key s
   await expect(page.getByText(/the key ending in/)).toHaveCount(0);
 });
 
-/** From `/en/start`, through the first four steps with their defaults, to step 5. */
-const toKeyStep = async (page: Page, placement: "diagnostic" | "skip") => {
+/** From `/en/start`, through the first three steps with their defaults, to the key, step 4 (D224). */
+const toKeyStep = async (page: Page) => {
   const next = page.getByRole("button", { name: "Continue" });
   await expect(next).toBeEnabled();
-  await next.click();
-  await next.click();
-  await page.getByRole("radio", { name: placement === "diagnostic" ? /Take the diagnostic/ : /Skip for now/ }).check();
-  await next.click();
-  await next.click();
+  for (let i = 0; i < 3; i++) await next.click();
 };
 
-test("step 5 says why a key, what it costs and how to get one, with the video, on the skip path (D220)", async ({ page }) => {
+/** From the key step on to the placement, the last step, choosing it and finishing. */
+const placeAndFinish = async (page: Page, placement: "diagnostic" | "skip") => {
+  await expect(page.getByRole("heading", { level: 2, name: "Where are you now?" })).toBeFocused();
+  await page.getByRole("radio", { name: placement === "diagnostic" ? /Take the diagnostic/ : /Skip for now/ }).check();
+  await page.getByRole("button", { name: placement === "diagnostic" ? "Start the diagnostic" : "Start practising" }).click();
+};
+
+test("the key step says why a key, what it costs and how to get one, with the video, before the placement (D220, D224)", async ({
+  page,
+}) => {
   await page.goto("/en/start");
-  await toKeyStep(page, "skip");
-  await expect(page.getByText("Step 5 of 5")).toBeVisible();
+  await toKeyStep(page);
+  await expect(page.getByText("Step 4 of 5")).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "Add your OpenAI key" })).toBeFocused();
 
   // Why and what it costs come first, closed until asked, so the video is in view on arrival (D222).
@@ -140,15 +145,17 @@ test("step 5 says why a key, what it costs and how to get one, with the video, o
   await expect(page.getByRole("link", { name: /OpenAI’s limits page/ })).toHaveAttribute("target", "_blank");
   await axeClean(page);
 
-  // Passed over, the wizard finishes and lands on today.
+  // Passed over, the wizard goes on to the placement, the last step, and from there to today.
   await page.getByRole("button", { name: "Not now, continue without a key" }).click();
+  await expect(page.getByText("Step 5 of 5")).toBeVisible();
+  await placeAndFinish(page, "skip");
   await expect(page).toHaveURL(/\/en\/home$/);
 });
 
-test("step 5 says so at once when OpenAI refuses the key pasted there", async ({ page, context }) => {
+test("the key step says so at once when OpenAI refuses the key pasted there", async ({ page, context }) => {
   await stubOpenAi(context, () => refusal(429, "insufficient_quota"));
   await page.goto("/en/start");
-  await toKeyStep(page, "skip");
+  await toKeyStep(page);
   await page.getByLabel("OpenAI API key").fill(SENTINEL);
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByRole("status").filter({ hasText: "has reached its usage limit or has no credit left" })).toBeVisible();
@@ -159,47 +166,55 @@ for (const [name, size] of [
   ["a taller window", { width: 1440, height: 900 }],
   ["a phone", { width: 390, height: 844 }],
 ] as const) {
-  test(`step 5 opens with the whole video and its heading in view on ${name} (D222)`, async ({ page }) => {
+  test(`the key step opens with the whole video and its heading in view on ${name} (D222)`, async ({ page }) => {
     await page.setViewportSize(size);
     await page.goto("/en/start");
-    await toKeyStep(page, "skip");
+    await toKeyStep(page);
     await expect(page.getByRole("heading", { level: 2, name: "Add your OpenAI key" })).toBeFocused();
     await expect(page.getByRole("heading", { level: 2, name: "Add your OpenAI key" })).toBeInViewport();
     await expect(page.locator("video")).toBeInViewport({ ratio: 1 });
   });
 }
 
-test("on the diagnostic path step 5 is shown too, and a key saved there leads straight to the diagnostic (D220)", async ({
+test("a key saved in the key step, then the diagnostic chosen last, leads straight to the diagnostic's launcher (D224)", async ({
   page,
   context,
 }) => {
   await stubOpenAi(context);
   await page.goto("/en/start");
-  await toKeyStep(page, "diagnostic");
-  await expect(page.getByText("Step 5 of 5")).toBeVisible();
+  await toKeyStep(page);
   await page.getByLabel("OpenAI API key").fill(SENTINEL);
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByRole("status").filter({ hasText: "This key works." })).toBeVisible();
-  await page.getByRole("button", { name: "Continue to the diagnostic" }).click();
+  await page.getByRole("button", { name: "Continue" }).click();
+  // Back from the placement finds the key step still holding the key.
+  await page.getByRole("button", { name: "Back" }).click();
+  await expect(page.getByText(/^Saved on this device/)).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await placeAndFinish(page, "diagnostic");
   await expect(page).toHaveURL(/\/en\/diagnostic$/);
   // The key is held, so the launcher stands where the gate would.
   await expect(page.getByRole("button", { name: /^Start the .* diagnostic$/ })).toBeVisible();
 });
 
-test("with a key already held, onboarding leaves step 5 out and counts four steps", async ({ page, context }) => {
+test("with a key already held, onboarding leaves the key step out and counts four steps", async ({ page, context }) => {
   await stubOpenAi(context);
   await page.goto("/en/settings/key");
   await page.getByLabel("OpenAI API key").fill(SENTINEL);
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByText(/^Saved on this device/)).toBeVisible();
-  // In-app, since the hermetic container lives for one page load: today asks a new user to set up.
+  // In-app, since the hermetic container lives for one page load: today sends a new user to onboarding (D224).
   await page.getByRole("link", { name: "Today", exact: true }).click();
-  await page.getByRole("link", { name: "Set up", exact: true }).click();
+  await expect(page).toHaveURL(/\/en\/start$/);
   await expect(page.getByText("Step 1 of 4")).toBeVisible();
   const next = page.getByRole("button", { name: "Continue" });
   for (let i = 0; i < 3; i++) await next.click();
+  // From the goal straight to the placement; and back from it to the goal, never to a hidden key step.
   await expect(page.getByText("Step 4 of 4")).toBeVisible();
-  await page.getByRole("button", { name: "Start practising" }).click();
+  await page.getByRole("button", { name: "Back" }).click();
+  await expect(page.getByRole("heading", { level: 2, name: "How much time a day?" })).toBeFocused();
+  await next.click();
+  await placeAndFinish(page, "skip");
   await expect(page).toHaveURL(/\/en\/home$/);
 });
 
@@ -215,13 +230,10 @@ test("the key guide shows the video and the seven steps, and links back to the k
   await axeClean(page);
 });
 
-test("on the diagnostic path with the key passed over, onboarding lands on today, and the diagnostic asks for the key first (ADR 25, D220)", async ({
+test("with the key passed over, choosing the diagnostic last lands on it, and it asks for the key first (ADR 25, D224)", async ({
   page,
 }) => {
   await onboard(page, "diagnostic");
-  // Not the gate the user just declined: today, which leads with the diagnostic.
-  await expect(page).toHaveURL(/\/en\/home$/);
-  await page.getByRole("link", { name: "Take the diagnostic" }).click();
   await expect(page).toHaveURL(/\/en\/diagnostic$/);
   // No question is asked before the key is held: the gate stands where the launcher would.
   await expect(page.getByRole("button", { name: /^Start the .* diagnostic$/ })).toHaveCount(0);

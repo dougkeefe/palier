@@ -1,8 +1,6 @@
 import type { FeatureCost } from "@palier/app";
 import type { AiFeature } from "@palier/domain";
 
-import type { Placement } from "./onboarding";
-
 /**
  * Onboarding's key step (progress.md D220): what a key costs, as a short list of the features a new
  * user meets first, each a typical use priced from `pricing.json` through `featureCosts`, so no figure
@@ -34,21 +32,9 @@ export const keyStepCosts = (costs: readonly FeatureCost[]): readonly KeyStepCos
   });
 
 /**
- * The step's way on (D220), a message key in `start`: with a key saved, the wizard's own finish, or the
- * diagnostic's on that path; with none, a quiet skip that says where it goes, since the key is
- * recommended but never required. On the diagnostic path that is today, whose next step is the
- * diagnostic (`destinationFor`), so the button says the diagnostic waits there.
+ * The step's way on (D220, D224), a message key in `start`. Both lead to the placement, the last step:
+ * with a key saved, the wizard's own "Continue"; with none, a quiet skip that names itself, since the
+ * key is recommended but never required.
  */
-export const keyStepFinish = ({
-  held,
-  placement,
-}: {
-  readonly held: boolean;
-  readonly placement: Placement;
-}): {
-  readonly label: "finish" | "keyFinishDiagnostic" | "keySkip" | "keySkipDiagnostic";
-  readonly primary: boolean;
-} => {
-  if (!held) return { label: placement === "diagnostic" ? "keySkipDiagnostic" : "keySkip", primary: false };
-  return { label: placement === "diagnostic" ? "keyFinishDiagnostic" : "finish", primary: true };
-};
+export const keyStepFinish = (held: boolean): { readonly label: "next" | "keySkip"; readonly primary: boolean } =>
+  held ? { label: "next", primary: true } : { label: "keySkip", primary: false };

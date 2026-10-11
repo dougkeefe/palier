@@ -8,10 +8,9 @@ import {
   DEFAULT_CHOICES,
   type OnboardingChoices,
   type OnboardingStep,
-  canSkipFrom,
   destinationFor,
+  finishLabel,
   profileFrom,
-  skipTarget,
   stepAfter,
   stepBefore,
   stepperSegments,
@@ -20,6 +19,7 @@ import {
 import { useRouter } from "../../i18n/navigation";
 import { DAILY_GOALS, writeStudyProfile } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
+import { NonAffiliation } from "../NonAffiliation";
 import { KeyStep } from "./KeyStep";
 
 /**
@@ -28,10 +28,11 @@ import { KeyStep } from "./KeyStep";
  * the platform. Each step's heading takes focus as it appears, so a screen-reader user
  * hears where they are (§11: focus is never lost as a flow advances).
  *
- * Step 5, the key, is shown on both paths unless this browser already holds a key (progress.md
- * D220): why Palier runs on the user's own key, what it costs, and how to get one, with the key
+ * The order is the owner's (progress.md D224): direction, target, goal, the key, then the placement,
+ * whose choice is where the wizard lands. The key step is shown unless this browser already holds a
+ * key (D220): why Palier runs on the user's own key, what it costs, and how to get one, with the key
  * taken in place. It is `KeyStep`, outside the wizard's `<form>`, since the key's own form sits in
- * it. "Skip for now" skips the preferences, not the key step.
+ * it. The non-affiliation statement heads the first step only; the footer carries it on every page.
  */
 export function OnboardingWizard() {
   const t = useTranslations("start");
@@ -42,7 +43,7 @@ export function OnboardingWizard() {
   const [choices, setChoices] = useState<OnboardingChoices>(DEFAULT_CHOICES);
   const [saving, setSaving] = useState(false);
   const [failed, setFailed] = useState(false);
-  // Read once: a key saved in step 5 itself keeps the step, so Back and forth never loses it.
+  // Read once: a key saved in the key step itself keeps the step, so Back and forth never loses it.
   const [hasKey, setHasKey] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
@@ -71,13 +72,12 @@ export function OnboardingWizard() {
   const steps = stepsFor(hasKey);
   const index = steps.indexOf(step);
 
-  /** `held` is whether a key is held as the wizard ends: read on mount, or saved in step 5 itself. */
-  const finish = async (final: OnboardingChoices, held: boolean = hasKey) => {
+  const finish = async (final: OnboardingChoices) => {
     if (container.status !== "ready") return;
     setSaving(true);
     try {
       await writeStudyProfile(container.container.settings, profileFrom(final));
-      router.push(destinationFor(final, { hasKey: held }));
+      router.push(destinationFor(final));
     } catch {
       setFailed(true);
       setSaving(false);
@@ -85,18 +85,10 @@ export function OnboardingWizard() {
   };
 
   const after = stepAfter(step, hasKey);
+  const before = stepBefore(step, hasKey);
   const onNext = () => {
-    const next = after;
-    if (next === null) void finish(choices);
-    else setStep(next);
-  };
-
-  const onSkip = () => {
-    const skipped: OnboardingChoices = { ...choices, placement: "skip" };
-    setChoices(skipped);
-    const target = skipTarget(hasKey);
-    if (target === null) void finish(skipped);
-    else setStep(target);
+    if (after === null) void finish(choices);
+    else setStep(after);
   };
 
   const stepper = (
@@ -117,11 +109,9 @@ export function OnboardingWizard() {
         {stepper}
         <KeyStep
           useCases={container.container.useCases}
-          placement={choices.placement}
           headingRef={headingRef}
-          saving={saving}
-          onBack={() => setStep(stepBefore(step) ?? step)}
-          onFinish={(held) => void finish(choices, held)}
+          onBack={() => setStep(before ?? step)}
+          onNext={onNext}
         />
         {failure}
       </div>
@@ -136,6 +126,7 @@ export function OnboardingWizard() {
         onNext();
       }}
     >
+      {step === "direction" ? <NonAffiliation /> : null}
       {stepper}
 
       {step === "direction" ? (
@@ -244,18 +235,13 @@ export function OnboardingWizard() {
       {failure}
 
       <div className="app-actions">
-        {stepBefore(step) === null ? null : (
-          <Button variant="secondary" onClick={() => setStep(stepBefore(step) ?? step)}>
+        {before === null ? null : (
+          <Button variant="secondary" onClick={() => setStep(before)}>
             {t("back")}
           </Button>
         )}
-        {canSkipFrom(step) && after !== null ? (
-          <Button variant="ghost" onClick={onSkip} disabled={saving}>
-            {t("placementSkip")}
-          </Button>
-        ) : null}
         <Button type="submit" arrow="next" disabled={saving || container.status !== "ready"}>
-          {after === null ? t("finish") : t("next")}
+          {after === null ? t(finishLabel(choices.placement)) : t("next")}
         </Button>
       </div>
     </form>

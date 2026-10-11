@@ -22,10 +22,8 @@ test("journey 1: onboarding, the key the diagnostic needs, the diagnostic, its r
   page,
 }) => {
   await stubOpenAi(page.context());
-  // The key passed over in step 5, onboarding lands on today, whose next step is the diagnostic (D214, D220).
+  // The key passed over in step 4, the diagnostic chosen last still lands on it (D224).
   await onboard(page, "diagnostic");
-  await page.getByRole("link", { name: "Take the diagnostic" }).click();
-  await expect(page).toHaveURL(/\/en\/diagnostic$/);
   // The diagnostic runs on the key: with none, its gate says what the key buys and where to add it.
   await axeClean(page);
   await addKeyAtDiagnosticGate(page, SENTINEL);
@@ -139,10 +137,16 @@ test("the drill keeps focus on the next item's options after advancing (§11)", 
   await expect(page.getByRole("radio").first()).toBeFocused();
 });
 
-test("today asks a first-time user to set up, rather than showing an empty chart (§14)", async ({ page }) => {
+test("today sends a first-time user straight to onboarding, rather than an empty chart or a card that only says set up (§14, D224)", async ({
+  page,
+}) => {
   await page.goto("/en/home");
-  await expect(page.getByRole("heading", { name: "Set up your practice first" })).toBeVisible();
+  await expect(page).toHaveURL(/\/en\/start$/);
+  await expect(page.getByText("Step 1 of 5")).toBeVisible();
   await axeClean(page);
+  // Replaced, not pushed: Back from the first step does not bounce through today again.
+  await page.goBack();
+  await expect(page).not.toHaveURL(/\/en\/(home|start)$/);
 });
 
 test("onboarding and today render in French too, at parity", async ({ page }) => {
@@ -184,9 +188,9 @@ test("journey 6: export, delete everything, import, and the same progress is bac
   await page.getByRole("button", { name: "Yes, delete everything" }).click();
   await expect(page.getByText("Everything on this device has been deleted.")).toBeVisible();
 
-  // It really is empty: today asks to set up again.
+  // It really is empty: today sends the user to onboarding again.
   await page.getByRole("link", { name: "Today", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Set up your practice first" })).toBeVisible();
+  await expect(page).toHaveURL(/\/en\/start$/);
 
   // Import the file, and the same progress is back.
   await page.getByRole("link", { name: "Your data" }).click();

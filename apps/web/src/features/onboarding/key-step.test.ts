@@ -38,20 +38,12 @@ describe("keyStepCosts — what a key costs, on onboarding's key step", () => {
   });
 });
 
-describe("keyStepFinish — the key step's way on", () => {
+describe("keyStepFinish — the key step's way on to the placement", () => {
   it("offers a quiet skip that names itself while no key is saved", () => {
-    expect(keyStepFinish({ held: false, placement: "skip" })).toEqual({ label: "keySkip", primary: false });
+    expect(keyStepFinish(false)).toEqual({ label: "keySkip", primary: false });
   });
 
-  it("says the diagnostic waits on today when the key is passed over on the diagnostic path", () => {
-    expect(keyStepFinish({ held: false, placement: "diagnostic" })).toEqual({ label: "keySkipDiagnostic", primary: false });
-  });
-
-  it("finishes the wizard as its primary action once a key is saved on the skip path", () => {
-    expect(keyStepFinish({ held: true, placement: "skip" })).toEqual({ label: "finish", primary: true });
-  });
-
-  it("leads on to the diagnostic once a key is saved on the diagnostic path", () => {
-    expect(keyStepFinish({ held: true, placement: "diagnostic" })).toEqual({ label: "keyFinishDiagnostic", primary: true });
+  it("continues as its primary action once a key is saved", () => {
+    expect(keyStepFinish(true)).toEqual({ label: "next", primary: true });
   });
 });

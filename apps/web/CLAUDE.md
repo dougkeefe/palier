@@ -107,7 +107,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   - Nothing names or styles a pilot item (D84 ruling 9).
 - **The R5 non-affiliation statement** is in the footer of every page, from day one, and **beside every band
   estimate and at the head of onboarding** (Gate K, progress.md D145): the exam result and home's exam half, the
-  diagnostic readout, the oral report, workshop feedback, `/progress` and `/start`. Every surface renders
+  diagnostic readout, the oral report, workshop feedback, `/progress` and onboarding's first step (D224: the wizard renders
+  it on that step only; the footer carries it after). Every surface renders
   `components/NonAffiliation.tsx`, never the key, so the wording cannot drift; a new screen that shows a band adds it.
 - **The about page and the privacy notice** (`/about`, `/privacy`, D145) are static pages the agent drafted and the
   human reads at Gate L. **A change to what the server holds, never holds or deletes changes `/privacy` in the same
@@ -261,15 +262,17 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     **name**, never the raw error. The form itself is `components/key/KeyEntry.tsx` (`useKeyEntry` holds the state, so
     the key screen keeps its own loading gate), shared with onboarding. **It is a `<form>` of its own, so never put it
     inside another.** `/settings/key/guide` is static: the owner's explainer video and `KeyGuideSteps`.
-  - **Onboarding's step 5 is the key** (D220, the owner's request, amending PRD §8.1): `components/onboarding/KeyStep.tsx`,
+  - **Onboarding's order** (D224): direction, target, goal, the key, then the placement last, whose choice is where it lands
+    (`destinationFor`: the diagnostic when chosen, key or not, else Today). There is no "Skip for now" button; each step
+    after the target has its own way past. **Today sends a user with no study profile to `/start`** with `router.replace`.
+  - **Onboarding's step 4 is the key** (D220, the owner's request, amending PRD §8.1): `components/onboarding/KeyStep.tsx`,
     with its decisions in `features/onboarding/key-step.ts`. It says why a key (free, safer, then `key.offerStays`, the one
     sentence carrying studio mode's exception), what it costs (`keyStepCosts` over `featureCosts`, never a typed figure),
     and how (the video, the written steps, and `KeyEntry`, which checks the key as soon as it is saved). Why and cost are
-    `<details>`, closed by default, and the step scrolls the video into view as it mounts, so it is above the fold (D222). It is shown on
-    **both** paths unless a key is already held (`stepsFor(hasKey)`), rendered outside the wizard's `<form>`, and stays
-    skippable; "Skip for now" lands on it. On the diagnostic path, a key passed over lands on Today, never on the gate the
-    user just declined (`destinationFor`); Today leads with the diagnostic, and taking it meets **the diagnostic's own
-    gate** (ADR 25): with none `DiagnosticLauncher` shows `NoKeyCard`, whose link carries `?next=diagnostic`, and the key
+    `<details>`, closed by default, and the step scrolls the video into view as it mounts, so it is above the fold (D222). It is
+    shown unless a key is already held (`stepsFor(hasKey)`), rendered outside the wizard's `<form>`, and stays skippable;
+    either way on leads to the placement (`keyStepFinish`). A diagnostic chosen with no key held meets **the diagnostic's own
+    gate** (ADR 25): `DiagnosticLauncher` shows `NoKeyCard`, whose link carries `?next=diagnostic`, and the key
     screen then offers the way back (`returnAfterKey`, an allow-list, never an address from the query).
   - **The explainer video** is `public/media/openai-explainer.mp4`, committed (only `public/content/` and `public/sw.js`
     are generated), rendered by `components/key/ExplainerVideo.tsx` with `preload="none"`, never autoplaying, and a poster
@@ -409,7 +412,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   keep it the `chromium` project's dependency. It visits each route in English, and `/fr` once (D223). **`offline` is listed before `chromium`**
   so `--shard` puts the production specs in shard 1 beside the warmup; listed last, they pushed shard 2 past its budget (D223). **`chromium`** (hermetic, `next dev`) runs the
   smoke tests and journeys 1, 2, 6, the review empty state, the report control and per-page
-  titles, **journey 5 and step 5 on both paths** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
+  titles, **journey 5 and onboarding's key step** (`key.spec.ts`), **the hermetic key-leak test** (`key-leak.spec.ts`),
   `errors.spec.ts` (the 404, a thrown route with its bundle and the key-leak sentinel, and the global view, D141–D142),
   `content.spec.ts` (the about page and privacy notice, onboarding's statement, the shortcut sheet, `/progress`
   printed to one page, D145, and the library with a drill's link into it, D162), `motion.spec.ts` (D160),
