@@ -92,18 +92,18 @@
       }
     },
     "sample": {
-      "tag": "Sample reading question",
-      "passage": "Please note that Thursday’s team meeting has been moved to Friday at 10:00 because the boardroom is unavailable.",
-      "question": "Why was the meeting moved?",
+      "tag": "Sample French reading question",
+      "passage": "Veuillez noter que la réunion d’équipe de jeudi est reportée à vendredi, à 10 h, car la salle du conseil n’est pas disponible.",
+      "question": "Pourquoi la réunion a-t-elle été reportée?",
       "options": {
-        "a": "The boardroom is unavailable",
-        "b": "Several people are away",
-        "c": "The agenda has changed",
-        "d": "The deadline was extended"
+        "a": "La salle du conseil n’est pas disponible",
+        "b": "Plusieurs personnes sont absentes",
+        "c": "L’ordre du jour a changé",
+        "d": "L’échéance a été prolongée"
       },
       "hint": "Choose an answer.",
-      "correct": "Correct. The reason follows “because”. The full mock exams are timed and use longer workplace passages.",
-      "incorrect": "Not quite. Reread the part after “because”."
+      "correct": "Correct. The reason follows “<w>car</w>”. The full mock exams are timed and use longer workplace passages.",
+      "incorrect": "Not quite. Reread the part after “<w>car</w>”."
     },
     "oral": {
       "tag": "Test three · Oral",
