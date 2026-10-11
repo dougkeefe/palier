@@ -92,18 +92,18 @@
       }
     },
     "sample": {
-      "tag": "Question type de compréhension de l’écrit",
-      "passage": "Veuillez noter que la réunion d’équipe de jeudi est reportée à vendredi, à 10 h, car la salle du conseil n’est pas disponible.",
-      "question": "Pourquoi la réunion a-t-elle été reportée?",
+      "tag": "Question type de compréhension de l’écrit en anglais",
+      "passage": "Please note that Thursday’s team meeting has been moved to Friday at 10:00 because the boardroom is unavailable.",
+      "question": "Why was the meeting moved?",
       "options": {
-        "a": "La salle du conseil n’est pas disponible",
-        "b": "Plusieurs personnes sont absentes",
-        "c": "L’ordre du jour a changé",
-        "d": "L’échéance a été prolongée"
+        "a": "The boardroom is unavailable",
+        "b": "Several people are away",
+        "c": "The agenda has changed",
+        "d": "The deadline was extended"
       },
       "hint": "Choisissez une réponse.",
-      "correct": "Exact. La raison suit « car ». Les examens blancs sont chronométrés et utilisent des textes du milieu de travail plus longs.",
-      "incorrect": "Pas tout à fait. Relisez ce qui suit « car »."
+      "correct": "Exact. La raison suit « <w>because</w> ». Les examens blancs sont chronométrés et utilisent des textes du milieu de travail plus longs.",
+      "incorrect": "Pas tout à fait. Relisez ce qui suit « <w>because</w> »."
     },
     "oral": {
       "tag": "Épreuve trois · Oral",

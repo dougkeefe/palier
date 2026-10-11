@@ -10,6 +10,13 @@
  */
 export const showsAppChrome = (pathname: string): boolean => pathname !== "/";
 
+/**
+ * The language the sample question is written in: the one the visitor is practising, which is the
+ * other one from the page's. An anglophone on `/en` is preparing for the French test, so the sample
+ * is French; the tag, hint and verdict around it stay in the page's language.
+ */
+export const sampleLanguage = (locale: string): "en" | "fr" => (locale === "fr" ? "en" : "fr");
+
 /** The sample question's four options, in the order shown. The first is the right answer. */
 export const SAMPLE_OPTIONS = ["a", "b", "c", "d"] as const;
 export type SampleOption = (typeof SAMPLE_OPTIONS)[number];

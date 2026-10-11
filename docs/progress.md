@@ -142,9 +142,9 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/palier-onboarding-adjustments` | **Onboarding reordered** (D224; the human's request, 10 October 2026): direction, target, goal, the key, then "Where are you now?" last, which lands on the diagnostic or Today; the statement on step 1 only; Today sends a new user straight to `/start`. | 10 October 2026 |
+| `dougkeefe/sample-question-language-update` | **The landing page's sample question in the language being practised** (D226; the human's request, 11 October 2026): French on `/en`, English on `/fr`, marked with `lang`. | 11 October 2026 |
 
-*(The prior rows — step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -262,6 +262,9 @@ four lanes are green. Then, on the deployed site, the human opens `/en/home` as 
   H.264);
 - paste a real key and see "This key works.", then choose "Take the diagnostic" last and see it lead straight to the
   launcher; once more with the key passed over, and see the diagnostic's gate.
+
+On the landing page, in both languages: the sample question is French on `/en` and English on `/fr` (D226). Say whether
+the verdict's quoted word ("car", « because ») reads naturally. The French read at Gate O gains `landing.sample.tag`.
 
 The French read at Gate O gains D220's keys: `start.key*`, and `key.video*`, `newTab`, `guidePlatform`, `guideIntro` and
 `guideStep1`–`guideStep7` with `guideStep6Below` (`start.keySkipDiagnostic` and `keyFinishDiagnostic` were deleted by D224,
@@ -7602,9 +7605,35 @@ skipping goes to Today.
   four-step case reaches the wizard by Today's redirect and goes back from the placement to the goal, and the diagnostic path
   with no key lands on the gate directly. D222's viewport checks are unchanged.
 
+### D226 — the landing page's sample question is in the language being practised, not the page's
+**Date:** 11 October 2026 · **Status:** accepted (human request)
+
+- The sample question showed the page's language: an English passage on `/en`, French on `/fr`. A visitor practises the
+  other language, so the sample now shows it: **French on `/en`, English on `/fr`**. The tag, the hint and the verdict stay
+  in the page's language.
+- **No new machinery.** `landing.sample`'s `passage`, `question` and `options` swapped between `en.json` and `fr.json`, so
+  each string still lives once. `sampleLanguage(locale)` in `features/landing/landing.ts` names the other language.
+  `SampleQuestion` puts `lang` on the passage, the question and each option (R9), and the verdict's quoted word ("car",
+  « because ») is a `<w>` span carrying it, the pattern `OralReport` uses.
+- **The test whose premise changed:** `e2e/smoke.spec.ts`'s "the landing page stays clean … sample question answered"
+  clicked English options on `/en` and expected "because". It now clicks the French options and expects "car", and also
+  checks the passage's `lang="fr"`. The axe checks are unchanged.
+- **Not an ADR.** Product copy, recorded here.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 11 October 2026 — `dougkeefe/sample-question-language-update` (the landing page's sample question in the language being practised; D226)
+
+This was not *Next, decided*. The human asked for the landing page's sample question to be in the other language from the
+page, since that is the one the visitor practises: French on `/en`, English on `/fr` (D226). The test whose premise changed
+is listed there.
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,389 tests passed (8 todo), with no dependency violations.
+- `pnpm test:e2e e2e/smoke.spec.ts --project=chromium` passed on a fresh production build: 13 tests, the axe checks included.
+- Screenshots of the answered sample on `/en` and `/fr` were checked by eye.
 
 ### 10 October 2026 — `dougkeefe/palier-onboarding-adjustments` (onboarding reordered, R5 on step 1, Today straight to onboarding; D224, D225)
 

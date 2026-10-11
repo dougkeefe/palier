@@ -70,13 +70,15 @@ test("the landing page stays clean with an answer open and the sample question a
   // The first answer starts open; open another, so two disclosures are expanded.
   await page.getByText("Is my data private?").click();
   await expect(page.getByText("Palier has no server that stores your data.", { exact: false })).toBeVisible();
+  // The English page's sample is in French, the language its visitor is practising (D226).
+  await expect(page.locator(".landing-sample__passage")).toHaveAttribute("lang", "fr");
   // A wrong pick marks it and the right answer, and says so in words.
-  await page.getByRole("button", { name: "The agenda has changed" }).click();
-  await expect(page.getByRole("button", { name: "The agenda has changed" })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.getByText("Not quite. Reread the part after “because”.")).toBeVisible();
+  await page.getByRole("button", { name: "L’ordre du jour a changé" }).click();
+  await expect(page.getByRole("button", { name: "L’ordre du jour a changé" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByText("Not quite. Reread the part after “car”.")).toBeVisible();
   await axeClean(page);
-  await page.getByRole("button", { name: "The boardroom is unavailable" }).click();
-  await expect(page.getByText("Correct. The reason follows “because”.", { exact: false })).toBeVisible();
+  await page.getByRole("button", { name: "La salle du conseil n’est pas disponible" }).click();
+  await expect(page.getByText("Correct. The reason follows “car”.", { exact: false })).toBeVisible();
   await axeClean(page);
 });
 

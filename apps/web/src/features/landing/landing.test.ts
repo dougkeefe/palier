@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { SAMPLE_ANSWER, SAMPLE_OPTIONS, sampleFeedback, sampleOptionState, showsAppChrome } from "./landing";
+import {
+  SAMPLE_ANSWER,
+  SAMPLE_OPTIONS,
+  sampleFeedback,
+  sampleLanguage,
+  sampleOptionState,
+  showsAppChrome,
+} from "./landing";
 
 describe("showsAppChrome", () => {
   it("leaves the landing page to its own header and footer", () => {
@@ -11,6 +18,16 @@ describe("showsAppChrome", () => {
     expect(showsAppChrome("/home")).toBe(true);
     expect(showsAppChrome("/about")).toBe(true);
     expect(showsAppChrome("/practice/reading")).toBe(true);
+  });
+});
+
+describe("sampleLanguage", () => {
+  it("shows the English page a French question, the language its visitor is practising", () => {
+    expect(sampleLanguage("en")).toBe("fr");
+  });
+
+  it("shows the French page an English question", () => {
+    expect(sampleLanguage("fr")).toBe("en");
   });
 });
 
