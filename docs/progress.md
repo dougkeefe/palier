@@ -7593,6 +7593,9 @@ skipping goes to Today.
   - journey 6's check after "Delete everything" is the redirect;
   - journey 1 no longer clicks Today's "Take the diagnostic": onboarding lands on the gate itself;
   - new: a drill opened before onboarding lands on `/start`.
+- `generate.spec.ts`'s "the writing drill links to fresh items…" opened `/en/practice/writing` on a fresh browser, a user
+  with no profile, which the drill now sends to onboarding. It raced the redirect and failed on CI's E2E 1/2. It now onboards
+  first and reaches the writing drill by Today's Start, then follows the same link and checks the same no-key card.
 - `content.spec.ts`'s "onboarding carries the statement on every step, not only the first (R5)" pinned D146's placement. It now
   checks the statement on step 1, its absence from `main` on step 2, and the footer's statement there.
 - `key.spec.ts`: the key step is "Step 4 of 5", passing it over reaches the placement, a saved key survives Back, the

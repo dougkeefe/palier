@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { axeClean } from "./helpers";
+import { axeClean, onboard } from "./helpers";
 import {
   GENERATED_SENTINEL,
   MODELS_ANSWER,
@@ -50,7 +50,12 @@ test("the writing drill links to fresh items, and without a key the screen shows
   context,
 }) => {
   await stubOpenAi(context);
-  await page.goto("/en/practice/writing");
+  // A drill sends a user who has not set up to onboarding (D224), so set up first, then reach the
+  // writing drill in-app, since the hermetic container lives for one page load.
+  await onboard(page, "skip");
+  await page.getByRole("radio", { name: "Written expression" }).check();
+  await page.getByRole("link", { name: /^Start/ }).click();
+  await expect(page).toHaveURL(/\/en\/practice\/writing$/);
   await page.getByRole("link", { name: "Generate a fresh set" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Fresh practice items" })).toBeVisible();
   await expect(page.getByText(/never counted in your progress/)).toBeVisible();
