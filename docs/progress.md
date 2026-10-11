@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 10 October 2026 (onboarding reordered: the key before the placement, the placement last, R5 on step 1, Today straight to onboarding; D224)
+**Last updated:** 11 October 2026 (the spoken-practice picker laid out again; D229)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/oral-page-layout-update` | **The spoken-practice picker laid out again** (D229; the human's request, 11 October 2026): the key card first, the two modes side by side, the sessions as a grid, the picker its own component. | 11 October 2026 |
 | `dougkeefe/p3an3` | **The nightly lane green again** (D227; the human's request, 11 October 2026): the live smoke's key was refused, and the smoke now says what to do about it. | 11 October 2026 |
 
 *(The prior rows — the sample question's language (#74), onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
@@ -262,6 +263,9 @@ four lanes are green. Then, on the deployed site, the human opens `/en/home` as 
   H.264);
 - paste a real key and see "This key works.", then choose "Take the diagnostic" last and see it lead straight to the
   launcher; once more with the key passed over, and see the diagnostic's gate.
+
+On `/practice/oral`, in both languages and on a phone: the picker's new layout (D229). Say whether the two steps read
+in order, and whether the no-key card belongs at the top.
 
 On the landing page, in both languages: the sample question is French on `/en` and English on `/fr` (D226). Say whether
 the verdict's quoted word ("car", « because ») reads naturally. The French read at Gate O gains `landing.sample.tag`.
@@ -7657,9 +7661,50 @@ skipping goes to Today.
 - **Test.** `db.test.ts` stubs `@electric-sql/pglite` and holds that a missing folder rejects with no PGlite constructed.
   It fails without the fix. Locally the integration test went from 0.8–1.6 s to 0.7 s.
 
+### D229 — the spoken-practice picker is laid out as two steps, with the key card first and the sessions as a grid
+**Date:** 11 October 2026 · **Status:** accepted (human request)
+
+- **What was wrong.** `/practice/oral`'s picker opened on a three-sentence intro that repeated the two mode hints. Then
+  came an unstyled "Choose a mode", an info `Callout` as loud as a warning between the two choices, and the no-key card
+  in the middle of the page, though it is what stops a user without a key. Last came five full-width session cards in
+  one column, indented and bulleted because `.app-prompts` never reset `.app-list`'s list style.
+- **What it is now** (top to bottom):
+  - a one-sentence intro, with `NoKeyCard` directly under it, still inline (PRD §14, D108);
+  - "Choose a mode" as a step heading, with the two modes side by side from about 640px so their costs compare at a
+    glance. Where the chosen mode sends what stays visible (R12, D186), as a quiet line under the choice rather than a
+    `Callout`;
+  - "Choose a session" as a grid of cards, two across at the app's 760px column and one on a phone. Each card's length,
+    estimate and Choose share its foot, so the buttons line up. An odd last card, the full simulation, spans the row.
+    That is CSS (`:last-child:nth-child(odd)`), not a count in code (ADR 9);
+  - the earlier sessions, unchanged.
+- **Maintainability.** The picker is `components/oral/OralPicker.tsx`, handed what it needs as `OralStudio` is, with
+  `History` moved there from `OralPractice.tsx`, which loses about 110 lines. There is no new decision logic: it reuses
+  `sessionEstimate`, `studioModeNote`, `estimateText` and `historyTag`, all tested already.
+- **`.app-prompts` now resets its list style**, which also takes the same stray bullets off the writing workshop's
+  prompt list.
+- **Copy.** `oral.intro` is shorter in both languages, and fr `oral.chooseTitle` reads "Choisissez une séance", parallel
+  to "Choisissez un mode". Both join the French read at Gate O.
+- **Tests.** No test changed: every role, name and string the e2e specs pin is kept. Those are the radios' names, each
+  session's `h3` inside its `listitem` with its Choose button, "Choose a session", the exact meta line, the no-key card's
+  heading and the studio note's text.
+- **Not an ADR.** Layout and copy, recorded here.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 11 October 2026 — `dougkeefe/oral-page-layout-update` (the spoken-practice picker laid out again; D229)
+
+This was not *Next, decided*. The human asked for a UX pass on `/practice/oral`'s layout, intuitive and maintainable.
+The picker now has the key card first and two steps of equal weight, the modes side by side and the sessions as a grid.
+It is its own component, `OralPicker.tsx` (D229). No test changed.
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,393 tests passed (8 todo), with no dependency violations.
+- `pnpm test:e2e e2e/oral.spec.ts e2e/oral-production.spec.ts --project=warmup --project=chromium --project=offline` passed
+  on a fresh production build: 14 tests, the picker's axe checks and both French passes included.
+- Screenshots of the picker on the production build were checked by eye, with and without a key, at 1280px and 390px, in
+  both languages, and the writing workshop's prompt list without its bullets.
 
 ### 11 October 2026 — `dougkeefe/p3an3` (the integration lane's PGlite timeout; D228)
 

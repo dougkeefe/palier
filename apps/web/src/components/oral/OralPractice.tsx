@@ -4,7 +4,7 @@ import type { OralHistoryEntry, OralSession, OralSessionChoice } from "@palier/a
 import type { Lang, OralMode, TargetBand } from "@palier/domain";
 import { sessionId } from "@palier/domain";
 import { Button, Callout, Card, Timer, Toast } from "@palier/ui";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { type Ref, useEffect, useId, useMemo, useReducer, useRef, useState } from "react";
 
 import { estimateText } from "../../features/key/spend-view";
@@ -17,12 +17,10 @@ import {
   phaseProgress,
   practice,
   sendsTo,
-  sessionEstimate,
-  studioModeNote,
   studioWarmup,
   turnFocus,
 } from "../../features/oral/practice-view";
-import { endReportLink, historyTag } from "../../features/oral/report-view";
+import { endReportLink } from "../../features/oral/report-view";
 import { type StudioController, studioController } from "../../features/oral/studio-controller";
 import { INITIAL_STUDIO, studio } from "../../features/oral/studio-view";
 import { elapsedText, preflightNotice } from "../../features/writing/workshop-view";
@@ -31,9 +29,8 @@ import type { Container } from "../../lib/container";
 import { browserLevelKit, measureLevel } from "../../lib/oral/level";
 import { browserMediaKit } from "../../lib/oral/recorder";
 import { readStudyProfile } from "../../lib/study";
-import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
-import { NoKeyCard } from "../key/NoKeyCard";
+import { OralPicker } from "./OralPicker";
 import { OralStudio } from "./OralStudio";
 
 /** The practice language is French until the English mirror (Phase 8), as for generated sets. */
@@ -246,75 +243,18 @@ export function OralPractice() {
   );
 
   if (state.phase === "picking") {
-    const perMinuteUsd = setup.perMinuteUsd[held];
     return (
-      <div className="app-stack">
-        <p>{t("intro")}</p>
-        <fieldset className="app-fieldset">
-          <legend>{t("modeTitle")}</legend>
-          {(["practice", "studio"] as const).map((mode) => {
-            const minute = setup.perMinuteUsd[mode];
-            const hint = mode === "practice" ? "modePracticeHint" : "modeStudioHint";
-            return (
-              <label key={mode} className="app-choice">
-                <input type="radio" name="oral-mode" value={mode} checked={held === mode} onChange={() => setHeld(mode)} />
-                <span className="app-choice__label">{t(mode === "practice" ? "modePractice" : "modeStudio")}</span>
-                <span className="app-choice__hint">
-                  {minute === null ? t(`${hint}Unpriced`) : t(hint, { amount: estimateText(minute, locale) })}
-                </span>
-              </label>
-            );
-          })}
-        </fieldset>
-        <Callout tone="info">
-          {held === "practice" ? (
-            <>
-              <strong>{t("practiceModeTitle")}</strong> {t("practiceMode")}
-            </>
-          ) : (
-            <>
-              <strong>{t("studioModeTitle")}</strong> {t(studioModeNote(setup.endpoint !== null))}
-            </>
-          )}
-        </Callout>
-        {setup.keyHeld ? null : <NoKeyCard namespace="oral" estimateUsd={perMinuteUsd} />}
-        <section className="app-stack" aria-labelledby="oral-choose-title">
-          <h2 id="oral-choose-title" ref={stepRef} tabIndex={-1} className="app-step-heading">
-            {t("chooseTitle")}
-          </h2>
-          {setup.choices.length === 0 ? <p>{t("noneAvailable")}</p> : null}
-          <ul className="app-list app-prompts">
-            {setup.choices.map((choice) => {
-              const estimate = sessionEstimate(perMinuteUsd, choice.minutes);
-              return (
-                <li key={choice.sessionType}>
-                  <Card>
-                    <h3 id={`oral-${choice.sessionType}`}>{t(`type_${choice.sessionType}`)}</h3>
-                    <p>{t(`purpose_${choice.sessionType}`)}</p>
-                    <p className="app-muted">
-                      {estimate === null
-                        ? t("sessionMetaUnpriced", { minutes: choice.minutes })
-                        : t("sessionMeta", { minutes: choice.minutes, amount: estimateText(estimate, locale) })}
-                    </p>
-                    {setup.keyHeld ? (
-                      <div className="app-actions">
-                        <Button
-                          variant="secondary"
-                          aria-describedby={`oral-${choice.sessionType}`}
-                          onClick={() => dispatch({ type: "choose", choice, held })}
-                        >
-                          {t("choose")}
-                        </Button>
-                      </div>
-                    ) : null}
-                  </Card>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-        <History history={setup.history} />
-      </div>
+      <OralPicker
+        keyHeld={setup.keyHeld}
+        choices={setup.choices}
+        perMinuteUsd={setup.perMinuteUsd}
+        history={setup.history}
+        ownEndpoint={setup.endpoint !== null}
+        held={held}
+        onHold={setHeld}
+        onChoose={(choice) => dispatch({ type: "choose", choice, held })}
+        headingRef={stepRef}
+      />
     );
   }
 
@@ -675,39 +615,6 @@ function Question({
         </>
       )}
     </div>
-  );
-}
-
-/** This device's past sessions (D126), each opening its report, where one can be asked for when it has none. */
-function History({ history }: { history: readonly OralHistoryEntry[] }) {
-  const t = useTranslations("oral");
-  const format = useFormatter();
-  if (history.length === 0) return null;
-  return (
-    <section className="app-stack" aria-labelledby="oral-history-title">
-      <h2 id="oral-history-title">{t("historyTitle")}</h2>
-      <p className="app-muted">{t("historyNote")}</p>
-      <ul className="app-list">
-        {history.map((entry) => (
-          <li key={entry.id} className="app-history">
-            <span id={`oral-history-${entry.id}`}>
-              {t("historyItem", {
-                type: entry.sessionType === null ? t("historyUnknownType") : t(`type_${entry.sessionType}`),
-                date: format.dateTime(new Date(entry.startedAt), { dateStyle: "medium", timeStyle: "short", timeZone: deviceTimeZone() }),
-              })}
-            </span>
-            <span className="app-tag">{t(historyTag(entry))}</span>
-            <Link
-              href={{ pathname: "/practice/oral/report", query: { session: entry.id } }}
-              className="app-link pl-focusable"
-              aria-describedby={`oral-history-${entry.id}`}
-            >
-              {t("historyOpen")}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </section>
   );
 }
 

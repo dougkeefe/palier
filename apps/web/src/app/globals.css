@@ -1587,6 +1587,9 @@ body {
 .app-prompts {
   display: grid;
   gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .app-criteria {
@@ -1655,6 +1658,55 @@ body {
   gap: 0.75rem;
   align-items: center;
   justify-content: space-between;
+}
+
+/* Spoken practice's picker (progress.md D229): the two modes side by side so their costs compare at a glance, and
+   the sessions as a grid of cards whose length, estimate and choose control sit at each card's foot. An odd last card,
+   the full simulation, takes the whole row, so the grid never ends on a hole however many sessions the profile lists. */
+.app-oral-modes {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+/* Side by side, the shorter mode is stretched to the taller one's height: its label and hint stay together at the top. */
+.app-oral-modes > .app-choice {
+  align-content: start;
+}
+
+.app-oral-sessions {
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+}
+
+.app-oral-sessions > li {
+  display: flex;
+}
+
+.app-oral-sessions > li:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.app-oral-session {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.app-oral-session > :is(h3, p) {
+  margin: 0;
+}
+
+.app-oral-session__foot {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.app-oral-session__foot > p {
+  margin: 0;
 }
 
 /* Studio mode (progress.md D185): the conversation centred on its voice form, and the end control large,

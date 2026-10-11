@@ -974,7 +974,7 @@
   },
   "oral": {
     "title": "Pratique orale",
-    "intro": "Répétez l’entrevue orale dans l’un de deux modes. En mode pratique, l’examinateur pose sa question par écrit et à voix haute, et vous répondez tour à tour. En mode studio, vous conversez en direct avec l’examinateur, comme à la véritable évaluation.",
+    "intro": "Répétez l’entrevue orale avec un examinateur qui vous interroge en français. Choisissez votre façon de parler, puis le sujet.",
     "practiceModeTitle": "Mode pratique.",
     "practiceMode": "Chaque réponse que vous enregistrez est envoyée à OpenAI pour être transcrite, avec votre clé. L’enregistrement de vos réponses reste sur cet appareil, et rien ici n’est synchronisé ni exporté.",
     "studioModeTitle": "Mode studio.",
@@ -987,7 +987,7 @@
     "modeStudio": "Mode studio",
     "modeStudioHint": "Une conversation en direct avec la voix de l’examinateur, comme à la véritable évaluation, sans transcription pendant que vous parlez. Environ {amount} la minute.",
     "modeStudioHintUnpriced": "Une conversation en direct avec la voix de l’examinateur, comme à la véritable évaluation, sans transcription pendant que vous parlez. Aucune estimation pour l’instant.",
-    "chooseTitle": "Choisir une séance",
+    "chooseTitle": "Choisissez une séance",
     "type_warmup": "Mise en train",
     "purpose_warmup": "Présentations, votre rôle et votre ministère. Peu de pression : une bonne première séance.",
     "type_work": "Discussion sur le travail",
