@@ -53,12 +53,11 @@ export const waitForOfflineReady = async (page: Page) => {
 };
 
 /**
- * §8.1 onboarding, placing as asked. Leaves the page wherever onboarding lands. Step 5, the key, is
- * shown on both paths (progress.md D220): given a `key`, it is pasted there, saved and checked at
- * once (so OpenAI must be stubbed to accept it), and the wizard finishes, on the diagnostic path at
- * the diagnostic. Otherwise the step is passed over and onboarding lands on today, whose next step is
- * the diagnostic; from there the diagnostic's own gate asks for the key (ADR 25): see
- * {@link addKeyAtDiagnosticGate}.
+ * §8.1 onboarding, placing as asked, in the owner's order (progress.md D224): direction, target, goal,
+ * the key, then the placement. Leaves the page wherever onboarding lands. Given a `key`, it is pasted in
+ * the key step, saved and checked at once (so OpenAI must be stubbed to accept it); otherwise the step
+ * is passed over. Choosing the diagnostic lands on it either way; with no key, the diagnostic's own gate
+ * asks for one (ADR 25): see {@link addKeyAtDiagnosticGate}.
  */
 export const onboard = async (page: Page, placement: "diagnostic" | "skip", { key }: { key?: string } = {}) => {
   await page.goto("/en/start");
@@ -69,31 +68,26 @@ export const onboard = async (page: Page, placement: "diagnostic" | "skip", { ke
   await page.getByRole("radio", { name: /Level C/ }).check();
   await next.click();
 
-  await page
-    .getByRole("radio", { name: placement === "diagnostic" ? /Take the diagnostic/ : /Skip for now/ })
-    .check();
-  await next.click();
-
   await page.getByRole("radio", { name: "20 minutes a day" }).check();
   await next.click();
   await expect(page.getByRole("heading", { name: "Add your OpenAI key" })).toBeFocused();
   if (key === undefined) {
-    await page
-      .getByRole("button", {
-        name: placement === "diagnostic" ? "Not now: take the diagnostic later, from Today" : "Not now, continue without a key",
-      })
-      .click();
+    await page.getByRole("button", { name: "Not now, continue without a key" }).click();
   } else {
     await page.getByLabel("OpenAI API key").fill(key);
     await page.getByRole("button", { name: "Save the key" }).click();
     await expect(page.getByText(`Saved on this device: the key ending in ${key.slice(-4)}.`)).toBeVisible();
     await expect(page.getByRole("status").filter({ hasText: "This key works." })).toBeVisible();
-    await page
-      .getByRole("button", { name: placement === "diagnostic" ? "Continue to the diagnostic" : "Start practising" })
-      .click();
+    await next.click();
   }
+
+  await expect(page.getByRole("heading", { name: "Where are you now?" })).toBeFocused();
+  await page
+    .getByRole("radio", { name: placement === "diagnostic" ? /Take the diagnostic/ : /Skip for now/ })
+    .check();
+  await page.getByRole("button", { name: placement === "diagnostic" ? "Start the diagnostic" : "Start practising" }).click();
   // The profile is written before the wizard leaves, so a caller may navigate once it has landed.
-  await expect(page).toHaveURL(placement === "diagnostic" && key !== undefined ? /\/en\/diagnostic$/ : /\/en\/home$/);
+  await expect(page).toHaveURL(placement === "diagnostic" ? /\/en\/diagnostic$/ : /\/en\/home$/);
 };
 
 /**

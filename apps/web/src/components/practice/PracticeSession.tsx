@@ -8,7 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { type ReactNode, type Ref, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 
 import { currentItem, drillReducer, pendingAnswer, startDrill, summaryOf } from "../../features/drill/drill";
-import { Link } from "../../i18n/navigation";
+import { Link, useRouter } from "../../i18n/navigation";
 import { ArticleLink } from "../library/ArticleLink";
 import type { Container } from "../../lib/container";
 import { isPageKey } from "../../lib/keyboard";
@@ -175,20 +175,17 @@ function TooFew({ available, size }: { available: number; size: number }) {
   );
 }
 
+/**
+ * A drill opened with no study profile goes straight to onboarding, as Today does (progress.md D224),
+ * replacing this entry so Back from its first step does not bounce here again.
+ */
 function NeedsSetup() {
-  const t = useTranslations("today");
-  return (
-    <EmptyState
-      heading={t("setUpTitle")}
-      action={
-        <Link href="/start" className="pl-btn pl-btn--primary pl-focusable">
-          {t("setUpAction")}
-        </Link>
-      }
-    >
-      {t("setUpBody")}
-    </EmptyState>
-  );
+  const t = useTranslations("common");
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/start");
+  }, [router]);
+  return <p role="status">{t("loading")}</p>;
 }
 
 function Runner({

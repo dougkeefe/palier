@@ -52,12 +52,13 @@ test("the footer reaches the about page and the privacy notice from every page",
   await expect(page).toHaveURL(/\/en\/about$/);
 });
 
-test("onboarding carries the statement on every step, not only the first (R5)", async ({ page }) => {
+test("onboarding carries the statement at its head, on the first step, and the footer after it (R5, D224)", async ({ page }) => {
   await page.goto("/en/start");
   await expectStatementInMain(page);
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByRole("radio", { name: /Level C/ })).toBeVisible();
-  await expectStatementInMain(page);
+  await expect(page.locator("main .app-nonaffiliation")).toHaveCount(0);
+  await expect(page.locator(".app-footer__disclaimer")).toContainText("not affiliated");
   await axeClean(page);
 });
 

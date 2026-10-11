@@ -281,6 +281,7 @@
     "back": "Retour",
     "next": "Continuer",
     "finish": "Commencer à pratiquer",
+    "finishDiagnostic": "Commencer le diagnostic",
     "directionHeading": "Quelle langue pratiquez-vous?",
     "directionFrench": "Le français langue seconde",
     "directionFrenchHint": "Compréhension de l’écrit et expression écrite, visée niveau C",
@@ -315,15 +316,10 @@
     "keyHowHeading": "Comment l’obtenir",
     "keyHowRead": "Lire plutôt les étapes",
     "keyHowGuide": "Ouvrir le guide dans une page à part",
-    "keySkip": "Pas maintenant, continuer sans clé",
-    "keyFinishDiagnostic": "Continuer vers le diagnostic",
-    "keySkipDiagnostic": "Pas maintenant : faire le diagnostic plus tard, à partir d’Aujourd’hui"
+    "keySkip": "Pas maintenant, continuer sans clé"
   },
   "today": {
     "title": "Aujourd’hui",
-    "setUpTitle": "Configurez d’abord votre pratique",
-    "setUpBody": "Deux petites questions et vous êtes prêt.",
-    "setUpAction": "Configurer",
     "readinessTitle": "Votre tendance en pratique",
     "diagnosticTitle": "Votre diagnostic",
     "diagnosticScore": "{correct} bonnes réponses sur {attempted}, le {date}.",

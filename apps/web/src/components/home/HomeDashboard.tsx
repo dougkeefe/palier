@@ -8,7 +8,6 @@ import {
   Callout,
   Card,
   type CardTone,
-  EmptyState,
   Glyph,
   type GlyphName,
   MonthCalendar,
@@ -37,7 +36,7 @@ import {
 } from "../../features/home/today-view";
 import { type EvidenceLine, evidenceLine } from "../../features/telemetry/telemetry";
 import { hasAnyEstimate } from "../../features/trend/trend-lines";
-import { Link } from "../../i18n/navigation";
+import { Link, useRouter } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { type StudyProfile, daysUntil, minutesFor, planRows, readStudyProfile, sessionSizeFor } from "../../lib/study";
 import { deviceTimeZone } from "../../lib/time-zone";
@@ -179,13 +178,19 @@ const useOverview = (state: ContainerState): Overview => {
  *
  * The skill switch sits in the plan and changes only the plan and where you stand. On mobile the
  * order is the hero, the plan, the pointer, the statistics, where you stand, then the calendar.
+ *
+ * A user with no study profile is sent straight to onboarding (progress.md D224), replacing this
+ * entry in the history so Back from its first step does not bounce here again. A card whose one
+ * action was "Set up" was a click with nothing to decide.
  */
 export function HomeDashboard() {
   const t = useTranslations("today");
   const tCommon = useTranslations("common");
   const container = useContainer();
+  const router = useRouter();
   const engagement = useEngagement(container);
   const overview = useOverview(container);
+  const needsSetup = overview.status === "needs-setup";
   const [skill, setSkill] = useState<ScoredSkill>("reading");
   // Keyed by the skill it was loaded for, so switching skill reads as loading until
   // the new skill's data arrives, with no reset inside the effect.
@@ -205,24 +210,14 @@ export function HomeDashboard() {
     };
   }, [container, skill, profile]);
 
+  useEffect(() => {
+    if (needsSetup) router.replace("/start");
+  }, [needsSetup, router]);
+
   if (container.status === "failed" || overview.status === "failed" || view.status === "failed") {
     return <Callout tone="incorrect">{tCommon("loadFailed")}</Callout>;
   }
-  if (overview.status === "needs-setup") {
-    return (
-      <EmptyState
-        heading={t("setUpTitle")}
-        action={
-          <Link href="/start" className={`${buttonClass("primary", "go")} pl-focusable`}>
-            {t("setUpAction")}
-          </Link>
-        }
-      >
-        {t("setUpBody")}
-      </EmptyState>
-    );
-  }
-  if (overview.status === "loading" || container.status !== "ready") {
+  if (overview.status === "loading" || needsSetup || container.status !== "ready") {
     return <p role="status">{tCommon("loading")}</p>;
   }
 
