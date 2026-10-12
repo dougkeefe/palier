@@ -82,6 +82,26 @@ test("the landing page stays clean with an answer open and the sample question a
   await axeClean(page);
 });
 
+test("the landing page shows the explainer in its own language, between the strip and 'Built for exam conditions', loading nothing until asked (D230)", async ({
+  page,
+}) => {
+  await page.goto("/en");
+  const sections = page.locator(".landing-main > section");
+  await expect(sections.nth(1)).toHaveClass(/landing-strip/);
+  await expect(sections.nth(2)).toHaveClass(/landing-video/);
+  await expect(sections.nth(3).getByRole("heading", { level: 2 })).toHaveText("Built for exam conditions.");
+
+  const video = page.getByLabel("Video: what Palier is and how it helps you prepare", { exact: false });
+  await expect(video).toHaveAttribute("preload", "none");
+  await expect(video).not.toHaveAttribute("autoplay");
+  await expect(page.locator(".landing-video source")).toHaveAttribute("src", "/media/palier-explainer-en.mp4");
+
+  await page.goto("/fr");
+  await expect(page.getByLabel("Vidéo : ce qu’est Palier", { exact: false })).toHaveAttribute("preload", "none");
+  await expect(page.locator(".landing-video source")).toHaveAttribute("src", "/media/palier-explainer-fr.mp4");
+  await axeClean(page);
+});
+
 test("the landing page's way in leads to the app, with the app's header and footer (D201)", async ({ page }) => {
   await page.goto("/en");
   await expect(page.locator(".app-header")).toHaveCount(0);

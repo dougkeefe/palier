@@ -1,7 +1,10 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
+import { explainerLanguage } from "../../features/landing/landing";
 import { Link } from "../../i18n/navigation";
 
+import posterEn from "./images/palier-explainer-en-poster.webp";
+import posterFr from "./images/palier-explainer-fr-poster.webp";
 import { SampleQuestion } from "./SampleQuestion";
 
 /**
@@ -54,6 +57,47 @@ export function Strip() {
           <li key={key}>{t(key)}</li>
         ))}
       </ul>
+    </section>
+  );
+}
+
+/**
+ * Served from this origin under `public/media/`, which the service worker leaves to the network
+ * (progress.md D220). One recording per language, each with its own poster, its closing title card.
+ */
+const EXPLAINER_VIDEOS = {
+  en: { src: "/media/palier-explainer-en.mp4", poster: posterEn },
+  fr: { src: "/media/palier-explainer-fr.mp4", poster: posterFr },
+} as const;
+const EXPLAINER_SIZE = { width: 1280, height: 720 } as const;
+
+/**
+ * The owner's explainer, below the fold, in the page's language (D230). As on the key step, it never
+ * plays by itself and loads nothing until asked (`preload="none"`), so it costs the page only its poster.
+ */
+export function Explainer() {
+  const t = useTranslations("landing.video");
+  const video = EXPLAINER_VIDEOS[explainerLanguage(useLocale())];
+  return (
+    <section className="landing-wrap landing-section landing-video">
+      <div className="landing-center">
+        <Eyebrow>{t("eyebrow")}</Eyebrow>
+        <h2 className="landing-h2 landing-h2--center">{t("title")}</h2>
+      </div>
+      <div className="landing-video__frame">
+        <video
+          controls
+          preload="none"
+          playsInline
+          poster={video.poster.src}
+          width={EXPLAINER_SIZE.width}
+          height={EXPLAINER_SIZE.height}
+          aria-label={t("label")}
+        >
+          <source src={video.src} type="video/mp4" />
+          {t("fallback")}
+        </video>
+      </div>
     </section>
   );
 }

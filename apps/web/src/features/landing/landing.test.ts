@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  explainerLanguage,
   SAMPLE_ANSWER,
   SAMPLE_OPTIONS,
   sampleFeedback,
@@ -28,6 +29,16 @@ describe("sampleLanguage", () => {
 
   it("shows the French page an English question", () => {
     expect(sampleLanguage("fr")).toBe("en");
+  });
+});
+
+describe("explainerLanguage", () => {
+  it("shows the English page the English video", () => {
+    expect(explainerLanguage("en")).toBe("en");
+  });
+
+  it("shows the French page the French video", () => {
+    expect(explainerLanguage("fr")).toBe("fr");
   });
 });
 

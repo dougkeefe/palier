@@ -42,7 +42,7 @@
     },
     "hero": {
       "tag": "Second Language Evaluation · Levels B and C",
-      "title": "Practise for your SLE.",
+      "title": "Practice for your SLE.",
       "lede": "Palier is a free study tool for the Public Service Commission’s Second Language Evaluation. Take timed reading and written-expression drills and mock exams, get AI feedback on your writing, and rehearse the oral interview out loud with an AI partner. No account needed.",
       "cta": "Try a free mock exam",
       "ctaShort": "Start free",
@@ -53,6 +53,12 @@
       "oral": "Spoken practice with an AI partner",
       "noAccount": "No account",
       "source": "Source-available"
+    },
+    "video": {
+      "eyebrow": "Watch",
+      "title": "Palier in a minute.",
+      "label": "Video: what Palier is and how it helps you prepare, about a minute long",
+      "fallback": "Your browser cannot play this video."
     },
     "features": {
       "title": "Built for exam conditions.",

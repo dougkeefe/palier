@@ -60,6 +60,10 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   - Its photographs live in `components/landing/images/` and are CSS backgrounds. They are bundled under
     `/_next/static/media/`, so the CSP needs no new origin and the worker precaches them through the stylesheet. Never
     hotlink an image.
+  - **The owner's explainer video** (D230) is `Explainer` in `LandingSections.tsx`, between the strip and the features:
+    `public/media/palier-explainer-{en,fr}.mp4`, in the page's language (`features/landing/landing.ts`'s
+    `explainerLanguage`), with D220's player (`preload="none"`, never autoplaying) and a poster per language imported from
+    `images/`, the only images there that are not CSS backgrounds.
 - **Composition root** at `src/lib/container.ts` (under `src/` so it is cruised, covered
   and tested — D23), assembling the use-case graph with `buildUseCases`. **Production**
   wires the real adapters — `@palier/adapters/bank` over `BANK_BASE_PATH`/`BANK_VERSION`,
@@ -78,7 +82,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   The islands' decisions live in tested `.ts` beside them (`src/features/**`, `src/lib/study.ts`); a
   `.tsx` holds rendering and effects only.
 - **`public/content/` and `public/sw.js` are generated, gitignored and never edited.** `public/media/` is committed
-  (the explainer video, D220) and is never precached.
+  (the explainer videos, D220 and D230) and is never precached.
   `scripts/prepare-public.mjs` runs before `dev` and `build`: it copies `content/bank/` and
   compiles the service worker from `src/sw/worker.ts` (D60). Every bank version is copied, but the
   worker **precaches only `BANK_VERSION`'s**, which the script reads from `src/lib/bank-version.ts` (D140); a
