@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 11 October 2026 (the spoken-practice picker laid out again; D229)
+**Last updated:** 11 October 2026 (the landing page's explainer video and headline; D230, D231)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/palier-explainer-video-use` | **The landing page's explainer video** (D230; the human's request, 11 October 2026): the owner's video below the fold, before "Built for exam conditions.", in each page's language. | 11 October 2026 |
 | `dougkeefe/oral-page-layout-update` | **The spoken-practice picker laid out again** (D229; the human's request, 11 October 2026): the key card first, the two modes side by side, the sessions as a grid, the picker its own component. | 11 October 2026 |
 | `dougkeefe/p3an3` | **The nightly lane green again** (D227; the human's request, 11 October 2026): the live smoke's key was refused, and the smoke now says what to do about it. | 11 October 2026 |
 
@@ -266,6 +267,11 @@ four lanes are green. Then, on the deployed site, the human opens `/en/home` as 
 
 On `/practice/oral`, in both languages and on a phone: the picker's new layout (D229). Say whether the two steps read
 in order, and whether the no-key card belongs at the top.
+
+On the landing page, in both languages: the explainer video (D230), between the strip and "Built for exam conditions.".
+Play each in Safari and Chrome, on a phone too, and say whether it sits right there. In the French recording's closing
+card, a decorative circle covers the end of « votre »; re-render it if that matters, and recut its poster (D230). The
+French read at Gate O gains `landing.video*`.
 
 On the landing page, in both languages: the sample question is French on `/en` and English on `/fr` (D226). Say whether
 the verdict's quoted word ("car", « because ») reads naturally. The French read at Gate O gains `landing.sample.tag`.
@@ -7689,9 +7695,68 @@ skipping goes to Today.
   heading and the studio note's text.
 - **Not an ADR.** Layout and copy, recorded here.
 
+### D230 — the landing page shows the owner's explainer video, below the fold, before "Built for exam conditions."
+**Date:** 11 October 2026 · **Status:** accepted (human's request and answers; agent's build)
+
+The human recorded an explainer of Palier in each language (`docs/explainer.mp4`, then `docs/eplainer-fr.mp4`) and asked
+for it on the landing page, below the fold, just before "Built for exam conditions.".
+
+- **Where.** A section of its own, `Explainer` in `components/landing/LandingSections.tsx`, between the strip and the
+  features: the hero fills the first screen, so it is below the fold. An eyebrow ("Watch") and a heading ("Palier in a
+  minute."), then the video. The section has no bottom padding, since the features bring their own.
+- **In the page's language.** `/en` plays `public/media/palier-explainer-en.mp4` (61 s) and `/fr` plays
+  `palier-explainer-fr.mp4` (76 s), both 1280×720 H.264 with AAC sound, 14.6 and 17.6 MB. Which one is
+  `features/landing/landing.ts`'s `explainerLanguage`, tested, beside `sampleLanguage`, which goes the other way: the
+  sample question is in the language being practised, but the video explains Palier, so it is in the language being read.
+- **The files** were remuxed losslessly with `moov` first, so playback starts before the whole file arrives (the human
+  chose this over a smaller re-encode). As with D220, each is committed once, and not also under `docs/`. `/media/` is
+  already left to the network by the service worker, and the CSP's `media-src 'self'` already allows it, so neither
+  changed.
+- **The player** is D220's: `controls`, `preload="none"`, `playsInline`, never autoplaying, explicit width and height so
+  nothing moves when the poster loads. Each poster is its video's closing title card (logo and tagline), a WebP of 24 and
+  29 KB, bundled as an import. **The French card has a flaw in the recording itself**: a decorative circle covers the end
+  of « votre » for as long as that line is on screen, so no frame of it is clean. The poster shows it too, and is the
+  human's to replace with the recording.
+- **No note under it.** With a recording in each language there is nothing to warn of; the human confirmed each video is
+  final as it is, sound and all.
+- **Not `ExplainerVideo`.** That component is the key video's, bound to the `key` messages and the OpenAI file. Two callers
+  did not earn a prop-driven version, so the landing section repeats its few attributes.
+- **Keys.** Added: `landing.video.eyebrow`, `title`, `label` and `fallback`. The French is the agent's, and goes to Gate
+  O's French read.
+- **Tests.** `landing.test.ts` gains `explainerLanguage`'s two cases. `smoke.spec.ts` gains one: the section is between
+  the strip and "Built for exam conditions.", the video loads nothing until asked and does not autoplay, each page serves
+  its own language's file, and the French page is axe-clean.
+- **Not an ADR.** Landing-page content, recorded here.
+
+### D231 — the landing page's headline reads "Practice for your SLE."
+**Date:** 11 October 2026 · **Status:** accepted (human's decision)
+
+`landing.hero.title` was "Practise for your SLE.". The agent pointed out that the Language Portal's Writing Tips Plus gives
+*practise* as the Canadian verb, which the headline uses. The human chose "Practice" all the same. **Do not change it
+back**: it is the human's call, made knowing the guide. The rest of the English copy keeps the guide's split, and the
+design files under `docs/Palier landing page/` keep their original text.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 11 October 2026 — `dougkeefe/palier-explainer-video-use` (the landing page's explainer video; D230)
+
+This was not *Next, decided*. The human added an explainer of Palier in English, then one in French, and asked for it on the
+landing page, below the fold, before "Built for exam conditions.". It is there, each page playing its own language's
+recording, as the key video is played (D230).
+
+The headline now reads "Practice for your SLE.", at the human's request (D231).
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,395 tests passed (8 todo), with no dependency violations.
+- `pnpm test:e2e e2e/smoke.spec.ts e2e/offline.spec.ts --project=warmup --project=chromium --project=offline` passed on a
+  fresh production build: 21 tests, the new one included. An earlier run, before the French video, failed once on "the
+  landing page's way in leads to the app" (D201), which expects `/en/home` and saw `/en/start`, and passed on two reruns.
+  That is a race this branch did not make: since D224, Today sends a user with no study profile to `/start`, so the test
+  passes only when its URL check lands before the redirect. Left as it is, for the next session to settle.
+- On the production build at 1440×900 and 390×844, in both languages, the section sat below the first screen, each page
+  named its own language's file, and the only request for it before play was the poster. Screenshots were checked by eye.
 
 ### 11 October 2026 — `dougkeefe/oral-page-layout-update` (the spoken-practice picker laid out again; D229)
 

@@ -54,6 +54,12 @@
       "noAccount": "Sans compte",
       "source": "Code source accessible"
     },
+    "video": {
+      "eyebrow": "À voir",
+      "title": "Palier en une minute.",
+      "label": "Vidéo : ce qu’est Palier et comment il vous aide à vous préparer, environ une minute",
+      "fallback": "Votre navigateur ne peut pas lire cette vidéo."
+    },
     "features": {
       "title": "Conçu pour les conditions d’examen, pas pour un cours.",
       "open": {

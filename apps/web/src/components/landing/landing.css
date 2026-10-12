@@ -408,6 +408,29 @@
   color: var(--landing-neutral-600);
 }
 
+/* ------------------------------------------------------------------- video */
+
+/* The features section below brings its own top padding, so this one stops at the video. */
+.landing-video {
+  padding-bottom: 0;
+}
+
+.landing-video__frame {
+  max-width: 960px;
+  margin: clamp(32px, 4vw, 56px) auto 0;
+}
+
+/* Its width and height attributes keep its ratio before the poster loads, so nothing below it moves. */
+.landing-video__frame video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  background: var(--landing-neutral-100);
+  /* The poster's ground is the page's own, so a hairline keeps the frame's edge. */
+  box-shadow: 0 0 0 1px rgb(32 30 29 / 0.12);
+}
+
 /* ---------------------------------------------------------------- features */
 
 .landing-features {

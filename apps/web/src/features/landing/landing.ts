@@ -17,6 +17,12 @@ export const showsAppChrome = (pathname: string): boolean => pathname !== "/";
  */
 export const sampleLanguage = (locale: string): "en" | "fr" => (locale === "fr" ? "en" : "fr");
 
+/**
+ * The language of the explainer video a page shows: the page's own (D230). Unlike the sample question,
+ * the video explains Palier itself, so a visitor watches it in the language they are reading.
+ */
+export const explainerLanguage = (locale: string): "en" | "fr" => (locale === "fr" ? "fr" : "en");
+
 /** The sample question's four options, in the order shown. The first is the right answer. */
 export const SAMPLE_OPTIONS = ["a", "b", "c", "d"] as const;
 export type SampleOption = (typeof SAMPLE_OPTIONS)[number];

@@ -5,6 +5,7 @@ import { LandingFooter } from "../../components/landing/LandingFooter";
 import { LandingHeader } from "../../components/landing/LandingHeader";
 import {
   CloseCta,
+  Explainer,
   Faq,
   Features,
   Hero,
@@ -35,6 +36,7 @@ export default function LandingPage({ params }: PageProps<"/[locale]">) {
       <main id="main" tabIndex={-1} className="landing-main">
         <Hero />
         <Strip />
+        <Explainer />
         <Features />
         <Tests />
         <OralBanner />
