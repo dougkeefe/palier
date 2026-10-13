@@ -7778,23 +7778,43 @@ The human reported two console warnings on the deployed landing page: the serif 
   the worker blocked, no warning on any load; with it in control, the warning on almost every load, and two font requests
   for one page where the trace showed them. The hero's warning did not reproduce in either browser tested. It is the same
   mechanism, and the same fix covers it.
-- **`reactMaxHeadersLength: 0`** in `next.config.ts` turns the header off, so React writes the same preloads into the
-  `<head>` instead. On the local production build each file is then requested once, by the parser, on every load, controlled
-  or not, and no warning appears. Lighthouse on `/en` and `/fr` (desktop, three runs each) scored 100 for performance and
-  accessibility, with an LCP near 0.79 s and a CLS of 0. The header could only help where the
-  browser acted on it before the `<head>` arrived; whether Vercel turns it into 103 Early Hints was not checked.
+- **`reactMaxHeadersLength: 1`** in `next.config.ts` turns the header off, so React writes the same preloads into the
+  `<head>` instead. One, not zero: no preload fits in one character, and zero makes React log an error on every render,
+  which CI's server log showed on every request. On the local production build each file is then requested once, by the
+  parser, on every load, controlled or not, and no warning appears. Lighthouse on `/en` and `/fr` (desktop, three runs
+  each, measured with `0`, whose document is the same) scored 100 for performance and accessibility, with an LCP near
+  0.79 s and a CLS of 0. The header could only help where the browser acted on it before the `<head>` arrived; whether
+  Vercel turns it into 103 Early Hints was not checked.
 - **Not the alternatives.** Dropping the font's preload would bring back the `/fr` rewrap that cost its Lighthouse budget
   (D201). Leaving fonts and images to the network would undo the offline serif (D161).
-- **Tests.** `offline.spec.ts` gains one in the production lane: the page's response has no `rel=preload` in a `Link`
-  header, its `<head>` has the font's preload, and once the worker is in control, `/en/about` raises no "preloaded but not
-  used" warning (read from Chrome's log over CDP) within 3.5 s of loading, just past Chrome's three. One page and one wait,
-  because E2E shard 1 ran in 4.6 of its 5 minutes on `main` (12 October). Without the setting, both halves fail on their
-  own, the warning half three runs in three. The setting is read when `next start` starts, so trying it needs no rebuild.
+- **Tests.** `offline.spec.ts` gains one in the production lane, about 0.15 s: the page's response has no `rel=preload`
+  in a `Link` header, and its `<head>` has the font's preload. It checks the cause, not the warning. A version that waited
+  for the worker and read Chrome's log over CDP took 6.8 s, and pushed E2E shard 1, already at 4.6 of its 5 minutes on
+  `main`, over its budget. The warning half was measured by hand instead: without the setting, three runs in three warned;
+  with it, none over four controlled loads. The setting is read when `next start` starts, so trying it needs no rebuild.
 - **Not an ADR.** A build setting with its reason, recorded here.
 
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 13 October 2026 — `dougkeefe/mobile-menu-fix` (E2E shard 1 back under budget; D233 amended)
+
+PR #79's E2E shard 1 ran out of its 300 s budget with about 60 of its 62 tests through. No test failed; the one in flight
+when the job was killed recorded "Target page, context or browser has been closed". Shard 1 already took 4.6 minutes on
+`main`'s last three runs, and this branch's D233 test added 6.8 s of waiting for the worker and Chrome's warning timer to
+it. That test now checks only the cause, in about 0.15 s. The CI log also showed React logging an error on every render
+for `reactMaxHeadersLength: 0`, so the setting is now `1`, which keeps every preload out of the header without the error
+(D233, amended). This corrects the entry below, which named `0`.
+
+**Verified:**
+- `pnpm verify` was green.
+- On a local production build: `e2e/offline.spec.ts` and `e2e/production.spec.ts` passed, 13 tests, the D233 test in 150 ms.
+  With `1`, `/en`, `/fr`, `/en/about` and `/en/home` sent no preload in a `Link` header and had the font's preload in the
+  `<head>`; the server logged no `maxHeadersLength` error; and four loads under the worker raised no unused-preload warning.
+- **Shard 1 still has little room.** Back to `main`'s 4.6 minutes, it passes, but a slow runner or another production test
+  could tip it over again. Shard 2 took 3.3 minutes on the same run. Balancing them is not this branch's work, but it
+  needs doing.
 
 ### 12 October 2026 — `dougkeefe/mobile-menu-fix` (preloads in the document; D233)
 

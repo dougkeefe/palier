@@ -54,28 +54,16 @@ test("the self-hosted serif is precached (D161, D202)", async ({
   expect(fonts.some((file) => file.startsWith("source_serif_4")), fonts.join(", ")).toBe(true);
 });
 
-test("a page the worker controls uses its preloads: they are in the document, never a Link header (D233)", async ({
+test("a page's preloads are in its document, never a Link header, so a page the worker controls uses them (D233)", async ({
   page,
-  context,
 }) => {
   // React sends a page's preloads as a Link header unless told not to. Chrome does not match a
-  // Link-header preload the worker answers, so it fetches the font again and warns.
+  // Link-header preload the worker answers, so it fetches the font again and warns. That was
+  // measured by hand (D233); this checks the cause, without waiting on the worker, since this
+  // shard's budget has little room.
   const response = await page.goto("/en");
   expect(response?.headers()["link"] ?? "").not.toMatch(/rel=preload/);
   await expect(page.locator('head link[rel="preload"][as="font"]')).toHaveCount(1);
-  await waitForOfflineReady(page);
-
-  const cdp = await context.newCDPSession(page);
-  const unused: string[] = [];
-  cdp.on("Log.entryAdded", ({ entry }) => {
-    if (entry.text.includes("preloaded using link preload but not used")) unused.push(entry.text);
-  });
-  await cdp.send("Log.enable");
-  // The first page the worker controls is enough: without the fix it warns every time. Chrome warns
-  // three seconds after the load event, and this lane's budget has little room, so wait just past it.
-  await page.goto("/en/about");
-  await page.waitForTimeout(3_500);
-  expect(unused).toEqual([]);
 });
 
 test("the key guide's video is fetched in ranges through the service worker, which leaves it to the network and never caches it (D220)", async ({

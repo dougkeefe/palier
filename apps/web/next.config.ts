@@ -26,7 +26,9 @@ const nextConfig: NextConfig = {
   // A page's preloads go in its `<head>`, never a `Link` header (progress.md D233). Chrome does not
   // match a Link-header preload the service worker answers: it fetches the font again and warns
   // the preload went unused. In the document, the same preloads are matched with or without it.
-  reactMaxHeadersLength: 0,
+  // One, not zero: no preload fits in one character, so React writes them all into the document,
+  // whereas zero makes React log an error on every render.
+  reactMaxHeadersLength: 1,
   async headers() {
     return [
       { source: "/:path*", headers: SECURITY_HEADERS },

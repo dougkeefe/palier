@@ -227,9 +227,10 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   layout in `x-palier-route` (and deletes any the client sent); the layout's metadata turns it into the canonical and
   `hreflang` links, with `metadataBase` and an Open Graph title and description. Both files are outside the proxy's
   matcher, so they carry no CSP and need none.
-- **A page's preloads are in its `<head>`, never a `Link` header** (`reactMaxHeadersLength: 0` in `next.config.ts`,
+- **A page's preloads are in its `<head>`, never a `Link` header** (`reactMaxHeadersLength: 1` in `next.config.ts`,
   D233). Chrome does not match a `Link`-header preload the service worker answers, so it fetches the serif twice and
-  warns. `offline.spec.ts` holds both halves. Do not raise the setting without a reason that beats that.
+  warns. One, not zero, which makes React log an error on every render. `offline.spec.ts` checks the header and the
+  `<head>`. Do not raise the setting without a reason that beats that.
 - **Baseline security headers on every response** (`next.config.ts`, architecture.md §12): HSTS,
   `nosniff`, `Referrer-Policy: no-referrer`, and a `Permissions-Policy` allowing the microphone on
   this origin only. They are asserted on the production server in `e2e/production.spec.ts`.
