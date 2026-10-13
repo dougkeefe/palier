@@ -23,6 +23,10 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   // Which build this is, inlined for the server and the client alike (src/lib/build-info.ts, D140).
   env: { PALIER_BUILD_VERSION: buildVersionFrom(process.env) },
+  // A page's preloads go in its `<head>`, never a `Link` header (progress.md D233). Chrome does not
+  // match a Link-header preload the service worker answers: it fetches the font again and warns
+  // the preload went unused. In the document, the same preloads are matched with or without it.
+  reactMaxHeadersLength: 0,
   async headers() {
     return [
       { source: "/:path*", headers: SECURITY_HEADERS },

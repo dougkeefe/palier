@@ -48,6 +48,10 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   - The layout wraps every page in `components/Shell.tsx`. It renders the app's header, `main#main` and footer everywhere
     except `/` (`features/landing/landing.ts`'s `showsAppChrome`, on next-intl's pathname). There the page renders its own
     `LandingHeader`, `main#main` and `LandingFooter`.
+  - **Below 1000px the landing header folds behind a menu button** at the top right (D232): `LandingMenu.tsx`, a
+    disclosure (never an ARIA menu) around the server-rendered nav and actions, deciding through `landing.ts`'s
+    `menuOpenAfter`. At 1000px and up its panel is `display: contents`, so the header is D201's. Keep one `nav` landmark:
+    never render the sections twice, one copy per width.
   - The landing footer must keep what the app's promises: `NonAffiliation`, the data, sync and key links, about,
     privacy, the library and `ShortcutSheet`.
   - **`components/landing/landing.css` holds the only palette outside `@palier/ui`'s tokens**: the `--landing-*` custom
@@ -223,6 +227,9 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   layout in `x-palier-route` (and deletes any the client sent); the layout's metadata turns it into the canonical and
   `hreflang` links, with `metadataBase` and an Open Graph title and description. Both files are outside the proxy's
   matcher, so they carry no CSP and need none.
+- **A page's preloads are in its `<head>`, never a `Link` header** (`reactMaxHeadersLength: 0` in `next.config.ts`,
+  D233). Chrome does not match a `Link`-header preload the service worker answers, so it fetches the serif twice and
+  warns. `offline.spec.ts` holds both halves. Do not raise the setting without a reason that beats that.
 - **Baseline security headers on every response** (`next.config.ts`, architecture.md §12): HSTS,
   `nosniff`, `Referrer-Policy: no-referrer`, and a `Permissions-Policy` allowing the microphone on
   this origin only. They are asserted on the production server in `e2e/production.spec.ts`.

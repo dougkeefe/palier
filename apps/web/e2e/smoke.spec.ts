@@ -65,6 +65,48 @@ test("the landing page's own header keeps the order: skip link, brand, then its 
   await expect(page.getByRole("navigation", { name: "On this page" }).getByRole("link").first()).toBeFocused();
 });
 
+test("on a phone, the landing page's header folds its sections behind a menu button at the top right (D232)", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/en");
+  const menu = page.getByRole("button", { name: "Menu" });
+  const sections = page.getByRole("navigation", { name: "On this page" });
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(sections).toBeHidden();
+  await expect(page.getByRole("link", { name: "Start free" })).toBeHidden();
+
+  // Open, it holds the sections, the language and the way in, and Escape closes it back onto the button.
+  await menu.click();
+  await expect(menu).toHaveAttribute("aria-expanded", "true");
+  await expect(sections.getByRole("link")).toHaveCount(4);
+  await expect(page.getByRole("link", { name: "Français" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Start free" })).toBeVisible();
+  await axeClean(page);
+  await sections.getByRole("link").first().focus();
+  await page.keyboard.press("Escape");
+  await expect(sections).toBeHidden();
+  await expect(menu).toBeFocused();
+
+  // Tabbing out of it, or tapping the page beside it, closes it too, so it is never left over the page.
+  await menu.click();
+  await page.getByRole("link", { name: "Start free" }).focus();
+  await page.keyboard.press("Tab");
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(sections).toBeHidden();
+  await menu.click();
+  // Bare hero, below the open panel.
+  await page.mouse.click(300, 800);
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+
+  // Following a section closes it, so the section is not under the menu.
+  await menu.click();
+  await sections.getByRole("link", { name: "How it works" }).click();
+  await expect(page).toHaveURL(/#how$/);
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(sections).toBeHidden();
+});
+
 test("the landing page stays clean with an answer open and the sample question answered (D201)", async ({ page }) => {
   await page.goto("/en");
   // The first answer starts open; open another, so two disclosures are expanded.
