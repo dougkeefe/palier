@@ -183,6 +183,20 @@ describe("practiceController — the microphone check (D121)", () => {
     expect(broken.mic.track.stopped).toBe(true);
   });
 
+  it("names a browser that opens the microphone but cannot record it unsupported, lets it go, and goes no further (D234)", async () => {
+    const { controller, actions, mic, useCases } = setUp({ media: mediaKit({ failAt: 0 }).kit });
+    await controller.checkMic();
+    expect(actions).toEqual([
+      { type: "mic", mic: "listening" },
+      { type: "mic", mic: "unsupported" },
+    ]);
+    expect(mic.track.stopped).toBe(true);
+    await controller.continueWith(CHOICE);
+    await controller.start(CHOICE);
+    expect(useCases.preflightSpend).not.toHaveBeenCalled();
+    expect(useCases.startOralPractice).not.toHaveBeenCalled();
+  });
+
   it("drops a verdict that arrives after Back, and lets the microphone go on Back", async () => {
     const level = deferred<number>();
     const { controller, actions, mic } = setUp({ measureLevel: () => level.promise });
@@ -221,31 +235,37 @@ describe("practiceController — the microphone check (D121)", () => {
 });
 
 describe("practiceController — the pre-flight (D121)", () => {
-  it("prices the session's minutes, and a typed session lets the microphone go", async () => {
+  it("prices the session's minutes, keeping the microphone open for the session", async () => {
     const { controller, actions, mic, useCases } = setUp();
     await controller.checkMic();
-    await controller.continueWith(CHOICE, "typed");
+    await controller.continueWith(CHOICE);
 
     expect(useCases.preflightSpend).toHaveBeenCalledWith({ feature: "oral-practice", quantity: 5 });
-    expect(actions.at(-1)).toEqual({ type: "preflighted", mode: "typed", preflight: PREFLIGHT });
-    expect(mic.track.stopped).toBe(true);
+    expect(actions.at(-1)).toEqual({ type: "preflighted", preflight: PREFLIGHT });
+    expect(mic.track.stopped).toBe(false);
   });
 
   it("prices studio mode as a studio conversation when the microphone is open (D185)", async () => {
     const { controller, actions, useCases } = setUp();
     await controller.checkMic();
-    await controller.continueWith(CHOICE, "spoken", "studio");
+    await controller.continueWith(CHOICE, "studio");
 
     expect(useCases.preflightSpend).toHaveBeenCalledWith({ feature: "oral-studio", quantity: 5 });
-    expect(actions.at(-1)).toEqual({ type: "preflighted", mode: "spoken", preflight: PREFLIGHT, held: "studio" });
+    expect(actions.at(-1)).toEqual({ type: "preflighted", preflight: PREFLIGHT, held: "studio" });
   });
 
-  it("prices studio mode with no microphone as practice by typing (D185)", async () => {
-    const { controller, actions, useCases } = setUp();
-    await controller.continueWith(CHOICE, "spoken", "studio");
+  it("goes nowhere without an open microphone, in either mode, since every answer is spoken (D234)", async () => {
+    const unchecked = setUp();
+    await unchecked.controller.continueWith(CHOICE);
+    await unchecked.controller.continueWith(CHOICE, "studio");
+    expect(unchecked.useCases.preflightSpend).not.toHaveBeenCalled();
+    expect(unchecked.actions).toEqual([]);
 
-    expect(useCases.preflightSpend).toHaveBeenCalledWith({ feature: "oral-practice", quantity: 5 });
-    expect(actions.at(-1)).toEqual({ type: "preflighted", mode: "typed", preflight: PREFLIGHT });
+    const refused = setUp({ openMic: () => Promise.reject(Object.assign(new Error("no"), { name: "NotAllowedError" })) });
+    await refused.controller.checkMic();
+    await refused.controller.continueWith(CHOICE);
+    expect(refused.useCases.preflightSpend).not.toHaveBeenCalled();
+    expect(types(refused.actions)).toEqual(["mic", "mic"]);
   });
 
   it("hands the checked microphone over once, and never stops it after (D185)", async () => {
@@ -259,18 +279,13 @@ describe("practiceController — the pre-flight (D121)", () => {
     expect(mic.track.stopped).toBe(false);
   });
 
-  it("answers by typing when asked to speak with no microphone open", async () => {
-    const { controller, actions } = setUp();
-    await controller.continueWith(CHOICE, "spoken");
-    expect(actions.at(-1)).toMatchObject({ type: "preflighted", mode: "typed" });
-  });
-
   it("runs once however often it is tapped while in flight", async () => {
     const pending = deferred<typeof PREFLIGHT>();
     const { controller, useCases } = setUp();
+    await controller.checkMic();
     useCases.preflightSpend.mockReturnValueOnce(pending.promise);
-    const first = controller.continueWith(CHOICE, "typed");
-    await controller.continueWith(CHOICE, "spoken");
+    const first = controller.continueWith(CHOICE);
+    await controller.continueWith(CHOICE);
     pending.resolve(PREFLIGHT);
     await first;
     expect(useCases.preflightSpend).toHaveBeenCalledTimes(1);
@@ -281,16 +296,16 @@ describe("practiceController — a session (D121)", () => {
   const spokenSession = async (over: Parameters<typeof setUp>[0] = {}) => {
     const handles = setUp(over);
     await handles.controller.checkMic();
-    await handles.controller.continueWith(CHOICE, "spoken");
-    await handles.controller.start(CHOICE, "spoken");
+    await handles.controller.continueWith(CHOICE);
+    await handles.controller.start(CHOICE);
     return handles;
   };
 
   it("starts once, recording the session's answers, and keeps the recording at the end, saying what was evicted", async () => {
     const { controller, actions, media, current, useCases, mic, ask } = await spokenSession();
-    await controller.start(CHOICE, "spoken");
+    await controller.start(CHOICE);
     expect(useCases.startOralPractice).toHaveBeenCalledTimes(1);
-    expect(actions.find((a) => a.type === "started")).toEqual({ type: "started", nowMs: 1_000, mode: "spoken" });
+    expect(actions.find((a) => a.type === "started")).toEqual({ type: "started", nowMs: 1_000 });
 
     const { answered } = ask();
     controller.record();
@@ -300,8 +315,10 @@ describe("practiceController — a session (D121)", () => {
     await settled();
 
     expect(current.endByUser).toHaveBeenCalled();
-    // The session's recorder ran only while the candidate answered; the answer's own recorder once.
+    // The check's recorder was never started; the session's ran only while the candidate answered; the answer's
+    // own recorder once.
     expect(media.made).toEqual([
+      [],
       ["start", "pause", "stop"],
       ["start", "stop"],
     ]);
@@ -321,45 +338,52 @@ describe("practiceController — a session (D121)", () => {
     expect(handles.actions.at(-1)).toMatchObject({ type: "ended", recordingKept: false, evicted: 0 });
   });
 
-  it("keeps no recording, and says nothing of one, for a typed session", async () => {
-    const { controller, actions, useCases, ask } = setUp();
-    await controller.continueWith(CHOICE, "typed");
-    await controller.start(CHOICE, "typed");
-    const { answered } = ask();
-    expect(controller.sendTyped("  ")).toBe(false);
-    expect(controller.sendTyped(" Je suis analyste. ")).toBe(true);
-    expect(await answered).toEqual({ kind: "typed", text: "Je suis analyste." });
-    expect(controller.sendTyped("Encore.")).toBe(false);
-    await controller.end();
-    await settled();
-    expect(useCases.saveOralAudio).not.toHaveBeenCalled();
-    expect(actions.at(-1)).toMatchObject({ type: "ended", recordingKept: null });
+  it("starts nothing without an open microphone (D234)", async () => {
+    const { controller, actions, useCases, holds } = setUp();
+    await controller.start(CHOICE);
+    expect(useCases.startOralPractice).not.toHaveBeenCalled();
+    expect(holds).toEqual([]);
+    expect(actions).toEqual([]);
   });
 
-  it("answers by typing for the whole session when the session recorder cannot be made", async () => {
-    const handles = setUp({ media: mediaKit({ failAt: 0 }).kit });
-    await handles.controller.checkMic();
-    await handles.controller.continueWith(CHOICE, "spoken");
-    await handles.controller.start(CHOICE, "spoken");
-    expect(handles.actions.find((a) => a.type === "started")).toMatchObject({ mode: "typed" });
+  it("still runs a session that cannot be recorded whole, keeping no recording and saying nothing of one (D234)", async () => {
+    const media = mediaKit({ failAt: 1 });
+    const handles = await spokenSession({ media: media.kit });
+    expect(handles.actions.find((a) => a.type === "started")).toEqual({ type: "started", nowMs: 1_000 });
+    expect(handles.mic.track.stopped).toBe(false);
+
+    const { answered } = handles.ask();
+    handles.controller.record();
+    await handles.controller.stopAndSend();
+    expect(await answered).toMatchObject({ kind: "audio" });
+    await handles.controller.end();
+    await settled();
+    expect(handles.useCases.saveOralAudio).not.toHaveBeenCalled();
+    expect(handles.actions.at(-1)).toMatchObject({ type: "ended", recordingKept: null });
     expect(handles.mic.track.stopped).toBe(true);
   });
 
-  it("turns to typing when an answer's recorder cannot start, keeping no clip", async () => {
-    const media = mediaKit({ failAt: 1 });
+  it("says an answer's recorder could not start, keeps no clip, and lets Record try again (D234)", async () => {
+    const media = mediaKit({ failAt: 2 });
     const handles = await spokenSession({ media: media.kit });
-    handles.ask();
+    const { answered } = handles.ask();
     handles.controller.record();
     expect(handles.actions.at(-1)).toEqual({ type: "recordFailed" });
-    expect(media.made[0]).toEqual(["start", "pause"]);
+    expect(media.made[1]).toEqual(["start", "pause"]);
+    expect(handles.mic.track.stopped).toBe(false);
     await handles.controller.stopAndSend();
     expect(handles.actions.at(-1)).toEqual({ type: "recordFailed" });
+
+    handles.controller.record();
+    expect(handles.actions.at(-1)).toEqual({ type: "recording" });
+    await handles.controller.stopAndSend();
+    expect(await answered).toMatchObject({ kind: "audio" });
   });
 
   it("sends the pause before a spoken answer, measured from the question's appearing when it has no voice (D127)", async () => {
     let clock = 1_000;
     const handles = await spokenSession({ now: () => clock });
-    await handles.controller.start(CHOICE, "spoken");
+    await handles.controller.start(CHOICE);
     const { answered } = handles.ask();
     clock = 3_400;
     handles.controller.record();
@@ -372,7 +396,7 @@ describe("practiceController — a session (D121)", () => {
   it("measures a voiced question's pause from when its voice stopped, and none when Record interrupts it (D127)", async () => {
     let clock = 1_000;
     const handles = await spokenSession({ now: () => clock });
-    await handles.controller.start(CHOICE, "spoken");
+    await handles.controller.start(CHOICE);
     const voiced = { ...QUESTION, audio: new Blob(["voix"]) };
     const wait = new AbortController();
     const bridge = handles.useCases.startOralPractice.mock.calls[0]?.[1] as { answer: (q: typeof voiced, s: AbortSignal) => Promise<unknown> };
@@ -396,7 +420,7 @@ describe("practiceController — a session (D121)", () => {
   it("never carries the last question's heard time into the next: an unheard new voice is no pause", async () => {
     let clock = 1_000;
     const handles = await spokenSession({ now: () => clock });
-    await handles.controller.start(CHOICE, "spoken");
+    await handles.controller.start(CHOICE);
     const voiced = { ...QUESTION, audio: new Blob(["voix"]) };
     const wait = new AbortController();
     const bridge = handles.useCases.startOralPractice.mock.calls[0]?.[1] as { answer: (q: typeof voiced, s: AbortSignal) => Promise<unknown> };
@@ -415,22 +439,13 @@ describe("practiceController — a session (D121)", () => {
     expect(await second).toMatchObject({ pauseMs: 0 });
   });
 
-  it("sends no pause with a typed answer", async () => {
-    const handles = setUp();
-    await handles.controller.continueWith(CHOICE, "typed");
-    await handles.controller.start(CHOICE, "typed");
-    const { answered } = handles.ask();
-    handles.controller.sendTyped("Oui.");
-    expect(await answered).toEqual({ kind: "typed", text: "Oui." });
-  });
-
   it("records nothing more while an answer is already being recorded", async () => {
     const media = mediaKit();
     const handles = await spokenSession({ media: media.kit });
     handles.ask();
     handles.controller.record();
     handles.controller.record();
-    expect(media.made).toHaveLength(2);
+    expect(media.made).toHaveLength(3);
   });
 
   it("stops the answer being recorded when the session is ended mid-answer", async () => {
@@ -439,8 +454,8 @@ describe("practiceController — a session (D121)", () => {
     handles.ask();
     handles.controller.record();
     await handles.controller.end();
-    expect(media.made[1]).toEqual(["start", "stop"]);
-    expect(media.made[0]).toContain("pause");
+    expect(media.made[2]).toEqual(["start", "stop"]);
+    expect(media.made[1]).toContain("pause");
   });
 
   it("ticks the run the screen's timer drives, and nothing before one exists", async () => {
@@ -448,8 +463,9 @@ describe("practiceController — a session (D121)", () => {
     await expect(handles.controller.tick()).resolves.toBeUndefined();
     const tick = vi.fn(() => Promise.resolve());
     (handles.current.run as unknown as { tick: () => Promise<void> }).tick = tick;
-    await handles.controller.continueWith(CHOICE, "typed");
-    await handles.controller.start(CHOICE, "typed");
+    await handles.controller.checkMic();
+    await handles.controller.continueWith(CHOICE);
+    await handles.controller.start(CHOICE);
     await handles.controller.tick();
     expect(tick).toHaveBeenCalledTimes(1);
   });
@@ -458,8 +474,9 @@ describe("practiceController — a session (D121)", () => {
     const started = deferred<OralPracticeRun>();
     const current = aRun();
     const handles = setUp({ started: started.promise });
-    await handles.controller.continueWith(CHOICE, "typed");
-    const starting = handles.controller.start(CHOICE, "typed");
+    await handles.controller.checkMic();
+    await handles.controller.continueWith(CHOICE);
+    const starting = handles.controller.start(CHOICE);
     await handles.controller.end();
     started.resolve(current.run);
     await starting;
@@ -472,8 +489,9 @@ describe("practiceController — a session (D121)", () => {
   it("names the failure the transport kept, and shows the no-key card again when the key is gone", async () => {
     const failed = aRun(Object.assign(new Error("gone"), { name: "NoApiKeyError" }));
     const handles = setUp({ started: Promise.resolve(failed.run) });
-    await handles.controller.continueWith(CHOICE, "typed");
-    await handles.controller.start(CHOICE, "typed");
+    await handles.controller.checkMic();
+    await handles.controller.continueWith(CHOICE);
+    await handles.controller.start(CHOICE);
     failed.ended.resolve(session({ endReason: "transport-failed" }));
     await settled();
 
@@ -484,8 +502,9 @@ describe("practiceController — a session (D121)", () => {
   it("closes the transport and ends with what was stored when the driver fails", async () => {
     const broken = aRun();
     const handles = setUp({ started: Promise.resolve(broken.run) });
-    await handles.controller.continueWith(CHOICE, "typed");
-    await handles.controller.start(CHOICE, "typed");
+    await handles.controller.checkMic();
+    await handles.controller.continueWith(CHOICE);
+    await handles.controller.start(CHOICE);
     broken.ended.reject(new Error("the store is full"));
     await settled();
 
@@ -497,8 +516,9 @@ describe("practiceController — a session (D121)", () => {
   it("ends with an empty session, named as failed, when the run cannot start and nothing was stored", async () => {
     const handles = setUp({ started: Promise.reject(Object.assign(new Error("bad"), { name: "InvalidApiKeyError" })) });
     handles.useCases.oralSession.mockResolvedValueOnce(null);
-    await handles.controller.continueWith(CHOICE, "typed");
-    await handles.controller.start(CHOICE, "typed");
+    await handles.controller.checkMic();
+    await handles.controller.continueWith(CHOICE);
+    await handles.controller.start(CHOICE);
 
     expect(handles.actions.at(-1)).toMatchObject({ type: "ended", failure: "invalid-key", session: { id: ID, turns: [] } });
   });
@@ -507,8 +527,9 @@ describe("practiceController — a session (D121)", () => {
     const broken = aRun();
     const handles = setUp({ started: Promise.resolve(broken.run) });
     handles.useCases.oralSession.mockRejectedValueOnce(new Error("IndexedDB gone"));
-    await handles.controller.continueWith(CHOICE, "typed");
-    await handles.controller.start(CHOICE, "typed");
+    await handles.controller.checkMic();
+    await handles.controller.continueWith(CHOICE);
+    await handles.controller.start(CHOICE);
     broken.ended.reject(new Error("the store is full"));
     await settled();
     expect(handles.actions.at(-1)).toMatchObject({ type: "ended", session: { id: ID, turns: [] } });
@@ -525,7 +546,7 @@ describe("practiceController — a session (D121)", () => {
 
     expect(handles.current.endByUser).toHaveBeenCalled();
     expect(handles.mic.track.stopped).toBe(true);
-    expect(media.made[1]).toContain("stop");
+    expect(media.made[2]).toContain("stop");
     expect(handles.actions).toHaveLength(before);
   });
 
@@ -543,8 +564,9 @@ describe("practiceController — a session (D121)", () => {
       expect(handles.holds).toEqual([{ id: ID, released: false }]);
       return Promise.resolve(handles.current.run);
     });
-    await handles.controller.continueWith(CHOICE, "typed");
-    await handles.controller.start(CHOICE, "typed");
+    await handles.controller.checkMic();
+    await handles.controller.continueWith(CHOICE);
+    await handles.controller.start(CHOICE);
     expect(handles.holds).toEqual([{ id: ID, released: false }]);
 
     await handles.controller.end();
@@ -554,15 +576,17 @@ describe("practiceController — a session (D121)", () => {
 
   it("lets go of the session when the screen goes away and the run ends, and when the run never starts (D144)", async () => {
     const leaving = setUp();
-    await leaving.controller.continueWith(CHOICE, "typed");
-    await leaving.controller.start(CHOICE, "typed");
+    await leaving.controller.checkMic();
+    await leaving.controller.continueWith(CHOICE);
+    await leaving.controller.start(CHOICE);
     leaving.controller.dispose();
     await settled();
     expect(leaving.holds.map((hold) => hold.released)).toEqual([true]);
 
     const refused = setUp({ started: Promise.reject(new Error("refused")) });
-    await refused.controller.continueWith(CHOICE, "typed");
-    await refused.controller.start(CHOICE, "typed");
+    await refused.controller.checkMic();
+    await refused.controller.continueWith(CHOICE);
+    await refused.controller.start(CHOICE);
     await settled();
     expect(refused.holds.map((hold) => hold.released)).toEqual([true]);
   });
@@ -571,8 +595,9 @@ describe("practiceController — a session (D121)", () => {
     const started = deferred<OralPracticeRun>();
     const current = aRun();
     const handles = setUp({ started: started.promise });
-    await handles.controller.continueWith(CHOICE, "typed");
-    const starting = handles.controller.start(CHOICE, "typed");
+    await handles.controller.checkMic();
+    await handles.controller.continueWith(CHOICE);
+    const starting = handles.controller.start(CHOICE);
     handles.controller.dispose();
     started.resolve(current.run);
     await starting;

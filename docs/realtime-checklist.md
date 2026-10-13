@@ -41,10 +41,10 @@ Settings → **Your key**: a key is saved. Spoken practice → **Studio mode** �
 - [ ] **First ask.** **Check my microphone** brings up the browser's own prompt. Allow it. The level meter moves when you
       speak, and "Palier can hear you." appears.
 - [ ] **Refused.** In the site's settings, block the microphone, reload, and check again. The screen says why in plain
-      words, names this browser's way to allow it again, and offers **Practise by typing instead**. Choosing it prices and
-      runs a practice session, never a studio one.
+      words, names this browser's way to allow it again, and links the writing workshop and reading practice. There is
+      no way on to a session without the microphone (D234).
 - [ ] **Allowed again** in the site's settings, reload: the check passes without leaving the page.
-- [ ] **No microphone** (desktop only: unplug or disable the input device). The screen says there is none and offers typing.
+- [ ] **No microphone** (desktop only: unplug or disable the input device). The screen says there is none and links the writing workshop and reading practice.
 
 ## 2. Establishing the call (exit criterion 1)
 

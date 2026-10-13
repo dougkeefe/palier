@@ -574,7 +574,7 @@ An item is retired automatically if calibration data shows negative discriminati
 | **Empty review queue** | A genuine reward state. Coco asleep. "Nothing due. Come back tomorrow, or do a set anyway." |
 | **First run, no data** | Readiness card shows an invitation to take the diagnostic rather than an empty chart. As built (D214): the invitation is the plan's first step, "Start here: take the diagnostic", and Where you stand says the result will appear there once it is taken. |
 | **Mid-session abandonment** | Session state is checkpointed every item. Returning offers resume or discard, and mock exams resume with the clock as it was. |
-| **Mic permission denied** | Clear recovery instructions per browser, and an offer to use practice mode with typed answers instead. |
+| **Mic permission denied** | Clear recovery instructions per browser, and an offer to use practice mode with typed answers instead. *(Amended 13 October 2026, human, `progress.md` D234: spoken practice takes no typed answers. Without a microphone it gives the recovery steps and offers the writing workshop and reading drills, §11's full-value alternatives.)* |
 | **Sync unavailable** | A quiet header indicator only. Study is never interrupted, nothing is lost, and the queue drains when the network returns. No modal, no error toast. |
 | **Sync conflict** | Resolved silently. Attempts merge because they are append-only, and estimates are recomputed from the merged set. The user is never asked to choose a version. |
 | **New device, pairing** | Enter the code, then a short "restoring your progress" state with the item count as it lands, followed by the readiness card already populated. |

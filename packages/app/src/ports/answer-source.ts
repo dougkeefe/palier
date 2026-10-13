@@ -9,9 +9,9 @@ export type ExaminerQuestion = {
 };
 
 /**
- * The candidate's answer: a recorded clip with its measured length, or typed words
- * when the microphone is refused or absent (product-requirements.md §14, "Mic
- * permission denied"). A clip may carry `pauseMs`, how long the candidate waited after the
+ * The candidate's answer: a recorded clip with its measured length, or typed words. No screen
+ * gives typed words since spoken practice became spoken only (progress.md D234); the kind stays
+ * so the port's contract, and the sessions already stored with typed turns, are unchanged. A clip may carry `pauseMs`, how long the candidate waited after the
  * question had been heard before they pressed Record, which only the screen can measure,
  * because only it knows when the question's voice stopped (progress.md D127).
  */

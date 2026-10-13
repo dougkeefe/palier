@@ -7,11 +7,9 @@ import type { MicState } from "./mic";
 
 /**
  * The spoken-practice screen's decisions (product-requirements.md §8.6 practice mode, §14;
- * progress.md D119), kept out of the `.tsx` so each is tested.
+ * progress.md D119), kept out of the `.tsx` so each is tested. Every answer is spoken: without a
+ * microphone the screen points to the writing workshop and reading drills, never to typing (D234).
  */
-
-/** How the candidate answers: by recording, or by typing when the microphone is refused or absent. */
-export type AnswerMode = "spoken" | "typed";
 
 /** Why a session failed, in words the screen can say (the key screen's names, D100). */
 export type OralFailure =
@@ -41,7 +39,6 @@ export type PracticeState =
   | {
       readonly phase: "confirming";
       readonly choice: OralSessionChoice;
-      readonly mode: AnswerMode;
       readonly preflight: Preflight;
       readonly held?: OralMode;
     }
@@ -50,12 +47,13 @@ export type PracticeState =
   | {
       readonly phase: "running";
       readonly choice: OralSessionChoice;
-      readonly mode: AnswerMode;
       /** The examiner's latest question, kept on screen while the next is written. */
       readonly question: ExaminerQuestion | null;
       /** Whether that question is waiting for an answer. */
       readonly waiting: boolean;
       readonly turn: Turn;
+      /** The last answer's recorder could not start; the next Record tries again (D234). */
+      readonly recordFailed: boolean;
       readonly ending: boolean;
       readonly startedAtMs: number;
     }
@@ -72,14 +70,14 @@ export type PracticeState =
 export type PracticeAction =
   | { readonly type: "choose"; readonly choice: OralSessionChoice; readonly held?: OralMode }
   | { readonly type: "mic"; readonly mic: MicState }
-  | { readonly type: "preflighted"; readonly mode: AnswerMode; readonly preflight: Preflight; readonly held?: OralMode }
+  | { readonly type: "preflighted"; readonly preflight: Preflight; readonly held?: OralMode }
   | { readonly type: "back" }
   /** A studio session started: the studio view takes over until it ends (D185). */
   | { readonly type: "studio" }
-  | { readonly type: "started"; readonly nowMs: number; readonly mode?: AnswerMode }
+  | { readonly type: "started"; readonly nowMs: number }
   | { readonly type: "question"; readonly waiting: ExaminerQuestion | null }
   | { readonly type: "recording" }
-  /** The recorder could not start: the rest of the session is answered by typing (D121). */
+  /** The answer's recorder could not start: the question waits for another try (D234). */
   | { readonly type: "recordFailed" }
   | { readonly type: "sent" }
   | { readonly type: "ending" }
@@ -97,7 +95,7 @@ export const INITIAL_PRACTICE: PracticeState = { phase: "picking" };
 const studioHeld = (held: OralMode | undefined): { readonly held?: OralMode } => (held === "studio" ? { held } : {});
 
 /**
- * The screen's steps: pick a session and a mode, check the microphone (or choose to type), confirm the
+ * The screen's steps: pick a session and a mode, check the microphone, confirm the
  * estimate, then run it until it ends. An action that does not belong to the current step is
  * ignored, so a late event (a question after the end, a tap during the check) never moves it.
  * A studio session leaves for its own view and comes back to the end card (D185).
@@ -113,7 +111,6 @@ export const practice = (state: PracticeState, action: PracticeAction): Practice
         return {
           phase: "confirming",
           choice: state.choice,
-          mode: action.mode,
           preflight: action.preflight,
           ...studioHeld(action.held),
         };
@@ -136,10 +133,10 @@ export const practice = (state: PracticeState, action: PracticeAction): Practice
       return {
         phase: "running",
         choice: state.choice,
-        mode: action.mode ?? state.mode,
         question: null,
         waiting: false,
         turn: "idle",
+        recordFailed: false,
         ending: false,
         startedAtMs: action.nowMs,
       };
@@ -150,9 +147,9 @@ export const practice = (state: PracticeState, action: PracticeAction): Practice
             ? { ...state, waiting: false }
             : { ...state, question: action.waiting, waiting: true, turn: "idle" };
         case "recording":
-          return state.waiting ? { ...state, turn: "recording" } : state;
+          return state.waiting ? { ...state, turn: "recording", recordFailed: false } : state;
         case "recordFailed":
-          return { ...state, mode: "typed", turn: "idle" };
+          return { ...state, turn: "idle", recordFailed: true };
         // A sent answer ends the wait at once, not when the bridge next speaks: the recorder takes a moment
         // to stop, and while it did, "Record your answer" came back for a question already answered, so a
         // second answer could be recorded to it, and a session ended there lost the next question (D202).
@@ -217,8 +214,8 @@ export const endMessage = (reason: OralEndReason | null): string => {
 
 /**
  * When studio mode's route is woken (D190): on each step before the tap, the microphone check and the pre-flight, of a
- * session held in studio mode. The step is the answer, so the screen wakes it once as each is shown. Practice mode,
- * and a studio choice that fell back to typing, never call the route.
+ * session held in studio mode. The step is the answer, so the screen wakes it once as each is shown. Practice mode
+ * never calls the route.
  */
 export const studioWarmup = (state: PracticeState): "mic" | "confirming" | null =>
   (state.phase === "mic" || state.phase === "confirming") && state.held === "studio" ? state.phase : null;
@@ -227,9 +224,9 @@ export const studioWarmup = (state: PracticeState): "mic" | "confirming" | null 
  * The pre-flight's line on where the session sends what, in the `oral` namespace (D186). Studio mode's says where the
  * key goes: Palier's route, or the user's own endpoint when this device has one (D192).
  */
-export const sendsTo = (studio: boolean, ownEndpoint: boolean, mode: AnswerMode): string => {
-  if (studio) return ownEndpoint ? "sendsToStudioOwn" : "sendsToStudio";
-  return mode === "spoken" ? "sendsToSpoken" : "sendsToTyped";
+export const sendsTo = (studio: boolean, ownEndpoint: boolean): string => {
+  if (!studio) return "sendsToSpoken";
+  return ownEndpoint ? "sendsToStudioOwn" : "sendsToStudio";
 };
 
 /** The picker's studio callout, in the `oral` namespace: the same choice of where the key goes (D186, D192). */
@@ -259,16 +256,13 @@ export const recordingsMegabytes = (bytes: number): number => (bytes <= 0 ? 0 : 
 
 /**
  * Where focus goes as a turn moves on (WCAG 2.4.3, D121): to the question when it starts waiting
- * to be answered aloud, to the answer field when it is to be typed, and nowhere otherwise, so
- * sending an answer never drops focus to the page and a new question is announced by landing on it.
+ * to be answered, and nowhere otherwise, so sending an answer never drops focus to the page and a
+ * new question is announced by landing on it.
  */
 export const turnFocus = (
   before: { readonly waiting: boolean } | null,
-  after: { readonly waiting: boolean; readonly mode: AnswerMode },
-): "question" | "answer" | null => {
-  if (!after.waiting || before?.waiting === true) return null;
-  return after.mode === "typed" ? "answer" : "question";
-};
+  after: { readonly waiting: boolean },
+): "question" | null => (after.waiting && before?.waiting !== true ? "question" : null);
 
 /** Where the question being answered stands, as the screen saw it, for the pause before an answer. */
 export type QuestionHeard = {

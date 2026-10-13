@@ -1001,7 +1001,8 @@ Practice mode first, deliberately. It delivers most of the learning value, it is
 - `assessOral`: per-criterion bands with quoted evidence, three ranked fixes mapped to sub-skills, missing vocabulary in context, marked-up transcript.
 - Client-side fluency metrics from timings: words per minute, filler count, mean pause.
 - The loop back into the scheduler, so the three fixes become tomorrow's drill items.
-- Mic permission handling and recovery, typed-answer fallback.
+- Mic permission handling and recovery, typed-answer fallback. *(Amended 13 October 2026, `progress.md` D234: the typed
+  fallback is removed; without a microphone the screen offers the writing workshop and reading drills.)*
 
 **Exit criteria**
 
@@ -1022,7 +1023,8 @@ practice mode and report, with all five session types and pronunciation as a per
   exit criterion 5.
 - **Slice 2 — The turn loop on the key.** `transcribe` and speech as `AiProvider` capabilities, the turn-based
   transport, `/practice/oral` in practice mode, mic permission and recovery with a typed-answer fallback, local
-  recording, and the key-leak test extended to audio. *Done:* exit criterion 3.
+  recording, and the key-leak test extended to audio. *Done:* exit criterion 3. *(The typed-answer fallback was removed
+  13 October 2026, D234.)*
 - **Slice 3 — `assessOral` and the report.** Per-criterion bands with quoted evidence, three ranked fixes into the
   scheduler, missing vocabulary, the marked-up transcript, device-side fluency metrics, the pronunciation opt-in
   (**deferred to Gate J** by the human, `progress.md` D122: the `pronounce` role ships unconfigured), cost per session

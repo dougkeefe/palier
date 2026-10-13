@@ -118,10 +118,10 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(await generateAndPractise(page)).toBe(5);
   expect(laptop.watch.openAiBodies().filter((body) => body.includes(GENERATED_SENTINEL))).toHaveLength(5);
   expect(laptop.watch.openAiAuthorizations()).toEqual(Array.from({ length: 10 }, () => `Bearer ${SENTINEL}`));
-  // 3c. Spoken practice from Today, with two recorded answers. The screen makes the session's
-  // recorder first (#1), then one per answer (#2, #3). Each clip goes to the transcription endpoint
-  // once, with the key; the session recording goes nowhere; the transcript goes back to OpenAI only
-  // inside the examiner's next request.
+  // 3c. Spoken practice from Today, with two recorded answers. The microphone check makes a recorder it never
+  // starts (#1, D234), the screen then makes the session's recorder (#2), then one per answer (#3, #4). Each
+  // clip goes to the transcription endpoint once, with the key; the session recording goes nowhere; the
+  // transcript goes back to OpenAI only inside the examiner's next request.
   await page.getByRole("link", { name: "Today", exact: true }).click();
   await page.getByRole("link", { name: "Practise speaking" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Spoken practice" })).toBeVisible();
@@ -129,9 +129,9 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await expect(page.getByText(TRANSCRIPT_SENTINEL, { exact: false }).first()).toBeVisible();
   const audioRequests = laptop.watch.openAiRequests().filter((request) => request.body.includes(AUDIO_SENTINEL));
   expect(audioRequests.map((request) => request.path)).toEqual(["/v1/audio/transcriptions", "/v1/audio/transcriptions"]);
-  expect(audioRequests[0]?.body).toContain(recorderMarker(2));
-  expect(audioRequests[1]?.body).toContain(recorderMarker(3));
-  expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
+  expect(audioRequests[0]?.body).toContain(recorderMarker(3));
+  expect(audioRequests[1]?.body).toContain(recorderMarker(4));
+  expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(2)))).toBe(false);
   const heardBack = laptop.watch.openAiRequests().filter((request) => request.body.includes(TRANSCRIPT_SENTINEL));
   expect(heardBack.length).toBeGreaterThan(0);
   expect(new Set(heardBack.map((request) => request.path))).toEqual(new Set(["/v1/chat/completions"]));
@@ -146,7 +146,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(reportRequest?.path).toBe("/v1/chat/completions");
   expect(reportRequest?.body).toContain(TRANSCRIPT_SENTINEL);
   expect(reportRequest?.body).not.toContain(AUDIO_SENTINEL);
-  expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
+  expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(2)))).toBe(false);
   // 3e. Studio mode's secret (ADR 3, D169): the one route on this origin that may see the key, posted to
   // as the studio transport's route client posts, with the key in Authorization and no body. Its answer
   // is a secret and its expiry and nothing else; the final check reads that answer for the key too.
@@ -161,7 +161,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(laptop.watch.openAiAuthorizations()).toHaveLength(19);
   // 3f. A studio conversation from the screen (D171, D188): the fake-peer half. The screen posts the key to the
   // route once, in Authorization; the call to /v1/realtime/calls carries the minted ek_ secret, never the key; the
-  // conversation's recording, the page's fourth recorder, reaches no request; and no other call spends the key.
+  // conversation's recording, the page's sixth recorder (after the studio check's own, #5), reaches no request; and no other call spends the key.
   await page.getByRole("link", { name: "Back to spoken practice" }).first().click();
   const warmupsBefore = laptop.watch.realtimeSecretWarmups();
   await talkInStudio(page);
@@ -172,7 +172,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(dialled).toHaveLength(1);
   expect(dialled.every((authorization) => /^Bearer ek_memory_\d+$/.test(authorization))).toBe(true);
   expect(laptop.watch.openAiAuthorizations()).toHaveLength(19);
-  expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(4)))).toBe(false);
+  expect(laptop.watch.openAiBodies().some((body) => body.includes(recorderMarker(6)))).toBe(false);
 
   // The first return home after a spoken session shows its milestone moment once (D159); it is closed as a user would.
   await page.getByRole("link", { name: "Today", exact: true }).click();

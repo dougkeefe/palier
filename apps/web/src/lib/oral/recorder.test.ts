@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { type MediaKit, type RecorderLike, pickRecordingType, recordClip, recordSession, recordWhole } from "./recorder";
+import { type MediaKit, type RecorderLike, canRecord, pickRecordingType, recordClip, recordSession, recordWhole } from "./recorder";
 
 /** A `MediaRecorder` stand-in: each `stop` flushes the chunks given since `start`, as the browser does. */
 const fakeRecorder = (mimeType: string) => {
@@ -56,6 +56,27 @@ describe("pickRecordingType (D119)", () => {
     expect(pickRecordingType(() => true)).toBe("audio/webm;codecs=opus");
     expect(pickRecordingType((t) => t === "audio/mp4")).toBe("audio/mp4");
     expect(pickRecordingType(() => false)).toBeUndefined();
+  });
+});
+
+describe("canRecord (D234)", () => {
+  it("makes a recorder in a clip's format, and never starts it", () => {
+    const { kit, made } = kitWith();
+    expect(canRecord(stream, kit)).toBe(true);
+    expect(made).toHaveLength(1);
+    expect(made[0]?.type).toBe("audio/webm;codecs=opus");
+    expect(made[0]?.recorder.calls).toEqual([]);
+  });
+
+  it("is false when the browser cannot make a recorder at all", () => {
+    const kit: MediaKit = {
+      record: () => {
+        throw new ReferenceError("MediaRecorder is not defined");
+      },
+      supports: () => false,
+      now: () => 0,
+    };
+    expect(canRecord(stream, kit)).toBe(false);
   });
 });
 
