@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 11 October 2026 (the landing page's explainer video and headline; D230, D231)
+**Last updated:** 12 October 2026 (the landing page's header folds behind a menu on a phone, D232; preloads in the document, D233)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/mobile-menu-fix` | **The landing page's menu on a phone** (D232; the human's request, 12 October 2026): below 1000px the header is the brand and a menu button at the top right, which opens the sections, the language and the way in. **And the console's two "preloaded but not used" warnings** (D233). | 12 October 2026 |
 | `dougkeefe/palier-explainer-video-use` | **The landing page's explainer video** (D230; the human's request, 11 October 2026): the owner's video below the fold, before "Built for exam conditions.", in each page's language. | 11 October 2026 |
 | `dougkeefe/oral-page-layout-update` | **The spoken-practice picker laid out again** (D229; the human's request, 11 October 2026): the key card first, the two modes side by side, the sessions as a grid, the picker its own component. | 11 October 2026 |
 | `dougkeefe/p3an3` | **The nightly lane green again** (D227; the human's request, 11 October 2026): the live smoke's key was refused, and the smoke now says what to do about it. | 11 October 2026 |
@@ -267,6 +268,9 @@ four lanes are green. Then, on the deployed site, the human opens `/en/home` as 
 
 On `/practice/oral`, in both languages and on a phone: the picker's new layout (D229). Say whether the two steps read
 in order, and whether the no-key card belongs at the top.
+
+On the landing page, in both languages and on a phone: open the menu at the top right (D232), follow a section, and
+say whether "Start free" belongs inside it or beside the button.
 
 On the landing page, in both languages: the explainer video (D230), between the strip and "Built for exam conditions.".
 Play each in Safari and Chrome, on a phone too, and say whether it sits right there. In the French recording's closing
@@ -7736,9 +7740,110 @@ for it on the landing page, below the fold, just before "Built for exam conditio
 back**: it is the human's call, made knowing the guide. The rest of the English copy keeps the guide's split, and the
 design files under `docs/Palier landing page/` keep their original text.
 
+### D232 — on a narrow screen, the landing page's header folds behind a menu button at the top right
+**Date:** 12 October 2026 · **Status:** accepted (human's request; agent's build). Amends D201's header below 1000px
+
+On a phone the landing header wrapped to three rows: the brand, the section pills ("Questions" alone on a second line),
+then the language and "Start free". It took a third of the hero. The human asked for a hamburger menu at the top right.
+
+- **Below 1000px the header is one row: the brand, and a menu button at the top right.** The button opens a panel on the
+  closing call's deep ink (`--landing-accent-900`, so its white text is the pair the contrast test already holds) with the
+  four sections stacked, then the language and "Start free" side by side. At 1000px and up the button is hidden and the
+  panel is `display: contents`, so the header is D201's exactly. 1000px, not lower: the French header wraps to two rows up
+  to about 960px, and below the breakpoint it can no longer wrap, so the hero's top padding is one value (120px) at every
+  width.
+- **"Start free" goes into the panel, not beside the button.** The header's focus order is brand, then the sections (D201's
+  smoke test). Beside the button, "Start free" would come after the sections in the document but before the button on
+  screen. The hero's own "Try a free mock exam" is directly below, so the way in is never hidden.
+- **A disclosure, not an ARIA menu.** `LandingMenu.tsx` is a client island around the server-rendered nav and actions: a
+  button with `aria-expanded` and `aria-controls`, labelled `landing.menu`. Escape closes it and returns focus to the
+  button; following a link inside closes it, since the sections are in-page anchors; and focus or a tap landing outside it
+  closes it, so Tab past its last link never leaves it over the page. What it decides is `menuOpenAfter`
+  in `features/landing/landing.ts`. One `nav` landmark at every width, no duplicated links.
+- **Tests.** `landing.test.ts` gains `menuOpenAfter`'s four cases. `smoke.spec.ts` gains one at 390×844: closed, the
+  sections and "Start free" are hidden; open, all of them show and the page is axe-clean; Escape closes it onto the button;
+  Tab out of it, or a tap on the hero below it, closes it; following "How it works" lands on `#how` with the menu closed. D201's desktop focus-order test is unchanged and passes.
+- **Not an ADR.** Landing-page layout, recorded here. The French read at Gate O gains `landing.menu` ("Menu").
+
+### D233 — a page's preloads are in its `<head>`, never a `Link` header
+**Date:** 12 October 2026 · **Status:** accepted (human's request; agent's diagnosis and build)
+
+The human reported two console warnings on the deployed landing page: the serif (D161) and the hero photograph (D201) were
+"preloaded using link preload but not used within a few seconds from the window's load event".
+
+- **The cause is React's `Link` header and the service worker together.** By default Next has React send a page's
+  preloads as an HTTP `Link` header. The serif is preloaded *only* there; the hero is in the header and in the HTML. On a
+  page the worker controls, Chrome does not match a `Link`-header preload the worker answers. It fetches the font a
+  second time when the stylesheet asks for it, and warns. Measured on the deployed site and a local production build: with
+  the worker blocked, no warning on any load; with it in control, the warning on almost every load, and two font requests
+  for one page where the trace showed them. The hero's warning did not reproduce in either browser tested. It is the same
+  mechanism, and the same fix covers it.
+- **`reactMaxHeadersLength: 1`** in `next.config.ts` turns the header off, so React writes the same preloads into the
+  `<head>` instead. One, not zero: no preload fits in one character, and zero makes React log an error on every render,
+  which CI's server log showed on every request. On the local production build each file is then requested once, by the
+  parser, on every load, controlled or not, and no warning appears. Lighthouse on `/en` and `/fr` (desktop, three runs
+  each, measured with `0`, whose document is the same) scored 100 for performance and accessibility, with an LCP near
+  0.79 s and a CLS of 0. The header could only help where the browser acted on it before the `<head>` arrived; whether
+  Vercel turns it into 103 Early Hints was not checked.
+- **Not the alternatives.** Dropping the font's preload would bring back the `/fr` rewrap that cost its Lighthouse budget
+  (D201). Leaving fonts and images to the network would undo the offline serif (D161).
+- **Tests.** `offline.spec.ts` gains one in the production lane, about 0.15 s: the page's response has no `rel=preload`
+  in a `Link` header, and its `<head>` has the font's preload. It checks the cause, not the warning. A version that waited
+  for the worker and read Chrome's log over CDP took 6.8 s, and pushed E2E shard 1, already at 4.6 of its 5 minutes on
+  `main`, over its budget. The warning half was measured by hand instead: without the setting, three runs in three warned;
+  with it, none over four controlled loads. The setting is read when `next start` starts, so trying it needs no rebuild.
+- **Not an ADR.** A build setting with its reason, recorded here.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 13 October 2026 — `dougkeefe/mobile-menu-fix` (E2E shard 1 back under budget; D233 amended)
+
+PR #79's E2E shard 1 ran out of its 300 s budget with about 60 of its 62 tests through. No test failed; the one in flight
+when the job was killed recorded "Target page, context or browser has been closed". Shard 1 already took 4.6 minutes on
+`main`'s last three runs, and this branch's D233 test added 6.8 s of waiting for the worker and Chrome's warning timer to
+it. That test now checks only the cause, in about 0.15 s. The CI log also showed React logging an error on every render
+for `reactMaxHeadersLength: 0`, so the setting is now `1`, which keeps every preload out of the header without the error
+(D233, amended). This corrects the entry below, which named `0`.
+
+**Verified:**
+- `pnpm verify` was green.
+- On a local production build: `e2e/offline.spec.ts` and `e2e/production.spec.ts` passed, 13 tests, the D233 test in 150 ms.
+  With `1`, `/en`, `/fr`, `/en/about` and `/en/home` sent no preload in a `Link` header and had the font's preload in the
+  `<head>`; the server logged no `maxHeadersLength` error; and four loads under the worker raised no unused-preload warning.
+- **Shard 1 still has little room.** Back to `main`'s 4.6 minutes, it passes, but a slow runner or another production test
+  could tip it over again. Shard 2 took 3.3 minutes on the same run. Balancing them is not this branch's work, but it
+  needs doing.
+
+### 12 October 2026 — `dougkeefe/mobile-menu-fix` (preloads in the document; D233)
+
+Also not *Next, decided*: the human asked for the console's two "preloaded but not used" warnings to go. The cause was
+React's `Link` header with the service worker in control. `reactMaxHeadersLength: 0` puts the preloads in the `<head>`
+(D233).
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,399 tests passed (8 todo), with no dependency violations.
+- On a local production build (`next start` on port 3457), `e2e/offline.spec.ts`, `e2e/production.spec.ts` and
+  `e2e/csp-production.spec.ts` passed: 20 tests, the new one included. Without the setting, the new test failed on the
+  header, and on the warnings alone (three runs in three) with the header assertions removed. A review then cut it from
+  two pages and 8 s of waiting to one and 3.5 s (6.8 s in all), since shard 1 has about 20 s of its budget left.
+- Lighthouse (desktop) on `/en` and `/fr`, three runs each: performance 100, accessibility 100, LCP 788–797 ms, CLS 0.
+
+### 12 October 2026 — `dougkeefe/mobile-menu-fix` (the landing page's menu on a phone; D232)
+
+This was not *Next, decided*. The human sent a screenshot of the landing header wrapping to three rows on a phone and
+asked for a hamburger menu at the top right. Below 1000px the header is now the brand and a menu button, whose panel holds
+the four sections, the language and "Start free" (D232). Desktop is unchanged. No existing test changed.
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,398 tests passed (8 todo), with no dependency violations.
+- `e2e/smoke.spec.ts` and `e2e/motion.spec.ts` passed against a hermetic `next dev` on port 3456 (port 3000 belonged to
+  another workspace): 16 tests, the new one and D201's focus-order test included. After the review added closing on
+  focus or a tap outside, the new test passed five runs in five. "The landing page's way in leads to the app" failed
+  once on a cold server and passed three runs in three after: the race the D230 entry describes.
+- Screenshots at 390, 999, 1000 and 1280px wide, in both languages, open and closed, were checked by eye: one header row
+  at every width, the button only below 1000px.
 
 ### 11 October 2026 — `dougkeefe/palier-explainer-video-use` (the landing page's explainer video; D230)
 

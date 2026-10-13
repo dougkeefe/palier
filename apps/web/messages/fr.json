@@ -34,6 +34,7 @@
   },
   "landing": {
     "navLabel": "Sur cette page",
+    "menu": "Menu",
     "nav": {
       "home": "Accueil",
       "tests": "Les épreuves",

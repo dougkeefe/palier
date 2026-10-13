@@ -54,6 +54,18 @@ test("the self-hosted serif is precached (D161, D202)", async ({
   expect(fonts.some((file) => file.startsWith("source_serif_4")), fonts.join(", ")).toBe(true);
 });
 
+test("a page's preloads are in its document, never a Link header, so a page the worker controls uses them (D233)", async ({
+  page,
+}) => {
+  // React sends a page's preloads as a Link header unless told not to. Chrome does not match a
+  // Link-header preload the worker answers, so it fetches the font again and warns. That was
+  // measured by hand (D233); this checks the cause, without waiting on the worker, since this
+  // shard's budget has little room.
+  const response = await page.goto("/en");
+  expect(response?.headers()["link"] ?? "").not.toMatch(/rel=preload/);
+  await expect(page.locator('head link[rel="preload"][as="font"]')).toHaveCount(1);
+});
+
 test("the key guide's video is fetched in ranges through the service worker, which leaves it to the network and never caches it (D220)", async ({
   page,
 }) => {

@@ -44,3 +44,13 @@ export const sampleOptionState = (
   if (option === SAMPLE_ANSWER) return "correct";
   return option === picked ? "incorrect" : "plain";
 };
+
+/** What can happen to the header's menu on a narrow screen (D232). */
+export type MenuEvent = "toggle" | "escape" | "follow" | "leave";
+
+/**
+ * Whether the header's menu is open after `event`: the button toggles it, and Escape, following
+ * one of its section links, or focus or a tap landing outside it closes it. The links are in-page
+ * anchors, so the page would otherwise scroll to the section with the menu still open over it.
+ */
+export const menuOpenAfter = (open: boolean, event: MenuEvent): boolean => (event === "toggle" ? !open : false);
