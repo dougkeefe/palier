@@ -6,12 +6,13 @@ import {
   type ClipRecording,
   type MediaKit,
   type SessionRecording,
+  canRecord,
   recordClip,
   recordSession,
 } from "../../lib/oral/recorder";
 import { type AnswerBridge, answerBridge } from "./answer-bridge";
 import { levelVerdict, micFailure } from "./mic";
-import { type AnswerMode, type OralFailure, type PracticeAction, type QuestionHeard, answerPause, oralFailure } from "./practice-view";
+import { type OralFailure, type PracticeAction, type QuestionHeard, answerPause, oralFailure } from "./practice-view";
 
 /** The use cases the screen's session needs, as the container binds them. */
 export type PracticeUseCases = {
@@ -48,20 +49,19 @@ export type PracticeControllerDeps = {
 export type PracticeController = {
   readonly checkMic: () => Promise<void>;
   /**
-   * On to the pre-flight, answering as `mode`, in the mode `held` chose (D185). Studio mode needs the microphone:
-   * without it, the session is priced, and run, as practice by typing.
+   * On to the pre-flight, in the mode `held` chose (D185), once the check has opened the microphone. Every answer is
+   * spoken, so without one it does nothing (D234).
    */
-  readonly continueWith: (choice: OralSessionChoice, mode: AnswerMode, held?: OralMode) => Promise<void>;
+  readonly continueWith: (choice: OralSessionChoice, held?: OralMode) => Promise<void>;
   /**
    * Give the checked microphone to studio mode's controller (D185), which lets it go when its session ends.
    * This controller forgets it, so neither Back nor leaving the page stops it under the studio session.
    */
   readonly handOver: () => MediaStream | null;
   readonly back: () => void;
-  readonly start: (choice: OralSessionChoice, mode: AnswerMode) => Promise<void>;
+  readonly start: (choice: OralSessionChoice) => Promise<void>;
   readonly record: () => void;
   readonly stopAndSend: () => Promise<void>;
-  readonly sendTyped: (text: string) => boolean;
   /** The question's voice began playing, or played again: the candidate is listening (D127). */
   readonly questionPlaying: () => void;
   /** The question's voice stopped, ended or paused, or could not play: it has been heard (D127). */
@@ -96,12 +96,14 @@ const ignore = (): void => undefined;
  * level check, the recorders, the practice run and its end, over deps a test can fake. The `.tsx`
  * renders the reducer's state and calls these; everything that decides lives here, tested.
  *
- * - **The microphone is let go on every way out**: Back, a failed check, a typed session, the end,
+ * - **The microphone is let go on every way out**: Back, a failed check, the end,
  *   and the screen going away. A check that finishes after the user moved on is dropped.
  * - **Each step runs once**: a second tap while a pre-flight or a start is in flight does nothing.
  * - **End before the run exists is kept**, and applied the moment it does.
- * - **A recorder that cannot start** turns the rest of the session to typing rather than leaving a
- *   dead button, and a clip is only ever kept once its recorder is running.
+ * - **Every answer is spoken** (D234). The check fails as `unsupported` when the browser cannot make a
+ *   recorder at all, so no session is paid for that could not be answered. A session that cannot be
+ *   recorded whole still runs, keeping no recording; an answer whose recorder cannot start says so and
+ *   waits for another try, and a clip is only ever kept once its recorder is running.
  * - **A session whose driver fails** is closed, and named as failed, with the transcript it stored.
  * - **The session is held as running in this page** from before it is stored until it ends (D144),
  *   so another tab never closes it as abandoned, and a closed tab's session is.
@@ -176,6 +178,12 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
           return;
         }
         stream = opened;
+        // A browser that opens the microphone but cannot record it is unsupported here, before anything is spent (D234).
+        if (!canRecord(opened, deps.media)) {
+          stopStream();
+          deps.dispatch({ type: "mic", mic: "unsupported" });
+          return;
+        }
         const peak = await deps.measureLevel(opened, deps.onLevel);
         if (mine !== check || disposed) return;
         deps.dispatch({ type: "mic", mic: levelVerdict(peak) });
@@ -186,17 +194,14 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
       }
     },
 
-    continueWith: async (choice, requested, held = "practice") => {
-      if (busy) return;
+    continueWith: async (choice, held = "practice") => {
+      if (busy || stream === null) return;
       busy = true;
       check += 1;
-      const mode: AnswerMode = requested === "spoken" && stream !== null ? "spoken" : "typed";
-      if (mode === "typed") stopStream();
-      const heldNow: OralMode = held === "studio" && mode === "spoken" ? "studio" : "practice";
       try {
-        const feature = heldNow === "studio" ? "oral-studio" : "oral-practice";
+        const feature = held === "studio" ? "oral-studio" : "oral-practice";
         const preflight = await deps.useCases.preflightSpend({ feature, quantity: choice.minutes });
-        if (!disposed) deps.dispatch({ type: "preflighted", mode, preflight, ...(heldNow === "studio" ? { held: heldNow } : {}) });
+        if (!disposed) deps.dispatch({ type: "preflighted", preflight, ...(held === "studio" ? { held } : {}) });
       } finally {
         busy = false;
       }
@@ -215,8 +220,8 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
       return given;
     },
 
-    start: async (choice, requested) => {
-      if (busy || !finished) return;
+    start: async (choice) => {
+      if (busy || !finished || stream === null) return;
       busy = true;
       finished = false;
       endRequested = false;
@@ -228,19 +233,12 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
         if (waiting !== null) question = { shownAtMs: deps.now(), voiced: waiting.audio !== null, heardAtMs: null };
         deps.dispatch({ type: "question", waiting });
       });
-      let mode: AnswerMode = requested;
-      recording = null;
-      if (requested === "spoken" && stream !== null) {
-        try {
-          recording = recordSession(stream, deps.media);
-        } catch {
-          mode = "typed";
-          stopStream();
-        }
-      } else {
-        mode = "typed";
+      try {
+        recording = recordSession(stream, deps.media);
+      } catch {
+        recording = null;
       }
-      deps.dispatch({ type: "started", nowMs: deps.now(), mode });
+      deps.dispatch({ type: "started", nowMs: deps.now() });
       try {
         const started = await deps.useCases.startOralPractice({ sessionId, scenarioId: choice.scenario.id }, bridge.source);
         run = started;
@@ -294,13 +292,6 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
 
     questionHeard: () => {
       if (question !== null) question = { ...question, heardAtMs: deps.now() };
-    },
-
-    sendTyped: (text) => {
-      const words = text.trim();
-      if (words === "" || bridge?.submit({ kind: "typed", text: words }) !== true) return false;
-      deps.dispatch({ type: "sent" });
-      return true;
     },
 
     tick: () => run?.tick() ?? Promise.resolve(),

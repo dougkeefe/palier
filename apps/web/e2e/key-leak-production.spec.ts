@@ -91,18 +91,19 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL] });
 
   // 2c. Spoken practice with one recorded answer: the transcript at rest in `oralSessions`, the
-  // session recording (recorder #1) in `oralAudio`, the clip (#2) sent to the transcription
-  // endpoint only, and five calls in the ledger: two questions written and voiced, one clip.
+  // session recording (recorder #2, after the check's unstarted #1, D234) in `oralAudio`, the clip (#3)
+  // sent to the transcription endpoint only, and five calls in the ledger: two questions written and
+  // voiced, one clip.
   await page.goto("/en/practice/oral");
   await practiseSpeaking(page, { answers: 1 });
   expect(await idsAtRest(page, "palier", "oralSessions")).toHaveLength(1);
-  expect(await recordingsAtRest(page)).toEqual([recorderMarker(1)]);
+  expect(await recordingsAtRest(page)).toEqual([recorderMarker(2)]);
   expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(1 + 6 + 5);
   const audio = watch.openAiRequests().filter((request) => request.body.includes(AUDIO_SENTINEL));
-  expect(audio.map((request) => [request.path, request.body.includes(recorderMarker(2))])).toEqual([["/v1/audio/transcriptions", true]]);
-  expect(watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
+  expect(audio.map((request) => [request.path, request.body.includes(recorderMarker(3))])).toEqual([["/v1/audio/transcriptions", true]]);
+  expect(watch.openAiBodies().some((body) => body.includes(recorderMarker(2)))).toBe(false);
   await page.reload();
-  expect(await recordingsAtRest(page)).toEqual([recorderMarker(1)]);
+  expect(await recordingsAtRest(page)).toEqual([recorderMarker(2)]);
   await watch.assertNoLeak([page], { deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL] });
 
   // 2d. Its report (D126), from the list of past sessions: one more ledger row, the report at rest
@@ -112,7 +113,7 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   await page.getByRole("button", { name: "Send for the report" }).click();
   await expect(page.getByRole("region", { name: "Your report" })).toBeVisible();
   expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(1 + 6 + 5 + 1);
-  expect(watch.openAiBodies().some((body) => body.includes(recorderMarker(1)))).toBe(false);
+  expect(watch.openAiBodies().some((body) => body.includes(recorderMarker(2)))).toBe(false);
   await page.reload();
   await expect(page.getByRole("region", { name: "Your report" })).toBeVisible();
   // The positive control: the report's words really are at rest with their session (D127).

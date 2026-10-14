@@ -336,9 +336,13 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     controller's `attach` pairs with `dispose`, because Strict Mode remounts the screen in development. The recorder and the level check are `lib/oral/`, over a
     `MediaKit` and a `LevelKit` a test fakes. The session is `startOralPractice`: the app's turn-based transport
     over the real adapter, metered as `oral-practice`. **Only the current question is shown during a session**,
-    never a running transcript. The session recording (the candidate's answers only) is kept by `saveOralAudio`,
-    **never uploaded in this slice, never synced and never exported**; `/settings/data` shows its size and deletes
-    it in one action. The hermetic clock is frozen, so hermetic journeys end a session by its end control.
+    never a running transcript. **Every answer is spoken, in either mode; nothing on the screen takes typed words**
+    (D234). The microphone check also makes, and never starts, a recorder (`canRecord`), so a browser that opens the
+    microphone but cannot record it is `unsupported` before anything is spent. Without a microphone the screen gives
+    the recovery steps and links the writing workshop and reading practice (PRD §11's alternatives). Typed turns still
+    exist in sessions stored before D234, so the report keeps rendering them. The session recording (the candidate's
+    answers only) is kept by `saveOralAudio`, **never uploaded in this slice, never synced and never exported**;
+    `/settings/data` shows its size and deletes it in one action. The hermetic clock is frozen, so hermetic journeys end a session by its end control.
     `container-oral.test.ts` runs a real session through both graphs over MSW.
   - **The report on a session** (Phase 5 Slice 3, progress.md D126) is `/practice/oral/report?session=…`, reached from a
     session's end and from the picker's list of past sessions. `components/oral/OralReport.tsx` renders it; its decisions
@@ -358,7 +362,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     with every turn kept.
   - **The studio screen** (Phase 6 Slice 2, progress.md D180–D189) is the same `/practice/oral` island: a **mode
     choice** on the picker, each mode's cost a minute from `featureCosts`, and studio's pre-flight as `oral-studio` at
-    the session's minutes. Studio mode needs the microphone; without it the screen offers practice by typing.
+    the session's minutes. Studio mode needs the microphone, as practice mode does (D234, above).
     - **`features/oral/studio-controller.ts`** owns the conversation, tested over fakes: the microphone is **handed
       over** by the practice controller's check (`handOver`), the examiner's voice plays in an `Audio` element outside
       the layout, and the peer is the container's `realtimePeer`, so `@palier/adapters/openai` stays in the lazily loaded

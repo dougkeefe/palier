@@ -1,18 +1,26 @@
 import { readFileSync } from "node:fs";
 
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 import { bankVersionFrom } from "../scripts/prepare-public.mjs";
 import { onboard } from "./helpers";
-import { EXAMINER_QUESTION, SENTINEL, idsAtRest, promptOf, stubOpenAi } from "./leak-guard";
+import { EXAMINER_QUESTION, SENTINEL, TRANSCRIPT_SENTINEL, defaultAnswer, idsAtRest, installFakeAudio, promptOf, stubOpenAi } from "./leak-guard";
 
 /**
  * Spoken practice on the production build (the `offline` project; progress.md D119–D120): the wall
  * clock and real IndexedDB. The hermetic clock is frozen, so this is where a phase is crossed by
  * time: the screen's timer ticks the session, the session machine directs the next phase, and the
  * examiner's next question is asked in it. `page.clock.setFixedTime`, as journey 4 does, because
- * `clock.install`'s fake timers stall Dexie and React.
+ * `clock.install`'s fake timers stall Dexie and React. Every answer is spoken (D234), on the microphone
+ * `installFakeAudio` synthesises.
  */
+
+/** Check the microphone and go on past it to the pre-flight. */
+const checkMicrophone = async (page: Page) => {
+  await page.getByRole("button", { name: "Check my microphone" }).click();
+  await expect(page.getByText("Palier can hear you.").or(page.getByText("Palier heard very little.", { exact: false }))).toBeVisible({ timeout: 10_000 });
+  await page.getByRole("button", { name: /^Continue/ }).click();
+};
 
 const START = new Date("2026-10-01T14:00:00.000Z");
 const MIN = 60_000;
@@ -42,10 +50,9 @@ test("the screen's timer moves the session into its next phase, and the examiner
     if (phase !== undefined) phases.push(phase);
     return path.endsWith("/chat/completions")
       ? { status: 200, body: { choices: [{ message: { content: JSON.stringify({ text: EXAMINER_QUESTION, difficulty: null }) } }], usage: { prompt_tokens: 900, completion_tokens: 30 } } }
-      : path.endsWith("/audio/speech")
-        ? { status: 200, contentType: "audio/mpeg", body: "ID3-stub-voice" }
-        : { status: 200, body: { object: "list", data: [] } };
+      : defaultAnswer(path, body);
   });
+  await installFakeAudio(context);
   await page.clock.setFixedTime(START);
 
   await onboard(page, "skip");
@@ -62,7 +69,7 @@ test("the screen's timer moves the session into its next phase, and the examiner
   const parts = warmup.phases.length;
   await page.goto("/en/practice/oral");
   await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Warm-up", exact: true }) }).getByRole("button", { name: "Choose" }).click();
-  await page.getByRole("button", { name: "Answer by typing instead" }).click();
+  await checkMicrophone(page);
   await page.getByRole("button", { name: "Start the session" }).click();
   await expect(page.getByText(EXAMINER_QUESTION)).toBeVisible();
   await expect(page.getByText(`Part 1 of ${String(parts)}`)).toBeVisible();
@@ -77,17 +84,18 @@ test("the screen's timer moves the session into its next phase, and the examiner
     const shown = (await timer.textContent()) ?? "";
     await expect(timer).not.toHaveText(shown);
   }
-  await page.getByRole("textbox", { name: "Your answer" }).fill("Je travaille à la direction des finances.");
-  await page.getByRole("button", { name: "Send answer" }).click();
+  await page.getByRole("button", { name: "Record your answer" }).click();
+  await page.getByRole("button", { name: "Stop and send" }).click();
   await expect(page.getByText(`Part 2 of ${String(parts)}`)).toBeVisible();
   expect(phases).toEqual([first.name, second.name]);
 
   await page.getByRole("button", { name: "End the session" }).click();
   await expect(page.getByRole("heading", { name: "Session over" })).toBeFocused();
-  await expect(page.getByRole("region", { name: "Transcript" }).getByText("Je travaille à la direction des finances.")).toBeVisible();
-  // The transcript is at rest in this device's own store, and the calls in its ledger.
+  await expect(page.getByRole("region", { name: "Transcript" }).getByText(TRANSCRIPT_SENTINEL, { exact: false })).toBeVisible();
+  // The transcript is at rest in this device's own store, and the calls in its ledger: two questions, each written
+  // and voiced, and the one answer written down.
   expect(await idsAtRest(page, "palier", "oralSessions")).toHaveLength(1);
-  expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(4);
+  expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(5);
 });
 
 /**
@@ -101,13 +109,12 @@ test("a session whose tab was closed is listed as over and can be reported on, a
   context,
 }) => {
   test.setTimeout(90_000);
-  await stubOpenAi(context, (path) =>
+  await stubOpenAi(context, (path, body) =>
     path.endsWith("/chat/completions")
       ? { status: 200, body: { choices: [{ message: { content: JSON.stringify({ text: EXAMINER_QUESTION, difficulty: null }) } }], usage: { prompt_tokens: 900, completion_tokens: 30 } } }
-      : path.endsWith("/audio/speech")
-        ? { status: 200, contentType: "audio/mpeg", body: "ID3-stub-voice" }
-        : { status: 200, body: { object: "list", data: [] } },
+      : defaultAnswer(path, body),
   );
+  await installFakeAudio(context);
   await onboard(page, "skip");
   // The key step is passed over, so the key is added on the key screen itself (D220).
   await page.goto("/en/settings/key");
@@ -117,12 +124,12 @@ test("a session whose tab was closed is listed as over and can be reported on, a
 
   await page.goto("/en/practice/oral");
   await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Warm-up", exact: true }) }).getByRole("button", { name: "Choose" }).click();
-  await page.getByRole("button", { name: "Answer by typing instead" }).click();
+  await checkMicrophone(page);
   await page.getByRole("button", { name: "Start the session" }).click();
   await expect(page.getByText(EXAMINER_QUESTION)).toBeVisible();
-  await page.getByRole("textbox", { name: "Your answer" }).fill("Je travaille à la direction des finances.");
-  await page.getByRole("button", { name: "Send answer" }).click();
-  await expect(page.getByRole("textbox", { name: "Your answer" })).toBeEnabled();
+  await page.getByRole("button", { name: "Record your answer" }).click();
+  await page.getByRole("button", { name: "Stop and send" }).click();
+  await expect(page.getByRole("button", { name: "Record your answer" })).toBeVisible();
 
   // Another tab, while the session runs: the session is not over, so it is not listed.
   const other = await context.newPage();

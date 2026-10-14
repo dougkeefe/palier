@@ -5,7 +5,7 @@ import type { Lang, OralMode, TargetBand } from "@palier/domain";
 import { sessionId } from "@palier/domain";
 import { Button, Callout, Card, Timer, Toast } from "@palier/ui";
 import { useLocale, useTranslations } from "next-intl";
-import { type Ref, useEffect, useId, useMemo, useReducer, useRef, useState } from "react";
+import { type Ref, useEffect, useMemo, useReducer, useRef, useState } from "react";
 
 import { estimateText } from "../../features/key/spend-view";
 import { LEVEL_CHECK_MS, browserFamily, recoverySteps } from "../../features/oral/mic";
@@ -88,8 +88,8 @@ const examinerAudio = (): HTMLAudioElement => {
 };
 
 /**
- * Spoken practice (product-requirements.md §8.6, §14; progress.md D117–D121, D185). Pick a mode and a
- * session, check the microphone or choose to type, confirm the estimate, then answer the examiner's
+ * Spoken practice (product-requirements.md §8.6, §14; progress.md D117–D121, D185, D234). Pick a mode and a
+ * session, check the microphone, confirm the estimate, then answer the examiner's
  * questions one at a time, or, in studio mode, talk with the examiner live (`OralStudio`). Each question is shown and played; each recorded answer is sent to OpenAI to
  * be written down, and nowhere else [R12]. There is no running transcript: only the question being asked
  * is shown, as the real test gives none (§8.6). At the end the recording of the candidate's answers is
@@ -109,13 +109,10 @@ export function OralPractice() {
   const [held, setHeld] = useState<OralMode>("practice");
   const [level, setLevel] = useState(0);
   const [elapsedMs, setElapsedMs] = useState(0);
-  const [typed, setTyped] = useState("");
   const stepRef = useRef<HTMLHeadingElement>(null);
   const questionRef = useRef<HTMLParagraphElement>(null);
-  const answerRef = useRef<HTMLTextAreaElement>(null);
   const shownPhase = useRef(state.phase);
   const lastTurn = useRef<{ readonly waiting: boolean } | null>(null);
-  const typedId = useId();
 
   // The session's controller, one per container: it holds the microphone, the recorders and the run.
   const control = useMemo((): PracticeController | null => {
@@ -217,19 +214,17 @@ export function OralPractice() {
     stepRef.current?.focus();
   }, [state.phase]);
 
-  // And each turn: to the question when it waits for a spoken answer, to the field for a typed one (D121).
+  // And each turn: to the question when it waits for an answer (D121).
   const waitingNow = state.phase === "running" ? state.waiting : false;
-  const modeNow = state.phase === "running" ? state.mode : "typed";
   useEffect(() => {
     if (state.phase !== "running") {
       lastTurn.current = null;
       return;
     }
-    const target = turnFocus(lastTurn.current, { waiting: waitingNow, mode: modeNow });
+    const target = turnFocus(lastTurn.current, { waiting: waitingNow });
     lastTurn.current = { waiting: waitingNow };
     if (target === "question") questionRef.current?.focus();
-    if (target === "answer") answerRef.current?.focus();
-  }, [state.phase, waitingNow, modeNow]);
+  }, [state.phase, waitingNow]);
 
   if (container.status === "failed") return <p role="status">{tCommon("loadFailed")}</p>;
   if (container.status !== "ready" || setup === null || control === null || studioControl === null) {
@@ -268,15 +263,25 @@ export function OralPractice() {
     const { choice, mic } = state;
     const studioHeld = state.held === "studio";
     const heldMode: OralMode = studioHeld ? "studio" : "practice";
-    const typeInstead = (
-      <Button variant="ghost" onClick={() => void control.continueWith(choice, "typed")}>
-        {t(studioHeld ? "studioTypeInstead" : "typeInstead")}
-      </Button>
-    );
-    // Studio mode is a spoken conversation: without the microphone it can only be practice by typing (D185).
-    const needsMic =
-      studioHeld && (mic === "denied" || mic === "no-mic" || mic === "unsupported" || mic === "failed") ? (
-        <Callout tone="info">{t("studioNeedsMic")}</Callout>
+    // Every answer is spoken: without the microphone, the writing workshop and the reading drills are the
+    // full-value alternatives (product-requirements.md §11), never typing (D234).
+    const alternatives =
+      mic === "denied" || mic === "no-mic" || mic === "unsupported" || mic === "failed" ? (
+        <Callout tone="info">
+          <p>{t("micAlternatives")}</p>
+          <ul className="app-steps">
+            <li>
+              <Link href="/practice/writing/workshop" className="app-link pl-focusable">
+                {t("micAlternativeWorkshop")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/practice/reading" className="app-link pl-focusable">
+                {t("micAlternativeReading")}
+              </Link>
+            </li>
+          </ul>
+        </Callout>
       ) : null;
     return (
       <Card>
@@ -286,7 +291,6 @@ export function OralPractice() {
           {mic === "idle" ? (
             <div className="app-actions">
               <Button onClick={() => void control.checkMic()}>{t("micCheck")}</Button>
-              {typeInstead}
             </div>
           ) : null}
           {mic === "listening" ? (
@@ -296,15 +300,13 @@ export function OralPractice() {
                 <span>{t("micLevel")}</span>
                 <meter className="app-meter" min={0} max={METER_MAX} value={Math.min(level, METER_MAX)} />
               </label>
-              <div className="app-actions">{typeInstead}</div>
             </div>
           ) : null}
           {mic === "ok" ? (
             <>
               <Callout tone="correct">{t("micOk")}</Callout>
               <div className="app-actions">
-                <Button onClick={() => void control.continueWith(choice, "spoken", heldMode)}>{t("micContinue")}</Button>
-                {typeInstead}
+                <Button onClick={() => void control.continueWith(choice, heldMode)}>{t("micContinue")}</Button>
               </div>
             </>
           ) : null}
@@ -313,10 +315,9 @@ export function OralPractice() {
               <Callout tone="info">{t("micQuiet")}</Callout>
               <div className="app-actions">
                 <Button onClick={() => void control.checkMic()}>{t("micAgain")}</Button>
-                <Button variant="secondary" onClick={() => void control.continueWith(choice, "spoken", heldMode)}>
+                <Button variant="secondary" onClick={() => void control.continueWith(choice, heldMode)}>
                   {t("micContinueAnyway")}
                 </Button>
-                {typeInstead}
               </div>
             </>
           ) : null}
@@ -332,7 +333,6 @@ export function OralPractice() {
               </ol>
               <div className="app-actions">
                 <Button onClick={() => void control.checkMic()}>{t("micAgain")}</Button>
-                {typeInstead}
               </div>
             </>
           ) : null}
@@ -341,13 +341,14 @@ export function OralPractice() {
               <Callout tone="incorrect">
                 {t(mic === "no-mic" ? "micNoMic" : mic === "unsupported" ? "micUnsupported" : "micFailed")}
               </Callout>
-              <div className="app-actions">
-                {mic === "unsupported" ? null : <Button onClick={() => void control.checkMic()}>{t("micAgain")}</Button>}
-                {typeInstead}
-              </div>
+              {mic === "unsupported" ? null : (
+                <div className="app-actions">
+                  <Button onClick={() => void control.checkMic()}>{t("micAgain")}</Button>
+                </div>
+              )}
             </>
           ) : null}
-          {needsMic}
+          {alternatives}
           <div className="app-actions">{back}</div>
         </div>
       </Card>
@@ -355,12 +356,12 @@ export function OralPractice() {
   }
 
   if (state.phase === "confirming") {
-    const { choice, mode, preflight } = state;
+    const { choice, preflight } = state;
     const studioHeld = state.held === "studio";
     const notice = preflightNotice(preflight);
     const start = () => {
       if (!studioHeld) {
-        void control.start(choice, mode);
+        void control.start(choice);
         return;
       }
       // The tap that starts the conversation: the microphone the check opened goes to the studio controller. With
@@ -383,7 +384,7 @@ export function OralPractice() {
               : t("preflightEstimate", { amount: estimateText(preflight.estimateUsd, locale) })}
           </p>
           {notice === null ? null : <Callout tone={notice.tone}>{t(notice.key)}</Callout>}
-          <p className="app-muted">{t(sendsTo(studioHeld, setup.endpoint !== null, mode))}</p>
+          <p className="app-muted">{t(sendsTo(studioHeld, setup.endpoint !== null))}</p>
           <div className="app-actions">
             <Button onClick={start}>{t("start")}</Button>
             {back}
@@ -399,7 +400,7 @@ export function OralPractice() {
   }
 
   if (state.phase === "running") {
-    const { choice, mode, question, waiting, turn, ending } = state;
+    const { choice, question, waiting, turn, recordFailed, ending } = state;
     const progress = phaseProgress(question, choice);
     const recordingNow = turn === "recording";
     // After an answer is sent, focus rests on the question, whose live region reads the next one (D121).
@@ -431,52 +432,23 @@ export function OralPractice() {
           )}
         </Card>
         {waiting && !ending ? (
-          mode === "spoken" ? (
-            <div className="app-stack">
-              <div className="app-actions">
-                <Button
-                  onClick={() => {
-                    if (recordingNow) {
-                      void control.stopAndSend().then(toQuestion);
-                    } else {
-                      control.record();
-                    }
-                  }}
-                >
-                  {t(recordingNow ? "stopAndSend" : "record")}
-                </Button>
-              </div>
-              {recordingNow ? <Toast tone="info">{t("recording")}</Toast> : null}
+          <div className="app-stack">
+            <div className="app-actions">
+              <Button
+                onClick={() => {
+                  if (recordingNow) {
+                    void control.stopAndSend().then(toQuestion);
+                  } else {
+                    control.record();
+                  }
+                }}
+              >
+                {t(recordingNow ? "stopAndSend" : "record")}
+              </Button>
             </div>
-          ) : (
-            <div className="app-stack">
-              <label className="app-field" htmlFor={typedId}>
-                <span>{t("typedLabel")}</span>
-                <textarea
-                  id={typedId}
-                  ref={answerRef}
-                  className="app-textarea"
-                  lang={choice.scenario.lang}
-                  rows={4}
-                  value={typed}
-                  onChange={(event) => setTyped(event.target.value)}
-                />
-              </label>
-              <div className="app-actions">
-                <Button
-                  onClick={() => {
-                    if (control.sendTyped(typed)) {
-                      setTyped("");
-                      toQuestion();
-                    }
-                  }}
-                  disabled={typed.trim() === ""}
-                >
-                  {t("sendAnswer")}
-                </Button>
-              </div>
-            </div>
-          )
+            {recordingNow ? <Toast tone="info">{t("recording")}</Toast> : null}
+            {recordFailed ? <Callout tone="incorrect">{t("recordFailed")}</Callout> : null}
+          </div>
         ) : null}
         {!waiting && turn === "sending" && !ending ? <Toast tone="info">{t("listening")}</Toast> : null}
         {ending ? <Toast tone="info">{t("ending")}</Toast> : null}

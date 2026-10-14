@@ -41,6 +41,20 @@ export const RECORDING_TYPES = ["audio/webm;codecs=opus", "audio/webm", "audio/m
 export const pickRecordingType = (supports: (type: string) => boolean): string | undefined =>
   RECORDING_TYPES.find((type) => supports(type));
 
+/**
+ * Whether this browser can record the stream (progress.md D234): a recorder is made, in the format a clip
+ * would be, and never started. A browser can open the microphone and still have no `MediaRecorder`, and with
+ * every answer spoken, the microphone check must find that out before a session is paid for.
+ */
+export const canRecord = (stream: MediaStream, kit: MediaKit): boolean => {
+  try {
+    kit.record(stream, pickRecordingType(kit.supports));
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 /** Collect a recorder's chunks into one blob once it stops. */
 const collect = (recorder: RecorderLike, fallbackType: string | undefined): Promise<Blob> => {
   const chunks: Blob[] = [];

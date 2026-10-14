@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/spoken-practice-typing-remove` | **Spoken practice is spoken only** (D234; the human's request, 13 October 2026): no typed answers in either mode. Without a microphone the screen gives the recovery steps and links the writing workshop and reading practice. | 13 October 2026 |
 | `dougkeefe/mobile-menu-fix` | **The landing page's menu on a phone** (D232; the human's request, 12 October 2026): below 1000px the header is the brand and a menu button at the top right, which opens the sections, the language and the way in. **And the console's two "preloaded but not used" warnings** (D233). | 12 October 2026 |
 | `dougkeefe/palier-explainer-video-use` | **The landing page's explainer video** (D230; the human's request, 11 October 2026): the owner's video below the fold, before "Built for exam conditions.", in each page's language. | 11 October 2026 |
 | `dougkeefe/oral-page-layout-update` | **The spoken-practice picker laid out again** (D229; the human's request, 11 October 2026): the key card first, the two modes side by side, the sessions as a grid, the picker its own component. | 11 October 2026 |
@@ -268,6 +269,12 @@ four lanes are green. Then, on the deployed site, the human opens `/en/home` as 
 
 On `/practice/oral`, in both languages and on a phone: the picker's new layout (D229). Say whether the two steps read
 in order, and whether the no-key card belongs at the top.
+
+On `/practice/oral`, spoken only (D234): block the microphone and check it, in each mode. Say whether the links to the
+writing workshop and reading practice read as the right offer. The French read at Gate O gains `oral.micAlternatives`,
+`oral.micAlternativeWorkshop`, `oral.micAlternativeReading` and `oral.recordFailed`, and the reworded `oral.micNoMic`,
+`oral.micUnsupported`, `oral.micFailed` and `oral.modePracticeHint*`. Gate O's checklist (`docs/realtime-checklist.md`
+§1) now expects the links, not typing.
 
 On the landing page, in both languages and on a phone: open the menu at the top right (D232), follow a section, and
 say whether "Start free" belongs inside it or beside the button.
@@ -7794,9 +7801,71 @@ The human reported two console warnings on the deployed landing page: the serif 
   with it, none over four controlled loads. The setting is read when `next start` starts, so trying it needs no rebuild.
 - **Not an ADR.** A build setting with its reason, recorded here.
 
+### D234 — spoken practice is spoken only: no typed answers, in either mode
+**Date:** 13 October 2026 · **Status:** accepted (human's decision; it overrides part of D119, D121 and D185, and amends
+PRD §14 and `implementation-plan.md` Phase 5 in place)
+
+The human found it strange that spoken practice offered typing: typing is for written expression. Asked how far to go,
+they chose to remove it entirely, including the fallback PRD §14 asked for when the microphone is refused.
+
+- **The microphone step offers no typing at any point.** D119's "Answer by typing instead" at every step, and D185's
+  "Practise by typing instead" for studio mode, are gone. The way on appears only once the check has opened the
+  microphone: "Continue", or "Continue anyway" after a quiet check. `continueWith` and `start` do nothing without an open
+  stream.
+- **The check also proves the browser can record** (`canRecord` in `lib/oral/recorder.ts`). It makes a recorder in a
+  clip's format and never starts it. A browser that opens the microphone but has no `MediaRecorder` used to fall back to
+  typing. With no typing, it would have passed the check, paid for a first question, then failed at every Record. It now
+  stops at the check as `unsupported`. The fake recorder in the E2E specs numbers recorders in the order they are made,
+  so the key-leak specs' recorder numbers move up by one for this unstarted recorder: the check's is #1 and the
+  session's #2.
+- **Without a microphone** (refused, missing, unsupported or failing), the screen keeps its recovery steps, and one callout
+  for both modes links the writing workshop and reading practice. These are PRD §11's "full-value alternatives" for an
+  audio task. The copy no longer says "or answer by typing".
+- **A recorder that fails mid-session** no longer turns the session to typing (D121). An answer's recorder that cannot
+  start says so (`oral.recordFailed`), and Record tries again. The candidate can also end the session. A session whose
+  whole-session recorder cannot be made still runs: each answer is its own clip, and only the local recording is lost.
+- **What stays.** `OralTurn.input: "typed"` (domain), `CandidateAnswer`'s `typed` kind (the `AnswerSource` port), fluency's
+  voice-only count (engine), and the report prompt's "(typed)" marker (adapters) all stay. So do the report's `typed` and
+  `fluencyTyped` keys. Sessions already on devices hold typed turns, and their reports must still read them. Removing the
+  kind would be a domain change for no user benefit.
+- **Tests.** The reducer, controller and recorder tests name the new behaviour. The E2E journeys that typed now answer on
+  `installFakeAudio`'s microphone: the refused call, the report still being made, the French pass and both
+  production-build specs. The two refused-microphone tests, practice and studio, assert the links and that no typing
+  button exists.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 13 October 2026 — `dougkeefe/spoken-practice-typing-remove` (D234 reviewed: the check proves the browser can record)
+
+A review of D234's change found one gap the typed fallback had been covering. A browser that opens the microphone but has
+no `MediaRecorder` would pass the check, pay for a first question, and then fail at every Record. The check now makes an
+unstarted recorder (`canRecord`) and stops such a browser as `unsupported`. D234 is amended to record this, and to say
+"Continue anyway" correctly. The key-leak specs' recorder numbers move up by one for the check's unstarted recorder. The
+spoken-only rule moved into `apps/web/CLAUDE.md`'s spoken-practice bullet, and `oral.micAlternativeReading` in French now
+uses the app's term, « La compréhension de l’écrit ».
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,398 tests passed (8 todo), with no dependency violations.
+- After `pnpm --filter @palier/web build`, `playwright test` on the oral, oral-production, both key-leak and
+  studio-selfhost specs: 18 passed.
+
+### 13 October 2026 — `dougkeefe/spoken-practice-typing-remove` (spoken practice is spoken only; D234)
+
+Not *Next, decided*: the human found the typing option in spoken practice strange, since typing belongs to written expression,
+and chose to remove it entirely (D234). Neither mode offers typing any more. Without a microphone, the screen gives the
+recovery steps and links the writing workshop and reading practice. A failed answer recorder now says so and lets Record try
+again. PRD §14, `implementation-plan.md` Phase 5, `docs/realtime-checklist.md` §1 and `apps/web/CLAUDE.md` are amended. The
+domain, the port, the engine and the report still read typed turns, which sessions already stored still hold.
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,395 tests passed (8 todo), with no dependency violations.
+- `pnpm --filter @palier/web build`, then `playwright test` on `e2e/oral.spec.ts`, `oral-production.spec.ts`,
+  `key-leak.spec.ts`, `key-leak-production.spec.ts` and `studio-selfhost-production.spec.ts`: 18 passed. That includes
+  the two rewritten refused-microphone tests and the production ledger, now five rows with the answer's transcription.
+- On the production build, the refused microphone was looked at in both modes: the recovery steps, "Check again", and
+  the callout with its two links. No typing button appears.
 
 ### 13 October 2026 — `dougkeefe/mobile-menu-fix` (E2E shard 1 back under budget; D233 amended)
 

@@ -15,7 +15,7 @@ export type AnswerBridge = {
 /**
  * The browser's `AnswerSource` (progress.md D118, D119): a bridge between the practice session,
  * which asks and waits, and the screen, which shows the question and hands back the recorder's
- * clip or the typed words. Plain data and callbacks, so it is tested without a DOM; the recording
+ * clip. The screen gives no typed words since D234; the port's `typed` kind still passes through. Plain data and callbacks, so it is tested without a DOM; the recording
  * itself is `lib/oral/recorder.ts`'s.
  */
 export const answerBridge = (): AnswerBridge => {

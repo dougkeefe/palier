@@ -32,20 +32,19 @@ const named = (name: string) => Object.assign(new Error(name), { name });
 
 const run = (...actions: Parameters<typeof practice>[1][]): PracticeState => actions.reduce(practice, INITIAL_PRACTICE);
 const running = () =>
-  run({ type: "choose", choice: CHOICE }, { type: "preflighted", mode: "spoken", preflight: PREFLIGHT }, { type: "started", nowMs: 1_000 });
+  run({ type: "choose", choice: CHOICE }, { type: "preflighted", preflight: PREFLIGHT }, { type: "started", nowMs: 1_000 });
 
 describe("practice, the screen's steps (D119)", () => {
   it("goes from the picker to the microphone check for the chosen session", () => {
     expect(run({ type: "choose", choice: CHOICE })).toEqual({ phase: "mic", choice: CHOICE, mic: "idle" });
   });
 
-  it("follows the microphone check, then confirms the estimate in the mode chosen", () => {
-    const checked = run({ type: "choose", choice: CHOICE }, { type: "mic", mic: "denied" });
-    expect(checked).toMatchObject({ phase: "mic", mic: "denied" });
-    expect(practice(checked, { type: "preflighted", mode: "typed", preflight: PREFLIGHT })).toEqual({
+  it("follows the microphone check, then confirms the estimate", () => {
+    const checked = run({ type: "choose", choice: CHOICE }, { type: "mic", mic: "quiet" });
+    expect(checked).toMatchObject({ phase: "mic", mic: "quiet" });
+    expect(practice(checked, { type: "preflighted", preflight: PREFLIGHT })).toEqual({
       phase: "confirming",
       choice: CHOICE,
-      mode: "typed",
       preflight: PREFLIGHT,
     });
   });
@@ -54,10 +53,10 @@ describe("practice, the screen's steps (D119)", () => {
     expect(running()).toEqual({
       phase: "running",
       choice: CHOICE,
-      mode: "spoken",
       question: null,
       waiting: false,
       turn: "idle",
+      recordFailed: false,
       ending: false,
       startedAtMs: 1_000,
     });
@@ -77,7 +76,7 @@ describe("practice, the screen's steps (D119)", () => {
   it("stops waiting the moment an answer is sent, before the bridge says so, so no second answer can be recorded to it (D202)", () => {
     const asked = run(
       { type: "choose", choice: CHOICE },
-      { type: "preflighted", mode: "spoken", preflight: PREFLIGHT },
+      { type: "preflighted", preflight: PREFLIGHT },
       { type: "started", nowMs: 1 },
       { type: "question", waiting: QUESTION },
       { type: "recording" },
@@ -88,14 +87,11 @@ describe("practice, the screen's steps (D119)", () => {
     expect(practice(sent, { type: "recording" })).toMatchObject({ turn: "sending" });
   });
 
-    it("starts in the mode the controller says, when the recorder could not be made (D121)", () => {
-    const typed = run({ type: "choose", choice: CHOICE }, { type: "preflighted", mode: "spoken", preflight: PREFLIGHT }, { type: "started", nowMs: 1, mode: "typed" });
-    expect(typed).toMatchObject({ phase: "running", mode: "typed" });
-  });
-
-  it("answers by typing for the rest of the session once the recorder fails (D121)", () => {
+  it("keeps the question waiting when its recorder fails, says so, and clears it on the next try (D234)", () => {
     const recording = practice(practice(running(), { type: "question", waiting: QUESTION }), { type: "recording" });
-    expect(practice(recording, { type: "recordFailed" })).toMatchObject({ mode: "typed", turn: "idle", waiting: true });
+    const failed = practice(recording, { type: "recordFailed" });
+    expect(failed).toMatchObject({ turn: "idle", waiting: true, recordFailed: true });
+    expect(practice(failed, { type: "recording" })).toMatchObject({ turn: "recording", recordFailed: false });
   });
 
   it("does not start recording when no question waits", () => {
@@ -119,7 +115,7 @@ describe("practice, the screen's steps (D119)", () => {
     expect(run({ type: "started", nowMs: 1 })).toEqual(INITIAL_PRACTICE);
     const mic = run({ type: "choose", choice: CHOICE });
     expect(practice(mic, { type: "started", nowMs: 1 })).toBe(mic);
-    const confirming = practice(mic, { type: "preflighted", mode: "spoken", preflight: PREFLIGHT });
+    const confirming = practice(mic, { type: "preflighted", preflight: PREFLIGHT });
     expect(practice(confirming, { type: "question", waiting: QUESTION })).toBe(confirming);
     const live = running();
     expect(practice(live, { type: "choose", choice: CHOICE })).toBe(live);
@@ -133,17 +129,12 @@ describe("practice, studio mode's steps (D185)", () => {
     run(
       { type: "choose", choice: CHOICE, held: "studio" },
       { type: "mic", mic: "ok" },
-      { type: "preflighted", mode: "spoken", preflight: PREFLIGHT, held: "studio" },
+      { type: "preflighted", preflight: PREFLIGHT, held: "studio" },
     );
 
   it("carries studio mode from the picker through the check to the pre-flight", () => {
     expect(run({ type: "choose", choice: CHOICE, held: "studio" })).toEqual({ phase: "mic", choice: CHOICE, mic: "idle", held: "studio" });
-    expect(studioConfirming()).toEqual({ phase: "confirming", choice: CHOICE, mode: "spoken", preflight: PREFLIGHT, held: "studio" });
-  });
-
-  it("prices a studio choice that fell back to typing as practice", () => {
-    const mic = run({ type: "choose", choice: CHOICE, held: "studio" });
-    expect(practice(mic, { type: "preflighted", mode: "typed", preflight: PREFLIGHT })).not.toHaveProperty("held");
+    expect(studioConfirming()).toEqual({ phase: "confirming", choice: CHOICE, preflight: PREFLIGHT, held: "studio" });
   });
 
   it("hands a studio session to the studio view, and never runs it as practice", () => {
@@ -152,7 +143,7 @@ describe("practice, studio mode's steps (D185)", () => {
   });
 
   it("never hands a practice session to the studio view", () => {
-    const confirming = run({ type: "choose", choice: CHOICE }, { type: "preflighted", mode: "spoken", preflight: PREFLIGHT });
+    const confirming = run({ type: "choose", choice: CHOICE }, { type: "preflighted", preflight: PREFLIGHT });
     expect(practice(confirming, { type: "studio" })).toBe(confirming);
   });
 
@@ -176,23 +167,21 @@ describe("studioWarmup (D190)", () => {
     const mic = run({ type: "choose", choice: CHOICE, held: "studio" });
     expect(studioWarmup(mic)).toBe("mic");
     expect(studioWarmup(practice(mic, { type: "mic", mic: "ok" }))).toBe("mic");
-    expect(studioWarmup(practice(mic, { type: "preflighted", mode: "spoken", preflight: PREFLIGHT, held: "studio" }))).toBe(
+    expect(studioWarmup(practice(mic, { type: "preflighted", preflight: PREFLIGHT, held: "studio" }))).toBe(
       "confirming",
     );
   });
 
-  it("never wakes it for practice mode, or for a studio choice that fell back to typing", () => {
+  it("never wakes it for practice mode", () => {
     const practiceMic = run({ type: "choose", choice: CHOICE });
     expect(studioWarmup(practiceMic)).toBeNull();
-    expect(studioWarmup(practice(practiceMic, { type: "preflighted", mode: "spoken", preflight: PREFLIGHT }))).toBeNull();
-    const studioMic = run({ type: "choose", choice: CHOICE, held: "studio" });
-    expect(studioWarmup(practice(studioMic, { type: "preflighted", mode: "typed", preflight: PREFLIGHT }))).toBeNull();
+    expect(studioWarmup(practice(practiceMic, { type: "preflighted", preflight: PREFLIGHT }))).toBeNull();
   });
 
   it("never wakes it once the tap is made, or before a session is chosen", () => {
     const studioConfirming = run(
       { type: "choose", choice: CHOICE, held: "studio" },
-      { type: "preflighted", mode: "spoken", preflight: PREFLIGHT, held: "studio" },
+      { type: "preflighted", preflight: PREFLIGHT, held: "studio" },
     );
     expect(studioWarmup(INITIAL_PRACTICE)).toBeNull();
     expect(studioWarmup(practice(studioConfirming, { type: "studio" }))).toBeNull();
@@ -218,15 +207,15 @@ describe("oralFailure and its words (D119)", () => {
 
 describe("where the key goes, in the pre-flight's line and the picker's callout (D186, D192)", () => {
   it("names Palier's route for studio mode, or the user's own endpoint when this device has one", () => {
-    expect(sendsTo(true, false, "spoken")).toBe("sendsToStudio");
-    expect(sendsTo(true, true, "spoken")).toBe("sendsToStudioOwn");
+    expect(sendsTo(true, false)).toBe("sendsToStudio");
+    expect(sendsTo(true, true)).toBe("sendsToStudioOwn");
     expect(studioModeNote(false)).toBe("studioMode");
     expect(studioModeNote(true)).toBe("studioModeOwn");
   });
 
   it("keeps practice mode's lines, endpoint or not, since practice never mints a secret", () => {
-    expect(sendsTo(false, false, "spoken")).toBe("sendsToSpoken");
-    expect(sendsTo(false, true, "typed")).toBe("sendsToTyped");
+    expect(sendsTo(false, false)).toBe("sendsToSpoken");
+    expect(sendsTo(false, true)).toBe("sendsToSpoken");
   });
 });
 
@@ -270,14 +259,14 @@ describe("recordingsMegabytes (D119)", () => {
 });
 
 describe("turnFocus (D121)", () => {
-  it("goes to the question when one starts waiting to be answered aloud, and to the field when it is to be typed", () => {
-    expect(turnFocus({ waiting: false }, { waiting: true, mode: "spoken" })).toBe("question");
-    expect(turnFocus(null, { waiting: true, mode: "typed" })).toBe("answer");
+  it("goes to the question when one starts waiting to be answered, the first or the next", () => {
+    expect(turnFocus({ waiting: false }, { waiting: true })).toBe("question");
+    expect(turnFocus(null, { waiting: true })).toBe("question");
   });
 
   it("stays put while the same question waits, and while none does", () => {
-    expect(turnFocus({ waiting: true }, { waiting: true, mode: "spoken" })).toBeNull();
-    expect(turnFocus({ waiting: true }, { waiting: false, mode: "spoken" })).toBeNull();
+    expect(turnFocus({ waiting: true }, { waiting: true })).toBeNull();
+    expect(turnFocus({ waiting: true }, { waiting: false })).toBeNull();
   });
 });
 
