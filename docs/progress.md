@@ -7875,9 +7875,64 @@ money. The human asked for a new headline, for the hero's second link to go, and
   No existing test pinned the changed copy.
 - **Not an ADR.** Landing-page copy and layout, recorded here. The French is the agent's, and goes to Gate O's French read.
 
+### D236 — four more dev-only advisories are overridden, D155's way; `sprintf-js` is removed rather than dismissed
+**Date:** 16 October 2026 · **Status:** accepted. Extends D155
+
+- **Four Dependabot alerts were open**, all transitive and dev-only. Each parent is on its latest release and pins or caps
+  the vulnerable version, so there was nothing for Dependabot to propose.
+
+  | Alert | Package | Advisory | Path | Parent's constraint |
+  | --- | --- | --- | --- | --- |
+  | #14, #15 | `handlebars` 4.7.9 | GHSA-8r5x-fm3f-whwj (critical), GHSA-xw65-4hp5-5hc7 | `eslint-plugin-boundaries` 7.2.0 and its `@boundaries/elements` 3.1.1 | both pin exactly `4.7.9` |
+  | #10 | `basic-ftp` 5.3.1 | GHSA-c475-qrg2-pj4r (high) | `@lhci/cli` → … → `pac-proxy-agent` → `get-uri` 6.0.5 | `get-uri`, even its latest 8.0.1, asks for `^5.3.1` |
+  | #12 | `sprintf-js` 1.0.3 | GHSA-hp3w-g68c-fv3c | `@lhci/utils` → `js-yaml` 3.15.2 → `argparse` 1.0.10 | no patched release exists |
+
+- **Four scoped `overrides` in `pnpm-workspace.yaml`**, commented with their GHSAs:
+  - `eslint-plugin-boundaries>handlebars` and `@boundaries/elements>handlebars` go to `4.7.10`, a patch release.
+  - `get-uri>basic-ftp` goes to `^6.2.3`. 6.0.0's one breaking change turns off separate transfer hosts by default (an
+    FTP-bounce guard). `get-uri` calls only `new Client()`, `access`, `lastMod`, `list`, `downloadTo` and `close`, so it is
+    not affected.
+  - `js-yaml@3>argparse` goes to `^2.0.1`. argparse 2 has no dependencies, so `sprintf-js` leaves the tree. js-yaml 3
+    requires argparse only in `bin/js-yaml.js`, its command line, which nothing runs. `@lhci/utils` calls the library's
+    `safeLoad`, which does not need argparse.
+- **Why not dismiss `sprintf-js` as D155 did with `extract-zip`?** Here an override can remove the package altogether,
+  without touching any code that runs. `extract-zip` had no such way out.
+- **No package is added.** The lockfile loses `argparse` 1.0.10 and `sprintf-js` 1.0.3. `handlebars` and `basic-ftp`
+  change versions. Nothing else moves.
+- **Smoke checks:**
+  - `lhci --version` answers 0.15.1.
+  - From `@lhci/utils`'s directory, `require('js-yaml').safeLoad` parses a `ci.collect` block.
+  - From `get-uri`'s directory, `basic-ftp` 6.2.3 loads, and its `Client` has every method `get-uri` calls.
+  - `pnpm lint` runs `eslint-plugin-boundaries` over every file.
+- **`pnpm audit` over the whole tree now shows three entries, none of them these four:**
+  - the two `extract-zip` entries D155 dismissed;
+  - `braces` 3.0.3, GHSA-vfj7-8cjw-p6xm, under `eslint-config-next` → `@next/eslint-plugin-next` → `fast-glob` →
+    `micromatch`. It has no patched release, and GitHub auto-dismissed its Dependabot alert (#11) as a dev-only,
+    low-impact path. **Revisit when** a fix ships.
+
+  CI's `--prod --audit-level=high` gate is unchanged: it shows only D135's two ignored `content` entries.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 16 October 2026 — `dougkeefe/2lbs2` (four Dependabot alerts closed by scoped overrides; D236)
+
+Not *Next, decided*, which is unchanged. The human asked for the four open Dependabot alerts to be resolved:
+- `handlebars`, twice, under `eslint-plugin-boundaries`;
+- `basic-ftp` under `@lhci/cli`'s `get-uri`;
+- `sprintf-js` under `@lhci/utils`'s `js-yaml` 3.
+
+Each is closed by a scoped override in `pnpm-workspace.yaml`, as in D155. `sprintf-js`, which has no patched release,
+leaves the tree because js-yaml 3 gets argparse 2 (D236).
+
+**Verified:**
+- `pnpm why`: `handlebars` 4.7.10, `basic-ftp` 6.2.3, and `sprintf-js` and `argparse` 1 are gone.
+- Smoke checks: `lhci --version` answers 0.15.1; `@lhci/utils`'s `js-yaml` still `safeLoad`s; `get-uri` loads
+  `basic-ftp` 6.2.3.
+- `pnpm audit` is down to the two dismissed `extract-zip` entries and the auto-dismissed `braces` one.
+  `pnpm audit --prod --audit-level=high` shows only the two ignored `content` entries.
+- `pnpm verify` was green, lint included: 272 files, 4,398 tests passed (8 todo), with no dependency violations.
 
 ### 16 October 2026 — `dougkeefe/landing-page-pricing-french` (the landing page's headline and one pricing message; D235)
 
