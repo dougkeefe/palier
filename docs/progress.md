@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 12 October 2026 (the landing page's header folds behind a menu on a phone, D232; preloads in the document, D233)
+**Last updated:** 16 October 2026 (the landing page's headline, its hero's one way in, and one pricing message in both languages, D235)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/landing-page-pricing-french` | **The landing page's headline and pricing** (D235; the human's request, 16 October 2026): "Your C is closer than you think.", no "Try a sample question" in the hero, and one pricing message (free to practise; the AI features a few cents each, billed by OpenAI, no subscription to us) wherever the landing page, the About page and the site's description speak of cost. | 16 October 2026 |
 | `dougkeefe/spoken-practice-typing-remove` | **Spoken practice is spoken only** (D234; the human's request, 13 October 2026): no typed answers in either mode. Without a microphone the screen gives the recovery steps and links the writing workshop and reading practice. | 13 October 2026 |
 | `dougkeefe/mobile-menu-fix` | **The landing page's menu on a phone** (D232; the human's request, 12 October 2026): below 1000px the header is the brand and a menu button at the top right, which opens the sections, the language and the way in. **And the console's two "preloaded but not used" warnings** (D233). | 12 October 2026 |
 | `dougkeefe/palier-explainer-video-use` | **The landing page's explainer video** (D230; the human's request, 11 October 2026): the owner's video below the fold, before "Built for exam conditions.", in each page's language. | 11 October 2026 |
@@ -275,6 +276,12 @@ writing workshop and reading practice read as the right offer. The French read a
 `oral.micAlternativeWorkshop`, `oral.micAlternativeReading` and `oral.recordFailed`, and the reworded `oral.micNoMic`,
 `oral.micUnsupported`, `oral.micFailed` and `oral.modePracticeHint*`. Gate O's checklist (`docs/realtime-checklist.md`
 §1) now expects the links, not typing.
+
+On the landing page, in both languages, on a laptop and on a phone: the new headline and the one pricing message (D235).
+Say whether the French headline, « Votre C est plus proche que vous ne le pensez. », reads right. It takes three lines on a
+desktop, so at 1440×900 the hero's button sits about 20px below the fold, under the header's « Commencer ». A shorter line,
+« Votre C n’est pas si loin. », would fit in two. The French read at Gate O gains `landing.hero.title`, `hero.lede`,
+`features.ai.body`, `how.body`, `faq.cost.q` and `.a`, `close.body`, `footer.tagline`, `metadata.description` and `about.what`.
 
 On the landing page, in both languages and on a phone: open the menu at the top right (D232), follow a section, and
 say whether "Start free" belongs inside it or beside the button.
@@ -7833,9 +7840,65 @@ they chose to remove it entirely, including the fallback PRD §14 asked for when
   production-build specs. The two refused-microphone tests, practice and studio, assert the links and that no typing
   button exists.
 
+### D235 — the landing page's headline reads "Your C is closer than you think.", and cost is said one way
+**Date:** 16 October 2026 · **Status:** accepted (human's request; agent's build and French). Supersedes D231's headline
+
+The landing page called Palier "a free study tool", "totally free" and "free to use", while three of its features cost
+money. The human asked for a new headline, for the hero's second link to go, and for one pricing message used everywhere.
+
+- **The headline** is "Your C is closer than you think." and in French « Votre C est plus proche que vous ne le pensez. ».
+  This replaces D231's "Practice for your SLE.", by the same person's decision.
+- **The hero has one way in.** "Try a sample question" (`landing.hero.trySample`) and its `.landing-hero__secondary` rules
+  are gone. The sample question keeps its `id="try"`, further down the page.
+- **The title is 14ch wide, not D201's 11ch.** At 11ch the English took three lines and the French four, which pushed the
+  hero's button below the fold on a desktop. At 14ch the English takes two lines and the French three. Both take three or
+  four on a phone, as before. In French at 1440×900 the button still sits about 20px below the fold; the header's
+  « Commencer » is visible above it. 14ch puts the French "plus" over the photograph's flag, which the hero's scrim already
+  makes readable.
+- **The message:** "Free to practise. The AI features cost a few cents each, billed by OpenAI to you, with no subscription
+  to us." In French: « Gratuit pour vous exercer. Les fonctions IA coûtent quelques cents chacune, que vous facture
+  directement OpenAI, sans abonnement chez nous. »
+  - **It is used in these landing keys:** `hero.lede`, `features.ai.body`, `how.body`, `faq.cost`, `close.body` and
+    `footer.tagline`.
+  - **And in two keys off the landing page that made the same claim:** `metadata.description` and `about.what`.
+  - **The FAQ question** is now "What does it cost?", since the cost is the AI features', not the key's.
+- **Spoken practice is billed by the minute** (about US$0.05 a minute in `pricing.json`), so a whole session costs more than
+  "a few cents". The FAQ says "a few cents a minute" for it, so the short line stays honest.
+- **Left as they were, since each is already accurate:**
+  - "Start free";
+  - the onboarding key step's cost copy (`start.keyWhyFree`, `keyCost*`), which already says no subscription;
+  - the milestone share texts ("a free, unofficial practice app").
+- **Tests.** `smoke.spec.ts` gains one test. On `/en` and `/fr`, it checks three things:
+  - the `h1` is the new headline;
+  - the hero's only link is the call to action;
+  - the FAQ's cost answer says "a few cents each".
+  No existing test pinned the changed copy.
+- **Not an ADR.** Landing-page copy and layout, recorded here. The French is the agent's, and goes to Gate O's French read.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 16 October 2026 — `dougkeefe/landing-page-pricing-french` (the landing page's headline and one pricing message; D235)
+
+Not *Next, decided*: the human asked for three things on the landing page, in both languages:
+- the headline "Your C is closer than you think.";
+- no "Try a sample question" in the hero;
+- one pricing message wherever cost comes up.
+
+The message: free to practise, the AI features a few cents each, billed by OpenAI, with no subscription to us. It also
+went into the site's description and the About page. The hero's title is 14ch wide so the French takes three lines
+(D235).
+
+**Verified:**
+- `pnpm verify` was green: 272 files, 4,398 tests passed (8 todo), with no dependency violations.
+- After `pnpm --filter @palier/web build`:
+  - `playwright test e2e/smoke.spec.ts`: 16 passed, the new D235 test included;
+  - `content.spec.ts`, `key.spec.ts` and `discoverability-production.spec.ts`: 27 passed.
+- On the dev server, the hero was measured and looked at in both languages at 1440×900, 1280×800, 1000×800 and 390×844, at
+  11, 13, 14 and 15ch:
+  - at 14ch the English title takes two lines on a desktop and three on a phone, and the French three and four;
+  - the French hero's button sits 22px below the fold at 1440×900, and the English one 134px above it.
 
 ### 13 October 2026 — `dougkeefe/spoken-practice-typing-remove` (D234 reviewed: the check proves the browser can record)
 
