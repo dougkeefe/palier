@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Palier",
-    "description": "A free, source-available tool for practising the Public Service Commission's Second Language Evaluation."
+    "description": "Free practice for the Public Service Commission's Second Language Evaluation, source-available. The AI features cost a few cents each, billed by OpenAI to you."
   },
   "nav": {
     "skipToContent": "Skip to main content",
@@ -43,11 +43,10 @@
     },
     "hero": {
       "tag": "Second Language Evaluation · Levels B and C",
-      "title": "Practice for your SLE.",
-      "lede": "Palier is a free study tool for the Public Service Commission’s Second Language Evaluation. Take timed reading and written-expression drills and mock exams, get AI feedback on your writing, and rehearse the oral interview out loud with an AI partner. No account needed.",
+      "title": "Your C is closer than you think.",
+      "lede": "Palier is a study tool for the Public Service Commission’s Second Language Evaluation. Take timed reading and written-expression drills and mock exams, get AI feedback on your writing, and rehearse the oral interview out loud with an AI partner. Free to practise, with no account. The AI features cost a few cents each, billed by OpenAI to you, with no subscription to us.",
       "cta": "Try a free mock exam",
-      "ctaShort": "Start free",
-      "trySample": "Try a sample question"
+      "ctaShort": "Start free"
     },
     "strip": {
       "feedback": "AI feedback on your writing",
@@ -70,7 +69,7 @@
       },
       "ai": {
         "title": "AI that marks and listens",
-        "body": "An AI coach comments on what you write and holds a spoken conversation with you. It runs on your own OpenAI key, a personal access code you create at openai.com. The cost shows before anything is spent.",
+        "body": "An AI coach comments on what you write and holds a spoken conversation with you. It runs on your own OpenAI key, a personal access code you create at openai.com. Each use costs a few cents, billed by OpenAI to you, with no subscription to us. The cost shows before anything is spent.",
         "tag": "Cost transparency"
       },
       "estimate": {
@@ -120,7 +119,7 @@
     "how": {
       "eyebrow": "How it works",
       "title": "Nothing to set up before you begin.",
-      "body": "Palier itself is totally free. The AI features run on your own OpenAI API key, and you pay OpenAI only for what you use.",
+      "body": "Free to practise. The AI features run on your own OpenAI key and cost a few cents each, billed by OpenAI to you, with no subscription to us.",
       "open": {
         "number": "01",
         "title": "Open it and practise",
@@ -153,8 +152,8 @@
         "a": "A personal access code from your own OpenAI account. You create it at openai.com and paste it into Palier. It lets Palier ask the AI to mark your writing and talk with you, billed to your account."
       },
       "cost": {
-        "q": "What does the OpenAI key cost?",
-        "a": "Palier itself is free. Only writing feedback, generated practice sets and spoken practice use an OpenAI key, and it is your own, billed by OpenAI on your account. Each feature shows its cost before it spends anything."
+        "q": "What does it cost?",
+        "a": "Practising is free: drills, review and mock exams need no key and cost nothing. The AI features (writing feedback, generated practice sets and spoken practice) cost a few cents each, billed by OpenAI to you on your own key, with no subscription to us. Spoken practice is billed by the minute, at a few cents a minute. Each feature shows its cost before it spends anything."
       },
       "source": {
         "q": "Where do the questions come from?",
@@ -167,10 +166,10 @@
     },
     "close": {
       "title": "Your next level starts here.",
-      "body": "Open Palier and do today’s practice. No account, no download, free to use."
+      "body": "Open Palier and do today’s practice. Free to practise, with no account and no download."
     },
     "footer": {
-      "tagline": "A free study tool for the Second Language Evaluation.",
+      "tagline": "A study tool for the Second Language Evaluation, free to practise.",
       "menu": "Menu",
       "yourDevice": "Your device",
       "more": "More",
@@ -185,7 +184,7 @@
     "independence": "Palier is an independent study tool, built in the open. It is not the exam, and using it is not a substitute for the Public Service Commission's own preparation material.",
     "noRealItems": "It contains no real test questions. Every item is written or generated for practice, and no result it produces is official.",
     "whatTitle": "What it is",
-    "what": "A free, source-available place to practise the Second Language Evaluation’s reading, written expression and oral tests, aiming at level B or C. Drills and mock exams need no account and work offline. The parts that cost money (writing feedback, generated practice sets and spoken practice) run on your own OpenAI key, straight from your browser, and each one shows its cost before it spends.",
+    "what": "A source-available place to practise the Second Language Evaluation’s reading, written expression and oral tests, aiming at level B or C. Practising is free: drills and mock exams need no account and work offline. The AI features (writing feedback, generated practice sets and spoken practice) cost a few cents each, billed by OpenAI to you, with no subscription to us. They run on your own OpenAI key, straight from your browser, and each one shows its cost before it spends.",
     "notTitle": "What it is not",
     "notCourse": "Not a language course. It assumes you already work in French and helps you perform under exam conditions.",
     "notPredictor": "Not a predictor. It gives an estimate with its uncertainty shown, never a promised result.",

@@ -436,7 +436,7 @@
   line-height: 1;
   letter-spacing: -0.035em;
   margin: 24px 0 0;
-  max-width: 11ch;
+  max-width: 14ch;
 }
 
 .landing-hero__lede {
@@ -449,18 +449,6 @@
 
 .landing-hero .landing-cta {
   margin-top: 32px;
-}
-
-.landing .landing-hero__secondary {
-  align-self: flex-start;
-  margin-top: 16px;
-  color: var(--landing-white);
-  font-size: 16px;
-  text-underline-offset: 4px;
-}
-
-.landing .landing-hero__secondary:hover {
-  color: var(--landing-accent-100);
 }
 
 /* ------------------------------------------------------------------- strip */

@@ -124,6 +124,24 @@ test("the landing page stays clean with an answer open and the sample question a
   await axeClean(page);
 });
 
+test("the landing page's hero has the headline and one way in, and the FAQ says what the AI costs (D235)", async ({
+  page,
+}) => {
+  for (const [locale, copy] of [
+    ["en", { title: "Your C is closer than you think.", q: "What does it cost?", cost: "cost a few cents each" }],
+    ["fr", { title: "Votre C est plus proche que vous ne le pensez.", q: "Combien ça coûte?", cost: "coûtent quelques cents chacune" }],
+  ] as const) {
+    await page.goto(`/${locale}`);
+    const hero = page.locator(".landing-hero");
+    await expect(hero.getByRole("heading", { level: 1 })).toHaveText(copy.title);
+    // The call to action is the hero's only link: the sample question's is gone.
+    await expect(hero.getByRole("link")).toHaveCount(1);
+    await expect(hero.locator('a[href="#try"]')).toHaveCount(0);
+    await page.getByText(copy.q).click();
+    await expect(page.locator(".landing-faq").getByText(copy.cost, { exact: false })).toBeVisible();
+  }
+});
+
 test("the landing page shows the explainer in its own language, between the strip and 'Built for exam conditions', loading nothing until asked (D230)", async ({
   page,
 }) => {

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Palier",
-    "description": "Un outil gratuit, au code source accessible, pour s'exercer à l'Évaluation de langue seconde de la Commission de la fonction publique."
+    "description": "Pratique gratuite pour l'Évaluation de langue seconde de la Commission de la fonction publique, au code source accessible. Les fonctions IA coûtent quelques cents chacune, que vous facture directement OpenAI."
   },
   "nav": {
     "skipToContent": "Passer au contenu principal",
@@ -43,11 +43,10 @@
     },
     "hero": {
       "tag": "Évaluation de langue seconde · Niveaux B et C",
-      "title": "Préparez votre ELS.",
-      "lede": "Palier est un outil d’étude gratuit pour l’Évaluation de langue seconde de la Commission de la fonction publique. Faites des exercices chronométrés et des examens blancs de compréhension de l’écrit et d’expression écrite, obtenez une rétroaction par IA sur vos textes et répétez l’entrevue orale à voix haute avec un interlocuteur IA. Aucun compte requis.",
+      "title": "Votre C est plus proche que vous ne le pensez.",
+      "lede": "Palier est un outil d’étude pour l’Évaluation de langue seconde de la Commission de la fonction publique. Faites des exercices chronométrés et des examens blancs de compréhension de l’écrit et d’expression écrite, obtenez une rétroaction par IA sur vos textes et répétez l’entrevue orale à voix haute avec un interlocuteur IA. Gratuit pour vous exercer, sans compte. Les fonctions IA coûtent quelques cents chacune, que vous facture directement OpenAI, sans abonnement chez nous.",
       "cta": "Essayer un examen blanc gratuit",
-      "ctaShort": "Commencer",
-      "trySample": "Essayer une question type"
+      "ctaShort": "Commencer"
     },
     "strip": {
       "feedback": "Rétroaction IA sur vos textes",
@@ -70,7 +69,7 @@
       },
       "ai": {
         "title": "Une IA qui corrige et qui écoute",
-        "body": "Un coach IA commente vos textes et tient une conversation orale avec vous. Il utilise votre propre clé OpenAI, un code d’accès personnel que vous créez sur openai.com. Le coût s’affiche avant toute dépense.",
+        "body": "Un coach IA commente vos textes et tient une conversation orale avec vous. Il utilise votre propre clé OpenAI, un code d’accès personnel que vous créez sur openai.com. Chaque utilisation coûte quelques cents, que vous facture directement OpenAI, sans abonnement chez nous. Le coût s’affiche avant toute dépense.",
         "tag": "Coût affiché d’abord"
       },
       "estimate": {
@@ -120,7 +119,7 @@
     "how": {
       "eyebrow": "Fonctionnement",
       "title": "Rien à configurer avant de commencer.",
-      "body": "Palier lui-même ne coûte rien. Les fonctions IA utilisent votre propre clé, et vous ne payez à OpenAI que ce que vous utilisez.",
+      "body": "Gratuit pour vous exercer. Les fonctions IA utilisent votre propre clé OpenAI et coûtent quelques cents chacune, que vous facture directement OpenAI, sans abonnement chez nous.",
       "open": {
         "number": "01",
         "title": "Ouvrez et exercez-vous",
@@ -153,8 +152,8 @@
         "a": "Un code d’accès personnel lié à votre propre compte OpenAI. Vous le créez sur openai.com et le collez dans Palier. Il permet à Palier de demander à l’IA de corriger vos textes et de converser avec vous, aux frais de votre compte."
       },
       "cost": {
-        "q": "Combien coûte la clé OpenAI?",
-        "a": "Palier est gratuit. Seules la rétroaction sur l’écrit, les séries générées et la pratique orale utilisent une clé OpenAI, la vôtre, facturée par OpenAI à votre compte. Chaque fonction affiche son coût avant de dépenser quoi que ce soit."
+        "q": "Combien ça coûte?",
+        "a": "S’exercer est gratuit : les exercices, la révision et les examens blancs n’exigent aucune clé et ne coûtent rien. Les fonctions IA (la rétroaction sur l’écrit, les séries générées et la pratique orale) coûtent quelques cents chacune, que vous facture directement OpenAI, avec votre propre clé, sans abonnement chez nous. La pratique orale se facture à la minute, quelques cents la minute. Chaque fonction affiche son coût avant de dépenser quoi que ce soit."
       },
       "source": {
         "q": "D’où viennent les questions?",
@@ -167,10 +166,10 @@
     },
     "close": {
       "title": "Votre prochain palier commence ici.",
-      "body": "Ouvrez Palier et faites la pratique du jour. Sans compte, sans téléchargement, gratuit."
+      "body": "Ouvrez Palier et faites la pratique du jour. Gratuit pour vous exercer, sans compte ni téléchargement."
     },
     "footer": {
-      "tagline": "Un outil d’étude gratuit pour l’Évaluation de langue seconde.",
+      "tagline": "Un outil d’étude pour l’Évaluation de langue seconde, gratuit pour vous exercer.",
       "menu": "Menu",
       "yourDevice": "Votre appareil",
       "more": "Plus",
@@ -185,7 +184,7 @@
     "independence": "Palier est un outil d'étude indépendant, conçu de façon ouverte. Il n'est pas l'examen, et son utilisation ne remplace pas le matériel de préparation de la Commission de la fonction publique.",
     "noRealItems": "Il ne contient aucune question d'examen réelle. Chaque question est rédigée ou générée à des fins d'exercice, et aucun résultat qu'il produit n'est officiel.",
     "whatTitle": "Ce que c’est",
-    "what": "Un outil gratuit, au code source accessible, pour vous exercer aux épreuves de compréhension de l’écrit, d’expression écrite et d’expression orale de l’Évaluation de langue seconde, en visant le niveau B ou C. Les exercices et les examens simulés ne demandent aucun compte et fonctionnent hors ligne. Les fonctions payantes (la rétroaction sur vos textes, les séries d’exercices générées et la pratique orale) utilisent votre propre clé OpenAI, directement depuis votre navigateur, et chacune affiche son coût avant de dépenser.",
+    "what": "Un outil au code source accessible pour vous exercer aux épreuves de compréhension de l’écrit, d’expression écrite et d’expression orale de l’Évaluation de langue seconde, en visant le niveau B ou C. S’exercer est gratuit : les exercices et les examens simulés ne demandent aucun compte et fonctionnent hors ligne. Les fonctions IA (la rétroaction sur vos textes, les séries d’exercices générées et la pratique orale) coûtent quelques cents chacune, que vous facture directement OpenAI, sans abonnement chez nous. Elles utilisent votre propre clé OpenAI, directement depuis votre navigateur, et chacune affiche son coût avant de dépenser.",
     "notTitle": "Ce que ce n’est pas",
     "notCourse": "Pas un cours de langue. L’outil suppose que vous travaillez déjà en français et vous aide à performer dans les conditions de l’examen.",
     "notPredictor": "Pas une prédiction. Il donne une estimation dont l’incertitude est affichée, jamais un résultat promis.",

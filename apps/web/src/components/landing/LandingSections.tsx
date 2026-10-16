@@ -38,9 +38,6 @@ export function Hero() {
         <h1 className="landing-hero__title">{t("title")}</h1>
         <p className="landing-hero__lede">{t("lede")}</p>
         <Cta href="/home" tone="light" />
-        <a href="#try" className="landing-hero__secondary pl-focusable">
-          {t("trySample")}
-        </a>
       </div>
     </section>
   );
