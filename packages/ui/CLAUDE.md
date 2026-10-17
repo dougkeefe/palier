@@ -68,7 +68,11 @@ system, not the application.
   progress.md D184: two decorative, `aria-hidden` layers scaled by the examiner's and the microphone's levels. The
   levels are written to two custom properties from a `requestAnimationFrame` loop, `transform` only, never React state.
   **The global motion switch cannot reach a frame loop**, so the caller passes `still` under `prefers-reduced-motion`,
-  and a still form runs no loop at all. It carries `"use client"`).
+  and a still form runs no loop at all. It carries `"use client"`), and **Working** (progress.md D237: a slow wait, in
+  the info tone: three `aria-hidden` dots that bounce on the motion tokens, the message as a polite status, unless
+  `live={false}` where the screen keeps its own, and optionally the time waited, shown and never announced, with a
+  once-a-minute announcement as `Timer`'s. The motion switch stills the dots, so the ticking time is what says the wait
+  is alive).
 - **Nothing that carries text fades in.** An `opacity` animation makes its text low-contrast for
   its opening frames, which fails 1.4.3 while it lasts. The Sheet's first draft did, and axe
   caught it (progress.md D65). Animate `transform`, and respect `prefers-reduced-motion`.

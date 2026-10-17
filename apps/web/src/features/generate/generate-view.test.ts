@@ -1,5 +1,4 @@
 import type { GeneratedSet } from "@palier/app";
-import type { Preflight } from "@palier/engine";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -13,7 +12,6 @@ import {
 
 const named = (name: string, extra: object = {}) => Object.assign(new Error(name), { name, ...extra });
 
-const PREFLIGHT: Preflight = { estimateUsd: 0.05, before: "under", after: "under" };
 const SET: GeneratedSet = { id: "set-1", skill: "writing", createdAt: "2026-09-26T10:00:00.000Z", items: [] };
 
 describe("generateFailure (D111)", () => {
@@ -45,18 +43,11 @@ describe("generator", () => {
     expect(choosing).toEqual({ phase: "choosing", subSkill: "agreement", request: { kind: "idle" } });
   });
 
-  it("takes the pre-flight, then sending, then a result", () => {
-    const confirming = generator(choosing, { type: "preflighted", preflight: PREFLIGHT });
-    expect(confirming).toMatchObject({ request: { kind: "confirming", preflight: PREFLIGHT } });
-    const sending = generator(confirming, { type: "sending" });
+  it("goes straight to sending on one press of Generate, then to a result (D237)", () => {
+    const sending = generator(choosing, { type: "sending" });
     expect(sending).toMatchObject({ request: { kind: "sending" } });
     const result = { set: SET, drafted: 5, discarded: 4 };
     expect(generator(sending, { type: "generated", result })).toEqual({ phase: "result", subSkill: "agreement", result });
-  });
-
-  it("goes back to choosing on cancel, keeping the sub-skill", () => {
-    const confirming = generator(choosing, { type: "preflighted", preflight: PREFLIGHT });
-    expect(generator(confirming, { type: "cancel" })).toEqual(choosing);
   });
 
   it("keeps the sub-skill through a failure, so trying again asks for the same thing", () => {
@@ -70,16 +61,6 @@ describe("generator", () => {
     expect(generator(sending, { type: "choose-sub-skill", subSkill: "pronouns" })).toBe(sending);
   });
 
-  it("ignores a pre-flight that lands while a set is being generated, so Send cannot come back mid-request", () => {
-    const sending = generator(generator(choosing, { type: "preflighted", preflight: PREFLIGHT }), { type: "sending" });
-    expect(generator(sending, { type: "preflighted", preflight: PREFLIGHT })).toBe(sending);
-  });
-
-  it("does nothing on cancel mid-request, so the Generate button stays disabled", () => {
-    const sending = generator(choosing, { type: "sending" });
-    expect(generator(sending, { type: "cancel" })).toBe(sending);
-  });
-
   it("practises a set, and comes back to choosing with the same sub-skill", () => {
     const practising = generator(choosing, { type: "practise", set: SET });
     expect(practising).toEqual({ phase: "practising", subSkill: "agreement", set: SET });
@@ -89,8 +70,6 @@ describe("generator", () => {
   it("ignores request events outside choosing", () => {
     const practising = generator(choosing, { type: "practise", set: SET });
     for (const action of [
-      { type: "preflighted", preflight: PREFLIGHT },
-      { type: "cancel" },
       { type: "sending" },
       { type: "failed", failure: "timeout" },
       { type: "choose-sub-skill", subSkill: "pronouns" },
@@ -107,9 +86,7 @@ describe("resumedGenerator (D143)", () => {
     expect(resumed).toEqual({ phase: "choosing", subSkill: "pronouns", request: { kind: "sending" } });
   });
 
-  it("offers no second request while it is out: a pre-flight, a cancel and a new sub-skill are all ignored", () => {
-    expect(generator(resumed, { type: "preflighted", preflight: PREFLIGHT })).toBe(resumed);
-    expect(generator(resumed, { type: "cancel" })).toBe(resumed);
+  it("offers no second request while it is out: a new sub-skill is ignored", () => {
     expect(generator(resumed, { type: "choose-sub-skill", subSkill: "agreement" })).toBe(resumed);
   });
 

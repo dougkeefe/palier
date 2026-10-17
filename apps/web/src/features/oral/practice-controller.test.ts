@@ -114,6 +114,10 @@ const setUp = (over: Partial<PracticeControllerDeps> & { started?: Promise<OralP
   const current = aRun();
   const useCases = {
     preflightSpend: vi.fn(() => Promise.resolve(PREFLIGHT)),
+    featureCosts: vi.fn(() => [
+      { feature: "oral-practice" as const, estimateUsd: 0.01 },
+      { feature: "oral-studio" as const, estimateUsd: 0.1 },
+    ]),
     startOralPractice: vi.fn((_request: unknown, answers: unknown) => {
       bridgeSource = answers as { answer: (q: typeof QUESTION, s: AbortSignal) => Promise<unknown> };
       return over.started ?? Promise.resolve(current.run);
@@ -191,7 +195,7 @@ describe("practiceController — the microphone check (D121)", () => {
       { type: "mic", mic: "unsupported" },
     ]);
     expect(mic.track.stopped).toBe(true);
-    await controller.continueWith(CHOICE);
+    await controller.price(CHOICE);
     await controller.start(CHOICE);
     expect(useCases.preflightSpend).not.toHaveBeenCalled();
     expect(useCases.startOralPractice).not.toHaveBeenCalled();
@@ -234,36 +238,47 @@ describe("practiceController — the microphone check (D121)", () => {
   });
 });
 
-describe("practiceController — the pre-flight (D121)", () => {
+describe("practiceController — the estimate beside the start (D121, D237)", () => {
   it("prices the session's minutes, keeping the microphone open for the session", async () => {
     const { controller, actions, mic, useCases } = setUp();
     await controller.checkMic();
-    await controller.continueWith(CHOICE);
+    await controller.price(CHOICE);
 
     expect(useCases.preflightSpend).toHaveBeenCalledWith({ feature: "oral-practice", quantity: 5 });
-    expect(actions.at(-1)).toEqual({ type: "preflighted", preflight: PREFLIGHT });
+    expect(actions.at(-1)).toEqual({ type: "preflighted", preflight: PREFLIGHT, scenarioId: CHOICE.scenario.id });
     expect(mic.track.stopped).toBe(false);
   });
 
   it("prices studio mode as a studio conversation when the microphone is open (D185)", async () => {
     const { controller, actions, useCases } = setUp();
     await controller.checkMic();
-    await controller.continueWith(CHOICE, "studio");
+    await controller.price(CHOICE, "studio");
 
     expect(useCases.preflightSpend).toHaveBeenCalledWith({ feature: "oral-studio", quantity: 5 });
-    expect(actions.at(-1)).toEqual({ type: "preflighted", preflight: PREFLIGHT, held: "studio" });
+    expect(actions.at(-1)).toEqual({ type: "preflighted", preflight: PREFLIGHT, scenarioId: CHOICE.scenario.id, held: "studio" });
+  });
+
+  it("falls back to the cost table when the month's spend cannot be read, so the start is never left disabled (D237)", async () => {
+    const { controller, actions, useCases } = setUp();
+    await controller.checkMic();
+    useCases.preflightSpend.mockReturnValueOnce(Promise.reject(new Error("IndexedDB blocked")));
+    await controller.price(CHOICE, "studio");
+
+    expect(actions.at(-1)).toMatchObject({ type: "preflighted", preflight: { before: "none", after: "none" }, held: "studio" });
+    const { preflight } = actions.at(-1) as Extract<PracticeAction, { type: "preflighted" }>;
+    expect(preflight.estimateUsd).toBeCloseTo(0.5);
   });
 
   it("goes nowhere without an open microphone, in either mode, since every answer is spoken (D234)", async () => {
     const unchecked = setUp();
-    await unchecked.controller.continueWith(CHOICE);
-    await unchecked.controller.continueWith(CHOICE, "studio");
+    await unchecked.controller.price(CHOICE);
+    await unchecked.controller.price(CHOICE, "studio");
     expect(unchecked.useCases.preflightSpend).not.toHaveBeenCalled();
     expect(unchecked.actions).toEqual([]);
 
     const refused = setUp({ openMic: () => Promise.reject(Object.assign(new Error("no"), { name: "NotAllowedError" })) });
     await refused.controller.checkMic();
-    await refused.controller.continueWith(CHOICE);
+    await refused.controller.price(CHOICE);
     expect(refused.useCases.preflightSpend).not.toHaveBeenCalled();
     expect(types(refused.actions)).toEqual(["mic", "mic"]);
   });
@@ -279,13 +294,13 @@ describe("practiceController — the pre-flight (D121)", () => {
     expect(mic.track.stopped).toBe(false);
   });
 
-  it("runs once however often it is tapped while in flight", async () => {
+  it("runs once however often it is asked for while in flight", async () => {
     const pending = deferred<typeof PREFLIGHT>();
     const { controller, useCases } = setUp();
     await controller.checkMic();
     useCases.preflightSpend.mockReturnValueOnce(pending.promise);
-    const first = controller.continueWith(CHOICE);
-    await controller.continueWith(CHOICE);
+    const first = controller.price(CHOICE);
+    await controller.price(CHOICE);
     pending.resolve(PREFLIGHT);
     await first;
     expect(useCases.preflightSpend).toHaveBeenCalledTimes(1);
@@ -296,7 +311,7 @@ describe("practiceController — a session (D121)", () => {
   const spokenSession = async (over: Parameters<typeof setUp>[0] = {}) => {
     const handles = setUp(over);
     await handles.controller.checkMic();
-    await handles.controller.continueWith(CHOICE);
+    await handles.controller.price(CHOICE);
     await handles.controller.start(CHOICE);
     return handles;
   };
@@ -464,7 +479,7 @@ describe("practiceController — a session (D121)", () => {
     const tick = vi.fn(() => Promise.resolve());
     (handles.current.run as unknown as { tick: () => Promise<void> }).tick = tick;
     await handles.controller.checkMic();
-    await handles.controller.continueWith(CHOICE);
+    await handles.controller.price(CHOICE);
     await handles.controller.start(CHOICE);
     await handles.controller.tick();
     expect(tick).toHaveBeenCalledTimes(1);
@@ -475,7 +490,7 @@ describe("practiceController — a session (D121)", () => {
     const current = aRun();
     const handles = setUp({ started: started.promise });
     await handles.controller.checkMic();
-    await handles.controller.continueWith(CHOICE);
+    await handles.controller.price(CHOICE);
     const starting = handles.controller.start(CHOICE);
     await handles.controller.end();
     started.resolve(current.run);
@@ -490,7 +505,7 @@ describe("practiceController — a session (D121)", () => {
     const failed = aRun(Object.assign(new Error("gone"), { name: "NoApiKeyError" }));
     const handles = setUp({ started: Promise.resolve(failed.run) });
     await handles.controller.checkMic();
-    await handles.controller.continueWith(CHOICE);
+    await handles.controller.price(CHOICE);
     await handles.controller.start(CHOICE);
     failed.ended.resolve(session({ endReason: "transport-failed" }));
     await settled();
@@ -503,7 +518,7 @@ describe("practiceController — a session (D121)", () => {
     const broken = aRun();
     const handles = setUp({ started: Promise.resolve(broken.run) });
     await handles.controller.checkMic();
-    await handles.controller.continueWith(CHOICE);
+    await handles.controller.price(CHOICE);
     await handles.controller.start(CHOICE);
     broken.ended.reject(new Error("the store is full"));
     await settled();
@@ -517,7 +532,7 @@ describe("practiceController — a session (D121)", () => {
     const handles = setUp({ started: Promise.reject(Object.assign(new Error("bad"), { name: "InvalidApiKeyError" })) });
     handles.useCases.oralSession.mockResolvedValueOnce(null);
     await handles.controller.checkMic();
-    await handles.controller.continueWith(CHOICE);
+    await handles.controller.price(CHOICE);
     await handles.controller.start(CHOICE);
 
     expect(handles.actions.at(-1)).toMatchObject({ type: "ended", failure: "invalid-key", session: { id: ID, turns: [] } });
@@ -528,7 +543,7 @@ describe("practiceController — a session (D121)", () => {
     const handles = setUp({ started: Promise.resolve(broken.run) });
     handles.useCases.oralSession.mockRejectedValueOnce(new Error("IndexedDB gone"));
     await handles.controller.checkMic();
-    await handles.controller.continueWith(CHOICE);
+    await handles.controller.price(CHOICE);
     await handles.controller.start(CHOICE);
     broken.ended.reject(new Error("the store is full"));
     await settled();
@@ -565,7 +580,7 @@ describe("practiceController — a session (D121)", () => {
       return Promise.resolve(handles.current.run);
     });
     await handles.controller.checkMic();
-    await handles.controller.continueWith(CHOICE);
+    await handles.controller.price(CHOICE);
     await handles.controller.start(CHOICE);
     expect(handles.holds).toEqual([{ id: ID, released: false }]);
 
@@ -577,7 +592,7 @@ describe("practiceController — a session (D121)", () => {
   it("lets go of the session when the screen goes away and the run ends, and when the run never starts (D144)", async () => {
     const leaving = setUp();
     await leaving.controller.checkMic();
-    await leaving.controller.continueWith(CHOICE);
+    await leaving.controller.price(CHOICE);
     await leaving.controller.start(CHOICE);
     leaving.controller.dispose();
     await settled();
@@ -585,7 +600,7 @@ describe("practiceController — a session (D121)", () => {
 
     const refused = setUp({ started: Promise.reject(new Error("refused")) });
     await refused.controller.checkMic();
-    await refused.controller.continueWith(CHOICE);
+    await refused.controller.price(CHOICE);
     await refused.controller.start(CHOICE);
     await settled();
     expect(refused.holds.map((hold) => hold.released)).toEqual([true]);
@@ -596,7 +611,7 @@ describe("practiceController — a session (D121)", () => {
     const current = aRun();
     const handles = setUp({ started: started.promise });
     await handles.controller.checkMic();
-    await handles.controller.continueWith(CHOICE);
+    await handles.controller.price(CHOICE);
     const starting = handles.controller.start(CHOICE);
     handles.controller.dispose();
     started.resolve(current.run);

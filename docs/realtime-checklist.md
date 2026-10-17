@@ -48,8 +48,8 @@ Settings → **Your key**: a key is saved. Spoken practice → **Studio mode** �
 
 ## 2. Establishing the call (exit criterion 1)
 
-Allowed microphone → **Continue** → the pre-flight shows the estimate for the session's minutes and says where the key
-goes ("Starting sends your key once to Palier's server…").
+Allowed microphone → the microphone card shows the estimate for the session's minutes beside **Start the session** and
+says where the key goes ("Starting sends your key once to Palier's server…"; D237).
 
 - [ ] **Start the session.** Time it by ear from the tap to the examiner's first word: under 2.5 s. (D190 measured a
       median of about 2.12 s on the deployed site, over a home connection.) Write down the figure.
@@ -113,7 +113,7 @@ Start a new studio session and hold one exchange.
 Settings → **Your key** → **The one exception: studio mode** → enter your endpoint's address → **Use this endpoint**. The
 line above the field names it.
 
-- [ ] **The copy changes with it.** The picker's studio callout and the pre-flight say the key goes to your own endpoint
+- [ ] **The copy changes with it.** The picker's studio callout and the line beside the start say the key goes to your own endpoint
       and never reaches Palier's server.
 - [ ] **Start the session.** A small window (a new tab on iOS) opens at your endpoint, says it is waiting for Palier, then
       closes itself, and the conversation starts. If the browser asked whether to allow a popup, allow it for Palier's

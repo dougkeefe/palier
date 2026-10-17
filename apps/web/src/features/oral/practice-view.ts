@@ -1,5 +1,5 @@
 import type { ExaminerQuestion, OralSession, OralSessionChoice } from "@palier/app";
-import type { OralEndReason, OralMode } from "@palier/domain";
+import type { OralEndReason, OralMode, ScenarioId } from "@palier/domain";
 import type { Preflight } from "@palier/engine";
 
 import { checkFailure } from "../key/key-view";
@@ -30,16 +30,19 @@ export type Turn = "idle" | "recording" | "sending";
 
 /**
  * The screen's steps, for both modes (product-requirements.md §8.6, progress.md D185). `held` is the mode the
- * candidate chose on the picker, and what the pre-flight priced; absent is practice, as on a stored session.
- * Studio mode goes on to its own view once started, and comes back to the same end card as practice.
+ * candidate chose on the picker, and what the estimate priced; absent is practice, as on a stored session.
+ * The microphone step is also where the session starts: its estimate is shown beside "Start the session" once
+ * the microphone is open, so one tap is the agreement (D237). Studio mode goes on to its own view once started,
+ * and comes back to the same end card as practice.
  */
 export type PracticeState =
   | { readonly phase: "picking" }
-  | { readonly phase: "mic"; readonly choice: OralSessionChoice; readonly mic: MicState; readonly held?: OralMode }
   | {
-      readonly phase: "confirming";
+      readonly phase: "mic";
       readonly choice: OralSessionChoice;
-      readonly preflight: Preflight;
+      readonly mic: MicState;
+      /** The session's estimate and its place against the cap, once the microphone is open; `null` until then. */
+      readonly preflight: Preflight | null;
       readonly held?: OralMode;
     }
   /** A studio conversation, rendered by the studio view from its own controller (D185). */
@@ -70,7 +73,8 @@ export type PracticeState =
 export type PracticeAction =
   | { readonly type: "choose"; readonly choice: OralSessionChoice; readonly held?: OralMode }
   | { readonly type: "mic"; readonly mic: MicState }
-  | { readonly type: "preflighted"; readonly preflight: Preflight; readonly held?: OralMode }
+  /** The session's price, tagged with the session and mode it priced, so a late one for another is dropped (D237). */
+  | { readonly type: "preflighted"; readonly preflight: Preflight; readonly scenarioId: ScenarioId; readonly held?: OralMode }
   | { readonly type: "back" }
   /** A studio session started: the studio view takes over until it ends (D185). */
   | { readonly type: "studio" }
@@ -95,8 +99,16 @@ export const INITIAL_PRACTICE: PracticeState = { phase: "picking" };
 const studioHeld = (held: OralMode | undefined): { readonly held?: OralMode } => (held === "studio" ? { held } : {});
 
 /**
- * The screen's steps: pick a session and a mode, check the microphone, confirm the
- * estimate, then run it until it ends. An action that does not belong to the current step is
+ * Whether the session can be started: the microphone heard something, or the candidate goes on
+ * though it was quiet, and the estimate is on the screen beside the button (D237). Every answer
+ * is spoken, so without an open microphone it cannot (D234).
+ */
+export const canStart = (state: PracticeState): boolean =>
+  state.phase === "mic" && (state.mic === "ok" || state.mic === "quiet") && state.preflight !== null;
+
+/**
+ * The screen's steps: pick a session and a mode, check the microphone, see the estimate and
+ * start, then run it until it ends. An action that does not belong to the current step is
  * ignored, so a late event (a question after the end, a tap during the check) never moves it.
  * A studio session leaves for its own view and comes back to the end card (D185).
  */
@@ -104,30 +116,17 @@ export const practice = (state: PracticeState, action: PracticeAction): Practice
   if (action.type === "back") return INITIAL_PRACTICE;
   switch (state.phase) {
     case "picking":
-      return action.type === "choose" ? { phase: "mic", choice: action.choice, mic: "idle", ...studioHeld(action.held) } : state;
+      return action.type === "choose"
+        ? { phase: "mic", choice: action.choice, mic: "idle", preflight: null, ...studioHeld(action.held) }
+        : state;
     case "mic":
       if (action.type === "mic") return { ...state, mic: action.mic };
       if (action.type === "preflighted") {
-        return {
-          phase: "confirming",
-          choice: state.choice,
-          preflight: action.preflight,
-          ...studioHeld(action.held),
-        };
+        return action.scenarioId === state.choice.scenario.id && action.held === state.held
+          ? { ...state, preflight: action.preflight }
+          : state;
       }
-      return state;
-    case "studio":
-      return action.type === "ended"
-        ? {
-            phase: "ended",
-            choice: state.choice,
-            session: action.session,
-            evicted: action.evicted,
-            failure: action.failure,
-            recordingKept: action.recordingKept,
-          }
-        : state;
-    case "confirming":
+      if (!canStart(state)) return state;
       if (action.type === "studio") return state.held === "studio" ? { phase: "studio", choice: state.choice } : state;
       if (action.type !== "started" || state.held === "studio") return state;
       return {
@@ -140,6 +139,17 @@ export const practice = (state: PracticeState, action: PracticeAction): Practice
         ending: false,
         startedAtMs: action.nowMs,
       };
+    case "studio":
+      return action.type === "ended"
+        ? {
+            phase: "ended",
+            choice: state.choice,
+            session: action.session,
+            evicted: action.evicted,
+            failure: action.failure,
+            recordingKept: action.recordingKept,
+          }
+        : state;
     case "running":
       switch (action.type) {
         case "question":
@@ -213,15 +223,15 @@ export const endMessage = (reason: OralEndReason | null): string => {
 };
 
 /**
- * When studio mode's route is woken (D190): on each step before the tap, the microphone check and the pre-flight, of a
- * session held in studio mode. The step is the answer, so the screen wakes it once as each is shown. Practice mode
- * never calls the route.
+ * When studio mode's route is woken (D190): on the step before the tap, the microphone check, where the session also
+ * starts (D237), of a session held in studio mode. The step is the answer, so the screen wakes it once as it is shown.
+ * Practice mode never calls the route.
  */
-export const studioWarmup = (state: PracticeState): "mic" | "confirming" | null =>
-  (state.phase === "mic" || state.phase === "confirming") && state.held === "studio" ? state.phase : null;
+export const studioWarmup = (state: PracticeState): "mic" | null =>
+  state.phase === "mic" && state.held === "studio" ? state.phase : null;
 
 /**
- * The pre-flight's line on where the session sends what, in the `oral` namespace (D186). Studio mode's says where the
+ * The line beside the start button on where the session sends what, in the `oral` namespace (D186, D237). Studio mode's says where the
  * key goes: Palier's route, or the user's own endpoint when this device has one (D192).
  */
 export const sendsTo = (studio: boolean, ownEndpoint: boolean): string => {

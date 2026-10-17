@@ -1,6 +1,5 @@
 import type { GeneratePracticeSetResult, GeneratedSet } from "@palier/app";
 import type { SubSkill } from "@palier/domain";
-import type { Preflight } from "@palier/engine";
 
 import { checkFailure } from "../key/key-view";
 
@@ -31,7 +30,6 @@ export const failureMessage = (failure: GenerateFailure): string =>
 
 export type RequestState =
   | { readonly kind: "idle" }
-  | { readonly kind: "confirming"; readonly preflight: Preflight }
   | { readonly kind: "sending" }
   | { readonly kind: "failed"; readonly failure: GenerateFailure };
 
@@ -42,8 +40,6 @@ export type GeneratorState =
 
 export type GeneratorAction =
   | { readonly type: "choose-sub-skill"; readonly subSkill: SubSkill }
-  | { readonly type: "preflighted"; readonly preflight: Preflight }
-  | { readonly type: "cancel" }
   | { readonly type: "sending" }
   | { readonly type: "generated"; readonly result: GeneratePracticeSetResult }
   | { readonly type: "failed"; readonly failure: GenerateFailure }
@@ -66,19 +62,15 @@ const idleChoosing = (state: GeneratorState): state is Extract<GeneratorState, {
   state.phase === "choosing" && state.request.kind !== "sending";
 
 /**
- * The screen's one reducer. Nothing that starts or changes a request is taken while a set is
- * being generated: a pre-flight that lands late (a double click on Generate) or a cancel would
- * otherwise bring Send back mid-request, and a second paid run with it. A failure keeps the
- * chosen sub-skill so "Try again" asks for the same thing.
+ * The screen's one reducer. One press of Generate is the agreement, its estimate shown beside it
+ * (D237). Nothing that changes the request is taken while a set is being generated: a new
+ * sub-skill would otherwise bring Generate back mid-request, and a second paid run with it. A
+ * failure keeps the chosen sub-skill so "Try again" asks for the same thing.
  */
 export const generator = (state: GeneratorState, action: GeneratorAction): GeneratorState => {
   switch (action.type) {
     case "choose-sub-skill":
       return idleChoosing(state) ? { phase: "choosing", subSkill: action.subSkill, request: IDLE } : state;
-    case "preflighted":
-      return idleChoosing(state) ? { ...state, request: { kind: "confirming", preflight: action.preflight } } : state;
-    case "cancel":
-      return idleChoosing(state) ? { ...state, request: IDLE } : state;
     case "sending":
       return state.phase === "choosing" ? { ...state, request: { kind: "sending" } } : state;
     case "failed":

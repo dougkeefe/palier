@@ -166,6 +166,15 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     is `lib/bank-version.ts`, which the server may import, unlike `container.ts`.
   - `[locale]/hermetic/[view]` is the E2E hook: it throws, or shows the global view, in the hermetic lane only, and is the
     404 anywhere else. A dynamic segment, so the worker never precaches it.
+- **One press spends, and a slow wait shows it is alive** (D237, amending D108's pre-flight). A spending button shows
+  its estimate beside it through `components/key/SpendOffer.tsx` (the estimate, the cap reminder from `preflightNotice`,
+  where the words go), from `components/key/use-preflight.ts`'s `usePreflight`. That works it out as the screen opens,
+  again once each request settles and again when the page is shown, and falls back to the cost table's estimate when
+  the read fails (`fallbackPreflight`). The button names it in `aria-describedby` and stays disabled until it is on
+  screen. A press that saves before it spends goes through `lib/latch.ts`, so a double press pays once. **There is no second "Before you send" step.** A call on
+  the key is waited for in `components/key/Waiting.tsx` (`@palier/ui`'s `Working`: the dots and the time waited, from
+  when the wait is shown). A screen that keeps its own status line mounted passes `live={false}`. A new spending screen
+  does both.
 - **A spending call outlives its screen** (D127, D143; `lib/in-flight.ts`). A report, a submission's feedback and a
   fresh set still out are joined, never repeated, from module scope in `container.ts`, so a rebuilt container finds
   them; each screen reads the held request on mount and shows it as still being made. **A wipe or delete-everywhere
@@ -346,7 +355,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `container-oral.test.ts` runs a real session through both graphs over MSW.
   - **The report on a session** (Phase 5 Slice 3, progress.md D126) is `/practice/oral/report?session=…`, reached from a
     session's end and from the picker's list of past sessions. `components/oral/OralReport.tsx` renders it; its decisions
-    are `features/oral/report-view.ts`. It offers itself on the key with the workshop's pre-flight, then shows the five
+    are `features/oral/report-view.ts`. It offers itself on the key with its estimate beside the button (D237), then shows the five
     criteria and pronunciation **not assessed** (Gate J), three fixes each linked to its skill's drill, five words, the
     transcript with **each error a button** that shows its correction, the fluency, the session's measured cost, and the
     recording, played or deleted in one tap. The filler list is `@palier/content/oral/fillers.json`, parsed once in the
@@ -361,15 +370,18 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     in `Authorization`, `/v1/realtime/calls` sees only `ek_` secrets, and a drop reconnects once, then fails cleanly
     with every turn kept.
   - **The studio screen** (Phase 6 Slice 2, progress.md D180–D189) is the same `/practice/oral` island: a **mode
-    choice** on the picker, each mode's cost a minute from `featureCosts`, and studio's pre-flight as `oral-studio` at
-    the session's minutes. Studio mode needs the microphone, as practice mode does (D234, above).
+    choice** on the picker, each mode's cost a minute from `featureCosts`. **The session starts from the microphone card**
+    (D237): once the microphone is open the controller's `price` works out `oral-practice` or `oral-studio` at the
+    session's minutes, shown beside "Start the session" ("Start anyway" when it was quiet). **The start's handler stays
+    synchronous**, with the pricing done before the tap, for D192's popup. Studio mode needs the microphone, as practice
+    mode does (D234, above).
     - **`features/oral/studio-controller.ts`** owns the conversation, tested over fakes: the microphone is **handed
       over** by the practice controller's check (`handOver`), the examiner's voice plays in an `Audio` element outside
       the layout, and the peer is the container's `realtimePeer`, so `@palier/adapters/openai` stays in the lazily loaded
       container chunk. It holds the Web Lock, records the microphone **whole** from the tap (`recordWhole`, D183), ticks
       the run for its `phase()` and reads `oralSessionCost` for the running meter. A failure is named only when the
       connection failed, since the transport keeps a server error without ending.
-    - **The route is woken before the tap** (D190): on the microphone check and the pre-flight of a studio session
+    - **The route is woken before the tap** (D190): on the microphone check of a studio session, where it starts (D237)
       (`practice-view.ts`'s `studioWarmup`), the screen calls the container's `warmRealtime`, a post with **no key**. The
       key still reaches the route only after the tap. The leak guard counts these as `realtimeSecretWarmups()`.
     - **`components/oral/OralStudio.tsx`** renders the conversation: `@palier/ui`'s `VoiceForm` (still under reduced
@@ -386,7 +398,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
       `studioController.start` → `startOralStudio({ …, endpoint })`, where the container builds
       `selfHostedRealtimeSecrets` and **opens its popup synchronously, inside the tap** (a browser opens a popup only from
       a gesture), and cancels it if the run fails before its mint. With an endpoint the route is never woken, and the
-      picker's and the pre-flight's copy name the endpoint (`studioModeNote`, `sendsTo`); its failure is `failEndpoint`.
+      picker's and the start's copy name the endpoint (`studioModeNote`, `sendsTo`); its failure is `failEndpoint`.
       **`connect-src` is unchanged**: the popup and `postMessage` are not connections.
     - **`selfhost/`** at the repository root is not a workspace: the one-file Cloudflare Worker and Vercel function
       users deploy, and their README (linked as `SELFHOST_GUIDE_URL`). `src/server/selfhost.test.ts` loads both by file

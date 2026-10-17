@@ -3,11 +3,11 @@
 import type { OralReport as Report } from "@palier/app";
 import type { Lang, OralAssessment } from "@palier/domain";
 import { sessionId } from "@palier/domain";
+import type { Preflight } from "@palier/engine";
 import { Button, Callout, Card, EmptyState } from "@palier/ui";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { type Ref, useCallback, useEffect, useId, useMemo, useReducer, useRef, useState } from "react";
 
-import { estimateText } from "../../features/key/spend-view";
 import {
   type AskState,
   INITIAL_REPORT,
@@ -27,12 +27,14 @@ import {
   transcriptRows,
 } from "../../features/oral/report-view";
 import { endMessage } from "../../features/oral/practice-view";
-import { preflightNotice } from "../../features/writing/workshop-view";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
+import { SpendOffer } from "../key/SpendOffer";
+import { usePreflight } from "../key/use-preflight";
+import { Waiting } from "../key/Waiting";
 import { NonAffiliation } from "../NonAffiliation";
 
 /** The session named in `?session=`, or none. */
@@ -55,8 +57,8 @@ const loadExtras = async (container: Container): Promise<Extras> => ({
 /**
  * The report on a spoken session (product-requirements.md §8.6, "post-session report"; progress.md
  * D126), at `/practice/oral/report?session=…`, reached from a session's end and from the list of
- * past sessions. For a session with no report yet it offers one, on the user's key, with the
- * workshop's pre-flight. The report: a level and quoted evidence per criterion, pronunciation "not
+ * past sessions. For a session with no report yet it offers one, on the user's key, with its
+ * estimate beside the button, as the workshop does (D237). The report: a level and quoted evidence per criterion, pronunciation "not
  * assessed" (Gate J), three fixes each with its drill, five words, the transcript with each error
  * marked and its correction on tap, the fluency figures, what the session cost, and the recording,
  * played back or deleted in one tap. Its decisions are in `features/oral/report-view.ts`.
@@ -128,6 +130,13 @@ export function OralReport() {
     if (askFocusMoves(before, askKind)) askRef.current?.focus();
   }, [askKind]);
 
+  // The estimate beside "Get the report" (D237), worked out again once a request settles, since a
+  // call moves this month's spend against the cap.
+  const preflight = usePreflight(container.status === "ready" ? container.container.useCases : null, "oral-assessment", {
+    enabled: (extras?.keyHeld ?? false) && askKind !== "asking",
+    reloadOn: askKind,
+  });
+
   // And a report just arrived takes it to the report.
   const assessed = state.phase === "ready" && state.report.session.assessment !== null;
   useEffect(() => {
@@ -172,9 +181,6 @@ export function OralReport() {
   const { session } = report;
   const lang: Lang = report.scenario?.lang ?? "fr";
 
-  const offer = async () => {
-    dispatch({ type: "preflighted", preflight: await useCases.preflightSpend({ feature: "oral-assessment" }) });
-  };
   const send = () =>
     follow(container.container, useCases.requestOralReport({ sessionId: session.id, feedbackLang: feedbackLangFor(locale) }));
 
@@ -187,10 +193,9 @@ export function OralReport() {
           report={report}
           ask={ask}
           extras={extras}
+          preflight={preflight}
           askRef={askRef}
-          onOffer={() => void offer()}
           onSend={() => void send()}
-          onCancel={() => dispatch({ type: "cancel" })}
         />
       ) : (
         <Assessment assessment={session.assessment} report={report} lang={lang} headingRef={reportRef} />
@@ -243,29 +248,27 @@ function Summary({ report, headingRef }: { report: Report; headingRef: Ref<HTMLH
 }
 
 /**
- * Asking for the report: the offer, the pre-flight, the wait, a failure, or why there is none to ask
- * for. One card throughout, whose heading takes focus at each step and whose status line is always
- * there, so the wait is announced when it starts (D127).
+ * Asking for the report: the offer with its estimate (D237), the wait, a failure, or why there is
+ * none to ask for. One card throughout, whose heading takes focus at each step and whose status
+ * line is always there, so the wait is announced when it starts (D127); the wait is shown below it.
  */
 function Ask({
   report,
   ask,
   extras,
+  preflight,
   askRef,
-  onOffer,
   onSend,
-  onCancel,
 }: {
   report: Report;
   ask: AskState;
   extras: Extras;
+  preflight: Preflight | null;
   askRef: Ref<HTMLHeadingElement>;
-  onOffer: () => void;
   onSend: () => void;
-  onCancel: () => void;
 }) {
   const t = useTranslations("oralReport");
-  const locale = useLocale();
+  const offerId = useId();
   const blocked = blockMessage(report.blocked);
   if (blocked !== null) {
     return (
@@ -276,33 +279,16 @@ function Ask({
     );
   }
   if (!extras.keyHeld) return <NoKeyCard namespace="oralReport" estimateUsd={extras.estimateUsd} />;
-  const notice = ask.kind === "confirming" ? preflightNotice(ask.preflight) : null;
   return (
     <Card>
       <h2 ref={askRef} tabIndex={-1} className="app-step-heading">
-        {t(ask.kind === "confirming" ? "preflightTitle" : "reportTitle")}
+        {t("reportTitle")}
       </h2>
       <div className="app-stack">
-        <p role="status" aria-live="polite" className="app-muted">
+        <p role="status" aria-live="polite" className="pl-visually-hidden">
           {ask.kind === "asking" ? t("asking") : ""}
         </p>
-        {ask.kind === "confirming" ? (
-          <>
-            <p>
-              {ask.preflight.estimateUsd === null
-                ? t("preflightUnpriced")
-                : t("preflightEstimate", { amount: estimateText(ask.preflight.estimateUsd, locale) })}
-            </p>
-            {notice === null ? null : <Callout tone={notice.tone}>{t(notice.key)}</Callout>}
-            <p className="app-muted">{t("sendsTo")}</p>
-            <div className="app-actions">
-              <Button onClick={onSend}>{t("send")}</Button>
-              <Button variant="ghost" onClick={onCancel}>
-                {t("cancel")}
-              </Button>
-            </div>
-          </>
-        ) : null}
+        {ask.kind === "asking" ? <Waiting live={false}>{t("asking")}</Waiting> : null}
         {ask.kind === "idle" || ask.kind === "failed" ? (
           <>
             {ask.kind === "failed" ? (
@@ -314,13 +300,15 @@ function Ask({
             )}
             {ask.kind === "failed" && !canRetry(ask.failure) ? null : (
               <>
-                <p className="app-muted">
-                  {extras.estimateUsd === null
-                    ? t("offerUnpriced")
-                    : t("offerCost", { amount: estimateText(extras.estimateUsd, locale) })}
-                </p>
+                {preflight === null ? null : <SpendOffer id={offerId} namespace="oralReport" preflight={preflight} />}
                 <div className="app-actions">
-                  <Button onClick={onOffer}>{t(ask.kind === "failed" ? "tryAgain" : "getReport")}</Button>
+                  <Button
+                    onClick={onSend}
+                    disabled={preflight === null}
+                    aria-describedby={preflight === null ? undefined : offerId}
+                  >
+                    {t(ask.kind === "failed" ? "tryAgain" : "getReport")}
+                  </Button>
                 </div>
               </>
             )}

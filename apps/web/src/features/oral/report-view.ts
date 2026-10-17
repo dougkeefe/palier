@@ -8,7 +8,7 @@ import {
 } from "@palier/app";
 import type { Lang, OralCriterion, OralMode, OralTurn, OralTurnError, ScoredSubSkill } from "@palier/domain";
 import { ORAL_CRITERIA, READING_SUB_SKILLS } from "@palier/domain";
-import type { FluencyMetrics, Preflight } from "@palier/engine";
+import type { FluencyMetrics } from "@palier/engine";
 
 import { moneyText } from "../key/spend-view";
 import { type TextSegment, segmentText } from "../writing/inline-errors";
@@ -28,7 +28,6 @@ export type AskFailure = OralFailure | "nothing" | "running" | "scenario-gone" |
 /** Where asking for the report stands, when the session has none yet. */
 export type AskState =
   | { readonly kind: "idle" }
-  | { readonly kind: "confirming"; readonly preflight: Preflight }
   | { readonly kind: "asking" }
   | { readonly kind: "failed"; readonly failure: AskFailure };
 
@@ -44,8 +43,6 @@ export type ReportAction =
   /** The session read again, keeping where asking stands: its cost after a failed call (D127). */
   | { readonly type: "refreshed"; readonly report: OralReport }
   | { readonly type: "loadFailed" }
-  | { readonly type: "preflighted"; readonly preflight: Preflight }
-  | { readonly type: "cancel" }
   | { readonly type: "asking" }
   | { readonly type: "failed"; readonly error: unknown };
 
@@ -61,7 +58,8 @@ const askFailure = (error: unknown): AskFailure => {
 
 /**
  * The steps: loading, then the session, and for one with no report yet, asking for it: the
- * offer, the pre-flight, the call, and a failure that keeps the transcript and offers it again.
+ * offer, its estimate beside the button so one press is the agreement (D237), the call, and a
+ * failure that keeps the transcript and offers it again.
  * A report arriving (`loaded` again) replaces the whole view, so the call's answer lands whole.
  * An action from another step is ignored.
  */
@@ -74,10 +72,6 @@ export const reportScreen = (state: ReportState, action: ReportAction): ReportSt
   switch (action.type) {
     case "refreshed":
       return { ...state, report: action.report };
-    case "preflighted":
-      return state.ask.kind === "asking" ? state : { ...state, ask: { kind: "confirming", preflight: action.preflight } };
-    case "cancel":
-      return state.ask.kind === "asking" ? state : { ...state, ask: { kind: "idle" } };
     case "asking":
       return { ...state, ask: { kind: "asking" } };
     case "failed":

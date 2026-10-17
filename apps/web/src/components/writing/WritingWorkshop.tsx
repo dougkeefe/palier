@@ -6,7 +6,6 @@ import { Button, Callout, Card, Timer, Toast } from "@palier/ui";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { type Ref, useCallback, useEffect, useId, useReducer, useRef, useState } from "react";
 
-import { estimateText } from "../../features/key/spend-view";
 import {
   INITIAL_WORKSHOP,
   type Draft,
@@ -15,16 +14,19 @@ import {
   elapsedText,
   failureMessage,
   feedbackFailure,
-  preflightNotice,
   reusableSubmission,
   wordTone,
   workshop,
 } from "../../features/writing/workshop-view";
 import type { Container } from "../../lib/container";
+import { latch } from "../../lib/latch";
 import { readStudyProfile } from "../../lib/study";
 import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
+import { SpendOffer } from "../key/SpendOffer";
+import { usePreflight } from "../key/use-preflight";
+import { Waiting } from "../key/Waiting";
 import { WritingFeedback } from "./WritingFeedback";
 
 /** Without a study profile, feedback aims at C, the level the SLE workshop is for (D108). */
@@ -56,9 +58,9 @@ const loadSetup = async (container: Container): Promise<{ readonly setup: Setup;
  * The writing workshop (product-requirements.md §8.7, progress.md D105–D108), marked as
  * supplementary because the real written test is multiple choice. Pick a prompt, write in a
  * plain editor against a word target with an elapsed-time display that is never enforced,
- * then ask for feedback: the pre-flight shows the estimate and warns near the cap, never
- * blocks, and one metered call returns the five criteria, the errors inline and a model
- * answer. Without a key the editor still works and PRD §14's inline card takes the button's
+ * then ask for feedback: the estimate sits beside the button and warns near the cap, never
+ * blocks, so one press is the agreement (D237), and one metered call returns the five
+ * criteria, the errors inline and a model answer. Without a key the editor still works and PRD §14's inline card takes the button's
  * place. Writing is saved when feedback is asked for, and stays on this device [R12].
  */
 export function WritingWorkshop() {
@@ -69,9 +71,12 @@ export function WritingWorkshop() {
   const [setup, setSetup] = useState<Setup | null>(null);
   const [state, dispatch] = useReducer(workshop, INITIAL_WORKSHOP);
   const [nowMs, setNowMs] = useState(() => Date.now());
+  const offerId = useId();
   const feedbackRef = useRef<HTMLHeadingElement>(null);
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const moved = useRef(false);
+  // One feedback request in flight from this screen at a time (D237), held across renders.
+  const [oneAtATime] = useState(() => latch((run: () => Promise<void>) => run()));
 
   // Follows a feedback request to its end: the feedback, or the failure in plain words, and the
   // history brought up to date either way. Stable, so loading can follow one already out (D143).
@@ -106,6 +111,13 @@ export function WritingWorkshop() {
       live = false;
     };
   }, [container, follow]);
+
+  // The estimate beside "Get feedback" (D237), worked out again whenever a request settles, since
+  // each one moves this month's spend against the cap, and the history is read again then.
+  const preflight = usePreflight(container.status === "ready" ? container.container.useCases : null, "writing-feedback", {
+    enabled: setup?.keyHeld ?? false,
+    reloadOn: setup?.history,
+  });
 
   // The elapsed-time display ticks while writing; it is a guide, so nothing acts on it.
   useEffect(() => {
@@ -155,11 +167,7 @@ export function WritingWorkshop() {
     void follow(useCases, submission.id, pending);
   };
 
-  const onGetFeedback = async () => {
-    dispatch({ type: "preflighted", preflight: await useCases.preflightSpend({ feature: "writing-feedback" }) });
-  };
-
-  const onSend = async (draft: Draft) => {
+  const send = async (draft: Draft) => {
     dispatch({ type: "sending" });
     try {
       let submissionId = reusableSubmission(draft);
@@ -179,6 +187,9 @@ export function WritingWorkshop() {
       await refreshHistory();
     }
   };
+  // One press spends (D237): a second press before the button disables would save a second
+  // submission and pay for it too, and only the same submission's request is joined.
+  const onSend = (draft: Draft) => oneAtATime(() => send(draft));
 
   const supplementary = (
     <Callout tone="info">
@@ -257,24 +268,21 @@ export function WritingWorkshop() {
       />
       {!setup.keyHeld ? (
         <NoKeyCard namespace="writing" estimateUsd={estimateUsd} />
-      ) : request.kind === "confirming" ? (
-        <Preflight
-          estimateUsd={request.preflight.estimateUsd}
-          notice={preflightNotice(request.preflight)}
-          onSend={() => void onSend(draft)}
-          onCancel={() => dispatch({ type: "cancel" })}
-        />
       ) : (
         <div className="app-stack">
+          {request.kind === "sending" || preflight === null ? null : (
+            <SpendOffer id={offerId} namespace="writing" preflight={preflight} />
+          )}
           <div className="app-actions">
             <Button
-              onClick={() => void onGetFeedback()}
-              disabled={request.kind === "sending" || countWords(draft.text) === 0}
+              onClick={() => void onSend(draft)}
+              disabled={request.kind === "sending" || preflight === null || countWords(draft.text) === 0}
+              aria-describedby={request.kind === "sending" || preflight === null ? undefined : offerId}
             >
               {request.kind === "failed" ? t("tryAgain") : t("getFeedback")}
             </Button>
           </div>
-          {request.kind === "sending" ? <Toast tone="info">{t("sending")}</Toast> : null}
+          {request.kind === "sending" ? <Waiting>{t("sending")}</Waiting> : null}
           {request.kind === "failed" ? <Toast tone="incorrect">{t(failureMessage(request.failure))}</Toast> : null}
         </div>
       )}
@@ -380,45 +388,6 @@ function Editor({
         <p className="pl-visually-hidden" aria-live="polite">
           {t("wordCountAnnounced", { count: announcedCount(words, prompt.wordTarget) })}
         </p>
-      </div>
-    </Card>
-  );
-}
-
-function Preflight({
-  estimateUsd,
-  notice,
-  onSend,
-  onCancel,
-}: {
-  estimateUsd: number | null;
-  notice: ReturnType<typeof preflightNotice>;
-  onSend: () => void;
-  onCancel: () => void;
-}) {
-  const t = useTranslations("writing");
-  const locale = useLocale();
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  useEffect(() => headingRef.current?.focus(), []);
-  return (
-    <Card>
-      <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
-        {t("preflightTitle")}
-      </h2>
-      <div className="app-stack">
-        <p>
-          {estimateUsd === null
-            ? t("preflightUnpriced")
-            : t("preflightEstimate", { amount: estimateText(estimateUsd, locale) })}
-        </p>
-        {notice === null ? null : <Callout tone={notice.tone}>{t(notice.key)}</Callout>}
-        <p className="app-muted">{t("sendsTo")}</p>
-        <div className="app-actions">
-          <Button onClick={onSend}>{t("send")}</Button>
-          <Button variant="secondary" onClick={onCancel}>
-            {t("keepEditing")}
-          </Button>
-        </div>
       </div>
     </Card>
   );

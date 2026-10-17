@@ -3,7 +3,7 @@
 import type { GeneratePracticeSetResult, GeneratedSet } from "@palier/app";
 import type { SubSkill, TargetBand } from "@palier/domain";
 import { Button, Callout, Card, Toast } from "@palier/ui";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useReducer, useRef, useState } from "react";
 
 import {
@@ -14,13 +14,14 @@ import {
   resultSummary,
   resumedGenerator,
 } from "../../features/generate/generate-view";
-import { estimateText } from "../../features/key/spend-view";
-import { preflightNotice } from "../../features/writing/workshop-view";
 import type { Container } from "../../lib/container";
 import { readStudyProfile } from "../../lib/study";
 import { deviceTimeZone } from "../../lib/time-zone";
 import { useContainer } from "../ContainerProvider";
 import { NoKeyCard } from "../key/NoKeyCard";
+import { SpendOffer } from "../key/SpendOffer";
+import { usePreflight } from "../key/use-preflight";
+import { Waiting } from "../key/Waiting";
 import { PracticeSession } from "../practice/PracticeSession";
 
 /** Without a study profile, a set aims at C, the level this product is built for (as D108 does). */
@@ -54,8 +55,8 @@ const loadSetup = async (container: Container): Promise<Setup> => {
 
 /**
  * "Generate a fresh set" (architecture.md §8.3, progress.md D110–D111): choose a
- * written-expression sub-skill, see the pre-flight estimate exactly as the workshop shows it
- * (never a block), and one metered use case drafts a set, reviews each item blind, and keeps
+ * written-expression sub-skill, see the estimate beside Generate exactly as the workshop shows
+ * it (never a block; one press is the agreement, D237), and one metered use case drafts a set, reviews each item blind, and keeps
  * what passes. The set is practised with the ordinary renderers, each item carrying its
  * provenance badge and the one-tap contribution. Without a key, PRD §14's inline card. The
  * last set stays on this device, so a reload never loses what was paid for, and none of it
@@ -122,7 +123,7 @@ function Generator({
   // Focus follows the user's move, so it never falls back to the page (WCAG 2.4.3): to the
   // result's heading once a set arrives; to the status line while one is generating, since the
   // controls are disabled and it says what is happening; to the no-key card if the key went
-  // mid-run; and back to the sub-skill after a cancel, a failure or a finished set.
+  // mid-run; and back to the sub-skill after a failure or a finished set.
   const requestKind = state.phase === "choosing" ? state.request.kind : null;
   useEffect(() => {
     if (!moved.current) return;
@@ -133,13 +134,16 @@ function Generator({
     else if (requestKind === "idle" || requestKind === "failed") subSkillRef.current?.focus();
   }, [state.phase, requestKind, setup.keyHeld]);
 
+  // The estimate beside Generate (D237), worked out again once each run settles, since a run
+  // moves this month's spend against the cap.
+  const preflight = usePreflight(useCases, "item-generation", {
+    enabled: setup.keyHeld && requestKind !== "sending",
+    reloadOn: requestKind,
+  });
+
   const back = () => {
     moved.current = true;
     dispatch({ type: "back" });
-  };
-
-  const onGenerate = async () => {
-    dispatch({ type: "preflighted", preflight: await useCases.preflightSpend({ feature: "item-generation" }) });
   };
 
   // Settles a run into the screen: the result, or the failure in plain words. Stable, so the
@@ -214,16 +218,6 @@ function Generator({
       {notCounted}
       {!setup.keyHeld ? (
         <NoKeyCard namespace="generate" estimateUsd={estimateUsd} headingRef={noKeyRef} />
-      ) : request.kind === "confirming" ? (
-        <Preflight
-          estimateUsd={request.preflight.estimateUsd}
-          notice={preflightNotice(request.preflight)}
-          onSend={() => void onSend(subSkill)}
-          onCancel={() => {
-            moved.current = true;
-            dispatch({ type: "cancel" });
-          }}
-        />
       ) : (
         <Card>
           <div className="app-stack">
@@ -248,14 +242,21 @@ function Generator({
                 {t("subSkillHint", { band: setup.targetBand })}
               </span>
             </label>
+            {request.kind === "sending" || preflight === null ? null : (
+              <SpendOffer id={`${id}-offer`} namespace="generate" preflight={preflight} />
+            )}
             <div className="app-actions">
-              <Button onClick={() => void onGenerate()} disabled={request.kind === "sending"}>
+              <Button
+                onClick={() => void onSend(subSkill)}
+                disabled={request.kind === "sending" || preflight === null}
+                aria-describedby={request.kind === "sending" || preflight === null ? undefined : `${id}-offer`}
+              >
                 {request.kind === "failed" ? t("tryAgain") : t("generate")}
               </Button>
             </div>
             {request.kind === "sending" ? (
               <div ref={statusRef} tabIndex={-1}>
-                <Toast tone="info">{t("sending")}</Toast>
+                <Waiting>{t("sending")}</Waiting>
               </div>
             ) : null}
             {request.kind === "failed" ? <Toast tone="incorrect">{t(failureMessage(request.failure))}</Toast> : null}
@@ -266,45 +267,6 @@ function Generator({
         <LastSet set={setup.latest} onPractise={() => dispatch({ type: "practise", set: setup.latest as GeneratedSet })} />
       )}
     </div>
-  );
-}
-
-function Preflight({
-  estimateUsd,
-  notice,
-  onSend,
-  onCancel,
-}: {
-  estimateUsd: number | null;
-  notice: ReturnType<typeof preflightNotice>;
-  onSend: () => void;
-  onCancel: () => void;
-}) {
-  const t = useTranslations("generate");
-  const locale = useLocale();
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  useEffect(() => headingRef.current?.focus(), []);
-  return (
-    <Card>
-      <h2 ref={headingRef} tabIndex={-1} className="app-step-heading">
-        {t("preflightTitle")}
-      </h2>
-      <div className="app-stack">
-        <p>
-          {estimateUsd === null
-            ? t("preflightUnpriced")
-            : t("preflightEstimate", { amount: estimateText(estimateUsd, locale) })}
-        </p>
-        {notice === null ? null : <Callout tone={notice.tone}>{t(notice.key)}</Callout>}
-        <p className="app-muted">{t("sendsTo")}</p>
-        <div className="app-actions">
-          <Button onClick={onSend}>{t("send")}</Button>
-          <Button variant="secondary" onClick={onCancel}>
-            {t("cancel")}
-          </Button>
-        </div>
-      </div>
-    </Card>
   );
 }
 

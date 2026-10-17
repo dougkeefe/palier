@@ -120,8 +120,7 @@ test("a blocked popup ends the dial with the endpoint's own sentence, and the ke
   const heard = page.getByText("Palier can hear you.");
   const quiet = page.getByText("Palier heard very little.", { exact: false });
   await expect(heard.or(quiet)).toBeVisible({ timeout: 10_000 });
-  await page.getByRole("button", { name: (await heard.isVisible()) ? "Continue" : "Continue anyway", exact: true }).click();
-  await page.getByRole("button", { name: "Start the session" }).click();
+  await page.getByRole("button", { name: (await heard.isVisible()) ? "Start the session" : "Start anyway", exact: true }).click();
 
   await expect(page.getByRole("heading", { name: "Session over" })).toBeFocused();
   await expect(page.getByText("Your own endpoint gave no pass.", { exact: false })).toBeVisible();

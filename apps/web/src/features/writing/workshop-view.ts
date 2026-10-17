@@ -81,7 +81,6 @@ export const failureMessage = (failure: FeedbackFailure): string =>
 
 export type RequestState =
   | { readonly kind: "idle" }
-  | { readonly kind: "confirming"; readonly preflight: Preflight }
   | { readonly kind: "sending" }
   | { readonly kind: "failed"; readonly failure: FeedbackFailure };
 
@@ -93,8 +92,6 @@ export type WorkshopState =
 export type WorkshopAction =
   | { readonly type: "pick"; readonly promptId: string; readonly nowMs: number }
   | { readonly type: "edit"; readonly text: string }
-  | { readonly type: "preflighted"; readonly preflight: Preflight }
-  | { readonly type: "cancel" }
   | { readonly type: "sending" }
   | { readonly type: "saved"; readonly id: string; readonly text: string }
   | { readonly type: "assessed"; readonly submission: WritingSubmission }
@@ -158,20 +155,17 @@ const draftOf = (submission: WritingSubmission, nowMs: number): Draft => ({
 /** The actions that only mean something while writing. */
 const writing = (
   state: Extract<WorkshopState, { phase: "writing" }>,
-  action: Extract<WorkshopAction, { type: "edit" | "preflighted" | "cancel" | "sending" | "saved" | "failed" }>,
+  action: Extract<WorkshopAction, { type: "edit" | "sending" | "saved" | "failed" }>,
 ): WorkshopState => {
   switch (action.type) {
     case "edit":
       // The text being assessed is fixed until its feedback arrives: an edit now would bring
       // "Get feedback" back mid-call, and a second paid request with it (D143).
       if (state.request.kind === "sending") return state;
-      // Editing clears a pending confirmation or a failure: the estimate was for the old text.
+      // Editing clears a failure: it was for the old text.
       return { ...state, draft: { ...state.draft, text: action.text }, request: IDLE };
-    case "preflighted":
-      return { ...state, request: { kind: "confirming", preflight: action.preflight } };
-    case "cancel":
-      return { ...state, request: IDLE };
     case "sending":
+      // One press of "Get feedback" is the agreement (D237): its estimate was shown beside it.
       return { ...state, request: { kind: "sending" } };
     case "saved":
       return { ...state, draft: { ...state.draft, saved: { id: action.id, text: action.text } } };
@@ -182,7 +176,7 @@ const writing = (
   }
 };
 
-/** The pre-flight's warning, when this call would bring the month near the cap or past it. Never a block. */
+/** The warning beside a spending button, when this call would bring the month near the cap or past it. Never a block (D237). */
 export const preflightNotice = (
   preflight: Preflight,
 ): { readonly key: "preflightNear" | "preflightOver"; readonly tone: "info" | "incorrect" } | null => {

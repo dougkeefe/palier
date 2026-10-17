@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Timer, VoiceForm } from "@palier/ui";
+import { Button, Card, Timer, VoiceForm, Working } from "@palier/ui";
 import { useLocale, useTranslations } from "next-intl";
 import { type Ref, useSyncExternalStore } from "react";
 
@@ -47,6 +47,7 @@ export function OralStudio({
   const locale = useLocale();
   const still = usePrefersReducedMotion();
   const meter = meterWords(state.spent, locale);
+  const status = studioStatus(state);
   return (
     <div className="app-stack">
       <div className="app-oral-bar">
@@ -64,7 +65,11 @@ export function OralStudio({
             {t("studioTitle")}
           </h2>
           <VoiceForm levels={control.levels} still={still} />
-          <p role="status">{t(studioStatus(state))}</p>
+          {/* The status line stays mounted, so each change is heard; while it dials or ends, the wait is shown (D237). */}
+          <p role="status" className={status === "studioLive" ? undefined : "pl-visually-hidden"}>
+            {t(status)}
+          </p>
+          {status === "studioLive" ? null : <Working live={false}>{t(status)}</Working>}
           <p className="app-muted">{t(meter.key, meter.values)}</p>
         </div>
       </Card>

@@ -1,6 +1,24 @@
 import { describe, expect, it } from "vitest";
 
-import { capNotice, capShare, estimateText, moneyText, parseCap } from "./spend-view";
+import { capNotice, capShare, estimateText, fallbackPreflight, moneyText, parseCap } from "./spend-view";
+
+describe("fallbackPreflight (D237)", () => {
+  const costs = [
+    { feature: "writing-feedback", estimateUsd: 0.01 },
+    { feature: "oral-practice", estimateUsd: 0.05 },
+    { feature: "item-generation", estimateUsd: null },
+  ] as const;
+
+  it("prices a typical use from the cost table, times the quantity, with no place against the cap", () => {
+    expect(fallbackPreflight(costs, "writing-feedback")).toEqual({ estimateUsd: 0.01, before: "none", after: "none" });
+    expect(fallbackPreflight(costs, "oral-practice", 10).estimateUsd).toBeCloseTo(0.5);
+  });
+
+  it("says there is no estimate for an unpriced feature, or one missing from the table", () => {
+    expect(fallbackPreflight(costs, "item-generation").estimateUsd).toBeNull();
+    expect(fallbackPreflight(costs, "oral-studio", 5).estimateUsd).toBeNull();
+  });
+});
 
 describe("moneyText", () => {
   it("writes US dollars to the cent, the English way and the French way", () => {

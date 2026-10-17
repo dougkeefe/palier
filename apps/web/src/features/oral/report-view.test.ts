@@ -7,7 +7,6 @@ import {
 } from "@palier/app";
 import type { OralTurn } from "@palier/domain";
 import { scenarioId, sessionId } from "@palier/domain";
-import type { Preflight } from "@palier/engine";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -33,7 +32,6 @@ import {
 } from "./report-view";
 
 const named = (name: string) => Object.assign(new Error(name), { name });
-const PREFLIGHT: Preflight = { estimateUsd: 0.02, before: "none", after: "none" };
 
 const REPORT: OralReport = {
   session: {
@@ -63,17 +61,13 @@ describe("reportScreen, the steps (D126)", () => {
     expect(run({ type: "loaded", report: null })).toEqual({ phase: "not-found" });
   });
 
-  it("offers the pre-flight, lets it be cancelled, and asks", () => {
-    const confirming = reportScreen(ready(), { type: "preflighted", preflight: PREFLIGHT });
-    expect(confirming).toMatchObject({ ask: { kind: "confirming", preflight: PREFLIGHT } });
-    expect(reportScreen(confirming, { type: "cancel" })).toMatchObject({ ask: { kind: "idle" } });
-    expect(reportScreen(confirming, { type: "asking" })).toMatchObject({ ask: { kind: "asking" } });
+  it("asks from the offer on one press, its estimate shown beside it (D237)", () => {
+    expect(reportScreen(ready(), { type: "asking" })).toMatchObject({ ask: { kind: "asking" } });
   });
 
-  it("ignores a pre-flight or a cancel while the call is out, so the wait cannot be lost", () => {
-    const asking = reportScreen(ready(), { type: "asking" });
-    expect(reportScreen(asking, { type: "preflighted", preflight: PREFLIGHT })).toBe(asking);
-    expect(reportScreen(asking, { type: "cancel" })).toBe(asking);
+  it("asks again after a failure, from the same card", () => {
+    const failed = reportScreen(reportScreen(ready(), { type: "asking" }), { type: "failed", error: named("RateLimitError") });
+    expect(reportScreen(failed, { type: "asking" })).toMatchObject({ ask: { kind: "asking" } });
   });
 
   it("names a failure in the key screen's words, and a session with nothing to assess apart", () => {
@@ -97,7 +91,7 @@ describe("reportScreen, the steps (D126)", () => {
 
   it("ignores every step's action before the session has loaded", () => {
     expect(run({ type: "asking" })).toBe(INITIAL_REPORT);
-    expect(run({ type: "loaded", report: null }, { type: "preflighted", preflight: PREFLIGHT })).toEqual({ phase: "not-found" });
+    expect(run({ type: "loaded", report: null }, { type: "asking" })).toEqual({ phase: "not-found" });
   });
 });
 
@@ -289,9 +283,8 @@ describe("historyTag", () => {
 
 describe("askFocusMoves (D127)", () => {
   it("moves focus at every change of step, never on the first render or away from a session", () => {
-    expect(askFocusMoves("idle", "confirming")).toBe(true);
-    expect(askFocusMoves("confirming", "idle")).toBe(true);
-    expect(askFocusMoves("confirming", "asking")).toBe(true);
+    expect(askFocusMoves("idle", "asking")).toBe(true);
+    expect(askFocusMoves("failed", "asking")).toBe(true);
     expect(askFocusMoves("asking", "failed")).toBe(true);
     expect(askFocusMoves(null, "idle")).toBe(false);
     expect(askFocusMoves("idle", "idle")).toBe(false);

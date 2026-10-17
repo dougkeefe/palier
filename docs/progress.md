@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/get-feedback-ui-issues` | **One press spends, and a wait you can see** (D237; the human's request, 17 October 2026): every spending screen shows its estimate beside its button and spends on one press, with no "Before you send" step, and a slow call on the key shows `Working`'s dots and the time waited. | 17 October 2026 |
 | `dougkeefe/landing-page-pricing-french` | **The landing page's headline and pricing** (D235; the human's request, 16 October 2026): "Your C is closer than you think.", no "Try a sample question" in the hero, and one pricing message (free to practise; the AI features a few cents each, billed by OpenAI, no subscription to us) wherever the landing page, the About page and the site's description speak of cost. | 16 October 2026 |
 | `dougkeefe/spoken-practice-typing-remove` | **Spoken practice is spoken only** (D234; the human's request, 13 October 2026): no typed answers in either mode. Without a microphone the screen gives the recovery steps and links the writing workshop and reading practice. | 13 October 2026 |
 | `dougkeefe/mobile-menu-fix` | **The landing page's menu on a phone** (D232; the human's request, 12 October 2026): below 1000px the header is the brand and a menu button at the top right, which opens the sections, the language and the way in. **And the console's two "preloaded but not used" warnings** (D233). | 12 October 2026 |
@@ -7912,9 +7913,97 @@ money. The human asked for a new headline, for the hero's second link to go, and
 
   CI's `--prod --audit-level=high` gate is unchanged: it shows only D135's two ignored `content` entries.
 
+### D237 — one press spends: the estimate stands beside the button, and a slow wait shows it is alive
+**Date:** 17 October 2026 · **Status:** accepted (human's request; agent's build and French). Amends D108's pre-flight
+and every screen that copied it (D111, D126, D185)
+
+The human asked for two things on the writing workshop, then on every screen that spends:
+- the estimate should be worked out on its own and shown beside "Get feedback", so pressing it is the agreement, with no
+  second "Before you send" step;
+- the wait ("This can take up to a minute") gave no sign it was still going, so a user could leave thinking it was broken.
+
+- **No ADR records the two-step pre-flight**; D108 made it, so this entry amends D108 and its copies.
+- **One press spends.** Each screen works out its `preflightSpend` as it opens, and again once each request settles,
+  since a call moves the month's spend against the cap. `components/key/SpendOffer.tsx` shows it beside the button: the
+  estimate, or that there is none, the near or over reminder from `preflightNotice` (never a block), and where the words
+  go. The button names that block in `aria-describedby`, so a screen reader hears the cost on the button, and stays
+  disabled until the figure is on screen, so nobody spends without having seen it.
+  - **The writing workshop:** "Get feedback" and "Try again" send. A second press before the button disables is
+    ignored, since a second press would save a second submission, and only one submission's request is joined.
+  - **Fresh sets:** "Generate a fresh set" generates. The in-flight join, keyed `"set"`, already stops a double press
+    paying twice.
+  - **The oral report:** "Get the report" asks. Its offer read `featureCosts` and had no cap reminder; it now has the
+    same block.
+  - **The diagnostic's written result** had no second step. Its offer gains the cap reminder the same way. The launcher
+    already showed its estimate and reminder inline, so it is unchanged.
+  - **Spoken practice and studio mode** start from the microphone card: Choose, "Check my microphone", then "Start the
+    session" ("Start anyway" when the microphone was quiet). That is two taps fewer. The session is priced as soon as the
+    microphone is open (the controller's `continueWith` became `price`), never before, since every answer is spoken
+    (D234). **The start's handler stays synchronous**, so a user's own endpoint still opens its popup inside the tap
+    (D192): the pricing is done before the tap, never in it. `studio-controller.test.ts` and `container-studio.test.ts`
+    still pin that, unchanged. The route is still woken on the microphone step (`studioWarmup` now returns `"mic"`
+    only).
+  - The reducers lose their `confirming` state and their `preflighted`/`cancel` actions. The tests of those steps were
+    rewritten to the one-press flow, the behaviour having been removed at the human's request. Their guards against a
+    second request mid-call stay.
+- **A slow wait you can see.** `@palier/ui` gains `Working`: the message, three dots that bounce, and, when given, the
+  time waited (`m:ss`, shown and never announced) with a once-a-minute polite announcement, as `Timer` does (§11).
+  - The dots move by `transform` only, on §10.5's three tokens (400ms, delayed 120ms and 200ms), so `motion.test.ts`
+    holds. Under reduced motion and in exam mode the global switch stills them, and the ticking time still says the
+    wait is alive (§10.5: "no loss of information").
+  - `components/key/Waiting.tsx` wraps it for a call on the key, with `features/key/waiting.ts`'s `waitView`: the time
+    waited, and past a minute "Still working. OpenAI can be slow at busy times.", since the screens promise "up to a
+    minute".
+  - **The clock starts when the wait is shown**, not when the request began. A request picked up again after leaving
+    the screen (D143) counts from the return. This is simpler than carrying a start time through four reducers, and
+    the request's own start is not stored anywhere today.
+  - It is on the workshop, fresh sets, the oral report and the diagnostic's written result. Spoken practice's waits
+    (the examiner preparing a question, an answer being written down, the end) and studio mode's dialling show the
+    dots without a time, because the session's own timer already ticks on that screen.
+  - Where a screen keeps its status line mounted throughout, so the wait is heard as it starts (the oral report, D127;
+    the diagnostic's live region; studio mode's status), `Working` takes `live={false}` and only shows the message.
+- **Copy.** Removed in both languages: `writing.preflightTitle`, `send` and `keepEditing`; `generate.preflightTitle`,
+  `send` and `cancel`; `oralReport.preflightTitle`, `send`, `cancel`, `offerCost` and `offerUnpriced`; `oral.preflightTitle`,
+  `micContinue` and `micContinueAnyway`. Added: `oral.startAnyway` ("Start anyway", « Commencer quand même ») and
+  `common.waitingElapsed`, `waitingMinutes` and `waitingSlow`. The French is the agent's, and goes to Gate O's French
+  read.
+- **Not moved:** `preflightNotice` and `elapsedText` stay in `features/writing/workshop-view.ts`, where four screens
+  already import them. Moving them would only churn imports.
+- **Hardened after review**, in the same branch:
+  - **One loader.** The four screens load the estimate through `components/key/use-preflight.ts`'s `usePreflight`, not
+    four copies of the same effect.
+  - **A failed read never disables a button.** Before this change the read ran on a press, which could be repeated.
+    Now it runs on mount, so a failed ledger read would have left the button disabled with no word why. It falls back
+    to the cost table's estimate with no cap reminder (`features/key/spend-view.ts`'s `fallbackPreflight`), here and in
+    the oral controller's `price`.
+  - **It is read again when the page is shown**, since another tab may have spent or moved the cap meanwhile.
+  - **The workshop's double-press guard** is `lib/latch.ts`, tested. `singleFlight` would not do: it gives a call made
+    mid-run one more run, which here means paying twice.
+  - **An oral price carries the session and mode it priced**, and the reducer drops one meant for another. Otherwise a
+    slow read could put a 5-minute practice price beside a 22-minute studio session chosen after Back.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 17 October 2026 — `dougkeefe/get-feedback-ui-issues` (one press spends, and a wait you can see; D237)
+
+Not *Next, decided*, which is unchanged. The human asked for the writing workshop's estimate to stand beside "Get
+feedback", so one press is the agreement, and for the wait to show it is still working. On being asked, they extended
+both to every spending screen. Done on:
+- the workshop, fresh sets and the oral report: one press spends, and the "Before …" step is gone;
+- the diagnostic's written result: its offer gains the cap reminder;
+- spoken practice and studio mode: the session starts from the microphone card, with the start's handler still
+  synchronous for D192's popup;
+- every one-shot call on the key: it is waited for in `@palier/ui`'s new `Working`, with the time waited (D237).
+
+**Verified:**
+- `pnpm verify` was green: 274 files, 4,410 tests passed (8 todo), with no dependency violations, after the review fixes.
+- After `pnpm --filter @palier/web build`, `playwright test --project=chromium` passed 45 tests (`workshop`, `generate`,
+  `oral`, `key-leak`, `key` and `journeys` specs), and `--project=offline` passed 14 (`oral-production`,
+  `generate-production`, `key-leak-production`, `studio-selfhost-production`, `spend-production` and `csp-production`).
+- Looked at on the hermetic server: the workshop's estimate beside "Get feedback", the wait with its dots and
+  "Waiting: 0:03", and the microphone card with the session's estimate beside "Start the session".
 
 ### 16 October 2026 — `dougkeefe/2lbs2` (four Dependabot alerts closed by scoped overrides; D236)
 

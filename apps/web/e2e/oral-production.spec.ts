@@ -15,11 +15,11 @@ import { EXAMINER_QUESTION, SENTINEL, TRANSCRIPT_SENTINEL, defaultAnswer, idsAtR
  * `installFakeAudio` synthesises.
  */
 
-/** Check the microphone and go on past it to the pre-flight. */
+/** Check the microphone, and wait for the session's estimate beside its start (D237). */
 const checkMicrophone = async (page: Page) => {
   await page.getByRole("button", { name: "Check my microphone" }).click();
   await expect(page.getByText("Palier can hear you.").or(page.getByText("Palier heard very little.", { exact: false }))).toBeVisible({ timeout: 10_000 });
-  await page.getByRole("button", { name: /^Continue/ }).click();
+  await expect(page.getByText(/^This session should cost about /)).toBeVisible();
 };
 
 const START = new Date("2026-10-01T14:00:00.000Z");
@@ -70,7 +70,7 @@ test("the screen's timer moves the session into its next phase, and the examiner
   await page.goto("/en/practice/oral");
   await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Warm-up", exact: true }) }).getByRole("button", { name: "Choose" }).click();
   await checkMicrophone(page);
-  await page.getByRole("button", { name: "Start the session" }).click();
+  await page.getByRole("button", { name: /^Start (the session|anyway)$/ }).click();
   await expect(page.getByText(EXAMINER_QUESTION)).toBeVisible();
   await expect(page.getByText(`Part 1 of ${String(parts)}`)).toBeVisible();
 
@@ -125,7 +125,7 @@ test("a session whose tab was closed is listed as over and can be reported on, a
   await page.goto("/en/practice/oral");
   await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Warm-up", exact: true }) }).getByRole("button", { name: "Choose" }).click();
   await checkMicrophone(page);
-  await page.getByRole("button", { name: "Start the session" }).click();
+  await page.getByRole("button", { name: /^Start (the session|anyway)$/ }).click();
   await expect(page.getByText(EXAMINER_QUESTION)).toBeVisible();
   await page.getByRole("button", { name: "Record your answer" }).click();
   await page.getByRole("button", { name: "Stop and send" }).click();

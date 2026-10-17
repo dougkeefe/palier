@@ -16,7 +16,7 @@ import {
  * Fresh practice items (architecture.md §8.3, PRD §13.0, §14; progress.md D110–D111), on the
  * hermetic lane. OpenAI is stubbed through the context, scripted per step, so each state is
  * reached through the real adapter, the real review gate and the real metering: no key,
- * choosing, the pre-flight with its cap warning, generating, a failure, the result, practising
+ * choosing with the estimate and its cap warning beside Generate (D237), generating, a failure, the result, practising
  * with the provenance badge open, a set in which nothing passed, and the last set kept. Every
  * state is audited by axe [R9].
  *
@@ -67,7 +67,7 @@ test("the writing drill links to fresh items, and without a key the screen shows
   await axeClean(page);
 });
 
-test("with a key: the pre-flight warns past the cap, a failure says so plainly, and a set is generated and practised", async ({
+test("with a key: the estimate warns past the cap, a failure says so plainly, and a set is generated and practised", async ({
   page,
   context,
 }) => {
@@ -94,21 +94,14 @@ test("with a key: the pre-flight warns past the cap, a failure says so plainly, 
   await expect(page.getByText("The set is written at your target level, C.")).toBeVisible();
   await axeClean(page);
 
-  // "Not now" puts focus back on the sub-skill, never on the page (WCAG 2.4.3).
-  await page.getByRole("button", { name: "Generate a fresh set" }).click();
-  await page.getByRole("button", { name: "Not now" }).click();
-  await expect(subSkill).toBeFocused();
-
-  // The pre-flight: the estimate, and the warning past the cap. It never blocks.
-  await page.getByRole("button", { name: "Generate a fresh set" }).click();
-  await expect(page.getByRole("heading", { name: "Before generating" })).toBeFocused();
+  // The estimate beside Generate, and the warning past the cap, before it is pressed (D237). It never blocks.
   await expect(page.getByText(/^This set should cost about US\$/)).toBeVisible();
   await expect(page.getByText(/past the cap you set in Palier/)).toBeVisible();
-  await axeClean(page);
+  await expect(page.getByRole("button", { name: "Generate a fresh set" })).toHaveAccessibleDescription(/^This set should cost about US\$/);
 
-  // A rate limit: a plain sentence, and the chosen sub-skill kept.
+  // A rate limit: a plain sentence, and the chosen sub-skill kept. One press is the agreement.
   failNext = true;
-  await page.getByRole("button", { name: "Generate the set" }).click();
+  await page.getByRole("button", { name: "Generate a fresh set" }).click();
   await expect(page.getByRole("status").filter({ hasText: "has reached its usage limit or is out of credit" })).toBeVisible();
   await expect(subSkill).toHaveValue("pronouns");
   await expect(subSkill).toBeFocused();
@@ -121,10 +114,10 @@ test("with a key: the pre-flight warns past the cap, a failure says so plainly, 
     release = resolve;
   });
   await page.getByRole("button", { name: "Try again" }).click();
-  await page.getByRole("button", { name: "Generate the set" }).click();
   await expect(page.getByRole("status").filter({ hasText: "Drafting and checking the set" })).toBeVisible();
-  // Its controls are disabled while it works, so focus rests on the status line that says so.
-  await expect(page.getByRole("status").filter({ hasText: "Drafting and checking the set" }).locator("..")).toBeFocused();
+  // Its controls are disabled while it works, so focus rests on the wait that says so, whose time ticks on (D237).
+  await expect(page.locator(":focus")).toContainText("Drafting and checking the set");
+  await expect(page.getByText(/^Waiting: (?!0:00$)\d+:\d{2}$/)).toBeVisible();
   await axeClean(page);
   release();
   hold = null;
@@ -185,7 +178,6 @@ test("a set in which no draft passes the review says so, and offers nothing to p
   await addKeyAndCap(page);
 
   await page.getByRole("button", { name: "Generate a fresh set" }).click();
-  await page.getByRole("button", { name: "Generate the set" }).click();
   await expect(page.getByRole("heading", { name: "Your fresh set" })).toBeFocused();
   await expect(page.getByText(/^None of the 5 drafts passed the automated check/)).toBeVisible();
   await expect(page.getByRole("button", { name: "Practise this set" })).toHaveCount(0);
@@ -219,7 +211,6 @@ test("a set still being made is waited for when you come back, and never asked f
   await openGenerator(page);
   await addKeyAndCap(page);
   await page.getByRole("button", { name: "Generate a fresh set" }).click();
-  await page.getByRole("button", { name: "Generate the set" }).click();
   const sending = page.getByRole("status").filter({ hasText: "Drafting and checking the set." });
   await expect(sending).toBeVisible();
 
