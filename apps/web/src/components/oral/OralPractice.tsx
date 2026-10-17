@@ -3,15 +3,15 @@
 import type { OralHistoryEntry, OralSession, OralSessionChoice } from "@palier/app";
 import type { Lang, OralMode, TargetBand } from "@palier/domain";
 import { sessionId } from "@palier/domain";
-import { Button, Callout, Card, Timer, Toast } from "@palier/ui";
-import { useLocale, useTranslations } from "next-intl";
-import { type Ref, useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { Button, Callout, Card, Timer, Toast, Working } from "@palier/ui";
+import { useTranslations } from "next-intl";
+import { type Ref, useEffect, useId, useMemo, useReducer, useRef, useState } from "react";
 
-import { estimateText } from "../../features/key/spend-view";
 import { LEVEL_CHECK_MS, browserFamily, recoverySteps } from "../../features/oral/mic";
 import { type PracticeController, practiceController } from "../../features/oral/practice-controller";
 import {
   INITIAL_PRACTICE,
+  canStart,
   endMessage,
   failureMessage,
   phaseProgress,
@@ -23,13 +23,14 @@ import {
 import { endReportLink } from "../../features/oral/report-view";
 import { type StudioController, studioController } from "../../features/oral/studio-controller";
 import { INITIAL_STUDIO, studio } from "../../features/oral/studio-view";
-import { elapsedText, preflightNotice } from "../../features/writing/workshop-view";
+import { elapsedText } from "../../features/writing/workshop-view";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { browserLevelKit, measureLevel } from "../../lib/oral/level";
 import { browserMediaKit } from "../../lib/oral/recorder";
 import { readStudyProfile } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
+import { SpendOffer } from "../key/SpendOffer";
 import { OralPicker } from "./OralPicker";
 import { OralStudio } from "./OralStudio";
 
@@ -101,8 +102,8 @@ const examinerAudio = (): HTMLAudioElement => {
 export function OralPractice() {
   const t = useTranslations("oral");
   const tCommon = useTranslations("common");
-  const locale = useLocale();
   const container = useContainer();
+  const offerId = useId();
   const [setup, setSetup] = useState<Setup | null>(null);
   const [state, dispatch] = useReducer(practice, INITIAL_PRACTICE);
   const [studioState, studioDispatch] = useReducer(studio, INITIAL_STUDIO);
@@ -183,6 +184,15 @@ export function OralPractice() {
     void container.container.warmRealtime();
   }, [container, warmup]);
 
+  // The session is priced as soon as the microphone is open, so its estimate stands beside "Start the session"
+  // before it is tapped (D237). Never before: every answer is spoken (D234).
+  const toPrice =
+    state.phase === "mic" && (state.mic === "ok" || state.mic === "quiet") && state.preflight === null ? state : null;
+  useEffect(() => {
+    if (toPrice === null || control === null) return;
+    void control.price(toPrice.choice, toPrice.held === "studio" ? "studio" : "practice");
+  }, [toPrice, control]);
+
   // The screen's timer: the elapsed time shown, and a tick so the session moves on at a phase boundary.
   const running = state.phase === "running";
   const startedAtMs = state.phase === "running" ? state.startedAtMs : 0;
@@ -260,9 +270,37 @@ export function OralPractice() {
   );
 
   if (state.phase === "mic") {
-    const { choice, mic } = state;
+    const { choice, mic, preflight } = state;
     const studioHeld = state.held === "studio";
-    const heldMode: OralMode = studioHeld ? "studio" : "practice";
+    const startable = canStart(state);
+    const start = () => {
+      if (!startable) return;
+      if (!studioHeld) {
+        void control.start(choice);
+        return;
+      }
+      // The tap that starts the conversation: the microphone the check opened goes to the studio controller. With
+      // the user's own endpoint, its popup opens inside this handler, before anything awaits (D192), which is why
+      // the session is priced before the tap and never in it (D237).
+      const microphone = control.handOver();
+      setElapsedMs(0);
+      dispatch({ type: "studio" });
+      void studioControl.start(choice, microphone, setup.endpoint);
+    };
+    // The session, its estimate, any reminder about the cap and where it sends what, beside the start (D237).
+    const offer =
+      preflight === null ? null : (
+        <>
+          <p>{t("sessionSummary", { type: t(`type_${choice.sessionType}`), minutes: choice.minutes })}</p>
+          <SpendOffer
+            id={offerId}
+            namespace="oral"
+            preflight={preflight}
+            sendsToKey={sendsTo(studioHeld, setup.endpoint !== null)}
+          />
+        </>
+      );
+    const describedBy = startable ? offerId : undefined;
     // Every answer is spoken: without the microphone, the writing workshop and the reading drills are the
     // full-value alternatives (product-requirements.md §11), never typing (D234).
     const alternatives =
@@ -305,18 +343,22 @@ export function OralPractice() {
           {mic === "ok" ? (
             <>
               <Callout tone="correct">{t("micOk")}</Callout>
+              {offer}
               <div className="app-actions">
-                <Button onClick={() => void control.continueWith(choice, heldMode)}>{t("micContinue")}</Button>
+                <Button onClick={start} disabled={!startable} aria-describedby={describedBy}>
+                  {t("start")}
+                </Button>
               </div>
             </>
           ) : null}
           {mic === "quiet" ? (
             <>
               <Callout tone="info">{t("micQuiet")}</Callout>
+              {offer}
               <div className="app-actions">
                 <Button onClick={() => void control.checkMic()}>{t("micAgain")}</Button>
-                <Button variant="secondary" onClick={() => void control.continueWith(choice, heldMode)}>
-                  {t("micContinueAnyway")}
+                <Button variant="secondary" onClick={start} disabled={!startable} aria-describedby={describedBy}>
+                  {t("startAnyway")}
                 </Button>
               </div>
             </>
@@ -355,45 +397,6 @@ export function OralPractice() {
     );
   }
 
-  if (state.phase === "confirming") {
-    const { choice, preflight } = state;
-    const studioHeld = state.held === "studio";
-    const notice = preflightNotice(preflight);
-    const start = () => {
-      if (!studioHeld) {
-        void control.start(choice);
-        return;
-      }
-      // The tap that starts the conversation: the microphone the check opened goes to the studio controller. With
-      // the user's own endpoint, its popup opens inside this handler, before anything awaits (D192).
-      const microphone = control.handOver();
-      setElapsedMs(0);
-      dispatch({ type: "studio" });
-      void studioControl.start(choice, microphone, setup.endpoint);
-    };
-    return (
-      <Card>
-        {heading("preflightTitle")}
-        <div className="app-stack">
-          <p>
-            {t("sessionSummary", { type: t(`type_${choice.sessionType}`), minutes: choice.minutes })}
-          </p>
-          <p>
-            {preflight.estimateUsd === null
-              ? t("preflightUnpriced")
-              : t("preflightEstimate", { amount: estimateText(preflight.estimateUsd, locale) })}
-          </p>
-          {notice === null ? null : <Callout tone={notice.tone}>{t(notice.key)}</Callout>}
-          <p className="app-muted">{t(sendsTo(studioHeld, setup.endpoint !== null))}</p>
-          <div className="app-actions">
-            <Button onClick={start}>{t("start")}</Button>
-            {back}
-          </div>
-        </div>
-      </Card>
-    );
-  }
-
   if (state.phase === "studio") {
     if (studioState.phase !== "live") return <p role="status">{tCommon("loading")}</p>;
     return <OralStudio state={studioState} control={studioControl} elapsedMs={elapsedMs} headingRef={stepRef} />;
@@ -419,7 +422,7 @@ export function OralPractice() {
         <Card>
           {heading("examinerAsks")}
           {question === null ? (
-            <Toast tone="info">{t("preparing")}</Toast>
+            <Working>{t("preparing")}</Working>
           ) : (
             <Question
               text={question.text}
@@ -450,8 +453,8 @@ export function OralPractice() {
             {recordFailed ? <Callout tone="incorrect">{t("recordFailed")}</Callout> : null}
           </div>
         ) : null}
-        {!waiting && turn === "sending" && !ending ? <Toast tone="info">{t("listening")}</Toast> : null}
-        {ending ? <Toast tone="info">{t("ending")}</Toast> : null}
+        {!waiting && turn === "sending" && !ending ? <Working>{t("listening")}</Working> : null}
+        {ending ? <Working>{t("ending")}</Working> : null}
         <div className="app-actions">
           <Button variant="secondary" onClick={() => void control.end()} disabled={ending}>
             {t("end")}

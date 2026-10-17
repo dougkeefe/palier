@@ -54,7 +54,7 @@ const expectAlternatives = async (page: Page) => {
   await expect(page.getByRole("link", { name: "The writing workshop", exact: false })).toHaveAttribute("href", "/en/practice/writing/workshop");
   await expect(page.getByRole("link", { name: "Reading practice" })).toHaveAttribute("href", "/en/practice/reading");
   await expect(page.getByRole("button", { name: /typing/ })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Continue", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /^Start/ })).toHaveCount(0);
 };
 
 test("without a key: every session with its length and estimate, PRD §14's inline card, and nothing to start", async ({ page, context }) => {
@@ -72,7 +72,7 @@ test("without a key: every session with its length and estimate, PRD §14's inli
   await axeClean(page);
 });
 
-test("a spoken session: the level check, the pre-flight, the question voiced, two recorded answers, the transcript, and its report", async ({
+test("a spoken session: the level check with its estimate, the question voiced, two recorded answers, the transcript, and its report", async ({
   page,
   context,
 }) => {
@@ -88,7 +88,10 @@ test("a spoken session: the level check, the pre-flight, the question voiced, tw
     answers: 2,
     onState: async (state) => {
       states.push(state);
-      if (state === "pre-flight") await expect(page.getByText(/^This session should cost about US\$/)).toBeVisible();
+      if (state === "microphone checked") {
+        await expect(page.getByText(/^This session should cost about US\$/)).toBeVisible();
+        await expect(page.getByRole("button", { name: /^Start/ })).toHaveAccessibleDescription(/This session should cost about US\$/);
+      }
       if (state === "recording") await expect(page.getByRole("status").filter({ hasText: "Recording your answer…" })).toBeVisible();
       if (state === "answered") {
         await expect(page.getByText("Part 1 of 3")).toBeVisible();
@@ -100,7 +103,7 @@ test("a spoken session: the level check, the pre-flight, the question voiced, tw
       await axeClean(page);
     },
   });
-  expect(states).toEqual(["picker", "microphone", "microphone checked", "pre-flight", "recording", "answered", "ended"]);
+  expect(states).toEqual(["picker", "microphone", "microphone checked", "recording", "answered", "ended"]);
 
   await expect(page.getByText("You ended the session.")).toBeVisible();
   const transcript = page.getByRole("region", { name: "Transcript" });
@@ -108,17 +111,16 @@ test("a spoken session: the level check, the pre-flight, the question voiced, tw
   await expect(transcript.getByText(TRANSCRIPT_SENTINEL, { exact: false })).toHaveCount(2);
   await expect(page.getByText("The recording of your answers is kept on this device only.", { exact: false })).toBeVisible();
 
-  // The report (D126): asked for on the key past its pre-flight, then every part of it, axe on each state.
+  // The report (D126): asked for on the key with its estimate beside the button (D237), then every part of it, axe on each state.
   const reportStates: string[] = [];
   await getOralReport(page, {
     onState: async (state) => {
       reportStates.push(state);
-      if (state === "offer") await expect(page.getByText(/^About US\$\d+\.\d+, paid to OpenAI directly\.$/)).toBeVisible();
-      if (state === "pre-flight") await expect(page.getByText(/^This report should cost about US\$/)).toBeVisible();
+      if (state === "offer") await expect(page.getByText(/^This report should cost about US\$/)).toBeVisible();
       await axeClean(page);
     },
   });
-  expect(reportStates).toEqual(["offer", "pre-flight", "report"]);
+  expect(reportStates).toEqual(["offer", "report"]);
   const report = page.getByRole("region", { name: "Your report" });
   await expect(report.getByText("Level B", { exact: true })).toHaveCount(5);
   await expect(report.getByText("Not assessed", { exact: true })).toBeVisible();
@@ -190,8 +192,7 @@ test("a call OpenAI refuses ends the session, names why in words, and keeps the 
   await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Warm-up", exact: true }) }).getByRole("button", { name: "Choose" }).click();
   await page.getByRole("button", { name: "Check my microphone" }).click();
   await expect(page.getByText("Palier can hear you.").or(page.getByText("Palier heard very little.", { exact: false }))).toBeVisible({ timeout: 10_000 });
-  await page.getByRole("button", { name: /^Continue/ }).click();
-  await page.getByRole("button", { name: "Start the session" }).click();
+  await page.getByRole("button", { name: /^Start/ }).click();
   await expect(page.getByText(EXAMINER_QUESTION)).toBeVisible();
 
   examiner = REFUSED;
@@ -213,7 +214,6 @@ test("a call OpenAI refuses ends the session, names why in words, and keeps the 
   // The report is refused the same way (D126): named in words, the transcript kept, and offered again.
   await earlier.getByRole("link", { name: "Open" }).click();
   await page.getByRole("button", { name: "Get the report" }).click();
-  await page.getByRole("button", { name: "Send for the report" }).click();
   await expect(page.getByText("OpenAI did not accept your key.", { exact: false })).toBeVisible();
   await expect(page.getByText("Your transcript is kept on this device, and you can ask again.", { exact: false })).toBeVisible();
   await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
@@ -242,8 +242,10 @@ test("a report still being made is waited for when you come back, and never aske
   await practiseSpeaking(page, { answers: 1 });
   await page.getByRole("link", { name: "See the report on this session" }).click();
   await page.getByRole("button", { name: "Get the report" }).click();
-  await page.getByRole("button", { name: "Send for the report" }).click();
   await expect(page.getByRole("status").filter({ hasText: "Assessing your answers…" })).toBeVisible();
+  // The wait shows it is alive: the time waited ticks on (D237).
+  await expect(page.getByText(/^Waiting: (?!0:00$)\d+:\d{2}$/)).toBeVisible();
+  await axeClean(page);
 
   // Leave while it is being made, and come back to the same session from the list.
   await page.getByRole("link", { name: "Back to spoken practice" }).first().click();
@@ -278,10 +280,9 @@ test("en français : la même pratique, à parité", async ({ page, context }) =
   await expect(page.getByText("Palier vous entend.").or(page.getByText("Palier n’a presque rien entendu.", { exact: false }))).toBeVisible({
     timeout: 10_000,
   });
-  await page.getByRole("button", { name: /^Continuer/ }).click();
-  await expect(page.getByRole("heading", { name: "Avant de commencer" })).toBeFocused();
+  await expect(page.getByText(/^Cette séance devrait coûter environ /)).toBeVisible();
   await axeClean(page);
-  await page.getByRole("button", { name: "Commencer la séance" }).click();
+  await page.getByRole("button", { name: /^Commencer/ }).click();
   await expect(page.getByText(EXAMINER_QUESTION)).toBeVisible();
   await expect(page.getByText("Partie 1 sur 2")).toBeVisible();
   await page.getByRole("button", { name: "Enregistrer votre réponse" }).click();
@@ -296,10 +297,9 @@ test("en français : la même pratique, à parité", async ({ page, context }) =
   // Le bilan, à parité (D126).
   await page.getByRole("link", { name: "Voir le bilan de cette séance" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Bilan d’une séance orale" })).toBeVisible();
-  await page.getByRole("button", { name: "Obtenir le bilan" }).click();
-  await expect(page.getByRole("heading", { name: "Avant de demander" })).toBeFocused();
+  await expect(page.getByText(/^Ce bilan devrait coûter environ /)).toBeVisible();
   await axeClean(page);
-  await page.getByRole("button", { name: "Demander le bilan" }).click();
+  await page.getByRole("button", { name: "Obtenir le bilan" }).click();
   const bilan = page.getByRole("region", { name: "Votre bilan" });
   await expect(bilan.getByText("Non évaluée", { exact: true })).toBeVisible();
   await expect(page.getByText("Mesuré sur votre seule réponse orale.", { exact: false })).toBeVisible();
@@ -311,7 +311,7 @@ test("en français : la même pratique, à parité", async ({ page, context }) =
 const repeatRequests = async (page: Page) =>
   (await realtimeSent(page)).filter((m) => m.type === "conversation.item.create" && (m.item as { type?: string } | undefined)?.type === "message");
 
-test("studio mode: both modes costed, the studio pre-flight, the conversation with its meter and a repeat, the end, and playback from each answer", async ({
+test("studio mode: both modes costed, the studio estimate beside the start, the conversation with its meter and a repeat, the end, and playback from each answer", async ({
   page,
   context,
 }) => {
@@ -343,7 +343,7 @@ test("studio mode: both modes costed, the studio pre-flight, the conversation wi
       await axeClean(page);
     },
   });
-  expect(states).toEqual(["picker", "microphone", "pre-flight", "conversation", "repeated", "ended"]);
+  expect(states).toEqual(["picker", "microphone", "microphone checked", "conversation", "repeated", "ended"]);
 
   await expect(page.getByText("You ended the session.")).toBeVisible();
   await expect(page.getByRole("region", { name: "Transcript" }).getByText(STUDIO_ANSWER)).toBeVisible();
@@ -406,8 +406,7 @@ test("a realtime call OpenAI refuses ends the studio session at once, and names 
   await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Warm-up", exact: true }) }).getByRole("button", { name: "Choose" }).click();
   await page.getByRole("button", { name: "Check my microphone" }).click();
   await expect(page.getByText("Palier can hear you.").or(page.getByText("Palier heard very little.", { exact: false }))).toBeVisible({ timeout: 10_000 });
-  await page.getByRole("button", { name: /^Continue/ }).first().click();
-  await page.getByRole("button", { name: "Start the session" }).click();
+  await page.getByRole("button", { name: /^Start/ }).click();
 
   await expect(page.getByRole("heading", { name: "Session over" })).toBeFocused();
   await expect(page.getByText("OpenAI did not accept your key.", { exact: false })).toBeVisible();
@@ -433,9 +432,8 @@ test("en français : le mode studio, à parité", async ({ page, context }) => {
   await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Mise en train", exact: true }) }).getByRole("button", { name: "Choisir" }).click();
   await page.getByRole("button", { name: "Vérifier mon microphone" }).click();
   await expect(page.getByText("Palier vous entend.").or(page.getByText("Palier n’a presque rien entendu", { exact: false }))).toBeVisible({ timeout: 10_000 });
-  await page.getByRole("button", { name: /^Continuer/ }).first().click();
-  await expect(page.getByRole("heading", { name: "Avant de commencer" })).toBeFocused();
-  await page.getByRole("button", { name: "Commencer la séance" }).click();
+  await expect(page.getByText(/^Cette séance devrait coûter environ /)).toBeVisible();
+  await page.getByRole("button", { name: /^Commencer/ }).click();
   await expect(page.getByRole("heading", { name: "La conversation" })).toBeFocused();
   await expect(page.getByRole("status").filter({ hasText: "La conversation est en cours." })).toBeVisible();
   await expect(page.getByRole("button", { name: "Je n’ai pas compris, pourriez-vous répéter" })).toBeVisible();

@@ -20,6 +20,7 @@ import { TrendChart } from "./TrendChart.js";
 import { Timer } from "./Timer.js";
 import { Dialog } from "./Dialog.js";
 import { VoiceForm } from "./VoiceForm.js";
+import { Working } from "./Working.js";
 
 afterEach(cleanup);
 
@@ -337,6 +338,43 @@ describe("Toast", () => {
     expect(status.getAttribute("aria-live")).toBe("polite");
     expect(status.className).toContain("pl-callout--correct");
     expect(status.textContent).toContain("Imported");
+  });
+});
+
+describe("Working (D237)", () => {
+  it("announces its message once, and shows the time waited without reading it every second", () => {
+    const { container } = render(
+      <Working elapsed="Waiting 0:23" announcement="1 minute">
+        Getting feedback.
+      </Working>,
+    );
+    const status = screen.getByRole("status");
+    expect(status.getAttribute("aria-live")).toBe("polite");
+    expect(status.textContent).toBe("Getting feedback.");
+    const elapsed = container.querySelector(".pl-working__elapsed");
+    expect(elapsed?.textContent).toBe("Waiting 0:23");
+    expect(elapsed?.getAttribute("aria-hidden")).toBe("true");
+    expect(container.querySelector(".pl-visually-hidden[aria-live='polite']")?.textContent).toBe("1 minute");
+  });
+
+  it("draws three decorative dots in the info tone", () => {
+    const { container } = render(<Working>Connecting.</Working>);
+    const dots = container.querySelector(".pl-working__dots");
+    expect(dots?.getAttribute("aria-hidden")).toBe("true");
+    expect(dots?.querySelectorAll(".pl-working__dot")).toHaveLength(3);
+    expect(container.firstElementChild?.className).toContain("pl-callout--info");
+  });
+
+  it("only shows its message where the screen keeps its own status line", () => {
+    const { container } = render(<Working live={false}>Assessing.</Working>);
+    expect(screen.queryByRole("status")).toBeNull();
+    expect(container.textContent).toContain("Assessing.");
+  });
+
+  it("shows no time and announces none where the screen already runs a clock", () => {
+    const { container } = render(<Working>Connecting.</Working>);
+    expect(container.querySelector(".pl-working__elapsed")).toBeNull();
+    expect(container.querySelector(".pl-visually-hidden")).toBeNull();
   });
 });
 

@@ -2,9 +2,10 @@
 
 import type { DiagnosticResult as Result } from "@palier/app";
 import type { DiagnosticInterpretation, ScoredSkill, SubSkill } from "@palier/domain";
+import type { Preflight } from "@palier/engine";
 import { Button, Callout, Card, EmptyState } from "@palier/ui";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 
 import {
   type InterpretationState,
@@ -18,12 +19,14 @@ import {
   placementOf,
   scoreOf,
 } from "../../features/diagnostic/result-view";
-import { estimateText } from "../../features/key/spend-view";
 import { feedbackLangFor } from "../../features/oral/report-view";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { readStudyProfile } from "../../lib/study";
 import { useContainer } from "../ContainerProvider";
+import { SpendOffer } from "../key/SpendOffer";
+import { usePreflight } from "../key/use-preflight";
+import { Waiting } from "../key/Waiting";
 import { NonAffiliation } from "../NonAffiliation";
 
 type Loaded =
@@ -34,8 +37,6 @@ type Loaded =
       readonly status: "ready";
       readonly result: Result;
       readonly keyHeld: boolean;
-      /** What writing the interpretation costs, for the offer, or `null` when unpriced. */
-      readonly estimateUsd: number | null;
     };
 
 /** The target the result reads against: the profile's, or C, the level this product is built for. */
@@ -45,10 +46,7 @@ const loadResult = async (container: Container, skill: ScoredSkill): Promise<Loa
     container.useCases.diagnosticResult({ skill, targetBand: profile?.targetBand ?? "C" }),
     container.useCases.apiKeyStatus(),
   ]);
-  const cost = container.useCases.featureCosts().find((row) => row.feature === "diagnostic-interpretation");
-  return result === null
-    ? { status: "none" }
-    : { status: "ready", result, keyHeld: key !== null, estimateUsd: cost?.estimateUsd ?? null };
+  return result === null ? { status: "none" } : { status: "ready", result, keyHeld: key !== null };
 };
 
 /**
@@ -56,8 +54,8 @@ const loadResult = async (container: Container, skill: ScoredSkill): Promise<Loa
  * `/diagnostic?result=…`: the score, right and wrong, by level and by sub-skill; the level
  * the plan now starts at and what it favours; and the written interpretation, kept on this device.
  * At the run's own end (`askOnOpen`) it is asked for at once on the user's key, since starting was
- * the consent; anywhere else, or kept in the other language, it is only offered, with its cost, so
- * opening a page never spends. It never shows a question, and it names no band (ADR 7). The score
+ * the consent; anywhere else, or kept in the other language, it is only offered, with its cost and
+ * any reminder about the cap beside the button (D237), so opening a page never spends. It never shows a question, and it names no band (ADR 7). The score
  * and the placement stand on their own if the interpretation fails.
  */
 export function DiagnosticResult({ skill, askOnOpen = false }: { skill: ScoredSkill; askOnOpen?: boolean }) {
@@ -105,6 +103,13 @@ export function DiagnosticResult({ skill, askOnOpen = false }: { skill: ScoredSk
       live = false;
     };
   }, [container, skill, ask, askOnOpen, locale]);
+
+  // The offer's estimate and cap reminder (D237), worked out again once a request settles.
+  const preflight = usePreflight(
+    container.status === "ready" ? container.container.useCases : null,
+    "diagnostic-interpretation",
+    { enabled: loaded.status === "ready" && loaded.keyHeld && words.kind !== "asking", reloadOn: words.kind },
+  );
 
   if (container.status === "failed" || loaded.status === "failed") {
     return <Callout tone="incorrect">{tCommon("loadFailed")}</Callout>;
@@ -157,7 +162,7 @@ export function DiagnosticResult({ skill, askOnOpen = false }: { skill: ScoredSk
         <div aria-live="polite">
           <Interpretation
             state={words}
-            estimateUsd={loaded.estimateUsd}
+            preflight={preflight}
             onAsk={() => void ask(container.container, summary.targetBand)}
             subSkillName={name}
           />
@@ -193,33 +198,40 @@ export function DiagnosticResult({ skill, askOnOpen = false }: { skill: ScoredSk
  */
 function Interpretation({
   state,
-  estimateUsd,
+  preflight,
   onAsk,
   subSkillName,
 }: {
   state: InterpretationState;
-  estimateUsd: number | null;
+  preflight: Preflight | null;
   onAsk: () => void;
   subSkillName: (subSkill: SubSkill) => string;
 }) {
   const t = useTranslations("diagnostic");
-  const locale = useLocale();
+  const offerId = useId();
   switch (state.kind) {
     case "idle":
-    case "asking":
       return <p>{t("asking")}</p>;
+    case "asking":
+      // Inside the card's one live region, so the wait is only shown here, not announced twice.
+      return <Waiting live={false}>{t("asking")}</Waiting>;
     case "ready":
       return <Written interpretation={state.interpretation} subSkillName={subSkillName} />;
     case "offer":
       return (
         <div className="app-stack">
           {state.existing === null ? null : <Written interpretation={state.existing} subSkillName={subSkillName} />}
-          <p>
-            {state.existing === null ? t("offer") : t("offerOtherLanguage")}{" "}
-            {estimateUsd === null ? t("preflightUnpriced") : t("offerCost", { amount: estimateText(estimateUsd, locale) })}
-          </p>
+          <p>{state.existing === null ? t("offer") : t("offerOtherLanguage")}</p>
+          {preflight === null ? null : (
+            <SpendOffer id={offerId} namespace="diagnostic" preflight={preflight} estimateKey="offerCost" sendsToKey={null} />
+          )}
           <div className="app-actions">
-            <Button variant="secondary" onClick={onAsk}>
+            <Button
+              variant="secondary"
+              onClick={onAsk}
+              disabled={preflight === null}
+              aria-describedby={preflight === null ? undefined : offerId}
+            >
               {state.existing === null ? t("offerAction") : t("offerAgainAction")}
             </Button>
           </div>

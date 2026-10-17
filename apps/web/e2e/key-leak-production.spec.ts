@@ -110,7 +110,6 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   // with its session in `oralSessions`, still there after a reload, and the recording still uploaded nowhere.
   await page.getByRole("region", { name: "Your earlier sessions" }).getByRole("link", { name: "Open" }).click();
   await page.getByRole("button", { name: "Get the report" }).click();
-  await page.getByRole("button", { name: "Send for the report" }).click();
   await expect(page.getByRole("region", { name: "Your report" })).toBeVisible();
   expect(await idsAtRest(page, "palier", "costLedger")).toHaveLength(1 + 6 + 5 + 1);
   expect(watch.openAiBodies().some((body) => body.includes(recorderMarker(2)))).toBe(false);

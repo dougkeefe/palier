@@ -13,6 +13,7 @@ import {
   practice,
   recordingsMegabytes,
   answerPause,
+  canStart,
   sendsTo,
   sessionEstimate,
   studioModeNote,
@@ -27,26 +28,69 @@ const CHOICE: OralSessionChoice = {
   scenario: { id: scenarioId("s"), lang: "fr", sessionType: "work", targetBand: "C", topic: "project-management", phases: [phase(2), phase(5), phase(3)] },
 };
 const PREFLIGHT: Preflight = { estimateUsd: 0.09, before: "none", after: "none" };
+/** The session's price, as the controller dispatches it for `CHOICE` (D237): tagged with what it priced. */
+const PRICED = { type: "preflighted", preflight: PREFLIGHT, scenarioId: CHOICE.scenario.id } as const;
+const PRICED_STUDIO = { ...PRICED, held: "studio" } as const;
 const QUESTION = { text: "Parlez-moi de votre poste.", audio: null, phase: 1 };
 const named = (name: string) => Object.assign(new Error(name), { name });
 
 const run = (...actions: Parameters<typeof practice>[1][]): PracticeState => actions.reduce(practice, INITIAL_PRACTICE);
 const running = () =>
-  run({ type: "choose", choice: CHOICE }, { type: "preflighted", preflight: PREFLIGHT }, { type: "started", nowMs: 1_000 });
+  run(
+    { type: "choose", choice: CHOICE },
+    { type: "mic", mic: "ok" },
+    PRICED,
+    { type: "started", nowMs: 1_000 },
+  );
 
 describe("practice, the screen's steps (D119)", () => {
-  it("goes from the picker to the microphone check for the chosen session", () => {
-    expect(run({ type: "choose", choice: CHOICE })).toEqual({ phase: "mic", choice: CHOICE, mic: "idle" });
+  it("goes from the picker to the microphone check for the chosen session, with no estimate yet", () => {
+    expect(run({ type: "choose", choice: CHOICE })).toEqual({ phase: "mic", choice: CHOICE, mic: "idle", preflight: null });
   });
 
-  it("follows the microphone check, then confirms the estimate", () => {
+  it("follows the microphone check, and shows the estimate on the same step, beside the start (D237)", () => {
     const checked = run({ type: "choose", choice: CHOICE }, { type: "mic", mic: "quiet" });
     expect(checked).toMatchObject({ phase: "mic", mic: "quiet" });
-    expect(practice(checked, { type: "preflighted", preflight: PREFLIGHT })).toEqual({
-      phase: "confirming",
+    expect(practice(checked, PRICED)).toEqual({
+      phase: "mic",
       choice: CHOICE,
+      mic: "quiet",
       preflight: PREFLIGHT,
     });
+  });
+
+  it("keeps the estimate through another microphone check", () => {
+    const priced = run({ type: "choose", choice: CHOICE }, { type: "mic", mic: "quiet" }, PRICED);
+    expect(practice(practice(priced, { type: "mic", mic: "listening" }), { type: "mic", mic: "ok" })).toMatchObject({
+      mic: "ok",
+      preflight: PREFLIGHT,
+    });
+  });
+
+  it("ignores a price for another session or mode, which a slow read can deliver after Back (D237)", () => {
+    const chosen = run({ type: "choose", choice: CHOICE }, { type: "mic", mic: "ok" });
+    expect(practice(chosen, { ...PRICED, scenarioId: scenarioId("other") })).toBe(chosen);
+    expect(practice(chosen, PRICED_STUDIO)).toBe(chosen);
+    const studioChosen = run({ type: "choose", choice: CHOICE, held: "studio" }, { type: "mic", mic: "ok" });
+    expect(practice(studioChosen, PRICED)).toBe(studioChosen);
+    expect(practice(studioChosen, PRICED_STUDIO)).toMatchObject({ preflight: PREFLIGHT });
+  });
+
+  it("starts only once the microphone is open and the estimate is shown (D234, D237)", () => {
+    const chosen = run({ type: "choose", choice: CHOICE });
+    const heard = practice(chosen, { type: "mic", mic: "ok" });
+    const priced = practice(heard, PRICED);
+    expect(canStart(chosen)).toBe(false);
+    expect(canStart(heard)).toBe(false);
+    expect(canStart(priced)).toBe(true);
+    expect(canStart(practice(priced, { type: "mic", mic: "quiet" }))).toBe(true);
+    for (const mic of ["idle", "listening", "denied", "no-mic", "unsupported", "failed"] as const) {
+      const refused = practice(priced, { type: "mic", mic });
+      expect(canStart(refused)).toBe(false);
+      expect(practice(refused, { type: "started", nowMs: 1 })).toBe(refused);
+    }
+    expect(practice(heard, { type: "started", nowMs: 1 })).toBe(heard);
+    expect(canStart(INITIAL_PRACTICE)).toBe(false);
   });
 
   it("starts the session with nothing asked yet, and back always returns to the picker", () => {
@@ -76,7 +120,8 @@ describe("practice, the screen's steps (D119)", () => {
   it("stops waiting the moment an answer is sent, before the bridge says so, so no second answer can be recorded to it (D202)", () => {
     const asked = run(
       { type: "choose", choice: CHOICE },
-      { type: "preflighted", preflight: PREFLIGHT },
+      { type: "mic", mic: "ok" },
+      PRICED,
       { type: "started", nowMs: 1 },
       { type: "question", waiting: QUESTION },
       { type: "recording" },
@@ -115,8 +160,8 @@ describe("practice, the screen's steps (D119)", () => {
     expect(run({ type: "started", nowMs: 1 })).toEqual(INITIAL_PRACTICE);
     const mic = run({ type: "choose", choice: CHOICE });
     expect(practice(mic, { type: "started", nowMs: 1 })).toBe(mic);
-    const confirming = practice(mic, { type: "preflighted", preflight: PREFLIGHT });
-    expect(practice(confirming, { type: "question", waiting: QUESTION })).toBe(confirming);
+    const priced = practice(practice(mic, { type: "mic", mic: "ok" }), PRICED);
+    expect(practice(priced, { type: "question", waiting: QUESTION })).toBe(priced);
     const live = running();
     expect(practice(live, { type: "choose", choice: CHOICE })).toBe(live);
     const ended = practice(live, { type: "ended", session: null, evicted: 0, failure: null, recordingKept: null });
@@ -125,30 +170,41 @@ describe("practice, the screen's steps (D119)", () => {
 });
 
 describe("practice, studio mode's steps (D185)", () => {
-  const studioConfirming = () =>
+  const studioPriced = () =>
     run(
       { type: "choose", choice: CHOICE, held: "studio" },
       { type: "mic", mic: "ok" },
-      { type: "preflighted", preflight: PREFLIGHT, held: "studio" },
+      PRICED_STUDIO,
     );
 
-  it("carries studio mode from the picker through the check to the pre-flight", () => {
-    expect(run({ type: "choose", choice: CHOICE, held: "studio" })).toEqual({ phase: "mic", choice: CHOICE, mic: "idle", held: "studio" });
-    expect(studioConfirming()).toEqual({ phase: "confirming", choice: CHOICE, preflight: PREFLIGHT, held: "studio" });
+  it("carries studio mode from the picker through the check and its estimate", () => {
+    expect(run({ type: "choose", choice: CHOICE, held: "studio" })).toEqual({
+      phase: "mic",
+      choice: CHOICE,
+      mic: "idle",
+      preflight: null,
+      held: "studio",
+    });
+    expect(studioPriced()).toEqual({ phase: "mic", choice: CHOICE, mic: "ok", preflight: PREFLIGHT, held: "studio" });
   });
 
   it("hands a studio session to the studio view, and never runs it as practice", () => {
-    expect(practice(studioConfirming(), { type: "studio" })).toEqual({ phase: "studio", choice: CHOICE });
-    expect(practice(studioConfirming(), { type: "started", nowMs: 1 })).toMatchObject({ phase: "confirming" });
+    expect(practice(studioPriced(), { type: "studio" })).toEqual({ phase: "studio", choice: CHOICE });
+    expect(practice(studioPriced(), { type: "started", nowMs: 1 })).toMatchObject({ phase: "mic" });
+  });
+
+  it("never hands a session to the studio view before it can start", () => {
+    const unpriced = run({ type: "choose", choice: CHOICE, held: "studio" }, { type: "mic", mic: "ok" });
+    expect(practice(unpriced, { type: "studio" })).toBe(unpriced);
   });
 
   it("never hands a practice session to the studio view", () => {
-    const confirming = run({ type: "choose", choice: CHOICE }, { type: "preflighted", preflight: PREFLIGHT });
-    expect(practice(confirming, { type: "studio" })).toBe(confirming);
+    const priced = run({ type: "choose", choice: CHOICE }, { type: "mic", mic: "ok" }, PRICED);
+    expect(practice(priced, { type: "studio" })).toBe(priced);
   });
 
   it("comes back from the studio view to the same end card, and ignores anything else meanwhile", () => {
-    const studio = practice(studioConfirming(), { type: "studio" });
+    const studio = practice(studioPriced(), { type: "studio" });
     expect(practice(studio, { type: "question", waiting: QUESTION })).toBe(studio);
     expect(practice(studio, { type: "ended", session: null, evicted: 0, failure: "invalid-key", recordingKept: true })).toEqual({
       phase: "ended",
@@ -163,28 +219,27 @@ describe("practice, studio mode's steps (D185)", () => {
 });
 
 describe("studioWarmup (D190)", () => {
-  it("wakes the route on the microphone check and again on the pre-flight of a studio session", () => {
+  it("wakes the route on the microphone check of a studio session, where it also starts (D237)", () => {
     const mic = run({ type: "choose", choice: CHOICE, held: "studio" });
     expect(studioWarmup(mic)).toBe("mic");
     expect(studioWarmup(practice(mic, { type: "mic", mic: "ok" }))).toBe("mic");
-    expect(studioWarmup(practice(mic, { type: "preflighted", preflight: PREFLIGHT, held: "studio" }))).toBe(
-      "confirming",
-    );
+    expect(studioWarmup(practice(mic, PRICED_STUDIO))).toBe("mic");
   });
 
   it("never wakes it for practice mode", () => {
     const practiceMic = run({ type: "choose", choice: CHOICE });
     expect(studioWarmup(practiceMic)).toBeNull();
-    expect(studioWarmup(practice(practiceMic, { type: "preflighted", preflight: PREFLIGHT }))).toBeNull();
+    expect(studioWarmup(practice(practiceMic, PRICED))).toBeNull();
   });
 
   it("never wakes it once the tap is made, or before a session is chosen", () => {
-    const studioConfirming = run(
+    const studioPriced = run(
       { type: "choose", choice: CHOICE, held: "studio" },
-      { type: "preflighted", preflight: PREFLIGHT, held: "studio" },
+      { type: "mic", mic: "ok" },
+      PRICED_STUDIO,
     );
     expect(studioWarmup(INITIAL_PRACTICE)).toBeNull();
-    expect(studioWarmup(practice(studioConfirming, { type: "studio" }))).toBeNull();
+    expect(studioWarmup(practice(studioPriced, { type: "studio" }))).toBeNull();
   });
 });
 

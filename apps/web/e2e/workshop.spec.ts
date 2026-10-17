@@ -6,8 +6,8 @@ import { MODELS_ANSWER, type OpenAiAnswer, SENTINEL, completionKind, feedbackAns
 /**
  * The writing workshop (product-requirements.md §8.7, §14; progress.md D105–D108), on the
  * hermetic lane. OpenAI is stubbed with `page.route`, scripted per step, so each state is
- * reached through the real adapter and the real metering: no key, editing, the pre-flight
- * with its cap warning, a failure, and the feedback. Every state is audited by axe [R9].
+ * reached through the real adapter and the real metering: no key, editing with the estimate
+ * and its cap warning beside "Get feedback" (D237), a failure, and the feedback. Every state is audited by axe [R9].
  *
  * The hermetic container lives for one page load, so the key and the cap are set by in-app
  * links from the workshop and the way back is the browser's own, which keeps the page.
@@ -48,7 +48,7 @@ test("the workshop without a key: prompts, an editor that works, and PRD §14's 
   await axeClean(page);
 });
 
-test("the workshop with a key: the pre-flight warns past the cap, a failure keeps the text, and feedback arrives", async ({
+test("the workshop with a key: the estimate warns past the cap, a failure keeps the text, and feedback arrives", async ({
   page,
   context,
 }) => {
@@ -75,16 +75,15 @@ test("the workshop with a key: the pre-flight warns past the cap, a failure keep
   await page.getByRole("textbox", { name: "Your text" }).fill(WRITTEN);
   await axeClean(page);
 
-  // The pre-flight: the estimate, and the warning past the cap. It never blocks.
-  await page.getByRole("button", { name: "Get feedback" }).click();
-  await expect(page.getByRole("heading", { name: "Before you send" })).toBeFocused();
+  // The estimate beside the button, and the warning past the cap, before it is pressed (D237). It never blocks.
   await expect(page.getByText(/^This feedback should cost about US\$/)).toBeVisible();
   await expect(page.getByText(/past the limit you set in Palier/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Get feedback" })).toHaveAccessibleDescription(/^This feedback should cost about US\$/);
   await axeClean(page);
 
-  // A rate limit: a plain sentence, and the text is kept.
+  // A rate limit: a plain sentence, and the text is kept. One press is the agreement.
   completion = RATE_LIMITED;
-  await page.getByRole("button", { name: "Send for feedback" }).click();
+  await page.getByRole("button", { name: "Get feedback" }).click();
   await expect(page.getByRole("status").filter({ hasText: "has reached its usage limit or has no credit left" })).toBeVisible();
   await expect(page.getByRole("textbox", { name: "Your text" })).toHaveValue(WRITTEN);
   await axeClean(page);
@@ -92,7 +91,6 @@ test("the workshop with a key: the pre-flight warns past the cap, a failure keep
   // Try again: the same submission, and this time the feedback.
   completion = FEEDBACK;
   await page.getByRole("button", { name: "Try again" }).click();
-  await page.getByRole("button", { name: "Send for feedback" }).click();
   await expect(page.getByRole("heading", { name: "Feedback", exact: true })).toBeFocused();
 
   // The five criteria, the error drawn over the user's own words, and the model answer's changes.
@@ -159,9 +157,11 @@ test("feedback still being made is waited for when you come back, and never aske
   const editor = page.getByRole("textbox", { name: "Your text" });
   await editor.fill(WRITTEN);
   await page.getByRole("button", { name: "Get feedback" }).click();
-  await page.getByRole("button", { name: "Send for feedback" }).click();
   const sending = page.getByRole("status").filter({ hasText: "Getting feedback." });
   await expect(sending).toBeVisible();
+  // The wait shows it is alive: the time waited ticks on (D237).
+  await expect(page.getByText(/^Waiting: (?!0:00$)\d+:\d{2}$/)).toBeVisible();
+  await axeClean(page);
   // The text being assessed is fixed until its feedback arrives.
   await expect(editor).toHaveAttribute("readonly", "");
 

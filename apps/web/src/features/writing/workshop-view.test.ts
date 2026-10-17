@@ -137,20 +137,13 @@ describe("workshop", () => {
     });
   });
 
-  it("goes from writing through the pre-flight and sending to feedback", () => {
+  it("goes from writing straight to sending on one press, then to feedback (D237)", () => {
     let state = workshop(writingState(), { type: "edit", text: "Madame, merci." });
-    state = workshop(state, { type: "preflighted", preflight: preflight("under") });
-    expect(state).toMatchObject({ request: { kind: "confirming", preflight: preflight("under") } });
     state = workshop(state, { type: "sending" });
     state = workshop(state, { type: "saved", id: "sub-1", text: "Madame, merci." });
     expect(state).toMatchObject({ request: { kind: "sending" }, draft: { saved: { id: "sub-1", text: "Madame, merci." } } });
     state = workshop(state, { type: "assessed", submission: aSubmission() });
     expect(state).toMatchObject({ phase: "feedback", submission: aSubmission(), draft: { text: "Madame, merci." } });
-  });
-
-  it("goes back to the draft when the pre-flight is cancelled", () => {
-    const confirming = workshop(writingState(), { type: "preflighted", preflight: preflight("near") });
-    expect(workshop(confirming, { type: "cancel" })).toMatchObject({ phase: "writing", request: { kind: "idle" } });
   });
 
   it("keeps the text through a failure, and editing clears the failure", () => {

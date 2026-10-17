@@ -932,6 +932,53 @@
   background-color: var(--surface);
 }
 
+/* ---- Working (a slow wait: three dots that bounce, and the time waited; D237) --
+   The dots move by transform only, on §10.5's tokens; the motion switch stills them,
+   and the time waited, which the caller ticks, still says the wait is alive. */
+
+.pl-working {
+  align-items: center;
+}
+
+.pl-working__dots {
+  display: inline-flex;
+  flex: none;
+  gap: 6px;
+  align-items: center;
+  min-height: 24px;
+}
+
+.pl-working__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+  animation: pl-working-bounce var(--pl-motion-celebrate) var(--pl-ease) infinite alternate;
+}
+
+.pl-working__dot:nth-child(2) {
+  animation-delay: var(--pl-motion-state);
+}
+
+.pl-working__dot:nth-child(3) {
+  animation-delay: var(--pl-motion-panel);
+}
+
+@keyframes pl-working-bounce {
+  from {
+    transform: none;
+  }
+  to {
+    transform: translateY(-6px);
+  }
+}
+
+.pl-working__elapsed {
+  margin: 4px 0 0;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
 /* ---- Mascot (decorative; the empty state's words carry the meaning) --------- */
 
 .pl-mascot {

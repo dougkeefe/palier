@@ -11,7 +11,7 @@ import { onboard } from "./helpers";
  * (`docs/deploy.md`). It spends about US$0.20.
  *
  * It measures what the plan asks to be measured, not assumed:
- * - **tap to first word** (exit criterion 1), three times: from the click on "Start the session" to the first
+ * - **tap to first word** (exit criterion 1), three times: from the click on "Start the session" (or "Start anyway") to the first
  *   moment the examiner's voice arrives on the remote track above a level, through an analyser;
  * - **the cost of a minute**: a conversation of about two minutes whose every `response.done` usage and every
  *   transcription's seconds are summed off the data channel, per minute, in `pricing.json`'s units. On its first
@@ -126,7 +126,8 @@ const instrument = ({ answers }: { answers: readonly string[] }) => {
     "click",
     (event) => {
       const button = (event.target as Element | null)?.closest?.("button");
-      if (button?.textContent?.trim() === "Start the session") {
+      const label = button?.textContent?.trim();
+      if (label === "Start the session" || label === "Start anyway") {
         live.tapAt = performance.now();
         live.firstVoiceAt = null;
         live.timeline = {};
@@ -251,8 +252,7 @@ const startStudio = async (page: Page) => {
   await page.getByRole("listitem").filter({ has: page.getByRole("heading", { name: "Warm-up", exact: true }) }).getByRole("button", { name: "Choose" }).click();
   await page.getByRole("button", { name: "Check my microphone" }).click();
   await expect(page.getByText("Palier can hear you.").or(page.getByText("Palier heard very little.", { exact: false }))).toBeVisible({ timeout: 10_000 });
-  await page.getByRole("button", { name: /^Continue/ }).first().click();
-  await page.getByRole("button", { name: "Start the session" }).click();
+  await page.getByRole("button", { name: /^Start (the session|anyway)$/ }).click();
   await expect(page.getByRole("status").filter({ hasText: "The conversation is on." })).toBeVisible({ timeout: 30_000 });
 };
 

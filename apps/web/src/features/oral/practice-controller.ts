@@ -1,4 +1,4 @@
-import type { OralPracticeRun, OralSession, OralSessionChoice, SaveOralAudioResult } from "@palier/app";
+import type { FeatureCost, OralPracticeRun, OralSession, OralSessionChoice, SaveOralAudioResult } from "@palier/app";
 import type { OralMode, ScenarioId, SessionId } from "@palier/domain";
 import type { Preflight } from "@palier/engine";
 
@@ -10,6 +10,7 @@ import {
   recordClip,
   recordSession,
 } from "../../lib/oral/recorder";
+import { fallbackPreflight } from "../key/spend-view";
 import { type AnswerBridge, answerBridge } from "./answer-bridge";
 import { levelVerdict, micFailure } from "./mic";
 import { type OralFailure, type PracticeAction, type QuestionHeard, answerPause, oralFailure } from "./practice-view";
@@ -17,6 +18,8 @@ import { type OralFailure, type PracticeAction, type QuestionHeard, answerPause,
 /** The use cases the screen's session needs, as the container binds them. */
 export type PracticeUseCases = {
   readonly preflightSpend: (request: { readonly feature: "oral-practice" | "oral-studio"; readonly quantity: number }) => Promise<Preflight>;
+  /** The cost table, for the estimate when where the month stands cannot be read (D237). */
+  readonly featureCosts: () => readonly FeatureCost[];
   readonly startOralPractice: (
     request: { readonly sessionId: SessionId; readonly scenarioId: ScenarioId },
     answers: AnswerBridge["source"],
@@ -49,10 +52,11 @@ export type PracticeControllerDeps = {
 export type PracticeController = {
   readonly checkMic: () => Promise<void>;
   /**
-   * On to the pre-flight, in the mode `held` chose (D185), once the check has opened the microphone. Every answer is
-   * spoken, so without one it does nothing (D234).
+   * Price the session in the mode `held` chose (D185), once the check has opened the microphone, so the estimate stands
+   * beside "Start the session" before it is tapped (D237). Every answer is spoken, so without a microphone it does
+   * nothing (D234).
    */
-  readonly continueWith: (choice: OralSessionChoice, held?: OralMode) => Promise<void>;
+  readonly price: (choice: OralSessionChoice, held?: OralMode) => Promise<void>;
   /**
    * Give the checked microphone to studio mode's controller (D185), which lets it go when its session ends.
    * This controller forgets it, so neither Back nor leaving the page stops it under the studio session.
@@ -98,7 +102,7 @@ const ignore = (): void => undefined;
  *
  * - **The microphone is let go on every way out**: Back, a failed check, the end,
  *   and the screen going away. A check that finishes after the user moved on is dropped.
- * - **Each step runs once**: a second tap while a pre-flight or a start is in flight does nothing.
+ * - **Each step runs once**: a second call while the pricing or a start is in flight does nothing.
  * - **End before the run exists is kept**, and applied the moment it does.
  * - **Every answer is spoken** (D234). The check fails as `unsupported` when the browser cannot make a
  *   recorder at all, so no session is paid for that could not be answered. A session that cannot be
@@ -194,14 +198,23 @@ export const practiceController = (deps: PracticeControllerDeps): PracticeContro
       }
     },
 
-    continueWith: async (choice, held = "practice") => {
+    price: async (choice, held = "practice") => {
       if (busy || stream === null) return;
       busy = true;
-      check += 1;
       try {
         const feature = held === "studio" ? "oral-studio" : "oral-practice";
-        const preflight = await deps.useCases.preflightSpend({ feature, quantity: choice.minutes });
-        if (!disposed) deps.dispatch({ type: "preflighted", preflight, ...(held === "studio" ? { held } : {}) });
+        // A failed read falls back to the cost table, so the start is never left disabled (D237).
+        const preflight = await deps.useCases
+          .preflightSpend({ feature, quantity: choice.minutes })
+          .catch(() => fallbackPreflight(deps.useCases.featureCosts(), feature, choice.minutes));
+        if (!disposed) {
+          deps.dispatch({
+            type: "preflighted",
+            preflight,
+            scenarioId: choice.scenario.id,
+            ...(held === "studio" ? { held } : {}),
+          });
+        }
       } finally {
         busy = false;
       }

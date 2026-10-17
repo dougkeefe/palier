@@ -82,6 +82,7 @@ export { MonthCalendar, type CalendarMark, type MonthCalendarProps } from "./pri
 export { Sheet, type SheetProps } from "./primitives/Sheet.js";
 export { Passage, type PassageProps } from "./primitives/Passage.js";
 export { Toast, type ToastProps } from "./primitives/Toast.js";
+export { Working, type WorkingProps } from "./primitives/Working.js";
 export { Mascot, type MascotProps } from "./primitives/Mascot.js";
 export { StreakFlame, type StreakFlameProps } from "./primitives/StreakFlame.js";
 export { Timer, type TimerProps } from "./primitives/Timer.js";

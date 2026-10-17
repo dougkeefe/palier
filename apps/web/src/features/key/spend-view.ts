@@ -1,4 +1,6 @@
-import type { CapState } from "@palier/engine";
+import type { FeatureCost } from "@palier/app";
+import type { AiFeature } from "@palier/domain";
+import type { CapState, Preflight } from "@palier/engine";
 
 /**
  * The spend section's decisions (product-requirements.md §8.10, §14; progress.md D101–D104),
@@ -28,6 +30,17 @@ export const moneyText = (usd: number, locale: string): MoneyText =>
 /** A typical use's estimate, which is often a fraction of a cent: to four places, so it reads. */
 export const estimateText = (usd: number, locale: string): string =>
   dollars(locale, usd >= 0.01 ? 2 : 4).format(usd);
+
+/**
+ * The estimate beside a spending button when where the month stands could not be read (D237): the
+ * typical use's cost times `quantity`, from the cost table, with no place against the cap. The cap
+ * is soft and this read feeds only its reminder, so a failed read must never leave the button
+ * disabled.
+ */
+export const fallbackPreflight = (costs: readonly FeatureCost[], feature: AiFeature, quantity = 1): Preflight => {
+  const each = costs.find((cost) => cost.feature === feature)?.estimateUsd ?? null;
+  return { estimateUsd: each === null ? null : each * quantity, before: "none", after: "none" };
+};
 
 /** How much of the cap this month has used, in whole percent, rounded down so 79.9% never reads 80. */
 export const capShare = (monthUsd: number, capUsd: number): number => Math.floor((monthUsd / capUsd) * 100);
