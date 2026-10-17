@@ -33,3 +33,11 @@ overrides:
   "typed-rest-client>qs": ^6.15.2
   # GHSA-67mh-4wv8-2f99: `drizzle-kit`'s deprecated `@esbuild-kit` loader pins 0.18; drizzle-kit itself uses 0.25.
   "@esbuild-kit/core-utils>esbuild": ^0.25.0
+  # GHSA-8r5x-fm3f-whwj, GHSA-xw65-4hp5-5hc7: `eslint-plugin-boundaries` and `@boundaries/elements` pin 4.7.9; a patch release (D236).
+  "eslint-plugin-boundaries>handlebars": 4.7.10
+  "@boundaries/elements>handlebars": 4.7.10
+  # GHSA-c475-qrg2-pj4r: `get-uri` caps it at ^5. 6.0's one break, separate transfer hosts off by default, touches no call it makes.
+  "get-uri>basic-ftp": ^6.2.3
+  # GHSA-hp3w-g68c-fv3c: `sprintf-js` has no patched release. Only argparse 1 pulls it in, and js-yaml 3 needs argparse only
+  # for its CLI, which nothing runs; `@lhci/utils` calls the library's `safeLoad`. argparse 2 has no dependencies.
+  "js-yaml@3>argparse": ^2.0.1
