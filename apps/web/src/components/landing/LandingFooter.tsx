@@ -67,14 +67,18 @@ export function LandingFooter() {
           <ShortcutSheet />
         </div>
       </div>
-      <div className="landing-footer__statement">
-        <p className="landing-footer__not-official">{t("footer.notOfficial")}</p>
-        <NonAffiliation variant="footer" />
+      {/* The statement and the photographs' credit share one quiet row, and the wordmark closes
+          the footer (D238). */}
+      <div className="landing-footer__legal">
+        <div className="landing-footer__statement">
+          <p className="landing-footer__not-official">{t("footer.notOfficial")}</p>
+          <NonAffiliation variant="footer" />
+        </div>
+        <p className="landing-footer__photos">{t("footer.photos")}</p>
       </div>
       {/* Decoration, drawn from the attribute so it is no text at all: at a tenth of white it
           would fail a contrast check it has no need to pass. */}
       <div aria-hidden="true" className="landing-footer__wordmark" data-wordmark={nav("brand")} />
-      <p className="landing-footer__photos">{t("footer.photos")}</p>
     </footer>
   );
 }

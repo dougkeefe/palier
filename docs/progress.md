@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/palier-footer-layout-improve` | **The landing footer's small print laid out again** (D238; the human's request, 18 October 2026): the non-affiliation statement and the photographs' credit share one row under a hairline, above the wordmark, which closes the footer at its size. | 18 October 2026 |
 | `dougkeefe/get-feedback-ui-issues` | **One press spends, and a wait you can see** (D237; the human's request, 17 October 2026): every spending screen shows its estimate beside its button and spends on one press, with no "Before you send" step, and a slow call on the key shows `Working`'s dots and the time waited. | 17 October 2026 |
 | `dougkeefe/landing-page-pricing-french` | **The landing page's headline and pricing** (D235; the human's request, 16 October 2026): "Your C is closer than you think.", no "Try a sample question" in the hero, and one pricing message (free to practise; the AI features a few cents each, billed by OpenAI, no subscription to us) wherever the landing page, the About page and the site's description speak of cost. | 16 October 2026 |
 | `dougkeefe/spoken-practice-typing-remove` | **Spoken practice is spoken only** (D234; the human's request, 13 October 2026): no typed answers in either mode. Without a microphone the screen gives the recovery steps and links the writing workshop and reading practice. | 13 October 2026 |
@@ -7982,9 +7983,32 @@ The human asked for two things on the writing workshop, then on every screen tha
   - **An oral price carries the session and mode it priced**, and the reducer drops one meant for another. Otherwise a
     slow read could put a 5-minute practice price beside a 22-minute studio session chosen after Back.
 
+### D238 — the landing footer's statement and photographs' credit share one row, above the wordmark
+**Date:** 18 October 2026 · **Status:** accepted (human's request; agent's layout). Amends D201's footer
+
+The human found the footer's small print misplaced and liked the wordmark as it was. The statement ran the full 1360px
+as one line of about two hundred characters, alone above the wordmark, and the credit sat under the wordmark, against
+the letters' feet, because the wordmark was moved down 8% and the credit painted over the move.
+
+- **One row, under a hairline** (`.landing-footer__legal`): the statement on the left at most 72ch wide, the credit on
+  the right at most 44ch. It is a wrapping flex row, so on a narrow screen the credit falls under the statement with no
+  media query. The hairline is the header's mobile panel's, `rgb(255 255 255 / 0.16)`.
+- **The wordmark closes the footer** at the same size, weight, spacing and colour. The 8% shift is gone and the footer
+  has a small bottom padding instead, so the letters stand whole on its floor, as they looked before.
+- Nothing else moves: the same copy, `NonAffiliation` and its class, and no new colour, so the contrast test is as it was.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 18 October 2026 — `dougkeefe/palier-footer-layout-improve` (the landing footer's small print; D238)
+
+Not *Next, decided*, which is unchanged. The human found the landing footer's statement and photographs' credit
+misplaced. They now share one row under a hairline, above the wordmark, which keeps its size (D238). Checked by eye at
+1440px and 390px wide, in English and French, on the hermetic dev server.
+
+**Verified:** `pnpm verify` exits 0: check-types and lint clean, dependency-cruiser "no dependency violations found" (519 and 372
+modules), and Vitest "Test Files 274 passed (274)", "Tests 4410 passed | 8 todo (4418)".
 
 ### 17 October 2026 — `dougkeefe/get-feedback-ui-issues` (one press spends, and a wait you can see; D237)
 
