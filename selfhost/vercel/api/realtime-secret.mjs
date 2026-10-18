@@ -12,7 +12,7 @@
  *
  * Deploy the `selfhost/vercel` directory as its own Vercel project; the endpoint's address is then
  * `https://<your-project>.vercel.app/api/realtime-secret`. Environment variables (Settings → Environment Variables):
- * - `ALLOWED_ORIGIN`, required: the address of the Palier you use, for example `https://palier-virid.vercel.app`.
+ * - `ALLOWED_ORIGIN`, required: the address of the Palier you use, for example `https://www.palier.study`.
  *   The page talks to that origin and no other.
  * - `OPENAI_BASE_URL`, optional: defaults to `https://api.openai.com/v1`.
  *

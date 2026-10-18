@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 16 October 2026 (the landing page's headline, its hero's one way in, and one pricing message in both languages, D235)
+**Last updated:** 18 October 2026 (the official domain is palier.study, D238; the README rewritten)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -128,7 +128,7 @@ human for anything expensive.
 | --- | --- | --- | --- |
 | 0 Foundations | An empty application that already enforces every rule | 2–3 wk | **in progress** |
 | 1 Content factory | Find out whether a generated bank is good enough | 3–4 wk | **built; the full-volume bank shipped** as `content/bank/v4`, written by Claude and reviewed blind by Claude, not a paid OpenAI run (human, 4 October 2026; D203, ADR 24) |
-| 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human) |
+| 2 Practice MVP | Ship something publicly useful | 3–4 wk | **complete** (live 24 September 2026 at https://palier-virid.vercel.app; shared, confirmed by the human; at https://www.palier.study from 18 October 2026, D238) |
 | 3 Exams and item statistics | The number users actually came for | 2 wk | **in progress** (all four slices built, exit criteria 1–4 met; the product pilot is running, human, D97) |
 | 4 BYOK, generation, writing workshop | Turn on the parts that cost money, safely | 2 wk | **complete** (four slices, D97, all merged, the last as #32; D98–D112; Gate G passed; all three exit criteria met) |
 | 5 Oral, practice mode | Oral rehearsal at a cost anyone can afford | 2–3 wk | **complete, one criterion deferred** (Gate H resolved; three slices, D113; Slice 1 merged, #34, exit criterion 5 met; Slice 2 merged, #35, exit criterion 3 met; Slice 3 merged, #37, D122–D127; exit criterion 4 met, D128; Gate I passed, D129; criterion 2 deferred by the human, D130) |
@@ -165,7 +165,7 @@ Defined in `implementation-plan.md` §7. The first-week list in §12 is the sugg
 - [x] Monorepo: pnpm workspaces, Turborepo, TypeScript project references, strict everywhere
 - [x] Eight workspaces created (`apps/web`, `apps/factory`, six `packages/*`), each with an explicit `exports` map
 - [x] `CLAUDE.md` per package, stating that package's invariants (§7, and §10 requires keeping them current) — all six written, plus the root router `CLAUDE.md`; D4 resolved, D15 recorded
-- [~] Name decided and domain registered (§12.1) — **name decided: Palier** (D96). The domain will be `palier.dougkeefe.com`, not yet pointed at the deployment
+- [x] Name decided and domain registered (§12.1) — **name decided: Palier** (D96). **The domain is `palier.study`** (human, 18 October 2026; D238), live at `https://www.palier.study`, the apex redirecting there. It replaces D96's `palier.dougkeefe.com`
 - [x] `LICENSE` (PolyForm Noncommercial 1.0.0), `LICENSE-CONTENT` (CC BY-NC-SA 4.0), `README` non-affiliation statement [R5, R13] — relicensed by ADR 23 (D153); MIT and CC BY until then
 - [x] `adr/README.md` covering the format, the never-edit-only-supersede rule, and numbers-on-acceptance (D16)
 
@@ -257,7 +257,7 @@ mode is in 1.0** (D165): Phase 6's three slices merged (#53, #57, #60), Gate N p
 reviewed blind by Claude, with v3's synthetic content retired.
 
 What stands between the code and 1.0 is now **the human's**: **Gate O**, then the rest of **Gate M** (an outside item
-submission, the domain and the trademark check). No agent slice is left before them.
+submission and the trademark check; the domain is done, D238). No agent slice is left before them.
 
 **First: onboarding reordered** (`dougkeefe/palier-onboarding-adjustments`; D224, D225), on the human's request of 10 October 2026. Merge it once its
 four lanes are green. Then, on the deployed site, the human opens `/en/home` as a new user, in both languages and on a phone:
@@ -326,7 +326,7 @@ read at Gate O gains `content/pointers/pointers.json` (50 French grammar pointer
 **Next: merge the content run's pull request, then the human's read of v4, then Gate O (human).**
 
 1. **Merge the content run** once its four lanes are green. Then, on the deployed build:
-   - `curl -s https://palier-virid.vercel.app/api/health` answers `"bank":4`;
+   - `curl -s https://www.palier.study/api/health` answers `"bank":4`;
    - `/en/about` and `/fr/about` say the items are written by Claude and reviewed blind by other Claude instances, and no
      longer say "partly synthetic";
    - a reading drill at C shows a real passage, and an item's report panel reads "Machine-generated…" (D203).
@@ -353,7 +353,7 @@ read at Gate O gains `content/pointers/pointers.json` (50 French grammar pointer
    Once `/api/health` answers the deployed build, run the dials-only spec on the deployed site four times, 90 s apart:
    ```
    cd apps/web && (set -a; . ../../.env.local; set +a; PALIER_LIVE=1 PALIER_LIVE_DIALS_ONLY=1 \
-     PALIER_LIVE_BASE_URL=https://palier-virid.vercel.app pnpm exec playwright test --project=live)
+     PALIER_LIVE_BASE_URL=https://www.palier.study pnpm exec playwright test --project=live)
    ```
    *Done:* the twelve figures in the session log beside D190's. Over 2.5 s median, find the step that moved first. It needs
    `OPENAI_SMOKE_KEY` in `.env.local` at the repository root. This session had none (session log, 3 October 2026).
@@ -369,7 +369,7 @@ cannot start, and `pnpm exec playwright install chromium` if Playwright's browse
 
 **For the human, from Phase 6 Slice 3 (D192–D194):**
 - **Deploy your own endpoint** from `selfhost/` (Cloudflare or Vercel; `selfhost/README.md`) with `ALLOWED_ORIGIN` set to
-  `https://palier-virid.vercel.app`, before Gate O: the checklist's section 7 needs one.
+  `https://www.palier.study`, before Gate O: the checklist's section 7 needs one.
 - **Read D193** and say whether "nothing Vercel records can carry the key" is what ADR 3's "request logging is disabled"
   should mean.
 - *(The route's rate limit is decided: Phase 7 Slice 5 builds it before Gate O, D195.)*
@@ -400,7 +400,7 @@ cannot start, and `pnpm exec playwright install chromium` if Playwright's browse
   bank build (D152).
 
 **For the human, from Slice 2:**
-- after merging, **`curl -s https://palier-virid.vercel.app/api/health`** should answer `{"build":"<7 hex>","bank":3,"database":"ok"}`
+- after merging, **`curl -s https://www.palier.study/api/health`** should answer `{"build":"<7 hex>","bank":3,"database":"ok"}`
   (`docs/deploy.md`'s smoke checks);
 - add the **`RETENTION_DATABASE_URL`** Actions secret, with the same value as Production's `DATABASE_URL` (D138), and the
   **`PLAN_STORAGE_MB`** variable (`512` on Neon's free tier);
@@ -474,7 +474,11 @@ last exit criterion.
   2026.
 
 Standing human items:
-- pointing `palier.dougkeefe.com` at the deployment;
+- *(Done 18 October 2026: the domain is `palier.study`, D238.)* **Set `PALIER_SITE_URL` to `https://www.palier.study`** in
+  Vercel's Production environment and redeploy. On 18 October 2026 the deployed `0571cf1` still named
+  `https://palier.dougkeefe.com` in every canonical and `hreflang` link, in `robots.txt` and in the sitemap (D238). Then say
+  whether `palier-virid.vercel.app` and `palier.dougkeefe.com` should redirect to the new domain. That choice is D238's;
+  a redirect leaves a user's local data behind on the old origin;
 - §12.1's trademark and language-school check before launch (D96);
 - *(Done 9 October 2026: the key guide's screenshots are the owner's explainer video, on the guide and onboarding's
   step 5, D220.)*
@@ -7982,9 +7986,61 @@ The human asked for two things on the writing workshop, then on every screen tha
   - **An oral price carries the session and mode it priced**, and the reducer drops one meant for another. Otherwise a
     slow read could put a 5-minute practice price beside a 22-minute studio session chosen after Back.
 
+### D238 — the official domain is palier.study, and its origin is `https://www.palier.study`
+**Date:** 18 October 2026 · **Status:** accepted (human). Replaces D96's `palier.dougkeefe.com`
+
+The human said `palier.study` is now the project's official domain.
+
+- **The origin is `www`.** Checked live the same day: `https://palier.study` answers 308 to `https://www.palier.study`,
+  and `/api/health` there answers `{"build":"0571cf1","bank":4,"database":"ok"}`. Wherever an exact origin is needed,
+  the repository writes the `www` form: `selfhost/`'s `ALLOWED_ORIGIN`, which the endpoint compares exactly, and
+  `PALIER_SITE_URL`. Prose says `palier.study`. If the human later makes the apex primary, those strings flip with it.
+- **No code changed.** D199's `siteUrlFrom` already reads the origin from the environment, and D96 held: nothing in
+  the app names its own origin. `build-info.test.ts`'s `PALIER_SITE_URL` example now reads the real origin. It is the
+  same assertion with a different value.
+- **The live site still advertises the old domain.** On `www.palier.study` and on `palier-virid.vercel.app`, the
+  canonical and `hreflang` links, `robots.txt`'s `Sitemap:` and therefore the sitemap all name
+  `https://palier.dougkeefe.com`. So the Production `PALIER_SITE_URL` (or the project's production domain) still points
+  there. It is a Vercel setting, not the repository's: set `PALIER_SITE_URL=https://www.palier.study` and redeploy, since
+  `robots.txt` and the sitemap are built once (`docs/deploy.md`). Standing human item.
+- **The old addresses still answer 200**, without redirecting. Whether they should redirect is the human's call. A
+  redirect cannot move what a browser holds: the bank cache, progress, the key and the sync id all live in the old
+  origin's storage. A user who moves can carry their progress by pairing the new browser from the old one (sync is
+  one backend, so a pair code made on either origin works on the other) or by export and import (R11). The key is
+  pasted again.
+- **Updated:** the README, `docs/deploy.md`'s smoke checks and `PALIER_SITE_URL` row, `docs/realtime-checklist.md`,
+  `selfhost/` (README and both files' header comments, which sit outside the shared-code markers),
+  `product-requirements.md` §10.1 (an amendment beside D96's), and this file's status row, Phase 0 checkbox and *Next,
+  decided*. **Not updated, as history:** the session log, earlier deviations, `implementation-plan.md`'s Gate C and
+  Slice 5 records, and the landing-page design prototypes in `docs/Palier landing page/`.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 18 October 2026 — `dougkeefe/cdkd5` (the README rewritten for readers outside the project; the domain is palier.study, D238)
+
+*Next, decided* changes only for the domain: its Gate M line, its URLs and its standing item. The human asked for a README that helps people understand the project. The
+README still described Phase 0. It said `adapters` and `apps/factory` were empty, and it listed `pnpm check-types` as
+`apps/web`'s command. It also left out `pnpm verify`, the test lanes, `selfhost/` and `SECURITY.md`. It now opens with
+what Palier is and links the live site, with the non-affiliation statement directly below. Then it covers:
+- what you can do, and which features need a key;
+- the cost and where your data goes (ADRs 1–4, 15);
+- where the questions come from (ADR 24; the counts from `content/bank/v4/manifest.json`);
+- the status;
+- running it locally with no environment variables;
+- the architecture and an updated layout table;
+- a corrected command table and a documentation map.
+
+The Contributing and Licence sections keep their substance. A script checked that every relative link in the README
+resolves and that every command it lists is in `package.json`.
+
+Then the human said `palier.study` is the official domain (D238). The current documents now name
+`https://www.palier.study`, where the apex redirects; the history keeps its old addresses. Checked live, with curl, on
+18 October 2026: `palier.study` → 308 → `www.palier.study`, whose `/api/health` answered
+`{"build":"0571cf1","bank":4,"database":"ok"}`; `robots.txt`'s `Sitemap:` and `/en`'s canonical link still name
+`https://palier.dougkeefe.com`. That is the Vercel setting D238 leaves to the human. The GitHub repository's website
+field now reads `https://www.palier.study`. No code changed; `build-info.test.ts`'s example value did.
 
 ### 17 October 2026 — `dougkeefe/get-feedback-ui-issues` (one press spends, and a wait you can see; D237)
 

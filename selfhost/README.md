@@ -40,7 +40,7 @@ so nothing it handles can reach a log line it writes.
 1. Workers & Pages → **Create** → **Create Worker**. Name it, deploy the starter, then **Edit code**.
 2. Replace the starter with the whole of `cloudflare-worker.mjs`, and deploy.
 3. Settings → **Variables and Secrets** → add `ALLOWED_ORIGIN` with the address of the Palier you use, for example
-   `https://palier-virid.vercel.app`, with no path and no trailing slash. Deploy again.
+   `https://www.palier.study`, with no path and no trailing slash. Deploy again.
 4. Your endpoint's address is the Worker's, for example `https://palier-secret.<you>.workers.dev/`.
 
 With Wrangler instead: `wrangler deploy cloudflare-worker.mjs --name palier-secret --compatibility-date 2026-10-01`, then
@@ -93,7 +93,7 @@ may block a popup that no tap opened. The session then ends, with everything sai
 
 | Variable | Required | Meaning |
 | --- | --- | --- |
-| `ALLOWED_ORIGIN` | yes | The Palier your page talks to: `https://palier-virid.vercel.app`, or your own deployment's address |
+| `ALLOWED_ORIGIN` | yes | The Palier your page talks to: `https://www.palier.study`, or your own deployment's address. It must be the exact origin in your address bar: `palier.study` redirects to `www.palier.study`, so the `www` form is the one that matches |
 | `OPENAI_BASE_URL` | no | Defaults to `https://api.openai.com/v1`. The repository's end-to-end test points it at a stand-in |
 
 The protocol, for anyone writing their own endpoint: the page posts `{ type: "palier-realtime-secret:ready", version: 1 }`

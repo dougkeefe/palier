@@ -20,7 +20,7 @@ sync as unavailable (ADR 21, `architecture.md` §11).
 | A serverless Postgres, e.g. Neon | The sync replica (ADR 21, `architecture.md` §9.2) | The provider's dashboard |
 | `DATABASE_URL` | The pooled connection string. postgres.js runs with `prepare: false`, so a pooler is fine | Vercel → Settings → Environment Variables, **Production only** |
 | `RATE_LIMIT_SALT` | 32 random bytes as hex (`openssl rand -hex 32`). It keys the per-IP rate-limit HMAC. Without it each serverless instance picks its own salt, and the limits stop holding across instances. **A production deployment with `DATABASE_URL` and no salt now fails at its migrate step** (`progress.md` D137), before any migration runs | Vercel, Production (and Preview, if a preview ever gets a database) |
-| `PALIER_SITE_URL` | **Optional.** The public origin, e.g. `https://palier.dougkeefe.com`, for `robots.txt`, the sitemap and every page's canonical and `hreflang` links (`progress.md` D199). Without it the origin is Vercel's own `VERCEL_PROJECT_PRODUCTION_URL`, which follows the project's production domain, so pointing a domain at the project needs no change. `robots.txt` and the sitemap are built once, so it must be set **for the build** | Vercel, Production |
+| `PALIER_SITE_URL` | **Optional.** The public origin, for production `https://www.palier.study` (the apex `palier.study` redirects to it; `progress.md` D238), for `robots.txt`, the sitemap and every page's canonical and `hreflang` links (`progress.md` D199). Without it the origin is Vercel's own `VERCEL_PROJECT_PRODUCTION_URL`, which follows the project's production domain, so pointing a domain at the project needs no change. `robots.txt` and the sitemap are built once, so it must be set **for the build** | Vercel, Production |
 | `TELEMETRY_DATABASE_URL` | A **read-only** connection string to the same database, for the monthly item-statistics job (`progress.md` D94). It only ever runs `select … from telemetry_events`. Without it, the workflow skips with a notice | GitHub → Settings → Secrets and variables → Actions |
 | `OPENAI_SMOKE_KEY` | An OpenAI key **of its own**, with a small monthly limit, for the nightly live smoke (`progress.md` D112). Each run spends about US$0.15, so about US$4.50 a month at one run a night. Without it, the job skips with a notice | GitHub → Settings → Secrets and variables → Actions |
 | `RETENTION_DATABASE_URL` | **The same pooled connection string as Production's `DATABASE_URL`**, for the daily retention job (`progress.md` D138). The app's role already owns the tables, so it can delete and read the database's size. Actions cannot read Vercel's environment, so the string is pasted here too. Without it, the workflow skips with a notice | GitHub → Settings → Secrets and variables → Actions |
@@ -327,7 +327,7 @@ it is a function invocation on Vercel, not a static file on the CDN, and it answ
 
 1. Open `/en/home` with the browser's console open. There must be no "Content Security Policy" or
    "Trusted Types" message, and the page must work (the plan and the buttons appear).
-2. `curl -sI https://palier-virid.vercel.app/en | grep -i content-security-policy` shows the header,
+2. `curl -sI https://www.palier.study/en | grep -i content-security-policy` shows the header,
    with `'nonce-…'`, `require-trusted-types-for 'script'` and `connect-src 'self' https://api.openai.com`.
    Two requests show two different nonces.
 
@@ -359,7 +359,7 @@ vercel.com/docs/logs/runtime), so what holds instead is that nothing Vercel reco
 1. Vercel → the project → **Logs**. Filter **Request Path** to `/api/realtime/secret`, and **Environment** to
    `production`.
 2. From a browser with a key saved, start a studio session (or, with no key, `curl -s -X POST
-   https://palier-virid.vercel.app/api/realtime/secret`, which answers `401 {"error":"missing-key"}` and spends nothing).
+   https://www.palier.study/api/realtime/secret`, which answers `401 {"error":"missing-key"}` and spends nothing).
 3. Open the request's row. Its details must show the method, path, status and the fields above, **no log messages**, and
    at most one outgoing request, to `api.openai.com/v1/realtime/client_secrets`. Search the logs for `sk-`: nothing.
 4. Record the date, the deployment and what the row showed in the session log.
