@@ -68,7 +68,7 @@ export function LandingFooter() {
         </div>
       </div>
       {/* The statement and the photographs' credit share one quiet row, and the wordmark closes
-          the footer (D238). */}
+          the footer (D240). */}
       <div className="landing-footer__legal">
         <div className="landing-footer__statement">
           <p className="landing-footer__not-official">{t("footer.notOfficial")}</p>
