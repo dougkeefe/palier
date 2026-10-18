@@ -907,7 +907,7 @@
   overflow: hidden;
   background: var(--landing-accent-900);
   color: var(--landing-on-dark-muted);
-  padding: clamp(48px, 6vw, 80px) var(--landing-gutter) 0;
+  padding: clamp(48px, 6vw, 80px) var(--landing-gutter) clamp(16px, 2vw, 32px);
   font-family: var(--landing-font);
 }
 
@@ -960,9 +960,23 @@
   text-decoration: underline;
 }
 
-.landing-footer__statement {
+/* The statement and the photographs' credit, one quiet row under a hairline (D240). On a narrow
+   screen the credit wraps under the statement. */
+.landing-footer__legal {
   max-width: 1360px;
-  margin: 40px auto 0;
+  margin: 48px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid rgb(255 255 255 / 0.16);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px 48px;
+}
+
+.landing-footer__statement {
+  flex: 1 1 40ch;
+  max-width: 72ch;
   font-size: 14px;
   line-height: 1.6;
 }
@@ -985,7 +999,7 @@
 
 .landing-footer__wordmark {
   max-width: 1360px;
-  margin: 24px auto 0;
+  margin: clamp(32px, 4vw, 56px) auto 0;
   font-weight: 600;
   font-size: clamp(100px, 24vw, 380px);
   line-height: 0.78;
@@ -993,7 +1007,6 @@
   text-transform: uppercase;
   color: rgb(255 255 255 / 0.1);
   text-align: center;
-  transform: translateY(8%);
   user-select: none;
 }
 
@@ -1002,10 +1015,9 @@
 }
 
 .landing-footer__photos {
-  position: relative;
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 12px 0 20px;
+  margin: 0;
+  max-width: 44ch;
   font-size: 12px;
+  line-height: 1.6;
   color: var(--landing-on-dark-muted);
 }
