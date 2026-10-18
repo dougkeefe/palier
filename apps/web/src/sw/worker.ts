@@ -14,7 +14,8 @@
  * - **On install**, every app route in every locale (their HTML, the
  *   `/_next/static/` assets that HTML references, and the fonts its stylesheets load) and the whole served bank (each
  *   manifest and every shard, passage and form path it lists). So offline works for
- *   routes and skills the user has not visited yet, not only the ones they have.
+ *   routes and skills the user has not visited yet, not only the ones they have. Each URL is
+ *   fetched once per install, a few at a time (progress.md D239).
  * - **Cache-first** for `/content/bank/**` and `/_next/static/**`. Both are
  *   content-addressed — a bank version is a new path, a Next chunk name carries its
  *   hash — so a cached copy is correct forever. This is the persistent twin of the
@@ -137,6 +138,25 @@ export const bankFilesIn = (manifest: unknown, bankBasePath: string): string[] =
   return paths;
 };
 
+/** How many precache fetches run at once: enough to overlap the round trips, few enough not to crowd the page's own. */
+export const PRECACHE_CONCURRENCY = 6;
+
+/** Run `task` over `items`, at most `limit` at a time, resolving once every one has settled. */
+export const inParallel = async <T>(
+  items: readonly T[],
+  limit: number,
+  task: (item: T) => Promise<unknown>,
+): Promise<void> => {
+  let next = 0;
+  const lane = async (): Promise<void> => {
+    while (next < items.length) {
+      const item = items[next++] as T;
+      await task(item);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, lane));
+};
+
 /** Wire the install, activate and fetch handlers onto the worker scope. */
 export const startServiceWorker = (
   scope: ServiceWorkerScope,
@@ -161,20 +181,32 @@ export const startServiceWorker = (
 
   // One failed URL must not abort the rest: install still succeeds, and that URL is
   // cached the first time it is fetched online.
+  //
+  // Each URL is fetched once per install (progress.md D239). Every page references the same shared chunks,
+  // so walking 64 pages asset by asset fetched each of them 64 times, one at a time. The pages and the bank's
+  // files are fetched PRECACHE_CONCURRENCY at a time.
   const precache = async (): Promise<void> => {
     const cache = await storage.open(cacheName);
-    for (const url of routeUrls(config.locales, config.routes)) {
-      const page = await store(cache, url);
-      if (page === null) continue;
-      for (const asset of staticAssetsIn(await page.text())) {
-        const stored = await store(cache, asset);
+    const claimed = new Set<string>();
+    /** Store a URL no other step of this install has claimed; null if it was claimed or failed. */
+    const storeOnce = async (url: string): Promise<Response | null> => {
+      if (claimed.has(url)) return null;
+      claimed.add(url);
+      return store(cache, url);
+    };
+    const precachePage = async (url: string): Promise<void> => {
+      const page = await storeOnce(url);
+      if (page === null) return;
+      await inParallel(staticAssetsIn(await page.text()), PRECACHE_CONCURRENCY, async (asset) => {
+        const stored = await storeOnce(asset);
         // Follow a stylesheet to what it loads, so a face no page preloads is here offline too.
-        if (stored === null || !asset.endsWith(".css")) continue;
-        for (const nested of staticAssetsInCss(await stored.text(), asset)) await store(cache, nested);
-      }
-    }
+        if (stored === null || !asset.endsWith(".css")) return;
+        await inParallel(staticAssetsInCss(await stored.text(), asset), PRECACHE_CONCURRENCY, storeOnce);
+      });
+    };
+    await inParallel(routeUrls(config.locales, config.routes), PRECACHE_CONCURRENCY, precachePage);
     for (const url of config.bankManifests) {
-      const manifest = await store(cache, url);
+      const manifest = await storeOnce(url);
       if (manifest === null) continue;
       let body: unknown;
       try {
@@ -182,7 +214,7 @@ export const startServiceWorker = (
       } catch {
         continue;
       }
-      for (const file of bankFilesIn(body, config.bankBasePath)) await store(cache, file);
+      await inParallel(bankFilesIn(body, config.bankBasePath), PRECACHE_CONCURRENCY, storeOnce);
     }
   };
 

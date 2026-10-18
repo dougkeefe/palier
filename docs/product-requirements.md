@@ -414,7 +414,7 @@ The direction is playful and obviously unofficial. Consumer-app polish, distinct
 
 ### 10.1 Brand
 
-**Name.** Working name Palier, French for a level or a landing on a staircase, and readable in English. Shortlist to check for domain availability: palier.ca, seuil.ca, niveauc.ca, monpalier.ca. Confirm no trademark conflict and no confusion with existing language schools before committing. *(Decided 25 September 2026, `progress.md` D96: the name stays Palier, and the app will live at `palier.dougkeefe.com`. The trademark and language-school check is still to do before launch.)*
+**Name.** Working name Palier, French for a level or a landing on a staircase, and readable in English. Shortlist to check for domain availability: palier.ca, seuil.ca, niveauc.ca, monpalier.ca. Confirm no trademark conflict and no confusion with existing language schools before committing. *(Decided 25 September 2026, `progress.md` D96: the name stays Palier, and the app will live at `palier.dougkeefe.com`. The trademark and language-school check is still to do before launch.)* *(Amended 18 October 2026, `progress.md` D238: the official domain is `palier.study`, which replaces `palier.dougkeefe.com`. The apex redirects to `https://www.palier.study`, so that is the origin.)*
 
 **Mascot.** A parrot named Coco. Reasons: language, repetition, a bit ridiculous, and impossible to mistake for a government symbol. Deliberately avoid beavers, maple leaves, geese, and anything in red and white. Coco appears in onboarding, empty states, milestones and the oral studio idle state, and never in mock exam mode or on the results screen, where the product needs to be taken seriously.
 

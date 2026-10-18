@@ -11,7 +11,7 @@
  * - It keeps nothing, writes nothing and logs nothing. There is no `console` call in this file.
  *
  * Configuration (Workers → your Worker → Settings → Variables):
- * - `ALLOWED_ORIGIN`, required: the address of the Palier you use, for example `https://palier-virid.vercel.app`.
+ * - `ALLOWED_ORIGIN`, required: the address of the Palier you use, for example `https://www.palier.study`.
  *   The page talks to that origin and no other.
  * - `OPENAI_BASE_URL`, optional: defaults to `https://api.openai.com/v1`.
  *

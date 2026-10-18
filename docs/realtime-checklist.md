@@ -11,8 +11,8 @@ phase transitions, disconnection recovery and cost accounting) and the rest of P
 
 ## Before you start
 
-- **The deployment.** Run it on production (`https://palier-virid.vercel.app`) after the release is promoted, or on a
-  preview you have logged in to. `curl -s https://palier-virid.vercel.app/api/health` names the build you are testing.
+- **The deployment.** Run it on production (`https://www.palier.study`) after the release is promoted, or on a
+  preview you have logged in to. `curl -s https://www.palier.study/api/health` names the build you are testing.
 - **A key with a hard monthly limit**, as onboarding recommends. A full run of this list is about 20 conversation
   minutes over six pairs, so about US$1.10 at D167's estimate of about US$0.055 a minute.
 - **A quiet room and headphones** for the first pass on each pair; one pass on the laptop's own speakers (step 4).

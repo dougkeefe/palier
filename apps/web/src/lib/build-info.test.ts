@@ -21,8 +21,8 @@ describe("BUILD_VERSION", () => {
 
 describe("siteUrlFrom (D199)", () => {
   it("is PALIER_SITE_URL when set, without a trailing slash", () => {
-    expect(siteUrlFrom({ PALIER_SITE_URL: "https://palier.dougkeefe.com/", VERCEL_PROJECT_PRODUCTION_URL: "x.vercel.app" })).toBe(
-      "https://palier.dougkeefe.com",
+    expect(siteUrlFrom({ PALIER_SITE_URL: "https://www.palier.study/", VERCEL_PROJECT_PRODUCTION_URL: "x.vercel.app" })).toBe(
+      "https://www.palier.study",
     );
   });
 
