@@ -8014,11 +8014,47 @@ The human said `palier.study` is now the project's official domain.
   decided*. **Not updated, as history:** the session log, earlier deviations, `implementation-plan.md`'s Gate C and
   Slice 5 records, and the landing-page design prototypes in `docs/Palier landing page/`.
 
+### D239 — the service worker fetches each URL once per install, which brings E2E shard 1 back inside its budget
+**Date:** 18 October 2026 · **Status:** accepted (agent; the human asked for the failing CI to be fixed)
+
+CI's E2E shard 1/2 was killed at its 300-second budget on `main` after #85, and on a re-run of #86. Nothing failed.
+Shard 1 passed in 284 s on #86's other run. D223's revisit names a third shard as the next lever, which is the human's
+call because it renames the required checks. This entry found a lever before that, inside the product.
+
+- **The install fetched the same files over and over.** `precache` walked the 64 pages (32 routes × 2 locales) one at a
+  time and stored every `/_next/static/` asset each page named. Nothing was de-duplicated across pages, so each shared
+  chunk was fetched about 64 times, in series. #86's trace shows the same four chunks requested every 200 ms for 20 s.
+  `waitForOfflineReady` took 13 s there.
+  - Every production spec opens a fresh context, so every one of them paid for this install. Even a spec that never
+    waits for the worker had the install running behind it.
+  - A real user's first visit paid for it too, though the browser's HTTP cache answered most of the repeats.
+- **The fix, in `src/sw/worker.ts`:**
+  - an install claims each URL once (`storeOnce` over a `Set`), so a page, a chunk, a stylesheet and a font are each
+    fetched once;
+  - the pages, a page's assets, a stylesheet's fonts and a manifest's files run `PRECACHE_CONCURRENCY` (6) at a time
+    through `inParallel`.
+
+  What is cached is unchanged: `offline.spec.ts` still opens every shard and an unvisited route with the network off.
+- **Measured.** One install, cold, on the production build: 1,303 requests in 3.0–3.3 s became 196 in 0.67–0.88 s. Shard 1
+  locally at CI's two workers, the same build, with only `public/sw.js` swapped: 141 s became 109 s, 61 passed both
+  times. CI has run at about twice local time, so shard 1 should be about 220 s of its 300.
+- **Tests:** `inParallel` holds to its limit and runs every item once, and an install fetches a shared asset, a
+  stylesheet and a font several stylesheets load once each. That test fails on the old worker: 4 fetches, not 1.
+- **Not changed:** the budget, the shard count and the required checks.
+- **Shard 2 is not helped.** It is hermetic, on `next dev`, where no worker registers, and it was at 263 s of 300 on the
+  same run.
+- **Revisit when** either shard is killed at its budget again. The next lever is still D223's third shard, the human's
+  call.
+- **#86's first failure was a different one, and is still unexplained.** On `/en/exam`, four chunks, Turbopack's runtime
+  among them, were `net::ERR_ABORTED` mid-load. The page never hydrated, and `key-leak-production.spec.ts` timed out on
+  "Loading…". It happened while this install's traffic was running, which may be related. It is not shown to be. It
+  has not been seen in the 40 runs before it. If it recurs, the trace is the first thing to read.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 18 October 2026 — `dougkeefe/cdkd5` (the README rewritten for readers outside the project; the domain is palier.study, D238)
+### 18 October 2026 — `dougkeefe/cdkd5` (the README rewritten for readers outside the project; the domain is palier.study, D238; the service worker's install de-duplicated, D239)
 
 *Next, decided* changes only for the domain: its Gate M line, its URLs and its standing item. The human asked for a README that helps people understand the project. The
 README still described Phase 0. It said `adapters` and `apps/factory` were empty, and it listed `pnpm check-types` as
@@ -8041,6 +8077,12 @@ Then the human said `palier.study` is the official domain (D238). The current do
 `{"build":"0571cf1","bank":4,"database":"ok"}`; `robots.txt`'s `Sitemap:` and `/en`'s canonical link still name
 `https://palier.dougkeefe.com`. That is the Vercel setting D238 leaves to the human. The GitHub repository's website
 field now reads `https://www.palier.study`. No code changed; `build-info.test.ts`'s example value did.
+
+Then #86's E2E shard 1 was killed at its budget, as `main`'s had been after #85, and the human asked for CI to be
+fixed (D239). The service worker's install fetched each shared chunk once per page, in series. It now fetches each URL
+once, six at a time. Measured locally on the production build: 1,303 requests in about 3.3 s became 196 in about 0.7 s.
+`pnpm --filter @palier/web exec playwright test --shard=1/2 --workers=2`: 141 s and 61 passed before, 109 s and 61
+passed after.
 
 ### 17 October 2026 — `dougkeefe/get-feedback-ui-issues` (one press spends, and a wait you can see; D237)
 

@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   bankFilesIn,
   cacheNameFor,
+  inParallel,
   routeUrls,
   type ServiceWorkerConfig,
   type ServiceWorkerScope,
@@ -101,6 +102,31 @@ describe("the precache lists", () => {
   });
 });
 
+describe("inParallel", () => {
+  it("runs every item once, never more than the limit at a time", async () => {
+    let running = 0;
+    let peak = 0;
+    const ran: number[] = [];
+    await inParallel([1, 2, 3, 4, 5, 6, 7], 3, async (item) => {
+      running++;
+      peak = Math.max(peak, running);
+      await new Promise((resolve) => setTimeout(resolve, 1));
+      ran.push(item);
+      running--;
+    });
+    expect(ran.sort()).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    expect(peak).toBe(3);
+  });
+
+  it("runs nothing for no items, and no more lanes than there are items", async () => {
+    const ran: string[] = [];
+    await inParallel([], 4, () => Promise.resolve(ran.push("never")));
+    expect(ran).toEqual([]);
+    await inParallel(["a"], 4, (item) => Promise.resolve(ran.push(item)));
+    expect(ran).toEqual(["a"]);
+  });
+});
+
 describe("cache naming", () => {
   it("gives each build its own cache and marks only our other caches stale", () => {
     const current = cacheNameFor("b2");
@@ -173,7 +199,7 @@ const scriptedNetwork = (files: Record<string, string>) => {
   return { fetch, requested, offline: () => (online = false) };
 };
 
-const bootWorker = (files: Record<string, string>) => {
+const bootWorker = (files: Record<string, string>, config: ServiceWorkerConfig = CONFIG) => {
   const listeners = new Map<string, (event: never) => void>();
   let claimed = false;
   let skipped = false;
@@ -193,7 +219,7 @@ const bootWorker = (files: Record<string, string>) => {
   };
   const storage = new FakeCacheStorage();
   const network = scriptedNetwork(files);
-  startServiceWorker(scope, CONFIG, storage as unknown as CacheStorage, network.fetch);
+  startServiceWorker(scope, config, storage as unknown as CacheStorage, network.fetch);
 
   const dispatch = async (type: string): Promise<void> => {
     let pending: Promise<unknown> = Promise.resolve();
@@ -257,6 +283,32 @@ describe("startServiceWorker", () => {
     expect(cached).toContain("/_next/static/media/serif.woff2");
     // A stylesheet that fails to load is skipped, as any asset is.
     expect(cached).not.toContain("/_next/static/chunks/gone.css");
+  });
+
+  it("fetches an asset several pages share, and a font several stylesheets load, once per install (D239)", async () => {
+    const page = '<script src="/_next/static/chunks/shared.js"></script><link href="/_next/static/chunks/a.css">';
+    const worker = bootWorker(
+      {
+        "/en": page,
+        "/en/review": `${page}<link href="/_next/static/chunks/b.css">`,
+        "/fr": page,
+        "/fr/review": page,
+        "/_next/static/chunks/shared.js": "console.log(1)",
+        "/_next/static/chunks/a.css": "@font-face{src:url(../media/serif.woff2)}",
+        "/_next/static/chunks/b.css": "@font-face{src:url(../media/serif.woff2)}",
+        "/_next/static/media/serif.woff2": "wOF2",
+      },
+      { ...CONFIG, locales: ["en", "fr"], routes: ["", "review"], bankManifests: [] },
+    );
+    await worker.dispatch("install");
+
+    const times = (path: string) => worker.network.requested.filter((url) => new URL(url).pathname === path).length;
+    expect(["/en", "/en/review", "/fr", "/fr/review"].map(times)).toEqual([1, 1, 1, 1]);
+    expect(times("/_next/static/chunks/shared.js")).toBe(1);
+    expect(times("/_next/static/chunks/a.css")).toBe(1);
+    expect(times("/_next/static/media/serif.woff2")).toBe(1);
+    const cached = [...worker.storage.caches.get("palier-b2")!.entries.keys()].map((u) => new URL(u).pathname);
+    expect(cached).toEqual(expect.arrayContaining(["/_next/static/chunks/b.css", "/_next/static/media/serif.woff2"]));
   });
 
   it("still installs when the network is down, caching what it can later", async () => {
