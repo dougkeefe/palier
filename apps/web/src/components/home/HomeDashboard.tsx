@@ -91,7 +91,7 @@ const loadOverview = async (container: Container): Promise<Overview> => {
   const [grammarFocus, activity, due] = await Promise.all([
     container.useCases.studyFocus({ skill: "writing", lang: "fr", targetBand: profile.targetBand }),
     container.useCases.practiceActivity({ timeZone }),
-    container.schedule.due(container.clock.now(), DUE_LIMIT),
+    container.useCases.reviewQueue({ limit: DUE_LIMIT }),
   ]);
   const today = localDay(container.clock.now(), timeZone);
   return {
@@ -99,8 +99,8 @@ const loadOverview = async (container: Container): Promise<Overview> => {
     profile,
     today,
     activity,
-    // The whole queue, both skills: the tile counts what `/review` will show.
-    dueCount: due.length,
+    // The whole queue, both skills, read as `/review` reads it, so a retired item is never counted (D241).
+    dueCount: due.items.length,
     pointer: pickPointer(container.pointers, { focusSubSkills: grammarFocus.focusSubSkills ?? [], day: today }),
   };
 };

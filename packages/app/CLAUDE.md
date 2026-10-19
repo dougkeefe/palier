@@ -217,7 +217,10 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   attempts**, because the readiness card keeps the exam result and the practice trend visually
   distinct (§8.2, progress.md D64). Do not merge them behind a flag. `progressReport` holds the
   same line over the **whole** practice record (`AttemptStore.all()`), and `reviewQueue` resolves
-  what is due now across both skills (D66). `oralTotals` is the summary's oral line: ended sessions and
+  what is due now across both skills (D66). **Due items are only those the bank still serves** (`dueLiveItems`,
+  D241): `reviewQueue` and `planDailySession` pass over a retired or missing item and read further down the schedule,
+  since its entry is never answered and would otherwise hold the head of the queue for good. It writes nothing; the entry
+  stays scheduled. `oralTotals` is the summary's oral line: ended sessions and
   the engine's `speakingMs` over them, from the device-local `OralStore`, so this device only (D145).
   `practiceActivity` (D219) is Today's week: drill and review answers only (`PLAN_MODES`; a diagnostic places the plan
   and is not part of it) since a day more than the week, and the ended oral sessions, handed to the engine's

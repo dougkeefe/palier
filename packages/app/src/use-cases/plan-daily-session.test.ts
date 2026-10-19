@@ -148,6 +148,20 @@ describe("planDailySession", () => {
     expect(plan.reviews.map((item) => item.id)).toEqual([a!.id, b!.id]);
   });
 
+  it("never plans a retired item as a review, though it is due (D241)", async () => {
+    const [a, ...rest] = aPool();
+    const retired = makeItem({ status: "retired" });
+    const schedule = scheduleOf([
+      { itemId: retired.id, due: NOW, skill: "writing", box: 1 },
+      { itemId: a!.id, due: NOW, skill: "writing", box: 1 },
+    ]);
+
+    const plan = await planDailySession(aRequest, depsWith({ schedule, items: itemsOf([retired, a!, ...rest]) }));
+
+    expect(plan.reviews.map((item) => item.id)).toEqual([a!.id]);
+    expect(plan.items.map((item) => item.id)).not.toContain(retired.id);
+  });
+
   it("excludes the due item ids from the candidate pool query", async () => {
     const [a, b, ...rest] = aPool();
     const schedule = scheduleOf([{ itemId: a!.id, due: NOW, skill: "writing", box: 1 }]);

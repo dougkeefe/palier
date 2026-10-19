@@ -77,6 +77,15 @@ describe("reviewQueue", () => {
     expect(items.map((i) => i.id)).toEqual(["a"]);
   });
 
+  it("never serves a retired item, and fills the set from the live items behind it", async () => {
+    const retired = { ...makeItem(itemId("old")), status: "retired" as const };
+    const { items } = await reviewQueue(
+      { limit: 1 },
+      { clock, schedule: scheduleOf([entry("old"), entry("a")]), items: itemsFrom([retired, makeItem(itemId("a"))]) },
+    );
+    expect(items.map((i) => i.id)).toEqual(["a"]);
+  });
+
   it("asks for nothing when the limit is not positive", async () => {
     const schedule = scheduleOf([entry("a")]);
     expect((await reviewQueue({ limit: 0 }, { clock, schedule, items: itemsFrom([]) })).items).toEqual([]);
