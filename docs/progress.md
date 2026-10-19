@@ -142,7 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/79m43` | **The review queue never serves a retired item** (D241; D205's named gap, scheduled by the human, 18 October 2026), and **this file reconciled with what has merged**: the slices and criteria `main` already holds, ticked, and *Next, decided* opening on Gate O. | 18 October 2026 |
+| `dougkeefe/docs-outstanding-implementations-review` | **The review queue never serves a retired item** (D241; D205's named gap, scheduled by the human, 18 October 2026), and **this file reconciled with what has merged**: the slices and criteria `main` already holds, ticked, and *Next, decided* opening on Gate O. | 18 October 2026 |
 
 *(The prior rows — the landing footer (#87), the README and the domain (#86), one press spends (#85), the Dependabot overrides (#83), the landing page's headline and pricing (#82), spoken practice spoken only (#80), the landing menu on a phone (#79), the explainer video (#78), the spoken-practice picker (#76), the nightly lane (#75), the sample question's language (#74), onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -850,7 +850,7 @@ built after Phase 7's slices and before Gate M.
   median about 2.12 s, one over (the first, on a cold function, 2.98 s). A local server measured a median of about 2.49 s
   (D189). The levers for the cold first dial are built (D190) and are measured once on `main`
 - [x] Disconnection mid-session recovers or fails cleanly with the transcript preserved. **Met at the port level** (D170;
-  run 18 October 2026, session log, `dougkeefe/79m43`): `container-studio.test.ts` reconnects once and fails cleanly on the
+  run 18 October 2026, session log, `dougkeefe/docs-outstanding-implementations-review`): `container-studio.test.ts` reconnects once and fails cleanly on the
   second drop with every turn and note kept, through both graphs, and `oral-session.test.ts` keeps the transcript on a
   drop either way. A real browser's drop is the checklist's (`docs/realtime-checklist.md`), read at Gate O
 - [ ] Manual realtime checklist (`architecture.md` §14) passes on Chrome, Safari, Firefox, desktop and mobile
@@ -8046,7 +8046,7 @@ retired synthetic items kept reviewing them (D205).
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 18 October 2026 — `dougkeefe/79m43` (the review queue never serves a retired item, D241; this file reconciled with what merged)
+### 18 October 2026 — `dougkeefe/docs-outstanding-implementations-review` (the review queue never serves a retired item, D241; this file reconciled with what merged)
 
 The human asked for an audit of `docs/` for outstanding work, then scheduled D205's named gap with a reconciliation of this
 file. **Code:** `dueLiveItems` in `@palier/app`, which `reviewQueue` and `planDailySession` now read through, and Today's due
