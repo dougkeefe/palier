@@ -67,10 +67,14 @@ test("journey 5: onboarding's step 5 takes the key and checks it, then the key s
   await expect(page.getByRole("status").filter({ hasText: "Checking with OpenAI" })).toHaveCount(0);
   await axeClean(page);
 
-  // For this tab only.
+  // For this tab only: folded closed behind a quiet disclosure, since it means pasting the key on every visit (D242).
   await page.getByRole("button", { name: "Remove the key" }).click();
   await field.fill(SENTINEL);
-  await page.getByRole("checkbox", { name: /for this tab only/ }).check();
+  const tabOnly = page.getByRole("checkbox", { name: /for this tab only/ });
+  await expect(tabOnly).toBeHidden();
+  await page.getByText("Using a shared computer?").click();
+  await expect(page.getByText(/paste it again each time you come back/)).toBeVisible();
+  await tabOnly.check();
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByText(`Held for this tab only: the key ending in ${ending}.`)).toBeVisible();
   answer = OK;

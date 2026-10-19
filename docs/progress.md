@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 18 October 2026 (the review queue never serves a retired item, D241; the checklists reconciled with what merged)
+**Last updated:** 19 October 2026 (the key form's "for this tab only" folded behind a quiet disclosure, D242; the landing hero says unofficial, D243)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/keep-for-this-tab-less-prominent` | **"For this tab only" folded behind a quiet disclosure** (D242, the human's request, 19 October 2026): onboarding's key step and `/settings/key` no longer offer it as a peer of saving the key, and its hint says the key must be pasted again on every visit. And **the landing hero says Palier is unofficial and unaffiliated** (D243). | 19 October 2026 |
 | `dougkeefe/docs-outstanding-implementations-review` | **The review queue never serves a retired item** (D241; D205's named gap, scheduled by the human, 18 October 2026), and **this file reconciled with what has merged**: the slices and criteria `main` already holds, ticked, and *Next, decided* opening on Gate O. | 18 October 2026 |
 
 *(The prior rows — the landing footer (#87), the README and the domain (#86), one press spends (#85), the Dependabot overrides (#83), the landing page's headline and pricing (#82), spoken practice spoken only (#80), the landing menu on a phone (#79), the explainer video (#78), the spoken-practice picker (#76), the nightly lane (#75), the sample question's language (#74), onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
@@ -8042,9 +8043,46 @@ retired synthetic items kept reviewing them (D205).
 - **What it does not do.** A retired item's entry is still in `ScheduleStore.all()`, so it still syncs and exports, since
   those carry the record, not what can be served.
 
+### D242 — "for this tab only" sits closed behind "Using a shared computer?", and its hint names the cost
+**Date:** 19 October 2026 · **Status:** accepted (human's request; agent's copy and layout). Amends D100's key form
+
+The human found the choice too large on onboarding's key step. It was a full `.app-choice` card under the key field, so it
+read as a recommended peer of saving the key. Palier's value is in coming back, and a key held for the tab must be pasted
+again on every visit.
+
+- **Kept, but folded.** `KeyEntry` wraps the same checkbox in a `<details>` (`.app-key-entry__more`), closed by default,
+  whose summary is "Using a shared computer?" (`key.tabOnlyMore`): the case it is for. The summary is quieter than the key
+  step's disclosures (soft ink, normal weight, smaller), with the same 44px target. The form is shared, so `/settings/key`
+  folds it too; removing a key remounts the form, so the disclosure is closed again.
+- **The hint says the consequence.** "…so closing or reloading the tab forgets it, and you will have to paste it again
+  each time you come back." Unchecked by default, as before; nothing about storage changes.
+- **Two specs gain a step, deliberately.** `key.spec.ts` now asserts the checkbox is hidden until the summary is opened,
+  and that the hint names the repeat paste; `key-leak-production.spec.ts` opens the summary before ticking it. No assertion
+  was loosened.
+- **The saved card's body is a stack**, as `TelemetrySettings`' is, so a check's result no longer sits flush under the
+  buttons (the human's screenshot). The heading stays outside it.
+
+### D243 — the landing hero says Palier is unofficial and not affiliated with the Commission
+**Date:** 19 October 2026 · **Status:** accepted (human's request; agent's wording). Amends the landing hero's lede (D201)
+
+The hero's first sentence called Palier "a study tool for the Public Service Commission's Second Language Evaluation",
+which a first-time reader could take for the Commission's own. It now reads "an unofficial study tool for … , and is not
+affiliated with the Commission" ("un outil d'étude non officiel … , et n'est pas affilié à la Commission"). The footer's
+full R5 statement (`NonAffiliation`) is unchanged; this is the short form where the eye lands first.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 19 October 2026 — `dougkeefe/keep-for-this-tab-less-prominent` ("for this tab only" folded behind a quiet disclosure, D242)
+
+Not *Next, decided*, which is unchanged (Gate O). The human found the tab-only choice too prominent on onboarding's key
+step, since it costs a paste on every visit. It now sits closed behind "Using a shared computer?" in the shared key form,
+and its hint names that cost, in both languages (D242). The saved key card's result message also sat flush under its
+buttons; its body is now an `app-stack`.
+
+The human then asked for the landing hero to say Palier is an unofficial, unaffiliated study tool: its lede's first
+sentence now does, in both languages (D243).
 
 ### 18 October 2026 — `dougkeefe/docs-outstanding-implementations-review` (the review queue never serves a retired item, D241; this file reconciled with what merged)
 
