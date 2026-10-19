@@ -9,6 +9,7 @@ import type {
   Random,
   ScheduleStore,
 } from "../ports/index.js";
+import { dueLiveItems } from "./due-items.js";
 
 /**
  * The first use case (implementation-plan.md §3.2): compose the ports and the
@@ -74,10 +75,9 @@ export const planDailySession = async (
 ): Promise<DayPlan> => {
   const now = deps.clock.now();
 
-  // Due reviews: read the schedule, then resolve the entries to items. No point
+  // Due reviews: the items the bank still serves, never a retired one (D241). No point
   // fetching more than a session can hold — the planner caps reviews at 40% of it.
-  const dueEntries = await deps.schedule.due(now, request.sessionSize);
-  const dueReviews = await deps.items.byIds(dueEntries.map((entry) => entry.itemId));
+  const dueReviews = await dueLiveItems(deps, now, request.sessionSize);
   const dueIds: readonly ItemId[] = dueReviews.map((item) => item.id);
 
   // The candidate pool for new and maintenance items. Excluding the due ids keeps
