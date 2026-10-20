@@ -44,7 +44,7 @@
     "hero": {
       "tag": "Second Language Evaluation · Levels B and C",
       "title": "Your C is closer than you think.",
-      "lede": "Palier is a study tool for the Public Service Commission’s Second Language Evaluation. Take timed reading and written-expression drills and mock exams, get AI feedback on your writing, and rehearse the oral interview out loud with an AI partner. Free to practise, with no account. The AI features cost a few cents each, billed by OpenAI to you, with no subscription to us.",
+      "lede": "Palier is an unofficial study tool for the Public Service Commission’s Second Language Evaluation, and is not affiliated with the Commission. Take timed reading and written-expression drills and mock exams, get AI feedback on your writing, and rehearse the oral interview out loud with an AI partner. Free to practise, with no account. The AI features cost a few cents each, billed by OpenAI to you, with no subscription to us.",
       "cta": "Try a free mock exam",
       "ctaShort": "Start free"
     },
@@ -744,7 +744,8 @@
     "fieldLabel": "OpenAI API key",
     "fieldHint": "It starts with sk-. Paste the whole key.",
     "tabOnly": "Keep it for this tab only",
-    "tabOnlyHint": "It is never written to this device, and closing or reloading the tab forgets it.",
+    "tabOnlyMore": "Using a shared computer?",
+    "tabOnlyHint": "It is never written to this device, so closing or reloading the tab forgets it, and you will have to paste it again each time you come back.",
     "save": "Save the key",
     "blank": "Paste a key first.",
     "saveFailed": "The key could not be saved. Reload the page and try again.",

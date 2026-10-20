@@ -157,6 +157,7 @@ test("a remembered key is ciphertext at rest, a tab-only key is never written, a
   await page.getByRole("button", { name: "Remove the key" }).click();
   await expect(page.getByLabel("OpenAI API key")).toBeVisible();
   await page.getByLabel("OpenAI API key").fill(SENTINEL);
+  await page.getByText("Using a shared computer?").click();
   await page.getByRole("checkbox", { name: /for this tab only/ }).check();
   await page.getByRole("button", { name: "Save the key" }).click();
   await expect(page.getByText(`Held for this tab only: ${MASKED}`)).toBeVisible();

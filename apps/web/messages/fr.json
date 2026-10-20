@@ -44,7 +44,7 @@
     "hero": {
       "tag": "Évaluation de langue seconde · Niveaux B et C",
       "title": "Votre C est plus proche que vous ne le pensez.",
-      "lede": "Palier est un outil d’étude pour l’Évaluation de langue seconde de la Commission de la fonction publique. Faites des exercices chronométrés et des examens blancs de compréhension de l’écrit et d’expression écrite, obtenez une rétroaction par IA sur vos textes et répétez l’entrevue orale à voix haute avec un interlocuteur IA. Gratuit pour vous exercer, sans compte. Les fonctions IA coûtent quelques cents chacune, que vous facture directement OpenAI, sans abonnement chez nous.",
+      "lede": "Palier est un outil d’étude non officiel pour l’Évaluation de langue seconde de la Commission de la fonction publique, et n’est pas affilié à la Commission. Faites des exercices chronométrés et des examens blancs de compréhension de l’écrit et d’expression écrite, obtenez une rétroaction par IA sur vos textes et répétez l’entrevue orale à voix haute avec un interlocuteur IA. Gratuit pour vous exercer, sans compte. Les fonctions IA coûtent quelques cents chacune, que vous facture directement OpenAI, sans abonnement chez nous.",
       "cta": "Essayer un examen blanc gratuit",
       "ctaShort": "Commencer"
     },
@@ -744,7 +744,8 @@
     "fieldLabel": "Clé d’API OpenAI",
     "fieldHint": "Elle commence par sk-. Collez la clé en entier.",
     "tabOnly": "La garder pour cet onglet seulement",
-    "tabOnlyHint": "Elle n’est jamais enregistrée sur cet appareil, et fermer ou recharger l’onglet l’efface.",
+    "tabOnlyMore": "Vous utilisez un ordinateur partagé?",
+    "tabOnlyHint": "Elle n’est jamais enregistrée sur cet appareil : fermer ou recharger l’onglet l’efface, et il faudra la coller de nouveau à chaque visite.",
     "save": "Enregistrer la clé",
     "blank": "Collez d’abord une clé.",
     "saveFailed": "La clé n’a pas pu être enregistrée. Rechargez la page et réessayez.",

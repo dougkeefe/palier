@@ -98,7 +98,8 @@ export function useKeyEntry(
 
 /**
  * The key's own form, shared by `/settings/key` and onboarding's key step (progress.md D100, D220):
- * - with no key, the masked field, "for this tab only", and save;
+ * - with no key, the masked field, "for this tab only" folded closed behind a quiet disclosure, since
+ *   it means pasting the key again on every visit (D242), and save;
  * - with a key, where it is held and how it ends, check and remove, and the check's result in plain
  *   words (§14), never the raw error.
  *
@@ -162,11 +163,18 @@ export function KeyEntry({
             {t("fieldHint")}
           </span>
         </label>
-        <label className="app-choice">
-          <input type="checkbox" checked={entry.tabOnly} onChange={(event) => entry.setTabOnly(event.target.checked)} />
-          <span className="app-choice__label">{t("tabOnly")}</span>
-          <span className="app-choice__hint">{t("tabOnlyHint")}</span>
-        </label>
+        <details className="app-key-entry__more">
+          <summary>{t("tabOnlyMore")}</summary>
+          <label className="app-choice">
+            <input
+              type="checkbox"
+              checked={entry.tabOnly}
+              onChange={(event) => entry.setTabOnly(event.target.checked)}
+            />
+            <span className="app-choice__label">{t("tabOnly")}</span>
+            <span className="app-choice__hint">{t("tabOnlyHint")}</span>
+          </label>
+        </details>
         <div className="app-actions">
           <Button type="submit" disabled={entry.busy}>
             {t("save")}
@@ -182,24 +190,26 @@ export function KeyEntry({
       <Heading ref={savedRef} tabIndex={-1} className="app-step-heading">
         {t("savedTitle")}
       </Heading>
-      <p>{t(state.status.storage === "device" ? "savedDevice" : "savedTab", { lastFour: state.status.lastFour })}</p>
-      <div className="app-actions">
-        <Button onClick={() => void entry.check()} disabled={state.check.kind === "checking"}>
-          {t("check")}
-        </Button>
-        <Button variant="secondary" onClick={() => void entry.remove()}>
-          {t("remove")}
-        </Button>
+      <div className="app-stack">
+        <p>{t(state.status.storage === "device" ? "savedDevice" : "savedTab", { lastFour: state.status.lastFour })}</p>
+        <div className="app-actions">
+          <Button onClick={() => void entry.check()} disabled={state.check.kind === "checking"}>
+            {t("check")}
+          </Button>
+          <Button variant="secondary" onClick={() => void entry.remove()}>
+            {t("remove")}
+          </Button>
+        </div>
+        {state.check.kind === "checking" ? <Toast tone="info">{t("checking")}</Toast> : null}
+        {savedExtra}
+        {state.check.kind === "done" ? (
+          <Toast tone={checkTone(state.check.result)}>
+            {t(checkMessage(state.check.result), {
+              status: state.check.result.kind === "failed" ? String(state.check.result.status) : "",
+            })}
+          </Toast>
+        ) : null}
       </div>
-      {state.check.kind === "checking" ? <Toast tone="info">{t("checking")}</Toast> : null}
-      {savedExtra}
-      {state.check.kind === "done" ? (
-        <Toast tone={checkTone(state.check.result)}>
-          {t(checkMessage(state.check.result), {
-            status: state.check.result.kind === "failed" ? String(state.check.result.status) : "",
-          })}
-        </Toast>
-      ) : null}
     </Card>
   );
 }

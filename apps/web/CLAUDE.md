@@ -279,7 +279,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     callback by `@palier/app`'s key use cases: `withAiProvider`, metered, and `checkApiKey` (D101). The browser calls `api.openai.com` directly; the key reaches
     `src/server` at one route only, `POST /api/realtime/secret` (ADR 3, D169).
   - `/settings/key` (`components/key/KeySettings.tsx`, with its decisions in `features/key/key-view.ts`)
-    saves, checks, removes and keeps a key for a tab. Every check result is a sentence mapped by error
+    saves, checks, removes and keeps a key for a tab (that choice closed behind "Using a shared computer?", since it costs a
+    paste on every visit, D242). Every check result is a sentence mapped by error
     **name**, never the raw error. The form itself is `components/key/KeyEntry.tsx` (`useKeyEntry` holds the state, so
     the key screen keeps its own loading gate), shared with onboarding. **It is a `<form>` of its own, so never put it
     inside another.** `/settings/key/guide` is static: the owner's explainer video and `KeyGuideSteps`.
