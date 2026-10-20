@@ -165,8 +165,12 @@ test("the landing page shows the explainer in its own language, between the stri
 test("the landing page's way in leads to the app, with the app's header and footer (D201)", async ({ page }) => {
   await page.goto("/en");
   await expect(page.locator(".app-header")).toHaveCount(0);
-  await page.getByRole("link", { name: "Start free" }).click();
-  await expect(page).toHaveURL(/\/en\/home$/);
+  // The link names Today; a new visitor has no study profile, so Today sends them on to /start (D224). Waiting for
+  // /en/home raced that redirect (D244).
+  const wayIn = page.getByRole("link", { name: "Start free" });
+  await expect(wayIn).toHaveAttribute("href", "/en/home");
+  await wayIn.click();
+  await expect(page).toHaveURL(/\/en\/start$/);
   await expect(page.locator(".app-header")).toBeVisible();
   await expect(page.locator(".app-footer__disclaimer")).toBeVisible();
 });

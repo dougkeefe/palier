@@ -142,7 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/keep-for-this-tab-less-prominent` | **"For this tab only" folded behind a quiet disclosure** (D242, the human's request, 19 October 2026): onboarding's key step and `/settings/key` no longer offer it as a peer of saving the key, and its hint says the key must be pasted again on every visit. And **the landing hero says Palier is unofficial and unaffiliated** (D243). | 19 October 2026 |
+| `dougkeefe/keep-for-this-tab-less-prominent` | **"For this tab only" folded behind a quiet disclosure** (D242, the human's request, 19 October 2026): onboarding's key step and `/settings/key` no longer offer it as a peer of saving the key, and its hint says the key must be pasted again on every visit. And **the landing hero says Palier is unofficial and unaffiliated** (D243), and the landing way-in test no longer races D224's redirect (D244). | 19 October 2026 |
 | `dougkeefe/docs-outstanding-implementations-review` | **The review queue never serves a retired item** (D241; D205's named gap, scheduled by the human, 18 October 2026), and **this file reconciled with what has merged**: the slices and criteria `main` already holds, ticked, and *Next, decided* opening on Gate O. | 18 October 2026 |
 
 *(The prior rows — the landing footer (#87), the README and the domain (#86), one press spends (#85), the Dependabot overrides (#83), the landing page's headline and pricing (#82), spoken practice spoken only (#80), the landing menu on a phone (#79), the explainer video (#78), the spoken-practice picker (#76), the nightly lane (#75), the sample question's language (#74), onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
@@ -8070,6 +8070,18 @@ which a first-time reader could take for the Commission's own. It now reads "an 
 affiliated with the Commission" ("un outil d'étude non officiel … , et n'est pas affilié à la Commission"). The footer's
 full R5 statement (`NonAffiliation`) is unchanged; this is the short form where the eye lands first.
 
+### D244 — the landing page's way-in test asserts the link and where a new visitor lands, not a page they pass through
+**Date:** 20 October 2026 · **Status:** accepted (human approved the test change). Corrects a test D224 made racy
+
+`smoke.spec.ts`'s "the landing page's way in leads to the app…" (D201) clicked "Start free" and waited for `/en/home`.
+Since D224, Today sends a visitor with no study profile on to `/start` with `router.replace`, and a fresh browser never
+has one, so the test passed only when Playwright's poll caught `/en/home` before the redirect. On PR #89 one run of the
+same commit (`f08c2bc`) failed on it and the other passed; the log shows `/en`, then `/en/start`, never `/en/home`.
+
+- **The test was wrong, not the app.** It now asserts the link's `href` is `/en/home` (what the landing page promises),
+  then that the click lands on `/en/start` (where a new visitor really ends up), with the app's header and footer as
+  before. Nothing is loosened: both halves are now deterministic.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
@@ -8083,6 +8095,9 @@ buttons; its body is now an `app-stack`.
 
 The human then asked for the landing hero to say Palier is an unofficial, unaffiliated study tool: its lede's first
 sentence now does, in both languages (D243).
+
+CI then failed shard 2/2 on `smoke.spec.ts`'s landing way-in test, racing D224's redirect; the other run of the same
+commit passed. With the human's approval the test now asserts the link's target and the visitor's real landing (D244).
 
 ### 18 October 2026 — `dougkeefe/docs-outstanding-implementations-review` (the review queue never serves a retired item, D241; this file reconciled with what merged)
 
