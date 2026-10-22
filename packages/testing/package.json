@@ -31,13 +31,13 @@
   },
   "devDependencies": {
     "typescript": "6.0.3",
-    "vitest": "5.0.2"
+    "vitest": "5.0.5"
   },
   "dependencies": {
-    "@electric-sql/pglite": "0.5.8",
+    "@electric-sql/pglite": "0.5.10",
     "@palier/app": "workspace:*",
     "@palier/domain": "workspace:*",
-    "fake-indexeddb": "6.2.5",
+    "fake-indexeddb": "6.2.6",
     "msw": "2.15.0"
   },
   "peerDependencies": {

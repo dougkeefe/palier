@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 19 October 2026 (the key form's "for this tab only" folded behind a quiet disclosure, D242; the landing hero says unofficial, D243)
+**Last updated:** 22 October 2026 (Dependabot's 18-update group rebuilt locally and `vite` 8.3.5 named at the root, closing three alerts, D246)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/dependabot-status-resolve` | **Dependabot cleared** (D246, the human's request, 22 October 2026): PR #90's 18 minor and patch bumps installed with the repo's pnpm, since Dependabot's lockfile pulled in `@types/node` 26, and `vite` 8.3.5 named as a root devDependency to close alerts #16–#18. | 22 October 2026 |
 | `dougkeefe/klt79` | **`/progress` as a dashboard** (D245, the human's request, 22 October 2026): an overview of all three domains in Today's deep hero, then the chosen skill's trend beside its sub-skills, each sub-skill with a bar (`@palier/ui`'s new `TallyBar`). Print is unchanged. | 22 October 2026 |
 | `dougkeefe/keep-for-this-tab-less-prominent` | **"For this tab only" folded behind a quiet disclosure** (D242, the human's request, 19 October 2026): onboarding's key step and `/settings/key` no longer offer it as a peer of saving the key, and its hint says the key must be pasted again on every visit. And **the landing hero says Palier is unofficial and unaffiliated** (D243), and the landing way-in test no longer races D224's redirect (D244). | 19 October 2026 |
 | `dougkeefe/docs-outstanding-implementations-review` | **The review queue never serves a retired item** (D241; D205's named gap, scheduled by the human, 18 October 2026), and **this file reconciled with what has merged**: the slices and criteria `main` already holds, ticked, and *Next, decided* opening on Gate O. | 18 October 2026 |
@@ -8120,9 +8121,48 @@ together and speaking reduced to one line below the fold. It now uses Today's la
   - `progress-history-production.spec.ts` gained assertions on the hero, the bars and print. No assertion was loosened.
 - The page takes `.app-wide` (1160px), as Today does. Every screen rule sits under `@media screen`.
 
+### D246 — `vite` is a pinned root devDependency, not an auto-installed peer; Dependabot's group is rebuilt locally
+**Date:** 22 October 2026 · **Status:** accepted. Extends D155 and D236
+
+- **Three Dependabot alerts were open on `vite` 8.3.0**: #16, #17 (high) and #18, all on its bundled `launch-editor`,
+  fixed in 8.3.3. `vite` was in no `package.json`. pnpm auto-installed it as the peer of `vitest` and `@vitest/mocker`,
+  both of which accept `^8.0.0`.
+- **D155's scoped override does not work here.** An `overrides` entry for `vite` reached the lockfile and changed
+  nothing: pnpm resolves an auto-installed peer from the versions already in the graph, not through overrides.
+  `pnpm update vite -r` left it alone for the same reason.
+- **So the root names it: `"vite": "8.3.5"`**, beside `vitest` and pinned exactly like the other devDependencies. It
+  adds no package to the tree, since it was already there, and `vitest` and `@vitest/mocker` now resolve their peer
+  to it. Dependabot can now see it and will propose its updates in the minor-and-patch group, where before it could
+  only raise alerts.
+- **Dependabot's PR #90 (the 18-update group) was rebuilt rather than merged.** Its lockfile resolved
+  `packages/testing`'s `msw` and `vitest` against an optional `@types/node` peer at **26.6.5**. That left three
+  `@types/node` versions in the tree, one of them the major D155 holds back with the runtime.
+  - The `dependabot.yml` ignore rule cannot catch this, because it only governs the versions Dependabot proposes.
+  - The same `package.json` specifiers, installed with the repo's pnpm 10.13.1, resolve every peer to 22.20.5. That
+    includes `apps/web`'s `^22`, which had been left at 22.18.11.
+  - Read a Dependabot lockfile for a stray major before merging it, as well as for the bumps it lists.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 22 October 2026 — `dougkeefe/dependabot-status-resolve` (Dependabot: the 18-update group and the `vite` alerts; D246)
+
+Not *Next, decided*, which is unchanged. The human asked for Dependabot's status to be reviewed and its issues resolved.
+- **The minor-and-patch group from PR #90 landed with a clean lockfile.** It brings `next` 16.4.2, React 19.3.1,
+  `vitest` 5.0.5, Playwright 1.64.1, `zod` 4.6.7 and 13 more.
+- **`vite` went to 8.3.5 as a named root devDependency**, which closes alerts #16–#18 (D246).
+- **PR #90 is closed in favour of this one**, because its lockfile pulled in `@types/node` 26.
+- **`apps/web/AGENTS.md`** takes the heading level that `next dev` 16.4.2 now writes.
+
+**Verified:**
+- The lockfile has one `vite` (8.3.5) and one `@types/node` (22.20.5).
+- `pnpm audit` is down to the two dismissed `extract-zip` entries and the auto-dismissed `braces` one.
+  `pnpm audit --prod --audit-level=high` shows only the two ignored `content` entries.
+- `pnpm verify` was green: 276 files, 4,439 tests passed (8 todo), with no dependency violations.
+- After `pnpm --filter @palier/web build`:
+  - the offline project passed 37 tests;
+  - `smoke.spec.ts` passed 16, run on port 3400 through a throwaway config because another app held port 3000.
 
 ### 22 October 2026 — `dougkeefe/klt79` (`/progress` as a dashboard, D245)
 
