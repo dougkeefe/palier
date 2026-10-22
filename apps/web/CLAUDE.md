@@ -35,7 +35,11 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   `practiceActivity`); then `.app-home__main` (the statistics, the plan, Where you stand) beside `.app-home__side` (the
   practice calendar, `@palier/ui`'s `MonthCalendar` over the streak's `activeDays`, and the grammar pointer). On mobile both
   wrappers are `display: contents` and the children take an `order`: the plan first. The hero, statistics, calendar and
-  pointer load once; the Reading/Writing switch, in the plan, reloads only the plan and Where you stand. The plan opens with
+  pointer load once; **the plan's three tabs** (D248, `@palier/ui`'s `Tabs`, never a radio switch, sharing the card's
+  width at every size) reload only the plan and Where you stand. **Speaking's plan is one suggested session**
+  (`features/home/oral-plan.ts`: the kind practised least lately, with practice mode's estimate), linking to
+  `/practice/oral` and never to a session, whose choice opens the microphone; its Where you stand is the newest report's
+  fixes, never a criterion level (R10). Nothing on Today spends or writes. A scored skill's plan opens with
   **one next step**, which
   `features/home/next-step.ts`'s `nextStep` decides: the diagnostic, a due retake, or a mock exam once the trend has an
   estimate at the target band or the planner advises one, once per diagnostic. Then come the rows, the start button and

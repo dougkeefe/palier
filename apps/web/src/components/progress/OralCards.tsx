@@ -10,7 +10,8 @@ import type { OralDetail } from "../../features/progress/progress-view";
 import { Link } from "../../i18n/navigation";
 import { deviceTimeZone } from "../../lib/time-zone";
 
-const reportHref = (session: string) => ({ pathname: "/practice/oral/report", query: { session } }) as const;
+/** A session's report, which `/progress` and Today's speaking tab both link (D247, D248). */
+export const reportHref = (session: string) => ({ pathname: "/practice/oral/report", query: { session } }) as const;
 
 /**
  * Speaking's detail on `/progress` (progress.md D247), the twin of a scored skill's two cards: the
@@ -119,7 +120,7 @@ export function OralCards({ detail, totals }: { detail: OralDetail; totals: Oral
 }
 
 /** The report's fixes, most costly first: the criterion each cost, and the drill for its sub-skill. */
-function OralFixes({ fixes }: { fixes: readonly OralFix[] }) {
+export function OralFixes({ fixes }: { fixes: readonly OralFix[] }) {
   const tReport = useTranslations("oralReport");
   const tSkills = useTranslations("subSkills");
   return (

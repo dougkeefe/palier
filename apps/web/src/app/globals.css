@@ -853,16 +853,36 @@ body {
   margin-bottom: 1rem;
 }
 
-.app-home__plan .app-segmented {
+/* The plan's three tabs (D248), `@palier/ui`'s, as on `/progress` (D247). The card is half the page, so the three
+   share its width at every size and a long name wraps, never scrolls ("Compréhension de l'écrit" overflowed it). */
+.app-home__plan .pl-tabs {
   margin-bottom: 1.25rem;
 }
 
-.app-home__plan .app-segmented__option {
-  background: var(--surface-quiet);
+.app-home__plan .pl-tabs__tab {
+  flex: 1 1 0;
+  min-width: 0;
+  line-height: 1.2;
+  overflow-wrap: break-word;
 }
 
-.app-home__plan .app-segmented__option:has(input:checked) {
-  background: var(--surface-tint);
+/* Beside its mark, a wrapped name reads from the mark; on a phone the primitive centres it under the mark, with its
+   own narrower padding. */
+@media (min-width: 600px) {
+  .app-home__plan .pl-tabs__tab {
+    padding-inline: 8px;
+    text-align: start;
+  }
+}
+
+/* Speaking's plan (D248): why this session, the session, what it covers, then the start, evenly spaced. */
+.app-home__oral-plan {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.app-home__plan .app-home__oral-plan > * {
+  margin: 0;
 }
 
 .app-home__plan .app-plan__row {

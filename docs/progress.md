@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 22 October 2026 (Dependabot's 18-update group rebuilt locally and `vite` 8.3.5 named at the root, closing three alerts, D246)
+**Last updated:** 22 October 2026 (Today's plan as three equal tabs, speaking included, D248)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/today-s-plan-oral-ux` | **Today's plan as three equal tabs** (D248, the human's request, 22 October 2026): Reading, Written expression and Oral expression as `@palier/ui`'s `Tabs` in place of the plan's two-skill radio switch, as `/progress` took them (D247). Speaking's plan is one suggested session (the kind practised least lately, its length and practice-mode estimate, and a way to `/practice/oral`), and its "Where you stand" is the newest report's fixes. Nothing on Today spends. | 22 October 2026 |
 | `dougkeefe/oral-progress-radio-buttons-ux` | **`/progress`'s detail as three equal tabs** (D247, the human's request, 22 October 2026): Reading, Written expression and Oral expression as WAI-ARIA tabs (`@palier/ui`'s new `Tabs`) in place of the two-skill radio switch; speaking gains a detail panel (its newest sessions, measured, beside the newest report's fixes, over `@palier/app`'s new `oralProgress`); each hero card has a way into its tab. Print is unchanged. | 22 October 2026 |
 | `dougkeefe/dependabot-status-resolve` | **Dependabot cleared** (D246, the human's request, 22 October 2026): PR #90's 18 minor and patch bumps installed with the repo's pnpm, since Dependabot's lockfile pulled in `@types/node` 26, and `vite` 8.3.5 named as a root devDependency to close alerts #16–#18. | 22 October 2026 |
 | `dougkeefe/klt79` | **`/progress` as a dashboard** (D245, the human's request, 22 October 2026): an overview of all three domains in Today's deep hero, then the chosen skill's trend beside its sub-skills, each sub-skill with a bar (`@palier/ui`'s new `TallyBar`). Print is unchanged. | 22 October 2026 |
@@ -8185,9 +8186,67 @@ better control than radio buttons.
 - **Not changed:** Today's plan switch and the exam picker keep their radios. The picker's is a real form choice. Today's
   plan switch is a view switch like this one and could take `Tabs` next, if the human wants it.
 
+### D248 — Today's plan is three equal tabs, speaking included; its plan is one suggested session
+**Date:** 22 October 2026 · **Status:** accepted (human's request; agent's design and copy). Amends D219's plan switch, and
+closes D247's "Not changed" note on Today
+
+The human pointed out that Today's plan offered only Reading and Writing, and that its radio buttons were the wrong
+control, as they had been on `/progress` (D247).
+
+- **Tabs, not radios**, for D247's reason: the switch shows another view of the same card. The plan card uses
+  `@palier/ui`'s `Tabs` and `TabPanel` unchanged (`idPrefix` `today-plan`), each tab in its `SKILL_LOOK` glyph and fill.
+  `features/skills/skill-look.ts`'s new `SKILL_KINDS` is the one order, and `/progress`'s `DETAIL_TABS` is it.
+  - The card is half the page, so here the three tabs **share its width at every size** and a long name wraps beside
+    its mark: "Compréhension de l'écrit" scrolled the list by 107px at 1280px before that. Below 600px the primitive's
+    own layout applies (mark over a centred name).
+  - `.app-segmented`'s home-only rules are gone; the class stays for `ExamPicker`'s real form choice.
+- **Speaking's plan is one session.** No planner holds oral practice, and the hero's oral rail already counts one ended
+  session as the day's goal (D219), so the plan matches it (`features/home/oral-plan.ts`, pure and tested):
+  - **The suggestion is the kind practised least lately** on this device (`oralHistory`, newest first). A kind never
+    practised comes first and a tie keeps the picker's order, so a new device is offered the warm-up. A session whose
+    scenario has left the bank names no kind and is passed over.
+  - The row is the kind with the picker's own `sessionMeta` (its minutes and **practice mode's** estimate, the picker's
+    default and the cheaper mode), then the kind's purpose and "Start speaking, {minutes} min".
+  - **The start links to `/practice/oral`, not to the session.** Choosing a session there opens the microphone check, which
+    must never happen on a page load, and the mode is chosen there, where the session is priced before it starts (D237).
+  - Once a session has ended today the plan says "Done for today" with today's sessions and minutes, and "Practise again".
+  - With no key it says spoken practice runs on the key and links the key screen. `NoKeyCard` is a card with its own
+    `h2`, which would have nested a card and a heading inside the plan.
+  - "More ways to practise" drops its speaking link on this tab. There is no next-step banner: speaking has no
+    diagnostic and no mock exam.
+- **Speaking's "Where you stand"** is `/progress`'s "From your latest report" through the same `oralDetail`: the
+  newest report's fixes, each a way into its drill (`OralCards.tsx`'s `OralFixes`, now exported), or the way to a
+  session a report can still be asked of. **No criterion level is shown off the report** (R10).
+- **Nothing on Today spends or writes.** `loadOral` reads the key's status, `oralSessionChoices`, `oralHistory`,
+  `oralProgress` and `featureCosts`. It leaves `closeAbandonedSessions`, which writes, to the oral screen.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 22 October 2026 — `dougkeefe/today-s-plan-oral-ux` (Today's plan as three equal tabs, speaking included; D248)
+
+Not *Next, decided*, which is unchanged (Gate O). The human asked why Today's plan offered only Reading and Writing, and
+for a better control than its radio buttons, as D247 had done for `/progress`.
+- **The plan's switch is `@palier/ui`'s `Tabs`**, one per domain in its glyph and fill, sharing the card's width.
+- **Speaking has a plan**: one suggested session, the kind practised least lately, with its length and practice mode's
+  estimate, leading to `/practice/oral`; "Done for today" once a session has ended; a line and a link with no key.
+- **Speaking's "Where you stand"** is the newest report's fixes, never a criterion level (R10). Nothing on Today spends.
+
+**Verified:**
+- A review pass then fixed five small findings: the plan card's tab padding no longer overrides the primitive's on a
+  phone, a dead class, an unwrapped line, and two copies (`reportHref`, now exported from `OralCards.tsx`, and the minute
+  rounding, now `today-view.ts`'s `minutesOf`).
+- `pnpm verify` exit 0 after those fixes: 277 files, 4,473 tests passed (8 todo), no dependency violations.
+  `oral-plan.test.ts` names each branch of the suggestion and the plan.
+- The chromium project's `journeys`, `content`, `generate` and `key-leak` on port 3400 through a throwaway config, since
+  another app held port 3000: 28 passed, including the new D248 journey (three tabs, no radio, the arrow keys, the
+  warm-up suggested, axe-clean, Start lands on `/practice/oral`). The library test failed once on the parallel dev
+  server's first compile, then passed alone; this change does not touch it.
+- After `pnpm --filter @palier/web build`, the offline project's `csp-production`: 7 passed.
+- Screenshots at 1280px and 375px in both languages through a throwaway production spec, which measured the tab list's
+  overflow: 107px in French at 1280px before the equal-width rule, 0 in all four after. The no-key state was checked
+  the same way.
 
 ### 22 October 2026 — `dougkeefe/oral-progress-radio-buttons-ux` (`/progress`'s detail as three equal tabs, speaking included; D247)
 

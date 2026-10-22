@@ -99,7 +99,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   // 3. A drill, then the writing workshop from the drill's page, then the review queue. The
   // diagnostic used up the fixture bank's reading items, so the drill is written expression.
   await page.getByRole("link", { name: "Today", exact: true }).click();
-  await page.getByRole("radio", { name: "Written expression" }).check();
+  await page.getByRole("tab", { name: "Written expression" }).click();
   await page.getByRole("link", { name: /^Start, \d+ min$/ }).click();
   await drillThroughByKeyboard(page);
   await page.getByRole("link", { name: "Open the writing workshop" }).click();
@@ -111,7 +111,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   // 3b. A fresh set from the writing drill's page: one draft and five blind reviews, all on the
   // key, then practised. Every review carries a generated stem back to OpenAI, and only there.
   await page.getByRole("link", { name: "Today", exact: true }).click();
-  await page.getByRole("radio", { name: "Written expression" }).check();
+  await page.getByRole("tab", { name: "Written expression" }).click();
   await page.getByRole("link", { name: /^Start, \d+ min$/ }).click();
   await page.getByRole("link", { name: "Generate a fresh set" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Fresh practice items" })).toBeVisible();

@@ -398,7 +398,12 @@
     "calendarTest": "Jour du test",
     "calendarToday": "aujourd’hui",
     "pointerViewAll": "Tous les articles",
-    "oralRail": "Pratique de l’oral aujourd’hui"
+    "oralRail": "Pratique de l’oral aujourd’hui",
+    "oralPlanWhy": "Une séance orale par jour. Celle d’aujourd’hui est du type que vous avez le moins pratiqué dernièrement.",
+    "oralStart": "Commencer à parler, {minutes} min",
+    "oralAgain": "Pratiquer de nouveau",
+    "oralNoSession": "Aucune séance orale n’est offerte pour l’instant.",
+    "oralNoKey": "La pratique orale passe par votre clé OpenAI."
   },
   "drill": {
     "progress": "Item {current} sur {total}",

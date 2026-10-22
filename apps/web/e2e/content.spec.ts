@@ -172,7 +172,7 @@ test("the library lists ten articles, and an article reads its examples in Frenc
 test("a written-expression item's feedback reaches its library article, in a new tab (D162)", async ({ page, context }) => {
   await onboard(page, "skip");
   await expect(page).toHaveURL(/\/en\/home$/);
-  await page.getByRole("radio", { name: "Written expression" }).check();
+  await page.getByRole("tab", { name: "Written expression" }).click();
   await page.getByRole("link", { name: /^Start/ }).click();
   await expect(page.locator(".app-session__count")).toBeVisible();
   await page.keyboard.press("1");

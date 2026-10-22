@@ -22,13 +22,14 @@ export type SkillCard =
       readonly sessions: number;
       /** Minutes spoken today, rounded: zero for a session answered by typing, which spoke nothing. */
       readonly minutes: number;
-      /** No plan holds oral practice, so the rail is full once a session has ended today. */
+      /** Speaking's plan is one session (D248), so the rail is full once a session has ended today. */
       readonly rail: { readonly current: number; readonly total: number };
     };
 
 const MINUTE_MS = 60_000;
 
-const minutesOf = (ms: number): number => Math.round(ms / MINUTE_MS);
+/** Milliseconds as whole minutes, as the hero's oral card and speaking's plan both show them. */
+export const minutesOf = (ms: number): number => Math.round(ms / MINUTE_MS);
 
 export const skillCards = (activity: PracticeActivity, sessionSize: number): readonly SkillCard[] => {
   const goal = Math.max(1, sessionSize);
