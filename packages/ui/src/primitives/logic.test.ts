@@ -9,6 +9,7 @@ import {
   mascotClass,
   monthGrid,
   sparklineGeometry,
+  tallyBarGeometry,
   streakFlameClass,
   optionRowKeydown,
   optionRowState,
@@ -94,6 +95,29 @@ describe("sparklineGeometry", () => {
 
   it("draws nothing for no values", () => {
     expect(sparklineGeometry([])).toEqual({ line: "", area: "" });
+  });
+});
+
+describe("tallyBarGeometry", () => {
+  it("draws the most practised row the whole width and fills its right answers", () => {
+    expect(tallyBarGeometry({ correct: 30, attempted: 40, scale: 40 })).toEqual({ answeredPercent: 100, correctPercent: 75 });
+  });
+
+  it("draws a row with few answers short, at the list's scale, so a handful never looks measured", () => {
+    expect(tallyBarGeometry({ correct: 2, attempted: 4, scale: 40 })).toEqual({ answeredPercent: 10, correctPercent: 5 });
+  });
+
+  it("draws nothing for a row and a list with no answers", () => {
+    expect(tallyBarGeometry({ correct: 0, attempted: 0, scale: 0 })).toEqual({ answeredPercent: 0, correctPercent: 0 });
+  });
+
+  it("never fills more right answers than were given, nor counts below zero", () => {
+    expect(tallyBarGeometry({ correct: 9, attempted: 5, scale: 10 })).toEqual({ answeredPercent: 50, correctPercent: 50 });
+    expect(tallyBarGeometry({ correct: -3, attempted: -1, scale: 10 })).toEqual({ answeredPercent: 0, correctPercent: 0 });
+  });
+
+  it("raises a scale below the row's own answers, so a bar never runs off its track", () => {
+    expect(tallyBarGeometry({ correct: 4, attempted: 8, scale: 2 })).toEqual({ answeredPercent: 100, correctPercent: 50 });
   });
 });
 

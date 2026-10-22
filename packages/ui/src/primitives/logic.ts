@@ -255,6 +255,37 @@ export const trendChartGeometry = (points: readonly (BandMeterInput | null)[]): 
   };
 };
 
+// ---- TallyBar (/progress: a sub-skill's answers, right and wrong, at the scale of the most practised) ----
+
+export type TallyBarInput = {
+  readonly correct: number;
+  readonly attempted: number;
+  /** The most answers any row beside it has, so every bar in a list is drawn to one scale. */
+  readonly scale: number;
+};
+
+export type TallyBarGeometry = {
+  /** How long the whole bar is, the answers given, as a percentage of the track. */
+  readonly answeredPercent: number;
+  /** How much of the track the right answers fill, as a percentage of the track. */
+  readonly correctPercent: number;
+};
+
+/**
+ * A tally's shapes (progress.md D245). The bar's length is the answers given against the most any
+ * row has, so a sub-skill met three times draws short beside one met forty times: the bar shows how
+ * much evidence there is as well as how it splits, and a handful of answers never looks like a
+ * measured rate (R10). Counts are clamped: nothing negative, never more right than given, and a scale
+ * below the row's own answers is raised to them.
+ */
+export const tallyBarGeometry = (input: TallyBarInput): TallyBarGeometry => {
+  const attempted = Math.max(0, input.attempted);
+  const correct = Math.min(Math.max(0, input.correct), attempted);
+  const scale = Math.max(input.scale, attempted);
+  if (scale === 0) return { answeredPercent: 0, correctPercent: 0 };
+  return { answeredPercent: (attempted / scale) * 100, correctPercent: (correct / scale) * 100 };
+};
+
 // ---- Sparkline (Today's minutes this week, progress.md D219) ----
 
 /** The sparkline's drawing box, in SVG user units; the SVG scales to its container's width. */

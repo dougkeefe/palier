@@ -91,6 +91,16 @@ test("progress draws twelve weeks at the target band, a gap where evidence is sh
   await page.goto("/en/progress");
 
   await expect(page.getByRole("heading", { name: "Week by week, C-level items" })).toBeVisible();
+  // At a glance (D245): the three domains side by side, each scored skill's C-level figure with its meter.
+  const glance = page.locator(".app-progress__hero");
+  await expect(glance.getByRole("heading", { level: 3 })).toHaveText(["Reading", "Written expression", "Oral expression"]);
+  await expect(glance.getByRole("meter", { name: "C-level items" })).toHaveCount(2);
+  await expect(glance.getByText(/^\d+% of C-level items right, likely \d+–\d+%$/)).toHaveCount(2);
+  await expect(glance).toContainText("0 spoken sessions");
+  // In detail: every sub-skill keeps its count, with a bar beside it.
+  const tallies = page.locator(".app-progress__tally");
+  await expect(tallies.first()).toContainText(/\d+ of \d+ correct/);
+  await expect(tallies.locator(".pl-tally-bar")).toHaveCount(await tallies.count());
   // Weeks 1–5 are short of evidence, 6–12 drawn: one unbroken run, seven dots.
   const chart = page.locator(".pl-trend-chart");
   await expect(chart).toHaveAttribute("aria-hidden", "true");
@@ -114,6 +124,9 @@ test("progress draws twelve weeks at the target band, a gap where evidence is sh
   await page.emulateMedia({ media: "print" });
   await expect(page.getByRole("table")).toHaveCount(2);
   await expect(page.getByText("Show the figures")).toHaveCount(0);
+  // Paper keeps D145's layout: the overview is the screen's alone, and the counts stand without their bars.
+  await expect(page.locator(".app-progress__hero")).toHaveCount(0);
+  await expect(page.locator(".pl-tally-bar").first()).toBeHidden();
   expect(pageCount(await page.pdf({ format: "Letter" }))).toBe(1);
   expect(pageCount(await page.pdf({ format: "A4" }))).toBe(1);
 

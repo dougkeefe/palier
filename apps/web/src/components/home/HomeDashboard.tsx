@@ -7,9 +7,7 @@ import { type DayPlan, type PracticeActivity, type SkillTrend, localDay } from "
 import {
   Callout,
   Card,
-  type CardTone,
   Glyph,
-  type GlyphName,
   MonthCalendar,
   ProgressRail,
   Sparkline,
@@ -34,6 +32,7 @@ import {
   stepMonth,
   weekMinutes,
 } from "../../features/home/today-view";
+import { SKILL_LOOK } from "../../features/skills/skill-look";
 import { type EvidenceLine, evidenceLine } from "../../features/telemetry/telemetry";
 import { hasAnyEstimate } from "../../features/trend/trend-lines";
 import { Link, useRouter } from "../../i18n/navigation";
@@ -265,12 +264,6 @@ export function HomeDashboard() {
     </div>
   );
 }
-
-const SKILL_LOOK: Readonly<Record<SkillCard["kind"], { readonly tone: CardTone; readonly glyph: GlyphName }>> = {
-  reading: { tone: "tint", glyph: "book" },
-  writing: { tone: "mint", glyph: "pen" },
-  oral: { tone: "rose", glyph: "mic" },
-};
 
 /**
  * The deep panel at the page's head (D219): the countdown, or "this week", over the week's answers,

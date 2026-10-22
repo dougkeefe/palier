@@ -1014,6 +1014,223 @@ body {
   line-height: 1.5;
 }
 
+/* ---- Progress (§8.9, D245): at a glance, then in detail, then the honest panel and the export ----
+ * Today's language (D219): a deep hero holding the three domains as cards in their own fills, then the
+ * skill the switch picks, its trend beside its sub-skills from 900px. Screen only: paper keeps D145's
+ * one-page layout at the end of this file, where the wrappers below dissolve. */
+@media screen {
+  .app-progress {
+    gap: 32px;
+  }
+
+  .app-progress__eyebrow {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .app-progress__hero {
+    display: grid;
+    gap: 24px;
+  }
+
+  .app-progress__hero-text {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .app-progress__hero-text > * {
+    margin: 0;
+  }
+
+  .app-progress__hero-title {
+    font-size: clamp(1.75rem, 3vw, 2.375rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+
+  .app-progress__skills {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* A domain's card: a light fill on the deep panel, its ink the page's own. */
+  .app-progress__skill {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    height: 100%;
+    box-sizing: border-box;
+    color: var(--ink);
+    --ink-muted: var(--ink-soft);
+  }
+
+  .app-progress__skill > * {
+    margin: 0;
+  }
+
+  .app-progress__skill-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .app-progress__skill-head h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.15;
+  }
+
+  .app-progress__skill-glyph {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    color: var(--primary);
+  }
+
+  .app-progress__figure {
+    display: grid;
+    gap: 4px;
+    font-size: 2.5rem;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .app-progress__figure-label,
+  .app-progress__skill-line {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    line-height: 1.35;
+  }
+
+  /* The figure above already says it in words, so the card's meter is its bar alone; the meter still
+     names itself and its value to a screen reader. */
+  .app-progress__skill .pl-band-meter__label,
+  .app-progress__skill .pl-band-meter__text {
+    display: none;
+  }
+
+  .app-progress__skill .pl-band-meter__track,
+  .app-progress__skill .pl-rail {
+    background-color: color-mix(in srgb, var(--primary) 14%, transparent);
+  }
+
+  /* In detail: the heading, and the switch beside it once there is room. */
+  .app-progress__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+  }
+
+  .app-progress__head h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 1.1;
+  }
+
+  .app-progress__head .app-segmented__option:not(:has(input:checked)) {
+    background: var(--surface-quiet);
+  }
+
+  .app-progress__detail,
+  .app-progress__footer {
+    display: grid;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .app-progress__detail .pl-card,
+  .app-progress__footer .pl-card {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  .app-progress__detail .pl-card > *,
+  .app-progress__footer .pl-card > * {
+    margin: 0;
+  }
+
+  .app-progress__detail h2,
+  .app-progress__footer h2 {
+    font-size: 1.375rem;
+    line-height: 1.15;
+  }
+
+  .app-progress__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+  }
+
+  .app-progress__facts > p {
+    margin: 0;
+  }
+
+  /* A sub-skill: its name and count on a line, its bar under them, ruled rows as Today's plan's. */
+  .app-plan.app-progress__tallies {
+    gap: 0;
+    margin: 0;
+  }
+
+  .app-plan__row.app-progress__tally {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name count"
+      "bar bar";
+    gap: 8px 12px;
+    align-items: baseline;
+    padding: 12px 0;
+    border-bottom: 0;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  }
+
+  .app-progress__tally .app-plan__kind {
+    grid-area: name;
+  }
+
+  .app-progress__tally .pl-tally-bar {
+    grid-area: bar;
+  }
+
+  .app-progress__tally .app-muted {
+    grid-area: count;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 720px) {
+    .app-progress__skills {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 900px) {
+    .app-progress__hero {
+      gap: 32px;
+    }
+
+    .app-progress__detail {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 32px;
+    }
+
+    .app-progress__footer {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 32px;
+    }
+  }
+}
+
 /* The library (PRD §13.2, D162): an index of articles, then each article's examples. A cited
    run is italic by its <i>; an example to write stands out by weight, never by colour alone. */
 .app-library__index {
@@ -1909,6 +2126,17 @@ body {
 
   .app-progress > :is(p, [role="status"]) {
     grid-column: 1 / -1;
+  }
+
+  /* The screen's wrappers (D245) dissolve, so each card is still a cell of this grid, as before. */
+  .app-progress__detail,
+  .app-progress__footer {
+    display: contents;
+  }
+
+  /* Paper keeps the sub-skills' counts; their bars would cost the page its one-page fit. */
+  .app-progress .pl-tally-bar {
+    display: none;
   }
 
   .app-progress .pl-card {

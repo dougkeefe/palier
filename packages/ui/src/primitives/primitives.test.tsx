@@ -9,6 +9,7 @@ import { EmptyState } from "./EmptyState.js";
 import { GLYPH_PATHS, Glyph } from "./Glyph.js";
 import { MonthCalendar } from "./MonthCalendar.js";
 import { Sparkline } from "./Sparkline.js";
+import { TallyBar } from "./TallyBar.js";
 import { OptionRow } from "./OptionRow.js";
 import { Passage } from "./Passage.js";
 import { ProgressRail } from "./ProgressRail.js";
@@ -184,6 +185,16 @@ describe("Sparkline", () => {
     expect(svg?.getAttribute("aria-hidden")).toBe("true");
     expect(container.querySelector(".pl-sparkline__line")?.getAttribute("points")).not.toBe("");
     expect(container.querySelector(".pl-sparkline__area")).not.toBeNull();
+  });
+});
+
+describe("TallyBar", () => {
+  it("is a picture hidden from assistive tech, its length the answers and its fill the right ones", () => {
+    const { container } = render(<TallyBar correct={3} attempted={6} scale={12} />);
+    const bar = container.querySelector(".pl-tally-bar");
+    expect(bar?.getAttribute("aria-hidden")).toBe("true");
+    expect(container.querySelector<HTMLElement>(".pl-tally-bar__answered")?.style.width).toBe("50%");
+    expect(container.querySelector<HTMLElement>(".pl-tally-bar__correct")?.style.width).toBe("25%");
   });
 });
 
