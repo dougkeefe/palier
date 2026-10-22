@@ -53,7 +53,9 @@ system, not the application.
   Slice 1, **BandMeter** (the estimate solid, its interval a lighter band, and no bar at all
   without an estimate, R10), **TrendChart** (Phase 7 Slice 5, D198: an SVG line per week-end, the interval
   shaded, a week without an estimate a gap, never bridged; `aria-hidden`, because the caller puts the same
-  figures in a table beside it; nothing animated), **Sheet** (the feedback panel: a labelled region whose heading takes
+  figures in a table beside it; nothing animated), **TallyBar** (D245: a sub-skill's answers, `aria-hidden` beside the
+  caller's "6 of 14 correct". Its length is the answers given against the list's `scale`, so a handful of answers draws
+  short, and its solid `primary` part is the right answers. No red or green, and nothing moves), **Sheet** (the feedback panel: a labelled region whose heading takes
   focus, not a dialog), **Passage** (serif, 66ch, `lang`-marked), **Toast** (a polite status
   message that does **not** dismiss itself: a timed disappearance is a 2.2.1 problem) and
   **Mascot** (Coco asleep, decorative and `aria-hidden`; the empty state's words carry the

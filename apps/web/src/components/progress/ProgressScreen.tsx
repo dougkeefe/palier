@@ -4,11 +4,12 @@ import type { OralTotals, ProgressReport } from "@palier/app";
 import type { ScoredSkill, TargetBand } from "@palier/domain";
 import type { TrendPoint } from "@palier/engine";
 import { SCORED_SKILLS } from "@palier/domain";
-import { Button, Callout, Card } from "@palier/ui";
+import { Button, Callout, Card, TallyBar } from "@palier/ui";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { flushSync } from "react-dom";
 
+import { tallyScale } from "../../features/progress/progress-view";
 import { TREND_HISTORY_WEEKS, historyBand } from "../../features/trend/trend-history";
 import { readStudyProfile } from "../../lib/study";
 import { deviceTimeZone } from "../../lib/time-zone";
@@ -16,6 +17,7 @@ import { useContainer } from "../ContainerProvider";
 import { ExportButton } from "../data/ExportButton";
 import { NonAffiliation } from "../NonAffiliation";
 import { TrendMeters } from "../practice/TrendMeters";
+import { ProgressGlance } from "./ProgressGlance";
 import { TrendHistory } from "./TrendHistory";
 
 type Loaded = {
@@ -29,10 +31,15 @@ type Loaded = {
 };
 
 /**
- * Progress (product-requirements.md §8.9): the practice trend with its interval, and
- * over time, week by week at the target band (D198), accuracy by sub-skill as plain counts (no percentage on a handful of answers, R10),
- * items answered, time spent answering, oral sessions and minutes spoken, an honest
- * panel on what this does and does not say, and the export.
+ * Progress (product-requirements.md §8.9), laid out as a dashboard in Today's language (D245):
+ *
+ * - **At a glance**, the deep panel: all the time practised, then the three domains side by side,
+ *   each a card in its own fill and glyph: a scored skill's accuracy at the target band with its
+ *   interval, or its answers toward the first figure as a rail (R10); speaking's sessions and minutes.
+ * - **In detail**, for the skill the switch picks: the practice trend with its interval, and over
+ *   time, week by week at the target band (D198), beside accuracy by sub-skill, plain counts with a
+ *   bar each whose length is the answers given (no percentage on a handful of answers, R10).
+ * - Then the honest panel on what this does and does not say, the export, and the statement.
  *
  * **It is also the one-page PDF summary** (Gate K, progress.md D145): printed, the page
  * drops the switch, the export and the site chrome, and shows both skills at once, so
@@ -83,19 +90,10 @@ export function ProgressScreen() {
     };
   }, [container]);
 
+  const failed = container.status === "failed" || loaded === "failed";
   return (
     <div className="app-stack app-progress">
-      <fieldset className="app-segmented app-screen-only">
-        <legend className="app-segmented__legend">{tToday("skillLabel")}</legend>
-        {SCORED_SKILLS.map((s) => (
-          <label key={s} className="app-segmented__option">
-            <input type="radio" name="skill" value={s} checked={skill === s} onChange={() => setSkill(s)} />
-            <span>{tSkills(s)}</span>
-          </label>
-        ))}
-      </fieldset>
-
-      {container.status === "failed" || loaded === "failed" ? (
+      {failed ? (
         <Callout tone="incorrect">{tCommon("loadFailed")}</Callout>
       ) : loaded === null ? (
         <p role="status">{tCommon("loading")}</p>
@@ -104,43 +102,63 @@ export function ProgressScreen() {
           <p className="app-muted app-print-only">
             {t("printedOn", { date: format.dateTime(new Date(loaded.printedAt), { dateStyle: "long" }) })}
           </p>
-          {SCORED_SKILLS.filter((s) => s === skill || printing).map((s) => (
-            <SkillCards
-              key={s}
-              skill={s}
-              report={loaded.reports[s]}
-              history={loaded.histories[s]}
-              band={loaded.band}
-              printing={printing}
-              printOnly={s !== skill}
-            />
-          ))}
-          <Card>
-            <h2>{t("oralTitle")}</h2>
-            <p>
-              {loaded.oral.sessions === 0
-                ? t("oralNone")
-                : t("oralLine", { sessions: loaded.oral.sessions, minutes: Math.round(loaded.oral.msSpoken / 60_000) })}
-            </p>
-            <p className="app-muted">{t("oralDevice")}</p>
-          </Card>
-          <Card>
-            <h2>{t("honestTitle")}</h2>
-            <p>{t("honestDoes")}</p>
-            <p>{t("honestDoesNot")}</p>
-          </Card>
+          {/* Paper already shows both skills in full and the oral card below, so the overview is the screen's alone. */}
+          {printing ? null : <ProgressGlance reports={loaded.reports} oral={loaded.oral} band={loaded.band} />}
+          <div className="app-progress__head app-screen-only">
+            <h2>{t("detailTitle")}</h2>
+            <fieldset className="app-segmented">
+              <legend className="app-segmented__legend">{tToday("skillLabel")}</legend>
+              {SCORED_SKILLS.map((s) => (
+                <label key={s} className="app-segmented__option">
+                  <input type="radio" name="skill" value={s} checked={skill === s} onChange={() => setSkill(s)} />
+                  <span>{tSkills(s)}</span>
+                </label>
+              ))}
+            </fieldset>
+          </div>
+          <div className="app-progress__detail">
+            {SCORED_SKILLS.filter((s) => s === skill || printing).map((s) => (
+              <SkillCards
+                key={s}
+                skill={s}
+                report={loaded.reports[s]}
+                history={loaded.histories[s]}
+                band={loaded.band}
+                printing={printing}
+                printOnly={s !== skill}
+              />
+            ))}
+          </div>
+          {printing ? (
+            <Card>
+              <h2>{t("oralTitle")}</h2>
+              <p>
+                {loaded.oral.sessions === 0
+                  ? t("oralNone")
+                  : t("oralLine", { sessions: loaded.oral.sessions, minutes: Math.round(loaded.oral.msSpoken / 60_000) })}
+              </p>
+              <p className="app-muted">{t("oralDevice")}</p>
+            </Card>
+          ) : null}
+          <div className="app-progress__footer">
+            <Card tone="quiet">
+              <h2>{t("honestTitle")}</h2>
+              <p>{t("honestDoes")}</p>
+              <p>{t("honestDoesNot")}</p>
+            </Card>
+            <Card className="app-screen-only">
+              <h2>{t("exportTitle")}</h2>
+              <p>{t("exportBody")}</p>
+              <div className="app-actions">
+                <ExportButton variant="secondary" />
+                <Button variant="secondary" onClick={() => window.print()}>
+                  {t("printAction")}
+                </Button>
+              </div>
+              <p className="app-muted">{t("printBody")}</p>
+            </Card>
+          </div>
           <NonAffiliation />
-          <Card className="app-screen-only">
-            <h2>{t("exportTitle")}</h2>
-            <p>{t("exportBody")}</p>
-            <div className="app-actions">
-              <ExportButton variant="secondary" />
-              <Button variant="secondary" onClick={() => window.print()}>
-                {t("printAction")}
-              </Button>
-            </div>
-            <p className="app-muted">{t("printBody")}</p>
-          </Card>
         </>
       )}
     </div>
@@ -151,6 +169,7 @@ export function ProgressScreen() {
  * One skill's trend and sub-skill cards. The skill is named in each heading only when
  * printed, where both skills stand side by side; on screen the switch names it. The trend
  * over time sits in the trend card on screen, and in a card of its own across the page on paper.
+ * Each sub-skill's bar is drawn to the most practised one's scale (D245); paper keeps the counts.
  */
 function SkillCards({
   skill,
@@ -171,17 +190,20 @@ function SkillCards({
   const tSkills = useTranslations("skills");
   const tSub = useTranslations("subSkills");
   const className = printOnly ? "app-print-only" : undefined;
+  const scale = tallyScale(report.bySubSkill);
   const skillName = <span className="app-print-only">{t("skillSuffix", { skill: tSkills(skill) })}</span>;
   return (
     <>
-      <Card className={className}>
+      <Card className={["app-progress__trend", className].filter(Boolean).join(" ")}>
         <h2>
           {t("trendTitle")}
           {skillName}
         </h2>
         <TrendMeters trend={report.trend} />
-        <p className="app-muted">{t("answered", { count: report.answered })}</p>
-        <p className="app-muted">{t("timeAnswering", { minutes: Math.round(report.msAnswering / 60_000) })}</p>
+        <div className="app-progress__facts">
+          <p className="app-muted">{t("answered", { count: report.answered })}</p>
+          <p className="app-muted">{t("timeAnswering", { minutes: Math.round(report.msAnswering / 60_000) })}</p>
+        </div>
         {printing ? null : <TrendHistory points={history} band={band} printing={false} />}
       </Card>
       <Card className={className}>
@@ -192,14 +214,18 @@ function SkillCards({
         {report.bySubSkill.length === 0 ? (
           <p className="app-muted">{t("subSkillEmpty")}</p>
         ) : (
-          <ul className="app-plan">
-            {report.bySubSkill.map((row) => (
-              <li key={row.subSkill} className="app-plan__row">
-                <span className="app-plan__kind">{tSub(row.subSkill)}</span>
-                <span className="app-muted">{t("subSkillRow", { correct: row.correct, attempted: row.attempted })}</span>
-              </li>
-            ))}
-          </ul>
+          <>
+            <p className="app-progress__eyebrow app-screen-only">{t("subSkillOrder")}</p>
+            <ul className="app-plan app-progress__tallies">
+              {report.bySubSkill.map((row) => (
+                <li key={row.subSkill} className="app-plan__row app-progress__tally">
+                  <span className="app-plan__kind">{tSub(row.subSkill)}</span>
+                  <TallyBar correct={row.correct} attempted={row.attempted} scale={scale} />
+                  <span className="app-muted">{t("subSkillRow", { correct: row.correct, attempted: row.attempted })}</span>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </Card>
       {/* Printed, the trend over time is its own row across the page, so the summary stays one page (D198). */}

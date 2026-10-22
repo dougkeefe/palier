@@ -750,6 +750,36 @@
   vector-effect: non-scaling-stroke;
 }
 
+/* ---- TallyBar (D245: a sub-skill's answers; its length the evidence, its solid part the right ones) ----
+ * The answered part is outlined in `rule` (3:1 on a card) and the right answers fill it in `primary`, so the wrong
+ * answers are the outlined remainder. No red or green: the words beside it carry the count. */
+
+.pl-tally-bar {
+  position: relative;
+  height: 12px;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+.pl-tally-bar__answered,
+.pl-tally-bar__correct {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 999px;
+  box-sizing: border-box;
+}
+
+.pl-tally-bar__answered {
+  border: 1px solid var(--rule);
+  background-color: var(--surface);
+}
+
+.pl-tally-bar__correct {
+  background-color: var(--primary);
+}
+
 /* ---- MonthCalendar (D219: a month as a table; marks are a shape and words, never colour alone) ---- */
 
 .pl-calendar {

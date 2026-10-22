@@ -125,6 +125,11 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   library. `app-print-only` / `app-screen-only` pick what paper shows, and the skill the switch does not show is
   **mounted only while printing** (`usePrinting`: `beforeprint`/`afterprint` and the print media query), since a
   hidden duplicate would still be in the document. `content.spec.ts` holds it to one page on Letter and A4.
+  **On screen it is a dashboard** (D245). A deep hero (`ProgressGlance.tsx`, over `features/progress/progress-view.ts`)
+  shows the three domains in `features/skills/skill-look.ts`'s fills, the same as Today. Below it, the chosen skill's trend
+  sits beside its sub-skills, each with a `TallyBar`. The hero is mounted only when not printing, and its wrappers are
+  `display: contents` on paper, so the printout is D145's. The hero says "answers", never "items answered": that sentence
+  is the detail's alone, and three specs find it as the single element on the page.
 - **Keyboard** (PRD §11, D145). Every page-wide key handler asks `lib/keyboard.ts`'s `isPageKey` first (no chord,
   no field, and not Enter on a real button). The shortcut sheet at `?` (`components/ShortcutSheet.tsx`, in the footer)
   lists `features/shortcuts/shortcuts.ts`'s registry: **a screen that gains a key registers a row there**, with its

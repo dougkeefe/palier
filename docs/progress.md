@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/klt79` | **`/progress` as a dashboard** (D245, the human's request, 22 October 2026): an overview of all three domains in Today's deep hero, then the chosen skill's trend beside its sub-skills, each sub-skill with a bar (`@palier/ui`'s new `TallyBar`). Print is unchanged. | 22 October 2026 |
 | `dougkeefe/keep-for-this-tab-less-prominent` | **"For this tab only" folded behind a quiet disclosure** (D242, the human's request, 19 October 2026): onboarding's key step and `/settings/key` no longer offer it as a peer of saving the key, and its hint says the key must be pasted again on every visit. And **the landing hero says Palier is unofficial and unaffiliated** (D243), and the landing way-in test no longer races D224's redirect (D244). | 19 October 2026 |
 | `dougkeefe/docs-outstanding-implementations-review` | **The review queue never serves a retired item** (D241; D205's named gap, scheduled by the human, 18 October 2026), and **this file reconciled with what has merged**: the slices and criteria `main` already holds, ticked, and *Next, decided* opening on Gate O. | 18 October 2026 |
 
@@ -295,6 +296,7 @@ need `OPENAI_SMOKE_KEY`, and one finding for the human to schedule.
      `historyAccuracy`, `historyCell`, `historyCellPaper`, `historyShort` (D198). Print `/fr/progress` with some history to
      see the paper cells;
    - the content run's: `about.bankMachine`, `landing.faq.source.a` and `progress.honestDoesNot` (D203);
+   - the progress dashboard's: `progress.glance*`, `progress.detailTitle` and `progress.subSkillOrder` (D245);
    - the diagnostic's: `diagnostic.*`, `today.diagnostic*`, `today.plan*`, `start.placementDiagnosticHint`,
      `key.continueToDiagnostic`, and the sentences added to `exam.intro` and `diagnostic.intro`;
    - Today's: `today.*` (`next*`, `more*`, `pointer*`, `libraryAction`, `standEmpty`, `diagnosticWhat`, `examWhat`, and D219's
@@ -8082,9 +8084,54 @@ same commit (`f08c2bc`) failed on it and the other passed; the log shows `/en`, 
   then that the click lands on `/en/start` (where a new visitor really ends up), with the app's header and footer as
   before. Nothing is loosened: both halves are now deterministic.
 
+### D245 — `/progress` is a dashboard: the three domains at a glance, then the chosen skill in detail
+**Date:** 22 October 2026 · **Status:** accepted (human's request; agent's layout and copy). Amends D145's and D198's screen layout, not their print
+
+The human found the page hard to read: a single 760px column of equal white cards, with nothing showing all three domains
+together and speaking reduced to one line below the fold. It now uses Today's language (D219).
+
+- **At a glance** is a deep hero (`components/progress/ProgressGlance.tsx`). It holds all the time practised, then one
+  card per domain in its fill and glyph. `SKILL_LOOK` moved to `features/skills/skill-look.ts` so Today and Progress cannot
+  drift.
+  - A scored skill's card leads with its accuracy at the target band, with the interval in words and as a `BandMeter`.
+    Short of `MIN_EVIDENCE`, it shows its answers toward the first figure as a `ProgressRail`, never a figure (R10).
+  - Speaking's card shows sessions and minutes spoken, on this device only.
+  - The decisions are `features/progress/progress-view.ts` (`glanceCards`, `practiceTime`, `tallyScale`), and they
+    restate the reports the page already reads. There is no new use case or engine function.
+- **The hero says "answers", never "items answered".** `journeys.spec.ts` and `sync.spec.ts` find "N items answered" as
+  the single element on the page, so the detail's line stays the only one.
+- **In detail** is a heading with the Reading/Writing switch beside it. Below it, from 900px, the trend card sits beside
+  the sub-skill card.
+- **Each sub-skill keeps its count ("6 of 14 correct") and gains a `TallyBar`.** This is a new `@palier/ui` primitive,
+  `aria-hidden`.
+  - Its length is the answers given, against the most-practised sub-skill. Its solid part is the right answers and its
+    outlined part the rest.
+  - Why this is still R10: D66 kept percentages off sub-skills because a handful of answers is not a rate. A bar of the
+    share alone would draw 2 of 3 as boldly as 30 of 45. Drawn to the shared scale, a sub-skill met three times is
+    visibly short, so the bar shows how much evidence there is as well as how it splits.
+  - The colours are `primary` and `rule`, both already held at 3:1 on a card. There is no red or green.
+- **The honest panel** is a quiet card beside the export card, with its wording unchanged (D203). The statement follows
+  them.
+- **Print is unchanged.**
+  - The hero is mounted only when not printing, so paper still shows the oral card and nothing is duplicated in the
+    document (D148's lesson).
+  - The new wrappers are `display: contents` on paper, so D145's two-column grid sees the same cards.
+  - The bars are hidden, which keeps the one page.
+  - `progress-history-production.spec.ts` gained assertions on the hero, the bars and print. No assertion was loosened.
+- The page takes `.app-wide` (1160px), as Today does. Every screen rule sits under `@media screen`.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 22 October 2026 — `dougkeefe/klt79` (`/progress` as a dashboard, D245)
+
+Not *Next, decided*, which is unchanged (Gate O). The human asked for the progress page to be easier to read, with all three
+domains visible together and pictures as well as words. `/progress` now opens on a deep hero with reading, written
+expression and speaking side by side. Below it come the chosen skill's trend and its sub-skills, each with a `TallyBar`,
+then the honest panel and the export (D245). Print is unchanged. Checked with `pnpm verify`; `progress-history-production`
+and `csp-production` (offline project); and `content`, `journeys` and `sync` (chromium). The hermetic specs ran on port
+3400 through a throwaway config, because port 3000 was taken by another app on the machine.
 
 ### 19 October 2026 — `dougkeefe/keep-for-this-tab-less-prominent` ("for this tab only" folded behind a quiet disclosure, D242)
 
