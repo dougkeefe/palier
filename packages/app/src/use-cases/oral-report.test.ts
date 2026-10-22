@@ -12,6 +12,7 @@ import {
   UnknownOralSessionError,
   oralFocusSubSkills,
   oralHistory,
+  oralProgress,
   oralReport,
   oralSessionCost,
   requestOralReport,
@@ -320,6 +321,63 @@ describe("oralHistory (D126)", () => {
       ["lost", null, "completed", false, true],
       ["old", "work", "completed", true, true],
     ]);
+  });
+});
+
+describe("oralProgress (D247)", () => {
+  const VOICED: OralSession["turns"] = [TURNS[0]!, TURNS[1]!];
+
+  it("lists the newest ended sessions first, up to the limit, passing over one still running", async () => {
+    const sessions = [
+      anEnded({ id: sessionId("a"), startedAt: "2026-09-24T10:00:00.000Z" }),
+      anEnded({ id: sessionId("b"), startedAt: "2026-09-25T10:00:00.000Z" }),
+      anEnded({ id: sessionId("c"), startedAt: "2026-09-26T10:00:00.000Z" }),
+      anOralSession({ id: sessionId("running"), startedAt: "2026-09-27T10:00:00.000Z" }),
+    ];
+    const progress = await oralProgress(2, { oral: oralStore(sessions), items: scenarioBank() });
+
+    expect(progress.recent.map((s) => s.id)).toEqual(["c", "b"]);
+  });
+
+  it("gives each session its type, its spoken time and its pace from the spoken answers alone", async () => {
+    const progress = await oralProgress(5, { oral: oralStore([anEnded({ turns: VOICED })]), items: scenarioBank() });
+
+    // One spoken answer of 8 words over 6 seconds: 80 a minute; the typed answer in TURNS adds nothing.
+    expect(progress.recent).toEqual([
+      { id: SESSION_ID, startedAt: START, sessionType: "work", msSpoken: 6_000, wordsPerMinute: 80, assessed: false, answered: true },
+    ]);
+  });
+
+  it("has no type for a session whose scenario is gone, and no pace for one with no spoken answer", async () => {
+    const typedOnly = anEnded({ scenarioId: scenarioId("gone"), turns: [TURNS[0]!, TURNS[3]!] });
+    const progress = await oralProgress(5, { oral: oralStore([typedOnly]), items: scenarioBank() });
+
+    expect(progress.recent[0]).toMatchObject({ sessionType: null, msSpoken: 0, wordsPerMinute: null });
+  });
+
+  it("marks a session with no answer, which no report could judge", async () => {
+    const silent = anEnded({ turns: [TURNS[0]!], endReason: "ended-by-user" });
+    const progress = await oralProgress(5, { oral: oralStore([silent]), items: scenarioBank() });
+
+    expect(progress.recent[0]).toMatchObject({ answered: false, msSpoken: 0 });
+  });
+
+  it("takes the newest session with a report, past newer ones without, and marks which rows have one", async () => {
+    const sessions = [
+      anEnded({ id: sessionId("older"), startedAt: "2026-09-24T10:00:00.000Z", assessment: { ...REPORT, fixes: [] } }),
+      anEnded({ id: sessionId("reported"), startedAt: "2026-09-25T10:00:00.000Z", assessment: REPORT }),
+      anEnded({ id: sessionId("newest"), startedAt: "2026-09-26T10:00:00.000Z" }),
+    ];
+    const progress = await oralProgress(1, { oral: oralStore(sessions), items: scenarioBank() });
+
+    expect(progress.recent.map((s) => [s.id, s.assessed])).toEqual([["newest", false]]);
+    expect(progress.latestReport).toEqual({ id: "reported", startedAt: "2026-09-25T10:00:00.000Z", fixes: REPORT.fixes });
+  });
+
+  it("has no report when no session has one, and nothing at all with no session or a limit of none", async () => {
+    expect(await oralProgress(5, { oral: oralStore([anEnded()]), items: scenarioBank() })).toMatchObject({ latestReport: null });
+    expect(await oralProgress(5, { oral: oralStore([]), items: scenarioBank() })).toEqual({ recent: [], latestReport: null });
+    expect((await oralProgress(-1, { oral: oralStore([anEnded()]), items: scenarioBank() })).recent).toEqual([]);
   });
 });
 

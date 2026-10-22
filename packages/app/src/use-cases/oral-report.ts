@@ -3,6 +3,7 @@ import type {
   Lang,
   OralAssessment,
   OralEndReason,
+  OralFix,
   OralFillers,
   OralRequest,
   OralScenario,
@@ -12,7 +13,7 @@ import type {
   SubSkill,
 } from "@palier/domain";
 import type { FluencyMetrics } from "@palier/engine";
-import { fluencyMetrics } from "@palier/engine";
+import { fluencyMetrics, speakingMs } from "@palier/engine";
 
 import type { CostLedger, ItemRepository, OralSession, OralStore } from "../ports/index.js";
 import type { ISO } from "../ports/time.js";
@@ -241,6 +242,65 @@ export const oralHistory = async (deps: {
           },
         ],
   );
+};
+
+/** One recent session as `/progress` lists it (D247): when, what kind, how long spoken, and how fast. */
+export type OralProgressSession = {
+  readonly id: SessionId;
+  readonly startedAt: ISO;
+  /** `null` when the bank no longer holds the scenario. */
+  readonly sessionType: OralSessionType | null;
+  /** The engine's `speakingMs`: a typed answer adds nothing, as in `oralTotals`. */
+  readonly msSpoken: number;
+  /** The engine's measured pace over the spoken answers, `null` with none. Never a model's judgement. */
+  readonly wordsPerMinute: number | null;
+  readonly assessed: boolean;
+  /** Whether it has an answer a report could judge (`hasAnswers`). */
+  readonly answered: boolean;
+};
+
+/** The newest session with a report, and what that report says to work on. */
+export type OralProgressReport = {
+  readonly id: SessionId;
+  readonly startedAt: ISO;
+  readonly fixes: readonly OralFix[];
+};
+
+/** Speaking's detail on `/progress` (D247), on this device only, as every oral figure is. */
+export type OralProgress = {
+  /** The newest ended sessions, newest first, at most the `limit` asked for. */
+  readonly recent: readonly OralProgressSession[];
+  /** The newest assessed session, however far back, or `null` when none has a report. */
+  readonly latestReport: OralProgressReport | null;
+};
+
+/**
+ * Speaking's detail on the progress page (D247): the newest `limit` ended sessions with the measured
+ * figures the report shows (D123), and the newest report's fixes. Pace needs no filler list, so none is
+ * read. A report's criterion levels are left on the report, beside the evidence that makes them honest (R10).
+ */
+export const oralProgress = async (
+  limit: number,
+  deps: { readonly oral: OralStore; readonly items: ItemRepository },
+): Promise<OralProgress> => {
+  const scenarios = new Map((await deps.items.scenarios()).map((scenario) => [scenario.id, scenario]));
+  const ended = (await deps.oral.all()).filter((session) => session.endedAt !== null);
+  const latest = ended.find((session) => session.assessment !== null);
+  return {
+    recent: ended.slice(0, Math.max(0, limit)).map((session) => ({
+      id: session.id,
+      startedAt: session.startedAt,
+      sessionType: scenarios.get(session.scenarioId)?.sessionType ?? null,
+      msSpoken: speakingMs(session.turns),
+      wordsPerMinute: fluencyMetrics(session.turns, []).wordsPerMinute,
+      assessed: session.assessment !== null,
+      answered: hasAnswers(session),
+    })),
+    latestReport:
+      latest === undefined || latest.assessment === null
+        ? null
+        : { id: latest.id, startedAt: latest.startedAt, fixes: latest.assessment.fixes },
+  };
 };
 
 /**

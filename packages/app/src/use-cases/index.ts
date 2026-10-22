@@ -256,6 +256,9 @@ export { startOralStudioRun } from "./oral-studio.js";
 export type {
   OralCostLine,
   OralHistoryEntry,
+  OralProgress,
+  OralProgressReport,
+  OralProgressSession,
   OralReport,
   OralReportBlock,
   OralReportDeps,
@@ -270,6 +273,7 @@ export {
   hasAnswers,
   oralFocusSubSkills,
   oralHistory,
+  oralProgress,
   oralReport,
   oralSessionCost,
   requestOralReport,

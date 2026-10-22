@@ -249,6 +249,11 @@ describe.each([
     expect(shown?.cost.report.calls).toBe(1);
     expect(shown?.blocked).toBe("assessed");
     expect(await c.useCases.oralHistory()).toEqual([expect.objectContaining({ id, assessed: true, sessionType: "work" })]);
+    // The progress page reads the same session through its own use case (D247).
+    expect(await c.useCases.oralProgress({ limit: 5 })).toEqual({
+      recent: [expect.objectContaining({ id, assessed: true, sessionType: "work" })],
+      latestReport: { id, startedAt: at.startedAt, fixes: REPORT.fixes },
+    });
 
     const exported = JSON.stringify(await c.useCases.exportData());
     expect(exported).not.toContain("système de rémunération");

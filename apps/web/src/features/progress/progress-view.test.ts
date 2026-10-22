@@ -1,9 +1,10 @@
-import type { OralTotals, ProgressReport } from "@palier/app";
+import type { OralProgress, OralProgressSession, OralTotals, ProgressReport } from "@palier/app";
 import type { ScoredSkill } from "@palier/domain";
+import { sessionId } from "@palier/domain";
 import type { SkillTrend, SubSkillTally } from "@palier/engine";
 import { describe, expect, it } from "vitest";
 
-import { glanceCards, practiceTime, tallyScale } from "./progress-view";
+import { DETAIL_TABS, glanceCards, oralDetail, practiceTime, tallyScale } from "./progress-view";
 
 const trend = (skill: ScoredSkill, c: SkillTrend["byBand"]["C"]): SkillTrend => ({
   skill,
@@ -102,5 +103,62 @@ describe("tallyScale", () => {
 
   it("is zero with no sub-skill practised", () => {
     expect(tallyScale([])).toBe(0);
+  });
+});
+
+describe("DETAIL_TABS (D247)", () => {
+  it("offers the three domains as equals, in the hero's order", () => {
+    expect(DETAIL_TABS).toEqual(["reading", "writing", "oral"]);
+  });
+});
+
+describe("oralDetail (D247)", () => {
+  const spoken = (id: string, over: Partial<OralProgressSession> = {}): OralProgressSession => ({
+    id: sessionId(id),
+    startedAt: "2026-10-20T10:00:00.000Z",
+    sessionType: "work",
+    msSpoken: 150_000,
+    wordsPerMinute: 101.6,
+    assessed: false,
+    answered: true,
+    ...over,
+  });
+  const FIXES = [{ criterion: "grammar", subSkill: "agreement", advice: "a", evidence: "e" }] as const;
+
+  it("is empty with no session, whatever else it holds", () => {
+    expect(oralDetail({ recent: [], latestReport: null })).toEqual({ status: "empty" });
+  });
+
+  it("rounds each session's spoken time to whole minutes and its pace to whole words", () => {
+    const detail = oralDetail({ recent: [spoken("a"), spoken("b", { msSpoken: 20_000, wordsPerMinute: null })], latestReport: null });
+    expect(detail.status === "empty" ? [] : detail.rows.map((row) => [row.minutes, row.wordsPerMinute])).toEqual([
+      [3, 102],
+      [0, null],
+    ]);
+  });
+
+  it("names the newest session to open when no session has a report", () => {
+    expect(oralDetail({ recent: [spoken("new"), spoken("old")], latestReport: null })).toMatchObject({
+      status: "unreported",
+      askable: "new",
+    });
+  });
+
+  it("passes over a session with no answer, or whose scenario is gone, since no report can be asked of it", () => {
+    const recent = [spoken("silent", { answered: false }), spoken("gone", { sessionType: null }), spoken("spoken")];
+    expect(oralDetail({ recent, latestReport: null })).toMatchObject({ status: "unreported", askable: "spoken" });
+  });
+
+  it("has nothing to open when no session listed can have a report", () => {
+    const recent = [spoken("silent", { answered: false }), spoken("gone", { sessionType: null })];
+    expect(oralDetail({ recent, latestReport: null })).toMatchObject({ status: "unreported", askable: null });
+  });
+
+  it("carries the newest report when one exists, even past the sessions listed", () => {
+    const progress: OralProgress = {
+      recent: [spoken("new")],
+      latestReport: { id: sessionId("older"), startedAt: "2026-10-01T10:00:00.000Z", fixes: FIXES },
+    };
+    expect(oralDetail(progress)).toMatchObject({ status: "reported", report: { id: "older", fixes: FIXES } });
   });
 });

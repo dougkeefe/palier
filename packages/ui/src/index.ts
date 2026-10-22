@@ -31,6 +31,10 @@ export {
   monthGrid,
   sparklineGeometry,
   tallyBarGeometry,
+  tabClass,
+  tabIds,
+  tabsKeydown,
+  type TabTone,
   type TallyBarGeometry,
   type TallyBarInput,
   SPARKLINE_HEIGHT,
@@ -82,6 +86,7 @@ export { BandMeter, type BandMeterProps } from "./primitives/BandMeter.js";
 export { TrendChart, type TrendChartProps } from "./primitives/TrendChart.js";
 export { Sparkline, type SparklineProps } from "./primitives/Sparkline.js";
 export { TallyBar, type TallyBarProps } from "./primitives/TallyBar.js";
+export { TabPanel, Tabs, type TabItem, type TabPanelProps, type TabsProps } from "./primitives/Tabs.js";
 export { MonthCalendar, type CalendarMark, type MonthCalendarProps } from "./primitives/MonthCalendar.js";
 export { Sheet, type SheetProps } from "./primitives/Sheet.js";
 export { Passage, type PassageProps } from "./primitives/Passage.js";

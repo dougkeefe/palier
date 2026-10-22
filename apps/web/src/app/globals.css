@@ -1060,11 +1060,11 @@ body {
     list-style: none;
   }
 
-  /* A domain's card: a light fill on the deep panel, its ink the page's own. */
+  /* A domain's card: a light fill on the deep panel, its ink the page's own, its way into the detail at its foot. */
   .app-progress__skill {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 12px;
-    align-content: start;
     height: 100%;
     box-sizing: border-box;
     color: var(--ink);
@@ -1121,23 +1121,35 @@ body {
     background-color: color-mix(in srgb, var(--primary) 14%, transparent);
   }
 
-  /* In detail: the heading, and the switch beside it once there is room. */
+  /* The way into the detail sits at the card's foot, so the three line up. It is drawn in the page's
+     primary, held at 3:1 on each light fill, where the deep panel around it would make it and its
+     focus ring white (D247). */
+  .app-progress__skill > .app-progress__see-detail {
+    align-self: flex-start;
+    margin: auto 0 0 -12px;
+    padding-inline: 12px;
+    color: var(--primary);
+    text-align: left;
+  }
+
+  .app-progress__skill.pl-card .app-progress__see-detail:focus-visible {
+    outline-color: var(--primary);
+  }
+
+  .app-progress__skill .app-progress__see-detail:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+  }
+
+  /* In detail: the heading, then the three tabs across the section, the panel hanging from their rule (D247). */
   .app-progress__head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px 24px;
+    display: grid;
+    gap: 12px;
   }
 
   .app-progress__head h2 {
     margin: 0;
     font-size: 1.75rem;
     line-height: 1.1;
-  }
-
-  .app-progress__head .app-segmented__option:not(:has(input:checked)) {
-    background: var(--surface-quiet);
   }
 
   .app-progress__detail,
@@ -1206,6 +1218,49 @@ body {
     grid-area: count;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
+  }
+
+  /* Speaking's detail (D247): a session's kind over its date, time and pace, its report at the end; a
+     fix's criterion over its drill. Ruled rows, as the sub-skills'. */
+  .app-plan.app-progress__sessions,
+  .app-plan.app-progress__fixes {
+    gap: 0;
+    margin: 0;
+  }
+
+  .app-plan__row.app-progress__session,
+  .app-plan__row.app-progress__fix {
+    display: grid;
+    gap: 4px 12px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 0;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  }
+
+  .app-plan__row.app-progress__session {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name end"
+      "line end";
+  }
+
+  .app-progress__session .app-plan__kind {
+    grid-area: name;
+  }
+
+  .app-progress__session .app-muted {
+    grid-area: line;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .app-progress__session-end {
+    display: inline-flex;
+    flex-wrap: wrap;
+    grid-area: end;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px 12px;
   }
 
   @media (min-width: 720px) {

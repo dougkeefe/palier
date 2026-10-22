@@ -120,12 +120,32 @@ test("progress draws twelve weeks at the target band, a gap where evidence is sh
   await expect(table.getByRole("row", { name: /Oct 3 \d+%, likely \d+–\d+%/ })).toBeVisible();
   await axeClean(page);
 
-  // Printed: both skills, each table shown with no disclosure, and still one page.
+  // In detail (D247): three equal tabs, never a radio group; an arrow selects the next tab.
+  const tabs = page.getByRole("tablist", { name: "Skill shown in detail" }).getByRole("tab");
+  await expect(tabs).toHaveText(["Reading", "Written expression", "Oral expression"]);
+  await expect(page.getByRole("radio")).toHaveCount(0);
+  await expect(tabs.nth(0)).toHaveAttribute("aria-selected", "true");
+  await tabs.nth(0).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
+  await expect(tabs.nth(1)).toBeFocused();
+  await expect(page.getByRole("tabpanel", { name: "Written expression" })).toContainText(/\d+ items answered/);
+  // The hero's way in selects speaking's tab, which has no session yet and says how to start one.
+  await glance.getByRole("button", { name: "Oral expression in detail" }).click();
+  await expect(tabs.nth(2)).toHaveAttribute("aria-selected", "true");
+  await expect(tabs.nth(2)).toBeFocused();
+  const oral = page.getByRole("tabpanel", { name: "Oral expression" });
+  await expect(oral).toContainText("No spoken session yet.");
+  await expect(oral.getByRole("link", { name: "Start a spoken session" })).toBeVisible();
+  await axeClean(page);
+
+  // Printed: both skills, each table shown with no disclosure, and still one page, with speaking's tab chosen too.
   await page.emulateMedia({ media: "print" });
   await expect(page.getByRole("table")).toHaveCount(2);
   await expect(page.getByText("Show the figures")).toHaveCount(0);
   // Paper keeps D145's layout: the overview is the screen's alone, and the counts stand without their bars.
   await expect(page.locator(".app-progress__hero")).toHaveCount(0);
+  await expect(page.getByRole("tablist")).toBeHidden();
   await expect(page.locator(".pl-tally-bar").first()).toBeHidden();
   expect(pageCount(await page.pdf({ format: "Letter" }))).toBe(1);
   expect(pageCount(await page.pdf({ format: "A4" }))).toBe(1);
@@ -136,4 +156,91 @@ test("progress draws twelve weeks at the target band, a gap where evidence is sh
   await expect(page.getByRole("table")).toHaveCount(2);
   expect(pageCount(await page.pdf({ format: "Letter" }))).toBe(1);
   expect(pageCount(await page.pdf({ format: "A4" }))).toBe(1);
+});
+
+/** The committed bank's first French work discussion: a scenario the bank holds, so the session has its type. */
+const workScenario = (): string => {
+  const scenarios = JSON.parse(
+    readFileSync(new URL(`../../../content/bank/v${String(BANK)}/oral/scenarios.json`, import.meta.url), "utf8"),
+  ) as { id: string; sessionType: string; lang: string }[];
+  const found = scenarios.find((scenario) => scenario.sessionType === "work" && scenario.lang === "fr");
+  if (found === undefined) throw new Error("the bank holds a French work discussion");
+  return found.id;
+};
+
+/** An ended spoken session as v1's `oralSessions` holds it: one examiner turn, one spoken answer of nine words in six seconds. */
+const spokenSession = (id: string, day: string, assessment: unknown) => ({
+  id,
+  scenarioId: workScenario(),
+  startedAt: `${day}T10:00:00.000Z`,
+  endedAt: `${day}T10:10:00.000Z`,
+  endReason: "completed",
+  turns: [
+    { speaker: "examiner", text: "Parlez-moi de votre travail.", phase: 0, startMs: 0, endMs: 2_000 },
+    {
+      speaker: "candidate",
+      text: "Je gère un projet de paie pour mon équipe.",
+      phase: 0,
+      startMs: 3_000,
+      endMs: 9_000,
+      input: "voice",
+      pauseMs: 1_000,
+    },
+  ],
+  assessment,
+});
+
+const REPORT = {
+  criteria: Object.fromEntries(
+    ["comprehension", "fluency", "grammar", "vocabulary", "task"].map((criterion) => [criterion, { band: "B", evidence: "« je gère »" }]),
+  ),
+  fixes: [{ criterion: "grammar", subSkill: "agreement", advice: "Accordez.", evidence: "« je gère »" }],
+  missingWords: [{ word: "piloter", turn: 1, excerpt: "gère", example: "Je pilote un projet." }],
+  errors: [],
+};
+
+test("speaking's tab lists the newest sessions, measured, beside what the newest report says to work on (D247)", async ({ page }) => {
+  await page.clock.setFixedTime(NOW);
+  await onboard(page, "skip");
+  await expect(page).toHaveURL(/\/en\/home$/);
+  await page.evaluate(async (sessions) => {
+    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+      const open = indexedDB.open("palier");
+      open.onsuccess = () => resolve(open.result);
+      open.onerror = () => reject(open.error);
+    });
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction(["oralSessions"], "readwrite");
+      for (const session of sessions) tx.objectStore("oralSessions").put(session);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    db.close();
+  }, [spokenSession("oral-reported", "2026-09-30", REPORT), spokenSession("oral-newest", "2026-10-02", null)]);
+  await page.goto("/en/progress");
+
+  await page.getByRole("tab", { name: "Oral expression" }).click();
+  const oral = page.getByRole("tabpanel", { name: "Oral expression" });
+  await expect(oral.getByRole("heading", { name: "Your spoken sessions" })).toBeVisible();
+  await expect(oral).toContainText("2 sessions, 0 minutes spoken");
+  const rows = oral.locator(".app-progress__session");
+  await expect(rows).toHaveCount(2);
+  // Newest first; nine words in six seconds is 90 a minute, measured, never judged.
+  await expect(rows.nth(0)).toContainText("Work discussion");
+  await expect(rows.nth(0)).toContainText(/Oct 2, 2026 · under a minute spoken · 90 words a minute/);
+  await expect(rows.nth(0)).not.toContainText("Report ready");
+  await expect(rows.nth(1)).toContainText("Report ready");
+  await expect(rows.nth(0).getByRole("link", { name: "Open" })).toHaveAttribute("href", /\/en\/practice\/oral\/report\?session=oral-newest$/);
+
+  // The newest report, past the newer session without one: its fix as the criterion and a drill, no level.
+  await expect(oral.getByRole("heading", { name: "From your latest report" })).toBeVisible();
+  await expect(oral).toContainText("Your session of Sep 30, 2026");
+  await expect(oral.locator(".app-progress__fix")).toContainText("Grammatical accuracy");
+  await expect(oral.getByRole("link", { name: "Practise agreement in written expression" })).toHaveAttribute(
+    "href",
+    /\/en\/practice\/writing$/,
+  );
+  await expect(oral).not.toContainText("Level B");
+  await expect(oral.getByRole("link", { name: "Read the full report" })).toHaveAttribute("href", /session=oral-reported$/);
+  await axeClean(page);
 });
