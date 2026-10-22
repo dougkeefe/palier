@@ -60,13 +60,15 @@ export const glanceCards = (
   { kind: "oral", sessions: oral.sessions, minutes: minutesOf(oral.msSpoken) },
 ];
 
-/** All the time practised, answering at both skills and speaking, as hours and the minutes past them. */
+/**
+ * All the time practised, answering at both skills and speaking, as hours and the minutes past them.
+ * It adds the whole minutes each card shows, so the total never differs from its cards by a rounding.
+ */
 export const practiceTime = (
   reports: Readonly<Record<ScoredSkill, ProgressReport>>,
   oral: OralTotals,
 ): { readonly hours: number; readonly minutes: number } => {
-  const ms = SCORED_SKILLS.reduce((sum, skill) => sum + Math.max(0, reports[skill].msAnswering), Math.max(0, oral.msSpoken));
-  const total = minutesOf(ms);
+  const total = SCORED_SKILLS.reduce((sum, skill) => sum + minutesOf(reports[skill].msAnswering), minutesOf(oral.msSpoken));
   return { hours: Math.floor(total / MINUTES_PER_HOUR), minutes: total % MINUTES_PER_HOUR };
 };
 

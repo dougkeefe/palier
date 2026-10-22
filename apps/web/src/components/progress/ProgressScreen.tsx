@@ -107,7 +107,8 @@ export function ProgressScreen() {
           <div className="app-progress__head app-screen-only">
             <h2>{t("detailTitle")}</h2>
             <fieldset className="app-segmented">
-              <legend className="app-segmented__legend">{tToday("skillLabel")}</legend>
+              {/* The heading names the section, so the switch's legend is for a screen reader alone. */}
+              <legend className="pl-visually-hidden">{tToday("skillLabel")}</legend>
               {SCORED_SKILLS.map((s) => (
                 <label key={s} className="app-segmented__option">
                   <input type="radio" name="skill" value={s} checked={skill === s} onChange={() => setSkill(s)} />
@@ -194,7 +195,7 @@ function SkillCards({
   const skillName = <span className="app-print-only">{t("skillSuffix", { skill: tSkills(skill) })}</span>;
   return (
     <>
-      <Card className={["app-progress__trend", className].filter(Boolean).join(" ")}>
+      <Card className={className}>
         <h2>
           {t("trendTitle")}
           {skillName}

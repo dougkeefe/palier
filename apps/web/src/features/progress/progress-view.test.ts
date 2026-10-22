@@ -80,6 +80,12 @@ describe("practiceTime", () => {
     expect(practiceTime({ ...quiet, reading: report("reading", reports.reading.trend.byBand.C, 0, 0) }, NO_ORAL)).toEqual({ hours: 0, minutes: 0 });
   });
 
+  it("adds the minutes each card shows, so the total never disagrees with them by a rounding", () => {
+    const nine = { reading: report("reading", reports.reading.trend.byBand.C, 0, 564_000), writing: report("writing", reports.writing.trend.byBand.C, 0, 564_000) };
+    expect(glanceCards(nine, NO_ORAL, "C").map((card) => card.minutes)).toEqual([9, 9, 0]);
+    expect(practiceTime(nine, NO_ORAL)).toEqual({ hours: 0, minutes: 18 });
+  });
+
   it("counts a negative duration as none", () => {
     expect(practiceTime(reports, { sessions: 1, msSpoken: -60_000 })).toEqual({ hours: 3, minutes: 15 });
   });
