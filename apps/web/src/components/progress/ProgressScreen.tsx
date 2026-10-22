@@ -1,15 +1,16 @@
 "use client";
 
-import type { OralTotals, ProgressReport } from "@palier/app";
+import type { OralProgress, OralTotals, ProgressReport } from "@palier/app";
 import type { ScoredSkill, TargetBand } from "@palier/domain";
 import type { TrendPoint } from "@palier/engine";
 import { SCORED_SKILLS } from "@palier/domain";
-import { Button, Callout, Card, TallyBar } from "@palier/ui";
+import { Button, Callout, Card, TabPanel, Tabs, TallyBar, tabIds } from "@palier/ui";
 import { useFormatter, useTranslations } from "next-intl";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { flushSync } from "react-dom";
 
-import { tallyScale } from "../../features/progress/progress-view";
+import { DETAIL_TABS, ORAL_RECENT_SESSIONS, oralDetail, tallyScale } from "../../features/progress/progress-view";
+import { SKILL_LOOK, type SkillKind } from "../../features/skills/skill-look";
 import { TREND_HISTORY_WEEKS, historyBand } from "../../features/trend/trend-history";
 import { readStudyProfile } from "../../lib/study";
 import { deviceTimeZone } from "../../lib/time-zone";
@@ -17,8 +18,12 @@ import { useContainer } from "../ContainerProvider";
 import { ExportButton } from "../data/ExportButton";
 import { NonAffiliation } from "../NonAffiliation";
 import { TrendMeters } from "../practice/TrendMeters";
+import { OralCards } from "./OralCards";
 import { ProgressGlance } from "./ProgressGlance";
 import { TrendHistory } from "./TrendHistory";
+
+/** Prefixes the detail's tab and panel ids. */
+const DETAIL_ID = "progress-detail";
 
 type Loaded = {
   readonly reports: Readonly<Record<ScoredSkill, ProgressReport>>;
@@ -27,6 +32,8 @@ type Loaded = {
   /** The band the history follows: the study profile's target. */
   readonly band: TargetBand;
   readonly oral: OralTotals;
+  /** Speaking's detail: its newest sessions and its newest report (D247). */
+  readonly oralProgress: OralProgress;
   readonly printedAt: string;
 };
 
@@ -36,19 +43,22 @@ type Loaded = {
  * - **At a glance**, the deep panel: all the time practised, then the three domains side by side,
  *   each a card in its own fill and glyph: a scored skill's accuracy at the target band with its
  *   interval, or its answers toward the first figure as a rail (R10); speaking's sessions and minutes.
- * - **In detail**, for the skill the switch picks: the practice trend with its interval, and over
- *   time, week by week at the target band (D198), beside accuracy by sub-skill, plain counts with a
- *   bar each whose length is the answers given (no percentage on a handful of answers, R10).
+ * - **In detail**, for the domain its tabs pick (D247: three equal tabs, never a radio group, which
+ *   reads as a question). A scored skill: the practice trend with its interval, and over time, week
+ *   by week at the target band (D198), beside accuracy by sub-skill, plain counts with a bar each
+ *   whose length is the answers given (no percentage on a handful of answers, R10). Speaking: its
+ *   newest sessions, measured, beside what its newest report says to work on (`OralCards`).
+ *   Each hero card has a way into its tab.
  * - Then the honest panel on what this does and does not say, the export, and the statement.
  *
  * **It is also the one-page PDF summary** (Gate K, progress.md D145): printed, the page
- * drops the switch, the export and the site chrome, and shows both skills at once, so
+ * drops the tabs, the export and the site chrome, and shows both skills at once, so
  * "Print or save as PDF" is the whole of it and no PDF library ships.
- * The skill the switch does not show is **mounted only while printing** (`usePrinting`), not
+ * A skill the tabs do not show is **mounted only while printing** (`usePrinting`), not
  * hidden on screen: a hidden copy is still in the document, and "13 items answered" twice is
  * ambiguous to anything reading it, a test's locator included.
  *
- * Everything below the skill switch renders in one pass once every report has loaded.
+ * Everything below the tabs renders in one pass once every report has loaded.
  * Static cards drawn early were pushed down when the report arrived above them, a layout
  * shift of 0.148 that Lighthouse caught (performance 0.94).
  */
@@ -59,9 +69,17 @@ export function ProgressScreen() {
   const tToday = useTranslations("today");
   const format = useFormatter();
   const container = useContainer();
-  const [skill, setSkill] = useState<ScoredSkill>("reading");
+  const [skill, setSkill] = useState<SkillKind>("reading");
   const [loaded, setLoaded] = useState<Loaded | "failed" | null>(null);
   const printing = usePrinting();
+  const head = useRef<HTMLDivElement>(null);
+
+  // A hero card's way in: its tab is shown and focused, and the detail's heading brought to the top.
+  const showDetail = (kind: SkillKind) => {
+    flushSync(() => setSkill(kind));
+    document.getElementById(tabIds(DETAIL_ID, kind).tab)?.focus({ preventScroll: true });
+    head.current?.scrollIntoView({ block: "start" });
+  };
 
   useEffect(() => {
     if (container.status !== "ready") return;
@@ -73,14 +91,16 @@ export function ProgressScreen() {
       Promise.all(SCORED_SKILLS.map((s) => useCases.practiceTrendHistory({ skill: s, weeks: TREND_HISTORY_WEEKS, timeZone }))),
       readStudyProfile(settings),
       useCases.oralTotals(),
+      useCases.oralProgress({ limit: ORAL_RECENT_SESSIONS }),
     ]).then(
-      ([reports, histories, profile, oral]) =>
+      ([reports, histories, profile, oral, oralProgress]) =>
         live &&
         setLoaded({
           reports: Object.fromEntries(SCORED_SKILLS.map((s, i) => [s, reports[i]!])) as Record<ScoredSkill, ProgressReport>,
           histories: Object.fromEntries(SCORED_SKILLS.map((s, i) => [s, histories[i]!])) as Record<ScoredSkill, TrendPoint[]>,
           band: historyBand(profile?.targetBand ?? null),
           oral,
+          oralProgress,
           printedAt: clock.now(),
         }),
       () => live && setLoaded("failed"),
@@ -103,33 +123,55 @@ export function ProgressScreen() {
             {t("printedOn", { date: format.dateTime(new Date(loaded.printedAt), { dateStyle: "long" }) })}
           </p>
           {/* Paper already shows both skills in full and the oral card below, so the overview is the screen's alone. */}
-          {printing ? null : <ProgressGlance reports={loaded.reports} oral={loaded.oral} band={loaded.band} />}
-          <div className="app-progress__head app-screen-only">
+          {printing ? null : (
+            <ProgressGlance reports={loaded.reports} oral={loaded.oral} band={loaded.band} onSeeDetail={showDetail} />
+          )}
+          <div className="app-progress__head app-screen-only" ref={head}>
             <h2>{t("detailTitle")}</h2>
-            <fieldset className="app-segmented">
-              {/* The heading names the section, so the switch's legend is for a screen reader alone. */}
-              <legend className="pl-visually-hidden">{tToday("skillLabel")}</legend>
+            <Tabs
+              label={t("detailTabs")}
+              items={DETAIL_TABS.map((kind) => ({
+                id: kind,
+                label: kind === "oral" ? tToday("oralName") : tSkills(kind),
+                glyph: SKILL_LOOK[kind].glyph,
+                tone: SKILL_LOOK[kind].tone,
+              }))}
+              selected={skill}
+              onSelect={setSkill}
+              idPrefix={DETAIL_ID}
+            />
+          </div>
+          {printing ? (
+            <div className="app-progress__detail">
               {SCORED_SKILLS.map((s) => (
-                <label key={s} className="app-segmented__option">
-                  <input type="radio" name="skill" value={s} checked={skill === s} onChange={() => setSkill(s)} />
-                  <span>{tSkills(s)}</span>
-                </label>
+                <SkillCards
+                  key={s}
+                  skill={s}
+                  report={loaded.reports[s]}
+                  history={loaded.histories[s]}
+                  band={loaded.band}
+                  printing
+                  printOnly={s !== skill}
+                />
               ))}
-            </fieldset>
-          </div>
-          <div className="app-progress__detail">
-            {SCORED_SKILLS.filter((s) => s === skill || printing).map((s) => (
-              <SkillCards
-                key={s}
-                skill={s}
-                report={loaded.reports[s]}
-                history={loaded.histories[s]}
-                band={loaded.band}
-                printing={printing}
-                printOnly={s !== skill}
-              />
-            ))}
-          </div>
+            </div>
+          ) : (
+            <TabPanel idPrefix={DETAIL_ID} id={skill} className="app-progress__detail">
+              {skill === "oral" ? (
+                <OralCards detail={oralDetail(loaded.oralProgress)} totals={loaded.oral} />
+              ) : (
+                <SkillCards
+                  key={skill}
+                  skill={skill}
+                  report={loaded.reports[skill]}
+                  history={loaded.histories[skill]}
+                  band={loaded.band}
+                  printing={false}
+                  printOnly={false}
+                />
+              )}
+            </TabPanel>
+          )}
           {printing ? (
             <Card>
               <h2>{t("oralTitle")}</h2>

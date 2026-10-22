@@ -1,8 +1,9 @@
-import type { OralTotals, ProgressReport } from "@palier/app";
-import type { ScoredSkill, TargetBand } from "@palier/domain";
+import type { OralProgress, OralProgressReport, OralTotals, ProgressReport } from "@palier/app";
+import type { OralSessionType, ScoredSkill, SessionId, TargetBand } from "@palier/domain";
 import { SCORED_SKILLS } from "@palier/domain";
 import type { SubSkillTally } from "@palier/engine";
 
+import type { SkillKind } from "../skills/skill-look";
 import { type TrendLine, trendLines } from "../trend/trend-lines";
 
 /**
@@ -74,3 +75,49 @@ export const practiceTime = (
 
 /** The scale every sub-skill's bar is drawn to: the most answers any one has, so a handful draws short. */
 export const tallyScale = (rows: readonly SubSkillTally[]): number => Math.max(0, ...rows.map((row) => row.attempted));
+
+/** The detail's tabs (D247): the three domains as equals, in the order the hero names them. */
+export const DETAIL_TABS: readonly SkillKind[] = [...SCORED_SKILLS, "oral"];
+
+/** How many of the newest spoken sessions speaking's detail lists (D247), a display rule and not the exam's. */
+export const ORAL_RECENT_SESSIONS = 5;
+
+/** One spoken session as speaking's detail lists it: its spoken time in whole minutes and its pace, rounded. */
+export type OralDetailRow = {
+  readonly id: SessionId;
+  readonly startedAt: string;
+  readonly sessionType: OralSessionType | null;
+  readonly minutes: number;
+  readonly wordsPerMinute: number | null;
+  readonly assessed: boolean;
+};
+
+/**
+ * What speaking's detail shows (D247): nothing yet but the way in; the sessions, with the newest one a
+ * report could still be asked of, or `null` when none listed can have one; or the sessions and the newest
+ * report's fixes.
+ */
+export type OralDetail =
+  | { readonly status: "empty" }
+  | { readonly status: "unreported"; readonly rows: readonly OralDetailRow[]; readonly askable: SessionId | null }
+  | { readonly status: "reported"; readonly rows: readonly OralDetailRow[]; readonly report: OralProgressReport };
+
+export const oralDetail = (progress: OralProgress): OralDetail => {
+  const rows = progress.recent.map(
+    (session): OralDetailRow => ({
+      id: session.id,
+      startedAt: session.startedAt,
+      sessionType: session.sessionType,
+      minutes: minutesOf(session.msSpoken),
+      wordsPerMinute: session.wordsPerMinute === null ? null : Math.round(session.wordsPerMinute),
+      assessed: session.assessed,
+    }),
+  );
+  if (rows.length === 0) return { status: "empty" };
+  if (progress.latestReport === null) {
+    // The report screen refuses a session with no answer, or whose scenario the bank no longer holds.
+    const askable = progress.recent.find((session) => session.answered && session.sessionType !== null);
+    return { status: "unreported", rows, askable: askable?.id ?? null };
+  }
+  return { status: "reported", rows, report: progress.latestReport };
+};

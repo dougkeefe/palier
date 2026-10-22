@@ -10,6 +10,7 @@ import { GLYPH_PATHS, Glyph } from "./Glyph.js";
 import { MonthCalendar } from "./MonthCalendar.js";
 import { Sparkline } from "./Sparkline.js";
 import { TallyBar } from "./TallyBar.js";
+import { TabPanel, Tabs } from "./Tabs.js";
 import { OptionRow } from "./OptionRow.js";
 import { Passage } from "./Passage.js";
 import { ProgressRail } from "./ProgressRail.js";
@@ -195,6 +196,64 @@ describe("TallyBar", () => {
     expect(bar?.getAttribute("aria-hidden")).toBe("true");
     expect(container.querySelector<HTMLElement>(".pl-tally-bar__answered")?.style.width).toBe("50%");
     expect(container.querySelector<HTMLElement>(".pl-tally-bar__correct")?.style.width).toBe("25%");
+  });
+});
+
+describe("Tabs (D247)", () => {
+  const items = [
+    { id: "reading", label: "Reading", glyph: "book", tone: "tint" },
+    { id: "writing", label: "Writing", glyph: "pen", tone: "mint" },
+    { id: "oral", label: "Speaking" },
+  ] as const;
+
+  it("is a named tab list whose shown tab is selected and controls its panel", () => {
+    render(
+      <>
+        <Tabs label="Skill" items={items} selected="writing" onSelect={() => {}} idPrefix="d" />
+        <TabPanel idPrefix="d" id="writing" className="extra">
+          Detail
+        </TabPanel>
+      </>,
+    );
+    expect(screen.getByRole("tablist", { name: "Skill" })).toBeDefined();
+    const tabs = screen.getAllByRole("tab");
+    expect(tabs.map((tab) => tab.getAttribute("aria-selected"))).toEqual(["false", "true", "false"]);
+    const panel = screen.getByRole("tabpanel", { name: "Writing" });
+    expect(tabs[1]?.getAttribute("aria-controls")).toBe(panel.id);
+    expect(panel.className).toBe("pl-tab-panel extra");
+    expect(panel.getAttribute("tabindex")).toBe("0");
+  });
+
+  it("puts only the shown tab in the tab order", () => {
+    render(<Tabs label="Skill" items={items} selected="oral" onSelect={() => {}} idPrefix="d" />);
+    expect(screen.getAllByRole("tab").map((tab) => tab.tabIndex)).toEqual([-1, -1, 0]);
+  });
+
+  it("draws a mark in its fill only for a tab that has a glyph, on the tint when no fill is named", () => {
+    const { container } = render(
+      <Tabs label="Skill" items={[...items, { id: "x", label: "X", glyph: "star" }]} selected="oral" onSelect={() => {}} idPrefix="d" />,
+    );
+    const marks = [...container.querySelectorAll(".pl-tabs__mark")].map((mark) => mark.className);
+    expect(marks).toEqual(["pl-tabs__mark pl-tabs__mark--tint", "pl-tabs__mark pl-tabs__mark--mint", "pl-tabs__mark pl-tabs__mark--tint"]);
+  });
+
+  it("selects a tab on click", () => {
+    const onSelect = vi.fn();
+    render(<Tabs label="Skill" items={items} selected="reading" onSelect={onSelect} idPrefix="d" />);
+    fireEvent.click(screen.getByRole("tab", { name: "Speaking" }));
+    expect(onSelect).toHaveBeenCalledWith("oral");
+  });
+
+  it("selects and focuses the tab an arrow reaches, and lets other keys through", () => {
+    const onSelect = vi.fn();
+    render(<Tabs label="Skill" items={items} selected="reading" onSelect={onSelect} idPrefix="d" />);
+    const reading = screen.getByRole("tab", { name: "Reading" });
+    expect(fireEvent.keyDown(reading, { key: "ArrowLeft" })).toBe(false);
+    expect(onSelect).toHaveBeenCalledWith("oral");
+    expect(document.activeElement).toBe(screen.getByRole("tab", { name: "Speaking" }));
+    onSelect.mockClear();
+    expect(fireEvent.keyDown(reading, { key: "ArrowDown" })).toBe(true);
+    expect(onSelect).not.toHaveBeenCalled();
   });
 });
 

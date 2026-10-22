@@ -85,6 +85,7 @@ import type {
   TelemetryStore,
   AnswerSource,
   OralHistoryEntry,
+  OralProgress,
   OralPracticeRun,
   OralStudioRun,
   OralReport,
@@ -128,6 +129,7 @@ import {
   practiceTrend,
   practiceTrendEvidence,
   oralTotals,
+  oralProgress,
   practiceActivity,
   practiceTrendHistory,
   progressReport,
@@ -425,6 +427,8 @@ export type UseCases = {
   readonly practiceTrendHistory: (request: PracticeTrendHistoryRequest) => Promise<TrendPoint[]>;
   /** The progress summary's oral line: sessions ended and minutes spoken, on this device (§8.9). */
   readonly oralTotals: () => Promise<OralTotals>;
+  /** The progress page's speaking detail: the newest `limit` sessions, measured, and the newest report's fixes (D247). */
+  readonly oralProgress: (request: { readonly limit: number }) => Promise<OralProgress>;
   /** Today's week: what each skill has done today, and the last seven days' answers and time (D219). */
   readonly practiceActivity: (request: PracticeActivityRequest) => Promise<PracticeActivity>;
   /** PRD §9's streak, on the device's days, and a freeze still to announce (D159). */
@@ -733,6 +737,7 @@ function buildUseCases(ports: Ports): UseCases {
         clock: ports.clock,
       }),
     oralTotals: () => oralTotals({ oral: ports.oral }),
+    oralProgress: (request) => oralProgress(request.limit, { oral: ports.oral, items: ports.items }),
     practiceActivity: (request) =>
       practiceActivity(request, { attempts: ports.attempts, oral: ports.oral, clock: ports.clock }),
     streakReport: (request) =>

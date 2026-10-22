@@ -2,11 +2,11 @@
 
 import type { OralTotals, ProgressReport } from "@palier/app";
 import type { ScoredSkill, TargetBand } from "@palier/domain";
-import { BandMeter, Card, Glyph, ProgressRail } from "@palier/ui";
+import { BandMeter, Button, Card, Glyph, ProgressRail } from "@palier/ui";
 import { useTranslations } from "next-intl";
 
 import { type GlanceCard, glanceCards, practiceTime } from "../../features/progress/progress-view";
-import { SKILL_LOOK } from "../../features/skills/skill-look";
+import { SKILL_LOOK, type SkillKind } from "../../features/skills/skill-look";
 
 /**
  * The progress page's overview (progress.md D245), the deep panel Today's hero is (D219): all the time
@@ -14,16 +14,19 @@ import { SKILL_LOOK } from "../../features/skills/skill-look";
  * A scored skill leads with its accuracy at the target band and its interval, or, short of the
  * evidence for one, its answers toward the first figure as a rail (R10); speaking with its sessions.
  * It restates the reports the page already holds and says "answers", never "items answered", so the
- * detail's line stays the one place that sentence is.
+ * detail's line stays the one place that sentence is. Each card ends in a way into its tab of the
+ * detail below (D247), so the overview and the tabs read as the same three domains.
  */
 export function ProgressGlance({
   reports,
   oral,
   band,
+  onSeeDetail,
 }: {
   reports: Readonly<Record<ScoredSkill, ProgressReport>>;
   oral: OralTotals;
   band: TargetBand;
+  onSeeDetail: (kind: SkillKind) => void;
 }) {
   const t = useTranslations("progress");
   const time = practiceTime(reports, oral);
@@ -36,7 +39,7 @@ export function ProgressGlance({
       <ol className="app-progress__skills">
         {glanceCards(reports, oral, band).map((card) => (
           <li key={card.kind}>
-            <GlanceSkill card={card} band={band} />
+            <GlanceSkill card={card} band={band} onSeeDetail={onSeeDetail} />
           </li>
         ))}
       </ol>
@@ -44,8 +47,16 @@ export function ProgressGlance({
   );
 }
 
-/** One domain's card: its mark and name, its headline as a figure and a picture of it, then its totals. */
-function GlanceSkill({ card, band }: { card: GlanceCard; band: TargetBand }) {
+/** One domain's card: its mark and name, its headline as a figure and a picture of it, its totals, then the way to its detail. */
+function GlanceSkill({
+  card,
+  band,
+  onSeeDetail,
+}: {
+  card: GlanceCard;
+  band: TargetBand;
+  onSeeDetail: (kind: SkillKind) => void;
+}) {
   const t = useTranslations("progress");
   const tSkills = useTranslations("skills");
   const tToday = useTranslations("today");
@@ -94,6 +105,9 @@ function GlanceSkill({ card, band }: { card: GlanceCard; band: TargetBand }) {
           <p className="app-progress__skill-line">{t("glanceAnswers", { count: card.answered, minutes: card.minutes })}</p>
         </>
       )}
+      <Button variant="ghost" className="app-progress__see-detail" onClick={() => onSeeDetail(card.kind)}>
+        {t("seeDetail", { skill: name })}
+      </Button>
     </Card>
   );
 }

@@ -55,7 +55,11 @@ system, not the application.
   shaded, a week without an estimate a gap, never bridged; `aria-hidden`, because the caller puts the same
   figures in a table beside it; nothing animated), **TallyBar** (D245: a sub-skill's answers, `aria-hidden` beside the
   caller's "6 of 14 correct". Its length is the answers given against the list's `scale`, so a handful of answers draws
-  short, and its solid `primary` part is the right answers. No red or green, and nothing moves), **Sheet** (the feedback panel: a labelled region whose heading takes
+  short, and its solid `primary` part is the right answers. No red or green, and nothing moves), **Tabs** and
+  **TabPanel** (D247: WAI-ARIA's tabs for several views of one place, never a radio group; controlled, selection follows
+  focus by `tabsKeydown`, only the selected tab in the tab order, a mark on a light fill (`TabTone`) and the name, the shown
+  tab underlined in `primary` or `Highlight`; below 600px the tabs share the width and a name wraps; carries
+  `"use client"`), **Sheet** (the feedback panel: a labelled region whose heading takes
   focus, not a dialog), **Passage** (serif, 66ch, `lang`-marked), **Toast** (a polite status
   message that does **not** dismiss itself: a timed disappearance is a 2.2.1 problem) and
   **Mascot** (Coco asleep, decorative and `aria-hidden`; the empty state's words carry the

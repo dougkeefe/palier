@@ -437,3 +437,39 @@ export const easeLevel = (shown: number, heard: number): number => (Number.isFin
 
 /** A still form, under reduced motion, is drawn at rest and never moves. */
 export const voiceFormClass = (still: boolean): string => (still ? "pl-voice-form pl-voice-form--still" : "pl-voice-form");
+
+// ---- Tabs (one place, several views: /progress's detail, progress.md D247) ----
+
+/** A tab's mark: the glyph sits on a disc in one of the light fills, as the skill cards wear it (D219). */
+export type TabTone = "tint" | "mint" | "rose";
+
+/**
+ * The tab list's keyboard model, WAI-ARIA's for a horizontal list: the left and right arrows move to
+ * the previous and next tab, wrapping, and Home and End to the first and last. Up and down are
+ * left to scroll the page. The answer is the tab to select and focus, or `null` for a key the list
+ * does not use, so the caller lets the event through.
+ */
+export const tabsKeydown = (key: string, index: number, count: number): number | null => {
+  if (count <= 0) return null;
+  switch (key) {
+    case "ArrowRight":
+      return (index + 1) % count;
+    case "ArrowLeft":
+      return (index - 1 + count) % count;
+    case "Home":
+      return 0;
+    case "End":
+      return count - 1;
+    default:
+      return null;
+  }
+};
+
+/** The ids that tie a tab to its panel, for `aria-controls` and `aria-labelledby`. */
+export const tabIds = (prefix: string, id: string): { readonly tab: string; readonly panel: string } => ({
+  tab: `${prefix}-tab-${id}`,
+  panel: `${prefix}-panel-${id}`,
+});
+
+/** The selected tab carries the underline; the others are muted until hovered. */
+export const tabClass = (selected: boolean): string => (selected ? "pl-tabs__tab pl-tabs__tab--selected" : "pl-tabs__tab");

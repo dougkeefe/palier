@@ -88,7 +88,9 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   `CostEntry.sessionId`, stamped by `withAiProvider`'s optional fourth argument, which the turn-based transport and the
   report both pass (D125), so `oralReport` costs a session from its own rows, never a time window, per line
   (`{ practice, report }`, each `{ usd, calls, unpriced }`, D127). `oralReport` also computes the fluency (the engine's,
-  D123), and says in `blocked` why a report cannot be asked for; `oralHistory` lists ended sessions. **`StartSession`
+  D123), and says in `blocked` why a report cannot be asked for; `oralHistory` lists ended sessions, and `oralProgress`
+  (D247) the newest `limit` of them with their spoken time and the engine's pace, and the newest report's fixes, for
+  `/progress`; it reads no filler list and returns no criterion level. **`StartSession`
   derives `focusSubSkills`** from the newest assessed session **in the plan's language**, through `oral: Pick<OralStore,
   "all">` and the bank's scenarios, as it derives `lastDayCompleted` (D124, D127). Each candidate's turn says how it
   arrived (`input`) and, for a clip, the pause the screen measured (`CandidateAnswer.pauseMs` → `OralTurn.pauseMs`, D127).

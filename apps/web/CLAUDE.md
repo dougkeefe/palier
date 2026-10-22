@@ -122,14 +122,18 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   human reads at Gate L. **A change to what the server holds, never holds or deletes changes `/privacy` in the same
   pull request.** Its never-synced list reads the sync settings' own keys (architecture.md §9.4, "verbatim").
 - **`/progress` is also the one-page PDF** (PRD §8.9, D145): a print stylesheet at the end of `globals.css`, no PDF
-  library. `app-print-only` / `app-screen-only` pick what paper shows, and the skill the switch does not show is
+  library. `app-print-only` / `app-screen-only` pick what paper shows, and a skill the tabs do not show is
   **mounted only while printing** (`usePrinting`: `beforeprint`/`afterprint` and the print media query), since a
   hidden duplicate would still be in the document. `content.spec.ts` holds it to one page on Letter and A4.
   **On screen it is a dashboard** (D245). A deep hero (`ProgressGlance.tsx`, over `features/progress/progress-view.ts`)
-  shows the three domains in `features/skills/skill-look.ts`'s fills, the same as Today. Below it, the chosen skill's trend
-  sits beside its sub-skills, each with a `TallyBar`. The hero is mounted only when not printing, and its wrappers are
-  `display: contents` on paper, so the printout is D145's. The hero says "answers", never "items answered": that sentence
-  is the detail's alone, and three specs find it as the single element on the page.
+  shows the three domains in `features/skills/skill-look.ts`'s fills, the same as Today, each card ending in a way into
+  its tab. Below it, **the detail is three equal tabs** (D247, `@palier/ui`'s `Tabs`, never a radio switch): a scored
+  skill's trend beside its sub-skills, each with a `TallyBar`; or speaking's newest sessions, measured, beside the newest
+  report's fixes (`OralCards.tsx` over the container's `oralProgress`). **No criterion level is shown off the oral report**,
+  where it stands beside its evidence (R10), and nothing on the page spends. The hero is mounted only when not printing,
+  the tabs are screen-only and the wrappers `display: contents` on paper, so the printout is D145's whichever tab is chosen. The
+  hero says "answers", never "items answered": that sentence is the detail's alone, and three specs find it as the single
+  element on the page.
 - **Keyboard** (PRD §11, D145). Every page-wide key handler asks `lib/keyboard.ts`'s `isPageKey` first (no chord,
   no field, and not Enter on a real button). The shortcut sheet at `?` (`components/ShortcutSheet.tsx`, in the footer)
   lists `features/shortcuts/shortcuts.ts`'s registry: **a screen that gains a key registers a row there**, with its

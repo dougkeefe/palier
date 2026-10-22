@@ -10,6 +10,9 @@ import {
   monthGrid,
   sparklineGeometry,
   tallyBarGeometry,
+  tabClass,
+  tabIds,
+  tabsKeydown,
   streakFlameClass,
   optionRowKeydown,
   optionRowState,
@@ -411,5 +414,43 @@ describe("voiceFormClass (D184)", () => {
   it("marks a still form", () => {
     expect(voiceFormClass(true)).toBe("pl-voice-form pl-voice-form--still");
     expect(voiceFormClass(false)).toBe("pl-voice-form");
+  });
+});
+
+describe("tabsKeydown (D247)", () => {
+  it("moves to the next tab on ArrowRight, wrapping at the end", () => {
+    expect(tabsKeydown("ArrowRight", 0, 3)).toBe(1);
+    expect(tabsKeydown("ArrowRight", 2, 3)).toBe(0);
+  });
+
+  it("moves to the previous tab on ArrowLeft, wrapping at the start", () => {
+    expect(tabsKeydown("ArrowLeft", 1, 3)).toBe(0);
+    expect(tabsKeydown("ArrowLeft", 0, 3)).toBe(2);
+  });
+
+  it("goes to the first tab on Home and the last on End", () => {
+    expect(tabsKeydown("Home", 2, 3)).toBe(0);
+    expect(tabsKeydown("End", 0, 3)).toBe(2);
+  });
+
+  it("leaves the up and down arrows, and any other key, to the page", () => {
+    expect(tabsKeydown("ArrowDown", 0, 3)).toBeNull();
+    expect(tabsKeydown("ArrowUp", 1, 3)).toBeNull();
+    expect(tabsKeydown("Enter", 0, 3)).toBeNull();
+  });
+
+  it("ignores every key when there are no tabs", () => {
+    expect(tabsKeydown("ArrowRight", 0, 0)).toBeNull();
+  });
+});
+
+describe("tabIds and tabClass (D247)", () => {
+  it("ties a tab to its panel through ids under the list's prefix", () => {
+    expect(tabIds("detail", "oral")).toEqual({ tab: "detail-tab-oral", panel: "detail-panel-oral" });
+  });
+
+  it("marks the shown tab, and only it", () => {
+    expect(tabClass(true)).toBe("pl-tabs__tab pl-tabs__tab--selected");
+    expect(tabClass(false)).toBe("pl-tabs__tab");
   });
 });
