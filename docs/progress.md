@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 23 October 2026 (the translator: English into federal French, or the user's own French corrected and explained with curated study links, D248)
+**Last updated:** 23 October 2026 (the translator: English into federal French, or the user's own French corrected and explained with curated study links, D248; its documents brought in line and its prompt made consistent)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -8240,6 +8240,29 @@ corrected, with links to study each error.
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 23 October 2026 — `dougkeefe/translate-to-french` (the translator reviewed against the standards; D248)
+
+Not *Next, decided*, which is unchanged (Gate O). The human asked whether PR #96 met the project's standards, its
+documentation especially. The code and its tests did; the documents outside this file did not, and the prompt
+contradicted itself.
+- **The documents brought in line with D248.** `implementation-plan.md` §3.3 gains `translate`, and `interpretDiagnostic`,
+  which ADR 25 added without amending it; `architecture.md` §4's tree gains `content/resources/`; `product-requirements.md`
+  §8.7 gains an "As built" paragraph for the translator; `apps/web/CLAUDE.md`'s island list names it.
+- **The prompt no longer asks for every value.** Its example shows both jobs' fields, and its closing line, shared with
+  the other prompts, said "filling every value", which asks for the mixed shape `checkTranslation` refuses, a retry billed
+  twice. It now says which arrays each job leaves empty, and names no source in the example when the model is to decide.
+  `PROMPT_VERSION` stays at 5: nothing for this prompt is recorded.
+- **The screen's locale decisions moved into `translate-view.ts`** with tests (`translatorFeedbackLang` over the oral
+  report's `feedbackLangFor`, `resourceTitle`, `resourceInOtherLanguage`), so `Translator.tsx` holds rendering only.
+- **A correction to the entry below**: `translate.spec.ts` has 3 tests, not 4; the run's fourth was the warmup.
+
+**Verified:**
+- `pnpm verify` was green: 282 files, 4,545 tests passed (8 todo), with no dependency violations.
+- After `pnpm --filter @palier/web build`, the chromium project's `translate.spec.ts` (3 tests) and `key-leak.spec.ts`
+  passed with the warmup, 5 of 5, run with `--workers=1` on port 3050, since another project held 3000 here. In parallel,
+  `key-leak` and the first translator test failed in onboarding before reaching the translator; serially both passed.
+- Not run: `csp-production` and the live smoke.
 
 ### 23 October 2026 — `dougkeefe/translate-to-french` (the translator; D248)
 

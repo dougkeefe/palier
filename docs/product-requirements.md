@@ -349,6 +349,8 @@ Session types offered:
 
 Optional and clearly marked as supplementary, since the real written test is multiple choice. A prompt in the register of GC work writing (a briefing note paragraph, a reply to a client, a meeting summary), a plain editor with a word target and a timer, then AI feedback structured as: register, structure, grammar and mechanics, vocabulary precision, and a rewritten model answer at the target level with the changes highlighted.
 
+As built (owner's request, 23 October 2026; progress.md D248): beside the workshop, and linked from the writing drill, a **translator** at `/practice/writing/translate`, also supplementary. The left text is English or French (Detect, English or French); the right is always French. **English is translated** for the federal public service, with up to six notes on its choices: a federal term, an official name, a false friend avoided. **The user's own French comes back corrected**, keeping their meaning and voice, with what it does well, each correction marked over their words and numbered, the reason for each and the written-expression sub-skill it is a slip in, then "What to study next" by sub-skill. **The study links are data, never a model's**: Palier's library article and curated government references from `@palier/content/resources`. One metered call on the user's key, its estimate beside the button, at most 4,000 characters, and **nothing is stored**: the answer lives on the screen.
+
 ### 8.8 Review queue (`/review`)
 
 A single stack of due items with a count, an estimated time, and a satisfying empty state. Mistakes are also browsable as a "mistake library" grouped by sub-skill, which is where a user goes the night before a test.

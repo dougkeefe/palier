@@ -421,12 +421,14 @@ const diagnostic = (req: DiagnosticInterpretationRequest): { system: string; use
  * translated for the federal public service. The model names a correction's words and its
  * sub-skill, never offsets and never a link: `assembleTranslation` places the words, and the
  * screen links the sub-skill's curated resources. The text is fenced as data, so an instruction
- * written in it is translated or corrected, never followed.
+ * written in it is translated or corrected, never followed. The example shows both jobs' fields, so
+ * the closing line says which arrays stay empty, and names no source when the model is to decide:
+ * a mixed shape is refused and retried, which bills twice.
  */
 const translation = (req: TranslationRequest): { system: string; user: string } => {
   const target = languageName(req.target);
   const example = JSON.stringify({
-    source: req.source ?? req.target,
+    source: req.source ?? "en or fr",
     output: "…",
     strengths: ["…"],
     corrections: [{ excerpt: "exact words copied from the text", correction: "…", why: "…", subSkill: WRITING_SUB_SKILLS[0] }],
@@ -466,7 +468,9 @@ const translation = (req: TranslationRequest): { system: string; user: string } 
       "your translation of them, and `why`; or none when there is nothing worth noting.",
       `Write \`output\`, \`correction\` and \`rendering\` in ${target}. Write \`strengths\` and every \`why\` in`,
       `${languageName(req.feedbackLang)}, plainly, as you would explain it to a colleague.`,
-      `Reply with JSON in exactly this shape (no extra or missing fields), filling every value: ${example}`,
+      "Reply with JSON in exactly this shape (no extra or missing fields). It shows every field, but one job fills only",
+      "its own: give `[]` for the arrays your job leaves empty, `notes` for a correction and `strengths` and `corrections`",
+      `for a translation. ${example}`,
     ].join(" "),
   };
 };

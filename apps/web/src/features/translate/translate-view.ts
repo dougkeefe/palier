@@ -3,6 +3,7 @@ import { MAX_TRANSLATION_CHARS } from "@palier/app";
 import type { Lang, StudyResource, Translation, TranslationCorrection, WritingSubSkill } from "@palier/domain";
 
 import { checkFailure } from "../key/key-view";
+import { feedbackLangFor } from "../oral/report-view";
 import { segmentText, type TextSegment } from "../writing/inline-errors";
 
 /**
@@ -31,6 +32,17 @@ export const translateRequest = (text: string, choice: SourceChoice, feedbackLan
   target: TARGET_LANG,
   feedbackLang,
 });
+
+/** The explanations' language: the interface's, French or English, as the oral report's is. */
+export const translatorFeedbackLang = (locale: string): Lang => feedbackLangFor(locale);
+
+/** A study resource's title in the interface's language. */
+export const resourceTitle = (resource: StudyResource, locale: string): string =>
+  feedbackLangFor(locale) === "fr" ? resource.title.fr : resource.title.en;
+
+/** Whether a study resource is written in another language than the interface's, which its link then says. */
+export const resourceInOtherLanguage = (resource: StudyResource, locale: string): boolean =>
+  resource.lang !== feedbackLangFor(locale);
 
 /** How many characters are left before the limit; negative once over it. */
 export const charactersLeft = (text: string): number => MAX_TRANSLATION_CHARS - text.length;

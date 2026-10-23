@@ -12,6 +12,8 @@ import {
   failureMessage,
   initialTranslator,
   isStale,
+  resourceInOtherLanguage,
+  resourceTitle,
   resumedTranslator,
   sourceOf,
   studyFocus,
@@ -19,6 +21,7 @@ import {
   translateFailure,
   translateRequest,
   translator,
+  translatorFeedbackLang,
 } from "./translate-view";
 
 const named = (name: string) => Object.assign(new Error(name), { name });
@@ -164,5 +167,25 @@ describe("the explanation", () => {
   it("lists what to study, the sub-skill with most corrections first, then by first appearance", () => {
     expect(studyFocus(CORRECTED)).toEqual(["agreement", "prepositions-and-government"]);
     expect(studyFocus(TRANSLATED)).toEqual([]);
+  });
+});
+
+describe("the interface's language", () => {
+  it("writes the explanations in the interface's language, French or English", () => {
+    expect(translatorFeedbackLang("fr")).toBe("fr");
+    expect(translatorFeedbackLang("en")).toBe("en");
+  });
+
+  it("titles a resource in the interface's language", () => {
+    const page: StudyResource = { ...resource("r", "agreement"), title: { en: "Agreement", fr: "L’accord" } };
+    expect(resourceTitle(page, "fr")).toBe("L’accord");
+    expect(resourceTitle(page, "en")).toBe("Agreement");
+  });
+
+  it("says a resource is in the other language only when it is not the interface's", () => {
+    const french = resource("r", "agreement");
+    expect(resourceInOtherLanguage(french, "fr")).toBe(false);
+    expect(resourceInOtherLanguage(french, "en")).toBe(true);
+    expect(resourceInOtherLanguage({ ...french, lang: "en" }, "en")).toBe(false);
   });
 });

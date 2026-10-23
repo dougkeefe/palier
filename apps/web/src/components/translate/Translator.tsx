@@ -19,12 +19,15 @@ import {
   failureMessage,
   initialTranslator,
   isStale,
+  resourceInOtherLanguage,
+  resourceTitle,
   resumedTranslator,
   studyFocus,
   textProblem,
   translateFailure,
   translateRequest,
   translator,
+  translatorFeedbackLang,
 } from "../../features/translate/translate-view";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
@@ -67,7 +70,7 @@ export function Translator() {
 function Workspace({ container, keyHeld, onKeyLost }: { container: Container; keyHeld: boolean; onKeyLost: () => void }) {
   const t = useTranslations("translate");
   const locale = useLocale();
-  const feedbackLang: Lang = locale === "fr" ? "fr" : "en";
+  const feedbackLang = translatorFeedbackLang(locale);
   const id = useId();
   const { useCases } = container;
   const [held] = useState(() => useCases.translationInFlight());
@@ -370,7 +373,6 @@ function StudyLinks({ subSkill, resources }: { subSkill: StudyResource["subSkill
   const tSub = useTranslations("subSkills");
   const locale = useLocale();
   const guide = articleHref(subSkill);
-  const title = (resource: StudyResource): string => (locale === "fr" ? resource.title.fr : resource.title.en);
   return (
     <ul className="app-list" aria-label={t("studyTitle")}>
       {guide === null ? null : (
@@ -390,13 +392,13 @@ function StudyLinks({ subSkill, resources }: { subSkill: StudyResource["subSkill
             target="_blank"
             rel="noopener noreferrer"
           >
-            {title(resource)}
+            {resourceTitle(resource, locale)}
             <span className="pl-visually-hidden"> {t("newTab")}</span>
           </a>{" "}
           <span className="app-muted">
-            {resource.lang === locale
-              ? t(`source_${resource.source}`)
-              : t("resourceInOtherLang", { source: t(`source_${resource.source}`) })}
+            {resourceInOtherLanguage(resource, locale)
+              ? t("resourceInOtherLang", { source: t(`source_${resource.source}`) })
+              : t(`source_${resource.source}`)}
           </span>
         </li>
       ))}

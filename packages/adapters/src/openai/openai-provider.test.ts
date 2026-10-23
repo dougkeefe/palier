@@ -1262,12 +1262,22 @@ describe("openAiProvider — translate (D248)", () => {
     expect(user).toContain("in English, plainly");
   });
 
+  it("says which arrays each job leaves empty, and names no source in the example when the model is to decide", async () => {
+    const { fetchImpl, sent } = answers(CORRECTED);
+    await makeProvider({ fetchImpl }).translate(correcting);
+    const user = userOf(sent()[0]);
+    expect(user).toContain("give `[]` for the arrays your job leaves empty");
+    expect(user).toContain('"source":"en or fr"');
+    expect(user).not.toContain("filling every value");
+  });
+
   it("tells the model the language the user named, rather than asking it to decide", async () => {
     const { fetchImpl, sent } = answers(TRANSLATED);
     await makeProvider({ fetchImpl }).translate({ ...correcting, text: "Hello.", source: "en", feedbackLang: "fr" });
     const user = userOf(sent()[0]);
     expect(user).toContain('The writer says the text is in English: give `source` as "en".');
     expect(user).not.toContain("First decide");
+    expect(user).toContain('"source":"en"');
     expect(user).toContain("in French, plainly");
   });
 
