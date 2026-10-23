@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 22 October 2026 (Today's plan as three equal tabs, speaking included, D248)
+**Last updated:** 23 October 2026 (the E2E warmup compiles the library's articles and the error pages, D249)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,7 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/today-s-plan-oral-ux` | **Today's plan as three equal tabs** (D248, the human's request, 22 October 2026): Reading, Written expression and Oral expression as `@palier/ui`'s `Tabs` in place of the plan's two-skill radio switch, as `/progress` took them (D247). Speaking's plan is one suggested session (the kind practised least lately, its length and practice-mode estimate, and a way to `/practice/oral`), and its "Where you stand" is the newest report's fixes. Nothing on Today spends. | 22 October 2026 |
+| `dougkeefe/today-s-plan-oral-ux` | **Today's plan as three equal tabs** (D248, the human's request, 22 October 2026): Reading, Written expression and Oral expression as `@palier/ui`'s `Tabs` in place of the plan's two-skill radio switch, as `/progress` took them (D247). Speaking's plan is one suggested session (the kind practised least lately, its length and practice-mode estimate, and a way to `/practice/oral`), and its "Where you stand" is the newest report's fixes. Nothing on Today spends. Also the E2E warmup's cold routes, which failed #95's medium lane (D249). | 22 October 2026 |
 | `dougkeefe/oral-progress-radio-buttons-ux` | **`/progress`'s detail as three equal tabs** (D247, the human's request, 22 October 2026): Reading, Written expression and Oral expression as WAI-ARIA tabs (`@palier/ui`'s new `Tabs`) in place of the two-skill radio switch; speaking gains a detail panel (its newest sessions, measured, beside the newest report's fixes, over `@palier/app`'s new `oralProgress`); each hero card has a way into its tab. Print is unchanged. | 22 October 2026 |
 | `dougkeefe/dependabot-status-resolve` | **Dependabot cleared** (D246, the human's request, 22 October 2026): PR #90's 18 minor and patch bumps installed with the repo's pnpm, since Dependabot's lockfile pulled in `@types/node` 26, and `vite` 8.3.5 named as a root devDependency to close alerts #16–#18. | 22 October 2026 |
 | `dougkeefe/klt79` | **`/progress` as a dashboard** (D245, the human's request, 22 October 2026): an overview of all three domains in Today's deep hero, then the chosen skill's trend beside its sub-skills, each sub-skill with a bar (`@palier/ui`'s new `TallyBar`). Print is unchanged. | 22 October 2026 |
@@ -8220,9 +8220,47 @@ control, as they had been on `/progress` (D247).
 - **Nothing on Today spends or writes.** `loadOral` reads the key's status, `oralSessionChoices`, `oralHistory`,
   `oralProgress` and `featureCosts`. It leaves `closeAbandonedSessions`, which writes, to the oral screen.
 
+### D249 — the E2E warmup reads `routes.json`, articles included, and compiles the pages it cannot name
+**Date:** 23 October 2026 · **Status:** accepted (agent's diagnosis of a CI failure the human reported). Amends D67's
+warmup and D223's route list
+
+PR #95's first medium lane failed one test it does not touch: `content.spec.ts`'s library test clicked "Agreement" and
+the URL never left `/en/library`. It had failed the same way once locally, on the first parallel run.
+- **The cause is a cold route compiled by its own click.** The CI trace shows the click's RSC request
+  (`/en/library/agreement?_rsc=…`) never answered, while the page logged "[Fast Refresh] rebuilding", one rebuild taking
+  4.4 s. The warmup derived its list with `routesFrom(pageDirs)`, which drops dynamic segments, and never passed the
+  article expansion, so **`library/[subSkill]` was never warmed**. A probe on a fresh `next dev` showed a route's first
+  compile makes every open page rebuild, cold `/en/progress` included. Once the warmup covered the articles,
+  `/en/library/agreement` answered in 99 ms against about 450 ms cold, and nothing else rebuilt.
+- **The warmup now reads `src/lib/routes.json`**, the app's one route list (D199), which the discoverability spec
+  reads too and a test holds equal to the page files. That adds the ten articles: the warmup took 42 s locally, against
+  34–36 s before.
+- **It also visits the pages that list cannot name**, which `errors.spec.ts` visits (`UNLISTED`): an unknown path's 404
+  and the hermetic hook's `route` and `global` views, each waiting for its `h1`, since the thrown route reaches its error
+  screen after the network is idle. The 404's first visit had made every open page rebuild; after this it does not.
+- **One residual is not fixed.** The thrown route (`/en/hermetic/route`) still recompiles once, for about 300 ms, on its
+  first visit from a new browser after the warmup, even when the warmup visited it twice. The cause was not found. That
+  rebuild is short, and it comes from a test that only reloads and reads; it can still drop another test's click in the
+  same window.
+- **Not changed:** no test's assertions. The failing test was right; its route was cold.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 23 October 2026 — `dougkeefe/today-s-plan-oral-ux` (the medium lane's library failure: the warmup's cold article route; D249)
+
+The human reported #95's red medium lane: `content.spec.ts`'s library test, which this branch does not touch.
+- **Diagnosed from the CI trace and a probe**: the article route was never warmed, so the test's click compiled it, and
+  the dev server's rebuild dropped the click's own request.
+- **The warmup reads `routes.json`**, the articles included, and visits the 404 and the hermetic error views (D249).
+
+**Verified:**
+- On a fresh hermetic `next dev` after the new warmup: first visits to an article, the 404 and the hermetic `global` view
+  rebuilt no other open page. The thrown `route` view still rebuilt once, about 300 ms (D249's residual).
+- `pnpm verify` exit 0: 277 files, 4,473 tests passed (8 todo), no dependency violations.
+- The whole hermetic `chromium` project from a cold dev server (port 3400, a throwaway config, since another app held
+  3000): 85 passed in 3.6 min, the warmup and the library test included.
 
 ### 22 October 2026 — `dougkeefe/today-s-plan-oral-ux` (Today's plan as three equal tabs, speaking included; D248)
 
