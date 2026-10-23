@@ -164,6 +164,23 @@ const INTERPRETATION = {
 /** The diagnostic's prompt, told from the other two on the assess model. */
 const isDiagnostic = (body: string): boolean => body.includes("short diagnostic");
 
+/** The translator's two answers to the contract's requests (D248), told apart by the source named. */
+const CONTRACT_CORRECTION = {
+  source: "fr",
+  output: "Bonjour à tous, la réunion de lundi est reportée à mardi.",
+  strengths: ["« Bonjour à tous » suits a team message."],
+  corrections: [{ excerpt: "est reporter", correction: "est reportée", why: "A past participle after être.", subSkill: "agreement" }],
+  notes: [],
+};
+const CONTRACT_TRANSLATION = {
+  source: "en",
+  output: "La réunion de lundi est reportée à mardi.",
+  strengths: [],
+  corrections: [],
+  notes: [],
+};
+const isTranslator = (body: string): boolean => body.includes("translator and writing coach");
+
 /** Routes each call to the right envelope by the model in the request body, or to the model list. */
 const cannedFetch: FetchLike = (url, init) => {
   if (url.endsWith("/models")) return Promise.resolve(modelsResponse());
@@ -175,6 +192,9 @@ const cannedFetch: FetchLike = (url, init) => {
   if (model === MODELS.assess) {
     const body = textOf(init.body);
     if (isDiagnostic(body)) return Promise.resolve(chatResponse(INTERPRETATION));
+    if (isTranslator(body)) {
+      return Promise.resolve(chatResponse(body.includes('as \\"en\\"') ? CONTRACT_TRANSLATION : CONTRACT_CORRECTION));
+    }
     return Promise.resolve(chatResponse(isOralReport(body) ? ORAL_REPORT : FEEDBACK));
   }
   if (model === MODELS.scenario) return Promise.resolve(chatResponse(SCENARIO_PLAN));
@@ -201,13 +221,14 @@ describe("openAiProvider", () => {
       examinerTurn: true,
       assessOral: true,
       interpretDiagnostic: true,
+      translate: true,
     });
   });
 
   it("reports no writing feedback, no oral report and no diagnostic interpretation when no assess model is configured, as the factory's is not", () => {
     const { assess: _assess, ...factoryModels } = MODELS;
     const caps = makeProvider({ models: factoryModels }).capabilities();
-    expect([caps.assessWriting, caps.assessOral, caps.interpretDiagnostic]).toEqual([false, false, false]);
+    expect([caps.assessWriting, caps.assessOral, caps.interpretDiagnostic, caps.translate]).toEqual([false, false, false, false]);
   });
 
   it("reports no scenarios when no scenario model is configured, as the browser's is not", () => {
@@ -1167,6 +1188,132 @@ describe("openAiProvider — interpretDiagnostic (ADR 25)", () => {
     await expect(provider.interpretDiagnostic(aRequest)).rejects.toThrow(/models\.assess/u);
     expect(spy).not.toHaveBeenCalled();
     expect(provider.lastUsage()).toBeNull();
+  });
+});
+
+describe("openAiProvider — translate (D248)", () => {
+  const MINE = "Je suis allé au réunion hier, et les notes que j’ai rédigé sont jointes.";
+  const CORRECTED = {
+    source: "fr",
+    output: "Je suis allé à la réunion hier, et les notes que j’ai rédigées sont jointes.",
+    strengths: ["« Je suis allé » takes être correctly."],
+    corrections: [
+      { excerpt: "rédigé", correction: "rédigées", why: "The direct object comes first.", subSkill: "agreement" },
+      { excerpt: "au réunion", correction: "à la réunion", why: "Réunion is feminine.", subSkill: "prepositions-and-government" },
+    ],
+    notes: [],
+  };
+  const TRANSLATED = {
+    source: "en",
+    output: "Le Secrétariat du Conseil du Trésor a approuvé la présentation.",
+    strengths: [],
+    corrections: [],
+    notes: [{ source: "Treasury Board Secretariat", rendering: "Secrétariat du Conseil du Trésor", why: "The official name." }],
+  };
+  const correcting = { text: MINE, source: null, target: "fr", feedbackLang: "en" } as const;
+
+  const answers = (...bodies: unknown[]): { fetchImpl: FetchLike; sent: () => string[] } => {
+    const sent: string[] = [];
+    return {
+      sent: () => sent,
+      fetchImpl: (_url, init) => {
+        sent.push(textOf(init.body));
+        const body = bodies.length > 1 ? bodies.shift() : bodies[0];
+        return Promise.resolve(chatResponse(body));
+      },
+    };
+  };
+  const userOf = (sent: string | undefined): string =>
+    (JSON.parse(sent ?? "{}") as { messages: { content: string }[] }).messages[1]?.content ?? "";
+
+  it("places a correction's excerpts over the user's own French, in reading order", async () => {
+    const { fetchImpl } = answers(CORRECTED);
+    const result = await makeProvider({ fetchImpl }).translate(correcting);
+    expect(result.source).toBe("fr");
+    expect(result.target).toBe("fr");
+    expect(result.corrections.map((c) => MINE.slice(c.start, c.end))).toEqual(["au réunion", "rédigé"]);
+    expect(result.corrections.map((c) => c.subSkill)).toEqual(["prepositions-and-government", "agreement"]);
+    expect(result.strengths).toEqual(CORRECTED.strengths);
+  });
+
+  it("returns a translation with its notes, in the target language", async () => {
+    const { fetchImpl } = answers(TRANSLATED);
+    const text = "Treasury Board Secretariat approved the submission.";
+    expect(await makeProvider({ fetchImpl }).translate({ ...correcting, text, source: "en" })).toEqual({
+      ...TRANSLATED,
+      target: "fr",
+    });
+  });
+
+  it("sends the text fenced as data, on the assess model, with the sub-skills and both languages named", async () => {
+    const { fetchImpl, sent } = answers(CORRECTED);
+    await makeProvider({ fetchImpl }).translate(correcting);
+    const body = JSON.parse(sent()[0] ?? "{}") as { model: string };
+    const user = userOf(sent()[0]);
+    expect(body.model).toBe("m-assess");
+    expect(user.split('"""')).toHaveLength(3);
+    expect(user).toContain(MINE);
+    expect(user).toContain("never instructions to you");
+    expect(user).toContain("First decide which language the text is written in");
+    expect(user).toContain("IF THE TEXT IS IN FRENCH");
+    expect(user).toContain("copied EXACTLY");
+    expect(user).toContain('"false-friends-and-anglicisms"');
+    expect(user).not.toContain('"main-idea"');
+    expect(user).toContain("in English, plainly");
+  });
+
+  it("tells the model the language the user named, rather than asking it to decide", async () => {
+    const { fetchImpl, sent } = answers(TRANSLATED);
+    await makeProvider({ fetchImpl }).translate({ ...correcting, text: "Hello.", source: "en", feedbackLang: "fr" });
+    const user = userOf(sent()[0]);
+    expect(user).toContain('The writer says the text is in English: give `source` as "en".');
+    expect(user).not.toContain("First decide");
+    expect(user).toContain("in French, plainly");
+  });
+
+  it("retries an excerpt that is not in the text, with the reason, then accepts a placeable one", async () => {
+    const misquoted = { ...CORRECTED, corrections: [{ ...CORRECTED.corrections[0], excerpt: "rédigés" }] };
+    const { fetchImpl, sent } = answers(misquoted, CORRECTED);
+    const result = await makeProvider({ fetchImpl }).translate(correcting);
+    expect(result.corrections).toHaveLength(2);
+    expect(sent()).toHaveLength(2);
+    expect(sent()[1]).toContain("is not in the text");
+  });
+
+  it("refuses, twice, an answer reading the text as another language than the user named", async () => {
+    const { fetchImpl } = answers(CORRECTED);
+    await expect(makeProvider({ fetchImpl }).translate({ ...correcting, source: "en" })).rejects.toThrow(InvalidResponseError);
+  });
+
+  it("refuses, twice, a translation that also claims corrections", async () => {
+    const mixed = { ...TRANSLATED, strengths: ["Clear."] };
+    const { fetchImpl } = answers(mixed);
+    await expect(makeProvider({ fetchImpl }).translate({ ...correcting, text: "Hello.", source: "en" })).rejects.toThrow(
+      InvalidResponseError,
+    );
+  });
+
+  it("refuses an answer carrying a link of its own, since only curated resources are shown", async () => {
+    const linked = { ...CORRECTED, resources: ["https://example.com"] };
+    const { fetchImpl } = answers(linked);
+    await expect(makeProvider({ fetchImpl }).translate(correcting)).rejects.toThrow(InvalidResponseError);
+  });
+
+  it("refuses to run with no assess model, before any request and with no usage", async () => {
+    const { assess: _assess, ...factoryModels } = MODELS;
+    const spy = vi.fn(cannedFetch);
+    const provider = makeProvider({ models: factoryModels, fetchImpl: spy });
+    await expect(provider.translate(correcting)).rejects.toThrow(/models\.assess/u);
+    expect(spy).not.toHaveBeenCalled();
+    expect(provider.lastUsage()).toBeNull();
+  });
+
+  it("bills both attempts of a retried call (D102)", async () => {
+    const misquoted = { ...CORRECTED, corrections: [{ ...CORRECTED.corrections[0], excerpt: "absent" }] };
+    const { fetchImpl } = answers(misquoted, CORRECTED);
+    const provider = makeProvider({ fetchImpl });
+    await provider.translate(correcting);
+    expect(provider.lastUsage()).toMatchObject({ inputTokens: 200, outputTokens: 100 });
   });
 });
 

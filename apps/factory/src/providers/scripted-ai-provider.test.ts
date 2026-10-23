@@ -81,7 +81,8 @@ describe("scriptedAiProvider's oral methods (D117, D122)", () => {
   it("says it runs no spoken session, in its capabilities and when asked, and bills nothing", async () => {
     const provider = scriptedAiProvider();
     const caps = provider.capabilities();
-    expect([caps.transcribe, caps.speak, caps.examinerTurn, caps.assessOral, caps.interpretDiagnostic]).toEqual([
+    expect([caps.transcribe, caps.speak, caps.examinerTurn, caps.assessOral, caps.interpretDiagnostic, caps.translate]).toEqual([
+      false,
       false,
       false,
       false,
@@ -113,6 +114,7 @@ describe("scriptedAiProvider's oral methods (D117, D122)", () => {
           descriptors: { A: "a", B: "b", C: "c" },
         }),
       () => provider.interpretDiagnostic({} as never),
+      () => provider.translate({} as never),
     ];
     for (const call of calls) {
       await provider.generatePassage({ topic: "finance-and-budgets", docType: "memo", targetBand: "B", lang: "fr", count: 1 });

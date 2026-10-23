@@ -62,6 +62,7 @@ import type {
   OralLiveness,
   OralStore,
   GeneratePracticeSetRequest,
+  TranslateRequest,
   GeneratePracticeSetResult,
   ScoreGeneratedAnswerRequest,
   StartExamRequest,
@@ -157,6 +158,7 @@ import {
   writingHistory,
   writingPrompts,
   generatePracticeSet,
+  translateText,
   latestGeneratedSet,
   scoreGeneratedAnswer,
   cleanUpAudio,
@@ -190,6 +192,7 @@ import { httpTelemetrySink } from "@palier/adapters/telemetry";
 import pscSleProfile from "@palier/content/profiles/psc-sle.json";
 import oralFillerLists from "@palier/content/oral/fillers.json";
 import pointerList from "@palier/content/pointers/pointers.json";
+import studyResourceList from "@palier/content/resources/resources.json";
 import writingPromptLibrary from "@palier/content/writing/prompts.json";
 import type {
   AiFeature,
@@ -201,6 +204,8 @@ import type {
   OralFillers,
   Pointer,
   ScenarioId,
+  StudyResource,
+  Translation,
   SessionId,
   TargetBand,
   WritingPrompt,
@@ -209,6 +214,7 @@ import {
   parseExamProfileOrThrow,
   parseOralFillersOrThrow,
   parsePointersOrThrow,
+  parseStudyResourcesOrThrow,
   parseWritingPromptsOrThrow,
 } from "@palier/domain";
 import type {
@@ -314,6 +320,12 @@ const ORAL_FILLERS: OralFillers = parseOralFillersOrThrow(oralFillerLists);
 const POINTERS: readonly Pointer[] = parsePointersOrThrow(pointerList);
 
 /**
+ * The translator's curated study links (progress.md D248), parsed once here as the pointers are: each
+ * on its source's own host, every written-expression sub-skill covered. A model never writes a link.
+ */
+const STUDY_RESOURCES: readonly StudyResource[] = parseStudyResourcesOrThrow(studyResourceList);
+
+/**
  * Spending requests still out, and the page's wipes (progress.md D127, D143; `lib/in-flight.ts`).
  * At module scope rather than in a container, so a container built again (a change of language
  * remounts the layout) still finds a request the last one made, and never pays for a second:
@@ -322,6 +334,7 @@ const POINTERS: readonly Pointer[] = parsePointersOrThrow(pointerList);
 const reportsInFlight = inFlight<SessionId, SessionId, OralAssessment>();
 const feedbackInFlight = inFlight<string, WritingFeedbackRequest, WritingSubmission>();
 const generationInFlight = inFlight<"set", GeneratePracticeSetRequest, GeneratePracticeSetResult>();
+const translationInFlight = inFlight<"text", TranslateRequest, Translation>();
 const interpretationsInFlight = inFlight<string, DiagnosticInterpretationAsk, DiagnosticInterpretation>();
 const wipes = wipeCount();
 
@@ -331,6 +344,7 @@ const forgetInFlight = (): void => {
   reportsInFlight.clear();
   feedbackInFlight.clear();
   generationInFlight.clear();
+  translationInFlight.clear();
   interpretationsInFlight.clear();
 };
 
@@ -508,6 +522,14 @@ export type UseCases = {
    */
   readonly generationInFlight: () => Held<GeneratePracticeSetRequest, GeneratePracticeSetResult> | null;
   readonly latestGeneratedSet: () => Promise<GeneratedSet | null>;
+  /**
+   * The translator (progress.md D248): one text translated into French, or the user's own French
+   * corrected and explained, on the user's key. Nothing is stored. One at a time on this device:
+   * asking again while one is out joins it, whatever was asked.
+   */
+  readonly translateText: (request: TranslateRequest) => Promise<Translation>;
+  /** The translation still being made on this device, with what was asked for, or `null` (D143). */
+  readonly translationInFlight: () => Held<TranslateRequest, Translation> | null;
   readonly scoreGeneratedAnswer: (request: ScoreGeneratedAnswerRequest) => Promise<{ readonly correct: boolean }>;
   /**
    * Spoken practice (PRD §8.6, progress.md D117–D119): the picker's rows, a session on the user's key answered by
@@ -616,6 +638,8 @@ export type Container = Ports & {
   readonly profile: ExamProfile;
   /** Today's quick pointers, every reading and written-expression sub-skill covered (D216). */
   readonly pointers: readonly Pointer[];
+  /** The translator's study links, every written-expression sub-skill covered (D248). */
+  readonly studyResources: readonly StudyResource[];
   /**
    * The browser's realtime peer over the studio screen's microphone and the element the examiner's voice plays in
    * (Phase 6 Slice 2, D185): native WebRTC, the same in both graphs, as the OpenAI adapter is. Here so the adapter
@@ -884,6 +908,16 @@ function buildUseCases(ports: Ports): UseCases {
         }),
       ),
     generationInFlight: () => generationInFlight.get("set"),
+    translateText: (request) =>
+      translationInFlight.join("text", request, () =>
+        translateText(request, {
+          vault: ports.vault,
+          aiProvider: ports.aiProvider,
+          ledger: ports.costLedger,
+          clock: ports.clock,
+        }),
+      ),
+    translationInFlight: () => translationInFlight.get("text"),
     latestGeneratedSet: () => latestGeneratedSet({ generated: ports.generated }),
     scoreGeneratedAnswer: (request) => scoreGeneratedAnswer(request, { generated: ports.generated }),
     oralSessionChoices: (request) => oralSessionChoices(request, { items: ports.items }),
@@ -1002,6 +1036,7 @@ export function createContainer(env: Env): Container {
     useCases: buildUseCases(ports),
     profile: PROFILE,
     pointers: POINTERS,
+    studyResources: STUDY_RESOURCES,
     realtimePeer: (microphone, remoteAudio) => browserRealtimePeer({ microphone, remoteAudio }),
     warmRealtime: WARM_REALTIME,
   };

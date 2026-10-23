@@ -38,6 +38,10 @@ Knows what the product does, nothing about how anything is stored, fetched or re
   into the exact text it assessed: `saveWriting` then `requestWritingFeedback`, which goes through
   `withAiProvider(…, "writing-feedback", …)`, keeps the text unassessed on a failure, and returns an existing
   assessment without spending. `AiProvider.assessWriting` has landed; its DTOs are in `@palier/domain`.
+- **The translator stores nothing** (`use-cases/translate.ts`, progress.md D248). `translateText` refuses an empty text or
+  one over `MAX_TRANSLATION_CHARS` **before any request** (`EmptyTranslationError`, `TranslationTooLongError`, each named
+  by a string literal), then makes one `withAiProvider(…, "translation", …)` call of `AiProvider.translate` with the text
+  exactly as typed. There is no store: the answer belongs to the screen, so nothing is synced, exported or wiped.
 - **Runtime-generated items are device-local and never enter the trend** (`ports/generated-item-store.ts`,
   `use-cases/generate.ts`, progress.md D110). `generatePracticeSet` is a compressed factory on the user's key:
   one `generateItems` call of `GENERATED_SET_SIZE`, then one **blind** `reviewItem` per draft, one at a time,

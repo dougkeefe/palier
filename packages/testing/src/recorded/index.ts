@@ -6,6 +6,7 @@ import type {
   OralRequest,
   ReviewRequest,
   SpeechRequest,
+  TranslationRequest,
   WritingRequest,
 } from "@palier/domain";
 
@@ -61,7 +62,8 @@ export type RecordedCompletion = {
     | "transcribe"
     | "speak"
     | "assessOral"
-    | "interpretDiagnostic";
+    | "interpretDiagnostic"
+    | "translate";
   readonly model: string;
   /** The port request the call was made with, so a replay makes the same call. */
   readonly request:
@@ -72,7 +74,8 @@ export type RecordedCompletion = {
     | RecordedTranscribeRequest
     | SpeechRequest
     | OralRequest
-    | DiagnosticInterpretationRequest;
+    | DiagnosticInterpretationRequest
+    | TranslationRequest;
   /** 1 for the first completion of a call, 2 for the adapter's one retry. */
   readonly attempt: number;
   /**
@@ -103,6 +106,7 @@ const METHODS = new Set([
   "speak",
   "assessOral",
   "interpretDiagnostic",
+  "translate",
 ]);
 
 /** A hand edit, or a recorder that changed shape, fails here rather than as a confusing replay. */

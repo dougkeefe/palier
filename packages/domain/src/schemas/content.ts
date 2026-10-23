@@ -3,6 +3,7 @@ import * as z from "zod";
 import { DOC_TYPES, LICENCES } from "../passage.js";
 import { ATTEMPT_MODES } from "../attempt.js";
 import { ORAL_SESSION_TYPES } from "../oral-scenario.js";
+import { STUDY_RESOURCE_SOURCES } from "../study-resource.js";
 import { WRITING_SUB_SKILLS } from "../sub-skills.js";
 import { WRITING_REGISTERS } from "../writing-prompt.js";
 import {
@@ -334,6 +335,20 @@ export const pointerShape = z.strictObject({
   text: z.string().trim().min(1),
 });
 
+/**
+ * A study resource (progress.md D248): one outside page on a written-expression sub-skill, which
+ * the translator's explanation links a correction to. Whether its address is on its source's own
+ * host is `parseStudyResources`'s, since it needs two fields at once.
+ */
+export const studyResourceShape = z.strictObject({
+  id: idSchema,
+  subSkill: writingSubSkillSchema,
+  source: z.enum(STUDY_RESOURCE_SOURCES),
+  lang: langSchema,
+  title: localisedSchema,
+  url: z.string().trim().min(1),
+});
+
 export const itemSchema = itemShape.readonly();
 export const passageSchema = passageShape.readonly();
 export const oralScenarioSchema = oralScenarioShape.readonly();
@@ -343,3 +358,4 @@ export const writingPromptSchema = writingPromptShape.readonly();
 export const oralFillersSchema = oralFillersShape.readonly();
 export const libraryArticleSchema = libraryArticleShape.readonly();
 export const pointerSchema = pointerShape.readonly();
+export const studyResourceSchema = studyResourceShape.readonly();

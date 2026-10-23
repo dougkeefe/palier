@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subSkill": {
+      "type": "string",
+      "enum": [
+        "verb-tense-and-mood",
+        "agreement",
+        "prepositions-and-government",
+        "pronouns",
+        "connectors-and-discourse-markers",
+        "register-and-formality",
+        "word-choice-precision",
+        "false-friends-and-anglicisms",
+        "punctuation-and-mechanics",
+        "sentence-structure"
+      ]
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "language-portal",
+        "oqlf",
+        "termium"
+      ]
+    },
+    "lang": {
+      "type": "string",
+      "enum": [
+        "en",
+        "fr"
+      ]
+    },
+    "title": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fr": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "en",
+        "fr"
+      ],
+      "additionalProperties": false
+    },
+    "url": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "id",
+    "subSkill",
+    "source",
+    "lang",
+    "title",
+    "url"
+  ],
+  "additionalProperties": false
+}

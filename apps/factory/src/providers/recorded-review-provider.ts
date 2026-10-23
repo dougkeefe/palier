@@ -62,6 +62,7 @@ export const recordedReviewProvider = (files: readonly RecordedReviews[]): AiPro
       examinerTurn: false,
       assessOral: false,
       interpretDiagnostic: false,
+      translate: false,
     }),
 
     reviewItem: (request) => {
@@ -86,6 +87,7 @@ export const recordedReviewProvider = (files: readonly RecordedReviews[]): AiPro
     examinerTurn: unsupported("run an oral session"),
     assessOral: unsupported("assess an oral session"),
     interpretDiagnostic: unsupported("interpret a diagnostic"),
+    translate: unsupported("translate"),
     verifyKey: () => {
       usage = null;
       return Promise.resolve();

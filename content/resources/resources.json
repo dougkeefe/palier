@@ -1,0 +1,170 @@
+[
+  {
+    "id": "verb-tense-and-mood-conjugart",
+    "subSkill": "verb-tense-and-mood",
+    "source": "language-portal",
+    "lang": "fr",
+    "title": { "en": "ConjugArt, the verb conjugator", "fr": "ConjugArt, le conjugueur" },
+    "url": "https://nos-langues.canada.ca/fr/conjugart/index-fra"
+  },
+  {
+    "id": "verb-tense-and-mood-modes",
+    "subSkill": "verb-tense-and-mood",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Verb moods, the subjunctive included", "fr": "Les modes, dont le subjonctif" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-grammaire/le-verbe/modes"
+  },
+  {
+    "id": "verb-tense-and-mood-temps",
+    "subSkill": "verb-tense-and-mood",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Verb tenses", "fr": "Les temps grammaticaux" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-grammaire/le-verbe/temps-grammaticaux"
+  },
+  {
+    "id": "agreement-participe-passe",
+    "subSkill": "agreement",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Past participle agreement", "fr": "L’accord du participe passé" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-grammaire/le-verbe/accord-du-participe-passe"
+  },
+  {
+    "id": "agreement-verbe-sujet",
+    "subSkill": "agreement",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Subject and verb agreement", "fr": "L’accord du verbe avec le sujet" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-grammaire/le-verbe/accord-du-verbe-avec-le-sujet"
+  },
+  {
+    "id": "prepositions-and-government-rouleau",
+    "subSkill": "prepositions-and-government",
+    "source": "language-portal",
+    "lang": "fr",
+    "title": { "en": "Le Rouleau des prépositions", "fr": "Le Rouleau des prépositions" },
+    "url": "https://nos-langues.canada.ca/fr/le-rouleau-des-prepositions/index-fra"
+  },
+  {
+    "id": "prepositions-and-government-oqlf",
+    "subSkill": "prepositions-and-government",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Prepositions", "fr": "Les prépositions" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-syntaxe/les-prepositions"
+  },
+  {
+    "id": "pronouns-oqlf",
+    "subSkill": "pronouns",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Pronouns", "fr": "Le pronom" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-grammaire/le-pronom"
+  },
+  {
+    "id": "pronouns-complement",
+    "subSkill": "pronouns",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "What a verb takes after it", "fr": "Le complément du verbe" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-syntaxe/le-complement-du-verbe"
+  },
+  {
+    "id": "connectors-and-discourse-markers-conjonctions",
+    "subSkill": "connectors-and-discourse-markers",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Conjunctions", "fr": "Les conjonctions" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-syntaxe/les-conjonctions"
+  },
+  {
+    "id": "connectors-and-discourse-markers-organisation",
+    "subSkill": "connectors-and-discourse-markers",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Organising a text", "fr": "L’organisation textuelle" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-redaction-et-la-communication/organisation-textuelle"
+  },
+  {
+    "id": "register-and-formality-correspondance",
+    "subSkill": "register-and-formality",
+    "source": "language-portal",
+    "lang": "fr",
+    "title": { "en": "Correspondence and addressing: rules and difficulties", "fr": "Correspondance et adressage : règles et difficultés" },
+    "url": "https://nos-langues.canada.ca/fr/cles-de-la-redaction/correspondance-et-adressage-regles-et-difficultes"
+  },
+  {
+    "id": "register-and-formality-administrative",
+    "subSkill": "register-and-formality",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Administrative and business writing", "fr": "La rédaction administrative et commerciale" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-redaction-et-la-communication/redaction-administrative-et-commerciale"
+  },
+  {
+    "id": "word-choice-precision-cooccurrences",
+    "subSkill": "word-choice-precision",
+    "source": "language-portal",
+    "lang": "fr",
+    "title": { "en": "Dictionary of word combinations", "fr": "Dictionnaire des cooccurrences" },
+    "url": "https://nos-langues.canada.ca/fr/dictionnaire-des-cooccurrences/index-fra"
+  },
+  {
+    "id": "word-choice-precision-lexique",
+    "subSkill": "word-choice-precision",
+    "source": "language-portal",
+    "lang": "fr",
+    "title": { "en": "Thesaurus by idea", "fr": "Lexique analogique" },
+    "url": "https://nos-langues.canada.ca/fr/lexique-analogique/index-fra"
+  },
+  {
+    "id": "false-friends-and-anglicisms-emprunts",
+    "subSkill": "false-friends-and-anglicisms",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Borrowings from English", "fr": "Les emprunts à l’anglais" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/banque-de-depannage-linguistique/les-emprunts-a-langlais"
+  },
+  {
+    "id": "false-friends-and-anglicisms-termium",
+    "subSkill": "false-friends-and-anglicisms",
+    "source": "termium",
+    "lang": "fr",
+    "title": { "en": "TERMIUM Plus, the Government of Canada’s terminology bank", "fr": "TERMIUM Plus, la banque de terminologie du gouvernement du Canada" },
+    "url": "https://www.btb.termiumplus.gc.ca/tpv2alpha/alpha-fra.html?lang=fra&index=alt"
+  },
+  {
+    "id": "punctuation-and-mechanics-ponctuation",
+    "subSkill": "punctuation-and-mechanics",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Punctuation", "fr": "La ponctuation" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/banque-de-depannage-linguistique/la-ponctuation"
+  },
+  {
+    "id": "punctuation-and-mechanics-typographie",
+    "subSkill": "punctuation-and-mechanics",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Typography: capitals, numbers, spacing", "fr": "La typographie : majuscules, nombres, espacement" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/banque-de-depannage-linguistique/la-typographie"
+  },
+  {
+    "id": "sentence-structure-boiteuses",
+    "subSkill": "sentence-structure",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "Faulty sentence constructions", "fr": "Les constructions syntaxiques boiteuses" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-syntaxe/constructions-syntaxiques-boiteuses"
+  },
+  {
+    "id": "sentence-structure-sujet",
+    "subSkill": "sentence-structure",
+    "source": "oqlf",
+    "lang": "fr",
+    "title": { "en": "The subject in the sentence", "fr": "Le sujet dans la phrase" },
+    "url": "https://vitrinelinguistique.oqlf.gouv.qc.ca/la-syntaxe/le-sujet-dans-la-phrase"
+  }
+]

@@ -20,7 +20,7 @@ export function NoKeyCard({
   headingRef,
   returnTo,
 }: {
-  namespace: "writing" | "generate" | "oral" | "oralReport" | "diagnostic";
+  namespace: "writing" | "generate" | "oral" | "oralReport" | "diagnostic" | "translate";
   estimateUsd: number | null;
   /** Where the key screen offers to go back to once the key is saved (ADR 25): the diagnostic's own gate. */
   returnTo?: "diagnostic";

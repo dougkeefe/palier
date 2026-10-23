@@ -17,6 +17,7 @@ import type {
   OralRequest,
   ReviewRequest,
   SpeechRequest,
+  TranslationRequest,
   WritingPrompt,
   WritingRequest,
 } from "@palier/domain";
@@ -41,7 +42,9 @@ import { memoryCostLedger, memoryKeyVault } from "@palier/testing/in-memory";
  * - `assessOral` on one short fixed session, `ORAL_SESSION` (Phase 5 Slice 3, D122). `runOralStability`
  *   scores a longer one, `STABILITY_SESSION`, five times, for the stability eval (D127);
  * - `interpretDiagnostic` on one fixed writing diagnostic, `DIAGNOSTIC_RUN`, a whole run's scores and its
- *   misses, so its tokens are a typical interpretation's (ADR 25).
+ *   misses, so its tokens are a typical interpretation's (ADR 25);
+ * - `translate` twice (D248): `TRANSLATIONS`, one paragraph of a learner's own French to correct and one of
+ *   English to translate, the translator's two jobs.
  *
  * Audio is never kept: a transcription is recorded with its clip described (type and size), and
  * a voice as its content type and size.
@@ -108,6 +111,25 @@ const WRITTEN = [
   "Bonjour à tous, la réunion de lundi est reporter à mardi. Les documents seront envoyer demain. Merci de votre compréhension.",
   "Madame, nous avons bien reçu votre demande et nous vous répondrons dans les plus bref délais. Veuillez agréer nos salutations.",
 ] as const;
+
+/**
+ * The translator's two jobs (D248): a learner's own French, with slips worth explaining, left for the model to
+ * place as French, and an English paragraph named as English, each about the length a learner checks at once.
+ */
+export const TRANSLATIONS: readonly TranslationRequest[] = [
+  {
+    text: "Bonjour à tous, je vous écris pour vous informer que la réunion de demain est annulé. Nous allons la reprogrammer la semaine prochaine, et je vous enverrai une invitation dès que possible. Si vous avez des questions, n’hésitez pas de me contacter.",
+    source: null,
+    target: "fr",
+    feedbackLang: "en",
+  },
+  {
+    text: "Treasury Board Secretariat has approved the submission. Please send your comments to the Director General by Friday so that the briefing note can be finalized before the deputy minister's meeting.",
+    source: "en",
+    target: "fr",
+    feedbackLang: "en",
+  },
+];
 
 const DRAFT_REQUEST = (type: (typeof GENERATED_ITEM_TYPES)[number]): GenerateItemsRequest => ({
   promptSpec: itemTypeDefinition(type).generatePrompt({
@@ -576,6 +598,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
         "oral-assessment": nothing,
         "oral-studio": nothing,
         "diagnostic-interpretation": nothing,
+        translation: nothing,
       },
       byMethod: {
         generateItems: empty,
@@ -586,6 +609,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
         speak: empty,
         assessOral: empty,
         interpretDiagnostic: empty,
+        translate: empty,
       },
       missingModels,
       completions: [],
@@ -629,6 +653,9 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
   await call("diagnostic-interpretation", "interpretDiagnostic", DIAGNOSTIC_RUN, (p) =>
     p.interpretDiagnostic(DIAGNOSTIC_RUN),
   );
+  for (const request of TRANSLATIONS) {
+    await call("translation", "translate", request, (p) => p.translate(request));
+  }
 
   const calls = await ledger.since(startedAt);
   const measure = (feature: AiFeature): FeatureMeasure => {
@@ -660,6 +687,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
       "oral-assessment": measure("oral-assessment"),
       "oral-studio": measure("oral-studio"),
       "diagnostic-interpretation": measure("diagnostic-interpretation"),
+      translation: measure("translation"),
     },
     byMethod: {
       generateItems: average("generateItems"),
@@ -670,6 +698,7 @@ export const runLiveSmoke = async (deps: LiveSmokeDeps): Promise<LiveSmokeResult
       speak: average("speak"),
       assessOral: average("assessOral"),
       interpretDiagnostic: average("interpretDiagnostic"),
+      translate: average("translate"),
     },
     missingModels,
     completions,

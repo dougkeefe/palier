@@ -41,6 +41,7 @@ describe("the published JSON Schemas", () => {
       "oral-scenario",
       "passage",
       "pointer",
+      "study-resource",
       "writing-prompt",
     ]);
   });

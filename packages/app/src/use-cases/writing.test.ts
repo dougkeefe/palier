@@ -50,7 +50,7 @@ const assessingProvider = (outcome: "ok" | "fail" = "ok") => {
   const requests: WritingRequest[] = [];
   let usage: UsageRecord | null = null;
   const provider: AiProvider = {
-    capabilities: () => ({ generatePassage: false, generateItems: false, reviewItem: false, assessWriting: true, generateScenario: false, transcribe: false, speak: false, examinerTurn: false, assessOral: false, interpretDiagnostic: false }),
+    capabilities: () => ({ generatePassage: false, generateItems: false, reviewItem: false, assessWriting: true, generateScenario: false, transcribe: false, speak: false, examinerTurn: false, assessOral: false, interpretDiagnostic: false, translate: false }),
     generatePassage: () => Promise.reject(new Error("unused")),
     generateItems: () => Promise.reject(new Error("unused")),
     reviewItem: () => Promise.reject(new Error("unused")),
@@ -65,6 +65,7 @@ const assessingProvider = (outcome: "ok" | "fail" = "ok") => {
     examinerTurn: () => Promise.reject(new Error("unused")),
     assessOral: () => Promise.reject(new Error("unused")),
     interpretDiagnostic: () => Promise.reject(new Error("unused")),
+    translate: () => Promise.reject(new Error("unused")),
     verifyKey: () => Promise.resolve(),
     lastUsage: () => usage,
   };

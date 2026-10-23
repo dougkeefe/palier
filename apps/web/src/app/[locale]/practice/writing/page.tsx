@@ -20,6 +20,7 @@ export default function WritingDrillPage({ params }: PageProps<"/[locale]/practi
   const t = useTranslations("skills");
   const tWriting = useTranslations("writing");
   const tGenerate = useTranslations("generate");
+  const tTranslate = useTranslations("translate");
 
   return (
     <section className="app-stack app-island">
@@ -37,6 +38,13 @@ export default function WritingDrillPage({ params }: PageProps<"/[locale]/practi
         <p className="app-muted">{tGenerate("linkBody")}</p>
         <Link href="/practice/writing/generate" className="app-link pl-focusable">
           {tGenerate("linkOpen")}
+        </Link>
+      </aside>
+      <aside className="app-stack" aria-labelledby="translate-link-title">
+        <h2 id="translate-link-title">{tTranslate("linkTitle")}</h2>
+        <p className="app-muted">{tTranslate("linkBody")}</p>
+        <Link href="/practice/writing/translate" className="app-link pl-focusable">
+          {tTranslate("linkOpen")}
         </Link>
       </aside>
     </section>

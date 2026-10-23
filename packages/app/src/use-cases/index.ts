@@ -197,6 +197,13 @@ export type {
   WritingFeedbackDeps,
   WritingFeedbackRequest,
 } from "./writing.js";
+export type { TranslateRequest } from "./translate.js";
+export {
+  EmptyTranslationError,
+  MAX_TRANSLATION_CHARS,
+  TranslationTooLongError,
+  translateText,
+} from "./translate.js";
 export {
   EmptyWritingError,
   UnknownWritingPromptError,

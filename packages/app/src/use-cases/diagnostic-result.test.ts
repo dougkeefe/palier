@@ -135,6 +135,7 @@ const interpreter = (fail: Error | null = null) => {
       examinerTurn: false,
       assessOral: false,
       interpretDiagnostic: true,
+      translate: false,
     }),
     generatePassage: unused,
     generateItems: unused,
@@ -150,6 +151,7 @@ const interpreter = (fail: Error | null = null) => {
       usage = { model: "m-assess", inputTokens: 4_000, outputTokens: 900, costUsd: 0.02 };
       return fail === null ? Promise.resolve(anInterpretation()) : Promise.reject(fail);
     },
+    translate: unused,
     verifyKey: () => Promise.resolve(),
     lastUsage: () => usage,
   };

@@ -21,7 +21,7 @@ const draft = (): ItemDraft => ({
 // A provider that drafts one item and reports no usage, to exercise the
 // "model unknown" fallback in assembly.
 const provider: AiProvider = {
-  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: false, generateScenario: false, transcribe: false, speak: false, examinerTurn: false, assessOral: false, interpretDiagnostic: false }),
+  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: false, generateScenario: false, transcribe: false, speak: false, examinerTurn: false, assessOral: false, interpretDiagnostic: false, translate: false }),
   generatePassage: () => Promise.resolve([]),
   generateItems: () => Promise.resolve([draft()]),
   reviewItem: () => Promise.reject(new Error("not used")),
@@ -32,6 +32,7 @@ const provider: AiProvider = {
   examinerTurn: () => Promise.reject(new Error("not used")),
   assessOral: () => Promise.reject(new Error("not used")),
   interpretDiagnostic: () => Promise.reject(new Error("not used")),
+  translate: () => Promise.reject(new Error("not used")),
   verifyKey: () => Promise.resolve(),
   lastUsage: () => null,
 };

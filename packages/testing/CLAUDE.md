@@ -21,7 +21,9 @@ smoke's one report in `assessOral.json`, and one session scored five times in `a
 factory's eval also reads for the scorer's stability (D126). Both are in `RECORDED_RUNS` and the replay gate. `fakeAiProvider.interpretDiagnostic` (ADR 25) makes the run's focus its priorities, or its weakest tally, or a
 sub-skill of its own skill, and the contract holds every provider's to `checkDiagnosticInterpretation`;
 `memoryDiagnosticReportStore` and `diagnosticReportStoreContract` follow the new port, and the store is in
-`./in-memory`. `RecordedCompletion.method` takes `interpretDiagnostic`, but **no fixture is recorded yet**: the next
+`./in-memory`. `fakeAiProvider.translate` (D248) corrects a target-language text's first word in place, on agreement, and
+tags any other as translated, and the contract holds every provider's two jobs to `checkTranslation`;
+`RecordedCompletion.method` takes `translate`, recorded by the next funded `live-smoke --record`. `RecordedCompletion.method` takes `interpretDiagnostic`, but **no fixture is recorded yet**: the next
 funded `live-smoke --record` writes `interpretDiagnostic.json`, which then needs its line in `RECORDED_RUNS` and the
 replay test's coverage set. The
 in-memory `KeyVault` keeps D98's two modes apart as the Dexie vault does. `memoryGeneratedItemStore` and

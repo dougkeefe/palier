@@ -22,7 +22,7 @@ const factoryPricing = JSON.parse(
 const models = { draft: "m" };
 const good = {
   models: { m: { inputPerMTok: 1, outputPerMTok: 2 } },
-  features: { "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }], "item-generation": [], "oral-practice": [], "oral-assessment": [], "oral-studio": [], "diagnostic-interpretation": [] },
+  features: { "writing-feedback": [{ role: "draft", inputTokens: 1, outputTokens: 2 }], "item-generation": [], "oral-practice": [], "oral-assessment": [], "oral-studio": [], "diagnostic-interpretation": [], translation: [] },
 };
 
 const realtimeRates = { textInputPerMTok: 4, textOutputPerMTok: 24, audioInputPerMTok: 32, audioOutputPerMTok: 64, cachedInputPerMTok: 0.4 };
@@ -110,6 +110,7 @@ describe("parsePricing", () => {
         "oral-assessment": [],
         "oral-studio": [],
         "diagnostic-interpretation": [],
+        translation: [],
       },
     });
   });

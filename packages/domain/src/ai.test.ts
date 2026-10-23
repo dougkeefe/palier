@@ -12,6 +12,7 @@ describe("AI_FEATURES", () => {
       "oral-assessment",
       "oral-studio",
       "diagnostic-interpretation",
+      "translation",
     ]);
   });
 });

@@ -1831,6 +1831,85 @@ body {
   margin: 0;
 }
 
+/* ---- Translator (progress.md D248) -------------------------------------------- */
+
+/* The language choice on the left, and the fixed target on the right, over the two panes. */
+.app-translate__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.app-translate__target {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+/* Side by side once there is room for two readable columns; one above the other on a phone. */
+.app-translate__panes {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .app-translate__panes {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.app-translate__label {
+  margin: 0;
+  font: inherit;
+}
+
+/* The answer reads as the editor does, on a tinted ground so it is plainly not a field to type in. */
+.app-translate__output {
+  min-height: 14rem;
+  padding: 14px 18px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--surface-tint);
+  color: var(--ink);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.app-translate__placeholder {
+  color: var(--ink-muted);
+}
+
+.app-translate__corrections {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.app-translate__corrections p {
+  margin: 0;
+}
+
+.app-translate__study {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-translate__study h3 {
+  margin: 0;
+}
+
+/* A sub-skill's name is lower case in running text; as a heading it starts with a capital. */
+.app-translate__study h3::first-letter {
+  text-transform: uppercase;
+}
+
 /* ---- Writing workshop (§8.7, progress.md D105–D108) --------------------------- */
 
 .app-textarea {

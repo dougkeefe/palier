@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 22 October 2026 (Dependabot's 18-update group rebuilt locally and `vite` 8.3.5 named at the root, closing three alerts, D246)
+**Last updated:** 23 October 2026 (the translator: English into federal French, or the user's own French corrected and explained with curated study links, D248)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/translate-to-french` | **The translator** (D248, the human's request, 23 October 2026): `/practice/writing/translate`, linked from the writing drill. English or French on the left, always French on the right: English is translated for the federal public service with notes on its choices; the user's own French comes back corrected, with its strengths, each correction marked over their words with its reason and sub-skill, and links to Palier's library and to curated government references (`content/resources/resources.json`). One metered call, `translation`, on the `assess` model; nothing stored. | 23 October 2026 |
 | `dougkeefe/oral-progress-radio-buttons-ux` | **`/progress`'s detail as three equal tabs** (D247, the human's request, 22 October 2026): Reading, Written expression and Oral expression as WAI-ARIA tabs (`@palier/ui`'s new `Tabs`) in place of the two-skill radio switch; speaking gains a detail panel (its newest sessions, measured, beside the newest report's fixes, over `@palier/app`'s new `oralProgress`); each hero card has a way into its tab. Print is unchanged. | 22 October 2026 |
 | `dougkeefe/dependabot-status-resolve` | **Dependabot cleared** (D246, the human's request, 22 October 2026): PR #90's 18 minor and patch bumps installed with the repo's pnpm, since Dependabot's lockfile pulled in `@types/node` 26, and `vite` 8.3.5 named as a root devDependency to close alerts #16–#18. | 22 October 2026 |
 | `dougkeefe/klt79` | **`/progress` as a dashboard** (D245, the human's request, 22 October 2026): an overview of all three domains in Today's deep hero, then the chosen skill's trend beside its sub-skills, each sub-skill with a bar (`@palier/ui`'s new `TallyBar`). Print is unchanged. | 22 October 2026 |
@@ -322,6 +323,10 @@ need `OPENAI_SMOKE_KEY`, and one finding for the human to schedule.
 3. **Gate M (human)**: an outside item submission [R13] and §12.1's trademark check (the domain is done, D238).
 
 **Beside them, whenever a smoke key is to hand (agent):**
+- **The translator's completions, recorded** (D248, two calls on the `assess` model, a few cents): the same
+  `live-smoke --record` run writes `packages/testing/src/recorded/openai/translate.json`. Add its line to `RECORDED_RUNS`,
+  `"translate"` to the replay test's coverage set and the method to the factory's `CONFORMANCE_METHODS`, and copy the
+  printed `translation` figures into `pricing.json` over the placeholder.
 - **The diagnostic's interpretation, recorded** (D211, about US$0.12): `pnpm --filter @palier/web live-smoke --record` writes
   `packages/testing/src/recorded/openai/interpretDiagnostic.json`. Add its line to `RECORDED_RUNS`, `"interpretDiagnostic"`
   to the replay test's coverage set and the method to the factory's `CONFORMANCE_METHODS`, and copy the printed
@@ -8185,9 +8190,75 @@ better control than radio buttons.
 - **Not changed:** Today's plan switch and the exam picker keep their radios. The picker's is a real form choice. Today's
   plan switch is a view switch like this one and could take `Tabs` next, if the human wants it.
 
+### D248 — The translator: one call, two jobs, and study links that are data, never a model's
+**Date:** 23 October 2026 · **Status:** accepted (human's request; agent's design and copy)
+
+The human asked for a translator like Google Translate: the left text area in English or French, the right one always
+French. English gets the best translation for the Canadian federal government. French is the user's own attempt, so the
+right side is its corrected version, and below it an explanation of what was strong, where each error was and why it was
+corrected, with links to study each error.
+
+- **One `AiProvider` method, `translate`, a sixth amendment to §3.3.** It takes `{ text, source, target, feedbackLang }`;
+  `source: null` lets the model say which language the text is in. **A text in the target language is a correction**:
+  `output` is the text with only its errors fixed, `strengths` up to four, and `corrections` placed over the user's words.
+  **Any other text is a translation**: `output` and up to six `notes` on its choices (a federal term, an official name, a
+  false friend avoided). `checkTranslation` holds the shape (no notes on a correction; no strengths or corrections on a
+  translation), and `assembleTranslation` places each correction by its excerpt, D105's rule, so a model never sends
+  offsets. A source the user named that the model disagrees with is a malformed answer, retried once.
+- **Each correction names a written-expression sub-skill, and the links come from data.** A model-written URL could be
+  dead or wrong, so the model names the sub-skill and the screen links (1) Palier's own library article for it and (2) the
+  sub-skill's entries in **`content/resources/resources.json`**, a new content artefact (`study-resource` in
+  `CONTENT_SCHEMAS`). `parseStudyResources` refuses a duplicate id or address, an address that is not `https`, that carries
+  credentials, or that is not on its source's own host (`STUDY_RESOURCE_HOSTS`: the Language Portal of Canada at
+  `nos-langues.canada.ca`, the OQLF's Banque de dépannage linguistique, and TERMIUM Plus), and a list missing any
+  written-expression sub-skill. The draft schema is strict, so an answer carrying a link of its own is refused.
+  - The 21 addresses were checked by hand on 23 October 2026 against the sources' own index pages. The Language Portal's
+    *Clés de la rédaction* has no thematic index (only an alphabetical one), so its federal tools stand where they fit
+    (ConjugArt, Le Rouleau des prépositions, the Dictionnaire des cooccurrences, the Lexique analogique, the correspondence
+    section, TERMIUM Plus), and the OQLF's theme pages cover the rest.
+- **The `assess` model and one feature, `translation`.** `pricing.json`'s figure is a PLACEHOLDER (about 1,500 tokens in
+  and 1,500 out) until the live smoke records it: the smoke now translates two fixed texts, `TRANSLATIONS`, and records
+  `translate.json` with `--record`, as it does `interpretDiagnostic` (D211). `PROMPT_VERSION` stays at 5: a new prompt does
+  not change the others.
+- **Nothing is stored.** The text goes to OpenAI with the user's key and nowhere else [R12]; the answer lives on the
+  screen. So there is no store, no sync, no export and nothing for a wipe beyond the in-flight request, which
+  `forgetInFlight` drops. One request at a time is joined from module scope (`translationInFlight`, D143), so leaving and
+  coming back follows it rather than paying twice. `/privacy` needed no change: its "paid features call OpenAI" covers it.
+- **Limits are product rules, not exam rules.** `MAX_TRANSLATION_CHARS` (4,000, about a page) is in the use case, which
+  refuses an empty or over-long text before any request. The screen shows the characters left and holds the button.
+- **The screen** (`components/translate/Translator.tsx`, decisions in `features/translate/translate-view.ts`): a
+  Detect / English / French choice and "Always in French", the two panes side by side from 640px, the estimate beside the
+  button (D237), "Copy the French", and an answer that stays through an edit and says it is for an earlier text. Below: for
+  a correction, the strengths, the user's text with each correction marked and numbered, each correction as
+  "“original” becomes “correction”" with its sub-skill and reason, then "What to study next", grouped by sub-skill, most
+  corrections first, with the guide and the references, each in a new tab with `rel="noopener noreferrer"` and
+  `hreflang`. For a translation, its notes. An AI caution is shown with every answer. No band is shown, so no
+  `NonAffiliation` is needed.
+- **Not built:** a history of past translations (nothing is kept, by design), and an English target, which waits for the
+  English mirror (Phase 8). The request already takes `target`.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 23 October 2026 — `dougkeefe/translate-to-french` (the translator; D248)
+
+Not *Next, decided*, which is unchanged (Gate O), except that the live smoke's next funded `--record` now also writes
+`translate.json`. The human asked for a translator: English or French on the left, always French on the right, the
+user's own French corrected and explained, with links to study each error.
+- **`AiProvider.translate`**, its DTOs, schemas and `assembleTranslation`/`checkTranslation` in `@palier/domain`; the
+  `translateText` use case, metered as `translation`; the OpenAI adapter's prompt and method on the `assess` model; every
+  provider and fake given the method, the factory's included; the contract suite holds both jobs.
+- **`content/resources/resources.json`**, 21 checked government references, parsed by `parseStudyResources`.
+- **`/practice/writing/translate`**, linked from the writing drill, in both languages; in the route list, the CSP page
+  list, the page-title journey and the key-leak journey (step 3g, `TRANSLATION_SENTINEL`).
+
+**Verified:**
+- `pnpm verify` was green: 282 files, 4,541 tests passed (8 todo), with no dependency violations.
+- After `pnpm --filter @palier/web build`, the chromium project's new `translate.spec.ts` (4 tests, axe on every state,
+  English and French) and `key-leak.spec.ts` passed, and the offline project's `csp-production` passed (7 tests).
+- `scripts/check-bundle-size.mjs`: 167.2 KB of 180 KB shared first-load JS.
+- Not run: the live smoke (it needs `OPENAI_SMOKE_KEY`), so no recorded translator completion exists yet.
 
 ### 22 October 2026 — `dougkeefe/oral-progress-radio-buttons-ux` (`/progress`'s detail as three equal tabs, speaking included; D247)
 

@@ -7,6 +7,7 @@ import type {
   OralAssessment,
   PassageDraft,
   ReviewVerdict,
+  Translation,
   UsageRecord,
   WritingAssessment,
 } from "@palier/domain";
@@ -40,6 +41,7 @@ export const fakeAiProvider = (): AiProvider => {
       examinerTurn: true,
       assessOral: true,
       interpretDiagnostic: true,
+      translate: true,
     }),
 
     generatePassage: (req) => {
@@ -204,6 +206,46 @@ export const fakeAiProvider = (): AiProvider => {
         priorities: subSkills.slice(0, 3).map((subSkill) => ({ subSkill, what: "what to practise", why: "why the run says so" })),
         planNote: `The plan starts at ${req.startBand}.`,
       });
+    },
+
+    // A text in the target language comes back with its first word "corrected" in place, on
+    // agreement, and one strength; any other comes back as the target language's text, unchanged
+    // but tagged, with no notes (D248). The source is the one named, or else the target.
+    translate: (req) => {
+      bill(25);
+      const source = req.source ?? req.target;
+      if (source !== req.target) {
+        const translated: Translation = {
+          source,
+          target: req.target,
+          output: `[${req.target}] ${req.text.trim()}`,
+          strengths: [],
+          corrections: [],
+          notes: [],
+        };
+        return Promise.resolve(translated);
+      }
+      const firstWord = /\S+/u.exec(req.text);
+      const corrected: Translation = {
+        source,
+        target: req.target,
+        output: req.text.trim(),
+        strengths: ["what the text does well"],
+        corrections:
+          firstWord === null
+            ? []
+            : [
+                {
+                  start: firstWord.index,
+                  end: firstWord.index + firstWord[0].length,
+                  correction: firstWord[0],
+                  why: "why it was corrected",
+                  subSkill: "agreement",
+                },
+              ],
+        notes: [],
+      };
+      return Promise.resolve(corrected);
     },
 
     // Bills nothing, and so leaves no earlier call's usage behind (D102).
