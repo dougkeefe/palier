@@ -8318,6 +8318,9 @@ contradicted itself.
 - **The translator is D250, not D248.** Main's #95 merged D248 (Today's tabs) and D249 (the warmup) while this branch
   was open, so every D248 this branch wrote, in code, tests and documents, now reads D250 (D16's lesson: a number is
   taken at merge).
+- **Two specs followed D248's tabs.** After the merge, `translate.spec.ts`'s first test and `key-leak.spec.ts`'s step 3g
+  still chose Today's writing plan by its old radio, so the first timed out and pushed E2E 2/2 past its budget. Both now
+  click the tab, as main's own specs do; locally both specs passed, 5 of 5 with the warmup, on two workers.
 
 **Verified:**
 - `pnpm verify` was green: 282 files, 4,545 tests passed (8 todo), with no dependency violations.
