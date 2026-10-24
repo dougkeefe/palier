@@ -142,7 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/c9rd5` | **The translator's explanation in the card** (D252, the human's request, 24 October 2026): the notes, or the strengths, corrections and study links, sit inside the white card right under the two panes; the visit's running total and "Your text goes only to OpenAI" move below the card. | 24 October 2026 |
+| `dougkeefe/translate-page-output-order` | **The translator's explanation in the card** (D252, the human's request, 24 October 2026): the notes, or the strengths, corrections and study links, sit inside the white card right under the two panes; the visit's running total and "Your text goes only to OpenAI" move below the card. | 24 October 2026 |
 | `dougkeefe/translate-page-access` | **The translator reworked** (D251, the human's request, 24 October 2026): the page at 1160px with the two panes aligned on a shared subgrid, side by side from 900px; translation on a 1.5 s pause in typing, with no button, amending D237 for this screen, and a running total for the visit; past the soft cap a pause stops sending and one press does; a copy icon (`@palier/ui`'s new `IconButton`) at the French's top right; "Always in French", the intro and "Start again" removed; the header's About replaced by Translate. | 24 October 2026 |
 | `dougkeefe/today-s-plan-oral-ux` | **Today's plan as three equal tabs** (D248, the human's request, 22 October 2026): Reading, Written expression and Oral expression as `@palier/ui`'s `Tabs` in place of the plan's two-skill radio switch, as `/progress` took them (D247). Speaking's plan is one suggested session (the kind practised least lately, its length and practice-mode estimate, and a way to `/practice/oral`), and its "Where you stand" is the newest report's fixes. Nothing on Today spends. Also the E2E warmup's cold routes, which failed #95's medium lane (D249). | 22 October 2026 |
 | `dougkeefe/oral-progress-radio-buttons-ux` | **`/progress`'s detail as three equal tabs** (D247, the human's request, 22 October 2026): Reading, Written expression and Oral expression as WAI-ARIA tabs (`@palier/ui`'s new `Tabs`) in place of the two-skill radio switch; speaking gains a detail panel (its newest sessions, measured, beside the newest report's fixes, over `@palier/app`'s new `oralProgress`); each hero card has a way into its tab. Print is unchanged. | 22 October 2026 |
@@ -8372,7 +8372,7 @@ explanation is what the user values most, so it should sit closest to the text a
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 24 October 2026 — `dougkeefe/c9rd5` (the translator's explanation in the card; D252)
+### 24 October 2026 — `dougkeefe/translate-page-output-order` (the translator's explanation in the card; D252)
 
 Not *Next, decided*, which is unchanged (Gate O): a human-requested detour. The human asked for the explanation to sit
 closest to the text areas, and the visit's total and "Your text goes only to OpenAI" to sit below the white card.
