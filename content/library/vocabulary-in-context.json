@@ -1,0 +1,73 @@
+{
+  "subSkill": "vocabulary-in-context",
+  "lang": "fr",
+  "title": {
+    "en": "Vocabulary in context",
+    "fr": "Le vocabulaire en contexte"
+  },
+  "summary": {
+    "en": "Working out what a word or phrase means in this sentence, which is not always its first meaning in the dictionary.",
+    "fr": "Déterminer le sens d’un mot ou d’une locution dans la phrase où il figure, qui n’est pas toujours son premier sens au dictionnaire."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Let the context decide",
+        "fr": "Laissez le contexte trancher"
+      },
+      "paragraphs": [
+        {
+          "en": "Read the sentence before and the sentence after. A connector (_donc_, _toutefois_) or a contrast in the same sentence often fixes the sense. Put each option in place of the word and keep the one that leaves the sentence true to the text.",
+          "fr": "Lisez la phrase qui précède et celle qui suit. Un connecteur (_donc_, _toutefois_) ou une opposition dans la même phrase fixe souvent le sens. Remplacez le mot par chaque choix et gardez celui qui laisse la phrase fidèle au texte."
+        },
+        {
+          "en": "Many administrative words have a general sense and a precise one: _une instance_ is a decision-making body, _imputer_ is to attribute (blame, or a cost to a budget), _à l’échelle de_ means across. The text picks one.",
+          "fr": "Bien des mots administratifs ont un sens courant et un sens précis : _une instance_ est un organe décisionnel, _imputer_ veut dire attribuer (une faute, ou une dépense à un budget), _à l’échelle de_ signifie dans l’ensemble de. Le texte en retient un."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Phrases and false friends",
+        "fr": "Les locutions et les faux amis"
+      },
+      "paragraphs": [
+        {
+          "en": "A phrase means more than its words. _Quitte à_ accepts a cost in advance (“even if it means”), _faute de_ gives a cause by absence, _sous réserve de_ sets a condition. Learn them whole.",
+          "fr": "Une locution veut dire plus que ses mots. _Quitte à_ accepte d’avance un inconvénient, _faute de_ donne une cause par l’absence, _sous réserve de_ pose une condition. Apprenez-les en bloc."
+        },
+        {
+          "en": "A word that looks like English often is not: _éventuellement_ means “possibly”, not “eventually”; _actuellement_ means “currently”; _une formation_ is training. An option that translates the look-alike is a common distractor.",
+          "fr": "Un mot qui ressemble à l’anglais n’a souvent pas le même sens : _éventuellement_ veut dire « peut-être », non « finalement »; _actuellement_ veut dire « en ce moment ». Le choix qui traduit le mot anglais semblable est un distracteur courant."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "excerpt": "Il n’y a donc pas lieu d’imputer la responsabilité de l’incident à l’employé, qui a suivi les méthodes établies.",
+      "why": {
+        "en": "_Donc_ draws a conclusion from the methods followed: _imputer_ here means to attribute the blame, not to charge a cost.",
+        "fr": "_Donc_ tire une conclusion des méthodes suivies : _imputer_ veut dire ici attribuer la faute, non porter une dépense à un budget."
+      }
+    },
+    {
+      "excerpt": "La direction maintiendra les services essentiels, quitte à revoir l’échéancier de certains projets.",
+      "why": {
+        "en": "_Quitte à_ accepts a possible cost in advance: services are kept even if some schedules slip. It is not a condition.",
+        "fr": "_Quitte à_ accepte d’avance un inconvénient possible : les services sont maintenus, même si certains échéanciers glissent. Ce n’est pas une condition."
+      }
+    },
+    {
+      "excerpt": "Les demandes seront éventuellement transmises au comité régional.",
+      "why": {
+        "en": "_Éventuellement_ means “possibly”, not “eventually”: the requests may never be sent at all.",
+        "fr": "_Éventuellement_ veut dire « peut-être » : il se peut que les demandes ne soient jamais transmises."
+      }
+    }
+  ],
+  "related": [
+    "cohesion-and-reference",
+    "inference"
+  ]
+}

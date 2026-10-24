@@ -1,14 +1,15 @@
 import * as z from "zod";
 
-import type { LibraryArticle } from "./library-article.js";
+import type { LibraryArticle, LibrarySubSkill } from "./library-article.js";
 import { libraryArticleSchema } from "./schemas/content.js";
-import { WRITING_SUB_SKILLS } from "./sub-skills.js";
+import { READING_SUB_SKILLS, WRITING_SUB_SKILLS } from "./sub-skills.js";
 
 /**
  * Parses an **already-read** library, as `parseWritingPrompts` parses the prompts: no I/O here,
- * the app imports the JSON (progress.md D162). The library is **one article per written-expression
- * sub-skill, exactly**: an item's explanation links to its sub-skill's article, so a missing one is
- * a dead link and a repeated one is ambiguous. Every `related` id must be another sub-skill.
+ * the app imports the JSON (progress.md D162). The library is **one article per reading and
+ * written-expression sub-skill, exactly** (D254): an item's explanation links to its sub-skill's
+ * article, so a missing one is a dead link and a repeated one is ambiguous. Every `related` id must be
+ * another sub-skill of the same skill, which the schema holds; the parser refuses the article itself.
  *
  * **Cited text is marked `_like this_`** in the prose (the summary, the paragraphs and each
  * example's `why`): a word or phrase in the article's `lang`, quoted inside interface-language
@@ -23,6 +24,9 @@ export type LibraryParseResult =
 
 /** The marker around cited target-language text. */
 export const CITED_MARK = "_";
+
+/** Every sub-skill the library has an article for, reading's first, each in the taxonomy's order. */
+export const LIBRARY_SUB_SKILLS: readonly LibrarySubSkill[] = [...READING_SUB_SKILLS, ...WRITING_SUB_SKILLS];
 
 const unpaired = (text: string): boolean => text.split(CITED_MARK).length % 2 === 0;
 
@@ -52,7 +56,7 @@ const librarySchema = z.array(libraryArticleSchema).superRefine((articles, ctx) 
       }
     }
   }
-  for (const subSkill of WRITING_SUB_SKILLS) {
+  for (const subSkill of LIBRARY_SUB_SKILLS) {
     if (!seen.has(subSkill)) ctx.addIssue({ code: "custom", path: [], message: `"${subSkill}" has no article` });
   }
 });

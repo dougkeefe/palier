@@ -1130,7 +1130,7 @@ sync.**
   deployment by the human at Gate O (D193). The checklist is written (D194).)*
 - **Gate O — studio mode's release reads (human).** The checklist on the six browser and platform pairs (exit criterion 3), the
   route read line by line, and the French of the new copy. Then Gate M. *(Sequenced after Phase 7 Slice 5, 2 October 2026,
-  `progress.md` D195: that slice adds the route's rate limit, so the route is read once, finished.)*
+  `progress.md` D195: that slice adds the route's rate limit, so the route is read once, finished.)* *(Passed 24 October 2026, `progress.md` D253.)*
 
 ---
 
@@ -1261,7 +1261,7 @@ direction, then the human's reviews.
   skill's history across the page on paper.)*
 - **Gate M — public.** ~~The repo made public~~ (**public, confirmed 2 October 2026**, `progress.md` D195), an outside item
   submission [R13], the domain, the trademark check, and the full-volume bank (D54), sequenced to the end (D56). **It waits
-  on Phase 6's Gate O** (`progress.md` D165), which waits on Slice 5 (D195). *Done:* exit criterion 2, and 1.0.
+  on Phase 6's Gate O** (`progress.md` D165), which waits on Slice 5 (D195). *Done:* exit criterion 2, and 1.0. *(Passed 24 October 2026, `progress.md` D253: 1.0.)*
 
 ---
 

@@ -1,3 +1,4 @@
+import { READING_SUB_SKILLS } from "@palier/domain";
 import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -7,6 +8,8 @@ import { NotFoundView } from "../../../../components/errors/NotFoundView";
 import { Cited } from "../../../../components/library/Cited";
 import { Link } from "../../../../i18n/navigation";
 import { articleFor } from "../../../../lib/library";
+
+const isReading = (subSkill: string): boolean => (READING_SUB_SKILLS as readonly string[]).includes(subSkill);
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/library/[subSkill]">): Promise<Metadata> {
   const { locale, subSkill } = await params;
@@ -19,10 +22,11 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/library/
 }
 
 /**
- * One library article (PRD §13.2, progress.md D162): the rule, the traps, then examples, each a
- * sentence to write and, usually, the one it replaces. The examples are in the article's language
- * and marked up with it, and so is every cited run in the prose. An unknown sub-skill renders the
- * 404 in place, never `notFound()`, which cannot run under the strict CSP (D141).
+ * One library article (PRD §13.2, progress.md D162, D254): the point, the traps, then examples. A
+ * writing article's are each a sentence to write and, usually, the one it replaces; a reading
+ * article's are each an excerpt to read. The examples are in the article's language and marked up
+ * with it, and so is every cited run in the prose. An unknown sub-skill renders the 404 in place,
+ * never `notFound()`, which cannot run under the strict CSP (D141).
  */
 export default function LibraryArticlePage({ params }: PageProps<"/[locale]/library/[subSkill]">) {
   const { locale, subSkill } = use(params);
@@ -59,21 +63,32 @@ export default function LibraryArticlePage({ params }: PageProps<"/[locale]/libr
       <h2>{t("examples")}</h2>
       <ul className="app-library__examples">
         {article.examples.map((example) => (
-          <li key={example.write} className="app-library__example">
-            {example.avoid === undefined ? null : (
+          <li key={"excerpt" in example ? example.excerpt : example.write} className="app-library__example">
+            {"excerpt" in example ? (
               <p>
-                <span className="app-library__tag">{t("insteadOf")}</span>{" "}
-                <span lang={article.lang} className="app-library__avoid">
-                  {example.avoid}
+                <span className="app-library__tag">{t("excerpt")}</span>{" "}
+                <span lang={article.lang}>
+                  {example.excerpt}
                 </span>
               </p>
+            ) : (
+              <>
+                {example.avoid === undefined ? null : (
+                  <p>
+                    <span className="app-library__tag">{t("insteadOf")}</span>{" "}
+                    <span lang={article.lang} className="app-library__avoid">
+                      {example.avoid}
+                    </span>
+                  </p>
+                )}
+                <p>
+                  <span className="app-library__tag">{t("write")}</span>{" "}
+                  <span lang={article.lang} className="app-library__write">
+                    {example.write}
+                  </span>
+                </p>
+              </>
             )}
-            <p>
-              <span className="app-library__tag">{t("write")}</span>{" "}
-              <span lang={article.lang} className="app-library__write">
-                {example.write}
-              </span>
-            </p>
             <p className="app-muted">
               <Cited text={example.why[lang]} lang={article.lang} />
             </p>
@@ -97,9 +112,15 @@ export default function LibraryArticlePage({ params }: PageProps<"/[locale]/libr
       )}
 
       <p>
-        <Link href="/practice/writing" className="pl-btn pl-btn--secondary pl-focusable">
-          {t("practise")}
-        </Link>
+        {isReading(article.subSkill) ? (
+          <Link href="/practice/reading" className="pl-btn pl-btn--secondary pl-focusable">
+            {t("practiseReading")}
+          </Link>
+        ) : (
+          <Link href="/practice/writing" className="pl-btn pl-btn--secondary pl-focusable">
+            {t("practise")}
+          </Link>
+        )}
       </p>
     </article>
   );

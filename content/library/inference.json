@@ -1,0 +1,73 @@
+{
+  "subSkill": "inference",
+  "lang": "fr",
+  "title": {
+    "en": "Inference",
+    "fr": "L’inférence"
+  },
+  "summary": {
+    "en": "Drawing what a text implies from the clues it gives, without going beyond them. The right inference is the one the text supports, not the one that seems likely.",
+    "fr": "Tirer ce que le texte laisse entendre à partir des indices qu’il donne, sans aller au-delà. La bonne inférence est celle que le texte appuie, pas celle qui semble probable."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Bring the clues together",
+        "fr": "Rapprochez les indices"
+      },
+      "paragraphs": [
+        {
+          "en": "An inference joins two pieces of the text: a rating in one paragraph and a finding in another, or a word such as _encore_, _de nouveau_ or _pour la troisième fois_, which tells you something happened before.",
+          "fr": "Une inférence relie deux éléments du texte : une évaluation dans un paragraphe et un constat dans un autre, ou un mot comme _encore_, _de nouveau_ ou _pour la troisième fois_, qui indique que quelque chose s’est déjà produit."
+        },
+        {
+          "en": "Ask what must be true for the text to say what it says. _Le comité rappelle que les rapports doivent être déposés à temps_ implies that some were not. It does not say who was late.",
+          "fr": "Demandez-vous ce qui doit être vrai pour que le texte dise ce qu’il dit. _Le comité rappelle que les rapports doivent être déposés à temps_ laisse entendre que certains ne l’ont pas été. Il ne dit pas qui était en retard."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Do not go further than the text",
+        "fr": "N’allez pas plus loin que le texte"
+      },
+      "paragraphs": [
+        {
+          "en": "The commonest trap is an option that is likely in real life but has no clue in the text. If you need knowledge from outside the passage to defend it, it is not an inference.",
+          "fr": "Le piège le plus courant est un choix vraisemblable dans la réalité, mais qu’aucun indice du texte n’appuie. S’il faut des connaissances extérieures au passage pour le défendre, ce n’est pas une inférence."
+        },
+        {
+          "en": "The other trap is an option that is too strong: _pourrait_ becomes “will”, _certains_ becomes “all”. Modal verbs and the conditional measure how sure the writer is, and the answer must keep that measure.",
+          "fr": "L’autre piège est un choix trop fort : _pourrait_ devient « va », _certains_ devient « tous ». Les verbes modaux et le conditionnel mesurent la certitude de l’auteur, et la réponse doit respecter cette mesure."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "excerpt": "Ces constats, déjà formulés dans les deux derniers rapports, risquent de figurer pour la troisième fois dans le prochain.",
+      "why": {
+        "en": "_Déjà_ and _pour la troisième fois_ imply that the earlier recommendations were not acted on. They do not say why, nor that anyone refused.",
+        "fr": "_Déjà_ et _pour la troisième fois_ laissent entendre que les recommandations précédentes n’ont pas été suivies. Ils ne disent ni pourquoi, ni que quelqu’un a refusé."
+      }
+    },
+    {
+      "excerpt": "La demande de réparation de l’éclairage avait été classée comme non urgente. Selon les enquêteurs, l’incident aurait pu être évité si cette première mesure avait été prise.",
+      "why": {
+        "en": "Joined, the two sentences imply that the request’s low priority played a part in the incident. The text blames no one by name.",
+        "fr": "Rapprochées, les deux phrases laissent entendre que la faible priorité accordée à la demande a joué un rôle dans l’incident. Le texte ne blâme personne nommément."
+      }
+    },
+    {
+      "excerpt": "Certaines directions pourraient devoir reporter des projets si le budget n’est pas rétabli.",
+      "why": {
+        "en": "_Certaines_, _pourraient_ and _si_ keep the claim partial and conditional. “Projects will be cancelled” goes further than the text.",
+        "fr": "_Certaines_, _pourraient_ et _si_ gardent l’énoncé partiel et conditionnel. « Des projets seront annulés » va plus loin que le texte."
+      }
+    }
+  ],
+  "related": [
+    "tone-and-intent",
+    "main-idea"
+  ]
+}
