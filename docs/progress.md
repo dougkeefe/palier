@@ -144,7 +144,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/s76v6` | **1.0 recorded** (D253: Gates O and M passed and v4 read, the human, 24 October 2026) and **reading's library articles** (D254, Gate K's "after 1.0"): one article per reading sub-skill, eight, in both languages, linked from every reading item's explanation. | 24 October 2026 |
+| `dougkeefe/palier-reading-comprehension-add` | **1.0 recorded** (D253: Gates O and M passed and v4 read, the human, 24 October 2026) and **reading's library articles** (D254, Gate K's "after 1.0"): one article per reading sub-skill, eight, in both languages, linked from every reading item's explanation. | 24 October 2026 |
 
 *(The prior rows — the translator's explanation in the card (#99), the translator reworked (#97), Today's plan as tabs (#95), `/progress`'s tabs (#94), Dependabot cleared (#93), `/progress` as a dashboard (#92), "for this tab only" folded (#89), the review queue and retired items (#88), the translator (#96), the landing footer (#87), the README and the domain (#86), one press spends (#85), the Dependabot overrides (#83), the landing page's headline and pricing (#82), spoken practice spoken only (#80), the landing menu on a phone (#79), the explainer video (#78), the spoken-practice picker (#76), the nightly lane (#75), the sample question's language (#74), onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
@@ -248,7 +248,7 @@ Built now rather than retrofitted — §7 is emphatic about this.
 
 **1.0 is reached** (D253, the human, 24 October 2026). Gate O and Gate M passed, and the human read bank v4 with no
 disagreement, so ADR 24 stands and Phases 6 and 7 are complete. **Reading's library articles are built** (D254,
-`dougkeefe/s76v6`), the first of Gate K's after-1.0 items (D145). XP, levels and the countdown are still named, not
+`dougkeefe/palier-reading-comprehension-add`), the first of Gate K's after-1.0 items (D145). XP, levels and the countdown are still named, not
 scheduled, and Phase 8, the English mirror, is the plan's next phase.
 
 **Next: D206, the bank's first fetch back under architecture.md §13's 400 KB.** Bank v4 is about 515 KB gzipped, because
@@ -8377,7 +8377,7 @@ written-expression sub-skill"; `architecture.md` §5's tree and PRD §8's `/libr
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 24 October 2026 — `dougkeefe/s76v6` (reading's library articles; D254)
+### 24 October 2026 — `dougkeefe/palier-reading-comprehension-add` (reading's library articles; D254)
 
 *Next, decided*'s slice, which the first commit on this branch set (D253).
 - **Domain:** `LibraryArticle` a union over reading and writing (`LibraryExcerpt`, `LIBRARY_SUB_SKILLS`), the schema a
@@ -8402,7 +8402,7 @@ Newest first. One entry per session that changed something. Never edit an older 
   `telemetry-offline.spec.ts`: 17 of 17.
 - Not run: Lighthouse, the rest of the medium lane and the live smoke. CI runs the medium lane on the pull request.
 
-### 24 October 2026 — `dougkeefe/s76v6` (1.0 recorded: Gates O and M passed, bank v4 read; D253)
+### 24 October 2026 — `dougkeefe/palier-reading-comprehension-add` (1.0 recorded: Gates O and M passed, bank v4 read; D253)
 
 The human asked about the library's "Articles on reading comprehension come after 1.0", and then reported the read of bank v4,
 Gate O and Gate M done. This commit changes documents only.
