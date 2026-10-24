@@ -398,7 +398,12 @@
     "calendarTest": "Test day",
     "calendarToday": "today",
     "pointerViewAll": "All articles",
-    "oralRail": "Oral practice today"
+    "oralRail": "Oral practice today",
+    "oralPlanWhy": "One spoken session a day. Today’s is the kind you’ve practised least lately.",
+    "oralStart": "Start speaking, {minutes} min",
+    "oralAgain": "Practise again",
+    "oralNoSession": "No spoken session is available right now.",
+    "oralNoKey": "Spoken practice runs on your OpenAI key."
   },
   "drill": {
     "progress": "Item {current} of {total}",

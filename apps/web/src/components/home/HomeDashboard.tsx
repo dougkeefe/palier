@@ -1,8 +1,7 @@
 "use client";
 
-import type { DiagnosticResult, StreakReport } from "@palier/app";
+import type { DiagnosticResult, OralHistoryEntry, OralProgress, OralSessionChoice, StreakReport } from "@palier/app";
 import type { Pointer, ScoredSkill, SubSkill, TargetBand } from "@palier/domain";
-import { SCORED_SKILLS } from "@palier/domain";
 import { type DayPlan, type PracticeActivity, type SkillTrend, localDay } from "@palier/engine";
 import {
   Callout,
@@ -11,6 +10,8 @@ import {
   MonthCalendar,
   ProgressRail,
   Sparkline,
+  TabPanel,
+  Tabs,
   buttonClass,
   cardClass,
 } from "@palier/ui";
@@ -21,6 +22,7 @@ import { focusText, interpretationFor, placementOf, scoreOf } from "../../featur
 import { feedbackLangFor } from "../../features/oral/report-view";
 import { type ExamReadiness, examReadiness } from "../../features/exam/readiness";
 import { type NextStep, nextStep } from "../../features/home/next-step";
+import { oralPlan } from "../../features/home/oral-plan";
 import { pickPointer } from "../../features/home/pointer";
 import {
   type Month,
@@ -32,7 +34,9 @@ import {
   stepMonth,
   weekMinutes,
 } from "../../features/home/today-view";
-import { SKILL_LOOK } from "../../features/skills/skill-look";
+import { estimateText } from "../../features/key/spend-view";
+import { ORAL_RECENT_SESSIONS, oralDetail } from "../../features/progress/progress-view";
+import { SKILL_KINDS, SKILL_LOOK, type SkillKind } from "../../features/skills/skill-look";
 import { type EvidenceLine, evidenceLine } from "../../features/telemetry/telemetry";
 import { hasAnyEstimate } from "../../features/trend/trend-lines";
 import { Link, useRouter } from "../../i18n/navigation";
@@ -44,6 +48,7 @@ import { MilestoneMoment, StreakFreezeNotice, StreakTile, useEngagement } from "
 import { Cited } from "../library/Cited";
 import { NonAffiliation } from "../NonAffiliation";
 import { TrendMeters } from "../practice/TrendMeters";
+import { OralFixes, reportHref } from "../progress/OralCards";
 
 /** What does not change with the skill switch: the week, the queue, the day's pointer (D219). */
 type Overview =
@@ -61,23 +66,38 @@ type Overview =
       readonly pointer: Pointer | null;
     };
 
-/** What the skill switch changes: the plan and where you stand at that skill. */
-type SkillView =
-  | { readonly status: "loading" }
-  | { readonly status: "failed" }
-  | {
-      readonly status: "ready";
-      readonly plan: DayPlan;
-      readonly trend: SkillTrend;
-      /** What the trend rests on, for the §13.0 disclosure (D94). */
-      readonly evidence: EvidenceLine | null;
-      /** The last submitted mock exam, whichever skill, rescored (§8.2 zone A). */
-      readonly exam: ExamReadiness | null;
-      /** The latest complete diagnostic at this skill, which also placed the plan (ADR 25), or none. */
-      readonly diagnostic: DiagnosticResult | null;
-      /** The one step the plan card leads with (D214). */
-      readonly step: NextStep;
-    };
+/** A scored skill's plan and where you stand at it. */
+type ScoredView = {
+  readonly status: "ready";
+  readonly kind: ScoredSkill;
+  readonly plan: DayPlan;
+  readonly trend: SkillTrend;
+  /** What the trend rests on, for the §13.0 disclosure (D94). */
+  readonly evidence: EvidenceLine | null;
+  /** The last submitted mock exam, whichever skill, rescored (§8.2 zone A). */
+  readonly exam: ExamReadiness | null;
+  /** The latest complete diagnostic at this skill, which also placed the plan (ADR 25), or none. */
+  readonly diagnostic: DiagnosticResult | null;
+  /** The one step the plan card leads with (D214). */
+  readonly step: NextStep;
+};
+
+/** Speaking's plan and where you stand at it (D248): one suggested session, then the newest report's fixes. */
+type OralView = {
+  readonly status: "ready";
+  readonly kind: "oral";
+  readonly keyHeld: boolean;
+  /** The picker's sessions, one per kind, at the study profile's band. */
+  readonly choices: readonly OralSessionChoice[];
+  /** This device's ended sessions, newest first, for the suggestion's rotation. */
+  readonly history: readonly OralHistoryEntry[];
+  readonly progress: OralProgress;
+  /** What a minute of practice mode is estimated to cost, or none when it is unpriced. */
+  readonly perMinuteUsd: number | null;
+};
+
+/** What the plan's tabs change: the plan and where you stand at that skill. */
+type SkillView = { readonly status: "loading" } | { readonly status: "failed" } | ScoredView | OralView;
 
 /** How far ahead of now "due" reaches for the queue count: due now, nothing later. */
 const DUE_LIMIT = 500;
@@ -104,7 +124,7 @@ const loadOverview = async (container: Container): Promise<Overview> => {
   };
 };
 
-const loadSkill = async (container: Container, skill: ScoredSkill, profile: StudyProfile): Promise<SkillView> => {
+const loadSkill = async (container: Container, skill: ScoredSkill, profile: StudyProfile): Promise<ScoredView> => {
   // A preview, not a session: `planDailySession` records nothing, so looking at the
   // card never counts as having started the day. It is biased by what the session will read
   // when it opens (`studyFocus`, ADR 25, D124), and only the plan waits for that.
@@ -135,6 +155,7 @@ const loadSkill = async (container: Container, skill: ScoredSkill, profile: Stud
   });
   return {
     status: "ready",
+    kind: skill,
     plan,
     trend,
     evidence: evidenceLine(evidence, container.profile.itemStatistics.minResponsesDifficulty),
@@ -143,6 +164,35 @@ const loadSkill = async (container: Container, skill: ScoredSkill, profile: Stud
     step,
   };
 };
+
+/**
+ * Speaking's tab (D248). A preview, like the scored skills': it reads and never writes, so a session a
+ * closed tab left open is closed by the oral screen, as it loads, and not here.
+ */
+const loadOral = async (container: Container, profile: StudyProfile): Promise<OralView> => {
+  const [status, choices, history, progress] = await Promise.all([
+    container.useCases.apiKeyStatus(),
+    container.useCases.oralSessionChoices({ targetBand: profile.targetBand, lang: "fr" }),
+    container.useCases.oralHistory(),
+    container.useCases.oralProgress({ limit: ORAL_RECENT_SESSIONS }),
+  ]);
+  const perMinute = container.useCases.featureCosts().find((cost) => cost.feature === "oral-practice");
+  return {
+    status: "ready",
+    kind: "oral",
+    keyHeld: status !== null,
+    choices,
+    history,
+    progress,
+    perMinuteUsd: perMinute?.estimateUsd ?? null,
+  };
+};
+
+const loadView = (container: Container, skill: SkillKind, profile: StudyProfile): Promise<SkillView> =>
+  skill === "oral" ? loadOral(container, profile) : loadSkill(container, skill, profile);
+
+/** The plan's tab list and panel share this prefix, so they name each other. */
+const PLAN_ID = "today-plan";
 
 /** Reads the overview once the container is ready. A failure is its own state, never a blank page. */
 const useOverview = (state: ContainerState): Overview => {
@@ -175,7 +225,8 @@ const useOverview = (state: ContainerState): Overview => {
  *   D64), and the last mock exam's band against its cuts once there is one.
  * - **The right column**: the practice calendar, the streak's days, and the day's grammar pointer.
  *
- * The skill switch sits in the plan and changes only the plan and where you stand. On mobile the
+ * The plan's three tabs, one per skill and speaking included (D248), change only the plan and where
+ * you stand. Speaking's plan is one suggested session (`features/home/oral-plan.ts`). On mobile the
  * order is the hero, the plan, the pointer, the statistics, where you stand, then the calendar.
  *
  * A user with no study profile is sent straight to onboarding (progress.md D224), replacing this
@@ -190,17 +241,17 @@ export function HomeDashboard() {
   const engagement = useEngagement(container);
   const overview = useOverview(container);
   const needsSetup = overview.status === "needs-setup";
-  const [skill, setSkill] = useState<ScoredSkill>("reading");
+  const [skill, setSkill] = useState<SkillKind>("reading");
   // Keyed by the skill it was loaded for, so switching skill reads as loading until
   // the new skill's data arrives, with no reset inside the effect.
-  const [loaded, setLoaded] = useState<{ skill: ScoredSkill; view: SkillView } | null>(null);
+  const [loaded, setLoaded] = useState<{ skill: SkillKind; view: SkillView } | null>(null);
   const view: SkillView = loaded?.skill === skill ? loaded.view : { status: "loading" };
   const profile = overview.status === "ready" ? overview.profile : null;
 
   useEffect(() => {
     if (container.status !== "ready" || profile === null) return;
     let live = true;
-    loadSkill(container.container, skill, profile).then(
+    loadView(container.container, skill, profile).then(
       (v) => live && setLoaded({ skill, view: v }),
       () => live && setLoaded({ skill, view: { status: "failed" } }),
     );
@@ -238,21 +289,33 @@ export function HomeDashboard() {
 
           <Card className="app-home__plan">
             <h2>{t("planTitle")}</h2>
-            <SkillSwitch skill={skill} onChange={setSkill} />
-            {view.status === "loading" ? (
-              <p role="status">{tCommon("loading")}</p>
-            ) : (
-              <PlanBody
-                view={view}
-                skill={skill}
-                dueCount={overview.dueCount}
-                targetBand={overview.profile.targetBand}
-                diagnosticSize={container.container.profile.diagnostic.size}
-              />
-            )}
+            <PlanTabs skill={skill} onSelect={setSkill} />
+            <TabPanel idPrefix={PLAN_ID} id={skill}>
+              {view.status === "loading" ? (
+                <p role="status">{tCommon("loading")}</p>
+              ) : view.kind === "oral" ? (
+                <OralPlanBody
+                  view={view}
+                  today={overview.activity.today}
+                  dueCount={overview.dueCount}
+                  targetBand={overview.profile.targetBand}
+                />
+              ) : (
+                <PlanBody
+                  view={view}
+                  dueCount={overview.dueCount}
+                  targetBand={overview.profile.targetBand}
+                  diagnosticSize={container.container.profile.diagnostic.size}
+                />
+              )}
+            </TabPanel>
           </Card>
 
-          {view.status === "loading" ? null : <WhereYouStand view={view} skill={skill} />}
+          {view.status === "loading" ? null : view.kind === "oral" ? (
+            <OralStanding progress={view.progress} />
+          ) : (
+            <WhereYouStand view={view} />
+          )}
         </div>
 
         <div className="app-home__side">
@@ -361,33 +424,37 @@ function Statistics({
   );
 }
 
-/** The Reading/Writing switch, which picks the plan and where you stand. */
-function SkillSwitch({ skill, onChange }: { skill: ScoredSkill; onChange: (skill: ScoredSkill) => void }) {
+/**
+ * The plan's three tabs (D248), as `/progress`'s detail has (D247): another view of the same card, so
+ * tabs and never a radio group, which reads as a question to answer. Each wears its skill's glyph and fill.
+ */
+function PlanTabs({ skill, onSelect }: { skill: SkillKind; onSelect: (skill: SkillKind) => void }) {
   const t = useTranslations("today");
   const tSkills = useTranslations("skills");
   return (
-    <fieldset className="app-segmented">
-      <legend className="app-segmented__legend">{t("skillLabel")}</legend>
-      {SCORED_SKILLS.map((s) => (
-        <label key={s} className="app-segmented__option">
-          <input type="radio" name="skill" value={s} checked={skill === s} onChange={() => onChange(s)} />
-          <span>{tSkills(s)}</span>
-        </label>
-      ))}
-    </fieldset>
+    <Tabs
+      label={t("skillLabel")}
+      items={SKILL_KINDS.map((kind) => ({
+        id: kind,
+        label: kind === "oral" ? t("oralName") : tSkills(kind),
+        glyph: SKILL_LOOK[kind].glyph,
+        tone: SKILL_LOOK[kind].tone,
+      }))}
+      selected={skill}
+      onSelect={onSelect}
+      idPrefix={PLAN_ID}
+    />
   );
 }
 
 /** Today's plan at the chosen skill: the next step, the placement, the rows and the start, then the other ways on. */
 function PlanBody({
   view,
-  skill,
   dueCount,
   targetBand,
   diagnosticSize,
 }: {
-  view: Extract<SkillView, { status: "ready" }>;
-  skill: ScoredSkill;
+  view: ScoredView;
   dueCount: number;
   targetBand: TargetBand;
   diagnosticSize: number;
@@ -414,7 +481,7 @@ function PlanBody({
               </li>
             ))}
           </ul>
-          <Link href={`/practice/${skill}`} className={`${buttonClass("primary", "go")} pl-focusable app-plan__start`}>
+          <Link href={`/practice/${view.kind}`} className={`${buttonClass("primary", "go")} pl-focusable app-plan__start`}>
             {t("start", { minutes: minutesFor(view.plan.items.length) })}
           </Link>
         </>
@@ -425,9 +492,10 @@ function PlanBody({
 }
 
 /** Where you stand at the chosen skill: the diagnostic, the practice trend once there is one, the last exam once there is one. */
-function WhereYouStand({ view, skill }: { view: Extract<SkillView, { status: "ready" }>; skill: ScoredSkill }) {
+function WhereYouStand({ view }: { view: ScoredView }) {
   const t = useTranslations("today");
   const tSkills = useTranslations("skills");
+  const skill = view.kind;
   return (
     <Card className="app-home__readiness">
       <h2>{t("readinessCardTitle")}</h2>
@@ -446,6 +514,123 @@ function WhereYouStand({ view, skill }: { view: Extract<SkillView, { status: "re
         </>
       ) : null}
       {view.exam === null ? null : <ExamHalf exam={view.exam} />}
+    </Card>
+  );
+}
+
+/**
+ * Speaking's plan (D248): one spoken session a day, the goal the hero's oral rail counts. Until one has
+ * ended today it suggests the kind practised least lately, with its length and its practice-mode
+ * estimate, and leads to the oral screen, where the mode is chosen and the session priced before it
+ * starts (D237). Nothing here spends. Without a key it says so, and links the key screen.
+ */
+function OralPlanBody({
+  view,
+  today,
+  dueCount,
+  targetBand,
+}: {
+  view: OralView;
+  today: PracticeActivity["today"];
+  dueCount: number;
+  targetBand: TargetBand;
+}) {
+  const t = useTranslations("today");
+  const tOral = useTranslations("oral");
+  const locale = useLocale();
+  const plan = oralPlan({ today, choices: view.choices, history: view.history, perMinuteUsd: view.perMinuteUsd });
+  return (
+    <>
+      {plan.status === "done-today" ? (
+        <div>
+          <p>
+            <strong>{t("doneTitle")}</strong>
+          </p>
+          <p>{t("oralToday", { count: plan.sessions, minutes: plan.minutes })}</p>
+          <p>
+            <Link href="/practice/oral" className="app-link pl-focusable">
+              {t("oralAgain")}
+            </Link>
+          </p>
+        </div>
+      ) : plan.status === "none" ? (
+        <p>{t("oralNoSession")}</p>
+      ) : (
+        <div className="app-home__oral-plan">
+          <p className="app-muted">{t("oralPlanWhy")}</p>
+          <ul className="app-plan">
+            <li className="app-plan__row">
+              <span className="app-plan__kind">{tOral(`type_${plan.choice.sessionType}`)}</span>
+              <span className="app-muted">
+                {plan.estimateUsd === null
+                  ? tOral("sessionMetaUnpriced", { minutes: plan.choice.minutes })
+                  : tOral("sessionMeta", { minutes: plan.choice.minutes, amount: estimateText(plan.estimateUsd, locale) })}
+              </span>
+            </li>
+          </ul>
+          <p>{tOral(`purpose_${plan.choice.sessionType}`)}</p>
+          {view.keyHeld ? (
+            <Link href="/practice/oral" className={`${buttonClass("primary", "go")} pl-focusable app-plan__start`}>
+              {t("oralStart", { minutes: plan.choice.minutes })}
+            </Link>
+          ) : (
+            <p>
+              {t("oralNoKey")}{" "}
+              <Link href="/settings/key" className="app-link pl-focusable">
+                {tOral("noKeyAdd")}
+              </Link>
+            </p>
+          )}
+        </div>
+      )}
+      <MorePractice dueCount={dueCount} step="plan" hasDiagnostic={false} targetBand={targetBand} speaking={false} />
+    </>
+  );
+}
+
+/**
+ * Where you stand at speaking (D248), as `/progress`'s speaking tab says it (D247): the newest report's
+ * fixes, each a way into its drill, or the way to a session a report can still be asked of. No criterion
+ * level is shown off the report, where each stands beside its evidence (R10).
+ */
+function OralStanding({ progress }: { progress: OralProgress }) {
+  const t = useTranslations("today");
+  const tProgress = useTranslations("progress");
+  const format = useFormatter();
+  const detail = oralDetail(progress);
+  return (
+    <Card className="app-home__readiness">
+      <h2>{t("readinessCardTitle")}</h2>
+      <div className="app-exam-result">
+        <h3>{tProgress("oralLatestTitle")}</h3>
+        {detail.status === "empty" ? (
+          <p className="app-muted">{tProgress("oralLatestEmpty")}</p>
+        ) : detail.status === "unreported" ? (
+          detail.askable === null ? (
+            <p>{tProgress("oralUnreportedNone")}</p>
+          ) : (
+            <>
+              <p>{tProgress("oralUnreported")}</p>
+              <Link href={reportHref(detail.askable)} className="app-link pl-focusable">
+                {tProgress("oralUnreportedOpen")}
+              </Link>
+            </>
+          )
+        ) : (
+          <>
+            <p className="app-muted">
+              {tProgress("oralLatestDate", {
+                date: format.dateTime(new Date(detail.report.startedAt), { dateStyle: "medium", timeZone: deviceTimeZone() }),
+              })}
+            </p>
+            <OralFixes fixes={detail.report.fixes} />
+            <p className="app-muted">{tProgress("oralLatestLevels")}</p>
+            <Link href={reportHref(detail.report.id)} className="app-link pl-focusable">
+              {tProgress("oralLatestOpen")}
+            </Link>
+          </>
+        )}
+      </div>
     </Card>
   );
 }
@@ -524,7 +709,7 @@ function NextStepBanner({
 
 /**
  * The plan's other ways on, where the review card was (D215): the queue with its due count,
- * speaking, the mock exam with what it is for, the library, and the diagnostic again once there is
+ * speaking (except on its own tab), the mock exam with what it is for, the library, and the diagnostic again once there is
  * one. A way the banner above already offers is not repeated.
  */
 function MorePractice({
@@ -532,11 +717,14 @@ function MorePractice({
   step,
   hasDiagnostic,
   targetBand,
+  speaking = true,
 }: {
   dueCount: number;
   step: NextStep;
   hasDiagnostic: boolean;
   targetBand: TargetBand;
+  /** Whether to offer speaking: not on its own tab, whose plan already leads there (D248). */
+  speaking?: boolean;
 }) {
   const t = useTranslations("today");
   return (
@@ -548,11 +736,13 @@ function MorePractice({
             {t("moreReview", { count: dueCount })}
           </Link>
         </li>
-        <li>
-          <Link href="/practice/oral" className="app-link pl-focusable">
-            {t("oralAction")}
-          </Link>
-        </li>
+        {speaking ? (
+          <li>
+            <Link href="/practice/oral" className="app-link pl-focusable">
+              {t("oralAction")}
+            </Link>
+          </li>
+        ) : null}
         {step === "mock-exam" ? null : (
           <li>
             <Link href="/exam" className="app-link pl-focusable">

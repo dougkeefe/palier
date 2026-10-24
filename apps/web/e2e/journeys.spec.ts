@@ -137,6 +137,37 @@ test("the drill keeps focus on the next item's options after advancing (§11)", 
   await expect(page.getByRole("radio").first()).toBeFocused();
 });
 
+test("today's plan is three equal tabs, never a radio group, and speaking's plan suggests a session (D248)", async ({
+  page,
+  context,
+}) => {
+  await stubOpenAi(context);
+  await onboard(page, "skip", { key: SENTINEL });
+  await expect(page).toHaveURL(/\/en\/home$/);
+
+  const plan = page.getByRole("tablist", { name: "Practising" });
+  await expect(plan.getByRole("tab")).toHaveText(["Reading", "Written expression", "Oral expression"]);
+  await expect(page.getByRole("radio")).toHaveCount(0);
+
+  // Selection follows focus: two arrows from Reading reach speaking.
+  await plan.getByRole("tab", { name: "Reading" }).focus();
+  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("ArrowRight");
+  const oral = plan.getByRole("tab", { name: "Oral expression" });
+  await expect(oral).toBeFocused();
+  await expect(oral).toHaveAttribute("aria-selected", "true");
+
+  // A device that has never spoken is offered the picker's first kind, with its length, and nothing spends here.
+  const panel = page.getByRole("tabpanel", { name: "Oral expression" });
+  await expect(panel.getByText("Warm-up", { exact: true })).toBeVisible();
+  await expect(panel.getByRole("link", { name: "Practise speaking" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "From your latest report" })).toBeVisible();
+  await axeClean(page);
+
+  await panel.getByRole("link", { name: /^Start speaking, \d+ min$/ }).click();
+  await expect(page).toHaveURL(/\/en\/practice\/oral$/);
+});
+
 test("today sends a first-time user straight to onboarding, rather than an empty chart or a card that only says set up (§14, D224)", async ({
   page,
 }) => {

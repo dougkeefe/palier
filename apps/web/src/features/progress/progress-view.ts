@@ -3,7 +3,7 @@ import type { OralSessionType, ScoredSkill, SessionId, TargetBand } from "@palie
 import { SCORED_SKILLS } from "@palier/domain";
 import type { SubSkillTally } from "@palier/engine";
 
-import type { SkillKind } from "../skills/skill-look";
+import { type SkillKind, SKILL_KINDS } from "../skills/skill-look";
 import { type TrendLine, trendLines } from "../trend/trend-lines";
 
 /**
@@ -77,7 +77,7 @@ export const practiceTime = (
 export const tallyScale = (rows: readonly SubSkillTally[]): number => Math.max(0, ...rows.map((row) => row.attempted));
 
 /** The detail's tabs (D247): the three domains as equals, in the order the hero names them. */
-export const DETAIL_TABS: readonly SkillKind[] = [...SCORED_SKILLS, "oral"];
+export const DETAIL_TABS: readonly SkillKind[] = SKILL_KINDS;
 
 /** How many of the newest spoken sessions speaking's detail lists (D247), a display rule and not the exam's. */
 export const ORAL_RECENT_SESSIONS = 5;
