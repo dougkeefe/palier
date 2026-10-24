@@ -19,7 +19,7 @@ export default function TranslatePage({ params }: PageProps<"/[locale]/practice/
   const t = useTranslations("translate");
 
   return (
-    <section className="app-stack app-island">
+    <section className="app-stack app-island app-wide">
       <h1 className="app-hero__title">{t("title")}</h1>
       <Translator />
     </section>

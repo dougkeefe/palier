@@ -21,7 +21,8 @@ describe("isCurrent", () => {
 });
 
 describe("NAV_ITEMS", () => {
-  it("are the five destinations in the design's order", () => {
-    expect(NAV_ITEMS.map((item) => item.key)).toEqual(["home", "review", "oral", "progress", "about"]);
+  it("are the five destinations in the design's order, the translator in About's place (D251)", () => {
+    expect(NAV_ITEMS.map((item) => item.key)).toEqual(["home", "review", "oral", "progress", "translate"]);
+    expect(NAV_ITEMS.find((item) => item.key === "translate")?.href).toBe("/practice/writing/translate");
   });
 });

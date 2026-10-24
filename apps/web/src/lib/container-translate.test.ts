@@ -84,6 +84,12 @@ describe.each([
     expect(entries).toHaveLength(1);
     expect(entries[0]).toMatchObject({ feature: "translation", model: aiModels.assess, inputTokens: 1_400, outputTokens: 1_200 });
     expect(entries[0]?.costUsd).toBeGreaterThan(0);
+    // The screen's running total for the visit reads that row back (D251).
+    expect(await c.useCases.featureSpendSince({ feature: "translation", from: "1970-01-01T00:00:00.000Z" })).toEqual({
+      usd: entries[0]?.costUsd,
+      calls: 1,
+      unpriced: 0,
+    });
     expect(JSON.stringify(await c.useCases.exportData())).not.toContain("est reporter");
     expect(await c.useCases.writingHistory()).toEqual([]);
   });

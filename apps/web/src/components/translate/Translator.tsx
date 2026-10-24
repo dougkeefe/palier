@@ -1,17 +1,20 @@
 "use client";
 
-import { MAX_TRANSLATION_CHARS } from "@palier/app";
+import { type FeatureSpend, MAX_TRANSLATION_CHARS } from "@palier/app";
 import type { Lang, StudyResource, Translation } from "@palier/domain";
-import { Button, Callout, Card, Toast } from "@palier/ui";
+import { Button, Callout, Card, IconButton, Toast } from "@palier/ui";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useId, useReducer, useRef, useState } from "react";
 
+import { estimateText } from "../../features/key/spend-view";
 import { articleHref } from "../../features/library/links";
 import {
   type Answered,
   SOURCE_CHOICES,
   TARGET_LANG,
+  TRANSLATE_PAUSE_MS,
   answerKind,
+  autoTranslates,
   charactersLeft,
   correctionRows,
   correctionSegments,
@@ -22,6 +25,7 @@ import {
   resourceInOtherLanguage,
   resourceTitle,
   resumedTranslator,
+  shouldTranslate,
   studyFocus,
   textProblem,
   translateFailure,
@@ -29,6 +33,7 @@ import {
   translator,
   translatorFeedbackLang,
 } from "../../features/translate/translate-view";
+import { preflightNotice } from "../../features/writing/workshop-view";
 import { Link } from "../../i18n/navigation";
 import type { Container } from "../../lib/container";
 import { useContainer } from "../ContainerProvider";
@@ -39,14 +44,19 @@ import { Waiting } from "../key/Waiting";
 
 type Setup = { readonly keyHeld: boolean };
 
+/** How long the copy button shows its tick before it is the copy glyph again. */
+const COPIED_MS = 2_000;
+
 /**
- * The translator (progress.md D250): English or French on the left, always French on the right.
+ * The translator (progress.md D250, D251): English or French on the left, always French on the right.
  * English comes back translated for the federal public service, with notes on its choices; the
  * user's own French comes back corrected, with what it did well, each correction marked over their
  * words with its reason, and where to study it: Palier's library article and curated government
- * references, never a link a model wrote. One press spends, its estimate beside the button (D237),
- * and nothing is stored: the answer stays on this screen, and a request still out when the screen
- * was left is followed when it opens again (D143).
+ * references, never a link a model wrote. It translates on a pause in typing, as Google Translate
+ * does (D251, amending D237 for this screen): the visit's running total stands in for an estimate
+ * before each call, and past the soft cap it stops and offers one press instead. Nothing is stored:
+ * the answer stays on this screen, and a request still out when the screen was left is followed
+ * when it opens again (D143).
  */
 export function Translator() {
   const tCommon = useTranslations("common");
@@ -76,29 +86,33 @@ function Workspace({ container, keyHeld, onKeyLost }: { container: Container; ke
   const [held] = useState(() => useCases.translationInFlight());
   const [state, dispatch] = useReducer(translator, held, (h) => (h === null ? initialTranslator() : resumedTranslator(h.request)));
   const [copy, setCopy] = useState<"idle" | "copied" | "failed">("idle");
-  const answerRef = useRef<HTMLHeadingElement>(null);
-  const statusRef = useRef<HTMLDivElement>(null);
-  const moved = useRef(false);
+  const [visitFrom] = useState(() => container.clock.now());
+  const [spent, setSpent] = useState<FeatureSpend | null>(null);
   const estimateUsd = useCases.featureCosts().find((cost) => cost.feature === "translation")?.estimateUsd ?? null;
   const sending = state.request.kind === "sending";
 
-  // The estimate beside the button (D237), worked out again once each request settles.
-  const preflight = usePreflight(useCases, "translation", { enabled: keyHeld && !sending, reloadOn: state.answered });
+  // Where this month would stand after one more text: past the cap, a pause no longer sends (D251).
+  // Read again as each request settles, answered or failed, since each moves the month's spend and the visit's total.
+  const preflight = usePreflight(useCases, "translation", { enabled: keyHeld && !sending, reloadOn: state.request });
+  const auto = preflight !== null && autoTranslates(preflight.after);
 
-  // Focus follows the user's move (WCAG 2.4.3): to the status line while the text is worked on,
-  // since the controls are held; to the answer's heading once it arrives.
   useEffect(() => {
-    if (!moved.current) return;
-    moved.current = false;
-    if (sending) statusRef.current?.focus();
-    else if (state.answered !== null) answerRef.current?.focus();
-  }, [sending, state.answered]);
+    let live = true;
+    useCases.featureSpendSince({ feature: "translation", from: visitFrom }).then(
+      (loaded) => {
+        if (live) setSpent(loaded);
+      },
+      () => undefined,
+    );
+    return () => {
+      live = false;
+    };
+  }, [useCases, visitFrom, state.request]);
 
   const settle = useCallback(
     async (pending: Promise<Translation>, request: Answered["request"]) => {
       try {
         const translation = await pending;
-        moved.current = true;
         dispatch({ type: "answered", answered: { request, translation } });
       } catch (error) {
         const failure = translateFailure(error);
@@ -114,14 +128,32 @@ function Workspace({ container, keyHeld, onKeyLost }: { container: Container; ke
     if (held !== null) void settle(held.result, held.request);
   }, [held, settle]);
 
-  const onSend = () => {
+  const send = () => {
     if (sending || textProblem(state.text) !== null) return;
     const request = translateRequest(state.text, state.choice, feedbackLang);
-    moved.current = true;
     setCopy("idle");
     dispatch({ type: "sending" });
     void settle(useCases.translateText(request), request);
   };
+
+  // The pause (D251): every keystroke, language change or settled request restarts the wait, and only a
+  // text whose French is not already on screen is sent. The timer calls the newest `send`, so it sends
+  // what is on screen when it fires.
+  const sendLatest = useRef(send);
+  useEffect(() => {
+    sendLatest.current = send;
+  });
+  useEffect(() => {
+    if (!keyHeld || !auto || !shouldTranslate(state)) return;
+    const timer = setTimeout(() => sendLatest.current(), TRANSLATE_PAUSE_MS);
+    return () => clearTimeout(timer);
+  }, [keyHeld, auto, state]);
+
+  useEffect(() => {
+    if (copy !== "copied") return;
+    const timer = setTimeout(() => setCopy("idle"), COPIED_MS);
+    return () => clearTimeout(timer);
+  }, [copy]);
 
   const onCopy = async (text: string) => {
     try {
@@ -132,102 +164,125 @@ function Workspace({ container, keyHeld, onKeyLost }: { container: Container; ke
     }
   };
 
-  const problem = textProblem(state.text);
   const left = charactersLeft(state.text);
-  const offered = keyHeld && !sending && preflight !== null;
   const answer = state.answered;
+  const failed = state.request.kind === "failed";
+  // One press spends, D237's way, where a pause does not: past the cap, and to try a failed text again.
+  const pressable = keyHeld && (!auto || failed);
+  const notice = preflight === null || !auto ? null : preflightNotice(preflight);
 
   return (
     <div className="app-stack">
-      <p>{t("intro")}</p>
       <Card>
         <div className="app-stack">
-          <div className="app-translate__head">
-            <fieldset className="app-segmented" disabled={sending}>
-              <legend className="app-segmented__legend">{t("sourceLabel")}</legend>
-              {SOURCE_CHOICES.map((choice) => (
-                <label key={choice} className="app-segmented__option">
-                  <input
-                    type="radio"
-                    name={`${id}-source`}
-                    value={choice}
-                    checked={state.choice === choice}
-                    onChange={() => dispatch({ type: "choose", choice })}
-                  />
-                  <span>{t(`source_${choice}`)}</span>
-                </label>
-              ))}
-            </fieldset>
-            <p className="app-translate__target">{t("targetLabel")}</p>
-          </div>
+          <fieldset className="app-segmented">
+            <legend className="app-segmented__legend">{t("sourceLabel")}</legend>
+            {SOURCE_CHOICES.map((choice) => (
+              <label key={choice} className="app-segmented__option">
+                <input
+                  type="radio"
+                  name={`${id}-source`}
+                  value={choice}
+                  checked={state.choice === choice}
+                  onChange={() => dispatch({ type: "choose", choice })}
+                />
+                <span>{t(`source_${choice}`)}</span>
+              </label>
+            ))}
+          </fieldset>
 
           <div className="app-translate__panes">
-            <label className="app-field" htmlFor={`${id}-text`}>
-              <span>{t("editorLabel")}</span>
+            {/* The label holds the title alone: wrapping the hint and the count would make them the field's name. */}
+            <div className="app-translate__pane">
+              <label className="app-translate__label" htmlFor={`${id}-text`}>
+                {t("editorLabel")}
+              </label>
               <textarea
                 id={`${id}-text`}
-                className="app-textarea"
+                className="app-textarea app-translate__box"
                 {...(editorLang(state.choice) === undefined ? {} : { lang: editorLang(state.choice) })}
                 rows={10}
                 aria-describedby={`${id}-hint ${id}-count`}
                 value={state.text}
-                readOnly={sending}
                 onChange={(event) => dispatch({ type: "edit", text: event.target.value })}
               />
-              <span id={`${id}-hint`} className="app-muted">
-                {t("editorHint")}
-              </span>
-              <span id={`${id}-count`} className={`app-word-count${left < 0 ? " app-word-count--near" : ""}`}>
-                {left < 0
-                  ? t("charactersOver", { count: -left, limit: MAX_TRANSLATION_CHARS })
-                  : t("charactersLeft", { count: left })}
-              </span>
-            </label>
+              <div className="app-translate__under">
+                <p id={`${id}-hint`} className="app-muted">
+                  {t("editorHint")}
+                </p>
+                <p id={`${id}-count`} className={`app-word-count${left < 0 ? " app-word-count--near" : ""}`}>
+                  {left < 0
+                    ? t("charactersOver", { count: -left, limit: MAX_TRANSLATION_CHARS })
+                    : t("charactersLeft", { count: left })}
+                </p>
+              </div>
+            </div>
 
-            <section className="app-field" aria-labelledby={`${id}-output-label`}>
-              <h2 id={`${id}-output-label`} ref={answerRef} tabIndex={-1} className="app-translate__label">
+            <section className="app-translate__pane" aria-labelledby={`${id}-output-label`}>
+              <h2 id={`${id}-output-label`} className="app-translate__label">
                 {t("outputLabel")}
               </h2>
-              <div className="app-translate__output" lang={TARGET_LANG}>
-                {answer === null ? <span className="app-translate__placeholder">{t("outputEmpty")}</span> : answer.translation.output}
-              </div>
-              {answer === null ? null : (
-                <div className="app-actions">
-                  <Button variant="secondary" onClick={() => void onCopy(answer.translation.output)}>
-                    {t("copy")}
-                  </Button>
-                  {copy === "idle" ? null : (
-                    <span role="status" className="app-muted">
-                      {copy === "copied" ? t("copied") : t("copyFailed")}
-                    </span>
-                  )}
+              <div className="app-translate__box app-translate__result" aria-busy={sending}>
+                <div
+                  className={`app-translate__output${answer !== null && isStale(state) ? " app-translate__output--stale" : ""}`}
+                  lang={TARGET_LANG}
+                >
+                  {answer === null ? <span className="app-translate__placeholder">{t("outputEmpty")}</span> : answer.translation.output}
                 </div>
-              )}
+                {answer === null ? null : (
+                  <IconButton
+                    className="app-translate__copy"
+                    label={t("copy")}
+                    glyph={copy === "copied" ? "check" : "copy"}
+                    onClick={() => void onCopy(answer.translation.output)}
+                  />
+                )}
+              </div>
+              <div className="app-translate__under">
+                {sending ? <Waiting live={false}>{t("sending")}</Waiting> : null}
+                {copy === "idle" ? null : (
+                  <p role="status" className="app-muted">
+                    {copy === "copied" ? t("copied") : t("copyFailed")}
+                  </p>
+                )}
+              </div>
             </section>
           </div>
+          {/* Said as each answer lands, politely: focus stays in the editor, since the user is typing (D251). */}
+          <p className="pl-visually-hidden" aria-live="polite">
+            {state.request.kind === "idle" && answer !== null && !isStale(state) ? t("ready") : ""}
+          </p>
 
           {!keyHeld ? null : (
             <>
-              {offered ? <SpendOffer id={`${id}-offer`} namespace="translate" preflight={preflight} /> : null}
-              <div className="app-actions">
-                <Button onClick={onSend} disabled={!offered || problem !== null} aria-describedby={offered ? `${id}-offer` : undefined}>
-                  {state.request.kind === "failed" ? t("tryAgain") : t(`button_${state.choice}`)}
-                </Button>
-                {state.text === "" && answer === null ? null : (
-                  <Button variant="secondary" onClick={() => dispatch({ type: "clear" })} disabled={sending}>
-                    {t("clear")}
-                  </Button>
-                )}
-              </div>
+              {state.request.kind === "failed" ? <Toast tone="incorrect">{t(failureMessage(state.request.failure))}</Toast> : null}
+              {!auto && preflight !== null ? <Callout tone="info">{t("capPaused")}</Callout> : null}
+              {pressable && preflight !== null ? (
+                <>
+                  <SpendOffer id={`${id}-offer`} namespace="translate" preflight={preflight} sendsToKey={null} />
+                  <div className="app-actions">
+                    <Button
+                      onClick={send}
+                      disabled={sending || textProblem(state.text) !== null || (!failed && !shouldTranslate(state))}
+                      aria-describedby={`${id}-offer`}
+                    >
+                      {failed ? t("tryAgain") : t("translateNow")}
+                    </Button>
+                  </div>
+                </>
+              ) : null}
+              {notice === null ? null : <Callout tone={notice.tone}>{t(notice.key)}</Callout>}
+              {spent === null || spent.calls === 0 ? null : (
+                <p>
+                  {t(spent.unpriced > 0 ? "visitTotalUnpriced" : "visitTotal", {
+                    amount: estimateText(spent.usd, locale),
+                    count: spent.calls,
+                  })}
+                </p>
+              )}
+              <p className="app-muted">{t("sendsTo")}</p>
             </>
           )}
-          {sending ? (
-            <div ref={statusRef} tabIndex={-1}>
-              <Waiting>{t("sending")}</Waiting>
-            </div>
-          ) : null}
-          {state.request.kind === "failed" ? <Toast tone="incorrect">{t(failureMessage(state.request.failure))}</Toast> : null}
-          {answer !== null && isStale(state) ? <Callout tone="info">{t("stale")}</Callout> : null}
         </div>
       </Card>
 
@@ -244,7 +299,7 @@ function Explanation({ answered, resources }: { answered: Answered; resources: r
   const { request, translation } = answered;
   const kind = answerKind(translation);
   return (
-    <section className="app-stack" aria-label={t(kind === "corrected" ? "correctionsTitle" : "notesTitle")}>
+    <section className="app-stack app-translate__explanation" aria-label={t(kind === "corrected" ? "correctionsTitle" : "notesTitle")}>
       <Callout tone="info">{t("aiNote")}</Callout>
       <p className="app-muted">{t(kind === "corrected" ? "readAsFrench" : "readAsEnglish")}</p>
       {kind === "corrected" ? (

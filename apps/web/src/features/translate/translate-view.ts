@@ -1,17 +1,26 @@
 import type { TranslateRequest } from "@palier/app";
 import { MAX_TRANSLATION_CHARS } from "@palier/app";
 import type { Lang, StudyResource, Translation, TranslationCorrection, WritingSubSkill } from "@palier/domain";
+import type { CapState } from "@palier/engine";
 
 import { checkFailure } from "../key/key-view";
 import { feedbackLangFor } from "../oral/report-view";
 import { segmentText, type TextSegment } from "../writing/inline-errors";
 
 /**
- * The translator's decisions (progress.md D250), kept out of the `.tsx` so each is tested. The left
+ * The translator's decisions (progress.md D250, D251), kept out of the `.tsx` so each is tested. The left
  * text is English or French, the right is always French: English is translated for the federal public
  * service, and the user's own French comes back corrected, with what it did well and why each
- * correction was made, each linked to where to study it.
+ * correction was made, each linked to where to study it. It translates on a pause in typing, as Google
+ * Translate does, with no button to press (D251).
  */
+
+/**
+ * How long the text must rest before it is sent (D251): the end of a burst of typing, short of a
+ * mid-sentence think. Each send is a paid call on the `assess` model, whose own latency dwarfs this, so a
+ * shorter pause would mostly buy calls for half-written sentences. A product rule, not an exam rule.
+ */
+export const TRANSLATE_PAUSE_MS = 1_500;
 
 /** What the user says the left text is in: let the translator tell, or name it. */
 export const SOURCE_CHOICES = ["detect", "en", "fr"] as const;
@@ -25,7 +34,7 @@ export const sourceOf = (choice: SourceChoice): Lang | null => (choice === "dete
 /** The editor's `lang`, so a screen reader and the spell checker read it right; none when unknown. */
 export const editorLang = (choice: SourceChoice): Lang | undefined => sourceOf(choice) ?? undefined;
 
-/** The request one press makes. The text goes as typed, since corrections point into exactly it. */
+/** The request a pause makes. The text goes as typed, since corrections point into exactly it. */
 export const translateRequest = (text: string, choice: SourceChoice, feedbackLang: Lang): TranslateRequest => ({
   text,
   source: sourceOf(choice),
@@ -47,7 +56,7 @@ export const resourceInOtherLanguage = (resource: StudyResource, locale: string)
 /** How many characters are left before the limit; negative once over it. */
 export const charactersLeft = (text: string): number => MAX_TRANSLATION_CHARS - text.length;
 
-/** Why the button is not offered yet: nothing to send, or too much. `null` when it can be pressed. */
+/** Why the text is not sent yet: nothing to send, or too much. `null` when it can be. */
 export const textProblem = (text: string): "empty" | "too-long" | null => {
   if (text.trim() === "") return "empty";
   return charactersLeft(text) < 0 ? "too-long" : null;
@@ -110,8 +119,7 @@ export type TranslatorAction =
   | { readonly type: "choose"; readonly choice: SourceChoice }
   | { readonly type: "sending" }
   | { readonly type: "answered"; readonly answered: Answered }
-  | { readonly type: "failed"; readonly failure: TranslateFailure }
-  | { readonly type: "clear" };
+  | { readonly type: "failed"; readonly failure: TranslateFailure };
 
 const IDLE: RequestState = { kind: "idle" };
 
@@ -119,7 +127,7 @@ export const initialTranslator = (): TranslatorState => ({ text: "", choice: "de
 
 /**
  * The screen opened while a translation it asked for earlier is still being made (D143's rule): it
- * shows that request's text as sending, and follows it rather than offering the button again.
+ * shows that request's text as sending, and follows it rather than sending it again.
  */
 export const resumedTranslator = (request: TranslateRequest): TranslatorState => ({
   text: request.text,
@@ -129,33 +137,56 @@ export const resumedTranslator = (request: TranslateRequest): TranslatorState =>
 });
 
 /**
- * The screen's one reducer. While a request is out the text and the language are held, so the
- * answer always belongs to what is on screen and a second paid request cannot start. An answer
- * arriving when nothing was sent is ignored. Editing after an answer keeps the answer, which then
- * reads as made for an earlier text (`isStale`), so nothing paid for vanishes on a keystroke.
+ * The screen's one reducer. Typing never stops (D251): the text and the language can change while a
+ * request is out, and its answer still lands, carrying the request it answered, so its marks point into
+ * the text that was sent. It then reads as made for an earlier text (`isStale`), and the next pause sends
+ * the new one. Only one request is out at a time. An answer arriving when nothing was sent is ignored.
+ * Emptying the text empties the French, as clearing Google Translate's does; that replaced D250's
+ * "Start again".
  */
 export const translator = (state: TranslatorState, action: TranslatorAction): TranslatorState => {
   const sending = state.request.kind === "sending";
   switch (action.type) {
-    case "edit":
-      return sending ? state : { ...state, text: action.text, request: state.request.kind === "failed" ? IDLE : state.request };
+    case "edit": {
+      const request = state.request.kind === "failed" ? IDLE : state.request;
+      return { ...state, text: action.text, request, answered: isBlank(action.text) ? null : state.answered };
+    }
     case "choose":
-      return sending ? state : { ...state, choice: action.choice };
+      return { ...state, choice: action.choice };
     case "sending":
       return sending ? state : { ...state, request: { kind: "sending" } };
     case "answered":
-      return sending ? { ...state, request: IDLE, answered: action.answered } : state;
+      return sending ? { ...state, request: IDLE, answered: isBlank(state.text) ? null : action.answered } : state;
     case "failed":
       return sending ? { ...state, request: { kind: "failed", failure: action.failure } } : state;
-    case "clear":
-      return sending ? state : initialTranslator();
   }
 };
 
-/** Whether the answer on screen was made for a different text or language than the one now shown. */
+const isBlank = (text: string): boolean => text.trim() === "";
+
+/**
+ * Whether the answer on screen was made for a different text or language than the one now shown. Space
+ * typed at the end is no change: the answer's marks still point into the same words, and the space before
+ * the next word should not buy a call (D251).
+ */
 export const isStale = (state: TranslatorState): boolean =>
   state.answered !== null &&
-  (state.answered.request.text !== state.text || state.answered.request.source !== sourceOf(state.choice));
+  (state.answered.request.text.trimEnd() !== state.text.trimEnd() || state.answered.request.source !== sourceOf(state.choice));
+
+/**
+ * Whether a pause should send the text now (D251): it has words and is within the limit, nothing is out
+ * or failed, and the French on screen is not already for it. A failure waits for the text to change, or
+ * for "Try again", so a failing call is never repeated on its own.
+ */
+export const shouldTranslate = (state: TranslatorState): boolean =>
+  textProblem(state.text) === null && state.request.kind === "idle" && (state.answered === null || isStale(state));
+
+/**
+ * Whether the screen translates on a pause (D251), from where this month would stand once one more text is
+ * sent. Past the soft cap it stops and offers one press instead, D237's way: the cap never blocks, but a
+ * call on every pause must not quietly run past it.
+ */
+export const autoTranslates = (after: CapState): boolean => after !== "over";
 
 /** Which of the two jobs the answer did. */
 export const answerKind = (translation: Translation): "corrected" | "translated" =>

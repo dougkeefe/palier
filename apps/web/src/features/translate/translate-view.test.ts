@@ -4,7 +4,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   type Answered,
+  TRANSLATE_PAUSE_MS,
   answerKind,
+  autoTranslates,
   charactersLeft,
   correctionRows,
   correctionSegments,
@@ -15,6 +17,7 @@ import {
   resourceInOtherLanguage,
   resourceTitle,
   resumedTranslator,
+  shouldTranslate,
   sourceOf,
   studyFocus,
   textProblem,
@@ -62,7 +65,7 @@ describe("the request (D250)", () => {
     expect(translateRequest("  Bonjour ", "detect", "en")).toEqual({ text: "  Bonjour ", source: null, target: "fr", feedbackLang: "en" });
   });
 
-  it("offers the button only for a text with words in it and within the limit", () => {
+  it("sends only a text with words in it and within the limit", () => {
     expect(textProblem(" \n")).toBe("empty");
     expect(textProblem("a".repeat(MAX_TRANSLATION_CHARS))).toBeNull();
     expect(textProblem("a".repeat(MAX_TRANSLATION_CHARS + 1))).toBe("too-long");
@@ -106,11 +109,20 @@ describe("translator", () => {
     expect(translator(initialTranslator(), { type: "failed", failure: "timeout" }).request).toEqual({ kind: "idle" });
   });
 
-  it("holds the text, the language and the button while a request is out, so one press pays once", () => {
-    expect(translator(sending, { type: "edit", text: "autre" }).text).toBe(MINE);
-    expect(translator(sending, { type: "choose", choice: "en" }).choice).toBe("detect");
+  it("keeps taking the text and the language while a request is out, and never starts a second (D251)", () => {
+    const typed = translator(sending, { type: "edit", text: `${MINE} Merci.` });
+    expect(typed.text).toBe(`${MINE} Merci.`);
+    expect(typed.request).toEqual({ kind: "sending" });
+    expect(translator(sending, { type: "choose", choice: "en" }).choice).toBe("en");
     expect(translator(sending, { type: "sending" })).toBe(sending);
-    expect(translator(sending, { type: "clear" })).toBe(sending);
+  });
+
+  it("lands an answer for the text that was sent, and reads it as stale when the text moved on meanwhile", () => {
+    const typed = translator(sending, { type: "edit", text: `${MINE} Merci.` });
+    const landed = translator(typed, { type: "answered", answered });
+    expect(landed.answered).toBe(answered);
+    expect(landed.request).toEqual({ kind: "idle" });
+    expect(isStale(landed)).toBe(true);
   });
 
   it("keeps an answer through an edit and reads it as made for an earlier text", () => {
@@ -123,17 +135,72 @@ describe("translator", () => {
     expect(isStale(initialTranslator())).toBe(false);
   });
 
-  it("clears a failure once the text changes, and clears everything on clear", () => {
+  it("does not read space typed at the end as a new text, so the space before the next word buys nothing", () => {
+    const shown = translator(sending, { type: "answered", answered });
+    expect(isStale(translator(shown, { type: "edit", text: `${MINE} ` }))).toBe(false);
+    expect(isStale(translator(shown, { type: "edit", text: `${MINE}\n\n` }))).toBe(false);
+    expect(isStale(translator(shown, { type: "edit", text: ` ${MINE}` }))).toBe(true);
+  });
+
+  it("empties the French when the text is emptied, which replaced Start again", () => {
+    const shown = translator(sending, { type: "answered", answered });
+    expect(translator(shown, { type: "edit", text: " \n" }).answered).toBeNull();
+    // Emptied while the request was out: what lands for the old text is not shown beside nothing.
+    const emptied = translator(sending, { type: "edit", text: "" });
+    expect(translator(emptied, { type: "answered", answered })).toEqual({ ...initialTranslator(), text: "" });
+  });
+
+  it("clears a failure once the text changes", () => {
     const failed = translator(sending, { type: "failed", failure: "timeout" });
     expect(failed.request).toEqual({ kind: "failed", failure: "timeout" });
     expect(translator(failed, { type: "edit", text: "x" }).request).toEqual({ kind: "idle" });
-    expect(translator(failed, { type: "clear" })).toEqual(initialTranslator());
   });
 
   it("resumes a request still out as sending, with its own text and language", () => {
     const resumed = resumedTranslator(translateRequest("Hello.", "en", "fr"));
     expect(resumed).toEqual({ text: "Hello.", choice: "en", request: { kind: "sending" }, answered: null });
     expect(resumedTranslator(translateRequest("Bonjour.", "detect", "fr")).choice).toBe("detect");
+  });
+});
+
+describe("translating on a pause (D251)", () => {
+  const typed = (text: string) => translator(initialTranslator(), { type: "edit", text });
+  const answered: Answered = { request: translateRequest(MINE, "detect", "en"), translation: CORRECTED };
+  const shown = translator(translator(typed(MINE), { type: "sending" }), { type: "answered", answered });
+
+  it("waits for the end of a burst of typing, not a mid-sentence think", () => {
+    expect(TRANSLATE_PAUSE_MS).toBeGreaterThanOrEqual(1_000);
+    expect(TRANSLATE_PAUSE_MS).toBeLessThanOrEqual(2_000);
+  });
+
+  it("sends a fresh text with words in it and within the limit", () => {
+    expect(shouldTranslate(typed(MINE))).toBe(true);
+    expect(shouldTranslate(typed(" \n"))).toBe(false);
+    expect(shouldTranslate(typed("a".repeat(MAX_TRANSLATION_CHARS + 1)))).toBe(false);
+  });
+
+  it("never sends while a request is out, or again after a failure until the text changes", () => {
+    const sending = translator(typed(MINE), { type: "sending" });
+    expect(shouldTranslate(sending)).toBe(false);
+    const failed = translator(sending, { type: "failed", failure: "timeout" });
+    expect(shouldTranslate(failed)).toBe(false);
+    expect(shouldTranslate(translator(failed, { type: "edit", text: `${MINE}!` }))).toBe(true);
+  });
+
+  it("does not send a text whose French is already on screen, and sends one that moved on", () => {
+    expect(shouldTranslate(shown)).toBe(false);
+    expect(shouldTranslate(translator(shown, { type: "edit", text: `${MINE} ` }))).toBe(false);
+    expect(shouldTranslate(translator(shown, { type: "edit", text: `${MINE} Merci.` }))).toBe(true);
+    expect(shouldTranslate(translator(shown, { type: "choose", choice: "fr" }))).toBe(true);
+  });
+
+  it.each([
+    ["none", true],
+    ["under", true],
+    ["near", true],
+    ["over", false],
+  ] as const)("with the month %s the cap once this text is sent, translates on a pause: %s", (after, auto) => {
+    expect(autoTranslates(after)).toBe(auto);
   });
 });
 

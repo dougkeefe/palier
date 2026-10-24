@@ -24,6 +24,7 @@
 /* The design's ring: 2px of the bright teal, 2px off. On a deep panel it is white. */
 .pl-focusable:focus-visible,
 .pl-btn:focus-visible,
+.pl-icon-btn:focus-visible,
 .pl-option:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -142,6 +143,32 @@
 .pl-btn--secondary.pl-btn--arrow::after {
   background-color: var(--primary);
   color: var(--on-deep);
+}
+
+/* ---- IconButton (D251: a glyph alone, named by its `aria-label`, at the 44px target) ---- */
+
+.pl-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; /* §11 2.5.8 */
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background-color: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color var(--pl-motion-state) var(--pl-ease);
+}
+
+.pl-icon-btn:hover:not(:disabled) {
+  background-color: var(--surface);
+}
+
+.pl-icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ---- Card (D202: a flat fill, 12px radius, no border and no shadow) --------- */

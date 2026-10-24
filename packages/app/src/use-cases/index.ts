@@ -179,11 +179,12 @@ export {
   setRealtimeEndpoint,
 } from "./realtime-endpoint.js";
 
-export type { FeatureCost, SpendDeps, SpendPricing, SpendSummary } from "./spend.js";
+export type { FeatureCost, FeatureSpend, SpendDeps, SpendPricing, SpendSummary } from "./spend.js";
 export {
   InvalidSpendCapError,
   SPEND_CAP_KEY,
   featureCosts,
+  featureSpendSince,
   preflightSpend,
   setSpendCap,
   spendCap,

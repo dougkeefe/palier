@@ -184,8 +184,8 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await page.getByRole("link", { name: "Review", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
-  // 3g. The translator from the writing drill's page (D250): the user's own French, corrected on the key.
-  // Its text goes to OpenAI once, and nothing of it is kept.
+  // 3g. The translator from the writing drill's page (D250): the user's own French, corrected on the key on a
+  // pause in typing (D251). Its text goes to OpenAI once, and nothing of it is kept.
   await page.getByRole("link", { name: "Today", exact: true }).click();
   await page.getByRole("tab", { name: "Written expression" }).click();
   await page.getByRole("link", { name: /^Start, \d+ min$/ }).click();
@@ -193,7 +193,6 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await expect(page.getByRole("heading", { level: 1, name: "Translator" })).toBeVisible();
   await page.getByRole("radio", { name: "French" }).check();
   await page.getByRole("textbox", { name: "Your text" }).fill(`Madame, le dossier ${TRANSLATION_SENTINEL} est en cours de traitement.`);
-  await page.getByRole("button", { name: "Correct my French" }).click();
   await expect(page.getByRole("heading", { name: "What was corrected, and why" })).toBeVisible();
   expect(laptop.watch.openAiBodies().filter((body) => body.includes(TRANSLATION_SENTINEL))).toHaveLength(1);
   expect(laptop.watch.openAiAuthorizations().every((authorization) => authorization === `Bearer ${SENTINEL}`)).toBe(true);

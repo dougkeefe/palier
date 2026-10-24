@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 23 October 2026 (the translator: English into federal French, or the user's own French corrected and explained with curated study links, D250; its documents brought in line and its prompt made consistent; main's D248 and D249 merged in)
+**Last updated:** 24 October 2026 (the translator reworked: wide and aligned, translating on a pause in typing with a running total, a copy icon, and Translate in About's place in the header, D251)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,7 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/translate-to-french` | **The translator** (D250, the human's request, 23 October 2026): `/practice/writing/translate`, linked from the writing drill. English or French on the left, always French on the right: English is translated for the federal public service with notes on its choices; the user's own French comes back corrected, with its strengths, each correction marked over their words with its reason and sub-skill, and links to Palier's library and to curated government references (`content/resources/resources.json`). One metered call, `translation`, on the `assess` model; nothing stored. | 23 October 2026 |
+| `dougkeefe/translate-page-access` | **The translator reworked** (D251, the human's request, 24 October 2026): the page at 1160px with the two panes aligned on a shared subgrid, side by side from 900px; translation on a 1.5 s pause in typing, with no button, amending D237 for this screen, and a running total for the visit; past the soft cap a pause stops sending and one press does; a copy icon (`@palier/ui`'s new `IconButton`) at the French's top right; "Always in French", the intro and "Start again" removed; the header's About replaced by Translate. | 24 October 2026 |
 | `dougkeefe/today-s-plan-oral-ux` | **Today's plan as three equal tabs** (D248, the human's request, 22 October 2026): Reading, Written expression and Oral expression as `@palier/ui`'s `Tabs` in place of the plan's two-skill radio switch, as `/progress` took them (D247). Speaking's plan is one suggested session (the kind practised least lately, its length and practice-mode estimate, and a way to `/practice/oral`), and its "Where you stand" is the newest report's fixes. Nothing on Today spends. Also the E2E warmup's cold routes, which failed #95's medium lane (D249). | 22 October 2026 |
 | `dougkeefe/oral-progress-radio-buttons-ux` | **`/progress`'s detail as three equal tabs** (D247, the human's request, 22 October 2026): Reading, Written expression and Oral expression as WAI-ARIA tabs (`@palier/ui`'s new `Tabs`) in place of the two-skill radio switch; speaking gains a detail panel (its newest sessions, measured, beside the newest report's fixes, over `@palier/app`'s new `oralProgress`); each hero card has a way into its tab. Print is unchanged. | 22 October 2026 |
 | `dougkeefe/dependabot-status-resolve` | **Dependabot cleared** (D246, the human's request, 22 October 2026): PR #90's 18 minor and patch bumps installed with the repo's pnpm, since Dependabot's lockfile pulled in `@types/node` 26, and `vite` 8.3.5 named as a root devDependency to close alerts #16–#18. | 22 October 2026 |
@@ -150,7 +150,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 | `dougkeefe/keep-for-this-tab-less-prominent` | **"For this tab only" folded behind a quiet disclosure** (D242, the human's request, 19 October 2026): onboarding's key step and `/settings/key` no longer offer it as a peer of saving the key, and its hint says the key must be pasted again on every visit. And **the landing hero says Palier is unofficial and unaffiliated** (D243), and the landing way-in test no longer races D224's redirect (D244). | 19 October 2026 |
 | `dougkeefe/docs-outstanding-implementations-review` | **The review queue never serves a retired item** (D241; D205's named gap, scheduled by the human, 18 October 2026), and **this file reconciled with what has merged**: the slices and criteria `main` already holds, ticked, and *Next, decided* opening on Gate O. | 18 October 2026 |
 
-*(The prior rows — the landing footer (#87), the README and the domain (#86), one press spends (#85), the Dependabot overrides (#83), the landing page's headline and pricing (#82), spoken practice spoken only (#80), the landing menu on a phone (#79), the explainer video (#78), the spoken-practice picker (#76), the nightly lane (#75), the sample question's language (#74), onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
+*(The prior rows — the translator (#96), the landing footer (#87), the README and the domain (#86), one press spends (#85), the Dependabot overrides (#83), the landing page's headline and pricing (#82), spoken practice spoken only (#80), the landing menu on a phone (#79), the explainer video (#78), the spoken-practice picker (#76), the nightly lane (#75), the sample question's language (#74), onboarding reordered (#73), step 5's disclosures (#72), onboarding's key step (#70), Today on the dashboard layout (#69), Today rebuilt around the next step (#68), the diagnostic that gives a result (#67), the full content run (#64), the app as designed (#63), the landing page as designed (#62), Phase 7 Slice 5 (#61), Phase 6 Slice 3 (#60), the human's studio session and the dial (#58), Phase 6 Slice 2 (#57), CI that can fail (#55), Gate N and its findings (#54), Phase 6 Slice 1 (#53), the language-toggle fix with Gate L and D165 (#52), Phase 7 Slice 4 (#51), the cleanup slice (#49), the relicense (#48), Phase 7 Slice 3 (#47), Slice 2 (#45), Slice 1 (#39), Phase 5 closed (#38), Phase 5 Slice 3 (#37), Slice 2 (#35), Slice 1 (#34), Phase 4 Slice 4 (#32), Slice 3 (#31), Slice 2 (#30), Slice 1 (#28), Phase 3 Slice 4 (#26), Slice 3 (#25), Slice 2 (#23), Slice 1 (#22), Phase 2 Slice 3 (#21), Slice 2 (#20), Slice 1 (#19), `adapters/bank` (#18), the `adapters/dexie` slice (#16) and the Phase-1 content
 factory — merged and were removed; the In-flight table tracks current work, not history, and the
 session log below is the permanent record.)*
 
@@ -8296,9 +8296,105 @@ corrected, with links to study each error.
 - **Not built:** a history of past translations (nothing is kept, by design), and an English target, which waits for the
   English mirror (Phase 8). The request already takes `target`.
 
+### D251 — The translator translates on a pause, Google Translate's way, on a page wide enough for two panes
+**Date:** 24 October 2026 · **Status:** accepted (human's request; agent's pause length, cap rule and layout). Amends
+D237 for the translator only, D250's screen, and D202's header
+
+The human looked at D250's screen on the deployed site and asked for it to work like Google Translate:
+- the panes were cramped in the 760px column, and the French box sat about 56px below the editor;
+- "Always in French", the intro paragraph and "Start again" were noise;
+- it should translate after a pause in typing, with no button. No estimate before each call was needed, but a running
+  total while in use was welcome;
+- copying should be a standard icon at the French's top right;
+- the header's About should become Translate, with About kept in the footer.
+
+- **No ADR records "one press spends"**: D237 made it, amending D108. This entry amends D237 for this screen only. Every
+  other spending screen keeps its button and its estimate beside it.
+- **Wide, not stacked.** The page carries `.app-wide` (1160px, as Today does). The panes sit side by side from 900px and
+  stack below that. Each pane is a CSS subgrid over three shared rows (its label, its box, what goes under it).
+  - **Why they misaligned:** each pane was its own grid stretched to the taller pane's height. The French pane has one
+    row fewer under its box, so its spare height went into its rows and pushed the box down.
+  - With the subgrid the boxes start on one line and are one height, and the French grows when the editor is resized.
+  - The explanation below keeps a 760px reading measure.
+- **The pause is 1.5 s** (`TRANSLATE_PAUSE_MS`, a product rule beside `MAX_TRANSLATION_CHARS`, not an exam rule). The
+  human suggested about 2 s and left it to the agent.
+  - It is roughly the end of a burst of typing and short of a mid-sentence think.
+  - Each send is a paid call on the `assess` model, whose own latency dwarfs the pause, so a shorter one would mostly buy
+    calls for half-written sentences.
+  - `shouldTranslate` sends only a text with words in it, within the limit, with nothing out or failed, whose French is
+    not already on screen. Space typed at the end is no change (`isStale` compares `trimEnd`), so the space before the
+    next word buys nothing.
+- **Typing never stops.** The reducer takes edits and a language change while a request is out, which D250 held.
+  - The answer lands with the request it answered, so its marks point into the text that was sent.
+  - It then reads as stale (drawn muted), and the next pause sends the newest text. Only one request is out at a time,
+    as `translationInFlight` already joins.
+  - Emptying the text empties the French, which replaced "Start again" and its `clear` action.
+- **A failure is never retried on its own.** It waits for the text to change, or for "Try again", which stays a press
+  with its estimate beside it (D237).
+- **Past the cap a pause no longer sends** (`autoTranslates`, from the pre-flight's `after`). The cap is soft and never
+  blocks (D104, D237), but a call on every pause must not quietly run past it.
+  - There the screen says translating as you type is paused, and offers one "Translate" press with its estimate:
+    D237's way.
+  - Near the cap it keeps translating and shows the reminder.
+- **The running total** is the visit's: `@palier/app`'s new `featureSpendSince({ feature, from })` over the ledger,
+  from the container's clock when the screen opened. It reads "This visit so far: US$0.04 on your OpenAI key, for 2
+  texts", re-read as each request settles, and it says "at least" when a call could not be priced.
+  - The estimate before a call is gone, as the human allowed.
+  - The no-key card still states the per-text cost.
+  - "Your text goes only to OpenAI" stays.
+- **Focus never moves.** D250 moved focus to the status line and then to the answer's heading; on every pause that would
+  pull the cursor out of the editor. A polite live region now says "The French is ready." as each answer lands. The
+  editor is never read-only, and the wait (`Waiting`, `live={false}`) sits under the French.
+- **The copy icon** is `@palier/ui`'s new `IconButton`, a glyph alone at the 44px target. Its `label` is required, as
+  its accessible name and its tooltip. `copy` joins `GLYPH_PATHS`, a new entry, never a case. "Copied." is still said in
+  a status line, and the glyph shows a tick for 2 s.
+- **The header's fifth destination is Translate** (`NAV_ITEMS`, `nav.translate`), in About's place. About stays in the
+  footer, where it always was, so D145's "about" link is unchanged. The specs that clicked the first "About" now reach
+  the footer's, and still land on `/about`.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 October 2026 — `dougkeefe/translate-page-access` (the translator reworked, translating on a pause; D251)
+
+Not *Next, decided*, which is unchanged (Gate O): a human-requested detour. The human asked for the translator to work
+like Google Translate, on a page wide enough for its two panes, after looking at D250's screen on the deployed site.
+- **The decisions** (`translate-view.ts`):
+  - the reducer takes typing while a call is out;
+  - an emptied text empties the French;
+  - `clear` is removed;
+  - `isStale` ignores space at the end;
+  - `shouldTranslate`, `autoTranslates` and `TRANSLATE_PAUSE_MS` (1.5 s) are new.
+- **The screen** (`Translator.tsx`): the pause effect, the over-cap press, the running total, the polite announcement in
+  place of the focus moves, the copy icon in the French's corner, and the wait under the French. The page takes
+  `.app-wide`, and the panes share a subgrid.
+- **`@palier/app`**: `featureSpendSince` and `FeatureSpend`, wired in the container. **`@palier/ui`**: `IconButton` and
+  the `copy` glyph, with `packages/ui/CLAUDE.md` updated.
+- **The header**: `NAV_ITEMS`' fifth item is Translate, in About's place.
+- **Messages** in both languages:
+  - removed: `intro`, `targetLabel`, `stale`, `clear` and the three `button_*`;
+  - added: `ready`, `translateNow`, `capPaused`, `visitTotal`, `visitTotalUnpriced` and `nav.translate`;
+  - changed: `editorHint` and `sending`.
+- **Tests**:
+  - `translate.spec.ts` is rewritten as 5 tests:
+    - the header's way in, and the drill's, with no key and no call;
+    - a correction on a pause with no button, the copy icon and the running total;
+    - space at the end buying nothing, then a new sentence sent;
+    - an emptied text;
+    - a call held while the user types on, which then sends the newest text;
+    - past the cap, no call until the press;
+    - a failure never retried.
+  - Key-leak step 3g sends on the pause.
+  - Unit tests cover each new branch.
+
+**Verified:**
+- `pnpm verify`: check-types, lint and boundaries were clean, and `pnpm test` passed 283 files, 4,570 tests (8 todo).
+- After `pnpm build`, the chromium project passed 6 of 6 for `translate.spec.ts` with the warmup. The same project then
+  passed 48 of 48 for `key-leak`, `smoke`, `content`, `generate`, `workshop` and `journeys`. Both runs were on port 3010
+  through a temporary, uncommitted config, since another project's dev server held 3000.
+- In Chrome at 1440px the editor and the French measured one top (392px) and one height (286px). At 375px they stack.
+- Not run: the `offline` project, `csp-production` and the live smoke.
 
 ### 23 October 2026 — `dougkeefe/translate-to-french` (the translator reviewed against the standards; D250)
 

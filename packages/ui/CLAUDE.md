@@ -46,7 +46,8 @@ system, not the application.
 - Logic (formatters, band-meter and trend-chart geometry, timer tone classes, keyboard handling, registry
   lookups) is 90% branch; rendering has no line target on purpose (§6.3).
 - **Primitives:** Button, Card, Callout, EmptyState, Glyph (its strokes the `GLYPH_PATHS` record: a new glyph is an
-  entry, never a case), OptionRow, ProgressRail, **Sparkline** and **MonthCalendar** (D219: a small `aria-hidden` line
+  entry, never a case), **IconButton** (D251: a glyph alone, `label` required as its accessible name and tooltip, at
+  the 44px target), OptionRow, ProgressRail, **Sparkline** and **MonthCalendar** (D219: a small `aria-hidden` line
   whose figure the caller states in text; a month as a table, Sunday first by `monthGrid`, today `aria-current="date"`,
   each mark read in words and repeated in a legend, the neighbouring months' days hidden from a screen reader, every
   string a prop), and, from
