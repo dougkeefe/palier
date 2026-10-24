@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 24 October 2026 (the translator reworked: wide and aligned, translating on a pause in typing with a running total, a copy icon, and Translate in About's place in the header, D251)
+**Last updated:** 24 October 2026 (the translator's explanation moved into the card under the panes, and the visit's total and "goes only to OpenAI" below the card, D252)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,6 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
+| `dougkeefe/translate-page-output-order` | **The translator's explanation in the card** (D252, the human's request, 24 October 2026): the notes, or the strengths, corrections and study links, sit inside the white card right under the two panes; the visit's running total and "Your text goes only to OpenAI" move below the card. | 24 October 2026 |
 | `dougkeefe/translate-page-access` | **The translator reworked** (D251, the human's request, 24 October 2026): the page at 1160px with the two panes aligned on a shared subgrid, side by side from 900px; translation on a 1.5 s pause in typing, with no button, amending D237 for this screen, and a running total for the visit; past the soft cap a pause stops sending and one press does; a copy icon (`@palier/ui`'s new `IconButton`) at the French's top right; "Always in French", the intro and "Start again" removed; the header's About replaced by Translate. | 24 October 2026 |
 | `dougkeefe/today-s-plan-oral-ux` | **Today's plan as three equal tabs** (D248, the human's request, 22 October 2026): Reading, Written expression and Oral expression as `@palier/ui`'s `Tabs` in place of the plan's two-skill radio switch, as `/progress` took them (D247). Speaking's plan is one suggested session (the kind practised least lately, its length and practice-mode estimate, and a way to `/practice/oral`), and its "Where you stand" is the newest report's fixes. Nothing on Today spends. Also the E2E warmup's cold routes, which failed #95's medium lane (D249). | 22 October 2026 |
 | `dougkeefe/oral-progress-radio-buttons-ux` | **`/progress`'s detail as three equal tabs** (D247, the human's request, 22 October 2026): Reading, Written expression and Oral expression as WAI-ARIA tabs (`@palier/ui`'s new `Tabs`) in place of the two-skill radio switch; speaking gains a detail panel (its newest sessions, measured, beside the newest report's fixes, over `@palier/app`'s new `oralProgress`); each hero card has a way into its tab. Print is unchanged. | 22 October 2026 |
@@ -8352,9 +8353,41 @@ The human looked at D250's screen on the deployed site and asked for it to work 
   footer, where it always was, so D145's "about" link is unchanged. The specs that clicked the first "About" now reach
   the footer's, and still land on `/about`.
 
+### D252 — The translator's explanation sits in the card, under the panes; the running total and the privacy line below it
+**Date:** 24 October 2026 · **Status:** accepted (human's request). Amends D251's layout only
+
+The human looked at D251's screen and asked to swap two things. The card held the panes, then the visit's running total
+and "Your text goes only to OpenAI…", and the explanation (a translation's "Choices worth knowing", or a correction's
+strengths, corrections and "What to study next") came after the card, furthest from the text it explains. The
+explanation is what the user values most, so it should sit closest to the text areas.
+
+- **In the card, in order:** the language choice, the two panes, then what bears on the next send (a failure, the cap's
+  pause, the over-cap press with its estimate, the cap reminder; absent in the usual case, when a pause translates), then
+  the explanation. The press stays next to the text it sends, rather than under a long explanation.
+- **Below the card:** the visit's total and "Your text goes only to OpenAI", still shown only with a key held, where the
+  no-key card is shown without one.
+- The explanation keeps its 760px reading measure inside the 1160px card. No message, decision or style changed.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 October 2026 — `dougkeefe/translate-page-output-order` (the translator's explanation in the card; D252)
+
+Not *Next, decided*, which is unchanged (Gate O): a human-requested detour. The human asked for the explanation to sit
+closest to the text areas, and the visit's total and "Your text goes only to OpenAI" to sit below the white card.
+- **The screen** (`Translator.tsx`): `Explanation` moves inside the `Card`, after the panes and the send controls; the
+  running total and the privacy line move below the card, still shown only with a key held. No message, decision or
+  style changed, and no branch was added.
+- **`apps/web/CLAUDE.md`**: the translator's bullet says where each sits.
+
+**Verified:**
+- `pnpm verify`: check-types, lint and boundaries were clean, and `pnpm test` passed 283 files, 4,570 tests (8 todo).
+- The chromium project, with the warmup, passed 6 of 6 for `translate.spec.ts` and 14 of 14 for `key-leak` and
+  `journeys`. Both runs used port 3010 through a temporary, uncommitted config, since another project's dev server held 3000.
+- A temporary, uncommitted spec checked at 1440px and 375px that "Choices worth knowing" is inside the card holding the
+  editor, and that the total is outside the card and below its bottom edge. It also took the screenshots.
+- Not run: the `offline` project, `csp-production` and the live smoke.
 
 ### 24 October 2026 — `dougkeefe/translate-page-access` (the translator reworked, translating on a pause; D251)
 

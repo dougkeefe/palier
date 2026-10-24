@@ -352,12 +352,13 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `generated` table in production, **never synced and never exported**, cleared by wipe and
     delete-everywhere. `components/key/NoKeyCard.tsx` is shared with the workshop, by namespace.
     `container-generate.test.ts` runs the real adapter over MSW through both graphs.
-  - **The translator** (progress.md D250, D251) is `/practice/writing/translate`, the header's fifth destination in
+  - **The translator** (progress.md D250–D252) is `/practice/writing/translate`, the header's fifth destination in
     About's place (About is in the footer) and linked from the writing drill. **It translates on a pause in typing**
     (`TRANSLATE_PAUSE_MS`, `shouldTranslate`), never moves focus out of the editor (a polite live region says the French
     is ready), and never holds the text while a call is out. Past the soft cap a pause no longer sends
     (`autoTranslates`) and one press does. The two panes share a CSS subgrid so their boxes align, and the copy control
-    is `@palier/ui`'s `IconButton` in the French's corner. The visit's running total is `featureSpendSince`.
+    is `@palier/ui`'s `IconButton` in the French's corner. The explanation sits inside the card under the panes, and the
+    visit's running total (`featureSpendSince`) and "goes only to OpenAI" below the card (D252).
     `components/translate/Translator.tsx` renders it; its decisions are in `features/translate/translate-view.ts`. English or
     French on the left, always French on the right; the user's own French comes back corrected, each correction marked
     and explained. **Every study link is data**: the library article by sub-skill, and the container's `studyResources`
