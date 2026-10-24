@@ -8,13 +8,15 @@
     "./writing/prompts.json": "./writing/prompts.json",
     "./oral/fillers.json": "./oral/fillers.json",
     "./library/*.json": "./library/*.json",
-    "./pointers/pointers.json": "./pointers/pointers.json"
+    "./pointers/pointers.json": "./pointers/pointers.json",
+    "./resources/resources.json": "./resources/resources.json"
   },
   "files": [
     "library",
     "oral",
     "pointers",
     "profiles",
+    "resources",
     "writing"
   ]
 }

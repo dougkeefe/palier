@@ -180,6 +180,7 @@ describe("the per-feature table", () => {
       "oral-assessment",
       "oral-studio",
       "diagnostic-interpretation",
+      "translation",
     ]);
     for (const cost of costs) expect(cost.estimateUsd).toBeGreaterThan(0);
   });

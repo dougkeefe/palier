@@ -18,6 +18,7 @@ import {
   SENTINEL,
   SUBMISSION_SENTINEL,
   TRANSCRIPT_SENTINEL,
+  TRANSLATION_SENTINEL,
   downloadedText,
   installFakeAudio,
   installFakeRealtime,
@@ -183,6 +184,20 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await page.getByRole("link", { name: "Review", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
+  // 3g. The translator from the writing drill's page (D250): the user's own French, corrected on the key.
+  // Its text goes to OpenAI once, and nothing of it is kept.
+  await page.getByRole("link", { name: "Today", exact: true }).click();
+  await page.getByRole("tab", { name: "Written expression" }).click();
+  await page.getByRole("link", { name: /^Start, \d+ min$/ }).click();
+  await page.getByRole("link", { name: "Open the translator" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Translator" })).toBeVisible();
+  await page.getByRole("radio", { name: "French" }).check();
+  await page.getByRole("textbox", { name: "Your text" }).fill(`Madame, le dossier ${TRANSLATION_SENTINEL} est en cours de traitement.`);
+  await page.getByRole("button", { name: "Correct my French" }).click();
+  await expect(page.getByRole("heading", { name: "What was corrected, and why" })).toBeVisible();
+  expect(laptop.watch.openAiBodies().filter((body) => body.includes(TRANSLATION_SENTINEL))).toHaveLength(1);
+  expect(laptop.watch.openAiAuthorizations().every((authorization) => authorization === `Bearer ${SENTINEL}`)).toBe(true);
+
   // 4. A mock exam, submitted, with its answers shared (the real telemetry route, on PGlite).
   await page.getByRole("link", { name: "Today", exact: true }).click();
   await page.getByRole("link", { name: "Take a mock exam" }).first().click();
@@ -214,6 +229,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   expect(exported).not.toContain(TRANSCRIPT_SENTINEL);
   expect(exported).not.toContain(AUDIO_SENTINEL);
   expect(exported).not.toContain(REPORT_SENTINEL);
+  expect(exported).not.toContain(TRANSLATION_SENTINEL);
 
   // 6. Sync, and a second device paired by code: real pushes and pulls through the routes.
   await openSettings(page, "Sync", "Sync");
@@ -234,9 +250,16 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await expect(page.getByText(`Saved on this device: the key ending in ${SENTINEL.slice(-4)}.`)).toBeVisible();
 
   await laptop.watch.assertNoLeak([page], {
-    deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL, REPORT_SENTINEL],
+    deviceOnly: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL, REPORT_SENTINEL, TRANSLATION_SENTINEL],
   });
   await phone.watch.assertNoLeak([phone.page], {
-    nowhere: [SUBMISSION_SENTINEL, GENERATED_SENTINEL, TRANSCRIPT_SENTINEL, AUDIO_SENTINEL, REPORT_SENTINEL],
+    nowhere: [
+      SUBMISSION_SENTINEL,
+      GENERATED_SENTINEL,
+      TRANSCRIPT_SENTINEL,
+      AUDIO_SENTINEL,
+      REPORT_SENTINEL,
+      TRANSLATION_SENTINEL,
+    ],
   });
 });

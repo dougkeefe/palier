@@ -37,6 +37,7 @@ const PAGES = [
   "/practice/reading",
   "/practice/writing",
   "/practice/writing/generate",
+  "/practice/writing/translate",
   "/practice/writing/workshop",
   "/privacy",
   "/progress",

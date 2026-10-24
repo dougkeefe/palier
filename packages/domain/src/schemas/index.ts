@@ -9,6 +9,7 @@ import {
   oralScenarioShape,
   passageShape,
   pointerShape,
+  studyResourceShape,
   writingPromptShape,
 } from "./content.js";
 import { examProfileShape } from "../profile/schema.js";
@@ -34,6 +35,7 @@ export const CONTENT_SCHEMAS = {
   "oral-fillers": oralFillersShape,
   "library-article": libraryArticleShape,
   pointer: pointerShape,
+  "study-resource": studyResourceShape,
 } as const satisfies Record<string, z.ZodType>;
 
 export type ContentSchemaName = keyof typeof CONTENT_SCHEMAS;

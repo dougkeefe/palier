@@ -85,7 +85,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   in the browser after hydration and imports the container module lazily, so the adapters stay out of
   the shared first-load JS. The layout passes `hermetic` from the environment. Screens are thin RSC
   shells around one client island each (`/start`, `/home`, `/diagnostic`, `/practice/{reading,writing}`,
-  `/practice/writing/{workshop,generate}`, `/practice/oral`, `/practice/oral/report`,
+  `/practice/writing/{workshop,generate,translate}`, `/practice/oral`, `/practice/oral/report`,
   `/exam`, `/exam/run`, `/exam/results`, `/settings/{data,sync,key}`).
   The islands' decisions live in tested `.ts` beside them (`src/features/**`, `src/lib/study.ts`); a
   `.tsx` holds rendering and effects only.
@@ -351,6 +351,14 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `generated` table in production, **never synced and never exported**, cleared by wipe and
     delete-everywhere. `components/key/NoKeyCard.tsx` is shared with the workshop, by namespace.
     `container-generate.test.ts` runs the real adapter over MSW through both graphs.
+  - **The translator** (progress.md D250) is `/practice/writing/translate`, linked from the writing drill.
+    `components/translate/Translator.tsx` renders it; its decisions are in `features/translate/translate-view.ts`. English or
+    French on the left, always French on the right; the user's own French comes back corrected, each correction marked
+    and explained. **Every study link is data**: the library article by sub-skill, and the container's `studyResources`
+    (`@palier/content/resources/resources.json`, parsed once), opened in a new tab with `rel="noopener noreferrer"` and
+    `hreflang`. Metered as `translation`, joined while in flight (`translationInFlight`), and **nothing is stored**.
+    `container-translate.test.ts` runs the real adapter over MSW through both graphs; `e2e/translate.spec.ts` runs it
+    axe-clean, and the key-leak journey's step 3g follows `TRANSLATION_SENTINEL`.
   - **Spoken practice** (Phase 5 Slice 2, progress.md D117–D119) is `/practice/oral`, linked from home's actions
     card. `components/oral/OralPractice.tsx` renders it, its picker in `OralPicker.tsx` (D229: the key card first, the two
     modes side by side, the sessions as a grid); its decisions are in `features/oral/`: the reducer, the

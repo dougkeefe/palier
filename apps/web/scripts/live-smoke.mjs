@@ -67,6 +67,13 @@ export const measuredFeatures = (result) => ({
       outputTokens: result.byMethod.interpretDiagnostic.outputTokens,
     },
   ],
+  translation: [
+    {
+      role: "assess",
+      inputTokens: result.byMethod.translate.inputTokens,
+      outputTokens: result.byMethod.translate.outputTokens,
+    },
+  ],
 });
 
 /** Every method the recorder keeps, the oral turn loop's three (D117) and the report (D122) included. */
@@ -79,6 +86,7 @@ const RECORDED_METHODS = [
   "speak",
   "assessOral",
   "interpretDiagnostic",
+  "translate",
 ];
 
 /** The profile's oral level descriptors in English, which the report's prompt quotes (ADR 9). */

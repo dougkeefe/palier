@@ -224,6 +224,60 @@ export const diagnosticInterpretationShape = z.strictObject({
   planNote: z.string().trim().min(1),
 });
 
+/**
+ * The translator's answer (progress.md D250), as the model writes it: corrections as excerpts, not
+ * offsets (D105). Which fields may be filled depends on whether the source is the target, which a
+ * schema does not see, so that is `assembleTranslation`'s. The bounds keep an explanation readable.
+ */
+const translationNotesShape = z
+  .array(
+    z.strictObject({
+      source: z.string().trim().min(1),
+      rendering: z.string().trim().min(1),
+      why: z.string().trim().min(1),
+    }),
+  )
+  .max(6);
+const translationStrengthsShape = z.array(z.string().trim().min(1)).max(4);
+const translationSubSkillShape = z.enum(WRITING_SUB_SKILLS);
+
+export const translationDraftShape = z.strictObject({
+  source: langSchema,
+  output: z.string().trim().min(1),
+  strengths: translationStrengthsShape,
+  corrections: z
+    .array(
+      z.strictObject({
+        excerpt: z.string().min(1),
+        correction: z.string().trim().min(1),
+        why: z.string().trim().min(1),
+        subSkill: translationSubSkillShape,
+      }),
+    )
+    .max(20),
+  notes: translationNotesShape,
+});
+
+/** A placed translation's shape; whether the ranges fit the text is `checkTranslation`'s. */
+export const translationShape = z.strictObject({
+  source: langSchema,
+  target: langSchema,
+  output: z.string().trim().min(1),
+  strengths: translationStrengthsShape,
+  corrections: z
+    .array(
+      z.strictObject({
+        start: z.number().int().nonnegative(),
+        end: z.number().int().positive(),
+        correction: z.string().trim().min(1),
+        why: z.string().trim().min(1),
+        subSkill: translationSubSkillShape,
+      }),
+    )
+    .max(20),
+  notes: translationNotesShape,
+});
+
 export const passageDraftSchema = passageDraftShape.readonly();
 export const itemDraftSchema = itemDraftShape.readonly();
 export const reviewVerdictSchema = reviewVerdictShape.readonly();
@@ -234,3 +288,5 @@ export const examinerTurnSchema = examinerTurnShape.readonly();
 export const oralAssessmentDraftSchema = oralAssessmentDraftShape.readonly();
 export const oralAssessmentSchema = oralAssessmentShape.readonly();
 export const diagnosticInterpretationSchema = diagnosticInterpretationShape.readonly();
+export const translationDraftSchema = translationDraftShape.readonly();
+export const translationSchema = translationShape.readonly();

@@ -90,6 +90,11 @@ export const meterProvider = (inner: AiProvider): MeteredProvider => {
       account();
       return out;
     },
+    translate: async (req) => {
+      const out = await inner.translate(req);
+      account();
+      return out;
+    },
     // A key check spends no tokens, so there is nothing to account.
     verifyKey: () => inner.verifyKey(),
     lastUsage: () => inner.lastUsage(),

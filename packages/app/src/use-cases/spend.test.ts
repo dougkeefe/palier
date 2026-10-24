@@ -40,6 +40,8 @@ const pricing: SpendPricing = {
     "oral-studio": [{ role: "transcribe", minutes: 0.6 }], // 0.3
     // One diagnostic run's interpretation (ADR 25).
     "diagnostic-interpretation": [{ role: "assess", inputTokens: 125_000, outputTokens: 31_250 }], // 0.25 + 0.25
+    // One text translated or corrected (D250).
+    translation: [{ role: "assess", inputTokens: 50_000, outputTokens: 12_500 }], // 0.1 + 0.1
   },
 };
 
@@ -125,6 +127,7 @@ describe("featureCosts", () => {
       "oral-assessment",
       "oral-studio",
       "diagnostic-interpretation",
+      "translation",
     ]);
     expect(costs[0]?.estimateUsd).toBeCloseTo(2, 10);
     expect(costs[1]?.estimateUsd).toBeCloseTo(2.5, 10);
@@ -132,11 +135,12 @@ describe("featureCosts", () => {
     expect(costs[3]?.estimateUsd).toBeCloseTo(1, 10);
     expect(costs[4]?.estimateUsd).toBeCloseTo(0.3, 10);
     expect(costs[5]?.estimateUsd).toBeCloseTo(0.5, 10);
+    expect(costs[6]?.estimateUsd).toBeCloseTo(0.2, 10);
   });
 
   it("gives no figure for a feature whose model is unpriced", () => {
     const costs = featureCosts({ pricing: { ...pricing, prices: { "m-small": { inputPerMTok: 1, outputPerMTok: 4 } } } });
-    expect(costs.map((c) => c.estimateUsd)).toEqual([null, null, null, null, null, null]);
+    expect(costs.map((c) => c.estimateUsd)).toEqual([null, null, null, null, null, null, null]);
   });
 });
 

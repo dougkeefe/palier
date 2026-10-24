@@ -246,6 +246,7 @@ export const examinerProvider = (options: ExaminerOptions = {}) => {
       examinerTurn: true,
       assessOral: false,
       interpretDiagnostic: false,
+      translate: false,
     }),
     generatePassage: () => Promise.reject(new Error("unused")),
     generateItems: () => Promise.reject(new Error("unused")),
@@ -254,6 +255,7 @@ export const examinerProvider = (options: ExaminerOptions = {}) => {
     generateScenario: () => Promise.reject(new Error("unused")),
     assessOral: () => Promise.reject(new Error("unused")),
     interpretDiagnostic: () => Promise.reject(new Error("unused")),
+    translate: () => Promise.reject(new Error("unused")),
     examinerTurn: async (req) => {
       examinerRequests.push(req);
       usage = { model: "m-examiner", inputTokens: 100, outputTokens: 10, costUsd: 0.001 };

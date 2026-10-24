@@ -128,6 +128,12 @@ export type {
   WritingErrorDraft,
   WritingFeedbackDraft,
   WritingRequest,
+  Translation,
+  TranslationCorrection,
+  TranslationCorrectionDraft,
+  TranslationDraft,
+  TranslationNote,
+  TranslationRequest,
 } from "./ai.js";
 export { AI_FEATURES, ORAL_CRITERIA, ORAL_NOTE_SEVERITIES, WRITING_CRITERIA } from "./ai.js";
 export { checkDiagnosticInterpretation } from "./diagnostic-interpretation.js";
@@ -144,6 +150,8 @@ export {
   scenarioDraftSchema,
   writingAssessmentSchema,
   writingFeedbackDraftSchema,
+  translationDraftSchema,
+  translationSchema,
 } from "./schemas/ai.js";
 
 // A spoken session's vocabulary: turns, end reasons, directions (progress.md D116).
@@ -165,6 +173,9 @@ export { assembleOralAssessment, checkOralAssessment } from "./oral-assessment.j
 export { CONFIDENCE_THRESHOLD, gateReasons, reviewRequestFor } from "./review-gate.js";
 export type { AssembleResult, PlaceErrorsResult } from "./writing.js";
 export { assembleAssessment, checkErrorOffsets, findExcerpt, placeErrors } from "./writing.js";
+// The translator's placement rule, D105's applied to a correction (progress.md D250).
+export type { AssembleTranslationResult } from "./translation.js";
+export { assembleTranslation, checkTranslation } from "./translation.js";
 
 // The writing workshop's prompt library, a content artefact (progress.md D107).
 export type { WritingPrompt, WritingRegister } from "./writing-prompt.js";
@@ -178,6 +189,11 @@ export { CITED_MARK, parseLibrary, parseLibraryOrThrow } from "./library.js";
 export type { Pointer } from "./pointer.js";
 export type { PointersParseResult } from "./pointers.js";
 export { parsePointers, parsePointersOrThrow } from "./pointers.js";
+// The translator's curated study links, a content artefact (progress.md D250).
+export type { StudyResource, StudyResourceSource } from "./study-resource.js";
+export { STUDY_RESOURCE_HOSTS, STUDY_RESOURCE_SOURCES } from "./study-resource.js";
+export type { StudyResourcesParseResult } from "./study-resources.js";
+export { parseStudyResources, parseStudyResourcesOrThrow } from "./study-resources.js";
 
 // The oral filler list, a content artefact the fluency metrics read (progress.md D123).
 export type { OralFillers, OralFillersParseResult } from "./oral-fillers.js";
@@ -224,6 +240,7 @@ export {
   oralScenarioSchema,
   passageSchema,
   pointerSchema,
+  studyResourceSchema,
   writingPromptSchema,
 } from "./schemas/content.js";
 export type { ContentSchemaName } from "./schemas/index.js";

@@ -70,6 +70,13 @@ export const TRANSCRIPT_SENTINEL = "Grelottard3b8e";
  */
 export const REPORT_SENTINEL = "Pimprenellard6f21";
 
+/**
+ * Written into the translator's text (progress.md D250). The translator stores nothing, so it may be on
+ * the page and in the one request to OpenAI, and must reach nothing else: no route of ours, no export,
+ * no paired device.
+ */
+export const TRANSLATION_SENTINEL = "Tisonnard4a9c";
+
 /** The question the stubbed examiner asks. */
 export const EXAMINER_QUESTION = "Pouvez-vous me décrire votre poste actuel ?";
 
@@ -314,16 +321,49 @@ export const diagnosticAnswer = (body: string): OpenAiAnswer => {
   );
 };
 
-/** Which completion a request is: a generation draft, a review, the examiner, an oral report, a diagnostic, or (otherwise) writing feedback. */
+/** The translator's notes on an English text (D250): one federal term rendered. */
+export const TRANSLATION_NOTE = { source: "Treasury Board", rendering: "Conseil du Trésor", why: "The institution's official French name." };
+
+/**
+ * The translator's answer (D250), fitted to whatever was sent: a text named English comes back as French with
+ * one note; any other is read as the user's French, with its first word "corrected" in place on agreement, so
+ * the excerpt is always in the text. The text is read back from between the prompt's fences.
+ */
+export const translateAnswer = (body: string): OpenAiAnswer => {
+  const prompt = promptOf(body);
+  const text = /"""\n([\s\S]*?)\n"""/.exec(prompt)?.[1] ?? "";
+  if (prompt.includes('give `source` as "en"')) {
+    return completion(
+      { source: "en", output: `Texte traduit : ${text.trim()}`, strengths: [], corrections: [], notes: [TRANSLATION_NOTE] },
+      1_400,
+      900,
+    );
+  }
+  const first = /\S+/u.exec(text)?.[0] ?? "Texte";
+  return completion(
+    {
+      source: "fr",
+      output: text.trim(),
+      strengths: ["The message gets straight to the point."],
+      corrections: [{ excerpt: first, correction: `${first}s`, why: "The noun is plural here, so it takes an s.", subSkill: "agreement" }],
+      notes: [],
+    },
+    1_400,
+    1_100,
+  );
+};
+
+/** Which completion a request is: a generation draft, a review, the examiner, an oral report, a diagnostic, a translation, or (otherwise) writing feedback. */
 export const completionKind = (
   body: string,
-): "draft" | "review" | "examiner" | "oral-report" | "diagnostic" | "feedback" => {
+): "draft" | "review" | "examiner" | "oral-report" | "diagnostic" | "translate" | "feedback" => {
   const prompt = promptOf(body);
   if (/Produce \d+ item\(s\)/.test(prompt)) return "draft";
   if (prompt.includes("adversarial reviewer")) return "review";
   if (prompt.includes("You are the examiner")) return "examiner";
   if (prompt.includes("assessing a rehearsal")) return "oral-report";
   if (prompt.includes("short diagnostic")) return "diagnostic";
+  if (prompt.includes("translator and writing coach")) return "translate";
   return "feedback";
 };
 
@@ -335,6 +375,7 @@ export const defaultCompletion = (body: string): OpenAiAnswer => {
   if (kind === "examiner") return examinerAnswer();
   if (kind === "oral-report") return oralReportAnswer(body);
   if (kind === "diagnostic") return diagnosticAnswer(body);
+  if (kind === "translate") return translateAnswer(body);
   return feedbackAnswer();
 };
 

@@ -37,6 +37,7 @@ export type AiCapabilities = {
   readonly examinerTurn: boolean;
   readonly assessOral: boolean;
   readonly interpretDiagnostic: boolean;
+  readonly translate: boolean;
 };
 
 /**
@@ -292,6 +293,77 @@ export type WritingFeedbackDraft = {
 };
 
 /**
+ * What the translator is sent (progress.md D250): a text the user wrote, the language it is in
+ * when they said so (`null` asks the model to tell), the language the result is always in, and the
+ * interface language its explanations are written in. When the source is the target, the text is
+ * the user's own attempt at the target language and comes back corrected and explained; otherwise
+ * it comes back translated for the federal public service.
+ */
+export type TranslationRequest = {
+  readonly text: string;
+  readonly source: Lang | null;
+  readonly target: Lang;
+  readonly feedbackLang: Lang;
+};
+
+/**
+ * One correction to the user's own target-language text, as `[start, end)` offsets into it
+ * (`checkErrorOffsets`'s rule): what replaces those words, why, in the interface language, and
+ * the written-expression sub-skill it is a slip in, which is how the screen links the library's
+ * article and the curated study resources. A model never writes a link (D250).
+ */
+export type TranslationCorrection = {
+  readonly start: number;
+  readonly end: number;
+  readonly correction: string;
+  readonly why: string;
+  readonly subSkill: WritingSubSkill;
+};
+
+/**
+ * A choice a translation made that a learner would want to know about (D250): a federal term of
+ * art, a title or a set phrase, the words in the source it renders, and why that rendering.
+ */
+export type TranslationNote = {
+  readonly source: string;
+  readonly rendering: string;
+  readonly why: string;
+};
+
+/**
+ * What `translate` returns (D250). `source` is the language the text was in. **When it is the
+ * target, `output` is the user's text corrected**, `strengths` says what it did well and
+ * `corrections` places each change over the text; `notes` is empty. **Otherwise `output` is the
+ * translation** and `notes` explains its choices; `strengths` and `corrections` are empty.
+ * `checkTranslation` holds that shape.
+ */
+export type Translation = {
+  readonly source: Lang;
+  readonly target: Lang;
+  readonly output: string;
+  readonly strengths: readonly string[];
+  readonly corrections: readonly TranslationCorrection[];
+  readonly notes: readonly TranslationNote[];
+};
+
+/** One correction as a model reports it: the exact words it changes, never offsets (D105). */
+export type TranslationCorrectionDraft = {
+  readonly excerpt: string;
+  readonly correction: string;
+  readonly why: string;
+  readonly subSkill: WritingSubSkill;
+};
+
+/** The model's answer, before its corrections are placed over the text. */
+export type TranslationDraft = {
+  readonly source: Lang;
+  readonly output: string;
+  readonly strengths: readonly string[];
+  readonly corrections: readonly TranslationCorrectionDraft[];
+  readonly notes: readonly TranslationNote[];
+};
+
+/**
  * The five criteria a spoken session is reported by (product-requirements.md §8.6),
  * in the order the report shows them. Pronunciation is the sixth, and is not among
  * them: it cannot be judged from a transcript (architecture.md §8.5), so it is "not
@@ -506,6 +578,7 @@ export const AI_FEATURES = [
   "oral-assessment",
   "oral-studio",
   "diagnostic-interpretation",
+  "translation",
 ] as const;
 export type AiFeature = (typeof AI_FEATURES)[number];
 

@@ -2,6 +2,7 @@ import type { AiProvider } from "@palier/app";
 import {
   assembleAssessment,
   assembleOralAssessment,
+  assembleTranslation,
   checkDiagnosticInterpretation,
   costOf,
   diagnosticInterpretationSchema,
@@ -11,6 +12,7 @@ import {
   passageDraftSchema,
   reviewVerdictSchema,
   scenarioDraftSchema,
+  translationDraftSchema,
   writingFeedbackDraftSchema,
 } from "@palier/domain";
 import type {
@@ -33,6 +35,9 @@ import type {
   SpeechRequest,
   TranscribeRequest,
   Transcript,
+  Translation,
+  TranslationDraft,
+  TranslationRequest,
   UsageRecord,
   WritingAssessment,
   WritingFeedbackDraft,
@@ -307,6 +312,7 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
       examinerTurn: config.models.examiner !== undefined,
       assessOral: config.models.assess !== undefined,
       interpretDiagnostic: config.models.assess !== undefined,
+      translate: config.models.assess !== undefined,
     }),
 
     generatePassage: (req: GeneratePassageRequest) => {
@@ -396,6 +402,25 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
         const problem = checkDiagnosticInterpretation(req, interpretation);
         if (problem !== null) throw new Error(problem);
         return interpretation;
+      });
+    },
+
+    /**
+     * The translator, on the `assess` model (progress.md D250). A correction's excerpts are placed by
+     * `assembleTranslation`, so an excerpt not in the text, two on the same words, a source other than
+     * the one the user named, or fields that do not fit the job (notes on a correction, corrections on
+     * a translation) fail the parse, and are retried once with the reason, then `InvalidResponseError`.
+     */
+    translate: (req: TranslationRequest) => {
+      const model = config.models.assess;
+      if (model === undefined) return refuseUnconfigured("the translator", "assess");
+      const { system, user } = buildPrompt.translation(req);
+      return callValidated(model, system, user, (raw): Translation => {
+        const result = translationDraftSchema.safeParse(raw);
+        if (!result.success) throw new Error(result.error.message);
+        const assembled = assembleTranslation(req, result.data as TranslationDraft);
+        if (!assembled.ok) throw new Error(assembled.problem);
+        return assembled.translation;
       });
     },
 

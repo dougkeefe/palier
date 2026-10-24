@@ -17,6 +17,8 @@ import type {
   SpeechRequest,
   TranscribeRequest,
   Transcript,
+  Translation,
+  TranslationRequest,
   UsageRecord,
   WritingAssessment,
   WritingRequest,
@@ -56,6 +58,9 @@ import type {
  *
  * `interpretDiagnostic` is a fifth amendment (ADR 25): the diagnostic's written result, in
  * plain language, over a run the engine has already scored and placed.
+ *
+ * `translate` is a sixth amendment (progress.md D250): the translator's one call, which turns
+ * English into federal French, or corrects and explains the user's own French.
  *
  * `verifyKey` is a third §3.3 amendment (progress.md D99, Phase 4 Slice 1): the one cheap
  * call `/settings/key` makes to report whether the user's key works (PRD §8.10).
@@ -115,6 +120,14 @@ export type AiProvider = {
    * that quotes a missed question say, rejects rather than return it.
    */
   interpretDiagnostic: (req: DiagnosticInterpretationRequest) => Promise<DiagnosticInterpretation>;
+  /**
+   * The translator (progress.md D250). A text in `req.target` comes back corrected, with what it
+   * did well and each correction placed over the text with its reason and written-expression
+   * sub-skill (`assembleTranslation`'s rule); any other comes back translated, with notes on its
+   * choices. A provider that cannot place a correction, or that reads the text as another language
+   * than `req.source` says, rejects, as `assessWriting` does.
+   */
+  translate: (req: TranslationRequest) => Promise<Translation>;
   /**
    * One cheap call that proves the key this provider holds is accepted. Resolves when it
    * is; otherwise rejects with the provider's own error for the reason (an invalid key, a

@@ -24,7 +24,7 @@ export function SpendOffer({
   sendsToKey = "sendsTo",
 }: {
   id: string;
-  namespace: "writing" | "generate" | "oral" | "oralReport" | "diagnostic";
+  namespace: "writing" | "generate" | "oral" | "oralReport" | "diagnostic" | "translate";
   preflight: Preflight;
   estimateKey?: string;
   unpricedKey?: string;

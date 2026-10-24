@@ -5,6 +5,7 @@ import {
   checkDiagnosticInterpretation,
   checkErrorOffsets,
   checkOralAssessment,
+  checkTranslation,
   diagnosticInterpretationSchema,
   oralAssessmentSchema,
   examinerTurnSchema,
@@ -12,6 +13,7 @@ import {
   passageDraftSchema,
   reviewVerdictSchema,
   scenarioDraftSchema,
+  translationSchema,
   writingAssessmentSchema,
 } from "@palier/domain";
 import type {
@@ -21,6 +23,7 @@ import type {
   GenerateScenarioRequest,
   OralRequest,
   ReviewRequest,
+  TranslationRequest,
   WritingRequest,
 } from "@palier/domain";
 
@@ -156,6 +159,20 @@ const anOralRequest = (): OralRequest => ({
   },
 });
 
+/** The user's own French, with one slip, and an English text to translate (progress.md D250). */
+const aCorrectionRequest = (): TranslationRequest => ({
+  text: "Bonjour à tous, la réunion de lundi est reporter à mardi.",
+  source: "fr",
+  target: "fr",
+  feedbackLang: "en",
+});
+const aTranslationRequest = (): TranslationRequest => ({
+  text: "Monday's meeting is moved to Tuesday.",
+  source: "en",
+  target: "fr",
+  feedbackLang: "en",
+});
+
 export const aiProviderContract = (name: string, make: () => Promise<AiProvider>): void => {
   describe(`AiProvider contract: ${name}`, () => {
     it("reports its capabilities as booleans", async () => {
@@ -164,6 +181,7 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       expect(typeof caps.generateItems).toBe("boolean");
       expect(typeof caps.reviewItem).toBe("boolean");
       expect(typeof caps.assessWriting).toBe("boolean");
+      expect(typeof caps.translate).toBe("boolean");
       expect(typeof caps.generateScenario).toBe("boolean");
       expect(typeof caps.transcribe).toBe("boolean");
       expect(typeof caps.speak).toBe("boolean");
@@ -287,6 +305,26 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       const interpretation = await provider.interpretDiagnostic(request);
       expect(diagnosticInterpretationSchema.safeParse(interpretation).success).toBe(true);
       expect(checkDiagnosticInterpretation(request, interpretation)).toBeNull();
+      expect(provider.lastUsage()).not.toBeNull();
+    });
+
+    it("corrects the user's own French schema-valid, every correction inside the text and none overlapping (D250)", async () => {
+      const provider = await make();
+      const request = aCorrectionRequest();
+      const corrected = await provider.translate(request);
+      expect(translationSchema.safeParse(corrected).success).toBe(true);
+      expect([corrected.source, corrected.target]).toEqual(["fr", "fr"]);
+      expect(checkTranslation(request.text, corrected)).toBeNull();
+      expect(provider.lastUsage()).not.toBeNull();
+    });
+
+    it("translates English into French schema-valid, with no corrections or strengths to show (D250)", async () => {
+      const provider = await make();
+      const request = aTranslationRequest();
+      const translated = await provider.translate(request);
+      expect(translationSchema.safeParse(translated).success).toBe(true);
+      expect([translated.source, translated.target]).toEqual(["en", "fr"]);
+      expect(checkTranslation(request.text, translated)).toBeNull();
       expect(provider.lastUsage()).not.toBeNull();
     });
 

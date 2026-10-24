@@ -6,7 +6,7 @@ import type { UsageRecord } from "@palier/domain";
 import { meterProvider } from "./metered.js";
 
 const providerWith = (usage: UsageRecord | null): AiProvider => ({
-  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true, transcribe: true, speak: true, examinerTurn: true, assessOral: true, interpretDiagnostic: true }),
+  capabilities: () => ({ generatePassage: true, generateItems: true, reviewItem: true, assessWriting: true, generateScenario: true, transcribe: true, speak: true, examinerTurn: true, assessOral: true, interpretDiagnostic: true, translate: true }),
   generatePassage: () => Promise.resolve([]),
   generateItems: () => Promise.resolve([]),
   reviewItem: () =>
@@ -25,6 +25,7 @@ const providerWith = (usage: UsageRecord | null): AiProvider => ({
   examinerTurn: () => Promise.resolve({ text: "q", difficulty: null }),
   assessOral: () => Promise.resolve({} as never),
   interpretDiagnostic: () => Promise.resolve({} as never),
+  translate: () => Promise.resolve({} as never),
   verifyKey: () => Promise.resolve(),
   lastUsage: () => usage,
 });
@@ -109,6 +110,12 @@ describe("meterProvider", () => {
     const metered = meterProvider(providerWith({ model: "m", inputTokens: 400, outputTokens: 90, costUsd: 0.01 }));
     await metered.provider.interpretDiagnostic({} as never);
     expect(metered.totals()).toEqual({ calls: 1, inputTokens: 400, outputTokens: 90, costUsd: 0.01 });
+  });
+
+  it("accounts a translation like any other spending call (D250)", async () => {
+    const metered = meterProvider(providerWith({ model: "m", inputTokens: 600, outputTokens: 900, costUsd: 0.01 }));
+    await metered.provider.translate({} as never);
+    expect(metered.totals()).toEqual({ calls: 1, inputTokens: 600, outputTokens: 900, costUsd: 0.01 });
   });
 
   it("passes a key check through and accounts nothing for it", async () => {
