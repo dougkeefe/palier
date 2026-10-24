@@ -1,10 +1,10 @@
 import type { Localised } from "./localised.js";
 import type { Lang } from "./skills.js";
-import type { WritingSubSkill } from "./sub-skills.js";
+import type { ReadingSubSkill, WritingSubSkill } from "./sub-skills.js";
 
 /**
  * One reference article in the library (product-requirements.md §13.2, implementation-plan.md
- * §7 Phase 7; progress.md D145, D162): the grammar or register point one written-expression
+ * §7 Phase 7; progress.md D145, D162, D254): the point one reading or written-expression
  * sub-skill names, published under `@palier/content/library/<subSkill>.json`.
  *
  * Structured content, not MDX: the same Zod-checked JSON pipeline as the bank and the prompts, and
@@ -12,6 +12,10 @@ import type { WritingSubSkill } from "./sub-skills.js";
  * the language being practised (`lang`), as a bank item's options are, so the page marks them up
  * with that `lang`. Inside the prose, a cited word or phrase in `lang` is marked `_like this_`
  * (`CITED_MARK`, `library.ts`).
+ *
+ * **A writing article and a reading article differ in their examples**: a writing article shows a
+ * sentence to write, a reading article an excerpt to read. Each relates only to its own skill's
+ * articles. The sub-skill tells the two apart, so the type cannot mix them.
  */
 export type LibrarySection = {
   readonly heading: Localised;
@@ -25,14 +29,35 @@ export type LibraryExample = {
   readonly why: Localised;
 };
 
-export type LibraryArticle = {
-  readonly subSkill: WritingSubSkill;
+/** A short original passage in `lang`, and what a careful reader notices in it (D254). */
+export type LibraryExcerpt = {
+  readonly excerpt: string;
+  readonly why: Localised;
+};
+
+type ArticleCommon = {
   readonly lang: Lang;
   readonly title: Localised;
-  /** One or two sentences: what the point is, and why a C-level writer gets it right. */
+  /** One or two sentences: what the point is, and why a C-level candidate gets it right. */
   readonly summary: Localised;
   readonly sections: readonly LibrarySection[];
+};
+
+export type WritingLibraryArticle = ArticleCommon & {
+  readonly subSkill: WritingSubSkill;
   readonly examples: readonly LibraryExample[];
-  /** Other articles worth reading next. Never the article itself. */
+  /** Other written-expression articles worth reading next. Never the article itself. */
   readonly related?: readonly WritingSubSkill[];
 };
+
+export type ReadingLibraryArticle = ArticleCommon & {
+  readonly subSkill: ReadingSubSkill;
+  readonly examples: readonly LibraryExcerpt[];
+  /** Other reading articles worth reading next. Never the article itself. */
+  readonly related?: readonly ReadingSubSkill[];
+};
+
+export type LibraryArticle = WritingLibraryArticle | ReadingLibraryArticle;
+
+/** A sub-skill the library has an article for: reading's and written expression's, never oral's. */
+export type LibrarySubSkill = LibraryArticle["subSkill"];

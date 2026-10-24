@@ -1,8 +1,8 @@
 # Palier: Progress
 
-**Last updated:** 24 October 2026 (**1.0 reached**: Gates O and M passed and bank v4 read by the human, D253; reading's library articles claimed, D254)
+**Last updated:** 24 October 2026 (**1.0 reached**: Gates O and M passed and bank v4 read by the human, D253; reading's library articles built, D254; next, D206's bank budget)
 **Current phase:** **1.0 is reached** (24 October 2026, D253): the human passed Gate O and Gate M and read bank v4 with no
-disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles come first (D254). The history follows.
+disagreement, so Phases 6 and 7 are complete. After 1.0, reading's library articles are built (D254), and D206's bank budget is next. The history follows.
 **Phase 7 (Polish and hardening, 1.0) opened** on 28 September 2026. **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -247,20 +247,30 @@ Built now rather than retrofitted — §7 is emphatic about this.
 ### Next, decided
 
 **1.0 is reached** (D253, the human, 24 October 2026). Gate O and Gate M passed, and the human read bank v4 with no
-disagreement, so ADR 24 stands and Phases 6 and 7 are complete. What Gate K put after 1.0 is open now (D145): reading's
-library articles, XP and levels, and the countdown. Phase 8, the English mirror, is the plan's next phase.
+disagreement, so ADR 24 stands and Phases 6 and 7 are complete. **Reading's library articles are built** (D254,
+`dougkeefe/s76v6`), the first of Gate K's after-1.0 items (D145). XP, levels and the countdown are still named, not
+scheduled, and Phase 8, the English mirror, is the plan's next phase.
 
-**The next slice: reading's library articles** (claimed by `dougkeefe/s76v6`, D254). One article per reading sub-skill,
-eight, in both languages, linked from every reading item's explanation, as D162 built writing's ten.
-- **Domain:** `LibraryArticle` over reading and writing sub-skills, with a reading example (an original French excerpt and
-  what to notice in it) beside the writing one. `parseLibrary` requires one article per scored sub-skill, refuses a `related`
-  from the other skill, and refuses an example of the other skill's kind.
-- **Content:** eight `content/library/<reading sub-skill>.json`, the agent's drafts, French included.
-- **Web:** `/library` in two sections, reading first; an article's excerpts marked with their `lang`; `articleHref` answers for
-  reading too, so the drill and the exam review link through the existing `ArticleLink`; `library.readingLater` removed.
+**Next: D206, the bank's first fetch back under architecture.md §13's 400 KB.** Bank v4 is about 515 KB gzipped, because
+`apps/web/src/sw/worker.ts` precaches every shard the manifest lists. It is the one known budget breach on the live site,
+and it costs a first visit on a phone the most.
+- **The choice is the human's** (D206 left it for them): lazy shard fetch, precaching only the study profile's skill, or
+  an amended budget. **The agent recommends the second, with the first behind it**: precache the manifest, the forms and
+  the shards of the skill the user studies, and fetch any other shard on first use, then cache it. An amended budget
+  would hide the cost rather than remove it.
+- **Then the slice:** the worker learns which shards to precache, from a list the page hands it, since the worker has no
+  runtime imports and cannot read the study profile; the bank adapter's shard fetch goes through the worker's runtime
+  cache, so a shard missed online is fetched once; and a test enforces the budget, which until now nothing did (D206).
+- **R4 must hold:** `offline.spec.ts`'s "every shard and form of the served bank is readable offline" becomes "every
+  shard of the studied skill", and a shard of the other skill, once opened online, stays readable offline. That is a
+  change to R4's reach, so it needs the human's yes with the choice.
 
-*Done:* `pnpm verify` and the library's journeys green, a missing reading article proven to fail the content tests, and a
-reading drill's feedback reaching its article.
+*Done:* a first visit's bank bytes under 400 KB gzipped, enforced by a test that fails on a deliberate breach, the
+offline journeys green, and R4's reach stated in the deviation.
+
+**For the human, from D254:** read the eight reading articles' French and English (`/fr/library` and `/en/library`,
+the reading section), as Gate L read writing's. In particular, say whether each excerpt reads as federal administrative
+French and whether each "what to notice" is the only defensible reading.
 
 **Beside it, whenever a smoke key is to hand (agent):**
 - **The translator's completions, recorded** (D250, two calls on the `assess` model, a few cents): the same
@@ -280,9 +290,7 @@ reading drill's feedback reaching its article.
   *Done:* the twelve figures in the session log beside D190's. Over 2.5 s median, find the step that moved first. It needs
   `OPENAI_SMOKE_KEY` in `.env.local` at the repository root.
 
-**One finding waits for the human to schedule** (D206): bank v4 is about 515 KB gzipped against architecture.md §13's 400 KB
-first bank fetch, because the service worker precaches every shard. The options are lazy shard fetch, precaching only the
-study profile's skill, or an amended budget. (D206's other finding, the review queue serving retired items, is fixed: D241.)
+*(D206's other finding, the review queue serving retired items, is fixed: D241.)*
 
 Budget note (D178): a change to a core package puts the fast lane near 92 s of its 120 s. On this machine `pnpm verify` took
 48 s for Slice 5. A fresh worktree needs `pnpm --filter @palier/web build` first, or the medium lane's production server
@@ -661,7 +669,8 @@ band, a table beside the chart, and the printout still one page in both language
 - [x] **Merged with Slice 4 (#51).** The library: MDX reference articles on the taxonomy's grammar and register points, linked from item explanations.
   Slice 4: one article per written-expression sub-skill, ten, in both languages; reading's after 1.0 (Gate K, D145). The
   articles' French is part of Gate L. **Slice 4, built on this branch** (D162): ten articles as structured JSON, not MDX, at
-  `/library`, linked from every written-expression explanation
+  `/library`, linked from every written-expression explanation. **Reading's eight, after 1.0** (D254): excerpts in place
+  of sentences to write, linked from every reading explanation
 - [x] **Merged with Slice 2 (#45); the realtime route's log exclusion is Phase 6 Slice 3's (D193).** Observability: the client diagnostic bundle, the prefilled issue path, no error reporting service (ADR 15). **The
   item-report issue path exists** (Phase 2). **Slice 2, merged (#45)** (D140–D142): the diagnostic bundle, the error
   states with a prefilled issue, and `/api/health`. The realtime route's exclusion from Vercel logging moves with studio
@@ -8329,9 +8338,69 @@ answers ADR 24's first *revisit when*
   articles come first (D254).
 
 
+### D254 — reading's library articles: eight, with excerpts in place of sentences to write
+**Date:** 24 October 2026 · **Status:** accepted (agent), Gate K's "after 1.0" (D145) now that 1.0 is reached (D253); the
+human asked about the library's "Articles on reading comprehension come after 1.0." Amends D162's "one article per
+written-expression sub-skill"; `architecture.md` §5's tree and PRD §8's `/library` row amended in place
+
+- **One article per reading sub-skill, eight**, at `content/library/<subSkill>.json`, beside writing's ten. Each has a
+  bilingual title and summary, two sections of two paragraphs on what to look for and the traps in the options, and three
+  **original** excerpts in federal administrative French, each with what to notice. They are the agent's drafts, French
+  included, written from how bank v4's reading items test each sub-skill; they are the human's to read (*Next, decided*).
+- **The article's shape follows its sub-skill.** `LibraryArticle` is now a union: `WritingLibraryArticle` keeps
+  `{ avoid?, write, why }` examples, and `ReadingLibraryArticle` takes `LibraryExcerpt`, `{ excerpt, why }`. "Instead
+  of / Write" means nothing for a reading point, and a reading article cannot pass with sentences to write, nor relate to
+  a writing article. The schema is a `z.discriminatedUnion` on `subSkill`, so a mismatch is reported at its own path
+  (`3.examples.0…`), not as one "invalid input".
+- **`parseLibrary` requires one article per `LIBRARY_SUB_SKILLS`** (reading's eight, then writing's ten), and an oral
+  sub-skill is refused. `articleHref` answers for reading too, so **a reading item's explanation now links its article**,
+  in the drill (a new tab) and the exam review, through the existing `ArticleLink`, with no change to either screen.
+- **The web:** `/library` lists reading first, then writing, each under its heading, and `library.readingLater` is gone.
+  A reading article's excerpts are tagged "Read" / « Lisez » with the article's `lang`, and its button leads to
+  `/practice/reading`. `skillHeading` became `writingHeading` beside `readingHeading`; `intro` names both skills. The eight
+  routes joined `routes.json` (so the warmup visits them) and the precache, by file name, with no script change.
+- **A content bar for reading:** at least three excerpts per article, beside writing's four sentences to write.
+  Excerpts are longer, and three cover each sub-skill's traps.
+- **Tests whose premise changed, said here as D207 did:**
+  - `links.test.ts`'s "links a reading sub-skill nowhere, since reading's articles come after 1.0" now holds that every
+    reading sub-skill links to an article, and that an oral one links nowhere.
+  - `lib/library.test.ts` counted ten articles; `library-content.test.ts` counted `WRITING_SUB_SKILLS` files and required
+    four `avoid` examples of every article; `library.test.ts` built writing articles only. Each now covers both skills.
+  - `content.spec.ts`'s library test counted ten entries and probed `/en/library/main-idea` as a 404. It counts eighteen,
+    and probes an oral sub-skill, `/en/library/fluency-and-hesitation`. A reading drill's journey into its article is new.
+- **Lighthouse's list is unchanged** (19 URLs): a reading article is the same server template as `/fr/library/agreement`,
+  which it already measures, and a 20th URL adds five runs to the medium lane. `csp-production.spec.ts` gained
+  `/library/inference`, which costs one page load.
+- **The bank grows by nothing**; the precache gains eight article pages in each locale.
+
 ## Session log
 
 Newest first. One entry per session that changed something. Never edit an older entry.
+
+### 24 October 2026 — `dougkeefe/s76v6` (reading's library articles; D254)
+
+*Next, decided*'s slice, which the first commit on this branch set (D253).
+- **Domain:** `LibraryArticle` a union over reading and writing (`LibraryExcerpt`, `LIBRARY_SUB_SKILLS`), the schema a
+  discriminated union on `subSkill`, `parseLibrary` over all eighteen; `docs/schemas/library-article.schema.json`
+  regenerated (`pnpm run test -u`).
+- **Content:** eight reading articles in `content/library/`.
+- **Web:** `/library` in two sections; the article page's excerpts and reading button; `articleHref` for reading;
+  `readingHeading`, `writingHeading`, `excerpt` and `practiseReading` in both languages, `readingLater` removed;
+  `routes.json` regenerated by `prepare-public.mjs`.
+- **Docs:** D254; `packages/domain/CLAUDE.md` and `apps/web/CLAUDE.md`; architecture.md §5 and PRD §8 in place;
+  *Next, decided* now D206.
+
+**Verified:**
+- `pnpm verify`: check-types, lint and boundaries clean; `pnpm test` passed 283 files, 4,578 tests (8 todo).
+- **Proven to bite:** with `content/library/inference.json` moved away, `library-content.test.ts` failed all five tests,
+  naming `(root): "inference" has no article`; restored, it passed.
+- `content.spec.ts` on the `chromium` project, with the warmup: 12 of 12, the new reading-drill journey and the
+  eighteen-article library test included. Run through a temporary, uncommitted config on port 3010, since another
+  project's dev server held 3000.
+- After `pnpm --filter @palier/web build`, the `offline` project's `csp-production.spec.ts` (every page in both locales,
+  `/library/inference` included, zero violations), `offline.spec.ts`, `exam-offline.spec.ts` and
+  `telemetry-offline.spec.ts`: 17 of 17.
+- Not run: Lighthouse, the rest of the medium lane and the live smoke. CI runs the medium lane on the pull request.
 
 ### 24 October 2026 — `dougkeefe/s76v6` (1.0 recorded: Gates O and M passed, bank v4 read; D253)
 

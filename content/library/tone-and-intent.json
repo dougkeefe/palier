@@ -1,0 +1,73 @@
+{
+  "subSkill": "tone-and-intent",
+  "lang": "fr",
+  "title": {
+    "en": "Tone and intent",
+    "fr": "Le ton et l’intention"
+  },
+  "summary": {
+    "en": "Telling what the writer wants (to inform, remind, recommend, persuade) and where they stand, from the verbs and words they choose.",
+    "fr": "Reconnaître ce que veut l’auteur (informer, rappeler, recommander, convaincre) et sa position, d’après les verbes et les mots qu’il choisit."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Intent: what the text is for",
+        "fr": "L’intention : à quoi sert le texte"
+      },
+      "paragraphs": [
+        {
+          "en": "The main verb usually says it: _informer_, _rappeler_, _inviter_, _recommander_, _exiger_. A note that _rappelle_ a rule implies it was not always followed; one that _invite_ asks without obliging.",
+          "fr": "Le verbe principal le dit souvent : _informer_, _rappeler_, _inviter_, _recommander_, _exiger_. Une note qui _rappelle_ une règle laisse entendre qu’elle n’a pas toujours été suivie; une note qui _invite_ demande sans obliger."
+        },
+        {
+          "en": "Look at the last sentence: an administrative text often states its purpose there. _Nous vous invitons à participer en grand nombre, sans quoi le projet ne reflétera pas vos besoins_ argues for taking part. It is not a threat.",
+          "fr": "Regardez la dernière phrase : un texte administratif y énonce souvent son but. _Nous vous invitons à participer en grand nombre, sans quoi le projet ne reflétera pas vos besoins_ plaide pour la participation. Ce n’est pas une menace."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Tone: where the writer stands",
+        "fr": "Le ton : la position de l’auteur"
+      },
+      "paragraphs": [
+        {
+          "en": "Government texts are rarely openly emotional, so tone shows in degree: _préoccupant_ or _alarmant_, _il conviendrait_ or _il faut_, _malheureusement_, _à juste titre_. The conditional and _il semble_ soften; _force est de constater_ insists.",
+          "fr": "Les textes gouvernementaux expriment rarement une émotion ouverte; le ton se lit dans les degrés : _préoccupant_ ou _alarmant_, _il conviendrait_ ou _il faut_, _malheureusement_, _à juste titre_. Le conditionnel et _il semble_ atténuent; _force est de constater_ insiste."
+        },
+        {
+          "en": "The trap is reading too much into neutrality. A report that states facts without blame is objective, not lenient, and a firm reminder is not anger. Choose the option that matches the strength of the wording, and no stronger.",
+          "fr": "Le piège est de trop lire dans la neutralité. Un rapport qui expose les faits sans blâmer est objectif, non indulgent, et un rappel ferme n’est pas de la colère. Choisissez l’option qui correspond à la force des mots, sans plus."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "excerpt": "La direction rappelle que les demandes de congé doivent être approuvées avant d’être prises.",
+      "why": {
+        "en": "_Rappelle_ implies the rule was not always followed. The tone is firm and neutral: a reminder, not a reprimand.",
+        "fr": "_Rappelle_ laisse entendre que la règle n’a pas toujours été suivie. Le ton est ferme et neutre : un rappel, pas une réprimande."
+      }
+    },
+    {
+      "excerpt": "Force est de constater que les mesures adoptées l’an dernier n’ont pas produit les résultats escomptés.",
+      "why": {
+        "en": "_Force est de constater_ admits a fact the writer would rather not: the tone is critical, but measured.",
+        "fr": "_Force est de constater_ admet un fait qu’on aurait préféré éviter : le ton est critique, mais mesuré."
+      }
+    },
+    {
+      "excerpt": "Il conviendrait d’envisager un report de la mise en œuvre.",
+      "why": {
+        "en": "_Il conviendrait_ and _envisager_ make this a cautious suggestion, not a decision.",
+        "fr": "_Il conviendrait_ et _envisager_ en font une suggestion prudente, et non une décision."
+      }
+    }
+  ],
+  "related": [
+    "inference",
+    "main-idea"
+  ]
+}

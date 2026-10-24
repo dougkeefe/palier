@@ -1,0 +1,73 @@
+{
+  "subSkill": "specific-detail",
+  "lang": "fr",
+  "title": {
+    "en": "Specific detail",
+    "fr": "Le détail précis"
+  },
+  "summary": {
+    "en": "Finding the one fact a question asks for (a date, a condition, a step, a reason) and keeping it apart from the facts beside it.",
+    "fr": "Repérer le renseignement que la question demande (une date, une condition, une étape, une raison) et le distinguer de ceux qui l’entourent."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Find the passage, then read it closely",
+        "fr": "Repérez le passage, puis lisez-le de près"
+      },
+      "paragraphs": [
+        {
+          "en": "Take the key words of the question (who, when, at what stage) and scan for them or their synonyms: the text rarely repeats the question’s wording. _Au plus tard le 15 mai_ answers “what is the deadline?”",
+          "fr": "Relevez les mots clés de la question (qui, quand, à quelle étape) et cherchez-les, ou leurs synonymes : le texte reprend rarement la formulation de la question. _Au plus tard le 15 mai_ répond à « quelle est la date limite? »"
+        },
+        {
+          "en": "Once found, read the whole sentence, and the ones before and after. A condition (_à condition de_, _sauf si_, _seulement_) or a cause (_faute de_, _en raison de_) often changes what the detail means.",
+          "fr": "Une fois le passage trouvé, lisez la phrase entière, ainsi que celle qui précède et celle qui suit. Une condition (_à condition de_, _sauf si_, _seulement_) ou une cause (_faute de_, _en raison de_) change souvent le sens du détail."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "The traps",
+        "fr": "Les pièges"
+      },
+      "paragraphs": [
+        {
+          "en": "The neighbouring fact. A text gives several dates, amounts or steps, and a wrong option takes the right kind of answer from the wrong place. Match each fact to what it describes.",
+          "fr": "Le renseignement voisin. Le texte donne plusieurs dates, montants ou étapes, et un mauvais choix prend le bon type de réponse au mauvais endroit. Associez chaque renseignement à ce qu’il décrit."
+        },
+        {
+          "en": "The plausible answer the text does not give. If an option sounds sensible but you cannot point to the sentence that says it, rule it out.",
+          "fr": "La réponse plausible que le texte ne donne pas. Si un choix paraît sensé mais que vous ne pouvez pas montrer la phrase qui le dit, écartez-le."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "excerpt": "Les personnes intéressées doivent soumettre leur curriculum vitæ et une lettre de présentation au plus tard le 15 mai. Les candidats retenus seront ensuite invités à fournir trois références et une preuve d’études.",
+      "why": {
+        "en": "Asked what to send when applying: the CV and the letter. The references and the proof of studies come later, and only from those retained.",
+        "fr": "On demande ce qu’il faut envoyer pour poser sa candidature : le CV et la lettre. Les références et la preuve d’études viennent plus tard, et seulement des candidats retenus."
+      }
+    },
+    {
+      "excerpt": "Faute de chariot disponible ce matin-là, le commis a transporté les boîtes à la main jusqu’à l’entrepôt.",
+      "why": {
+        "en": "_Faute de_ gives a cause by an absence: there was no cart. Haste or an instruction would be plausible causes, but the text names neither.",
+        "fr": "_Faute de_ donne une cause par l’absence : il n’y avait pas de chariot. La hâte ou une consigne seraient des causes plausibles, mais le texte n’en nomme aucune."
+      }
+    },
+    {
+      "excerpt": "Les frais de déplacement sont remboursés sur présentation des reçus, sauf s’ils ont été engagés sans autorisation préalable.",
+      "why": {
+        "en": "_Sauf si_ sets an exception: approved costs are repaid, costs incurred without approval are not. Missing it reverses the detail.",
+        "fr": "_Sauf si_ pose une exception : les frais autorisés sont remboursés, ceux engagés sans autorisation ne le sont pas. La manquer inverse le détail."
+      }
+    }
+  ],
+  "related": [
+    "numerical-and-tabular-detail",
+    "vocabulary-in-context"
+  ]
+}

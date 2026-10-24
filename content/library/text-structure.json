@@ -1,0 +1,73 @@
+{
+  "subSkill": "text-structure",
+  "lang": "fr",
+  "title": {
+    "en": "Text structure",
+    "fr": "La structure du texte"
+  },
+  "summary": {
+    "en": "Seeing how a text is built (the order of its parts and what each paragraph does for the whole), so you can say how it moves from start to finish.",
+    "fr": "Voir comment un texte est construit (l’ordre de ses parties et le rôle de chaque paragraphe), pour dire comment il progresse du début à la fin."
+  },
+  "sections": [
+    {
+      "heading": {
+        "en": "Map the paragraphs",
+        "fr": "Faites le plan des paragraphes"
+      },
+      "paragraphs": [
+        {
+          "en": "Name each paragraph’s role in two or three words: context, problem, cause, solution, recommendation, next steps. The sequence of roles is the structure. Compare it with the options.",
+          "fr": "Nommez le rôle de chaque paragraphe en deux ou trois mots : contexte, problème, cause, solution, recommandation, prochaines étapes. La suite de ces rôles est la structure. Comparez-la aux choix."
+        },
+        {
+          "en": "Administrative texts have habits. A briefing note runs context, analysis, options, recommendation; an incident report runs facts, causes, conclusions; an email often asks first and explains after.",
+          "fr": "Les textes administratifs ont leurs habitudes. La note d’information va du contexte à l’analyse, aux options, puis à la recommandation; le rapport d’incident, des faits aux causes, puis aux conclusions; le courriel formule souvent sa demande d’abord et l’explique ensuite."
+        }
+      ]
+    },
+    {
+      "heading": {
+        "en": "Follow the signposts",
+        "fr": "Suivez les repères"
+      },
+      "paragraphs": [
+        {
+          "en": "Connectors mark each turn: _d’abord_, _ensuite_ and _enfin_ order; _en revanche_ opposes; _donc_ and _par conséquent_ conclude; _par ailleurs_ adds a separate point. A paragraph that opens with _en revanche_ does not continue the argument before it.",
+          "fr": "Les connecteurs marquent chaque tournant : _d’abord_, _ensuite_ et _enfin_ ordonnent; _en revanche_ oppose; _donc_ et _par conséquent_ concluent; _par ailleurs_ ajoute un point distinct. Un paragraphe qui s’ouvre sur _en revanche_ ne prolonge pas l’argument qui précède."
+        },
+        {
+          "en": "An option can name every part correctly and still get the order wrong. Check the sequence, not only the content.",
+          "fr": "Un choix peut nommer toutes les parties correctement et se tromper d’ordre. Vérifiez la suite, et pas seulement le contenu."
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "excerpt": "D’abord, le comité a examiné les plaintes reçues depuis janvier. Il en ressort que la plupart portent sur les délais. Par conséquent, il recommande d’ajouter deux agents à l’équipe d’accueil.",
+      "why": {
+        "en": "Facts, finding, recommendation: _d’abord_, _il en ressort_ and _par conséquent_ mark each step.",
+        "fr": "Des faits, un constat, une recommandation : _d’abord_, _il en ressort_ et _par conséquent_ marquent chaque étape."
+      }
+    },
+    {
+      "excerpt": "Les ateliers ont été bien reçus par les participants. En revanche, leur coût par personne dépasse largement celui des formations en ligne.",
+      "why": {
+        "en": "_En revanche_ turns from an advantage to a drawback: the text weighs the two, it does not list praise.",
+        "fr": "_En revanche_ fait passer d’un avantage à un inconvénient : le texte compare, il n’énumère pas des éloges."
+      }
+    },
+    {
+      "excerpt": "Pourriez-vous me transmettre votre rapport d’ici vendredi? La sous-ministre adjointe souhaite en prendre connaissance avant la réunion de lundi.",
+      "why": {
+        "en": "The request comes first and its reason after, a common order in an email. An option that says “context, then request” reverses it.",
+        "fr": "La demande vient d’abord et sa raison ensuite, un ordre courant dans un courriel. Le choix « le contexte, puis la demande » l’inverse."
+      }
+    }
+  ],
+  "related": [
+    "main-idea",
+    "cohesion-and-reference"
+  ]
+}

@@ -182,9 +182,17 @@ export type { WritingPrompt, WritingRegister } from "./writing-prompt.js";
 export { WRITING_REGISTERS } from "./writing-prompt.js";
 export type { WritingPromptsParseResult } from "./writing-prompts.js";
 export { parseWritingPrompts, parseWritingPromptsOrThrow } from "./writing-prompts.js";
-export type { LibraryArticle, LibraryExample, LibrarySection } from "./library-article.js";
+export type {
+  LibraryArticle,
+  LibraryExample,
+  LibraryExcerpt,
+  LibrarySection,
+  LibrarySubSkill,
+  ReadingLibraryArticle,
+  WritingLibraryArticle,
+} from "./library-article.js";
 export type { LibraryParseResult } from "./library.js";
-export { CITED_MARK, parseLibrary, parseLibraryOrThrow } from "./library.js";
+export { CITED_MARK, LIBRARY_SUB_SKILLS, parseLibrary, parseLibraryOrThrow } from "./library.js";
 // Today's quick pointers, a content artefact (progress.md D216).
 export type { Pointer } from "./pointer.js";
 export type { PointersParseResult } from "./pointers.js";

@@ -140,10 +140,12 @@ test("progress prints as a one-page summary of both skills, with the statement (
   await expect(page.getByRole("heading", { name: "Practice trend — Written expression" })).toBeVisible();
 });
 
-test("the library lists ten articles, and an article reads its examples in French, in both languages (D162)", async ({ page }) => {
+test("the library lists eighteen articles, reading first, and an article reads its examples in French, in both languages (D162, D254)", async ({ page }) => {
   await page.goto("/en/library");
   await expect(page.getByRole("heading", { level: 1, name: "Library" })).toBeVisible();
-  await expect(page.locator(".app-library__entry")).toHaveCount(10);
+  await expect(page.locator(".app-library__entry")).toHaveCount(18);
+  const sections = page.locator("main").getByRole("heading", { level: 2 });
+  await expect(sections).toHaveText(["Reading comprehension", "Written expression"]);
   await axeClean(page);
 
   await page.getByRole("link", { name: "Agreement", exact: true }).click();
@@ -164,8 +166,15 @@ test("the library lists ten articles, and an article reads its examples in Frenc
   await expect(page.getByText("Au lieu de").first()).toBeVisible();
   await axeClean(page);
 
-  // A segment that is not a written-expression sub-skill is the 404, in place.
-  await page.goto("/en/library/main-idea");
+  // A reading article's examples are excerpts to read, in French, and it leads to reading practice.
+  await page.goto("/en/library/inference");
+  await expect(page.getByRole("heading", { level: 1, name: "Inference" })).toBeVisible();
+  await expect(page.getByText("Certaines directions pourraient devoir reporter des projets si le budget n’est pas rétabli.")).toHaveAttribute("lang", "fr");
+  await expect(page.getByRole("link", { name: "Practise reading comprehension" })).toHaveAttribute("href", "/en/practice/reading");
+  await axeClean(page);
+
+  // A segment that is not a reading or written-expression sub-skill is the 404, in place.
+  await page.goto("/en/library/fluency-and-hesitation");
   await expect(page.getByRole("heading", { level: 1, name: "Page not found" })).toBeVisible();
 });
 
@@ -187,5 +196,24 @@ test("a written-expression item's feedback reaches its library article, in a new
   await expect(article).toHaveURL(/\/en\/library\/[a-z-]+$/);
   await expect(article.getByRole("heading", { level: 1 })).toBeVisible();
   // The drill is still where it was.
+  await expect(feedback).toBeVisible();
+});
+
+test("a reading item's feedback reaches its library article, in a new tab (D254)", async ({ page, context }) => {
+  await onboard(page, "skip");
+  await expect(page).toHaveURL(/\/en\/home$/);
+  await page.getByRole("tab", { name: "Reading" }).click();
+  await page.getByRole("link", { name: /^Start/ }).click();
+  await expect(page.locator(".app-session__count")).toBeVisible();
+  await page.keyboard.press("1");
+  await page.keyboard.press("Enter");
+  const feedback = page.getByRole("region", { name: /Correct|Not quite/ });
+  await expect(feedback).toBeVisible();
+
+  const link = feedback.getByRole("link", { name: /Read about .+ in the library/ });
+  await expect(link).toHaveAttribute("target", "_blank");
+  const [article] = await Promise.all([context.waitForEvent("page"), link.click()]);
+  await expect(article).toHaveURL(/\/en\/library\/[a-z-]+$/);
+  await expect(article.getByRole("link", { name: "Practise reading comprehension" })).toBeVisible();
   await expect(feedback).toBeVisible();
 });

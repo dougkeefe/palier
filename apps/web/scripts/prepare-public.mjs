@@ -31,7 +31,7 @@ const WEB_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
  * `(name)` add no URL segment; dynamic `[param]` and private `_folder` routes cannot
  * be precached by name, so they are left to runtime caching, **unless the dynamic
  * directory's values are known at build time and listed in `expansions`**: the
- * library's articles, one per written-expression sub-skill (progress.md D162), so every
+ * library's articles, one per reading and written-expression sub-skill (progress.md D162, D254), so every
  * article opens offline.
  * @param {readonly string[]} pageDirs directories holding a page, relative to `[locale]`, "/"-separated
  * @param {Readonly<Record<string, readonly string[]>>} [expansions] a dynamic directory's values

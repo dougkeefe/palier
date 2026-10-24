@@ -61,10 +61,13 @@ from disk (progress.md D154).
   clock and a practice one does not. **A realtime price is a fourth
   `ModelPrice` kind** (`RealtimePrice`: text and audio in and out, and one cached-input rate), and `costOf` prices
   `RealtimeTokens`, whose input counts are the uncached part, `null` when any unit is unmeasured (D167).
-- **The library is a content artefact** (`library-article` in `CONTENT_SCHEMAS`, `library.ts`, progress.md D162): one
-  `LibraryArticle` per written-expression sub-skill, prose `Localised`, examples in `lang`. **`parseLibrary` refuses a
-  library missing any sub-skill's article, or with two**, since an item's explanation links to its sub-skill's page, and
-  an article related to itself. Cited target-language text in the prose is marked `_like this_` (`CITED_MARK`), which the
+- **The library is a content artefact** (`library-article` in `CONTENT_SCHEMAS`, `library.ts`, progress.md D162, D254):
+  one `LibraryArticle` per reading and written-expression sub-skill (`LIBRARY_SUB_SKILLS`, never oral), prose
+  `Localised`, examples in `lang`. **The sub-skill decides the article's shape** (a discriminated union): a writing
+  article's examples are sentences to write (`LibraryExample`), a reading article's are excerpts to read
+  (`LibraryExcerpt`), and `related` names only its own skill's sub-skills. **`parseLibrary` refuses a library missing any
+  sub-skill's article, or with two**, since an item's explanation links to its sub-skill's page, and an article related
+  to itself. Cited target-language text in the prose is marked `_like this_` (`CITED_MARK`), which the
   page renders with the article's `lang`; an unpaired marker is refused, with its path.
 - **The grammar pointers are a content artefact** (`pointer` in `CONTENT_SCHEMAS`, `pointers.ts`, progress.md D216,
   D218). A `Pointer` is `{ id, subSkill, lang, text }`. **The text is written in the practised language (`lang`), never

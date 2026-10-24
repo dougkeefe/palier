@@ -5,9 +5,9 @@ import { articleHref } from "../../features/library/links";
 import { Link } from "../../i18n/navigation";
 
 /**
- * "Read about {subSkill}": a written-expression item's way from its explanation to its library
- * article (progress.md D162), and nothing for a reading item. In a drill it opens a new tab, so
- * the session in progress is never left; the exam review opens it in place.
+ * "Read about {subSkill}": a reading or written-expression item's way from its explanation to its
+ * library article (progress.md D162, D254), and nothing for an oral sub-skill. In a drill it opens a
+ * new tab, so the session in progress is never left; the exam review opens it in place.
  */
 export function ArticleLink({ subSkill, newTab = false }: { subSkill: SubSkill; newTab?: boolean }) {
   const t = useTranslations("library");

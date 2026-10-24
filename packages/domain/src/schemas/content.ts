@@ -4,7 +4,7 @@ import { DOC_TYPES, LICENCES } from "../passage.js";
 import { ATTEMPT_MODES } from "../attempt.js";
 import { ORAL_SESSION_TYPES } from "../oral-scenario.js";
 import { STUDY_RESOURCE_SOURCES } from "../study-resource.js";
-import { WRITING_SUB_SKILLS } from "../sub-skills.js";
+import { READING_SUB_SKILLS, WRITING_SUB_SKILLS } from "../sub-skills.js";
 import { WRITING_REGISTERS } from "../writing-prompt.js";
 import {
   bandSchema,
@@ -284,20 +284,27 @@ export const writingPromptShape = z.strictObject({
 });
 
 /**
- * A library article (progress.md D162): one written-expression sub-skill's reference page.
- * Prose in both interface languages, examples in `lang`. `avoid` is optional, since some
- * examples only show the form to write.
+ * A library article (progress.md D162, D254): one reading or written-expression sub-skill's
+ * reference page. Prose in both interface languages, examples in `lang`. A writing article's
+ * examples are sentences, `avoid` optional since some only show the form to write; a reading
+ * article's are excerpts. The sub-skill decides which shape applies, so a reading article with a
+ * sentence to write, or a `related` from the other skill, is refused.
  */
 const writingSubSkillSchema = z.enum(WRITING_SUB_SKILLS);
+const readingSubSkillSchema = z.enum(READING_SUB_SKILLS);
 
-export const libraryArticleShape = z.strictObject({
-  subSkill: writingSubSkillSchema,
+const articleCommon = {
   lang: langSchema,
   title: localisedSchema,
   summary: localisedSchema,
   sections: z
     .array(z.strictObject({ heading: localisedSchema, paragraphs: z.array(localisedSchema).min(1) }))
     .min(1),
+};
+
+const writingLibraryArticleShape = z.strictObject({
+  subSkill: writingSubSkillSchema,
+  ...articleCommon,
   examples: z
     .array(
       z.strictObject({
@@ -309,6 +316,18 @@ export const libraryArticleShape = z.strictObject({
     .min(1),
   related: z.array(writingSubSkillSchema).min(1).optional(),
 });
+
+const readingLibraryArticleShape = z.strictObject({
+  subSkill: readingSubSkillSchema,
+  ...articleCommon,
+  examples: z.array(z.strictObject({ excerpt: z.string().trim().min(1), why: localisedSchema })).min(1),
+  related: z.array(readingSubSkillSchema).min(1).optional(),
+});
+
+export const libraryArticleShape = z.discriminatedUnion("subSkill", [
+  readingLibraryArticleShape,
+  writingLibraryArticleShape,
+]);
 
 /**
  * The words a candidate fills a pause with, per language (progress.md D123): the

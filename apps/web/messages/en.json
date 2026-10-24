@@ -1360,15 +1360,17 @@
   },
   "library": {
     "title": "Library",
-    "intro": "Short reference articles on the ten points of written expression Palier tracks. Each sets out the rule, the traps an anglophone writer meets, and examples.",
-    "skillHeading": "Written expression",
-    "readingLater": "Articles on reading comprehension come after 1.0.",
+    "intro": "Short reference articles on the eighteen points of reading and written expression Palier tracks. A reading article shows what to look for and the traps in the options, with excerpts to read; a writing article sets out the rule, the traps an anglophone writer meets, and examples.",
+    "readingHeading": "Reading comprehension",
+    "writingHeading": "Written expression",
     "back": "All articles",
     "examples": "Examples",
+    "excerpt": "Read",
     "insteadOf": "Instead of",
     "write": "Write",
     "related": "Read next",
     "practise": "Practise written expression",
+    "practiseReading": "Practise reading comprehension",
     "readAbout": "Read about {subSkill} in the library",
     "newTab": "(opens in a new tab)"
   }

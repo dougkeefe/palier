@@ -32,6 +32,7 @@ const PAGES = [
   "/home",
   "/library",
   "/library/agreement",
+  "/library/inference",
   "/practice/oral",
   "/practice/oral/report",
   "/practice/reading",
