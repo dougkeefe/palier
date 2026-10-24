@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/practice
   return { title: t("title") };
 }
 
-// The translator (progress.md D248). A static route, so the service worker precaches it by name
+// The translator (progress.md D250). A static route, so the service worker precaches it by name
 // as it does the workshop (D60).
 export default function TranslatePage({ params }: PageProps<"/[locale]/practice/writing/translate">) {
   const { locale } = use(params);

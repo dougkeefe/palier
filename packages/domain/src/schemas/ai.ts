@@ -225,7 +225,7 @@ export const diagnosticInterpretationShape = z.strictObject({
 });
 
 /**
- * The translator's answer (progress.md D248), as the model writes it: corrections as excerpts, not
+ * The translator's answer (progress.md D250), as the model writes it: corrections as excerpts, not
  * offsets (D105). Which fields may be filled depends on whether the source is the target, which a
  * schema does not see, so that is `assembleTranslation`'s. The bounds keep an explanation readable.
  */

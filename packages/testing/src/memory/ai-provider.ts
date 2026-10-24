@@ -210,7 +210,7 @@ export const fakeAiProvider = (): AiProvider => {
 
     // A text in the target language comes back with its first word "corrected" in place, on
     // agreement, and one strength; any other comes back as the target language's text, unchanged
-    // but tagged, with no notes (D248). The source is the one named, or else the target.
+    // but tagged, with no notes (D250). The source is the one named, or else the target.
     translate: (req) => {
       bill(25);
       const source = req.source ?? req.target;

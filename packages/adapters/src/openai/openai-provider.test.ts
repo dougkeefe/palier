@@ -164,7 +164,7 @@ const INTERPRETATION = {
 /** The diagnostic's prompt, told from the other two on the assess model. */
 const isDiagnostic = (body: string): boolean => body.includes("short diagnostic");
 
-/** The translator's two answers to the contract's requests (D248), told apart by the source named. */
+/** The translator's two answers to the contract's requests (D250), told apart by the source named. */
 const CONTRACT_CORRECTION = {
   source: "fr",
   output: "Bonjour à tous, la réunion de lundi est reportée à mardi.",
@@ -1191,7 +1191,7 @@ describe("openAiProvider — interpretDiagnostic (ADR 25)", () => {
   });
 });
 
-describe("openAiProvider — translate (D248)", () => {
+describe("openAiProvider — translate (D250)", () => {
   const MINE = "Je suis allé au réunion hier, et les notes que j’ai rédigé sont jointes.";
   const CORRECTED = {
     source: "fr",

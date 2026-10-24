@@ -293,7 +293,7 @@ export type WritingFeedbackDraft = {
 };
 
 /**
- * What the translator is sent (progress.md D248): a text the user wrote, the language it is in
+ * What the translator is sent (progress.md D250): a text the user wrote, the language it is in
  * when they said so (`null` asks the model to tell), the language the result is always in, and the
  * interface language its explanations are written in. When the source is the target, the text is
  * the user's own attempt at the target language and comes back corrected and explained; otherwise
@@ -310,7 +310,7 @@ export type TranslationRequest = {
  * One correction to the user's own target-language text, as `[start, end)` offsets into it
  * (`checkErrorOffsets`'s rule): what replaces those words, why, in the interface language, and
  * the written-expression sub-skill it is a slip in, which is how the screen links the library's
- * article and the curated study resources. A model never writes a link (D248).
+ * article and the curated study resources. A model never writes a link (D250).
  */
 export type TranslationCorrection = {
   readonly start: number;
@@ -321,7 +321,7 @@ export type TranslationCorrection = {
 };
 
 /**
- * A choice a translation made that a learner would want to know about (D248): a federal term of
+ * A choice a translation made that a learner would want to know about (D250): a federal term of
  * art, a title or a set phrase, the words in the source it renders, and why that rendering.
  */
 export type TranslationNote = {
@@ -331,7 +331,7 @@ export type TranslationNote = {
 };
 
 /**
- * What `translate` returns (D248). `source` is the language the text was in. **When it is the
+ * What `translate` returns (D250). `source` is the language the text was in. **When it is the
  * target, `output` is the user's text corrected**, `strengths` says what it did well and
  * `corrections` places each change over the text; `notes` is empty. **Otherwise `output` is the
  * translation** and `notes` explains its choices; `strengths` and `corrections` are empty.

@@ -29,7 +29,7 @@ const QUOTED_BANDS = TARGET_BANDS.map((band) => `"${band}"`);
  *
  * `writing` was added with Phase 4 Slice 3 (progress.md D105), `scenario` with Phase 5
  * Slice 1 (D114), `examiner` with Slice 2 (D117), `oral` with Slice 3 (D122), and `diagnostic`
- * with ADR 25, and `translation` with the translator (progress.md D248). Adding a prompt does not
+ * with ADR 25, and `translation` with the translator (progress.md D250). Adding a prompt does not
  * change the others, so the version stays.
  *
  * **Version 4** (Phase 4 Slice 4, progress.md D112): the review prompt names the band scale.
@@ -416,7 +416,7 @@ const diagnostic = (req: DiagnosticInterpretationRequest): { system: string; use
 };
 
 /**
- * The translator (progress.md D248). One prompt, two jobs, chosen by the language the text is in:
+ * The translator (progress.md D250). One prompt, two jobs, chosen by the language the text is in:
  * a text in the target language is the user's own attempt, corrected and explained; any other is
  * translated for the federal public service. The model names a correction's words and its
  * sub-skill, never offsets and never a link: `assembleTranslation` places the words, and the

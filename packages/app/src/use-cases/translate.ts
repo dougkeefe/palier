@@ -3,7 +3,7 @@ import type { Lang, Translation } from "@palier/domain";
 import { type MeteredAiDeps, withAiProvider } from "./api-key.js";
 
 /**
- * The translator (progress.md D248), a writing aid beside the workshop. English comes back as
+ * The translator (progress.md D250), a writing aid beside the workshop. English comes back as
  * French for the federal public service; the user's own French comes back corrected, with what it
  * did well and why each correction was made. **Nothing is stored**: the text goes to the user's
  * provider and nowhere else [R12], and the answer lives on the screen, so there is no store, no

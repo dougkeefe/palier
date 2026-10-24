@@ -208,7 +208,7 @@ interface AiProvider {
   interpretDiagnostic(req: DiagnosticInterpretationRequest): Promise<DiagnosticInterpretation>  // ADDED (ADR 25; brought
                                     // in line 23 October 2026): the diagnostic's written result, in plain language, over a
                                     // run the engine has already scored and placed; checkDiagnosticInterpretation holds it
-  translate(req: TranslationRequest): Promise<Translation>         // ADDED 23 October 2026 (progress.md D248): a text in
+  translate(req: TranslationRequest): Promise<Translation>         // ADDED 23 October 2026 (progress.md D250): a text in
                                     // req.target comes back corrected, with strengths and corrections, each naming a
                                     // written-expression sub-skill; any other comes back translated, with notes. The model
                                     // quotes excerpts, assembleTranslation places them; it never sends offsets or links

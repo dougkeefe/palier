@@ -347,7 +347,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `generated` table in production, **never synced and never exported**, cleared by wipe and
     delete-everywhere. `components/key/NoKeyCard.tsx` is shared with the workshop, by namespace.
     `container-generate.test.ts` runs the real adapter over MSW through both graphs.
-  - **The translator** (progress.md D248) is `/practice/writing/translate`, linked from the writing drill.
+  - **The translator** (progress.md D250) is `/practice/writing/translate`, linked from the writing drill.
     `components/translate/Translator.tsx` renders it; its decisions are in `features/translate/translate-view.ts`. English or
     French on the left, always French on the right; the user's own French comes back corrected, each correction marked
     and explained. **Every study link is data**: the library article by sub-skill, and the container's `studyResources`

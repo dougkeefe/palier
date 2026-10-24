@@ -7,7 +7,7 @@ import type {
 import { checkErrorOffsets, findExcerpt } from "./writing.js";
 
 /**
- * The translator's invariants (progress.md D248). Pure, so the adapter, the fake and the screen
+ * The translator's invariants (progress.md D250). Pure, so the adapter, the fake and the screen
  * hold one rule between them, as `writing.ts` does for writing feedback.
  */
 
@@ -35,7 +35,7 @@ export const checkTranslation = (text: string, translation: Translation): string
 };
 
 /**
- * A draft made whole (D248). When the user said which language the text is in, the model must
+ * A draft made whole (D250). When the user said which language the text is in, the model must
  * agree, or the answer is malformed and retried. A correction's excerpts are found in the text the
  * way `placeErrors` finds them, each from where the last one ended, then from the start, and come
  * back in reading order with their sub-skill and reason; an excerpt not in the text, or two on the

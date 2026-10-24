@@ -40,7 +40,7 @@ const pricing: SpendPricing = {
     "oral-studio": [{ role: "transcribe", minutes: 0.6 }], // 0.3
     // One diagnostic run's interpretation (ADR 25).
     "diagnostic-interpretation": [{ role: "assess", inputTokens: 125_000, outputTokens: 31_250 }], // 0.25 + 0.25
-    // One text translated or corrected (D248).
+    // One text translated or corrected (D250).
     translation: [{ role: "assess", inputTokens: 50_000, outputTokens: 12_500 }], // 0.1 + 0.1
   },
 };

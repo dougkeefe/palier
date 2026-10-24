@@ -4,7 +4,7 @@ import { axeClean, onboard } from "./helpers";
 import { MODELS_ANSWER, type OpenAiAnswer, SENTINEL, completionKind, stubOpenAi, translateAnswer } from "./leak-guard";
 
 /**
- * The translator (progress.md D248), on the hermetic lane, through the real adapter and the real
+ * The translator (progress.md D250), on the hermetic lane, through the real adapter and the real
  * metering, with OpenAI stubbed by `page.route`: the writing drill's way in, no key, a correction of
  * the user's own French with its marks, reasons and study links, a translation of English with its
  * notes, and an answer that goes stale when the text changes. Every state is audited by axe [R9].

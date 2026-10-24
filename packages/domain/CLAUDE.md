@@ -70,13 +70,13 @@ from disk (progress.md D154).
   D218). A `Pointer` is `{ id, subSkill, lang, text }`. **The text is written in the practised language (`lang`), never
   the interface's**, with its example marked `_like this_`. Its sub-skill is a written-expression one, never reading or oral.
   `parsePointers` refuses a duplicate id, an unpaired `CITED_MARK`, and **a set missing any written-expression sub-skill**.
-- **The translator's DTOs and rule live here too** (progress.md D248). `TranslationRequest`, `Translation` and the
+- **The translator's DTOs and rule live here too** (progress.md D250). `TranslationRequest`, `Translation` and the
   model-facing `TranslationDraft` (`ai.ts`, `schemas/ai.ts`). `translation.ts` holds `assembleTranslation`, which places a
   correction's excerpts with `findExcerpt` as `placeErrors` does, and refuses a source other than the one the user named,
   and `checkTranslation`: **a text in the target language is a correction** (strengths and placed corrections, no notes);
   **any other is a translation** (notes, no strengths or corrections). Each correction names a `WritingSubSkill`, never a
   link. `translation` is the eighth-listed `AI_FEATURES` entry, and `AiCapabilities.translate` the eleventh capability.
-- **The study resources are a content artefact** (`study-resource` in `CONTENT_SCHEMAS`, `study-resources.ts`, D248): one
+- **The study resources are a content artefact** (`study-resource` in `CONTENT_SCHEMAS`, `study-resources.ts`, D250): one
   curated outside page per entry, `{ id, subSkill, source, lang, title, url }`. **`parseStudyResources` refuses a duplicate
   id or address, an address that is not `https`, carries credentials or is off its source's own host
   (`STUDY_RESOURCE_HOSTS`), and a list missing any written-expression sub-skill.** A new source is a new

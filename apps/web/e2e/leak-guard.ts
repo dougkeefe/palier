@@ -71,7 +71,7 @@ export const TRANSCRIPT_SENTINEL = "Grelottard3b8e";
 export const REPORT_SENTINEL = "Pimprenellard6f21";
 
 /**
- * Written into the translator's text (progress.md D248). The translator stores nothing, so it may be on
+ * Written into the translator's text (progress.md D250). The translator stores nothing, so it may be on
  * the page and in the one request to OpenAI, and must reach nothing else: no route of ours, no export,
  * no paired device.
  */
@@ -321,11 +321,11 @@ export const diagnosticAnswer = (body: string): OpenAiAnswer => {
   );
 };
 
-/** The translator's notes on an English text (D248): one federal term rendered. */
+/** The translator's notes on an English text (D250): one federal term rendered. */
 export const TRANSLATION_NOTE = { source: "Treasury Board", rendering: "Conseil du Trésor", why: "The institution's official French name." };
 
 /**
- * The translator's answer (D248), fitted to whatever was sent: a text named English comes back as French with
+ * The translator's answer (D250), fitted to whatever was sent: a text named English comes back as French with
  * one note; any other is read as the user's French, with its first word "corrected" in place on agreement, so
  * the excerpt is always in the text. The text is read back from between the prompt's fences.
  */

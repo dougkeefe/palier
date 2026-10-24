@@ -59,7 +59,7 @@ import type {
  * `interpretDiagnostic` is a fifth amendment (ADR 25): the diagnostic's written result, in
  * plain language, over a run the engine has already scored and placed.
  *
- * `translate` is a sixth amendment (progress.md D248): the translator's one call, which turns
+ * `translate` is a sixth amendment (progress.md D250): the translator's one call, which turns
  * English into federal French, or corrects and explains the user's own French.
  *
  * `verifyKey` is a third §3.3 amendment (progress.md D99, Phase 4 Slice 1): the one cheap
@@ -121,7 +121,7 @@ export type AiProvider = {
    */
   interpretDiagnostic: (req: DiagnosticInterpretationRequest) => Promise<DiagnosticInterpretation>;
   /**
-   * The translator (progress.md D248). A text in `req.target` comes back corrected, with what it
+   * The translator (progress.md D250). A text in `req.target` comes back corrected, with what it
    * did well and each correction placed over the text with its reason and written-expression
    * sub-skill (`assembleTranslation`'s rule); any other comes back translated, with notes on its
    * choices. A provider that cannot place a correction, or that reads the text as another language

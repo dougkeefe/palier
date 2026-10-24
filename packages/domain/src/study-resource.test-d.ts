@@ -5,7 +5,7 @@ import type { StudyResource } from "./study-resource.js";
 
 /**
  * The hand-written type is the contract, and what the schema parses must be one (progress.md
- * D248), the same one-way check as the pointer's.
+ * D250), the same one-way check as the pointer's.
  */
 type Parsed = z.infer<typeof studyResourceSchema>;
 

@@ -173,7 +173,7 @@ export { assembleOralAssessment, checkOralAssessment } from "./oral-assessment.j
 export { CONFIDENCE_THRESHOLD, gateReasons, reviewRequestFor } from "./review-gate.js";
 export type { AssembleResult, PlaceErrorsResult } from "./writing.js";
 export { assembleAssessment, checkErrorOffsets, findExcerpt, placeErrors } from "./writing.js";
-// The translator's placement rule, D105's applied to a correction (progress.md D248).
+// The translator's placement rule, D105's applied to a correction (progress.md D250).
 export type { AssembleTranslationResult } from "./translation.js";
 export { assembleTranslation, checkTranslation } from "./translation.js";
 
@@ -189,7 +189,7 @@ export { CITED_MARK, parseLibrary, parseLibraryOrThrow } from "./library.js";
 export type { Pointer } from "./pointer.js";
 export type { PointersParseResult } from "./pointers.js";
 export { parsePointers, parsePointersOrThrow } from "./pointers.js";
-// The translator's curated study links, a content artefact (progress.md D248).
+// The translator's curated study links, a content artefact (progress.md D250).
 export type { StudyResource, StudyResourceSource } from "./study-resource.js";
 export { STUDY_RESOURCE_HOSTS, STUDY_RESOURCE_SOURCES } from "./study-resource.js";
 export type { StudyResourcesParseResult } from "./study-resources.js";

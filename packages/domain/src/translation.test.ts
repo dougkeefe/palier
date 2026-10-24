@@ -147,7 +147,7 @@ describe("translationDraftSchema", () => {
     expect(translationDraftSchema.safeParse({ ...correctionDraft(), strengths: ["a", "b", "c", "d", "e"] }).success).toBe(false);
   });
 
-  it("refuses a link or any field it does not name: a model never writes the resources (D248)", () => {
+  it("refuses a link or any field it does not name: a model never writes the resources (D250)", () => {
     const linked = { ...correctionDraft(), resources: ["https://example.com"] };
     expect(translationDraftSchema.safeParse(linked).success).toBe(false);
   });

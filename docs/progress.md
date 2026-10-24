@@ -1,6 +1,6 @@
 # Palier: Progress
 
-**Last updated:** 23 October 2026 (the translator: English into federal French, or the user's own French corrected and explained with curated study links, D248; its documents brought in line and its prompt made consistent)
+**Last updated:** 23 October 2026 (the translator: English into federal French, or the user's own French corrected and explained with curated study links, D250; its documents brought in line and its prompt made consistent)
 **Current phase:** **Phase 7 (Polish and hardening, 1.0) is open** (28 September 2026). **Phase 6's decision gate is
 resolved: studio mode is deferred past 1.0** (D131, human), so Phase 7 follows Phase 5 directly. It is planned as four
 slices and three gates (D132). **Slice 1, security hardening, merged (#39)**, **Slice 2 merged (#45)**, **Gate K is
@@ -142,7 +142,7 @@ Task states: `[ ]` not started · `[~]` in flight · `[x]` done and verified · 
 
 | Branch | Task | Session started |
 | --- | --- | --- |
-| `dougkeefe/translate-to-french` | **The translator** (D248, the human's request, 23 October 2026): `/practice/writing/translate`, linked from the writing drill. English or French on the left, always French on the right: English is translated for the federal public service with notes on its choices; the user's own French comes back corrected, with its strengths, each correction marked over their words with its reason and sub-skill, and links to Palier's library and to curated government references (`content/resources/resources.json`). One metered call, `translation`, on the `assess` model; nothing stored. | 23 October 2026 |
+| `dougkeefe/translate-to-french` | **The translator** (D250, the human's request, 23 October 2026): `/practice/writing/translate`, linked from the writing drill. English or French on the left, always French on the right: English is translated for the federal public service with notes on its choices; the user's own French comes back corrected, with its strengths, each correction marked over their words with its reason and sub-skill, and links to Palier's library and to curated government references (`content/resources/resources.json`). One metered call, `translation`, on the `assess` model; nothing stored. | 23 October 2026 |
 | `dougkeefe/oral-progress-radio-buttons-ux` | **`/progress`'s detail as three equal tabs** (D247, the human's request, 22 October 2026): Reading, Written expression and Oral expression as WAI-ARIA tabs (`@palier/ui`'s new `Tabs`) in place of the two-skill radio switch; speaking gains a detail panel (its newest sessions, measured, beside the newest report's fixes, over `@palier/app`'s new `oralProgress`); each hero card has a way into its tab. Print is unchanged. | 22 October 2026 |
 | `dougkeefe/dependabot-status-resolve` | **Dependabot cleared** (D246, the human's request, 22 October 2026): PR #90's 18 minor and patch bumps installed with the repo's pnpm, since Dependabot's lockfile pulled in `@types/node` 26, and `vite` 8.3.5 named as a root devDependency to close alerts #16–#18. | 22 October 2026 |
 | `dougkeefe/klt79` | **`/progress` as a dashboard** (D245, the human's request, 22 October 2026): an overview of all three domains in Today's deep hero, then the chosen skill's trend beside its sub-skills, each sub-skill with a bar (`@palier/ui`'s new `TallyBar`). Print is unchanged. | 22 October 2026 |
@@ -323,7 +323,7 @@ need `OPENAI_SMOKE_KEY`, and one finding for the human to schedule.
 3. **Gate M (human)**: an outside item submission [R13] and §12.1's trademark check (the domain is done, D238).
 
 **Beside them, whenever a smoke key is to hand (agent):**
-- **The translator's completions, recorded** (D248, two calls on the `assess` model, a few cents): the same
+- **The translator's completions, recorded** (D250, two calls on the `assess` model, a few cents): the same
   `live-smoke --record` run writes `packages/testing/src/recorded/openai/translate.json`. Add its line to `RECORDED_RUNS`,
   `"translate"` to the replay test's coverage set and the method to the factory's `CONFORMANCE_METHODS`, and copy the
   printed `translation` figures into `pricing.json` over the placeholder.
@@ -8190,7 +8190,7 @@ better control than radio buttons.
 - **Not changed:** Today's plan switch and the exam picker keep their radios. The picker's is a real form choice. Today's
   plan switch is a view switch like this one and could take `Tabs` next, if the human wants it.
 
-### D248 — The translator: one call, two jobs, and study links that are data, never a model's
+### D250 — The translator: one call, two jobs, and study links that are data, never a model's
 **Date:** 23 October 2026 · **Status:** accepted (human's request; agent's design and copy)
 
 The human asked for a translator like Google Translate: the left text area in English or French, the right one always
@@ -8241,12 +8241,12 @@ corrected, with links to study each error.
 
 Newest first. One entry per session that changed something. Never edit an older entry.
 
-### 23 October 2026 — `dougkeefe/translate-to-french` (the translator reviewed against the standards; D248)
+### 23 October 2026 — `dougkeefe/translate-to-french` (the translator reviewed against the standards; D250)
 
 Not *Next, decided*, which is unchanged (Gate O). The human asked whether PR #96 met the project's standards, its
 documentation especially. The code and its tests did; the documents outside this file did not, and the prompt
 contradicted itself.
-- **The documents brought in line with D248.** `implementation-plan.md` §3.3 gains `translate`, and `interpretDiagnostic`,
+- **The documents brought in line with D250.** `implementation-plan.md` §3.3 gains `translate`, and `interpretDiagnostic`,
   which ADR 25 added without amending it; `architecture.md` §4's tree gains `content/resources/`; `product-requirements.md`
   §8.7 gains an "As built" paragraph for the translator; `apps/web/CLAUDE.md`'s island list names it.
 - **The prompt no longer asks for every value.** Its example shows both jobs' fields, and its closing line, shared with
@@ -8264,7 +8264,7 @@ contradicted itself.
   `key-leak` and the first translator test failed in onboarding before reaching the translator; serially both passed.
 - Not run: `csp-production` and the live smoke.
 
-### 23 October 2026 — `dougkeefe/translate-to-french` (the translator; D248)
+### 23 October 2026 — `dougkeefe/translate-to-french` (the translator; D250)
 
 Not *Next, decided*, which is unchanged (Gate O), except that the live smoke's next funded `--record` now also writes
 `translate.json`. The human asked for a translator: English or French on the left, always French on the right, the

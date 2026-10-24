@@ -184,7 +184,7 @@ test("the sentinel key never leaves for anywhere but OpenAI, across every journe
   await page.getByRole("link", { name: "Review", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
-  // 3g. The translator from the writing drill's page (D248): the user's own French, corrected on the key.
+  // 3g. The translator from the writing drill's page (D250): the user's own French, corrected on the key.
   // Its text goes to OpenAI once, and nothing of it is kept.
   await page.getByRole("link", { name: "Today", exact: true }).click();
   await page.getByRole("radio", { name: "Written expression" }).check();

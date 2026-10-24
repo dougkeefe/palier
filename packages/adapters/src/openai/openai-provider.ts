@@ -406,7 +406,7 @@ export const openAiProvider = (config: OpenAiProviderConfig): AiProvider => {
     },
 
     /**
-     * The translator, on the `assess` model (progress.md D248). A correction's excerpts are placed by
+     * The translator, on the `assess` model (progress.md D250). A correction's excerpts are placed by
      * `assembleTranslation`, so an excerpt not in the text, two on the same words, a source other than
      * the one the user named, or fields that do not fit the job (notes on a correction, corrections on
      * a translation) fail the parse, and are retried once with the reason, then `InvalidResponseError`.

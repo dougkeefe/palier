@@ -7,7 +7,7 @@ import { WRITING_SUB_SKILLS } from "./sub-skills.js";
 
 /**
  * Parses **already-read** study resources, as `parsePointers` parses the pointers: no I/O here, the
- * composition root imports the JSON (progress.md D248). Ids and addresses are unique, every address
+ * composition root imports the JSON (progress.md D250). Ids and addresses are unique, every address
  * is `https` on its source's own host with no credentials, and **every written-expression sub-skill
  * has at least one resource**, so every correction the translator explains has somewhere to study it.
  */

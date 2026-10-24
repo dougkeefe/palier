@@ -96,7 +96,7 @@ const replay = (completion: RecordedCompletion): Promise<unknown> => {
     // Recorded by the next funded `live-smoke --record` (ADR 25); until then no completion reaches it.
     case "interpretDiagnostic":
       return provider.interpretDiagnostic(completion.request as DiagnosticInterpretationRequest);
-    // The translator's (D248), likewise recorded by the next funded `live-smoke --record`.
+    // The translator's (D250), likewise recorded by the next funded `live-smoke --record`.
     case "translate":
       return provider.translate(completion.request as TranslationRequest);
   }

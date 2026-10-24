@@ -159,7 +159,7 @@ const anOralRequest = (): OralRequest => ({
   },
 });
 
-/** The user's own French, with one slip, and an English text to translate (progress.md D248). */
+/** The user's own French, with one slip, and an English text to translate (progress.md D250). */
 const aCorrectionRequest = (): TranslationRequest => ({
   text: "Bonjour à tous, la réunion de lundi est reporter à mardi.",
   source: "fr",
@@ -308,7 +308,7 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       expect(provider.lastUsage()).not.toBeNull();
     });
 
-    it("corrects the user's own French schema-valid, every correction inside the text and none overlapping (D248)", async () => {
+    it("corrects the user's own French schema-valid, every correction inside the text and none overlapping (D250)", async () => {
       const provider = await make();
       const request = aCorrectionRequest();
       const corrected = await provider.translate(request);
@@ -318,7 +318,7 @@ export const aiProviderContract = (name: string, make: () => Promise<AiProvider>
       expect(provider.lastUsage()).not.toBeNull();
     });
 
-    it("translates English into French schema-valid, with no corrections or strengths to show (D248)", async () => {
+    it("translates English into French schema-valid, with no corrections or strengths to show (D250)", async () => {
       const provider = await make();
       const request = aTranslationRequest();
       const translated = await provider.translate(request);

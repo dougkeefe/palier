@@ -43,7 +43,7 @@ import { memoryCostLedger, memoryKeyVault } from "@palier/testing/in-memory";
  *   scores a longer one, `STABILITY_SESSION`, five times, for the stability eval (D127);
  * - `interpretDiagnostic` on one fixed writing diagnostic, `DIAGNOSTIC_RUN`, a whole run's scores and its
  *   misses, so its tokens are a typical interpretation's (ADR 25);
- * - `translate` twice (D248): `TRANSLATIONS`, one paragraph of a learner's own French to correct and one of
+ * - `translate` twice (D250): `TRANSLATIONS`, one paragraph of a learner's own French to correct and one of
  *   English to translate, the translator's two jobs.
  *
  * Audio is never kept: a transcription is recorded with its clip described (type and size), and
@@ -113,7 +113,7 @@ const WRITTEN = [
 ] as const;
 
 /**
- * The translator's two jobs (D248): a learner's own French, with slips worth explaining, left for the model to
+ * The translator's two jobs (D250): a learner's own French, with slips worth explaining, left for the model to
  * place as French, and an English paragraph named as English, each about the length a learner checks at once.
  */
 export const TRANSLATIONS: readonly TranslationRequest[] = [

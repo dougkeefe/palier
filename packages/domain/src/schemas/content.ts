@@ -336,7 +336,7 @@ export const pointerShape = z.strictObject({
 });
 
 /**
- * A study resource (progress.md D248): one outside page on a written-expression sub-skill, which
+ * A study resource (progress.md D250): one outside page on a written-expression sub-skill, which
  * the translator's explanation links a correction to. Whether its address is on its source's own
  * host is `parseStudyResources`'s, since it needs two fields at once.
  */

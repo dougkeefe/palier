@@ -53,7 +53,7 @@ const resource = (id: string, subSkill: StudyResource["subSkill"]): StudyResourc
   url: `https://vitrinelinguistique.oqlf.gouv.qc.ca/${id}`,
 });
 
-describe("the request (D248)", () => {
+describe("the request (D250)", () => {
   it("lets the translator tell the language, or names it, and always asks for French", () => {
     expect(sourceOf("detect")).toBeNull();
     expect(sourceOf("en")).toBe("en");

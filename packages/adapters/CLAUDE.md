@@ -40,7 +40,7 @@ quote a question or name a band; a reply that `checkDiagnosticInterpretation` re
 role: the model names a candidate's turn and quotes its words, and `@palier/domain`'s `assembleOralAssessment` places
 them per turn, so an excerpt not in its turn, an examiner's turn named, or a fix on an oral sub-skill is a malformed
 answer, retried once. The prompt numbers the turns, marks a typed one, and quotes the profile's descriptors from the
-request, each turn's words **as a JSON string**, so a typed answer cannot fake a turn (D127). **`translate`** (D248) is on the `assess` role too: the
+request, each turn's words **as a JSON string**, so a typed answer cannot fake a turn (D127). **`translate`** (D250) is on the `assess` role too: the
 prompt fences the text as data, names the language the user gave or asks the model to decide, and lists the
 written-expression sub-skills; `@palier/domain`'s `assembleTranslation` places a correction's excerpts and holds the two
 shapes apart, so a misplaced excerpt, a disagreeing source or a mixed shape is retried once, then `InvalidResponseError`.

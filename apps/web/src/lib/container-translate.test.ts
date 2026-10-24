@@ -6,7 +6,7 @@ import aiModels from "./ai-models.json";
 import { createContainer } from "./container";
 
 /**
- * The translator through the real wiring (progress.md D248): the real OpenAI adapter over MSW, the
+ * The translator through the real wiring (progress.md D250): the real OpenAI adapter over MSW, the
  * correction placed in the user's own words, the call metered into the real ledger, one request at a
  * time joined from module scope, and nothing kept on the device but the ledger's row.
  */

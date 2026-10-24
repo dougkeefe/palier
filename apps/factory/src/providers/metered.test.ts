@@ -112,7 +112,7 @@ describe("meterProvider", () => {
     expect(metered.totals()).toEqual({ calls: 1, inputTokens: 400, outputTokens: 90, costUsd: 0.01 });
   });
 
-  it("accounts a translation like any other spending call (D248)", async () => {
+  it("accounts a translation like any other spending call (D250)", async () => {
     const metered = meterProvider(providerWith({ model: "m", inputTokens: 600, outputTokens: 900, costUsd: 0.01 }));
     await metered.provider.translate({} as never);
     expect(metered.totals()).toEqual({ calls: 1, inputTokens: 600, outputTokens: 900, costUsd: 0.01 });

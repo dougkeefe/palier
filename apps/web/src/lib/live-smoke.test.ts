@@ -34,7 +34,7 @@ const FEEDBACK = {
 const DESCRIPTORS = { A: "Descriptor A.", B: "Descriptor B.", C: "Descriptor C." };
 
 /** An interpretation of the smoke's fixed diagnostic, on its own sub-skills and quoting no question (ADR 25). */
-/** The translator's two answers (D248): a correction placed in the smoke's own French, and a translation. */
+/** The translator's two answers (D250): a correction placed in the smoke's own French, and a translation. */
 const CORRECTED = {
   source: "fr",
   output: "Bonjour à tous, je vous écris pour vous informer que la réunion de demain est annulée.",
@@ -184,7 +184,7 @@ describe("runLiveSmoke", () => {
     const result = await run(network().fetchImpl);
 
     // Drafts, reviews, two pieces of writing, one oral report, one diagnostic interpretation (ADR 25) and
-    // the translator's two jobs (D248).
+    // the translator's two jobs (D250).
     expect(result.completions).toHaveLength(3 + LIVE_SMOKE_REVIEWS + 2 + 1 + 1 + 2);
     expect(result.completions.every((c) => c.conformant && c.attempt === 1)).toBe(true);
     const [draft] = result.completions;

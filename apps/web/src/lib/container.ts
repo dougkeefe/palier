@@ -320,7 +320,7 @@ const ORAL_FILLERS: OralFillers = parseOralFillersOrThrow(oralFillerLists);
 const POINTERS: readonly Pointer[] = parsePointersOrThrow(pointerList);
 
 /**
- * The translator's curated study links (progress.md D248), parsed once here as the pointers are: each
+ * The translator's curated study links (progress.md D250), parsed once here as the pointers are: each
  * on its source's own host, every written-expression sub-skill covered. A model never writes a link.
  */
 const STUDY_RESOURCES: readonly StudyResource[] = parseStudyResourcesOrThrow(studyResourceList);
@@ -523,7 +523,7 @@ export type UseCases = {
   readonly generationInFlight: () => Held<GeneratePracticeSetRequest, GeneratePracticeSetResult> | null;
   readonly latestGeneratedSet: () => Promise<GeneratedSet | null>;
   /**
-   * The translator (progress.md D248): one text translated into French, or the user's own French
+   * The translator (progress.md D250): one text translated into French, or the user's own French
    * corrected and explained, on the user's key. Nothing is stored. One at a time on this device:
    * asking again while one is out joins it, whatever was asked.
    */
@@ -638,7 +638,7 @@ export type Container = Ports & {
   readonly profile: ExamProfile;
   /** Today's quick pointers, every reading and written-expression sub-skill covered (D216). */
   readonly pointers: readonly Pointer[];
-  /** The translator's study links, every written-expression sub-skill covered (D248). */
+  /** The translator's study links, every written-expression sub-skill covered (D250). */
   readonly studyResources: readonly StudyResource[];
   /**
    * The browser's realtime peer over the studio screen's microphone and the element the examiner's voice plays in

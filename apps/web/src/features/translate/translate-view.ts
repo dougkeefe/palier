@@ -7,7 +7,7 @@ import { feedbackLangFor } from "../oral/report-view";
 import { segmentText, type TextSegment } from "../writing/inline-errors";
 
 /**
- * The translator's decisions (progress.md D248), kept out of the `.tsx` so each is tested. The left
+ * The translator's decisions (progress.md D250), kept out of the `.tsx` so each is tested. The left
  * text is English or French, the right is always French: English is translated for the federal public
  * service, and the user's own French comes back corrected, with what it did well and why each
  * correction was made, each linked to where to study it.

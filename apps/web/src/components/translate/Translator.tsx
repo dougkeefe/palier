@@ -40,7 +40,7 @@ import { Waiting } from "../key/Waiting";
 type Setup = { readonly keyHeld: boolean };
 
 /**
- * The translator (progress.md D248): English or French on the left, always French on the right.
+ * The translator (progress.md D250): English or French on the left, always French on the right.
  * English comes back translated for the federal public service, with notes on its choices; the
  * user's own French comes back corrected, with what it did well, each correction marked over their
  * words with its reason, and where to study it: Palier's library article and curated government

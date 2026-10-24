@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import { parseStudyResources, parseStudyResourcesOrThrow } from "../study-resources.js";
 import { WRITING_SUB_SKILLS } from "../sub-skills.js";
 
-/** The committed resources, `@palier/content/resources/resources.json` (progress.md D248), held valid. */
+/** The committed resources, `@palier/content/resources/resources.json` (progress.md D250), held valid. */
 const committed: unknown = JSON.parse(
   readFileSync(fileURLToPath(new URL("../../../../content/resources/resources.json", import.meta.url)), "utf8"),
 );
