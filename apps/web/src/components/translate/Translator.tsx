@@ -272,23 +272,29 @@ function Workspace({ container, keyHeld, onKeyLost }: { container: Container; ke
                 </>
               ) : null}
               {notice === null ? null : <Callout tone={notice.tone}>{t(notice.key)}</Callout>}
-              {spent === null || spent.calls === 0 ? null : (
-                <p>
-                  {t(spent.unpriced > 0 ? "visitTotalUnpriced" : "visitTotal", {
-                    amount: estimateText(spent.usd, locale),
-                    count: spent.calls,
-                  })}
-                </p>
-              )}
-              <p className="app-muted">{t("sendsTo")}</p>
             </>
           )}
+
+          {/* The explanation sits under the panes, in the card, since it is what the user reads next (D252). */}
+          {answer === null ? null : <Explanation answered={answer} resources={container.studyResources} />}
         </div>
       </Card>
 
       {keyHeld ? null : <NoKeyCard namespace="translate" estimateUsd={estimateUsd} />}
 
-      {answer === null ? null : <Explanation answered={answer} resources={container.studyResources} />}
+      {!keyHeld ? null : (
+        <>
+          {spent === null || spent.calls === 0 ? null : (
+            <p>
+              {t(spent.unpriced > 0 ? "visitTotalUnpriced" : "visitTotal", {
+                amount: estimateText(spent.usd, locale),
+                count: spent.calls,
+              })}
+            </p>
+          )}
+          <p className="app-muted">{t("sendsTo")}</p>
+        </>
+      )}
     </div>
   );
 }
