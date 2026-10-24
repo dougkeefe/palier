@@ -53,7 +53,7 @@ test("the writing drill links to fresh items, and without a key the screen shows
   // A drill sends a user who has not set up to onboarding (D224), so set up first, then reach the
   // writing drill in-app, since the hermetic container lives for one page load.
   await onboard(page, "skip");
-  await page.getByRole("radio", { name: "Written expression" }).check();
+  await page.getByRole("tab", { name: "Written expression" }).click();
   await page.getByRole("link", { name: /^Start/ }).click();
   await expect(page).toHaveURL(/\/en\/practice\/writing$/);
   await page.getByRole("link", { name: "Generate a fresh set" }).click();
