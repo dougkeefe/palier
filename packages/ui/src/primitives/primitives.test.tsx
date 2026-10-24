@@ -7,6 +7,7 @@ import { Card } from "./Card.js";
 import { Callout } from "./Callout.js";
 import { EmptyState } from "./EmptyState.js";
 import { GLYPH_PATHS, Glyph } from "./Glyph.js";
+import { IconButton } from "./IconButton.js";
 import { MonthCalendar } from "./MonthCalendar.js";
 import { Sparkline } from "./Sparkline.js";
 import { TallyBar } from "./TallyBar.js";
@@ -49,6 +50,25 @@ describe("Button", () => {
     const button = screen.getByRole("button", { name: "Continue" });
     expect(button.className).toBe("pl-btn pl-btn--primary pl-btn--arrow");
     expect(button.textContent).toBe("Continue");
+  });
+});
+
+describe("IconButton (D251)", () => {
+  it("is named by its label alone, with the glyph hidden, and never submits a form", () => {
+    const onClick = vi.fn();
+    render(<IconButton label="Copy the French" glyph="copy" onClick={onClick} />);
+    const button = screen.getByRole("button", { name: "Copy the French" });
+    expect(button.getAttribute("type")).toBe("button");
+    expect(button.getAttribute("title")).toBe("Copy the French");
+    expect(button.className).toBe("pl-icon-btn");
+    expect(button.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+    fireEvent.click(button);
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+
+  it("merges a caller className", () => {
+    render(<IconButton label="Copy" glyph="check" className="app-translate__copy" />);
+    expect(screen.getByRole("button", { name: "Copy" }).className).toBe("pl-icon-btn app-translate__copy");
   });
 });
 

@@ -82,6 +82,29 @@ export const spendSummary = async (
   return { totals, capUsd, cap: capState(totals.month, capUsd) };
 };
 
+/**
+ * What one feature has cost since `from`: the priced calls' dollars, how many calls were made, and how many the
+ * pricing could not price, so a screen says its total is a floor rather than show an unpriced call as free (D103).
+ * The translator's running total for a visit (D251), which it reads in place of an estimate before each call.
+ */
+export type FeatureSpend = {
+  readonly usd: number;
+  readonly calls: number;
+  readonly unpriced: number;
+};
+
+export const featureSpendSince = async (
+  request: { readonly feature: AiFeature; readonly from: ISO },
+  deps: Pick<SpendDeps, "ledger">,
+): Promise<FeatureSpend> => {
+  const rows = (await deps.ledger.since(request.from)).filter((row) => row.feature === request.feature);
+  return {
+    usd: rows.reduce((total, row) => total + (row.costUsd ?? 0), 0),
+    calls: rows.length,
+    unpriced: rows.filter((row) => row.costUsd === null).length,
+  };
+};
+
 export type FeatureCost = {
   readonly feature: AiFeature;
   /** A typical use's cost in USD, or `null` when a model it uses is unpriced. */

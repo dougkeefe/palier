@@ -1853,30 +1853,34 @@ body {
 
 /* ---- Translator (progress.md D250) -------------------------------------------- */
 
-/* The language choice on the left, and the fixed target on the right, over the two panes. */
-.app-translate__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.app-translate__target {
-  margin: 0;
-  color: var(--ink-muted);
-  font-size: 0.875rem;
-}
-
-/* Side by side once there is room for two readable columns; one above the other on a phone. */
+/*
+ * The two panes, side by side once each has room for a readable line (the page takes `.app-wide`, D251), one above
+ * the other below that. Each pane is a subgrid over the same three rows (its label, its box, what goes under it), so
+ * the two boxes start on one line and are one height whatever stands under either, and the French grows with the
+ * editor when it is resized.
+ */
 .app-translate__panes {
   display: grid;
-  gap: 16px;
+  grid-template-rows: auto 1fr auto;
+  gap: 8px 24px;
 }
 
-@media (min-width: 640px) {
+.app-translate__pane {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+}
+
+@media (min-width: 900px) {
   .app-translate__panes {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+/* Stacked, the editor's under-row needs room before the French's label. */
+@media (max-width: 899.98px) {
+  .app-translate__pane + .app-translate__pane {
+    margin-top: 16px;
   }
 }
 
@@ -1885,17 +1889,47 @@ body {
   font: inherit;
 }
 
-/* The answer reads as the editor does, on a tinted ground so it is plainly not a field to type in. */
-.app-translate__output {
+.app-translate__box {
   min-height: 14rem;
-  padding: 14px 18px;
+}
+
+.app-translate__under {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+/* The answer reads as the editor does, on a tinted ground so it is plainly not a field to type in. The copy
+   button sits in its top right corner, over room the text leaves for it. */
+.app-translate__result {
+  position: relative;
   border: 1px solid var(--rule);
   border-radius: 10px;
   background: var(--surface-tint);
+}
+
+.app-translate__output {
+  padding: 14px 60px 14px 18px;
   color: var(--ink);
   line-height: 1.6;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+/* Made for an earlier text: still there to read, and plainly about to be replaced (D251). */
+.app-translate__output--stale {
+  color: var(--ink-muted);
+}
+
+.app-translate__copy {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+/* The explanation keeps a reading measure on the wide page. */
+.app-translate__explanation {
+  max-width: 760px;
 }
 
 .app-translate__placeholder {

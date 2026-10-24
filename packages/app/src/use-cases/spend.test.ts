@@ -5,6 +5,7 @@ import {
   SPEND_CAP_KEY,
   type SpendPricing,
   featureCosts,
+  featureSpendSince,
   preflightSpend,
   setSpendCap,
   spendCap,
@@ -114,6 +115,32 @@ describe("spendSummary", () => {
       capUsd: null,
       cap: "none",
     });
+  });
+});
+
+describe("featureSpendSince (D251)", () => {
+  it("totals one feature's calls from a moment on, and leaves other features and earlier calls out", async () => {
+    const device = aDevice([
+      aCostEntry({ ts: "2026-10-01T11:30:00.000Z", feature: "translation", costUsd: 0.02 }),
+      aCostEntry({ ts: "2026-10-01T11:40:00.000Z", feature: "translation", costUsd: 0.03 }),
+      aCostEntry({ ts: "2026-10-01T11:45:00.000Z", feature: "writing-feedback", costUsd: 1 }), // another feature
+      aCostEntry({ ts: "2026-10-01T10:00:00.000Z", feature: "translation", costUsd: 4 }), // before the visit
+    ]);
+    const spent = await featureSpendSince({ feature: "translation", from: SESSION }, device);
+    expect(spent.usd).toBeCloseTo(0.05, 10);
+    expect(spent).toMatchObject({ calls: 2, unpriced: 0 });
+  });
+
+  it("counts an unpriced call as a call, never as dollars", async () => {
+    const device = aDevice([
+      aCostEntry({ ts: "2026-10-01T11:30:00.000Z", feature: "translation", costUsd: null }),
+      aCostEntry({ ts: "2026-10-01T11:31:00.000Z", feature: "translation", costUsd: 0.02 }),
+    ]);
+    expect(await featureSpendSince({ feature: "translation", from: SESSION }, device)).toEqual({ usd: 0.02, calls: 2, unpriced: 1 });
+  });
+
+  it("is nothing before the first call", async () => {
+    expect(await featureSpendSince({ feature: "translation", from: SESSION }, aDevice([]))).toEqual({ usd: 0, calls: 0, unpriced: 0 });
   });
 });
 

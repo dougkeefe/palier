@@ -80,6 +80,7 @@ export { Card, type CardProps } from "./primitives/Card.js";
 export { Callout, type CalloutProps } from "./primitives/Callout.js";
 export { EmptyState, type EmptyStateProps } from "./primitives/EmptyState.js";
 export { GLYPH_PATHS, Glyph, type GlyphProps } from "./primitives/Glyph.js";
+export { IconButton, type IconButtonProps } from "./primitives/IconButton.js";
 export { OptionRow, type OptionRowProps } from "./primitives/OptionRow.js";
 export { ProgressRail, type ProgressRailProps } from "./primitives/ProgressRail.js";
 export { BandMeter, type BandMeterProps } from "./primitives/BandMeter.js";

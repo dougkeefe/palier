@@ -1,13 +1,14 @@
 /**
  * The header's destinations, in order, and which one the page is (progress.md D202). The header marks
- * the current one as a white pill with `aria-current="page"`, as designed.
+ * the current one as a white pill with `aria-current="page"`, as designed. The translator took About's
+ * place (D251); About is in the footer, as it always was.
  */
 export const NAV_ITEMS = [
   { key: "home", href: "/home" },
   { key: "review", href: "/review" },
   { key: "oral", href: "/practice/oral" },
   { key: "progress", href: "/progress" },
-  { key: "about", href: "/about" },
+  { key: "translate", href: "/practice/writing/translate" },
 ] as const;
 
 export type NavKey = (typeof NAV_ITEMS)[number]["key"];

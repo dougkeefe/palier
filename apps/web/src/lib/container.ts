@@ -7,6 +7,7 @@ import type {
   Clock,
   CostLedger,
   FeatureCost,
+  FeatureSpend,
   CompleteSessionRequest,
   CompleteSessionResult,
   AnswerExamItemRequest,
@@ -104,6 +105,7 @@ import {
   saveApiKey,
   setRealtimeEndpoint,
   featureCosts,
+  featureSpendSince,
   preflightSpend,
   setSpendCap,
   spendCap,
@@ -501,6 +503,8 @@ export type UseCases = {
   readonly featureCosts: () => readonly FeatureCost[];
   /** `quantity` typical uses: oral practice's is a minute, so a session asks for its minutes (D117). */
   readonly preflightSpend: (request: { readonly feature: AiFeature; readonly quantity?: number }) => Promise<Preflight>;
+  /** One feature's spending since `from`: the translator's running total for a visit (D251). */
+  readonly featureSpendSince: (request: { readonly feature: AiFeature; readonly from: string }) => Promise<FeatureSpend>;
   /** The writing workshop (PRD §8.7, progress.md D105–D108): prompts, save, feedback, history. */
   readonly writingPrompts: () => readonly WritingPrompt[];
   readonly saveWriting: (request: SaveWritingRequest) => Promise<WritingSubmission>;
@@ -878,6 +882,7 @@ function buildUseCases(ports: Ports): UseCases {
     setSpendCap: (request) => setSpendCap(request.capUsd, spendDeps),
     featureCosts: () => featureCosts(spendDeps),
     preflightSpend: (request) => preflightSpend(request.feature, spendDeps, request.quantity),
+    featureSpendSince: (request) => featureSpendSince(request, spendDeps),
     writingPrompts: () => writingPrompts({ prompts: WRITING_PROMPTS }),
     saveWriting: (request) =>
       saveWriting(request, { prompts: WRITING_PROMPTS, writing: ports.writing, ids: ports.ids, clock: ports.clock }),

@@ -29,7 +29,7 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   and Source Serif 4, light only. The header is the wordmark, the destinations on a quiet pill track (`HeaderNav`, a
   client component that marks the current page `aria-current="page"` from `features/nav/nav.ts`), then sync and the
   language. The footer is deep teal with the giant wordmark, drawn by `::before` from a `data-` attribute. `.app-main`
-  is 760px, and a page whose section carries `.app-wide` (today) takes 1160px. Every colour in `globals.css` is a token.
+  is 760px, and a page whose section carries `.app-wide` (today, the translator) takes 1160px. Every colour in `globals.css` is a token.
   **Today** (D214–D219) is the dashboard design (D219): a deep hero with the week's answers and the three skills as cards,
   each a link to its practice with today's plan done (`features/home/today-view.ts`, over the container's
   `practiceActivity`); then `.app-home__main` (the statistics, the plan, Where you stand) beside `.app-home__side` (the
@@ -187,7 +187,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   screen. A press that saves before it spends goes through `lib/latch.ts`, so a double press pays once. **There is no second "Before you send" step.** A call on
   the key is waited for in `components/key/Waiting.tsx` (`@palier/ui`'s `Working`: the dots and the time waited, from
   when the wait is shown). A screen that keeps its own status line mounted passes `live={false}`. A new spending screen
-  does both.
+  does both. **The translator is the one exception** (D251): it sends on a pause in typing, with the visit's running
+  total in place of an estimate, and falls back to one press with `SpendOffer` past the cap and for "Try again".
 - **A spending call outlives its screen** (D127, D143; `lib/in-flight.ts`). A report, a submission's feedback and a
   fresh set still out are joined, never repeated, from module scope in `container.ts`, so a rebuilt container finds
   them; each screen reads the held request on mount and shows it as still being made. **A wipe or delete-everywhere
@@ -351,7 +352,12 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     `generated` table in production, **never synced and never exported**, cleared by wipe and
     delete-everywhere. `components/key/NoKeyCard.tsx` is shared with the workshop, by namespace.
     `container-generate.test.ts` runs the real adapter over MSW through both graphs.
-  - **The translator** (progress.md D250) is `/practice/writing/translate`, linked from the writing drill.
+  - **The translator** (progress.md D250, D251) is `/practice/writing/translate`, the header's fifth destination in
+    About's place (About is in the footer) and linked from the writing drill. **It translates on a pause in typing**
+    (`TRANSLATE_PAUSE_MS`, `shouldTranslate`), never moves focus out of the editor (a polite live region says the French
+    is ready), and never holds the text while a call is out. Past the soft cap a pause no longer sends
+    (`autoTranslates`) and one press does. The two panes share a CSS subgrid so their boxes align, and the copy control
+    is `@palier/ui`'s `IconButton` in the French's corner. The visit's running total is `featureSpendSince`.
     `components/translate/Translator.tsx` renders it; its decisions are in `features/translate/translate-view.ts`. English or
     French on the left, always French on the right; the user's own French comes back corrected, each correction marked
     and explained. **Every study link is data**: the library article by sub-skill, and the container's `studyResources`
