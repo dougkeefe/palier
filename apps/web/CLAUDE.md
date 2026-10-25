@@ -369,7 +369,8 @@ import every package; holds the concrete-adapter wiring nothing else may name.
     is ready), and never holds the text while a call is out. Past the soft cap a pause no longer sends
     (`autoTranslates`) and one press does. The two panes share a CSS subgrid so their boxes align, and the copy control
     is `@palier/ui`'s `IconButton` in the French's corner. The explanation sits inside the card under the panes, and the
-    visit's running total (`featureSpendSince`) and "goes only to OpenAI" below the card (D252).
+    visit's running total (`featureSpendSince`) and "goes only to OpenAI" below the card (D252). With no key, `NoKeyCard`
+    sits above the card, before the editor (D258).
     `components/translate/Translator.tsx` renders it; its decisions are in `features/translate/translate-view.ts`. English or
     French on the left, always French on the right; the user's own French comes back corrected, each correction marked
     and explained. **Every study link is data**: the library article by sub-skill, and the container's `studyResources`

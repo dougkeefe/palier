@@ -3,6 +3,20 @@
 Newest first. Moved verbatim from `docs/progress.md` on 24 October 2026 (D255). Its index there points here. The rules are
 `progress.md`'s: never edit a session entry, and mark a deviation resolved in place, updating its index line too.
 
+### 23 October 2026 — `dougkeefe/today-s-plan-oral-ux` (the medium lane's library failure: the warmup's cold article route; D249)
+
+The human reported #95's red medium lane: `content.spec.ts`'s library test, which this branch does not touch.
+- **Diagnosed from the CI trace and a probe**: the article route was never warmed, so the test's click compiled it, and
+  the dev server's rebuild dropped the click's own request.
+- **The warmup reads `routes.json`**, the articles included, and visits the 404 and the hermetic error views (D249).
+
+**Verified:**
+- On a fresh hermetic `next dev` after the new warmup: first visits to an article, the 404 and the hermetic `global` view
+  rebuilt no other open page. The thrown `route` view still rebuilt once, about 300 ms (D249's residual).
+- `pnpm verify` exit 0: 277 files, 4,473 tests passed (8 todo), no dependency violations.
+- The whole hermetic `chromium` project from a cold dev server (port 3400, a throwaway config, since another app held
+  3000): 85 passed in 3.6 min, the warmup and the library test included.
+
 ### 22 October 2026 — `dougkeefe/today-s-plan-oral-ux` (Today's plan as three equal tabs, speaking included; D248)
 
 Not *Next, decided*, which is unchanged (Gate O). The human asked why Today's plan offered only Reading and Writing, and

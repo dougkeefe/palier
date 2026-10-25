@@ -173,6 +173,9 @@ function Workspace({ container, keyHeld, onKeyLost }: { container: Container; ke
 
   return (
     <div className="app-stack">
+      {/* Above the editor, not below it, so nobody types into a translator that cannot send (D258). */}
+      {keyHeld ? null : <NoKeyCard namespace="translate" estimateUsd={estimateUsd} />}
+
       <Card>
         <div className="app-stack">
           <fieldset className="app-segmented">
@@ -279,8 +282,6 @@ function Workspace({ container, keyHeld, onKeyLost }: { container: Container; ke
           {answer === null ? null : <Explanation answered={answer} resources={container.studyResources} />}
         </div>
       </Card>
-
-      {keyHeld ? null : <NoKeyCard namespace="translate" estimateUsd={estimateUsd} />}
 
       {!keyHeld ? null : (
         <>

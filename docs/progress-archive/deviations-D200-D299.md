@@ -1402,3 +1402,37 @@ better control than radio buttons.
   chosen and asserts that the tab list is hidden on paper.
 - **Not changed:** Today's plan switch and the exam picker keep their radios. The picker's is a real form choice. Today's
   plan switch is a view switch like this one and could take `Tabs` next, if the human wants it.
+
+### D248 — Today's plan is three equal tabs, speaking included; its plan is one suggested session
+**Date:** 22 October 2026 · **Status:** accepted (human's request; agent's design and copy). Amends D219's plan switch, and
+closes D247's "Not changed" note on Today
+
+The human pointed out that Today's plan offered only Reading and Writing, and that its radio buttons were the wrong
+control, as they had been on `/progress` (D247).
+
+- **Tabs, not radios**, for D247's reason: the switch shows another view of the same card. The plan card uses
+  `@palier/ui`'s `Tabs` and `TabPanel` unchanged (`idPrefix` `today-plan`), each tab in its `SKILL_LOOK` glyph and fill.
+  `features/skills/skill-look.ts`'s new `SKILL_KINDS` is the one order, and `/progress`'s `DETAIL_TABS` is it.
+  - The card is half the page, so here the three tabs **share its width at every size** and a long name wraps beside
+    its mark: "Compréhension de l'écrit" scrolled the list by 107px at 1280px before that. Below 600px the primitive's
+    own layout applies (mark over a centred name).
+  - `.app-segmented`'s home-only rules are gone; the class stays for `ExamPicker`'s real form choice.
+- **Speaking's plan is one session.** No planner holds oral practice, and the hero's oral rail already counts one ended
+  session as the day's goal (D219), so the plan matches it (`features/home/oral-plan.ts`, pure and tested):
+  - **The suggestion is the kind practised least lately** on this device (`oralHistory`, newest first). A kind never
+    practised comes first and a tie keeps the picker's order, so a new device is offered the warm-up. A session whose
+    scenario has left the bank names no kind and is passed over.
+  - The row is the kind with the picker's own `sessionMeta` (its minutes and **practice mode's** estimate, the picker's
+    default and the cheaper mode), then the kind's purpose and "Start speaking, {minutes} min".
+  - **The start links to `/practice/oral`, not to the session.** Choosing a session there opens the microphone check, which
+    must never happen on a page load, and the mode is chosen there, where the session is priced before it starts (D237).
+  - Once a session has ended today the plan says "Done for today" with today's sessions and minutes, and "Practise again".
+  - With no key it says spoken practice runs on the key and links the key screen. `NoKeyCard` is a card with its own
+    `h2`, which would have nested a card and a heading inside the plan.
+  - "More ways to practise" drops its speaking link on this tab. There is no next-step banner: speaking has no
+    diagnostic and no mock exam.
+- **Speaking's "Where you stand"** is `/progress`'s "From your latest report" through the same `oralDetail`: the
+  newest report's fixes, each a way into its drill (`OralCards.tsx`'s `OralFixes`, now exported), or the way to a
+  session a report can still be asked of. **No criterion level is shown off the report** (R10).
+- **Nothing on Today spends or writes.** `loadOral` reads the key's status, `oralSessionChoices`, `oralHistory`,
+  `oralProgress` and `featureCosts`. It leaves `closeAbandonedSessions`, which writes, to the oral screen.
