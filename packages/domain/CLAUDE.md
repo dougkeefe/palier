@@ -68,7 +68,8 @@ from disk (progress.md D154).
   (`LibraryExcerpt`), and `related` names only its own skill's sub-skills. **`parseLibrary` refuses a library missing any
   sub-skill's article, or with two**, since an item's explanation links to its sub-skill's page, and an article related
   to itself. Cited target-language text in the prose is marked `_like this_` (`CITED_MARK`), which the
-  page renders with the article's `lang`; an unpaired marker is refused, with its path.
+  page renders with the article's `lang`; an unpaired marker is refused, with its path. **Every article has one
+  `topic` of `LIBRARY_TOPICS`** (D257), across both skills, which the app's index filters by.
 - **The grammar pointers are a content artefact** (`pointer` in `CONTENT_SCHEMAS`, `pointers.ts`, progress.md D216,
   D218). A `Pointer` is `{ id, subSkill, lang, text }`. **The text is written in the practised language (`lang`), never
   the interface's**, with its example marked `_like this_`. Its sub-skill is a written-expression one, never reading or oral.

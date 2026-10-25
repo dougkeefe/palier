@@ -188,9 +188,11 @@ export type {
   LibraryExcerpt,
   LibrarySection,
   LibrarySubSkill,
+  LibraryTopic,
   ReadingLibraryArticle,
   WritingLibraryArticle,
 } from "./library-article.js";
+export { LIBRARY_TOPICS } from "./library-article.js";
 export type { LibraryParseResult } from "./library.js";
 export { CITED_MARK, LIBRARY_SUB_SKILLS, parseLibrary, parseLibraryOrThrow } from "./library.js";
 // Today's quick pointers, a content artefact (progress.md D216).

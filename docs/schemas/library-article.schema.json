@@ -24,6 +24,16 @@
             "fr"
           ]
         },
+        "topic": {
+          "type": "string",
+          "enum": [
+            "comprehension",
+            "vocabulary",
+            "grammar",
+            "structure",
+            "register"
+          ]
+        },
         "title": {
           "type": "object",
           "properties": {
@@ -171,6 +181,7 @@
       "required": [
         "subSkill",
         "lang",
+        "topic",
         "title",
         "summary",
         "sections",
@@ -201,6 +212,16 @@
           "enum": [
             "en",
             "fr"
+          ]
+        },
+        "topic": {
+          "type": "string",
+          "enum": [
+            "comprehension",
+            "vocabulary",
+            "grammar",
+            "structure",
+            "register"
           ]
         },
         "title": {
@@ -356,6 +377,7 @@
       "required": [
         "subSkill",
         "lang",
+        "topic",
         "title",
         "summary",
         "sections",

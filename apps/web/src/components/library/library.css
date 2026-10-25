@@ -1,6 +1,6 @@
 /*
- * The library (PRD §13.2, progress.md D162, D254, D256): the index as a title with its photograph
- * and a way to each skill, then each skill's articles as cards; an article as where it sits, its
+ * The library (PRD §13.2, progress.md D162, D254, D256, D257): the index as a title with its
+ * photograph, then a row of pills over one grid of cards; an article as where it sits, its
  * contents beside its prose, its examples, related cards, the way to practise and the articles
  * either side. Only the library's two pages import this sheet, and Next keeps a page's stylesheet
  * after a soft navigation away, so every rule is scoped under `.app-library`, as `landing.css` is
@@ -9,7 +9,7 @@
  * is drawn outside it, on the paper.
  */
 
-/* ---- The photographs: decoration, never under text, on a quiet fill until they load ---- */
+/* ---- The photographs: decoration, on a quiet fill until they load; only a solid badge sits on one ---- */
 
 .app-library .app-library__photo {
   border-radius: 12px;
@@ -22,15 +22,79 @@
   background-image: url("./images/library.webp");
 }
 
-.app-library .app-library__photo--reading {
-  background-image: url("./images/reading.webp");
+.app-library .app-library__photo--main-idea {
+  background-image: url("./images/main-idea.webp");
 }
 
-.app-library .app-library__photo--writing {
-  background-image: url("./images/writing.webp");
+.app-library .app-library__photo--specific-detail {
+  background-image: url("./images/specific-detail.webp");
 }
 
-/* ---- The index's head: the title, a line, the way to each skill; the photograph beside ---- */
+.app-library .app-library__photo--inference {
+  background-image: url("./images/inference.webp");
+}
+
+.app-library .app-library__photo--vocabulary-in-context {
+  background-image: url("./images/vocabulary-in-context.webp");
+}
+
+.app-library .app-library__photo--cohesion-and-reference {
+  background-image: url("./images/cohesion-and-reference.webp");
+}
+
+.app-library .app-library__photo--tone-and-intent {
+  background-image: url("./images/tone-and-intent.webp");
+}
+
+.app-library .app-library__photo--text-structure {
+  background-image: url("./images/text-structure.webp");
+}
+
+.app-library .app-library__photo--numerical-and-tabular-detail {
+  background-image: url("./images/numerical-and-tabular-detail.webp");
+}
+
+.app-library .app-library__photo--verb-tense-and-mood {
+  background-image: url("./images/verb-tense-and-mood.webp");
+}
+
+.app-library .app-library__photo--agreement {
+  background-image: url("./images/agreement.webp");
+}
+
+.app-library .app-library__photo--prepositions-and-government {
+  background-image: url("./images/prepositions-and-government.webp");
+}
+
+.app-library .app-library__photo--pronouns {
+  background-image: url("./images/pronouns.webp");
+}
+
+.app-library .app-library__photo--connectors-and-discourse-markers {
+  background-image: url("./images/connectors-and-discourse-markers.webp");
+}
+
+.app-library .app-library__photo--register-and-formality {
+  background-image: url("./images/register-and-formality.webp");
+}
+
+.app-library .app-library__photo--word-choice-precision {
+  background-image: url("./images/word-choice-precision.webp");
+}
+
+.app-library .app-library__photo--false-friends-and-anglicisms {
+  background-image: url("./images/false-friends-and-anglicisms.webp");
+}
+
+.app-library .app-library__photo--punctuation-and-mechanics {
+  background-image: url("./images/punctuation-and-mechanics.webp");
+}
+
+.app-library .app-library__photo--sentence-structure {
+  background-image: url("./images/sentence-structure.webp");
+}
+
+/* ---- The index's head: the title and a line, the photograph beside ---- */
 
 .app-library .app-library__hero {
   display: grid;
@@ -60,137 +124,84 @@
   }
 
   .app-library .app-library__hero-photo {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 9;
   }
 }
 
-/* One under the other at every width: side by side they would wrap at some widths and not others. */
-.app-library .app-library__jump {
-  display: grid;
-  justify-items: start;
-  gap: 10px;
-  margin: 28px 0 0;
-  padding: 0;
-  list-style: none;
+/* ---- The filter: a row of pills, one pressed, over the cards ---- */
+
+.app-library .app-library__browse {
+  margin-top: clamp(40px, 6vw, 72px);
 }
 
-.app-library .app-library__jump-link {
+.app-library .app-library__filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: clamp(28px, 4vw, 40px);
+}
+
+.app-library .app-library__pill {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  min-height: 48px;
-  box-sizing: border-box;
-  padding: 8px 20px 8px 14px;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 0;
   border-radius: 999px;
   background-color: var(--surface);
   color: var(--ink);
-  text-decoration: none;
-}
-
-.app-library .app-library__jump-link:hover .app-library__jump-name {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.app-library .app-library__jump-glyph {
-  width: 22px;
-  height: 22px;
-  color: var(--primary);
-}
-
-.app-library .app-library__jump-name {
+  font: inherit;
+  font-size: 0.875rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--pl-motion-state) var(--pl-ease),
+    color var(--pl-motion-state) var(--pl-ease);
 }
 
-.app-library .app-library__jump-count {
-  color: var(--ink-muted);
-  font-size: 0.9375rem;
-}
-
-/* ---- A skill's section: its mark, name, count and line, its photograph, then its cards ---- */
-
-.app-library .app-library__skill {
-  margin-top: clamp(56px, 8vw, 96px);
-}
-
-.app-library .app-library__skill-head {
-  display: grid;
-  gap: 32px;
-  align-items: end;
-  margin-bottom: 28px;
-}
-
-.app-library .app-library__mark {
-  display: inline-grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 999px;
-  color: var(--primary);
-}
-
-.app-library .app-library__mark svg {
-  width: 26px;
-  height: 26px;
-}
-
-.app-library .app-library__mark--tint {
+.app-library .app-library__pill:hover {
   background-color: var(--surface-tint);
 }
 
-.app-library .app-library__mark--mint {
-  background-color: var(--surface-mint);
+/* Pressed is said by `aria-pressed` and shown by the fill, never by the colour of the words alone. */
+.app-library .app-library__pill[aria-pressed="true"] {
+  background-color: var(--primary);
+  color: var(--on-deep);
 }
 
-.app-library .app-library__skill-title {
-  margin: 16px 0 4px;
-  font-size: clamp(1.75rem, 3vw, 2.375rem);
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-  scroll-margin-top: 24px;
-}
-
-.app-library .app-library__skill-count {
-  margin: 0;
+.app-library .app-library__pill-count {
   color: var(--ink-muted);
-  font-size: 0.9375rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
 }
 
-.app-library .app-library__skill-lede {
-  margin: 8px 0 0;
-  max-width: 56ch;
-  color: var(--ink-soft);
-  font-size: 1.0625rem;
+.app-library .app-library__pill[aria-pressed="true"] .app-library__pill-count {
+  color: var(--on-deep);
 }
 
-/* On a phone the cards come straight after the words: the photograph would only push them down. */
-.app-library .app-library__skill-photo {
+/* On a phone the pills wrap wherever they fall, so a rule there would dangle at a line's end. */
+.app-library .app-library__filter-rule {
   display: none;
 }
 
-@media (min-width: 600px) {
-  .app-library .app-library__skill-head {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
-  }
-
-  .app-library .app-library__skill-photo {
-    display: block;
-    aspect-ratio: 3 / 2;
-  }
-}
-
 @media (min-width: 900px) {
-  .app-library .app-library__skill-head {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 380px);
+  .app-library .app-library__filter-rule {
+    display: block;
+    align-self: stretch;
+    width: 1px;
+    margin: 8px 4px;
+    background-color: color-mix(in srgb, var(--ink) 16%, transparent);
   }
 }
 
-/* ---- An article as a card ---- */
+/* ---- An article as a card: its photograph and skill, its title, summary, topic and time ---- */
 
 .app-library .app-library__cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-  gap: 16px;
+  gap: 20px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -199,9 +210,18 @@
 .app-library .app-library__card {
   position: relative;
   display: grid;
-  gap: 8px;
-  align-content: start;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 10px;
+  padding: 10px 10px 18px;
   transition: transform var(--pl-motion-state) var(--pl-ease);
+}
+
+.app-library .app-library__card[hidden] {
+  display: none;
+}
+
+.app-library .app-library__card > :not(.app-library__card-media) {
+  margin-inline: 10px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -216,10 +236,36 @@
   outline-offset: 2px;
 }
 
-.app-library .app-library__number {
-  color: var(--ink-muted);
-  font-size: 0.875rem;
-  font-variant-numeric: tabular-nums;
+.app-library .app-library__card-media {
+  position: relative;
+  margin-bottom: 6px;
+}
+
+.app-library .app-library__card-photo {
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+}
+
+/* A solid pill: its words take their contrast from its own fill, never from the photograph. */
+.app-library .app-library__badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px 4px 8px;
+  border-radius: 999px;
+  background-color: var(--surface);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.app-library .app-library__badge-glyph {
+  width: 16px;
+  height: 16px;
+  color: var(--primary);
 }
 
 .app-library .app-library__card-title {
@@ -255,6 +301,58 @@
   color: var(--ink-soft);
   font-size: 0.9375rem;
   line-height: 1.5;
+}
+
+/* The chips wrap among themselves; "Read" keeps to the last line's end. */
+.app-library .app-library__card-foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.app-library .app-library__card-foot > .app-library__chips {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.app-library .app-library__chips.app-library__head-chips {
+  margin-top: 20px;
+}
+
+.app-library .app-library__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-library .app-library__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--surface) 70%, transparent);
+  color: var(--ink);
+  font-size: 0.8125rem;
+}
+
+.app-library .app-library__chip-glyph {
+  width: 14px;
+  height: 14px;
+  color: var(--ink-soft);
+}
+
+.app-library .app-library__more {
+  flex: none;
+  padding-bottom: 2px;
+  color: var(--primary);
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
 
 /* ---- The credit for the photographs ---- */

@@ -155,20 +155,23 @@ import every package; holds the concrete-adapter wiring nothing else may name.
   `next/font/local` (its arguments must be literals), as `--font-serif` on `<html>`, **preloaded**: it sets every page
   (D202; Inter and Figtree were removed). `SOURCES.md` records the file's origin and hash, and `fonts.test.ts` holds it
   to it. **The service worker follows each precached stylesheet to the fonts it loads** (`staticAssetsInCss`).
-- **The library** (D162, D254) is `/library` and `/library/[subSkill]`, server components over `lib/library.ts`, which
-  parses `@palier/content/library/*.json` once. The index lists reading's eight, then writing's ten (`libraryArticlesFor`);
+- **The library** (D162, D254, D257) is `/library` and `/library/[subSkill]`, server components over `lib/library.ts`, which
+  parses `@palier/content/library/*.json` once. The index lists reading's eight, then writing's ten (`libraryArticlesFor`), in one grid;
   a reading article's examples are excerpts and its button leads to reading practice. **Never import `lib/library.ts` into
   a client component**: it would put every article in the JavaScript; a link needs only `features/library/links.ts`.
   Every reading and written-expression item's explanation links its article (`components/library/ArticleLink.tsx`), in a new tab from a drill so the session is never left. Cited
   French in the prose renders through `Cited` with the article's `lang`. `prepare-public.mjs` expands the article route
   from the content's file names, so every article is precached.
-  **Its layout** (D256) is `components/library/`: `LibraryCard` (the index's cards and Read next, h3 titles, the link
-  covering the card), `LibraryPhoto` and `PhotoCredit`, styled by `library.css`, which only the two pages import and which
-  scopes every rule under `.app-library`. Previous and next stay within a skill (`lib/library.ts`'s `adjacentArticles`).
-  **Its three photographs** are the landing page's kind: WebP in `components/library/images/`, CSS backgrounds,
-  `aria-hidden`, never under text, each credited and linked on the page that shows it (`features/library/photos.ts`),
-  with `images/SOURCES.md` the record `photos.test.ts` holds them to. On a skill's fill only the inks and `primary` clear
-  contrast, so a card's ring is drawn outside it.
+  **Its layout** (D256, D257) is `components/library/`: `LibraryCard` (the index's cards, h2 titles, and Read next's, h3;
+  the link covering the card; `data-tags` of its skill and topic), `LibraryFilter` (the index's one client component: pills
+  over the server-rendered cards, handed in as `children`, the pressed pill in the URL's hash, `features/library/filter.ts`),
+  `LibraryPhoto` and `PhotoCredit`, styled by `library.css`, which only the two pages import and which scopes every rule
+  under `.app-library`. An article's `topic` is content (`LIBRARY_TOPICS`, `@palier/domain`). Previous and next stay within
+  a skill (`lib/library.ts`'s `adjacentArticles`). **Its nineteen photographs**, the library's and one per article, are the
+  landing page's kind: WebP in `components/library/images/`, CSS backgrounds, `aria-hidden`, each credited and linked on
+  the page that shows it (`features/library/photos.ts`), with `images/SOURCES.md` the record `photos.test.ts` holds them
+  to, at 25 KB at most each, since the worker precaches them all. Only a solid badge sits on a photograph. On a skill's
+  fill only the inks and `primary` clear contrast, so a card's ring is drawn outside it.
 - **The error states** (Phase 7 Slice 2, architecture.md §16, ADR 15; D141–D142).
   - `[locale]/error.tsx`, `[locale]/not-found.tsx` and `global-error.tsx` are one-line bindings; the screens are named
     components in `src/components/errors/`, so `NO_JSX_LITERALS` still applies to them.

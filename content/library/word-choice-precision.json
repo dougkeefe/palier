@@ -1,6 +1,7 @@
 {
   "subSkill": "word-choice-precision",
   "lang": "fr",
+  "topic": "vocabulary",
   "title": {
     "en": "Precise word choice",
     "fr": "La précision du vocabulaire"
